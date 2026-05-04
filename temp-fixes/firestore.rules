@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========== NOTICIAS ==========
+    match /noticias/{noticiaId} {
+      // Lectura pública — pero list solo si hay query con límite
+      allow get: if true;
+      allow list: if true; // Firebase v2 requiere índices para list seguro
+      allow create, update: if request.auth != null
+          && request.auth.token.admin == true
+          && request.resource.data.keys().hasOnly([
+               'titulo','resumen','contenido','categoria','autor',
+               'fecha','fechaActualizacion','imagen','slug','destacada',
+               'premium','vistas','tags','pieFoto','tiempoLectura','esFallecido'
+             ])
+          && request.resource.data.titulo is string
+          && request.resource.data.titulo.size() > 0
+          && request.resource.data.titulo.size() <= 200
+          && request.resource.data.contenido is string
+          && request.resource.data.contenido.size() <= 50000
+          && request.resource.data.categoria in [
+               'Sucesos','Nacionales','Deportes','Internacionales','Espectaculo'
+             ];
+      allow delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // ========== NEWSLETTER SUBSCRIBERS ==========
+    match /newsletter_subscribers/{email} {
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow create: if request.resource.data.email == email
+          && request.resource.data.email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$')
+          && request.resource.data.status == 'active'
+          && request.resource.data.subscribedAt is timestamp;
+      allow update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // ========== COMENTARIOS ==========
+    match /comentarios/{comentarioId} {
+      allow read: if true;
+      allow create: if request.auth != null
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.contenido is string
+          && request.resource.data.contenido.size() > 0
+          && request.resource.data.contenido.size() <= 2000
+          && request.resource.data.createdAt is timestamp;
+      allow update, delete: if request.auth != null
+          && request.auth.uid == resource.data.userId;
+    }
+
+    // ========== ADMIN ONLY ==========
+    match /newsletter_campaigns/{campaignId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    match /newsletter_sponsors/{sponsorId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    match /sponsored_campaigns/{campaignId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    match /analytics/{docId} {
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow write: if false; // Solo Cloud Functions
+    }
+  }
+}

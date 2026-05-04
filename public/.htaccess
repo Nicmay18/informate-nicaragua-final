@@ -1,0 +1,14 @@
+# Nicaragua Informate - SPA Routing Configuration
+RewriteEngine On
+RewriteBase /
+
+# Permitir acceso a archivos existentes (imágenes, css, js, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirigir API calls a backend (si existe)
+RewriteRule ^api/(.*)$ api/$1 [L]
+
+# Fallback: Todas las rutas a index.html para SPA routing
+RewriteRule ^ index.html [L]

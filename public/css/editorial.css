@@ -1,0 +1,463 @@
+/**
+ * NICARAGUA INFORMATE - DISEÑO EDITORIAL
+ * Inspirado en Confidencial y medios profesionales
+ * Sistema tipográfico serif + sans-serif
+ */
+
+/* ============================================
+   1. TIPOGRAFÍA EDITORIAL
+   ============================================ */
+
+/* Importar fuentes de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Tipografía Editorial (similar a Confidencial) */
+  --font-headline: 'Merriweather', 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+  
+  /* Escalas tipográficas profesionales */
+  --text-headline: 1.75rem;    /* 28px - Títulos principales */
+  --text-subheadline: 1.25rem; /* 20px - Subtítulos */
+  --text-body: 1rem;           /* 16px - Cuerpo */
+  --text-caption: 0.875rem;    /* 14px - Metadatos */
+  --text-overline: 0.75rem;    /* 12px - Categorías */
+  
+  /* Colores periodísticos */
+  --color-text-primary: #1a1a1a;  /* Casi negro, no azul */
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #6b7280;
+  --color-accent-red: #dc2626;     /* Rojo periodístico */
+  --color-border-subtle: #e5e7eb;
+  
+  /* Espaciado editorial - más aire */
+  --space-editorial-xs: 0.5rem;
+  --space-editorial-sm: 0.75rem;
+  --space-editorial-md: 1.5rem;
+  --space-editorial-lg: 2rem;
+  --space-editorial-xl: 3rem;
+}
+
+/* ============================================
+   2. APLICAR TIPOGRAFÍA A TÍTULOS
+   ============================================ */
+
+/* Títulos de noticias - Serif para autoridad periodística */
+.card h3,
+.article-title,
+.carousel-caption h3,
+.news-title,
+.breaking-body h2,
+.modal-title-wrap h2 {
+  font-family: var(--font-headline) !important;
+  font-weight: 700 !important; /* Bold, no extra-bold */
+  line-height: 1.3 !important; /* Menos apretado */
+  letter-spacing: -0.02em !important; /* Ligero tracking negativo */
+  color: var(--color-text-primary) !important;
+}
+
+/* Cuerpo de texto - Sans-serif para legibilidad */
+body,
+.card p,
+.news-excerpt,
+.modal-text,
+.card-body p {
+  font-family: var(--font-body) !important;
+  line-height: 1.6 !important;
+  color: var(--color-text-secondary) !important;
+}
+
+/* ============================================
+   3. CATEGORÍAS ESTILO CONFIDENCIAL
+   ============================================ */
+
+/* Categorías: sutiles, mayúsculas, espaciado */
+.tag,
+.category-label,
+.news-category,
+.carousel-badge {
+  font-family: var(--font-ui) !important;
+  font-size: var(--text-overline) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important; /* Espaciado entre letras */
+  color: var(--color-accent-red) !important;
+  background: transparent !important; /* Sin fondo de color */
+  padding: 0 !important; /* Sin padding de botón */
+  margin-bottom: var(--space-editorial-sm) !important;
+  display: block !important; /* En su propia línea */
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Mantener colores solo para identificación visual sutil */
+.tag.Sucesos { color: #dc2626 !important; }
+.tag.Deportes { color: #10B981 !important; }
+.tag.Internacionales { color: #7c3aed !important; }
+.tag.Tecnología { color: #0284c7 !important; }
+.tag.Nacionales { color: #ea580c !important; }
+.tag.Economía { color: #d97706 !important; }
+.tag.Cultura { color: #9333ea !important; }
+.tag.Espectáculos { color: #db2777 !important; }
+
+/* ============================================
+   4. IMÁGENES - SIN BLUR, ALTA CALIDAD
+   ============================================ */
+
+/* Contenedor de imagen con proporción consistente */
+.card-image-wrapper,
+.news-image-wrapper,
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9 !important; /* Proporción consistente */
+  overflow: hidden;
+  background-color: #f3f4f6 !important; /* Placeholder mientras carga */
+  border-radius: 0 !important; /* Sin bordes redondeados excesivos */
+}
+
+/* La imagen PRINCIPAL - NO blurreada */
+.card-image-wrapper img,
+.news-image img,
+.img-fg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center 20% !important; /* Foco en la parte superior (rostros) */
+  filter: none !important; /* ELIMINAR cualquier blur o grayscale */
+  transition: transform 0.3s ease !important;
+}
+
+/* ELIMINAR imágenes de fondo blurreadas */
+.carousel-bg,
+.img-bg {
+  display: none !important; /* Ocultar completamente */
+}
+
+/* Efecto hover sutil (no exagerado) */
+.card:hover .card-image-wrapper img,
+.card:hover .img-fg {
+  transform: scale(1.02) !important; /* 2% es suficiente, no 5% */
+}
+
+/* ============================================
+   5. TARJETAS ESTILO CONFIDENCIAL
+   ============================================ */
+
+/* Tarjetas: planas, limpias, jerárquicas */
+.card,
+.news-card {
+  background: #fff !important;
+  border-radius: 4px !important; /* Muy sutil, no 12px */
+  overflow: hidden;
+  box-shadow: none !important; /* ELIMINAR sombra fuerte */
+  border-bottom: 1px solid var(--color-border-subtle) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  padding-bottom: var(--space-editorial-md) !important;
+  margin-bottom: var(--space-editorial-md) !important;
+  transition: all 0.3s ease !important;
+}
+
+.card:hover,
+.news-card:hover {
+  transform: translateY(-2px) !important; /* Movimiento muy sutil */
+  box-shadow: 0 1px 3px rgba(0,0,0,.08) !important; /* Sombra mínima */
+  border-bottom-color: var(--color-accent-red) !important;
+}
+
+/* Cuerpo de la tarjeta - más espaciado */
+.card-body {
+  padding: var(--space-editorial-md) 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-editorial-sm) !important;
+}
+
+/* Títulos de tarjetas */
+.card h3 {
+  font-size: 1.25rem !important; /* 20px */
+  line-height: 1.3 !important;
+  margin: var(--space-editorial-sm) 0 !important;
+  color: var(--color-text-primary) !important;
+  font-weight: 700 !important;
+  text-transform: none !important; /* NO mayúsculas */
+}
+
+/* Extractos con line-clamp */
+.card p,
+.news-excerpt {
+  font-size: 0.9375rem !important; /* 15px */
+  line-height: 1.5 !important;
+  color: var(--color-text-secondary) !important;
+  margin: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important; /* Máximo 2 líneas */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* Metadatos */
+.card-footer,
+.news-meta {
+  display: flex;
+  gap: 1rem !important;
+  font-size: 0.8125rem !important; /* 13px */
+  color: var(--color-text-tertiary) !important;
+  margin-top: auto !important;
+  padding-top: var(--space-editorial-sm) !important;
+  border-top: none !important;
+}
+
+/* ============================================
+   6. HEADER LIMPIO
+   ============================================ */
+
+.topbar,
+.site-header {
+  background: #fff !important; /* Blanco puro, no gradientes */
+  border-bottom: 1px solid var(--color-border-subtle) !important;
+  padding: 1rem 0 !important;
+  box-shadow: none !important; /* Sin sombra */
+}
+
+/* Navegación horizontal simple */
+.menu,
+.site-nav {
+  display: flex;
+  gap: 2rem !important;
+  justify-content: center;
+  font-family: var(--font-ui) !important;
+  font-size: 0.9375rem !important; /* 15px */
+  font-weight: 500 !important;
+  background: #fff !important;
+  border-bottom: 1px solid var(--color-border-subtle) !important;
+  padding: 1rem 1.25rem !important;
+}
+
+.menu button,
+.site-nav a {
+  color: #374151 !important;
+  text-decoration: none;
+  padding: 0.5rem 0 !important;
+  border-bottom: 2px solid transparent !important;
+  transition: border-color 0.2s, color 0.2s !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  font-weight: 500 !important;
+}
+
+.menu button:hover,
+.menu button.active,
+.site-nav a:hover,
+.site-nav a.active {
+  color: #111827 !important;
+  border-bottom-color: var(--color-accent-red) !important; /* Línea roja sutil */
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   7. GRID EDITORIAL (TIPO CONFIDENCIAL)
+   ============================================ */
+
+/* Grid de 3 columnas donde el principal ocupa 2/3 */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Artículo destacado (2/3 del ancho) */
+.news-item.featured,
+.breaking-card {
+  grid-column: span 8 !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem !important;
+  border-bottom: 1px solid var(--color-border-subtle) !important;
+  padding-bottom: 2rem !important;
+  margin-bottom: 2rem !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.news-item.featured .image,
+.breaking-card .card-image-wrapper {
+  aspect-ratio: 4/3 !important;
+  height: auto !important;
+}
+
+.news-item.featured h3,
+.breaking-body h2 {
+  font-size: 2rem !important; /* Más grande */
+  line-height: 1.2 !important;
+}
+
+/* Artículos secundarios (1/3 del ancho) */
+.news-item.side {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.news-item.side .image {
+  aspect-ratio: 16/9;
+  margin-bottom: 0.5rem;
+}
+
+.news-item.side h3 {
+  font-size: 1.125rem !important; /* Más pequeño */
+  font-weight: 600 !important;
+}
+
+/* ============================================
+   8. ENLACES CON SUBRAYADO ANIMADO
+   ============================================ */
+
+.news-title a,
+.card h3 a {
+  text-decoration: none !important;
+  color: inherit !important;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 0.3s;
+}
+
+.news-title a:hover,
+.card h3 a:hover {
+  background-size: 100% 2px !important; /* Subrayado animado sutil */
+}
+
+/* ============================================
+   9. BOTONES DE COMPARTIR DISCRETOS
+   ============================================ */
+
+/* Botones fuera del flujo principal, aparecen en hover */
+.news-share,
+.card-share {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.news-card:hover .news-share,
+.card:hover .card-share {
+  opacity: 1;
+}
+
+/* ============================================
+   10. RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+  .breaking-card,
+  .news-item.featured {
+    grid-template-columns: 1fr !important;
+    grid-column: span 12 !important;
+  }
+  
+  .news-item.side {
+    grid-column: span 12 !important;
+  }
+  
+  .card h3 {
+    font-size: 1.125rem !important;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --text-headline: 1.25rem; /* 20px en móvil */
+  }
+  
+  .card h3 {
+    font-size: 1rem !important;
+  }
+  
+  .menu {
+    gap: 0.5rem !important;
+  }
+}
+
+/* ============================================
+   11. CARRUSEL MEJORADO
+   ============================================ */
+
+.carousel-caption h3 {
+  font-size: 28px !important;
+  font-weight: 700 !important; /* No 800 */
+  line-height: 1.3 !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.8) !important; /* Sombra más sutil */
+}
+
+.carousel-caption p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  opacity: 0.9 !important;
+}
+
+/* ============================================
+   12. MODAL MEJORADO
+   ============================================ */
+
+.modal-title-wrap h2 {
+  font-size: 2rem !important; /* 32px */
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.modal-text {
+  font-size: 1.0625rem !important; /* 17px - más legible */
+  line-height: 1.7 !important; /* Más espaciado */
+  color: var(--color-text-secondary) !important;
+}
+
+/* ============================================
+   13. AJUSTES FINALES
+   ============================================ */
+
+/* Aumentar espaciado general */
+.main-wrapper {
+  padding: 2rem 1.25rem !important;
+}
+
+.section-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--color-text-primary) !important;
+  margin: 3rem 0 1.5rem !important;
+  padding-bottom: 1rem !important;
+  border-bottom: 2px solid var(--color-border-subtle) !important;
+}
+
+/* Grid con más espaciado */
+.grid {
+  gap: 2rem !important;
+}
+
+/* Eliminar efectos exagerados */
+.card:hover {
+  transform: translateY(-2px) !important; /* Muy sutil */
+}
+
+/* Line height mejorado para legibilidad */
+p {
+  line-height: 1.6 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3 !important;
+}

@@ -1,0 +1,71 @@
+# Dependencias
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Producción
+dist/
+build/
+coverage/
+
+# Variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache & Platforms
+.cache/
+*.tmp
+.vercel/
+.firebase/
+.next/
+
+# Firebase Service Account (NEVER commit this)
+serviceAccountKey.json
+service-account.json
+**/serviceAccountKey.json
+**/service-account.json
+
+# Tokens backup (NEVER commit this)
+tokens-backup.json
+
+# Notas internas / scratch
+ADMIN_BACKUP.txt
+BACKUP-README.md
+FIX_RAPIDO.txt
+SCRIPT_PARA_CONSOLE.txt
+all_images.txt
+imagenes_array.txt
+deploy.log
+
+# Scripts one-shot de migración (no van al deploy)
+mapear_imagenes.js
+mapeo_inteligente.js
+migrate-images.js
+update-images-firebase.js
+asignar-imagenes-inteligente.js
+check-news.js
+eliminar_todo.js
+fix-imagenes-locales.js
+forzar_imagenes.js
+limpiar-imagenes-base64.js
+
+.vercel

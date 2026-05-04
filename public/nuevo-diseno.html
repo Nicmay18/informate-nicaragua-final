@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nicaragua Informate - Diseño Profesional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f4f6;
+      line-height: 1.6;
+    }
+    
+    /* HEADER */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #1a1a1a;
+    }
+    
+    /* NAVEGACIÓN */
+    .nav {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 24px;
+    }
+    
+    .nav-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+    }
+    
+    .nav a {
+      color: #4b5563;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    
+    .nav a:hover,
+    .nav a.active {
+      color: #1a1a1a;
+      border-bottom-color: #dc2626;
+    }
+    
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 48px 24px;
+    }
+    
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    
+    @media (min-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr 300px;
+      }
+    }
+    
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      max-width: 800px;
+    }
+    
+    /* CARRUSEL */
+    .hero {
+      position: relative;
+      aspect-ratio: 16/9;
+      max-height: 500px;
+      overflow: hidden;
+      border-radius: 4px;
+      margin-bottom: 48px;
+    }
+    
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    .hero-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, transparent 100%);
+      padding: 48px 32px 32px;
+      color: #fff;
+    }
+    
+    .hero-category {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #dc2626;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    
+    .hero-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    
+    .hero-excerpt {
+      font-size: 16px;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+    
+    /* SECCIÓN DE NOTICIAS */
+    .section-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 48px 0 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    
+    /* TARJETAS DE NOTICIAS */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .news-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 32px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .news-card:hover {
+      border-bottom-color: #dc2626;
+    }
+    
+    @media (min-width: 768px) {
+      .news-card {
+        flex-direction: row;
+        gap: 24px;
+      }
+    }
+    
+    .news-image {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: #e5e7eb;
+      border-radius: 4px;
+    }
+    
+    @media (min-width: 768px) {
+      .news-image {
+        width: 300px;
+        flex-shrink: 0;
+      }
+    }
+    
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s;
+    }
+    
+    .news-card:hover .news-image img {
+      transform: scale(1.02);
+    }
+    
+    .news-content {
+      flex: 1;
+    }
+    
+    .news-category {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #dc2626;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .news-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #1a1a1a;
+      margin: 8px 0;
+    }
+    
+    .news-excerpt {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #4b5563;
+      margin: 8px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .news-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    
+    .read-more {
+      color: #3b82f6;
+      font-weight: 500;
+    }
+    
+    /* SIDEBAR */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+    }
+    
+    .sidebar-box {
+      background: #f9fafb;
+      padding: 24px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .sidebar-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+    
+    .trending-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .trending-item:hover {
+      background: #fff;
+    }
+    
+    .trending-number {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #e5e7eb;
+      min-width: 32px;
+    }
+    
+    .trending-item:nth-child(1) .trending-number {
+      color: #3b82f6;
+    }
+    
+    .trending-item:nth-child(2) .trending-number {
+      color: #60a5fa;
+    }
+    
+    .trending-item:nth-child(3) .trending-number {
+      color: #93c5fd;
+    }
+    
+    .trending-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">Nicaragua Informate</div>
+      <div style="font-size: 14px; color: #6b7280;">
+        🕐 <span id="clock"></span>
+      </div>
+    </div>
+  </header>
+  
+  <!-- NAVEGACIÓN -->
+  <nav class="nav">
+    <div class="nav-content">
+      <a href="#" class="active">Última hora</a>
+      <a href="#">Sucesos</a>
+      <a href="#">Nacionales</a>
+      <a href="#">Deportes</a>
+      <a href="#">Internacionales</a>
+      <a href="#">Tecnología</a>
+    </div>
+  </nav>
+  
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="container">
+    <div class="layout">
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="main-content">
+        <!-- CARRUSEL HERO -->
+        <div class="hero">
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=675&fit=crop&q=80" alt="Noticia principal">
+          <div class="hero-caption">
+            <span class="hero-category">SUCESOS</span>
+            <h1 class="hero-title">Muere mujer 48 horas después de accidente que también cobró la vida de su hijo</h1>
+            <p class="hero-excerpt">Una mujer de 95 años murió tras permanecer en cuidados intensivos en Managua, elevando a dos las víctimas del hecho...</p>
+          </div>
+        </div>
+        
+        <!-- SECCIÓN DE NOTICIAS -->
+        <h2 class="section-title">📰 Últimas Noticias</h2>
+        
+        <div class="news-list">
+          <!-- Noticia 1 -->
+          <article class="news-card">
+            <div class="news-image">
+              <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=800&h=450&fit=crop&q=80" alt="Noticia">
+            </div>
+            <div class="news-content">
+              <span class="news-category">NACIONALES</span>
+              <h3 class="news-title">Controlan incendio agropecuario en Jinotega tras acción conjunta de instituciones</h3>
+              <p class="news-excerpt">Bomberos y autoridades locales lograron sofocar el incendio que amenazaba cultivos en la zona norte del país...</p>
+              <div class="news-meta">
+                <span>📅 Hace 5 h</span>
+                <span class="read-more">Leer más →</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 2 -->
+          <article class="news-card">
+            <div class="news-image">
+              <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=450&fit=crop&q=80" alt="Noticia">
+            </div>
+            <div class="news-content">
+              <span class="news-category">DEPORTES</span>
+              <h3 class="news-title">Selección nacional se prepara para enfrentar a Costa Rica en eliminatorias</h3>
+              <p class="news-excerpt">El equipo nicaragüense intensifica entrenamientos de cara al crucial partido de clasificación al mundial...</p>
+              <div class="news-meta">
+                <span>📅 Hace 3 h</span>
+                <span class="read-more">Leer más →</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 3 -->
+          <article class="news-card">
+            <div class="news-image">
+              <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&h=450&fit=crop&q=80" alt="Noticia">
+            </div>
+            <div class="news-content">
+              <span class="news-category">TECNOLOGÍA</span>
+              <h3 class="news-title">Nicaragua avanza en digitalización de servicios públicos con nueva plataforma</h3>
+              <p class="news-excerpt">El gobierno presenta sistema digital que permitirá realizar trámites en línea de manera más eficiente...</p>
+              <div class="news-meta">
+                <span>📅 Hace 7 h</span>
+                <span class="read-more">Leer más →</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 4 -->
+          <article class="news-card">
+            <div class="news-image">
+              <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=450&fit=crop&q=80" alt="Noticia">
+            </div>
+            <div class="news-content">
+              <span class="news-category">ECONOMÍA</span>
+              <h3 class="news-title">Nicaragua crece 4.9% en 2025 y consolida su dinamismo económico</h3>
+              <p class="news-excerpt">Nicaragua registró un crecimiento del 4.9% en 2025, impulsado por construcción, inversión y exportaciones de café...</p>
+              <div class="news-meta">
+                <span>📅 Hace 12 h</span>
+                <span class="read-more">Leer más →</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+      
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-box">
+          <h3 class="sidebar-title">🔥 Trending</h3>
+          <div class="trending-item">
+            <div class="trending-number">1</div>
+            <div class="trending-title">Muere mujer 48 horas después de accidente</div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-number">2</div>
+            <div class="trending-title">Controlan incendio en Jinotega</div>
+          </div>
+          <div class="trending-item">
+            <div class="trending-number">3</div>
+            <div class="trending-title">Selección se prepara para Costa Rica</div>
+          </div>
+        </div>
+        
+        <div class="sidebar-box">
+          <h3 class="sidebar-title">📊 Indicadores</h3>
+          <div style="font-size: 14px; line-height: 2; color: #4b5563;">
+            <div>💵 Dólar: C$36.62</div>
+            <div>⛽ Gasolina: C$47.84</div>
+            <div>🛢 Diésel: C$43.21</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  
+  <script>
+    // Reloj en tiempo real
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('es-NI', {hour: '2-digit', minute: '2-digit'});
+      const date = now.toLocaleDateString('es-NI', {weekday: 'short', day: 'numeric', month: 'short'});
+      document.getElementById('clock').textContent = `${time} | ${date}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

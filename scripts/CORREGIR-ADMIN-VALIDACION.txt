@@ -1,0 +1,124 @@
+=============================================================
+CORRECCIÓN PARA ADMIN (index(1).html)
+=============================================================
+
+PASO 1: Agregar validación ANTI-NaN al inicio de guardarNoticia()
+------------------------------------------------------------------
+
+Busca la función guardarNoticia() en tu admin (index(1).html) 
+y AGREGA ESTO al principio, justo después de "e.preventDefault()":
+
+    // ✅ VALIDACIÓN CRÍTICA: No permitir guardar sin imagen válida
+    const imagenUrl = document.getElementById('imagenUrl').value.trim();
+    
+    if (!imagenUrl || imagenUrl === 'NaN' || imagenUrl === 'null' || 
+        imagenUrl === 'undefined' || imagenUrl === '' ||
+        imagenUrl.startsWith('data:image')) {
+      
+      alert('❌ Error: La imagen no está lista.\n\n' +
+            'Pasos para corregir:\n' +
+            '1. Genera el collage en el canvas\n' +
+            '2. Haz clic en "Subir a Servidor"\n' +
+            '3. Espera que se suba a GitHub\n' +
+            '4. Luego guarda la noticia');
+      return;
+    }
+
+PASO 2: Modificar subirCollageServidor() para guardar nombre correcto
+--------------------------------------------------------------------
+
+Busca la función subirCollageServidor() y REEMPLÁZALA con esta:
+
+async function subirCollageServidor(base64) {
+  mostrarLoading(true, 'Subiendo imagen...');
+  
+  try {
+    // Generar nombre único
+    const timestamp = Date.now();
+    const randomStr = Math.random().toString(36).substring(2, 8);
+    const nombreArchivo = `collage_${timestamp}_${randomStr}.webp`;
+    
+    // Intentar subir a GitHub vía API
+    const resp = await fetch('/api/upload-github', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        imagen: base64, 
+        nombre: nombreArchivo 
+      })
+    });
+
+    const data = await resp.json();
+    
+    if (data.success) {
+      // ✅ Guardar SOLO el nombre, no base64, no URL completa
+      document.getElementById('imagenUrl').value = data.filename;
+      showToast('success', '✅ Imagen lista', 
+                `Guardada como: ${data.filename}`);
+      return data.filename;
+    } else {
+      throw new Error(data.error || 'Error en servidor');
+    }
+    
+  } catch (err) {
+    console.error('Error:', err);
+    
+    // Fallback: descargar para subida manual
+    const link = document.createElement('a');
+    link.href = base64;
+    link.download = `manual_${Date.now()}.webp`;
+    link.click();
+    
+    alert('⚠️ Error de subida automática.\n\n' +
+          'La imagen se descargó. Súbela manualmente a GitHub:\n' +
+          'github.com/Nicmay18/informate-nicaragua → informate-nicaragua-main/public/images/\n\n' +
+          'Luego pega el nombre del archivo en el campo Imagen.');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
+=============================================================
+CÓMO USAR ESTOS SCRIPTS
+=============================================================
+
+1. LIMPIAR NOTICIAS EXISTENTES (una vez):
+   ----------------------------------------
+   cd "g:\RESPALDO\ESCRITORIO\Curso NoelCode\informate-nicaragua\informate-nicaragua-main"
+   
+   # Necesitas Node.js y el serviceAccountKey.json
+   node scripts/limpiar-imagenes-nan.js
+   
+   Esto pondrá 'placeholder_GENERAL.webp' en las noticias con 'NaN'
+
+2. CORREGIR ADMIN (para noticias nuevas):
+   ----------------------------------------
+   - Abre tu archivo admin (index(1).html)
+   - Busca la función guardarNoticia()
+   - Agrega la validación del PASO 1
+   - Reemplaza subirCollageServidor() con el PASO 2
+   - Guarda y sube a Vercel
+
+3. SUBIR IMÁGENES REALES A GITHUB:
+   --------------------------------
+   - Ve a: https://github.com/Nicmay18/informate-nicaragua
+   - Navega: informate-nicaragua-main → public → images
+   - Haz clic en "Add file" → "Upload files"
+   - Sube las imágenes que tienes localmente
+   - Espera 5-10 minutos a que jsDelivr/cache se actualice
+
+=============================================================
+ESTRUCTURA CORRECTA DE URLS
+=============================================================
+
+GitHub Raw:
+https://raw.githubusercontent.com/Nicmay18/informate-nicaragua/main/informate-nicaragua-main/public/images/NOMBRE.webp
+
+jsDelivr (más rápido):
+https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua@main/informate-nicaragua-main/public/images/NOMBRE.webp
+
+En Firestore debe guardarse SOLO el nombre:
+✅ "collage_1234567890_abcd1234.webp"
+❌ "https://..." (URL completa - solo si es externa)
+❌ "data:image/jpeg;base64,..." (NUNCA)
+❌ "NaN", "null", "" (NUNCA)

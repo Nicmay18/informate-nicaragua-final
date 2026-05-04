@@ -1,0 +1,29 @@
+#!/bin/sh
+# Pre-commit: validar que no haya URLs base64 ni rotas en archivos JS/HTML
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|html)$' || true)
+
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+ERRORS=0
+for FILE in $STAGED; do
+  # Rechazar imagenes base64 inline (mas de 500 chars de data:image)
+  if git show ":$FILE" | grep -qP 'data:image/[^;]{1,20};base64,[A-Za-z0-9+/]{500,}'; then
+    echo "ERROR: $FILE contiene imagen base64 inline. Subila a GitHub primero."
+    ERRORS=$((ERRORS + 1))
+  fi
+  # Rechazar URLs de Facebook CDN
+  if git show ":$FILE" | grep -qE 'fbcdn\.(net|com)|scontent-.*\.fbcdn|instagram\.com.*cdninstagram'; then
+    echo "ERROR: $FILE contiene URL de Facebook/Instagram CDN. Usa GitHub + jsDelivr."
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+if [ $ERRORS -gt 0 ]; then
+  echo "Commit bloqueado: corrige las URLs de imagenes."
+  exit 1
+fi
+
+exit 0

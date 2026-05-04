@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapear Imágenes | Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; }
+    .header { background: #c41e3a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 18px; }
+    .container { display: flex; height: calc(100vh - 60px); }
+    .noticias { width: 50%; overflow-y: auto; padding: 10px; border-right: 1px solid #333; }
+    .imagenes { width: 50%; overflow-y: auto; padding: 10px; background: #222; }
+    .noticia { background: #2a2a2a; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
+    .noticia:hover { border-color: #c41e3a; }
+    .noticia.activa { border-color: #c41e3a; background: #3a1a1a; }
+    .noticia img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; float: left; margin-right: 10px; }
+    .noticia h3 { font-size: 14px; margin-bottom: 5px; }
+    .noticia .cat { font-size: 11px; color: #aaa; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+    .img-item { cursor: pointer; border-radius: 6px; overflow: hidden; border: 2px solid transparent; transition: 0.2s; position: relative; }
+    .img-item:hover { border-color: #c41e3a; transform: scale(1.05); }
+    .img-item img { width: 100%; height: 80px; object-fit: cover; display: block; }
+    .img-item .name { font-size: 9px; padding: 4px; background: rgba(0,0,0,0.7); position: absolute; bottom: 0; left: 0; right: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .filtro { padding: 10px; background: #333; position: sticky; top: 0; z-index: 10; }
+    .filtro input { width: 100%; padding: 8px; border: none; border-radius: 4px; background: #444; color: white; }
+    .msg { position: fixed; top: 20px; right: 20px; background: #28a745; padding: 15px 20px; border-radius: 8px; display: none; z-index: 1000; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🖼️ Asignar Imágenes a Noticias</h1>
+    <div>
+      <span id="contador">Cargando...</span>
+      <a href="admin.html" style="color:white;margin-left:20px;">← Volver al Admin</a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="noticias" id="noticias">
+      <div class="filtro">
+        <input type="text" id="filtroNoticias" placeholder="Buscar noticia..." oninput="filtrarNoticias(this.value)">
+      </div>
+      <div id="listaNoticias"></div>
+    </div>
+    
+    <div class="imagenes" id="imagenes">
+      <div class="filtro">
+        <input type="text" id="filtroImagenes" placeholder="Buscar imagen..." oninput="filtrarImagenes(this.value)">
+      </div>
+      <div class="grid" id="gridImagenes"></div>
+    </div>
+  </div>
+  
+  <div class="msg" id="msg">✅ Imagen asignada!</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVsqRGr7dtdi5ecO14THIdbnEzKKOJxcA",
+      authDomain: "informate-instant-nicaragua.firebaseapp.com",
+      projectId: "informate-instant-nicaragua",
+      storageBucket: "informate-instant-nicaragua.firebasestorage.app",
+      messagingSenderId: "24988088146",
+      appId: "1:24988088146:web:d26a207508da055668ec8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const CDN_BASE = "https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua@main/public/images/";
+    
+    let noticias = [];
+    let imagenes = [];
+    let noticiaActiva = null;
+
+    // Lista de imágenes (generada automáticamente)
+    const NOMBRES_IMAGENES = ["1774024854629_655278217_18005774471850823_1069036113521707958_n_jpg.webp","1774026861491_hue_jpg.webp","1774027225845_g_png.webp","1774028977124_chuck_norris_texas_webp.webp","1774030005635_unnamed_jpg.webp","1774043060134_haa_webp.webp","1774045561737_leon_webp.webp","1774048380338_preso_webp.webp","1774062057495_122_webp.webp","1774062696605_ruben_webp.webp","1774064218765_ruta_webp.webp","1774064490349_SELE_webp.webp","1774086809370_incend_webp.webp","1774088285400_Captura_de_pantalla_2026_03_21_041635_webp.webp","1774089053990_xqzbt3tc_webp.webp","1774091802394_JSDJS_webp.webp","1774092678008_SEELE_webp.webp","1774098956732_63139_webp.webp","1774100097928_63162_webp.webp","1774116834145_63328_webp.webp","1774128476900_63435_webp.webp","1774130407030_63477_webp.webp","1774132339385_63483_webp.webp","1774133749920_63513_webp.webp","1774134733172_63518_webp.webp","1774134963655_63519_webp.webp","1774136334336_63522_webp.webp","1774136909877_63536_webp.webp","1774137617177_63538_webp.webp","1774178981611_63963_webp.webp","1774195735279_64051_webp.webp","1774196293698_64064_webp.webp","1774198483272_64097_webp.webp","1774201298947_64131_webp.webp","1774202111243_64144_webp.webp","1774282483211_aveja_webp.webp","1774286298283_12_webp.webp","1774287327911_avion_webp.webp","1774288701609_jalapa_webp.webp","1774289649734_grecia_webp.webp","1774290041273_image_4c03a8dd_webp.webp","1774291041891_WhatsApp_Image_2026_03_23_at_12_32_03_PM_webp.webp","1774291866168_alfabetizacion_webp.webp","1774295719228_norr_webp.webp","1774296209489_minsa_webp.webp","1774296735187_madris_webp.webp","1774297565420_bar_webp.webp","1774299337338_bad_webp.webp","1774300622526_WhatsApp_Image_2026_03_23_at_3_16_23_PM_webp.webp","1774301291574_f4f3fbe28bc90130e481152b361e1245_webp.webp","1774301873801_657540689_1626468092210788_1787147465049955445_n_webp.webp","1774302957274_WhatsApp_Image_2026_03_23_at_3_55_30_PM_webp.webp","1774303033550_WhatsApp_Image_2026_03_23_at_3_56_50_PM_webp.webp","1774303491882_Rendimiento_SSD_en_Windows_11_1600x900_webp.webp","1774320901279_65270_webp.webp","1774321626082_65276_webp.webp","1774355917105_65537_webp.webp","1774356495487_65544_webp.webp","1774374057364_WhatsApp_Image_2026_03_24_at_11_37_48_AM_webp.webp","1774382299072_DarkSword_1300x867_webp.webp","1774383407437_Policia_Nacional_1_webp.webp","1774384809591_DarkSword_1300x867_webp.webp","1774384814397_69c23c4559bf5b2c8621dd91_webp.webp","1774385410030_avio_webp.webp","1774387802420_WhatsApp_Image_2026_03_24_at_3_29_28_PM_webp.webp","1774393881872_655479942_1473903334334383_4143752232754479216_n_webp.webp","1774455200705_silla_webp.webp","1774456418543_pn_webp.webp","1774459872277_rivas_webp.webp","1774461493954_WhatsApp_Image_2026_03_25_at_11_51_51_AM_webp.webp","1774461846962_657611945_1711045256517848_4776855585097096012_n_webp.webp","1774462868890_WhatsApp_Image_2026_03_25_at_11_47_06_AM_webp.webp","1774470174159_sina_webp.webp","1774472771613_iran_webp.webp","1774476610060_pn_webp.webp","1774477485848_Super_Mario_Galaxy_Pelicula_Hielo_nth_hero_webp_webp.webp","1774478089159_655604934_26349545034694671_8919086571440051703_n_webp.webp","1774479210380_peaton_webp.webp","1774480548263_656710854_1371480261671726_2712724060909172517_n_webp.webp","1774536365593_nica_webp.webp","1774538565055_pitbi_webp.webp","1774560444701_leon_webp.webp","1774560584762_leon_webp.webp","1774560663721_leon_webp.webp","1774561010096_leon_webp.webp","1774561030817_leon_webp.webp","1774561114913_leon_webp.webp","1774561257451_leon_webp.webp","1774561489798_leon_webp.webp","1774561776093_leon_webp.webp","1774561903697_leon_webp.webp","1774561924366_leon_webp.webp","1774562041185_leon_webp.webp","1774562226241_leon_webp.webp","1774562410106_leon_webp.webp","1774562922738_leon_webp.webp","1774563038379_leon_webp.webp","1774564411657_crimen_webp.webp","1774564424012_crimen_webp.webp","1774564481374_crimen_webp.webp","1774567322024_nindiri_webp.webp","1774568414427_nindiri_webp.webp","1774568454756_nindiri_webp.webp","1774568559454_nindiri_webp.webp","1774568631333_nindiri_webp.webp","1774568701648_nindiri_webp.webp","1774568864691_nindiri_webp.webp"];
+
+    async function init() {
+      // Cargar noticias
+      const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+      const snap = await getDocs(q);
+      snap.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+      
+      // Crear lista de imágenes
+      imagenes = NOMBRES_IMAGENES.map(n => ({ nombre: n, url: CDN_BASE + n }));
+      
+      document.getElementById('contador').textContent = `${noticias.length} noticias | ${imagenes.length} imágenes`;
+      
+      renderNoticias();
+      renderImagenes();
+    }
+
+    function renderNoticias(filtro = '') {
+      const container = document.getElementById('listaNoticias');
+      const filtroLower = filtro.toLowerCase();
+      
+      const filtradas = noticias.filter(n => {
+        const texto = `${n.titulo || ''} ${n.categoria || ''}`.toLowerCase();
+        return texto.includes(filtroLower);
+      });
+      
+      container.innerHTML = filtradas.map(n => `
+        <div class="noticia ${noticiaActiva?.id === n.id ? 'activa' : ''}" onclick="seleccionarNoticia('${n.id}')">
+          <img src="${n.imagen || 'https://via.placeholder.com/80x60?text=Sin+IMG'}" onerror="this.src='https://via.placeholder.com/80x60?text=Error'">
+          <h3>${n.titulo || '(Sin título)'}</h3>
+          <div class="cat">${n.categoria || '—'} | ${n.id.substring(0,8)}</div>
+          <div style="clear:both;"></div>
+        </div>
+      `).join('');
+    }
+
+    window.seleccionarNoticia = function(id) {
+      noticiaActiva = noticias.find(n => n.id === id);
+      renderNoticias(document.getElementById('filtroNoticias').value);
+      // Scroll a imágenes en móvil
+      if (window.innerWidth < 768) {
+        document.getElementById('imagenes').scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    function renderImagenes(filtro = '') {
+      const container = document.getElementById('gridImagenes');
+      const filtroLower = filtro.toLowerCase();
+      
+      const filtradas = imagenes.filter(img => img.nombre.toLowerCase().includes(filtroLower));
+      
+      container.innerHTML = filtradas.map(img => `
+        <div class="img-item" onclick="asignarImagen('${img.nombre}')">
+          <img src="${img.url}" loading="lazy" onerror="this.style.display='none'">
+          <div class="name">${img.nombre.substring(0, 30)}</div>
+        </div>
+      `).join('');
+    }
+
+    window.asignarImagen = async function(nombreImagen) {
+      if (!noticiaActiva) {
+        alert('Primero haz click en una noticia (izquierda)');
+        return;
+      }
+      
+      const url = CDN_BASE + nombreImagen;
+      try {
+        await updateDoc(doc(db, "noticias", noticiaActiva.id), { imagen: url });
+        
+        // Actualizar local
+        noticiaActiva.imagen = url;
+        renderNoticias(document.getElementById('filtroNoticias').value);
+        
+        // Mostrar mensaje
+        const msg = document.getElementById('msg');
+        msg.style.display = 'block';
+        msg.textContent = `✅ "${noticiaActiva.titulo?.substring(0,30)}..." → ${nombreImagen.substring(0,20)}`;
+        setTimeout(() => msg.style.display = 'none', 2000);
+        
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    };
+
+    window.filtrarNoticias = function(valor) {
+      renderNoticias(valor);
+    };
+
+    window.filtrarImagenes = function(valor) {
+      renderImagenes(valor);
+    };
+
+    init();
+  </script>
+</body>
+</html>

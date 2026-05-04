@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corregir Títulos - Nicaragua Informate</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f3f4f6;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #b91c1c;
+    }
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      display: none;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #dc2626;
+    }
+    .info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #3b82f6;
+    }
+    #log {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: monospace;
+      display: none;
+    }
+    .log-item {
+      padding: 4px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 Corregir Títulos en Mayúsculas</h1>
+    <p>Este script corregirá todos los títulos de noticias que están en MAYÚSCULAS y los convertirá a formato normal (solo primera letra mayúscula).</p>
+    
+    <button id="btnCorregir" onclick="corregirTitulos()">
+      Corregir Todos los Títulos
+    </button>
+    
+    <div id="status"></div>
+    <div id="log"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const app = initializeApp({
+      apiKey: "AIzaSyDVsqRGr7dtdi5ecO14THIdbnEzZKOJxcA",
+      authDomain: "informate-instant-nicaragua.firebaseapp.com",
+      projectId: "informate-instant-nicaragua",
+      storageBucket: "informate-instant-nicaragua.firebasestorage.app",
+      messagingSenderId: "24988088146",
+      appId: "1:24988088146:web:d26a207508da055668ec8b"
+    });
+
+    const db = getFirestore(app);
+
+    window.corregirTitulos = async function() {
+      const btn = document.getElementById('btnCorregir');
+      const status = document.getElementById('status');
+      const log = document.getElementById('log');
+      
+      btn.disabled = true;
+      btn.textContent = 'Corrigiendo...';
+      status.style.display = 'block';
+      status.className = 'info';
+      status.textContent = '⏳ Cargando noticias...';
+      log.style.display = 'block';
+      log.innerHTML = '';
+      
+      try {
+        const snapshot = await getDocs(collection(db, 'noticias'));
+        let corregidos = 0;
+        let total = snapshot.docs.length;
+        
+        status.textContent = `📊 Encontradas ${total} noticias. Corrigiendo...`;
+        
+        for (const docSnap of snapshot.docs) {
+          const noticia = docSnap.data();
+          const tituloOriginal = noticia.titulo;
+          
+          if (tituloOriginal) {
+            // Convertir a minúsculas y capitalizar solo primera letra
+            const tituloLower = tituloOriginal.toLowerCase();
+            const tituloCorregido = tituloLower.charAt(0).toUpperCase() + tituloLower.slice(1);
+            
+            // Solo actualizar si hay cambio
+            if (tituloOriginal !== tituloCorregido) {
+              await updateDoc(doc(db, 'noticias', docSnap.id), {
+                titulo: tituloCorregido
+              });
+              
+              const logItem = document.createElement('div');
+              logItem.className = 'log-item';
+              logItem.innerHTML = `✅ <strong>Antes:</strong> ${tituloOriginal}<br><strong>Después:</strong> ${tituloCorregido}`;
+              log.appendChild(logItem);
+              
+              corregidos++;
+            }
+          }
+        }
+        
+        status.className = 'success';
+        status.textContent = `🎉 ¡Completado! ${corregidos} de ${total} títulos corregidos.`;
+        btn.textContent = 'Corregir Todos los Títulos';
+        btn.disabled = false;
+        
+        if (corregidos > 0) {
+          setTimeout(() => {
+            if (confirm('✅ Títulos corregidos. ¿Quieres recargar la página principal para ver los cambios?')) {
+              window.location.href = '/';
+            }
+          }, 1000);
+        }
+        
+      } catch (error) {
+        console.error('Error:', error);
+        status.className = 'error';
+        status.textContent = `❌ Error: ${error.message}`;
+        btn.textContent = 'Reintentar';
+        btn.disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>

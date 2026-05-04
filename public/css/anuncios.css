@@ -1,0 +1,210 @@
+/**
+ * Estilos para Anuncios Inteligentes
+ * Garantiza que NO tapen marca de agua ni títulos
+ */
+
+/* Contenedor base de anuncios */
+.ad-container {
+  margin: 40px auto;
+  padding: 20px 0;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  clear: both;
+  position: relative;
+  z-index: 1; /* NUNCA más alto que marca de agua (z-index: 10) */
+}
+
+/* Etiqueta "Publicidad" obligatoria */
+.ad-container::before {
+  content: "Publicidad";
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* Dark mode */
+body.dark-theme .ad-container {
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+body.dark-theme .ad-container::before {
+  color: #666;
+}
+
+/* ========================================
+   ANUNCIOS EN INDEX
+   ======================================== */
+
+/* Anuncio después del carrusel */
+.ad-after-carousel {
+  max-width: 1280px;
+  margin: 30px auto;
+  padding: 20px 24px;
+}
+
+/* Anuncio después de noticia destacada */
+.ad-after-featured {
+  margin: 30px 0;
+}
+
+/* Anuncios en el feed de noticias */
+.ad-in-feed {
+  grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+  margin: 20px 0;
+  max-width: 100%;
+}
+
+/* Anuncio en sidebar (sticky pero respetando scroll) */
+.ad-sidebar {
+  position: sticky;
+  top: 80px;
+  margin-bottom: 30px;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.ad-sidebar::before {
+  margin-bottom: 15px;
+}
+
+/* ========================================
+   ANUNCIOS EN NOTICIA
+   ======================================== */
+
+/* Anuncio DESPUÉS de imagen hero (NUNCA encima) */
+.ad-after-hero {
+  margin: 30px 0 40px;
+  max-width: 100%;
+}
+
+/* Anuncio dentro del artículo */
+.ad-in-article {
+  margin: 40px 0;
+  float: none;
+  clear: both;
+}
+
+/* Anuncio antes de compartir */
+.ad-before-share {
+  margin: 30px 0;
+}
+
+/* ========================================
+   FORMATOS DE ANUNCIOS
+   ======================================== */
+
+/* Banner horizontal (728x90 o responsive) */
+.ad-container.horizontal {
+  min-height: 90px;
+}
+
+/* Rectángulo (300x250) */
+.ad-container.rectangle {
+  min-height: 250px;
+}
+
+/* Vertical (160x600) */
+.ad-container.vertical {
+  min-height: 600px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .ad-sidebar {
+    display: none; /* Ocultar sidebar ads en tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .ad-container {
+    margin: 30px auto;
+    padding: 15px 0;
+  }
+  
+  /* Reducir cantidad de anuncios en móvil */
+  .ad-in-feed:nth-child(n+2) {
+    display: none; /* Solo 1 anuncio in-feed en móvil */
+  }
+  
+  .ad-after-carousel {
+    padding: 15px 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .ad-container {
+    margin: 20px auto;
+  }
+  
+  /* Anuncios más compactos en móvil */
+  .ad-container::before {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+}
+
+/* ========================================
+   PROTECCIÓN ANTI-OVERLAP
+   ======================================== */
+
+/* NUNCA permitir que anuncios se superpongan al contenido */
+.ad-container {
+  position: relative !important; /* Nunca absolute o fixed sobre contenido */
+  float: none !important;
+  clear: both !important;
+}
+
+/* Asegurar que marca de agua siempre esté visible */
+.carousel-item-custom::before,
+.breaking-card .card-image::before {
+  z-index: 10 !important; /* Siempre sobre anuncios */
+}
+
+/* Asegurar que títulos sobre fotos sean legibles */
+.carousel-caption-custom,
+.titular-sobre-foto {
+  z-index: 5 !important; /* Sobre degradado pero bajo marca de agua */
+}
+
+/* ========================================
+   ESTADOS DE CARGA
+   ======================================== */
+
+/* Placeholder mientras carga el anuncio */
+.ad-container:empty::after {
+  content: "Cargando anuncio...";
+  display: block;
+  color: #d1d5db;
+  font-size: 12px;
+  padding: 20px;
+}
+
+/* Anuncio cargado */
+.ad-container:not(:empty)::after {
+  display: none;
+}
+
+/* ========================================
+   ACCESIBILIDAD
+   ======================================== */
+
+/* Permitir saltar anuncios con teclado */
+.ad-container {
+  scroll-margin-top: 80px;
+}
+
+/* Indicador visual para screen readers */
+.ad-container[aria-label]::before {
+  content: attr(aria-label);
+}

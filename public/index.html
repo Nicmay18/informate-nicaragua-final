@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#8c1d18">
+  <meta name="description" content="Nicaragua Informate — Periodismo de Precisión. Noticias de Nicaragua en tiempo real: Sucesos, Nacionales, Deportes, Internacionales y Espectáculos.">
+  <meta name="keywords" content="noticias nicaragua, periodismo nicaragua, sucesos, nacionales, deportes, internacionales, espectáculos">
+  <meta name="author" content="Nicaragua Informate">
+  <meta name="robots" content="index, follow">
+  <meta name="google-adsense-account" content="ca-pub-4115203339551838">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  <link rel="canonical" href="https://nicaraguainformate.com/">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
+  <meta name="msapplication-TileColor" content="#8c1d18">
+  <meta name="theme-color" content="#8c1d18" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0e1a" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nicaraguainformate.com/">
+  <meta property="og:title" content="Nicaragua Informate | Periodismo de Precisión">
+  <meta property="og:description" content="Noticias de Nicaragua al instante.">
+  <meta property="og:image" content="https://nicaraguainformate.com/og-image.jpg">
+  <title>Nicaragua Informate | Periodismo de Precisión</title>
+  <script>(function(){try{var t=localStorage.getItem('ni_theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W1B5J61WEP',{send_page_view:false});</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossorigin="anonymous"></script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.gstatic.com https://*.adtrafficquality.google 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https://images.unsplash.com https://openweathermap.org https://*.gstatic.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google https://cdn.jsdelivr.net https://raw.githubusercontent.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://firebasestorage.googleapis.com https://*.firebasestorage.app data: blob:; connect-src 'self' https://*.googleapis.com https://*.cloudfunctions.net https://api.open-meteo.com https://*.google.com https://www.gstatic.com https://*.adtrafficquality.google https://www.google-analytics.com https://www.googletagmanager.com; media-src 'self' https: blob:; frame-src 'self' https://googleads.g.doubleclick.net https://www.google.com https://*.googlesyndication.com https://tpc.googlesyndication.com https://*.adtrafficquality.google; upgrade-insecure-requests;">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <script type="module">
+    (async function bootstrap() {
+      // 1. DESTRUIR Service Worker y TODAS sus caches inmediatamente
+      if ('serviceWorker' in navigator) {
+        try {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(n => caches.delete(n)));
+          console.log('[Bootstrap] SW y caches eliminados');
+        } catch(e) { console.warn('[Bootstrap] Error limpiando SW:', e); }
+      }
+
+      // 2. Limpiar versiones antiguas de cache (solo una vez)
+      try {
+        const cacheVer = localStorage.getItem('ni_cache_version');
+        if (cacheVer !== 'v10') {
+          ['v3','v4','v5','v6','v7','v8','v9'].forEach(v => {
+            localStorage.removeItem('ni_news_cache_' + v);
+            localStorage.removeItem('ni_news_cache_meta_' + v);
+          });
+          localStorage.setItem('ni_cache_version', 'v10');
+          console.log('[Bootstrap] Cache antiguo limpiado');
+        }
+      } catch(e) { console.warn('[Bootstrap] Error limpiando localStorage:', e); }
+
+      // 3. Cargar Firebase y esperar
+      const fbModule = await import('/js/firebase-loader.js?v=10');
+      const fb = await fbModule.initFirebase();
+      console.log('[Bootstrap] Firebase listo:', !!fb.db);
+
+      // 4. Cargar news-service.js SOLO DESPUÉS de que Firebase existe
+      await import('/js/news-service.js?v=10');
+      console.log('[Bootstrap] NewsService cargado');
+
+      // 5. Cargar app.js al final
+      await import('/js/app.js?v=10');
+      console.log('[Bootstrap] App inicializada');
+    })();
+  </script>
+
+  <a href="#main-content" class="skip-link">Ir al contenido principal</a>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu-overlay" onclick="app.toggleMenu()"></div>
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-header">
+        <span class="brand-title">Nicaragua Informate</span>
+        <button type="button" class="mobile-menu-close" onclick="event.preventDefault(); event.stopPropagation(); app.toggleMenu(); return false;" aria-label="Cerrar menú" ontouchstart="event.preventDefault(); event.stopPropagation(); app.toggleMenu(); return false;"><i class="fas fa-times" onclick="event.stopPropagation();"></i></button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a class="mobile-menu-link active" onclick="app.filter('Todas', this); app.toggleMenu();" href="#"><i class="fas fa-home"></i> Inicio</a>
+        <a class="mobile-menu-link" onclick="app.filter('Sucesos', this); app.toggleMenu();" href="#"><i class="fas fa-exclamation-triangle" style="color:var(--cat-sucesos)"></i> Sucesos</a>
+        <a class="mobile-menu-link" onclick="app.filter('Nacionales', this); app.toggleMenu();" href="#"><i class="fas fa-building-columns" style="color:var(--cat-nacionales)"></i> Nacionales</a>
+        <a class="mobile-menu-link" onclick="app.filter('Deportes', this); app.toggleMenu();" href="#"><i class="fas fa-futbol" style="color:var(--cat-deportes)"></i> Deportes</a>
+        <a class="mobile-menu-link" onclick="app.filter('Internacionales', this); app.toggleMenu();" href="#"><i class="fas fa-globe" style="color:var(--cat-internacionales)"></i> Internacionales</a>
+        <a class="mobile-menu-link" onclick="app.filter('Espectáculos', this); app.toggleMenu();" href="#"><i class="fas fa-film" style="color:var(--cat-espectaculos)"></i> Espectáculos</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span><i class="far fa-calendar-alt"></i> <span id="topBarDate"></span></span>
+        <span><i class="fas fa-map-marker-alt"></i> Managua, Nicaragua</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="/" class="brand" onclick="event.preventDefault(); app.refresh();" aria-label="Nicaragua Informate - Inicio">
+        <img src="/logo.png" class="brand-logo" alt="Nicaragua Informate" width="40" height="40">
+        <div class="brand-info">
+          <span class="brand-title">Nicaragua Informate</span>
+          <span class="brand-tagline">Periodismo de Precisión</span>
+        </div>
+      </a>
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <button class="nav-link active" onclick="app.filter('Todas', this)" aria-current="page"><i class="fas fa-home" aria-hidden="true"></i> Inicio</button>
+        <button class="nav-link" onclick="app.filter('Sucesos', this)"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Sucesos</button>
+        <button class="nav-link" onclick="app.filter('Nacionales', this)"><i class="fas fa-building-columns" aria-hidden="true"></i> Nacionales</button>
+        <button class="nav-link" onclick="app.filter('Deportes', this)"><i class="fas fa-futbol" aria-hidden="true"></i> Deportes</button>
+        <button class="nav-link" onclick="app.filter('Internacionales', this)"><i class="fas fa-globe" aria-hidden="true"></i> Internacionales</button>
+        <button class="nav-link" onclick="app.filter('Espectáculos', this)"><i class="fas fa-film" aria-hidden="true"></i> Espectáculos</button>
+      </nav>
+      <div class="header-actions">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="app.toggleMenu()" aria-label="Menú" aria-expanded="false" aria-controls="mobileMenu"><i class="fas fa-bars" aria-hidden="true"></i></button>
+        <div class="search-box" role="search">
+          <button class="search-toggle" id="searchToggle" onclick="app.toggleSearch()" aria-label="Buscar"><i class="fas fa-search" aria-hidden="true"></i></button>
+          <input type="search" class="search-input" id="searchInput" placeholder="Buscar noticias..." oninput="app.search(this.value)" aria-label="Buscar noticias">
+        </div>
+        <button class="theme-toggle" onclick="app.toggleTheme()" id="themeBtn" aria-label="Cambiar tema"><i class="fas fa-sun" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Radio Bar -->
+  <div class="radio-bar" role="complementary" aria-label="Radio en vivo">
+    <div class="radio-inner">
+      <div class="live-badge"><span class="live-dot" aria-hidden="true"></span> En Vivo</div>
+      <div class="radio-control">
+        <button class="radio-play-btn" id="radioPlayBtn" onclick="(app&&app.radio||window._niRadio).toggle()" aria-label="Reproducir radio"><i class="fas fa-play" id="radioIcon" aria-hidden="true"></i></button>
+        <select class="radio-select" id="radioStation" onchange="(app&&app.radio||window._niRadio).change()" aria-label="Seleccionar emisora">
+          <option value="">Seleccionar emisora...</option>
+          <option value="https://stream.zenolive.com/axr92qawesmtv">La Nueva Radio Ya</option>
+          <option value="https://stream.zeno.fm/iwmolyow6tivv">Radio Futura 91.3 FM</option>
+          <option value="https://stream.zeno.fm/91gkqnhmns8uv">Clásica 101.9 FM</option>
+          <option value="https://sonicpanel.us/8032/stream">Radio Maranatha 103.5 FM</option>
+          <option value="https://stream.zeno.fm/cbd1wweamzzuv">La Voz del Norte</option>
+          <option value="https://radios.solumedia.com/6596/stream">Fiesta Latina 89.1 FM</option>
+          <option value="https://a9.asurahosting.com:7140/radio.mp3">Stereo Beso 94.5 FM</option>
+          <option value="https://streamer.radio.co/sd5242d0b6/listen">Radio Estrella del Mar</option>
+        </select>
+      </div>
+      <span class="radio-status" id="radioStatus">Selecciona una emisora</span>
+      <div class="visualizer" id="visualizer" aria-hidden="true" style="opacity: 0;">
+        <div class="visualizer-bar" style="height: 5px;"></div><div class="visualizer-bar" style="height: 15px;"></div>
+        <div class="visualizer-bar" style="height: 10px;"></div><div class="visualizer-bar" style="height: 20px;"></div>
+        <div class="visualizer-bar" style="height: 8px;"></div>
+      </div>
+      <audio id="radioAudio" preload="none"></audio>
+    </div>
+  </div>
+
+  <!-- Breaking News Bar -->
+  <div class="breaking-bar" id="breakingBar" style="display:none;" role="alert" aria-live="polite">
+    <div class="breaking-bar__inner">
+      <span class="breaking-bar__label">
+        <span class="breaking-bar__pulse" aria-hidden="true"></span>
+        Última hora
+      </span>
+      <div class="breaking-bar__ticker" id="breakingTicker"></div>
+    </div>
+  </div>
+
+  <!-- Hero Carousel -->
+  <section class="hero" aria-label="Noticias destacadas">
+    <div class="hero-carrusel-container">
+      <div class="carrusel-indicadores" id="heroIndicators" role="tablist" aria-label="Controles de carrusel"></div>
+      <div class="carrusel-slides" id="heroSlides"></div>
+      <button class="carrusel-control prev" onclick="app.carruselPrev()" aria-label="Noticia anterior"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+      <button class="carrusel-control next" onclick="app.carruselNext()" aria-label="Noticia siguiente"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+  <!-- Main Layout -->
+  <div class="layout">
+    <aside class="sidebar-left" role="complementary" aria-label="Barra lateral izquierda">
+      <div class="widget"><div class="widget-header"><h3 class="widget-title"><i class="fas fa-fire"></i> Tendencias</h3></div><div class="trending-list" id="trendingList"></div></div>
+      <div class="widget"><div class="widget-header"><h3 class="widget-title"><i class="fas fa-envelope"></i> Newsletter</h3></div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Recibe las noticias más importantes cada mañana.</p>
+        <form onsubmit="event.preventDefault(); (async()=>{const e=this.querySelector('input');const btn=this.querySelector('button');if(!e.value)return;btn.disabled=true;btn.textContent='Enviando...';try{const{getFirebaseError}=await import('/js/firebase-loader.js');const{initFirebase}=await import('/js/firebase-loader.js');const fb=await initFirebase();if(fb.db){const{collection,addDoc}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');await addDoc(collection(fb.db,'newsletter_subscribers'),{email:e.value,status:'active',subscribedAt:new Date().toISOString()});app.showToast('¡Gracias por suscribirte!','success');e.value='';}else{app.showToast('Error de conexión','error');}}catch(err){app.showToast('Error al suscribirse','error');}btn.disabled=false;btn.textContent='Suscribirse';})();">
+          <input type="email" placeholder="tu@email.com" required>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Suscribirse</button>
+        </form>
+      </div>
+    </aside>
+    <main class="main-content" id="main-content" role="main">
+      <nav class="breadcrumbs" aria-label="Navegación de migas de pan">
+        <a href="/">Inicio</a>
+        <span class="separator">/</span>
+        <span class="current">Últimas Noticias</span>
+      </nav>
+      <div class="section-header"><h2 class="section-title">Últimas Noticias</h2>
+        <div class="section-actions"><button class="btn btn-secondary" onclick="app.loadMore()"><i class="fas fa-sync-alt"></i> Actualizar</button></div>
+      </div>
+      <div class="news-grid" id="newsGrid" aria-live="polite">
+<article class="news-card" data-category="Sucesos"><a href="/noticias/doble-tragedia-en-managua-muere-pareja-tras-choque-en-larreynaga-mod1m70u/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777157360894_larreynaga.webp" alt="Doble tragedia en Larreynaga: Fallece conductor de moto en hospital" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Doble tragedia en Larreynaga: Fallece conductor de moto en hospital</h2><p class="news-card-excerpt">Gustavo Matamoros Martínez falleció tras colisionar contra un bus de la ruta 168 en Managua. Su pareja también murió. Un...</p><div class="news-card-meta"><span>24 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Sucesos"><a href="/noticias/tragedia-en-managua-fallece-joven-hondureno-tras-vuelco-de-camioneta-modjj958/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777157186489_seminole.webp" alt="Tragedia en Managua: Fallece joven hondureño tras vuelco de camioneta" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Tragedia en Managua: Fallece joven hondureño tras vuelco de camioneta</h2><p class="news-card-excerpt">Elken Munguía Sarmiento, de 21 años, murió en el hospital Lenin Fonseca tras un brutal accidente cerca del Seminole. El ...</p><div class="news-card-meta"><span>24 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Nacionales"><a href="/noticias/la-costanera-el-nuevo-eje-de-inversion-en-nicaragua-mom59col/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777593368757_COSTANERA.webp" alt="La Costanera: El nuevo eje de inversión en Nicaragua" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-nacionales)">Nacionales</span><h2 class="news-card-title">La Costanera: El nuevo eje de inversión en Nicaragua</h2><p class="news-card-excerpt">El Gobierno de Nicaragua impulsa la Carretera Costanera, una obra estratégica que dinamiza el mercado inmobiliario y atr...</p><div class="news-card-meta"><span>30 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Nacionales"><a href="/noticias/minsa-intensifica-vacunacion-contra-el-covid-19-en-san-francisco-libre-mof2gdof/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777165462406_MINSA.webp" alt="Minsa intensifica vacunación contra el COVID-19 en San Francisco Libre" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-nacionales)">Nacionales</span><h2 class="news-card-title">Minsa intensifica vacunación contra el COVID-19 en San Francisco Libre</h2><p class="news-card-excerpt">Brigadas del Minsa se despliegan en San Francisco Libre para aplicar dosis de refuerzo contra el COVID-19, priorizando a...</p><div class="news-card-meta"><span>25 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Internacionales"><a href="/noticias/emergencia-en-oklahoma-tornados-devastadores-dejan-heridos-y-danos-modkgwym/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777157152942_tornados.webp" alt="Emergencia en Oklahoma: Tornados devastadores dejan heridos y daños" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-internacionales)">Internacionales</span><h2 class="news-card-title">Emergencia en Oklahoma: Tornados devastadores dejan heridos y daños</h2><p class="news-card-excerpt">Potentes tornados azotan el norte de Oklahoma en el inicio de la temporada crítica. Se reportan heridos y daños material...</p><div class="news-card-meta"><span>24 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Sucesos"><a href="/noticias/motociclista-muere-tras-chocar-contra-camion-estacionado-en-matiguas-monbknph/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777664282117_camion.webp" alt="Motociclista muere tras chocar contra camión estacionado en Matiguás" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Motociclista muere tras chocar contra camión estacionado en Matiguás</h2><p class="news-card-excerpt">Melquin Masis, de 23 años, falleció en el kilómetro 161 de Matiguás tras impactar a alta velocidad contra un pesado cami...</p><div class="news-card-meta"><span>1 de mayo de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Sucesos"><a href="/noticias/trabajador-del-minsa-muere-en-choque-frontal-en-carretera-norte-moirj0d4/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777388970465_MINSA.webp" alt="Trabajador del MINSA muere en choque frontal en Carretera Norte" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Trabajador del MINSA muere en choque frontal en Carretera Norte</h2><p class="news-card-excerpt">Kener Efrén Velásquez, trabajador del MINSA, falleció este martes tras ser impactado por una camioneta que presuntamente...</p><div class="news-card-meta"><span>28 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Internacionales"><a href="/noticias/canal-de-panama-buques-pagan-hasta-4-millones-por-crisis-en-ormuz-mog7i9m2/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777234412379_panama.webp" alt="Canal de Panamá: Buques pagan hasta $4 millones por crisis en Ormuz" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-internacionales)">Internacionales</span><h2 class="news-card-title">Canal de Panamá: Buques pagan hasta $4 millones por crisis en Ormuz</h2><p class="news-card-excerpt">Crisis en Medio Oriente obliga a buques a pagar hasta $4 millones por cruzar el Canal de Panamá. Vea cómo el bloqueo en ...</p><div class="news-card-meta"><span>26 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Internacionales"><a href="/noticias/ataque-armado-en-colonia-candelaria-hombre-resulta-gravemente-herido-modtzttr/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777157805786_guatemala.webp" alt="Ataque armado en Colonia Candelaria: Hombre resulta gravemente herido" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-internacionales)">Internacionales</span><h2 class="news-card-title">Ataque armado en Colonia Candelaria: Hombre resulta gravemente herido</h2><p class="news-card-excerpt">Un hombre identificado como Auder Catalán Bulex fue herido de bala en el sector A de la colonia Candelaria, zona 18. Su ...</p><div class="news-card-meta"><span>24 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Tecnología"><a href="/noticias/frutinovelas-el-drama-viral-de-la-ia-que-enciende-alarmas-digitales-mondr38q/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777668499450_FRUTA.webp" alt="Frutinovelas: El drama viral de la IA que enciende alarmas digitales" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-tecnologa)">Tecnología</span><h2 class="news-card-title">Frutinovelas: El drama viral de la IA que enciende alarmas digitales</h2><p class="news-card-excerpt">Expertos alertan sobre los riesgos de las 'frutinovelas' generadas por IA, citando peligros para la salud mental infanti...</p><div class="news-card-meta"><span>1 de mayo de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Internacionales"><a href="/noticias/australia-7-de-cada-10-menores-burlan-prohibicion-de-redes-sociales-mokkxe0n/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777498799991_redes.webp" alt="Australia: 7 de cada 10 menores burlan prohibición de redes sociales" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-internacionales)">Internacionales</span><h2 class="news-card-title">Australia: 7 de cada 10 menores burlan prohibición de redes sociales</h2><p class="news-card-excerpt">Primer balance de 2026 revela que el 70% de los menores en Australia mantiene su presencia en redes sociales a pesar de ...</p><div class="news-card-meta"><span>29 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Deportes"><a href="/noticias/luka-modric-al-quirofano-fractura-de-pomulo-pone-en-vilo-al-milan-mohnqrr1/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777322171320_LUKAS.webp" alt="Luka Modrić al quirófano: Fractura de pómulo pone en vilo al Milan" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-deportes)">Deportes</span><h2 class="news-card-title">Luka Modrić al quirófano: Fractura de pómulo pone en vilo al Milan</h2><p class="news-card-excerpt">Tras un fuerte choque contra Locatelli, Luka Modrić sufrió una fractura facial. El volante del AC Milan será operado y p...</p><div class="news-card-meta"><span>27 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Deportes"><a href="/noticias/luca-zidane-sufre-fractura-de-mandibula-y-peligra-para-el-mundial-moiwxm9p/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777397997488_zidane.webp" alt="Luca Zidane sufre fractura de mandíbula y peligra para el Mundial" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-deportes)">Deportes</span><h2 class="news-card-title">Luca Zidane sufre fractura de mandíbula y peligra para el Mundial</h2><p class="news-card-excerpt">El arquero Luca Zidane sufrió una fractura de mentón y mandíbula tras un choque con el Granada. A mes y medio del Mundia...</p><div class="news-card-meta"><span>28 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Espectaculo"><a href="/noticias/florinda-meza-revela-secreto-a-angela-aguilar-para-un-amor-eterno-modxkmjj/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777157028122_florinda.webp" alt="Florinda Meza revela secreto a Ángela Aguilar para un amor eterno" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-espectaculo)">Espectaculo</span><h2 class="news-card-title">Florinda Meza revela secreto a Ángela Aguilar para un amor eterno</h2><p class="news-card-excerpt">La viuda de &quot;Chespirito&quot; rompe el silencio y envía contundentes consejos a Ángela Aguilar sobre su matrimonio con Christ...</p><div class="news-card-meta"><span>25 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+<article class="news-card" data-category="Sucesos"><a href="/noticias/identifican-cuerpo-de-anciano-que-estaba-desaparecido-en-managua-moj6c4s3/" class="news-card-link"><div class="news-card-image"><img src="https://raw.githubusercontent.com/Nicmay18/informate-nicaragua-final/master/public/images/1777413870903_anciano.webp" alt="Identifican cuerpo de anciano que estaba desaparecido en Managua" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Identifican cuerpo de anciano que estaba desaparecido en Managua</h2><p class="news-card-excerpt">Identifican cuerpo de anciano que estaba desaparecido en Managua...</p><div class="news-card-meta"><span>28 de abril de 2026</span><span><i class="far fa-clock"></i> 2 min</span></div></div></a></article>
+<article class="news-card" data-category="Sucesos"><a href="/noticias/masaya-voraz-incendio-deja-un-fallecido-y-una-vivienda-en-cenizas-mog62t4m/" class="news-card-link"><div class="news-card-image"><img src="https://cdn.jsdelivr.net/gh/Nicmay18/informate-nicaragua-final@master/public/images/1777231798129_679827235_1516244900511889_582.webp" alt="Masaya: Voraz incendio deja un fallecido y una vivienda en cenizas" loading="lazy"></div><div class="news-card-body"><span class="news-card-category" style="color:var(--cat-sucesos)">Sucesos</span><h2 class="news-card-title">Masaya: Voraz incendio deja un fallecido y una vivienda en cenizas</h2><p class="news-card-excerpt">Un trágico incendio cobró la vida de don Carlos Espinoza, de 70 años, en Masaya. Bomberos trabajaron en el lugar. Conozc...</p><div class="news-card-meta"><span>26 de abril de 2026</span><span><i class="far fa-clock"></i> 3 min</span></div></div></a></article>
+</div>
+      <div style="text-align: center; margin-top: 32px;"><button class="btn btn-primary" id="loadMoreBtn" onclick="app.loadMore()" style="min-width: 200px;"><i class="fas fa-plus"></i> Cargar más noticias</button></div>
+      <div style="text-align: center; margin-top: 24px;" class="mobile-widgets-toggle" style="display: none;"><button class="btn btn-secondary" onclick="document.querySelector('.radio-bar').classList.add('mobile-visible'); document.querySelector('.mobile-widgets').classList.add('mobile-visible'); this.style.display='none';"><i class="fas fa-tools"></i> Mostrar Radio e Indicadores</button></div>
+    </main>
+    <aside class="sidebar-right" role="complementary" aria-label="Barra lateral derecha">
+      <div class="widget"><div class="widget-header"><h3 class="widget-title"><i class="fas fa-chart-line"></i> Indicadores Económicos</h3></div>
+        <div class="indicator-list" id="indicatorsList">
+          <div class="indicator-item"><span class="indicator-label">Dólar BCN<span class="sparkline neutral"><svg viewBox="0 0 48 24"><path d="M2 12 L8 12 L14 12 L20 12 L26 12 L32 12 L38 12 L46 12"/></svg></span></span><div><span class="indicator-value">C$ 36.62</span><span class="indicator-change neutral">→ 0.00%</span></div></div>
+          <div class="indicator-item"><span class="indicator-label">Euro<span class="sparkline up"><svg viewBox="0 0 48 24"><path d="M2 18 L8 15 L14 16 L20 12 L26 10 L32 8 L38 6 L46 4"/></svg></span></span><div><span class="indicator-value">C$ 43.11</span><span class="indicator-change positive">↑ 1.25%</span></div></div>
+          <div class="indicator-item"><span class="indicator-label">Gasolina Regular<span class="sparkline neutral"><svg viewBox="0 0 48 24"><path d="M2 12 L8 12 L14 12 L20 12 L26 12 L32 12 L38 12 L46 12"/></svg></span></span><div><span class="indicator-value">C$ 47.80-48.00</span><span class="indicator-change neutral">→ 0.00%</span></div></div>
+          <div class="indicator-item"><span class="indicator-label">Gasolina Súper<span class="sparkline neutral"><svg viewBox="0 0 48 24"><path d="M2 12 L8 12 L14 12 L20 12 L26 12 L32 12 L38 12 L46 12"/></svg></span></span><div><span class="indicator-value">C$ 49.00</span><span class="indicator-change neutral">→ 0.00%</span></div></div>
+          <div class="indicator-item"><span class="indicator-label">Diésel<span class="sparkline up"><svg viewBox="0 0 48 24"><path d="M2 20 L8 18 L14 16 L20 14 L26 12 L32 10 L38 8 L46 6"/></svg></span></span><div><span class="indicator-value">C$ 43.21-43.40</span><span class="indicator-change positive">↑ 0.44%</span></div></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;">Fuente: BCN / INE — Datos referenciales</p>
+      </div>
+      <div class="widget"><div class="widget-header"><h3 class="widget-title"><i class="fas fa-fire" style="color: #dc2626;"></i> Más Leídas</h3></div><div class="trending-list" id="popularesList"></div></div>
+      <div class="widget weather-widget"><div class="widget-header"><h3 class="widget-title"><i class="fas fa-cloud-sun"></i> Clima Nicaragua</h3><span class="weather-live-badge"><span class="live-dot"></span> EN VIVO</span></div>
+        <div class="weather-container" id="weatherContainer">
+          <div class="weather-city-indicator" id="weatherCityIndicator">1 / 3</div>
+          <div class="weather-main"><i class="fas fa-sun weather-icon" id="weatherIcon"></i><div class="weather-temp" id="weatherTemp">--°C</div></div>
+          <div class="weather-city" id="weatherCity">Cargando...</div><div class="weather-desc" id="weatherDesc">Obteniendo datos...</div>
+          <div class="weather-details">
+            <div class="weather-detail"><i class="fas fa-tint"></i><span id="weatherHumidity">--%</span></div>
+            <div class="weather-detail"><i class="fas fa-wind"></i><span id="weatherWind">-- km/h</span></div>
+            <div class="weather-detail"><i class="fas fa-eye"></i><span id="weatherVisibility">-- km</span></div>
+          </div>
+        </div>
+        <div class="weather-cities-nav" id="weatherCitiesNav"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Ads -->
+  <section class="ads-section" aria-label="Publicidad"><div style="max-width:var(--max-width);margin:0 auto;padding:0 24px;"><div style="text-align:center;"><span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:8px;">Publicidad</span><ins class="adsbygoogle" style="display:block;min-height:90px;" data-ad-client="ca-pub-4115203339551838" data-ad-slot="leaderboard-slot" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></section>
+
+  <!-- Footer -->
+  <footer class="footer-pro" role="contentinfo">
+    <div class="footer-main">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="/logo.png" alt="Nicaragua Informate" class="footer-logo-img" width="48" height="48" loading="lazy">
+          <h3 class="footer-title">Nicaragua Informate</h3>
+          <p class="footer-desc">Periodismo de precisión sobre Nicaragua y el mundo. Información verificada, contextualizada y oportuna para la formación de ciudadanos informados.</p>
+          <div class="footer-social">
+            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+          </div>
+        </div>
+        <div class="footer-sections">
+          <div class="footer-col"><h4>Secciones</h4><ul><li><span onclick="app.filter('Sucesos')" role="link" tabindex="0">Sucesos</span></li><li><span onclick="app.filter('Nacionales')" role="link" tabindex="0">Nacionales</span></li><li><span onclick="app.filter('Deportes')" role="link" tabindex="0">Deportes</span></li><li><span onclick="app.filter('Internacionales')" role="link" tabindex="0">Internacionales</span></li><li><span onclick="app.filter('Espectáculos')" role="link" tabindex="0">Espectáculos</span></li></ul></div>
+          <div class="footer-col"><h4>Servicios</h4><ul><li><span onclick="document.querySelector('.indicator-list')?.closest('.widget')?.scrollIntoView({behavior:'smooth'})">Indicadores Económicos</span></li><li><span onclick="document.querySelector('.weather-widget')?.closest('.widget')?.scrollIntoView({behavior:'smooth'})">Clima de Nicaragua</span></li><li><span onclick="document.querySelector('.radio-bar')?.scrollIntoView({behavior:'smooth'})">Radio en vivo</span></li></ul></div>
+          <div class="footer-col"><h4>Legal</h4><ul><li><a href="nosotros.html">Quiénes Somos</a></li><li><a href="aviso-legal.html">Aviso Legal</a></li><li><a href="privacidad.html">Política de Privacidad</a></li><li><a href="terminos.html">Términos de Uso</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom-bar"><div class="footer-bottom-content"><p class="copyright"> 2025-2026 <strong>Nicaragua Informate</strong>. Todos los derechos reservados.</p><nav class="footer-bottom-links" aria-label="Enlaces legales"><a href="terminos.html">Términos</a><a href="contacto.html">Anúnciate</a><a href="privacidad.html">Privacidad</a><a href="#" onclick="alert('Configuración de cookies'); return false;">Administrar Cookies</a><a href="contacto.html">Contáctanos</a><a href="nosotros.html">Quiénes Somos</a></nav></div></div>
+  </footer>
+
+  <!-- FABs -->
+  <div class="fab-container">
+    <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" class="fab fab-whatsapp" aria-label="Síguenos en WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" class="fab fab-telegram" aria-label="Síguenos en Telegram"><i class="fab fa-telegram-plane"></i></a>
+  </div>
+
+  <!-- Scripts finales: Radio controller + JSON-LD + SW + Bottom Nav -->
+  <script>
+    (function() {
+      // Dynamic date in top bar
+      var d = new Date();
+      var days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+      var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      var el = document.getElementById('topBarDate');
+      if (el) el.textContent = days[d.getDay()] + ', ' + d.getDate() + ' de ' + months[d.getMonth()] + ' de ' + d.getFullYear();
+
+      // Radio controller con mejor manejo de errores
+      var audioEl = document.getElementById('radioAudio');
+      audioEl.preload = 'none';
+      var radioObj = {
+        audio: audioEl, isPlaying: false, retryCount: 0, maxRetries: 2,
+        toggle: function() { this.isPlaying ? this.stop() : this.play(); },
+        play: function() {
+          var s = document.getElementById('radioStation').value;
+          if (!s) { if (window.app && window.app.showToast) window.app.showToast('Selecciona una emisora'); return; }
+          document.getElementById('radioStatus').textContent = 'Conectando...';
+          this.retryCount = 0;
+          this._loadAndPlay(s);
+        },
+        _loadAndPlay: function(url) {
+          var self = this;
+          this.audio.src = url;
+          this.audio.onerror = null;
+          this.audio.oncanplay = null;
+
+          this.audio.oncanplay = function() {
+            self.audio.play().then(function() {
+              self.isPlaying = true;
+              self.retryCount = 0;
+              document.getElementById('radioPlayBtn').classList.add('playing');
+              document.getElementById('radioIcon').className = 'fas fa-pause';
+              document.getElementById('radioStatus').textContent = '▶ Reproduciendo';
+              document.getElementById('visualizer').style.opacity = '1';
+            }).catch(function(err) {
+              document.getElementById('radioStatus').textContent = 'Error de reproducción';
+              console.error('Radio play error:', err);
+            });
+          };
+          this.audio.onerror = function(e) {
+            console.error('Radio stream error, code:', self.audio.error ? self.audio.error.code : 'unknown');
+            if (self.retryCount < self.maxRetries) {
+              self.retryCount++;
+              document.getElementById('radioStatus').textContent = 'Reintentando (' + self.retryCount + '/' + self.maxRetries + ')...';
+              setTimeout(function() { self._loadAndPlay(url); }, 1500);
+            } else {
+              document.getElementById('radioStatus').textContent = 'Emisora no disponible';
+              if (window.app && window.app.showToast) window.app.showToast('Esta emisora no responde. Intenta otra.', 'warning');
+              self.stop();
+            }
+          };
+          this.audio.load();
+        },
+        stop: function() {
+          this.audio.pause();
+          this.audio.src = '';
+          this.audio.onerror = null;
+          this.audio.oncanplay = null;
+          this.isPlaying = false;
+          this.retryCount = 0;
+          document.getElementById('radioPlayBtn').classList.remove('playing');
+          document.getElementById('radioIcon').className = 'fas fa-play';
+          document.getElementById('radioStatus').textContent = 'Selecciona una emisora';
+          document.getElementById('visualizer').style.opacity = '0';
+        },
+        change: function() {
+          if (this.isPlaying) {
+            this.stop();
+            var self = this;
+            setTimeout(function() { self.play(); }, 500);
+          }
+        }
+      };
+      window._niRadio = radioObj;
+      var waitForApp = setInterval(function() {
+        if (window.app) {
+          window.app.radio = radioObj;
+          clearInterval(waitForApp);
+        }
+      }, 100);
+    })();
+  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsMediaOrganization","name":"Nicaragua Informate","url":"https://nicaraguainformate.com","logo":"https://nicaraguainformate.com/logo.png","sameAs":["https://facebook.com/profile.php?id=61578261125687","https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17","https://t.me/+fHHjncJqMQM3NjZh"],"contactPoint":{"@type":"ContactPoint","contactType":"Editorial","email":"keylingrivera20@gmail.com"}}</script>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" aria-label="Navegación principal">
+    <a href="/" class="mobile-nav-item active" aria-current="page" onclick="event.preventDefault(); app.filter('Todas'); app.scrollToMain();">
+      <i class="fas fa-home" aria-hidden="true"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="/?cat=Sucesos" class="mobile-nav-item" onclick="event.preventDefault(); app.filter('Sucesos'); app.scrollToMain();">
+      <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+      <span>Sucesos</span>
+    </a>
+    <a href="/?cat=Nacionales" class="mobile-nav-item" onclick="event.preventDefault(); app.filter('Nacionales'); app.scrollToMain();">
+      <i class="fas fa-flag" aria-hidden="true"></i>
+      <span>Nacionales</span>
+    </a>
+    <a href="/?cat=Deportes" class="mobile-nav-item" onclick="event.preventDefault(); app.filter('Deportes'); app.scrollToMain();">
+      <i class="fas fa-futbol" aria-hidden="true"></i>
+      <span>Deportes</span>
+    </a>
+    <button class="mobile-nav-item" onclick="app.toggleMenu()" aria-label="Menú">
+      <i class="fas fa-bars" aria-hidden="true"></i>
+      <span>Más</span>
+    </button>
+  </nav>
+
+  <script>
+    // Mobile bottom nav active state
+    function updateMobileNavActive(category) {
+      document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(el => {
+        el.classList.remove('active');
+      });
+      const items = document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item');
+      if (category === 'Todas' || category === 'Inicio') {
+        items[0]?.classList.add('active');
+      } else if (category === 'Sucesos') {
+        items[1]?.classList.add('active');
+      } else if (category === 'Nacionales') {
+        items[2]?.classList.add('active');
+      } else if (category === 'Deportes') {
+        items[3]?.classList.add('active');
+      }
+    }
+
+    // Swipe support for hero carousel
+    (function() {
+      const container = document.querySelector('.hero-carrusel-container');
+      const slides = document.querySelector('.carrusel-slides');
+      if (!container || !slides) return;
+
+      let startX = 0, currentX = 0, isDragging = false;
+
+      container.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        slides.style.transition = 'none';
+      }, { passive: true });
+
+      container.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', function() {
+        isDragging = false;
+        slides.style.transition = '';
+        const diff = currentX - startX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            if (typeof app !== 'undefined' && app.carruselPrev) app.carruselPrev();
+          } else {
+            if (typeof app !== 'undefined' && app.carruselNext) app.carruselNext();
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

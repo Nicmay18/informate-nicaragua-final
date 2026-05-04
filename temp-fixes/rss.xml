@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Nicaragua Informate</title>
+    <link>https://nicaraguainformate.com</link>
+    <description>Periodismo de Precision. Noticias de Nicaragua al instante - Sucesos, Nacionales, Deportes, Internacionales y Espectaculo.</description>
+    <language>es-ni</language>
+    <lastBuildDate>Tue, 22 Apr 2026 10:00:00 -0600</lastBuildDate>
+    <atom:link href="https://nicaraguainformate.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <image>
+      <url>https://nicaraguainformate.com/logo.png</url>
+      <title>Nicaragua Informate</title>
+      <link>https://nicaraguainformate.com</link>
+    </image>
+
+    <item>
+      <title>Bienvenidos a Nicaragua Informate</title>
+      <link>https://nicaraguainformate.com/</link>
+      <guid isPermaLink="true">https://nicaraguainformate.com/</guid>
+      <pubDate>Tue, 22 Apr 2026 10:00:00 -0600</pubDate>
+      <category>Nacionales</category>
+      <description>El medio de comunicacion digital de Nicaragua que informa con verdad, contexto y responsabilidad. Cobertura en tiempo real de sucesos, deportes, internacionales y espectaculo.</description>
+    </item>
+
+  </channel>
+</rss>

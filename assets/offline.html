@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es-NI">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sin conexión - Nicaragua Informate</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .container { max-width: 400px; }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 24px; margin-bottom: 12px; color: #d00000; }
+    p { color: #64748b; margin-bottom: 24px; line-height: 1.6; }
+    button {
+      background: #d00000;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #9d0000; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>Sin conexión a internet</h1>
+    <p>No tienes conexión. Algunas noticias guardadas pueden estar disponibles.</p>
+    <button onclick="window.location.reload()">Intentar de nuevo</button>
+  </div>
+</body>
+</html>

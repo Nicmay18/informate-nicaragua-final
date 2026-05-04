@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejemplo de Integración - Sistema de Ads</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f8fafc;
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+    }
+    
+    .main-content {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+    }
+    
+    .sidebar {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+    
+    /* Ad Slots */
+    [data-ad-slot] {
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+    
+    [data-ad-slot].ad-viewable {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    
+    #ad-header {
+      min-height: 90px;
+    }
+    
+    #ad-sidebar {
+      min-height: 600px;
+    }
+    
+    /* Metrics Dashboard */
+    .metrics {
+      background: #1e293b;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    
+    .metrics h3 {
+      margin-top: 0;
+      color: #10b981;
+    }
+    
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #334155;
+    }
+    
+    .metric-label {
+      color: #94a3b8;
+    }
+    
+    .metric-value {
+      color: #10b981;
+      font-weight: bold;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Ad -->
+  <div id="ad-header" 
+       data-ad-slot 
+       data-ad-position="header"
+       data-ad-slot="1234567890">
+    Header Ad (728x90)
+  </div>
+
+  <div class="container">
+    <!-- Main Content -->
+    <div class="main-content">
+      <article data-category="tecnología">
+        <h1>Nicaragua Avanza en Transformación Digital</h1>
+        
+        <p>
+          Nicaragua está experimentando un crecimiento significativo en el sector 
+          tecnológico, con nuevas inversiones en infraestructura digital y 
+          capacitación en programación.
+        </p>
+
+        <!-- Article Mid Ad -->
+        <div id="ad-article-mid" 
+             data-ad-slot 
+             data-ad-position="article-mid"
+             data-ad-slot="0987654321">
+          Article Mid Ad (300x250)
+        </div>
+
+        <p>
+          Las empresas locales están adoptando soluciones de software modernas 
+          para mejorar su competitividad en el mercado regional. El gobierno 
+          ha lanzado programas de apoyo para startups tecnológicas.
+        </p>
+
+        <!-- In-Article Ad -->
+        <div id="ad-in-article" 
+             data-ad-slot 
+             data-ad-position="in-article"
+             data-ad-slot="5544332211">
+          In-Article Ad (Native)
+        </div>
+
+        <p>
+          La educación en tecnología se ha convertido en una prioridad, con 
+          universidades ofreciendo nuevas carreras en ciencias de la computación 
+          y desarrollo de software.
+        </p>
+
+        <h2>Oportunidades de Inversión</h2>
+        
+        <p>
+          Inversionistas internacionales están mostrando interés en el mercado 
+          nicaragüense, especialmente en sectores como fintech, e-commerce y 
+          servicios digitales.
+        </p>
+      </article>
+
+      <!-- Metrics Dashboard -->
+      <div class="metrics">
+        <h3>📊 Métricas en Tiempo Real</h3>
+        <div id="metrics-display"></div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Ad -->
+      <div id="ad-sidebar" 
+           data-ad-slot 
+           data-ad-position="sidebar"
+           data-ad-slot="1122334455">
+        Sidebar Ad (300x600)
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Footer Ad (Mobile) -->
+  <div id="ad-sticky-footer" 
+       data-ad-slot 
+       data-ad-position="sticky-footer"
+       data-ad-slot="9988776655"
+       style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;">
+    Sticky Footer Ad (320x50)
+  </div>
+
+  <!-- AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          crossorigin="anonymous"></script>
+
+  <!-- Ad System Scripts -->
+  <script src="./core/ViewabilityTracker.js"></script>
+  <script src="./core/RefreshController.js"></script>
+  <script src="./slots/BaseAdSlot.js"></script>
+  <script src="./slots/HeaderSlot.js"></script>
+  <script src="./slots/ArticleMidSlot.js"></script>
+  <script src="./slots/SidebarSlot.js"></script>
+  <script src="./slots/StickyFooterSlot.js"></script>
+  <script src="./slots/InArticleSlot.js"></script>
+  <script src="./slots/ParallaxSlot.js"></script>
+  <script src="./targeting/ContextualTarget.js"></script>
+  <script src="./targeting/AudienceTarget.js"></script>
+  <script src="./analytics/AdAnalytics.js"></script>
+  <script src="./analytics/RevenueEstimator.js"></script>
+  <script src="./core/AdManager.js"></script>
+
+  <!-- Initialize -->
+  <script>
+    // Inicializar sistema de ads
+    const adManager = new AdManager({
+      adsenseClient: 'ca-pub-4115203339551838',
+      lazyLoadOffset: '200px',
+      refreshInterval: 30000,
+      maxRefreshes: 3,
+      viewabilityThreshold: 0.5
+    });
+
+    // Inicializar revenue estimator
+    const revenueEstimator = new RevenueEstimator({
+      cpm: 1.50,
+      cpc: 0.15,
+      viewableCPM: 2.00
+    });
+
+    // Inicializar audience targeting
+    const audienceTarget = new AudienceTarget();
+
+    // Actualizar métricas cada 2 segundos
+    setInterval(() => {
+      const metrics = adManager.metrics;
+      const revenue = revenueEstimator.getMetrics();
+      const audience = audienceTarget.getTargetingData();
+
+      const html = `
+        <div class="metric-row">
+          <span class="metric-label">Total Requests:</span>
+          <span class="metric-value">${metrics.totalRequests}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Successful Loads:</span>
+          <span class="metric-value">${metrics.successfulLoads}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Viewable Impressions:</span>
+          <span class="metric-value">${metrics.viewableImpressions}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Viewability Rate:</span>
+          <span class="metric-value">${metrics.totalRequests > 0 ? 
+            ((metrics.viewableImpressions / metrics.totalRequests) * 100).toFixed(1) : 0}%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Active Slots:</span>
+          <span class="metric-value">${adManager.slots.size}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Estimated Revenue:</span>
+          <span class="metric-value">$${revenue.estimatedRevenue.toFixed(2)}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">RPM:</span>
+          <span class="metric-value">$${revenue.rpm}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">User Segment:</span>
+          <span class="metric-value">${audience.segments[0] || 'N/A'}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Engagement:</span>
+          <span class="metric-value">${audience.engagement}%</span>
+        </div>
+      `;
+
+      document.getElementById('metrics-display').innerHTML = html;
+    }, 2000);
+
+    // Log de eventos importantes
+    window.addEventListener('refresh-controller:refresh', (e) => {
+      console.log('🔄 Ad Refreshed:', e.detail);
+    });
+
+    // Simular clicks para demo (REMOVER EN PRODUCCIÓN)
+    setTimeout(() => {
+      console.log('📊 Demo: Simulando métricas...');
+      
+      // Simular impresiones viewables
+      setInterval(() => {
+        const slots = ['ad-header', 'ad-article-mid', 'ad-sidebar'];
+        const randomSlot = slots[Math.floor(Math.random() * slots.length)];
+        
+        revenueEstimator.trackImpression(randomSlot, {
+          isViewable: Math.random() > 0.3,
+          category: 'tecnología',
+          device: window.innerWidth < 768 ? 'mobile' : 'desktop',
+          engagement: 'medium'
+        });
+
+        // Simular clicks ocasionales
+        if (Math.random() > 0.95) {
+          revenueEstimator.trackClick(randomSlot, {
+            category: 'tecnología',
+            device: window.innerWidth < 768 ? 'mobile' : 'desktop',
+            engagement: 'high'
+          });
+        }
+      }, 3000);
+    }, 2000);
+
+    // Proyección mensual
+    console.log('📈 Proyección Mensual (50K visitas):');
+    const projection = revenueEstimator.projectMonthlyRevenue(50000 / 30, 4);
+    console.table({
+      'Visitas Mensuales': projection.monthlyPageViews.toLocaleString(),
+      'Impresiones': projection.monthlyImpressions.toLocaleString(),
+      'Viewable': projection.viewableImpressions.toLocaleString(),
+      'Clicks Estimados': projection.estimatedClicks,
+      'Revenue Estimado': `$${projection.estimatedRevenue.toFixed(2)}`
+    });
+  </script>
+
+</body>
+</html>
