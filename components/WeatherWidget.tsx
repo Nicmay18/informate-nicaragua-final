@@ -89,23 +89,23 @@ export default function WeatherWidget() {
   const wx = main ? (WX[main.code] ?? { label: 'Variable', emoji: '🌡️' }) : { label: 'Cargando...', emoji: '🌡️' };
 
   return (
-    <div style={{ background: 'linear-gradient(135deg, #1E3A5F 0%, #0F172A 100%)', borderRadius: 14, overflow: 'hidden', color: '#fff', boxShadow: '0 4px 24px rgba(0,0,0,0.18)' }}>
+    <div style={{ background: 'linear-gradient(160deg, #1e3a5f 0%, #0f172a 60%, #0a0e1a 100%)', borderRadius: 14, overflow: 'hidden', color: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
       {/* Header */}
       <div style={{ padding: '13px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <i className="fas fa-cloud-sun" style={{ color: '#D4AF37', fontSize: 14 }} />
+          <i className="fas fa-cloud-sun weather-float-icon" style={{ color: '#D4AF37', fontSize: 18 }} />
           <span style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Clima Nicaragua</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500 }}>{active + 1}/{CITIES.length}</span>
-          <span style={{ background: 'rgba(196,30,58,0.3)', border: '1px solid rgba(196,30,58,0.5)', color: '#fca5a5', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 700, letterSpacing: '0.06em' }}>EN VIVO</span>
+          <span className="pulse-green" style={{ background: '#22c55e', color: '#fff', fontSize: 10, padding: '3px 10px', borderRadius: 999, fontWeight: 800, letterSpacing: '0.06em' }}>EN VIVO</span>
         </div>
       </div>
 
       <div style={{ padding: 16 }}>
         {/* Main weather display */}
         <div style={{ textAlign: 'center', marginBottom: 14 }}>
-          <div style={{ fontSize: 54, lineHeight: 1, marginBottom: 6, transition: 'all 0.4s', filter: loading ? 'blur(2px)' : 'none' }}>
+          <div style={{ fontSize: 54, lineHeight: 1, marginBottom: 6, transition: 'all 0.4s', filter: loading ? 'blur(2px)' : 'none' }} className="weather-float-icon">
             {wx.emoji}
           </div>
           <div style={{ fontSize: 42, fontWeight: 900, lineHeight: 1, marginBottom: 3, transition: 'all 0.3s' }}>

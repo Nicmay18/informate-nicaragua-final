@@ -49,20 +49,20 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
   return (
     <>
       {/* Top Bar */}
-      <div className="top-bar">
+      <div className="top-bar" style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)' }}>
         <div className="top-bar-inner">
           <div className="top-bar-left">
-            <span><i className="far fa-calendar-alt" /> {today}</span>
-            <span><i className="fas fa-map-marker-alt" /> Managua, Nicaragua</span>
+            <span><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
+            <span><i className="fas fa-map-marker-alt" style={{ color: '#e53e3e' }} /> Managua, Nicaragua</span>
           </div>
           <div className="top-bar-right">
-            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook">
+            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook" className="top-icon-hover">
               <i className="fab fa-facebook-f" />
             </a>
-            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp" className="top-icon-hover">
               <i className="fab fa-whatsapp" />
             </a>
-            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram">
+            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram" className="top-icon-hover">
               <i className="fab fa-telegram-plane" />
             </a>
           </div>
@@ -70,10 +70,10 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       </div>
 
       {/* Main Header */}
-      <header className="header" id="header">
+      <header className="header glass" id="header" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(140,29,24,0.15)' }}>
         <div className="header-inner">
           <Link href="/" className="brand" aria-label="Nicaragua Informate - Inicio">
-            <Image src="/logo.png" className="brand-logo" alt="Nicaragua Informate" width={48} height={48} />
+            <Image src="/logo.png" className="brand-logo logo-hover" alt="Nicaragua Informate" width={48} height={48} />
             <div className="brand-info">
               <span className="brand-title">Nicaragua Informate</span>
               <span className="brand-tagline">Periodismo de Precisión</span>
@@ -84,7 +84,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.value}
-                className={`nav-link${activeCategory === cat.value ? ' active' : ''}`}
+                className={`nav-link nav-red-hover${activeCategory === cat.value ? ' active' : ''}`}
                 onClick={() => handleCategory(cat.value)}
               >
                 <i className={`fas ${cat.icon}`} style={cat.color ? { color: cat.color } : undefined} aria-hidden="true" />
@@ -116,7 +116,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       {/* Mobile Menu */}
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`} aria-hidden={!menuOpen}>
         <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)} />
-        <div className="mobile-menu-panel">
+        <div className="mobile-menu-panel mobile-menu-panel-glass">
           <div className="mobile-menu-header">
             <span className="brand-title">Nicaragua Informate</span>
             <button className="mobile-menu-close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">

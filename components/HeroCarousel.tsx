@@ -52,11 +52,11 @@ export default function HeroCarousel({ articles }: HeroCarouselProps) {
                   priority={i === 0}
                   style={{ objectFit: 'cover' }}
                 />
-                <div className="carrusel-overlay">
+                <div className="carrusel-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.15) 100%)' }}>
                   <span className="hero-category" style={{ backgroundColor: catColor }}>
                     {article.category}
                   </span>
-                  <h2>{article.title}</h2>
+                  <h2 style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}>{article.title}</h2>
                   {article.excerpt && <p>{article.excerpt}</p>}
                 </div>
               </Link>
@@ -66,10 +66,10 @@ export default function HeroCarousel({ articles }: HeroCarouselProps) {
 
         {slides.length > 1 && (
           <>
-            <button className="carrusel-control prev" onClick={prev} aria-label="Noticia anterior">
+            <button className="carrusel-control prev hero-control-blur" onClick={prev} aria-label="Noticia anterior">
               <i className="fas fa-chevron-left" aria-hidden="true" />
             </button>
-            <button className="carrusel-control next" onClick={next} aria-label="Noticia siguiente">
+            <button className="carrusel-control next hero-control-blur" onClick={next} aria-label="Noticia siguiente">
               <i className="fas fa-chevron-right" aria-hidden="true" />
             </button>
             <div className="carrusel-indicadores" role="tablist">
@@ -81,6 +81,7 @@ export default function HeroCarousel({ articles }: HeroCarouselProps) {
                   aria-label={`Ir a noticia ${i + 1}`}
                   aria-selected={i === current}
                   role="tab"
+                  style={{ borderRadius: i === current ? 5 : '50%', transition: 'all 0.3s ease' }}
                 />
               ))}
             </div>

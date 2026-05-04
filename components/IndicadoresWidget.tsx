@@ -23,6 +23,24 @@ function TrendArrow({ trend }: { trend: string }) {
   return <span style={{ color, fontWeight: 700, fontSize: 13 }}>{trend}</span>;
 }
 
+function Sparkline({ trend }: { trend: string }) {
+  const isUp = trend === '↑';
+  const isDown = trend === '↓';
+  const stroke = isUp ? '#22c55e' : isDown ? '#ef4444' : '#94a3b8';
+  const path = isUp
+    ? 'M0,18 L10,14 L20,10 L30,6 L40,2 L48,0'
+    : isDown
+    ? 'M0,2 L10,6 L20,10 L30,14 L40,18 L48,20'
+    : 'M0,10 L12,8 L24,12 L36,9 L48,10';
+  return (
+    <span className="sparkline-wrap">
+      <svg viewBox="0 0 48 20" preserveAspectRatio="none">
+        <path d={path} fill="none" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
 export default async function IndicadoresWidget() {
   const rates = await getRates();
 
@@ -48,11 +66,14 @@ export default async function IndicadoresWidget() {
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{row.label}</div>
               <div style={{ fontSize: 10, color: 'var(--ink-faint)', marginTop: 1 }}>Tasa de referencia</div>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--ink)' }}>{row.value}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
-                <TrendArrow trend={row.trend} />
-                <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+            <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Sparkline trend={row.trend} />
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--ink)' }}>{row.value}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
+                  <TrendArrow trend={row.trend} />
+                  <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -65,11 +86,14 @@ export default async function IndicadoresWidget() {
         {GAS_PRICES.map((row, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderBottom: i < GAS_PRICES.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
             <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{row.label}</div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{row.unit} {row.price}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
-                <TrendArrow trend={row.trend} />
-                <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+            <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Sparkline trend={row.trend} />
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{row.unit} {row.price}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
+                  <TrendArrow trend={row.trend} />
+                  <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+                </div>
               </div>
             </div>
           </div>

@@ -95,7 +95,7 @@ export default async function HomePage() {
   return (
     <div style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
       {/* Top Bar */}
-      <div style={{ background: '#0a0e1a', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <i className="fas fa-calendar-alt" style={{ color: '#e53e3e', fontSize: 11 }} />
@@ -103,19 +103,19 @@ export default async function HomePage() {
             <span style={{ color: '#475569' }}>|</span>
             <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', fontSize: 11 }} /> Managua, Nicaragua
           </span>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" style={{ color: '#94a3b8', textDecoration: 'none' }} aria-label="Facebook"><i className="fab fa-facebook-f" /></a>
-            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" style={{ color: '#94a3b8', textDecoration: 'none' }} aria-label="WhatsApp"><i className="fab fa-whatsapp" /></a>
-            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" style={{ color: '#94a3b8', textDecoration: 'none' }} aria-label="Telegram"><i className="fab fa-telegram-plane" /></a>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" className="top-icon-hover" aria-label="Facebook"><i className="fab fa-facebook-f" /></a>
+            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" className="top-icon-hover" aria-label="WhatsApp"><i className="fab fa-whatsapp" /></a>
+            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" className="top-icon-hover" aria-label="Telegram"><i className="fab fa-telegram-plane" /></a>
           </div>
         </div>
       </div>
 
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(15,23,42,0.97)', backdropFilter: 'blur(12px)', borderBottom: '2px solid #e53e3e' }}>
+      <header className="glass" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(140,29,24,0.15)', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', padding: '10px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-            <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 42, height: 42, borderRadius: 8, objectFit: 'cover' }} />
+            <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 42, height: 42, borderRadius: 8, objectFit: 'cover' }} className="logo-hover" />
             <div>
               <div style={{ color: '#e53e3e', fontWeight: 800, fontSize: 18, lineHeight: 1.2, letterSpacing: '-0.3px' }}>Nicaragua Informate</div>
               <div style={{ color: '#475569', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Noticias de Nicaragua</div>
@@ -123,7 +123,7 @@ export default async function HomePage() {
           </Link>
           <nav style={{ display: 'flex', gap: 2 }} className="hidden md:flex">
             {['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'].map((cat) => (
-              <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`} className="nav-cat-link">
+              <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`} className="nav-red-hover" style={{ padding: '6px 12px', fontSize: 13, color: '#cbd5e1', textDecoration: 'none', borderRadius: 6, fontWeight: 500 }}>
                 {cat}
               </a>
             ))}
@@ -146,7 +146,7 @@ export default async function HomePage() {
           ].map((cat) => (
             <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
               style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', fontSize: 13, fontWeight: 600, color: 'var(--ink-muted)', textDecoration: 'none', borderBottom: '3px solid transparent', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
-              className={`cat-ribbon-link cat-ribbon-${cat.name.toLowerCase().replace(/[^a-z]/g,'')}`}>
+              className={`nav-red-hover cat-ribbon-link cat-ribbon-${cat.name.toLowerCase().replace(/[^a-z]/g,'')}`}>
               <i className={`fas ${cat.icon}`} style={{ color: cat.color, fontSize: 12 }} />
               {cat.name}
             </a>
@@ -159,9 +159,9 @@ export default async function HomePage() {
 
       {/* Breaking News Ticker */}
       {tickerNews.length > 0 && (
-        <div style={{ background: '#e53e3e', color: '#fff', fontSize: 13, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-          <div style={{ background: '#9b1c1c', padding: '8px 16px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap', flexShrink: 0, fontSize: 11 }}>
-            <i className="fas fa-bolt" style={{ marginRight: 6 }} />Última Hora
+        <div style={{ background: 'linear-gradient(90deg, #8c1d18, #c41e3a)', color: '#fff', fontSize: 13, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <div className="breaking-label" style={{ padding: '8px 16px', flexShrink: 0 }}>
+            <i className="fas fa-bolt" />Última Hora
           </div>
           <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
@@ -189,13 +189,13 @@ export default async function HomePage() {
                 style={{ position: 'relative', overflow: 'hidden', borderRadius: 16, display: 'block', textDecoration: 'none', aspectRatio: '16/10', gridRow: '1 / 3' }}>
                 <img src={destacadas[0].imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'}
                   alt={destacadas[0].titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
-                  className="group-img" />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)' }} />
+                  className="img-zoom" />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.15) 100%)' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}>
                   <span style={{ background: catColor(destacadas[0].categoria), color: '#fff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '3px 10px', borderRadius: 4 }}>
                     {destacadas[0].categoria}
                   </span>
-                  <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginTop: 10, lineHeight: 1.3, letterSpacing: '-0.3px' }}>{destacadas[0].titulo}</h2>
+                  <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginTop: 10, lineHeight: 1.3, letterSpacing: '-0.3px', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}>{destacadas[0].titulo}</h2>
                   {destacadas[0].resumen && (
                     <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, marginTop: 6, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {destacadas[0].resumen}
@@ -211,9 +211,10 @@ export default async function HomePage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               {destacadas.slice(1, 5).map((n) => (
                 <Link key={n.id} href={`/noticias/${n.slug}`}
-                  style={{ position: 'relative', overflow: 'hidden', borderRadius: 12, display: 'block', textDecoration: 'none', aspectRatio: '4/3' }}>
+                  style={{ position: 'relative', overflow: 'hidden', borderRadius: 12, display: 'block', textDecoration: 'none', aspectRatio: '4/3' }}
+                  className="card-top-border">
                   <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80'}
-                    alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
+                    alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} className="img-zoom" />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 12px' }}>
                     <span style={{ background: catColor(n.categoria), color: '#fff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', padding: '2px 6px', borderRadius: 3 }}>
@@ -250,12 +251,12 @@ export default async function HomePage() {
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }} className="md:grid-cols-2 grid-cols-1">
               {(recientes.length > 0 ? recientes : noticias).map((n) => (
-                <article key={n.id} style={{ background: 'var(--paper-accent)', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border-light)', transition: 'all 0.25s', display: 'flex', flexDirection: 'column' }}
-                  className="hover-card">
+                <article key={n.id} style={{ background: 'var(--paper-accent)', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border-light)', transition: 'all 0.3s ease', display: 'flex', flexDirection: 'column', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                  className="card-top-border widget-lift">
                   <Link href={`/noticias/${n.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <div style={{ aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }} className="img-zoom-wrap">
                       <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80'}
-                        alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }} className="card-img" />
+                        alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="img-zoom" />
                     </div>
                     <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -288,15 +289,15 @@ export default async function HomePage() {
         {/* Sidebar */}
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Trending */}
-          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-            <div style={{ background: '#e53e3e', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+            <div style={{ background: 'linear-gradient(135deg, #8c1d18, #c41e3a)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <i className="fas fa-fire" style={{ color: '#fff', fontSize: 14 }} />
               <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Tendencias</span>
             </div>
             <div style={{ padding: '8px 0' }}>
               {noticias.slice(0, 6).map((n, i) => (
-                <Link key={n.id} href={`/noticias/${n.slug}`} style={{ display: 'flex', gap: 12, padding: '10px 16px', textDecoration: 'none', borderBottom: i < 5 ? '1px solid var(--border-light)' : 'none', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: 22, fontWeight: 900, color: i === 0 ? '#e53e3e' : 'var(--border-medium)', minWidth: 28, lineHeight: 1 }}>{i + 1}</span>
+                <Link key={n.id} href={`/noticias/${n.slug}`} style={{ display: 'flex', gap: 12, padding: '10px 16px', textDecoration: 'none', borderBottom: i < 5 ? '1px solid var(--border-light)' : 'none', alignItems: 'flex-start' }} className="trend-item-hover">
+                  <span className="trend-num">{i + 1}</span>
                   <div>
                     <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: catColor(n.categoria), display: 'block', marginBottom: 3 }}>{n.categoria}</span>
                     <span style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.titulo}</span>
@@ -307,15 +308,19 @@ export default async function HomePage() {
           </div>
 
           {/* Clima */}
-          <WeatherWidget />
+          <div className="widget-lift" style={{ borderRadius: 14, overflow: 'hidden' }}>
+            <WeatherWidget />
+          </div>
 
           {/* Indicadores */}
-          <IndicadoresWidget />
+          <div className="widget-lift" style={{ borderRadius: 14, overflow: 'hidden' }}>
+            <IndicadoresWidget />
+          </div>
 
           {/* Más Leídas — numbered */}
           {masLeidas.length > 0 && (
-            <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-              <div style={{ background: '#8c1d18', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+              <div style={{ background: 'linear-gradient(135deg, #8c1d18, #c41e3a)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <i className="fas fa-fire" style={{ color: '#fca5a5', fontSize: 14 }} />
                 <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Más Leídas</span>
               </div>
@@ -365,7 +370,7 @@ export default async function HomePage() {
           </div>
 
           {/* Tags cloud */}
-          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 16 }}>
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
               <i className="fas fa-hashtag" style={{ color: '#e53e3e' }} /> Etiquetas
             </div>
@@ -381,27 +386,23 @@ export default async function HomePage() {
       </main>
 
       {/* Floating buttons */}
-      <div style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'center' }}>
+      <div style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'flex-end' }}>
         {/* WhatsApp */}
-        <div style={{ position: 'relative' }}>
-          <span style={{ position: 'absolute', inset: -4, borderRadius: '50%', background: 'rgba(37,211,102,0.35)', animation: 'floatPulse 2.2s ease-out infinite', zIndex: 0 }} />
-          <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp"
-            style={{ width: 52, height: 52, borderRadius: '50%', background: '#25d366', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(37,211,102,0.55)', fontSize: 24, textDecoration: 'none', position: 'relative', zIndex: 1, transition: 'transform 0.2s, box-shadow 0.2s' }}
-            className="float-btn">
-            <i className="fab fa-whatsapp" style={{ position: 'relative', zIndex: 2, lineHeight: 1 }} />
+        <div className="tooltip-wrap" data-tip="Canal WhatsApp">
+          <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp" className="fab-elongated shine">
+            <i className="fab fa-whatsapp" /> WhatsApp
           </a>
         </div>
         {/* Telegram */}
-        <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram"
-          style={{ width: 52, height: 52, borderRadius: '50%', background: '#0088cc', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(0,136,204,0.5)', fontSize: 22, textDecoration: 'none', position: 'relative', zIndex: 1, transition: 'transform 0.2s, box-shadow 0.2s' }}
-          className="float-btn">
-          <i className="fab fa-telegram-plane" style={{ position: 'relative', zIndex: 2, lineHeight: 1 }} />
-        </a>
-        <style>{`@keyframes floatPulse { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(1.7);opacity:0} } .float-btn:hover { transform: scale(1.1) !important; box-shadow: 0 8px 30px rgba(0,0,0,0.3) !important; }`}</style>
+        <div className="tooltip-wrap" data-tip="Canal Telegram">
+          <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram" className="fab-telegram-elongated shine">
+            <i className="fab fa-telegram-plane" /> Telegram
+          </a>
+        </div>
       </div>
 
       {/* Footer */}
-      <footer style={{ background: '#0a0e1a', color: '#64748b', borderTop: '3px solid #e53e3e', marginTop: 0, paddingTop: 48, paddingBottom: 24, paddingLeft: 24, paddingRight: 24 }}>
+      <footer className="footer-deep" style={{ color: '#94a3b8', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 0, paddingTop: 48, paddingBottom: 24, paddingLeft: 24, paddingRight: 24 }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, marginBottom: 40 }} className="footer-grid">
             {/* Brand */}
@@ -415,13 +416,11 @@ export default async function HomePage() {
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
                 {[
-                  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', bg: '#1877f2' },
-                  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', bg: '#25d366' },
-                  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', bg: '#0088cc' },
-                ].map(({ href, icon, bg }) => (
-                  <a key={icon} href={href} target="_blank" rel="noopener"
-                    style={{ width: 38, height: 38, borderRadius: '50%', background: bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, textDecoration: 'none', boxShadow: `0 3px 10px ${bg}66`, transition: 'transform 0.2s, box-shadow 0.2s' }}
-                    className="footer-social-icon">
+                  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f' },
+                  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp' },
+                  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane' },
+                ].map(({ href, icon }) => (
+                  <a key={icon} href={href} target="_blank" rel="noopener" className="footer-social-unified">
                     <i className={`fab ${icon}`} />
                   </a>
                 ))}
@@ -489,8 +488,6 @@ export default async function HomePage() {
       <style>{`
         .hover-card:hover { border-color: rgba(229,62,62,0.4) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         .hover-card:hover .card-img { transform: scale(1.05); }
-        .nav-cat-link { padding: 6px 12px; font-size: 13px; color: #cbd5e1; text-decoration: none; border-radius: 6px; font-weight: 500; transition: all 0.2s; }
-        .nav-cat-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
         .trend-item:hover span:last-child { color: var(--ink) !important; }
         .footer-link:hover { color: #f1f5f9 !important; }
         .social-icon-btn:hover { opacity: 0.85; transform: translateY(-1px); }
@@ -499,8 +496,8 @@ export default async function HomePage() {
         .tag-chip:hover { background: #e53e3e !important; color: #fff !important; border-color: #e53e3e !important; }
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
-        .footer-social-icon:hover { transform: translateY(-3px) scale(1.1); }
         @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}}
+        @media(max-width:640px){.fab-elongated span, .fab-telegram-elongated span { display:none; padding:14px; }}
       `}</style>
     </div>
   );
