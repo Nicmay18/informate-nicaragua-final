@@ -57,6 +57,30 @@ const PLACEHOLDERS: Record<string, string> = {
   Espectáculos: 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=1200&q=85',
 };
 
+async function getRelated(categoria: string, currentSlug: string): Promise<Array<{ id: string; slug: string; titulo: string; imagen: string; categoria: string; fecha: string }>> {
+  try {
+    const snap = await adminDb.collection('noticias')
+      .where('categoria', '==', categoria)
+      .orderBy('fecha', 'desc')
+      .limit(6)
+      .get();
+    return snap.docs
+      .filter(d => d.data().slug !== currentSlug)
+      .slice(0, 4)
+      .map(d => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          imagen: data.imagen || '',
+          categoria: data.categoria || 'General',
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+        };
+      });
+  } catch { return []; }
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
@@ -71,6 +95,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const autor = n.autor || 'Keyling Rivera M.';
   const autorInitial = autor.charAt(0).toUpperCase();
   const imgUrl = n.imagen || PLACEHOLDERS[n.categoria as string] || PLACEHOLDERS['Nacionales'];
+  const related = await getRelated(n.categoria || 'General', slug);
 
   const fechaISO = n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha).toISOString();
   const fechaMod = n.fechaActualizacion?.toDate
@@ -205,11 +230,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {/* Article body */}
           <div style={{ fontFamily: "'Crimson Pro','Times New Roman',Georgia,serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a', userSelect: 'none' }}>
             {previewPars.map((p, i) => (
-              <p key={i} style={{ marginBottom: '1.6em', textAlign: 'justify', hyphens: 'auto' }}
+              <p key={i} className={i === 0 ? 'drop-cap' : ''}
+                style={{ marginBottom: '1.6em', textAlign: 'justify', hyphens: 'auto' }}
                 dangerouslySetInnerHTML={{ __html: contentIsHTML ? p : p }}
               />
             ))}
           </div>
+          <style>{`.drop-cap::first-letter { float: left; font-size: 4.5em; line-height: 0.8; font-weight: 700; color: #8c1d18; font-family: 'Crimson Pro', Georgia, serif; margin: 4px 8px 0 0; padding: 0 4px; }`}</style>
 
           {/* Premium paywall */}
           {isPremium && hiddenPars.length > 0 && (
@@ -264,6 +291,35 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <ShareSticky href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(n.titulo)}`} icon="x-twitter" color="#0f1419" />
         <CopyButton url={url} />
       </aside>
+
+      {/* Related articles */}
+      {related.length > 0 && (
+        <section style={{ maxWidth: 780, margin: '0 auto', padding: '0 28px 60px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+            <i className="fas fa-layer-group" style={{ color: '#8c1d18', fontSize: 16 }} />
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#18181b', margin: 0 }}>Más noticias de {n.categoria || 'General'}</h2>
+            <div style={{ flex: 1, height: 1, background: '#ddd6ce' }} />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+            {related.map(r => (
+              <Link key={r.id} href={`/noticias/${r.slug}`}
+                style={{ textDecoration: 'none', borderRadius: 10, overflow: 'hidden', border: '1px solid #ddd6ce', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
+                  <img src={r.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=70'}
+                    alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ padding: '12px 14px' }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: '#8c1d18', letterSpacing: '0.06em' }}>{r.categoria}</span>
+                  <h3 style={{ fontSize: 15, fontWeight: 700, color: '#18181b', lineHeight: 1.4, margin: '6px 0 4px', letterSpacing: '-0.2px' }}>{r.titulo}</h3>
+                  <span style={{ fontSize: 12, color: '#9f968d' }}>
+                    {r.fecha ? new Date(r.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <footer style={{ background: '#18181b', color: '#9f968d', padding: '48px 24px 32px', marginTop: 80 }}>
         <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>

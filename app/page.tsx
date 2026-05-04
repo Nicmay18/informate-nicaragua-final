@@ -1,5 +1,7 @@
 import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
+import RadioBar from '@/components/RadioBar';
+import NewsletterForm from '@/components/NewsletterForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,6 +35,30 @@ function formatDate(iso: string) {
   } catch { return ''; }
 }
 
+async function getMasLeidas(): Promise<Noticia[]> {
+  try {
+    const snap = await adminDb
+      .collection('noticias')
+      .orderBy('vistas', 'desc')
+      .limit(5)
+      .get();
+    return snap.docs.map((d) => {
+      const data = d.data();
+      return {
+        id: d.id,
+        slug: data.slug || d.id,
+        titulo: data.titulo || '',
+        resumen: data.resumen || '',
+        categoria: data.categoria || 'General',
+        imagen: data.imagen || '',
+        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
 async function getNews(): Promise<Noticia[]> {
   try {
     const snap = await adminDb
@@ -60,7 +86,7 @@ async function getNews(): Promise<Noticia[]> {
 }
 
 export default async function HomePage() {
-  const noticias = await getNews();
+  const [noticias, masLeidas] = await Promise.all([getNews(), getMasLeidas()]);
   const destacadas = noticias.slice(0, 5);
   const recientes = noticias.slice(5);
   const tickerNews = noticias.slice(0, 8);
@@ -96,10 +122,7 @@ export default async function HomePage() {
           </Link>
           <nav style={{ display: 'flex', gap: 2 }} className="hidden md:flex">
             {['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'].map((cat) => (
-              <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`}
-                style={{ padding: '6px 12px', fontSize: 13, color: '#cbd5e1', textDecoration: 'none', borderRadius: 6, fontWeight: 500, transition: 'all 0.2s' }}
-                onMouseEnter={e => { (e.target as HTMLElement).style.color = '#fff'; (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.08)'; }}
-                onMouseLeave={e => { (e.target as HTMLElement).style.color = '#cbd5e1'; (e.target as HTMLElement).style.background = 'transparent'; }}>
+              <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`} className="nav-cat-link">
                 {cat}
               </a>
             ))}
@@ -109,6 +132,8 @@ export default async function HomePage() {
           </a>
         </div>
       </header>
+
+      <RadioBar />
 
       {/* Breaking News Ticker */}
       {tickerNews.length > 0 && (
@@ -257,23 +282,50 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Newsletter CTA */}
+          {/* Más Leídas */}
+          {masLeidas.length > 0 && (
+            <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
+              <div style={{ background: '#1e3a5f', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <i className="fas fa-chart-line" style={{ color: '#fff', fontSize: 14 }} />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Más Leídas</span>
+              </div>
+              <div style={{ padding: '8px 0' }}>
+                {masLeidas.map((n, i) => (
+                  <Link key={n.id} href={`/noticias/${n.slug}`}
+                    style={{ display: 'flex', gap: 10, padding: '10px 14px', textDecoration: 'none', borderBottom: i < masLeidas.length - 1 ? '1px solid var(--border-light)' : 'none', alignItems: 'center' }}>
+                    <div style={{ width: 56, height: 42, borderRadius: 6, overflow: 'hidden', flexShrink: 0 }}>
+                      <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=100&q=70'}
+                        alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: 10, color: catColor(n.categoria), fontWeight: 700, textTransform: 'uppercase' }}>{n.categoria}</span>
+                      <div style={{ fontSize: 12, color: 'var(--ink-muted)', lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginTop: 2 }}>{n.titulo}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Newsletter */}
+          <NewsletterForm />
+
+          {/* Redes */}
           <div style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2040 100%)', borderRadius: 14, padding: 20, textAlign: 'center' }}>
-            <i className="fas fa-bell" style={{ color: '#f97316', fontSize: 24, marginBottom: 8, display: 'block' }} />
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 6 }}>¡Mantente informado!</div>
-            <div style={{ color: '#94a3b8', fontSize: 13, marginBottom: 14, lineHeight: 1.5 }}>Síguenos en nuestros canales para recibir las últimas noticias.</div>
+            <i className="fas fa-bell" style={{ color: '#f97316', fontSize: 22, marginBottom: 8, display: 'block' }} />
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Síguenos</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 16px', background: '#25d366', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-                <i className="fab fa-whatsapp" style={{ fontSize: 16 }} /> Canal WhatsApp
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#25d366', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
+                <i className="fab fa-whatsapp" /> WhatsApp
               </a>
               <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 16px', background: '#0088cc', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-                <i className="fab fa-telegram-plane" style={{ fontSize: 16 }} /> Canal Telegram
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#0088cc', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
+                <i className="fab fa-telegram-plane" /> Telegram
               </a>
               <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px 16px', background: '#1877f2', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-                <i className="fab fa-facebook-f" style={{ fontSize: 16 }} /> Facebook
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#1877f2', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
+                <i className="fab fa-facebook-f" /> Facebook
               </a>
             </div>
           </div>
@@ -358,6 +410,11 @@ export default async function HomePage() {
       <style>{`
         .hover-card:hover { border-color: rgba(229,62,62,0.4) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         .hover-card:hover .card-img { transform: scale(1.05); }
+        .nav-cat-link { padding: 6px 12px; font-size: 13px; color: #cbd5e1; text-decoration: none; border-radius: 6px; font-weight: 500; transition: all 0.2s; }
+        .nav-cat-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .trend-item:hover span:last-child { color: var(--ink) !important; }
+        .footer-link:hover { color: #f1f5f9 !important; }
+        .social-icon-btn:hover { opacity: 0.85; transform: translateY(-1px); }
       `}</style>
     </div>
   );
