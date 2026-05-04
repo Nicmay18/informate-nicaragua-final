@@ -4,14 +4,19 @@ import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 function getAdminApp(): App {
   if (getApps().length > 0) return getApp();
 
+  const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+  if (b64) {
+    const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+    console.log('[firebase-admin] using base64 account, project:', sa.project_id);
+    return initializeApp({ credential: cert(sa) });
+  }
+
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const rawKey = process.env.FIREBASE_PRIVATE_KEY ?? '';
-  // Handle all formats: with quotes, with literal \n, with real newlines
-  const privateKey = rawKey
+  const privateKey = (process.env.FIREBASE_PRIVATE_KEY ?? '')
     .trim()
-    .replace(/^["']|["']$/g, '')   // strip surrounding quotes
-    .replace(/\\n/g, '\n');         // convert literal \n to real newlines
+    .replace(/^["']|["']$/g, '')
+    .replace(/\\n/g, '\n');
 
   console.log('[firebase-admin] projectId:', projectId ?? 'MISSING');
   console.log('[firebase-admin] clientEmail:', clientEmail ? clientEmail.slice(0, 20) + '...' : 'MISSING');
@@ -20,9 +25,7 @@ function getAdminApp(): App {
   console.log('[firebase-admin] key_newlines:', (privateKey.match(/\n/g) ?? []).length);
 
   if (!projectId || !clientEmail || !privateKey) {
-    throw new Error(
-      '[firebase-admin] Missing env vars: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY'
-    );
+    throw new Error('[firebase-admin] Missing env vars');
   }
 
   return initializeApp({ credential: cert({ projectId, privateKey, clientEmail }) });

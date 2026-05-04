@@ -12,7 +12,9 @@ coverage/
 
 # Variables de entorno
 .env
-.env.local
+.env*.local
+*firebase-adminsdk*.json
+fb-key-base64.txt
 .env.development.local
 .env.test.local
 .env.production.local
