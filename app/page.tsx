@@ -118,7 +118,7 @@ export default async function HomePage() {
             <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 42, height: 42, borderRadius: 8, objectFit: 'cover' }} />
             <div>
               <div style={{ color: '#e53e3e', fontWeight: 800, fontSize: 18, lineHeight: 1.2, letterSpacing: '-0.3px' }}>Nicaragua Informate</div>
-              <div style={{ color: '#64748b', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Periodismo de Precisión</div>
+              <div style={{ color: '#475569', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Noticias de Nicaragua</div>
             </div>
           </Link>
           <nav style={{ display: 'flex', gap: 2 }} className="hidden md:flex">
@@ -163,17 +163,19 @@ export default async function HomePage() {
           <div style={{ background: '#9b1c1c', padding: '8px 16px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap', flexShrink: 0, fontSize: 11 }}>
             <i className="fas fa-bolt" style={{ marginRight: 6 }} />Última Hora
           </div>
-          <div style={{ overflow: 'hidden', flex: 1 }}>
-            <div style={{ display: 'flex', animation: 'ticker 40s linear infinite', whiteSpace: 'nowrap', padding: '8px 0' }}>
+          <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
+            <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #e53e3e, transparent)', zIndex: 1, pointerEvents: 'none' }} />
+            <div style={{ display: 'flex', animation: 'ticker 70s linear infinite', whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
               {[...tickerNews, ...tickerNews].map((n, i) => (
                 <Link key={`${n.id}-${i}`} href={`/noticias/${n.slug}`}
-                  style={{ color: '#fff', textDecoration: 'none', marginRight: 48, flexShrink: 0 }}>
-                  <span style={{ opacity: 0.7, marginRight: 8 }}>▸</span>{n.titulo}
+                  style={{ color: '#fff', textDecoration: 'none', marginRight: 56, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                  <i className="fas fa-circle" style={{ fontSize: 6, color: '#fca5a5' }} />{n.titulo}
                 </Link>
               ))}
             </div>
           </div>
-          <style>{`@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }`}</style>
+          <style>{`@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } } .ticker-scroll:hover { animation-play-state: paused; }`}</style>
         </div>
       )}
 
@@ -310,24 +312,21 @@ export default async function HomePage() {
           {/* Indicadores */}
           <IndicadoresWidget />
 
-          {/* Más Leídas */}
+          {/* Más Leídas — numbered */}
           {masLeidas.length > 0 && (
             <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-              <div style={{ background: '#1e3a5f', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <i className="fas fa-chart-line" style={{ color: '#fff', fontSize: 14 }} />
-                <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Más Leídas</span>
+              <div style={{ background: '#8c1d18', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <i className="fas fa-fire" style={{ color: '#fca5a5', fontSize: 14 }} />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Más Leídas</span>
               </div>
               <div style={{ padding: '8px 0' }}>
                 {masLeidas.map((n, i) => (
-                  <Link key={n.id} href={`/noticias/${n.slug}`}
-                    style={{ display: 'flex', gap: 10, padding: '10px 14px', textDecoration: 'none', borderBottom: i < masLeidas.length - 1 ? '1px solid var(--border-light)' : 'none', alignItems: 'center' }}>
-                    <div style={{ width: 56, height: 42, borderRadius: 6, overflow: 'hidden', flexShrink: 0 }}>
-                      <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=100&q=70'}
-                        alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
+                  <Link key={n.id} href={`/noticias/${n.slug}`} className="mas-leidas-item"
+                    style={{ display: 'flex', gap: 14, padding: '12px 16px', textDecoration: 'none', borderBottom: i < masLeidas.length - 1 ? '1px solid var(--border-light)' : 'none', alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: 28, fontWeight: 900, color: i === 0 ? '#8c1d18' : 'var(--border-medium)', lineHeight: 1, minWidth: 32, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <span style={{ fontSize: 10, color: catColor(n.categoria), fontWeight: 700, textTransform: 'uppercase' }}>{n.categoria}</span>
-                      <div style={{ fontSize: 12, color: 'var(--ink-muted)', lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginTop: 2 }}>{n.titulo}</div>
+                      <span style={{ fontSize: 10, color: catColor(n.categoria), fontWeight: 700, textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>{n.categoria}</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontWeight: 600 }}>{n.titulo}</span>
                     </div>
                   </Link>
                 ))}
@@ -338,91 +337,138 @@ export default async function HomePage() {
           {/* Newsletter */}
           <NewsletterForm />
 
-          {/* Redes */}
-          <div style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2040 100%)', borderRadius: 14, padding: 20, textAlign: 'center' }}>
-            <i className="fas fa-bell" style={{ color: '#f97316', fontSize: 22, marginBottom: 8, display: 'block' }} />
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Síguenos</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#25d366', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-                <i className="fab fa-whatsapp" /> WhatsApp
-              </a>
-              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#0088cc', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-                <i className="fab fa-telegram-plane" /> Telegram
-              </a>
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '9px 14px', background: '#1877f2', color: '#fff', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-                <i className="fab fa-facebook-f" /> Facebook
-              </a>
+          {/* Síguenos */}
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
+            <div style={{ background: '#0f172a', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <i className="fas fa-share-nodes" style={{ color: '#94a3b8', fontSize: 14 }} />
+              <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Síguenos</span>
+            </div>
+            <div style={{ padding: 14, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {[
+                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', bg: '#1877f2', count: '' },
+                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#25d366', count: 'Canal' },
+                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', bg: '#0088cc', count: 'Canal' },
+              ].map(s => (
+                <a key={s.href} href={s.href} target="_blank" rel="noopener"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 10px', borderRadius: 10, background: s.bg + '15', border: `1px solid ${s.bg}30`, textDecoration: 'none', transition: 'all 0.2s' }}
+                  className="social-follow-btn">
+                  <div style={{ width: 32, height: 32, borderRadius: 8, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <i className={`fab ${s.icon}`} style={{ color: '#fff', fontSize: 14 }} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink)' }}>{s.label}</div>
+                    {s.count && <div style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{s.count}</div>}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Tags cloud */}
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 16 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <i className="fas fa-hashtag" style={{ color: '#e53e3e' }} /> Etiquetas
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {['#Nicaragua','#Managua','#Sucesos','#Deportes','#Política','#Economía','#Cultura','#Clima','#Espectáculos','#Centroamérica'].map(tag => (
+                <span key={tag} style={{ padding: '5px 12px', background: 'var(--paper)', border: '1px solid var(--border-light)', borderRadius: 999, fontSize: 12, fontWeight: 500, color: 'var(--ink-muted)', cursor: 'pointer', transition: 'all 0.2s' }} className="tag-chip">
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         </aside>
       </main>
 
       {/* Floating buttons */}
-      <div style={{ position: 'fixed', bottom: 24, right: 24, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 40 }}>
+      <div style={{ position: 'fixed', bottom: 24, right: 22, display: 'flex', flexDirection: 'column', gap: 12, zIndex: 40, alignItems: 'center' }}>
         <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp"
-          style={{ width: 50, height: 50, borderRadius: '50%', background: '#25d366', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.25)', fontSize: 20, textDecoration: 'none' }}>
+          style={{ width: 46, height: 46, borderRadius: '50%', background: 'linear-gradient(135deg,#25d366,#128c7e)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(37,211,102,0.45)', fontSize: 20, textDecoration: 'none', position: 'relative', transition: 'transform 0.2s' }}
+          className="float-btn">
           <i className="fab fa-whatsapp" />
+          <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'rgba(37,211,102,0.35)', animation: 'floatPulse 2s infinite' }} />
         </a>
         <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram"
-          style={{ width: 50, height: 50, borderRadius: '50%', background: '#0088cc', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.25)', fontSize: 20, textDecoration: 'none' }}>
+          style={{ width: 46, height: 46, borderRadius: '50%', background: 'linear-gradient(135deg,#0088cc,#006699)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,136,204,0.4)', fontSize: 19, textDecoration: 'none', transition: 'transform 0.2s' }}
+          className="float-btn">
           <i className="fab fa-telegram-plane" />
         </a>
+        <style>{`@keyframes floatPulse { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(1.6);opacity:0} } .float-btn:hover { transform: scale(1.12) !important; }`}</style>
       </div>
 
       {/* Footer */}
       <footer style={{ background: '#0a0e1a', color: '#64748b', borderTop: '3px solid #e53e3e', marginTop: 0, paddingTop: 48, paddingBottom: 24, paddingLeft: 24, paddingRight: 24 }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 40, marginBottom: 40 }} className="md:grid-cols-3 grid-cols-1">
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                <img src="/logo.png" alt="Logo" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
-                <div>
-                  <div style={{ color: '#f1f5f9', fontWeight: 800, fontSize: 17 }}>Nicaragua Informate</div>
-                  <div style={{ color: '#475569', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Periodismo de Precisión</div>
-                </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, marginBottom: 40 }} className="footer-grid">
+            {/* Brand */}
+            <div style={{ gridColumn: '1 / 2' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <img src="/logo.png" alt="Logo" style={{ width: 38, height: 38, borderRadius: 8, objectFit: 'cover' }} />
+                <div style={{ color: '#f1f5f9', fontWeight: 800, fontSize: 16 }}>Nicaragua Informate</div>
               </div>
-              <p style={{ color: '#475569', fontSize: 13, lineHeight: 1.7, marginBottom: 16, maxWidth: 300 }}>
-                Cubriendo las noticias más importantes de Nicaragua con rigor periodístico y compromiso con la verdad desde Managua.
+              <p style={{ color: '#475569', fontSize: 13, lineHeight: 1.7, marginBottom: 16, maxWidth: 240 }}>
+                Cubriendo las noticias más importantes de Nicaragua al instante, con compromiso y rigor informativo.
               </p>
-              <div style={{ display: 'flex', gap: 12 }}>
+              <div style={{ display: 'flex', gap: 10 }}>
                 {[
                   { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', bg: '#1877f2' },
                   { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', bg: '#25d366' },
                   { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', bg: '#0088cc' },
                 ].map(({ href, icon, bg }) => (
                   <a key={icon} href={href} target="_blank" rel="noopener"
-                    style={{ width: 36, height: 36, borderRadius: 8, background: bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, textDecoration: 'none' }}>
+                    style={{ width: 34, height: 34, borderRadius: 8, background: bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, textDecoration: 'none' }}>
                     <i className={`fab ${icon}`} />
                   </a>
                 ))}
               </div>
             </div>
+            {/* Secciones */}
             <div>
-              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 14, marginBottom: 16, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>Secciones</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Secciones</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'].map((cat) => (
                   <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`}
-                    style={{ color: '#64748b', textDecoration: 'none', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: catColor(cat), display: 'inline-block', flexShrink: 0 }} />
-                    {cat}
+                    style={{ color: '#64748b', textDecoration: 'none', fontSize: 13, display: 'flex', alignItems: 'center', gap: 7 }} className="footer-link">
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: catColor(cat), display: 'inline-block', flexShrink: 0 }} />{cat}
                   </a>
                 ))}
               </div>
             </div>
+            {/* Legal */}
             <div>
-              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 14, marginBottom: 16, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>Legal</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Legal</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {[
                   { href: '/nosotros', label: 'Sobre Nosotros' },
                   { href: '/privacidad', label: 'Privacidad' },
                   { href: '/terminos', label: 'Términos de Uso' },
                   { href: '/politica-editorial', label: 'Política Editorial' },
                 ].map(({ href, label }) => (
-                  <a key={href} href={href} style={{ color: '#64748b', textDecoration: 'none', fontSize: 14 }}>{label}</a>
+                  <a key={href} href={href} style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }} className="footer-link">{label}</a>
                 ))}
+              </div>
+            </div>
+            {/* Contacto */}
+            <div>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contacto</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
+                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> Managua, Nicaragua
+                </div>
+                <a href="mailto:kelingrivera20@gmail.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }}>
+                  <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> kelingrivera20@gmail.com
+                </a>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748b' }}>
+                  <i className="fas fa-phone" style={{ color: '#e53e3e', flexShrink: 0 }} /> +505 8239-3844
+                </div>
+                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#25d366', textDecoration: 'none', fontWeight: 600 }}>
+                  <i className="fab fa-whatsapp" /> Canal WhatsApp
+                </a>
+                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#38bdf8', textDecoration: 'none', fontWeight: 600 }}>
+                  <i className="fab fa-telegram-plane" /> Canal Telegram
+                </a>
               </div>
             </div>
           </div>
@@ -444,6 +490,11 @@ export default async function HomePage() {
         .footer-link:hover { color: #f1f5f9 !important; }
         .social-icon-btn:hover { opacity: 0.85; transform: translateY(-1px); }
         .cat-ribbon-link:hover { color: var(--ink) !important; border-bottom-color: #e53e3e !important; background: rgba(229,62,62,0.05); }
+        .mas-leidas-item:hover { background: var(--paper-accent); }
+        .tag-chip:hover { background: #e53e3e !important; color: #fff !important; border-color: #e53e3e !important; }
+        .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .footer-link:hover { color: #e2e8f0 !important; }
+        @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}}
       `}</style>
     </div>
   );
