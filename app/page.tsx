@@ -166,7 +166,7 @@ export default async function HomePage() {
           <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #e53e3e, transparent)', zIndex: 1, pointerEvents: 'none' }} />
-            <div style={{ display: 'flex', animation: 'ticker 90s linear infinite', whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
+            <div style={{ display: 'flex', animation: `ticker ${Math.max(40, tickerNews.length * 12)}s linear infinite`, whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
               {[...tickerNews, ...tickerNews].map((n, i) => (
                 <Link key={`${n.id}-${i}`} href={`/noticias/${n.slug}`}
                   style={{ color: '#fff', textDecoration: 'none', marginRight: 56, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
