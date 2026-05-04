@@ -1,7 +1,8 @@
 import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
-import RadioBar from '@/components/RadioBar';
 import NewsletterForm from '@/components/NewsletterForm';
+import WeatherWidget from '@/components/WeatherWidget';
+import IndicadoresWidget from '@/components/IndicadoresWidget';
 
 export const dynamic = 'force-dynamic';
 
@@ -133,7 +134,28 @@ export default async function HomePage() {
         </div>
       </header>
 
-      <RadioBar />
+      {/* Category Ribbon */}
+      <div style={{ background: 'var(--paper-accent)', borderBottom: '1px solid var(--border-light)' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: 0, overflowX: 'auto' }}>
+          {[
+            { name: 'Sucesos', color: '#dc2626', icon: 'fa-triangle-exclamation' },
+            { name: 'Nacionales', color: '#1d4ed8', icon: 'fa-flag' },
+            { name: 'Deportes', color: '#16a34a', icon: 'fa-futbol' },
+            { name: 'Internacionales', color: '#7c3aed', icon: 'fa-globe' },
+            { name: 'Espect\u00e1culos', color: '#db2777', icon: 'fa-star' },
+          ].map((cat) => (
+            <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', fontSize: 13, fontWeight: 600, color: 'var(--ink-muted)', textDecoration: 'none', borderBottom: '3px solid transparent', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
+              className={`cat-ribbon-link cat-ribbon-${cat.name.toLowerCase().replace(/[^a-z]/g,'')}`}>
+              <i className={`fas ${cat.icon}`} style={{ color: cat.color, fontSize: 12 }} />
+              {cat.name}
+            </a>
+          ))}
+          <a href="/feed.xml" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', fontSize: 12, fontWeight: 600, color: '#f97316', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <i className="fas fa-rss" /> RSS
+          </a>
+        </div>
+      </div>
 
       {/* Breaking News Ticker */}
       {tickerNews.length > 0 && (
@@ -282,6 +304,12 @@ export default async function HomePage() {
             </div>
           </div>
 
+          {/* Clima */}
+          <WeatherWidget />
+
+          {/* Indicadores */}
+          <IndicadoresWidget />
+
           {/* Más Leídas */}
           {masLeidas.length > 0 && (
             <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
@@ -415,6 +443,7 @@ export default async function HomePage() {
         .trend-item:hover span:last-child { color: var(--ink) !important; }
         .footer-link:hover { color: #f1f5f9 !important; }
         .social-icon-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .cat-ribbon-link:hover { color: var(--ink) !important; border-bottom-color: #e53e3e !important; background: rgba(229,62,62,0.05); }
       `}</style>
     </div>
   );

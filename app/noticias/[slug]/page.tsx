@@ -202,25 +202,29 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   <span style={{ fontSize: 12, color: '#9f968d', fontWeight: 500 }}>{n.autorRol || 'Nicaragua Informate'}</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: '#9f968d', fontWeight: 500 }}>
-                <span>📅 {fechaStr}</span>
-                <span>⏱️ {readTime} min de lectura</span>
-                <span>📝 {wordCount} palabras</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: '#9f968d', flexWrap: 'wrap' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="far fa-calendar" style={{ color: '#8c1d18' }} /> {fechaStr}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="far fa-clock" style={{ color: '#8c1d18' }} /> {readTime} min de lectura</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-align-left" style={{ color: '#8c1d18' }} /> {wordCount} palabras</span>
               </div>
             </div>
           </header>
 
-          <figure style={{ margin: '0 0 44px 0' }}>
+          <figure style={{ margin: '0 0 36px 0' }}>
             <img
               src={imgUrl}
               alt={n.titulo}
               style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', objectPosition: 'center 25%', borderRadius: 4, display: 'block', border: '1px solid #ddd6ce', userSelect: 'none' }}
             />
-            <figcaption style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 14, paddingTop: 12, borderTop: '1px solid #18181b' }}>
-              <span style={{ width: 24, height: 2, background: '#8c1d18', marginTop: 10, flexShrink: 0 }} />
-              <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, lineHeight: 1.6, color: '#5b5b5f' }}>
-                <strong style={{ color: '#18181b', fontWeight: 600 }}>{n.categoria || 'General'}</strong>
-                <span style={{ display: 'block', marginTop: 4, fontSize: 11, color: '#9f968d', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Nicaragua Informate / Archivo</span>
+            <figcaption style={{ marginTop: 10, paddingTop: 10, borderTop: '2px solid #18181b', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <span style={{ width: 28, height: 2, background: '#8c1d18', marginTop: 9, flexShrink: 0 }} />
+              <div>
+                {n.resumen && (
+                  <p style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 14, lineHeight: 1.6, color: '#3f3f46', fontStyle: 'italic', margin: '0 0 4px' }}>
+                    {n.resumen.length > 140 ? n.resumen.slice(0, 140) + '...' : n.resumen} — <strong style={{ fontStyle: 'normal', color: '#8c1d18' }}>{n.categoria || 'General'}</strong>
+                  </p>
+                )}
+                <span style={{ fontSize: 10, color: '#9f968d', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Nicaragua Informate / Archivo</span>
               </div>
             </figcaption>
           </figure>

@@ -102,6 +102,7 @@ export function ShareChip({ href, label, bg }: { href: string; label: string; bg
 }
 
 export function ShareSticky({ href, icon, color }: { href: string; icon: string; color: string }) {
+  const isSolid = icon === 'link';
   return (
     <a
       href={href}
@@ -110,30 +111,32 @@ export function ShareSticky({ href, icon, color }: { href: string; icon: string;
       onMouseEnter={(e) => {
         const el = e.currentTarget as HTMLElement;
         el.style.backgroundColor = color;
-        el.style.color = 'white';
-        el.style.borderColor = color;
+        el.style.color = '#fff';
+        el.style.transform = 'scale(1.1)';
+        el.style.boxShadow = `0 4px 12px ${color}55`;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget as HTMLElement;
-        el.style.backgroundColor = '#fffdf9';
-        el.style.color = '#756d66';
-        el.style.borderColor = '#ddd6ce';
+        el.style.backgroundColor = color;
+        el.style.color = '#fff';
+        el.style.transform = 'scale(1)';
+        el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
       }}
       style={{
-        width: 44,
-        height: 44,
+        width: 42,
+        height: 42,
         borderRadius: '50%',
-        background: '#fffdf9',
-        border: '1px solid #ddd6ce',
+        background: color,
         display: 'grid',
         placeItems: 'center',
         textDecoration: 'none',
-        color: '#756d66',
+        color: '#fff',
         fontSize: 16,
         transition: 'all 0.2s',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
       }}
     >
-      <i className={`fab fa-${icon}`} />
+      <i className={`${isSolid ? 'fas' : 'fab'} fa-${icon}`} />
     </a>
   );
 }
