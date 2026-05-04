@@ -49,6 +49,7 @@ export default function WeatherWidget() {
   const [main, setMain]           = useState<WData | null>(null);
   const [temps, setTemps]         = useState<(number | null)[]>(new Array(CITIES.length).fill(null));
   const [loading, setLoading]     = useState(false);
+  const [paused, setPaused]       = useState(false);
 
   const loadCity = useCallback(async (idx: number) => {
     setLoading(true);
@@ -65,9 +66,24 @@ export default function WeatherWidget() {
     });
   }, [loadCity]);
 
+  // Auto-cycle through cities every 6 seconds (pause on manual select)
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setActive(prev => {
+        const next = (prev + 1) % CITIES.length;
+        loadCity(next);
+        return next;
+      });
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [loadCity, paused]);
+
   const select = (idx: number) => {
     setActive(idx);
     loadCity(idx);
+    setPaused(true);
+    setTimeout(() => setPaused(false), 20000);
   };
 
   const wx = main ? (WX[main.code] ?? { label: 'Variable', emoji: '🌡️' }) : { label: 'Cargando...', emoji: '🌡️' };
@@ -80,9 +96,10 @@ export default function WeatherWidget() {
           <i className="fas fa-cloud-sun" style={{ color: '#D4AF37', fontSize: 14 }} />
           <span style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Clima Nicaragua</span>
         </div>
-        <span style={{ background: 'rgba(196,30,58,0.3)', border: '1px solid rgba(196,30,58,0.5)', color: '#fca5a5', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 700, letterSpacing: '0.06em' }}>
-          EN VIVO
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 11, color: '#64748b', fontWeight: 500 }}>{active + 1}/{CITIES.length}</span>
+          <span style={{ background: 'rgba(196,30,58,0.3)', border: '1px solid rgba(196,30,58,0.5)', color: '#fca5a5', fontSize: 10, padding: '2px 8px', borderRadius: 4, fontWeight: 700, letterSpacing: '0.06em' }}>EN VIVO</span>
+        </div>
       </div>
 
       <div style={{ padding: 16 }}>

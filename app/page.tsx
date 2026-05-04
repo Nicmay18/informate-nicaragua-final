@@ -166,7 +166,7 @@ export default async function HomePage() {
           <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #e53e3e, transparent)', zIndex: 1, pointerEvents: 'none' }} />
-            <div style={{ display: 'flex', animation: 'ticker 70s linear infinite', whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
+            <div style={{ display: 'flex', animation: 'ticker 90s linear infinite', whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
               {[...tickerNews, ...tickerNews].map((n, i) => (
                 <Link key={`${n.id}-${i}`} href={`/noticias/${n.slug}`}
                   style={{ color: '#fff', textDecoration: 'none', marginRight: 56, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
@@ -381,19 +381,23 @@ export default async function HomePage() {
       </main>
 
       {/* Floating buttons */}
-      <div style={{ position: 'fixed', bottom: 24, right: 22, display: 'flex', flexDirection: 'column', gap: 12, zIndex: 40, alignItems: 'center' }}>
-        <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp"
-          style={{ width: 46, height: 46, borderRadius: '50%', background: 'linear-gradient(135deg,#25d366,#128c7e)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(37,211,102,0.45)', fontSize: 20, textDecoration: 'none', position: 'relative', transition: 'transform 0.2s' }}
-          className="float-btn">
-          <i className="fab fa-whatsapp" />
-          <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'rgba(37,211,102,0.35)', animation: 'floatPulse 2s infinite' }} />
-        </a>
+      <div style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'center' }}>
+        {/* WhatsApp */}
+        <div style={{ position: 'relative' }}>
+          <span style={{ position: 'absolute', inset: -4, borderRadius: '50%', background: 'rgba(37,211,102,0.35)', animation: 'floatPulse 2.2s ease-out infinite', zIndex: 0 }} />
+          <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp"
+            style={{ width: 52, height: 52, borderRadius: '50%', background: '#25d366', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(37,211,102,0.55)', fontSize: 24, textDecoration: 'none', position: 'relative', zIndex: 1, transition: 'transform 0.2s, box-shadow 0.2s' }}
+            className="float-btn">
+            <i className="fab fa-whatsapp" style={{ position: 'relative', zIndex: 2, lineHeight: 1 }} />
+          </a>
+        </div>
+        {/* Telegram */}
         <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram"
-          style={{ width: 46, height: 46, borderRadius: '50%', background: 'linear-gradient(135deg,#0088cc,#006699)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,136,204,0.4)', fontSize: 19, textDecoration: 'none', transition: 'transform 0.2s' }}
+          style={{ width: 52, height: 52, borderRadius: '50%', background: '#0088cc', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(0,136,204,0.5)', fontSize: 22, textDecoration: 'none', position: 'relative', zIndex: 1, transition: 'transform 0.2s, box-shadow 0.2s' }}
           className="float-btn">
-          <i className="fab fa-telegram-plane" />
+          <i className="fab fa-telegram-plane" style={{ position: 'relative', zIndex: 2, lineHeight: 1 }} />
         </a>
-        <style>{`@keyframes floatPulse { 0%{transform:scale(1);opacity:0.7} 100%{transform:scale(1.6);opacity:0} } .float-btn:hover { transform: scale(1.12) !important; }`}</style>
+        <style>{`@keyframes floatPulse { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(1.7);opacity:0} } .float-btn:hover { transform: scale(1.1) !important; box-shadow: 0 8px 30px rgba(0,0,0,0.3) !important; }`}</style>
       </div>
 
       {/* Footer */}
@@ -416,7 +420,8 @@ export default async function HomePage() {
                   { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', bg: '#0088cc' },
                 ].map(({ href, icon, bg }) => (
                   <a key={icon} href={href} target="_blank" rel="noopener"
-                    style={{ width: 34, height: 34, borderRadius: 8, background: bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, textDecoration: 'none' }}>
+                    style={{ width: 38, height: 38, borderRadius: '50%', background: bg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, textDecoration: 'none', boxShadow: `0 3px 10px ${bg}66`, transition: 'transform 0.2s, box-shadow 0.2s' }}
+                    className="footer-social-icon">
                     <i className={`fab ${icon}`} />
                   </a>
                 ))}
@@ -494,6 +499,7 @@ export default async function HomePage() {
         .tag-chip:hover { background: #e53e3e !important; color: #fff !important; border-color: #e53e3e !important; }
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
+        .footer-social-icon:hover { transform: translateY(-3px) scale(1.1); }
         @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}}
       `}</style>
     </div>
