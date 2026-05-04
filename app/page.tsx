@@ -1,7 +1,7 @@
 import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 interface Noticia {
   id: string;

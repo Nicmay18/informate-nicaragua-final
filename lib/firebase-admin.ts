@@ -7,18 +7,17 @@ function getAdminApp(): App {
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const rawKey = process.env.FIREBASE_PRIVATE_KEY ?? '';
-
+  // Handle all formats: with quotes, with literal \n, with real newlines
   const privateKey = rawKey
     .trim()
-    .replace(/^["']|["']$/g, '')
-    .replace(/\\n/g, '\n');
+    .replace(/^["']|["']$/g, '')   // strip surrounding quotes
+    .replace(/\\n/g, '\n');         // convert literal \n to real newlines
 
   console.log('[firebase-admin] projectId:', projectId ?? 'MISSING');
-  console.log('[firebase-admin] clientEmail:', clientEmail ?? 'MISSING');
-  console.log('[firebase-admin] privateKey starts with:', privateKey.slice(0, 30));
-  console.log('[firebase-admin] privateKey ends with:', privateKey.slice(-30));
-  console.log('[firebase-admin] privateKey length:', privateKey.length);
-  console.log('[firebase-admin] has real newlines:', privateKey.includes('\n'));
+  console.log('[firebase-admin] clientEmail:', clientEmail ? clientEmail.slice(0, 20) + '...' : 'MISSING');
+  console.log('[firebase-admin] key_starts:', privateKey.slice(0, 27));
+  console.log('[firebase-admin] key_length:', privateKey.length);
+  console.log('[firebase-admin] key_newlines:', (privateKey.match(/\n/g) ?? []).length);
 
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error(
