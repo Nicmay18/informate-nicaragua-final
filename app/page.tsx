@@ -33,7 +33,8 @@ async function getNews(): Promise<Noticia[]> {
         fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
       };
     });
-  } catch {
+  } catch (err) {
+    console.error('[getNews] Firebase error:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
