@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "buildCommand": "next build",
-  "outputDirectory": ".next",
-  "functions": {
-    "app/**/*.ts": { "maxDuration": 30 }
-  },
   "headers": [
     {
       "source": "/feed.xml",
