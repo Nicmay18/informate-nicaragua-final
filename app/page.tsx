@@ -125,16 +125,14 @@ export default async function HomePage() {
               <div style={{ color: '#475569', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Noticias de Nicaragua</div>
             </div>
           </Link>
-          <nav style={{ display: 'flex', gap: 2 }} className="hidden md:flex">
-            {['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'].map((cat) => (
-              <a key={cat} href={`/?cat=${encodeURIComponent(cat)}`} className="nav-red-hover" style={{ padding: '6px 12px', fontSize: 13, color: '#cbd5e1', textDecoration: 'none', borderRadius: 6, fontWeight: 500 }}>
-                {cat}
-              </a>
-            ))}
-          </nav>
-          <a href="/feed.xml" style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#f97316', fontSize: 12, fontWeight: 600, textDecoration: 'none' }} className="hidden md:flex">
-            <i className="fas fa-rss" /> RSS
-          </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <Link href="/noticias" style={{ display: 'none', alignItems: 'center', gap: 6, color: 'var(--ink-muted)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }} className="md:flex">
+              <i className="fas fa-newspaper" style={{ color: '#8c1d18' }} /> Todas las noticias
+            </Link>
+            <Link href="/contacto" style={{ display: 'none', alignItems: 'center', gap: 6, color: 'var(--ink-muted)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }} className="md:flex">
+              <i className="fas fa-envelope" style={{ color: '#8c1d18' }} /> Contacto
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -155,9 +153,6 @@ export default async function HomePage() {
               {cat.name}
             </a>
           ))}
-          <a href="/feed.xml" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '10px 16px', fontSize: 12, fontWeight: 600, color: '#f97316', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-            <i className="fas fa-rss" /> RSS
-          </a>
         </div>
       </div>
 
@@ -295,29 +290,23 @@ export default async function HomePage() {
           {/* Newsletter */}
           <NewsletterForm />
 
-          {/* Síguenos */}
-          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-            <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <i className="fas fa-users" style={{ color: '#94a3b8', fontSize: 14 }} />
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Síguenos</span>
+          {/* Síguenos — grid compacto 2x2 */}
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <i className="fas fa-share-nodes" style={{ color: '#8c1d18' }} /> Síguenos
             </div>
-            <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               {[
-                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', sub: 'Únete a nuestra página', bg: '#1877f2', cta: 'Me gusta' },
-                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', sub: 'Canal de noticias', bg: '#25d366', cta: 'Unirse' },
-                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', sub: 'Alertas al instante', bg: '#0088cc', cta: 'Unirse' },
+                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', bg: '#1877f2' },
+                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#25d366' },
+                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', bg: '#0088cc' },
+                { href: '/feed.xml', icon: 'fa-rss', label: 'RSS', bg: '#f97316' },
               ].map(s => (
-                <a key={s.href} href={s.href} target="_blank" rel="noopener"
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, background: 'var(--paper)', border: '1px solid var(--border-light)', textDecoration: 'none', transition: 'all 0.2s' }}
-                  className="social-pro-btn">
-                  <div style={{ width: 42, height: 42, borderRadius: 12, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${s.bg}40` }}>
-                    <i className={`fab ${s.icon}`} style={{ color: '#fff', fontSize: 18 }} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{s.label}</div>
-                    <div style={{ fontSize: 11, color: 'var(--ink-faint)', marginTop: 1 }}>{s.sub}</div>
-                  </div>
-                  <div style={{ flexShrink: 0, background: s.bg, color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{s.cta}</div>
+                <a key={s.href} href={s.href} target={s.href.startsWith('http') ? '_blank' : undefined} rel={s.href.startsWith('http') ? 'noopener' : undefined}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 10px', borderRadius: 8, background: s.bg, color: '#fff', textDecoration: 'none', fontSize: 12.5, fontWeight: 700, transition: 'all 0.15s' }}
+                  className="social-grid-btn">
+                  <i className={`${s.icon === 'fa-rss' ? 'fas' : 'fab'} ${s.icon}`} style={{ fontSize: 14 }} />
+                  {s.label}
                 </a>
               ))}
             </div>
@@ -338,29 +327,6 @@ export default async function HomePage() {
           </div>
         </aside>
       </main>
-
-      {/* Floating buttons */}
-      <div className="fab-container" style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'flex-end' }}>
-        {/* WhatsApp */}
-        <div className="tooltip-wrap fab-desktop" data-tip="Canal WhatsApp">
-          <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp" className="fab-elongated shine">
-            <i className="fab fa-whatsapp" /> <span>WhatsApp</span>
-          </a>
-        </div>
-        {/* Telegram */}
-        <div className="tooltip-wrap fab-desktop" data-tip="Canal Telegram">
-          <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram" className="fab-telegram-elongated shine">
-            <i className="fab fa-telegram-plane" /> <span>Telegram</span>
-          </a>
-        </div>
-        {/* Mobile compact FABs */}
-        <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" className="fab-mobile" aria-label="Canal WhatsApp" style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#25D366,#128C7E)', color: '#fff', display: 'none', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(37,211,102,0.4)', fontSize: 20 }}>
-          <i className="fab fa-whatsapp" />
-        </a>
-        <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" className="fab-mobile" aria-label="Canal Telegram" style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#0088cc,#005f8f)', color: '#fff', display: 'none', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(0,136,204,0.4)', fontSize: 18 }}>
-          <i className="fab fa-telegram-plane" />
-        </a>
-      </div>
 
       {/* Mobile Bottom Nav */}
       <nav className="mobile-bottom-nav" style={{ display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(255,253,249,0.97)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderTop: '2px solid var(--border-light)', boxShadow: '0 -4px 24px rgba(0,0,0,0.08)', paddingBottom: 'env(safe-area-inset-bottom, 0)' }}>
@@ -442,12 +408,12 @@ export default async function HomePage() {
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
                   <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> Managua, Nicaragua
                 </div>
-                <a href="mailto:kelingrivera20@gmail.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }}>
-                  <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> kelingrivera20@gmail.com
+                <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }} className="footer-link">
+                  <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> redaccion@nicaraguainformate.com
                 </a>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748b' }}>
-                  <i className="fas fa-phone" style={{ color: '#e53e3e', flexShrink: 0 }} /> +505 8239-3844
-                </div>
+                <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none' }} className="footer-link">
+                  <i className="fas fa-paper-plane" style={{ color: '#e53e3e', flexShrink: 0 }} /> Formulario de contacto
+                </Link>
                 <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
                   style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#25d366', textDecoration: 'none', fontWeight: 600 }}>
                   <i className="fab fa-whatsapp" /> Canal WhatsApp
@@ -479,6 +445,7 @@ export default async function HomePage() {
         .tag-chip:hover { background: #e53e3e !important; color: #fff !important; border-color: #e53e3e !important; }
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
+        .social-grid-btn:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.15); }
         @media(max-width:768px){
           .footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}
           .hero-section{padding:12px 12px 4px !important;}

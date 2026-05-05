@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
   title: 'Política Editorial | Nicaragua Informate',
@@ -8,71 +8,78 @@ export const metadata: Metadata = {
 };
 
 const PRINCIPIOS = [
-  { icon: 'fa-check-circle', title: 'Verificación', desc: 'Priorizamos información contrastada y contextualizada antes de publicar.' },
-  { icon: 'fa-scale-balanced', title: 'Responsabilidad', desc: 'Evitamos afirmaciones engañosas, manipuladas o descontextualizadas.' },
-  { icon: 'fa-eye', title: 'Transparencia', desc: 'Distinguimos con claridad noticias, opinión, contenido patrocinado y publicidad.' },
-  { icon: 'fa-users', title: 'Interés público', desc: 'Damos prioridad a temas que impactan a la ciudadanía y la vida pública.' },
+  { icon: 'fa-check-circle', title: 'Verificación', desc: 'Priorizamos información contrastada y contextualizada antes de publicar cada pieza periodística.' },
+  { icon: 'fa-scale-balanced', title: 'Responsabilidad', desc: 'Evitamos afirmaciones engañosas, manipuladas o descontextualizadas que puedan generar confusión.' },
+  { icon: 'fa-eye', title: 'Transparencia', desc: 'Distinguimos con claridad noticias, opinión, contenido patrocinado y publicidad comercial.' },
+  { icon: 'fa-users', title: 'Interés público', desc: 'Damos prioridad a temas que impactan a la ciudadanía y la vida pública de Nicaragua.' },
 ];
 
 export default function PoliticaEditorialPage() {
   return (
-    <div style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", background: '#f7f4ee', color: '#18181b', lineHeight: 1.7 }}>
-      <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(255,253,249,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #ddd6ce' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '1rem 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
-          <Link href="/" style={{ color: '#8c1d18', textDecoration: 'none', fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-            Nicaragua Informate
-            <small style={{ display: 'block', fontFamily: "'Source Sans 3', system-ui, sans-serif", fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.16em', color: '#756d66', marginTop: 2 }}>Portal de noticias digital</small>
-          </Link>
-          <nav><ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0 }}>
-            <li><Link href="/" style={{ color: '#5b5b5f', textDecoration: 'none', fontWeight: 600 }}>Inicio</Link></li>
-            <li><Link href="/nosotros" style={{ color: '#5b5b5f', textDecoration: 'none', fontWeight: 600 }}>Quiénes somos</Link></li>
-            <li><Link href="/terminos" style={{ color: '#5b5b5f', textDecoration: 'none', fontWeight: 600 }}>Términos</Link></li>
-          </ul></nav>
-        </div>
-      </header>
-      <main style={{ padding: '3rem 0 4rem' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px' }}>
-          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: '2.5rem', color: '#8c1d18', textDecoration: 'none', fontWeight: 700 }}>← Volver al inicio</Link>
-          <div style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #ddd6ce' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8c1d18', marginBottom: 14 }}>Política Editorial</div>
-            <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(2.2rem,5vw,3.5rem)', lineHeight: 1.05, marginBottom: '1rem', letterSpacing: '-0.04em' }}>Compromiso editorial de Nicaragua Informate</h1>
-            <p style={{ fontSize: '1.1rem', color: '#5b5b5f', maxWidth: 720 }}>Nicaragua Informate es un portal de noticias digital. Nuestra línea editorial está orientada a informar con responsabilidad, claridad y criterio periodístico propio.</p>
+    <LegalPageShell title="Política Editorial">
+      <div style={{ background: 'rgba(140,29,24,0.08)', borderLeft: '4px solid #8c1d18', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
+        <strong>Última actualización:</strong> 5 de mayo de 2026
+      </div>
+
+      <p style={{ fontSize: '1.05rem', color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+        Nicaragua Informate es un portal de noticias digital independiente. Nuestra línea editorial está orientada a informar con responsabilidad, claridad y criterio periodístico propio sobre los acontecimientos más relevantes en Nicaragua y el mundo.
+      </p>
+
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderLeft: '3px solid #8c1d18', padding: '1rem 1.25rem', margin: '0 0 1.5rem', color: '#94a3b8', fontSize: '0.88rem' }}>
+        Nicaragua Informate no guarda relación con cuentas, perfiles o páginas de terceros con nombres similares. Verifica siempre nuestros canales oficiales.
+      </div>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>1. Autonomía editorial</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
+        Nicaragua Informate desarrolla su cobertura con criterio periodístico propio. Nuestras decisiones editoriales no están sujetas a intereses políticos, comerciales ni de ningún grupo externo. Mantenemos independencia absoluta en la selección, tratamiento y publicación de noticias.
+      </p>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>2. Principios de cobertura</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '0.75rem', margin: '1.25rem 0 1.5rem' }}>
+        {PRINCIPIOS.map((p) => (
+          <div key={p.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem' }}>
+            <h3 style={{ fontSize: '0.95rem', marginBottom: '0.4rem', color: '#fff' }}>
+              <i className={`fas ${p.icon}`} style={{ color: '#8c1d18', marginRight: 8 }} />{p.title}
+            </h3>
+            <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.85rem', lineHeight: 1.55 }}>{p.desc}</p>
           </div>
-          <div style={{ background: '#f1ece4', border: '1px solid #ddd6ce', borderLeft: '4px solid #8c1d18', padding: '1rem 1.25rem', margin: '0 0 2rem', color: '#5b5b5f' }}>
-            Nicaragua Informate no guarda relación con cuentas, perfiles o páginas de terceros con nombres similares.
-          </div>
-          <article style={{ background: '#fffdf9', border: '1px solid #ddd6ce', borderRadius: 16, padding: '2.25rem', boxShadow: '0 8px 24px rgba(24,24,27,0.08)' }}>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>1. Autonomía editorial</h2>
-            <p style={{ color: '#5b5b5f', marginBottom: '1rem' }}>Nicaragua Informate desarrolla su cobertura con criterio periodístico propio.</p>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>2. Principios de cobertura</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '1rem', margin: '1.5rem 0 2rem' }}>
-              {PRINCIPIOS.map((p) => (
-                <div key={p.title} style={{ background: '#f7f4ee', border: '1px solid #ddd6ce', borderRadius: 10, padding: '1rem' }}>
-                  <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem', color: '#18181b' }}>
-                    <i className={`fas ${p.icon}`} style={{ color: '#8c1d18', marginRight: 8 }} />{p.title}
-                  </h3>
-                  <p style={{ color: '#5b5b5f', margin: 0, fontSize: '0.9rem' }}>{p.desc}</p>
-                </div>
-              ))}
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>3. Correcciones y actualizaciones</h2>
-            <p style={{ color: '#5b5b5f', marginBottom: '1rem' }}>Cuando se detecte un error relevante, Nicaragua Informate podrá corregir, ampliar o actualizar la pieza correspondiente.</p>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>4. Fuentes e integridad de la información</h2>
-            <p style={{ color: '#5b5b5f', marginBottom: '1rem' }}>Valoramos el uso responsable de fuentes documentales, testimoniales e institucionales.</p>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>5. Separación entre contenido editorial y comercial</h2>
-            <p style={{ color: '#5b5b5f', marginBottom: '1rem' }}>La publicidad no debe determinar la línea informativa del medio.</p>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>6. Identidad y no afiliación</h2>
-            <p style={{ color: '#5b5b5f', marginBottom: '1rem' }}>Nicaragua Informate utiliza su propia marca, estilo editorial y canales oficiales.</p>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.5rem', margin: '2rem 0 1rem', color: '#18181b' }}>7. Contacto editorial</h2>
-            <p style={{ color: '#5b5b5f' }}>Para aclaraciones o consultas: <Link href="/nosotros" style={{ color: '#8c1d18', textDecoration: 'none' }}>nuestra página de contacto</Link>.</p>
-          </article>
-        </div>
-      </main>
-      <footer style={{ borderTop: '1px solid #ddd6ce', padding: '2rem 0 3rem', color: '#756d66', textAlign: 'center' }}>
-        <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>
-          © 2025-2026 Nicaragua Informate. Portal de noticias digital. Sitio sin relación con cuentas, perfiles o páginas de terceros con nombres similares.
-        </div>
-      </footer>
-    </div>
+        ))}
+      </div>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>3. Correcciones y actualizaciones</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
+        Cuando se detecte un error relevante, Nicaragua Informate podrá corregir, ampliar o actualizar la pieza correspondiente, indicando claramente la fecha de modificación cuando sea pertinente.
+      </p>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>4. Fuentes e integridad de la información</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
+        Valoramos el uso responsable de fuentes documentales, testimoniales e institucionales. Procuramos contrastar la información antes de su publicación y citamos las fuentes cuando corresponde.
+      </p>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>5. Separación entre contenido editorial y comercial</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
+        La publicidad comercial (incluidos los anuncios de Google AdSense) no determina la línea informativa del medio. Los contenidos patrocinados o publicitarios se identifican claramente como tales.
+      </p>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>6. Identidad y no afiliación</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem' }}>
+        Nicaragua Informate utiliza su propia marca, estilo editorial y canales oficiales. No mantenemos relación de afiliación con cuentas, perfiles o páginas de terceros con nombres similares.
+      </p>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>7. Director Editorial</h2>
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem', marginBottom: '1.25rem' }}>
+        <p style={{ color: '#fff', margin: '0 0 0.5rem', fontWeight: 700 }}>Keyling Rivera</p>
+        <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.88rem', lineHeight: 1.6 }}>
+          Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético y la información verificada para la ciudadanía nicaragüense.
+        </p>
+      </div>
+
+      <h2 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.6rem' }}>8. Contacto editorial</h2>
+      <p style={{ color: '#cbd5e1', fontSize: '0.92rem' }}>
+        Para aclaraciones, consultas o reportes sobre nuestro contenido, utiliza nuestro{' '}
+        <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>{' '}
+        o escribe a <a href="mailto:redaccion@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>redaccion@nicaraguainformate.com</a>.
+      </p>
+    </LegalPageShell>
   );
 }

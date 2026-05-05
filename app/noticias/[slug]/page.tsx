@@ -81,6 +81,32 @@ async function getRelated(categoria: string, currentSlug: string): Promise<Array
   } catch { return []; }
 }
 
+async function getMostRead(currentSlug: string): Promise<Array<{ id: string; slug: string; titulo: string; categoria: string }>> {
+  try {
+    const snap = await adminDb.collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(8)
+      .get();
+    return snap.docs
+      .filter(d => d.data().slug !== currentSlug)
+      .slice(0, 5)
+      .map(d => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          categoria: data.categoria || 'General',
+        };
+      });
+  } catch { return []; }
+}
+
+const CAT_COLORS: Record<string, string> = {
+  Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
+  Internacionales: '#7c3aed', Espectáculos: '#db2777',
+};
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
@@ -96,6 +122,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const autorInitial = autor.charAt(0).toUpperCase();
   const imgUrl = n.imagen || PLACEHOLDERS[n.categoria as string] || PLACEHOLDERS['Nacionales'];
   const related = await getRelated(n.categoria || 'General', slug);
+  const mostRead = await getMostRead(slug);
 
   const fechaISO = n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha).toISOString();
   const fechaMod = n.fechaActualizacion?.toDate
@@ -166,7 +193,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </header>
 
       {/* Breadcrumb */}
-      <nav style={{ maxWidth: 720, margin: '0 auto', padding: '16px 24px 0', fontSize: 12, color: '#9f968d', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }} aria-label="Breadcrumb">
+      <nav style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 28px 0', fontSize: 12, color: '#9f968d', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }} aria-label="Breadcrumb">
         <Link href="/" style={{ color: '#756d66', textDecoration: 'none', fontWeight: 500 }}>Inicio</Link>
         <span style={{ color: '#c6beb5' }}>/</span>
         <span style={{ color: '#756d66', fontWeight: 500 }}>{n.categoria || 'General'}</span>
@@ -174,8 +201,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <span style={{ color: '#9f968d', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 300, whiteSpace: 'nowrap' }}>{n.titulo}</span>
       </nav>
 
-      <main style={{ maxWidth: 780, margin: '0 auto', padding: '28px 28px 88px' }}>
-        <article>
+      <style>{`.article-grid{max-width:1200px;margin:0 auto;padding:28px 28px 88px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}@media(max-width:1024px){.article-grid{grid-template-columns:1fr;gap:32px;padding:24px 20px 80px}.article-aside{position:static!important}}`}</style>
+      <main className="article-grid">
+        <article style={{ minWidth: 0 }}>
           <header style={{ marginBottom: 28 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
               <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#8c1d18', padding: '6px 12px', background: 'rgba(140,29,24,0.07)', borderRadius: 3 }}>
@@ -289,6 +317,87 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </>
           )}
         </article>
+
+        {/* Sidebar */}
+        <aside className="article-aside" style={{ position: 'sticky', top: 88, display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {/* Noticias relacionadas */}
+          {related.length > 0 && (
+            <div style={{ background: '#fffdf9', border: '1px solid #ddd6ce', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ padding: '12px 16px', borderBottom: '1px solid #ddd6ce', display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(140,29,24,0.04)' }}>
+                <i className="fas fa-layer-group" style={{ color: '#8c1d18', fontSize: 13 }} />
+                <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#18181b' }}>Noticias relacionadas</span>
+              </div>
+              <div style={{ padding: '4px 0' }}>
+                {related.map((r, i) => (
+                  <Link key={r.id} href={`/noticias/${r.slug}`} style={{ display: 'flex', gap: 10, padding: '12px 16px', textDecoration: 'none', borderBottom: i < related.length - 1 ? '1px solid #f1ece4' : 'none' }}>
+                    <div style={{ width: 84, height: 56, borderRadius: 6, overflow: 'hidden', flexShrink: 0, background: '#f1ece4' }}>
+                      <img src={r.imagen || PLACEHOLDERS[r.categoria] || PLACEHOLDERS['Nacionales']} alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: CAT_COLORS[r.categoria] || '#8c1d18', display: 'block', marginBottom: 3 }}>{r.categoria}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#18181b', lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{r.titulo}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Más leídas */}
+          {mostRead.length > 0 && (
+            <div style={{ background: '#fffdf9', border: '1px solid #ddd6ce', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ padding: '12px 16px', borderBottom: '1px solid #ddd6ce', display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(140,29,24,0.04)' }}>
+                <i className="fas fa-fire" style={{ color: '#8c1d18', fontSize: 13 }} />
+                <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#18181b' }}>Más leídas</span>
+              </div>
+              <div style={{ padding: '4px 0' }}>
+                {mostRead.map((m, i) => (
+                  <Link key={m.id} href={`/noticias/${m.slug}`} style={{ display: 'flex', gap: 12, padding: '12px 16px', textDecoration: 'none', borderBottom: i < mostRead.length - 1 ? '1px solid #f1ece4' : 'none', alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: 22, fontWeight: 900, color: i === 0 ? '#8c1d18' : '#c6beb5', lineHeight: 1, minWidth: 26, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: CAT_COLORS[m.categoria] || '#8c1d18', display: 'block', marginBottom: 3 }}>{m.categoria}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#18181b', lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{m.titulo}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Newsletter mini */}
+          <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', borderRadius: 12, padding: 18, color: '#fff' }}>
+            <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 6 }}>¿Te gustó esta noticia?</div>
+            <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 12, lineHeight: 1.5 }}>Recibe lo más importante de Nicaragua en tu correo, sin spam.</div>
+            <form action="/api/newsletter" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <input type="email" name="email" required placeholder="tu@email.com"
+                style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 13 }} />
+              <button type="submit" style={{ padding: '9px 12px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                Suscribirme
+              </button>
+            </form>
+          </div>
+
+          {/* Seguir en redes */}
+          <div style={{ background: '#fffdf9', border: '1px solid #ddd6ce', borderRadius: 12, padding: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#18181b', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <i className="fas fa-share-nodes" style={{ color: '#8c1d18' }} /> Síguenos
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+              {[
+                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', bg: '#1877f2' },
+                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#25d366' },
+                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', bg: '#0088cc' },
+                { href: '/feed.xml', icon: 'fa-rss', label: 'RSS', bg: '#f97316' },
+              ].map(s => (
+                <a key={s.href} href={s.href} target={s.href.startsWith('http') ? '_blank' : undefined} rel={s.href.startsWith('http') ? 'noopener' : undefined}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '9px 8px', borderRadius: 7, background: s.bg, color: '#fff', textDecoration: 'none', fontSize: 11.5, fontWeight: 700 }}>
+                  <i className={`${s.icon === 'fa-rss' ? 'fas' : 'fab'} ${s.icon}`} style={{ fontSize: 12 }} />
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
       </main>
 
       {/* Sticky share sidebar (desktop) */}
@@ -299,51 +408,63 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <CopyButton url={url} />
       </aside>
 
-      {/* Related articles */}
-      {related.length > 0 && (
-        <section style={{ maxWidth: 780, margin: '0 auto', padding: '0 28px 60px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-            <i className="fas fa-layer-group" style={{ color: '#8c1d18', fontSize: 16 }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#18181b', margin: 0 }}>Más noticias de {n.categoria || 'General'}</h2>
-            <div style={{ flex: 1, height: 1, background: '#ddd6ce' }} />
+      <footer style={{ background: '#0f172a', color: '#94a3b8', padding: '48px 24px 24px', marginTop: 60, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="art-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, marginBottom: 36 }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <img src="/logo.png" alt="" style={{ width: 38, height: 38, borderRadius: 8, objectFit: 'cover' }} />
+                <div style={{ color: '#f1f5f9', fontWeight: 800, fontSize: 16 }}>Nicaragua Informate</div>
+              </div>
+              <p style={{ color: '#64748b', fontSize: 13, lineHeight: 1.7, marginBottom: 14, maxWidth: 240 }}>
+                Periodismo de precisión. Cubriendo Nicaragua al instante con rigor informativo.
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <SocialFooter href="https://www.facebook.com/profile.php?id=61578261125687" icon="facebook-f" />
+                <SocialFooter href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" icon="whatsapp" />
+                <SocialFooter href="https://t.me/+fHHjncJqMQM3NjZh" icon="telegram-plane" />
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Secciones</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'].map(c => (
+                  <Link key={c} href={`/?cat=${encodeURIComponent(c)}`} style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>{c}</Link>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Legal</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                <Link href="/nosotros" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Sobre Nosotros</Link>
+                <Link href="/privacidad" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Privacidad</Link>
+                <Link href="/terminos" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Términos de Uso</Link>
+                <Link href="/politica-editorial" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Política Editorial</Link>
+              </div>
+            </div>
+            <div>
+              <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contacto</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <span style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
+                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2 }} /> Managua, Nicaragua
+                </span>
+                <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }}>
+                  <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2 }} /> redaccion@nicaraguainformate.com
+                </a>
+                <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none' }}>
+                  <i className="fas fa-paper-plane" style={{ color: '#e53e3e' }} /> Formulario de contacto
+                </Link>
+              </div>
+            </div>
           </div>
-          <style>{`.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px} @media(max-width:600px){.related-grid{grid-template-columns:1fr}}`}</style>
-          <div className="related-grid">
-            {related.map(r => (
-              <Link key={r.id} href={`/noticias/${r.slug}`}
-                style={{ textDecoration: 'none', borderRadius: 10, overflow: 'hidden', border: '1px solid #ddd6ce', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                  <img src={r.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=70'}
-                    alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ padding: '12px 14px' }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: '#8c1d18', letterSpacing: '0.06em' }}>{r.categoria}</span>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: '#18181b', lineHeight: 1.4, margin: '6px 0 4px', letterSpacing: '-0.2px' }}>{r.titulo}</h3>
-                  <span style={{ fontSize: 12, color: '#9f968d' }}>
-                    {r.fecha ? new Date(r.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <footer style={{ background: '#18181b', color: '#9f968d', padding: '48px 24px 32px', marginTop: 80 }}>
-        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-          <img src="/logo.png" alt="" style={{ width: 42, height: 42, borderRadius: 8, objectFit: 'contain', display: 'inline-block', marginBottom: 8 }} />
-          <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 20, fontWeight: 700, color: '#fffdf9', marginBottom: 8 }}>Nicaragua Informate</div>
-          <div style={{ fontSize: 13, color: '#756d66', marginBottom: 24 }}>Nicaragua Informate | Portal de noticias digital</div>
-          <div style={{ width: 40, height: 1, background: '#5b5b5f', margin: '0 auto 24px' }} />
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 24 }}>
-            <SocialFooter href="https://www.facebook.com/profile.php?id=61578261125687" icon="facebook-f" />
-            <SocialFooter href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" icon="whatsapp" />
-            <SocialFooter href="https://t.me/+fHHjncJqMQM3NjZh" icon="telegram-plane" />
-          </div>
-          <div style={{ fontSize: 12, color: '#5b5b5f', lineHeight: 1.8 }}>
-            © 2025-2026 Nicaragua Informate. Todos los derechos reservados.<br />Managua, Nicaragua.
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, fontSize: 12, color: '#475569' }}>
+            <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
+            <a href="/feed.xml" style={{ color: '#f97316', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <i className="fas fa-rss" /> Feed RSS
+            </a>
           </div>
         </div>
+        <style>{`@media(max-width:768px){.art-footer-grid{grid-template-columns:1fr 1fr!important}.art-footer-grid>div:first-child{grid-column:1/-1}}@media(max-width:480px){.art-footer-grid{grid-template-columns:1fr!important}}`}</style>
       </footer>
 
       <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.getElementById('readProgress');if(!b)return;window.addEventListener('scroll',function(){var d=document.documentElement;var h=d.scrollHeight-d.clientHeight;if(h>0)b.style.width=Math.round(((window.scrollY||d.scrollTop)/h)*100)+'%';},{passive:true});})();` }} />

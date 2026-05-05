@@ -137,10 +137,12 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                     <i className="fas fa-clock" style={{ color: '#8c1d18', fontSize: 10 }} />
                     {timeAgo(n.fecha)}
                   </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <i className="fas fa-book-open" style={{ fontSize: 10 }} />
-                    {readTime(n.titulo, n.resumen)} min de lectura
-                  </span>
+                  {readTime(n.titulo, n.resumen) > 2 && (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <i className="fas fa-book-open" style={{ fontSize: 10 }} />
+                      {readTime(n.titulo, n.resumen)} min de lectura
+                    </span>
+                  )}
                 </div>
               </div>
             </Link>

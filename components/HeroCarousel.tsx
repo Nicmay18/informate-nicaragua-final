@@ -51,9 +51,9 @@ export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
   const CTRL: React.CSSProperties = {
     position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-    width: 44, height: 44, borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.25)',
-    background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(6px)',
-    color: '#fff', cursor: 'pointer', fontSize: 15, display: 'flex',
+    width: 48, height: 48, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)',
+    background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+    color: '#fff', cursor: 'pointer', fontSize: 17, display: 'flex', boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
     alignItems: 'center', justifyContent: 'center', zIndex: 10, transition: 'all 0.2s',
   };
 

@@ -817,3 +817,4 @@ ul { list-style: none; }
 }
 :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 @media (max-width: 1100px) { .share-sticky-desktop { display: none !important; } }
+.footer-link-hover:hover { color: #fff !important; }
