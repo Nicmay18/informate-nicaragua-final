@@ -3,6 +3,7 @@ import Link from 'next/link';
 import NewsletterForm from '@/components/NewsletterForm';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
+import RadioBar from '@/components/RadioBar';
 
 export const dynamic = 'force-dynamic';
 
@@ -166,7 +167,7 @@ export default async function HomePage() {
           <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #e53e3e, transparent)', zIndex: 1, pointerEvents: 'none' }} />
-            <div style={{ display: 'flex', animation: `ticker ${Math.max(40, tickerNews.length * 12)}s linear infinite`, whiteSpace: 'nowrap', padding: '9px 0' }} className="ticker-scroll">
+            <div style={{ display: 'flex', animation: `ticker ${Math.max(120, tickerNews.reduce((a,n)=>a+n.titulo.length,0)*0.3)}s linear infinite`, whiteSpace: 'nowrap', padding: '10px 0' }} className="ticker-scroll">
               {[...tickerNews, ...tickerNews].map((n, i) => (
                 <Link key={`${n.id}-${i}`} href={`/noticias/${n.slug}`}
                   style={{ color: '#fff', textDecoration: 'none', marginRight: 56, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
@@ -181,23 +182,21 @@ export default async function HomePage() {
 
       {/* Hero Section */}
       {destacadas.length > 0 && (
-        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 24px 8px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="md:grid-cols-2 grid-cols-1">
+        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 24px 8px' }} className="hero-section">
+          <div className="hero-grid">
             {/* Main featured */}
             {destacadas[0] && (
-              <Link href={`/noticias/${destacadas[0].slug}`}
-                style={{ position: 'relative', overflow: 'hidden', borderRadius: 16, display: 'block', textDecoration: 'none', aspectRatio: '16/10', gridRow: '1 / 3' }}>
+              <Link href={`/noticias/${destacadas[0].slug}`} className="hero-featured">
                 <img src={destacadas[0].imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'}
-                  alt={destacadas[0].titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
-                  className="img-zoom" />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.15) 100%)' }} />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}>
+                  alt={destacadas[0].titulo} className="img-zoom" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
+                <div className="hero-overlay" />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }} className="hero-content">
                   <span style={{ background: catColor(destacadas[0].categoria), color: '#fff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '3px 10px', borderRadius: 4 }}>
                     {destacadas[0].categoria}
                   </span>
-                  <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginTop: 10, lineHeight: 1.3, letterSpacing: '-0.3px', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}>{destacadas[0].titulo}</h2>
+                  <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginTop: 10, lineHeight: 1.3, letterSpacing: '-0.3px', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }} className="hero-title">{destacadas[0].titulo}</h2>
                   {destacadas[0].resumen && (
-                    <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, marginTop: 6, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, marginTop: 6, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="hero-excerpt">
                       {destacadas[0].resumen}
                     </p>
                   )}
@@ -208,11 +207,10 @@ export default async function HomePage() {
               </Link>
             )}
             {/* Secondary featured */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="hero-secondary">
               {destacadas.slice(1, 5).map((n) => (
                 <Link key={n.id} href={`/noticias/${n.slug}`}
-                  style={{ position: 'relative', overflow: 'hidden', borderRadius: 12, display: 'block', textDecoration: 'none', aspectRatio: '4/3' }}
-                  className="card-top-border">
+                  className="hero-card card-top-border">
                   <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80'}
                     alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} className="img-zoom" />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
@@ -284,6 +282,68 @@ export default async function HomePage() {
               ))}
             </div>
           )}
+
+          {/* Mobile-only sidebar sections */}
+          <div className="mobile-sidebar-sections">
+
+            {/* Mobile Radio */}
+            <div id="radio-mobile" style={{ borderRadius: 14, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+              <div style={{ background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <i className="fas fa-radio" style={{ color: '#fca5a5', fontSize: 14 }} />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Radio en Vivo</span>
+              </div>
+              <RadioBar />
+            </div>
+
+            {/* Mobile Clima */}
+            <WeatherWidget />
+
+            {/* Mobile Indicadores */}
+            <div style={{ borderRadius: 14, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+              <IndicadoresWidget />
+            </div>
+
+            {/* Mobile Tendencias */}
+            <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+              <div style={{ background: 'linear-gradient(135deg, #8c1d18, #c41e3a)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <i className="fas fa-fire" style={{ color: '#fff', fontSize: 14 }} />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Tendencias</span>
+              </div>
+              <div style={{ padding: '8px 0' }}>
+                {noticias.slice(0, 5).map((n, i) => (
+                  <Link key={n.id} href={`/noticias/${n.slug}`} style={{ display: 'flex', gap: 12, padding: '10px 16px', textDecoration: 'none', borderBottom: i < 4 ? '1px solid var(--border-light)' : 'none', alignItems: 'flex-start' }} className="trend-item-hover">
+                    <span className="trend-num">{i + 1}</span>
+                    <div>
+                      <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: catColor(n.categoria), display: 'block', marginBottom: 3 }}>{n.categoria}</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.titulo}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Más Leídas */}
+            {masLeidas.length > 0 && (
+              <div id="mas-leidas" style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+                <div style={{ background: 'linear-gradient(135deg, #8c1d18, #c41e3a)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <i className="fas fa-fire" style={{ color: '#fca5a5', fontSize: 14 }} />
+                  <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Más Leídas</span>
+                </div>
+                <div style={{ padding: '8px 0' }}>
+                  {masLeidas.slice(0, 5).map((n, i) => (
+                    <Link key={n.id} href={`/noticias/${n.slug}`} className="mas-leidas-item"
+                      style={{ display: 'flex', gap: 14, padding: '12px 16px', textDecoration: 'none', borderBottom: i < 4 ? '1px solid var(--border-light)' : 'none', alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: 28, fontWeight: 900, color: i === 0 ? '#8c1d18' : 'var(--border-medium)', lineHeight: 1, minWidth: 32, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 10, color: catColor(n.categoria), fontWeight: 700, textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>{n.categoria}</span>
+                        <span style={{ fontSize: 13, color: 'var(--ink-muted)', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontWeight: 600 }}>{n.titulo}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Sidebar */}
@@ -344,26 +404,27 @@ export default async function HomePage() {
 
           {/* Síguenos */}
           <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-            <div style={{ background: '#0f172a', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <i className="fas fa-share-nodes" style={{ color: '#94a3b8', fontSize: 14 }} />
+            <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <i className="fas fa-users" style={{ color: '#94a3b8', fontSize: 14 }} />
               <span style={{ color: '#fff', fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Síguenos</span>
             </div>
-            <div style={{ padding: 14, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', bg: '#1877f2', count: '' },
-                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#25d366', count: 'Canal' },
-                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', bg: '#0088cc', count: 'Canal' },
+                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', sub: 'Únete a nuestra página', bg: '#1877f2', cta: 'Me gusta' },
+                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', sub: 'Canal de noticias', bg: '#25d366', cta: 'Unirse' },
+                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', sub: 'Alertas al instante', bg: '#0088cc', cta: 'Unirse' },
               ].map(s => (
                 <a key={s.href} href={s.href} target="_blank" rel="noopener"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 10px', borderRadius: 10, background: s.bg + '15', border: `1px solid ${s.bg}30`, textDecoration: 'none', transition: 'all 0.2s' }}
-                  className="social-follow-btn">
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <i className={`fab ${s.icon}`} style={{ color: '#fff', fontSize: 14 }} />
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, background: 'var(--paper)', border: '1px solid var(--border-light)', textDecoration: 'none', transition: 'all 0.2s' }}
+                  className="social-pro-btn">
+                  <div style={{ width: 42, height: 42, borderRadius: 12, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${s.bg}40` }}>
+                    <i className={`fab ${s.icon}`} style={{ color: '#fff', fontSize: 18 }} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink)' }}>{s.label}</div>
-                    {s.count && <div style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{s.count}</div>}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: 'var(--ink-faint)', marginTop: 1 }}>{s.sub}</div>
                   </div>
+                  <div style={{ flexShrink: 0, background: s.bg, color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>{s.cta}</div>
                 </a>
               ))}
             </div>
@@ -386,23 +447,52 @@ export default async function HomePage() {
       </main>
 
       {/* Floating buttons */}
-      <div style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'flex-end' }}>
+      <div className="fab-container" style={{ position: 'fixed', bottom: 28, right: 24, display: 'flex', flexDirection: 'column', gap: 14, zIndex: 999, alignItems: 'flex-end' }}>
         {/* WhatsApp */}
-        <div className="tooltip-wrap" data-tip="Canal WhatsApp">
+        <div className="tooltip-wrap fab-desktop" data-tip="Canal WhatsApp">
           <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="Canal WhatsApp" className="fab-elongated shine">
-            <i className="fab fa-whatsapp" /> WhatsApp
+            <i className="fab fa-whatsapp" /> <span>WhatsApp</span>
           </a>
         </div>
         {/* Telegram */}
-        <div className="tooltip-wrap" data-tip="Canal Telegram">
+        <div className="tooltip-wrap fab-desktop" data-tip="Canal Telegram">
           <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Canal Telegram" className="fab-telegram-elongated shine">
-            <i className="fab fa-telegram-plane" /> Telegram
+            <i className="fab fa-telegram-plane" /> <span>Telegram</span>
           </a>
         </div>
+        {/* Mobile compact FABs */}
+        <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" className="fab-mobile" aria-label="Canal WhatsApp" style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#25D366,#128C7E)', color: '#fff', display: 'none', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(37,211,102,0.4)', fontSize: 20 }}>
+          <i className="fab fa-whatsapp" />
+        </a>
+        <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" className="fab-mobile" aria-label="Canal Telegram" style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#0088cc,#005f8f)', color: '#fff', display: 'none', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 20px rgba(0,136,204,0.4)', fontSize: 18 }}>
+          <i className="fab fa-telegram-plane" />
+        </a>
       </div>
 
+      {/* Mobile Bottom Nav */}
+      <nav className="mobile-bottom-nav" style={{ display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100, background: 'rgba(255,253,249,0.97)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderTop: '2px solid var(--border-light)', boxShadow: '0 -4px 24px rgba(0,0,0,0.08)', paddingBottom: 'env(safe-area-inset-bottom, 0)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', maxWidth: 480, margin: '0 auto', padding: '6px 0 8px' }}>
+          <Link href="/" className="mob-nav-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: '#8c1d18', textDecoration: 'none', fontSize: 9, fontWeight: 700, padding: '4px 10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <i className="fas fa-house" style={{ fontSize: 20 }} />
+            Portada
+          </Link>
+          <a href="#radio-mobile" className="mob-nav-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: '#64748b', textDecoration: 'none', fontSize: 9, fontWeight: 700, padding: '4px 10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <i className="fas fa-radio" style={{ fontSize: 20 }} />
+            Radio
+          </a>
+          <a href="#mas-leidas" className="mob-nav-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: '#64748b', textDecoration: 'none', fontSize: 9, fontWeight: 700, padding: '4px 10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <i className="fas fa-fire" style={{ fontSize: 20 }} />
+            Top
+          </a>
+          <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" className="mob-nav-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: '#64748b', textDecoration: 'none', fontSize: 9, fontWeight: 700, padding: '4px 10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <i className="fab fa-whatsapp" style={{ fontSize: 20 }} />
+            Seguir
+          </a>
+        </div>
+      </nav>
+
       {/* Footer */}
-      <footer className="footer-deep" style={{ color: '#94a3b8', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 0, paddingTop: 48, paddingBottom: 24, paddingLeft: 24, paddingRight: 24 }}>
+      <footer className="footer-deep site-footer" style={{ color: '#94a3b8', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 0, paddingTop: 48, paddingBottom: 24, paddingLeft: 24, paddingRight: 24 }}>
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, marginBottom: 40 }} className="footer-grid">
             {/* Brand */}
@@ -496,8 +586,16 @@ export default async function HomePage() {
         .tag-chip:hover { background: #e53e3e !important; color: #fff !important; border-color: #e53e3e !important; }
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
-        @media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}}
-        @media(max-width:640px){.fab-elongated span, .fab-telegram-elongated span { display:none; padding:14px; }}
+        @media(max-width:768px){
+          .footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}
+          .hero-section{padding:12px 12px 4px !important;}
+          #main-content{padding:0 12px 48px !important;}
+        }
+        @media(max-width:640px){
+          .fab-elongated span, .fab-telegram-elongated span { display:none; padding:14px; }
+          .hero-title{font-size:1.1rem !important}
+          .hero-content{padding:12px !important}
+        }
       `}</style>
     </div>
   );
