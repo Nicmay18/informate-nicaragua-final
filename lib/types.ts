@@ -26,11 +26,4 @@ export const CATEGORY_COLORS: Record<string, string> = {
   Tecnología: '#0891b2',
 };
 
-export const IMAGE_FALLBACKS: Record<string, string> = {
-  Sucesos: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=800&q=80',
-  Nacionales: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-  Deportes: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
-  Internacionales: 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=800&q=80',
-  Espectáculos: 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=800&q=80',
-  Economía: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
-};
+export const FALLBACK_IMAGE = '/logo.png';

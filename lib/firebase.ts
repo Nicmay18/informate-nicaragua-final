@@ -1,4 +1,4 @@
-import { Article, IMAGE_FALLBACKS } from './types';
+import { Article, FALLBACK_IMAGE } from './types';
 
 const PROJECT_ID = 'informate-instant-nicaragua';
 const BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
@@ -47,7 +47,7 @@ function bool(v: unknown): boolean {
 }
 
 function normalizeImage(imagen: string, categoria: string): string {
-  const fb = IMAGE_FALLBACKS[categoria] || IMAGE_FALLBACKS['Nacionales'];
+  const fb = FALLBACK_IMAGE;
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return fb;
   if (imagen.startsWith('data:')) return fb;
 

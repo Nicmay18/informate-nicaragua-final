@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import { ThemeInit } from '@/components/ThemeInit';
-import { buildOrganizationJsonLd } from '@/lib/schema';
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import StickyRadio from '@/components/StickyRadio';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -11,29 +11,44 @@ const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nicaraguainformate.com'),
   title: {
-    default: 'Nicaragua Informate | Periodismo de Precisión',
+    default: 'Nicaragua Informate — Noticias de Nicaragua en Tiempo Real',
     template: '%s | Nicaragua Informate',
   },
-  description: 'Noticias de Nicaragua en tiempo real: Sucesos, Nacionales, Deportes, Internacionales y Espectáculos.',
-  keywords: ['noticias nicaragua', 'periodismo nicaragua', 'sucesos', 'nacionales', 'deportes'],
-  authors: [{ name: 'Nicaragua Informate' }],
-  robots: 'index, follow',
+  description: 'Portal de noticias de Nicaragua con cobertura en sucesos, nacionales, deportes, internacionales, espectáculos y economía. Periodismo verificado y actualizado las 24 horas desde Masaya, Nicaragua.',
+  keywords: ['noticias nicaragua', 'periodismo nicaragua', 'sucesos nicaragua', 'noticias managua', 'deportes nicaragua', 'noticias centroamerica', 'nicaragua informate'],
+  authors: [{ name: 'Nicaragua Informate', url: 'https://nicaraguainformate.com' }],
+  creator: 'Nicaragua Informate',
+  publisher: 'Nicaragua Informate',
+  robots: 'index, follow, max-image-preview:large, max-snippet:-1',
   openGraph: {
     type: 'website',
+    locale: 'es_NI',
     url: 'https://nicaraguainformate.com',
-    title: 'Nicaragua Informate | Periodismo de Precisión',
-    description: 'Noticias de Nicaragua al instante.',
-    images: ['https://nicaraguainformate.com/og-image.jpg'],
+    siteName: 'Nicaragua Informate',
+    title: 'Nicaragua Informate — Noticias de Nicaragua en Tiempo Real',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado y cobertura en sucesos, nacionales, deportes e internacionales.',
+    images: [{ url: 'https://nicaraguainformate.com/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nicaragua Informate — Noticias de Nicaragua',
+    description: 'Noticias verificadas de Nicaragua al instante.',
+    images: ['https://nicaraguainformate.com/logo.png'],
   },
   alternates: {
+    canonical: 'https://nicaraguainformate.com',
     types: {
       'application/rss+xml': 'https://nicaraguainformate.com/feed.xml',
     },
+  },
+  verification: {
+    google: 'ca-pub-4115203339551838',
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const orgJsonLd = buildOrganizationJsonLd();
+  const siteJsonLd = buildWebSiteJsonLd();
 
   return (
     <html lang="es" data-theme="dark" className={`${inter.variable} ${merriweather.variable}`}>
@@ -54,6 +69,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP" />

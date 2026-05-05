@@ -13,13 +13,7 @@ interface Noticia {
   fecha?: unknown;
 }
 
-const FALLBACKS: Record<string, string> = {
-  Sucesos: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1200&q=85',
-  Nacionales: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=85',
-  Deportes: 'https://images.unsplash.com/photo-1461896836934-f66c71d1ef65?w=1200&q=85',
-  Internacionales: 'https://images.unsplash.com/photo-1526304640152-d4619684e484?w=1200&q=85',
-  'Espectáculos': 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=1200&q=85',
-};
+const FALLBACK_IMAGE = '/logo.png';
 
 export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
   const slides = noticias.slice(0, 6);
@@ -47,7 +41,7 @@ export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
   const n   = slides[current];
   const col = CATEGORY_COLORS[n.categoria] || '#8c1d18';
-  const img = n.imagen || FALLBACKS[n.categoria] || FALLBACKS['Nacionales'];
+  const img = n.imagen || FALLBACK_IMAGE;
 
   const CTRL: React.CSSProperties = {
     position: 'absolute', top: '50%', transform: 'translateY(-50%)',

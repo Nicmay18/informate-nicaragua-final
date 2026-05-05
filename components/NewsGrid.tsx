@@ -22,13 +22,7 @@ const CAT_ICONS: Record<string, string> = {
   Deportes: 'fa-futbol', Internacionales: 'fa-globe', 'Espectáculos': 'fa-star',
 };
 
-const FALLBACKS: Record<string, string> = {
-  Sucesos: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400&q=75',
-  Nacionales: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&q=75',
-  Deportes: 'https://images.unsplash.com/photo-1461896836934-f66c71d1ef65?w=400&q=75',
-  Internacionales: 'https://images.unsplash.com/photo-1526304640152-d4619684e484?w=400&q=75',
-  'Espectáculos': 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=400&q=75',
-};
+const FALLBACK_IMAGE = '/logo.png';
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 8;
@@ -116,7 +110,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card">
               {/* Thumbnail */}
               <div className="ng-thumb">
-                <img src={n.imagen || FALLBACKS[n.categoria] || FALLBACKS['Nacionales']} alt={n.titulo} loading="lazy" />
+                <img src={n.imagen || FALLBACK_IMAGE} alt={n.titulo} loading="lazy" />
               </div>
 
               {/* Text */}

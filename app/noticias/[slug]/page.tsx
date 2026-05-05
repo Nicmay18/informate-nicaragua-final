@@ -49,13 +49,7 @@ function countWords(text: string): number {
   return text.trim().split(/\s+/).filter((w) => w.length > 0).length;
 }
 
-const PLACEHOLDERS: Record<string, string> = {
-  Sucesos: 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=1200&q=85',
-  Nacionales: 'https://images.unsplash.com/photo-1526666923127-b2970f64b422?w=1200&q=85',
-  Deportes: 'https://images.unsplash.com/photo-1461896836934-f66c71d1ef65?w=1200&q=85',
-  Internacionales: 'https://images.unsplash.com/photo-1526304640152-d4619684e484?w=1200&q=85',
-  Espectáculos: 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=1200&q=85',
-};
+const FALLBACK_IMAGE = '/logo.png';
 
 async function getRelated(categoria: string, currentSlug: string): Promise<Array<{ id: string; slug: string; titulo: string; imagen: string; categoria: string; fecha: string }>> {
   try {
@@ -120,7 +114,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const fechaStr = fmtDate(n.fecha);
   const autor = n.autor || 'Keyling Rivera M.';
   const autorInitial = autor.charAt(0).toUpperCase();
-  const imgUrl = n.imagen || PLACEHOLDERS[n.categoria as string] || PLACEHOLDERS['Nacionales'];
+  const imgUrl = n.imagen || FALLBACK_IMAGE;
   const related = await getRelated(n.categoria || 'General', slug);
   const mostRead = await getMostRead(slug);
 
@@ -169,6 +163,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://nicaraguainformate.com' },
+          { '@type': 'ListItem', position: 2, name: 'Noticias', item: 'https://nicaraguainformate.com/noticias' },
+          { '@type': 'ListItem', position: 3, name: n.categoria || 'General', item: `https://nicaraguainformate.com/noticias?cat=${encodeURIComponent(n.categoria || 'General')}` },
+          { '@type': 'ListItem', position: 4, name: n.titulo },
+        ],
+      }) }} />
 
       <div id="readProgress" style={{ position: 'fixed', top: 0, left: 0, height: 3, background: '#8c1d18', zIndex: 1001, width: '0%', transition: 'width 0.1s linear' }} />
 
@@ -331,7 +335,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 {related.map((r, i) => (
                   <Link key={r.id} href={`/noticias/${r.slug}`} style={{ display: 'flex', gap: 10, padding: '12px 16px', textDecoration: 'none', borderBottom: i < related.length - 1 ? '1px solid #f1ece4' : 'none' }}>
                     <div style={{ width: 84, height: 56, borderRadius: 6, overflow: 'hidden', flexShrink: 0, background: '#f1ece4' }}>
-                      <img src={r.imagen || PLACEHOLDERS[r.categoria] || PLACEHOLDERS['Nacionales']} alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={r.imagen || FALLBACK_IMAGE} alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: CAT_COLORS[r.categoria] || '#8c1d18', display: 'block', marginBottom: 3 }}>{r.categoria}</span>

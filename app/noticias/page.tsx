@@ -21,13 +21,7 @@ const CAT_ICON: Record<string, string> = {
   Deportes: 'fa-futbol', Internacionales: 'fa-globe', 'Espectáculos': 'fa-film',
 };
 
-const PLACEHOLDERS: Record<string, string> = {
-  Sucesos: 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=600&q=80',
-  Nacionales: 'https://images.unsplash.com/photo-1526666923127-b2970f64b422?w=600&q=80',
-  Deportes: 'https://images.unsplash.com/photo-1461896836934-f66c71d1ef65?w=600&q=80',
-  Internacionales: 'https://images.unsplash.com/photo-1526304640152-d4619684e484?w=600&q=80',
-  'Espectáculos': 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=600&q=80',
-};
+const FALLBACK_IMAGE = '/logo.png';
 
 function fmtDate(ts: unknown): string {
   if (!ts) return '';
@@ -153,7 +147,7 @@ export default async function NoticiasIndexPage({
               <Link href={`/noticias/${featured.slug}`} className="ni-news-card" style={{ display: 'flex', flexDirection: 'row', marginBottom: 32, minHeight: 240 }} aria-label={featured.titulo}>
                 <div className="img-wrap ni-featured-img" style={{ width: '45%', flexShrink: 0, height: 'auto', minHeight: 240 }}>
                   <img
-                    src={featured.imagen || PLACEHOLDERS[featured.categoria] || PLACEHOLDERS['Nacionales']}
+                    src={featured.imagen || FALLBACK_IMAGE}
                     alt={featured.titulo}
                     className="ni-card-img"
                     style={{ height: '100%', width: '100%', objectFit: 'cover' }}
@@ -204,7 +198,7 @@ export default async function NoticiasIndexPage({
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="ni-news-card">
                   <div className="img-wrap" style={{ aspectRatio: '16/9' }}>
                     <img
-                      src={n.imagen || PLACEHOLDERS[n.categoria] || PLACEHOLDERS['Nacionales']}
+                      src={n.imagen || FALLBACK_IMAGE}
                       alt={n.titulo}
                       className="ni-card-img"
                     />

@@ -60,17 +60,42 @@ export function buildOrganizationJsonLd(): WithContext<NewsMediaOrganization> {
     '@context': 'https://schema.org',
     '@type': 'NewsMediaOrganization',
     name: 'Nicaragua Informate',
+    alternateName: 'NicaraguaInformate.com',
     url: 'https://nicaraguainformate.com',
     logo: 'https://nicaraguainformate.com/logo.png',
+    foundingDate: '2025-01-01',
+    description: 'Medio digital de noticias de Nicaragua. Periodismo de precisión con cobertura en sucesos, nacionales, deportes, internacionales y espectáculos.',
     sameAs: [
       'https://facebook.com/profile.php?id=61578261125687',
       'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
       'https://t.me/+fHHjncJqMQM3NjZh',
     ],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Masaya',
+      addressRegion: 'Masaya',
+      addressCountry: 'NI',
+    },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Editorial',
-      email: 'keylingrivera20@gmail.com',
+      email: 'redaccion@nicaraguainformate.com',
+      availableLanguage: 'es',
+    },
+    publishingPrinciples: 'https://nicaraguainformate.com/politica-editorial',
+  };
+}
+
+export function buildWebSiteJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Nicaragua Informate',
+    url: 'https://nicaraguainformate.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://nicaraguainformate.com/noticias?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
     },
   };
 }
