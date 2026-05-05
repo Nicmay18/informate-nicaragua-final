@@ -15,16 +15,20 @@ const FOOTER_COLS = [
     { label: 'Sucesos', href: '/noticias?cat=Sucesos' },
     { label: 'Nacionales', href: '/noticias?cat=Nacionales' },
     { label: 'Deportes', href: '/noticias?cat=Deportes' },
+    { label: 'Internacionales', href: '/noticias?cat=Internacionales' },
+    { label: 'Espectáculos', href: '/noticias?cat=Espectáculos' },
   ]},
-  { title: 'Legales', links: [
+  { title: 'Legal', links: [
     { label: 'Sobre Nosotros', href: '/nosotros' },
     { label: 'Política de Privacidad', href: '/privacidad' },
     { label: 'Términos de Uso', href: '/terminos' },
     { label: 'Política Editorial', href: '/politica-editorial' },
+    { label: 'Contacto', href: '/contacto' },
   ]},
   { title: 'Contacto', links: [
-    { label: 'Formulario de contacto', href: '/contacto' },
     { label: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com' },
+    { label: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com' },
+    { label: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com' },
     { label: 'Masaya, Nicaragua', href: '#' },
   ]},
 ];
