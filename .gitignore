@@ -73,3 +73,11 @@ limpiar-imagenes-base64.js
 .vercel
 
 .vercel
+
+# Broken git backups and sync scripts
+.git_broken_*/
+_sync-push.*
+_g.txt
+_push.txt
+_br.txt
+_gcheck.txt
