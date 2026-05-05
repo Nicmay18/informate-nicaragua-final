@@ -14,7 +14,7 @@ export default function NosotrosPage() {
         Nicaragua Informate es un medio de comunicación digital fundado en 2025, dedicado a ofrecer cobertura periodística rigurosa, verificada e independiente sobre los acontecimientos más relevantes de Nicaragua y la región centroamericana.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7 }}>
-        Operamos desde Masaya, Nicaragua, y nuestro compromiso es con la verdad, la transparencia y el derecho de los ciudadanos a estar bien informados. Publicamos contenido original las 24 horas del día, los 7 días de la semana, cubriendo las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales.
+        Operamos desde Estelí, Nicaragua, y nuestro compromiso es con la verdad, la transparencia y el derecho de los ciudadanos a estar bien informados. Publicamos contenido original las 24 horas del día, los 7 días de la semana, cubriendo las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
@@ -33,20 +33,62 @@ export default function NosotrosPage() {
       <p style={{ color: '#cbd5e1', marginBottom: '1rem', lineHeight: 1.7 }}>
         Nuestro equipo está conformado por periodistas y comunicadores profesionales comprometidos con el rigor informativo. Cada pieza publicada pasa por un proceso de verificación y revisión editorial antes de ser publicada.
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '1rem', margin: '1rem 0 2rem' }}>
-        {[
-          { name: 'Keyling Rivera M.', role: 'Directora Editorial', desc: 'Periodista con experiencia en medios digitales nicaragüenses. Lidera la línea editorial y la verificación de contenidos.' },
-          { name: 'Equipo de Redacción', role: 'Periodistas', desc: 'Equipo multidisciplinario de reporteros y editores que cubren las principales fuentes informativas del país.' },
-        ].map((m) => (
-          <div key={m.name} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem' }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 18, marginBottom: 12 }}>
-              {m.name.charAt(0)}
-            </div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 2 }}>{m.name}</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>{m.role}</div>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>{m.desc}</p>
+
+      {/* Director Editorial - Con foto */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.25rem', marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+          {/* Foto pequeña y protegida */}
+          <div 
+            style={{ 
+              width: 70, 
+              height: 70, 
+              borderRadius: '50%', 
+              overflow: 'hidden', 
+              flexShrink: 0,
+              border: '2px solid rgba(140,29,24,0.3)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              userSelect: 'none',
+              WebkitUserSelect: 'none'
+            }}
+          >
+            <img 
+              src="/keyling-rivera.jpg" 
+              alt="Keyling Rivera - Directora Editorial"
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                filter: 'blur(0.3px)',
+                userSelect: 'none',
+                WebkitUserSelect: 'none'
+              }}
+              draggable={false}
+            />
           </div>
-        ))}
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Rivera M.</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial</div>
+            <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
+              Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético, la verificación de fuentes y la información precisa para la ciudadanía nicaragüense.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Resto del equipo */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 18 }}>
+            <i className="fas fa-users" />
+          </div>
+          <div>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 2 }}>Equipo de Redacción</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Periodistas</div>
+            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>
+              Equipo multidisciplinario de reporteros y editores que cubren las principales fuentes informativas del país.
+            </p>
+          </div>
+        </div>
       </div>
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Principios editoriales</h2>
@@ -66,7 +108,7 @@ export default function NosotrosPage() {
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem', margin: '0.5rem 0 1.5rem' }}>
         {[
-          { icon: 'fa-map-marker-alt', label: 'Dirección', val: 'Masaya, Departamento de Masaya, Nicaragua, Centroamérica' },
+          { icon: 'fa-map-marker-alt', label: 'Dirección', val: 'Estelí, Nicaragua, Centroamérica' },
           { icon: 'fa-envelope', label: 'Correo editorial', val: 'redaccion@nicaraguainformate.com' },
           { icon: 'fa-globe', label: 'Sitio web', val: 'www.nicaraguainformate.com' },
         ].map(c => (
