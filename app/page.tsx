@@ -6,6 +6,7 @@ import IndicadoresWidget from '@/components/IndicadoresWidget';
 import RadioBar from '@/components/RadioBar';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
+import NewsGrid from '@/components/NewsGrid';
 
 export const dynamic = 'force-dynamic';
 
@@ -170,66 +171,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Section divider */}
-      <div style={{ maxWidth: 1400, margin: '20px auto 0', padding: '0 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <div style={{ width: 4, height: 24, background: '#e53e3e', borderRadius: 2 }} />
-          <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--ink)', margin: 0, letterSpacing: '-0.3px' }}>Últimas Noticias</h2>
-          <div style={{ flex: 1, height: 1, background: 'var(--border-light)' }} />
-        </div>
-      </div>
-
       {/* Main Grid */}
-      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '0 24px 48px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content" className="lg:grid-cols-[1fr_320px] grid-cols-1">
+      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 24px 48px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content" className="lg:grid-cols-[1fr_320px] grid-cols-1">
         <div>
-          {recientes.length === 0 && noticias.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--ink-faint)' }}>
-              <i className="fas fa-newspaper" style={{ fontSize: 48, marginBottom: 16, display: 'block' }} />
-              <p>No hay noticias disponibles en este momento.</p>
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }} className="md:grid-cols-2 grid-cols-1">
-              {(recientes.length > 0 ? recientes : noticias).map((n) => (
-                <article key={n.id} style={{ background: 'var(--paper-accent)', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border-light)', transition: 'all 0.3s ease', display: 'flex', flexDirection: 'column', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
-                  className="card-top-border widget-lift">
-                  <Link href={`/noticias/${n.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <div style={{ aspectRatio: '16/9', overflow: 'hidden', position: 'relative' }} className="img-zoom-wrap">
-                      <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80'}
-                        alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="img-zoom" />
-                    </div>
-                    <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ background: catColor(n.categoria), color: '#fff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '2px 8px', borderRadius: 4 }}>
-                          {n.categoria}
-                        </span>
-                        {n.fecha && (
-                          <span style={{ color: 'var(--ink-faint)', fontSize: 11 }}>
-                            <i className="fas fa-clock" style={{ marginRight: 3, fontSize: 10 }} />{formatDate(n.fecha)}
-                          </span>
-                        )}
-                      </div>
-                      <h3 style={{ color: 'var(--ink)', fontWeight: 700, fontSize: 15, lineHeight: 1.4, margin: 0, letterSpacing: '-0.2px' }}>{n.titulo}</h3>
-                      {n.resumen && (
-                        <p style={{ color: 'var(--ink-muted)', fontSize: 13, lineHeight: 1.5, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                          {n.resumen}
-                        </p>
-                      )}
-                      <div style={{ marginTop: 'auto', paddingTop: 8, color: '#e53e3e', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        Leer más <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
-                      </div>
-                    </div>
-                  </Link>
-                </article>
-              ))}
-            </div>
-          )}
-
-          {/* Ver todas CTA */}
-          <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
-            <Link href="/noticias" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 32px', borderRadius: 10, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 14, boxShadow: '0 4px 16px rgba(140,29,24,0.25)', transition: 'all 0.2s' }}>
-              <i className="fas fa-newspaper" /> Ver todas las noticias
-            </Link>
-          </div>
+          <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
 
           {/* Mobile-only sidebar sections */}
           <div className="mobile-sidebar-sections">
