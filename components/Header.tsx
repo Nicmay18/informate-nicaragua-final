@@ -135,6 +135,11 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
                 {cat.label}
               </button>
             ))}
+            <Link href="/noticias" className="mobile-menu-link" onClick={() => setMenuOpen(false)}
+              style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, color: '#8c1d18', fontWeight: 700, borderTop: '1px solid rgba(140,29,24,0.15)', marginTop: 8 }}>
+              <i className="fas fa-newspaper" style={{ color: '#8c1d18' }} />
+              Todas las Noticias
+            </Link>
           </nav>
         </div>
       </div>

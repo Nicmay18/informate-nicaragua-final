@@ -146,17 +146,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <div id="readProgress" style={{ position: 'fixed', top: 0, left: 0, height: 3, background: '#8c1d18', zIndex: 1001, width: '0%', transition: 'width 0.1s linear' }} />
 
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,253,249,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #ddd6ce' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none', color: '#18181b' }}>
-            <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 38, height: 38, borderRadius: 8, objectFit: 'cover' }} />
-            <span style={{ fontFamily: "'Crimson Pro', 'Times New Roman', Georgia, serif", fontSize: 24, fontWeight: 700, letterSpacing: '-0.03em', color: '#8c1d18', lineHeight: 1.05 }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,253,249,0.97)', backdropFilter: 'blur(16px)', borderBottom: '2px solid #e5e0d8' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
+            <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 34, height: 34, borderRadius: 8, objectFit: 'cover' }} />
+            <span style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', color: '#8c1d18', lineHeight: 1 }}>
               Nicaragua <span style={{ color: '#18181b' }}>Informate</span>
             </span>
           </Link>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 4, fontSize: 12, fontWeight: 600, textDecoration: 'none', border: '1px solid #ddd6ce', color: '#5b5b5f' }}>
-              ← Inicio
+          <nav style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Link href="/noticias" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'rgba(140,29,24,0.06)', color: '#8c1d18', border: '1px solid rgba(140,29,24,0.15)' }}>
+              <i className="fas fa-newspaper" style={{ fontSize: 11 }} /> Noticias
+            </Link>
+            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', border: '1px solid #ddd6ce', color: '#5b5b5f' }}>
+              <i className="fas fa-house" style={{ fontSize: 11 }} /> Inicio
             </Link>
           </nav>
         </div>
@@ -304,7 +307,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#18181b', margin: 0 }}>Más noticias de {n.categoria || 'General'}</h2>
             <div style={{ flex: 1, height: 1, background: '#ddd6ce' }} />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+          <style>{`.related-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px} @media(max-width:600px){.related-grid{grid-template-columns:1fr}}`}</style>
+          <div className="related-grid">
             {related.map(r => (
               <Link key={r.id} href={`/noticias/${r.slug}`}
                 style={{ textDecoration: 'none', borderRadius: 10, overflow: 'hidden', border: '1px solid #ddd6ce', display: 'flex', flexDirection: 'column' }}>

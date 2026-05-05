@@ -283,6 +283,13 @@ export default async function HomePage() {
             </div>
           )}
 
+          {/* Ver todas CTA */}
+          <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
+            <Link href="/noticias" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 32px', borderRadius: 10, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 14, boxShadow: '0 4px 16px rgba(140,29,24,0.25)', transition: 'all 0.2s' }}>
+              <i className="fas fa-newspaper" /> Ver todas las noticias
+            </Link>
+          </div>
+
           {/* Mobile-only sidebar sections */}
           <div className="mobile-sidebar-sections">
 
