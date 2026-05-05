@@ -675,13 +675,12 @@ ul { list-style: none; }
 .sparkline-wrap { display: inline-flex; align-items: center; width: 50px; height: 20px; }
 .sparkline-wrap svg { width: 100%; height: 100%; overflow: visible; }
 
-/* Green pulse badge */
-.pulse-green { animation: pulse-green-anim 2s ease-in-out infinite; }
-@keyframes pulse-green-anim { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.4)} 50%{box-shadow:0 0 0 6px rgba(74,222,128,0)} }
+/* Green pulse badge - subtle glow only */
+.pulse-green { animation: pulse-green-anim 3s ease-in-out infinite; }
+@keyframes pulse-green-anim { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.25)} 50%{box-shadow:0 0 0 3px rgba(74,222,128,0)} }
 
-/* Weather floating icon */
-.weather-float-icon { animation: weather-float 3s ease-in-out infinite; }
-@keyframes weather-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+/* Weather floating icon - disabled to prevent shaking */
+.weather-float-icon { animation: none; }
 
 /* Logo hover */
 .logo-hover { transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }

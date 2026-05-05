@@ -95,7 +95,7 @@ export default function WeatherWidget() {
       {/* Header */}
       <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <i className="fas fa-cloud-sun weather-float-icon" style={{ color: '#fbbf24', fontSize: 15 }} />
+          <i className="fas fa-cloud-sun" style={{ color: '#fbbf24', fontSize: 15 }} />
           <span style={{ fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Clima</span>
           <span style={{ fontSize: 13, color: '#fbbf24', fontWeight: 700 }}>— {CITIES[cityIdx].name}</span>
         </div>

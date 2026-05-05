@@ -107,10 +107,16 @@ export default async function HomePage() {
             <span style={{ color: '#475569' }}>|</span>
             <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', fontSize: 11 }} /> Managua, Nicaragua
           </span>
-          <div style={{ display: 'flex', gap: 4 }}>
-            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" className="top-icon-hover" aria-label="Facebook"><i className="fab fa-facebook-f" /></a>
-            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" className="top-icon-hover" aria-label="WhatsApp"><i className="fab fa-whatsapp" /></a>
-            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" className="top-icon-hover" aria-label="Telegram"><i className="fab fa-telegram-plane" /></a>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook"
+              style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none', fontSize: 13, transition: 'all 0.2s', border: '1px solid rgba(255,255,255,0.06)' }}
+              className="top-social-btn"><i className="fab fa-facebook-f" /></a>
+            <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp"
+              style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none', fontSize: 13, transition: 'all 0.2s', border: '1px solid rgba(255,255,255,0.06)' }}
+              className="top-social-btn"><i className="fab fa-whatsapp" /></a>
+            <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram"
+              style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none', fontSize: 13, transition: 'all 0.2s', border: '1px solid rgba(255,255,255,0.06)' }}
+              className="top-social-btn"><i className="fab fa-telegram-plane" /></a>
           </div>
         </div>
       </div>
@@ -369,13 +375,15 @@ export default async function HomePage() {
               <p style={{ color: '#475569', fontSize: 13, lineHeight: 1.7, marginBottom: 16, maxWidth: 240 }}>
                 Cubriendo las noticias más importantes de Nicaragua al instante, con compromiso y rigor informativo.
               </p>
-              <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 {[
-                  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f' },
-                  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp' },
-                  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane' },
-                ].map(({ href, icon }) => (
-                  <a key={icon} href={href} target="_blank" rel="noopener" className="footer-social-unified">
+                  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', color: '#1877F2' },
+                  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', color: '#25D366' },
+                  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', color: '#0088cc' },
+                ].map(({ href, icon, color }) => (
+                  <a key={icon} href={href} target="_blank" rel="noopener" 
+                    style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none', fontSize: 14, transition: 'all 0.2s' }}
+                    className="footer-social-btn">
                     <i className={`fab ${icon}`} />
                   </a>
                 ))}
@@ -410,7 +418,7 @@ export default async function HomePage() {
             {/* Contacto */}
             <div>
               <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contacto</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
                   <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> Managua, Nicaragua
                 </div>
@@ -420,14 +428,17 @@ export default async function HomePage() {
                 <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none' }} className="footer-link">
                   <i className="fas fa-paper-plane" style={{ color: '#e53e3e', flexShrink: 0 }} /> Formulario de contacto
                 </Link>
-                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#25d366', textDecoration: 'none', fontWeight: 600 }}>
-                  <i className="fab fa-whatsapp" /> Canal WhatsApp
-                </a>
-                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#38bdf8', textDecoration: 'none', fontWeight: 600 }}>
-                  <i className="fab fa-telegram-plane" /> Canal Telegram
-                </a>
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', margin: '6px 0', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <span style={{ fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>Síguenos</span>
+                  <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#94a3b8', textDecoration: 'none' }} className="footer-link">
+                    <span style={{ width: 20, height: 20, borderRadius: 4, background: '#25d366', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11 }}><i className="fab fa-whatsapp" /></span> Canal WhatsApp
+                  </a>
+                  <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#94a3b8', textDecoration: 'none' }} className="footer-link">
+                    <span style={{ width: 20, height: 20, borderRadius: 4, background: '#0088cc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11 }}><i className="fab fa-telegram-plane" /></span> Canal Telegram
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -452,6 +463,8 @@ export default async function HomePage() {
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
         .social-grid-btn:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.15); }
+        .top-social-btn:hover { background: rgba(255,255,255,0.15) !important; color: #fff !important; border-color: rgba(255,255,255,0.2) !important; transform: translateY(-1px); }
+        .footer-social-btn:hover { background: rgba(255,255,255,0.1) !important; color: #fff !important; border-color: rgba(255,255,255,0.15) !important; transform: translateY(-2px); }
         @media(max-width:980px){.footer-grid{grid-template-columns:1fr 1fr!important}.footer-brand{grid-column:1/-1}}
         @media(max-width:640px){.footer-grid{grid-template-columns:1fr!important}}
         /* Social widget hover effects */
