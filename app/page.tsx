@@ -290,63 +290,31 @@ export default async function HomePage() {
           {/* Newsletter */}
           <NewsletterForm />
 
-          {/* Síguenos — widget refinado 2x2 con iconos y hints */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', padding: 24, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }} className="widget-lift">
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, fontSize: 13, fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#111827' }}>
+          {/* Síguenos — widget con iconos sólidos y soporte día/noche */}
+          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 18, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, fontSize: 13, fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--ink)' }}>
               <span style={{ display: 'block', width: 4, height: 20, background: 'linear-gradient(180deg,#ef4444 0%,#f97316 100%)', borderRadius: 2 }} />
               Síguenos
             </div>
-            {/* Grid 2x2 */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {/* Facebook */}
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
-                className="social-item social-item--fb">
-                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#eff6ff', color: '#1877F2' }}>
-                  <i className="fab fa-facebook-f" style={{ fontSize: 18 }} />
-                </span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>Facebook</div>
-                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Noticias diarias</div>
-                </div>
-              </a>
-              {/* WhatsApp */}
-              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
-                className="social-item social-item--wa">
-                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#f0fdf4', color: '#25D366' }}>
-                  <i className="fab fa-whatsapp" style={{ fontSize: 18 }} />
-                </span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>WhatsApp</div>
-                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Únete al canal</div>
-                </div>
-              </a>
-              {/* Telegram */}
-              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
-                className="social-item social-item--tg">
-                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#ecfeff', color: '#0088cc' }}>
-                  <i className="fab fa-telegram-plane" style={{ fontSize: 18 }} />
-                </span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>Telegram</div>
-                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Alertas al instante</div>
-                </div>
-              </a>
-              {/* RSS */}
-              <a href="/feed.xml"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
-                className="social-item social-item--rss">
-                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#fff7ed', color: '#f26522' }}>
-                  <i className="fas fa-rss" style={{ fontSize: 18 }} />
-                </span>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>RSS</div>
-                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Feed de noticias</div>
-                </div>
-              </a>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {[
+                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fab fa-facebook-f', label: 'Facebook', hint: 'Noticias diarias', bg: '#1877F2' },
+                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fab fa-whatsapp', label: 'WhatsApp', hint: 'Únete al canal', bg: '#25D366' },
+                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fab fa-telegram-plane', label: 'Telegram', hint: 'Alertas al instante', bg: '#0088cc' },
+                { href: '/feed.xml', icon: 'fas fa-rss', label: 'RSS', hint: 'Feed de noticias', bg: '#f26522' },
+              ].map(s => (
+                <a key={s.label} href={s.href} target={s.href.startsWith('http') ? '_blank' : undefined} rel={s.href.startsWith('http') ? 'noopener' : undefined}
+                  style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'var(--paper)', border: '1px solid var(--border-light)', borderRadius: 12, textDecoration: 'none', color: 'var(--ink)', transition: 'all 0.2s' }}
+                  className="social-item">
+                  <span style={{ width: 38, height: 38, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: s.bg, color: '#fff', fontSize: 17 }}>
+                    <i className={s.icon} />
+                  </span>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: 'var(--ink-muted)', marginTop: 2, fontWeight: 500 }}>{s.hint}</div>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
 
