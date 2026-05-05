@@ -408,6 +408,7 @@ export default async function HomePage() {
                 {[
                   { href: '/nosotros', label: 'Sobre Nosotros' },
                   { href: '/privacidad', label: 'Privacidad' },
+                  { href: '/cookies', label: 'Cookies' },
                   { href: '/terminos', label: 'Términos de Uso' },
                   { href: '/politica-editorial', label: 'Política Editorial' },
                 ].map(({ href, label }) => (

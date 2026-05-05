@@ -21,6 +21,7 @@ const FOOTER_COLS = [
   { title: 'Legal', links: [
     { label: 'Sobre Nosotros', href: '/nosotros' },
     { label: 'Política de Privacidad', href: '/privacidad' },
+    { label: 'Política de Cookies', href: '/cookies' },
     { label: 'Términos de Uso', href: '/terminos' },
     { label: 'Política Editorial', href: '/politica-editorial' },
     { label: 'Contacto', href: '/contacto' },
