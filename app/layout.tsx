@@ -3,6 +3,7 @@ import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import { ThemeInit } from '@/components/ThemeInit';
 import { buildOrganizationJsonLd } from '@/lib/schema';
+import StickyRadio from '@/components/StickyRadio';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-merri' });
@@ -68,9 +69,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
       </head>
-      <body className="bg-[var(--paper)] text-[var(--ink)] antialiased">
+      <body className="bg-[var(--paper)] text-[var(--ink)] antialiased" style={{ paddingBottom: 'var(--radio-bar-h,0)' }}>
         <ThemeInit />
         {children}
+        <StickyRadio />
       </body>
     </html>
   );

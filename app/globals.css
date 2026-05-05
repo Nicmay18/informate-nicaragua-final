@@ -5,6 +5,9 @@
    Fonts, Variables, Reset, Layout, Components, Article
    ═══════════════════════════════════════════════════════════ */
 
+/* Sticky radio bar height variable (desktop only) */
+@media(min-width:769px){ :root { --radio-bar-h: 58px; } }
+
 :root {
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;

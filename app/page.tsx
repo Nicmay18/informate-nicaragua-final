@@ -4,6 +4,8 @@ import NewsletterForm from '@/components/NewsletterForm';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import RadioBar from '@/components/RadioBar';
+import BreakingTicker from '@/components/BreakingTicker';
+import HeroCarousel from '@/components/HeroCarousel';
 
 export const dynamic = 'force-dynamic';
 
@@ -159,73 +161,12 @@ export default async function HomePage() {
       </div>
 
       {/* Breaking News Ticker */}
-      {tickerNews.length > 0 && (
-        <div style={{ background: 'linear-gradient(90deg, #8c1d18, #c41e3a)', color: '#fff', fontSize: 13, overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-          <div className="breaking-label" style={{ padding: '8px 16px', flexShrink: 0 }}>
-            <i className="fas fa-bolt" />Última Hora
-          </div>
-          <div style={{ overflow: 'hidden', flex: 1, position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(90deg, #9b1c1c, transparent)', zIndex: 1, pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 60, background: 'linear-gradient(270deg, #e53e3e, transparent)', zIndex: 1, pointerEvents: 'none' }} />
-            <div style={{ display: 'flex', animation: `ticker ${Math.max(120, tickerNews.reduce((a,n)=>a+n.titulo.length,0)*0.3)}s linear infinite`, whiteSpace: 'nowrap', padding: '10px 0' }} className="ticker-scroll">
-              {[...tickerNews, ...tickerNews].map((n, i) => (
-                <Link key={`${n.id}-${i}`} href={`/noticias/${n.slug}`}
-                  style={{ color: '#fff', textDecoration: 'none', marginRight: 56, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
-                  <i className="fas fa-circle" style={{ fontSize: 6, color: '#fca5a5' }} />{n.titulo}
-                </Link>
-              ))}
-            </div>
-          </div>
-          <style>{`@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } } .ticker-scroll:hover { animation-play-state: paused; }`}</style>
-        </div>
-      )}
+      <BreakingTicker noticias={tickerNews} />
 
-      {/* Hero Section */}
+      {/* Hero Carousel */}
       {destacadas.length > 0 && (
-        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 24px 8px' }} className="hero-section">
-          <div className="hero-grid">
-            {/* Main featured */}
-            {destacadas[0] && (
-              <Link href={`/noticias/${destacadas[0].slug}`} className="hero-featured">
-                <img src={destacadas[0].imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80'}
-                  alt={destacadas[0].titulo} className="img-zoom" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
-                <div className="hero-overlay" />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }} className="hero-content">
-                  <span style={{ background: catColor(destacadas[0].categoria), color: '#fff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '3px 10px', borderRadius: 4 }}>
-                    {destacadas[0].categoria}
-                  </span>
-                  <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginTop: 10, lineHeight: 1.3, letterSpacing: '-0.3px', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }} className="hero-title">{destacadas[0].titulo}</h2>
-                  {destacadas[0].resumen && (
-                    <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, marginTop: 6, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="hero-excerpt">
-                      {destacadas[0].resumen}
-                    </p>
-                  )}
-                  <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginTop: 10 }}>
-                    <i className="fas fa-clock" style={{ marginRight: 4 }} />{formatDate(destacadas[0].fecha)}
-                  </div>
-                </div>
-              </Link>
-            )}
-            {/* Secondary featured */}
-            <div className="hero-secondary">
-              {destacadas.slice(1, 5).map((n) => (
-                <Link key={n.id} href={`/noticias/${n.slug}`}
-                  className="hero-card card-top-border">
-                  <img src={n.imagen || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80'}
-                    alt={n.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} className="img-zoom" />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 12px' }}>
-                    <span style={{ background: catColor(n.categoria), color: '#fff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', padding: '2px 6px', borderRadius: 3 }}>
-                      {n.categoria}
-                    </span>
-                    <h3 style={{ color: '#fff', fontSize: 12, fontWeight: 700, marginTop: 4, lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {n.titulo}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '16px 24px 8px' }}>
+          <HeroCarousel noticias={destacadas} />
         </section>
       )}
 
