@@ -39,12 +39,12 @@ export default function LegalPageShell({ children, title }: { children: React.Re
     <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", background: 'linear-gradient(135deg,#0f172a 0%,#1e293b 100%)', minHeight: '100vh', color: '#e2e8f0', lineHeight: 1.7 }}>
       {/* Sticky header */}
       <header style={{ background: 'rgba(15,23,42,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.08)', position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
             <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 34, height: 34, borderRadius: 8 }} />
             <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#8c1d18', lineHeight: 1 }}>Nicaragua <span style={{ color: '#fff' }}>Informate</span></span>
           </Link>
-          <nav><ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0 }}>
+          <nav className="legal-nav-scroll"><ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0, whiteSpace: 'nowrap' }}>
             {LEGAL_LINKS.map(l => (
               <li key={l.href}><Link href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontWeight: 500, fontSize: 13 }}>{l.label}</Link></li>
             ))}
@@ -86,6 +86,17 @@ export default function LegalPageShell({ children, title }: { children: React.Re
           © 2025-2026 Nicaragua Informate. Todos los derechos reservados.
         </div>
       </footer>
+      <style>{`
+        .legal-nav-scroll {
+          display: flex;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .legal-nav-scroll::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
   );
 }

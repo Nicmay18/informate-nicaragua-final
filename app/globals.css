@@ -748,6 +748,7 @@ ul { list-style: none; }
   .header-inner { padding: 10px 16px; gap: 10px; align-items: center; }
   .brand-logo { width: 36px; height: 36px; }
   .brand-title { font-size: 1.1rem; }
+  .brand-tagline { font-size: 0.65rem; }
   .nav { overflow-x: auto; padding: 0; }
   .mobile-menu-btn { display: inline-flex; }
   .search-box { display: none; }
@@ -803,6 +804,10 @@ ul { list-style: none; }
   .whatsapp-btn-float span { display: none; }
   .post-nav-grid { grid-template-columns: 1fr; }
   .author-box { padding: 16px; }
+  /* Legal pages mobile */
+  .legal-page-shell { padding: 12px 14px 24px; }
+  .legal-page-title { font-size: 1.4rem; }
+  .legal-page-content { font-size: 0.95rem; line-height: 1.7; }
 }
 @media (max-width: 600px) {
   .header-inner { padding: 8px 12px; }
