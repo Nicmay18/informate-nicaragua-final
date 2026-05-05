@@ -2,10 +2,9 @@
 import { useState, useRef } from 'react';
 
 const EMISORAS = [
-  { name: 'Radio Ya', url: 'https://s3.radio.co/s6b5e4c9cb/listen' },
-  { name: 'La Primerísima', url: 'https://ice41.securenetsystems.net/LAPRIMERI' },
-  { name: 'Radio Nicaragua', url: 'https://s2.radio.co/s7e8b1a7f9/listen' },
-  { name: 'Radio Corporación', url: 'https://corporacion.net/stream' },
+  { name: 'Radio Futura',    url: 'https://radiofutura.stream.laut.fm/radiofutura' },
+  { name: 'Radio Clásica',   url: 'https://cloudstream2030.conectarhosting.com/8038/stream' },
+  { name: 'Radio Nicaragua',  url: 'https://stream.zeno.fm/radionicaragua' },
 ];
 
 export default function RadioBar() {

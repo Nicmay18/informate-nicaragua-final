@@ -400,8 +400,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </aside>
       </main>
 
-      {/* Sticky share sidebar (desktop) */}
-      <aside className="share-sticky-desktop" style={{ position: 'fixed', left: 'max(16px, calc((100vw - 920px) / 2 - 72px))', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 10, zIndex: 50 }}>
+      {/* Sticky share sidebar (desktop only — hidden on narrow screens) */}
+      <style>{`.share-sticky-desktop{display:none}@media(min-width:1440px){.share-sticky-desktop{display:flex!important}}`}</style>
+      <aside className="share-sticky-desktop" style={{ position: 'fixed', left: 'calc((100vw - 1200px) / 2 - 64px)', top: '50%', transform: 'translateY(-50%)', flexDirection: 'column', gap: 10, zIndex: 50 }}>
         <ShareSticky href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} icon="facebook-f" color="#1877f2" />
         <ShareSticky href={`https://wa.me/?text=${encodeURIComponent(n.titulo + ' — ' + url)}`} icon="whatsapp" color="#25d366" />
         <ShareSticky href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(n.titulo)}`} icon="x-twitter" color="#0f1419" />

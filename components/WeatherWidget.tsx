@@ -102,12 +102,12 @@ export default function WeatherWidget() {
         <span className="pulse-green" style={{ background: '#22c55e', color: '#fff', fontSize: 9, padding: '2px 8px', borderRadius: 999, fontWeight: 800, letterSpacing: '0.05em' }}>EN VIVO</span>
       </div>
 
-      {/* Sliding info panel */}
-      <div style={{ padding: '16px 16px 4px', minHeight: 84, opacity: loading ? 0.5 : 1, transition: 'opacity 0.3s' }}>
+      {/* Sliding info panel — fixed height, opacity transitions to avoid layout shift */}
+      <div style={{ padding: '16px 16px 4px', position: 'relative', height: 110, opacity: loading ? 0.5 : 1, transition: 'opacity 0.3s' }}>
 
         {/* Slide 0 — Temperature */}
-        <div style={{ display: slide === 0 ? 'flex' : 'none', alignItems: 'center', gap: 16 }}>
-          <div style={{ fontSize: 46, lineHeight: 1 }} className="weather-float-icon">{wx.emoji}</div>
+        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 0 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 0 ? 'auto' : 'none' }}>
+          <div style={{ fontSize: 46, lineHeight: 1 }}>{wx.emoji}</div>
           <div>
             <div style={{ fontSize: 40, fontWeight: 900, lineHeight: 1 }}>{data ? `${data.temp}°` : '--°'}</div>
             <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>{wx.label}</div>
@@ -115,7 +115,7 @@ export default function WeatherWidget() {
         </div>
 
         {/* Slide 1 — Wind */}
-        <div style={{ display: slide === 1 ? 'flex' : 'none', alignItems: 'center', gap: 16 }}>
+        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 1 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 1 ? 'auto' : 'none' }}>
           <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(148,163,184,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <i className="fas fa-wind" style={{ fontSize: 24, color: '#94a3b8' }} />
           </div>
@@ -128,7 +128,7 @@ export default function WeatherWidget() {
         </div>
 
         {/* Slide 2 — Humidity */}
-        <div style={{ display: slide === 2 ? 'flex' : 'none', alignItems: 'center', gap: 16 }}>
+        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 2 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 2 ? 'auto' : 'none' }}>
           <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(56,189,248,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <i className="fas fa-droplet" style={{ fontSize: 24, color: '#38bdf8' }} />
           </div>
@@ -140,8 +140,8 @@ export default function WeatherWidget() {
           </div>
         </div>
 
-        {/* Progress dots */}
-        <div style={{ display: 'flex', gap: 6, marginTop: 14, justifyContent: 'center' }}>
+        {/* Progress dots — positioned at bottom of fixed container */}
+        <div style={{ position: 'absolute', bottom: 4, left: 0, right: 0, display: 'flex', gap: 6, justifyContent: 'center' }}>
           {[0, 1, 2].map(i => (
             <button key={i} onClick={() => setSlide(i)}
               style={{ width: slide === i ? 22 : 7, height: 7, borderRadius: 4, background: slide === i ? '#fbbf24' : 'rgba(255,255,255,0.2)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.35s ease' }} />
