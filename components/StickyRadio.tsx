@@ -2,14 +2,9 @@
 import { useState, useRef, useEffect } from 'react';
 
 const EMISORAS = [
-  { name: 'Radio Ya La Buenísima', url: 'https://ssl.omegatelecom.online:9010/stream' },
   { name: 'Radio Futura',          url: 'https://radiofutura.stream.laut.fm/radiofutura' },
   { name: 'Radio Clásica',         url: 'https://cloudstream2030.conectarhosting.com/8038/stream' },
-  { name: 'Radio Viva FM',         url: 'https://sp.unoaudio.com:8015/stream' },
-  { name: 'Radio Amor',            url: 'https://live.amfmhd.com/radioamor' },
-  { name: 'La Primerísima',        url: 'https://ice41.securenetsystems.net/LAPRIMERI' },
   { name: 'Radio Nicaragua',       url: 'https://stream.zeno.fm/radionicaragua' },
-  { name: 'Radio Corporación',     url: 'https://radio.corporacion.com.ni:8000/corporacion' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];

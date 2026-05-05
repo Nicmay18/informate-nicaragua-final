@@ -290,25 +290,63 @@ export default async function HomePage() {
           {/* Newsletter */}
           <NewsletterForm />
 
-          {/* Síguenos — grid compacto 2x2 */}
-          <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} className="widget-lift">
-            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <i className="fas fa-share-nodes" style={{ color: '#8c1d18' }} /> Síguenos
+          {/* Síguenos — widget refinado 2x2 con iconos y hints */}
+          <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', padding: 24, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }} className="widget-lift">
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, fontSize: 13, fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#111827' }}>
+              <span style={{ display: 'block', width: 4, height: 20, background: 'linear-gradient(180deg,#ef4444 0%,#f97316 100%)', borderRadius: 2 }} />
+              Síguenos
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              {[
-                { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fa-facebook-f', label: 'Facebook', bg: '#1877f2' },
-                { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#25d366' },
-                { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fa-telegram-plane', label: 'Telegram', bg: '#0088cc' },
-                { href: '/feed.xml', icon: 'fa-rss', label: 'RSS', bg: '#f97316' },
-              ].map(s => (
-                <a key={s.href} href={s.href} target={s.href.startsWith('http') ? '_blank' : undefined} rel={s.href.startsWith('http') ? 'noopener' : undefined}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 10px', borderRadius: 8, background: s.bg, color: '#fff', textDecoration: 'none', fontSize: 12.5, fontWeight: 700, transition: 'all 0.15s' }}
-                  className="social-grid-btn">
-                  <i className={`${s.icon === 'fa-rss' ? 'fas' : 'fab'} ${s.icon}`} style={{ fontSize: 14 }} />
-                  {s.label}
-                </a>
-              ))}
+            {/* Grid 2x2 */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {/* Facebook */}
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
+                className="social-item social-item--fb">
+                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#eff6ff', color: '#1877F2' }}>
+                  <i className="fab fa-facebook-f" style={{ fontSize: 18 }} />
+                </span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>Facebook</div>
+                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Noticias diarias</div>
+                </div>
+              </a>
+              {/* WhatsApp */}
+              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
+                className="social-item social-item--wa">
+                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#f0fdf4', color: '#25D366' }}>
+                  <i className="fab fa-whatsapp" style={{ fontSize: 18 }} />
+                </span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>WhatsApp</div>
+                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Únete al canal</div>
+                </div>
+              </a>
+              {/* Telegram */}
+              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
+                className="social-item social-item--tg">
+                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#ecfeff', color: '#0088cc' }}>
+                  <i className="fab fa-telegram-plane" style={{ fontSize: 18 }} />
+                </span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>Telegram</div>
+                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Alertas al instante</div>
+                </div>
+              </a>
+              {/* RSS */}
+              <a href="/feed.xml"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: '#111827', transition: 'all 0.25s cubic-bezier(0.4,0,0.2,1)' }}
+                className="social-item social-item--rss">
+                <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', flexShrink: 0, background: '#fff7ed', color: '#f26522' }}>
+                  <i className="fas fa-rss" style={{ fontSize: 18 }} />
+                </span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>RSS</div>
+                  <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, fontWeight: 500 }}>Feed de noticias</div>
+                </div>
+              </a>
             </div>
           </div>
 
@@ -446,16 +484,17 @@ export default async function HomePage() {
         .social-follow-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .footer-link:hover { color: #e2e8f0 !important; }
         .social-grid-btn:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.15); }
-        @media(max-width:768px){
-          .footer-grid{grid-template-columns:1fr 1fr !important;} .footer-grid>div:first-child{grid-column:1/-1;}
-          .hero-section{padding:12px 12px 4px !important;}
-          #main-content{padding:0 12px 48px !important;}
-        }
-        @media(max-width:640px){
-          .fab-elongated span, .fab-telegram-elongated span { display:none; padding:14px; }
-          .hero-title{font-size:1.1rem !important}
-          .hero-content{padding:12px !important}
-        }
+        @media(max-width:980px){.footer-grid{grid-template-columns:1fr 1fr!important}.footer-brand{grid-column:1/-1}}
+        @media(max-width:640px){.footer-grid{grid-template-columns:1fr!important}}
+        /* Social widget hover effects */
+        .social-item{transition:all .25s cubic-bezier(.4,0,.2,1)}
+        .social-item:hover{transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);border-color:transparent}
+        .social-item:active{transform:translateY(0)}
+        .social-item--fb:hover .social-item__icon{background:#1877F2!important;color:#fff!important}
+        .social-item--wa:hover .social-item__icon{background:#25D366!important;color:#fff!important}
+        .social-item--tg:hover .social-item__icon{background:#0088cc!important;color:#fff!important}
+        .social-item--rss:hover .social-item__icon{background:#f26522!important;color:#fff!important}
+        .social-item__icon{transition:all .25s cubic-bezier(.4,0,.2,1)}
       `}</style>
     </div>
   );
