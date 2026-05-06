@@ -38,7 +38,8 @@ export default function NewsletterForm() {
           </div>
         ) : (
           <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+            <label htmlFor="newsletter-email" style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-muted)', marginBottom: '-4px' }}>Correo electrónico</label>
+            <input id="newsletter-email" type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="tu@email.com" required
               style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border-light)', borderRadius: 6, fontSize: 13, background: 'var(--paper)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }} />
             <button type="submit" disabled={status === 'loading'}

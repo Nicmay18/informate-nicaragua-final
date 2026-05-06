@@ -36,15 +36,24 @@ function fmtDate(ts: unknown): string {
 export default async function NoticiasIndexPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string }>;
+  searchParams: Promise<{ cat?: string; page?: string }>;
 }) {
-  const { cat = 'Todas' } = await searchParams;
+  const { cat = 'Todas', page = '1' } = await searchParams;
+  const currentPage = Math.max(1, parseInt(page, 10));
+  const itemsPerPage = 30;
+  const offset = (currentPage - 1) * itemsPerPage;
 
   let snap;
+  let totalCount = 0;
+
   if (cat !== 'Todas') {
-    snap = await adminDb.collection('noticias').where('categoria', '==', cat).limit(60).get();
+    const countSnap = await adminDb.collection('noticias').where('categoria', '==', cat).count().get();
+    totalCount = countSnap.data().count;
+    snap = await adminDb.collection('noticias').where('categoria', '==', cat).orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
   } else {
-    snap = await adminDb.collection('noticias').orderBy('fecha', 'desc').limit(60).get();
+    const countSnap = await adminDb.collection('noticias').count().get();
+    totalCount = countSnap.data().count;
+    snap = await adminDb.collection('noticias').orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
   }
 
   const noticias = snap.docs
@@ -65,6 +74,7 @@ export default async function NoticiasIndexPage({
 
   const featured = noticias[0];
   const rest = noticias.slice(1);
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   return (
     <>
@@ -227,6 +237,58 @@ export default async function NoticiasIndexPage({
                 </Link>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 40, padding: '20px 0', borderTop: '1px solid #e5e7eb' }}>
+                {currentPage > 1 && (
+                  <Link
+                    href={cat === 'Todas' ? `/noticias?page=${currentPage - 1}` : `/noticias?cat=${encodeURIComponent(cat)}&page=${currentPage - 1}`}
+                    style={{ padding: '10px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, textDecoration: 'none', color: '#18181b', fontWeight: 600, fontSize: 14 }}
+                  >
+                    ← Anterior
+                  </Link>
+                )}
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  return (
+                    <Link
+                      key={pageNum}
+                      href={cat === 'Todas' ? `/noticias?page=${pageNum}` : `/noticias?cat=${encodeURIComponent(cat)}&page=${pageNum}`}
+                      style={{
+                        padding: '10px 16px',
+                        background: pageNum === currentPage ? '#8c1d18' : '#fff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: 8,
+                        textDecoration: 'none',
+                        color: pageNum === currentPage ? '#fff' : '#18181b',
+                        fontWeight: pageNum === currentPage ? 700 : 600,
+                        fontSize: 14,
+                      }}
+                    >
+                      {pageNum}
+                    </Link>
+                  );
+                })}
+                {currentPage < totalPages && (
+                  <Link
+                    href={cat === 'Todas' ? `/noticias?page=${currentPage + 1}` : `/noticias?cat=${encodeURIComponent(cat)}&page=${currentPage + 1}`}
+                    style={{ padding: '10px 16px', background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8, textDecoration: 'none', color: '#18181b', fontWeight: 600, fontSize: 14 }}
+                  >
+                    Siguiente →
+                  </Link>
+                )}
+              </div>
+            )}
           </>
         )}
       </main>

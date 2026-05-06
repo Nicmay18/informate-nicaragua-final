@@ -53,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" data-theme="dark" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
+        <style>{`a.skip-link{position:absolute;top:-40px;left:0;background:#8c1d18;color:#fff;padding:8px 16px;text-decoration:none;z-index:100;transition:top 0.3s}a.skip-link:focus{top:0}`}</style>
         <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
         <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-[var(--paper)] text-[var(--ink)] antialiased" style={{ paddingBottom: 'var(--radio-bar-h,0)' }}>
+        <a href="#main-content" className="skip-link">Saltar al contenido principal</a>
         <ThemeInit />
         {children}
         <StickyRadio />
