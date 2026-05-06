@@ -27,8 +27,8 @@ service cloud.firestore {
                'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'
              ];
 
-      // UPDATE: validar SOLO los campos que se envían (update parcial)
-      allow update: if true
+      // UPDATE: usuarios autenticados pueden actualizar (update parcial)
+      allow update: if request.auth != null
           && request.resource.data.keys().hasOnly([
                'titulo','resumen','contenido','categoria','autor',
                'fecha','fechaActualizacion','imagen','slug','destacada',
