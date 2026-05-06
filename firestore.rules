@@ -27,28 +27,8 @@ service cloud.firestore {
                'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'
              ];
 
-      // UPDATE: temporalmente permitido para todos (restaurar auth después)
-      allow update: if true
-          && request.resource.data.keys().hasOnly([
-               'titulo','resumen','contenido','categoria','autor',
-               'fecha','fechaActualizacion','imagen','slug','destacada',
-               'premium','vistas','tags','pieFoto','tiempoLectura',
-               'departamento','dateline','esFallecido','palabras'
-             ])
-          && (!request.resource.data.keys().hasAny(['titulo']) || (
-               request.resource.data.titulo is string
-               && request.resource.data.titulo.size() > 0
-               && request.resource.data.titulo.size() <= 200
-             ))
-          && (!request.resource.data.keys().hasAny(['contenido']) || (
-               request.resource.data.contenido is string
-               && request.resource.data.contenido.size() <= 50000
-             ))
-          && (!request.resource.data.keys().hasAny(['categoria']) || (
-               request.resource.data.categoria in [
-                 'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'
-               ]
-             ));
+      // UPDATE: completamente abierto para arreglar el problema de edición
+      allow update: if true;
 
       // DELETE: solo admins (¡cuidado con dejarlo en true!)
       allow delete: if true;
