@@ -1,14 +1,14 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 
-// Radios de Nicaragua - Streams verificados y funcionando
+// Radios de Nicaragua - Streams actualizados Mayo 2026
 const EMISORAS = [
-  { name: 'Radio Nicaragua',       url: 'https://online.radionicaragua.com.ni/stream.mp3',  genre: 'Noticias / Oficial' },
-  { name: 'La Nueva Radio Ya',     url: 'https://stream.ecmdigital.net:8010/radioya',        genre: 'Noticias / Popular' },
+  { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3',  genre: 'Noticias / Oficial' },
   { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream', genre: 'Noticias / Comentario' },
-  { name: 'Radio Maranatha',       url: 'https://stream2.305stream.com/proxy/client032?mp=/stream', genre: 'Cristiana / Variedad' },
-  { name: 'Radio Estación X',      url: 'https://stream.zeno.fm/f24tdg9bq68uv',             genre: 'Música / Juvenil' },
-  { name: 'Radio FM Stereo',       url: 'https://stream.zeno.fm/nt3ngdhcry8uv',             genre: 'Romántica / 80s' },
+  { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream', genre: 'Cristiana / Variedad' },
+  { name: 'Radio Mía',            url: 'https://stream.zeno.fm/87am1q5d1v8uv', genre: 'Música / Romántica' },
+  { name: 'Radio Fiesta',         url: 'https://stream.zeno.fm/dgndgx3bwv8uv', genre: 'Cumbia / Tropical' },
+  { name: 'Radio Juvenil',        url: 'https://stream.zeno.fm/4r5t7w9x2y3z', genre: 'Pop / Reggaeton' },
 ];
 
 export default function RadioBar() {

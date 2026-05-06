@@ -567,12 +567,9 @@
                     <option value="">Seleccionar...</option>
                     <option value="Sucesos">🚨 Sucesos</option>
                     <option value="Nacionales">🇳🇮 Nacionales</option>
-                    <option value="Economía">💰 Economía</option>
-                    <option value="Cultura">🎨 Cultura</option>
-                    <option value="Espectáculos">⭐ Espectáculos</option>
                     <option value="Deportes">⚽ Deportes</option>
-                    <option value="Tecnología">💻 Tecnología</option>
                     <option value="Internacionales">🌍 Internacionales</option>
+                    <option value="Espectáculos">🎬 Espectáculos</option>
                   </select>
                 </div>
               </div>
@@ -755,11 +752,9 @@
               <select id="iaCategoria" class="ai-select" style="width: 100%;">
                 <option value="Nacionales">Nacionales</option>
                 <option value="Sucesos">Sucesos</option>
-                <option value="Economía">Economía</option>
-                <option value="Cultura">Cultura</option>
                 <option value="Deportes">Deportes</option>
-                <option value="Tecnología">Tecnología</option>
                 <option value="Internacionales">Internacionales</option>
+                <option value="Espectáculos">Espectáculos</option>
               </select>
             </div>
             <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Generar</button>
@@ -1072,12 +1067,9 @@ sin texto ni marcas de agua, composición periodística"
     const categorias = [
       { id: 'Sucesos', key: 'Sucesos', emoji: '🚨', color: 'sucesos', icon: 'fa-exclamation-triangle' },
       { id: 'Nacionales', key: 'Nacionales', emoji: '🇳🇮', color: 'nacionales', icon: 'fa-flag' },
-      { id: 'Economía', key: 'Economia', emoji: '💰', color: 'economia', icon: 'fa-chart-line' },
-      { id: 'Cultura', key: 'Cultura', emoji: '🎨', color: 'cultura', icon: 'fa-palette' },
-      { id: 'Espectáculos', key: 'Espectaculos', emoji: '⭐', color: 'espectaculos', icon: 'fa-star' },
       { id: 'Deportes', key: 'Deportes', emoji: '⚽', color: 'deportes', icon: 'fa-futbol' },
-      { id: 'Tecnología', key: 'Tecnologia', emoji: '💻', color: 'tecnologia', icon: 'fa-microchip' },
-      { id: 'Internacionales', key: 'Internacionales', emoji: '🌍', color: 'internacionales', icon: 'fa-globe-americas' }
+      { id: 'Internacionales', key: 'Internacionales', emoji: '🌍', color: 'internacionales', icon: 'fa-globe' },
+      { id: 'Espectáculos', key: 'Espectaculos', emoji: '🎬', color: 'espectaculos', icon: 'fa-star' }
     ];
 
     function showToast(message, type = 'success', title = '') {
@@ -1491,12 +1483,12 @@ sin texto ni marcas de agua, composición periodística"
     window.sugerirImagenCategoria = function() {
       const cat = document.getElementById('categoria').value;
       if (!cat || document.getElementById('imagenUrl').value) return;
-      const keywords = { 'Sucesos': 'emergency', 'Nacionales': 'nicaragua', 'Economía': 'business', 'Cultura': 'culture', 'Espectáculos': 'entertainment', 'Deportes': 'sports', 'Tecnología': 'technology', 'Internacionales': 'world' };
+      const keywords = { 'Sucesos': 'emergency', 'Nacionales': 'nicaragua', 'Cultura': 'culture', 'Espectáculos': 'entertainment', 'Deportes': 'sports', 'Internacionales': 'world' };
       const url = `https://picsum.photos/seed/${keywords[cat] || 'news'}/800/500`;
       document.getElementById('imagenUrl').value = url; actualizarPreview();
     };
 
-    const IMAGENES_RESPALDO = { 'Sucesos': [101,102,103], 'Nacionales': [501,502,503], 'Economía': [601,602,603], 'Cultura': [701,702,703], 'Espectáculos': [801,802,803], 'Deportes': [201,202,203], 'Tecnología': [401,402,403], 'Internacionales': [301,302,303], 'default': [10,20,30] };
+    const IMAGENES_RESPALDO = { 'Sucesos': [101,102,103], 'Nacionales': [501,502,503], 'Cultura': [701,702,703], 'Espectáculos': [801,802,803], 'Deportes': [201,202,203], 'Internacionales': [301,302,303], 'default': [10,20,30] };
     window.migrarImagenes = async function() {
       const btn = document.getElementById('btnMigrar'); const statusDiv = document.getElementById('migrarStatus');
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analizando...';
