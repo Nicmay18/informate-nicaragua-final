@@ -23,9 +23,11 @@ service cloud.firestore {
           && request.resource.data.titulo.size() <= 200
           && request.resource.data.contenido is string
           && request.resource.data.contenido.size() <= 50000
-          && request.resource.data.categoria in [
-               'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'
-             ];
+          && (!request.resource.data.keys().hasAny(['categoria']) || (
+               request.resource.data.categoria in [
+                 'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'
+               ]
+             ));
 
       // UPDATE: completamente abierto para arreglar el problema de edición
       allow update: if true;

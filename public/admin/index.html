@@ -570,6 +570,7 @@
                     <option value="Deportes">⚽ Deportes</option>
                     <option value="Internacionales">🌍 Internacionales</option>
                     <option value="Espectáculos">🎬 Espectáculos</option>
+                    <option value="Tecnología">💻 Tecnología</option>
                   </select>
                 </div>
               </div>
@@ -706,12 +707,10 @@
           <button class="filter-btn active" onclick="filtrarNoticias('todas', this)">Todas</button>
           <button class="filter-btn" onclick="filtrarNoticias('Sucesos', this)">🚨 Sucesos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Nacionales', this)">🇳🇮 Nacionales</button>
-          <button class="filter-btn" onclick="filtrarNoticias('Economía', this)">💰 Economía</button>
-          <button class="filter-btn" onclick="filtrarNoticias('Cultura', this)">🎨 Cultura</button>
-          <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">⭐ Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Deportes', this)">⚽ Deportes</button>
-          <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
+          <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
+          <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
         </div>
         <div class="card"><div class="card-body" style="padding: 0;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
@@ -755,6 +754,7 @@
                 <option value="Deportes">Deportes</option>
                 <option value="Internacionales">Internacionales</option>
                 <option value="Espectáculos">Espectáculos</option>
+                <option value="Tecnología">Tecnología</option>
               </select>
             </div>
             <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Generar</button>
@@ -1069,7 +1069,8 @@ sin texto ni marcas de agua, composición periodística"
       { id: 'Nacionales', key: 'Nacionales', emoji: '🇳🇮', color: 'nacionales', icon: 'fa-flag' },
       { id: 'Deportes', key: 'Deportes', emoji: '⚽', color: 'deportes', icon: 'fa-futbol' },
       { id: 'Internacionales', key: 'Internacionales', emoji: '🌍', color: 'internacionales', icon: 'fa-globe' },
-      { id: 'Espectáculos', key: 'Espectaculos', emoji: '🎬', color: 'espectaculos', icon: 'fa-star' }
+      { id: 'Espectáculos', key: 'Espectaculos', emoji: '🎬', color: 'espectaculos', icon: 'fa-star' },
+      { id: 'Tecnología', key: 'Tecnologia', emoji: '💻', color: 'tecnologia', icon: 'fa-microchip' }
     ];
 
     function showToast(message, type = 'success', title = '') {
