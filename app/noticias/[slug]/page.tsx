@@ -265,7 +265,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <img
               src={imgUrl}
               alt={n.titulo}
-              style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', objectPosition: 'center 25%', borderRadius: 4, display: 'block', border: '1px solid #ddd6ce', userSelect: 'none' }}
+              style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', objectPosition: 'center 25%', borderRadius: 4, display: 'block', border: '1px solid #ddd6ce' }}
             />
             <figcaption style={{ marginTop: 10, paddingTop: 10, borderTop: '2px solid #18181b', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
               <span style={{ width: 28, height: 2, background: '#8c1d18', marginTop: 9, flexShrink: 0 }} />
@@ -283,7 +283,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <AudioButton titulo={n.titulo} resumen={n.resumen || ''} contenido={n.contenido || ''} />
 
           {/* Article body */}
-          <div style={{ fontFamily: "'Crimson Pro','Times New Roman',Georgia,serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a', userSelect: 'none' }}>
+          <div style={{ fontFamily: "'Crimson Pro','Times New Roman',Georgia,serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a' }}>
             {previewPars.map((p, i) => (
               <p key={i} className={i === 0 ? 'drop-cap' : ''}
                 style={{ marginBottom: '1.6em', textAlign: 'justify', hyphens: 'auto' }}
@@ -306,7 +306,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   👑 Suscribirme — $5/mes
                 </a>
               </div>
-              <div style={{ position: 'relative', maxHeight: 180, overflow: 'hidden', pointerEvents: 'none', userSelect: 'none' }}>
+              <div style={{ position: 'relative', maxHeight: 180, overflow: 'hidden', pointerEvents: 'none' }}>
                 <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a', filter: 'blur(6px)' }}>
                   {hiddenPars.map((p, i) => (
                     <p key={i} style={{ marginBottom: '1.6em', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: contentIsHTML ? p : p }} />
