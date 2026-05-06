@@ -1213,14 +1213,20 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     window.actualizarContadorPalabras = function() {
-      const texto = document.getElementById('contenido').value.trim();
-      const palabras = texto ? texto.split(/\s+/).length : 0;
+      const texto = document.getElementById('contenido').value;
+      // Contar solo palabras reales, ignorando etiquetas HTML
+      const palabrasReales = texto.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
       const el = document.getElementById('contadorPalabras');
-      const status = document.getElementById('adsenseStatus');
-      el.textContent = palabras;
-      if (palabras >= 350) { el.className = 'count ok'; status.innerHTML = '<i class="fas fa-check-circle"></i> Cumple meta AdSense (350+)'; status.style.color = 'var(--success)'; }
-      else if (palabras >= 200) { el.className = 'count warn'; status.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por debajo de 350 palabras'; status.style.color = 'var(--warning)'; }
-      else { el.className = 'count bad'; status.innerHTML = '<i class="fas fa-times-circle"></i> Insuficiente para AdSense'; status.style.color = 'var(--danger)'; }
+      el.textContent = palabrasReales;
+      
+      const adsenseStatus = document.getElementById('adsenseStatus');
+      if (palabrasReales >= 350) {
+        adsenseStatus.innerHTML = '<i class="fas fa-check-circle"></i> Cumple meta AdSense (350+)';
+        adsenseStatus.style.color = 'var(--success)';
+      } else {
+        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Necesita más palabras (meta AdSense: 350+)';
+        adsenseStatus.style.color = 'var(--warning)';
+      }
     };
 
     // Auth - Firebase authentication (required for Firestore writes)
