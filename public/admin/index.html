@@ -1172,28 +1172,39 @@ sin texto ni marcas de agua, composición periodística"
       else { el.className = 'count bad'; status.innerHTML = '<i class="fas fa-times-circle"></i> Insuficiente para AdSense'; status.style.color = 'var(--danger)'; }
     };
 
-    // Auth - Local authentication (bypass Firebase)
+    // Auth - Firebase authentication (required for Firestore writes)
+    function enterDashboard(email) {
+      localStorage.setItem('adminUser', email);
+      document.getElementById('loginScreen').style.opacity = '0';
+      setTimeout(() => { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').classList.add('active'); }, 400);
+      document.getElementById('userName').textContent = email;
+      document.getElementById('userAvatar').textContent = email[0].toUpperCase();
+      cargarDatosIniciales();
+      verificarConexiones();
+    }
+
     window.handleLogin = async function(e) {
       e.preventDefault();
       const email = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       if (!email || !password) { showToast('Completa todos los campos', 'error'); return; }
       showLoading(true, 'Verificando credenciales...');
-      
-      // Local authentication - accept any email/password for now
-      setTimeout(() => {
-        localStorage.setItem('adminUser', email);
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
         showLoading(false);
         showToast(`Bienvenido, ${email.split('@')[0]}`, 'success', 'Acceso concedido');
-        document.getElementById('loginScreen').style.opacity = '0';
-        setTimeout(() => { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').classList.add('active'); }, 400);
-        document.getElementById('userName').textContent = email;
-        document.getElementById('userAvatar').textContent = email[0].toUpperCase();
-        cargarDatosIniciales();
-        verificarConexiones();
-      }, 500);
+        enterDashboard(email);
+      } catch (err) {
+        showLoading(false);
+        const msg = err.code === 'auth/invalid-credential' ? 'Correo o contraseña incorrectos'
+          : err.code === 'auth/too-many-requests' ? 'Demasiados intentos, espera un momento'
+          : 'Error: ' + err.message;
+        showToast(msg, 'error');
+      }
     };
+
     window.logout = async function() {
+      try { await signOut(auth); } catch(e) {}
       localStorage.removeItem('adminUser');
       showToast('Sesión cerrada', 'success');
       document.getElementById('dashboard').classList.remove('active');
@@ -1201,16 +1212,12 @@ sin texto ni marcas de agua, composición periodística"
       setTimeout(() => document.getElementById('loginScreen').style.opacity = '1', 10);
     };
 
-    // Check local storage on load
-    const savedUser = localStorage.getItem('adminUser');
-    if (savedUser) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').classList.add('active');
-      document.getElementById('userName').textContent = savedUser;
-      document.getElementById('userAvatar').textContent = savedUser[0].toUpperCase();
-      cargarDatosIniciales();
-      verificarConexiones();
-    }
+    // Auto-login if Firebase session persists
+    onAuthStateChanged(auth, (user) => {
+      if (user && !document.getElementById('dashboard').classList.contains('active')) {
+        enterDashboard(user.email);
+      }
+    });
 
     // Navigation
     window.showTab = function(tabId, navElement) {
@@ -1284,7 +1291,7 @@ sin texto ni marcas de agua, composición periodística"
         facebook: { page1: { id: localStorage.getItem('admin_fb_page1_id') || '', token: localStorage.getItem('admin_fb_page1_token') || '' }, page2: { id: localStorage.getItem('admin_fb_page2_id') || '', token: localStorage.getItem('admin_fb_page2_token') || '' } }
       };
       payload.config = config;
-      const url = `https://informate-nicaragua.vercel.app/api/${endpoint}`;
+      const url = `/api/${endpoint}`;
       const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.error || data.message || `Error ${resp.status}`);
