@@ -682,6 +682,17 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- WhatsApp Preview -->
+                  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                      <div style="width: 24px; height: 24px; background: #25d366; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">W</div>
+                      <span style="font-size: 12px; font-weight: 600; color: #666;">WhatsApp</span>
+                    </div>
+                    <div style="font-size: 14px; font-weight: 600; color: #000; margin-bottom: 4px;" id="whatsappTitle">Título de la noticia</div>
+                    <div style="font-size: 13px; color: #555; line-height: 1.4;" id="whatsappDesc">Descripción de la noticia...</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 6px;">nicaraguainformate.com</div>
+                  </div>
                 </div>
               </div>
 
@@ -1188,6 +1199,10 @@ sin texto ni marcas de agua, composición periodística"
       // Facebook
       document.getElementById('facebookTitle').textContent = titulo.length > 80 ? titulo.substring(0, 77) + '...' : titulo;
       document.getElementById('facebookDesc').textContent = resumen.length > 120 ? resumen.substring(0, 117) + '...' : resumen;
+      
+      // WhatsApp
+      document.getElementById('whatsappTitle').textContent = titulo.length > 65 ? titulo.substring(0, 62) + '...' : titulo;
+      document.getElementById('whatsappDesc').textContent = resumen.length > 80 ? resumen.substring(0, 77) + '...' : resumen;
     };
 
     window.actualizarContadorTitulo = function() {
