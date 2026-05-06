@@ -1644,7 +1644,7 @@ sin texto ni marcas de agua, composición periodística"
             let parrafoFormateado = parrafo;
             
             // Negritas para nombres propios (inician con mayúscula)
-            parrafoFormateado = parrafoFormateado.replace(/\b([A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)*\b/g, '<b>$1</b>');
+            parrafoFormateado = parrafoFormateado.replace(/\\b([A-Z][a-záéíóúñ]+(?:\\s+[A-Z][a-záéíóúñ]+)*\\b/g, '<b>$1</b>');
             
             // Negritas para cargos/títulos importantes
             const palabrasClave = ['falleció', 'murió', 'herido', 'accidente', 'incidente', 'autoridades', 'policía', 'ministro', 'presidente', 'fiscal', 'juez'];
