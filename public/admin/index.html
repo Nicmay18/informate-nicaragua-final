@@ -1344,7 +1344,11 @@ sin texto ni marcas de agua, composición periodística"
         facebook: { page1: { id: localStorage.getItem('admin_fb_page1_id') || '', token: localStorage.getItem('admin_fb_page1_token') || '' }, page2: { id: localStorage.getItem('admin_fb_page2_id') || '', token: localStorage.getItem('admin_fb_page2_token') || '' } }
       };
       payload.config = config;
-      const url = `/api/${endpoint}`;
+      
+      // Usar URLs absolutas para Next.js App Router
+      const baseUrl = window.location.origin;
+      const url = `${baseUrl}/api/${endpoint}`;
+      
       const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.error || data.message || `Error ${resp.status}`);
