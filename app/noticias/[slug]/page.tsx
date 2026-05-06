@@ -135,7 +135,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       '@type': 'Person',
       name: autor,
       url: 'https://nicaraguainformate.com/nosotros',
-      jobTitle: n.autorRol || 'Periodista',
+      jobTitle: n.autorRol || 'Editor',
     },
     publisher: {
       '@type': 'Organization',
@@ -344,9 +344,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: '#18181b', marginBottom: 2 }}>{autor}</div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#8c1d18', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>{n.autorRol || 'Periodista'}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#8c1d18', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>{n.autorRol || 'Editor'}</div>
               <p style={{ fontSize: 13, color: '#5b5b5f', lineHeight: 1.6, margin: 0 }}>
-                Periodista de Nicaragua Informate. Comprometida con el rigor informativo, la verificación de fuentes y el periodismo ético al servicio de la ciudadanía.
+                Editor de Nicaragua Informate. Comprometido con el rigor informativo, la verificación de fuentes y el periodismo ético al servicio de la ciudadanía.
               </p>
               <Link href="/nosotros" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 10, fontSize: 12, fontWeight: 600, color: '#8c1d18', textDecoration: 'none' }}>
                 Ver equipo editorial <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />

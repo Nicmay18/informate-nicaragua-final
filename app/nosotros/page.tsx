@@ -83,7 +83,7 @@ export default function NosotrosPage() {
           </div>
           <div>
             <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 2 }}>Equipo de Redacción</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Periodistas</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Editores</div>
             <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>
               Equipo multidisciplinario de reporteros y editores que cubren las principales fuentes informativas del país.
             </p>
