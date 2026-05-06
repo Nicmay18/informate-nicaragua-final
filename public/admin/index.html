@@ -1569,10 +1569,18 @@ sin texto ni marcas de agua, composición periodística"
 
     window.verificarConexiones = async function() {
       const tgDiv = document.getElementById('statusTelegram'); const fbDiv = document.getElementById('statusFacebook');
+      
+      // Temporalmente desactivado hasta deploy en Vercel
+      tgDiv.className = 'status-indicator status-warning'; tgDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Pendiente deploy</span>';
+      fbDiv.className = 'status-indicator status-warning'; fbDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Pendiente deploy</span>';
+      
+      // Comentado temporalmente para evitar errores 404
+      /*
       tgDiv.className = 'status-indicator status-checking'; tgDiv.innerHTML = '<i class="fas fa-circle" style="font-size:7px;"></i><span>Verificando...</span>';
       fbDiv.className = 'status-indicator status-checking'; fbDiv.innerHTML = '<i class="fas fa-circle" style="font-size:7px;"></i><span>Verificando...</span>';
       try { await postToApi('telegram', { noticia: { titulo: 'Test', categoria: 'Tecnología', resumen: 'Test', imagen: 'https://via.placeholder.com/400' } }); tgDiv.className = 'status-indicator status-online'; tgDiv.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>'; } catch (e) { tgDiv.className = 'status-indicator status-offline'; tgDiv.innerHTML = '<i class="fas fa-times-circle"></i><span>Error</span>'; }
       try { await postToApi('facebook', { noticia: { titulo: 'Test', categoria: 'Tecnología', resumen: 'Test', imagen: 'https://via.placeholder.com/400' } }); fbDiv.className = 'status-indicator status-online'; fbDiv.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>'; } catch (e) { fbDiv.className = 'status-indicator status-offline'; fbDiv.innerHTML = '<i class="fas fa-times-circle"></i><span>Error</span>'; }
+      */
     };
 
     window.cargarConfiguracion = function() {
