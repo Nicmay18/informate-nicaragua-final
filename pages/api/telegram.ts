@@ -1,25 +1,21 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: CORS_HEADERS });
-}
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { noticia, config } = body;
+    const { noticia, config } = req.body;
     const TG_TOKEN = config?.telegram?.token || process.env.TG_TOKEN || '';
     const TG_CHAT_ID = config?.telegram?.chatId || process.env.TG_CHAT_ID || '';
 
-    if (!TG_TOKEN) return NextResponse.json({ error: 'Falta token de Telegram' }, { status: 400, headers: CORS_HEADERS });
-    if (!TG_CHAT_ID) return NextResponse.json({ error: 'Falta chat ID de Telegram' }, { status: 400, headers: CORS_HEADERS });
-    if (!noticia?.titulo) return NextResponse.json({ error: 'Falta título' }, { status: 400, headers: CORS_HEADERS });
+    if (!TG_TOKEN) return res.status(400).json({ error: 'Falta token de Telegram' });
+    if (!TG_CHAT_ID) return res.status(400).json({ error: 'Falta chat ID de Telegram' });
+    if (!noticia?.titulo) return res.status(400).json({ error: 'Falta título' });
 
     const emoji: Record<string, string> = {
       'Sucesos': '🚨', 'Nacionales': '📌', 'Economía': '💰', 'Cultura': '🎭',
@@ -72,7 +68,6 @@ export async function POST(req: NextRequest) {
 
     let data = await respuesta.json();
 
-    // Retry with text if image fails
     if (!data.ok && imagenValida && data.description?.includes('wrong type')) {
       respuesta = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -86,17 +81,17 @@ export async function POST(req: NextRequest) {
     }
 
     if (!data.ok) {
-      return NextResponse.json({
+      return res.status(400).json({
         error: 'Telegram API error', details: data.description,
         suggestion: data.description?.includes('not found')
           ? 'Verifica que el bot esté en el canal/grupo como administrador'
           : 'Revisa el token y chat ID',
-      }, { status: 400, headers: CORS_HEADERS });
+      });
     }
 
-    return NextResponse.json({ success: true, messageId: data.result.message_id }, { headers: CORS_HEADERS });
+    return res.status(200).json({ success: true, messageId: data.result.message_id });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Error desconocido';
-    return NextResponse.json({ error: msg }, { status: 500, headers: CORS_HEADERS });
+    return res.status(500).json({ error: msg });
   }
 }

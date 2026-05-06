@@ -1,19 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: CORS_HEADERS });
-}
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { noticia, config } = body;
+    const { noticia, config } = req.body;
 
     const FB_PAGE_ACCESS_TOKEN = config?.facebook?.page1?.token || process.env.FB_PAGE_ACCESS_TOKEN || '';
     const FB_PAGE_ID = config?.facebook?.page1?.id || process.env.FB_PAGE_ID || '';
@@ -21,7 +17,7 @@ export async function POST(req: NextRequest) {
     const FB_PAGE_2_ID = config?.facebook?.page2?.id || '';
 
     if (!FB_PAGE_ACCESS_TOKEN) {
-      return NextResponse.json({ success: true, skipped: true, message: 'Facebook no configurado' }, { headers: CORS_HEADERS });
+      return res.status(200).json({ success: true, skipped: true, message: 'Facebook no configurado' });
     }
 
     const mensaje = `${noticia.titulo}\n\n${noticia.resumen || (noticia.contenido || '').substring(0, 500)}\n\n#${(noticia.categoria || 'Noticias').replace(/\s+/g, '')} #Nicaragua #InformateAlInstante`;
@@ -73,9 +69,9 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ success: true, results }, { headers: CORS_HEADERS });
+    return res.status(200).json({ success: true, results });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Error desconocido';
-    return NextResponse.json({ error: msg }, { status: 500, headers: CORS_HEADERS });
+    return res.status(500).json({ error: msg });
   }
 }
