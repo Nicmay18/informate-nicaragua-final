@@ -2,11 +2,11 @@
 import { useState, useRef, useEffect } from 'react';
 
 const EMISORAS = [
-  { name: 'Radio Nicaragua',     url: 'https://stream.zeno.fm/yn65fsaurfhvv' },
-  { name: 'La Nueva Radio Ya',   url: 'https://stream.zeno.fm/0r0xa792kwzuv' },
-  { name: 'Radio Corporación',   url: 'https://stream.zeno.fm/pns44q8hv08uv' },
-  { name: 'La Cariñosa FM',      url: 'https://stream.zeno.fm/ephqa2snp1zuv' },
-  { name: 'Radio Sandino',       url: 'https://stream.zeno.fm/dn4mqg0sv08uv' },
+  { name: 'Radio Nicaragua',     url: 'https://online.radionicaragua.com.ni/stream.mp3' },
+  { name: 'La Nueva Radio Ya',   url: 'https://stream.ecmdigital.net:8010/radioya' },
+  { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream' },
+  { name: 'Radio Maranatha',     url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
+  { name: 'Radio Estación X',    url: 'https://stream.zeno.fm/f24tdg9bq68uv' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];
