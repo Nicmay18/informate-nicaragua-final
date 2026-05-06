@@ -1261,9 +1261,11 @@ sin texto ni marcas de agua, composición periodística"
 
         categorias.forEach(c => { const el = document.getElementById(`count${c.key}`); if (el) el.textContent = `${conteo[c.id] || 0} noticias`; });
 
-        const statsRef = doc(db, "estadisticas", "visitas");
-        const statsSnap = await getDoc(statsRef);
-        document.getElementById('statVisitas').textContent = statsSnap.exists() ? (statsSnap.data().total || 0).toLocaleString() : '0';
+        try {
+          const statsRef = doc(db, "config", "estadisticas");
+          const statsSnap = await getDoc(statsRef);
+          document.getElementById('statVisitas').textContent = statsSnap.exists() ? (statsSnap.data().total || 0).toLocaleString() : '—';
+        } catch(e) { document.getElementById('statVisitas').textContent = '—'; }
         document.getElementById('statHoy').textContent = Math.floor(Math.random() * 500 + 100).toLocaleString();
         document.getElementById('statHoyVar').textContent = `+${Math.floor(Math.random() * 10)} hoy`;
       } catch (error) { console.error("Error estadísticas:", error); }
@@ -1331,12 +1333,12 @@ sin texto ni marcas de agua, composición periodística"
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido.substring(0, 150) + '...',
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
-          publicadoPor: auth.currentUser?.email || 'admin', destacada, slug, palabras
+          autor: auth.currentUser?.email || 'Redacción', destacada, slug, palabras
         };
         let esNueva = !noticiaId;
 
         if (noticiaId) {
-          noticiaData.actualizado = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug;
+          noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug; delete noticiaData.vistas;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
           showToast('Noticia actualizada', 'success');
         } else {
