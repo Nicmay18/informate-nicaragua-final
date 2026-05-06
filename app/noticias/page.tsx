@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Todas las Noticias | Nicaragua Informate',
   description: 'Explora todas las noticias de Nicaragua: sucesos, nacionales, deportes, internacionales, espectáculos y más.',
+  alternates: { canonical: 'https://nicaraguainformate.com/noticias' },
 };
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
