@@ -3,7 +3,7 @@ import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
   title: 'Sobre Nosotros | Nicaragua Informate',
-  description: 'Conoce al equipo detrás de Nicaragua Informate. Periodismo de precisión desde Masaya, Nicaragua.',
+  description: 'Conoce al equipo editorial de Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Managua, Nicaragua.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
 
@@ -14,7 +14,7 @@ export default function NosotrosPage() {
         Nicaragua Informate es un medio de comunicación digital fundado en 2025, dedicado a ofrecer cobertura periodística rigurosa, verificada e independiente sobre los acontecimientos más relevantes de Nicaragua y la región centroamericana.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7 }}>
-        Operamos desde Estelí, Nicaragua, y nuestro compromiso es con la verdad, la transparencia y el derecho de los ciudadanos a estar bien informados. Publicamos contenido original las 24 horas del día, los 7 días de la semana, cubriendo las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales.
+        Operamos desde Managua, Nicaragua, y nuestro compromiso es con la verdad, la transparencia y el derecho de los ciudadanos a estar bien informados. Publicamos contenido original las 24 horas del día, los 7 días de la semana, cubriendo las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
@@ -108,7 +108,7 @@ export default function NosotrosPage() {
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem', margin: '0.5rem 0 1.5rem' }}>
         {[
-          { icon: 'fa-map-marker-alt', label: 'Dirección', val: 'Estelí, Nicaragua, Centroamérica' },
+          { icon: 'fa-map-marker-alt', label: 'Dirección', val: 'Managua, Nicaragua, Centroamérica' },
           { icon: 'fa-envelope', label: 'Correo editorial', val: 'redaccion@nicaraguainformate.com' },
           { icon: 'fa-globe', label: 'Sitio web', val: 'www.nicaraguainformate.com' },
         ].map(c => (

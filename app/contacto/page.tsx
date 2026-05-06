@@ -24,9 +24,9 @@ export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
       {/* Intro */}
-      <p style={{ fontSize: '1.05rem', color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+      <p style={{ color: '#cbd5e1', marginBottom: '2.5rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte. 
-        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Masaya.
+        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Managua.
       </p>
 
       {/* Location Card with Map */}
@@ -35,11 +35,11 @@ export default function ContactoPage() {
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <i className="fas fa-map-marker-alt" style={{ color: '#fff', fontSize: 20 }} />
           </div>
-          <div>
-            <h3 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 700, marginBottom: 4 }}>Oficinas Principales</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <h3 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Masaya, Nicaragua<br />
-              <span style={{ color: '#cbd5e1' }}>Cerca del Parque Central de Masaya</span>
+              Managua, Nicaragua<br />
+              <span style={{ color: '#cbd5e1' }}>Capital de la República</span>
             </p>
           </div>
         </div>
@@ -47,12 +47,12 @@ export default function ContactoPage() {
         {/* Map Embed */}
         <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.7424!2d-86.2966!3d11.9739!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f740f5b7c0b8e4d%3A0x8f740f5b7c0b8e4d!2sMasaya%2C%20Nicaragua!5e0!3m2!1ses!2s!4v1600000000000!5m2!1ses!2s"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124866.52731518178!2d-86.35338166299863!3d12.140889218274712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f7155e81d77759d%3A0x6001256191c94485!2sManagua%2C%20Nicaragua!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
             width="100%" 
             height="250" 
             style={{ border: 0 }} 
-            allowFullScreen 
-            loading="lazy"
+            allowFullScreen={false} 
+            loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>

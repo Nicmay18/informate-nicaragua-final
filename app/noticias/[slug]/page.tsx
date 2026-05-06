@@ -131,15 +131,28 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     image: n.imagen || 'https://nicaraguainformate.com/logo.png',
     datePublished: fechaISO,
     dateModified: fechaMod,
-    author: { '@type': 'Person', name: autor, url: 'https://nicaraguainformate.com' },
+    author: {
+      '@type': 'Person',
+      name: autor,
+      url: 'https://nicaraguainformate.com/nosotros',
+      jobTitle: n.autorRol || 'Periodista',
+    },
     publisher: {
       '@type': 'Organization',
       name: 'Nicaragua Informate',
-      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' },
+      url: 'https://nicaraguainformate.com',
+      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png', width: 512, height: 512 },
+      sameAs: [
+        'https://facebook.com/profile.php?id=61578261125687',
+        'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
+        'https://t.me/+fHHjncJqMQM3NjZh',
+      ],
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     articleSection: n.categoria || 'General',
     wordCount,
+    isAccessibleForFree: !isPremium,
+    inLanguage: 'es',
   };
 
   let contentIsHTML = false;
@@ -162,7 +175,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -174,22 +190,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         ],
       }) }} />
 
-      <div id="readProgress" style={{ position: 'fixed', top: 0, left: 0, height: 3, background: '#8c1d18', zIndex: 1001, width: '0%', transition: 'width 0.1s linear' }} />
+      <div id="readProgress" className="read-progress" />
 
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,253,249,0.97)', backdropFilter: 'blur(16px)', borderBottom: '2px solid #e5e0d8' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
+      <header className="masthead" style={{ position: 'relative', zIndex: 50, background: 'rgba(255,253,249,0.97)', borderBottom: '2px solid #e5e0d8' }}>
+        <div className="masthead-inner">
+          <Link href="/" className="masthead-brand">
             <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 34, height: 34, borderRadius: 8, objectFit: 'cover' }} />
-            <span style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 20, fontWeight: 700, letterSpacing: '-0.03em', color: '#8c1d18', lineHeight: 1 }}>
-              Nicaragua <span style={{ color: '#18181b' }}>Informate</span>
+            <span className="masthead-brand-text">
+              Nicaragua <span style={{ color: 'var(--ink)' }}>Informate</span>
             </span>
           </Link>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Link href="/noticias" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', background: 'rgba(140,29,24,0.06)', color: '#8c1d18', border: '1px solid rgba(140,29,24,0.15)' }}>
+          <nav className="masthead-nav">
+            <Link href="/noticias" className="nav-btn" style={{ background: 'rgba(140,29,24,0.06)', color: 'var(--brand)', borderColor: 'rgba(140,29,24,0.15)' }}>
               <i className="fas fa-newspaper" style={{ fontSize: 11 }} /> Noticias
             </Link>
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', border: '1px solid #ddd6ce', color: '#5b5b5f' }}>
+            <Link href="/" className="nav-btn">
               <i className="fas fa-house" style={{ fontSize: 11 }} /> Inicio
             </Link>
           </nav>
@@ -320,6 +336,23 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               </div>
             </>
           )}
+
+          {/* Author Box - E-E-A-T */}
+          <div className="author-box" style={{ marginTop: 48, padding: '24px 28px', background: '#f7f4ee', border: '1px solid #ddd6ce', borderRadius: 12, display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18 0%,#6f1713 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 20, fontWeight: 700, flexShrink: 0 }}>
+              {autorInitial}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#18181b', marginBottom: 2 }}>{autor}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#8c1d18', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>{n.autorRol || 'Periodista'}</div>
+              <p style={{ fontSize: 13, color: '#5b5b5f', lineHeight: 1.6, margin: 0 }}>
+                Periodista de Nicaragua Informate. Comprometida con el rigor informativo, la verificación de fuentes y el periodismo ético al servicio de la ciudadanía.
+              </p>
+              <Link href="/nosotros" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 10, fontSize: 12, fontWeight: 600, color: '#8c1d18', textDecoration: 'none' }}>
+                Ver equipo editorial <i className="fas fa-arrow-right" style={{ fontSize: 10 }} />
+              </Link>
+            </div>
+          </div>
         </article>
 
         {/* Sidebar */}
@@ -443,6 +476,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 <Link href="/nosotros" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Sobre Nosotros</Link>
                 <Link href="/privacidad" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Privacidad</Link>
+                <Link href="/cookies" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Cookies</Link>
                 <Link href="/terminos" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Términos de Uso</Link>
                 <Link href="/politica-editorial" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13 }}>Política Editorial</Link>
               </div>

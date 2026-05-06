@@ -801,6 +801,17 @@ ul { list-style: none; }
   .fab-container { bottom: 80px !important; right: 16px !important; gap: 10px !important; }
   /* Mobile sidebar sections */
   .mobile-sidebar-sections { display: flex !important; flex-direction: column; gap: 20px; margin-top: 24px; }
+  /* Fix sticky header overlap in mobile */
+  .masthead { position: relative !important; top: auto !important; }
+  /* Fix layout padding in mobile */
+  .layout { padding: 8px !important; }
+  .article-wrap { padding: 16px 12px 32px !important; }
+  /* Fix font sizes for mobile */
+  .masthead-brand-text { font-size: 1.1rem !important; }
+  .nav-btn { padding: 6px 10px !important; font-size: 11px !important; }
+  .article-theme-toggle { width: 36px !important; height: 36px !important; }
+  .footer-bottom-content { flex-direction: column; align-items: flex-start; text-align: left; }
+  .footer-bottom-content .copyright { font-size: 11px; margin-bottom: 8px; }
   .whatsapp-btn-float span { display: none; }
   .post-nav-grid { grid-template-columns: 1fr; }
   .author-box { padding: 16px; }
@@ -808,6 +819,10 @@ ul { list-style: none; }
   .legal-page-shell { padding: 12px 14px 24px; }
   .legal-page-title { font-size: 1.4rem; }
   .legal-page-content { font-size: 0.95rem; line-height: 1.7; }
+  /* Footer deep tweaks */
+  .footer-col h4 { font-size: 0.75rem; margin-bottom: 12px; padding-bottom: 8px; }
+  .footer-col li a { font-size: 0.85rem; }
+  .footer-social-unified { width: 32px; height: 32px; font-size: 13px; }
 }
 @media (max-width: 600px) {
   .header-inner { padding: 8px 12px; }
@@ -815,6 +830,14 @@ ul { list-style: none; }
   .layout { padding: 10px 10px 20px; }
   .section-title { font-size: 1.5rem; }
   .footer-sections { grid-template-columns: 1fr; }
+  /* Fix sticky header overlap in mobile */
+  .masthead { position: relative !important; top: auto !important; }
+  .article-site-footer { margin-top: 40px !important; padding: 32px 16px 24px !important; }
+  .footer-masthead { font-size: 16px !important; }
+  .footer-tagline { font-size: 11px !important; }
+  .article-footer-social { gap: 12px !important; }
+  .article-footer-social a { width: 32px !important; height: 32px !important; font-size: 14px !important; }
+  .footer-legal { font-size: 10px !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
