@@ -72,8 +72,8 @@ export function buildOrganizationJsonLd(): WithContext<NewsMediaOrganization> {
     ],
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Masaya',
-      addressRegion: 'Masaya',
+      addressLocality: 'Managua',
+      addressRegion: 'Managua',
       addressCountry: 'NI',
     },
     contactPoint: {
