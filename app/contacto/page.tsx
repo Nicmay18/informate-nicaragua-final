@@ -3,7 +3,7 @@ import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
   title: 'Contacto | Nicaragua Informate',
-  description: 'Contacta a Nicaragua Informate. Ubicación en Masaya, Nicaragua. Redacción: redaccion@nicaraguainformate.com. Horario: Lunes a Viernes 8:00 - 18:00',
+  description: 'Contacta a Nicaragua Informate. Ubicación en Estelí, Nicaragua. Redacción: redaccion@nicaraguainformate.com. Horario: Lunes a Viernes 8:00 - 18:00',
   alternates: { canonical: 'https://nicaraguainformate.com/contacto' },
 };
 
@@ -26,7 +26,7 @@ export default function ContactoPage() {
       {/* Intro */}
       <p style={{ color: '#cbd5e1', marginBottom: '2.5rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte. 
-        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Managua.
+        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Estelí.
       </p>
 
       {/* Location Card with Map */}
@@ -38,8 +38,8 @@ export default function ContactoPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <h3 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Managua, Nicaragua<br />
-              <span style={{ color: '#cbd5e1' }}>Capital de la República</span>
+              Estelí, Nicaragua<br />
+              <span style={{ color: '#cbd5e1' }}>Departamento de Estelí</span>
             </p>
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function ContactoPage() {
         {/* Map Embed */}
         <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124866.52731518178!2d-86.35338166299863!3d12.140889218274712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f7155e81d77759d%3A0x6001256191c94485!2sManagua%2C%20Nicaragua!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62288.01234567!2d-86.36!3d13.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f71249e5c41c0c3%3A0x5a0e7f1e0e3a6b0e!2sEstel%C3%AD%2C%20Nicaragua!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
             width="100%" 
             height="250" 
             style={{ border: 0 }} 

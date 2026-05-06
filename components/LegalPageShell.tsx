@@ -30,7 +30,7 @@ const FOOTER_COLS = [
     { label: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com' },
     { label: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com' },
     { label: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com' },
-    { label: 'Managua, Nicaragua', href: '#' },
+    { label: 'Estelí, Nicaragua', href: '#' },
   ]},
 ];
 

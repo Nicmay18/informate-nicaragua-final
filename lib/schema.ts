@@ -72,8 +72,8 @@ export function buildOrganizationJsonLd(): WithContext<NewsMediaOrganization> {
     ],
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Managua',
-      addressRegion: 'Managua',
+      addressLocality: 'Estelí',
+      addressRegion: 'Estelí',
       addressCountry: 'NI',
     },
     contactPoint: {

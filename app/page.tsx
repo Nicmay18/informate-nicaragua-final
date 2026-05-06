@@ -105,7 +105,7 @@ export default async function HomePage() {
             <i className="fas fa-calendar-alt" style={{ color: '#e53e3e', fontSize: 11 }} />
             {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             <span style={{ color: '#475569' }}>|</span>
-            <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', fontSize: 11 }} /> Managua, Nicaragua
+            <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', fontSize: 11 }} /> Estelí, Nicaragua
           </span>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook"
@@ -421,7 +421,7 @@ export default async function HomePage() {
               <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contacto</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
-                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> Managua, Nicaragua
+                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> Estelí, Nicaragua
                 </div>
                 <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }} className="footer-link">
                   <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2, flexShrink: 0 }} /> redaccion@nicaraguainformate.com
@@ -444,7 +444,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, fontSize: 12, color: '#334155' }}>
-            <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados. Managua, Nicaragua.</span>
+            <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados. Estelí, Nicaragua.</span>
             <a href="/feed.xml" style={{ color: '#f97316', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
               <i className="fas fa-rss" /> Feed RSS
             </a>

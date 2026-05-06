@@ -53,7 +53,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
         <div className="top-bar-inner">
           <div className="top-bar-left">
             <span><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
-            <span><i className="fas fa-map-marker-alt" style={{ color: '#e53e3e' }} /> Managua, Nicaragua</span>
+            <span><i className="fas fa-map-marker-alt" style={{ color: '#e53e3e' }} /> Estelí, Nicaragua</span>
           </div>
           <div className="top-bar-right">
             <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook" className="top-icon-hover">

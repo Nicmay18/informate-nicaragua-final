@@ -485,7 +485,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: 13, marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,0.07)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Contacto</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <span style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b' }}>
-                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2 }} /> Managua, Nicaragua
+                  <i className="fas fa-map-marker-alt" style={{ color: '#e53e3e', marginTop: 2 }} /> Estelí, Nicaragua
                 </span>
                 <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#64748b', textDecoration: 'none', wordBreak: 'break-all' }}>
                   <i className="fas fa-envelope" style={{ color: '#e53e3e', marginTop: 2 }} /> redaccion@nicaraguainformate.com
