@@ -47,7 +47,6 @@ async function fetchCity(lat: number, lon: number): Promise<WData | null> {
 export default function WeatherWidget() {
   const [cityIdx, setCityIdx]   = useState(0);
   const [data, setData]         = useState<WData | null>(null);
-  const [slide, setSlide]       = useState(0);
   const [allTemps, setAllTemps] = useState<(number | null)[]>(new Array(CITIES.length).fill(null));
   const [loading, setLoading]   = useState(false);
   const [paused, setPaused]     = useState(false);
@@ -67,24 +66,18 @@ export default function WeatherWidget() {
     });
   }, [loadCity]);
 
-  // Auto-slide info cards every 3.5 s
-  useEffect(() => {
-    const t = setInterval(() => setSlide(p => (p + 1) % 3), 3500);
-    return () => clearInterval(t);
-  }, []);
-
-  // Auto-cycle cities every 7 s
+  // Auto-cycle cities every 10 s (más tiempo para ver los datos)
   useEffect(() => {
     if (paused) return;
     const t = setInterval(() => {
       setCityIdx(prev => { const next = (prev + 1) % CITIES.length; loadCity(next); return next; });
-    }, 7000);
+    }, 10000);
     return () => clearInterval(t);
   }, [loadCity, paused]);
 
   const select = (i: number) => {
     setCityIdx(i); loadCity(i); setPaused(true);
-    setTimeout(() => setPaused(false), 25000);
+    setTimeout(() => setPaused(false), 30000);
   };
 
   const wx = data ? (WX[data.code] ?? { label: 'Variable', emoji: '🌡️' }) : { label: 'Cargando...', emoji: '🌡️' };
@@ -102,50 +95,44 @@ export default function WeatherWidget() {
         <span className="pulse-green" style={{ background: '#22c55e', color: '#fff', fontSize: 9, padding: '2px 8px', borderRadius: 999, fontWeight: 800, letterSpacing: '0.05em' }}>EN VIVO</span>
       </div>
 
-      {/* Sliding info panel — fixed height, opacity transitions to avoid layout shift */}
-      <div style={{ padding: '16px 16px 4px', position: 'relative', height: 110, opacity: loading ? 0.5 : 1, transition: 'opacity 0.3s' }}>
-
-        {/* Slide 0 — Temperature */}
-        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 0 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 0 ? 'auto' : 'none' }}>
-          <div style={{ fontSize: 46, lineHeight: 1 }}>{wx.emoji}</div>
+      {/* Main weather display — Temperature prominent, humidity & wind below */}
+      <div style={{ padding: '20px 16px', opacity: loading ? 0.5 : 1, transition: 'opacity 0.3s' }}>
+        {/* Temperature — Main focus */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+          <div style={{ fontSize: 56, lineHeight: 1 }}>{wx.emoji}</div>
           <div>
-            <div style={{ fontSize: 40, fontWeight: 900, lineHeight: 1 }}>{data ? `${data.temp}°` : '--°'}</div>
-            <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>{wx.label}</div>
+            <div style={{ fontSize: 48, fontWeight: 900, lineHeight: 1 }}>{data ? `${data.temp}°` : '--°'}</div>
+            <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>{wx.label}</div>
           </div>
         </div>
 
-        {/* Slide 1 — Wind */}
-        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 1 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 1 ? 'auto' : 'none' }}>
-          <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(148,163,184,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <i className="fas fa-wind" style={{ fontSize: 24, color: '#94a3b8' }} />
-          </div>
-          <div>
-            <div style={{ fontSize: 34, fontWeight: 900, lineHeight: 1 }}>
-              {data ? data.wind : '--'} <span style={{ fontSize: 15, fontWeight: 400, color: '#94a3b8' }}>km/h</span>
+        {/* Humidity & Wind — Secondary row */}
+        <div style={{ display: 'flex', gap: 12 }}>
+          {/* Humidity */}
+          <div style={{ flex: 1, background: 'rgba(56,189,248,0.12)', borderRadius: 12, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(56,189,248,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="fas fa-droplet" style={{ fontSize: 16, color: '#38bdf8' }} />
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Velocidad del viento</div>
-          </div>
-        </div>
-
-        {/* Slide 2 — Humidity */}
-        <div style={{ position: 'absolute', inset: '16px 16px auto', display: 'flex', alignItems: 'center', gap: 16, opacity: slide === 2 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: slide === 2 ? 'auto' : 'none' }}>
-          <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(56,189,248,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <i className="fas fa-droplet" style={{ fontSize: 24, color: '#38bdf8' }} />
-          </div>
-          <div>
-            <div style={{ fontSize: 34, fontWeight: 900, lineHeight: 1 }}>
-              {data ? data.humidity : '--'} <span style={{ fontSize: 15, fontWeight: 400, color: '#94a3b8' }}>%</span>
+            <div>
+              <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1 }}>
+                {data ? data.humidity : '--'}<span style={{ fontSize: 12, fontWeight: 500, color: '#94a3b8' }}>%</span>
+              </div>
+              <div style={{ fontSize: 10, color: '#64748b', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Humedad</div>
             </div>
-            <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Humedad relativa</div>
           </div>
-        </div>
 
-        {/* Progress dots — positioned at bottom of fixed container */}
-        <div style={{ position: 'absolute', bottom: 4, left: 0, right: 0, display: 'flex', gap: 6, justifyContent: 'center' }}>
-          {[0, 1, 2].map(i => (
-            <button key={i} onClick={() => setSlide(i)}
-              style={{ width: slide === i ? 22 : 7, height: 7, borderRadius: 4, background: slide === i ? '#fbbf24' : 'rgba(255,255,255,0.2)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.35s ease' }} />
-          ))}
+          {/* Wind */}
+          <div style={{ flex: 1, background: 'rgba(148,163,184,0.12)', borderRadius: 12, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(148,163,184,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <i className="fas fa-wind" style={{ fontSize: 16, color: '#94a3b8' }} />
+            </div>
+            <div>
+              <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1 }}>
+                {data ? data.wind : '--'}<span style={{ fontSize: 12, fontWeight: 500, color: '#94a3b8' }}>km/h</span>
+              </div>
+              <div style={{ fontSize: 10, color: '#64748b', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Viento</div>
+            </div>
+          </div>
         </div>
       </div>
 
