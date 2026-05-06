@@ -1636,37 +1636,28 @@ sin texto ni marcas de agua, composición periodística"
         const texto = event.clipboardData.getData('text/plain');
         if (!texto || texto.length < 100) return;
 
-        // Limpiar y estructurar el texto
-        let textoFormateado = texto
-          .replace(/\s+/g, ' ') // Eliminar espacios múltiples
-          .replace(/([.!?])\s*([A-ZÁÉÍÓÚ])/g, '$1\n\n<p>$2') // Separar párrafos
-          .replace(/\n{3,}/g, '\n\n<p>') // Limitar saltos de línea
-          .replace(/([a-záéíóúñ])\.([a-záéíóúñ])/gi, '$1. $2') // Espacio después de punto
-          .replace(/(\d+)([a-záéíóúñ])/gi, '$1 $2'); // Espacio después de números
-
-        // Aplicar formato profesional básico
-        const parrafos = textoFormateado.split('\n').filter(p => p.trim().length > 0);
-        let resultado = '';
+        // Aplicar formato profesional directo
+        let textoFormateado = texto;
         
-        parrafos.forEach((parrafo, index) => {
-          if (parrafo.includes('<p>')) {
-            resultado += parrafo + '\n\n';
-          } else {
-            // Identificar elementos clave y formatear
-            let parrafoFormateado = parrafo;
-            
-            // Negritas para nombres propios (inician con mayúscula)
-            parrafoFormateado = parrafoFormateado.replace(/\\b[A-Z][a-záéíóúñ]+\\b/g, '<b>$&</b>');
-            
-            // Negritas para cargos/títulos importantes
-            const palabrasClave = ['falleció', 'murió', 'herido', 'accidente', 'incidente', 'autoridades', 'policía', 'ministro', 'presidente', 'fiscal', 'juez'];
-            palabrasClave.forEach(palabra => {
-              const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-              parrafoFormateado = parrafoFormateado.replace(regex, `<b>${palabra}</b>`);
-            });
-            
-            resultado += `<p>${parrafoFormateado}</p>\n\n`;
-          }
+        // Separar párrafos con etiquetas <p>
+        textoFormateado = textoFormateado.replace(/\n\n+/g, '</p><p>');
+        textoFormateado = '<p>' + textoFormateado + '</p>';
+        
+        // Negritas para nombres propios (palabras que inician con mayúscula y tienen más de 3 letras)
+        textoFormateado = textoFormateado.replace(/\b([A-ZÁÉÍÓÚÑ][a-záéíóúññ]{3,})\b/g, '<b>$1</b>');
+        
+        // Negritas para términos clave específicos
+        const terminosClave = ['Rosita', 'José Manuel López García', 'Nuevo Amanecer', 'homicidio imprudente', 'omisión de auxilio', 'Dirección de Seguridad de Tránsito Nacional'];
+        terminosClave.forEach(termino => {
+          const regex = new RegExp(termino.replace(/ /g, '\\s+'), 'g');
+          textoFormateado = textoFormateado.replace(regex, `<b>${termino}</b>`);
+        });
+        
+        // Negritas para palabras comunes importantes
+        const palabrasClave = ['falleció', 'murió', 'accidente', 'incidente', 'autoridades', 'tragedia', 'víctima', 'conductor'];
+        palabrasClave.forEach(palabra => {
+          const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
+          textoFormateado = textoFormateado.replace(regex, `<b>${palabra}</b>`);
         });
 
         // Insertar en el textarea
@@ -1674,7 +1665,7 @@ sin texto ni marcas de agua, composición periodística"
         const cursorPos = textarea.selectionStart;
         const textoAnterior = textarea.value;
         
-        textarea.value = textoAnterior.substring(0, cursorPos) + resultado + textoAnterior.substring(textarea.selectionEnd);
+        textarea.value = textoAnterior.substring(0, cursorPos) + textoFormateado + textoAnterior.substring(textarea.selectionEnd);
         
         // Actualizar contadores
         actualizarContadorPalabras();
