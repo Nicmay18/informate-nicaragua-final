@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | Nicaragua Informate',
   },
   description: 'Portal de noticias de Nicaragua con cobertura en sucesos, nacionales, deportes, internacionales, espectáculos y economía. Periodismo verificado y actualizado las 24 horas desde Estelí, Nicaragua.',
-  keywords: ['noticias nicaragua', 'periodismo nicaragua', 'sucesos nicaragua', 'noticias managua', 'deportes nicaragua', 'noticias centroamerica', 'nicaragua informate'],
+  keywords: ['noticias nicaragua', 'periodismo nicaragua', 'sucesos nicaragua', 'noticias estelí', 'deportes nicaragua', 'noticias centroamerica', 'nicaragua informate'],
   authors: [{ name: 'Nicaragua Informate', url: 'https://nicaraguainformate.com' }],
   creator: 'Nicaragua Informate',
   publisher: 'Nicaragua Informate',

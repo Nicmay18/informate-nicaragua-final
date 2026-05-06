@@ -124,6 +124,7 @@ export default async function HomePage() {
       {/* Header */}
       <header className="glass" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(140,29,24,0.15)', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', padding: '10px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>Últimas Noticias de Nicaragua</h1>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 42, height: 42, borderRadius: 8, objectFit: 'cover' }} className="logo-hover" />
             <div>
@@ -330,7 +331,7 @@ export default async function HomePage() {
               <i className="fas fa-hashtag" style={{ color: '#e53e3e' }} /> Etiquetas
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {['#Nicaragua','#Managua','#Sucesos','#Deportes','#Política','#Economía','#Cultura','#Clima','#Espectáculos','#Centroamérica'].map(tag => (
+              {['#Nicaragua','#Estelí','#Sucesos','#Deportes','#Política','#Economía','#Cultura','#Clima','#Espectáculos','#Centroamérica'].map(tag => (
                 <span key={tag} style={{ padding: '5px 12px', background: 'var(--paper)', border: '1px solid var(--border-light)', borderRadius: 999, fontSize: 12, fontWeight: 500, color: 'var(--ink-muted)', cursor: 'pointer', transition: 'all 0.2s' }} className="tag-chip">
                   {tag}
                 </span>

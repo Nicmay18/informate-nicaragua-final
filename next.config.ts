@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
       { protocol: 'https', hostname: '**.googleapis.com' },
     ],
-    unoptimized: true,
   },
   async redirects() {
     return [
@@ -36,6 +35,16 @@ const nextConfig: NextConfig = {
       {
         source: '/politica-editorial.html',
         destination: '/politica-editorial',
+        permanent: true,
+      },
+      {
+        source: '/contacto.html',
+        destination: '/contacto',
+        permanent: true,
+      },
+      {
+        source: '/cookies.html',
+        destination: '/cookies',
         permanent: true,
       },
       {
