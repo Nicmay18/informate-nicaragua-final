@@ -612,7 +612,7 @@
 
               <div class="form-group">
                 <label class="form-label">Cuerpo de la Noticia <span class="required">*</span></label>
-                <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo de la noticia. Estructura recomendada: Lead (5W), contexto nacional, desarrollo, datos duros, cierre profesional." required oninput="actualizarContadorPalabras()"></textarea>
+                <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí..." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
                   <span>Palabras: <span class="count ok" id="contadorPalabras">0</span></span>
                   <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Cumple meta AdSense (350+)</span>
@@ -1602,6 +1602,70 @@ sin texto ni marcas de agua, composición periodística"
 
     // REDACCIÓN IA MEJORADA
     // Cargar plantilla de redacción desde configuración
+    // Función para formatear automáticamente texto pegado
+    window.formatearTextoPegado = function(event) {
+      try {
+        event.preventDefault();
+        const texto = event.clipboardData.getData('text/plain');
+        if (!texto || texto.length < 100) return;
+
+        // Limpiar y estructurar el texto
+        let textoFormateado = texto
+          .replace(/\s+/g, ' ') // Eliminar espacios múltiples
+          .replace(/([.!?])\s*([A-ZÁÉÍÓÚ])/g, '$1\n\n<p>$2') // Separar párrafos
+          .replace(/\n{3,}/g, '\n\n<p>') // Limitar saltos de línea
+          .replace(/([a-záéíóúñ])\.([a-záéíóúñ])/gi, '$1. $2') // Espacio después de punto
+          .replace(/(\d+)([a-záéíóúñ])/gi, '$1 $2'); // Espacio después de números
+
+        // Aplicar formato profesional básico
+        const parrafos = textoFormateado.split('\n').filter(p => p.trim().length > 0);
+        let resultado = '';
+        
+        parrafos.forEach((parrafo, index) => {
+          if (parrafo.includes('<p>')) {
+            resultado += parrafo + '\n\n';
+          } else {
+            // Identificar elementos clave y formatear
+            let parrafoFormateado = parrafo;
+            
+            // Negritas para nombres propios (inician con mayúscula)
+            parrafoFormateado = parrafoFormateado.replace(/\b([A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)*\b/g, '<b>$1</b>');
+            
+            // Negritas para cargos/títulos importantes
+            const palabrasClave = ['falleció', 'murió', 'herido', 'accidente', 'incidente', 'autoridades', 'policía', 'ministro', 'presidente', 'fiscal', 'juez'];
+            palabrasClave.forEach(palabra => {
+              const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
+              parrafoFormateado = parrafoFormateado.replace(regex, `<b>${palabra}</b>`);
+            });
+            
+            resultado += `<p>${parrafoFormateado}</p>\n\n`;
+          }
+        });
+
+        // Insertar en el textarea
+        const textarea = document.getElementById('contenido');
+        const cursorPos = textarea.selectionStart;
+        const textoAnterior = textarea.value;
+        
+        textarea.value = textoAnterior.substring(0, cursorPos) + resultado + textoAnterior.substring(textarea.selectionEnd);
+        
+        // Actualizar contadores
+        actualizarContadorPalabras();
+        actualizarSeoPreview();
+        
+        showToast('✅ Texto formateado profesionalmente', 'success');
+        
+      } catch (error) {
+        console.error('Error formateando texto:', error);
+        // Si falla el formateo, pegar texto normal
+        const texto = event.clipboardData.getData('text/plain');
+        const textarea = document.getElementById('contenido');
+        const cursorPos = textarea.selectionStart;
+        textarea.value = textarea.value.substring(0, cursorPos) + texto + textarea.value.substring(textarea.selectionEnd);
+        actualizarContadorPalabras();
+      }
+    };
+
     window.cargarPlantillaRedaccion = async function() {
       try {
         const status = document.getElementById('iaStatus');
@@ -1660,7 +1724,7 @@ sin texto ni marcas de agua, composición periodística"
       status.textContent = 'Conectando con Gemini y construyendo prompt profesional...';
 
       try {
-        const GEMINI_KEY = 'AIzaSyCQituTaOZOhktUw71r088NYzAe2XLbzBk';
+        const GEMINI_KEY = 'AIzaSyC7uL9x2kQ8rTm3vN5w7pKs1jH4zG8';
         
         const prompt = `Actúa como un corresponsal senior de una agencia internacional de noticias (tipo Reuters o AP) destacado en Nicaragua. Redacta una noticia basada en el título: '${titulo}'.
 
