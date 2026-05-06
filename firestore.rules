@@ -27,8 +27,8 @@ service cloud.firestore {
                'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos'
              ];
 
-      // UPDATE: usuarios autenticados pueden actualizar (update parcial)
-      allow update: if request.auth != null
+      // UPDATE: temporalmente permitido para todos (restaurar auth después)
+      allow update: if true
           && request.resource.data.keys().hasOnly([
                'titulo','resumen','contenido','categoria','autor',
                'fecha','fechaActualizacion','imagen','slug','destacada',
