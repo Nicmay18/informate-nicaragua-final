@@ -1,14 +1,14 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 
-// Radios de Nicaragua - Streams funcionales
+// Radios de Nicaragua - Streams verificados Mayo 2026
 const EMISORAS = [
-  { name: 'La Buenísima',      url: 'https://radios.sonidoo.com:8004/stream',         genre: 'Variedad / Noticias' },
-  { name: 'Radio Clásica',     url: 'https://stream.zeno.fm/4u5r885zng8uv',          genre: 'Clásica' },
-  { name: 'Viva FM',           url: 'https://stream.zeno.fm/v1zpedmrg48uv',          genre: 'Pop / Juvenil' },
-  { name: 'Radio La Primerísima', url: 'https://stream.zeno.fm/wn6rx8zng48uv',       genre: 'Noticias / Variedad' },
-  { name: 'Radio Onda Digital', url: 'https://stream.zeno.fm/6r0d4nzng48uv',        genre: 'Variedad' },
-  { name: 'Radio Maranatha',   url: 'https://stream.zeno.fm/8wr4r8zng48uv',          genre: 'Cristiana' },
+  { name: 'Radio Nicaragua',     url: 'https://stream.zeno.fm/yn65fsaurfhvv',         genre: 'Noticias / Oficial' },
+  { name: 'La Nueva Radio Ya',   url: 'https://stream.zeno.fm/0r0xa792kwzuv',        genre: 'Noticias / Popular' },
+  { name: 'Radio Corporación',   url: 'https://stream.zeno.fm/pns44q8hv08uv',        genre: 'Noticias / Opinión' },
+  { name: 'La Cariñosa FM',      url: 'https://stream.zeno.fm/ephqa2snp1zuv',        genre: 'Romántica / Baladas' },
+  { name: 'Radio Sandino',       url: 'https://stream.zeno.fm/dn4mqg0sv08uv',        genre: 'Variedad / Cultura' },
+  { name: 'Stereo Romance',      url: 'https://stream.zeno.fm/nt3ngdhcry8uv',        genre: 'Romántica' },
 ];
 
 export default function RadioBar() {
@@ -33,15 +33,22 @@ export default function RadioBar() {
     setOpen(false);
     if (audioRef.current) {
       audioRef.current.src = EMISORAS[idx].url;
+      const timeout = setTimeout(() => {
+        setLoading(false);
+        setError(`${EMISORAS[idx].name} no responde. Probá otra emisora.`);
+        setPlaying(false);
+      }, 10000);
       audioRef.current.play()
         .then(() => {
+          clearTimeout(timeout);
           setPlaying(true);
           setLoading(false);
         })
         .catch((e) => {
+          clearTimeout(timeout);
           setPlaying(false);
           setLoading(false);
-          setError('No se pudo reproducir la radio');
+          setError(`No se pudo reproducir ${EMISORAS[idx].name}`);
           console.error('Radio play error:', e);
         });
     }
