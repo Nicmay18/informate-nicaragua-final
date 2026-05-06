@@ -789,6 +789,7 @@
               </select>
             </div>
             <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Generar</button>
+            <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857);"><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
           </div>
           <div id="iaStatus" style="margin-top: 12px; font-size: 13px; color: #fbbf24; font-weight: 500;"></div>
         </div>
@@ -1600,6 +1601,52 @@ sin texto ni marcas de agua, composición periodística"
     setTimeout(() => { if (document.getElementById('configTgToken')) cargarConfiguracion(); }, 1000);
 
     // REDACCIÓN IA MEJORADA
+    // Cargar plantilla de redacción desde configuración
+    window.cargarPlantillaRedaccion = async function() {
+      try {
+        const status = document.getElementById('iaStatus');
+        const btn = document.getElementById('btnCargarPlantilla');
+        btn.disabled = true; 
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
+        status.textContent = 'Cargando plantilla de redacción profesional...';
+
+        // Obtener plantilla desde Firestore
+        const doc = await db.collection('config').doc('plantilla_redaccion').get();
+        if (doc.exists) {
+          const plantilla = doc.data().plantilla;
+          
+          // Transferir al formulario principal
+          document.getElementById('titulo').value = plantilla.titulo || '';
+          document.getElementById('contenido').value = plantilla.contenido || '';
+          document.getElementById('resumen').value = plantilla.resumen || '';
+          document.getElementById('categoria').value = plantilla.categoria || 'Sucesos';
+          document.getElementById('departamento').value = plantilla.departamento || 'Managua';
+          document.getElementById('pieFoto').value = plantilla.pieFoto || '';
+          
+          // Actualizar vistas previas
+          actualizarSeoPreview();
+          actualizarContadorTitulo();
+          actualizarContadorPalabras();
+          
+          // Cambiar a tab de nueva noticia
+          showTab('nueva-tab', document.querySelectorAll('.nav-link')[1]);
+          
+          showToast('✅ Plantilla de redacción cargada correctamente', 'success');
+          status.textContent = 'Plantilla lista para editar y publicar';
+        } else {
+          showToast('❌ No se encontró la plantilla en configuración', 'error');
+          status.textContent = 'Error: Plantilla no disponible';
+        }
+      } catch (error) {
+        console.error('Error cargando plantilla:', error);
+        showToast('❌ Error al cargar plantilla: ' + error.message, 'error');
+      } finally {
+        const btn = document.getElementById('btnCargarPlantilla');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-file-alt"></i> Cargar Plantilla';
+      }
+    };
+
     window.redactarConIA = async function() {
       const titulo = document.getElementById('iaTitulo').value.trim();
       const departamento = document.getElementById('iaDepartamento').value;
