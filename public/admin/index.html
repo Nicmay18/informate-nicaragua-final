@@ -654,6 +654,37 @@
                 </div>
               </div>
 
+              <div class="form-group">
+                <label class="form-label">Vista Previa Redes Sociales</label>
+                <div style="display: grid; gap: 12px;">
+                  <!-- Telegram Preview -->
+                  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                      <div style="width: 24px; height: 24px; background: #0088cc; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">T</div>
+                      <span style="font-size: 12px; font-weight: 600; color: #666;">Telegram</span>
+                    </div>
+                    <div style="font-size: 14px; font-weight: 600; color: #000; margin-bottom: 4px;" id="telegramTitle">Título de la noticia</div>
+                    <div style="font-size: 13px; color: #555; line-height: 1.4;" id="telegramDesc">Descripción de la noticia...</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 6px;">nicaraguainformate.com</div>
+                  </div>
+
+                  <!-- Facebook Preview -->
+                  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                    <div style="height: 120px; background: linear-gradient(135deg, #1877f2, #0e5fc7); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">
+                      📷 Imagen de la noticia
+                    </div>
+                    <div style="padding: 12px;">
+                      <div style="font-size: 14px; font-weight: 600; color: #000; margin-bottom: 4px;" id="facebookTitle">Título de la noticia</div>
+                      <div style="font-size: 13px; color: #555; line-height: 1.4;" id="facebookDesc">Descripción de la noticia...</div>
+                      <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+                        <div style="width: 16px; height: 16px; background: #1877f2; border-radius: 2px;"></div>
+                        <span style="font-size: 11px; color: #666;">nicaraguainformate.com</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="form-row">
                 <div class="form-group">
                   <label class="checkbox-wrapper" style="width: 100%;">
@@ -1142,9 +1173,20 @@ sin texto ni marcas de agua, composición periodística"
       const titulo = document.getElementById('titulo').value || 'Título de la noticia aparecerá aquí';
       const resumen = document.getElementById('resumen').value || 'La descripción de la noticia aparecerá aquí. Optimiza el resumen para mejorar el CTR en resultados de búsqueda.';
       const slug = generarSlug(titulo).substring(0, 40);
+      
+      // Actualizar SEO Preview
       document.getElementById('seoTitle').textContent = titulo.length > 60 ? titulo.substring(0, 57) + '...' : titulo;
       document.getElementById('seoDesc').textContent = resumen.length > 160 ? resumen.substring(0, 157) + '...' : resumen;
       document.getElementById('seoUrl').textContent = `nicaraguainformate.com › noticias › ${slug}`;
+      
+      // Actualizar Social Media Previews
+      // Telegram
+      document.getElementById('telegramTitle').textContent = titulo.length > 100 ? titulo.substring(0, 97) + '...' : titulo;
+      document.getElementById('telegramDesc').textContent = resumen.length > 200 ? resumen.substring(0, 197) + '...' : resumen;
+      
+      // Facebook
+      document.getElementById('facebookTitle').textContent = titulo.length > 80 ? titulo.substring(0, 77) + '...' : titulo;
+      document.getElementById('facebookDesc').textContent = resumen.length > 120 ? resumen.substring(0, 117) + '...' : resumen;
     };
 
     window.actualizarContadorTitulo = function() {
