@@ -708,8 +708,8 @@
                 </div>
                 <div class="form-group">
                   <label class="checkbox-wrapper" style="width: 100%;">
-                    <input type="checkbox" id="enviarFacebook">
-                    <div class="checkbox-content"><h4>📘 Publicar en Facebook</h4><p>Compartir en páginas oficiales</p></div>
+                    <input type="checkbox" id="enviarFacebook" checked>
+                    <div class="checkbox-content"><h4>📘 Preparar Facebook y WhatsApp</h4><p>Generar titular, descripción y links para copiar</p></div>
                   </label>
                 </div>
               </div>
@@ -733,6 +733,36 @@
                   <div><div style="font-weight: 600; font-size: 13px;" id="statusRedesTitulo">Procesando...</div><div style="font-size: 12px; color: var(--gray-500);" id="statusRedesTexto">Preparando publicación</div></div>
                 </div>
                 <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width: 0%"></div></div>
+              </div>
+
+              <div id="panelCompartirManual" style="display: none; margin-top: 20px; padding: 18px; background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;">
+                  <div>
+                    <h3 style="font-size: 16px; margin: 0 0 4px; color: var(--gray-900);">Publicación lista para redes</h3>
+                    <p style="font-size: 12px; margin: 0; color: var(--gray-500);">Copia el texto o abre el enlace para publicar manualmente.</p>
+                  </div>
+                  <button type="button" class="btn btn-ghost" onclick="document.getElementById('panelCompartirManual').style.display='none'"><i class="fas fa-times"></i></button>
+                </div>
+                <div style="display: grid; gap: 12px;">
+                  <div>
+                    <label class="form-label" style="font-size: 12px;">Titular profesional</label>
+                    <div id="shareTitulo" style="padding: 10px 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); font-weight: 700; color: var(--gray-900);"></div>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-size: 12px;">Descripción para redes</label>
+                    <div id="shareDescripcion" style="padding: 10px 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); color: var(--gray-700); line-height: 1.5;"></div>
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-size: 12px;">Texto completo para copiar</label>
+                    <textarea id="shareTextoCompleto" class="form-textarea" readonly style="min-height: 120px; font-size: 13px;"></textarea>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <button type="button" class="btn btn-primary" onclick="copiarTextoRed('shareTextoCompleto')"><i class="fas fa-copy"></i><span>Copiar texto</span></button>
+                    <a id="shareWhatsappLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i><span>Abrir WhatsApp</span></a>
+                    <a id="shareFacebookLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fab fa-facebook"></i><span>Abrir Facebook</span></a>
+                    <a id="shareNoticiaLink" class="btn btn-ghost" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i><span>Ver noticia</span></a>
+                  </div>
+                </div>
               </div>
             </form>
           </div>
@@ -1148,6 +1178,41 @@ sin texto ni marcas de agua, composición periodística"
       return titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
     }
 
+    function crearDescripcionRedes(resumen, contenido) {
+      const texto = (resumen || contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!texto) return 'Lee la noticia completa en Nicaragua Informate.';
+      return texto.length > 180 ? texto.substring(0, 177).trim() + '...' : texto;
+    }
+
+    function mostrarPanelCompartir(noticia) {
+      const panel = document.getElementById('panelCompartirManual');
+      const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+      const titulo = noticia.titulo;
+      const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
+      const texto = `${titulo}\n\n${descripcion}\n\nLeer noticia completa:\n${url}`;
+      document.getElementById('shareTitulo').textContent = titulo;
+      document.getElementById('shareDescripcion').textContent = descripcion;
+      document.getElementById('shareTextoCompleto').value = texto;
+      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`${titulo}\n\n${descripcion}`)}`;
+      document.getElementById('shareNoticiaLink').href = url;
+      panel.style.display = 'block';
+      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    window.copiarTextoRed = async function(id) {
+      const el = document.getElementById(id);
+      const texto = el.value || el.textContent || '';
+      try {
+        await navigator.clipboard.writeText(texto);
+        showToast('Texto copiado para redes', 'success');
+      } catch {
+        el.select();
+        document.execCommand('copy');
+        showToast('Texto copiado para redes', 'success');
+      }
+    };
+
     function formatearFecha(fecha) {
       if (!fecha) return "—";
       if (fecha.toDate) return fecha.toDate().toLocaleString("es-NI", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -1376,7 +1441,7 @@ sin texto ni marcas de agua, composición periodística"
       const imagenUrl = document.getElementById('imagenUrl').value.trim();
       const pieFoto = document.getElementById('pieFoto').value.trim();
       const enviarTelegram = document.getElementById('enviarTelegram').checked;
-      const enviarFacebook = document.getElementById('enviarFacebook').checked;
+      const prepararRedes = document.getElementById('enviarFacebook').checked;
       const destacada = document.getElementById('destacada').checked;
 
       if (!titulo || !categoria || !contenido || !imagenUrl) { showToast('Completa todos los campos obligatorios', 'error'); return; }
@@ -1419,15 +1484,15 @@ sin texto ni marcas de agua, composición periodística"
             progress = 60; progressBar.style.width = progress + '%';
             try { await postToApi('telegram', { noticia: noticiaData }); showToast('Enviado a Telegram', 'success'); } catch (err) { showToast('Error Telegram: ' + err.message, 'warning'); }
           }
-          if (enviarFacebook) {
-            document.getElementById('statusRedesTitulo').textContent = 'Publicando en Facebook...';
-            document.getElementById('statusRedesTexto').textContent = 'Graph API...';
+          if (prepararRedes) {
+            document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
+            document.getElementById('statusRedesTexto').textContent = 'Generando WhatsApp y Facebook...';
             progress = 90; progressBar.style.width = progress + '%';
-            try { await postToApi('facebook', { noticia: noticiaData }); showToast('Publicado en Facebook', 'success'); } catch (err) { showToast('Error Facebook: ' + err.message, 'warning'); }
+            mostrarPanelCompartir(noticiaData);
           }
           progressBar.style.width = '100%';
         }
-        limpiarFormulario();
+        if (!prepararRedes) limpiarFormulario();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
       } catch (error) {
