@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Panel Editorial | NicaraguaInformate.com</title>
-  <meta name="version" content="5.0.0">
+  <meta name="version" content="5.0.1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -1394,7 +1397,7 @@ sin texto ni marcas de agua, composición periodística"
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido.substring(0, 150) + '...',
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
-          autor: auth.currentUser?.email || 'Redacción', destacada, slug, palabras
+          autor: 'Directora Editorial', destacada, slug, palabras
         };
         let esNueva = !noticiaId;
 
@@ -1652,7 +1655,7 @@ sin texto ni marcas de agua, composición periodística"
         parrafos.forEach(parrafo => {
           if (parrafo.trim()) {
             // Negritas para nombres propios (inician con mayúscula)
-            parrafo = parrafo.replace(/\b([A-ZÁÉÍÓÚÑ][a-záéíóúññ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúññ]+)*\b/g, '<b>$1</b>');
+            parrafo = parrafo.replace(/[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g, '<b>$&</b>');
             
             // Negritas para términos clave
             const palabrasClave = ['falleció', 'murió', 'herido', 'accidente', 'incidente', 'autoridades', 'policía', 'tragedia', 'víctima', 'conductor', 'homicidio imprudente', 'omisión de auxilio'];

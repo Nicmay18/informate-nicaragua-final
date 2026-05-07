@@ -256,7 +256,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: '#9f968d', flexWrap: 'wrap' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="far fa-calendar" style={{ color: '#8c1d18' }} /> {fechaStr}</span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="far fa-clock" style={{ color: '#8c1d18' }} /> {readTime} min de lectura</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><i className="fas fa-align-left" style={{ color: '#8c1d18' }} /> {wordCount} palabras</span>
               </div>
             </div>
           </header>
