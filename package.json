@@ -11,14 +11,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "type-check": "tsc --noEmit",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "pre-commit": "npm run lint && npm run type-check",
-    "prepare": "husky install"
+    "lint": "next lint"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",

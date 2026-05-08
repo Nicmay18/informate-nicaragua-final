@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
+  "nodeVersion": "20.x",
+  "installCommand": "npm install --legacy-peer-deps",
+  "headers": [
+    {
+      "source": "/feed.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }]
+    }
+  ]
+}
