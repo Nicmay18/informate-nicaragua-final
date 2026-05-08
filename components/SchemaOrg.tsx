@@ -1,75 +1,66 @@
 import { Article } from '@/lib/types';
+import { buildNewsArticleJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 
+/**
+ * Props para ArticleJsonLd
+ */
 interface ArticleJsonLdProps {
   article: Article;
+  url?: string;
 }
 
-export function ArticleJsonLd({ article }: ArticleJsonLdProps) {
-  const wordCount = article.content.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length;
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: article.title,
-    description: article.excerpt || article.title,
-    image: article.image,
-    datePublished: article.date,
-    dateModified: article.date,
-    author: {
-      '@type': 'Person',
-      name: article.author,
-      url: 'https://nicaraguainformate.com',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Nicaragua Informate',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
+/**
+ * Componente para JSON-LD de artículo de noticias
+ * @param props Props del componente
+ * @returns Script tag con JSON-LD
+ */
+export function ArticleJsonLd({ article, url }: ArticleJsonLdProps) {
+  if (!article || !article.titulo) {
+    return null;
+  }
+
+  try {
+    const jsonLd = buildNewsArticleJsonLd(
+      {
+        titulo: article.titulo,
+        resumen: article.resumen,
+        imagen: article.imagen,
+        fecha: article.fecha,
+        autor: article.autor,
+        categoria: article.categoria,
+        contenido: article.contenido,
       },
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://nicaraguainformate.com/noticias/${article.slug}/`,
-    },
-    articleSection: article.category,
-    wordCount,
-    inLanguage: 'es',
-  };
+      url || `https://nicaraguainformate.com/noticias/${article.slug}/`
+    );
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
+    return (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    );
+  } catch (error) {
+    console.error('[ArticleJsonLd]', error instanceof Error ? error.message : String(error));
+    return null;
+  }
 }
 
+/**
+ * Componente para JSON-LD del sitio web
+ * @returns Script tag con JSON-LD
+ */
 export function WebSiteJsonLd() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Nicaragua Informate',
-    url: 'https://nicaraguainformate.com',
-    description: 'Periodismo de Precisión. Noticias de Nicaragua al instante.',
-    publisher: {
-      '@type': 'Organization',
-      name: 'Nicaragua Informate',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
-      },
-    },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://nicaraguainformate.com/?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
-  };
+  try {
+    const jsonLd = buildWebSiteJsonLd();
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
+    return (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    );
+  } catch (error) {
+    console.error('[WebSiteJsonLd]', error instanceof Error ? error.message : String(error));
+    return null;
+  }
 }

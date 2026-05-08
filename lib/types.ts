@@ -1,29 +1,71 @@
-export interface Article {
+/**
+ * Interface principal para noticias/artículos del sistema
+ * @description Representa una noticia completa con todos sus campos
+ */
+export interface Noticia {
   id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  category: string;
-  author: string;
-  date: string;
-  image: string;
-  readTime: number;
   slug: string;
-  destacada: boolean;
-  vistas: number;
+  titulo: string;
+  resumen: string;
+  contenido?: string;
+  categoria: string;
+  imagen: string;
+  fecha: string;
+  autor?: string;
+  destacada?: boolean;
+  vistas?: number;
+  palabras?: number;
 }
 
-export type Category = 'Todas' | 'Sucesos' | 'Nacionales' | 'Deportes' | 'Internacionales' | 'Espectáculos';
+/**
+ * Alias de Noticia para compatibilidad con código existente
+ * @deprecated Usar Noticia directamente en su lugar
+ */
+export type Article = Noticia;
 
-export const CATEGORY_COLORS: Record<string, string> = {
-  Sucesos: '#dc2626',
-  Nacionales: '#1e40af',
-  Deportes: '#047857',
-  Internacionales: '#7c3aed',
-  Espectáculos: '#db2777',
-  Espectaculo: '#db2777',
-  Economía: '#0369a1',
-  Tecnología: '#0891b2',
-};
+/**
+ * Categorías válidas para noticias
+ */
+export type Category = 'Sucesos' | 'Nacionales' | 'Deportes' | 'Internacionales' | 'Espectáculos';
 
+/**
+ * Configuración de categorías con colores e iconos
+ * @description Fuente única de verdad para datos de categorías
+ */
+export const CATEGORIES = [
+  { name: 'Sucesos', color: '#dc2626', icon: 'fa-triangle-exclamation' },
+  { name: 'Nacionales', color: '#1d4ed8', icon: 'fa-flag' },
+  { name: 'Deportes', color: '#16a34a', icon: 'fa-futbol' },
+  { name: 'Internacionales', color: '#7c3aed', icon: 'fa-globe' },
+  { name: 'Espectáculos', color: '#db2777', icon: 'fa-star' },
+] as const;
+
+/**
+ * Mapa de colores por categoría (derivado de CATEGORIES)
+ */
+export const CATEGORY_COLORS: Record<string, string> = CATEGORIES.reduce(
+  (acc, cat) => ({ ...acc, [cat.name]: cat.color }),
+  {} as Record<string, string>
+);
+
+/**
+ * Mapa de iconos por categoría (derivado de CATEGORIES)
+ */
+export const CAT_ICONS: Record<string, string> = CATEGORIES.reduce(
+  (acc, cat) => ({ ...acc, [cat.name]: cat.icon }),
+  {} as Record<string, string>
+);
+
+/**
+ * Imagen por defecto para noticias sin imagen
+ */
 export const FALLBACK_IMAGE = '/logo.png';
+
+/**
+ * Valida si una categoría es válida
+ * @param category Nombre de la categoría a validar
+ * @returns true si la categoría es válida
+ */
+export function isValidCategory(category: string): category is Category {
+  return CATEGORIES.some(cat => cat.name === category);
+}

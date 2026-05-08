@@ -4,18 +4,27 @@
   "description": "Nicaragua Infórmate — Periodismo de Precisión (Next.js 15 + Firebase)",
   "private": true,
   "engines": {
-    "node": ">=20.0.0"
+    "node": "^20.0.0",
+    "npm": "^10.0.0"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "pre-commit": "npm run lint && npm run type-check",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",
     "firebase": "^12.12.1",
     "firebase-admin": "^12.7.0",
+    "framer-motion": "^12.38.0",
     "next": "15.3.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -26,6 +35,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "sharp": "^0.34.5",
     "typescript": "^5"
   },
   "repository": {

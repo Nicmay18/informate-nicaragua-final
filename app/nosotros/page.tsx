@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Sobre Nosotros | Nicaragua Informate',
+  title: 'Sobre Nosotros',
   description: 'Conoce al equipo editorial de Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Estelí, Nicaragua.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
@@ -51,12 +52,15 @@ export default function NosotrosPage() {
               WebkitUserSelect: 'none'
             }}
           >
-            <img 
-              src="/keyling-rivera.jpg" 
+            <Image
+              src="/keyling-rivera.jpg"
               alt="Keyling Rivera - Directora Editorial"
-              style={{ 
-                width: '100%', 
-                height: '100%', 
+              width={200}
+              height={200}
+              quality={85}
+              style={{
+                width: '100%',
+                height: '100%',
                 objectFit: 'cover',
                 filter: 'blur(0.3px)',
                 userSelect: 'none',

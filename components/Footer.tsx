@@ -1,6 +1,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
+/**
+ * URLs de redes sociales
+ */
+const SOCIAL_URLS = {
+  facebook: 'https://facebook.com/profile.php?id=61578261125687',
+  whatsapp: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
+  telegram: 'https://t.me/+fHHjncJqMQM3NjZh',
+  rss: '/feed.xml',
+} as const;
+
+/**
+ * Componente de footer del sitio
+ * @returns Footer con navegación y links sociales
+ */
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
@@ -27,16 +41,16 @@ export default function Footer() {
                 Deportes, Internacionales y Espectáculos.
               </p>
               <div className="footer-social">
-                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener" aria-label="Facebook">
+                <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" aria-label="Facebook">
                   <i className="fab fa-facebook-f" />
                 </a>
-                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener" aria-label="WhatsApp">
+                <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp">
                   <i className="fab fa-whatsapp" />
                 </a>
-                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener" aria-label="Telegram">
+                <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" aria-label="Telegram">
                   <i className="fab fa-telegram-plane" />
                 </a>
-                <a href="/feed.xml" target="_blank" rel="noopener" aria-label="RSS">
+                <a href={SOCIAL_URLS.rss} target="_blank" rel="noopener" aria-label="RSS">
                   <i className="fas fa-rss" />
                 </a>
               </div>
@@ -64,9 +78,9 @@ export default function Footer() {
               <div className="footer-col">
                 <h4>Más</h4>
                 <ul>
-                  <li><a href="/feed.xml" target="_blank" rel="noopener">Feed RSS</a></li>
-                  <li><a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener">Canal WhatsApp</a></li>
-                  <li><a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener">Canal Telegram</a></li>
+                  <li><a href={SOCIAL_URLS.rss} target="_blank" rel="noopener">Feed RSS</a></li>
+                  <li><a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener">Canal WhatsApp</a></li>
+                  <li><a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener">Canal Telegram</a></li>
                 </ul>
               </div>
             </div>

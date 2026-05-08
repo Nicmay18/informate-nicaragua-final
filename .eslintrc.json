@@ -34,7 +34,11 @@
     "document": "readonly"
   },
   "rules": {
-    "no-unused-vars": ["warn", {"argsIgnorePattern": "^_"}],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-floating-promises": "error",
     "no-console": "off",
     "semi": ["error", "always"],
     "quotes": "off",
@@ -42,7 +46,9 @@
     "no-empty": "warn",
     "no-constant-condition": "warn",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-uses-react": "off"
+    "react/jsx-uses-react": "off",
+    "prefer-const": "error",
+    "no-var": "error"
   },
   "overrides": [
     {

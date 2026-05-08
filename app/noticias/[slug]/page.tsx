@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import { AudioButton, CopyButton, ShareChip, ShareSticky, SocialFooter } from '@/components/ArticleClient';
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (snap.empty) return { title: 'Noticia no encontrada' };
   const n = snap.docs[0].data();
   return {
-    title: `${n.titulo} | Nicaragua Informate`,
+    title: n.titulo,
     description: n.resumen || n.titulo,
     alternates: { canonical: `https://nicaraguainformate.com/noticias/${slug}` },
     openGraph: {
@@ -101,6 +102,37 @@ const CAT_COLORS: Record<string, string> = {
   Internacionales: '#7c3aed', Espectáculos: '#db2777',
 };
 
+/**
+ * Limpia etiquetas HTML mal anidadas
+ * @param html Contenido HTML con posibles etiquetas mal anidadas
+ * @returns HTML limpio
+ */
+function cleanNestedTags(html: string): string {
+  if (!html) return '';
+  
+  // Eliminar etiquetas <p> anidadas
+  let cleaned = html.replace(/<p>\s*<p>/gi, '<p>');
+  cleaned = cleaned.replace(/<\/p>\s*<\/p>/gi, '</p>');
+  
+  // Eliminar etiquetas <b> anidadas
+  cleaned = cleaned.replace(/<b>\s*<b>/gi, '<b>');
+  cleaned = cleaned.replace(/<\/b>\s*<\/b>/gi, '</b>');
+  
+  // Eliminar etiquetas <strong> anidadas
+  cleaned = cleaned.replace(/<strong>\s*<strong>/gi, '<strong>');
+  cleaned = cleaned.replace(/<\/strong>\s*<\/strong>/gi, '</strong>');
+  
+  // Eliminar etiquetas <i> anidadas
+  cleaned = cleaned.replace(/<i>\s*<i>/gi, '<i>');
+  cleaned = cleaned.replace(/<\/i>\s*<\/i>/gi, '</i>');
+  
+  // Eliminar etiquetas <em> anidadas
+  cleaned = cleaned.replace(/<em>\s*<em>/gi, '<em>');
+  cleaned = cleaned.replace(/<\/em>\s*<\/em>/gi, '</em>');
+  
+  return cleaned;
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
@@ -155,24 +187,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     inLanguage: 'es',
   };
 
-  let contentIsHTML = false;
-  function normalizeContent(text: string): string[] {
-    if (!text) return [];
-    if (/<p[>\s]/i.test(text)) {
-      contentIsHTML = true;
-      const matches = text.match(/<p[^>]*>([\s\S]*?)<\/p>/gi) || [];
-      return matches.map((m) => m.replace(/<\/?p[^>]*>/gi, '').trim()).filter((p) => p.length > 0);
-    }
-    return text
-      .replace(/\n{3,}/g, '\n\n')
-      .split('\n\n')
-      .map((p) => p.replace(/\s+/g, ' ').trim())
-      .filter((p) => p.length > 0);
-  }
-  const allPars = normalizeContent(n.contenido || '');
-  const previewPars = isPremium ? allPars.slice(0, 2) : allPars;
-  const hiddenPars = isPremium ? allPars.slice(2) : [];
-
   return (
     <>
       <script
@@ -192,11 +206,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       <div id="readProgress" className="read-progress" />
 
-      {/* Header */}
-      <header className="masthead" style={{ position: 'relative', zIndex: 50, background: 'rgba(255,253,249,0.97)', borderBottom: '2px solid #e5e0d8' }}>
+      {/* Header - Simplified for PWA */}
+      <header className="masthead" style={{ 
+        position: 'relative', 
+        zIndex: 50, 
+        background: 'rgba(255,253,249,0.97)', 
+        borderBottom: '2px solid #e5e0d8',
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: '8px'
+      }}>
         <div className="masthead-inner">
           <Link href="/" className="masthead-brand">
-            <img src="/logo.png" alt="Nicaragua Informate" style={{ width: 34, height: 34, borderRadius: 8, objectFit: 'cover' }} />
+            <Image src="/logo.png" alt="Nicaragua Informate" width={34} height={34} style={{ borderRadius: 8, objectFit: 'cover' }} />
             <span className="masthead-brand-text">
               Nicaragua <span style={{ color: 'var(--ink)' }}>Informate</span>
             </span>
@@ -221,7 +242,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <span style={{ color: '#9f968d', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 300, whiteSpace: 'nowrap' }}>{n.titulo}</span>
       </nav>
 
-      <style>{`.article-grid{max-width:1200px;margin:0 auto;padding:28px 28px 88px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}@media(max-width:1024px){.article-grid{grid-template-columns:1fr;gap:32px;padding:24px 20px 80px}.article-aside{position:static!important}}`}</style>
+      <style>{`.article-grid{max-width:1200px;margin:0 auto;padding:28px 28px 88px;padding-bottom:calc(88px + env(safe-area-inset-bottom));display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;align-items:start}@media(max-width:1024px){.article-grid{grid-template-columns:1fr;gap:32px;padding:24px 20px 80px;padding-bottom:calc(80px + env(safe-area-inset-bottom));.article-aside{position:static!important}}@media(max-width:640px){.article-grid{padding:20px 16px 100px;padding-bottom:calc(100px + env(safe-area-inset-bottom));gap:24px}}}`}</style>
       <main className="article-grid">
         <article style={{ minWidth: 0 }}>
           <header style={{ marginBottom: 28 }}>
@@ -261,9 +282,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </header>
 
           <figure style={{ margin: '0 0 36px 0' }}>
-            <img
+            <Image
               src={imgUrl}
               alt={n.titulo}
+              width={800}
+              height={450}
+              priority
+              quality={85}
               style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', objectPosition: 'center 25%', borderRadius: 4, display: 'block', border: '1px solid #ddd6ce' }}
             />
             <figcaption style={{ marginTop: 10, paddingTop: 10, borderTop: '2px solid #18181b', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
@@ -282,39 +307,19 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <AudioButton titulo={n.titulo} resumen={n.resumen || ''} contenido={n.contenido || ''} />
 
           {/* Article body */}
-          <div style={{ fontFamily: "'Crimson Pro','Times New Roman',Georgia,serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a' }}>
-            {previewPars.map((p, i) => (
-              <p key={i} className={i === 0 ? 'drop-cap' : ''}
-                style={{ marginBottom: '1.6em', textAlign: 'justify', hyphens: 'auto' }}
-                dangerouslySetInnerHTML={{ __html: contentIsHTML ? p : p }}
-              />
-            ))}
-          </div>
-          <style>{`.drop-cap::first-letter { float: left; font-size: 4.5em; line-height: 0.8; font-weight: 700; color: #8c1d18; font-family: 'Crimson Pro', Georgia, serif; margin: 4px 8px 0 0; padding: 0 4px; }`}</style>
-
-          {/* Premium paywall */}
-          {isPremium && hiddenPars.length > 0 && (
-            <>
-              <div style={{ margin: '48px 0', padding: '48px 40px', background: 'linear-gradient(180deg,#f6efe4 0%,#fff 100%)', border: '1px solid #d6b38a', borderRadius: 8, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: 'linear-gradient(90deg,#9a3412,#f59e0b,#9a3412)' }} />
-                <div style={{ width: 64, height: 64, background: 'linear-gradient(135deg,#fbbf24,#d97706)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: 28, color: 'white' }}>💎</div>
-                <h3 style={{ fontFamily: "'Crimson Pro',serif", fontSize: 26, fontWeight: 700, color: '#18181b', marginBottom: 10 }}>Contenido exclusivo para suscriptores</h3>
-                <p style={{ fontSize: 15, color: '#5b5b5f', maxWidth: 420, margin: '0 auto 28px', lineHeight: 1.6 }}>Accede al análisis completo de esta noticia y a todo nuestro contenido premium sin límites.</p>
-                <a href="https://paypal.me/NicaraguaInformate/5" target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 32px', background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: 'white', borderRadius: 999, fontSize: 15, fontWeight: 700, textDecoration: 'none' }}>
-                  👑 Suscribirme — $5/mes
-                </a>
-              </div>
-              <div style={{ position: 'relative', maxHeight: 180, overflow: 'hidden', pointerEvents: 'none' }}>
-                <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.75, color: '#27272a', filter: 'blur(6px)' }}>
-                  {hiddenPars.map((p, i) => (
-                    <p key={i} style={{ marginBottom: '1.6em', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: contentIsHTML ? p : p }} />
-                  ))}
-                </div>
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 140, background: 'linear-gradient(to bottom,transparent,#fffdf9)' }} />
-              </div>
-            </>
-          )}
+          <div className="cuerpo-noticia" style={{ fontFamily: "'Crimson Pro','Times New Roman',Georgia,serif", fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.6, color: '#27272a' }}
+            dangerouslySetInnerHTML={{ __html: cleanNestedTags(n.contenido || '') }}
+          />
+          <style>{`
+            .cuerpo-noticia p { margin-bottom: 1.5rem; line-height: 1.6; display: block; }
+            .cuerpo-noticia ul { margin-bottom: 1.5rem; padding-left: 1.5rem; list-style-type: disc !important; }
+            .cuerpo-noticia li { margin-bottom: 0.5rem; }
+            .cuerpo-noticia h2 { font-weight: bold; font-size: 1.75rem; margin-top: 2rem; margin-bottom: 1rem; display: block; }
+            .cuerpo-noticia h3 { font-weight: bold; font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; display: block; }
+            .cuerpo-noticia b { font-weight: bold; }
+            .cuerpo-noticia strong { font-weight: bold; }
+            .cuerpo-noticia { text-align: justify; }
+          `}</style>
 
           {/* Share panel */}
           {!isPremium && (
@@ -367,7 +372,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 {related.map((r, i) => (
                   <Link key={r.id} href={`/noticias/${r.slug}`} style={{ display: 'flex', gap: 10, padding: '12px 16px', textDecoration: 'none', borderBottom: i < related.length - 1 ? '1px solid #f1ece4' : 'none' }}>
                     <div style={{ width: 84, height: 56, borderRadius: 6, overflow: 'hidden', flexShrink: 0, background: '#f1ece4' }}>
-                      <img src={r.imagen || FALLBACK_IMAGE} alt={r.titulo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <Image src={r.imagen || FALLBACK_IMAGE} alt={r.titulo} width={84} height={56} loading="lazy" quality={75} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: CAT_COLORS[r.categoria] || '#8c1d18', display: 'block', marginBottom: 3 }}>{r.categoria}</span>
@@ -450,7 +455,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="art-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, marginBottom: 36 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <img src="/logo.png" alt="" style={{ width: 38, height: 38, borderRadius: 8, objectFit: 'cover' }} />
+                <Image src="/logo.png" alt="" width={38} height={38} style={{ borderRadius: 8, objectFit: 'cover' }} />
                 <div style={{ color: '#f1f5f9', fontWeight: 800, fontSize: 16 }}>Nicaragua Informate</div>
               </div>
               <p style={{ color: '#64748b', fontSize: 13, lineHeight: 1.7, marginBottom: 14, maxWidth: 240 }}>
@@ -506,6 +511,34 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </footer>
 
       <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.getElementById('readProgress');if(!b)return;window.addEventListener('scroll',function(){var d=document.documentElement;var h=d.scrollHeight-d.clientHeight;if(h>0)b.style.width=Math.round(((window.scrollY||d.scrollTop)/h)*100)+'%';},{passive:true});})();` }} />
+      
+      {/* Schema NewsArticle JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            "headline": n?.titulo || "",
+            "image": [n?.imagen || ""],
+            "datePublished": n?.fecha || "",
+            "dateModified": n?.fecha || "",
+            "author": {
+              "@type": "Person",
+              "name": n?.autor || "Nicaragua Informate"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Nicaragua Informate",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://nicaraguainformate.com/logo.png"
+              }
+            },
+            "description": n?.resumen || n?.titulo || ""
+          })
+        }}
+      />
     </>
   );
 }

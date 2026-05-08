@@ -1,44 +1,92 @@
 'use client';
+
 import { useState, useRef, useEffect } from 'react';
 
-/* ─── Voice selection: prefer female Latin-American Spanish ─── */
+/**
+ * Constantes para el sintetizador de voz
+ */
 const FEMALE_NAMES = ['paulina','sabina','luciana','camila','mónica','paloma','helena','teresa','rosa','marisol','valeria','daniela','sofia','andrea','silvia','laura','claudia','natalia'];
+const LATAM_LOCALES = ['es-MX','es-419','es-US','es-CL','es-CO','es-AR','es-PE'];
+const MAX_CHUNK_LENGTH = 220;
+const CHUNK_DELAY_MS = 60;
+const ERROR_DELAY_MS = 80;
+const VOICE_RETRY_DELAY_MS = 200;
+const INITIAL_DELAY_MS = 100;
 
+/**
+ * Alturas de barras para visualizador de audio
+ */
+const BAR_HEIGHTS = [4,7,11,9,5,10,7,13,6,9,5,8] as const;
+
+/**
+ * Selecciona una voz femenina en español de Latinoamérica
+ * @returns Voz seleccionada o null
+ */
 function pickVoice(): SpeechSynthesisVoice | null {
-  const voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  const LATAM = ['es-MX','es-419','es-US','es-CL','es-CO','es-AR','es-PE'];
-  // 1. Named female + Latin American
-  const v1 = voices.find(v => LATAM.includes(v.lang) && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
-  if (v1) return v1;
-  // 2. Any Latin American Spanish
-  const v2 = voices.find(v => LATAM.includes(v.lang));
-  if (v2) return v2;
-  // 3. Named female in any Spanish
-  const v3 = voices.find(v => v.lang.startsWith('es') && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
-  if (v3) return v3;
-  // 4. Any Spanish
-  return voices.find(v => v.lang.startsWith('es')) || null;
+  try {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    // 1. Named female + Latin American
+    const v1 = voices.find(v => LATAM_LOCALES.includes(v.lang) && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
+    if (v1) return v1;
+
+    // 2. Any Latin American Spanish
+    const v2 = voices.find(v => LATAM_LOCALES.includes(v.lang));
+    if (v2) return v2;
+
+    // 3. Named female in any Spanish
+    const v3 = voices.find(v => v.lang.startsWith('es') && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
+    if (v3) return v3;
+
+    // 4. Any Spanish
+    return voices.find(v => v.lang.startsWith('es')) || null;
+  } catch (error) {
+    console.error('[pickVoice]', error instanceof Error ? error.message : String(error));
+    return null;
+  }
 }
 
-/* ─── Split full text into ~200-char sentence chunks ─── */
+/**
+ * Divide el texto en chunks de ~200 caracteres
+ * @param titulo Título del artículo
+ * @param resumen Resumen del artículo
+ * @param contenido Contenido del artículo
+ * @returns Array de chunks de texto
+ */
 function buildChunks(titulo: string, resumen: string, contenido: string): string[] {
   const clean = (s: string) => s.replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim();
   const full = `${clean(titulo)}. ${clean(resumen)}. ${clean(contenido)}`;
   const parts = full.split(/(?<=[.!?¡¿])\s+/);
   const chunks: string[] = [];
   let cur = '';
+  
   for (const p of parts) {
     if (!p.trim()) continue;
-    if ((cur + ' ' + p).length < 220) { cur = cur ? cur + ' ' + p : p; }
-    else { if (cur) chunks.push(cur.trim()); cur = p; }
+    if ((cur + ' ' + p).length < MAX_CHUNK_LENGTH) { 
+      cur = cur ? cur + ' ' + p : p; 
+    } else { 
+      if (cur) chunks.push(cur.trim()); 
+      cur = p; 
+    }
   }
+  
   if (cur.trim()) chunks.push(cur.trim());
   return chunks;
 }
 
+/**
+ * Tipo de estado del reproductor de audio
+ */
+type AudioStatus = 'idle' | 'loading' | 'playing' | 'paused';
+
+/**
+ * Componente de botón de audio para texto a voz
+ * @param props Props del componente
+ * @returns Botón de audio
+ */
 export function AudioButton({ titulo, resumen, contenido }: { titulo: string; resumen: string; contenido: string }) {
-  const [status, setStatus] = useState<'idle'|'loading'|'playing'|'paused'>('idle');
+  const [status, setStatus] = useState<AudioStatus>('idle');
   const [progress, setProgress] = useState(0);
   const [curText, setCurText] = useState('');
   const chunksRef  = useRef<string[]>([]);
@@ -52,30 +100,60 @@ export function AudioButton({ titulo, resumen, contenido }: { titulo: string; re
 
   function playFrom(i: number) {
     const chunks = chunksRef.current;
-    if (i >= chunks.length) { setStatus('idle'); setProgress(100); setCurText('✓ Lectura finalizada'); return; }
+    if (i >= chunks.length) { 
+      setStatus('idle'); 
+      setProgress(100); 
+      setCurText('✓ Lectura finalizada'); 
+      return; 
+    }
     idxRef.current = i;
     const u = new SpeechSynthesisUtterance(chunks[i]);
     u.lang  = 'es-MX';
     u.rate  = 0.9;
     u.pitch = 1.08;
-    const v = pickVoice(); if (v) u.voice = v;
-    u.onstart = () => { setCurText(chunks[i]); setProgress(Math.round(((i + 1) / chunks.length) * 100)); setStatus('playing'); };
-    u.onend   = () => { timerRef.current = setTimeout(() => playFrom(i + 1), 60); };
-    u.onerror = (e) => { if (e.error !== 'interrupted' && e.error !== 'canceled') timerRef.current = setTimeout(() => playFrom(i + 1), 80); };
+    const v = pickVoice(); 
+    if (v) u.voice = v;
+    u.onstart = () => { 
+      setCurText(chunks[i]); 
+      setProgress(Math.round(((i + 1) / chunks.length) * 100)); 
+      setStatus('playing'); 
+    };
+    u.onend   = () => { 
+      timerRef.current = setTimeout(() => playFrom(i + 1), CHUNK_DELAY_MS); 
+    };
+    u.onerror = (e) => { 
+      if (e.error !== 'interrupted' && e.error !== 'canceled') {
+        console.error('[AudioButton] Speech synthesis error:', e.error);
+        timerRef.current = setTimeout(() => playFrom(i + 1), ERROR_DELAY_MS); 
+      }
+    };
     window.speechSynthesis.speak(u);
   }
 
   function play() {
-    if (!('speechSynthesis' in window)) return;
-    setStatus('loading'); setProgress(0); setCurText('');
+    if (!('speechSynthesis' in window)) {
+      console.warn('[AudioButton] Speech synthesis not supported');
+      return;
+    }
+    setStatus('loading'); 
+    setProgress(0); 
+    setCurText('');
     chunksRef.current = buildChunks(titulo, resumen, contenido);
     idxRef.current = 0;
     window.speechSynthesis.cancel();
     const tryPlay = () => {
-      const v = window.speechSynthesis.getVoices();
-      if (!v.length) { timerRef.current = setTimeout(tryPlay, 200); } else { playFrom(0); }
+      try {
+        const v = window.speechSynthesis.getVoices();
+        if (!v.length) { 
+          timerRef.current = setTimeout(tryPlay, VOICE_RETRY_DELAY_MS); 
+        } else { 
+          playFrom(0); 
+        }
+      } catch (error) {
+        console.error('[AudioButton] Error getting voices:', error instanceof Error ? error.message : String(error));
+      }
     };
-    timerRef.current = setTimeout(tryPlay, 100);
+    timerRef.current = setTimeout(tryPlay, INITIAL_DELAY_MS);
   }
 
   function pause() {
@@ -89,7 +167,10 @@ export function AudioButton({ titulo, resumen, contenido }: { titulo: string; re
   function stop() {
     if (timerRef.current) clearTimeout(timerRef.current);
     window.speechSynthesis.cancel();
-    setStatus('idle'); setProgress(0); setCurText(''); idxRef.current = 0;
+    setStatus('idle'); 
+    setProgress(0); 
+    setCurText(''); 
+    idxRef.current = 0;
   }
 
   /* ── Idle button ── */
@@ -100,7 +181,6 @@ export function AudioButton({ titulo, resumen, contenido }: { titulo: string; re
   );
 
   /* ── Active player ── */
-  const BAR_H = [4,7,11,9,5,10,7,13,6,9,5,8];
   return (
     <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', borderRadius: 14, padding: '16px 18px', marginBottom: 24, boxShadow: '0 8px 24px rgba(0,0,0,0.25)', color: '#fff' }}>
       {/* Top row */}
@@ -108,7 +188,7 @@ export function AudioButton({ titulo, resumen, contenido }: { titulo: string; re
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           {status === 'playing' && (
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 18 }}>
-              {BAR_H.map((h, i) => (
+              {BAR_HEIGHTS.map((h: number, i: number) => (
                 <span key={i} style={{ display: 'inline-block', width: 3, height: h, background: '#e53e3e', borderRadius: 1.5, animation: `wvbar ${0.5 + (i % 3) * 0.15}s ease-in-out ${i * 0.05}s infinite alternate` }} />
               ))}
             </div>
@@ -149,10 +229,27 @@ export function AudioButton({ titulo, resumen, contenido }: { titulo: string; re
   );
 }
 
+/**
+ * Componente de botón para copiar URL al portapapeles
+ * @param props Props del componente
+ * @returns Botón de copiar
+ */
 export function CopyButton({ url }: { url: string }) {
+  const handleCopy = async () => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        console.warn('[CopyButton] Clipboard API not supported');
+      }
+    } catch (error) {
+      console.error('[CopyButton]', error instanceof Error ? error.message : String(error));
+    }
+  };
+
   return (
     <button
-      onClick={() => navigator.clipboard?.writeText(url)}
+      onClick={handleCopy}
       style={{
         width: 44,
         height: 44,
@@ -172,6 +269,11 @@ export function CopyButton({ url }: { url: string }) {
   );
 }
 
+/**
+ * Componente de chip para compartir en redes sociales
+ * @param props Props del componente
+ * @returns Chip de compartir
+ */
 export function ShareChip({ href, label, bg }: { href: string; label: string; bg: string }) {
   return (
     <a
@@ -210,6 +312,11 @@ export function ShareChip({ href, label, bg }: { href: string; label: string; bg
   );
 }
 
+/**
+ * Componente de botón sticky para compartir
+ * @param props Props del componente
+ * @returns Botón sticky de compartir
+ */
 export function ShareSticky({ href, icon, color }: { href: string; icon: string; color: string }) {
   const isSolid = icon === 'link';
   return (
@@ -250,6 +357,11 @@ export function ShareSticky({ href, icon, color }: { href: string; icon: string;
   );
 }
 
+/**
+ * Componente de icono social para footer
+ * @param props Props del componente
+ * @returns Icono social
+ */
 export function SocialFooter({ href, icon }: { href: string; icon: string }) {
   return (
     <a

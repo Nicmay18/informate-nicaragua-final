@@ -566,7 +566,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Categoría <span class="required">*</span></label>
-                  <select class="form-select" id="categoria" required onchange="sugerirImagenCategoria(); actualizarSeoPreview();">
+                  <select class="form-select" id="categoria" required onchange="actualizarSeoPreview();">
                     <option value="">Seleccionar...</option>
                     <option value="Sucesos">🚨 Sucesos</option>
                     <option value="Nacionales">🇳🇮 Nacionales</option>
@@ -624,10 +624,16 @@
 
               <div class="form-group">
                 <label class="form-label">Imagen Destacada <span class="required">*</span></label>
+                <div style="margin-bottom: 8px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-700); cursor: pointer;">
+                    <input type="checkbox" id="conLuto" style="width: 16px; height: 16px; cursor: pointer;">
+                    <span><i class="fas fa-ribbon" style="color: #333;"></i> Activar cinta de luto (opcional)</span>
+                  </label>
+                </div>
                 <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
                   <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                   <div class="upload-text">Arrastra imagen o haz clic para subir</div>
-                  <div class="upload-subtext">JPG/PNG hasta 5MB. Pie de foto recomendado.</div>
+                  <div class="upload-subtext">JPG/PNG hasta 5MB. Vista previa antes de publicar.</div>
                   <input type="file" id="fileInput" hidden accept="image/*" onchange="handleFileSelect(event)">
                 </div>
                 <div class="image-preview-container" id="imagePreviewContainer">
@@ -1119,6 +1125,7 @@ sin texto ni marcas de agua, composición periodística"
   <div class="toast-container" id="toastContainer"></div>
   <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Procesando...</div></div>
 
+  <script src="/js/collage-profesional.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -1189,12 +1196,30 @@ sin texto ni marcas de agua, composición periodística"
       const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
       const titulo = noticia.titulo;
       const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
-      const texto = `${titulo}\n\n${descripcion}\n\nLeer noticia completa:\n${url}`;
+      const categoria = noticia.categoria || 'Noticias';
+      
+      // Formato para Telegram/Facebook (más claro y profesional)
+      const textoRedes = `📰 ${titulo}
+
+${descripcion}
+
+📂 ${categoria}
+🔗 ${url}
+
+📱 Nicaragua Informate - Periodismo de Precisión`;
+      
+      // Formato para WhatsApp (más corto)
+      const textoWhatsapp = `${titulo}
+
+${descripcion}
+
+Leer más: ${url}`;
+      
       document.getElementById('shareTitulo').textContent = titulo;
       document.getElementById('shareDescripcion').textContent = descripcion;
-      document.getElementById('shareTextoCompleto').value = texto;
-      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(`${titulo}\n\n${descripcion}`)}`;
+      document.getElementById('shareTextoCompleto').value = textoRedes;
+      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoWhatsapp)}`;
+      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(textoRedes)}`;
       document.getElementById('shareNoticiaLink').href = url;
       panel.style.display = 'block';
       panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1234,9 +1259,39 @@ sin texto ni marcas de agua, composición periodística"
       const file = files[0];
       if (!file.type.startsWith('image/')) { showToast('Selecciona una imagen válida', 'error'); return; }
       if (file.size > 5 * 1024 * 1024) { showToast('Máximo 5MB', 'error'); return; }
-      const reader = new FileReader();
-      reader.onload = e => { document.getElementById('imagenUrl').value = e.target.result; actualizarPreview(); showToast('Imagen cargada', 'success'); };
-      reader.readAsDataURL(file);
+      
+      // Verificar si es luto
+      const conLuto = document.getElementById('conLuto')?.checked || false;
+      
+      // Usar collage profesional si está disponible y se activó luto
+      if (conLuto && typeof window.procesarImagenConCollage === 'function') {
+        window.procesarImagenConCollage(file, { conLuto })
+          .then(resultado => {
+            document.getElementById('imagenUrl').value = resultado.preview;
+            actualizarPreview();
+            showToast('Imagen con cinta de luto aplicada', 'success');
+          })
+          .catch(error => {
+            console.error('Error al procesar collage:', error);
+            // Fallback a método original
+            const reader = new FileReader();
+            reader.onload = e => { 
+              document.getElementById('imagenUrl').value = e.target.result; 
+              actualizarPreview(); 
+              showToast('Imagen cargada', 'success'); 
+            };
+            reader.readAsDataURL(file);
+          });
+      } else {
+        // Método original simple
+        const reader = new FileReader();
+        reader.onload = e => { 
+          document.getElementById('imagenUrl').value = e.target.result; 
+          actualizarPreview(); 
+          showToast('Imagen cargada', 'success'); 
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     function actualizarPreview() {
@@ -1246,7 +1301,7 @@ sin texto ni marcas de agua, composición periodística"
       if (url) { preview.src = url; container.classList.add('active'); document.getElementById('uploadZone').style.display = 'none'; }
       else { container.classList.remove('active'); document.getElementById('uploadZone').style.display = 'block'; }
     }
-    function clearImage() { document.getElementById('imagenUrl').value = ''; document.getElementById('fileInput').value = ''; actualizarPreview(); }
+    window.clearImage = function() { document.getElementById('imagenUrl').value = ''; document.getElementById('fileInput').value = ''; actualizarPreview(); };
 
     // SEO Preview
     window.actualizarSeoPreview = function() {
@@ -1459,8 +1514,9 @@ sin texto ni marcas de agua, composición periodística"
 
       try {
         const slug = noticiaId ? undefined : generarSlug(titulo);
+        // Usar resumen manual si existe, si no usar el contenido completo para mostrar todo
         const noticiaData = {
-          titulo, categoria, departamento, dateline, resumen: resumen || contenido.substring(0, 150) + '...',
+          titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
           autor: 'Directora Editorial', destacada, slug, palabras
         };

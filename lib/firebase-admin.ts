@@ -1,41 +1,77 @@
 import { initializeApp, getApps, cert, getApp, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 
+/**
+ * Inicializa la aplicación de Firebase Admin SDK
+ * @returns Instancia de Firebase App
+ * @throws Error si faltan credenciales o son inválidas
+ */
 function getAdminApp(): App {
-  if (getApps().length > 0) return getApp();
+  if (getApps().length > 0) {
+    return getApp();
+  }
 
   const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
   if (b64) {
-    const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
-    console.log('[firebase-admin] using base64 account, project:', sa.project_id);
-    return initializeApp({ credential: cert(sa) });
+    try {
+      const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+      
+      if (!sa.project_id) {
+        throw new Error('Service account missing project_id');
+      }
+      
+      console.log('[firebase-admin] initialized with base64 credentials');
+      return initializeApp({ credential: cert(sa) });
+    } catch (error) {
+      throw new Error(`Failed to parse base64 service account: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
 
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY ?? '')
+  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
+
+  if (!projectId || !clientEmail || !privateKeyRaw) {
+    throw new Error('[firebase-admin] Missing required environment variables (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY)');
+  }
+
+  const privateKey = privateKeyRaw
     .trim()
     .replace(/^["']|["']$/g, '')
     .replace(/\\n/g, '\n');
 
-  console.log('[firebase-admin] projectId:', projectId ?? 'MISSING');
-  console.log('[firebase-admin] clientEmail:', clientEmail ? clientEmail.slice(0, 20) + '...' : 'MISSING');
-  console.log('[firebase-admin] key_starts:', privateKey.slice(0, 27));
-  console.log('[firebase-admin] key_length:', privateKey.length);
-  console.log('[firebase-admin] key_newlines:', (privateKey.match(/\n/g) ?? []).length);
-
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error('[firebase-admin] Missing env vars');
+  if (privateKey.length < 100) {
+    throw new Error('[firebase-admin] Private key appears to be invalid (too short)');
   }
 
+  console.log('[firebase-admin] initialized with environment credentials');
   return initializeApp({ credential: cert({ projectId, privateKey, clientEmail }) });
 }
 
+/**
+ * Instancia singleton de Firestore
+ * Se inicializa de forma lazy para evitar errores durante el build
+ */
 let _db: Firestore | null = null;
 
+/**
+ * Obtiene la instancia de Firestore
+ * @returns Instancia de Firestore
+ */
+export function getAdminDb(): Firestore {
+  if (!_db) {
+    _db = getFirestore(getAdminApp());
+  }
+  return _db;
+}
+
+/**
+ * Proxy para backward compatibility
+ * @deprecated Usar getAdminDb() directamente
+ */
 export const adminDb: Firestore = new Proxy({} as Firestore, {
-  get(_target, prop, receiver) {
-    if (!_db) _db = getFirestore(getAdminApp());
-    return Reflect.get(_db, prop, _db);
+  get(_target, prop) {
+    const db = getAdminDb();
+    return Reflect.get(db, prop);
   },
 });

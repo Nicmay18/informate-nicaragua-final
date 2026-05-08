@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Contacto | Nicaragua Informate',
+  title: 'Contacto',
   description: 'Contacta a Nicaragua Informate. Ubicación en Estelí, Nicaragua. Redacción: redaccion@nicaraguainformate.com. Horario: Lunes a Viernes 8:00 - 18:00',
   alternates: { canonical: 'https://nicaraguainformate.com/contacto' },
 };

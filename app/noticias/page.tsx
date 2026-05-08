@@ -1,11 +1,12 @@
 import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Todas las Noticias | Nicaragua Informate',
+  title: 'Todas las Noticias',
   description: 'Explora todas las noticias de Nicaragua: sucesos, nacionales, deportes, internacionales, espectáculos y más.',
   alternates: { canonical: 'https://nicaraguainformate.com/noticias' },
 };
@@ -157,11 +158,14 @@ export default async function NoticiasIndexPage({
             {featured && (
               <Link href={`/noticias/${featured.slug}`} className="ni-news-card" style={{ display: 'flex', flexDirection: 'row', marginBottom: 32, minHeight: 240 }} aria-label={featured.titulo}>
                 <div className="img-wrap ni-featured-img" style={{ width: '45%', flexShrink: 0, height: 'auto', minHeight: 240 }}>
-                  <img
+                  <Image
                     src={featured.imagen || FALLBACK_IMAGE}
                     alt={featured.titulo}
+                    width={400}
+                    height={300}
+                    priority
+                    quality={85}
                     className="ni-card-img"
-                    style={{ height: '100%', width: '100%', objectFit: 'cover' }}
                   />
                 </div>
                 <div style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
@@ -177,7 +181,7 @@ export default async function NoticiasIndexPage({
                     {featured.titulo}
                   </h2>
                   {featured.resumen && (
-                    <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.6, margin: 0 }}>
                       {featured.resumen}
                     </p>
                   )}
@@ -208,9 +212,13 @@ export default async function NoticiasIndexPage({
               {rest.map(n => (
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="ni-news-card">
                   <div className="img-wrap" style={{ aspectRatio: '16/9' }}>
-                    <img
+                    <Image
                       src={n.imagen || FALLBACK_IMAGE}
                       alt={n.titulo}
+                      width={400}
+                      height={225}
+                      loading="lazy"
+                      quality={75}
                       className="ni-card-img"
                     />
                   </div>
@@ -227,7 +235,7 @@ export default async function NoticiasIndexPage({
                       {n.titulo}
                     </h3>
                     {n.resumen && (
-                      <p style={{ color: '#6b7280', fontSize: 13, lineHeight: 1.5, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      <p style={{ color: '#6b7280', fontSize: 13, lineHeight: 1.5, margin: 0 }}>
                         {n.resumen}
                       </p>
                     )}

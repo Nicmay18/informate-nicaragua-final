@@ -1,43 +1,68 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Article, CATEGORY_COLORS } from '@/lib/types';
+import { Noticia, CATEGORY_COLORS, FALLBACK_IMAGE } from '@/lib/types';
 
+/**
+ * Props para ArticleCard
+ */
 interface ArticleCardProps {
-  article: Article;
+  article: Noticia;
   hero?: boolean;
   index?: number;
 }
 
+/**
+ * Formatea una fecha a string en español
+ * @param dateStr Fecha en formato string
+ * @returns Fecha formateada
+ */
 function formatDate(dateStr: string): string {
   try {
-    return new Date(dateStr).toLocaleDateString('es-NI', {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      console.warn('[formatDate] Invalid date:', dateStr);
+      return dateStr;
+    }
+    return date.toLocaleDateString('es-NI', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
-  } catch {
+  } catch (error) {
+    console.error('[formatDate]', error instanceof Error ? error.message : String(error));
     return dateStr;
   }
 }
 
+/**
+ * Componente de tarjeta de artículo
+ * @param props Props del componente
+ * @returns Tarjeta de artículo
+ */
 export default function ArticleCard({ article, hero = false, index = 0 }: ArticleCardProps) {
-  const catColor = CATEGORY_COLORS[article.category] || '#8c1d18';
+  if (!article || !article.slug || !article.titulo) {
+    return null;
+  }
+
+  const catColor = CATEGORY_COLORS[article.categoria] || '#8c1d18';
   const href = `/noticias/${article.slug}/`;
+  const imageUrl = article.imagen || FALLBACK_IMAGE;
+  const readTime = article.palabras ? Math.ceil(article.palabras / 200) : 3;
 
   if (hero) {
     return (
-      <article className="news-card news-card--hero" data-category={article.category}>
+      <article className="news-card news-card--hero" data-category={article.categoria}>
         <Link href={href} className="news-card-link" style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr' }}>
           <div className="news-card-image">
             <span
               className="news-card-category"
               style={{ backgroundColor: catColor }}
             >
-              {article.category}
+              {article.categoria}
             </span>
             <Image
-              src={article.image}
-              alt={article.title}
+              src={imageUrl}
+              alt={article.titulo}
               width={800}
               height={450}
               priority={index === 0}
@@ -45,11 +70,11 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             />
           </div>
           <div className="news-card-body">
-            <h2 className="news-card-title">{article.title}</h2>
-            <p className="news-card-excerpt">{article.excerpt}</p>
+            <h2 className="news-card-title">{article.titulo}</h2>
+            <p className="news-card-excerpt">{article.resumen}</p>
             <div className="news-card-meta">
-              <span>{formatDate(article.date)}</span>
-              <span><i className="far fa-clock" /> {article.readTime} min</span>
+              <span>{formatDate(article.fecha)}</span>
+              <span><i className="far fa-clock" /> {readTime} min</span>
             </div>
           </div>
         </Link>
@@ -58,18 +83,18 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
   }
 
   return (
-    <article className="news-card" data-category={article.category}>
+    <article className="news-card" data-category={article.categoria}>
       <Link href={href} className="news-card-link">
         <div className="news-card-image">
           <span
             className="news-card-category"
             style={{ backgroundColor: catColor }}
           >
-            {article.category}
+            {article.categoria}
           </span>
           <Image
-            src={article.image}
-            alt={article.title}
+            src={imageUrl}
+            alt={article.titulo}
             width={640}
             height={400}
             loading={index < 6 ? 'eager' : 'lazy'}
@@ -77,11 +102,11 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
           />
         </div>
         <div className="news-card-body">
-          <h2 className="news-card-title">{article.title}</h2>
-          <p className="news-card-excerpt">{article.excerpt}</p>
+          <h2 className="news-card-title">{article.titulo}</h2>
+          <p className="news-card-excerpt">{article.resumen}</p>
           <div className="news-card-meta">
-            <span>{formatDate(article.date)}</span>
-            <span><i className="far fa-clock" /> {article.readTime} min</span>
+            <span>{formatDate(article.fecha)}</span>
+            <span><i className="far fa-clock" /> {readTime} min</span>
           </div>
         </div>
       </Link>

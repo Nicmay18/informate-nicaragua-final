@@ -1,22 +1,54 @@
 'use client';
+
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
-interface Item { id: string; slug: string; titulo: string; }
-
-const BTN: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)',
-  color: '#fff', cursor: 'pointer', width: 28, height: 28, borderRadius: 6,
-  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11,
-  transition: 'background 0.15s', flexShrink: 0,
+/**
+ * Constantes de configuración para el ticker
+ */
+const TICKER_DURATION_MS = 6000;
+const TICKER_UPDATE_INTERVAL_MS = 100;
+const BUTTON_STYLE: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.12)', 
+  border: '1px solid rgba(255,255,255,0.15)',
+  color: '#fff', 
+  cursor: 'pointer', 
+  width: 28, 
+  height: 28, 
+  borderRadius: 6,
+  display: 'flex', 
+  alignItems: 'center', 
+  justifyContent: 'center', 
+  fontSize: 11,
+  transition: 'background 0.15s', 
+  flexShrink: 0,
 };
 
-export default function BreakingTicker({ noticias }: { noticias: Item[] }) {
-  const [current, setCurrent]   = useState(0);
-  const [paused,  setPaused]    = useState(false);
+/**
+ * Interfaz para item de noticia
+ */
+interface BreakingNewsItem {
+  id: string;
+  slug: string;
+  titulo: string;
+}
+
+/**
+ * Props para BreakingTicker
+ */
+interface BreakingTickerProps {
+  noticias: BreakingNewsItem[];
+}
+
+/**
+ * Componente de ticker de noticias urgentes
+ * @param props Props del componente
+ * @returns Ticker de noticias
+ */
+export default function BreakingTicker({ noticias }: BreakingTickerProps) {
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0);
-  const DURATION = 6000;
-  const STEP     = 100;
 
   const goTo = useCallback((idx: number) => {
     setCurrent(idx);
@@ -30,10 +62,13 @@ export default function BreakingTicker({ noticias }: { noticias: Item[] }) {
     if (paused || noticias.length <= 1) return;
     const t = setInterval(() => {
       setProgress(p => {
-        if (p >= 100) { goNext(); return 0; }
-        return p + (100 / (DURATION / STEP));
+        if (p >= 100) { 
+          goNext(); 
+          return 0; 
+        }
+        return p + (100 / (TICKER_DURATION_MS / TICKER_UPDATE_INTERVAL_MS));
       });
-    }, STEP);
+    }, TICKER_UPDATE_INTERVAL_MS);
     return () => clearInterval(t);
   }, [paused, goNext, noticias.length]);
 
@@ -66,14 +101,14 @@ export default function BreakingTicker({ noticias }: { noticias: Item[] }) {
 
         {/* Controls */}
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <button onClick={() => setPaused(p => !p)} style={BTN} title={paused ? 'Reanudar' : 'Pausar'}>
+          <button onClick={() => setPaused(p => !p)} style={BUTTON_STYLE} title={paused ? 'Reanudar' : 'Pausar'}>
             <i className={`fas fa-${paused ? 'play' : 'pause'}`} />
           </button>
-          <button onClick={goPrev} style={BTN}><i className="fas fa-chevron-left" /></button>
+          <button onClick={goPrev} style={BUTTON_STYLE}><i className="fas fa-chevron-left" /></button>
           <span style={{ fontSize: 11, minWidth: 38, textAlign: 'center', color: 'rgba(255,255,255,0.65)', fontWeight: 700, flexShrink: 0 }}>
             {current + 1}/{noticias.length}
           </span>
-          <button onClick={goNext} style={BTN}><i className="fas fa-chevron-right" /></button>
+          <button onClick={goNext} style={BUTTON_STYLE}><i className="fas fa-chevron-right" /></button>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Noticia {
   id: string;
@@ -108,18 +109,38 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         <div>
           {shown.map(n => (
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card">
-              {/* Thumbnail */}
-              <div className="ng-thumb">
-                <img src={n.imagen || FALLBACK_IMAGE} alt={n.titulo} loading="lazy" />
+              {/* Thumbnail with category badge */}
+              <div className="ng-thumb" style={{ position: 'relative' }}>
+                <Image
+                  src={n.imagen || FALLBACK_IMAGE}
+                  alt={n.titulo}
+                  width={168}
+                  height={114}
+                  loading="lazy"
+                  quality={75}
+                  className="w-full h-full object-cover"
+                />
+                {/* Category badge as overlay */}
+                <div style={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 8,
+                  background: CAT_COLORS[n.categoria] || '#374151',
+                  color: '#fff',
+                  fontSize: 9,
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.09em',
+                  padding: '2px 8px',
+                  borderRadius: 4,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}>
+                  {n.categoria}
+                </div>
               </div>
 
               {/* Text */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7, minWidth: 0, justifyContent: 'center' }}>
-                <div>
-                  <span style={{ background: CAT_COLORS[n.categoria] || '#374151', color: '#fff', fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', padding: '2px 8px', borderRadius: 4 }}>
-                    {n.categoria}
-                  </span>
-                </div>
                 <h3 className="ng-title">{n.titulo}</h3>
                 {n.resumen && (
                   <p style={{ color: 'var(--ink-muted)', fontSize: 13, lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
@@ -153,7 +174,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
           </button>
         )}
         <Link href={activeCat === 'Todas' ? '/noticias' : `/noticias?cat=${encodeURIComponent(activeCat)}`}
-          style={{ padding: '10px 26px', border: '2px solid #8c1d18', color: '#fff', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          style={{ padding: '10px 26px', color: '#fff', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(140, 29, 24, 0.15)' }}>
           <i className="fas fa-newspaper" />
           {activeCat === 'Todas' ? 'Ver todas las noticias' : `Ver todo: ${activeCat}`}
         </Link>

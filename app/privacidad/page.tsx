@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidad | Nicaragua Informate',
+  title: 'Política de Privacidad',
   description: 'Política de privacidad de Nicaragua Informate — Cómo protegemos tu información personal.',
   alternates: { canonical: 'https://nicaraguainformate.com/privacidad' },
 };

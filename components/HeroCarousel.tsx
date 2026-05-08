@@ -1,31 +1,66 @@
 'use client';
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { CATEGORY_COLORS } from '@/lib/types';
+import Image from 'next/image';
+import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 
-interface Noticia {
-  id: string;
-  slug: string;
-  titulo: string;
-  resumen?: string;
-  categoria: string;
-  imagen: string;
-  fecha?: unknown;
+/**
+ * Constantes de configuración para el carrusel
+ */
+const MAX_SLIDES = 6;
+const FADE_DURATION_MS = 300;
+const AUTOPLAY_DELAY_MS = 5500;
+const SWIPE_THRESHOLD_PX = 48;
+
+/**
+ * Estilos para botones de control del carrusel
+ */
+const CONTROL_BUTTON_STYLE: React.CSSProperties = {
+  position: 'absolute', 
+  top: '50%', 
+  transform: 'translateY(-50%)',
+  width: 48, 
+  height: 48, 
+  borderRadius: '50%', 
+  border: '2px solid rgba(255,255,255,0.4)',
+  background: 'rgba(0,0,0,0.65)', 
+  backdropFilter: 'blur(8px)', 
+  WebkitBackdropFilter: 'blur(8px)',
+  color: '#fff', 
+  cursor: 'pointer', 
+  fontSize: 17, 
+  display: 'flex', 
+  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+  alignItems: 'center', 
+  justifyContent: 'center', 
+  zIndex: 10, 
+  transition: 'all 0.2s',
+};
+
+/**
+ * Props para HeroCarousel
+ */
+interface HeroCarouselProps {
+  noticias: Noticia[];
 }
 
-const FALLBACK_IMAGE = '/logo.png';
-
-export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
-  const slides = noticias.slice(0, 6);
-  const [current,  setCurrent]  = useState(0);
-  const [fading,   setFading]   = useState(false);
-  const [paused,   setPaused]   = useState(false);
+/**
+ * Componente de carrusel hero para noticias destacadas
+ * @param props Props del componente
+ * @returns Carrusel de noticias
+ */
+export default function HeroCarousel({ noticias }: HeroCarouselProps) {
+  const slides = noticias.slice(0, MAX_SLIDES);
+  const [current, setCurrent] = useState(0);
+  const [fading, setFading] = useState(false);
+  const [paused, setPaused] = useState(false);
   const touchX = useRef<number | null>(null);
 
   const goTo = useCallback((idx: number) => {
     if (fading) return;
     setFading(true);
-    setTimeout(() => { setCurrent(idx); setFading(false); }, 300);
+    setTimeout(() => { setCurrent(idx); setFading(false); }, FADE_DURATION_MS);
   }, [fading]);
 
   const next = useCallback(() => goTo((current + 1) % slides.length), [goTo, current, slides.length]);
@@ -33,23 +68,15 @@ export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
   useEffect(() => {
     if (paused || slides.length < 2) return;
-    const t = setTimeout(next, 5500);
+    const t = setTimeout(next, AUTOPLAY_DELAY_MS);
     return () => clearTimeout(t);
   }, [current, paused, next, slides.length]);
 
   if (!slides.length) return null;
 
-  const n   = slides[current];
+  const n = slides[current];
   const col = CATEGORY_COLORS[n.categoria] || '#8c1d18';
   const img = n.imagen || FALLBACK_IMAGE;
-
-  const CTRL: React.CSSProperties = {
-    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-    width: 48, height: 48, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)',
-    background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-    color: '#fff', cursor: 'pointer', fontSize: 17, display: 'flex', boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-    alignItems: 'center', justifyContent: 'center', zIndex: 10, transition: 'all 0.2s',
-  };
 
   return (
     <section
@@ -60,16 +87,21 @@ export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
       onTouchEnd={e => {
         if (touchX.current === null) return;
         const dx = e.changedTouches[0].clientX - touchX.current;
-        if (dx < -48) next(); else if (dx > 48) prev();
+        if (dx < -SWIPE_THRESHOLD_PX) next(); else if (dx > SWIPE_THRESHOLD_PX) prev();
         touchX.current = null;
       }}
       aria-label="Noticias destacadas"
     >
       {/* Slide image */}
-      <Link href={`/noticias/${n.slug}`} style={{ display: 'block', position: 'relative', aspectRatio: '21/9', textDecoration: 'none' }}>
-        <img
-          src={img} alt={n.titulo}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
+      <Link href={`/noticias/${n.slug}`} className="block relative aspect-[16/9] lg:aspect-[21/9] no-underline">
+        <Image
+          src={img}
+          alt={n.titulo}
+          fill
+          priority
+          quality={85}
+          className="object-cover object-[center_30%] transition-opacity duration-300"
+          style={{ opacity: fading ? 0 : 1 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.08) 100%)' }} />
 
@@ -92,8 +124,8 @@ export default function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
       {/* Arrows */}
       {slides.length > 1 && (
         <>
-          <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CTRL, left: 14 }} aria-label="Anterior"><i className="fas fa-chevron-left" /></button>
-          <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CTRL, right: 14 }} aria-label="Siguiente"><i className="fas fa-chevron-right" /></button>
+          <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><i className="fas fa-chevron-left" /></button>
+          <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><i className="fas fa-chevron-right" /></button>
         </>
       )}
 

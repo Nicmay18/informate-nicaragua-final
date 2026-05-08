@@ -1,24 +1,73 @@
 'use client';
+
 import { useState } from 'react';
 
+/**
+ * API endpoint para newsletter
+ */
+const NEWSLETTER_API = '/api/newsletter';
+
+/**
+ * Regex para validación de email
+ */
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Tipo de estado del formulario
+ */
+type FormStatus = 'idle' | 'loading' | 'ok' | 'err';
+
+/**
+ * Valida si un email tiene formato válido
+ * @param email Email a validar
+ * @returns true si el email es válido
+ */
+function isValidEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email);
+}
+
+/**
+ * Componente de formulario de suscripción a newsletter
+ */
 export default function NewsletterForm() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'ok' | 'err'>('idle');
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [error, setError] = useState<string>('');
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
+    
+    if (!email || !isValidEmail(email)) {
+      setError('Por favor ingresa un email válido');
+      return;
+    }
+
     setStatus('loading');
+    setError('');
+
     try {
-      const res = await fetch('/api/newsletter', {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const res = await fetch(NEWSLETTER_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: email.trim() }),
+        signal: controller.signal,
       });
-      setStatus(res.ok ? 'ok' : 'err');
-      if (res.ok) setEmail('');
-    } catch {
+
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        setStatus('ok');
+        setEmail('');
+      } else {
+        setStatus('err');
+        setError('Error al suscribirse. Intenta de nuevo.');
+      }
+    } catch (err) {
       setStatus('err');
+      setError(err instanceof Error ? err.message : 'Error de conexión');
     }
   }
 
@@ -39,14 +88,21 @@ export default function NewsletterForm() {
         ) : (
           <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <label htmlFor="newsletter-email" style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-muted)', marginBottom: '-4px' }}>Correo electrónico</label>
-            <input id="newsletter-email" type="email" value={email} onChange={e => setEmail(e.target.value)}
-              placeholder="tu@email.com" required
-              style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border-light)', borderRadius: 6, fontSize: 13, background: 'var(--paper)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }} />
+            <input 
+              id="newsletter-email" 
+              type="email" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)}
+              placeholder="tu@email.com" 
+              required
+              autoComplete="email"
+              style={{ width: '100%', padding: '9px 12px', border: '1px solid var(--border-light)', borderRadius: 6, fontSize: 13, background: 'var(--paper)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }} 
+            />
             <button type="submit" disabled={status === 'loading'}
               style={{ width: '100%', padding: '10px', background: '#8c1d18', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: status === 'loading' ? 0.7 : 1 }}>
               {status === 'loading' ? 'Suscribiendo...' : 'Suscribirse'}
             </button>
-            {status === 'err' && <p style={{ color: '#dc2626', fontSize: 12, margin: 0 }}>Error. Intenta de nuevo.</p>}
+            {status === 'err' && <p style={{ color: '#dc2626', fontSize: 12, margin: 0 }}>{error}</p>}
           </form>
         )}
       </div>
