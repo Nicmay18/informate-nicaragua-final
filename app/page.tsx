@@ -28,7 +28,7 @@ export default async function HomePage() {
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] text-slate-400 text-xs border-b border-white/[0.06]">
         <div className="max-w-[1400px] mx-auto px-6 py-1.5 flex justify-between items-center">
-          <span className="flex items-center gap-3">
+          <span className="flex items-center gap-3" suppressHydrationWarning>
             <i className="fas fa-calendar-alt text-red-500 text-[11px]" />
             {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             <span className="text-slate-600">|</span>
