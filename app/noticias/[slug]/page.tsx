@@ -77,21 +77,33 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (snap.empty) notFound();
 
   const n = snap.docs[0].data();
+  
+  // Validar datos antes de usarlos
+  if (!n || typeof n !== 'object') {
+    notFound();
+  }
   const url = `https://nicaraguainformate.com/noticias/${slug}`;
   const wordCount = countWords(n.contenido || '');
   const readTime = Math.ceil(wordCount / 200);
   const fechaStr = fmtDate(n.fecha);
   const autor = n.autor || 'Keyling Rivera M.';
-  const autorInitial = autor.charAt(0).toUpperCase();
+  const autorInitial = autor.charAt(0) || 'N';
   const imgUrl = n.imagen || FALLBACK_IMAGE;
   const related = await getRelated(n.categoria || 'General', slug);
   const mostRead = await getMostRead(slug);
+
+  let fechaISO;
+try {
+  fechaISO = n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha || Date.now()).toISOString();
+} catch {
+  fechaISO = new Date().toISOString();
+}
 
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'NewsArticle',
     headline: n.titulo, description: n.resumen || n.titulo,
     image: n.imagen || 'https://nicaraguainformate.com/logo.png',
-    datePublished: n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha).toISOString(),
+    datePublished: fechaISO,
     author: { '@type': 'Person', name: autor },
     publisher: { '@type': 'Organization', name: 'Nicaragua Informate', logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
