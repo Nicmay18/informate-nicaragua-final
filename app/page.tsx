@@ -14,10 +14,7 @@ import SiteFooter from '@/components/home/SiteFooter';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
 
-const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'), {
-  ssr: false,
-  loading: () => <div style={{ background: 'linear-gradient(160deg, #1e3a5f 0%, #0f172a 100%)', borderRadius: 14, padding: '20px', color: '#fff' }}>Cargando clima...</div>
-});
+const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'));
 
 export const revalidate = 60;
 
