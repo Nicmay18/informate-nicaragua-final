@@ -7,6 +7,7 @@ import { AudioButton, ShareChip } from '@/components/ArticleClient';
 
 export const revalidate = 60;
 export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
 
 export async function generateStaticParams() {
   try {
