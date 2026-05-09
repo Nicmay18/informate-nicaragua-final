@@ -5,15 +5,10 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { AudioButton, CopyButton, ShareChip } from '@/components/ArticleClient';
 
-export const revalidate = 60;
+// FUERZA renderizado dinámico para ignorar nombres de noticias viejos
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    const snapshot = await adminDb.collection('noticias').select('slug').limit(500).get();
-    return snapshot.docs.map((doc) => ({ slug: doc.data().slug as string }));
-  } catch { return []; }
-}
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -71,8 +66,8 @@ function cleanNestedTags(html: string): string {
   return c;
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function NewsPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
   if (snap.empty) notFound();
 
@@ -115,7 +110,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
       </header>
 
-      <main style={{ width: '100%', margin: '0 auto', padding: '32px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 48 }} id="main-content">
+      <main 
+  className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" 
+  id="main-content"
+>
         <article>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
             <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#fff', padding: '4px 10px', background: CAT_COLORS[n.categoria] || '#8c1d18', borderRadius: 3 }}>{n.categoria || 'General'}</span>
