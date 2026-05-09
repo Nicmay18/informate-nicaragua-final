@@ -148,7 +148,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                   </p>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 11, color: 'var(--ink-faint)', flexWrap: 'wrap' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }} suppressHydrationWarning>
                     <i className="fas fa-clock" style={{ color: '#8c1d18', fontSize: 10 }} />
                     {timeAgo(n.fecha)}
                   </span>

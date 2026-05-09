@@ -100,7 +100,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       }}>
         <div className="top-bar-inner">
           <div className="top-bar-left">
-            <span><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
+            <span suppressHydrationWarning><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
             <span><i className="fas fa-map-marker-alt" style={{ color: '#e53e3e' }} /> Estelí, Nicaragua</span>
           </div>
           <div className="top-bar-right">

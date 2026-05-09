@@ -90,7 +90,7 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container">
           <div className="footer-bottom-content">
-            <p className="copyright">
+            <p className="copyright" suppressHydrationWarning>
               &copy; {year} <strong>Nicaragua Informate</strong>. Todos los derechos reservados.
             </p>
             <div className="footer-bottom-links">
