@@ -1,7 +1,7 @@
 'use client';
+
 import { useState, useRef, useEffect } from 'react';
 
-// Radios de Nicaragua - Streams actualizados Mayo 2026
 const EMISORAS = [
   { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3',  genre: 'Noticias / Oficial' },
   { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream', genre: 'Noticias / Comentario' },
@@ -26,41 +26,83 @@ export default function RadioBar() {
     }
   }, [volume]);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      setPlaying(false);
+      setSelected(null);
+    };
+
+    const handleError = () => {
+      setPlaying(false);
+      setError('Error de conexión');
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
+
+    return () => {
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
+
   function play(idx: number) {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    
     setLoading(true);
     setError(null);
     setSelected(idx);
     setOpen(false);
-    if (audioRef.current) {
-      audioRef.current.src = EMISORAS[idx].url;
-      const timeout = setTimeout(() => {
+    
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      setError(`${EMISORAS[idx].name} no responde. Intenta otra emisora.`);
+      setPlaying(false);
+    }, 10000);
+    
+    audioRef.current.src = EMISORAS[idx].url;
+    
+    audioRef.current.play()
+      .then(() => {
+        clearTimeout(timeout);
+        setPlaying(true);
         setLoading(false);
-        setError(`${EMISORAS[idx].name} no responde. Probá otra emisora.`);
+      })
+      .catch((e) => {
+        clearTimeout(timeout);
         setPlaying(false);
-      }, 10000);
-      audioRef.current.play()
-        .then(() => {
-          clearTimeout(timeout);
-          setPlaying(true);
-          setLoading(false);
-        })
-        .catch((e) => {
-          clearTimeout(timeout);
-          setPlaying(false);
-          setLoading(false);
-          setError(`No se pudo reproducir ${EMISORAS[idx].name}`);
-          console.error('Radio play error:', e);
-        });
-    }
+        setLoading(false);
+        setError(`No se pudo reproducir ${EMISORAS[idx].name}`);
+        console.error('Radio play error:', e);
+      });
   }
 
   function toggle() {
     if (!audioRef.current) return;
+    
     if (playing) {
       audioRef.current.pause();
       setPlaying(false);
     } else {
-      if (selected === null) { setOpen(true); return; }
+      if (selected === null) { 
+        setOpen(true); 
+        return; 
+      }
       setLoading(true);
       audioRef.current.play()
         .then(() => {
@@ -74,23 +116,38 @@ export default function RadioBar() {
     }
   }
 
+  function stop() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    setPlaying(false);
+    setSelected(null);
+    setError(null);
+    setLoading(false);
+  }
+
   return (
     <div style={{ background: '#f8f4ef', borderBottom: '1px solid #e2d9d0', fontSize: 13 }}>
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '8px 24px', display: 'flex', alignItems: 'center', gap: 12, position: 'relative', flexWrap: 'wrap' }}>
-        {/* EN VIVO badge */}
         <span style={{ background: playing ? '#22c55e' : '#e53e3e', color: '#fff', fontSize: 10, fontWeight: 800, padding: '3px 8px', borderRadius: 4, letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0, transition: 'background 0.3s' }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', animation: playing ? 'pulse 1.2s infinite' : 'none' }} />
-          {playing ? 'ON AIR' : 'EN VIVO'}
+          {playing ? 'EN DIRECTO' : 'EN VIVO'}
         </span>
 
-        {/* Play button with loading state */}
         <button onClick={toggle} aria-label={playing ? 'Pausar' : 'Reproducir'}
           style={{ width: 34, height: 34, borderRadius: '50%', background: loading ? '#9ca3af' : '#8c1d18', border: 'none', color: '#fff', cursor: loading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, transition: 'all 0.2s' }}
           disabled={loading}>
           {loading ? <i className="fas fa-spinner fa-spin" /> : <i className={`fas ${playing ? 'fa-pause' : 'fa-play'}`} style={{ marginLeft: playing ? 0 : 2 }} />}
         </button>
 
-        {/* Station selector */}
+        {playing && (
+          <button onClick={stop} aria-label="Detener"
+            style={{ width: 34, height: 34, borderRadius: '50%', background: '#dc2626', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, transition: 'all 0.2s' }}>
+            <i className="fas fa-stop" />
+          </button>
+        )}
+
         <div style={{ position: 'relative' }}>
           <button onClick={() => setOpen(!open)}
             style={{ background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: '#4a3728', fontWeight: 600, fontSize: 13, padding: '6px 10px', borderRadius: 6, border: '1px solid #e2d9d0' }}>
@@ -114,7 +171,6 @@ export default function RadioBar() {
           )}
         </div>
 
-        {/* Now playing info */}
         <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 4 }}>
           <span style={{ color: '#4a3728', fontSize: 13, fontWeight: 600 }}>
             {selected !== null ? EMISORAS[selected].name : 'Selecciona una emisora'}
@@ -124,7 +180,6 @@ export default function RadioBar() {
           )}
         </div>
 
-        {/* Volume control */}
         {selected !== null && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
             <i className={volume === 0 ? 'fas fa-volume-mute' : volume < 0.5 ? 'fas fa-volume-down' : 'fas fa-volume-up'} style={{ color: '#8c7b70', fontSize: 12 }} />
@@ -140,7 +195,6 @@ export default function RadioBar() {
           </div>
         )}
 
-        {/* Error message */}
         {error && (
           <div style={{ position: 'absolute', top: '100%', left: 24, right: 24, marginTop: 4, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: '6px 12px', color: '#dc2626', fontSize: 12 }}>
             <i className="fas fa-exclamation-circle" style={{ marginRight: 6 }} />{error}

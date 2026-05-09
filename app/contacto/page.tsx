@@ -23,13 +23,11 @@ const SOCIAL_CHANNELS = [
 export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
-      {/* Intro */}
       <p style={{ color: '#cbd5e1', marginBottom: '2.5rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte. 
         Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Estelí.
       </p>
 
-      {/* Location Card with Map */}
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: '1rem' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -44,10 +42,9 @@ export default function ContactoPage() {
           </div>
         </div>
         
-        {/* Map Embed */}
         <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62288.01234567!2d-86.36!3d13.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f71249e5c41c0c3%3A0x5a0e7f1e0e3a6b0e!2sEstel%C3%AD%2C%20Nicaragua!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62288.01234567!2d-86.36!3d13.09!2m3!1f0!2f0!2f0!2f0!2m2!1s0x8f71249e5c41c0c3%3A0x5a0e7f1e0e3a6b0e!2sNicaragua%20Informate!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
             width="100%" 
             height="250" 
             style={{ border: 0 }} 
@@ -57,7 +54,6 @@ export default function ContactoPage() {
           />
         </div>
 
-        {/* Hours */}
         <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <i className="fas fa-clock" style={{ color: '#fbbf24', fontSize: 14 }} />
@@ -80,7 +76,6 @@ export default function ContactoPage() {
         </div>
       </div>
 
-      {/* Email Channels */}
       <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
         <i className="fas fa-envelope" style={{ color: '#8c1d18' }} />
         Correos Electrónicos
@@ -102,7 +97,6 @@ export default function ContactoPage() {
         ))}
       </div>
 
-      {/* Social Media */}
       <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
         <i className="fas fa-share-alt" style={{ color: '#8c1d18' }} />
         Redes Sociales
@@ -118,7 +112,6 @@ export default function ContactoPage() {
         ))}
       </div>
 
-      {/* Contact Form */}
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem' }}>
         <h3 style={{ color: '#fff', margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 700 }}>Formulario de contacto</h3>
         <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
