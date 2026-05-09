@@ -33,7 +33,7 @@ export default async function HomePage() {
   const tickerNews = noticias.slice(0, 8);
 
   return (
-    <div style={{ background: '#0a0a0a', color: '#e5e5e5', minHeight: '100vh' }}>
+    <div className="min-h-screen bg-[#0a0a0a] text-[#e5e5e5]">
       {/* Top Bar */}
       <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ width: '100%', margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -89,7 +89,7 @@ export default async function HomePage() {
       )}
 
       {/* Main Content */}
-      <main style={{ width: '100%', margin: '0 auto', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content">
+      <main className="w-full max-w-[1440px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" id="main-content">
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
