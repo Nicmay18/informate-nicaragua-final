@@ -12,9 +12,7 @@ const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // ELIMINADO: maximumScale y userScalable que rompían el zoom en móvil
-  viewportFit: 'cover',
-  themeColor: '#ffffff',
+  // Al no poner maximumScale, el navegador permite zoom natural en móvil
 };
 
 export const metadata: Metadata = {

@@ -89,7 +89,10 @@ export default async function HomePage() {
       )}
 
       {/* Main Content */}
-      <main className="w-full max-w-[1440px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" id="main-content">
+      <main 
+  id="main-content"
+  className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8"
+>
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
