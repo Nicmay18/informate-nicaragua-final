@@ -805,6 +805,69 @@ ul { list-style: none; }
   .sidebar-left, .sidebar-right { display: none; }
   .related-cards-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   LAYOUT PROFESIONAL — Nicaragua Informate
+   Grid principal + responsive robusto (sin clases arbitrarias de Tailwind)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Asegurar ancho completo */
+html, body, #__next {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Layout principal del index */
+.ni-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.ni-content {
+  min-width: 0;
+  order: 1;
+}
+
+.ni-sidebar {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  order: 2;
+}
+
+/* Tablet+: 2 columnas (768px+) */
+@media (min-width: 768px) {
+  .ni-layout {
+    grid-template-columns: 1fr 300px;
+  }
+  .ni-sidebar {
+    display: flex;
+  }
+}
+
+/* Desktop: sidebar más ancho (1024px+) */
+@media (min-width: 1024px) {
+  .ni-layout {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+/* Mobile bottom nav: solo visible en móvil */
+.bottom-nav {
+  display: flex;
+}
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none !important;
+  }
+}
+
+/* Fecha contraste */
+.fecha, .date, time {
+  color: #767676 !important;
+}
 @media (max-width: 768px) {
   .header { height: auto; }
   .header-inner { padding: 10px 16px; gap: 10px; align-items: center; }
