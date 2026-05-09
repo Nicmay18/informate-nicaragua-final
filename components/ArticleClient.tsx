@@ -166,3 +166,192 @@ export function SocialFooter({ href, icon }: { href: string; icon: string }) {
     </a>
   );
 }
+
+type NoticiaProps = {
+  id: string;
+  slug: string;
+  titulo: string;
+  resumen: string;
+  contenido?: string;
+  categoria: string;
+  imagen: string;
+  fecha: string;
+  autor?: string;
+  destacada?: boolean;
+  vistas?: number;
+  palabras?: number;
+};
+
+const CAT_COLORS: Record<string, string> = { 
+  Sucesos: '#dc2626', 
+  Nacionales: '#1d4ed8', 
+  Deportes: '#16a34a', 
+  Internacionales: '#7c3aed', 
+  Espectáculos: '#db2777' 
+};
+
+function fmtDate(ts: unknown): string {
+  if (!ts) return 'Hace un momento';
+  try {
+    const d = typeof ts === 'string' ? new Date(ts) : new Date(String(ts));
+    return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' });
+  } catch { return 'Hace un momento'; }
+}
+
+function countWords(text: string): number { 
+  return text?.trim()?.split(/\s+/).filter(w => w.length > 0).length || 0; 
+}
+
+function cleanNestedTags(html: string): string {
+  if (!html) return '';
+  let c = html.replace(/<p>\s*<p>/gi, '<p>').replace(/<\/p>\s*<\/p>/gi, '</p>');
+  c = c.replace(/<b>\s*<b>/gi, '<b>').replace(/<\/b>\s*<\/b>/gi, '</b>');
+  c = c.replace(/<strong>\s*<strong>/gi, '<strong>').replace(/<\/strong>\s*<\/strong>/gi, '</strong>');
+  c = c.replace(/<i>\s*<i>/gi, '<i>').replace(/<\/i>\s*<\/i>/gi, '</i>');
+  c = c.replace(/<em>\s*<em>/gi, '<em>').replace(/<\/em>\s*<\/em>/gi, '</em>');
+  return c;
+}
+
+export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
+  if (!noticia) {
+    return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
+  }
+
+  const slug = noticia.slug || '';
+  const url = `https://nicaraguainformate.com/noticias/${slug}`;
+  const wordCount = countWords(noticia.contenido || '');
+  const readTime = Math.ceil(wordCount / 200);
+  const fechaStr = fmtDate(noticia.fecha);
+  const autor = noticia.autor || 'Keyling Rivera M.';
+  const autorInitial = autor.charAt(0).toUpperCase();
+  const imgUrl = noticia.imagen || '/logo.png';
+
+  const jsonLd = {
+    '@context': 'https://schema.org', 
+    '@type': 'NewsArticle',
+    headline: noticia.titulo, 
+    description: noticia.resumen || noticia.titulo,
+    image: noticia.imagen || 'https://nicaraguainformate.com/logo.png',
+    datePublished: noticia.fecha || new Date().toISOString(),
+    author: { '@type': 'Person', name: autor },
+    publisher: { 
+      '@type': 'Organization', 
+      name: 'Nicaragua Informate', 
+      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } 
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      
+      <main className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-6">
+        <article style={{ maxWidth: 800, margin: '0 auto' }}>
+          <div style={{ marginBottom: 20 }}>
+            <span style={{ 
+              fontSize: 11, 
+              fontWeight: 700, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.1em', 
+              color: '#fff', 
+              padding: '4px 10px', 
+              background: CAT_COLORS[noticia.categoria] || '#8c1d18', 
+              borderRadius: 3,
+              display: 'inline-block',
+              marginBottom: 12
+            }}>
+              {noticia.categoria || 'General'}
+            </span>
+            <span style={{ fontSize: 12, color: '#8c8c8c', display: 'block' }}>{fechaStr}</span>
+          </div>
+
+          <h1 style={{ 
+            fontFamily: "Georgia, serif", 
+            fontSize: 'clamp(24px, 5vw, 38px)', 
+            fontWeight: 700, 
+            color: '#121212', 
+            lineHeight: 1.15, 
+            marginBottom: 16 
+          }}>
+            {noticia.titulo}
+          </h1>
+          
+          {noticia.resumen && (
+            <p style={{ fontSize: 17, color: '#595959', lineHeight: 1.5, marginBottom: 20 }}>
+              {noticia.resumen}
+            </p>
+          )}
+
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 10, 
+            marginBottom: 24, 
+            padding: '12px 0', 
+            borderTop: '1px solid #e2e2e2', 
+            borderBottom: '1px solid #e2e2e2' 
+          }}>
+            <div style={{ 
+              width: 36, 
+              height: 36, 
+              borderRadius: '50%', 
+              background: '#8c1d18', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              color: '#fff', 
+              fontWeight: 700, 
+              fontSize: 14 
+            }}>
+              {autorInitial}
+            </div>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#121212' }}>{autor}</div>
+              <div style={{ fontSize: 12, color: '#8c8c8c' }}>{readTime} min de lectura</div>
+            </div>
+          </div>
+
+          {noticia.imagen && (
+            <img 
+              src={imgUrl} 
+              alt={noticia.titulo}
+              style={{ width: '100%', borderRadius: 8, marginBottom: 24, display: 'block' }} 
+            />
+          )}
+
+          <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+
+          <div 
+            className="article-body" 
+            style={{ fontFamily: "Georgia, serif", fontSize: 17, lineHeight: 1.7, color: '#1a1a1a' }}
+            dangerouslySetInnerHTML={{ __html: cleanNestedTags(noticia.contenido || '') }} 
+          />
+
+          <div style={{ 
+            margin: '40px 0', 
+            padding: '24px 0', 
+            borderTop: '1px solid #e2e2e2', 
+            borderBottom: '1px solid #e2e2e2' 
+          }}>
+            <div style={{ 
+              fontSize: 11, 
+              fontWeight: 700, 
+              textTransform: 'uppercase', 
+              color: '#8c8c8c', 
+              marginBottom: 12, 
+              letterSpacing: '0.05em' 
+            }}>
+              Compartir
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="Facebook" bg="#1877f2" />
+              <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" />
+              <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="Telegram" bg="#0088cc" />
+            </div>
+          </div>
+        </article>
+      </main>
+    </>
+  );
+}
