@@ -6,7 +6,7 @@ export default function SiteFooter() {
   return (
     <footer className="footer-deep site-footer text-slate-400 border-t border-white/[0.06] pt-12 pb-6 px-6">
       <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-3">
@@ -90,7 +90,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="border-t border-white/[0.06] pt-5 flex justify-between items-center flex-wrap gap-2 text-xs text-slate-700">
-          <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados. Estelí, Nicaragua.</span>
+          <span suppressHydrationWarning>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados. Estelí, Nicaragua.</span>
           <a href="/feed.xml" className="text-orange-500 no-underline flex items-center gap-1">
             <i className="fas fa-rss" /> Feed RSS
           </a>

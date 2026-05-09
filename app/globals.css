@@ -997,6 +997,19 @@ body {
 }
 
 /* Date contrast fix (WCAG AA 4.5:1) */
+
+/* Force centering and full width for all containers */
+#__next,
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Ensure body has full width */
+body {
+  width: 100% !important;
+  min-width: 100% !important;
+}
 .fecha, .date, time {
   color: #767676 !important;
 }
