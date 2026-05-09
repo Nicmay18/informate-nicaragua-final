@@ -5,9 +5,9 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { AudioButton, ShareChip } from '@/components/ArticleClient';
 
-export const revalidate = 60;
-export const dynamicParams = true;
 export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   try {
