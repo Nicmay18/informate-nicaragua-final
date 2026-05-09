@@ -73,6 +73,9 @@ function cleanNestedTags(html: string): string {
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  // Agrega esto para que si una noticia da error, el build no se detenga
+  if (!params.slug) return null; 
+  
   const { slug } = params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
   if (snap.empty) notFound();
