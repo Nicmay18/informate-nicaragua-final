@@ -101,9 +101,17 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
 
       {/* ── Articles ── */}
       {shown.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--ink-faint)' }}>
-          <i className="fas fa-newspaper" style={{ fontSize: 36, marginBottom: 12, display: 'block' }} />
-          No hay noticias en esta categoría.
+        <div className="news-grid">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="news-card" style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+              <div className="skeleton" style={{ aspectRatio: '16/10' }} />
+              <div style={{ padding: 'var(--space-5)' }}>
+                <div className="skeleton" style={{ height: 24, marginBottom: 'var(--space-3)', borderRadius: 4 }} />
+                <div className="skeleton" style={{ height: 16, marginBottom: 'var(--space-4)', borderRadius: 4 }} />
+                <div className="skeleton" style={{ height: 16, marginBottom: 'var(--space-4)', borderRadius: 4 }} />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div>
