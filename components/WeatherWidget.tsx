@@ -45,16 +45,11 @@ async function fetchCity(lat: number, lon: number): Promise<WData | null> {
 }
 
 export default function WeatherWidget() {
-  const [mounted, setMounted] = useState(false);
   const [cityIdx, setCityIdx]   = useState(0);
   const [data, setData]         = useState<WData | null>(null);
   const [allTemps, setAllTemps] = useState<(number | null)[]>(new Array(CITIES.length).fill(null));
   const [loading, setLoading]   = useState(false);
   const [paused, setPaused]     = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const loadCity = useCallback(async (idx: number) => {
     setLoading(true);
@@ -64,22 +59,21 @@ export default function WeatherWidget() {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
     loadCity(0);
     CITIES.forEach(async (c, i) => {
       const w = await fetchCity(c.lat, c.lon);
       if (w) setAllTemps(prev => { const n = [...prev]; n[i] = w.temp; return n; });
     });
-  }, [mounted, loadCity]);
+  }, [loadCity]);
 
   // Auto-cycle cities every 10 s (más tiempo para ver los datos)
   useEffect(() => {
-    if (!mounted || paused) return;
+    if (paused) return;
     const t = setInterval(() => {
       setCityIdx(prev => { const next = (prev + 1) % CITIES.length; loadCity(next); return next; });
     }, 10000);
     return () => clearInterval(t);
-  }, [mounted, loadCity, paused]);
+  }, [loadCity, paused]);
 
   const select = (i: number) => {
     setCityIdx(i); loadCity(i); setPaused(true);

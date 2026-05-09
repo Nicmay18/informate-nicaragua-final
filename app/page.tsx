@@ -11,7 +11,7 @@ import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
-import BottomNav from '@/components/BottomNav';
+import MobileBottomNav from '@/components/home/MobileBottomNav';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
 
@@ -85,27 +85,43 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Main Grid — usa clases CSS normales, NO arbitrarias de Tailwind */}
-      <main className="ni-layout max-w-[1400px] mx-auto px-6 py-5 pb-12" id="main-content">
-        <div className="ni-content">
+      {/* Main Grid */}
+      <main className="max-w-[1400px] mx-auto px-6 py-5 pb-12 grid grid-cols-1 sm:grid-cols-[1fr_300px] lg:grid-cols-[1fr_320px] gap-8" id="main-content">
+        <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
 
-        {/* Sidebar — oculta en móvil, visible en tablet+ */}
-        <aside className="ni-sidebar">
+        {/* Sidebar */}
+        <aside className="flex flex-col gap-6">
+          {/* Trending */}
           <TrendingList noticias={noticias.slice(0, 6)} />
+
+          {/* Clima */}
           <div className="widget-lift rounded-[14px] overflow-hidden">
             <WeatherWidget />
           </div>
+
+          {/* Indicadores */}
           <div className="widget-lift rounded-[14px] overflow-hidden">
             <IndicadoresWidget />
           </div>
+
+          {/* Más Leídas */}
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+
+          {/* Newsletter */}
           <NewsletterForm />
+
+          {/* Social Grid */}
           <SocialGrid />
+
+          {/* Tags Cloud */}
           <TagsCloud />
         </aside>
       </main>
+
+      {/* Mobile Bottom Nav */}
+      <MobileBottomNav />
 
       {/* Footer */}
       <SiteFooter />
