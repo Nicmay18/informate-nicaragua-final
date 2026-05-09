@@ -69,9 +69,12 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
       .orderBy('fecha', 'desc')
       .limit(validatedCount)
       .get();
-    return snap.docs.map(docToNoticia);
+    const noticias = snap.docs.map(docToNoticia);
+    console.log(`[getNews] Fetched ${noticias.length} noticias`);
+    return noticias;
   } catch (err) {
-    console.error('[getNews]', err instanceof Error ? err.message : String(err));
+    console.error('[getNews] Error:', err instanceof Error ? err.message : String(err));
+    console.error('[getNews] Stack:', err instanceof Error ? err.stack : 'No stack');
     return [];
   }
 }
