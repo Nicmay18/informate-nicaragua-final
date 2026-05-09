@@ -1,0 +1,38 @@
+remote: warning: See https://gh.io/lfs for more information.        
+remote: warning: File d3db80a2e352b1966a57e9ee22d0153205208cc6 is 50.04 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB        
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cannot contain secrets        
+remote: 
+remote:             
+remote:      (?) Learn how to resolve a blocked push        
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push        
+remote:             
+remote:             
+remote:       —— Google Cloud Service Account Credentials ——————————        
+remote:        locations:        
+remote:          - commit: d778c53f17da693abdb292cfffc34baf30a08164        
+remote:            path: serviceAccountKey.json:1        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/Nicmay18/informate-nicaragua/security/secret-scanning/unblock-secret/3ClZ6wSP25x84BsjK9o8TZGS4Ng        
+remote:             
+remote:             
+remote:       —— GitHub Personal Access Token ——————————————————————        
+remote:        locations:        
+remote:          - commit: f026877b865ba8535033b2ac3dd33858fc19dc82        
+remote:            path: informate-nicaragua-main/public/admin/index.html:1729        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/Nicmay18/informate-nicaragua/security/secret-scanning/unblock-secret/3Cldqv1azCYjoKhkIyclsd0MyU4        
+remote:             
+remote: 
+remote: 
+To https://github.com/Nicmay18/informate-nicaragua.git
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/Nicmay18/informate-nicaragua.git'
