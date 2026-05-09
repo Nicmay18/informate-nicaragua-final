@@ -39,7 +39,7 @@ export default async function HomePage() {
     <div style={{ background: '#0a0a0a', color: '#e5e5e5', minHeight: '100vh' }}>
       {/* Top Bar */}
       <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ width: '100%', margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <i className="fas fa-calendar-alt" style={{ color: '#dc2626', fontSize: 11 }} />
             {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
@@ -52,7 +52,7 @@ export default async function HomePage() {
 
       {/* Header */}
       <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid #262626' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div style={{ width: '100%', margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} style={{ borderRadius: 8 }} />
             <div>
@@ -69,7 +69,7 @@ export default async function HomePage() {
 
       {/* Category Ribbon */}
       <div style={{ background: '#141414', borderBottom: '1px solid #262626' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 24px', display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none' }}>
+        <div style={{ width: '100%', margin: '0 auto', padding: '0 24px', display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {CATEGORIES.map((cat) => (
             <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
               style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#a3a3a3', textDecoration: 'none', borderBottom: '2px solid transparent', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
@@ -86,13 +86,13 @@ export default async function HomePage() {
 
       {/* Hero */}
       {destacadas.length > 0 && (
-        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '24px' }}>
+        <section style={{ width: '100%', margin: '0 auto', padding: '24px' }}>
           <HeroCarousel noticias={destacadas} />
         </section>
       )}
 
       {/* Main Content */}
-      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content">
+      <main style={{ width: '100%', margin: '0 auto', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content">
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>

@@ -16,7 +16,7 @@ export async function generateStaticParams() {
   } catch { return []; }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = await params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
   if (snap.empty) return { title: 'Noticia no encontrada' };
@@ -131,7 +131,7 @@ try {
         </div>
       </header>
 
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 48 }}>
+      <main style={{ width: '100%', margin: '0 auto', padding: '32px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 48 }} id="main-content">
         <article>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
             <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', padding: '5px 12px', background: 'rgba(220,38,38,0.1)', borderRadius: 4 }}>{noticia.categoria || 'General'}</span>
