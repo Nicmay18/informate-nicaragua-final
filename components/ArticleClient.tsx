@@ -206,22 +206,108 @@ export function CopyButton({ url }: { url: string }) {
     <button
       onClick={handleCopy}
       style={{
-        width: 44,
-        height: 44,
-        borderRadius: '50%',
+        width: 44, height: 44, borderRadius: '50%',
         background: copied ? '#16a34a' : '#fffdf9',
         border: '1px solid #ddd6ce',
-        display: 'grid',
-        placeItems: 'center',
-        cursor: 'pointer',
-        color: copied ? '#fff' : '#756d66',
-        fontSize: 16,
-        transition: 'all 0.2s',
+        display: 'grid', placeItems: 'center',
+        cursor: 'pointer', color: copied ? '#fff' : '#756d66',
+        fontSize: 16, transition: 'all 0.2s',
       }}
       title={copied ? '¡Copiado!' : 'Copiar enlace'}
       aria-label={copied ? 'Enlace copiado' : 'Copiar enlace al portapapeles'}
     >
       {copied ? '✓' : '🔗'}
     </button>
+  );
+}
+
+export function ShareChip({ href, label, bg }: { href: string; label: string; bg: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 8,
+        padding: '10px 20px', borderRadius: 999, fontSize: 13, fontWeight: 600,
+        textDecoration: 'none', border: '1px solid #ddd6ce',
+        background: '#fffdf9', color: '#756d66', transition: 'all 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget;
+        el.style.backgroundColor = bg;
+        el.style.color = 'white';
+        el.style.borderColor = bg;
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget;
+        el.style.backgroundColor = '#fffdf9';
+        el.style.color = '#756d66';
+        el.style.borderColor = '#ddd6ce';
+      }}
+    >
+      {label}
+    </a>
+  );
+}
+
+export function ShareSticky({ href, icon, color }: { href: string; icon: string; color: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        width: 44, height: 44, borderRadius: '50%', background: color,
+        display: 'grid', placeItems: 'center', textDecoration: 'none',
+        color: '#fff', fontSize: 16, transition: 'all 0.2s',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget;
+        el.style.transform = 'scale(1.1)';
+        el.style.boxShadow = `0 4px 12px ${color}55`;
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget;
+        el.style.transform = 'scale(1)';
+        el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+      }}
+    >
+      <i className={`fab fa-${icon}`} />
+    </a>
+  );
+}
+
+export function SocialFooter({ href, icon }: { href: string; icon: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        width: 40, height: 40, borderRadius: '50%',
+        background: 'rgba(255,255,255,0.06)', color: '#94a3b8',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 15, textDecoration: 'none', transition: 'all 0.3s',
+        border: '1px solid rgba(255,255,255,0.08)',
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget;
+        el.style.background = '#8c1d18';
+        el.style.color = '#fff';
+        el.style.borderColor = '#8c1d18';
+        el.style.transform = 'translateY(-3px) scale(1.1)';
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget;
+        el.style.background = 'rgba(255,255,255,0.06)';
+        el.style.color = '#94a3b8';
+        el.style.borderColor = 'rgba(255,255,255,0.08)';
+        el.style.transform = 'translateY(0) scale(1)';
+      }}
+    >
+      <i className={`fab fa-${icon}`} />
+    </a>
   );
 }
