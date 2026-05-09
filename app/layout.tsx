@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const siteJsonLd = buildWebSiteJsonLd();
 
   return (
-    <html lang="es" data-theme="dark" className={`${inter.variable} ${merriweather.variable}`}>
+    <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
         <style>{`a.skip-link{position:absolute;top:-40px;left:0;background:#8c1d18;color:#fff;padding:8px 16px;text-decoration:none;z-index:100;transition:top 0.3s}a.skip-link:focus{top:0}`}</style>
         <meta name="theme-color" content="#0F0F0F" />
