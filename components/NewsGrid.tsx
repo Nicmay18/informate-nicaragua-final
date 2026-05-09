@@ -24,7 +24,6 @@ const CAT_ICONS: Record<string, string> = {
 };
 
 const FALLBACK_IMAGE = '/logo.png';
-
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 8;
 
@@ -46,21 +45,22 @@ function readTime(titulo: string, resumen: string): number {
 
 export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const [activeCat, setActiveCat] = useState('Todas');
-  const [page, setPage]           = useState(1);
+  const [page, setPage] = useState(1);
 
   const filtered = activeCat === 'Todas' ? noticias : noticias.filter(n => n.categoria === activeCat);
-  const shown    = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore  = shown.length < filtered.length;
+  const shown = filtered.slice(0, page * PAGE_SIZE);
+  const hasMore = shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
 
   return (
     <div>
       <style>{`
-        .ng-card { display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--border-light); text-decoration:none; }
+        .ng-card { display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--border-light); text-decoration:none; transition: all 0.2s ease; }
+        .ng-card:hover { padding-left: 8px; }
         .ng-card:last-child { border-bottom:none; }
-        .ng-thumb { flex-shrink:0; width:168px; height:114px; border-radius:10px; overflow:hidden; background:#e5e7eb; }
-        .ng-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+        .ng-thumb { flex-shrink:0; width:168px; height:114px; border-radius:12px; overflow:hidden; background:var(--gray-100); position:relative; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .ng-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); }
         .ng-card:hover .ng-thumb img { transform:scale(1.06); }
         .ng-title { color:var(--ink); font-weight:700; font-size:16px; line-height:1.35; margin:0; letter-spacing:-0.2px; transition:color 0.15s; }
         .ng-card:hover .ng-title { color:#8c1d18; }
@@ -69,14 +69,13 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         .ng-load-btn { padding:10px 26px; border:2px solid var(--ink); color:var(--ink); background:none; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; transition:all 0.2s; }
         .ng-load-btn:hover { background:var(--ink); color:var(--paper); }
         @media(max-width:580px){
-          .ng-thumb { width:110px; height:80px; border-radius:8px; }
+          .ng-thumb { width:110px; height:80px; border-radius:10px; }
           .ng-title { font-size:14px; }
           .ng-cats-row { gap:6px; }
           .ng-cat-btn { padding:5px 11px; font-size:11px; }
         }
       `}</style>
 
-      {/* ── Section header ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
         <div style={{ width: 4, height: 24, background: '#e53e3e', borderRadius: 2, flexShrink: 0 }} />
         <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--ink)', margin: 0, letterSpacing: '-0.3px' }}>Últimas Noticias</h2>
@@ -84,11 +83,10 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 600, flexShrink: 0 }}>{filtered.length} artículos</span>
       </div>
 
-      {/* ── Category filter pills ── */}
       <div className="ng-cats-row" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
         {CATS.map(c => {
           const active = c === activeCat;
-          const color  = c === 'Todas' ? '#8c1d18' : (CAT_COLORS[c] || '#374151');
+          const color = c === 'Todas' ? '#8c1d18' : (CAT_COLORS[c] || '#374151');
           return (
             <button key={c} onClick={() => switchCat(c)} className="ng-cat-btn"
               style={{ background: active ? color : 'transparent', color: active ? '#fff' : 'var(--ink-muted)', borderColor: active ? color : 'var(--border-light)' }}>
@@ -99,26 +97,16 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         })}
       </div>
 
-      {/* ── Articles ── */}
       {shown.length === 0 ? (
-        <div className="news-grid">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="news-card" style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
-              <div className="skeleton" style={{ aspectRatio: '16/10' }} />
-              <div style={{ padding: 'var(--space-5)' }}>
-                <div className="skeleton" style={{ height: 24, marginBottom: 'var(--space-3)', borderRadius: 4 }} />
-                <div className="skeleton" style={{ height: 16, marginBottom: 'var(--space-4)', borderRadius: 4 }} />
-                <div className="skeleton" style={{ height: 16, marginBottom: 'var(--space-4)', borderRadius: 4 }} />
-              </div>
-            </div>
-          ))}
+        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--ink-faint)' }}>
+          <i className="fas fa-newspaper" style={{ fontSize: 36, marginBottom: 12, display: 'block' }} />
+          No hay noticias en esta categoría.
         </div>
       ) : (
         <div>
           {shown.map(n => (
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card">
-              {/* Thumbnail with category badge */}
-              <div className="ng-thumb" style={{ position: 'relative' }}>
+              <div className="ng-thumb">
                 <Image
                   src={n.imagen || FALLBACK_IMAGE}
                   alt={n.titulo}
@@ -128,26 +116,18 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                   quality={75}
                   className="w-full h-full object-cover"
                 />
-                {/* Category badge as overlay */}
                 <div style={{
-                  position: 'absolute',
-                  top: 8,
-                  left: 8,
+                  position: 'absolute', top: 8, left: 8,
                   background: CAT_COLORS[n.categoria] || '#374151',
-                  color: '#fff',
-                  fontSize: 9,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.09em',
-                  padding: '2px 8px',
-                  borderRadius: 4,
+                  color: '#fff', fontSize: 9, fontWeight: 700,
+                  textTransform: 'uppercase', letterSpacing: '0.09em',
+                  padding: '2px 8px', borderRadius: 4,
                   boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                 }}>
                   {n.categoria}
                 </div>
               </div>
 
-              {/* Text */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7, minWidth: 0, justifyContent: 'center' }}>
                 <h3 className="ng-title">{n.titulo}</h3>
                 {n.resumen && (
@@ -156,14 +136,14 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                   </p>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 11, color: 'var(--ink-faint)', flexWrap: 'wrap' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }} suppressHydrationWarning>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <i className="fas fa-clock" style={{ color: '#8c1d18', fontSize: 10 }} />
                     {timeAgo(n.fecha)}
                   </span>
                   {readTime(n.titulo, n.resumen) > 2 && (
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                       <i className="fas fa-book-open" style={{ fontSize: 10 }} />
-                      {readTime(n.titulo, n.resumen)} min de lectura
+                      {readTime(n.titulo, n.resumen)} min
                     </span>
                   )}
                 </div>
@@ -173,18 +153,17 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         </div>
       )}
 
-      {/* ── Actions ── */}
       <div style={{ textAlign: 'center', paddingTop: 24, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         {hasMore && (
           <button onClick={() => setPage(p => p + 1)} className="ng-load-btn">
             <i className="fas fa-arrow-down" style={{ marginRight: 8 }} />
-            Cargar más noticias
+            Cargar más
           </button>
         )}
         <Link href={activeCat === 'Todas' ? '/noticias' : `/noticias?cat=${encodeURIComponent(activeCat)}`}
           style={{ padding: '10px 26px', color: '#fff', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(140, 29, 24, 0.15)' }}>
           <i className="fas fa-newspaper" />
-          {activeCat === 'Todas' ? 'Ver todas las noticias' : `Ver todo: ${activeCat}`}
+          {activeCat === 'Todas' ? 'Ver todas' : `Ver: ${activeCat}`}
         </Link>
       </div>
     </div>

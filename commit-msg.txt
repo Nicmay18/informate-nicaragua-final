@@ -1,1 +1,1 @@
-fix: firebase typos + mock fallback para noticias
+refine: visual improvements - glassmorphism, elegant cards, mobile nav
