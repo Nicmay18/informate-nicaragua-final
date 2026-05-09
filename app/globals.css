@@ -2,9 +2,8 @@
 
 :root {
   --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-serif: 'Crimson Pro', 'Times New Roman', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   
   --color-primary: #8c1d18;
   --color-primary-hover: #6f1713;
