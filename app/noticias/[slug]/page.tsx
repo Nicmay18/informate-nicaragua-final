@@ -3,7 +3,7 @@ import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { AudioButton, CopyButton, ShareChip, ShareSticky, SocialFooter } from '@/components/ArticleClient';
+import { AudioButton, CopyButton, ShareChip, ShareSticky } from '@/components/ArticleClient';
 
 export const revalidate = 60;
 export const dynamicParams = true;
