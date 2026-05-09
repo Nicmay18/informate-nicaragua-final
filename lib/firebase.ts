@@ -1,18 +1,12 @@
 import { Article, FALLBACK_IMAGE } from './types';
 
-/**
- * Constantes de configuración
- */
 const PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'informate-instant-nicaragua';
 const BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 const DEFAULT_PAGE_SIZE = 100;
 const DEFAULT_QUERY_LIMIT = 1;
-const FETCH_TIMEOUT = 10000; // 10 segundos
+const FETCH_TIMEOUT = 10000;
 const MAX_ARTICLES = 300;
 
-/**
- * Tipos para valores de Firestore REST API
- */
 type FirestoreValue =
   | { stringValue: string }
   | { integerValue: string }
@@ -23,11 +17,6 @@ type FirestoreValue =
   | { mapValue: { fields: Record<string, FirestoreValue> } }
   | { arrayValue: { values?: FirestoreValue[] } };
 
-/**
- * Convierte un valor de Firestore a tipo JavaScript
- * @param field Valor de Firestore
- * @returns Valor convertido
- */
 function getValue(field: FirestoreValue | undefined): unknown {
   if (!field) return null;
   if ('stringValue' in field) return field.stringValue;
@@ -49,20 +38,10 @@ function getValue(field: FirestoreValue | undefined): unknown {
   return null;
 }
 
-/**
- * Convierte valor a string de forma segura
- * @param v Valor a convertir
- * @returns String
- */
 function toString(v: unknown): string {
   return typeof v === 'string' ? v : '';
 }
 
-/**
- * Convierte valor a número de forma segura
- * @param v Valor a convertir
- * @returns Number
- */
 function toNumber(v: unknown): number {
   if (typeof v === 'number') return v;
   if (typeof v === 'string') {
@@ -72,21 +51,10 @@ function toNumber(v: unknown): number {
   return 0;
 }
 
-/**
- * Convierte valor a boolean de forma segura
- * @param v Valor a convertir
- * @returns Boolean
- */
 function toBoolean(v: unknown): boolean {
   return typeof v === 'boolean' ? v : false;
 }
 
-/**
- * Normaliza la URL de la imagen
- * @param imagen URL de la imagen
- * @param categoria Categoría de la noticia
- * @returns URL normalizada
- */
 function normalizeImage(imagen: string): string {
   const fb = FALLBACK_IMAGE;
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return fb;
@@ -114,11 +82,6 @@ function normalizeImage(imagen: string): string {
   return `/images/${fn}`;
 }
 
-/**
- * Convierte un documento de Firestore a Article
- * @param doc Documento de Firestore
- * @returns Article o null si hay error
- */
 function docToArticle(doc: { name?: string; fields?: Record<string, FirestoreValue> }): Article | null {
   try {
     const f = doc.fields || {};
@@ -136,14 +99,14 @@ function docToArticle(doc: { name?: string; fields?: Record<string, FirestoreVal
 
     return {
       id,
-      titulo: titulo,
+      titulo,
       resumen: toString(getValue(f['resumen']) ?? getValue(f['excerpt'])),
       contenido: toString(getValue(f['contenido']) ?? getValue(f['content'])),
-      categoria: categoria,
+      categoria,
       autor: toString(getValue(f['autor']) ?? getValue(f['author'])) || 'Nicaragua Informate',
       fecha: toString(getValue(f['fecha'])) || new Date().toISOString(),
       imagen: normalizeImage(imagen),
-            slug,
+      slug,
       destacada: toBoolean(getValue(f['destacada'])),
       vistas: toNumber(getValue(f['vistas']) ?? getValue(f['views'])),
     };
@@ -153,19 +116,11 @@ function docToArticle(doc: { name?: string; fields?: Record<string, FirestoreVal
   }
 }
 
-/**
- * Respuesta de Firestore REST API para listas
- */
 interface FirestoreListResponse {
   documents?: Array<{ name?: string; fields?: Record<string, FirestoreValue> }>;
   nextPageToken?: string;
 }
 
-/**
- * Valida el parámetro limitCount
- * @param count Cantidad solicitada
- * @returns Count validado
- */
 function validateLimitCount(count: number): number {
   if (typeof count !== 'number' || isNaN(count)) return MAX_ARTICLES;
   if (count < 0) return MAX_ARTICLES;
@@ -173,11 +128,6 @@ function validateLimitCount(count: number): number {
   return count || MAX_ARTICLES;
 }
 
-/**
- * Obtiene todos los artículos de Firestore
- * @param limitCount Límite de artículos a obtener
- * @returns Array de artículos
- */
 export async function getAllArticles(limitCount = 200): Promise<Article[]> {
   try {
     const validatedLimit = validateLimitCount(limitCount);
@@ -222,11 +172,6 @@ export async function getAllArticles(limitCount = 200): Promise<Article[]> {
   }
 }
 
-/**
- * Obtiene un artículo por su slug
- * @param slug Slug del artículo
- * @returns Article o null si no se encuentra
- */
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   try {
     if (!slug) return null;
@@ -276,10 +221,6 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   }
 }
 
-/**
- * Obtiene todos los slugs de artículos
- * @returns Array de slugs
- */
 export async function getAllSlugs(): Promise<string[]> {
   try {
     const articles = await getAllArticles(MAX_ARTICLES);
@@ -290,11 +231,6 @@ export async function getAllSlugs(): Promise<string[]> {
   }
 }
 
-/**
- * Obtiene los artículos más recientes
- * @param count Cantidad de artículos a obtener
- * @returns Array de artículos
- */
 export async function getLatestArticles(count = 50): Promise<Article[]> {
   try {
     const validatedCount = validateLimitCount(count);
@@ -305,4 +241,3 @@ export async function getLatestArticles(count = 50): Promise<Article[]> {
     return [];
   }
 }
-
