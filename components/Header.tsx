@@ -5,38 +5,20 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { CATEGORIES } from '@/lib/types';
 
-/**
- * URLs de redes sociales
- */
 const SOCIAL_URLS = {
   facebook: 'https://facebook.com/profile.php?id=61578261125687',
   whatsapp: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
   telegram: 'https://t.me/+fHHjncJqMQM3NjZh',
 } as const;
 
-/**
- * Clave de localStorage para tema
- */
 const THEME_STORAGE_KEY = 'ni_theme';
-
-/**
- * Tipos de tema válidos
- */
 type ThemeType = 'light' | 'dark';
 
-/**
- * Props para Header
- */
 interface HeaderProps {
   activeCategory?: string;
   onCategoryChange?: (cat: string) => void;
 }
 
-/**
- * Componente de header del sitio
- * @param props Props del componente
- * @returns Header con navegación y controles de tema
- */
 export default function Header({ activeCategory = 'Todas', onCategoryChange }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeType>('dark');
@@ -53,7 +35,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       setTheme(initial);
       document.documentElement.setAttribute('data-theme', initial);
     } catch (error) {
-      console.error('[Header] Error reading theme from localStorage:', error instanceof Error ? error.message : String(error));
+      console.error('[Header] Error reading theme:', error instanceof Error ? error.message : String(error));
       const initial = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       setTheme(initial);
       document.documentElement.setAttribute('data-theme', initial);
@@ -63,7 +45,6 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
     );
 
-    // Scroll detection for collapsible header
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -79,7 +60,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch (error) {
-      console.error('[Header] Error saving theme to localStorage:', error instanceof Error ? error.message : String(error));
+      console.error('[Header] Error saving theme:', error instanceof Error ? error.message : String(error));
     }
   };
 
@@ -90,7 +71,6 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
 
   return (
     <>
-      {/* Top Bar - Hidden on scroll for PWA experience */}
       <div className="top-bar" style={{ 
         background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
         transition: 'transform 0.3s ease',
@@ -100,7 +80,7 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
       }}>
         <div className="top-bar-inner">
           <div className="top-bar-left">
-            <span suppressHydrationWarning><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
+            <span><i className="far fa-calendar-alt" style={{ color: '#e53e3e' }} /> {today}</span>
             <span><i className="fas fa-map-marker-alt" style={{ color: '#e53e3e' }} /> Estelí, Nicaragua</span>
           </div>
           <div className="top-bar-right">
@@ -117,7 +97,6 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
         </div>
       </div>
 
-      {/* Main Header - Collapsible on scroll */}
       <header 
         className="header glass" 
         id="header" 
@@ -188,10 +167,8 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
         </div>
       </header>
 
-      {/* Spacer for fixed header */}
       {isScrolled && <div style={{ height: '80px' }} />}
 
-      {/* Mobile Menu */}
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`} aria-hidden={!menuOpen}>
         <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)} />
         <div className="mobile-menu-panel mobile-menu-panel-glass">

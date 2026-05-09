@@ -1,57 +1,106 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+interface NavItem {
+  label: string;
+  href: string;
+  icon: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { label: 'Inicio', href: '/', icon: 'fa-home' },
+  { label: 'Noticias', href: '/noticias', icon: 'fa-newspaper' },
+  { label: 'Categorías', href: '/noticias', icon: 'fa-th-large' },
+  { label: 'Nosotros', href: '/nosotros', icon: 'fa-info-circle' },
+  { label: 'Contacto', href: '/contacto', icon: 'fa-envelope' },
+];
 
 export default function BottomNav() {
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setVisible(currentScrollY < lastScrollY || currentScrollY < 100);
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // No mostrar en páginas de admin
   if (pathname?.startsWith('/admin')) {
     return null;
   }
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 transition-transform duration-300"
-      style={{ transform: visible ? 'translateY(0)' : 'translateY(100%)' }}
+      className="bottom-nav"
+      style={{
+        position: 'fixed',
+        bottom: isVisible ? '0' : '-100%',
+        left: 0,
+        right: 0,
+        background: 'var(--paper)',
+        borderTop: '1px solid var(--border-light)',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: 'env(safe-area-inset-bottom) 0 0 0',
+        height: 'calc(60px + env(safe-area-inset-bottom))',
+        zIndex: 9999,
+        transition: 'transform 0.3s ease',
+        boxShadow: '0 -4px 20px rgba(0,0,0,0.08)',
+      }}
     >
-      <div className="flex justify-around items-center py-2">
-        <a
-          href="/"
-          className={`flex flex-col items-center p-2 text-xs ${pathname === '/' ? 'text-red-600' : 'text-gray-600'}`}
-        >
-          <i className="fas fa-home text-lg mb-1" />
-          Inicio
-        </a>
-        <a
-          href="/noticias"
-          className={`flex flex-col items-center p-2 text-xs ${pathname === '/noticias' ? 'text-red-600' : 'text-gray-600'}`}
-        >
-          <i className="fas fa-newspaper text-lg mb-1" />
-          Noticias
-        </a>
-        <a
-          href="/contacto"
-          className={`flex flex-col items-center p-2 text-xs ${pathname === '/contacto' ? 'text-red-600' : 'text-gray-600'}`}
-        >
-          <i className="fas fa-envelope text-lg mb-1" />
-          Contacto
-        </a>
-      </div>
+      {NAV_ITEMS.map((item) => {
+        const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="bottom-nav-item"
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px 0',
+              color: isActive ? 'var(--brand)' : 'var(--ink-muted)',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <i
+              className={`fas ${item.icon}`}
+              style={{
+                fontSize: '20px',
+                marginBottom: '4px',
+                transition: 'transform 0.2s ease',
+              }}
+            />
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: isActive ? 600 : 500,
+                letterSpacing: '0.02em',
+              }}
+            >
+              {item.label}
+            </span>
+          </Link>
+        );
+      })}
     </nav>
   );
 }

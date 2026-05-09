@@ -1,19 +1,11 @@
 import { Article } from '@/lib/types';
 import { buildNewsArticleJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 
-/**
- * Props para ArticleJsonLd
- */
 interface ArticleJsonLdProps {
   article: Article;
   url?: string;
 }
 
-/**
- * Componente para JSON-LD de artículo de noticias
- * @param props Props del componente
- * @returns Script tag con JSON-LD
- */
 export function ArticleJsonLd({ article, url }: ArticleJsonLdProps) {
   if (!article || !article.titulo) {
     return null;
@@ -45,10 +37,6 @@ export function ArticleJsonLd({ article, url }: ArticleJsonLdProps) {
   }
 }
 
-/**
- * Componente para JSON-LD del sitio web
- * @returns Script tag con JSON-LD
- */
 export function WebSiteJsonLd() {
   try {
     const jsonLd = buildWebSiteJsonLd();
