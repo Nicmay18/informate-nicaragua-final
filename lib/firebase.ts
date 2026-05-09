@@ -1,0 +1,308 @@
+import { Article, FALLBACK_IMAGE } from './types';
+
+/**
+ * Constantes de configuración
+ */
+const PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'informate-instant-nicaragua';
+const BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+const DEFAULT_PAGE_SIZE = 100;
+const DEFAULT_QUERY_LIMIT = 1;
+const FETCH_TIMEOUT = 10000; // 10 segundos
+const MAX_ARTICLES = 300;
+
+/**
+ * Tipos para valores de Firestore REST API
+ */
+type FirestoreValue =
+  | { stringValue: string }
+  | { integerValue: string }
+  | { doubleValue: number }
+  | { booleanValue: boolean }
+  | { timestampValue: string }
+  | { nullValue: null }
+  | { mapValue: { fields: Record<string, FirestoreValue> } }
+  | { arrayValue: { values?: FirestoreValue[] } };
+
+/**
+ * Convierte un valor de Firestore a tipo JavaScript
+ * @param field Valor de Firestore
+ * @returns Valor convertido
+ */
+function getValue(field: FirestoreValue | undefined): unknown {
+  if (!field) return null;
+  if ('stringValue' in field) return field.stringValue;
+  if ('integerValue' in field) return parseInt(field.integerValue, 10);
+  if ('doubleValue' in field) return field.doubleValue;
+  if ('booleanValue' in field) return field.booleanValue;
+  if ('timestampValue' in field) return field.timestampValue;
+  if ('nullValue' in field) return null;
+  if ('mapValue' in field) {
+    const result: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(field.mapValue.fields || {})) {
+      result[k] = getValue(v);
+    }
+    return result;
+  }
+  if ('arrayValue' in field) {
+    return (field.arrayValue.values || []).map(getValue);
+  }
+  return null;
+}
+
+/**
+ * Convierte valor a string de forma segura
+ * @param v Valor a convertir
+ * @returns String
+ */
+function toString(v: unknown): string {
+  return typeof v === 'string' ? v : '';
+}
+
+/**
+ * Convierte valor a número de forma segura
+ * @param v Valor a convertir
+ * @returns Number
+ */
+function toNumber(v: unknown): number {
+  if (typeof v === 'number') return v;
+  if (typeof v === 'string') {
+    const parsed = parseFloat(v);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
+}
+
+/**
+ * Convierte valor a boolean de forma segura
+ * @param v Valor a convertir
+ * @returns Boolean
+ */
+function toBoolean(v: unknown): boolean {
+  return typeof v === 'boolean' ? v : false;
+}
+
+/**
+ * Normaliza la URL de la imagen
+ * @param imagen URL de la imagen
+ * @param categoria Categoría de la noticia
+ * @returns URL normalizada
+ */
+function normalizeImage(imagen: string): string {
+  const fb = FALLBACK_IMAGE;
+  if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return fb;
+  if (imagen.startsWith('data:')) return fb;
+
+  if (imagen.includes('firebasestorage.googleapis.com')) {
+    const m = imagen.match(/\/o\/(.+?)(\?|$)/);
+    if (m) {
+      const fn = decodeURIComponent(m[1]).split('/').pop();
+      if (fn && fn.length > 2) return `/images/${fn}`;
+    }
+  }
+
+  if (imagen.includes('githubusercontent.com') || imagen.includes('cdn.jsdelivr.net')) {
+    const m = imagen.match(/images\/([^/?#]+)/);
+    if (m?.[1]) return `/images/${m[1]}`;
+  }
+
+  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
+  if (imagen.startsWith('images/')) return `/${imagen}`;
+  if (imagen.startsWith('/')) return imagen;
+
+  const fn = imagen.split('/').pop()?.trim();
+  if (!fn || fn.length < 2) return fb;
+  return `/images/${fn}`;
+}
+
+/**
+ * Convierte un documento de Firestore a Article
+ * @param doc Documento de Firestore
+ * @returns Article o null si hay error
+ */
+function docToArticle(doc: { name?: string; fields?: Record<string, FirestoreValue> }): Article | null {
+  try {
+    const f = doc.fields || {};
+    const id = doc.name?.split('/').pop() || '';
+    if (!id) return null;
+
+    const titulo = toString(getValue(f['titulo']) ?? getValue(f['title']));
+    if (!titulo) return null;
+
+    const categoria = toString(getValue(f['categoria']) ?? getValue(f['category'])) || 'Nacionales';
+    const slug = toString(getValue(f['slug']));
+    if (!slug) return null;
+
+    const imagen = toString(getValue(f['imagen']) ?? getValue(f['image']));
+
+    return {
+      id,
+      titulo: titulo,
+      resumen: toString(getValue(f['resumen']) ?? getValue(f['excerpt'])),
+      contenido: toString(getValue(f['contenido']) ?? getValue(f['content'])),
+      categoria: categoria,
+      autor: toString(getValue(f['autor']) ?? getValue(f['author'])) || 'Nicaragua Informate',
+      fecha: toString(getValue(f['fecha'])) || new Date().toISOString(),
+      imagen: normalizeImage(imagen),
+            slug,
+      destacada: toBoolean(getValue(f['destacada'])),
+      vistas: toNumber(getValue(f['vistas']) ?? getValue(f['views'])),
+    };
+  } catch (error) {
+    console.error('[docToArticle]', error instanceof Error ? error.message : String(error));
+    return null;
+  }
+}
+
+/**
+ * Respuesta de Firestore REST API para listas
+ */
+interface FirestoreListResponse {
+  documents?: Array<{ name?: string; fields?: Record<string, FirestoreValue> }>;
+  nextPageToken?: string;
+}
+
+/**
+ * Valida el parámetro limitCount
+ * @param count Cantidad solicitada
+ * @returns Count validado
+ */
+function validateLimitCount(count: number): number {
+  if (typeof count !== 'number' || isNaN(count)) return MAX_ARTICLES;
+  if (count < 0) return MAX_ARTICLES;
+  if (count > MAX_ARTICLES) return MAX_ARTICLES;
+  return count || MAX_ARTICLES;
+}
+
+/**
+ * Obtiene todos los artículos de Firestore
+ * @param limitCount Límite de artículos a obtener
+ * @returns Array de artículos
+ */
+export async function getAllArticles(limitCount = 200): Promise<Article[]> {
+  try {
+    const validatedLimit = validateLimitCount(limitCount);
+    const articles: Article[] = [];
+    let pageToken: string | undefined;
+
+    do {
+      const url = new URL(`${BASE_URL}/noticias`);
+      url.searchParams.set('pageSize', String(DEFAULT_PAGE_SIZE));
+      url.searchParams.set('orderBy', 'fecha desc');
+      if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
+      const res = await fetch(url.toString(), {
+        cache: 'no-store',
+        signal: controller.signal,
+      } as RequestInit);
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        console.error('[getAllArticles] HTTP error:', res.status, res.statusText);
+        break;
+      }
+
+      const data: FirestoreListResponse = await res.json();
+      for (const doc of data.documents || []) {
+        const article = docToArticle(doc);
+        if (article) articles.push(article);
+        if (articles.length >= validatedLimit) break;
+      }
+
+      pageToken = articles.length < validatedLimit ? data.nextPageToken : undefined;
+    } while (pageToken);
+
+    return articles;
+  } catch (error) {
+    console.error('[getAllArticles]', error instanceof Error ? error.message : String(error));
+    return [];
+  }
+}
+
+/**
+ * Obtiene un artículo por su slug
+ * @param slug Slug del artículo
+ * @returns Article o null si no se encuentra
+ */
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  try {
+    if (!slug) return null;
+
+    const filterUrl = `${BASE_URL}:runQuery`;
+
+    const body = {
+      structuredQuery: {
+        from: [{ collectionId: 'noticias' }],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: 'slug' },
+            op: 'EQUAL',
+            value: { stringValue: slug },
+          },
+        },
+        limit: DEFAULT_QUERY_LIMIT,
+      },
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
+    const res = await fetch(filterUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      cache: 'no-store',
+      signal: controller.signal,
+    } as RequestInit);
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      console.error('[getArticleBySlug] HTTP error:', res.status, res.statusText);
+      return null;
+    }
+
+    const results: Array<{ document?: { name?: string; fields?: Record<string, FirestoreValue> } }> = await res.json();
+    const doc = results?.[0]?.document;
+    if (!doc) return null;
+
+    return docToArticle(doc);
+  } catch (error) {
+    console.error('[getArticleBySlug]', error instanceof Error ? error.message : String(error));
+    return null;
+  }
+}
+
+/**
+ * Obtiene todos los slugs de artículos
+ * @returns Array de slugs
+ */
+export async function getAllSlugs(): Promise<string[]> {
+  try {
+    const articles = await getAllArticles(MAX_ARTICLES);
+    return articles.map((a) => a.slug).filter(Boolean);
+  } catch (error) {
+    console.error('[getAllSlugs]', error instanceof Error ? error.message : String(error));
+    return [];
+  }
+}
+
+/**
+ * Obtiene los artículos más recientes
+ * @param count Cantidad de artículos a obtener
+ * @returns Array de artículos
+ */
+export async function getLatestArticles(count = 50): Promise<Article[]> {
+  try {
+    const validatedCount = validateLimitCount(count);
+    const articles = await getAllArticles(validatedCount);
+    return articles.slice(0, validatedCount);
+  } catch (error) {
+    console.error('[getLatestArticles]', error instanceof Error ? error.message : String(error));
+    return [];
+  }
+}
+

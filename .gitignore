@@ -1,0 +1,122 @@
+# Dependencias
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Producción
+dist/
+build/
+coverage/
+out/
+
+# Variables de entorno (CRÍTICO - NUNCA commitear)
+.env
+.env*.local
+.env.txt
+.env.development.local
+.env.test.local
+.env.production.local
+*firebase-adminsdk*.json
+fb-key-base64.txt
+firebase.json.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Cache & Platforms
+.cache/
+*.tmp
+.vercel/
+.firebase/
+.next/
+.turbo/
+
+# Firebase Service Account (NEVER commit this)
+serviceAccountKey.json
+service-account.json
+**/serviceAccountKey.json
+**/service-account.json
+*firebase-adminsdk*.json
+
+# Tokens backup (NEVER commit this)
+tokens-backup.json
+*key*.json
+*secret*.json
+
+# Notas internas / scratch
+ADMIN_BACKUP.txt
+BACKUP-README.md
+FIX_RAPIDO.txt
+SCRIPT_PARA_CONSOLE.txt
+all_images.txt
+imagenes_array.txt
+deploy.log
+*.txt.backup
+*.bak
+*.tmp
+
+# Scripts one-shot de migración (no van al deploy)
+*migracion*.js
+*mapear*.js
+*migrate*.js
+*update-images*.js
+*asignar*.js
+check-news.js
+eliminar_todo.js
+fix-imagenes*.js
+forzar*.js
+limpiar*.js
+auditor*.js
+analizar*.js
+mejorar*.js
+configurar*.js
+expandir*.js
+verificar*.js
+arreglar*.js
+fix-editor*.js
+update-editor*.js
+update-keyling*.js
+
+# Broken git backups and sync scripts
+.git_broken*/
+_sync-push.*
+_g.txt
+_push.txt
+_br.txt
+_gcheck.txt
+git-log.txt
+push-log.txt
+
+# Archivos temporales y de prueba
+s
+firebase
+temp-fixes/

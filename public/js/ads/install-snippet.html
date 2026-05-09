@@ -1,0 +1,272 @@
+<!-- 
+  SNIPPET DE INSTALACIÓN - Sistema de Ads Nicaragua Informate
+  
+  Copia este código en tu index.html para activar el sistema completo de ads.
+  
+  INSTRUCCIONES:
+  1. Copia la sección de scripts antes de </body>
+  2. Copia los slots de ads donde quieras mostrar anuncios
+  3. Reemplaza "TU_AD_SLOT_ID" con tus IDs reales de AdSense
+  4. ¡Listo! El sistema se inicializa automáticamente
+-->
+
+<!-- ============================================ -->
+<!-- PASO 1: Scripts del Sistema (antes de </body>) -->
+<!-- ============================================ -->
+
+<!-- AdSense Script -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+        crossorigin="anonymous"></script>
+
+<!-- Sistema de Ads - Core -->
+<script src="/js/ads/core/ViewabilityTracker.js" defer></script>
+<script src="/js/ads/core/RefreshController.js" defer></script>
+
+<!-- Sistema de Ads - Slots -->
+<script src="/js/ads/slots/BaseAdSlot.js" defer></script>
+<script src="/js/ads/slots/HeaderSlot.js" defer></script>
+<script src="/js/ads/slots/ArticleMidSlot.js" defer></script>
+<script src="/js/ads/slots/SidebarSlot.js" defer></script>
+<script src="/js/ads/slots/StickyFooterSlot.js" defer></script>
+<script src="/js/ads/slots/InArticleSlot.js" defer></script>
+<script src="/js/ads/slots/ParallaxSlot.js" defer></script>
+
+<!-- Sistema de Ads - Targeting -->
+<script src="/js/ads/targeting/ContextualTarget.js" defer></script>
+<script src="/js/ads/targeting/AudienceTarget.js" defer></script>
+
+<!-- Sistema de Ads - Analytics -->
+<script src="/js/ads/analytics/AdAnalytics.js" defer></script>
+<script src="/js/ads/analytics/RevenueEstimator.js" defer></script>
+
+<!-- Sistema de Ads - Manager (debe ir al final) -->
+<script src="/js/ads/core/AdManager.js" defer></script>
+
+<!-- Inicialización (opcional - para configuración personalizada) -->
+<script>
+  // El AdManager se inicializa automáticamente
+  // Puedes acceder a él con: window.adManager
+  
+  // Opcional: Escuchar eventos
+  window.addEventListener('DOMContentLoaded', () => {
+    // Evento de refresh
+    window.addEventListener('refresh-controller:refresh', (e) => {
+      console.log('Ad refreshed:', e.detail);
+    });
+    
+    // Acceder a métricas
+    setTimeout(() => {
+      if (window.adManager) {
+        console.log('Ad Metrics:', window.adManager.metrics);
+      }
+    }, 5000);
+  });
+</script>
+
+
+<!-- ============================================ -->
+<!-- PASO 2: Slots de Ads (coloca donde quieras) -->
+<!-- ============================================ -->
+
+<!-- Header Ad (después del navbar) -->
+<div id="ad-header" 
+     data-ad-slot 
+     data-ad-position="header"
+     data-ad-slot="TU_AD_SLOT_ID"
+     style="margin: 20px auto; max-width: 728px;">
+</div>
+
+<!-- Article Mid Ad (dentro del contenido del artículo) -->
+<div id="ad-article-mid" 
+     data-ad-slot 
+     data-ad-position="article-mid"
+     data-ad-slot="TU_AD_SLOT_ID"
+     style="margin: 30px auto; max-width: 300px;">
+</div>
+
+<!-- Sidebar Ad (en el sidebar) -->
+<div id="ad-sidebar" 
+     data-ad-slot 
+     data-ad-position="sidebar"
+     data-ad-slot="TU_AD_SLOT_ID"
+     style="position: sticky; top: 20px;">
+</div>
+
+<!-- In-Article Ad (entre párrafos) -->
+<div id="ad-in-article" 
+     data-ad-slot 
+     data-ad-position="in-article"
+     data-ad-slot="TU_AD_SLOT_ID"
+     style="margin: 20px 0;">
+</div>
+
+<!-- Sticky Footer Ad (solo mobile) -->
+<div id="ad-sticky-footer" 
+     data-ad-slot 
+     data-ad-position="sticky-footer"
+     data-ad-slot="TU_AD_SLOT_ID"
+     style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; display: none;">
+</div>
+
+<style>
+  /* Mostrar sticky footer solo en mobile */
+  @media (max-width: 768px) {
+    #ad-sticky-footer {
+      display: block !important;
+    }
+  }
+  
+  /* Estilos opcionales para slots */
+  [data-ad-slot] {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Indicador visual cuando ad es viewable (opcional) */
+  [data-ad-slot].ad-viewable {
+    /* border: 2px solid #10b981; */
+  }
+</style>
+
+
+<!-- ============================================ -->
+<!-- PASO 3: Configuración Avanzada (opcional) -->
+<!-- ============================================ -->
+
+<script>
+  // Si quieres personalizar la configuración, hazlo ANTES de cargar AdManager.js
+  
+  window.adManagerConfig = {
+    adsenseClient: 'ca-pub-4115203339551838',
+    lazyLoadOffset: '200px',      // Cargar ads 200px antes de ser visibles
+    refreshInterval: 30000,        // Refrescar cada 30 segundos
+    maxRefreshes: 3,               // Máximo 3 refrescos por slot
+    viewabilityThreshold: 0.5      // 50% visible para contar como viewable
+  };
+  
+  // Personalizar tasas de revenue
+  window.revenueEstimatorConfig = {
+    cpm: 1.50,           // $1.50 CPM base
+    cpc: 0.15,           // $0.15 CPC base
+    viewableCPM: 2.00    // $2.00 vCPM
+  };
+</script>
+
+
+<!-- ============================================ -->
+<!-- EJEMPLO COMPLETO DE INTEGRACIÓN -->
+<!-- ============================================ -->
+
+<!--
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nicaragua Informate</title>
+</head>
+<body>
+
+  <nav>
+    <!-- Tu navbar -->
+  </nav>
+
+  <!-- Header Ad -->
+  <div id="ad-header" data-ad-slot data-ad-position="header" data-ad-slot="1234567890"></div>
+
+  <div class="container">
+    <div class="row">
+      
+      <!-- Contenido Principal -->
+      <div class="col-md-8">
+        <article data-category="tecnología">
+          <h1>Título del Artículo</h1>
+          
+          <p>Primer párrafo...</p>
+          
+          <!-- Article Mid Ad -->
+          <div id="ad-article-mid" data-ad-slot data-ad-position="article-mid" data-ad-slot="0987654321"></div>
+          
+          <p>Segundo párrafo...</p>
+          
+          <!-- In-Article Ad -->
+          <div id="ad-in-article" data-ad-slot data-ad-position="in-article" data-ad-slot="5544332211"></div>
+          
+          <p>Tercer párrafo...</p>
+        </article>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="col-md-4">
+        <!-- Sidebar Ad -->
+        <div id="ad-sidebar" data-ad-slot data-ad-position="sidebar" data-ad-slot="1122334455"></div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Sticky Footer Ad -->
+  <div id="ad-sticky-footer" data-ad-slot data-ad-position="sticky-footer" data-ad-slot="9988776655"></div>
+
+  <!-- Scripts del Sistema -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossorigin="anonymous"></script>
+  <script src="/js/ads/core/ViewabilityTracker.js" defer></script>
+  <script src="/js/ads/core/RefreshController.js" defer></script>
+  <script src="/js/ads/slots/BaseAdSlot.js" defer></script>
+  <script src="/js/ads/slots/HeaderSlot.js" defer></script>
+  <script src="/js/ads/slots/ArticleMidSlot.js" defer></script>
+  <script src="/js/ads/slots/SidebarSlot.js" defer></script>
+  <script src="/js/ads/slots/StickyFooterSlot.js" defer></script>
+  <script src="/js/ads/targeting/ContextualTarget.js" defer></script>
+  <script src="/js/ads/targeting/AudienceTarget.js" defer></script>
+  <script src="/js/ads/analytics/AdAnalytics.js" defer></script>
+  <script src="/js/ads/analytics/RevenueEstimator.js" defer></script>
+  <script src="/js/ads/core/AdManager.js" defer></script>
+
+</body>
+</html>
+-->
+
+
+<!-- ============================================ -->
+<!-- NOTAS IMPORTANTES -->
+<!-- ============================================ -->
+
+<!--
+  1. REEMPLAZAR IDs:
+     - Cambia "TU_AD_SLOT_ID" por tus IDs reales de AdSense
+     - Cambia "ca-pub-4115203339551838" por tu Publisher ID
+  
+  2. POSICIONES RECOMENDADAS:
+     - Header: Después del navbar, antes del contenido
+     - Article Mid: Después del primer o segundo párrafo
+     - Sidebar: En el sidebar, con position: sticky
+     - In-Article: Entre párrafos del contenido
+     - Sticky Footer: Solo en mobile, fixed bottom
+  
+  3. CANTIDAD DE ADS:
+     - Máximo 3-4 ads por página para mejor UX
+     - Priorizar viewability sobre cantidad
+     - Mobile: 2-3 ads máximo
+  
+  4. TESTING:
+     - Abre DevTools Console para ver logs
+     - Verifica que los ads cargan correctamente
+     - Monitorea métricas: window.adManager.metrics
+  
+  5. PERFORMANCE:
+     - Todos los scripts usan defer para no bloquear
+     - Lazy loading automático con IntersectionObserver
+     - Cache de targeting para mejor performance
+  
+  6. GDPR/PRIVACY:
+     - El sistema NO trackea PII
+     - Solo guarda preferencias en localStorage
+     - Compatible con GDPR
+  
+  7. SOPORTE:
+     - Ver documentación: /js/ads/README.md
+     - Ver ejemplo: /js/ads/example-integration.html
+     - Métricas en tiempo real en Console
+-->
