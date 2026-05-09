@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamicImport from 'next/dynamic';
 import NewsGrid from '@/components/NewsGrid';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
@@ -10,10 +11,13 @@ import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
-import ClientDate from '@/components/home/ClientDate';
-import DynamicWeatherWidget from '@/components/home/DynamicWeatherWidget';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
+
+const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'), {
+  ssr: false,
+  loading: () => <div style={{ background: 'linear-gradient(160deg, #1e3a5f 0%, #0f172a 100%)', borderRadius: 14, padding: '20px', color: '#fff' }}>Cargando clima...</div>
+});
 
 export const revalidate = 60;
 
@@ -24,7 +28,7 @@ export default async function HomePage() {
   try {
     [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
   } catch (error) {
-    console.error('[HomePage] Error fetching data:', error);
+    console.error('[HomePage] Error:', error);
   }
 
   const destacadas = noticias.slice(0, 5);
@@ -32,80 +36,73 @@ export default async function HomePage() {
   const tickerNews = noticias.slice(0, 8);
 
   return (
-    <div className="bg-[var(--paper)] text-[var(--ink)]">
+    <div style={{ background: '#0a0a0a', color: '#e5e5e5', minHeight: '100vh' }}>
       {/* Top Bar */}
-      <div className="bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] text-slate-400 text-xs border-b border-white/[0.06]">
-        <div className="max-w-[1400px] mx-auto px-6 py-1.5 flex justify-between items-center">
-          <span className="flex items-center gap-3">
-            <i className="fas fa-calendar-alt text-red-500 text-[11px]" />
-            <ClientDate />
-            <span className="text-slate-600">|</span>
-            <i className="fas fa-map-marker-alt text-red-500 text-[11px]" /> Estelí, Nicaragua
+      <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <i className="fas fa-calendar-alt" style={{ color: '#dc2626', fontSize: 11 }} />
+            {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <span style={{ color: '#475569' }}>|</span>
+            <i className="fas fa-map-marker-alt" style={{ color: '#dc2626', fontSize: 11 }} />
+            Estelí, Nicaragua
           </span>
         </div>
       </div>
 
       {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-red-900/[0.15] shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-        <div className="max-w-[1400px] mx-auto px-6 py-2.5 flex items-center justify-between gap-4">
-          <h1 className="sr-only">Últimas Noticias de Nicaragua</h1>
-          <Link href="/" className="flex items-center gap-3 no-underline">
-            <Image src="/logo.png" alt="Nicaragua Informate" width={42} height={42} className="rounded-lg object-cover" />
+      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid #262626' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} style={{ borderRadius: 8 }} />
             <div>
-              <div className="text-red-600 font-extrabold text-[18px] leading-tight tracking-tight">Nicaragua Informate</div>
-              <div className="text-slate-500 text-[10px] uppercase tracking-wider">Noticias de Nicaragua</div>
+              <div style={{ color: '#dc2626', fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Nicaragua Informate</div>
+              <div style={{ color: '#525252', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700 }}>Noticias de Nicaragua</div>
             </div>
           </Link>
-          <div className="flex items-center gap-3.5 hidden md:flex">
-            <Link href="/noticias" className="flex items-center gap-1.5 text-[var(--ink-muted)] text-[13px] font-semibold no-underline">
-              <i className="fas fa-newspaper text-[#8c1d18]" /> Todas las noticias
-            </Link>
-            <Link href="/contacto" className="flex items-center gap-1.5 text-[var(--ink-muted)] text-[13px] font-semibold no-underline">
-              <i className="fas fa-envelope text-[#8c1d18]" /> Contacto
-            </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <Link href="/noticias" style={{ color: '#a3a3a3', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Todas las noticias</Link>
+            <Link href="/contacto" style={{ color: '#a3a3a3', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Contacto</Link>
           </div>
         </div>
       </header>
 
       {/* Category Ribbon */}
-      <div className="bg-[var(--paper-accent)] border-b border-[var(--border-light)]">
-        <div className="max-w-[1400px] mx-auto px-6 flex items-center overflow-x-auto scrollbar-hide">
+      <div style={{ background: '#141414', borderBottom: '1px solid #262626' }}>
+        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 24px', display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {CATEGORIES.map((cat) => (
-            <a
-              key={cat.name}
-              href={`/?cat=${encodeURIComponent(cat.name)}`}
-              className="nav-red-hover cat-ribbon-link flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-semibold text-[var(--ink-muted)] no-underline border-b-[3px] border-transparent whitespace-nowrap transition-all"
-            >
-              <i className={`fas ${cat.icon}`} style={{ color: cat.color, fontSize: 12 }} />
+            <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#a3a3a3', textDecoration: 'none', borderBottom: '2px solid transparent', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
+              className="cat-link">
+              <i className={`fas ${cat.icon}`} style={{ color: cat.color, fontSize: 11 }} />
               {cat.name}
             </a>
           ))}
         </div>
       </div>
 
-      {/* Breaking News Ticker */}
+      {/* Breaking Ticker */}
       {tickerNews.length > 0 && <BreakingTicker noticias={tickerNews} />}
 
-      {/* Hero Carousel */}
+      {/* Hero */}
       {destacadas.length > 0 && (
-        <section className="max-w-[1400px] mx-auto px-6 py-4">
+        <section style={{ maxWidth: 1400, margin: '0 auto', padding: '24px' }}>
           <HeroCarousel noticias={destacadas} />
         </section>
       )}
 
-      {/* Main Grid */}
-      <main className="max-w-[1400px] mx-auto px-6 py-5 pb-12 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" id="main-content">
+      {/* Main Content */}
+      <main style={{ maxWidth: 1400, margin: '0 auto', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 32 }} id="main-content">
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
 
-        {/* Sidebar */}
-        <aside className="flex flex-col gap-6">
+        <aside style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <TrendingList noticias={noticias.slice(0, 6)} />
-          <div className="widget-lift rounded-[14px] overflow-hidden">
-            <DynamicWeatherWidget />
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
+            <WeatherWidget />
           </div>
-          <div className="widget-lift rounded-[14px] overflow-hidden">
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
             <IndicadoresWidget />
           </div>
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
@@ -115,8 +112,15 @@ export default async function HomePage() {
         </aside>
       </main>
 
-      {/* Footer */}
       <SiteFooter />
+
+      <style>{`
+        .cat-link:hover { color: #f5f5f5 !important; border-bottom-color: #dc2626 !important; background: rgba(220,38,38,0.05); }
+        @media (max-width: 1024px) {
+          main { grid-template-columns: 1fr !important; }
+          aside { display: none !important; }
+        }
+      `}</style>
     </div>
   );
 }
