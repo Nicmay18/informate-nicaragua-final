@@ -111,6 +111,11 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
 }
 
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
+  // Verificar que el slug no llegue vacío
+  if (!slug || typeof slug !== 'string') {
+    return null;
+  }
+  
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
