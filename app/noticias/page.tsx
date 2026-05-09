@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Todas las Noticias',
@@ -48,14 +48,28 @@ export default async function NoticiasIndexPage({
   let snap;
   let totalCount = 0;
 
-  if (cat !== 'Todas') {
-    const countSnap = await adminDb.collection('noticias').where('categoria', '==', cat).count().get();
-    totalCount = countSnap.data().count;
-    snap = await adminDb.collection('noticias').where('categoria', '==', cat).orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
-  } else {
-    const countSnap = await adminDb.collection('noticias').count().get();
-    totalCount = countSnap.data().count;
-    snap = await adminDb.collection('noticias').orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
+  try {
+    if (cat !== 'Todas') {
+      const countSnap = await adminDb.collection('noticias').where('categoria', '==', cat).count().get();
+      totalCount = countSnap.data().count;
+      snap = await adminDb.collection('noticias').where('categoria', '==', cat).orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
+    } else {
+      const countSnap = await adminDb.collection('noticias').count().get();
+      totalCount = countSnap.data().count;
+      snap = await adminDb.collection('noticias').orderBy('fecha', 'desc').offset(offset).limit(itemsPerPage).get();
+    }
+  } catch (error) {
+    console.error('[NoticiasIndex] Error fetching:', error);
+    return (
+      <div style={{ textAlign: 'center', padding: '80px 24px', color: '#9ca3af' }}>
+        <i className="fas fa-exclamation-triangle" style={{ fontSize: 48, marginBottom: 16, display: 'block', color: '#8c1d18' }} />
+        <h2 style={{ color: '#fff', marginBottom: 8 }}>Error al cargar noticias</h2>
+        <p>Por favor intenta recargar la página.</p>
+        <Link href="/noticias" style={{ color: '#8c1d18', fontWeight: 600, marginTop: 16, display: 'inline-block' }}>
+          Recargar →
+        </Link>
+      </div>
+    );
   }
 
   const noticias = snap.docs
@@ -98,7 +112,6 @@ export default async function NoticiasIndexPage({
         }
       `}</style>
 
-      {/* Page header */}
       <div style={{ background: 'linear-gradient(135deg,#0f172a 0%,#1e293b 100%)', color: '#fff', padding: '40px 24px 0' }} className="ni-page-header">
         <div style={{ maxWidth: 1400, margin: '0 auto' }}>
           <Link href="/" style={{ color: '#94a3b8', fontSize: 13, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 16 }}>
@@ -119,7 +132,6 @@ export default async function NoticiasIndexPage({
             </div>
           </div>
 
-          {/* Category filter chips */}
           <div className="ni-cats" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 0, marginBottom: -1 }}>
             {CATS.map(c => {
               const isActive = c === cat;
@@ -145,7 +157,6 @@ export default async function NoticiasIndexPage({
       </div>
 
       <main style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 24px 80px' }} className="ni-content">
-
         {noticias.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0', color: '#9ca3af' }}>
             <i className="fas fa-newspaper" style={{ fontSize: 48, marginBottom: 16, display: 'block' }} />
@@ -154,7 +165,6 @@ export default async function NoticiasIndexPage({
           </div>
         ) : (
           <>
-            {/* Featured top article */}
             {featured && (
               <Link href={`/noticias/${featured.slug}`} className="ni-news-card" style={{ display: 'flex', flexDirection: 'row', marginBottom: 32, minHeight: 240 }} aria-label={featured.titulo}>
                 <div className="img-wrap ni-featured-img" style={{ width: '45%', flexShrink: 0, height: 'auto', minHeight: 240 }}>
@@ -197,7 +207,6 @@ export default async function NoticiasIndexPage({
               </Link>
             )}
 
-            {/* Section header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
               <div style={{ width: 4, height: 22, background: '#8c1d18', borderRadius: 2 }} />
               <h2 style={{ fontSize: 18, fontWeight: 800, color: '#18181b', margin: 0 }}>
@@ -207,7 +216,6 @@ export default async function NoticiasIndexPage({
               <span style={{ fontSize: 12, color: '#9ca3af', fontWeight: 600 }}>{rest.length} artículos</span>
             </div>
 
-            {/* Grid */}
             <div className="ni-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
               {rest.map(n => (
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="ni-news-card">
@@ -247,7 +255,6 @@ export default async function NoticiasIndexPage({
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 40, padding: '20px 0', borderTop: '1px solid #e5e7eb' }}>
                 {currentPage > 1 && (

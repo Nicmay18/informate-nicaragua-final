@@ -12,8 +12,6 @@ const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: 'cover',
   themeColor: '#0F0F0F',
 };
@@ -66,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const siteJsonLd = buildWebSiteJsonLd();
 
   return (
-    <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
+    <html lang="es" data-theme="dark" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
         <style>{`a.skip-link{position:absolute;top:-40px;left:0;background:#8c1d18;color:#fff;padding:8px 16px;text-decoration:none;z-index:100;transition:top 0.3s}a.skip-link:focus{top:0}`}</style>
         <meta name="theme-color" content="#0F0F0F" />
@@ -89,14 +87,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
-        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP" />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W1B5J61WEP');`,
           }}
         />
-        {/* AdSense */}
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NewsGrid from '@/components/NewsGrid';
-import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -11,14 +10,23 @@ import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
-import MobileBottomNav from '@/components/home/MobileBottomNav';
+import ClientDate from '@/components/home/ClientDate';
+import DynamicWeatherWidget from '@/components/home/DynamicWeatherWidget';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function HomePage() {
-  const [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
+  let noticias = [];
+  let masLeidas = [];
+
+  try {
+    [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
+  } catch (error) {
+    console.error('[HomePage] Error fetching data:', error);
+  }
+
   const destacadas = noticias.slice(0, 5);
   const recientes = noticias.slice(5);
   const tickerNews = noticias.slice(0, 8);
@@ -28,9 +36,9 @@ export default async function HomePage() {
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] text-slate-400 text-xs border-b border-white/[0.06]">
         <div className="max-w-[1400px] mx-auto px-6 py-1.5 flex justify-between items-center">
-          <span className="flex items-center gap-3" suppressHydrationWarning>
+          <span className="flex items-center gap-3">
             <i className="fas fa-calendar-alt text-red-500 text-[11px]" />
-            {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <ClientDate />
             <span className="text-slate-600">|</span>
             <i className="fas fa-map-marker-alt text-red-500 text-[11px]" /> Estelí, Nicaragua
           </span>
@@ -76,7 +84,7 @@ export default async function HomePage() {
       </div>
 
       {/* Breaking News Ticker */}
-      <BreakingTicker noticias={tickerNews} />
+      {tickerNews.length > 0 && <BreakingTicker noticias={tickerNews} />}
 
       {/* Hero Carousel */}
       {destacadas.length > 0 && (
@@ -86,42 +94,26 @@ export default async function HomePage() {
       )}
 
       {/* Main Grid */}
-      <main className="max-w-[1400px] mx-auto px-6 py-5 pb-12 grid grid-cols-1 sm:grid-cols-[1fr_300px] lg:grid-cols-[1fr_320px] gap-8" id="main-content">
+      <main className="max-w-[1400px] mx-auto px-6 py-5 pb-12 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" id="main-content">
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
 
         {/* Sidebar */}
         <aside className="flex flex-col gap-6">
-          {/* Trending */}
           <TrendingList noticias={noticias.slice(0, 6)} />
-
-          {/* Clima */}
           <div className="widget-lift rounded-[14px] overflow-hidden">
-            <WeatherWidget />
+            <DynamicWeatherWidget />
           </div>
-
-          {/* Indicadores */}
           <div className="widget-lift rounded-[14px] overflow-hidden">
             <IndicadoresWidget />
           </div>
-
-          {/* Más Leídas */}
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
-
-          {/* Newsletter */}
           <NewsletterForm />
-
-          {/* Social Grid */}
           <SocialGrid />
-
-          {/* Tags Cloud */}
           <TagsCloud />
         </aside>
       </main>
-
-      {/* Mobile Bottom Nav */}
-      <MobileBottomNav />
 
       {/* Footer */}
       <SiteFooter />
