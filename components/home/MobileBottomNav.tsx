@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function MobileBottomNav() {
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-[100] bg-[rgba(255,253,249,0.97)] backdrop-blur-xl border-t-2 border-[var(--border-light)] shadow-[0_-4px_24px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom,0)] block lg:hidden">
+    <nav className="fixed bottom-0 inset-x-0 z-[100] bg-[rgba(255,253,249,0.97)] backdrop-blur-xl border-t-2 border-[var(--border-light)] shadow-[0_-4px_24px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom,0)] block md:hidden">
       <div className="flex justify-around items-center max-w-[480px] mx-auto py-1.5 pb-2">
         <Link
           href="/"

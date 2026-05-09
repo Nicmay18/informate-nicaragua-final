@@ -1010,6 +1010,48 @@ body {
   width: 100% !important;
   min-width: 100% !important;
 }
+
+/* ============================================
+   OVERRIDE DE EMERGENCIA - NICARAGUA INFORMATE
+   Para pantallas con escalado alto de Windows
+   ============================================ */
+
+@media (min-width: 768px) {
+  /* Forzar grid principal a 2 columnas */
+  main[class*="grid"] {
+    grid-template-columns: 1fr 300px !important;
+  }
+
+  /* Mostrar sidebar */
+  aside[class*="hidden"] {
+    display: flex !important;
+  }
+
+  /* Ocultar nav inferior móvil */
+  nav[class*="bottom-nav"],
+  nav[class*="fixed bottom-0"] {
+    display: none !important;
+  }
+
+  /* Hero en ancho completo */
+  section[class*="aspect"] {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Noticias en 2 columnas en vez de 1 */
+  .ng-cats-row,
+  div[class*="ng-cats-row"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main[class*="grid"] {
+    grid-template-columns: 1fr 320px !important;
+  }
+}
 .fecha, .date, time {
   color: #767676 !important;
 }
