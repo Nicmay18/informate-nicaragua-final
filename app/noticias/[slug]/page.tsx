@@ -79,6 +79,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const n = snap.docs[0].data();
   
+  // Validación simple para datos de noticia
+  if (!n) {
+    return <div>Noticia no encontrada</div>;
+  }
+  
   // Validar datos antes de usarlos
   if (!n || typeof n !== 'object') {
     notFound();
