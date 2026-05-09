@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import { ThemeInit } from '@/components/ThemeInit';
@@ -9,17 +9,18 @@ import BottomNav from '@/components/BottomNav';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-merri' });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#0F0F0F',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://nicaraguainformate.com'),
   manifest: '/manifest.json',
-  themeColor: '#0F0F0F',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover',
-  },
   title: {
     default: 'Nicaragua Informate — Noticias de Nicaragua en Tiempo Real',
     template: '%s | Nicaragua Informate',
