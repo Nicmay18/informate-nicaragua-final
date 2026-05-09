@@ -1,60 +1,37 @@
+import { getNewsBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
-import { adminDb } from '@/lib/firebase-admin';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Metadata } from 'next';
-import { AudioButton, CopyButton, ShareChip } from '@/components/ArticleClient';
+import { AudioButton, ShareChip } from '@/components/ArticleClient';
 
-// FUERZA renderizado dinámico para ignorar nombres de noticias viejos
+// ESTO ELIMINA EL ERROR DE PRERENDER
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 export const revalidate = 0;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
-  if (snap.empty) return { title: 'Noticia no encontrada' };
-  const n = snap.docs[0].data();
-  return {
-    title: n.titulo,
-    description: n.resumen || n.titulo,
-    alternates: { canonical: `https://nicaraguainformate.com/noticias/${slug}` },
-    openGraph: { type: 'article', title: n.titulo, description: n.resumen || n.titulo, images: [n.imagen || 'https://nicaraguainformate.com/logo.png'] },
-  };
-}
+const CAT_COLORS: Record<string, string> = { 
+  Sucesos: '#dc2626', 
+  Nacionales: '#1d4ed8', 
+  Deportes: '#16a34a', 
+  Internacionales: '#7c3aed', 
+  Espectáculos: '#db2777' 
+};
 
 function fmtDate(ts: unknown): string {
   if (!ts) return 'Hace un momento';
   try {
-    const d = (ts as { toDate?: () => Date }).toDate ? (ts as { toDate: () => Date }).toDate() : new Date(ts as string);
+    const d = (ts as { toDate?: () => Date }).toDate 
+      ? (ts as { toDate: () => Date }).toDate() 
+      : new Date(ts as string);
     return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' });
-  } catch { return 'Hace un momento'; }
+  } catch { 
+    return 'Hace un momento'; 
+  }
 }
 
-function countWords(text: string): number { return text.trim().split(/\s+/).filter(w => w.length > 0).length; }
-const FALLBACK_IMAGE = '/logo.png';
-
-async function getRelated(categoria: string, currentSlug: string) {
-  try {
-    const snap = await adminDb.collection('noticias').where('categoria', '==', categoria).orderBy('fecha', 'desc').limit(6).get();
-    return snap.docs.filter(d => d.data().slug !== currentSlug).slice(0, 4).map(d => {
-      const data = d.data();
-      return { id: d.id, slug: data.slug || d.id, titulo: data.titulo || '', imagen: data.imagen || '', categoria: data.categoria || 'General', fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '' };
-    });
-  } catch { return []; }
+function countWords(text: string): number { 
+  return text.trim().split(/\s+/).filter(w => w.length > 0).length; 
 }
-
-async function getMostRead(currentSlug: string) {
-  try {
-    const snap = await adminDb.collection('noticias').orderBy('fecha', 'desc').limit(8).get();
-    return snap.docs.filter(d => d.data().slug !== currentSlug).slice(0, 5).map(d => {
-      const data = d.data();
-      return { id: d.id, slug: data.slug || d.id, titulo: data.titulo || '', categoria: data.categoria || 'General' };
-    });
-  } catch { return []; }
-}
-
-const CAT_COLORS: Record<string, string> = { Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a', Internacionales: '#7c3aed', Espectáculos: '#db2777' };
 
 function cleanNestedTags(html: string): string {
   if (!html) return '';
@@ -68,80 +45,161 @@ function cleanNestedTags(html: string): string {
 
 export default async function NewsPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
-  if (snap.empty) notFound();
+  const n = await getNewsBySlug(slug);
 
-  const n = snap.docs[0].data();
+  if (!n) {
+    notFound();
+  }
+
   const url = `https://nicaraguainformate.com/noticias/${slug}`;
   const wordCount = countWords(n.contenido || '');
   const readTime = Math.ceil(wordCount / 200);
   const fechaStr = fmtDate(n.fecha);
   const autor = n.autor || 'Keyling Rivera M.';
   const autorInitial = autor.charAt(0).toUpperCase();
-  const imgUrl = n.imagen || FALLBACK_IMAGE;
-  const related = await getRelated(n.categoria || 'General', slug);
-  const mostRead = await getMostRead(slug);
+  const imgUrl = n.imagen || '/logo.png';
 
   const jsonLd = {
-    '@context': 'https://schema.org', '@type': 'NewsArticle',
-    headline: n.titulo, description: n.resumen || n.titulo,
+    '@context': 'https://schema.org', 
+    '@type': 'NewsArticle',
+    headline: n.titulo, 
+    description: n.resumen || n.titulo,
     image: n.imagen || 'https://nicaraguainformate.com/logo.png',
-    datePublished: n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha).toISOString(),
+    datePublished: n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date().toISOString(),
     author: { '@type': 'Person', name: autor },
-    publisher: { '@type': 'Organization', name: 'Nicaragua Informate', logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } },
+    publisher: { 
+      '@type': 'Organization', 
+      name: 'Nicaragua Informate', 
+      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } 
+    },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   };
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div id="readProgress" style={{ position: 'fixed', top: 0, left: 0, height: 3, background: '#8c1d18', zIndex: 1001, width: '0%', transition: 'width 0.1s linear' }} />
-
-      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#0a0a0a', borderBottom: '1px solid #262626', padding: '12px 24px' }}>
+      
+      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#8c1d18', padding: '12px 24px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <Image src="/logo.png" alt="" width={34} height={34} style={{ borderRadius: 8 }} />
-            <span style={{ color: '#dc2626', fontWeight: 900, fontSize: 18 }}>Nicaragua <span style={{ color: '#fff' }}>Informate</span></span>
+            <span style={{ color: '#fff', fontWeight: 900, fontSize: 18 }}>
+              Nicaragua <span style={{ fontWeight: 400 }}>Informate</span>
+            </span>
           </Link>
           <nav style={{ display: 'flex', gap: 10 }}>
-            <Link href="/noticias" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#fff', background: '#1a1a1a', textDecoration: 'none' }}>Noticias</Link>
-            <Link href="/" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#a3a3a3', textDecoration: 'none' }}>Inicio</Link>
+            <Link href="/noticias" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#fff', background: 'rgba(0,0,0,0.2)', textDecoration: 'none' }}>
+              Noticias
+            </Link>
+            <Link href="/" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#fff', textDecoration: 'none' }}>
+              Inicio
+            </Link>
           </nav>
         </div>
       </header>
 
-      <main 
-  className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8" 
-  id="main-content"
->
-        <article>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#fff', padding: '4px 10px', background: CAT_COLORS[n.categoria] || '#8c1d18', borderRadius: 3 }}>{n.categoria || 'General'}</span>
-            <span style={{ fontSize: 12, color: '#8c8c8c' }}>{fechaStr}</span>
+      <main className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-6">
+        <article style={{ maxWidth: 800, margin: '0 auto' }}>
+          <div style={{ marginBottom: 20 }}>
+            <span style={{ 
+              fontSize: 11, 
+              fontWeight: 700, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.1em', 
+              color: '#fff', 
+              padding: '4px 10px', 
+              background: CAT_COLORS[n.categoria] || '#8c1d18', 
+              borderRadius: 3,
+              display: 'inline-block',
+              marginBottom: 12
+            }}>
+              {n.categoria || 'General'}
+            </span>
+            <span style={{ fontSize: 12, color: '#8c8c8c', display: 'block' }}>{fechaStr}</span>
           </div>
 
-          <h1 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 700, color: '#121212', lineHeight: 1.1, marginBottom: 12, letterSpacing: '-0.02em' }}>
+          <h1 style={{ 
+            fontFamily: "Georgia, serif", 
+            fontSize: 'clamp(24px, 5vw, 38px)', 
+            fontWeight: 700, 
+            color: '#121212', 
+            lineHeight: 1.15, 
+            marginBottom: 16 
+          }}>
             {n.titulo}
           </h1>
-          {n.resumen && <p style={{ fontSize: 17, color: '#595959', lineHeight: 1.5, marginBottom: 20 }}>{n.resumen}</p>}
+          
+          {n.resumen && (
+            <p style={{ fontSize: 17, color: '#595959', lineHeight: 1.5, marginBottom: 20 }}>
+              {n.resumen}
+            </p>
+          )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24, padding: '12px 0', borderTop: '1px solid #e2e2e2', borderBottom: '1px solid #e2e2e2' }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#8c1d18', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>{autorInitial}</div>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 10, 
+            marginBottom: 24, 
+            padding: '12px 0', 
+            borderTop: '1px solid #e2e2e2', 
+            borderBottom: '1px solid #e2e2e2' 
+          }}>
+            <div style={{ 
+              width: 36, 
+              height: 36, 
+              borderRadius: '50%', 
+              background: '#8c1d18', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              color: '#fff', 
+              fontWeight: 700, 
+              fontSize: 14 
+            }}>
+              {autorInitial}
+            </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: '#121212' }}>{autor}</div>
               <div style={{ fontSize: 12, color: '#8c8c8c' }}>{readTime} min de lectura</div>
             </div>
           </div>
 
-          <Image src={imgUrl} alt={n.titulo} width={800} height={450} priority quality={85} style={{ width: '100%', borderRadius: 8, marginBottom: 20, display: 'block' }} />
+          {n.imagen && (
+            <Image 
+              src={imgUrl} 
+              alt={n.titulo} 
+              width={800} 
+              height={450} 
+              priority 
+              quality={85} 
+              style={{ width: '100%', borderRadius: 8, marginBottom: 24, display: 'block' }} 
+            />
+          )}
 
           <AudioButton titulo={n.titulo} resumen={n.resumen || ''} contenido={n.contenido || ''} />
 
-          <div className="article-body" style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 18, lineHeight: 1.7, color: '#1a1a1a' }}
-            dangerouslySetInnerHTML={{ __html: cleanNestedTags(n.contenido || '') }} />
+          <div 
+            className="article-body" 
+            style={{ fontFamily: "Georgia, serif", fontSize: 17, lineHeight: 1.7, color: '#1a1a1a' }}
+            dangerouslySetInnerHTML={{ __html: cleanNestedTags(n.contenido || '') }} 
+          />
 
-          <div style={{ margin: '40px 0', padding: '24px 0', borderTop: '1px solid #e2e2e2', borderBottom: '1px solid #e2e2e2' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#8c8c8c', marginBottom: 12, letterSpacing: '0.05em' }}>Compartir</div>
+          <div style={{ 
+            margin: '40px 0', 
+            padding: '24px 0', 
+            borderTop: '1px solid #e2e2e2', 
+            borderBottom: '1px solid #e2e2e2' 
+          }}>
+            <div style={{ 
+              fontSize: 11, 
+              fontWeight: 700, 
+              textTransform: 'uppercase', 
+              color: '#8c8c8c', 
+              marginBottom: 12, 
+              letterSpacing: '0.05em' 
+            }}>
+              Compartir
+            </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="Facebook" bg="#1877f2" />
               <ShareChip href={`https://wa.me/?text=${encodeURIComponent(n.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" />
@@ -149,42 +207,13 @@ export default async function NewsPage({ params }: { params: { slug: string } })
             </div>
           </div>
         </article>
-
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {related.length > 0 && (
-            <div style={{ background: '#141414', border: '1px solid #262626', borderRadius: 12, padding: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#f5f5f5', marginBottom: 12, textTransform: 'uppercase' }}>Relacionadas</div>
-              {related.map(r => (
-                <Link key={r.id} href={`/noticias/${r.slug}`} style={{ display: 'flex', gap: 10, marginBottom: 10, textDecoration: 'none' }}>
-                  <div style={{ width: 80, height: 54, borderRadius: 6, overflow: 'hidden', flexShrink: 0 }}>
-                    <Image src={r.imagen || FALLBACK_IMAGE} alt="" width={80} height={54} style={{ objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#e5e5e5', lineHeight: 1.35 }}>{r.titulo}</div>
-                </Link>
-              ))}
-            </div>
-          )}
-          {mostRead.length > 0 && (
-            <div style={{ background: '#141414', border: '1px solid #262626', borderRadius: 12, padding: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#f5f5f5', marginBottom: 12, textTransform: 'uppercase' }}>Más leídas</div>
-              {mostRead.map((m, i) => (
-                <Link key={m.id} href={`/noticias/${m.slug}`} style={{ display: 'flex', gap: 10, marginBottom: 10, textDecoration: 'none', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: 20, fontWeight: 900, color: '#dc2626' }}>{i + 1}</span>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#e5e5e5', lineHeight: 1.35 }}>{m.titulo}</div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </aside>
       </main>
 
-      <footer style={{ background: '#0a0a0a', borderTop: '1px solid #262626', padding: '40px 24px', color: '#737373', fontSize: 13 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
+      <footer style={{ background: '#121212', padding: '40px 24px', color: '#a0a0a0', fontSize: 13, textAlign: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           © {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.
         </div>
       </footer>
-
-      <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.getElementById('readProgress');if(!b)return;window.addEventListener('scroll',function(){var d=document.documentElement;var h=d.scrollHeight-d.clientHeight;if(h>0)b.style.width=Math.round(((window.scrollY||d.scrollTop)/h)*100)+'%';},{passive:true});})();` }} />
     </>
   );
 }

@@ -109,3 +109,37 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
   console.error('[data.ts] ERROR: No hay noticias más leídas disponibles - checkear Firebase');
   return [];
 }
+
+export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('slug', '==', slug)
+      .limit(1)
+      .get();
+    
+    if (!snap.empty) {
+      const doc = snap.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        slug: data.slug || doc.id,
+        titulo: data.titulo || '',
+        resumen: data.resumen || '',
+        contenido: data.contenido || '',
+        categoria: data.categoria || 'General',
+        imagen: data.imagen || '',
+        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+        autor: data.autor,
+        destacada: data.destacada,
+        vistas: data.vistas,
+        palabras: data.palabras,
+      };
+    }
+  } catch (err) {
+    console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
+  }
+  
+  return null;
+}
