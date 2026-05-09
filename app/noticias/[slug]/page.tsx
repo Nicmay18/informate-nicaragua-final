@@ -72,43 +72,38 @@ function cleanNestedTags(html: string): string {
   return c;
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const snap = await adminDb.collection('noticias').where('slug', '==', slug).limit(1).get();
   if (snap.empty) notFound();
 
-  const n = snap.docs[0].data();
+  const noticia = snap.docs[0].data();
   
-  // Validación simple para datos de noticia
-  if (!n) {
-    return <div>Noticia no encontrada</div>;
-  }
-  
-  // Validar datos antes de usarlos
-  if (!n || typeof n !== 'object') {
-    notFound();
+  // Esto evita que la página "explote" si no hay datos
+  if (!noticia) {
+    return <div className="p-10 text-center">Noticia no encontrada</div>;
   }
   const url = `https://nicaraguainformate.com/noticias/${slug}`;
-  const wordCount = countWords(n.contenido || '');
+  const wordCount = countWords(noticia.contenido || '');
   const readTime = Math.ceil(wordCount / 200);
-  const fechaStr = fmtDate(n.fecha);
-  const autor = n.autor || 'Keyling Rivera M.';
+  const fechaStr = fmtDate(noticia.fecha);
+  const autor = noticia.autor || 'Keyling Rivera M.';
   const autorInitial = autor.charAt(0) || 'N';
-  const imgUrl = n.imagen || FALLBACK_IMAGE;
-  const related = await getRelated(n.categoria || 'General', slug);
+  const imgUrl = noticia.imagen || FALLBACK_IMAGE;
+  const related = await getRelated(noticia.categoria || 'General', slug);
   const mostRead = await getMostRead(slug);
 
   let fechaISO;
 try {
-  fechaISO = n.fecha?.toDate ? n.fecha.toDate().toISOString() : new Date(n.fecha || Date.now()).toISOString();
+  fechaISO = noticia.fecha?.toDate ? noticia.fecha.toDate().toISOString() : new Date(noticia.fecha || Date.now()).toISOString();
 } catch {
   fechaISO = new Date().toISOString();
 }
 
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'NewsArticle',
-    headline: n.titulo, description: n.resumen || n.titulo,
-    image: n.imagen || 'https://nicaraguainformate.com/logo.png',
+    headline: noticia.titulo, description: noticia.resumen || noticia.titulo,
+    image: noticia.imagen || 'https://nicaraguainformate.com/logo.png',
     datePublished: fechaISO,
     author: { '@type': 'Person', name: autor },
     publisher: { '@type': 'Organization', name: 'Nicaragua Informate', logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } },
@@ -136,13 +131,13 @@ try {
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 320px', gap: 48 }}>
         <article>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', padding: '5px 12px', background: 'rgba(220,38,38,0.1)', borderRadius: 4 }}>{n.categoria || 'General'}</span>
+            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', padding: '5px 12px', background: 'rgba(220,38,38,0.1)', borderRadius: 4 }}>{noticia.categoria || 'General'}</span>
             <span style={{ flex: 1, height: 1, background: '#262626' }} />
             <span style={{ fontSize: 12, color: '#737373' }}>{fechaStr}</span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#f5f5f5', lineHeight: 1.1, marginBottom: 16 }}>{n.titulo}</h1>
-          {n.resumen && <p style={{ fontSize: 18, color: '#a3a3a3', lineHeight: 1.6, marginBottom: 20 }}>{n.resumen}</p>}
+          <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#f5f5f5', lineHeight: 1.1, marginBottom: 16 }}>{noticia.titulo}</h1>
+          {noticia.resumen && <p style={{ fontSize: 18, color: '#a3a3a3', lineHeight: 1.6, marginBottom: 20 }}>{noticia.resumen}</p>}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28, padding: '14px 0', borderTop: '1px solid #262626', borderBottom: '1px solid #262626' }}>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700 }}>{autorInitial}</div>
@@ -152,18 +147,18 @@ try {
             </div>
           </div>
 
-          <Image src={imgUrl} alt={n.titulo} width={800} height={450} priority quality={85} style={{ width: '100%', borderRadius: 8, marginBottom: 24 }} />
+          <Image src={imgUrl} alt={noticia.titulo} width={800} height={450} priority quality={85} style={{ width: '100%', borderRadius: 8, marginBottom: 24 }} />
 
-          <AudioButton titulo={n.titulo} resumen={n.resumen || ''} contenido={n.contenido || ''} />
+          <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
-          <div style={{ fontSize: 17, lineHeight: 1.7, color: '#d4d4d4' }} dangerouslySetInnerHTML={{ __html: cleanNestedTags(n.contenido || '') }} />
+          <div style={{ fontSize: 17, lineHeight: 1.7, color: '#d4d4d4' }} dangerouslySetInnerHTML={{ __html: cleanNestedTags(noticia.contenido || '') }} />
 
           <div style={{ margin: '40px 0', padding: '24px 0', borderTop: '1px solid #262626', borderBottom: '1px solid #262626' }}>
             <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#737373', marginBottom: 14 }}>Compartir</div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="Facebook" bg="#1877f2" />
-              <ShareChip href={`https://wa.me/?text=${encodeURIComponent(n.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" />
-              <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(n.titulo)}`} label="Telegram" bg="#0088cc" />
+              <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" />
+              <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="Telegram" bg="#0088cc" />
             </div>
           </div>
         </article>
