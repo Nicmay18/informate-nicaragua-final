@@ -8,9 +8,28 @@ import type { Noticia } from '@/lib/types';
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = 'https://nicaraguainformate.com';
+  const url = `${baseUrl}/noticias`;
+
   return {
     title: 'Todas las Noticias | Nicaragua Informate',
     description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'website',
+      locale: 'es_NI',
+      url,
+      siteName: 'Nicaragua Informate',
+      title: 'Todas las Noticias | Nicaragua Informate',
+      description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+      images: [{ url: `${baseUrl}/logo.png`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Todas las Noticias | Nicaragua Informate',
+      description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+      images: [`${baseUrl}/logo.png`],
+    },
   };
 }
 

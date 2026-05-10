@@ -2,7 +2,7 @@ import ArticleClient from '@/components/ArticleClient';
 import { getNewsBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { buildNewsArticleJsonLd } from '@/lib/schema';
+import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -72,6 +72,7 @@ export default async function NewsPage({ params }: { params: { slug: string } })
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLd(noticia, url)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(noticia.categoria)) }} />
         <ArticleClient noticia={noticia} />
       </>
     );
