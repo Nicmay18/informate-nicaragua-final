@@ -17,3 +17,4 @@ export default async function NewsPage({ params }: { params: { slug: string } })
 
   return <ArticleClient noticia={noticia} />;
 }
+subi
