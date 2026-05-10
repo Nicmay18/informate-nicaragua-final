@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 
-const MAX_SLIDES = 6;
+const MAX_SLIDES = 3;
 const FADE_DURATION_MS = 300;
 const AUTOPLAY_DELAY_MS = 5500;
 const SWIPE_THRESHOLD_PX = 48;
@@ -78,7 +78,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
       }}
       aria-label="Noticias destacadas"
     >
-      <Link href={`/noticias/${n.slug}`} className="block relative aspect-[16/9] lg:aspect-[21/9] no-underline">
+      <Link href={`/noticias/${n.slug}`} className="block relative max-h-[420px] aspect-[21/9] no-underline overflow-hidden">
         <Image
           src={img}
           alt={n.titulo}

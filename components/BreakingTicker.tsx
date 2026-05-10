@@ -85,7 +85,7 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
         <div style={{ height: '100%', width: `${progress}%`, background: 'rgba(255,255,255,0.65)', transition: 'width 0.1s linear' }} />
       </div>
 
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', gap: 10, minHeight: 44 }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', gap: 10, height: 34 }}>
         {/* Badge */}
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: 999, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
           <i className="fas fa-bolt" style={{ fontSize: 9 }} /> Última Hora

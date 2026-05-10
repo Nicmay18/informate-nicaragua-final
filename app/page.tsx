@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import NewsGrid from '@/components/NewsGrid';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
@@ -12,7 +13,7 @@ import SiteFooter from '@/components/home/SiteFooter';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
-import { CATEGORIES } from '@/lib/types';
+import { CATEGORIES, CATEGORY_COLORS, FALLBACK_IMAGE } from '@/lib/types';
 
 export const revalidate = 60;
 
@@ -82,25 +83,66 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Main Content */}
+      {/* Main Content - Grid Reorganizado */}
       <main 
   id="main-content"
-  className="w-full mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8"
+  className="w-full mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6"
   style={{ maxWidth: 1200 }}
 >
-        <div>
+        <div className="space-y-6">
+          {/* Hero Compacto 2/3 */}
+          {destacadas.length > 0 && (
+            <section className="lg:hidden">
+              <HeroCarousel noticias={destacadas} />
+            </section>
+          )}
+          
+          {/* Últimas Noticias */}
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
 
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <aside className="space-y-6">
+          {/* Hero Desktop + Noticia Destacada 1/3 */}
+          {destacadas.length > 0 && (
+            <section className="hidden lg:block">
+              <HeroCarousel noticias={destacadas.slice(0, 1)} />
+              {destacadas.length > 1 && (
+                <div className="mt-4">
+                  <h3 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', marginBottom: 12, color: '#333' }}>También destacado</h3>
+                  <Link href={`/noticias/${destacadas[1].slug}`} className="block no-underline">
+                    <div style={{ display: 'flex', gap: 12, padding: 12, border: '1px solid #e5e7eb', borderRadius: 8, transition: 'all 0.2s' }}>
+                      <Image
+                        src={destacadas[1].imagen || FALLBACK_IMAGE}
+                        alt={destacadas[1].titulo}
+                        width={120}
+                        height={90}
+                        className="object-cover rounded"
+                        style={{ flexShrink: 0 }}
+                      />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 10, color: CATEGORY_COLORS[destacadas[1].categoria] || '#8c1d18', fontWeight: 600, textTransform: 'uppercase' }}>
+                          {destacadas[1].categoria}
+                        </span>
+                        <h4 style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.3, margin: '4px 0', color: '#121212' }}>
+                          {destacadas[1].titulo}
+                        </h4>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Sidebar Reordenado */}
           <TrendingList noticias={noticias.slice(0, 6)} />
+          {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
             <WeatherWidgetWrapper />
           </div>
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
             <IndicadoresWidget />
           </div>
-          {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
           <NewsletterForm />
           <SocialGrid />
           <TagsCloud />

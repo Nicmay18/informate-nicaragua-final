@@ -111,11 +111,11 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                 <Image
                   src={n.imagen || FALLBACK_IMAGE}
                   alt={n.titulo}
-                  width={168}
-                  height={114}
+                  width={140}
+                  height={100}
                   loading="lazy"
                   quality={75}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded"
                 />
                 <div style={{
                   position: 'absolute', top: 8, left: 8,
@@ -130,7 +130,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
               </div>
 
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7, minWidth: 0, justifyContent: 'center' }}>
-                <h3 className="ng-title">{n.titulo}</h3>
+                <h3 className="ng-title" style={{ fontSize: 16, lineHeight: 1.35, fontWeight: 700, marginBottom: 4 }}>{n.titulo}</h3>
                 {n.resumen && (
                   <p style={{ color: 'var(--ink-muted)', fontSize: 13, lineHeight: 1.55, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                     {n.resumen}
