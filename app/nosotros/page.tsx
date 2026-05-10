@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import LegalPageShell from '@/components/LegalPageShell';
+import { Target, Eye, HeartHandshake, Users, Mail, Globe, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Sobre Nosotros',
@@ -19,11 +20,11 @@ export default function NosotrosPage() {
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
-        {[{ icon: 'fa-bullseye', title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna que contribuya a la formación de ciudadanos informados y al fortalecimiento de la democracia.' },
-          { icon: 'fa-eye', title: 'Visión', desc: 'Consolidarnos como la fuente de noticias más confiable para la población nicaragüense en el país y la diáspora.' },
-          { icon: 'fa-handshake', title: 'Valores', desc: 'Veracidad, precisión, responsabilidad social, ética periodística, independencia editorial y respeto a la dignidad humana.' }].map((v) => (
+        {[{ icon: <Target size={24} color="#8c1d18" />, title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna que contribuya a la formación de ciudadanos informados y al fortalecimiento de la democracia.' },
+          { icon: <Eye size={24} color="#8c1d18" />, title: 'Visión', desc: 'Consolidarnos como la fuente de noticias más confiable para la población nicaragüense en el país y la diáspora.' },
+          { icon: <HeartHandshake size={24} color="#8c1d18" />, title: 'Valores', desc: 'Veracidad, precisión, responsabilidad social, ética periodística, independencia editorial y respeto a la dignidad humana.' }].map((v) => (
           <div key={v.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-            <i className={`fas ${v.icon}`} style={{ fontSize: '1.5rem', color: '#8c1d18', marginBottom: '0.75rem', display: 'block' }} />
+            <div style={{ marginBottom: '0.75rem' }}>{v.icon}</div>
             <h3 style={{ color: '#fff', marginBottom: '0.4rem', fontSize: '1.05rem' }}>{v.title}</h3>
             <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>{v.desc}</p>
           </div>
@@ -83,7 +84,7 @@ export default function NosotrosPage() {
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 18 }}>
-            <i className="fas fa-users" />
+            <Users size={20} color="#fff" />
           </div>
           <div>
             <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 2 }}>Equipo de Redacción</div>
@@ -112,12 +113,12 @@ export default function NosotrosPage() {
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem', margin: '0.5rem 0 1.5rem' }}>
         {[
-          { icon: 'fa-map-marker-alt', label: 'Dirección', val: 'Estelí, Nicaragua, Centroamérica' },
-          { icon: 'fa-envelope', label: 'Correo editorial', val: 'redaccion@nicaraguainformate.com' },
-          { icon: 'fa-globe', label: 'Sitio web', val: 'www.nicaraguainformate.com' },
+          { icon: <MapPin size={16} color="#8c1d18" />, label: 'Dirección', val: 'Estelí, Nicaragua, Centroamérica' },
+          { icon: <Mail size={16} color="#8c1d18" />, label: 'Correo editorial', val: 'redaccion@nicaraguainformate.com' },
+          { icon: <Globe size={16} color="#8c1d18" />, label: 'Sitio web', val: 'www.nicaraguainformate.com' },
         ].map(c => (
           <div key={c.label} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem' }}>
-            <i className={`fas ${c.icon}`} style={{ color: '#8c1d18', fontSize: 16, marginBottom: 8, display: 'block' }} />
+            <div style={{ marginBottom: 8 }}>{c.icon}</div>
             <div style={{ color: '#fff', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{c.label}</div>
             <div style={{ color: '#94a3b8', fontSize: 13 }}>{c.val}</div>
           </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Mail, CircleCheck } from 'lucide-react';
 
 /**
  * API endpoint para newsletter
@@ -74,7 +75,7 @@ export default function NewsletterForm() {
   return (
     <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
       <div style={{ background: '#8c1d18', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <i className="fas fa-envelope" style={{ color: '#fff', fontSize: 14 }} />
+        <Mail size={14} color="#fff" />
         <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Newsletter</span>
       </div>
       <div style={{ padding: 16 }}>
@@ -83,7 +84,7 @@ export default function NewsletterForm() {
         </p>
         {status === 'ok' ? (
           <div style={{ color: '#16a34a', fontSize: 13, fontWeight: 600, padding: '10px 0', textAlign: 'center' }}>
-            <i className="fas fa-check-circle" style={{ marginRight: 6 }} />¡Suscrito con éxito!
+            <CircleCheck size={14} style={{ marginRight: 6 }} />¡Suscrito con éxito!
           </div>
         ) : (
           <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

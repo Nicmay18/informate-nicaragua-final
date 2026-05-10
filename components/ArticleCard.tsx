@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Clock } from 'lucide-react';
 import { Noticia, CATEGORY_COLORS, FALLBACK_IMAGE } from '@/lib/types';
 
 /**
@@ -76,7 +77,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             <p className="news-card-excerpt">{article.resumen}</p>
             <div className="news-card-meta">
               <span>{formatDate(article.fecha)}</span>
-              <span><i className="far fa-clock" /> {readTime} min</span>
+              <span><Clock size={12} /> {readTime} min</span>
             </div>
           </div>
         </Link>
@@ -110,7 +111,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
           <p className="news-card-excerpt">{article.resumen}</p>
           <div className="news-card-meta">
             <span>{formatDate(article.fecha)}</span>
-            <span><i className="far fa-clock" /> {readTime} min</span>
+            <span><Clock size={12} /> {readTime} min</span>
           </div>
         </div>
       </Link>

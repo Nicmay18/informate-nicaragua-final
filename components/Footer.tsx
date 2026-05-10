@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BrandIcon from '@/components/BrandIcon';
 import { CATEGORIES } from '@/lib/types';
 
 const SOCIAL_URLS = {
@@ -71,13 +72,13 @@ export default function Footer() {
           </Link>
           <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
             <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Facebook">
-              <i className="fab fa-facebook-f" style={{ fontSize: 13 }} />
+              <BrandIcon name="facebook-f" size={13} />
             </a>
             <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="WhatsApp">
-              <i className="fab fa-whatsapp" style={{ fontSize: 13 }} />
+              <BrandIcon name="whatsapp" size={13} />
             </a>
             <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Telegram">
-              <i className="fab fa-telegram-plane" style={{ fontSize: 13 }} />
+              <BrandIcon name="telegram" size={13} />
             </a>
           </div>
         </div>

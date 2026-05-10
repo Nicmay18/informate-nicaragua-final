@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CalendarDays, Clock, Eye, Tag, Check, Link2, Play, Pause, Square } from 'lucide-react';
+import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura } from '@/lib/formateo';
 
 /* ================================================================
@@ -156,7 +158,7 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
               animation: 'spin 0.8s linear infinite',
             }} />
           ) : (
-            <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`} style={{ fontSize: 18, marginLeft: isPlaying ? 0 : 2 }} />
+            isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: 2 }} />
           )}
         </button>
 
@@ -188,7 +190,7 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
             border: '1px solid #ddd6ce', background: '#fff',
             color: '#756d66', fontWeight: 700, fontSize: 12, cursor: 'pointer',
           }}>
-            <i className="fas fa-stop" style={{ fontSize: 10 }} /> Detener
+            <Square size={10} fill="#756d66" /> Detener
           </button>
         )}
       </div>
@@ -225,7 +227,7 @@ export function CopyButton({ url }: { url: string }) {
         color: copied ? '#16a34a' : '#374151',
       }}
     >
-      <i className={`fas ${copied ? 'fa-check' : 'fa-link'}`} style={{ fontSize: 14 }} />
+      {copied ? <Check size={14} color="#16a34a" /> : <Link2 size={14} />}
     </button>
   );
 }
@@ -247,7 +249,7 @@ export function ShareChip({ href, label, bg, icon }: { href: string; label: stri
       }}
       className="share-chip-hover"
     >
-      {icon && <i className={`fab fa-${icon}`} style={{ fontSize: 14 }} />}
+      {icon && <BrandIcon name={icon} size={14} />}
       {label}
     </a>
   );
@@ -346,13 +348,13 @@ export default function ArticleClient({
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 13, color: '#8c8c8c', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <i className="far fa-calendar" style={{ fontSize: 12 }} /> {fechaStr}
+              <CalendarDays size={12} /> {fechaStr}
             </span>
             <span style={{ fontSize: 13, color: '#8c8c8c', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <i className="far fa-clock" style={{ fontSize: 12 }} /> {lecturaMin} min de lectura
+              <Clock size={12} /> {lecturaMin} min de lectura
             </span>
             <span style={{ fontSize: 13, color: '#8c8c8c', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <i className="far fa-eye" style={{ fontSize: 12 }} /> {vistas} vistas
+              <Eye size={12} /> {vistas} vistas
             </span>
           </div>
         </div>
@@ -394,7 +396,7 @@ export default function ArticleClient({
         {/* ===== TAGS ===== */}
         <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
           <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
-            <i className="fas fa-tags" style={{ marginRight: 6 }} /> Etiquetas
+            <Tag size={12} style={{ marginRight: 6 }} /> Etiquetas
           </div>
           <div className="tags-list">
             {tags.map((tag) => (
@@ -467,7 +469,7 @@ export default function ArticleClient({
                         {n.titulo}
                       </h4>
                       <div style={{ fontSize: 12, color: '#a0a0a0', marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <i className="far fa-clock" style={{ fontSize: 10 }} /> {fmtDate(n.fecha)}
+                        <Clock size={10} /> {fmtDate(n.fecha)}
                       </div>
                     </div>
                   </article>

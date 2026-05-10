@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
+import { CloudSun, Droplets, Wind } from 'lucide-react';
 
 const CITIES = [
   { name: 'Managua',    lat: 12.1364, lon: -86.2514 },
@@ -88,7 +89,7 @@ export default function WeatherWidget() {
       {/* Header */}
       <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <i className="fas fa-cloud-sun" style={{ color: '#fbbf24', fontSize: 15 }} />
+          <CloudSun size={15} color="#fbbf24" />
           <span style={{ fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Clima</span>
           <span style={{ fontSize: 13, color: '#fbbf24', fontWeight: 700 }}>— {CITIES[cityIdx].name}</span>
         </div>
@@ -111,7 +112,7 @@ export default function WeatherWidget() {
           {/* Humidity */}
           <div style={{ flex: 1, background: 'rgba(56,189,248,0.12)', borderRadius: 12, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(56,189,248,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <i className="fas fa-droplet" style={{ fontSize: 16, color: '#38bdf8' }} />
+              <Droplets size={16} color="#38bdf8" />
             </div>
             <div>
               <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1 }}>
@@ -124,7 +125,7 @@ export default function WeatherWidget() {
           {/* Wind */}
           <div style={{ flex: 1, background: 'rgba(148,163,184,0.12)', borderRadius: 12, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(148,163,184,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <i className="fas fa-wind" style={{ fontSize: 16, color: '#94a3b8' }} />
+              <Wind size={16} color="#94a3b8" />
             </div>
             <div>
               <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1 }}>

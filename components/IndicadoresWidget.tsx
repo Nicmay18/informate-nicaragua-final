@@ -1,3 +1,5 @@
+import { TrendingUp, Fuel } from 'lucide-react';
+
 const GAS_PRICES = [
   { label: 'Gasolina Regular', price: '47.80–48.00', unit: 'C$', trend: '→', change: '0.00%' },
   { label: 'Gasolina Súper', price: '49.00', unit: 'C$', trend: '→', change: '0.00%' },
@@ -55,7 +57,7 @@ export default async function IndicadoresWidget() {
   return (
     <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
       <div style={{ background: 'linear-gradient(135deg, #14532d 0%, #166534 100%)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <i className="fas fa-chart-line" style={{ color: '#4ade80', fontSize: 14 }} />
+        <TrendingUp size={14} color="#4ade80" />
         <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Indicadores Económicos</span>
       </div>
       <div style={{ padding: '8px 0' }}>
@@ -81,7 +83,7 @@ export default async function IndicadoresWidget() {
 
         {/* Gas prices */}
         <div style={{ padding: '8px 16px 4px', fontSize: 11, color: 'var(--ink-faint)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          <i className="fas fa-gas-pump" style={{ marginRight: 6, color: '#f97316' }} />Combustibles (C$/galón)
+          <Fuel size={14} style={{ marginRight: 6, color: '#f97316' }} />Combustibles (C$/galón)
         </div>
         {GAS_PRICES.map((row, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderBottom: i < GAS_PRICES.length - 1 ? '1px solid var(--border-light)' : 'none' }}>

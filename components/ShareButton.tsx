@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Check, Share2 } from 'lucide-react';
 
 interface ShareButtonProps {
   title: string;
@@ -61,12 +62,12 @@ export default function ShareButton({ title, text, url, className = '' }: ShareB
     >
       {shared ? (
         <>
-          <i className="fas fa-check" />
+          <Check size={16} />
           Copiado
         </>
       ) : (
         <>
-          <i className="fas fa-share-alt" />
+          <Share2 size={16} />
           Compartir
         </>
       )}

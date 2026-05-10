@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X } from 'lucide-react';
 
 const EMISORAS = [
   { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3' },
@@ -23,8 +24,14 @@ export default function StickyRadio() {
 
   useEffect(() => {
     setMounted(true);
-    if (sessionStorage.getItem('radio-dismissed')) setDismissed(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    try {
+      if (sessionStorage.getItem('radio-dismissed')) setDismissed(true);
+    } catch {}
+  }, [mounted]);
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = muted ? 0 : volume;
@@ -79,7 +86,7 @@ export default function StickyRadio() {
 
           {/* Icon + label + waveform */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-            <i className="fas fa-radio" style={{ color: playing ? '#ef4444' : '#475569', fontSize: 18, transition: 'color 0.3s' }} />
+            <Radio size={18} style={{ color: playing ? '#ef4444' : '#475569', transition: 'color 0.3s' }} />
             <span style={{ fontSize: 11, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Radio en Vivo</span>
             {playing && (
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 16 }}>
@@ -97,7 +104,7 @@ export default function StickyRadio() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
             boxShadow: playing ? '0 0 0 4px rgba(239,68,68,0.2)' : 'none', transition: 'all 0.2s',
           }}>
-            <i className={`fas fa-${playing ? 'pause' : 'play'}`} style={{ marginLeft: playing ? 0 : 2 }} />
+            {playing ? <Pause size={14} /> : <Play size={14} style={{ marginLeft: 2 }} />}
           </button>
 
           {/* Station picker */}
@@ -111,7 +118,7 @@ export default function StickyRadio() {
               <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {EMISORAS[selected].name}
               </span>
-              <i className="fas fa-chevron-up" style={{ fontSize: 10, flexShrink: 0, transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
+              <ChevronUp size={10} style={{ flexShrink: 0, transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
             </button>
             {open && (
               <div style={{
@@ -127,8 +134,8 @@ export default function StickyRadio() {
                     cursor: 'pointer', fontSize: 13, fontWeight: selected === i ? 700 : 400, textAlign: 'left',
                     borderBottom: i < EMISORAS.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                   }}>
-                    <i className="fas fa-radio" style={{ fontSize: 12 }} /> {e.name}
-                    {selected === i && playing && <i className="fas fa-volume-high" style={{ marginLeft: 'auto', color: '#ef4444', fontSize: 12 }} />}
+                    <Radio size={12} /> {e.name}
+                    {selected === i && playing && <Volume2 size={12} style={{ marginLeft: 'auto', color: '#ef4444' }} />}
                   </button>
                 ))}
               </div>
@@ -145,7 +152,7 @@ export default function StickyRadio() {
           {/* Volume control (desktop) */}
           <div className="sradio-vol">
             <button onClick={() => setMuted(m => !m)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 15, padding: '4px' }}>
-              <i className={`fas fa-volume-${muted ? 'xmark' : 'high'}`} />
+              {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
             </button>
             <input type="range" min="0" max="1" step="0.05"
               value={muted ? 0 : volume}
@@ -156,7 +163,7 @@ export default function StickyRadio() {
 
           {/* Dismiss */}
           <button onClick={dismiss} title="Cerrar" style={{ flexShrink: 0, background: 'none', border: 'none', color: '#334155', cursor: 'pointer', fontSize: 16, padding: '6px', borderRadius: 6 }}>
-            <i className="fas fa-xmark" />
+            <X size={16} />
           </button>
         </div>
 

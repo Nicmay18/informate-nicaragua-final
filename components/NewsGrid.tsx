@@ -1,29 +1,20 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-
-interface Noticia {
-  id: string;
-  slug: string;
-  titulo: string;
-  resumen: string;
-  categoria: string;
-  imagen: string;
-  fecha: string;
-}
+import Link from 'next/link';
+import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
+import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 
 const CAT_COLORS: Record<string, string> = {
   Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
   Internacionales: '#7c3aed', 'Espectáculos': '#db2777', General: '#374151',
 };
 
-const CAT_ICONS: Record<string, string> = {
-  Sucesos: 'fa-triangle-exclamation', Nacionales: 'fa-flag',
-  Deportes: 'fa-futbol', Internacionales: 'fa-globe', 'Espectáculos': 'fa-star',
+const CAT_ICONS: Record<string, React.ReactNode> = {
+  Sucesos: <AlertTriangle size={10} />, Nacionales: <Flag size={10} />,
+  Deportes: <Trophy size={10} />, Internacionales: <Globe size={10} />, 'Espectáculos': <Star size={10} />,
 };
 
-const FALLBACK_IMAGE = '/logo.png';
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 8;
 
@@ -103,7 +94,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
           const active = c === activeCat;
           return (
             <button key={c} onClick={() => switchCat(c)} className={`ng-cat-btn${active ? ' active' : ''}`}>
-              {c !== 'Todas' && <i className={`fas ${CAT_ICONS[c] || 'fa-newspaper'}`} style={{ fontSize: 10, marginRight: 5 }} />}
+              {c !== 'Todas' && <span style={{ marginRight: 5 }}>{CAT_ICONS[c] || <Newspaper size={10} />}</span>}
               {c}
             </button>
           );
@@ -112,7 +103,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
 
       {shown.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '56px 0', color: '#8a8a9e' }}>
-          <i className="fas fa-newspaper" style={{ fontSize: 34, marginBottom: 12, display: 'block' }} />
+          <Newspaper size={34} style={{ marginBottom: 12 }} />
           <div style={{ fontWeight: 700, color: '#1a1a2e', marginBottom: 6 }}>Sin publicaciones por el momento</div>
           <div style={{ fontSize: 14 }}>Actualizaremos esta sección en cuanto haya nueva información.</div>
         </div>
@@ -157,7 +148,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32 }}>
         {hasMore && (
           <button onClick={() => setPage(p => p + 1)} className="ng-load-btn">
-            <i className="fas fa-arrow-down" style={{ marginRight: 8 }} />
+            <ArrowDown size={14} style={{ marginRight: 8 }} />
             Cargar más
           </button>
         )}
@@ -165,7 +156,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
           style={{ padding: '12px 28px', color: '#fff', background: '#c41e3a', borderRadius: 4, fontWeight: 700, fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'background 0.2s' }}
           onMouseEnter={e => e.currentTarget.style.background = '#a01830'}
           onMouseLeave={e => e.currentTarget.style.background = '#c41e3a'}>
-          <i className="fas fa-newspaper" />
+          <Newspaper size={14} />
           {activeCat === 'Todas' ? 'Ver todas' : `Ver: ${activeCat}`}
         </Link>
       </div>

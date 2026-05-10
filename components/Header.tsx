@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 import { CATEGORIES } from '@/lib/types';
 
 const THEME_STORAGE_KEY = 'ni_theme';
@@ -103,10 +104,10 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
 
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button className="theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
-              <i className={`fas fa-${theme === 'dark' ? 'sun' : 'moon'}`} />
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
             <button className="mobile-toggle" onClick={() => setMenuOpen(true)} aria-label="Menú">
-              <i className="fas fa-bars" />
+              <Menu size={20} />
             </button>
           </div>
         </div>
@@ -117,7 +118,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
         <div className="mobile-drawer-header">
           <span className="logo-pro">Nicaragua <span>Informate</span></span>
           <button className="theme-btn" onClick={() => setMenuOpen(false)} aria-label="Cerrar">
-            <i className="fas fa-times" />
+            <X size={18} />
           </button>
         </div>
         <nav className="mobile-drawer-nav">

@@ -1,8 +1,11 @@
+import BrandIcon from '@/components/BrandIcon';
+import { Rss } from 'lucide-react';
+
 const SOCIALS = [
-  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fab fa-facebook-f', label: 'Facebook', hint: 'Noticias diarias', bg: '#1877F2' },
-  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fab fa-whatsapp', label: 'WhatsApp', hint: 'Únete al canal', bg: '#25D366' },
-  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fab fa-telegram-plane', label: 'Telegram', hint: 'Alertas al instante', bg: '#0088cc' },
-  { href: '/feed.xml', icon: 'fas fa-rss', label: 'RSS', hint: 'Feed de noticias', bg: '#ff6600' },
+  { href: 'https://facebook.com/profile.php?id=61578261125687', icon: <BrandIcon name="facebook-f" size={14} />, label: 'Facebook', hint: 'Noticias diarias', bg: '#1877F2' },
+  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: <BrandIcon name="whatsapp" size={14} />, label: 'WhatsApp', hint: 'Únete al canal', bg: '#25D366' },
+  { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: <BrandIcon name="telegram" size={14} />, label: 'Telegram', hint: 'Alertas al instante', bg: '#0088cc' },
+  { href: '/feed.xml', icon: <Rss size={14} />, label: 'RSS', hint: 'Feed de noticias', bg: '#ff6600' },
 ];
 
 export default function SocialGrid() {
@@ -40,7 +43,7 @@ export default function SocialGrid() {
               background: s.bg,
               flexShrink: 0,
             }}>
-              <i className={s.icon} />
+              {s.icon}
             </span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 13, fontWeight: 700 }}>{s.label}</div>

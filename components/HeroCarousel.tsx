@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 
 const MAX_SLIDES = 4;
@@ -110,8 +111,8 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
 
         {slides.length > 1 && (
           <>
-            <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><i className="fas fa-chevron-left" /></button>
-            <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><i className="fas fa-chevron-right" /></button>
+            <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><ChevronLeft size={20} /></button>
+            <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><ChevronRight size={20} /></button>
           </>
         )}
 

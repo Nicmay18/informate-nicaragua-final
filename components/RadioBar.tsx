@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { Loader2, Play, Pause, Square, Radio, ChevronDown, VolumeX, Volume1, Volume2, AlertCircle, X } from 'lucide-react';
 
 const EMISORAS = [
   { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3',  genre: 'Noticias / Oficial' },
@@ -138,22 +139,22 @@ export default function RadioBar() {
         <button onClick={toggle} aria-label={playing ? 'Pausar' : 'Reproducir'}
           style={{ width: 34, height: 34, borderRadius: '50%', background: loading ? '#9ca3af' : '#8c1d18', border: 'none', color: '#fff', cursor: loading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, transition: 'all 0.2s' }}
           disabled={loading}>
-          {loading ? <i className="fas fa-spinner fa-spin" /> : <i className={`fas ${playing ? 'fa-pause' : 'fa-play'}`} style={{ marginLeft: playing ? 0 : 2 }} />}
+          {loading ? <Loader2 size={14} className="animate-spin" /> : playing ? <Pause size={14} /> : <Play size={14} style={{ marginLeft: 2 }} />}
         </button>
 
         {playing && (
           <button onClick={stop} aria-label="Detener"
             style={{ width: 34, height: 34, borderRadius: '50%', background: '#dc2626', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, transition: 'all 0.2s' }}>
-            <i className="fas fa-stop" />
+            <Square size={12} fill="#fff" />
           </button>
         )}
 
         <div style={{ position: 'relative' }}>
           <button onClick={() => setOpen(!open)}
             style={{ background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: '#4a3728', fontWeight: 600, fontSize: 13, padding: '6px 10px', borderRadius: 6, border: '1px solid #e2d9d0' }}>
-            <i className="fas fa-radio" style={{ color: '#8c1d18' }} />
+            <Radio size={14} color="#8c1d18" />
             {selected !== null ? EMISORAS[selected].name : 'Seleccionar emisora...'}
-            <i className="fas fa-chevron-down" style={{ fontSize: 10, color: '#8c7b70', marginLeft: 4 }} />
+            <ChevronDown size={10} color="#8c7b70" style={{ marginLeft: 4 }} />
           </button>
           {open && (
             <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 6, background: '#fff', border: '1px solid #e2d9d0', borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.15)', zIndex: 100, minWidth: 260, overflow: 'hidden' }}>
@@ -182,7 +183,7 @@ export default function RadioBar() {
 
         {selected !== null && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' }}>
-            <i className={volume === 0 ? 'fas fa-volume-mute' : volume < 0.5 ? 'fas fa-volume-down' : 'fas fa-volume-up'} style={{ color: '#8c7b70', fontSize: 12 }} />
+            {volume === 0 ? <VolumeX size={12} color="#8c7b70" /> : volume < 0.5 ? <Volume1 size={12} color="#8c7b70" /> : <Volume2 size={12} color="#8c7b70" />}
             <input
               type="range"
               min="0"
@@ -197,8 +198,8 @@ export default function RadioBar() {
 
         {error && (
           <div style={{ position: 'absolute', top: '100%', left: 24, right: 24, marginTop: 4, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: '6px 12px', color: '#dc2626', fontSize: 12 }}>
-            <i className="fas fa-exclamation-circle" style={{ marginRight: 6 }} />{error}
-            <button onClick={() => setError(null)} style={{ marginLeft: 8, background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: 12 }}><i className="fas fa-times" /></button>
+            <AlertCircle size={12} style={{ marginRight: 6 }} />{error}
+            <button onClick={() => setError(null)} style={{ marginLeft: 8, background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', fontSize: 12 }}><X size={12} /></button>
           </div>
         )}
 

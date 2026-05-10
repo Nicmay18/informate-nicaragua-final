@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
+import { MapPin, Clock, Mail, Share2, Info, Send, Shield, Scale, Megaphone } from 'lucide-react';
+import BrandIcon from '@/components/BrandIcon';
 
 export const metadata: Metadata = {
   title: 'Contacto',
@@ -8,16 +10,16 @@ export const metadata: Metadata = {
 };
 
 const CONTACT_CHANNELS = [
-  { icon: 'fa-envelope', label: 'Redacción', val: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com', desc: 'Noticias y prensa' },
-  { icon: 'fa-shield-halved', label: 'Privacidad', val: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com', desc: 'Datos personales' },
-  { icon: 'fa-scale-balanced', label: 'Legal', val: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com', desc: 'Asuntos legales' },
-  { icon: 'fa-bullhorn', label: 'Publicidad', val: 'publicidad@nicaraguainformate.com', href: 'mailto:publicidad@nicaraguainformate.com', desc: 'Anuncios y patrocinios' },
+  { icon: <Mail size={14} />, label: 'Redacción', val: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com', desc: 'Noticias y prensa' },
+  { icon: <Shield size={14} />, label: 'Privacidad', val: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com', desc: 'Datos personales' },
+  { icon: <Scale size={14} />, label: 'Legal', val: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com', desc: 'Asuntos legales' },
+  { icon: <Megaphone size={14} />, label: 'Publicidad', val: 'publicidad@nicaraguainformate.com', href: 'mailto:publicidad@nicaraguainformate.com', desc: 'Anuncios y patrocinios' },
 ];
 
 const SOCIAL_CHANNELS = [
-  { icon: 'fab fa-facebook-f', label: 'Facebook', href: 'https://facebook.com/profile.php?id=61578261125687', color: '#1877F2' },
-  { icon: 'fab fa-whatsapp', label: 'WhatsApp', href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', color: '#25D366' },
-  { icon: 'fab fa-telegram-plane', label: 'Telegram', href: 'https://t.me/+fHHjncJqMQM3NjZh', color: '#0088cc' },
+  { icon: 'facebook-f', label: 'Facebook', href: 'https://facebook.com/profile.php?id=61578261125687', color: '#1877F2' },
+  { icon: 'whatsapp', label: 'WhatsApp', href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', color: '#25D366' },
+  { icon: 'telegram', label: 'Telegram', href: 'https://t.me/+fHHjncJqMQM3NjZh', color: '#0088cc' },
 ];
 
 export default function ContactoPage() {
@@ -31,7 +33,7 @@ export default function ContactoPage() {
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: '1rem' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <i className="fas fa-map-marker-alt" style={{ color: '#fff', fontSize: 20 }} />
+            <MapPin size={20} color="#fff" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <h3 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
@@ -56,19 +58,19 @@ export default function ContactoPage() {
 
         <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <i className="fas fa-clock" style={{ color: '#fbbf24', fontSize: 14 }} />
+            <Clock size={14} color="#fbbf24" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
               <strong style={{ color: '#fff' }}>Lun - Vie:</strong> 8:00 - 18:00
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <i className="fas fa-clock" style={{ color: '#22c55e', fontSize: 14 }} />
+            <Clock size={14} color="#22c55e" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
               <strong style={{ color: '#fff' }}>Sábado:</strong> 9:00 - 14:00
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <i className="fas fa-clock" style={{ color: '#64748b', fontSize: 14 }} />
+            <Clock size={14} color="#64748b" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
               <strong style={{ color: '#fff' }}>Domingo:</strong> Cerrado
             </span>
@@ -77,7 +79,7 @@ export default function ContactoPage() {
       </div>
 
       <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <i className="fas fa-envelope" style={{ color: '#8c1d18' }} />
+        <Mail size={16} color="#8c1d18" />
         Correos Electrónicos
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '0.75rem', margin: '0 0 2rem' }}>
@@ -87,7 +89,7 @@ export default function ContactoPage() {
             className="contact-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
               <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(140,29,24,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <i className={`fas ${c.icon}`} style={{ color: '#8c1d18', fontSize: 14 }} />
+                {c.icon}
               </div>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>{c.label}</div>
             </div>
@@ -98,7 +100,7 @@ export default function ContactoPage() {
       </div>
 
       <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <i className="fas fa-share-alt" style={{ color: '#8c1d18' }} />
+        <Share2 size={16} color="#8c1d18" />
         Redes Sociales
       </h2>
       <div style={{ display: 'flex', gap: 10, marginBottom: '2rem', flexWrap: 'wrap' }}>
@@ -106,7 +108,7 @@ export default function ContactoPage() {
           <a key={s.label} href={s.href} target="_blank" rel="noopener"
             style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
             className="social-contact-btn">
-            <i className={s.icon} style={{ color: s.color, fontSize: 18 }} />
+            <BrandIcon name={s.icon} size={18} />
             <span style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{s.label}</span>
           </a>
         ))}
@@ -149,12 +151,12 @@ export default function ContactoPage() {
               style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: 14, resize: 'vertical' }} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
-            <i className="fas fa-info-circle" />
+            <Info size={14} />
             <span>Al enviar este formulario, aceptas nuestra <a href="/privacidad" style={{ color: '#60a5fa', textDecoration: 'none' }}>política de privacidad</a></span>
           </div>
           <button type="submit"
             style={{ padding: '14px 28px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            <i className="fas fa-paper-plane" />
+            <Send size={16} />
             Enviar mensaje
           </button>
         </form>

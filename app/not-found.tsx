@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Home, Newspaper } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,10 +18,10 @@ export default function NotFound() {
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#8c1d18', color: '#fff', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-            <i className="fas fa-home" /> Ir al inicio
+            <Home size={16} /> Ir al inicio
           </Link>
           <Link href="/noticias" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', border: '1px solid var(--border-light)', color: 'var(--ink)', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-            <i className="fas fa-newspaper" /> Ver noticias
+            <Newspaper size={16} /> Ver noticias
           </Link>
         </div>
         <div style={{ marginTop: 40, padding: '16px 0', borderTop: '1px solid var(--border-light)', fontSize: 12, color: 'var(--ink-faint)' }}>

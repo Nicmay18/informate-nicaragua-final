@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { Home, Radio, Flame } from 'lucide-react';
+import BrandIcon from '@/components/BrandIcon';
 
 export default function MobileBottomNav() {
   return (
@@ -10,21 +12,21 @@ export default function MobileBottomNav() {
           href="/"
           className="flex flex-col items-center gap-0.5 text-[#8c1d18] no-underline text-[9px] font-bold px-2.5 py-1 uppercase tracking-wide"
         >
-          <i className="fas fa-house text-xl" />
+          <Home size={20} />
           Portada
         </Link>
         <a
           href="#radio-section"
           className="flex flex-col items-center gap-0.5 text-slate-500 no-underline text-[9px] font-bold px-2.5 py-1 uppercase tracking-wide"
         >
-          <i className="fas fa-radio text-xl" />
+          <Radio size={20} />
           Radio
         </a>
         <a
           href="#mas-leidas"
           className="flex flex-col items-center gap-0.5 text-slate-500 no-underline text-[9px] font-bold px-2.5 py-1 uppercase tracking-wide"
         >
-          <i className="fas fa-fire text-xl" />
+          <Flame size={20} />
           Top
         </a>
         <a
@@ -33,7 +35,7 @@ export default function MobileBottomNav() {
           rel="noopener"
           className="flex flex-col items-center gap-0.5 text-slate-500 no-underline text-[9px] font-bold px-2.5 py-1 uppercase tracking-wide"
         >
-          <i className="fab fa-whatsapp text-xl" />
+          <BrandIcon name="whatsapp" size={20} />
           Seguir
         </a>
       </div>

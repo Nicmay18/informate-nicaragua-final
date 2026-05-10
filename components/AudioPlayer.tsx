@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { Play, Pause, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface AudioPlayerProps {
   src?: string;
@@ -85,7 +86,7 @@ export default function AudioPlayer({ src, title = 'Audio', autoPlay = false }: 
             flexShrink: 0,
           }}
         >
-          <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`} />
+          {isPlaying ? <Pause size={16} /> : <Play size={16} />}
         </button>
 
         {isExpanded && (
@@ -102,7 +103,7 @@ export default function AudioPlayer({ src, title = 'Audio', autoPlay = false }: 
               onClick={() => setIsExpanded(false)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-muted)', padding: '4px' }}
             >
-              <i className="fas fa-chevron-down" />
+              <ChevronDown size={16} />
             </button>
           </>
         )}
@@ -114,7 +115,7 @@ export default function AudioPlayer({ src, title = 'Audio', autoPlay = false }: 
               onClick={() => setIsExpanded(true)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-muted)', padding: '4px' }}
             >
-              <i className="fas fa-chevron-up" />
+              <ChevronUp size={16} />
             </button>
           </>
         )}

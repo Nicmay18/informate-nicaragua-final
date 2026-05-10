@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
+import { CircleCheck, Scale, Eye, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Política Editorial',
@@ -8,10 +9,10 @@ export const metadata: Metadata = {
 };
 
 const PRINCIPIOS = [
-  { icon: 'fa-check-circle', title: 'Verificación', desc: 'Priorizamos información contrastada y contextualizada antes de publicar cada pieza periodística.' },
-  { icon: 'fa-scale-balanced', title: 'Responsabilidad', desc: 'Evitamos afirmaciones engañosas, manipuladas o descontextualizadas que puedan generar confusión.' },
-  { icon: 'fa-eye', title: 'Transparencia', desc: 'Distinguimos con claridad noticias, opinión, contenido patrocinado y publicidad comercial.' },
-  { icon: 'fa-users', title: 'Interés público', desc: 'Damos prioridad a temas que impactan a la ciudadanía y la vida pública de Nicaragua.' },
+  { icon: <CircleCheck size={16} color="#8c1d18" />, title: 'Verificación', desc: 'Priorizamos información contrastada y contextualizada antes de publicar cada pieza periodística.' },
+  { icon: <Scale size={16} color="#8c1d18" />, title: 'Responsabilidad', desc: 'Evitamos afirmaciones engañosas, manipuladas o descontextualizadas que puedan generar confusión.' },
+  { icon: <Eye size={16} color="#8c1d18" />, title: 'Transparencia', desc: 'Distinguimos con claridad noticias, opinión, contenido patrocinado y publicidad comercial.' },
+  { icon: <Users size={16} color="#8c1d18" />, title: 'Interés público', desc: 'Damos prioridad a temas que impactan a la ciudadanía y la vida pública de Nicaragua.' },
 ];
 
 export default function PoliticaEditorialPage() {
@@ -42,7 +43,7 @@ export default function PoliticaEditorialPage() {
         {PRINCIPIOS.map((p) => (
           <div key={p.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem' }}>
             <h3 style={{ fontSize: '0.95rem', marginBottom: '0.4rem', color: '#fff', fontWeight: 600 }}>
-              <i className={`fas ${p.icon}`} style={{ color: '#8c1d18', marginRight: 8 }} />{p.title}
+              <span style={{ marginRight: 8 }}>{p.icon}</span>{p.title}
             </h3>
             <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.85rem', lineHeight: 1.55 }}>{p.desc}</p>
           </div>

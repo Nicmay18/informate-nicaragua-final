@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Flame } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { CATEGORY_COLORS } from '@/lib/types';
 
@@ -9,7 +10,7 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
     <div style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
-        <i className="fas fa-fire" style={{ color: '#c41e3a', fontSize: 14 }} />
+        <Flame size={14} color="#c41e3a" />
         <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Más Leídas</h3>
       </div>
 

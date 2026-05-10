@@ -3,6 +3,7 @@ import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import { ThemeInit } from '@/components/ThemeInit';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
+import ClientOnly from '@/components/ClientOnly';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
 
@@ -44,19 +45,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${inter.variable} ${merriweather.variable}`}>
+    <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossOrigin="anonymous" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <a href="#main-content" style={{ position: 'absolute', top: -40, left: 0, background: '#c41e3a', color: '#fff', padding: '8px 16px', zIndex: 10000, transition: 'top 0.3s', fontSize: '14px', fontWeight: 600, textDecoration: 'none', borderRadius: '4px' }}>Saltar al contenido</a>
         <ThemeInit />
         {children}
-        <StickyRadio />
-        <BottomNav />
+        <ClientOnly fallback={<div style={{ height: 58 }} />}>
+          <StickyRadio />
+        </ClientOnly>
+        <ClientOnly>
+          <BottomNav />
+        </ClientOnly>
       </body>
     </html>
   );
