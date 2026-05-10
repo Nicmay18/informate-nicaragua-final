@@ -1292,7 +1292,7 @@ ${descripcion}
       uploadZone.addEventListener('drop', e => { const dt = e.dataTransfer; if (dt.files.length) handleFiles(dt.files); }, false);
     }
 
-    function handleFileSelect(e) { if (e.target.files.length) handleFiles(e.target.files); }
+    window.handleFileSelect = function(e) { if (e.target.files.length) handleFiles(e.target.files); };
     async function handleFiles(files) {
       const file = files[0];
       if (!file.type.startsWith('image/')) { showToast('Selecciona una imagen válida', 'error'); return; }
