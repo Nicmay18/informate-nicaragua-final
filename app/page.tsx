@@ -32,51 +32,38 @@ export default async function HomePage() {
   const today = new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white">
       {/* ===== TOP BAR ===== */}
-      <div style={{ background: '#1a1a2e', color: '#fff', fontSize: 12, padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="top-bar">
+        <div className="top-bar-inner">
           <div style={{ display: 'flex', gap: 20, alignItems: 'center', opacity: 0.8 }}>
             <span>📍 Estelí, Nicaragua</span>
             <span>{today}</span>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Link href="/nosotros" style={{ color: '#fff', textDecoration: 'none', opacity: 0.8, transition: 'opacity 0.2s', fontWeight: 500 }}>Sobre Nosotros</Link>
-            <Link href="/contacto" style={{ color: '#fff', textDecoration: 'none', opacity: 0.8, transition: 'opacity 0.2s', fontWeight: 500 }}>Contacto</Link>
-            <Link href="/feed.xml" style={{ color: '#fff', textDecoration: 'none', opacity: 0.8, transition: 'opacity 0.2s', fontWeight: 500 }}>RSS</Link>
+            <Link href="/nosotros">Sobre Nosotros</Link>
+            <Link href="/contacto">Contacto</Link>
+            <Link href="/feed.xml">RSS</Link>
           </div>
         </div>
       </div>
 
       {/* ===== HEADER STICKY ===== */}
-      <header style={{ background: '#fff', borderBottom: '1px solid #e8e8ec', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(12px)', backgroundColor: 'rgba(255,255,255,0.95)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 900, color: '#c41e3a', letterSpacing: '-0.5px', lineHeight: 1 }}>
-              Nicaragua <span style={{ color: '#1a1a2e', fontWeight: 700 }}>Informate</span>
-            </div>
-            <div style={{ fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', color: '#8a8a9e', marginTop: 2, fontWeight: 600 }}>
-              Noticias de Nicaragua en Tiempo Real
-            </div>
+      <header className="header-pro">
+        <div className="header-pro-inner">
+          <Link href="/" className="logo-pro">
+            Nicaragua <span>Informate</span>
           </Link>
           <nav>
-            <ul style={{ display: 'flex', gap: 28, listStyle: 'none', margin: 0, padding: 0 }}>
-              <li><Link href="/" style={{ textDecoration: 'none', color: '#1a1a2e', fontSize: 14, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '8px 0', position: 'relative', transition: 'color 0.2s' }}>Inicio</Link></li>
+            <ul className="nav-pro">
+              <li><Link href="/" className="active">Inicio</Link></li>
               {CATEGORIES.slice(0, 5).map((cat) => (
                 <li key={cat.name}>
-                  <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`}
-                    style={{ textDecoration: 'none', color: '#1a1a2e', fontSize: 14, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '8px 0', position: 'relative', transition: 'color 0.2s' }}>
-                    {cat.name}
-                  </Link>
+                  <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`}>{cat.name}</Link>
                 </li>
               ))}
             </ul>
           </nav>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <button style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid #e8e8ec', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} aria-label="Buscar">
-              <i className="fas fa-search" style={{ fontSize: 14, color: '#5a5a6e' }} />
-            </button>
-          </div>
         </div>
       </header>
 
@@ -85,20 +72,20 @@ export default async function HomePage() {
 
       {/* ===== HERO SECTION ===== */}
       {destacadas.length > 0 && (
-        <section style={{ maxWidth: 1280, margin: '32px auto', padding: '0 24px' }}>
+        <section className="hero-section">
           <HeroCarousel noticias={destacadas} />
         </section>
       )}
 
       {/* ===== MAIN CONTENT GRID ===== */}
-      <main id="main-content" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px 48px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40 }}>
+      <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, paddingBottom: 48 }}>
         {/* Left Column - News */}
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
         </div>
 
         {/* Right Column - Sidebar */}
-        <aside style={{ position: 'sticky', top: 100 }}>
+        <aside className="sidebar" style={{ position: 'sticky', top: 100 }}>
           <TrendingList noticias={noticias.slice(0, 6)} />
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
           <AdSlot slot="homepage-sidebar-1" width={300} height={250} />
@@ -111,19 +98,6 @@ export default async function HomePage() {
       </main>
 
       <SiteFooter />
-
-      <style>{`
-        .cat-link:hover { color: #111 !important; background: rgba(185,28,28,0.06); }
-        @media (max-width: 1024px) {
-          main { grid-template-columns: 1fr !important; }
-          aside { display: none !important; }
-        }
-        @media (max-width: 768px) {
-          header > div { padding: 12px 16px !important; }
-          header nav ul { display: none !important; }
-          .logo { font-size: 22px !important; }
-        }
-      `}</style>
     </div>
   );
 }

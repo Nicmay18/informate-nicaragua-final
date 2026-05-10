@@ -312,112 +312,32 @@ export default function ArticleClient({
 
   return (
     <>
-      <style>{`
-        @keyframes wvbar{from{transform:scaleY(0.3)}to{transform:scaleY(1)}}
-        .article-body { font-family: var(--font-merri), Georgia, serif; font-size: 18px; line-height: 1.75; color: #2d2d2d; }
-        .article-body p { margin-bottom: 1.4em; }
-        .article-body a { color: #8c1d18; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
-        .article-body a:hover { color: #6b1412; }
-        .article-body h2 { font-family: var(--font-inter), Inter, sans-serif; font-size: 26px; font-weight: 800; color: #121212; margin: 40px 0 16px; line-height: 1.25; }
-        .article-body h3 { font-family: var(--font-inter), Inter, sans-serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 32px 0 12px; line-height: 1.3; }
-        .article-body blockquote {
-          border-left: 4px solid #8c1d18;
-          padding: 16px 24px;
-          margin: 28px 0;
-          background: #faf9f7;
-          font-style: italic;
-          color: #4a4a4a;
-          border-radius: 0 8px 8px 0;
-        }
-        .article-body ul, .article-body ol { margin: 20px 0; padding-left: 28px; }
-        .article-body li { margin-bottom: 10px; }
-        .article-body ul li::marker { color: #8c1d18; }
-        .drop-cap::first-letter {
-          float: left;
-          font-size: 5.2em;
-          line-height: 0.75;
-          font-weight: 900;
-          color: #121212;
-          margin-right: 12px;
-          margin-top: 6px;
-          font-family: var(--font-merri), Georgia, serif;
-        }
-        .related-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-        .share-chip-hover:hover { opacity: 0.9; }
-        @media (max-width: 768px) {
-          .article-body { font-size: 17px; }
-          .article-body h2 { font-size: 22px; }
-          .drop-cap::first-letter { font-size: 3.8em; }
-        }
-      `}</style>
-
-      <article>
+      <article className="article-page">
         {/* ===== BREADCRUMB ===== */}
-        <nav style={{ marginBottom: 20 }}>
-          <ol style={{ display: 'flex', alignItems: 'center', gap: 8, listStyle: 'none', margin: 0, padding: 0, fontSize: 13, color: '#8c8c8c' }}>
-            <li><Link href="/" style={{ color: '#8c1d18', textDecoration: 'none', fontWeight: 600 }}>Inicio</Link></li>
-            <li><i className="fas fa-chevron-right" style={{ fontSize: 10 }} /></li>
-            <li><span style={{ color: catColor, fontWeight: 700 }}>{noticia.categoria}</span></li>
-            <li><i className="fas fa-chevron-right" style={{ fontSize: 10 }} /></li>
-            <li><span style={{ color: '#a0a0a0' }}>Artículo</span></li>
-          </ol>
+        <nav className="article-breadcrumb">
+          <Link href="/">Inicio</Link>
+          <span>›</span>
+          <span style={{ color: catColor, fontWeight: 700 }}>{noticia.categoria}</span>
+          <span>›</span>
+          <span>Artículo</span>
         </nav>
 
         {/* ===== CATEGORY BADGE ===== */}
-        <div style={{ marginBottom: 16 }}>
-          <span style={{
-            fontSize: 11, fontWeight: 800, textTransform: 'uppercase',
-            letterSpacing: '0.08em', color: '#fff',
-            padding: '5px 12px', background: catColor,
-            borderRadius: 4, display: 'inline-block',
-          }}>
-            {noticia.categoria}
-          </span>
-        </div>
+        <span className="article-category-badge" style={{ background: catColor }}>
+          {noticia.categoria}
+        </span>
 
         {/* ===== TITLE ===== */}
-        <h1 style={{
-          fontFamily: 'var(--font-merri), Georgia, serif',
-          fontSize: 'clamp(28px, 4vw, 42px)',
-          fontWeight: 900,
-          color: '#121212',
-          lineHeight: 1.12,
-          marginBottom: 20,
-          letterSpacing: '-0.3px',
-        }}>
-          {noticia.titulo}
-        </h1>
+        <h1 className="article-title-pro">{noticia.titulo}</h1>
 
         {/* ===== LEAD / SUMMARY ===== */}
         {noticia.resumen && (
-          <p style={{
-            fontFamily: 'var(--font-inter), Inter, sans-serif',
-            fontSize: 20,
-            color: '#595959',
-            lineHeight: 1.55,
-            marginBottom: 24,
-            fontWeight: 400,
-          }}>
-            {noticia.resumen}
-          </p>
+          <p className="article-lead-pro">{noticia.resumen}</p>
         )}
 
         {/* ===== META BAR ===== */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 16,
-          marginBottom: 28,
-          padding: '14px 0',
-          borderTop: '1px solid #e8e8ec',
-          borderBottom: '1px solid #e8e8ec',
-          flexWrap: 'wrap',
-        }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: '50%',
-            background: catColor,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 800, fontSize: 16,
-            flexShrink: 0,
-          }}>
+        <div className="article-meta-bar">
+          <div className="author-avatar-pro" style={{ background: catColor }}>
             {autorInicial}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -439,8 +359,8 @@ export default function ArticleClient({
 
         {/* ===== FEATURED IMAGE ===== */}
         {noticia.imagen && (
-          <figure style={{ margin: '0 0 28px' }}>
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 10, overflow: 'hidden' }}>
+          <figure className="featured-image-wrap">
+            <div className="featured-image">
               <Image
                 src={noticia.imagen}
                 alt={noticia.titulo}
@@ -451,9 +371,7 @@ export default function ArticleClient({
                 sizes="(max-width: 800px) 100vw, 800px"
               />
             </div>
-            <figcaption style={{ fontSize: 12, color: '#9a9a9a', marginTop: 8, textAlign: 'center' }}>
-              {noticia.titulo}
-            </figcaption>
+            <figcaption className="featured-caption">{noticia.titulo}</figcaption>
           </figure>
         )}
 
@@ -462,8 +380,7 @@ export default function ArticleClient({
 
         {/* ===== ARTICLE BODY ===== */}
         <div
-          className="article-body drop-cap"
-          style={{ maxWidth: 680 }}
+          className="article-body-pro drop-cap"
           dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
         />
 
@@ -475,29 +392,21 @@ export default function ArticleClient({
         )}
 
         {/* ===== TAGS ===== */}
-        <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid #e8e8ec' }}>
-          <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8c8c8c', marginBottom: 12 }}>
+        <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
+          <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
             <i className="fas fa-tags" style={{ marginRight: 6 }} /> Etiquetas
           </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div className="tags-list">
             {tags.map((tag) => (
-              <span key={tag} style={{
-                padding: '6px 14px', borderRadius: 20,
-                background: '#f5f5f7', border: '1px solid #e8e8ec',
-                fontSize: 13, fontWeight: 600, color: '#4a4a4a',
-              }}>
-                {tag}
-              </span>
+              <span key={tag} className="tag-pro">{tag}</span>
             ))}
           </div>
         </div>
 
         {/* ===== SHARE BAR ===== */}
-        <div style={{ margin: '28px 0', padding: '20px 0', borderTop: '1px solid #e8e8ec', borderBottom: '1px solid #e8e8ec' }}>
-          <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8c8c8c', marginBottom: 14 }}>
-            Compartir este artículo
-          </div>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="share-bar-pro">
+          <div className="share-label">Compartir este artículo</div>
+          <div className="share-buttons">
             <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="Facebook" bg="#1877f2" icon="facebook-f" />
             <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" icon="whatsapp" />
             <ShareChip href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticia.titulo)}&url=${encodeURIComponent(url)}`} label="X / Twitter" bg="#0f1419" icon="x-twitter" />
@@ -507,26 +416,16 @@ export default function ArticleClient({
         </div>
 
         {/* ===== AUTHOR BOX ===== */}
-        <div style={{
-          display: 'flex', gap: 20, alignItems: 'flex-start',
-          padding: 24, background: '#faf9f7', borderRadius: 12,
-          border: '1px solid #e8e8ec', margin: '32px 0',
-        }}>
-          <div style={{
-            width: 80, height: 80, borderRadius: '50%',
-            background: catColor,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 900, fontSize: 32,
-            flexShrink: 0,
-          }}>
+        <div className="author-box-pro">
+          <div className="author-avatar-pro" style={{ width: 80, height: 80, fontSize: 32, background: catColor }}>
             {autorInicial}
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: '#121212', marginBottom: 4 }}>{autor}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', marginBottom: 4 }}>{autor}</div>
             <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: catColor, marginBottom: 10 }}>
               Periodista — Nicaragua Informate
             </div>
-            <p style={{ fontSize: 14, color: '#595959', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
               Periodista nicaragüense con amplia trayectoria cubriendo temas de actualidad nacional e internacional. Comprometida con la veracidad y el rigor periodístico.
             </p>
           </div>
@@ -535,25 +434,13 @@ export default function ArticleClient({
         {/* ===== RELATED ARTICLES ===== */}
         {related.length > 0 && (
           <div style={{ marginTop: 48 }}>
-            <div style={{
-              fontSize: 13, fontWeight: 800, textTransform: 'uppercase',
-              letterSpacing: '0.08em', color: '#8c8c8c',
-              marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10,
-            }}>
-              <span style={{ width: 24, height: 2, background: catColor, borderRadius: 1 }} />
-              Noticias relacionadas
+            <div className="section-header" style={{ marginBottom: 20 }}>
+              <h3 className="section-title">Noticias relacionadas</h3>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            <div className="related-grid-pro">
               {related.map((n) => (
-                <Link key={n.slug} href={`/noticias/${n.slug}`} style={{ textDecoration: 'none' }}>
-                  <article className="related-card" style={{
-                    borderRadius: 10, overflow: 'hidden',
-                    border: '1px solid #e8e8ec',
-                    background: '#fff',
-                    transition: 'transform 0.25s, box-shadow 0.25s',
-                    height: '100%',
-                    display: 'flex', flexDirection: 'column',
-                  }}>
+                <Link key={n.slug} href={`/noticias/${n.slug}`} className="related-card-pro">
+                  <article>
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
                       <Image
                         src={n.imagen || '/logo.png'}
