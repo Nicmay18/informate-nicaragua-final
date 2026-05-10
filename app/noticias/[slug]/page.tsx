@@ -9,11 +9,16 @@ export const revalidate = 0;
 
 export default async function NewsPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const noticia = await getNewsBySlug(slug);
+  try {
+    const noticia = await getNewsBySlug(slug);
 
-  if (!noticia) {
-    notFound();
+    if (!noticia) {
+      return notFound();
+    }
+
+    return <ArticleClient noticia={noticia} />;
+  } catch (error) {
+    console.error('Error cargando noticia:', error);
+    return notFound();
   }
-
-  return <ArticleClient noticia={noticia} />;
 }
