@@ -2185,9 +2185,10 @@ ${descripcion}
         status.textContent = 'Cargando plantilla de redacción profesional...';
 
         // Obtener plantilla desde Firestore
-        const doc = await db.collection('config').doc('plantilla_redaccion').get();
-        if (doc.exists) {
-          const plantilla = doc.data().plantilla;
+        const docRef = doc(db, 'config', 'plantilla_redaccion');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const plantilla = docSnap.data().plantilla;
           
           // Transferir al formulario principal
           document.getElementById('titulo').value = plantilla.titulo || '';
