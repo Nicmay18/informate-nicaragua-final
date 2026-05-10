@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import dynamicImport from 'next/dynamic';
 import NewsGrid from '@/components/NewsGrid';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
@@ -11,10 +10,9 @@ import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
+import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
-
-const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'), { ssr: false });
 
 export const revalidate = 60;
 
@@ -100,7 +98,7 @@ export default async function HomePage() {
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <TrendingList noticias={noticias.slice(0, 6)} />
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
-            <WeatherWidget />
+            <WeatherWidgetWrapper />
           </div>
           <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
             <IndicadoresWidget />
