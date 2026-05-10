@@ -269,7 +269,8 @@ function fmtDate(ts: unknown): string {
 function cleanHtml(html: string): string {
   if (!html) return '';
   if (!html.includes('<')) return formatearNoticia(html);
-  return formatearNoticia(limpiarHtml(html));
+  // Si ya tiene HTML estructurado (p, h2, blockquote, ul, etc.), solo limpiar basura
+  return limpiarHtml(html);
 }
 
 function fmtViews(v?: number): string {
