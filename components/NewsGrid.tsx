@@ -79,7 +79,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         @media(max-width:768px){
           .ng-card { grid-template-columns:120px 1fr; gap:14px; padding:16px 0; }
           .ng-card:hover { margin:0 -8px; padding-left:8px; padding-right:8px; }
-          .ng-thumb { aspect-ratio:1/1; }
+          .ng-thumb { aspect-ratio:4/3; }
           .ng-title { font-size:15px; }
           .ng-excerpt { display:none; }
         }

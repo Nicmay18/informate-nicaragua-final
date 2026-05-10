@@ -255,3 +255,47 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   
   return null;
 }
+
+export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
+  const validatedCount = validateCount(count, 3);
+
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('categoria', '==', categoria)
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount + 1)
+      .get();
+
+    const related = snap.docs
+      .map((d: any) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido,
+          categoria: data.categoria || 'General',
+          imagen: data.imagen || '',
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+        };
+      })
+      .filter((n: Noticia) => n.slug !== excludeSlug)
+      .slice(0, validatedCount);
+
+    return related;
+  } catch (err) {
+    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', err instanceof Error ? err.message : String(err));
+  }
+
+  // Fallback a noticias de ejemplo
+  return MOCK_NOTICIAS
+    .filter(n => n.categoria === categoria && n.slug !== excludeSlug)
+    .slice(0, validatedCount);
+}

@@ -68,7 +68,7 @@ export default function SiteFooter() {
 
         <div style={{ maxWidth: 1280, margin: '32px auto 0', padding: '20px 0 0', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
           <p>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</p>
-          <p>Hecho con ❤️ en Nicaragua</p>
+          <p>Periodismo verificado desde Estelí, Nicaragua</p>
         </div>
       </div>
 

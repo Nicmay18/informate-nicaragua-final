@@ -76,7 +76,7 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
 
   return (
     <div
-      style={{ background: 'linear-gradient(90deg,#8c1d18,#c41e3a)', color: '#fff', position: 'relative' }}
+      style={{ background: '#1a1a2e', color: '#fff', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >

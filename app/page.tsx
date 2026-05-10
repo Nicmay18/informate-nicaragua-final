@@ -1,19 +1,16 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import NewsGrid from '@/components/NewsGrid';
-import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
 import NewsletterForm from '@/components/NewsletterForm';
 import TrendingList from '@/components/home/TrendingList';
 import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
-import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
-import { CATEGORIES, CATEGORY_COLORS, FALLBACK_IMAGE } from '@/lib/types';
+import { CATEGORIES } from '@/lib/types';
 
 export const revalidate = 60;
 
