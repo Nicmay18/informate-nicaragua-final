@@ -435,15 +435,11 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
 
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
 
-          <div 
-            className="prose max-w-none text-gray-800 text-lg leading-relaxed"
+          <div
+            className="prose prose-invert max-w-none text-gray-300 text-lg leading-relaxed [&>p]:mb-6 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:border-b [&>h2]:border-red-900/30 first-letter:text-7xl first-letter:font-black first-letter:text-red-600 first-letter:mr-3 first-letter:float-left first-letter:leading-[0.7] first-letter:mt-3"
             style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
-          >
-            <div 
-              className="first-letter:text-5xl first-letter:font-bold first-letter:text-red-700 first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]"
-              dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }} 
-            />
-          </div>
+            dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
+          />
 
           <div style={{ 
             margin: '40px 0', 
