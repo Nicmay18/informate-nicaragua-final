@@ -35,11 +35,6 @@ export default async function HomePage() {
       {/* Breaking Ticker */}
       {tickerNews.length > 0 && <BreakingTicker noticias={tickerNews} />}
 
-      {/* ===== PRELOAD HERO IMAGE (LCP optimization) ===== */}
-      {destacadas[0]?.imagen && (
-        <link rel="preload" as="image" href={destacadas[0].imagen} type="image/webp" />
-      )}
-
       {/* ===== HERO SECTION ===== */}
       {destacadas.length > 0 && (
         <section className="hero-section">

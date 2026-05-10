@@ -67,7 +67,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const img = n.imagen || FALLBACK_IMAGE;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
+    <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
       {/* Hero Main - 2/3 */}
       <section
         style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 420 }}
@@ -135,7 +135,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
 
       {/* Side Cards - 1/3 */}
       {sideCards.length > 0 && (
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <aside className="hero-side" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {sideCards.map((card) => (
             <Link key={card.id} href={`/noticias/${card.slug}`} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 14, padding: 14, background: '#faf9f7', borderRadius: 8, border: '1px solid #f0f0f4', transition: 'all 0.2s', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
