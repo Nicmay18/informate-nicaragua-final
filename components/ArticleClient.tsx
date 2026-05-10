@@ -357,7 +357,9 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
 
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
-  const autor = noticia.autor || 'Keyling Rivera M.';
+  const rawAutor = (noticia.autor || '').trim();
+  const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Rivera M.';
+  const autorLabel = `Periodista: ${autor}`;
 
   return (
     <>
@@ -421,7 +423,7 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
               {autor.charAt(0).toUpperCase()}
             </div>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#121212' }}>{autor}</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#121212' }}>{autorLabel}</div>
             </div>
           </div>
 
