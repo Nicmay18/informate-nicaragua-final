@@ -22,20 +22,30 @@ export default async function NoticiasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#e5e5e5]">
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: 'Georgia, Times New Roman, serif' }}>
+      {/* Top Bar */}
+      <div style={{ background: '#f8f8f8', color: '#666', fontSize: 11, borderBottom: '1px solid #e0e0e0', padding: '8px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <i className="fas fa-map-marker-alt" style={{ color: '#b91c1c', fontSize: 10 }} />
+            Estelí, Nicaragua
+          </span>
+        </div>
+      </div>
+
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid #262626' }}>
-        <div className="w-full max-w-[1440px] mx-auto p-6 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-3 no-underline">
-            <div style={{ width: 40, height: 40, background: '#dc2626', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 12 }}>NI</div>
+      <header style={{ borderBottom: '2px solid #b91c1c', padding: '16px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            <div style={{ width: 40, height: 40, background: '#b91c1c', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>NI</div>
             <div>
-              <div style={{ color: '#dc2626', fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Nicaragua Informate</div>
-              <div style={{ color: '#525252', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700 }}>Noticias de Nicaragua</div>
+              <div style={{ color: '#b91c1c', fontWeight: 700, fontSize: 28, letterSpacing: '-0.03em', fontFamily: 'Georgia, serif' }}>Nicaragua Informate</div>
+              <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 2 }}>Noticias de Nicaragua</div>
             </div>
           </Link>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <Link href="/noticias" style={{ color: '#fff', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Todas las noticias</Link>
-            <Link href="/" style={{ color: '#a3a3a3', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Inicio</Link>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <Link href="/noticias" style={{ color: '#333', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Todas las noticias</Link>
+            <Link href="/" style={{ color: '#333', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Inicio</Link>
           </nav>
         </div>
       </header>
@@ -43,8 +53,8 @@ export default async function NoticiasPage() {
       {/* Main Content */}
       <main className="w-full max-w-[1440px] mx-auto p-6">
         <div style={{ marginBottom: 32 }}>
-          <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#f5f5f5', lineHeight: 1.1, marginBottom: 16 }}>Todas las Noticias</h1>
-          <p style={{ fontSize: 18, color: '#a3a3a3', lineHeight: 1.6 }}>
+          <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#111', lineHeight: 1.1, marginBottom: 16, fontFamily: 'Georgia, serif' }}>Todas las Noticias</h1>
+          <p style={{ fontSize: 18, color: '#666', lineHeight: 1.6 }}>
             Mantente informado con las últimas noticias de Nicaragua y el mundo.
           </p>
         </div>
@@ -52,9 +62,9 @@ export default async function NoticiasPage() {
         {noticias.length > 0 ? (
           <NewsGrid noticias={noticias} />
         ) : (
-          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#a3a3a3' }}>
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#666' }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>📰</div>
-            <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: '#f5f5f5' }}>No hay noticias disponibles</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: '#333' }}>No hay noticias disponibles</h2>
             <p>Estamos trabajando para traerte las últimas noticias. Por favor, intenta más tarde.</p>
           </div>
         )}

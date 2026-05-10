@@ -31,28 +31,26 @@ export default async function HomePage() {
   const tickerNews = noticias.slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      {/* Top Bar */}
-      <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ width: '100%', margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <i className="fas fa-calendar-alt" style={{ color: '#dc2626', fontSize: 11 }} />
-            {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-            <span style={{ color: '#475569' }}>|</span>
-            <i className="fas fa-map-marker-alt" style={{ color: '#dc2626', fontSize: 11 }} />
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: 'Georgia, Times New Roman, serif' }}>
+      {/* Top Bar - Estilo NYT */}
+      <div style={{ background: '#f8f8f8', color: '#666', fontSize: 11, borderBottom: '1px solid #e0e0e0', padding: '8px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <i className="fas fa-map-marker-alt" style={{ color: '#b91c1c', fontSize: 10 }} />
             Estelí, Nicaragua
           </span>
+          <span>{new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
         </div>
       </div>
 
-      {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'white', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ width: '100%', margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+      {/* Header - Estilo periódico profesional */}
+      <header style={{ borderBottom: '2px solid #b91c1c', padding: '16px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} style={{ borderRadius: 8 }} />
             <div>
-              <div style={{ color: '#dc2626', fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Nicaragua Informate</div>
-              <div style={{ color: '#525252', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700 }}>Noticias de Nicaragua</div>
+              <div style={{ color: '#b91c1c', fontWeight: 700, fontSize: 28, letterSpacing: '-0.03em', fontFamily: 'Georgia, serif' }}>Nicaragua Informate</div>
+              <div style={{ color: '#666', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 2 }}>Noticias de Nicaragua</div>
             </div>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -63,18 +61,18 @@ export default async function HomePage() {
       </header>
 
       {/* Category Ribbon */}
-      <div style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+      <nav style={{ borderBottom: '1px solid #e5e5e5', padding: '12px 0' }}>
         <div style={{ width: '100%', margin: '0 auto', padding: '0 24px', display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {CATEGORIES.map((cat) => (
             <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 16px', fontSize: 13, fontWeight: 600, color: '#a3a3a3', textDecoration: 'none', borderBottom: '2px solid transparent', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', fontSize: 12, fontWeight: 600, color: '#333', textDecoration: 'none', fontFamily: 'Arial, sans-serif', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap', transition: 'color 0.2s' }}
               className="cat-link">
-              <i className={`fas ${cat.icon}`} style={{ color: cat.color, fontSize: 11 }} />
+              <i className={`fas ${cat.icon}`} style={{ color: '#b91c1c', fontSize: 10 }} />
               {cat.name}
             </a>
           ))}
         </div>
-      </div>
+      </nav>
 
       {/* Breaking Ticker */}
       {tickerNews.length > 0 && <BreakingTicker noticias={tickerNews} />}
