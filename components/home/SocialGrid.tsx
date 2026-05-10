@@ -2,34 +2,49 @@ const SOCIALS = [
   { href: 'https://facebook.com/profile.php?id=61578261125687', icon: 'fab fa-facebook-f', label: 'Facebook', hint: 'Noticias diarias', bg: '#1877F2' },
   { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', icon: 'fab fa-whatsapp', label: 'WhatsApp', hint: 'Únete al canal', bg: '#25D366' },
   { href: 'https://t.me/+fHHjncJqMQM3NjZh', icon: 'fab fa-telegram-plane', label: 'Telegram', hint: 'Alertas al instante', bg: '#0088cc' },
-  { href: '/feed.xml', icon: 'fas fa-rss', label: 'RSS', hint: 'Feed de noticias', bg: '#f26522' },
+  { href: '/feed.xml', icon: 'fas fa-rss', label: 'RSS', hint: 'Feed de noticias', bg: '#ff6600' },
 ];
 
 export default function SocialGrid() {
   return (
-    <div className="bg-[var(--paper-accent)] rounded-[14px] border border-[var(--border-light)] p-[18px] shadow-sm widget-lift">
-      <div className="flex items-center gap-2 mb-4 text-[13px] font-extrabold tracking-wide uppercase text-[var(--ink)]">
-        <span className="block w-1 h-5 bg-gradient-to-b from-red-500 to-orange-500 rounded-sm" />
-        Síguenos
+    <div style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
+      {/* Widget Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
+        <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Síguenos</h3>
       </div>
-      <div className="grid grid-cols-2 gap-2.5">
+
+      <style>{`
+        .social-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .social-card { display: flex; align-items: center; gap: 10px; padding: 12px; background: #fff; border-radius: 4px; text-decoration: none; color: #1a1a2e; border: 1px solid #e8e8ec; transition: all 0.2s; }
+        .social-card:hover { border-color: #c41e3a; transform: translateY(-1px); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+      `}</style>
+      <div className="social-link-grid">
         {SOCIALS.map((s) => (
           <a
             key={s.label}
             href={s.href}
             target={s.href.startsWith('http') ? '_blank' : undefined}
             rel={s.href.startsWith('http') ? 'noopener' : undefined}
-            className="social-item flex items-center gap-2.5 p-3 bg-[var(--paper)] border border-[var(--border-light)] rounded-xl no-underline text-[var(--ink)]"
+            className="social-card"
           >
-            <span
-              className="w-[38px] h-[38px] rounded-[10px] grid place-items-center shrink-0 text-white text-[17px]"
-              style={{ background: s.bg }}
-            >
+            <span style={{
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 14,
+              fontWeight: 700,
+              color: '#fff',
+              background: s.bg,
+              flexShrink: 0,
+            }}>
               <i className={s.icon} />
             </span>
-            <div>
-              <div className="text-[13px] font-bold leading-tight">{s.label}</div>
-              <div className="text-[11px] text-[var(--ink-muted)] mt-0.5 font-medium">{s.hint}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 700 }}>{s.label}</div>
+              <div style={{ fontSize: 11, color: '#8a8a9e' }}>{s.hint}</div>
             </div>
           </a>
         ))}

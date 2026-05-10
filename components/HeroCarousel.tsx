@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 
-const MAX_SLIDES = 3;
+const MAX_SLIDES = 4;
 const FADE_DURATION_MS = 300;
 const AUTOPLAY_DELAY_MS = 5500;
 const SWIPE_THRESHOLD_PX = 48;
@@ -38,6 +38,7 @@ interface HeroCarouselProps {
 
 export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const slides = noticias.slice(0, MAX_SLIDES);
+  const sideCards = noticias.slice(1, 4);
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -65,66 +66,104 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const img = n.imagen || FALLBACK_IMAGE;
 
   return (
-    <section
-      style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', background: '#0f172a' }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
-      onTouchEnd={e => {
-        if (touchX.current === null) return;
-        const dx = e.changedTouches[0].clientX - touchX.current;
-        if (dx < -SWIPE_THRESHOLD_PX) next(); else if (dx > SWIPE_THRESHOLD_PX) prev();
-        touchX.current = null;
-      }}
-      aria-label="Noticias destacadas"
-    >
-      <Link href={`/noticias/${n.slug}`} className="block relative max-h-[420px] aspect-[21/9] no-underline overflow-hidden">
-        <Image
-          src={img}
-          alt={n.titulo}
-          fill
-          priority
-          quality={85}
-          className="object-cover object-[center_30%] transition-opacity duration-300"
-          style={{ opacity: fading ? 0 : 1 }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.08) 100%)' }} />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
+      {/* Hero Main - 2/3 */}
+      <section
+        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 420 }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
+        onTouchEnd={e => {
+          if (touchX.current === null) return;
+          const dx = e.changedTouches[0].clientX - touchX.current;
+          if (dx < -SWIPE_THRESHOLD_PX) next(); else if (dx > SWIPE_THRESHOLD_PX) prev();
+          touchX.current = null;
+        }}
+        aria-label="Noticias destacadas"
+      >
+        <Link href={`/noticias/${n.slug}`} style={{ display: 'block', position: 'relative', width: '100%', height: '100%', textDecoration: 'none' }}>
+          <Image
+            src={img}
+            alt={n.titulo}
+            fill
+            priority
+            quality={85}
+            className="object-cover object-[center_30%] transition-opacity duration-300"
+            style={{ opacity: fading ? 0 : 1 }}
+          />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px 24px 64px' }}>
-          <span style={{ background: col, color: '#fff', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', padding: '4px 12px', borderRadius: 4, display: 'inline-block', marginBottom: 12 }}>
-            {n.categoria}
-          </span>
-          <h2 style={{ color: '#fff', fontSize: 'clamp(18px,2.8vw,32px)', fontWeight: 800, lineHeight: 1.2, margin: '0 0 8px', letterSpacing: '-0.3px', textShadow: '0 2px 20px rgba(0,0,0,0.7)', maxWidth: 780 }}>
-            {n.titulo}
-          </h2>
-          {n.resumen && (
-            <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 14, lineHeight: 1.55, margin: 0, maxWidth: 600, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-              {n.resumen}
-            </p>
-          )}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '60px 32px 32px' }}>
+            <span style={{ display: 'inline-block', background: col, color: '#fff', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
+              {n.categoria}
+            </span>
+            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.25, marginBottom: 12, textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
+              {n.titulo}
+            </h2>
+            <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
+              <span>{new Date(n.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'long' })}</span>
+              <span>•</span>
+              <span>Por Redacción NI</span>
+            </div>
+          </div>
+        </Link>
+
+        {slides.length > 1 && (
+          <>
+            <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><i className="fas fa-chevron-left" /></button>
+            <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><i className="fas fa-chevron-right" /></button>
+          </>
+        )}
+
+        <div style={{ position: 'absolute', bottom: 18, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, zIndex: 10 }}>
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
+              style={{ width: i === current ? 22 : 7, height: 7, borderRadius: 4, border: 'none', cursor: 'pointer', padding: 0, background: i === current ? '#fff' : 'rgba(255,255,255,0.35)', transition: 'all 0.3s ease' }} />
+          ))}
         </div>
-      </Link>
 
-      {slides.length > 1 && (
-        <>
-          <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><i className="fas fa-chevron-left" /></button>
-          <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><i className="fas fa-chevron-right" /></button>
-        </>
+        {!paused && (
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'rgba(255,255,255,0.12)' }}>
+            <div key={current} style={{ height: '100%', background: 'rgba(255,255,255,0.5)', animation: 'hero-progress 5.5s linear forwards' }} />
+          </div>
+        )}
+        <style>{`@keyframes hero-progress { from { width:0% } to { width:100% } }`}</style>
+      </section>
+
+      {/* Side Cards - 1/3 */}
+      {sideCards.length > 0 && (
+        <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {sideCards.map((card) => (
+            <Link key={card.id} href={`/noticias/${card.slug}`} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 14, padding: 14, background: '#faf9f7', borderRadius: 8, border: '1px solid #f0f0f4', transition: 'all 0.2s', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+              <Image
+                src={card.imagen || FALLBACK_IMAGE}
+                alt={card.titulo}
+                width={100}
+                height={75}
+                className="object-cover rounded"
+                style={{ borderRadius: 4 }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>
+                  {card.categoria}
+                </span>
+                <h4 style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.4, color: '#1a1a2e', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: 0 }}>
+                  {card.titulo}
+                </h4>
+              </div>
+            </Link>
+          ))}
+        </aside>
       )}
 
-      <div style={{ position: 'absolute', bottom: 18, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, zIndex: 10 }}>
-        {slides.map((_, i) => (
-          <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
-            style={{ width: i === current ? 22 : 7, height: 7, borderRadius: 4, border: 'none', cursor: 'pointer', padding: 0, background: i === current ? '#fff' : 'rgba(255,255,255,0.35)', transition: 'all 0.3s ease' }} />
-        ))}
-      </div>
-
-      {!paused && (
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'rgba(255,255,255,0.12)' }}>
-          <div key={current} style={{ height: '100%', background: 'rgba(255,255,255,0.5)', animation: 'hero-progress 5.5s linear forwards' }} />
-        </div>
-      )}
-      <style>{`@keyframes hero-progress { from { width:0% } to { width:100% } }`}</style>
-    </section>
+      <style>{`
+        @media (max-width: 1024px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-side { display: none !important; }
+        }
+      `}</style>
+    </div>
   );
 }
