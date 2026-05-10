@@ -1426,6 +1426,17 @@ a:hover { color: var(--accent-dark); }
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
 }
 
+[data-theme="dark"] .header-pro {
+  background: rgba(15, 15, 15, 0.95);
+  border-bottom-color: #262626;
+}
+
+[data-theme="dark"] .top-bar {
+  background: #0a0a0a;
+  color: #f5f5f5;
+  border-bottom-color: #262626;
+}
+
 /* ═══════════════════════════════════════════════════════════
    GLASSMORPHISM & UTILITIES
    ═══════════════════════════════════════════════════════════ */
