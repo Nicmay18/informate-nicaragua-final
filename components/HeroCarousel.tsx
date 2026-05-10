@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
+import { formatDateShortES } from '@/lib/formateo';
 
 const MAX_SLIDES = 4;
 const FADE_DURATION_MS = 300;
@@ -104,7 +105,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               {n.titulo}
             </h2>
             <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
-              <span>{new Date(n.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'long' })}</span>
+              <span>{formatDateShortES(n.fecha)}</span>
               <span>•</span>
               <span>Por Redacción NI</span>
             </div>

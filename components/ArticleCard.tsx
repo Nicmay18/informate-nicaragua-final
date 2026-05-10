@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Clock } from 'lucide-react';
 import { Noticia, CATEGORY_COLORS, FALLBACK_IMAGE } from '@/lib/types';
+import { formatDateES } from '@/lib/formateo';
 
 /**
  * Props para ArticleCard
@@ -10,29 +11,6 @@ interface ArticleCardProps {
   article: Noticia;
   hero?: boolean;
   index?: number;
-}
-
-/**
- * Formatea una fecha a string en español
- * @param dateStr Fecha en formato string
- * @returns Fecha formateada
- */
-function formatDate(dateStr: string): string {
-  try {
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-      console.warn('[formatDate] Invalid date:', dateStr);
-      return dateStr;
-    }
-    return date.toLocaleDateString('es-NI', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  } catch (error) {
-    console.error('[formatDate]', error instanceof Error ? error.message : String(error));
-    return dateStr;
-  }
 }
 
 /**
@@ -77,7 +55,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             <h2 className="news-card-title">{article.titulo}</h2>
             <p className="news-card-excerpt">{article.resumen}</p>
             <div className="news-card-meta">
-              <span>{formatDate(article.fecha)}</span>
+              <span>{formatDateES(article.fecha)}</span>
               <span><Clock size={12} /> {readTime} min</span>
             </div>
           </div>
@@ -112,7 +90,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
           <h2 className="news-card-title">{article.titulo}</h2>
           <p className="news-card-excerpt">{article.resumen}</p>
           <div className="news-card-meta">
-            <span>{formatDate(article.fecha)}</span>
+            <span>{formatDateES(article.fecha)}</span>
             <span><Clock size={12} /> {readTime} min</span>
           </div>
         </div>

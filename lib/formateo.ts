@@ -14,6 +14,27 @@
 const MAX_PARRAFO = 320;
 const PALABRAS_POR_MIN = 200;
 
+/**
+ * Formatea una fecha a español de manera determinista (sin depender de toLocaleDateString)
+ * para evitar hydration mismatches entre SSR y cliente.
+ */
+export function formatDateES(dateStr: string | Date): string {
+  const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
+  if (isNaN(date.getTime())) return String(dateStr);
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${date.getDate()} de ${meses[date.getMonth()]} de ${date.getFullYear()}`;
+}
+
+/**
+ * Formatea una fecha a español corto (día mes corto) de manera determinista.
+ */
+export function formatDateShortES(dateStr: string | Date): string {
+  const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
+  if (isNaN(date.getTime())) return String(dateStr);
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${date.getDate()} ${meses[date.getMonth()]}`;
+}
+
 /* ================================================================
    DETECTORES DE PATRONES PERIODÍSTICOS
    ================================================================ */

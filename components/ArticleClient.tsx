@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
-import { formatearNoticia, limpiarHtml, tiempoLectura } from '@/lib/formateo';
+import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 
 /* ================================================================
    TIPOS
@@ -261,8 +261,7 @@ export function ShareChip({ href, label, bg, icon }: { href: string; label: stri
 function fmtDate(ts: unknown): string {
   if (!ts) return 'Hace un momento';
   try {
-    const d = typeof ts === 'string' ? new Date(ts) : new Date(String(ts));
-    return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' });
+    return formatDateES(typeof ts === 'string' ? ts : String(ts));
   } catch { return 'Hace un momento'; }
 }
 

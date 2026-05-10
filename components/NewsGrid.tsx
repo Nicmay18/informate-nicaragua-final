@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
+import { formatDateShortES } from '@/lib/formateo';
 
 const CAT_COLORS: Record<string, string> = {
   Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
@@ -18,7 +19,7 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 8;
 
-function timeAgo(iso: string): string {
+function calcTimeAgo(iso: string): string {
   if (!iso) return '';
   try {
     const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
@@ -26,7 +27,7 @@ function timeAgo(iso: string): string {
     const m = Math.floor(s / 60); if (m < 60) return `Hace ${m} min`;
     const h = Math.floor(m / 60); if (h < 24) return `Hace ${h} h`;
     const d = Math.floor(h / 24); if (d < 7) return `Hace ${d} días`;
-    return new Date(iso).toLocaleDateString('es-NI', { day: 'numeric', month: 'short' });
+    return formatDateShortES(iso);
   } catch { return ''; }
 }
 
@@ -37,12 +38,21 @@ function readTime(titulo: string, resumen: string): number {
 export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const [activeCat, setActiveCat] = useState('Todas');
   const [page, setPage] = useState(1);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const filtered = activeCat === 'Todas' ? noticias : noticias.filter(n => n.categoria === activeCat);
   const shown = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
+  function timeAgo(iso: string): string {
+    // SSR: mostrar fecha estática determinista
+    if (!mounted) return iso ? formatDateShortES(iso) : '';
+    // Cliente: calcular tiempo relativo
+    return calcTimeAgo(iso);
+  }
 
   return (
     <div>
