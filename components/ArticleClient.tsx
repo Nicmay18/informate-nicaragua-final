@@ -290,9 +290,11 @@ function extractTags(categoria: string, titulo: string): string[] {
 export default function ArticleClient({
   noticia,
   related = [],
+  adSlot,
 }: {
   noticia: NoticiaProps;
   related?: NoticiaProps[];
+  adSlot?: React.ReactNode;
 }) {
   if (!noticia) {
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
@@ -464,6 +466,13 @@ export default function ArticleClient({
           style={{ maxWidth: 680 }}
           dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
         />
+
+        {/* ===== IN-ARTICLE AD ===== */}
+        {adSlot && (
+          <div style={{ margin: '36px 0', maxWidth: 680 }}>
+            {adSlot}
+          </div>
+        )}
 
         {/* ===== TAGS ===== */}
         <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid #e8e8ec' }}>

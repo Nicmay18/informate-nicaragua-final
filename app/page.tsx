@@ -3,6 +3,7 @@ import NewsGrid from '@/components/NewsGrid';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
 import NewsletterForm from '@/components/NewsletterForm';
+import AdSlot from '@/components/AdSlot';
 import TrendingList from '@/components/home/TrendingList';
 import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
@@ -100,6 +101,7 @@ export default async function HomePage() {
         <aside style={{ position: 'sticky', top: 100 }}>
           <TrendingList noticias={noticias.slice(0, 6)} />
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+          <AdSlot slot="homepage-sidebar-1" width={300} height={250} />
           <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
             <WeatherWidgetWrapper />
           </div>

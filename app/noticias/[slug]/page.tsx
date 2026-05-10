@@ -4,6 +4,7 @@ import TrendingList from '@/components/home/TrendingList';
 import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import NewsletterForm from '@/components/NewsletterForm';
+import AdSlot from '@/components/AdSlot';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import SiteFooter from '@/components/home/SiteFooter';
 import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas } from '@/lib/data';
@@ -11,7 +12,6 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
 import { CATEGORIES } from '@/lib/types';
-import type { Noticia } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -139,7 +139,11 @@ export default async function NewsPage({ params }: { params: { slug: string } })
           <div>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLd(noticia, url)) }} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(noticia.categoria)) }} />
-            <ArticleClient noticia={noticia} related={related} />
+            <ArticleClient
+              noticia={noticia}
+              related={related}
+              adSlot={<AdSlot slot="article-in-content" width={336} height={280} />}
+            />
           </div>
 
           {/* Right Column - Sidebar */}
@@ -149,6 +153,7 @@ export default async function NewsPage({ params }: { params: { slug: string } })
             <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
               <WeatherWidgetWrapper />
             </div>
+            <AdSlot slot="article-sidebar-1" width={300} height={250} />
             <NewsletterForm />
             <SocialGrid />
           </aside>

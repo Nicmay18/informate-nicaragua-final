@@ -22,21 +22,34 @@ export function buildWebSiteJsonLd() {
 }
 
 export function buildNewsArticleJsonLd(article: any, url: string) {
-  const base = {
+  const keywords = [article.categoria, 'Nicaragua', 'noticias', 'actualidad'];
+  if (article.tags && Array.isArray(article.tags)) {
+    keywords.push(...article.tags.slice(0, 5));
+  }
+
+  const base: any = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: article.titulo,
     description: article.resumen,
     image: article.imagen,
     datePublished: article.fecha,
-    author: { '@type': 'Person', name: article.autor || 'Keyling Rivera M.' },
-    publisher: { '@type': 'NewsMediaOrganization', name: 'Nicaragua Informate', logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } },
+    dateModified: article.fechaActualizacion || article.fecha,
+    author: {
+      '@type': 'Person',
+      name: article.autor || 'Keyling Rivera M.',
+      url: 'https://nicaraguainformate.com/nosotros',
+    },
+    publisher: {
+      '@type': 'NewsMediaOrganization',
+      name: 'Nicaragua Informate',
+      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png', width: 512, height: 512 },
+    },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    inLanguage: 'es-NI',
+    articleSection: article.categoria,
+    keywords: keywords.join(', '),
   };
-
-  if (article.fechaActualizacion) {
-    (base as any).dateModified = article.fechaActualizacion;
-  }
 
   return base;
 }
@@ -50,7 +63,7 @@ export function buildBreadcrumbJsonLd(category?: string) {
   if (category && category !== 'General') {
     breadcrumbItems.push({
       name: category,
-      item: `https://nicaraguainformate.com/noticias?cat=${encodeURIComponent(category)}`,
+      item: `https://nicaraguainformate.com/noticias/${encodeURIComponent(category.toLowerCase().replace(/\s+/g, '-'))}`,
     });
   }
 

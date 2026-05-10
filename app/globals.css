@@ -413,7 +413,7 @@ ul { list-style: none; }
 .caption-text { font-size: 13px; line-height: 1.6; color: var(--ink-muted); }
 
 .article-body { font-family: var(--font-serif); font-size: clamp(17px, 1.8vw, 20px); line-height: 1.75; color: var(--ink-soft); }
-.article-body p { margin-bottom: 1.6em; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.article-body p { margin-bottom: 1.6em; text-align: left; hyphens: none; -webkit-hyphens: none; }
 .article-body > p:first-of-type::first-letter { font-family: var(--font-serif); font-size: 5.2em; font-weight: 700; float: left; line-height: 0.78; margin-right: 14px; margin-top: 6px; color: var(--ink); }
 .article-body > p:first-of-type::first-line { font-variant: small-caps; font-weight: 600; letter-spacing: 0.02em; }
 .article-body h2, .article-body h3 { font-family: var(--font-serif); color: var(--ink); margin: 2em 0 0.8em; line-height: 1.2; }

@@ -1,0 +1,65 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+
+interface AdSlotProps {
+  slot: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  format?: 'auto' | 'fluid' | 'rectangle' | 'vertical' | 'horizontal';
+}
+
+export default function AdSlot({
+  slot,
+  width = 336,
+  height = 280,
+  className = '',
+  style = {},
+  format = 'auto',
+}: AdSlotProps) {
+  const insRef = useRef<HTMLDivElement>(null);
+  const pushed = useRef(false);
+
+  useEffect(() => {
+    if (pushed.current || !insRef.current) return;
+    try {
+      const w = window as any;
+      if (w.adsbygoogle) {
+        w.adsbygoogle.push({});
+        pushed.current = true;
+      }
+    } catch {
+      // AdSense no cargado — ignorar
+    }
+  }, []);
+
+  return (
+    <div
+      ref={insRef}
+      className={className}
+      style={{
+        minHeight: height,
+        minWidth: width,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#f5f5f7',
+        border: '1px solid #e8e8ec',
+        borderRadius: 8,
+        overflow: 'hidden',
+        ...style,
+      }}
+    >
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'inline-block', width, height }}
+        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
+}
