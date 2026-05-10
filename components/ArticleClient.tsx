@@ -418,19 +418,17 @@ export default function ArticleClient({
         </div>
 
         {/* ===== AUTHOR BOX ===== */}
-        <div className="author-box-pro">
-          <div className="author-avatar-pro" style={{ width: 80, height: 80, fontSize: 32, background: catColor }}>
+        <div className="author-box-pro" style={{ textAlign: 'center', padding: '32px 24px' }}>
+          <div className="author-avatar-pro" style={{ width: 80, height: 80, fontSize: 32, background: '#2563eb', margin: '0 auto 16px' }}>
             {autorInicial}
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)', marginBottom: 4 }}>{autor}</div>
-            <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: catColor, marginBottom: 10 }}>
-              Periodista — Nicaragua Informate
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-              Periodista nicaragüense con amplia trayectoria cubriendo temas de actualidad nacional e internacional. Comprometida con la veracidad y el rigor periodístico.
-            </p>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 6 }}>{autor}</div>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#2563eb', marginBottom: 14 }}>
+            Periodista — Nicaragua Informate
           </div>
+          <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 auto', maxWidth: 480 }}>
+            Periodista especializada en el análisis de sucesos y eventos de relevancia en el territorio nicaragüense. Enfocada en reportes viales y la transformación de la información de última hora en reportes detallados con rigor informativo.
+          </p>
         </div>
 
         {/* ===== RELATED ARTICLES ===== */}

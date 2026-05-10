@@ -40,6 +40,7 @@ export default function AdSlot({
       ref={insRef}
       className={className}
       style={{
+        position: 'relative',
         minHeight: height,
         minWidth: width,
         display: 'flex',
@@ -60,6 +61,9 @@ export default function AdSlot({
         data-ad-format={format}
         data-full-width-responsive="true"
       />
+      <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
+        Publicidad
+      </span>
     </div>
   );
 }
