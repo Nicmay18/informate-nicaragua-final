@@ -436,7 +436,8 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
 
           <div 
-            style={{ fontFamily: "Georgia, serif", fontSize: 17, lineHeight: 1.7, color: '#1a1a1a' }}
+            className="prose max-w-none text-gray-800 text-lg leading-relaxed"
+            style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
             dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }} 
           />
 

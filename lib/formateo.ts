@@ -76,14 +76,30 @@ export function formatearNoticia(texto: string): string {
 export function limpiarHtml(html: string): string {
   if (!html) return '';
   
-  return html
+  // Eliminar todos los estilos inline y atributos no deseados
+  let limpio = html
+    // Eliminar style="..." de cualquier etiqueta
+    .replace(/\s*style="[^"]*"/gi, '')
+    .replace(/\s*class="[^"]*"/gi, '')
+    .replace(/\s*align="[^"]*"/gi, '')
+    .replace(/\s*valign="[^"]*"/gi, '')
+    .replace(/\s*width="[^"]*"/gi, '')
+    .replace(/\s*height="[^"]*"/gi, '')
     // Eliminar múltiples saltos de línea
     .replace(/\n{3,}/g, '\n\n')
     // Normalizar espacios
     .replace(/ +/g, ' ')
     // Eliminar etiquetas vacías
     .replace(/<p>\s*<\/p>/g, '')
-    .replace(/<p><br\s*\/?>\s*<\/p>/g, '');
+    .replace(/<p><br\s*\/?>\s*<\/p>/g, '')
+    // Eliminar etiquetas span innecesarias
+    .replace(/<\/?span[^>]*>/gi, '')
+    // Eliminar etiquetas font
+    .replace(/<\/?font[^>]*>/gi, '')
+    // Eliminar múltiples <br>
+    .replace(/(<br\s*\/?>\s*){2,}/gi, '<br>');
+  
+  return limpio;
 }
 
 /**
