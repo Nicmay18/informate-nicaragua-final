@@ -31,7 +31,7 @@ export default async function HomePage() {
   const tickerNews = noticias.slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#e5e5e5]">
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Top Bar */}
       <div style={{ background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)', color: '#94a3b8', fontSize: 12, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ width: '100%', margin: '0 auto', padding: '6px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -46,7 +46,7 @@ export default async function HomePage() {
       </div>
 
       {/* Header */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid #262626' }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'white', borderBottom: '1px solid #e5e7eb' }}>
         <div style={{ width: '100%', margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} style={{ borderRadius: 8 }} />
@@ -56,14 +56,14 @@ export default async function HomePage() {
             </div>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <Link href="/noticias" style={{ color: '#a3a3a3', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Todas las noticias</Link>
-            <Link href="/contacto" style={{ color: '#a3a3a3', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Contacto</Link>
+            <Link href="/noticias" style={{ color: '#374151', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Todas las noticias</Link>
+            <Link href="/contacto" style={{ color: '#374151', fontSize: 13, fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }}>Contacto</Link>
           </div>
         </div>
       </header>
 
       {/* Category Ribbon */}
-      <div style={{ background: '#141414', borderBottom: '1px solid #262626' }}>
+      <div style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
         <div style={{ width: '100%', margin: '0 auto', padding: '0 24px', display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {CATEGORIES.map((cat) => (
             <a key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
@@ -97,10 +97,10 @@ export default async function HomePage() {
 
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <TrendingList noticias={noticias.slice(0, 6)} />
-          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
             <WeatherWidgetWrapper />
           </div>
-          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #262626' }}>
+          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e5e7eb' }}>
             <IndicadoresWidget />
           </div>
           {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
