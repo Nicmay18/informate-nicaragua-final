@@ -7,6 +7,10 @@ export const dynamicParams = true;
 // SOLUCION FINAL
 export const revalidate = 0;
 
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function NewsPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   try {
