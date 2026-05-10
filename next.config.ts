@@ -90,7 +90,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://pagead2.googlesyndication.com; frame-src https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://pagead2.googlesyndication.com https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com; frame-src https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
           },
         ],
       },
