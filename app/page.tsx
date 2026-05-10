@@ -14,7 +14,7 @@ import SiteFooter from '@/components/home/SiteFooter';
 import { getNews, getMasLeidas } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
 
-const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'));
+const WeatherWidget = dynamicImport(() => import('@/components/WeatherWidget'), { ssr: false });
 
 export const revalidate = 60;
 
