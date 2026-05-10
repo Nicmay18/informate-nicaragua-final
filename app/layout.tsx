@@ -6,8 +6,8 @@ import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-merri' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const merriweather = Merriweather({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
 
 export const viewport: Viewport = {
   width: 'device-width',
