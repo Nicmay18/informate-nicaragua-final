@@ -1,9 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { CATEGORIES } from '@/lib/types';
 
-/**
- * URLs de redes sociales
- */
 const SOCIAL_URLS = {
   facebook: 'https://facebook.com/profile.php?id=61578261125687',
   whatsapp: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
@@ -11,95 +8,84 @@ const SOCIAL_URLS = {
   rss: '/feed.xml',
 } as const;
 
-/**
- * Componente de footer del sitio
- * @returns Footer con navegación y links sociales
- */
 export default function Footer() {
-  const year = new Date().getFullYear();
   return (
-    <footer className="footer-pro" role="contentinfo">
-      <div className="footer-nav">
-        <ul className="footer-links-row">
-          <li><Link href="/">Inicio</Link></li>
-          <li><Link href="/nosotros">Nosotros</Link></li>
-          <li><Link href="/privacidad">Privacidad</Link></li>
-          <li><Link href="/terminos">Términos</Link></li>
-          <li><Link href="/contacto">Contacto</Link></li>
-          <li><a href="/feed.xml" target="_blank" rel="noopener">RSS</a></li>
-          <li><Link href="/sitemap.xml">Sitemap</Link></li>
-        </ul>
-      </div>
-      <div className="footer-main">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <Image src="/logo.png" alt="Nicaragua Informate" className="footer-logo-img" width={56} height={56} />
-              <p className="footer-title">Nicaragua Informate</p>
-              <p className="footer-desc">
-                Periodismo de Precisión. Noticias de Nicaragua al instante: Sucesos, Nacionales,
-                Deportes, Internacionales y Espectáculos.
-              </p>
-              <div className="footer-social">
-                <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" aria-label="Facebook">
-                  <i className="fab fa-facebook-f" />
-                </a>
-                <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp">
-                  <i className="fab fa-whatsapp" />
-                </a>
-                <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" aria-label="Telegram">
-                  <i className="fab fa-telegram-plane" />
-                </a>
-                <a href={SOCIAL_URLS.rss} target="_blank" rel="noopener" aria-label="RSS">
-                  <i className="fas fa-rss" />
-                </a>
-              </div>
+    <footer className="site-footer">
+      <div className="footer-inner">
+        {/* Brand */}
+        <div>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div style={{ fontFamily: 'var(--font-merri)', fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, display: 'inline-block' }}>
+              Nicaragua <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700 }}>Informate</span>
             </div>
-            <div className="footer-sections">
-              <div className="footer-col">
-                <h4>Secciones</h4>
-                <ul>
-                  <li><Link href="/?cat=Sucesos">Sucesos</Link></li>
-                  <li><Link href="/?cat=Nacionales">Nacionales</Link></li>
-                  <li><Link href="/?cat=Deportes">Deportes</Link></li>
-                  <li><Link href="/?cat=Internacionales">Internacionales</Link></li>
-                  <li><Link href="/?cat=Espect%C3%A1culos">Espectáculos</Link></li>
-                </ul>
-              </div>
-              <div className="footer-col">
-                <h4>Nosotros</h4>
-                <ul>
-                  <li><Link href="/nosotros">¿Quiénes somos?</Link></li>
-                  <li><Link href="/contacto">Contacto</Link></li>
-                  <li><Link href="/privacidad">Política de Privacidad</Link></li>
-                  <li><Link href="/terminos">Términos de Uso</Link></li>
-                </ul>
-              </div>
-              <div className="footer-col">
-                <h4>Más</h4>
-                <ul>
-                  <li><a href={SOCIAL_URLS.rss} target="_blank" rel="noopener">Feed RSS</a></li>
-                  <li><a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener">Canal WhatsApp</a></li>
-                  <li><a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener">Canal Telegram</a></li>
-                </ul>
-              </div>
-            </div>
+          </Link>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 300 }}>
+            Cubriendo las noticias más importantes de Nicaragua al instante, con compromiso y rigor informativo.
+          </p>
+        </div>
+
+        {/* Secciones */}
+        <div>
+          <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Secciones</h4>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+            {CATEGORIES.map((cat) => (
+              <li key={cat.name} style={{ marginBottom: 10 }}>
+                <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
+                  {cat.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Legal</h4>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+            {[
+              { href: '/nosotros', label: 'Sobre Nosotros' },
+              { href: '/privacidad', label: 'Privacidad' },
+              { href: '/cookies', label: 'Cookies' },
+              { href: '/terminos', label: 'Términos de Uso' },
+            ].map(({ href, label }) => (
+              <li key={href} style={{ marginBottom: 10 }}>
+                <Link href={href} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contacto */}
+        <div>
+          <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Contacto</h4>
+          <p style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
+            <span>📍</span> Estelí, Nicaragua
+          </p>
+          <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+            <span>✉️</span> redaccion@nicaraguainformate.com
+          </a>
+          <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+            <span>📝</span> Formulario de contacto
+          </Link>
+          <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+            <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Facebook">
+              <i className="fab fa-facebook-f" style={{ fontSize: 13 }} />
+            </a>
+            <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="WhatsApp">
+              <i className="fab fa-whatsapp" style={{ fontSize: 13 }} />
+            </a>
+            <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Telegram">
+              <i className="fab fa-telegram-plane" style={{ fontSize: 13 }} />
+            </a>
           </div>
         </div>
       </div>
-      <div className="footer-bottom-bar">
-        <div className="container">
-          <div className="footer-bottom-content">
-            <p className="copyright" suppressHydrationWarning>
-              &copy; {year} <strong>Nicaragua Informate</strong>. Todos los derechos reservados.
-            </p>
-            <div className="footer-bottom-links">
-              <Link href="/privacidad">Privacidad</Link>
-              <Link href="/terminos">Términos</Link>
-              <Link href="/contacto">Contacto</Link>
-            </div>
-          </div>
-        </div>
+
+      <div style={{ maxWidth: 1280, margin: '32px auto 0', padding: '20px 24px 0', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
+        <p>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</p>
+        <p>Periodismo verificado desde Estelí, Nicaragua</p>
       </div>
     </footer>
   );

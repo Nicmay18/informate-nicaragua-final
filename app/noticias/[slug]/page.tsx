@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import ArticleClient from '@/components/ArticleClient';
 import TrendingList from '@/components/home/TrendingList';
 import MasLeidas from '@/components/home/MasLeidas';
@@ -6,12 +5,12 @@ import SocialGrid from '@/components/home/SocialGrid';
 import NewsletterForm from '@/components/NewsletterForm';
 import AdSlot from '@/components/AdSlot';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
-import SiteFooter from '@/components/home/SiteFooter';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
-import { CATEGORIES } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -82,43 +81,10 @@ export default async function NewsPage({ params }: { params: { slug: string } })
 
     const related = await getRelatedNews(noticia.categoria, noticia.slug, 3);
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-    const today = new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
     return (
       <div className="min-h-screen bg-white">
-        {/* ===== TOP BAR ===== */}
-        <div className="top-bar">
-          <div className="top-bar-inner">
-            <div style={{ display: 'flex', gap: 20, alignItems: 'center', opacity: 0.8 }}>
-              <span>📍 Estelí, Nicaragua</span>
-              <span>{today}</span>
-            </div>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <Link href="/nosotros">Sobre Nosotros</Link>
-              <Link href="/contacto">Contacto</Link>
-              <Link href="/feed.xml">RSS</Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ===== HEADER STICKY ===== */}
-        <header className="header-pro">
-          <div className="header-pro-inner">
-            <Link href="/" className="logo-pro">
-              Nicaragua <span>Informate</span>
-            </Link>
-            <nav>
-              <ul className="nav-pro">
-                <li><Link href="/">Inicio</Link></li>
-                {CATEGORIES.slice(0, 5).map((cat) => (
-                  <li key={cat.name}>
-                    <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`}>{cat.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        </header>
+        <Header activeCategory={noticia.categoria} />
 
         {/* ===== MAIN CONTENT GRID ===== */}
         <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, padding: '32px 24px 48px' }}>
@@ -146,7 +112,7 @@ export default async function NewsPage({ params }: { params: { slug: string } })
           </aside>
         </main>
 
-        <SiteFooter />
+        <Footer />
       </div>
     );
   } catch (error) {
