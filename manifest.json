@@ -4,8 +4,8 @@
   "description": "Noticias de Nicaragua al momento",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d47a1",
-  "theme_color": "#0d47a1",
+  "background_color": "#c41e3a",
+  "theme_color": "#1a1a2e",
   "orientation": "portrait-primary",
   "icons": [
     {

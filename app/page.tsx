@@ -35,6 +35,11 @@ export default async function HomePage() {
       {/* Breaking Ticker */}
       {tickerNews.length > 0 && <BreakingTicker noticias={tickerNews} />}
 
+      {/* ===== PRELOAD HERO IMAGE (LCP optimization) ===== */}
+      {destacadas[0]?.imagen && (
+        <link rel="preload" as="image" href={destacadas[0].imagen} type="image/webp" />
+      )}
+
       {/* ===== HERO SECTION ===== */}
       {destacadas.length > 0 && (
         <section className="hero-section">
@@ -42,11 +47,21 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* ===== TOP BANNER AD — Desktop & Mobile ===== */}
+      <div className="container-pro" style={{ padding: '24px 0 0' }}>
+        <AdSlot slot="homepage-top" width={728} height={90} format="horizontal" style={{ minHeight: 90, margin: '0 auto', maxWidth: 728 }} />
+      </div>
+
       {/* ===== MAIN CONTENT GRID ===== */}
       <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, paddingBottom: 48 }}>
         {/* Left Column - News */}
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
+
+          {/* ===== IN-CONTENT AD ===== */}
+          <div style={{ marginTop: 32 }}>
+            <AdSlot slot="homepage-in-content" width={336} height={280} />
+          </div>
         </div>
 
         {/* Right Column - Sidebar */}
@@ -61,6 +76,11 @@ export default async function HomePage() {
           <SocialGrid />
         </aside>
       </main>
+
+      {/* ===== STICKY BOTTOM AD — Mobile only ===== */}
+      <div className="sticky-ad-mobile" style={{ position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: '#fff', borderTop: '1px solid #e8e8ec', padding: '8px 0' }}>
+        <AdSlot slot="homepage-sticky-bottom" width={320} height={50} format="horizontal" style={{ minHeight: 50 }} />
+      </div>
 
       <Footer />
     </div>

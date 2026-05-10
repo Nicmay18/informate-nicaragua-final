@@ -9,7 +9,7 @@ export default function SiteFooter() {
           {/* Brand */}
           <div>
             <Link href="/" style={{ textDecoration: 'none' }}>
-              <div style={{ fontFamily: 'Georgia, serif', fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, display: 'inline-block' }}>
+              <div style={{ fontFamily: 'var(--font-merri)', fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, display: 'inline-block' }}>
                 Nicaragua <span style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700 }}>Informate</span>
               </div>
             </Link>

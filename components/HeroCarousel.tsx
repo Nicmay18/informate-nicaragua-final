@@ -87,8 +87,10 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             src={img}
             alt={n.titulo}
             fill
-            priority
-            quality={85}
+            priority={current === 0}
+            loading={current === 0 ? undefined : 'lazy'}
+            quality={75}
+            sizes="(max-width: 1024px) 100vw, 66vw"
             className="object-cover object-[center_30%] transition-opacity duration-300"
             style={{ opacity: fading ? 0 : 1 }}
           />
@@ -98,7 +100,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             <span style={{ display: 'inline-block', background: col, color: '#fff', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
               {n.categoria}
             </span>
-            <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.25, marginBottom: 12, textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
+            <h2 style={{ fontFamily: 'var(--font-merri)', fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.25, marginBottom: 12, textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
               {n.titulo}
             </h2>
             <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
@@ -143,6 +145,9 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
                 alt={card.titulo}
                 width={100}
                 height={75}
+                loading="lazy"
+                quality={75}
+                sizes="100px"
                 className="object-cover rounded"
                 style={{ borderRadius: 4 }}
               />

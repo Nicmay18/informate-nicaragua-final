@@ -5,6 +5,50 @@ const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 100;
 
 // =============================================================================
+// NORMALIZAR IMÁGENES: Firebase Storage URL → ruta local /images/
+// Las imágenes WebP se suben a public/images/ vía GitHub API
+// Firestore solo guarda el URL original; lo mapeamos a la ruta local
+// =============================================================================
+function normalizeImage(imagen: string): string {
+  if (!imagen) return '';
+
+  // Ya es ruta local
+  if (imagen.startsWith('/images/')) return imagen;
+
+  // Data URI (imagen inline del admin) → mantener
+  if (imagen.startsWith('data:')) return imagen;
+
+  // Firebase Storage URL → extraer nombre de archivo y mapear a local
+  if (imagen.includes('firebasestorage.googleapis.com')) {
+    const m = imagen.match(/\/o\/(.+?)(\?|$)/);
+    if (m) {
+      const fn = decodeURIComponent(m[1]).split('/').pop();
+      if (fn && fn.length > 2) return `/images/${fn}`;
+    }
+  }
+
+  // GitHub raw / CDN URLs → extraer nombre
+  if (imagen.includes('githubusercontent.com') || imagen.includes('cdn.jsdelivr.net')) {
+    const m = imagen.match(/images\/([^/?#]+)/);
+    if (m?.[1]) return `/images/${m[1]}`;
+  }
+
+  // URL externa (Unsplash, etc.) → mantener
+  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
+
+  // Ruta relativa images/
+  if (imagen.startsWith('images/')) return `/${imagen}`;
+
+  // Ruta absoluta ya normalizada
+  if (imagen.startsWith('/')) return imagen;
+
+  // Solo nombre de archivo → asumir /images/
+  const fn = imagen.split('/').pop()?.trim();
+  if (!fn || fn.length < 2) return '';
+  return `/images/${fn}`;
+}
+
+// =============================================================================
 // FORZADO FIREBASE ADMIN SDK - Sin fallback mock data
 // =============================================================================
 // El sistema ahora solo funciona con noticias reales de Firebase
@@ -38,7 +82,7 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
         resumen: data.resumen || '',
         contenido: data.contenido,
         categoria: data.categoria || 'General',
-        imagen: data.imagen || '',
+        imagen: normalizeImage(data.imagen || ''),
         fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
         autor: data.autor,
         destacada: data.destacada,
@@ -190,7 +234,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
           resumen: data.resumen || '',
           contenido: data.contenido,
           categoria: data.categoria || 'General',
-          imagen: data.imagen || '',
+          imagen: normalizeImage(data.imagen || ''),
           fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
           autor: data.autor,
           destacada: data.destacada,
@@ -235,7 +279,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         resumen: data.resumen || '',
         contenido: data.contenido || '',
         categoria: data.categoria || 'General',
-        imagen: data.imagen || '',
+        imagen: normalizeImage(data.imagen || ''),
         fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
         autor: data.autor,
         destacada: data.destacada,
@@ -278,7 +322,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           resumen: data.resumen || '',
           contenido: data.contenido,
           categoria: data.categoria || 'General',
-          imagen: data.imagen || '',
+          imagen: normalizeImage(data.imagen || ''),
           fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
           autor: data.autor,
           destacada: data.destacada,

@@ -13,7 +13,7 @@ export default function SocialGrid() {
     <div style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
-        <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Síguenos</h3>
+        <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Síguenos</h3>
       </div>
 
       <style>{`

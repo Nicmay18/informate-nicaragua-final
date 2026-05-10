@@ -1,150 +1,250 @@
 /**
- * Formatea texto plano de noticias en HTML estructurado
- * Convierte texto largo en párrafos profesionales legibles
+ * ================================================================
+ * FORMATEO PERIODÍSTICO PROFESIONAL
+ * ================================================================
+ * Convierte cualquier texto plano o HTML en artículo con formato
+ * periodístico digital estricto. Aplica automáticamente:
+ * - Párrafos cortos (máx 4 líneas / ~320 caracteres)
+ * - Subtítulos H2 detectados por MAYÚSCULAS o patrones
+ * - Blockquotes para citas entre comillas
+ * - Listas con viñetas para enumeraciones
+ * - Limpieza de basura no editorial
  */
+
+const MAX_PARRAFO = 320;
+const PALABRAS_POR_MIN = 200;
+
+/* ================================================================
+   DETECTORES DE PATRONES PERIODÍSTICOS
+   ================================================================ */
+
+function esSubtitulo(linea: string): boolean {
+  const l = linea.trim();
+  if (l.length < 4 || l.length > 70) return false;
+  // MAYÚSCULAS puras
+  if (l === l.toUpperCase() && !l.endsWith('.')) return true;
+  // Patrones comunes de subtítulo
+  const patrones = /^(el|la|los|las|un|una|nuevos?|antiguos?|impacto|alerta|riesgo|crisis|futuro|revelan?|exigen|denuncian?|declaran?|anuncian?|confirman?)\s+/i;
+  if (patrones.test(l) && !l.endsWith('.')) return true;
+  return false;
+}
+
+function esCita(linea: string): boolean {
+  const l = linea.trim();
+  return l.startsWith('"') && l.includes('"') && l.length > 30;
+}
+
+function esLista(linea: string): boolean {
+  const l = linea.trim();
+  return /^[\-\*•✓✅⚠️🔍]\s/.test(l) || /^\d+[\.)]\s/.test(l);
+}
+
+function esRecomendacion(linea: string): boolean {
+  const l = linea.trim().toLowerCase();
+  return l.includes('recomendaci') || l.includes('consejo') || l.includes('tip') || l.includes('precaucion');
+}
+
+/* ================================================================
+   FORMATEADOR PRINCIPAL
+   ================================================================ */
 
 export function formatearNoticia(texto: string): string {
   if (!texto) return '';
-  
-  // Si ya tiene HTML, no procesar
-  if (texto.includes('<')) return texto;
-  
-  // Limpiar el texto primero
-  let textoLimpio = texto
-    // Quitar textos no-editoriales que a veces se pegan al final
+
+  // Si ya tiene HTML estructurado (h2, blockquote, ul), preservarlo
+  if (texto.includes('<h2') || texto.includes('<blockquote') || texto.includes('<ul')) {
+    return limpiarHtml(texto);
+  }
+
+  // === FASE 1: LIMPIEZA INICIAL ===
+  let limpio = texto
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    // Eliminar basura no editorial del final
     .replace(/\bcompartir\b[\s\S]*$/i, '')
     .replace(/\bno\s+hay\s+noticias\s+relacionadas\b[\s\S]*$/i, '')
     .replace(/\bradio\s+en\s+vivo\b[\s\S]*$/i, '')
     .replace(/\bfacebook\b[\s\S]*$/i, '')
     .replace(/\bwhatsapp\b[\s\S]*$/i, '')
     .replace(/\btelegram\b[\s\S]*$/i, '')
-    // Eliminar dashes多余的
-    .replace(/—+/g, '')
-    .replace(/–+/g, '')
-    .replace(/ - /g, '. ')
-    // Eliminar múltiples espacios
+    // Normalizar espacios
     .replace(/  +/g, ' ')
-    // Normalizar saltos de línea
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n');
-  
-  // Dividir en oraciones y reconstruir
-  const oraciones = textoLimpio.split(/(?<=[.!?])\s+/);
-  
-  const parrafos: string[] = [];
+    .replace(/\n{3,}/g, '\n\n');
+
+  // === FASE 2: DIVIDIR EN BLOQUES ===
+  const lineas = limpio.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const bloques: string[] = [];
   let parrafoActual = '';
-  
-  for (const oracion of oraciones) {
-    const trimmed = oracion.trim();
-    if (!trimmed) continue;
-    
-    // Primera letra mayúscula
-    let corregida = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
-    
-    // Corregir errores comunes de puntuación
-    corregida = corregida
-      .replace(/\s+,/g, ',')
-      .replace(/,\s*$/g, '.')
-      .replace(/\.{2,}/g, '.');
-    
-    parrafoActual += (parrafoActual ? ' ' : '') + corregida;
-    
-    // Nuevo párrafo cada 3-4 oraciones o si hay cambio de tema
-    if (parrafoActual.length > 300 || trimmed.endsWith(':')) {
-      if (parrafoActual) {
-        parrafos.push(parrafoActual);
-        parrafoActual = '';
+
+  function flushParrafo() {
+    if (parrafoActual.trim()) {
+      // Dividir párrafo largo en pedazos de ~MAX_PARRAFO chars
+      const partes = partirParrafo(parrafoActual.trim());
+      partes.forEach(p => bloques.push(`<p>${escaparHtml(p)}</p>`));
+      parrafoActual = '';
+    }
+  }
+
+  for (const linea of lineas) {
+    // Detectar subtítulo
+    if (esSubtitulo(linea)) {
+      flushParrafo();
+      bloques.push(`<h2>${escaparHtml(linea)}</h2>`);
+      continue;
+    }
+
+    // Detectar cita
+    if (esCita(linea)) {
+      flushParrafo();
+      bloques.push(`<blockquote>${escaparHtml(linea)}</blockquote>`);
+      continue;
+    }
+
+    // Detectar lista
+    if (esLista(linea)) {
+      flushParrafo();
+      // Agrupar items consecutivos
+      const items: string[] = [linea.replace(/^[\-\*•✓✅⚠️🔍\d+[\.)]]\s*/, '')];
+      // Nota: el loop externo ya avanza linea por linea, así que el manejo de listas
+      // múltiples lo haremos en post-proceso
+      bloques.push(`<li>${escaparHtml(items[0])}</li>`);
+      continue;
+    }
+
+    // Acumular párrafo
+    if (linea.length < 50 && !linea.endsWith('.')) {
+      // Posible fragmento de subtítulo no detectado
+      flushParrafo();
+      bloques.push(`<h2>${escaparHtml(linea)}</h2>`);
+      continue;
+    }
+
+    parrafoActual += (parrafoActual ? ' ' : '') + linea;
+
+    if (parrafoActual.length > MAX_PARRAFO) {
+      flushParrafo();
+    }
+  }
+  flushParrafo();
+
+  // === FASE 3: POST-PROCESO ===
+  // Agrupar <li> consecutivos en <ul>
+  const final: string[] = [];
+  let enLista = false;
+
+  for (const bloque of bloques) {
+    if (bloque.startsWith('<li>')) {
+      if (!enLista) {
+        final.push('<ul>');
+        enLista = true;
       }
+      final.push(bloque);
+    } else {
+      if (enLista) {
+        final.push('</ul>');
+        enLista = false;
+      }
+      final.push(bloque);
     }
   }
-  
-  // Agregar último párrafo
-  if (parrafoActual) {
-    parrafos.push(parrafoActual);
-  }
-  
-  // Convertir a HTML
-  const html = parrafos.map((p) => {
-    // Detectar si es un subtítulo
-    if (p.length < 80 && p === p.toUpperCase() && !p.includes('.')) {
-      return `<h3 style="font-size: 18px; font-weight: 700; color: #111; margin: 24px 0 12px; font-family: Georgia, serif;">${p}</h3>`;
-    }
-    
-    // Párrafo normal
-    return `<p style="font-size: 16px; line-height: 1.8; color: #333; margin-bottom: 16px; font-family: Georgia, Times New Roman, serif;">${p}</p>`;
-  }).join('\n');
-  
-  return html;
+  if (enLista) final.push('</ul>');
+
+  return final.join('\n');
 }
 
-/**
- * Limpia HTML innecesario y normaliza el contenido
- */
+/* ================================================================
+   UTILIDADES INTERNAS
+   ================================================================ */
+
+function escaparHtml(texto: string): string {
+  return texto
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function partirParrafo(texto: string): string[] {
+  if (texto.length <= MAX_PARRAFO) return [texto];
+
+  const partes: string[] = [];
+  let actual = '';
+  const oraciones = texto.split(/(?<=[.!?])\s+/);
+
+  for (const oracion of oraciones) {
+    const o = oracion.trim();
+    if (!o) continue;
+
+    if (actual.length + o.length > MAX_PARRAFO && actual.length > 100) {
+      partes.push(actual.trim());
+      actual = o;
+    } else {
+      actual += (actual ? ' ' : '') + o;
+    }
+  }
+  if (actual) partes.push(actual.trim());
+  return partes;
+}
+
+/* ================================================================
+   LIMPIADOR DE HTML
+   Preserva estructura periodística, elimina basura
+   ================================================================ */
+
 export function limpiarHtml(html: string): string {
   if (!html) return '';
-  
-  // Eliminar todos los estilos inline y atributos no deseados
+
+  // Si es texto plano (sin HTML), pasar por formatearNoticia
+  if (!html.includes('<')) {
+    return formatearNoticia(html);
+  }
+
   let limpio = html
-    // Quitar textos no-editoriales que a veces se pegan al final del contenido
+    // Quitar basura no editorial del final
     .replace(/\bcompartir\b[\s\S]*$/i, '')
     .replace(/\bno\s+hay\s+noticias\s+relacionadas\b[\s\S]*$/i, '')
     .replace(/\bradio\s+en\s+vivo\b[\s\S]*$/i, '')
-    // Eliminar style="..." de cualquier etiqueta
+    // Preservar h2, h3, blockquote, ul, ol, li, strong, em, p, br
+    // Solo limpiar atributos de spam
     .replace(/\s*style="[^"]*"/gi, '')
     .replace(/\s*class="[^"]*"/gi, '')
     .replace(/\s*align="[^"]*"/gi, '')
     .replace(/\s*valign="[^"]*"/gi, '')
     .replace(/\s*width="[^"]*"/gi, '')
     .replace(/\s*height="[^"]*"/gi, '')
-    // Eliminar múltiples saltos de línea
-    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\s*font-family="[^"]*"/gi, '')
+    // Eliminar span/font vacíos o con solo estilo
+    .replace(/<span[^>]*>(.*?)<\/span>/gi, '$1')
+    .replace(/<font[^>]*>(.*?)<\/font>/gi, '$1')
     // Normalizar espacios
     .replace(/ +/g, ' ')
-    // Eliminar etiquetas vacías
+    .replace(/\n{3,}/g, '\n\n')
+    // Eliminar párrafos vacíos
     .replace(/<p>\s*<\/p>/g, '')
-    .replace(/<p><br\s*\/?>\s*<\/p>/g, '')
-    // Eliminar etiquetas span innecesarias
-    .replace(/<\/?span[^>]*>/gi, '')
-    // Eliminar etiquetas font
-    .replace(/<\/?font[^>]*>/gi, '')
-    // Eliminar múltiples <br>
-    .replace(/(<br\s*\/?>\s*){2,}/gi, '<br>');
-  
-  return limpio;
+    .replace(/<p><br\s*\/?>\s*<\/p>/g, '');
+
+  return limpio.trim();
 }
 
-/**
- * Extrae el primer párrafo como resumen
- */
+/* ================================================================
+   EXTRACTORES Y CONTADORES
+   ================================================================ */
+
 export function extraerResumen(texto: string, maxLength: number = 150): string {
   if (!texto) return '';
-  
-  // Si es HTML, quitar etiquetas y obtener texto plano
   const textoPlano = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  
   if (textoPlano.length <= maxLength) return textoPlano;
-  
-  // Cortar en el último espacio antes del límite
   const cortado = textoPlano.substring(0, maxLength);
   const ultimoEspacio = cortado.lastIndexOf(' ');
-  
   return (ultimoEspacio > 0 ? cortado.substring(0, ultimoEspacio) : cortado) + '...';
 }
 
-/**
- * Cuenta palabras del contenido
- */
 export function contarPalabras(texto: string): number {
   if (!texto) return 0;
   const textoPlano = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   return textoPlano.split(' ').filter(p => p.length > 0).length;
 }
 
-/**
- * Estima tiempo de lectura
- */
 export function tiempoLectura(texto: string): number {
   const palabras = contarPalabras(texto);
-  const palabrasPorMinuto = 200;
-  return Math.max(1, Math.ceil(palabras / palabrasPorMinuto));
+  return Math.max(1, Math.ceil(palabras / PALABRAS_POR_MIN));
 }

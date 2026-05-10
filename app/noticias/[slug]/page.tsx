@@ -86,6 +86,11 @@ export default async function NewsPage({ params }: { params: { slug: string } })
       <div className="min-h-screen bg-white">
         <Header activeCategory={noticia.categoria} />
 
+        {/* ===== TOP BANNER AD — Article ===== */}
+        <div className="container-pro" style={{ padding: '16px 0 0' }}>
+          <AdSlot slot="article-top" width={728} height={90} format="horizontal" style={{ minHeight: 90, margin: '0 auto', maxWidth: 728 }} />
+        </div>
+
         {/* ===== MAIN CONTENT GRID ===== */}
         <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, padding: '32px 24px 48px' }}>
           {/* Left Column - Article */}
@@ -111,6 +116,11 @@ export default async function NewsPage({ params }: { params: { slug: string } })
             <SocialGrid />
           </aside>
         </main>
+
+        {/* ===== STICKY BOTTOM AD — Mobile only ===== */}
+        <div className="sticky-ad-mobile" style={{ position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: '#fff', borderTop: '1px solid #e8e8ec', padding: '8px 0' }}>
+          <AdSlot slot="article-sticky-bottom" width={320} height={50} format="horizontal" style={{ minHeight: 50 }} />
+        </div>
 
         <Footer />
       </div>

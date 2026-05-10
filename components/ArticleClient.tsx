@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CalendarDays, Clock, Eye, Tag, Check, Link2, Play, Pause, Square } from 'lucide-react';
+import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura } from '@/lib/formateo';
 
@@ -373,7 +373,10 @@ export default function ArticleClient({
                 sizes="(max-width: 800px) 100vw, 800px"
               />
             </div>
-            <figcaption className="featured-caption">{noticia.titulo}</figcaption>
+            <figcaption className="featured-caption">
+              {noticia.titulo}
+              <span className="featured-credit">Foto: Nicaragua Informate</span>
+            </figcaption>
           </figure>
         )}
 
@@ -396,7 +399,7 @@ export default function ArticleClient({
         {/* ===== TAGS ===== */}
         <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
           <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
-            <Tag size={12} style={{ marginRight: 6 }} /> Etiquetas
+            🏷️ Etiquetas
           </div>
           <div className="tags-list">
             {tags.map((tag) => (
@@ -407,27 +410,27 @@ export default function ArticleClient({
 
         {/* ===== SHARE BAR ===== */}
         <div className="share-bar-pro">
-          <div className="share-label">Compartir este artículo</div>
+          <div className="share-label">📤 Compartir artículo</div>
           <div className="share-buttons">
-            <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="Facebook" bg="#1877f2" icon="facebook-f" />
-            <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="WhatsApp" bg="#25d366" icon="whatsapp" />
-            <ShareChip href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticia.titulo)}&url=${encodeURIComponent(url)}`} label="X / Twitter" bg="#0f1419" icon="x-twitter" />
-            <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="Telegram" bg="#0088cc" icon="telegram" />
+            <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="📘 Facebook" bg="#1877f2" icon="facebook-f" />
+            <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="💬 WhatsApp" bg="#25d366" icon="whatsapp" />
+            <ShareChip href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(noticia.titulo)}&url=${encodeURIComponent(url)}`} label="🐦 X / Twitter" bg="#0f1419" icon="x-twitter" />
+            <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="✈️ Telegram" bg="#0088cc" icon="telegram" />
             <CopyButton url={url} />
           </div>
         </div>
 
-        {/* ===== AUTHOR BOX ===== */}
+        {/* ===== AUTHOR BIO ===== */}
         <div className="author-box-pro" style={{ textAlign: 'center', padding: '32px 24px' }}>
           <div className="author-avatar-pro" style={{ width: 80, height: 80, fontSize: 32, background: '#2563eb', margin: '0 auto 16px' }}>
             {autorInicial}
           </div>
           <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 6 }}>{autor}</div>
           <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#2563eb', marginBottom: 14 }}>
-            Periodista — Nicaragua Informate
+            Periodista | {noticia.categoria}
           </div>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 auto', maxWidth: 480 }}>
-            Periodista especializada en el análisis de sucesos y eventos de relevancia en el territorio nicaragüense. Enfocada en reportes viales y la transformación de la información de última hora en reportes detallados con rigor informativo.
+            Periodista especializada en el análisis de sucesos y eventos de relevancia en el territorio nicaragüense. Enfocada en reportes detallados con rigor informativo y compromiso con la verdad.
           </p>
         </div>
 

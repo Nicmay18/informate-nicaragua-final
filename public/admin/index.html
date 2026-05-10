@@ -561,12 +561,12 @@
               <div class="form-row">
                 <div class="form-group" style="flex: 2;">
                   <label class="form-label">Titular <span class="required">*</span></label>
-                  <input type="text" class="form-input" id="titulo" placeholder="Ej: Avances en infraestructura vial del Pacífico nicaragüense" required oninput="actualizarSeoPreview(); actualizarContadorTitulo();">
+                  <input type="text" class="form-input" id="titulo" placeholder="Ej: Avances en infraestructura vial del Pacífico nicaragüense" required oninput="actualizarSeoPreview(); actualizarContadorTitulo(); actualizarPreviewHomepage();">
                   <div class="word-counter"><span>Caracteres: <span class="count" id="contadorTitulo">0</span>/70</span><span style="color: var(--gray-400);">Óptimo para SEO</span></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Categoría <span class="required">*</span></label>
-                  <select class="form-select" id="categoria" required onchange="actualizarSeoPreview();">
+                  <select class="form-select" id="categoria" required onchange="actualizarSeoPreview(); actualizarPreviewHomepage();">
                     <option value="">Seleccionar...</option>
                     <option value="Sucesos">🚨 Sucesos</option>
                     <option value="Nacionales">🇳🇮 Nacionales</option>
@@ -615,7 +615,17 @@
 
               <div class="form-group">
                 <label class="form-label">Cuerpo de la Noticia <span class="required">*</span></label>
-                <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí..." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; padding: 8px 10px; background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: var(--radius); align-items: center;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; margin-right: 4px;">Formato:</span>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('h2')" title="Subtítulo"><i class="fas fa-heading"></i> H2</button>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('blockquote')" title="Cita destacada"><i class="fas fa-quote-left"></i> Cita</button>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('ul')" title="Lista con viñetas"><i class="fas fa-list-ul"></i> Lista</button>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('strong')" title="Negrita"><i class="fas fa-bold"></i></button>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('em')" title="Cursiva"><i class="fas fa-italic"></i></button>
+                  <div style="width: 1px; height: 20px; background: var(--gray-300); margin: 0 4px;"></div>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="cargarPlantillaPeriodistica()" title="Insertar estructura periodística"><i class="fas fa-file-alt"></i> Plantilla</button>
+                </div>
+                <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
                   <span>Palabras: <span class="count ok" id="contadorPalabras">0</span></span>
                   <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Cumple meta AdSense (350+)</span>
@@ -705,6 +715,35 @@
                 </div>
               </div>
 
+              <!-- Vista Previa Homepage -->
+              <div class="form-group" id="previewHomepageSection">
+                <label class="form-label">Vista Previa en Homepage</label>
+                <p style="font-size: 12px; color: var(--gray-500); margin: -8px 0 12px;">Así se verá tu noticia publicada en el sitio principal</p>
+
+                <!-- Preview Hero (solo si destacada) -->
+                <div id="previewHero" style="display: none; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gray-200); box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                  <div style="position: relative; height: 180px; background: linear-gradient(135deg, #1a1a2e, #2d2d44); display: flex; align-items: flex-end; padding: 16px;">
+                    <div id="previewHeroImg" style="position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.4;"></div>
+                    <div style="position: relative; z-index: 1;">
+                      <span id="previewHeroCat" style="display: inline-block; background: #c41e3a; color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Sucesos</span>
+                      <div id="previewHeroTitle" style="font-family: Georgia, serif; font-size: 16px; font-weight: 700; color: #fff; line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,0.8); max-width: 500px;">Título de la noticia aparecerá aquí en el slider principal</div>
+                      <div style="font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 6px;">Hoy • Por Redacción NI</div>
+                    </div>
+                  </div>
+                  <div style="padding: 8px 12px; background: #faf9f7; font-size: 11px; color: var(--gray-500); text-align: center;">⭐ Noticia Destacada — Slider Principal</div>
+                </div>
+
+                <!-- Preview Card Grid -->
+                <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--gray-200); background: #fff; display: flex; gap: 12px; padding: 12px; max-width: 480px;">
+                  <div id="previewCardImg" style="width: 120px; height: 80px; border-radius: 6px; background: var(--gray-200); flex-shrink: 0; background-size: cover; background-position: center;"></div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div id="previewCardCat" style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #c41e3a; letter-spacing: 0.5px; margin-bottom: 4px;">Sucesos</div>
+                    <div id="previewCardTitle" style="font-size: 13px; font-weight: 600; color: var(--gray-900); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Título de la noticia aparecerá aquí en la lista de noticias</div>
+                    <div style="font-size: 11px; color: var(--gray-400); margin-top: 6px;">Hoy • Nicaragua Informate</div>
+                  </div>
+                </div>
+              </div>
+
               <div class="form-row">
                 <div class="form-group">
                   <label class="checkbox-wrapper" style="width: 100%;">
@@ -722,7 +761,7 @@
 
               <div class="form-group">
                 <label class="checkbox-wrapper" style="width: fit-content;">
-                  <input type="checkbox" id="destacada">
+                  <input type="checkbox" id="destacada" onchange="actualizarPreviewHomepage();">
                   <div class="checkbox-content"><h4>⭐ Noticia Destacada</h4><p>Aparecerá en el slider principal</p></div>
                 </label>
               </div>
@@ -1125,7 +1164,6 @@ sin texto ni marcas de agua, composición periodística"
   <div class="toast-container" id="toastContainer"></div>
   <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-text">Procesando...</div></div>
 
-  <script src="/js/collage-profesional.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -1197,9 +1235,16 @@ sin texto ni marcas de agua, composición periodística"
       const titulo = noticia.titulo;
       const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
       const categoria = noticia.categoria || 'Noticias';
-      
-      // Formato para Telegram/Facebook (más claro y profesional)
-      const textoRedes = `📰 ${titulo}
+
+      // Formato tipo La Prensa (profesional para copiar/pegar en WhatsApp/Facebook)
+      const textoRedes = `${titulo}
+
+${descripcion}
+
+🔗 Leé más: ${url}`;
+
+      // Formato con emoji para Telegram
+      const textoTelegram = `📰 ${titulo}
 
 ${descripcion}
 
@@ -1207,18 +1252,11 @@ ${descripcion}
 🔗 ${url}
 
 📱 Nicaragua Informate - Periodismo de Precisión`;
-      
-      // Formato para WhatsApp (más corto)
-      const textoWhatsapp = `${titulo}
 
-${descripcion}
-
-Leer más: ${url}`;
-      
       document.getElementById('shareTitulo').textContent = titulo;
       document.getElementById('shareDescripcion').textContent = descripcion;
       document.getElementById('shareTextoCompleto').value = textoRedes;
-      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoWhatsapp)}`;
+      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoRedes)}`;
       document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(textoRedes)}`;
       document.getElementById('shareNoticiaLink').href = url;
       panel.style.display = 'block';
@@ -1255,42 +1293,49 @@ Leer más: ${url}`;
     }
 
     function handleFileSelect(e) { if (e.target.files.length) handleFiles(e.target.files); }
-    function handleFiles(files) {
+    async function handleFiles(files) {
       const file = files[0];
       if (!file.type.startsWith('image/')) { showToast('Selecciona una imagen válida', 'error'); return; }
       if (file.size > 5 * 1024 * 1024) { showToast('Máximo 5MB', 'error'); return; }
-      
-      // Verificar si es luto
-      const conLuto = document.getElementById('conLuto')?.checked || false;
-      
-      // Usar collage profesional si está disponible y se activó luto
-      if (conLuto && typeof window.procesarImagenConCollage === 'function') {
-        window.procesarImagenConCollage(file, { conLuto })
-          .then(resultado => {
-            document.getElementById('imagenUrl').value = resultado.preview;
-            actualizarPreview();
-            showToast('Imagen con cinta de luto aplicada', 'success');
-          })
-          .catch(error => {
-            console.error('Error al procesar collage:', error);
-            // Fallback a método original
-            const reader = new FileReader();
-            reader.onload = e => { 
-              document.getElementById('imagenUrl').value = e.target.result; 
-              actualizarPreview(); 
-              showToast('Imagen cargada', 'success'); 
-            };
-            reader.readAsDataURL(file);
-          });
-      } else {
-        // Método original simple
+
+      const token = localStorage.getItem('admin_github_token') || '';
+      if (!token) {
+        showToast('Configura tu token de GitHub en la pestaña Configuración', 'error');
+        // Fallback: guardar data URI temporalmente para preview
         const reader = new FileReader();
-        reader.onload = e => { 
-          document.getElementById('imagenUrl').value = e.target.result; 
-          actualizarPreview(); 
-          showToast('Imagen cargada', 'success'); 
-        };
+        reader.onload = e => { document.getElementById('imagenUrl').value = e.target.result; actualizarPreview(); };
         reader.readAsDataURL(file);
+        return;
+      }
+
+      const conLuto = document.getElementById('conLuto')?.checked || false;
+      showLoading(true, conLuto ? 'Procesando collage con luto...' : 'Procesando imagen...');
+      try {
+        // 1. Generar nombre único
+        const slug = generarSlug(document.getElementById('titulo').value || 'noticia').substring(0, 40) || 'noticia';
+        const timestamp = Date.now();
+        const filename = `${slug}-${timestamp}.webp`;
+
+        // 2. Procesar collage (marca de agua + cinta de luto si aplica)
+        const webpBlob = await procesarImagenCollage(file, { conLuto });
+        showLoading(true, 'Subiendo a GitHub...');
+
+        // 3. Subir a GitHub
+        const localPath = await uploadImageToGitHub(webpBlob, filename);
+
+        // 4. Guardar ruta local
+        document.getElementById('imagenUrl').value = localPath;
+        actualizarPreview();
+        showToast('Imagen subida: ' + localPath, 'success');
+      } catch (err) {
+        console.error('Error procesando imagen:', err);
+        showToast('Error: ' + err.message, 'error');
+        // Fallback a data URI para que no se pierda la imagen
+        const reader = new FileReader();
+        reader.onload = e => { document.getElementById('imagenUrl').value = e.target.result; actualizarPreview(); };
+        reader.readAsDataURL(file);
+      } finally {
+        showLoading(false);
       }
     }
 
@@ -1300,8 +1345,187 @@ Leer más: ${url}`;
       const container = document.getElementById('imagePreviewContainer');
       if (url) { preview.src = url; container.classList.add('active'); document.getElementById('uploadZone').style.display = 'none'; }
       else { container.classList.remove('active'); document.getElementById('uploadZone').style.display = 'block'; }
+      actualizarPreviewHomepage();
     }
     window.clearImage = function() { document.getElementById('imagenUrl').value = ''; document.getElementById('fileInput').value = ''; actualizarPreview(); };
+
+    // =============================================================================
+    // CONVERSIÓN A WEBP Y SUBIDA A GITHUB
+    // =============================================================================
+
+    /**
+     * Procesa imagen con collage profesional: marca de agua + cinta de luto opcional
+     * @param file Archivo original
+     * @param options { conLuto: boolean }
+     * @returns Promise<Blob> Imagen procesada como WebP
+     */
+    function procesarImagenCollage(file, options = {}) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          const MAX_W = 1200;
+          if (w > MAX_W) {
+            h = Math.round(h * (MAX_W / w));
+            w = MAX_W;
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+
+          // Dibujar imagen base
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const conLuto = options.conLuto || false;
+
+          // Si es luto: escala de grises
+          if (conLuto) {
+            const imageData = ctx.getImageData(0, 0, w, h);
+            const d = imageData.data;
+            for (let i = 0; i < d.length; i += 4) {
+              const gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+              d[i] = gray; d[i+1] = gray; d[i+2] = gray;
+            }
+            ctx.putImageData(imageData, 0, 0);
+          }
+
+          // Cinta de luto en esquina superior izquierda
+          if (conLuto) {
+            const ribbonH = Math.max(28, Math.round(h * 0.055));
+            const ribbonW = Math.min(320, Math.round(w * 0.55));
+            const padding = Math.round(ribbonH * 0.3);
+            ctx.fillStyle = 'rgba(0,0,0,0.88)';
+            ctx.fillRect(0, 0, ribbonW, ribbonH + padding * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.round(ribbonH * 0.5)}px Arial, sans-serif`;
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'left';
+            ctx.fillText('DESCANSA EN PAZ', padding, ribbonH / 2 + padding);
+          }
+
+          // Marca de agua en esquina inferior derecha
+          const wmText = 'NicaraguaInformate.com';
+          ctx.save();
+          const wmSize = Math.max(11, Math.round(h * 0.022));
+          ctx.font = `bold ${wmSize}px Arial, sans-serif`;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'bottom';
+          const wmPad = Math.round(wmSize * 1.2);
+          const wmW = ctx.measureText(wmText).width + wmPad * 2;
+          const wmH = wmSize + wmPad;
+          ctx.fillStyle = 'rgba(0,0,0,0.55)';
+          ctx.beginPath();
+          ctx.roundRect(w - wmW, h - wmH, wmW, wmH, 4);
+          ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.92)';
+          ctx.fillText(wmText, w - wmPad, h - wmPad / 2);
+          ctx.restore();
+
+          // Convertir a WebP
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('No se pudo generar collage'));
+          }, 'image/webp', 0.85);
+        };
+        img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
+    /**
+     * Convierte un File de imagen a WebP usando canvas
+     * @param file Archivo original (JPG/PNG)
+     * @param maxWidth Ancho máximo (default 1200px)
+     * @param quality Calidad WebP 0-1 (default 0.85)
+     * @returns Promise<Blob>
+     */
+    function convertToWebP(file, maxWidth = 1200, quality = 0.85) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxWidth) {
+            h = Math.round(h * (maxWidth / w));
+            w = maxWidth;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('No se pudo convertir a WebP'));
+          }, 'image/webp', quality);
+        };
+        img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
+    /**
+     * Sube un blob WebP a GitHub via API
+     * @param blob Blob WebP
+     * @param filename Nombre del archivo (ej: noticia-123.webp)
+     * @returns Promise<string> Ruta local /images/filename
+     */
+    async function uploadImageToGitHub(blob, filename) {
+      const token = localStorage.getItem('admin_github_token') || '';
+      const owner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
+      const repo = localStorage.getItem('admin_github_repo') || 'informate-nicaragua-final';
+      const path = (localStorage.getItem('admin_github_path') || 'public/images/').replace(/\/$/, '') + '/';
+
+      if (!token) throw new Error('No hay token de GitHub configurado. Ve a Configuración > GitHub.');
+
+      // Convertir blob a base64
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}${filename}`;
+
+      // Verificar si el archivo ya existe
+      let sha = null;
+      try {
+        const checkRes = await fetch(url, { headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
+        if (checkRes.status === 200) {
+          const checkData = await checkRes.json();
+          sha = checkData.sha;
+        }
+      } catch (e) { /* archivo no existe */ }
+
+      const body = {
+        message: `Subir imagen: ${filename}`,
+        content: base64,
+        branch: 'master'
+      };
+      if (sha) body.sha = sha;
+
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || `GitHub error ${res.status}`);
+      }
+
+      // Devolver ruta local para Firestore
+      return `/images/${filename}`;
+    }
 
     // SEO Preview
     window.actualizarSeoPreview = function() {
@@ -1326,6 +1550,49 @@ Leer más: ${url}`;
       // WhatsApp
       document.getElementById('whatsappTitle').textContent = titulo.length > 65 ? titulo.substring(0, 62) + '...' : titulo;
       document.getElementById('whatsappDesc').textContent = resumen.length > 80 ? resumen.substring(0, 77) + '...' : resumen;
+    };
+
+    window.actualizarPreviewHomepage = function() {
+      const titulo = document.getElementById('titulo').value || 'Título de la noticia aparecerá aquí';
+      const categoria = document.getElementById('categoria').value || 'Sucesos';
+      const imagenUrl = document.getElementById('imagenUrl').value || '';
+      const destacada = document.getElementById('destacada').checked;
+      const CAT_COLORS = { 'Sucesos': '#dc2626', 'Nacionales': '#1d4ed8', 'Deportes': '#16a34a', 'Internacionales': '#7c3aed', 'Espectáculos': '#db2777', 'Tecnología': '#0891b2' };
+      const color = CAT_COLORS[categoria] || '#c41e3a';
+
+      // Hero preview (solo si destacada)
+      const heroEl = document.getElementById('previewHero');
+      if (heroEl) {
+        heroEl.style.display = destacada ? 'block' : 'none';
+        if (destacada) {
+          document.getElementById('previewHeroCat').textContent = categoria;
+          document.getElementById('previewHeroCat').style.background = color;
+          document.getElementById('previewHeroTitle').textContent = titulo;
+          const heroImg = document.getElementById('previewHeroImg');
+          if (imagenUrl && !imagenUrl.startsWith('data:')) {
+            heroImg.style.backgroundImage = `url(${imagenUrl})`;
+          } else {
+            heroImg.style.backgroundImage = 'none';
+          }
+        }
+      }
+
+      // Card preview
+      const cardTitle = document.getElementById('previewCardTitle');
+      const cardCat = document.getElementById('previewCardCat');
+      const cardImg = document.getElementById('previewCardImg');
+      if (cardTitle) cardTitle.textContent = titulo;
+      if (cardCat) {
+        cardCat.textContent = categoria;
+        cardCat.style.color = color;
+      }
+      if (cardImg) {
+        if (imagenUrl && !imagenUrl.startsWith('data:')) {
+          cardImg.style.backgroundImage = `url(${imagenUrl})`;
+        } else {
+          cardImg.style.backgroundImage = 'none';
+        }
+      }
     };
 
     window.actualizarContadorTitulo = function() {
@@ -1493,13 +1760,36 @@ Leer más: ${url}`;
       const dateline = document.getElementById('dateline').value.trim();
       const resumen = document.getElementById('resumen').value.trim();
       const contenido = document.getElementById('contenido').value.trim();
-      const imagenUrl = document.getElementById('imagenUrl').value.trim();
+      let imagenUrl = document.getElementById('imagenUrl').value.trim();
       const pieFoto = document.getElementById('pieFoto').value.trim();
       const enviarTelegram = document.getElementById('enviarTelegram').checked;
       const prepararRedes = document.getElementById('enviarFacebook').checked;
       const destacada = document.getElementById('destacada').checked;
 
       if (!titulo || !categoria || !contenido || !imagenUrl) { showToast('Completa todos los campos obligatorios', 'error'); return; }
+
+      // Si la imagen es un data URI (fallback), intentar subir a GitHub
+      if (imagenUrl.startsWith('data:')) {
+        const token = localStorage.getItem('admin_github_token') || '';
+        if (!token) {
+          showToast('La imagen no está subida a GitHub. Configura el token en Configuración.', 'error');
+          return;
+        }
+        showLoading(true, 'Subiendo imagen a GitHub...');
+        try {
+          const slug = generarSlug(titulo).substring(0, 40) || 'noticia';
+          const filename = `${slug}-${Date.now()}.webp`;
+          // Convertir data URI a blob
+          const res = await fetch(imagenUrl);
+          const blob = await res.blob();
+          imagenUrl = await uploadImageToGitHub(blob, filename);
+          document.getElementById('imagenUrl').value = imagenUrl;
+        } catch (err) {
+          showToast('Error subiendo imagen: ' + err.message, 'error');
+          showLoading(false);
+          return;
+        }
+      }
 
       const palabras = contenido.split(/\s+/).length;
       if (palabras < 350) { showToast(`Contenido muy corto (${palabras} palabras). AdSense requiere mínimo 350.`, 'warning'); }
@@ -1606,7 +1896,7 @@ Leer más: ${url}`;
         document.getElementById('imagenUrl').value = data.imagen || '';
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
-        actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
+        actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
         document.getElementById('tituloFormulario').textContent = 'Editar Noticia';
         document.getElementById('subtituloFormulario').textContent = 'Modifica los detalles de la publicación';
         document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-save"></i><span>Guardar Cambios</span>';
@@ -1757,8 +2047,74 @@ Leer más: ${url}`;
 
     setTimeout(() => { if (document.getElementById('configTgToken')) cargarConfiguracion(); }, 1000);
 
+    // ================================================================
+    // EDITOR ENRIQUECIDO — Formato periodístico
+    // ================================================================
+    window.insertarTag = function(tag) {
+      const textarea = document.getElementById('contenido');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const texto = textarea.value;
+      const sel = texto.substring(start, end) || 'Texto aquí';
+      let reemplazo = '';
+      switch(tag) {
+        case 'h2': reemplazo = `<h2>${sel}</h2>`; break;
+        case 'blockquote': reemplazo = `<blockquote>"${sel}"</blockquote>`; break;
+        case 'ul': reemplazo = `<ul>\n  <li>${sel}</li>\n  <li>Otro punto</li>\n</ul>`; break;
+        case 'strong': reemplazo = `<strong>${sel}</strong>`; break;
+        case 'em': reemplazo = `<em>${sel}</em>`; break;
+      }
+      textarea.value = texto.substring(0, start) + reemplazo + texto.substring(end);
+      textarea.focus();
+      textarea.selectionStart = start + reemplazo.length;
+      textarea.selectionEnd = start + reemplazo.length;
+      actualizarContadorPalabras();
+    };
+
+    window.cargarPlantillaPeriodistica = function() {
+      const plantilla = `<p>Describe aquí la situación inicial de la noticia. Qué pasó, dónde y cuándo. Máximo 4 líneas.</p>
+
+<h2>EL DESARROLLO DEL HECHO</h2>
+
+<p>Desarrolla los detalles principales. Quiénes están involucrados. Cómo ocurrió.</p>
+
+<p>Segundo párrafo con más contexto o reacciones oficiales.</p>
+
+<blockquote>"Inserta aquí una cita contundente de un testigo, víctima o autoridad. Debe ser breve e impactante."</blockquote>
+
+<h2>IMPACTO Y CONSECUENCIAS</h2>
+
+<p>Explica el impacto social, económico o humano del hecho.</p>
+
+<ul>
+  <li>Primer punto clave o dato relevante</li>
+  <li>Segundo punto con información de respaldo</li>
+  <li>Tercer punto que aporte contexto</li>
+</ul>
+
+<h2>RECOMENDACIONES</h2>
+
+<p>Si aplica, incluye medidas preventivas o pasos a seguir.</p>
+
+<ul>
+  <li>✅ Primera recomendación con verbo de acción</li>
+  <li>⚠️ Segunda recomendación de precaución</li>
+  <li>🔍 Tercera recomendación de seguimiento</li>
+</ul>
+
+<p>Cierra con una reflexión o llamado a la acción. No repitas información ya dada.</p>`;
+      const textarea = document.getElementById('contenido');
+      if (!textarea.value.trim()) {
+        textarea.value = plantilla;
+      } else {
+        const cursorPos = textarea.selectionStart;
+        textarea.value = textarea.value.substring(0, cursorPos) + '\n\n' + plantilla + '\n\n' + textarea.value.substring(cursorPos);
+      }
+      actualizarContadorPalabras();
+      showToast('Plantilla periodística cargada', 'success');
+    };
+
     // REDACCIÓN IA MEJORADA
-    // Cargar plantilla de redacción desde configuración
     // Función para formatear automáticamente texto pegado
     window.formatearTextoPegado = function(event) {
       try {

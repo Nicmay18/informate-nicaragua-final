@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import BrandIcon from '@/components/BrandIcon';
 import { CATEGORIES } from '@/lib/types';
+import { MapPin, Mail, FileText } from 'lucide-react';
 
 const SOCIAL_URLS = {
   facebook: 'https://facebook.com/profile.php?id=61578261125687',
@@ -62,13 +63,13 @@ export default function Footer() {
         <div>
           <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Contacto</h4>
           <p style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
-            <span>📍</span> Estelí, Nicaragua
+            <MapPin size={14} /> Estelí, Nicaragua
           </p>
           <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-            <span>✉️</span> redaccion@nicaraguainformate.com
+            <Mail size={14} /> redaccion@nicaraguainformate.com
           </a>
           <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-            <span>📝</span> Formulario de contacto
+            <FileText size={14} /> Formulario de contacto
           </Link>
           <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
             <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Facebook">

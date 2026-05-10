@@ -10,7 +10,7 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
         <span style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%', animation: 'pulse 2s infinite', display: 'inline-block' }} />
-        <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Tendencias</h3>
+        <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Tendencias</h3>
       </div>
 
       <style>{`
@@ -37,7 +37,7 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
                 color: i === 0 ? '#c41e3a' : '#e8e8ec',
                 lineHeight: 1,
                 minWidth: 28,
-                fontFamily: 'Georgia, serif',
+                fontFamily: 'var(--font-merri)',
                 transition: 'color 0.2s',
               }}>
                 {String(i + 1).padStart(2, '0')}

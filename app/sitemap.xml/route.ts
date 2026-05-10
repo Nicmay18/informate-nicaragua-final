@@ -91,11 +91,12 @@ export async function GET() {
       return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>\n    <lastmod>${toIsoDate(now)}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(1)}</priority>\n  </url>`;
     }),
     ...articleUrls.map((u) => {
-      return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>\n    <lastmod>${toIsoDate(u.lastmod)}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(2)}</priority>\n  </url>`;
+      const pubDate = toIsoDate(u.lastmod).split('T')[0];
+      return `  <url>\n    <loc>${escapeXml(u.loc)}</loc>\n    <lastmod>${toIsoDate(u.lastmod)}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority.toFixed(2)}</priority>\n    <news:news>\n      <news:publication>\n        <news:name>Nicaragua Informate</news:name>\n        <news:language>es</news:language>\n      </news:publication>\n      <news:publication_date>${pubDate}</news:publication_date>\n      <news:title>${escapeXml(u.loc.split('/').pop()?.replace(/-/g, ' ') || 'Noticia')}</news:title>\n    </news:news>\n  </url>`;
     }),
   ].join('\n');
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlsXml}\n</urlset>\n`;
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${urlsXml}\n</urlset>\n`;
 
   return new Response(xml, {
     headers: {

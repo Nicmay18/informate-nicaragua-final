@@ -4,5 +4,10 @@ Disallow: /admin/
 Disallow: /admin.html
 Disallow: /login/
 Disallow: /api/
+Disallow: /cgi-bin/
+Disallow: /author/
+Disallow: /tag/
+Disallow: /*?*
+Crawl-delay: 1
 
 Sitemap: https://nicaraguainformate.com/sitemap.xml

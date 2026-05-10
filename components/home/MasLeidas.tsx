@@ -11,7 +11,7 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
         <Flame size={14} color="#c41e3a" />
-        <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Más Leídas</h3>
+        <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Más Leídas</h3>
       </div>
 
       <style>{`
@@ -34,7 +34,7 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
                 color: i === 0 ? '#c41e3a' : '#e8e8ec',
                 lineHeight: 1,
                 minWidth: 28,
-                fontFamily: 'Georgia, serif',
+                fontFamily: 'var(--font-merri)',
                 transition: 'color 0.2s',
               }}>
                 {String(i + 1).padStart(2, '0')}

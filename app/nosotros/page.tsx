@@ -59,6 +59,7 @@ export default function NosotrosPage() {
               width={200}
               height={200}
               quality={85}
+              sizes="200px"
               style={{
                 width: '100%',
                 height: '100%',

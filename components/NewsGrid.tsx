@@ -81,7 +81,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
 
       {/* Section Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
-        <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 20, fontWeight: 900, color: '#1a1a2e', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
+        <h2 style={{ fontFamily: 'var(--font-merri)', fontSize: 20, fontWeight: 900, color: '#1a1a2e', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
           <span style={{ width: 4, height: 24, background: '#c41e3a', borderRadius: 2, display: 'inline-block' }} />
           Últimas Noticias
         </h2>
@@ -120,6 +120,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                   loading="lazy"
                   quality={75}
                   className="object-cover"
+                  sizes="(max-width: 768px) 120px, 200px"
                 />
                 <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
                   {n.categoria}
