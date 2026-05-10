@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const DURATION_MS = 6000;
 
@@ -81,13 +82,13 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
 
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
           <button onClick={() => setPaused(p => !p)} style={btnStyle} title={paused ? 'Reanudar' : 'Pausar'}>
-            {paused ? '&#9654;' : '&#10074;&#10074;'}
+            {paused ? <Play size={12} fill="#fff" /> : <Pause size={12} fill="#fff" />}
           </button>
-          <button onClick={goPrev} style={btnStyle}>&#9664;</button>
+          <button onClick={goPrev} style={btnStyle}><ChevronLeft size={14} /></button>
           <span style={{ fontSize: 11, minWidth: 38, textAlign: 'center', color: 'rgba(255,255,255,0.65)', fontWeight: 700, flexShrink: 0 }}>
             {current + 1}/{noticias.length}
           </span>
-          <button onClick={goNext} style={btnStyle}>&#9654;</button>
+          <button onClick={goNext} style={btnStyle}><ChevronRight size={14} /></button>
         </div>
       </div>
     </div>

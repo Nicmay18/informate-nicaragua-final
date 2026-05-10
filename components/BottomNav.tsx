@@ -3,19 +3,20 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { Home, Newspaper, LayoutGrid, Info, Mail } from 'lucide-react';
 
 interface NavItem {
   label: string;
   href: string;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Inicio', href: '/', icon: 'fa-home' },
-  { label: 'Noticias', href: '/noticias', icon: 'fa-newspaper' },
-  { label: 'Categorías', href: '/noticias', icon: 'fa-th-large' },
-  { label: 'Nosotros', href: '/nosotros', icon: 'fa-info-circle' },
-  { label: 'Contacto', href: '/contacto', icon: 'fa-envelope' },
+  { label: 'Inicio', href: '/', icon: <Home size={20} /> },
+  { label: 'Noticias', href: '/noticias', icon: <Newspaper size={20} /> },
+  { label: 'Categorías', href: '/noticias', icon: <LayoutGrid size={20} /> },
+  { label: 'Nosotros', href: '/nosotros', icon: <Info size={20} /> },
+  { label: 'Contacto', href: '/contacto', icon: <Mail size={20} /> },
 ];
 
 export default function BottomNav() {
@@ -92,15 +93,14 @@ export default function BottomNav() {
                 borderRadius: '0 0 4px 4px',
               }} />
             )}
-            <i
-              className={`fas ${item.icon}`}
-              style={{
-                fontSize: '20px',
-                marginBottom: '3px',
-                transition: 'transform 0.2s ease',
-                transform: isActive ? 'scale(1.1)' : 'scale(1)',
-              }}
-            />
+            <span style={{
+              marginBottom: '3px',
+              transition: 'transform 0.2s ease',
+              transform: isActive ? 'scale(1.1)' : 'scale(1)',
+              display: 'inline-flex',
+            }}>
+              {item.icon}
+            </span>
             <span
               style={{
                 fontSize: '10px',
