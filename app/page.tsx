@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import NewsGrid from '@/components/NewsGrid';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import BreakingTicker from '@/components/BreakingTicker';
@@ -12,13 +11,14 @@ import TagsCloud from '@/components/home/TagsCloud';
 import SiteFooter from '@/components/home/SiteFooter';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import { getNews, getMasLeidas } from '@/lib/data';
+import type { Noticia } from '@/lib/types';
 import { CATEGORIES } from '@/lib/types';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  let noticias = [];
-  let masLeidas = [];
+  let noticias: Noticia[] = [];
+  let masLeidas: Noticia[] = [];
 
   try {
     [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
@@ -77,7 +77,7 @@ export default async function HomePage() {
 
       {/* Hero */}
       {destacadas.length > 0 && (
-        <section style={{ width: '100%', margin: '0 auto', padding: '24px' }}>
+        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
           <HeroCarousel noticias={destacadas} />
         </section>
       )}
@@ -85,7 +85,8 @@ export default async function HomePage() {
       {/* Main Content */}
       <main 
   id="main-content"
-  className="w-full max-w-[1440px] mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8"
+  className="w-full mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8"
+  style={{ maxWidth: 1200 }}
 >
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
@@ -109,7 +110,7 @@ export default async function HomePage() {
       <SiteFooter />
 
       <style>{`
-        .cat-link:hover { color: #f5f5f5 !important; border-bottom-color: #dc2626 !important; background: rgba(220,38,38,0.05); }
+        .cat-link:hover { color: #111 !important; background: rgba(185,28,28,0.06); }
         @media (max-width: 1024px) {
           main { grid-template-columns: 1fr !important; }
           aside { display: none !important; }

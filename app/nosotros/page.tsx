@@ -54,7 +54,7 @@ export default function NosotrosPage() {
           >
             <Image
               src="/keyling-rivera.jpg"
-              alt="Keyling Rivera - Directora Editorial"
+              alt="Keyling Rivera - Periodista"
               width={200}
               height={200}
               quality={85}
@@ -71,7 +71,7 @@ export default function NosotrosPage() {
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Rivera M.</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Periodista</div>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
               Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético, la verificación de fuentes y la información precisa para la ciudadanía nicaragüense.
             </p>

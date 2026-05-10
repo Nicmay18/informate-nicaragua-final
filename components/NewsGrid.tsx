@@ -98,9 +98,10 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
       </div>
 
       {shown.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--ink-faint)' }}>
-          <i className="fas fa-newspaper" style={{ fontSize: 36, marginBottom: 12, display: 'block' }} />
-          No hay noticias en esta categoría.
+        <div style={{ textAlign: 'center', padding: '56px 0', color: 'var(--ink-faint)' }}>
+          <i className="fas fa-newspaper" style={{ fontSize: 34, marginBottom: 12, display: 'block' }} />
+          <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 6 }}>Sin publicaciones por el momento</div>
+          <div style={{ fontSize: 14 }}>Actualizaremos esta sección en cuanto haya nueva información.</div>
         </div>
       ) : (
         <div>

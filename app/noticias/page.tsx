@@ -3,6 +3,7 @@ import Link from 'next/link';
 import NewsGrid from '@/components/NewsGrid';
 import { getNews } from '@/lib/data';
 import { CATEGORIES } from '@/lib/types';
+import type { Noticia } from '@/lib/types';
 
 export const revalidate = 60;
 
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function NoticiasPage() {
-  let noticias = [];
+  let noticias: Noticia[] = [];
 
   try {
     noticias = await getNews(50);
@@ -65,9 +66,9 @@ export default async function NoticiasPage() {
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-[1440px] mx-auto p-6">
-        <div style={{ marginBottom: 32 }}>
-          <h1 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, color: '#111', lineHeight: 1.1, marginBottom: 16, fontFamily: 'Georgia, serif' }}>Todas las Noticias</h1>
+      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 20px 40px' }}>
+        <div style={{ marginBottom: 28 }}>
+          <h1 style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, color: '#111', lineHeight: 1.08, marginBottom: 10, fontFamily: 'Georgia, serif', letterSpacing: '-0.01em' }}>Todas las Noticias</h1>
           <p style={{ fontSize: 18, color: '#666', lineHeight: 1.6 }}>
             Mantente informado con las últimas noticias de Nicaragua y el mundo.
           </p>
@@ -76,10 +77,12 @@ export default async function NoticiasPage() {
         {noticias.length > 0 ? (
           <NewsGrid noticias={noticias} />
         ) : (
-          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#666' }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>📰</div>
-            <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: '#333' }}>No hay noticias disponibles</h2>
-            <p>Estamos trabajando para traerte las últimas noticias. Por favor, intenta más tarde.</p>
+          <div style={{ textAlign: 'center', padding: '64px 20px', color: '#666', border: '1px solid #e5e7eb', borderRadius: 12, background: '#fafafa' }}>
+            <div style={{ fontSize: 44, marginBottom: 14 }}>📰</div>
+            <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#111', fontFamily: 'Georgia, serif' }}>Sin publicaciones por el momento</h2>
+            <p style={{ margin: 0, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
+              Estamos actualizando esta sección. Vuelve en unos minutos para ver nuevas publicaciones.
+            </p>
           </div>
         )}
       </main>

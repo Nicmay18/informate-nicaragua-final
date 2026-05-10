@@ -107,7 +107,7 @@ export default function PoliticaEditorialPage() {
           </div>
           <div>
             <p style={{ color: '#fff', margin: '0 0 0.5rem', fontWeight: 700, fontSize: '1.1rem' }}>Keyling Rivera</p>
-            <p style={{ color: '#8c1d18', margin: '0 0 0.75rem', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Directora Editorial</p>
+            <p style={{ color: '#8c1d18', margin: '0 0 0.75rem', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Periodista</p>
             <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.88rem', lineHeight: 1.65 }}>
               Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético, la verificación de fuentes y la información precisa para la ciudadanía nicaragüense.
             </p>
