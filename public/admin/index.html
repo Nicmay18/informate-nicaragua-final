@@ -1326,7 +1326,7 @@ ${descripcion}
         // 4. Guardar ruta local
         document.getElementById('imagenUrl').value = localPath;
         actualizarPreview();
-        showToast('Imagen subida: ' + localPath, 'success');
+        showToast('Imagen subida a GitHub. Ahora haz Redeploy en Vercel para que la imagen esté disponible en el sitio.', 'success');
       } catch (err) {
         console.error('Error procesando imagen:', err);
         showToast('Error: ' + err.message, 'error');
@@ -1522,6 +1522,9 @@ ${descripcion}
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.message || `GitHub error ${res.status}`);
       }
+
+      const data = await res.json().catch(() => ({}));
+      console.log('[GitHub Upload] OK:', data.content?.html_url || url);
 
       // Devolver ruta local para Firestore
       return `/images/${filename}`;
