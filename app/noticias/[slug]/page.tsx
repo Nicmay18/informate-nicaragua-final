@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
+// Force rebuild
 export const revalidate = 0;
 
 export default async function NewsPage({ params }: { params: { slug: string } }) {
