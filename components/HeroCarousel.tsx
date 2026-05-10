@@ -97,11 +97,11 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '90px 32px 32px' }}>
+          <div className="hero-carousel-overlay" style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
             <span style={{ display: 'inline-block', background: col, color: '#fff', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
               {n.categoria}
             </span>
-            <h2 style={{ fontFamily: 'var(--font-merri)', fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.25, marginBottom: 12, textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
+            <h2 className="hero-carousel-title" style={{ fontFamily: 'var(--font-merri)', fontWeight: 900, color: '#fff', textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
               {n.titulo}
             </h2>
             <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>

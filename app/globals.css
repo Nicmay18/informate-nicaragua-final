@@ -322,6 +322,16 @@ a:hover { color: var(--accent-dark); }
   font-weight: 500;
 }
 
+.hero-carousel-overlay {
+  padding: 70px 32px 32px;
+}
+
+.hero-carousel-title {
+  font-size: 28px;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
 .hero-side {
   display: flex;
   flex-direction: column;
@@ -1337,6 +1347,8 @@ a:hover { color: var(--accent-dark); }
   .hero-main { aspect-ratio: 16/10; max-height: 300px; }
   .hero-title { font-size: 20px; }
   .hero-overlay { padding: 40px 20px 20px; }
+  .hero-carousel-overlay { padding: 50px 20px 20px; }
+  .hero-carousel-title { font-size: 20px; }
   .news-item {
     grid-template-columns: 120px 1fr;
     gap: 14px;
@@ -1400,6 +1412,8 @@ a:hover { color: var(--accent-dark); }
 @media (max-width: 480px) {
   .hero-main { aspect-ratio: 4/3; max-height: 260px; }
   .hero-title { font-size: 18px; }
+  .hero-carousel-overlay { padding: 40px 16px 16px; }
+  .hero-carousel-title { font-size: 18px; }
   .news-item { grid-template-columns: 100px 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
   .article-title-pro { font-size: 24px; }
