@@ -97,7 +97,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '60px 32px 32px' }}>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '90px 32px 32px' }}>
             <span style={{ display: 'inline-block', background: col, color: '#fff', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
               {n.categoria}
             </span>
@@ -106,8 +106,6 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             </h2>
             <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
               <span>{formatDateShortES(n.fecha)}</span>
-              <span>•</span>
-              <span>Por Redacción NI</span>
             </div>
           </div>
         </Link>
