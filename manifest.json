@@ -1,22 +1,21 @@
 {
   "name": "Nicaragua Informate",
-  "short_name": "NI Noticias",
-  "description": "Noticias de Nicaragua al momento",
+  "short_name": "NicInformate",
+  "description": "Noticias de Nicaragua y el mundo al instante",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#c41e3a",
-  "theme_color": "#1a1a2e",
-  "orientation": "portrait-primary",
+  "background_color": "#0F0F0F",
+  "theme_color": "#0F0F0F",
+  "orientation": "portrait",
+  "lang": "es-NI",
+  "dir": "ltr",
+  "categories": ["news", "magazines"],
   "icons": [
-    {
-      "src": "/logo.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/logo.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+    {"src": "./icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any"},
+    {"src": "./icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any"},
+    {"src": "./icon-192x192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "./icon-512x512.png", "sizes": "512x512", "type": "image/png"}
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

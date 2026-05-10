@@ -644,7 +644,7 @@
                   <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                   <div class="upload-text">Arrastra imagen o haz clic para subir</div>
                   <div class="upload-subtext">JPG/PNG hasta 5MB. Vista previa antes de publicar.</div>
-                  <input type="file" id="fileInput" hidden accept="image/*" onchange="handleFileSelect(event)">
+                  <input type="file" id="fileInput" hidden accept="image/*">
                 </div>
                 <div class="image-preview-container" id="imagePreviewContainer">
                   <img id="preview" class="image-preview" src="" alt="Preview">
@@ -1292,6 +1292,9 @@ ${descripcion}
       uploadZone.addEventListener('drop', e => { const dt = e.dataTransfer; if (dt.files.length) handleFiles(dt.files); }, false);
     }
 
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) { fileInput.addEventListener('change', e => { if (e.target.files.length) handleFiles(e.target.files); }); }
+
     window.handleFileSelect = function(e) { if (e.target.files.length) handleFiles(e.target.files); };
     async function handleFiles(files) {
       const file = files[0];
@@ -1504,7 +1507,7 @@ ${descripcion}
       const body = {
         message: `Subir imagen: ${filename}`,
         content: base64,
-        branch: 'master'
+        branch: localStorage.getItem('admin_github_branch') || 'master'
       };
       if (sha) body.sha = sha;
 
@@ -1831,7 +1834,14 @@ ${descripcion}
             document.getElementById('statusRedesTitulo').textContent = 'Enviando a Telegram...';
             document.getElementById('statusRedesTexto').textContent = 'Conectando con bot...';
             progress = 60; progressBar.style.width = progress + '%';
-            try { await postToApi('telegram', { noticia: noticiaData }); showToast('Enviado a Telegram', 'success'); } catch (err) { showToast('Error Telegram: ' + err.message, 'warning'); }
+            try {
+              await postToApi('telegram', { noticia: noticiaData });
+              showToast('Enviado a Telegram', 'success');
+              document.getElementById('telegramStatus').textContent = '✅ Enviado a Telegram';
+            } catch (err) {
+              showToast('Error Telegram: ' + err.message, 'warning');
+              document.getElementById('telegramStatus').textContent = '❌ Error Telegram';
+            }
           }
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
