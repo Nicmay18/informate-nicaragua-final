@@ -22,6 +22,24 @@ export const metadata: Metadata = {
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
   robots: 'index, follow',
   icons: { icon: '/logo.png', apple: '/logo.png' },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_NI',
+    url: 'https://nicaraguainformate.com',
+    siteName: 'Nicaragua Informate',
+    title: 'Nicaragua Informate — Noticias de Nicaragua',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nicaragua Informate — Noticias de Nicaragua',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    images: ['/logo.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
