@@ -438,8 +438,12 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
           <div 
             className="prose max-w-none text-gray-800 text-lg leading-relaxed"
             style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
-            dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }} 
-          />
+          >
+            <div 
+              className="first-letter:text-5xl first-letter:font-bold first-letter:text-red-700 first-letter:mr-3 first-letter:float-left first-letter:leading-[0.85]"
+              dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }} 
+            />
+          </div>
 
           <div style={{ 
             margin: '40px 0', 
