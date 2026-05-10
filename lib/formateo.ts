@@ -11,6 +11,13 @@ export function formatearNoticia(texto: string): string {
   
   // Limpiar el texto primero
   let textoLimpio = texto
+    // Quitar textos no-editoriales que a veces se pegan al final
+    .replace(/\bcompartir\b[\s\S]*$/i, '')
+    .replace(/\bno\s+hay\s+noticias\s+relacionadas\b[\s\S]*$/i, '')
+    .replace(/\bradio\s+en\s+vivo\b[\s\S]*$/i, '')
+    .replace(/\bfacebook\b[\s\S]*$/i, '')
+    .replace(/\bwhatsapp\b[\s\S]*$/i, '')
+    .replace(/\btelegram\b[\s\S]*$/i, '')
     // Eliminar dashes多余的
     .replace(/—+/g, '')
     .replace(/–+/g, '')
@@ -57,7 +64,7 @@ export function formatearNoticia(texto: string): string {
   }
   
   // Convertir a HTML
-  const html = parrafos.map((p, i) => {
+  const html = parrafos.map((p) => {
     // Detectar si es un subtítulo
     if (p.length < 80 && p === p.toUpperCase() && !p.includes('.')) {
       return `<h3 style="font-size: 18px; font-weight: 700; color: #111; margin: 24px 0 12px; font-family: Georgia, serif;">${p}</h3>`;
@@ -78,6 +85,10 @@ export function limpiarHtml(html: string): string {
   
   // Eliminar todos los estilos inline y atributos no deseados
   let limpio = html
+    // Quitar textos no-editoriales que a veces se pegan al final del contenido
+    .replace(/\bcompartir\b[\s\S]*$/i, '')
+    .replace(/\bno\s+hay\s+noticias\s+relacionadas\b[\s\S]*$/i, '')
+    .replace(/\bradio\s+en\s+vivo\b[\s\S]*$/i, '')
     // Eliminar style="..." de cualquier etiqueta
     .replace(/\s*style="[^"]*"/gi, '')
     .replace(/\s*class="[^"]*"/gi, '')
