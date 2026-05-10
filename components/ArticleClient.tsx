@@ -1,149 +1,237 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
-const FEMALE_NAMES = ['paulina','sabina','luciana','camila','mónica','paloma','helena','teresa','rosa','marisol','valeria','daniela','sofia','andrea','silvia','laura','claudia','natalia'];
-const LATAM_LOCALES = ['es-MX','es-419','es-US','es-CL','es-CO','es-AR','es-PE'];
-const MAX_CHUNK_LENGTH = 220;
-const CHUNK_DELAY_MS = 60;
-const ERROR_DELAY_MS = 80;
-const VOICE_RETRY_DELAY_MS = 200;
-const INITIAL_DELAY_MS = 100;
-const BAR_HEIGHTS = [4,7,11,9,5,10,7,13,6,9,5,8] as const;
-
-function pickVoice(): SpeechSynthesisVoice | null {
-  try {
-    const voices = window.speechSynthesis.getVoices();
-    if (!voices.length) return null;
-    const v1 = voices.find(v => LATAM_LOCALES.includes(v.lang) && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
-    if (v1) return v1;
-    const v2 = voices.find(v => LATAM_LOCALES.includes(v.lang));
-    if (v2) return v2;
-    const v3 = voices.find(v => v.lang.startsWith('es') && FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n)));
-    if (v3) return v3;
-    return voices.find(v => v.lang.startsWith('es')) || null;
-  } catch { return null; }
+interface AudioButtonProps {
+  titulo: string;
+  resumen: string;
+  contenido: string;
 }
 
-function buildChunks(titulo: string, resumen: string, contenido: string): string[] {
-  const clean = (s: string) => s.replace(/<[^>]*>/g, ' ').replace(/\s{2,}/g, ' ').trim();
-  const full = `${clean(titulo)}. ${clean(resumen)}. ${clean(contenido)}`;
-  const parts = full.split(/(?<=[.!?¡¿])\s+/);
-  const chunks: string[] = [];
-  let cur = '';
-  for (const p of parts) {
-    if (!p.trim()) continue;
-    if ((cur + ' ' + p).length < MAX_CHUNK_LENGTH) { cur = cur ? cur + ' ' + p : p; }
-    else { if (cur) chunks.push(cur.trim()); cur = p; }
-  }
-  if (cur.trim()) chunks.push(cur.trim());
-  return chunks;
-}
+export function AudioButton({ titulo, resumen, contenido }: AudioButtonProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<string>('');
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-type AudioStatus = 'idle' | 'loading' | 'playing' | 'paused';
+  const cleanText = (html: string) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
 
-export function AudioButton({ titulo, resumen, contenido }: { titulo: string; resumen: string; contenido: string }) {
-  const [status, setStatus] = useState<AudioStatus>('idle');
-  const [progress, setProgress] = useState(0);
-  const [curText, setCurText] = useState('');
-  const chunksRef = useRef<string[]>([]);
-  const idxRef = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fullText = `${titulo}. ${resumen ? resumen + '. ' : ''}${cleanText(contenido)}`;
 
-  useEffect(() => () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    if (typeof window !== 'undefined') window.speechSynthesis.cancel();
+  useEffect(() => {
+    const loadVoices = () => {
+      const available = window.speechSynthesis.getVoices();
+      const spanishVoices = available.filter(v => v.lang.startsWith('es'));
+      setVoices(spanishVoices.length ? spanishVoices : available);
+      if (spanishVoices.length) {
+        const preferred = spanishVoices.find(v => 
+          v.name.includes('Google') || 
+          v.name.includes('Sabina') || 
+          v.name.includes('Elena') ||
+          v.name.includes('Paulina') ||
+          v.name.includes('Monica')
+        );
+        setSelectedVoice(preferred?.name || spanishVoices[0].name);
+      }
+    };
+
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      window.speechSynthesis.cancel();
+    };
   }, []);
 
-  function playFrom(i: number) {
-    const chunks = chunksRef.current;
-    if (i >= chunks.length) { setStatus('idle'); setProgress(100); setCurText('✓ Lectura finalizada'); return; }
-    idxRef.current = i;
-    const u = new SpeechSynthesisUtterance(chunks[i]);
-    u.lang = 'es-MX'; u.rate = 0.9; u.pitch = 1.08;
-    const v = pickVoice(); if (v) u.voice = v;
-    u.onstart = () => { setCurText(chunks[i]); setProgress(Math.round(((i + 1) / chunks.length) * 100)); setStatus('playing'); };
-    u.onend = () => { timerRef.current = setTimeout(() => playFrom(i + 1), CHUNK_DELAY_MS); };
-    u.onerror = (e) => { if (e.error !== 'interrupted' && e.error !== 'canceled') { timerRef.current = setTimeout(() => playFrom(i + 1), ERROR_DELAY_MS); } };
-    window.speechSynthesis.speak(u);
-  }
+  const play = useCallback(() => {
+    if (!window.speechSynthesis) {
+      alert('Tu navegador no soporta lectura de noticias.');
+      return;
+    }
 
-  function play() {
-    if (!('speechSynthesis' in window)) return;
-    setStatus('loading'); setProgress(0); setCurText('');
-    chunksRef.current = buildChunks(titulo, resumen, contenido);
-    idxRef.current = 0; window.speechSynthesis.cancel();
-    const tryPlay = () => {
-      const v = window.speechSynthesis.getVoices();
-      if (!v.length) { timerRef.current = setTimeout(tryPlay, VOICE_RETRY_DELAY_MS); }
-      else { playFrom(0); }
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(fullText);
+    const voice = voices.find(v => v.name === selectedVoice);
+    if (voice) utter.voice = voice;
+    
+    utter.lang = 'es-NI';
+    utter.rate = 0.95;
+    utter.pitch = 1.02;
+    
+    utter.onstart = () => {
+      setIsPlaying(true);
+      setIsPaused(false);
     };
-    timerRef.current = setTimeout(tryPlay, INITIAL_DELAY_MS);
-  }
+    utter.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+    utter.onerror = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
 
-  function pause() { if (timerRef.current) clearTimeout(timerRef.current); window.speechSynthesis.cancel(); setStatus('paused'); }
-  function resume() { playFrom(idxRef.current); }
-  function stop() { if (timerRef.current) clearTimeout(timerRef.current); window.speechSynthesis.cancel(); setStatus('idle'); setProgress(0); setCurText(''); idxRef.current = 0; }
+    utteranceRef.current = utter;
+    window.speechSynthesis.speak(utter);
+  }, [fullText, voices, selectedVoice]);
 
-  if (status === 'idle') return (
-    <button onClick={play} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', border: 'none', padding: '12px 24px', borderRadius: 10, cursor: 'pointer', fontWeight: 700, fontSize: 14, marginBottom: 24, boxShadow: '0 4px 16px rgba(140,29,24,0.3)', transition: 'all 0.2s' }}>
-      <i className="fas fa-circle-play" style={{ fontSize: 18 }} /> Escuchar noticia completa
-    </button>
-  );
+  const pause = () => {
+    window.speechSynthesis.pause();
+    setIsPaused(true);
+  };
+
+  const resume = () => {
+    window.speechSynthesis.resume();
+    setIsPaused(false);
+  };
+
+  const stop = () => {
+    window.speechSynthesis.cancel();
+    setIsPlaying(false);
+    setIsPaused(false);
+  };
+
+  if (typeof window === 'undefined') return null;
 
   return (
-    <div style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', borderRadius: 14, padding: '16px 18px', marginBottom: 24, boxShadow: '0 8px 24px rgba(0,0,0,0.25)', color: '#fff' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {status === 'playing' && (
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 18 }}>
-              {BAR_HEIGHTS.map((h, i) => (
-                <span key={i} style={{ display: 'inline-block', width: 3, height: h, background: '#e53e3e', borderRadius: 1.5, animation: `wvbar ${0.5 + (i % 3) * 0.15}s ease-in-out ${i * 0.05}s infinite alternate` }} />
-              ))}
-            </div>
-          )}
-          {status === 'paused' && <i className="fas fa-pause-circle" style={{ color: '#fbbf24', fontSize: 18 }} />}
-          {status === 'loading' && <i className="fas fa-circle-notch fa-spin" style={{ color: '#64748b', fontSize: 18 }} />}
-          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: status === 'playing' ? '#f87171' : '#64748b' }}>
-            {status === 'playing' ? '▶ Reproduciendo' : status === 'paused' ? 'Pausado' : 'Cargando voz...'}
-          </span>
+    <div style={{ 
+      margin: '0 0 32px', 
+      padding: '16px 20px', 
+      background: '#f7f4ee', 
+      border: '1px solid #ddd6ce', 
+      borderRadius: 12,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 16,
+      flexWrap: 'wrap'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 200 }}>
+        <div style={{ 
+          width: 44, 
+          height: 44, 
+          borderRadius: '50%', 
+          background: isPlaying ? '#8c1d18' : '#e5e0d8',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: isPlaying ? '#fff' : '#8c1d18',
+          transition: 'all 0.3s',
+          flexShrink: 0
+        }}>
+          <i className={`fas ${isPlaying ? 'fa-volume-high' : 'fa-headphones'}`} style={{ fontSize: 16 }} />
         </div>
-        <span style={{ fontSize: 12, color: '#475569', fontWeight: 700 }}>{progress}%</span>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#18181b' }}>
+            {isPlaying ? 'Escuchando noticia...' : 'Escuchar noticia'}
+          </div>
+          <div style={{ fontSize: 11, color: '#9f968d', marginTop: 2 }}>
+            {isPlaying ? 'Voz en español' : 'Disponible sin conexión'}
+          </div>
+        </div>
       </div>
-      <div style={{ height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, marginBottom: 10, overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg,#8c1d18,#ef4444)', borderRadius: 2, transition: 'width 0.4s ease' }} />
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        {!isPlaying ? (
+          <button 
+            onClick={play}
+            style={{ 
+              padding: '8px 18px', 
+              borderRadius: 8, 
+              border: 'none', 
+              background: '#8c1d18', 
+              color: '#fff', 
+              fontWeight: 700, 
+              fontSize: 13, 
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6
+            }}
+          >
+            <i className="fas fa-play" style={{ fontSize: 10 }} /> Reproducir
+          </button>
+        ) : (
+          <>
+            {isPaused ? (
+              <button 
+                onClick={resume}
+                style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #8c1d18', background: '#fff', color: '#8c1d18', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+              >
+                <i className="fas fa-play" style={{ fontSize: 10 }} /> Continuar
+              </button>
+            ) : (
+              <button 
+                onClick={pause}
+                style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #8c1d18', background: '#fff', color: '#8c1d18', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+              >
+                <i className="fas fa-pause" style={{ fontSize: 10 }} /> Pausar
+              </button>
+            )}
+            <button 
+              onClick={stop}
+              style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #ddd6ce', background: '#fff', color: '#756d66', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+            >
+              <i className="fas fa-stop" style={{ fontSize: 10 }} /> Detener
+            </button>
+          </>
+        )}
+
+        {voices.length > 1 && (
+          <select 
+            value={selectedVoice}
+            onChange={(e) => {
+              setSelectedVoice(e.target.value);
+              if (isPlaying) {
+                stop();
+                setTimeout(play, 100);
+              }
+            }}
+            style={{ 
+              padding: '8px 10px', 
+              borderRadius: 8, 
+              border: '1px solid #ddd6ce', 
+              background: '#fff', 
+              fontSize: 12, 
+              color: '#4b5563',
+              maxWidth: 160
+            }}
+            title="Seleccionar voz"
+          >
+            {voices.map(v => (
+              <option key={v.name} value={v.name}>{v.name}</option>
+            ))}
+          </select>
+        )}
       </div>
-      {curText && <p style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.55, marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontStyle: 'italic' }}>{curText}</p>}
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-        {status === 'playing'
-          ? <button onClick={pause} style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#1e3a5f', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}><i className="fas fa-pause" /> Pausar</button>
-          : <button onClick={status === 'loading' ? undefined : resume} style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#8c1d18', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}><i className="fas fa-play" /> {status === 'paused' ? 'Reanudar' : 'Iniciar'}</button>
-        }
-        <button onClick={stop} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.07)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}><i className="fas fa-stop" /> Detener</button>
-      </div>
-      <style>{`@keyframes wvbar { from { transform: scaleY(0.4) } to { transform: scaleY(1.6) } }`}</style>
     </div>
   );
 }
 
 export function CopyButton({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
-  const handleCopy = async () => {
-    try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <button onClick={handleCopy} style={{ width: 44, height: 44, borderRadius: '50%', background: copied ? '#16a34a' : '#fffdf9', border: '1px solid #ddd6ce', display: 'grid', placeItems: 'center', cursor: 'pointer', color: copied ? '#fff' : '#756d66', fontSize: 16, transition: 'all 0.2s' }} title={copied ? '¡Copiado!' : 'Copiar enlace'}>
-      {copied ? '✓' : '🔗'}
+    <button onClick={handleCopy} title="Copiar enlace" style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid #e5e7eb', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: copied ? '#16a34a' : '#374151' }}>
+      <i className={`fas ${copied ? 'fa-check' : 'fa-link'}`} style={{ fontSize: 14 }} />
     </button>
   );
 }
 
 export function ShareChip({ href, label, bg }: { href: string; label: string; bg: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={(e) => { const el = e.currentTarget; el.style.backgroundColor = bg; el.style.color = 'white'; el.style.borderColor = bg; }}
-      onMouseLeave={(e) => { const el = e.currentTarget; el.style.backgroundColor = '#fffdf9'; el.style.color = '#756d66'; el.style.borderColor = '#ddd6ce'; }}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 999, fontSize: 13, fontWeight: 600, textDecoration: 'none', border: '1px solid #ddd6ce', background: '#fffdf9', color: '#756d66', transition: 'all 0.2s' }}>
+    <a href={href} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 14px', borderRadius: 8, background: bg, color: '#fff', textDecoration: 'none', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
       {label}
     </a>
   );
@@ -151,18 +239,16 @@ export function ShareChip({ href, label, bg }: { href: string; label: string; bg
 
 export function ShareSticky({ href, icon, color }: { href: string; icon: string; color: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      style={{ width: 44, height: 44, borderRadius: '50%', background: color, display: 'grid', placeItems: 'center', textDecoration: 'none', color: '#fff', fontSize: 16, transition: 'all 0.2s', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-      <i className={`fab fa-${icon}`} />
+    <a href={href} target="_blank" rel="noopener noreferrer" style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color, textDecoration: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+      <i className={`fab fa-${icon}`} style={{ fontSize: 15 }} />
     </a>
   );
 }
 
 export function SocialFooter({ href, icon }: { href: string; icon: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, textDecoration: 'none', transition: 'all 0.3s', border: '1px solid rgba(255,255,255,0.08)' }}>
-      <i className={`fab fa-${icon}`} />
+    <a href={href} target="_blank" rel="noopener noreferrer" style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none' }}>
+      <i className={`fab fa-${icon}`} style={{ fontSize: 13 }} />
     </a>
   );
 }
@@ -177,9 +263,6 @@ type NoticiaProps = {
   imagen: string;
   fecha: string;
   autor?: string;
-  destacada?: boolean;
-  vistas?: number;
-  palabras?: number;
 };
 
 const CAT_COLORS: Record<string, string> = { 
@@ -198,18 +281,9 @@ function fmtDate(ts: unknown): string {
   } catch { return 'Hace un momento'; }
 }
 
-function countWords(text: string): number { 
-  return text?.trim()?.split(/\s+/).filter(w => w.length > 0).length || 0; 
-}
-
-function cleanNestedTags(html: string): string {
+function cleanHtml(html: string): string {
   if (!html) return '';
-  let c = html.replace(/<p>\s*<p>/gi, '<p>').replace(/<\/p>\s*<\/p>/gi, '</p>');
-  c = c.replace(/<b>\s*<b>/gi, '<b>').replace(/<\/b>\s*<\/b>/gi, '</b>');
-  c = c.replace(/<strong>\s*<strong>/gi, '<strong>').replace(/<\/strong>\s*<\/strong>/gi, '</strong>');
-  c = c.replace(/<i>\s*<i>/gi, '<i>').replace(/<\/i>\s*<\/i>/gi, '</i>');
-  c = c.replace(/<em>\s*<em>/gi, '<em>').replace(/<\/em>\s*<\/em>/gi, '</em>');
-  return c;
+  return html.replace(/<p>\s*<p>/gi, '<p>').replace(/<\/p>\s*<\/p>/gi, '</p>');
 }
 
 export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
@@ -217,35 +291,12 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
   }
 
-  const slug = noticia.slug || '';
-  const url = `https://nicaraguainformate.com/noticias/${slug}`;
-  const wordCount = countWords(noticia.contenido || '');
-  const readTime = Math.ceil(wordCount / 200);
+  const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const autor = noticia.autor || 'Keyling Rivera M.';
-  const autorInitial = autor.charAt(0).toUpperCase();
-  const imgUrl = noticia.imagen || '/logo.png';
-
-  const jsonLd = {
-    '@context': 'https://schema.org', 
-    '@type': 'NewsArticle',
-    headline: noticia.titulo, 
-    description: noticia.resumen || noticia.titulo,
-    image: noticia.imagen || 'https://nicaraguainformate.com/logo.png',
-    datePublished: noticia.fecha || new Date().toISOString(),
-    author: { '@type': 'Person', name: autor },
-    publisher: { 
-      '@type': 'Organization', 
-      name: 'Nicaragua Informate', 
-      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png' } 
-    },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-  };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      
       <main className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-6">
         <article style={{ maxWidth: 800, margin: '0 auto' }}>
           <div style={{ marginBottom: 20 }}>
@@ -253,7 +304,6 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
               fontSize: 11, 
               fontWeight: 700, 
               textTransform: 'uppercase', 
-              letterSpacing: '0.1em', 
               color: '#fff', 
               padding: '4px 10px', 
               background: CAT_COLORS[noticia.categoria] || '#8c1d18', 
@@ -304,17 +354,16 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
               fontWeight: 700, 
               fontSize: 14 
             }}>
-              {autorInitial}
+              {autor.charAt(0).toUpperCase()}
             </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 600, color: '#121212' }}>{autor}</div>
-              <div style={{ fontSize: 12, color: '#8c8c8c' }}>{readTime} min de lectura</div>
             </div>
           </div>
 
           {noticia.imagen && (
             <img 
-              src={imgUrl} 
+              src={noticia.imagen} 
               alt={noticia.titulo}
               style={{ width: '100%', borderRadius: 8, marginBottom: 24, display: 'block' }} 
             />
@@ -323,9 +372,8 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
           <div 
-            className="article-body" 
             style={{ fontFamily: "Georgia, serif", fontSize: 17, lineHeight: 1.7, color: '#1a1a1a' }}
-            dangerouslySetInnerHTML={{ __html: cleanNestedTags(noticia.contenido || '') }} 
+            dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }} 
           />
 
           <div style={{ 
@@ -339,8 +387,7 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
               fontWeight: 700, 
               textTransform: 'uppercase', 
               color: '#8c8c8c', 
-              marginBottom: 12, 
-              letterSpacing: '0.05em' 
+              marginBottom: 12 
             }}>
               Compartir
             </div>
