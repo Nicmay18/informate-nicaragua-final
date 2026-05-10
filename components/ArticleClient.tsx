@@ -1,216 +1,211 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 interface AudioButtonProps {
   titulo: string;
   resumen: string;
   contenido: string;
+  articleId?: string;
 }
 
-export function AudioButton({ titulo, resumen, contenido }: AudioButtonProps) {
+export function AudioButton({ titulo, resumen, contenido, articleId = '' }: AudioButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] = useState<string>('');
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const cleanText = (html: string) => {
+    if (typeof window === 'undefined') return html;
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || '';
   };
 
-  const fullText = `${titulo}. ${resumen ? resumen + '. ' : ''}${cleanText(contenido)}`;
+  const fullText = `${titulo}. ${resumen ? resumen + '. ' : ''}${cleanText(contenido)}`.slice(0, 4500);
 
-  useEffect(() => {
-    const loadVoices = () => {
-      const available = window.speechSynthesis.getVoices();
-      const spanishVoices = available.filter(v => v.lang.startsWith('es'));
-      setVoices(spanishVoices.length ? spanishVoices : available);
-      if (spanishVoices.length) {
-        const preferred = spanishVoices.find(v => 
-          v.name.includes('Google') || 
-          v.name.includes('Sabina') || 
-          v.name.includes('Elena') ||
-          v.name.includes('Paulina') ||
-          v.name.includes('Monica')
-        );
-        setSelectedVoice(preferred?.name || spanishVoices[0].name);
-      }
-    };
-
-    loadVoices();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
+  const stop = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
-
-    return () => {
-      window.speechSynthesis.cancel();
-    };
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsPlaying(false);
+    setProgress(0);
   }, []);
 
-  const play = useCallback(() => {
-    if (!window.speechSynthesis) {
-      alert('Tu navegador no soporta lectura de noticias.');
+  const play = async () => {
+    if (isLoading) return;
+
+    if (audioRef.current && audioRef.current.src) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      startProgressTracker();
       return;
     }
 
-    window.speechSynthesis.cancel();
+    setIsLoading(true);
 
-    const utter = new SpeechSynthesisUtterance(fullText);
-    const voice = voices.find(v => v.name === selectedVoice);
-    if (voice) utter.voice = voice;
-    
-    utter.lang = 'es-NI';
-    utter.rate = 0.95;
-    utter.pitch = 1.02;
-    
-    utter.onstart = () => {
+    try {
+      const res = await fetch('/api/audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: fullText, articleId }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success || !data.audioBase64) {
+        throw new Error(data.error || 'Error generando audio');
+      }
+
+      const audio = new Audio(data.audioBase64);
+      audioRef.current = audio;
+
+      audio.onended = () => {
+        setIsPlaying(false);
+        setProgress(0);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+
+      audio.onerror = () => {
+        setIsPlaying(false);
+        setIsLoading(false);
+        alert('Error reproduciendo el audio');
+      };
+
+      await audio.play();
       setIsPlaying(true);
-      setIsPaused(false);
-    };
-    utter.onend = () => {
+      setIsLoading(false);
+      startProgressTracker();
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+      alert('No se pudo generar el audio. Verifica tu conexión o la configuración de ElevenLabs.');
+    }
+  };
+
+  const startProgressTracker = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (audioRef.current) {
+        const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
+        setProgress(Number.isFinite(pct) ? pct : 0);
+      }
+    }, 500);
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      audioRef.current?.pause();
       setIsPlaying(false);
-      setIsPaused(false);
-    };
-    utter.onerror = () => {
-      setIsPlaying(false);
-      setIsPaused(false);
-    };
-
-    utteranceRef.current = utter;
-    window.speechSynthesis.speak(utter);
-  }, [fullText, voices, selectedVoice]);
-
-  const pause = () => {
-    window.speechSynthesis.pause();
-    setIsPaused(true);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    } else {
+      play();
+    }
   };
-
-  const resume = () => {
-    window.speechSynthesis.resume();
-    setIsPaused(false);
-  };
-
-  const stop = () => {
-    window.speechSynthesis.cancel();
-    setIsPlaying(false);
-    setIsPaused(false);
-  };
-
-  if (typeof window === 'undefined') return null;
 
   return (
-    <div style={{ 
-      margin: '0 0 32px', 
-      padding: '16px 20px', 
-      background: '#f7f4ee', 
-      border: '1px solid #ddd6ce', 
-      borderRadius: 12,
-      display: 'flex',
-      alignItems: 'center',
-      gap: 16,
-      flexWrap: 'wrap'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 200 }}>
-        <div style={{ 
-          width: 44, 
-          height: 44, 
-          borderRadius: '50%', 
-          background: isPlaying ? '#8c1d18' : '#e5e0d8',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: isPlaying ? '#fff' : '#8c1d18',
-          transition: 'all 0.3s',
-          flexShrink: 0
-        }}>
-          <i className={`fas ${isPlaying ? 'fa-volume-high' : 'fa-headphones'}`} style={{ fontSize: 16 }} />
-        </div>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#18181b' }}>
-            {isPlaying ? 'Escuchando noticia...' : 'Escuchar noticia'}
-          </div>
-          <div style={{ fontSize: 11, color: '#9f968d', marginTop: 2 }}>
-            {isPlaying ? 'Voz en español' : 'Disponible sin conexión'}
-          </div>
-        </div>
-      </div>
+    <div
+      style={{
+        margin: '0 0 32px',
+        padding: '18px 22px',
+        background: '#f7f4ee',
+        border: '1px solid #ddd6ce',
+        borderRadius: 12,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <button
+          onClick={togglePlay}
+          disabled={isLoading}
+          style={{
+            width: 52,
+            height: 52,
+            borderRadius: '50%',
+            border: 'none',
+            background: isLoading ? '#c6beb5' : isPlaying ? '#8c1d18' : '#8c1d18',
+            color: '#fff',
+            cursor: isLoading ? 'wait' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            transition: 'transform 0.2s',
+          }}
+        >
+          {isLoading ? (
+            <div
+              style={{
+                width: 20,
+                height: 20,
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderTopColor: '#fff',
+                borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite',
+              }}
+            />
+          ) : (
+            <i
+              className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}
+              style={{ fontSize: 18, marginLeft: isPlaying ? 0 : 2 }}
+            />
+          )}
+        </button>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-        {!isPlaying ? (
-          <button 
-            onClick={play}
-            style={{ 
-              padding: '8px 18px', 
-              borderRadius: 8, 
-              border: 'none', 
-              background: '#8c1d18', 
-              color: '#fff', 
-              fontWeight: 700, 
-              fontSize: 13, 
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#18181b' }}>
+            {isLoading
+              ? 'Generando audio profesional...'
+              : isPlaying
+              ? 'Reproduciendo noticia'
+              : 'Escuchar noticia en voz profesional'}
+          </div>
+          <div style={{ fontSize: 12, color: '#9f968d', marginTop: 3 }}>
+            {isLoading
+              ? 'Esto puede tomar unos segundos la primera vez'
+              : 'Voz generada con inteligencia artificial'}
+          </div>
+        </div>
+
+        {isPlaying && (
+          <button
+            onClick={stop}
+            style={{
+              padding: '8px 14px',
+              borderRadius: 8,
+              border: '1px solid #ddd6ce',
+              background: '#fff',
+              color: '#756d66',
+              fontWeight: 700,
+              fontSize: 12,
               cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6
             }}
           >
-            <i className="fas fa-play" style={{ fontSize: 10 }} /> Reproducir
+            <i className="fas fa-stop" style={{ fontSize: 10 }} /> Detener
           </button>
-        ) : (
-          <>
-            {isPaused ? (
-              <button 
-                onClick={resume}
-                style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #8c1d18', background: '#fff', color: '#8c1d18', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-              >
-                <i className="fas fa-play" style={{ fontSize: 10 }} /> Continuar
-              </button>
-            ) : (
-              <button 
-                onClick={pause}
-                style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #8c1d18', background: '#fff', color: '#8c1d18', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-              >
-                <i className="fas fa-pause" style={{ fontSize: 10 }} /> Pausar
-              </button>
-            )}
-            <button 
-              onClick={stop}
-              style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #ddd6ce', background: '#fff', color: '#756d66', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-            >
-              <i className="fas fa-stop" style={{ fontSize: 10 }} /> Detener
-            </button>
-          </>
-        )}
-
-        {voices.length > 1 && (
-          <select 
-            value={selectedVoice}
-            onChange={(e) => {
-              setSelectedVoice(e.target.value);
-              if (isPlaying) {
-                stop();
-                setTimeout(play, 100);
-              }
-            }}
-            style={{ 
-              padding: '8px 10px', 
-              borderRadius: 8, 
-              border: '1px solid #ddd6ce', 
-              background: '#fff', 
-              fontSize: 12, 
-              color: '#4b5563',
-              maxWidth: 160
-            }}
-            title="Seleccionar voz"
-          >
-            {voices.map(v => (
-              <option key={v.name} value={v.name}>{v.name}</option>
-            ))}
-          </select>
         )}
       </div>
+
+      {(isPlaying || progress > 0) && (
+        <div style={{ width: '100%', height: 4, background: '#e5e0d8', borderRadius: 2, overflow: 'hidden' }}>
+          <div
+            style={{
+              width: `${progress}%`,
+              height: '100%',
+              background: '#8c1d18',
+              borderRadius: 2,
+              transition: 'width 0.3s linear',
+            }}
+          />
+        </div>
+      )}
+
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
 }
@@ -223,7 +218,22 @@ export function CopyButton({ url }: { url: string }) {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <button onClick={handleCopy} title="Copiar enlace" style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid #e5e7eb', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: copied ? '#16a34a' : '#374151' }}>
+    <button
+      onClick={handleCopy}
+      title="Copiar enlace"
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        border: '1px solid #e5e7eb',
+        background: '#fff',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: copied ? '#16a34a' : '#374151',
+      }}
+    >
       <i className={`fas ${copied ? 'fa-check' : 'fa-link'}`} style={{ fontSize: 14 }} />
     </button>
   );
@@ -231,7 +241,23 @@ export function CopyButton({ url }: { url: string }) {
 
 export function ShareChip({ href, label, bg }: { href: string; label: string; bg: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 14px', borderRadius: 8, background: bg, color: '#fff', textDecoration: 'none', fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        padding: '8px 14px',
+        borderRadius: 8,
+        background: bg,
+        color: '#fff',
+        textDecoration: 'none',
+        fontSize: 12,
+        fontWeight: 700,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+      }}
+    >
       {label}
     </a>
   );
@@ -239,7 +265,24 @@ export function ShareChip({ href, label, bg }: { href: string; label: string; bg
 
 export function ShareSticky({ href, icon, color }: { href: string; icon: string; color: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color, textDecoration: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        background: '#fff',
+        border: '1px solid #e5e7eb',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color,
+        textDecoration: 'none',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+      }}
+    >
       <i className={`fab fa-${icon}`} style={{ fontSize: 15 }} />
     </a>
   );
@@ -247,7 +290,22 @@ export function ShareSticky({ href, icon, color }: { href: string; icon: string;
 
 export function SocialFooter({ href, icon }: { href: string; icon: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', textDecoration: 'none' }}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        width: 34,
+        height: 34,
+        borderRadius: '50%',
+        background: 'rgba(255,255,255,0.06)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#94a3b8',
+        textDecoration: 'none',
+      }}
+    >
       <i className={`fab fa-${icon}`} style={{ fontSize: 13 }} />
     </a>
   );
@@ -369,7 +427,7 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
             />
           )}
 
-          <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+          <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
 
           <div 
             style={{ fontFamily: "Georgia, serif", fontSize: 17, lineHeight: 1.7, color: '#1a1a1a' }}
