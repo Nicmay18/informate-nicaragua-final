@@ -79,7 +79,7 @@ export default function NewsletterForm() {
         <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Newsletter</span>
       </div>
       <div style={{ padding: 16 }}>
-        <p style={{ color: 'var(--ink-muted)', fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}>
           Recibe las noticias más importantes cada mañana.
         </p>
         {status === 'ok' ? (
@@ -88,7 +88,7 @@ export default function NewsletterForm() {
           </div>
         ) : (
           <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label htmlFor="newsletter-email" style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-muted)', marginBottom: '-4px' }}>Correo electrónico</label>
+            <label htmlFor="newsletter-email" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '-4px' }}>Correo electrónico</label>
             <input 
               id="newsletter-email" 
               type="email" 
