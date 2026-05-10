@@ -6,5 +6,9 @@
     }
   ],
   "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "github": {
+    "silent": true
+  }
 }
