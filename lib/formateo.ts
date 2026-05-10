@@ -1,6 +1,6 @@
 /**
  * Formatea texto plano de noticias en HTML estructurado
- * Convierte texto largo en párrafos, títulos y secciones legibles
+ * Convierte texto largo en párrafos profesionales legibles
  */
 
 export function formatearNoticia(texto: string): string {
@@ -9,28 +9,65 @@ export function formatearNoticia(texto: string): string {
   // Si ya tiene HTML, no procesar
   if (texto.includes('<')) return texto;
   
-  // Dividir por párrafos naturales (doble salto de línea)
-  const parrafos = texto.split(/\n\s*\n/);
+  // Limpiar el texto primero
+  let textoLimpio = texto
+    // Eliminar dashes多余的
+    .replace(/—+/g, '')
+    .replace(/–+/g, '')
+    .replace(/ - /g, '. ')
+    // Eliminar múltiples espacios
+    .replace(/  +/g, ' ')
+    // Normalizar saltos de línea
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n');
   
-  const parrafosFormateados = parrafos.map(p => {
-    const textoLimpio = p.trim();
-    if (!textoLimpio) return '';
+  // Dividir en oraciones y reconstruir
+  const oraciones = textoLimpio.split(/(?<=[.!?])\s+/);
+  
+  const parrafos: string[] = [];
+  let parrafoActual = '';
+  
+  for (const oracion of oraciones) {
+    const trimmed = oracion.trim();
+    if (!trimmed) continue;
     
-    // Detectar si es un subtítulo (líneas cortas en mayúsculas)
-    if (textoLimpio.length < 80 && textoLimpio === textoLimpio.toUpperCase() && !textoLimpio.includes('.')) {
-      return `<h3 style="font-size: 18px; font-weight: 700; color: #111; margin: 24px 0 12px; font-family: Georgia, serif;">${textoLimpio}</h3>`;
+    // Primera letra mayúscula
+    let corregida = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+    
+    // Corregir errores comunes de puntuación
+    corregida = corregida
+      .replace(/\s+,/g, ',')
+      .replace(/,\s*$/g, '.')
+      .replace(/\.{2,}/g, '.');
+    
+    parrafoActual += (parrafoActual ? ' ' : '') + corregida;
+    
+    // Nuevo párrafo cada 3-4 oraciones o si hay cambio de tema
+    if (parrafoActual.length > 300 || trimmed.endsWith(':')) {
+      if (parrafoActual) {
+        parrafos.push(parrafoActual);
+        parrafoActual = '';
+      }
     }
-    
-    // Detectar si es un título de sección
-    if (textoLimpio.length < 100 && textoLimpio.endsWith(':') && textoLimpio.split(' ').length < 6) {
-      return `<h4 style="font-size: 16px; font-weight: 600; color: #b91c1c; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 0.05em;">${textoLimpio}</h4>`;
+  }
+  
+  // Agregar último párrafo
+  if (parrafoActual) {
+    parrafos.push(parrafoActual);
+  }
+  
+  // Convertir a HTML
+  const html = parrafos.map((p, i) => {
+    // Detectar si es un subtítulo
+    if (p.length < 80 && p === p.toUpperCase() && !p.includes('.')) {
+      return `<h3 style="font-size: 18px; font-weight: 700; color: #111; margin: 24px 0 12px; font-family: Georgia, serif;">${p}</h3>`;
     }
     
     // Párrafo normal
-    return `<p style="font-size: 16px; line-height: 1.8; color: #333; margin-bottom: 16px; font-family: Georgia, Times New Roman, serif;">${textoLimpio}</p>`;
-  });
+    return `<p style="font-size: 16px; line-height: 1.8; color: #333; margin-bottom: 16px; font-family: Georgia, Times New Roman, serif;">${p}</p>`;
+  }).join('\n');
   
-  return parrafosFormateados.join('\n');
+  return html;
 }
 
 /**

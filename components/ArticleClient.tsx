@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { formatearNoticia, limpiarHtml } from '@/lib/formateo';
 
 interface AudioButtonProps {
   titulo: string;
@@ -341,7 +342,12 @@ function fmtDate(ts: unknown): string {
 
 function cleanHtml(html: string): string {
   if (!html) return '';
-  return html.replace(/<p>\s*<p>/gi, '<p>').replace(/<\/p>\s*<\/p>/gi, '</p>');
+  // Si es texto plano, formatear como HTML
+  if (!html.includes('<')) {
+    return formatearNoticia(html);
+  }
+  // Si ya tiene HTML, limpiar y formatear
+  return formatearNoticia(limpiarHtml(html));
 }
 
 export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
