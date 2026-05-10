@@ -72,7 +72,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
         <div className="top-bar-inner">
           <div style={{ display: 'flex', gap: 20, alignItems: 'center', opacity: 0.8 }}>
             <span>📍 Estelí, Nicaragua</span>
-            <span>{today}</span>
+            <span suppressHydrationWarning>{today}</span>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
             <Link href="/nosotros">Sobre Nosotros</Link>

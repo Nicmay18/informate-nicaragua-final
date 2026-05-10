@@ -48,7 +48,7 @@ export default async function NoticiasPage() {
     <div className="min-h-screen bg-white text-gray-900">
       {/* Fecha */}
       <div style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 0', textAlign: 'center' }}>
-        <span style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{today}</span>
+        <span suppressHydrationWarning style={{ fontSize: 12, color: '#666', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{today}</span>
       </div>
 
       {/* Header */}
