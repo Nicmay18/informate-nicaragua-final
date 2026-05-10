@@ -131,6 +131,8 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
             <button
               className={`nav-link nav-red-hover${activeCategory === 'Todas' ? ' active' : ''}`}
               onClick={() => handleCategory('Todas')}
+              aria-pressed={activeCategory === 'Todas'}
+              aria-label="Inicio"
             >
               <i className="fas fa-home" aria-hidden="true" />
               Inicio
@@ -140,6 +142,8 @@ export default function Header({ activeCategory = 'Todas', onCategoryChange }: H
                 key={cat.name}
                 className={`nav-link nav-red-hover${activeCategory === cat.name ? ' active' : ''}`}
                 onClick={() => handleCategory(cat.name)}
+                aria-pressed={activeCategory === cat.name}
+                aria-label={`Categoría ${cat.name}`}
               >
                 <i className={`fas ${cat.icon}`} style={{ color: cat.color }} aria-hidden="true" />
                 {cat.name}

@@ -46,12 +46,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossOrigin="anonymous" />
+        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" crossOrigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossOrigin="anonymous" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
       </head>
       <body style={{ background: '#ffffff', color: '#121212', fontFamily: 'var(--font-body)' }}>
-        <a href="#main-content" style={{ position: 'absolute', top: -40, left: 0, background: '#8c1d18', color: '#fff', padding: '8px 16px', zIndex: 10000, transition: 'top 0.3s' }}>Saltar al contenido</a>
+        <a href="#main-content" style={{ position: 'absolute', top: -40, left: 0, background: '#8c1d18', color: '#fff', padding: '8px 16px', zIndex: 10000, transition: 'top 0.3s', fontSize: '14px', fontWeight: 600, textDecoration: 'none', borderRadius: '4px' }}>Saltar al contenido</a>
         <ThemeInit />
         {children}
         <StickyRadio />

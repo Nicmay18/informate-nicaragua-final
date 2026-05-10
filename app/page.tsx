@@ -45,8 +45,8 @@ export default async function HomePage() {
           <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <span style={{ fontSize: 11, color: '#333' }}>Estelí, Nicaragua</span>
             <div style={{ display: 'flex', gap: 16 }}>
-              <Link href="/noticias" style={{ color: '#333', fontSize: 11, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase' }}>Noticias</Link>
-              <Link href="/contacto" style={{ color: '#333', fontSize: 11, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase' }}>Contacto</Link>
+              <Link href="/noticias" style={{ color: '#333', fontSize: 11, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', padding: '6px 12px', borderRadius: 4, transition: 'background 0.2s' }}>Noticias</Link>
+              <Link href="/contacto" style={{ color: '#333', fontSize: 11, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', padding: '6px 12px', borderRadius: 4, transition: 'background 0.2s' }}>Contacto</Link>
             </div>
           </nav>
           
@@ -61,10 +61,10 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <nav style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 20, paddingTop: 16, borderTop: '1px solid #e5e5e5' }}>
+          <nav style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 20, paddingTop: 16, borderTop: '1px solid #e5e5e5', flexWrap: 'wrap' }}>
             {CATEGORIES.slice(0, 5).map((cat) => (
               <Link key={cat.name} href={`/?cat=${encodeURIComponent(cat.name)}`}
-                style={{ color: '#333', fontSize: 12, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                style={{ color: '#333', fontSize: 12, fontWeight: 600, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '6px 12px', borderRadius: 4, transition: 'background 0.2s' }}>
                 {cat.name}
               </Link>
             ))}
@@ -114,6 +114,13 @@ export default async function HomePage() {
         @media (max-width: 1024px) {
           main { grid-template-columns: 1fr !important; }
           aside { display: none !important; }
+        }
+        @media (max-width: 768px) {
+          header nav { flex-direction: column; gap: 12px; align-items: flex-start; }
+          header nav > div { flex-direction: column; gap: 8px; width: 100%; }
+          header nav > div a { text-align: center; display: block; }
+          header nav:last-child { gap: 12px; }
+          header nav:last-child a { padding: 8px 12px; }
         }
       `}</style>
     </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { formatearNoticia, limpiarHtml } from '@/lib/formateo';
 
 interface AudioButtonProps {
@@ -428,10 +429,15 @@ export default function ArticleClient({ noticia }: { noticia: NoticiaProps }) {
           </div>
 
           {noticia.imagen && (
-            <img 
-              src={noticia.imagen} 
+            <Image
+              src={noticia.imagen}
               alt={noticia.titulo}
-              style={{ width: '100%', borderRadius: 8, marginBottom: 24, display: 'block' }} 
+              width={800}
+              height={450}
+              loading="lazy"
+              quality={85}
+              style={{ width: '100%', borderRadius: 8, marginBottom: 24, display: 'block' }}
+              className="w-full"
             />
           )}
 

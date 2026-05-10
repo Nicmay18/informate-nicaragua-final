@@ -75,7 +75,7 @@ export default function BottomNav() {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '6px 0',
+              padding: '8px 0', minHeight: '48px',
               color: isActive ? '#8c1d18' : '#737373',
               textDecoration: 'none',
               transition: 'all 0.2s ease',

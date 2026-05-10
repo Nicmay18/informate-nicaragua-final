@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Focus visible mejorado para accesibilidad */
+:focus-visible {
+  outline: 2px solid #8c1d18;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 :root {
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -28,8 +35,8 @@
   --border: #404040;
   
   --text-primary: #F5F5F5;
-  --text-secondary: #A3A3A3;
-  --text-muted: #737373;
+  --text-secondary: #D4D4D4;
+  --text-muted: #A3A3A3;
   
   --bg: var(--bg-primary);
   --text: var(--text-primary);
@@ -90,8 +97,8 @@
   --border: #ddd6ce;
   
   --text-primary: #18181b;
-  --text-secondary: #5b5b5f;
-  --text-muted: #756d66;
+  --text-secondary: #413f46;
+  --text-muted: #5b5b5f;
   
   --bg: var(--bg-primary);
   --text: var(--text-primary);

@@ -66,6 +66,8 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
               width={800}
               height={450}
               priority={index === 0}
+              loading={index === 0 ? undefined : 'lazy'}
+              quality={index === 0 ? 90 : 75}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
@@ -97,7 +99,9 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             alt={article.titulo}
             width={640}
             height={400}
-            loading={index < 6 ? 'eager' : 'lazy'}
+            priority={index < 6}
+            loading={index < 6 ? undefined : 'lazy'}
+            quality={index < 6 ? 85 : 75}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
