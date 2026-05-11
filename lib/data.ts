@@ -74,23 +74,25 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
       .limit(count)
       .get();
     
-    return snap.docs.map((d: any) => {
-      const data = d.data();
-      return {
-        id: d.id,
-        slug: data.slug || d.id,
-        titulo: data.titulo || '',
-        resumen: data.resumen || '',
-        contenido: data.contenido,
-        categoria: data.categoria || 'General',
-        imagen: normalizeImage(data.imagen || ''),
-        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-        autor: data.autor,
-        destacada: data.destacada,
-        vistas: data.vistas,
-        palabras: data.palabras,
-      };
-    });
+    return snap.docs
+      .filter((d: any) => d.data().publicado !== false)
+      .map((d: any) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido,
+          categoria: data.categoria || 'General',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+        };
+      });
   } catch (err) {
     console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
     console.error('[data.ts] VERIFICAR: Variables de entorno FIREBASE_* en Vercel');
@@ -226,23 +228,25 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .get();
     
     if (!snap.empty) {
-      const masLeidas = snap.docs.map((d: any) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: data.titulo || '',
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'General',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          autor: data.autor,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-        };
-      });
+      const masLeidas = snap.docs
+        .filter((d: any) => d.data().publicado !== false)
+        .map((d: any) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            slug: data.slug || d.id,
+            titulo: data.titulo || '',
+            resumen: data.resumen || '',
+            contenido: data.contenido,
+            categoria: data.categoria || 'General',
+            imagen: normalizeImage(data.imagen || ''),
+            fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+            autor: data.autor,
+            destacada: data.destacada,
+            vistas: data.vistas,
+            palabras: data.palabras,
+          };
+        });
       
       console.log(`[data.ts] Obtenidas ${masLeidas.length} noticias más leídas de Firebase`);
       return masLeidas;
@@ -314,6 +318,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .get();
 
     const related = snap.docs
+      .filter((d: any) => d.data().publicado !== false)
       .map((d: any) => {
         const data = d.data();
         return {

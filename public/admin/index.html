@@ -759,15 +759,24 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="checkbox-wrapper" style="width: fit-content;">
-                  <input type="checkbox" id="destacada" onchange="actualizarPreviewHomepage();">
-                  <div class="checkbox-content"><h4>⭐ Noticia Destacada</h4><p>Aparecerá en el slider principal</p></div>
-                </label>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="checkbox-wrapper" style="width: fit-content;">
+                    <input type="checkbox" id="destacada" onchange="actualizarPreviewHomepage();">
+                    <div class="checkbox-content"><h4>⭐ Noticia Destacada</h4><p>Aparecerá en el slider principal</p></div>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label class="checkbox-wrapper" style="width: fit-content;">
+                    <input type="checkbox" id="publicado">
+                    <div class="checkbox-content"><h4>🌐 Publicar en sitio</h4><p>Visible en la página principal</p></div>
+                  </label>
+                </div>
               </div>
 
               <div style="display: flex; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span>Publicar Noticia</span></button>
+                <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span></button>
+                <button type="button" class="btn btn-secondary btn-lg" onclick="vistaPreviaNoticia()"><i class="fas fa-eye"></i><span>Vista previa</span></button>
                 <button type="button" class="btn btn-secondary btn-lg" onclick="limpiarFormulario()"><i class="fas fa-eraser"></i><span>Limpiar</span></button>
                 <button type="button" class="btn btn-ghost btn-lg" id="btnCancelarEdicion" onclick="cancelarEdicion()" style="display: none; margin-left: auto;"><i class="fas fa-times"></i><span>Cancelar</span></button>
               </div>
@@ -1735,7 +1744,14 @@ ${descripcion}
         container.innerHTML = noticias.slice(0, 5).map(n => `
           <div class="news-item" style="padding: 10px 0;">
             <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
-            <div class="news-content"><div class="news-title">${n.titulo || '(Sin título)'}</div><div class="news-meta"><span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span><span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span></div></div>
+            <div class="news-content">
+              <div class="news-title">${n.titulo || '(Sin título)'}</div>
+              <div class="news-meta">
+                <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
+                <span class="news-badge" style="background:${n.publicado ? 'var(--success)' : 'var(--gray-400)'};color:#fff;font-size:10px;">${n.publicado ? 'PUBLICADO' : 'BORRADOR'}</span>
+                <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
+              </div>
+            </div>
           </div>
         `).join('');
       } catch (error) { console.error("Error últimas noticias:", error); }
@@ -1772,6 +1788,7 @@ ${descripcion}
       const enviarTelegram = document.getElementById('enviarTelegram').checked;
       const prepararRedes = document.getElementById('enviarFacebook').checked;
       const destacada = document.getElementById('destacada').checked;
+      const publicado = document.getElementById('publicado').checked;
 
       if (!titulo || !categoria || !contenido || !imagenUrl) { showToast('Completa todos los campos obligatorios', 'error'); return; }
 
@@ -1815,18 +1832,18 @@ ${descripcion}
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
-          autor: 'Directora Editorial', destacada, slug, palabras
+          autor: 'Directora Editorial', destacada, slug, palabras, publicado
         };
         let esNueva = !noticiaId;
 
         if (noticiaId) {
           noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug; delete noticiaData.vistas;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
-          showToast('Noticia actualizada', 'success');
+          showToast(publicado ? 'Noticia publicada' : 'Borrador guardado', 'success');
         } else {
           const docRef = await addDoc(collection(db, "noticias"), noticiaData);
           noticiaData.id = docRef.id;
-          showToast('Noticia publicada', 'success');
+          showToast(publicado ? 'Noticia publicada en el sitio' : 'Borrador guardado (no visible en el sitio)', 'success');
         }
 
         if (esNueva) {
@@ -1910,10 +1927,12 @@ ${descripcion}
         document.getElementById('imagenUrl').value = data.imagen || '';
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
+        document.getElementById('publicado').checked = !!data.publicado;
         actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
         document.getElementById('tituloFormulario').textContent = 'Editar Noticia';
         document.getElementById('subtituloFormulario').textContent = 'Modifica los detalles de la publicación';
-        document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-save"></i><span>Guardar Cambios</span>';
+        const estaPublicado = !!data.publicado;
+        document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-save"></i><span id="btnGuardarTexto">' + (estaPublicado ? 'Guardar Cambios' : 'Guardar Borrador') + '</span>';
         document.getElementById('btnCancelarEdicion').style.display = 'inline-flex';
         document.getElementById('enviarTelegram').checked = false;
         document.getElementById('enviarFacebook').checked = false;
@@ -1956,10 +1975,24 @@ ${descripcion}
       document.getElementById('formNoticia').reset(); document.getElementById('noticiaId').value = ''; clearImage();
       document.getElementById('tituloFormulario').textContent = 'Nueva Noticia';
       document.getElementById('subtituloFormulario').textContent = 'Redacción profesional optimizada para AdSense y SEO.';
-      document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span>Publicar Noticia</span>';
+      document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span>';
       document.getElementById('btnCancelarEdicion').style.display = 'none';
-      document.getElementById('enviarTelegram').checked = true; document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false;
+      document.getElementById('enviarTelegram').checked = true; document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
+    };
+
+    window.vistaPreviaNoticia = function() {
+      const titulo = document.getElementById('titulo').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      const contenido = document.getElementById('contenido').value.trim();
+      const imagenUrl = document.getElementById('imagenUrl').value.trim();
+      if (!titulo || !categoria || !contenido || !imagenUrl) {
+        showToast('Completa todos los campos obligatorios para ver la vista previa', 'error');
+        return;
+      }
+      const slug = document.getElementById('noticiaId').value ? undefined : generarSlug(titulo);
+      const previewUrl = '/noticias/' + (slug || 'vista-previa') + '?preview=1';
+      window.open(previewUrl, '_blank');
     };
 
     window.verSitio = function() { window.open('https://informate-instant-nicaragua.vercel.app/', '_blank'); };
