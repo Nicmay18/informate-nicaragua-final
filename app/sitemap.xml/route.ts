@@ -20,6 +20,7 @@ export async function GET() {
 
   const now = new Date();
 
+  const categories = ['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
   const staticUrls = [
     { loc: `${baseUrl}/`, priority: 1.0, changefreq: 'daily' },
     { loc: `${baseUrl}/noticias`, priority: 0.9, changefreq: 'daily' },
@@ -29,6 +30,11 @@ export async function GET() {
     { loc: `${baseUrl}/cookies`, priority: 0.4, changefreq: 'yearly' },
     { loc: `${baseUrl}/privacidad`, priority: 0.3, changefreq: 'yearly' },
     { loc: `${baseUrl}/terminos`, priority: 0.3, changefreq: 'yearly' },
+    ...categories.map(cat => ({
+      loc: `${baseUrl}/noticias?cat=${encodeURIComponent(cat)}`,
+      priority: 0.8,
+      changefreq: 'daily',
+    })),
   ];
 
   type ArticleDoc = {

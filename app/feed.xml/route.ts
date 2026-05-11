@@ -5,7 +5,7 @@ export const revalidate = 3600;
 export async function GET() {
   const baseUrl = 'https://nicaraguainformate.com';
 
-  let articles: { title: string; slug: string; description: string; pubDate: string; category: string }[] = [];
+  let articles: { title: string; slug: string; description: string; pubDate: string; category: string; imagen?: string }[] = [];
   try {
     const snapshot = await adminDb
       .collection('noticias')
@@ -22,6 +22,7 @@ export async function GET() {
         description: (d.resumen || d.titulo) as string,
         pubDate: fecha,
         category: (d.categoria || 'General') as string,
+        imagen: (d.imagen || '') as string,
       };
     });
   } catch {
@@ -46,6 +47,7 @@ export async function GET() {
       <pubDate>${a.pubDate}</pubDate>
       <category>${a.category}</category>
       <description><![CDATA[${a.description}]]></description>
+      ${a.imagen ? `<enclosure url="${a.imagen.startsWith('http') ? a.imagen : baseUrl + a.imagen}" type="image/webp" />` : ''}
     </item>`).join('')}
   </channel>
 </rss>`;

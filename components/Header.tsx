@@ -104,7 +104,9 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
 
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button className="theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              <span suppressHydrationWarning>
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              </span>
             </button>
             <button className="mobile-toggle" onClick={() => setMenuOpen(true)} aria-label="Menú">
               <Menu size={20} />

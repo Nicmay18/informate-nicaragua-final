@@ -61,7 +61,7 @@ export default function AdSlot({
       {mounted && (
         <ins
           className="adsbygoogle"
-          style={{ display: 'inline-block', width, height }}
+          style={{ display: 'block', width: '100%', minHeight: height }}
           data-ad-client="ca-pub-4115203339551838"
           data-ad-slot={slot}
           data-ad-format={format}

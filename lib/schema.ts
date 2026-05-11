@@ -2,13 +2,28 @@ export function buildOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsMediaOrganization',
+    '@id': 'https://nicaraguainformate.com/#organization',
     name: 'Nicaragua Informate',
+    alternateName: 'NicInformate',
     url: 'https://nicaraguainformate.com',
-    logo: 'https://nicaraguainformate.com/logo.png',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://nicaraguainformate.com/logo.png',
+      width: 512,
+      height: 512,
+    },
     sameAs: [
       'https://facebook.com/profile.php?id=61578261125687',
       'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
+      'https://t.me/+fHHjncJqMQM3NjZh',
     ],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Estelí',
+      addressCountry: 'NI',
+    },
+    areaServed: { '@type': 'Country', name: 'Nicaragua' },
+    inLanguage: 'es-NI',
   };
 }
 
@@ -38,12 +53,16 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
     author: {
       '@type': 'Person',
       name: article.autor || 'Keyling Rivera M.',
+      jobTitle: 'Periodista',
       url: 'https://nicaraguainformate.com/nosotros',
+      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.article-headline', '.article-body'],
     },
     publisher: {
-      '@type': 'NewsMediaOrganization',
-      name: 'Nicaragua Informate',
-      logo: { '@type': 'ImageObject', url: 'https://nicaraguainformate.com/logo.png', width: 512, height: 512 },
+      '@id': 'https://nicaraguainformate.com/#organization',
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     inLanguage: 'es-NI',
