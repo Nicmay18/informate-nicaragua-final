@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
@@ -19,18 +19,6 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 8;
 
-function calcTimeAgo(iso: string): string {
-  if (!iso) return '';
-  try {
-    const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
-    if (s < 60) return 'Hace un momento';
-    const m = Math.floor(s / 60); if (m < 60) return `Hace ${m} min`;
-    const h = Math.floor(m / 60); if (h < 24) return `Hace ${h} h`;
-    const d = Math.floor(h / 24); if (d < 7) return `Hace ${d} días`;
-    return formatDateShortES(iso);
-  } catch { return ''; }
-}
-
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
 }
@@ -38,9 +26,6 @@ function readTime(titulo: string, resumen: string): number {
 export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const [activeCat, setActiveCat] = useState('Todas');
   const [page, setPage] = useState(1);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
 
   const filtered = activeCat === 'Todas' ? noticias : noticias.filter(n => n.categoria === activeCat);
   const shown = filtered.slice(0, page * PAGE_SIZE);
@@ -48,10 +33,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
   function timeAgo(iso: string): string {
-    // SSR: mostrar fecha estática determinista
-    if (!mounted) return iso ? formatDateShortES(iso) : '';
-    // Cliente: calcular tiempo relativo
-    return calcTimeAgo(iso);
+    return iso ? formatDateShortES(iso) : '';
   }
 
   return (
