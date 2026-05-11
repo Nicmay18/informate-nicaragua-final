@@ -55,16 +55,49 @@ export default function WeatherWidget() {
   const loadCity = useCallback(async (idx: number) => {
     setLoading(true);
     const w = await fetchCity(CITIES[idx].lat, CITIES[idx].lon);
-    setData(w);
+    if (w) {
+      setData(w);
+      setAllTemps(prev => { const n = [...prev]; n[idx] = w.temp; return n; });
+    }
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    loadCity(0);
-    CITIES.forEach(async (c, i) => {
-      const w = await fetchCity(c.lat, c.lon);
-      if (w) setAllTemps(prev => { const n = [...prev]; n[i] = w.temp; return n; });
-    });
+    // Caché en sessionStorage para evitar 429 en recargas
+    try {
+      const cached = sessionStorage.getItem('ni_weather_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.ts < 10 * 60 * 1000) {
+          setData(parsed.data);
+          setAllTemps(parsed.allTemps);
+          return;
+        }
+      }
+    } catch {}
+
+    async function bootstrap() {
+      // 1) Cargar ciudad principal inmediatamente
+      await loadCity(0);
+      // 2) Cargar resto con delay de 500ms entre cada una para evitar 429
+      for (let i = 1; i < CITIES.length; i++) {
+        await new Promise(r => setTimeout(r, 500));
+        const w = await fetchCity(CITIES[i].lat, CITIES[i].lon);
+        if (w) {
+          setAllTemps(prev => { const n = [...prev]; n[i] = w.temp; return n; });
+          if (i === cityIdx) setData(w);
+        }
+      }
+      // Guardar caché
+      try {
+        sessionStorage.setItem('ni_weather_cache', JSON.stringify({
+          ts: Date.now(),
+          data,
+          allTemps: allTemps.map((t, i) => t ?? CITIES[i].name),
+        }));
+      } catch {}
+    }
+    bootstrap();
   }, [loadCity]);
 
   // Auto-cycle cities every 10 s (más tiempo para ver los datos)

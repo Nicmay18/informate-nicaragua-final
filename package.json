@@ -4,7 +4,7 @@
   "description": "Nicaragua Infórmate — Periodismo de Precisión (Next.js 15 + Firebase)",
   "private": true,
   "engines": {
-    "node": ">=20.0.0"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "next dev",
