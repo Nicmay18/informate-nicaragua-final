@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface AdSlotProps {
   slot: string;
@@ -19,11 +19,16 @@ export default function AdSlot({
   style = {},
   format = 'auto',
 }: AdSlotProps) {
+  const [mounted, setMounted] = useState(false);
   const insRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
 
   useEffect(() => {
-    if (pushed.current || !insRef.current) return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || pushed.current || !insRef.current) return;
     try {
       const w = window as any;
       if (w.adsbygoogle) {
@@ -33,7 +38,7 @@ export default function AdSlot({
     } catch {
       // AdSense no cargado — ignorar
     }
-  }, []);
+  }, [mounted]);
 
   return (
     <div
@@ -53,14 +58,16 @@ export default function AdSlot({
         ...style,
       }}
     >
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'inline-block', width, height }}
-        data-ad-client="ca-pub-4115203339551838"
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-      />
+      {mounted && (
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'inline-block', width, height }}
+          data-ad-client="ca-pub-4115203339551838"
+          data-ad-slot={slot}
+          data-ad-format={format}
+          data-full-width-responsive="true"
+        />
+      )}
       <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
         Publicidad
       </span>

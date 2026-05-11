@@ -68,7 +68,7 @@ export default function BottomNav() {
         const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
         return (
           <Link
-            key={item.href}
+            key={item.label}
             href={item.href}
             style={{
               flex: 1,

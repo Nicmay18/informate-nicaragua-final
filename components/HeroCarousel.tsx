@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
+import { cleanImageUrl } from '@/lib/image-utils';
 
 const MAX_SLIDES = 4;
 const FADE_DURATION_MS = 300;
@@ -65,7 +66,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
 
   const n = slides[current];
   const col = CATEGORY_COLORS[n.categoria] || '#8c1d18';
-  const img = n.imagen || FALLBACK_IMAGE;
+  const img = cleanImageUrl(n.imagen || FALLBACK_IMAGE);
 
   return (
     <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
@@ -140,7 +141,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
               <Image
-                src={card.imagen || FALLBACK_IMAGE}
+                src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)}
                 alt={card.titulo}
                 width={100}
                 height={75}

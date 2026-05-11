@@ -33,8 +33,10 @@ function normalizeImage(imagen: string): string {
     if (m?.[1]) return `/images/${m[1]}`;
   }
 
-  // URL externa (Unsplash, etc.) → mantener
-  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
+  // URL externa (Unsplash, etc.) → quitar query params para evitar 404 del optimizer
+  if (imagen.startsWith('http://') || imagen.startsWith('https://')) {
+    return imagen.split('?')[0];
+  }
 
   // Ruta relativa images/
   if (imagen.startsWith('images/')) return `/${imagen}`;
