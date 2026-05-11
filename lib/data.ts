@@ -27,13 +27,12 @@ function normalizeImage(imagen: string): string {
     }
   }
 
-  // GitHub raw / CDN URLs → extraer nombre
-  if (imagen.includes('githubusercontent.com') || imagen.includes('cdn.jsdelivr.net')) {
-    const m = imagen.match(/images\/([^/?#]+)/);
-    if (m?.[1]) return `/images/${m[1]}`;
+  // jsDelivr CDN / GitHub raw URLs → mantener como URL externa (imagenes en repo separado)
+  if (imagen.includes('cdn.jsdelivr.net') || imagen.includes('githubusercontent.com')) {
+    return imagen.split('?')[0];
   }
 
-  // URL externa (Unsplash, etc.) → quitar query params para evitar 404 del optimizer
+  // URL externa (Unsplash, Firebase Storage, etc.) → quitar query params
   if (imagen.startsWith('http://') || imagen.startsWith('https://')) {
     return imagen.split('?')[0];
   }

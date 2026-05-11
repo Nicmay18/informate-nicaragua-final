@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     const token = body.token || process.env.GITHUB_TOKEN || '';
     const owner = body.owner || process.env.GITHUB_OWNER || 'Nicmay18';
-    const repo = body.repo || process.env.GITHUB_REPO || 'informate-nicaragua-final';
+    const repo = body.repo || process.env.GITHUB_IMAGE_REPO || 'informate-images';
 
     if (!token) {
       return NextResponse.json(
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const path = `public/images/${filename}`;
+    const path = `images/${filename}`;
 
     // Convertir base64 a buffer
     const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       // Archivo no existe, se creará nuevo
     }
 
-    // Subir a GitHub
+    // Subir a GitHub (repo de imagenes separado)
     const githubRes = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
       {
@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           message: `Upload: ${filename}`,
           content: buffer.toString('base64'),
+          branch: 'main',
           ...(sha ? { sha } : {}),
         }),
       }
@@ -95,11 +96,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const localPath = `/images/${filename}`;
+    // CDN URL via jsDelivr (no trigger deploys, global CDN)
+    const cdnUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}`;
 
     return NextResponse.json({
       success: true,
-      path: localPath,
+      path: cdnUrl,
+      url: cdnUrl,
       filename,
     });
   } catch (error) {
