@@ -20,12 +20,13 @@ export async function generateStaticParams() {
   return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const baseUrl = 'https://nicaraguainformate.com';
-  const url = `${baseUrl}/noticias/${params.slug}`;
+  const url = `${baseUrl}/noticias/${slug}`;
 
   try {
-    const noticia = await getNewsBySlug(params.slug);
+    const noticia = await getNewsBySlug(slug);
     if (!noticia) {
       return {
         title: 'Noticia no encontrada | Nicaragua Informate',
@@ -65,8 +66,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function NewsPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   try {
     const [noticia, noticiasTrending, masLeidas] = await Promise.all([
