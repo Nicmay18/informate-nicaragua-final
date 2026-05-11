@@ -19,19 +19,13 @@ export default function StickyRadio() {
   const [muted,     setMuted]     = useState(false);
   const [open,      setOpen]      = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
     try {
       if (sessionStorage.getItem('radio-dismissed')) setDismissed(true);
     } catch {}
-  }, [mounted]);
+  }, []);
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = muted ? 0 : volume;
@@ -53,12 +47,6 @@ export default function StickyRadio() {
   function dismiss() {
     audioRef.current?.pause(); setPlaying(false); setDismissed(true);
     sessionStorage.setItem('radio-dismissed', '1');
-  }
-
-  // Siempre reservar espacio para evitar CLS
-  // En SSR/mount inicial se muestra; dismissed se oculta visualmente
-  if (!mounted) {
-    return <div style={{ height: 58, width: '100%' }} aria-hidden />;
   }
 
   if (dismissed) {

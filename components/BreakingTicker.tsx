@@ -60,7 +60,7 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
           key={current + (paused ? '-paused' : '')}
           style={{
             height: '100%',
-            width: paused ? `${((timerRef.current ? 0 : 100))}%` : '100%',
+            width: paused ? `${timerRef.current ? 0 : 100}%` : '100%',
             background: 'rgba(255,255,255,0.65)',
             animation: paused ? 'none' : `ticker-progress ${DURATION_MS}ms linear forwards`,
           }}

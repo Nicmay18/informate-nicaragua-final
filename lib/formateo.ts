@@ -60,11 +60,6 @@ function esLista(linea: string): boolean {
   return /^[\-\*•✓✅⚠️🔍]\s/.test(l) || /^\d+[\.)]\s/.test(l);
 }
 
-function esRecomendacion(linea: string): boolean {
-  const l = linea.trim().toLowerCase();
-  return l.includes('recomendaci') || l.includes('consejo') || l.includes('tip') || l.includes('precaucion');
-}
-
 /* ================================================================
    FORMATEADOR PRINCIPAL
    ================================================================ */

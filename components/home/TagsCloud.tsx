@@ -3,8 +3,6 @@ const TAGS = [
   '#Economía', '#Cultura', '#Clima', '#Espectáculos', '#Centroamérica',
 ];
 
-import { useMemo } from 'react';
-import Link from 'next/link';
 import { Hash } from 'lucide-react';
 
 export default function TagsCloud() {

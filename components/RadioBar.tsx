@@ -76,6 +76,8 @@ export default function RadioBar() {
       setPlaying(false);
     }, 10000);
     
+    if (!audioRef.current) return;
+
     audioRef.current.src = EMISORAS[idx].url;
     
     audioRef.current.play()
