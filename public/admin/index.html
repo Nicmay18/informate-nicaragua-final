@@ -1329,7 +1329,7 @@ ${descripcion}
         // 4. Guardar ruta local
         document.getElementById('imagenUrl').value = localPath;
         actualizarPreview();
-        showToast('Imagen subida a GitHub. Ahora haz Redeploy en Vercel para que la imagen esté disponible en el sitio.', 'success');
+        showToast('Imagen subida. Disponible inmediatamente via CDN.', 'success');
       } catch (err) {
         console.error('Error procesando imagen:', err);
         showToast('Error: ' + err.message, 'error');
@@ -1479,8 +1479,8 @@ ${descripcion}
     async function uploadImageToGitHub(blob, filename) {
       const token = localStorage.getItem('admin_github_token') || '';
       const owner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
-      const repo = localStorage.getItem('admin_github_repo') || 'informate-nicaragua-final';
-      const path = (localStorage.getItem('admin_github_path') || 'public/images/').replace(/\/$/, '') + '/';
+      const repo = localStorage.getItem('admin_github_repo') || 'informate-images';
+      const path = (localStorage.getItem('admin_github_path') || 'images/').replace(/\/$/, '') + '/';
 
       if (!token) throw new Error('No hay token de GitHub configurado. Ve a Configuración > GitHub.');
 
@@ -1507,7 +1507,7 @@ ${descripcion}
       const body = {
         message: `Subir imagen: ${filename}`,
         content: base64,
-        branch: localStorage.getItem('admin_github_branch') || 'master'
+        branch: localStorage.getItem('admin_github_branch') || 'main'
       };
       if (sha) body.sha = sha;
 
@@ -1529,8 +1529,8 @@ ${descripcion}
       const data = await res.json().catch(() => ({}));
       console.log('[GitHub Upload] OK:', data.content?.html_url || url);
 
-      // Devolver ruta local para Firestore
-      return `/images/${filename}`;
+      // Devolver URL CDN (jsDelivr) — disponible inmediatamente, sin redeploy
+      return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}${filename}`;
     }
 
     // SEO Preview
