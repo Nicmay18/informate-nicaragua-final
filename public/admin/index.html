@@ -768,7 +768,7 @@
                 </div>
                 <div class="form-group">
                   <label class="checkbox-wrapper" style="width: fit-content;">
-                    <input type="checkbox" id="publicado">
+                    <input type="checkbox" id="publicado" onchange="actualizarTextoBotonGuardar()">
                     <div class="checkbox-content"><h4>🌐 Publicar en sitio</h4><p>Visible en la página principal</p></div>
                   </label>
                 </div>
@@ -1990,6 +1990,12 @@ ${descripcion}
       document.getElementById('btnCancelarEdicion').style.display = 'none';
       document.getElementById('enviarTelegram').checked = true; document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
+    };
+
+    window.actualizarTextoBotonGuardar = function() {
+      const publicado = document.getElementById('publicado').checked;
+      const btnTexto = document.getElementById('btnGuardarTexto');
+      if (btnTexto) btnTexto.textContent = publicado ? 'Publicar Noticia' : 'Guardar Borrador';
     };
 
     window.vistaPreviaNoticia = function() {
