@@ -10,7 +10,7 @@ import { cleanImageUrl } from '@/lib/image-utils';
 
 const MAX_SLIDES = 4;
 const FADE_DURATION_MS = 300;
-const AUTOPLAY_DELAY_MS = 5500;
+const AUTOPLAY_DELAY_MS = 4000;
 const SWIPE_THRESHOLD_PX = 48;
 
 const CONTROL_BUTTON_STYLE: React.CSSProperties = {

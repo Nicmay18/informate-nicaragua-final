@@ -14,7 +14,7 @@ import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -33,7 +33,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <AutoRefresh intervalSec={60} />
+      <AutoRefresh intervalSec={30} />
       <Header activeCategory="Todas" />
 
       {/* Breaking Ticker */}
