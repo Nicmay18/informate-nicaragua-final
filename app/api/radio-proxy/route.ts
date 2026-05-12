@@ -1,7 +1,7 @@
-// app/api/radio-proxy/route.js
+// app/api/radio-proxy/route.ts
 import { NextResponse } from 'next/server';
 
-const RADIOS_NICARAGUA = {
+const RADIOS_NICARAGUA: Record<string, string> = {
   'radioya': 'https://stream.ecmdigital.net:8010/radioya',
   'buenisima': 'https://stream.zeno.fm/f24tdg9bq68uv',
   'pachanguera': 'https://stream.zeno.fm/8qhxqhx2gg0uv',
@@ -9,7 +9,7 @@ const RADIOS_NICARAGUA = {
   'vivafm': 'https://stream.zeno.fm/aqf8fnx2gg0uv'
 };
 
-export async function GET(request) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const radio = searchParams.get('radio');
 
@@ -67,7 +67,7 @@ export async function GET(request) {
     console.error('Error streaming:', error);
     return NextResponse.json({ 
       error: 'Error al conectar con la radio',
-      details: error.message 
+      details: error instanceof Error ? error.message : String(error)
     }, { status: 500 });
   }
 }
