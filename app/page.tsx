@@ -25,7 +25,7 @@ export default async function HomePage() {
   }
 
   const destacadas = noticias.slice(0, 5);
-  const recientes = noticias.slice(5);
+  const recientes = noticias;
   const tickerNews = noticias.slice(0, 8);
 
   return (
