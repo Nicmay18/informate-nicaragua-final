@@ -5,7 +5,7 @@
       "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }]
     }
   ],
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf .next node_modules package-lock.json && npm install && npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "github": {
