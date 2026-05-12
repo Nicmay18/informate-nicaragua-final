@@ -15,7 +15,7 @@ import SocialJoinButtons from '@/components/SocialJoinButtons';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 1;
+export const revalidate = 60;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];

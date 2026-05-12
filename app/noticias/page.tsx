@@ -8,7 +8,7 @@ import SocialJoinButtons from '@/components/SocialJoinButtons';
 import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 1;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = 'https://nicaraguainformate.com';

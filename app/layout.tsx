@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  verification: {
+    google: 'TU_CODIGO_DE_VERIFICACION_AQUI', // Reemplaza con tu código real de Google Search Console
+  },
   openGraph: {
     type: 'website',
     locale: 'es_NI',

@@ -32,8 +32,8 @@ service cloud.firestore {
       // UPDATE: completamente abierto para arreglar el problema de edición
       allow update: if true;
 
-      // DELETE: solo admins (¡cuidado con dejarlo en true!)
-      allow delete: if true;
+      // DELETE: solo admins autenticados
+      allow delete: if request.auth != null && request.auth.token.admin == true;
     }
 
     // ========== NEWSLETTER SUBSCRIBERS ==========
@@ -75,14 +75,14 @@ service cloud.firestore {
     }
 
     // ========== CONFIGURACIÓN ==========
-    // ⚠️ NUNCA dejes write en true: cualquiera podría destruir tu app
+    // Solo admins pueden escribir en configuración
     match /config/{docId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
     }
     match /configuracion/{docId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
     }
   }
 }
