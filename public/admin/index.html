@@ -1356,9 +1356,9 @@ ${descripcion}
         showLoading(true, 'Subiendo a GitHub...');
         const cdnUrl = await uploadImageToGitHub(webpBlob, filename);
 
-        // 5. Guardar URL CDN para publicación (jsDelivr — tarda ~1 min en propagar)
+        // 5. Guardar URL raw de GitHub (disponible inmediatamente)
         document.getElementById('imagenUrl').value = cdnUrl;
-        showToast('Imagen subida. El preview se ve ahora; CDN se sincroniza en unos segundos.', 'success');
+        showToast('Imagen subida. Disponible inmediatamente.', 'success');
       } catch (err) {
         console.error('Error procesando imagen:', err);
         showToast('Error: ' + err.message, 'error');
@@ -1558,8 +1558,8 @@ ${descripcion}
 
       const data = await res.json().catch(() => ({}));
       console.log('[GitHub Upload] OK:', data.content?.html_url || url);
-      // Devolver URL CDN (jsDelivr) — optimizado para producción
-      return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}${filename}`;
+      // Devolver URL raw de GitHub — disponible INMEDIATAMENTE tras upload
+      return `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}${filename}`;
     }
 
     // SEO Preview
