@@ -1,9 +1,9 @@
+import { Hash } from 'lucide-react';
+
 const TAGS = [
   '#Nicaragua', '#Estelí', '#Sucesos', '#Deportes', '#Política',
   '#Economía', '#Cultura', '#Clima', '#Espectáculos', '#Centroamérica',
 ];
-
-import { Hash } from 'lucide-react';
 
 export default function TagsCloud() {
   return (
