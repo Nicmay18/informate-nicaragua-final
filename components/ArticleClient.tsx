@@ -366,7 +366,7 @@ export default function ArticleClient({
 
         {/* ===== FEATURED IMAGE ===== */}
         {noticia.imagen && (
-          <figure className="featured-figure">
+          <figure className="featured-figure" style={{ margin: '0 0 40px' }}>
             {isLuto ? (
               <LutoImage
                 src={noticia.imagen || '/logo.png'}
@@ -375,14 +375,15 @@ export default function ArticleClient({
                 className="featured-image-wrapper"
               />
             ) : (
-              <div className="featured-image-wrapper">
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 12, overflow: 'hidden' }}>
                 <Image
                   src={noticia.imagen || '/logo.png'}
                   alt={noticia.titulo}
                   fill
-                  className="featured-image"
                   sizes="(max-width: 768px) 100vw, 800px"
                   priority
+                  style={{ objectFit: 'cover' }}
+                  unoptimized={noticia.imagen?.includes('cdn.jsdelivr.net') || noticia.imagen?.includes('raw.githubusercontent.com')}
                 />
               </div>
             )}
@@ -466,6 +467,7 @@ export default function ArticleClient({
                         quality={75}
                         style={{ objectFit: 'cover' }}
                         sizes="(max-width: 768px) 100vw, 260px"
+                        unoptimized={n.imagen?.includes('cdn.jsdelivr.net') || n.imagen?.includes('raw.githubusercontent.com')}
                       />
                     </div>
                     <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>

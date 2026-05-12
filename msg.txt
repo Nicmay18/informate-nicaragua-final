@@ -1,1 +1,1 @@
-fix-admin-raw-github-url-immediate  
+fix-hero-image-style-cdn  
