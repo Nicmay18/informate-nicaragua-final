@@ -1,1 +1,1 @@
-force-nextjs-vercel-config  
+fix-admin-raw-github-url-immediate  

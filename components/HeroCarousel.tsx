@@ -72,7 +72,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
     <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
       {/* Hero Main - 2/3 */}
       <section
-        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 480 }}
+        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 420 }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
@@ -93,8 +93,8 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             loading={current === 0 ? undefined : 'lazy'}
             quality={75}
             sizes="(max-width: 1024px) 100vw, 66vw"
-            className="object-cover object-[center_30%] transition-opacity duration-300"
-            style={{ opacity: fading ? 0 : 1 }}
+            style={{ objectFit: 'cover', objectPosition: 'center 30%', opacity: fading ? 0 : 1 }}
+            unoptimized={img.includes('cdn.jsdelivr.net') || img.includes('raw.githubusercontent.com')}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
