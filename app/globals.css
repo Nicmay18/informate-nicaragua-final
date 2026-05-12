@@ -1093,7 +1093,7 @@ a:hover { color: var(--accent-dark); }
   font-family: var(--font-inter);
   font-size: 24px;
   font-weight: 800;
-  color: var(--primary);
+  color: #111111;
   margin: 40px 0 20px;
   line-height: 1.3;
 }

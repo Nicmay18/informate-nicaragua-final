@@ -2031,6 +2031,11 @@ ${descripcion}
             ${resumen ? `<p style="font-size:18px;font-weight:600;line-height:1.6;color:#5a5a6e;margin-bottom:24px;">${resumen}</p>` : ''}
             <div style="margin-top:16px;">${contenidoRenderizado}</div>
           </div>
+          <style>
+            #previewModalBody h2 { color: #111111 !important; font-family: Inter, system-ui, sans-serif !important; font-size: 22px; font-weight: 800; margin: 28px 0 14px; }
+            #previewModalBody p { margin: 0 0 16px; }
+            #previewModalBody blockquote { border-left: 4px solid #c41e3a; padding-left: 16px; margin: 20px 0; color: #5a5a6e; font-style: italic; }
+          </style>
         </div>
       `;
       document.getElementById('previewModalBody').innerHTML = html;
