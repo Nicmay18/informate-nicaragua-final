@@ -6,6 +6,7 @@ import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
+import CookieBanner from '@/components/CookieBanner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -85,6 +86,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ClientOnly>
         <ClientOnly>
           <BottomNav />
+        </ClientOnly>
+        <ClientOnly>
+          <CookieBanner />
         </ClientOnly>
       </body>
     </html>
