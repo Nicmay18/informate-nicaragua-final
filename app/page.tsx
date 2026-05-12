@@ -12,7 +12,7 @@ import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 60;
+export const revalidate = 1;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
