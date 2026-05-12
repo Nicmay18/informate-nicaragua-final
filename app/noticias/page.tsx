@@ -7,7 +7,7 @@ import DonationCard from '@/components/DonationCard';
 import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = 'https://nicaraguainformate.com';
@@ -40,6 +40,7 @@ export default async function NoticiasPage() {
 
   try {
     noticias = await getNews(50);
+    console.log(`[NoticiasPage] Cargadas ${noticias.length} noticias desde Firebase`);
   } catch (error) {
     console.error('[NoticiasPage] Error:', error);
   }

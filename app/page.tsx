@@ -14,7 +14,7 @@ import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 45;
+export const revalidate = 10;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -22,6 +22,7 @@ export default async function HomePage() {
 
   try {
     [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
+    console.log(`[HomePage] Cargadas ${noticias.length} noticias, ${masLeidas.length} más leídas`);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
