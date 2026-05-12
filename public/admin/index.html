@@ -1523,33 +1523,46 @@ ${descripcion}
       });
 
       const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}${filename}`;
+      const branch = localStorage.getItem('admin_github_branch') || 'main';
 
-      // Verificar si el archivo ya existe
-      let sha = null;
-      try {
-        const checkRes = await fetch(url, { headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
-        if (checkRes.status === 200) {
-          const checkData = await checkRes.json();
-          sha = checkData.sha;
-        }
-      } catch (e) { /* archivo no existe */ }
-
-      const body = {
-        message: `Subir imagen: ${filename}`,
-        content: base64,
-        branch: localStorage.getItem('admin_github_branch') || 'main'
-      };
-      if (sha) body.sha = sha;
-
-      const res = await fetch(url, {
+      // Intentar PUT directamente (evita 404 de pre-check en consola)
+      let res = await fetch(url, {
         method: 'PUT',
         headers: {
           'Authorization': `token ${token}`,
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({
+          message: `Subir imagen: ${filename}`,
+          content: base64,
+          branch
+        })
       });
+
+      // Si falla porque el archivo ya existe, obtener sha y reintentar
+      if (res.status === 422) {
+        try {
+          const checkRes = await fetch(url, { headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
+          if (checkRes.status === 200) {
+            const checkData = await checkRes.json();
+            res = await fetch(url, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                message: `Actualizar imagen: ${filename}`,
+                content: base64,
+                sha: checkData.sha,
+                branch
+              })
+            });
+          }
+        } catch (e) { /* ignorar */ }
+      }
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
@@ -1867,7 +1880,8 @@ ${descripcion}
 
         if (esNueva) {
           let progress = 30; progressBar.style.width = progress + '%';
-          if (enviarTelegram) {
+          const tgToken = localStorage.getItem('admin_tg_token') || '';
+          if (enviarTelegram && tgToken) {
             document.getElementById('statusRedesTitulo').textContent = 'Enviando a Telegram...';
             document.getElementById('statusRedesTexto').textContent = 'Conectando con bot...';
             progress = 60; progressBar.style.width = progress + '%';
@@ -1879,6 +1893,9 @@ ${descripcion}
               showToast('Error Telegram: ' + err.message, 'warning');
               document.getElementById('telegramStatus').textContent = '❌ Error Telegram';
             }
+          } else if (enviarTelegram && !tgToken) {
+            showToast('Telegram: No hay token configurado. Ve a Configuración > Telegram Bot.', 'warning');
+            document.getElementById('telegramStatus').textContent = '⚠️ Sin token de Telegram';
           }
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
@@ -1996,7 +2013,7 @@ ${descripcion}
       document.getElementById('subtituloFormulario').textContent = 'Redacción profesional optimizada para AdSense y SEO.';
       document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span>';
       document.getElementById('btnCancelarEdicion').style.display = 'none';
-      document.getElementById('enviarTelegram').checked = true; document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
+      document.getElementById('enviarTelegram').checked = !!(localStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
     };
 
