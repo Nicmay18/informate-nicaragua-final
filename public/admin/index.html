@@ -1548,10 +1548,10 @@ ${descripcion}
       }
 
       const data = await res.json().catch(() => ({}));
-      console.log('[GitHub Upload] OK:', data.content?.html_url || url);
-
-      // Devolver URL CDN (jsDelivr) — disponible inmediatamente, sin redeploy
-      return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}${filename}`;
+      // Usar download_url (raw GitHub) para preview inmediato; jsdelivr tiene delay de cache
+      const rawUrl = data.content?.download_url || `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}${filename}`;
+      console.log('[GitHub Upload] OK:', rawUrl);
+      return rawUrl;
     }
 
     // SEO Preview
