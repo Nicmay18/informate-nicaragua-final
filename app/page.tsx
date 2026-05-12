@@ -14,7 +14,7 @@ import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 60;
+export const revalidate = 45;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];

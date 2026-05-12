@@ -1,1 +1,1 @@
-force-rebuild-vercel  
+remove-vercel-json-force-clean  
