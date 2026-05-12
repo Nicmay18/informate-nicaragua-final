@@ -1655,27 +1655,37 @@ ${descripcion}
       const text = (e.clipboardData || window.clipboardData).getData('text/plain');
       if (!text) return;
 
-      const bloques = text.split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
-      const formateado = bloques.map(bloque => {
-        const lineas = bloque.split('\n').map(l => l.trim()).filter(Boolean);
-        const textoPlano = lineas.join(' ');
+      const lineas = text.split('\n').map(l => l.trim()).filter(Boolean);
+      const resultado = [];
+      let bufferParrafo = [];
 
-        // Detectar subtítulo: línea corta (≤12 palabras), sin punto final, sin coma, primera letra mayúscula
-        const palabras = textoPlano.split(/\s+/).length;
-        const sinPuntoFinal = !/[.!?;:,]$/.test(textoPlano);
-        const empiezaMayus = /^[A-ZÁÉÍÓÚÜÑ]/.test(textoPlano);
-        const esSubtitulo = palabras <= 12 && sinPuntoFinal && empiezaMayus && !textoPlano.includes('"');
+      function flushParrafo() {
+        if (bufferParrafo.length === 0) return;
+        let textoPlano = bufferParrafo.join(' ');
+        // <strong> en textos entre comillas
+        textoPlano = textoPlano.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
+        textoPlano = textoPlano.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>"$1"</strong>');
+        resultado.push(`<p>${textoPlano}</p>`);
+        bufferParrafo = [];
+      }
+
+      for (const linea of lineas) {
+        const palabras = linea.split(/\s+/).length;
+        const sinPuntoFinal = !/[.!?;:,]$/.test(linea);
+        const empiezaMayus = /^[A-ZÁÉÍÓÚÜÑ]/.test(linea);
+        // Subtítulo: corto (≤12 palabras), sin signo de puntuación al final, empieza con mayúscula, no comillas
+        const esSubtitulo = palabras <= 12 && sinPuntoFinal && empiezaMayus && !linea.includes('"') && !linea.includes('\u201c');
 
         if (esSubtitulo) {
-          return `<h2>${textoPlano}</h2>`;
+          flushParrafo();
+          resultado.push(`<h2>${linea}</h2>`);
+        } else {
+          bufferParrafo.push(linea);
         }
+      }
+      flushParrafo();
 
-        // Párrafo: poner <strong> en textos entre comillas
-        let parrafo = textoPlano.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
-        parrafo = parrafo.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>"$1"</strong>'); // comillas tipográficas
-
-        return `<p>${parrafo}</p>`;
-      }).join('\n\n');
+      const formateado = resultado.join('\n\n');
 
       const textarea = document.getElementById('contenido');
       const start = textarea.selectionStart;
@@ -2270,68 +2280,6 @@ ${descripcion}
       }
       actualizarContadorPalabras();
       showToast('Plantilla periodística cargada', 'success');
-    };
-
-    // REDACCIÓN IA MEJORADA
-    // Función para formatear automáticamente texto pegado
-    window.formatearTextoPegado = function(event) {
-      try {
-        event.preventDefault();
-        let texto = event.clipboardData.getData('text/plain');
-        if (!texto || texto.length < 100) return;
-
-        // Limpiar texto primero
-        texto = texto.trim();
-        
-        // Separar párrafos (dobles saltos de línea = nuevo párrafo)
-        let parrafos = texto.split(/\n\s*\n/);
-        let resultado = '';
-        
-        parrafos.forEach(parrafo => {
-          if (parrafo.trim()) {
-            // Negritas para nombres propios (inician con mayúscula)
-            parrafo = parrafo.replace(/[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g, '<b>$&</b>');
-            
-            // Negritas para términos clave
-            const palabrasClave = ['falleció', 'murió', 'herido', 'accidente', 'incidente', 'autoridades', 'policía', 'tragedia', 'víctima', 'conductor', 'homicidio imprudente', 'omisión de auxilio'];
-            palabrasClave.forEach(palabra => {
-              const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-              parrafo = parrafo.replace(regex, `<b>${palabra}</b>`);
-            });
-            
-            // Negritas para lugares específicos
-            const lugares = ['Rosita', 'Nuevo Amanecer', 'Caribe Norte', 'Región Autónoma'];
-            lugares.forEach(lugar => {
-              const regex = new RegExp(`\\b${lugar}\\b`, 'g');
-              parrafo = parrafo.replace(regex, `<b>${lugar}</b>`);
-            });
-            
-            resultado += `<p>${parrafo.trim()}</p>\n\n`;
-          }
-        });
-
-        // Insertar en el textarea
-        const textarea = document.getElementById('contenido');
-        const cursorPos = textarea.selectionStart;
-        const textoAnterior = textarea.value;
-        
-        textarea.value = textoAnterior.substring(0, cursorPos) + resultado + textoAnterior.substring(textarea.selectionEnd);
-        
-        // Actualizar contadores
-        actualizarContadorPalabras();
-        actualizarSeoPreview();
-        
-        showToast('✅ Texto formateado profesionalmente', 'success');
-        
-      } catch (error) {
-        console.error('Error formateando texto:', error);
-        // Si falla el formateo, pegar texto normal
-        const texto = event.clipboardData.getData('text/plain');
-        const textarea = document.getElementById('contenido');
-        const cursorPos = textarea.selectionStart;
-        textarea.value = textarea.value.substring(0, cursorPos) + texto + textarea.value.substring(textarea.selectionEnd);
-        actualizarContadorPalabras();
-      }
     };
 
     window.cargarPlantillaRedaccion = async function() {
