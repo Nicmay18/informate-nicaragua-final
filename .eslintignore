@@ -1,7 +1,0 @@
-node_modules/
-public/js/vendor/
-public/assets/
-src/js/
-lib/firebase-admin.js
-src/js/**/*.test.js
-app/api/radio-proxy/route.js

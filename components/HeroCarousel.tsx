@@ -72,7 +72,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
     <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
       {/* Hero Main - 2/3 */}
       <section
-        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '21/9', maxHeight: 480 }}
+        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 480 }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={e => { touchX.current = e.touches[0].clientX; }}

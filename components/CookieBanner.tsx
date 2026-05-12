@@ -5,14 +5,12 @@ import { useState, useEffect } from 'react';
 type ConsentStatus = 'pending' | 'accepted' | 'rejected';
 
 export default function CookieBanner() {
-  const [consent, setConsent] = useState<ConsentStatus>('pending');
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('ni_cookie_consent');
     if (saved === 'accepted' || saved === 'rejected') {
-      setConsent(saved);
       setShowBanner(false);
     } else {
       setShowBanner(true);
@@ -21,7 +19,6 @@ export default function CookieBanner() {
 
   const handleAccept = () => {
     localStorage.setItem('ni_cookie_consent', 'accepted');
-    setConsent('accepted');
     setShowBanner(false);
     // Cargar Analytics y AdSense
     loadAnalytics();
@@ -29,7 +26,6 @@ export default function CookieBanner() {
 
   const handleReject = () => {
     localStorage.setItem('ni_cookie_consent', 'rejected');
-    setConsent('rejected');
     setShowBanner(false);
   };
 

@@ -787,7 +787,7 @@ a:hover { color: var(--accent-dark); }
    FOOTER
    ================================================================ */
 .site-footer {
-  background: var(--primary);
+  background: #1a1a2e;
   color: #fff;
   padding: 48px 0 24px;
   margin-top: 48px;

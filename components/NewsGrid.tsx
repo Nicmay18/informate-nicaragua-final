@@ -69,15 +69,26 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         @media(max-width:480px){
           .ng-card { grid-template-columns:100px 1fr; }
         }
+        [data-theme="dark"] .ng-card { border-bottom-color: #333; }
+        [data-theme="dark"] .ng-card:hover { background: #1a1a1a; }
+        [data-theme="dark"] .ng-title { color: #f5f5f5; }
+        [data-theme="dark"] .ng-excerpt { color: #a3a3a3; }
+        [data-theme="dark"] .ng-meta { color: #737373; }
+        [data-theme="dark"] .ng-cat-btn { background: #1a1a1a; border-color: #333; color: #a3a3a3; }
+        [data-theme="dark"] .ng-cat-btn.active { background: #f5f5f5; color: #1a1a2e; border-color: #f5f5f5; }
+        [data-theme="dark"] .ng-load-btn { background: #1a1a1a; border-color: #333; color: #f5f5f5; }
+        [data-theme="dark"] .ng-section-header { border-bottom-color: #f5f5f5 !important; }
+        [data-theme="dark"] .ng-section-title { color: #f5f5f5 !important; }
+        [data-theme="dark"] .ng-count { color: #737373 !important; }
       `}</style>
 
       {/* Section Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
-        <h2 style={{ fontFamily: 'var(--font-merri)', fontSize: 20, fontWeight: 900, color: '#1a1a2e', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
+      <div className="ng-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
+        <h2 className="ng-section-title" style={{ fontFamily: 'var(--font-merri)', fontSize: 20, fontWeight: 900, color: '#1a1a2e', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
           <span style={{ width: 4, height: 24, background: '#c41e3a', borderRadius: 2, display: 'inline-block' }} />
           Últimas Noticias
         </h2>
-        <span style={{ fontSize: 13, color: '#8a8a9e', fontWeight: 500 }}>{filtered.length} artículos</span>
+        <span className="ng-count" style={{ fontSize: 13, color: '#8a8a9e', fontWeight: 500 }}>{filtered.length} artículos</span>
       </div>
 
       {/* Filter Tabs */}
