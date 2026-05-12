@@ -3,6 +3,7 @@ import NewsGrid from '@/components/NewsGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AutoRefresh from '@/components/AutoRefresh';
+import DonationCard from '@/components/DonationCard';
 import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -59,7 +60,12 @@ export default async function NoticiasPage() {
         </div>
 
         {noticias.length > 0 ? (
-          <NewsGrid noticias={noticias} />
+          <>
+            <NewsGrid noticias={noticias} />
+            <div style={{ marginTop: 40, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto' }}>
+              <DonationCard />
+            </div>
+          </>
         ) : (
           <div style={{ textAlign: 'center', padding: '64px 20px', color: '#666', border: '1px solid #e5e7eb', borderRadius: 12, background: '#fafafa' }}>
             <div style={{ fontSize: 44, marginBottom: 14 }}>📰</div>

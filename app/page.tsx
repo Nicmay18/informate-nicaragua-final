@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import AutoRefresh from '@/components/AutoRefresh';
+import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -71,6 +72,7 @@ export default async function HomePage() {
           </div>
           <NewsletterForm />
           <SocialGrid />
+          <DonationCard />
         </aside>
       </main>
 
