@@ -1341,15 +1341,24 @@ ${descripcion}
 
         // 2. Procesar collage (marca de agua + cinta de luto si aplica)
         const webpBlob = await procesarImagenCollage(file, { conLuto });
+
+        // 3. Mostrar preview INMEDIATO con blob local (no espera GitHub)
+        const blobUrl = URL.createObjectURL(webpBlob);
+        const previewEl = document.getElementById('preview');
+        const containerEl = document.getElementById('imagePreviewContainer');
+        if (previewEl && containerEl) {
+          previewEl.src = blobUrl;
+          containerEl.classList.add('active');
+          document.getElementById('uploadZone').style.display = 'none';
+        }
+
+        // 4. Subir a GitHub en segundo plano
         showLoading(true, 'Subiendo a GitHub...');
+        const cdnUrl = await uploadImageToGitHub(webpBlob, filename);
 
-        // 3. Subir a GitHub
-        const localPath = await uploadImageToGitHub(webpBlob, filename);
-
-        // 4. Guardar ruta local
-        document.getElementById('imagenUrl').value = localPath;
-        actualizarPreview();
-        showToast('Imagen subida. Disponible inmediatamente via CDN.', 'success');
+        // 5. Guardar URL CDN para publicación (jsDelivr — tarda ~1 min en propagar)
+        document.getElementById('imagenUrl').value = cdnUrl;
+        showToast('Imagen subida. El preview se ve ahora; CDN se sincroniza en unos segundos.', 'success');
       } catch (err) {
         console.error('Error procesando imagen:', err);
         showToast('Error: ' + err.message, 'error');
@@ -1548,10 +1557,9 @@ ${descripcion}
       }
 
       const data = await res.json().catch(() => ({}));
-      // Usar download_url (raw GitHub) para preview inmediato; jsdelivr tiene delay de cache
-      const rawUrl = data.content?.download_url || `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}${filename}`;
-      console.log('[GitHub Upload] OK:', rawUrl);
-      return rawUrl;
+      console.log('[GitHub Upload] OK:', data.content?.html_url || url);
+      // Devolver URL CDN (jsDelivr) — optimizado para producción
+      return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}${filename}`;
     }
 
     // SEO Preview
