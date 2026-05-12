@@ -69,3 +69,14 @@ export const FALLBACK_IMAGE = '/logo.png';
 export function isValidCategory(category: string): category is Category {
   return CATEGORIES.some(cat => cat.name === category);
 }
+
+/** Keywords que indican noticia de luto/fallecimiento */
+const LUTO_KEYWORDS = ['muere', 'fallece', 'falleció', 'fallecimiento', 'muerto', 'muerta', 'luto', 'sepelio', 'funeral', 'muert', 'víctima mortal', 'asesinad', 'homicidio', 'descansa en paz', 'd.e.p', 'dep.', ' DEP '];
+
+/**
+ * Detecta si una noticia es de luto/fallecimiento basado en título y contenido
+ */
+export function isLutoNews(noticia: Noticia): boolean {
+  const text = `${noticia.titulo} ${noticia.resumen} ${noticia.contenido || ''}`.toLowerCase();
+  return LUTO_KEYWORDS.some(kw => text.includes(kw.toLowerCase()));
+}

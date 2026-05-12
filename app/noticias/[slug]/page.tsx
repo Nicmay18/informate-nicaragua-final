@@ -8,6 +8,7 @@ import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas } from '@/lib/data';
+import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
@@ -43,26 +44,45 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description,
       alternates: { canonical: url },
       openGraph: {
-        type: 'article',
-        locale: 'es_NI',
+        title: noticia.titulo,
+        description: noticia.resumen,
         url,
         siteName: 'Nicaragua Informate',
-        title,
-        description,
-        images: [{ url: image }],
+        images: [
+          {
+            url: image,
+            alt: noticia.titulo,
+            width: 1200,
+            height: 630,
+          },
+        ],
+        locale: 'es_NI',
+        type: 'article',
+        publishedTime: noticia.fecha,
+        modifiedTime: noticia.fecha,
+        section: noticia.categoria || 'Noticias',
+        tags: noticia.tags || [noticia.categoria],
       },
       twitter: {
         card: 'summary_large_image',
-        title,
-        description,
+        title: noticia.titulo,
+        description: noticia.resumen,
         images: [image],
+        site: '@nicaraguainformate',
+        creator: '@nicaraguainformate',
+      },
+      other: {
+        'whatsapp:title': noticia.titulo,
+        'whatsapp:description': noticia.resumen,
+        'whatsapp:image': image,
+        'telegram:title': noticia.titulo,
+        'telegram:description': noticia.resumen,
+        'telegram:image': image,
       },
     };
-  } catch {
-    return {
-      title: 'Noticia | Nicaragua Informate',
-      alternates: { canonical: url },
-    };
+  } catch (e) {
+    console.error('generateMetadata error:', e);
+    return {};
   }
 }
 
@@ -79,6 +99,12 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     if (!noticia) {
       return notFound();
     }
+
+    const image = noticia.imagen?.startsWith('http')
+      ? noticia.imagen
+      : `https://nicaraguainformate.com${noticia.imagen || '/logo.png'}`;
+    
+    const isLuto = isLutoNews(noticia);
 
     const related = await getRelatedNews(noticia.categoria, noticia.slug, 3);
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
@@ -101,6 +127,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
             <ArticleClient
               noticia={noticia}
               related={related}
+              isLuto={isLuto}
               adSlot={<AdSlot slot="article-in-content" width={336} height={280} />}
             />
           </div>

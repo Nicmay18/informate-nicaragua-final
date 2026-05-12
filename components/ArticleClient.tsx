@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
+import SocialJoinButtons from '@/components/SocialJoinButtons';
+import LutoImage from '@/components/LutoImage';
 
 /* ================================================================
    TIPOS
@@ -28,6 +30,13 @@ interface NoticiaProps {
   fecha: string;
   autor?: string;
   vistas?: number;
+}
+
+interface ArticleClientProps {
+  noticia: NoticiaProps;
+  related: NoticiaProps[];
+  isLuto?: boolean;
+  adSlot?: React.ReactNode;
 }
 
 /* ================================================================
@@ -292,12 +301,9 @@ function extractTags(categoria: string, titulo: string): string[] {
 export default function ArticleClient({
   noticia,
   related = [],
+  isLuto = false,
   adSlot,
-}: {
-  noticia: NoticiaProps;
-  related?: NoticiaProps[];
-  adSlot?: React.ReactNode;
-}) {
+}: ArticleClientProps) {
   if (!noticia) {
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
   }
@@ -361,18 +367,26 @@ export default function ArticleClient({
 
         {/* ===== FEATURED IMAGE ===== */}
         {noticia.imagen && (
-          <figure className="featured-image-wrap">
-            <div className="featured-image">
-              <Image
-                src={noticia.imagen}
+          <figure className="featured-figure">
+            {isLuto ? (
+              <LutoImage
+                src={noticia.imagen || '/logo.png'}
                 alt={noticia.titulo}
-                fill
-                loading="eager"
-                quality={85}
-                style={{ objectFit: 'cover' }}
-                sizes="(max-width: 800px) 100vw, 800px"
+                nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
+                className="featured-image-wrapper"
               />
-            </div>
+            ) : (
+              <div className="featured-image-wrapper">
+                <Image
+                  src={noticia.imagen || '/logo.png'}
+                  alt={noticia.titulo}
+                  fill
+                  className="featured-image"
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  priority
+                />
+              </div>
+            )}
             <figcaption className="featured-caption">
               {noticia.titulo}
               <span className="featured-credit">Foto: Nicaragua Informate</span>
@@ -419,6 +433,9 @@ export default function ArticleClient({
             <CopyButton url={url} />
           </div>
         </div>
+
+        {/* ===== FOLLOW US ===== */}
+        <SocialJoinButtons />
 
         {/* ===== AUTHOR BIO ===== */}
         <div className="author-box-pro" style={{ textAlign: 'center', padding: '32px 24px' }}>

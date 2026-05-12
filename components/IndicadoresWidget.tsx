@@ -66,6 +66,7 @@ export default async function IndicadoresWidget() {
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 16px', borderBottom: '1px solid var(--border-light)' }}>
             <div>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{row.label}</div>
+              <p suppressHydrationWarning>Actualizado: {rates ? new Date().toLocaleDateString('es-NI') : 'Cargando...'}</p>
               <div style={{ fontSize: 10, color: 'var(--ink-faint)', marginTop: 1 }}>Tasa de referencia</div>
             </div>
             <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>

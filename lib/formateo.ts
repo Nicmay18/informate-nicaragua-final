@@ -15,24 +15,45 @@ const MAX_PARRAFO = 320;
 const PALABRAS_POR_MIN = 200;
 
 /**
+ * Parsea una fecha de forma determinista sin depender de la zona horaria local.
+ * Soporta strings ISO (YYYY-MM-DDTHH:mm:ss.sssZ) y YYYY-MM-DD.
+ */
+function parseDateParts(dateStr: string | Date): { day: number; month: number; year: number } | null {
+  const str = typeof dateStr === 'string' ? dateStr : dateStr.toISOString();
+  // Extraer YYYY-MM-DD directamente del string para evitar timezone shifts
+  const m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    return {
+      year: parseInt(m[1], 10),
+      month: parseInt(m[2], 10) - 1, // 0-based
+      day: parseInt(m[3], 10),
+    };
+  }
+  // Fallback para formatos no estándar
+  const d = new Date(str);
+  if (isNaN(d.getTime())) return null;
+  return { year: d.getUTCFullYear(), month: d.getUTCMonth(), day: d.getUTCDate() };
+}
+
+/**
  * Formatea una fecha a español de manera determinista (sin depender de toLocaleDateString)
  * para evitar hydration mismatches entre SSR y cliente.
  */
 export function formatDateES(dateStr: string | Date): string {
-  const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
-  if (isNaN(date.getTime())) return String(dateStr);
+  const parts = parseDateParts(dateStr);
+  if (!parts) return String(dateStr);
   const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  return `${date.getDate()} de ${meses[date.getMonth()]} de ${date.getFullYear()}`;
+  return `${parts.day} de ${meses[parts.month]} de ${parts.year}`;
 }
 
 /**
  * Formatea una fecha a español corto (día mes corto) de manera determinista.
  */
 export function formatDateShortES(dateStr: string | Date): string {
-  const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
-  if (isNaN(date.getTime())) return String(dateStr);
+  const parts = parseDateParts(dateStr);
+  if (!parts) return String(dateStr);
   const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return `${date.getDate()} ${meses[date.getMonth()]}`;
+  return `${parts.day} ${meses[parts.month]}`;
 }
 
 /* ================================================================
