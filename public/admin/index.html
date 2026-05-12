@@ -1650,6 +1650,43 @@ ${descripcion}
       el.className = 'count ' + (len > 70 ? 'bad' : len > 50 ? 'ok' : 'warn');
     };
 
+    window.formatearTextoPegado = function(e) {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+      if (!text) return;
+
+      const bloques = text.split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
+      const formateado = bloques.map(bloque => {
+        const lineas = bloque.split('\n').map(l => l.trim()).filter(Boolean);
+        const textoPlano = lineas.join(' ');
+
+        // Detectar subtítulo: línea corta (≤12 palabras), sin punto final, sin coma, primera letra mayúscula
+        const palabras = textoPlano.split(/\s+/).length;
+        const sinPuntoFinal = !/[.!?;:,]$/.test(textoPlano);
+        const empiezaMayus = /^[A-ZÁÉÍÓÚÜÑ]/.test(textoPlano);
+        const esSubtitulo = palabras <= 12 && sinPuntoFinal && empiezaMayus && !textoPlano.includes('"');
+
+        if (esSubtitulo) {
+          return `<h2>${textoPlano}</h2>`;
+        }
+
+        // Párrafo: poner <strong> en textos entre comillas
+        let parrafo = textoPlano.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
+        parrafo = parrafo.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>"$1"</strong>'); // comillas tipográficas
+
+        return `<p>${parrafo}</p>`;
+      }).join('\n\n');
+
+      const textarea = document.getElementById('contenido');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const val = textarea.value;
+      textarea.value = val.substring(0, start) + formateado + val.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + formateado.length;
+      actualizarContadorPalabras();
+      showToast('Texto formateado automáticamente', 'success');
+    };
+
     window.actualizarContadorPalabras = function() {
       const texto = document.getElementById('contenido').value;
       // Contar solo palabras reales, ignorando etiquetas HTML
