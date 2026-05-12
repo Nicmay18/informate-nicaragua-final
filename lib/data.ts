@@ -18,21 +18,17 @@ function normalizeImage(imagen: string): string {
   // Data URI (imagen inline del admin) → mantener
   if (imagen.startsWith('data:')) return imagen;
 
-  // Firebase Storage URL → extraer nombre de archivo y mapear a local
-  if (imagen.includes('firebasestorage.googleapis.com')) {
-    const m = imagen.match(/\/o\/(.+?)(\?|$)/);
-    if (m) {
-      const fn = decodeURIComponent(m[1]).split('/').pop();
-      if (fn && fn.length > 2) return `/images/${fn}`;
-    }
+  // Firebase Storage URL → mantener como URL externa (configurada en next.config.ts)
+  if (imagen.includes('firebasestorage.googleapis.com') || imagen.includes('storage.googleapis.com')) {
+    return imagen.split('?')[0];
   }
 
-  // jsDelivr CDN / GitHub raw URLs → mantener como URL externa (imagenes en repo separado)
+  // jsDelivr CDN / GitHub raw URLs → mantener como URL externa
   if (imagen.includes('cdn.jsdelivr.net') || imagen.includes('githubusercontent.com')) {
     return imagen.split('?')[0];
   }
 
-  // URL externa (Unsplash, Firebase Storage, etc.) → quitar query params
+  // URL externa (Unsplash, etc.) → quitar query params
   if (imagen.startsWith('http://') || imagen.startsWith('https://')) {
     return imagen.split('?')[0];
   }
