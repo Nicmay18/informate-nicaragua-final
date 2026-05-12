@@ -140,17 +140,18 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             <Link key={card.id} href={`/noticias/${card.slug}`} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 14, padding: 14, background: '#faf9f7', borderRadius: 8, border: '1px solid #f0f0f4', transition: 'all 0.2s', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-              <Image
-                src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)}
-                alt={card.titulo}
-                width={100}
-                height={75}
-                loading="lazy"
-                quality={75}
-                sizes="100px"
-                className="object-cover rounded"
-                style={{ borderRadius: 4 }}
-              />
+              <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
+                <Image
+                  src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)}
+                  alt={card.titulo}
+                  fill
+                  loading="lazy"
+                  quality={75}
+                  sizes="100px"
+                  style={{ objectFit: 'cover' }}
+                  unoptimized={card.imagen?.includes('cdn.jsdelivr.net') || card.imagen?.includes('raw.githubusercontent.com')}
+                />
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>
                   {card.categoria}

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
-import SocialJoinButtons from '@/components/SocialJoinButtons';
 import LutoImage from '@/components/LutoImage';
 
 /* ================================================================
@@ -433,9 +432,6 @@ export default function ArticleClient({
             <CopyButton url={url} />
           </div>
         </div>
-
-        {/* ===== FOLLOW US ===== */}
-        <SocialJoinButtons />
 
         {/* ===== AUTHOR BIO ===== */}
         <div className="author-box-pro" style={{ textAlign: 'center', padding: '32px 24px' }}>

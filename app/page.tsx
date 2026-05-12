@@ -11,7 +11,6 @@ import Footer from '@/components/Footer';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import AutoRefresh from '@/components/AutoRefresh';
 import DonationCard from '@/components/DonationCard';
-import SocialJoinButtons from '@/components/SocialJoinButtons';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -45,11 +44,6 @@ export default async function HomePage() {
           <HeroCarousel noticias={destacadas} />
         </section>
       )}
-
-      {/* ===== SOCIAL JOIN BUTTONS ===== */}
-      <div className="container-pro" style={{ padding: '24px 0' }}>
-        <SocialJoinButtons />
-      </div>
 
       {/* ===== TOP BANNER AD — Desktop & Mobile ===== */}
       <div className="container-pro" style={{ padding: '24px 0 0' }}>

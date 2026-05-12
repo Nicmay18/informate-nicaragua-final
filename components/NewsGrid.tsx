@@ -118,12 +118,12 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                 <Image
                   src={n.imagen || FALLBACK_IMAGE}
                   alt={n.titulo}
-                  width={200}
-                  height={150}
+                  fill
                   loading="lazy"
                   quality={75}
-                  className="object-cover"
+                  style={{ objectFit: 'cover' }}
                   sizes="(max-width: 768px) 120px, 200px"
+                  unoptimized={n.imagen?.includes('cdn.jsdelivr.net') || n.imagen?.includes('raw.githubusercontent.com')}
                 />
                 <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
                   {n.categoria}

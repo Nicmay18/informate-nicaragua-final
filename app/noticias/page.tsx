@@ -4,7 +4,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AutoRefresh from '@/components/AutoRefresh';
 import DonationCard from '@/components/DonationCard';
-import SocialJoinButtons from '@/components/SocialJoinButtons';
 import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -62,7 +61,6 @@ export default async function NoticiasPage() {
 
         {noticias.length > 0 ? (
           <>
-            <SocialJoinButtons />
             <NewsGrid noticias={noticias} />
             <div style={{ marginTop: 40, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto' }}>
               <DonationCard />
