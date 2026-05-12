@@ -3,7 +3,6 @@ import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
-import AdSenseLoader from '@/components/AdSenseLoader';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
 
@@ -51,6 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script
@@ -69,9 +70,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning>
         <a href="#main-content" style={{ position: 'absolute', top: -40, left: 0, background: '#c41e3a', color: '#fff', padding: '8px 16px', zIndex: 10000, transition: 'top 0.3s', fontSize: '14px', fontWeight: 600, textDecoration: 'none', borderRadius: '4px' }}>Saltar al contenido</a>
-        <ClientOnly>
-          <AdSenseLoader />
-        </ClientOnly>
         {children}
         <ClientOnly fallback={<div style={{ height: 58 }} />}>
           <StickyRadio />

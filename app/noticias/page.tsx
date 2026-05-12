@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import NewsGrid from '@/components/NewsGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AutoRefresh from '@/components/AutoRefresh';
 import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -43,15 +44,16 @@ export default async function NoticiasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
+      <AutoRefresh intervalSec={60} />
       <Header activeCategory="Todas" />
 
       <main id="main-content" className="container-pro" style={{ padding: '32px 24px 48px' }}>
         <div style={{ marginBottom: 28 }}>
-          <h1 style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, color: '#111', lineHeight: 1.08, marginBottom: 10, fontFamily: 'var(--font-merri)', letterSpacing: '-0.01em' }}>
+          <h1 className="article-title-pro" style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, lineHeight: 1.08, marginBottom: 10, fontFamily: 'var(--font-merri)', letterSpacing: '-0.01em' }}>
             Todas las Noticias
           </h1>
-          <p style={{ fontSize: 18, color: '#666', lineHeight: 1.6 }}>
+          <p className="article-lead-pro" style={{ fontSize: 18, lineHeight: 1.6 }}>
             Mantente informado con las últimas noticias de Nicaragua y el mundo.
           </p>
         </div>

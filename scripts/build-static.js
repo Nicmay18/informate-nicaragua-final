@@ -49,7 +49,7 @@ function pageHTML(n, canonical, body, relatedHTML){
     headline: n.titulo, description: n.resumen||n.titulo, image: img,
     datePublished: fISO, dateModified: fMod,
     author:{'@type':'Person',name:autor,url:'https://nicaraguainformate.com'},
-    publisher:{'@type':'Organization',name:'Nicaragua Informate',logo:{'@type':'ImageObject',url:'https://nicaragua informate.com/logo.png'}},
+    publisher:{'@type':'Organization',name:'Nicaragua Informate',logo:{'@type':'ImageObject',url:'https://nicaraguainformate.com/logo.png'}},
     mainEntityOfPage:{'@type':'WebPage','@id':canonical},
     articleSection:n.categoria||'General',wordCount:wCount(n.contenido)
   },null,2);
