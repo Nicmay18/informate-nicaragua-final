@@ -18,12 +18,12 @@ export default function StickyRadio() {
   const [volume,    setVolume]    = useState(0.8);
   const [muted,     setMuted]     = useState(false);
   const [open,      setOpen]      = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem('radio-dismissed')) setDismissed(true);
+      if (!sessionStorage.getItem('radio-dismissed')) setDismissed(false);
     } catch {}
   }, []);
 
