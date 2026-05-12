@@ -165,7 +165,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     resumen: 'El pitcher nica se convierte en el nuevo Rey de los ponches.',
     contenido: '<p>Un logro histórico para el beisbol nicaragüense...</p>',
     categoria: 'Deportes',
-    imagen: 'https://images.unsplash.com/photo-1461896836934- voices-6b2c207?w=800',
+    imagen: 'https://images.unsplash.com/photo-1461896836934-88f358215123?w=800',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 1800,
@@ -336,8 +336,14 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .slice(0, validatedCount);
 
     return related;
-  } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', err instanceof Error ? err.message : String(err));
+  } catch (err: any) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Firestore composite index missing → log helpful message, don't crash
+    if (msg.includes('index') || msg.includes('requires an index')) {
+      console.warn('[data.ts] Se requiere índice compuesto en Firestore para noticias relacionadas. Crear índice en consola Firebase.');
+    } else {
+      console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', msg);
+    }
   }
 
   // Fallback a noticias de ejemplo

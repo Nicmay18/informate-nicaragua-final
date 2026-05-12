@@ -123,7 +123,8 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
                   quality={75}
                   style={{ objectFit: 'cover' }}
                   sizes="(max-width: 768px) 120px, 200px"
-                  unoptimized={n.imagen?.includes('cdn.jsdelivr.net') || n.imagen?.includes('raw.githubusercontent.com')}
+                  unoptimized={!!(n.imagen && (n.imagen.includes('cdn.jsdelivr.net') || n.imagen.includes('raw.githubusercontent.com') || n.imagen.startsWith('data:')))}
+                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
                 />
                 <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
                   {n.categoria}

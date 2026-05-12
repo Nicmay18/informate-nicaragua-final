@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
+import { FALLBACK_IMAGE } from '@/lib/types';
 import LutoImage from '@/components/LutoImage';
 
 /* ================================================================
@@ -383,7 +384,8 @@ export default function ArticleClient({
                   sizes="(max-width: 768px) 100vw, 800px"
                   priority
                   style={{ objectFit: 'cover' }}
-                  unoptimized={noticia.imagen?.includes('cdn.jsdelivr.net') || noticia.imagen?.includes('raw.githubusercontent.com')}
+                  unoptimized={!!(noticia.imagen && (noticia.imagen.includes('cdn.jsdelivr.net') || noticia.imagen.includes('raw.githubusercontent.com') || noticia.imagen.startsWith('data:')))}
+                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
                 />
               </div>
             )}
@@ -467,7 +469,8 @@ export default function ArticleClient({
                         quality={75}
                         style={{ objectFit: 'cover' }}
                         sizes="(max-width: 768px) 100vw, 260px"
-                        unoptimized={n.imagen?.includes('cdn.jsdelivr.net') || n.imagen?.includes('raw.githubusercontent.com')}
+                        unoptimized={!!(n.imagen && (n.imagen.includes('cdn.jsdelivr.net') || n.imagen.includes('raw.githubusercontent.com') || n.imagen.startsWith('data:')))}
+                        onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
                       />
                     </div>
                     <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>

@@ -35,11 +35,10 @@ interface WData { temp: number; code: number; wind: number; humidity: number }
 
 async function fetchCity(lat: number, lon: number): Promise<WData | null> {
   try {
-    const r = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m&timezone=America%2FManagua&wind_speed_unit=kmh`
-    );
+    const r = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
     if (!r.ok) return null;
     const d = await r.json();
+    if (d.error) return null;
     const c = d.current;
     return { temp: Math.round(c.temperature_2m), code: c.weathercode, wind: Math.round(c.windspeed_10m), humidity: c.relativehumidity_2m };
   } catch { return null; }

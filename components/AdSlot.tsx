@@ -20,6 +20,7 @@ export default function AdSlot({
   format = 'auto',
 }: AdSlotProps) {
   const [mounted, setMounted] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const insRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
 
@@ -38,6 +39,9 @@ export default function AdSlot({
     } catch {
       // AdSense no cargado — ignorar
     }
+    // Ocultar label "Publicidad" después de 3s si el anuncio cargó
+    const t = setTimeout(() => setLoaded(true), 3000);
+    return () => clearTimeout(t);
   }, [mounted]);
 
   return (
@@ -51,8 +55,8 @@ export default function AdSlot({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#f5f5f7',
-        border: '1px solid #e8e8ec',
+        background: loaded ? 'transparent' : '#f5f5f7',
+        border: loaded ? 'none' : '1px solid #e8e8ec',
         borderRadius: 8,
         overflow: 'hidden',
         ...style,
@@ -68,9 +72,11 @@ export default function AdSlot({
           data-full-width-responsive="true"
         />
       )}
-      <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
-        Publicidad
-      </span>
+      {!loaded && (
+        <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
+          Publicidad
+        </span>
+      )}
     </div>
   );
 }

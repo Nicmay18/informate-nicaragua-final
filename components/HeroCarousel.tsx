@@ -94,7 +94,8 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             quality={75}
             sizes="(max-width: 1024px) 100vw, 66vw"
             style={{ objectFit: 'cover', objectPosition: 'center 30%', opacity: fading ? 0 : 1 }}
-            unoptimized={img.includes('cdn.jsdelivr.net') || img.includes('raw.githubusercontent.com')}
+            unoptimized={img.includes('cdn.jsdelivr.net') || img.includes('raw.githubusercontent.com') || img.startsWith('data:')}
+            onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
@@ -149,7 +150,8 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
                   quality={75}
                   sizes="100px"
                   style={{ objectFit: 'cover' }}
-                  unoptimized={card.imagen?.includes('cdn.jsdelivr.net') || card.imagen?.includes('raw.githubusercontent.com')}
+                  unoptimized={!!(card.imagen && (card.imagen.includes('cdn.jsdelivr.net') || card.imagen.includes('raw.githubusercontent.com') || card.imagen.startsWith('data:')))}
+                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
