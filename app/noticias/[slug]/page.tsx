@@ -100,10 +100,6 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       return notFound();
     }
 
-    const image = noticia.imagen?.startsWith('http')
-      ? noticia.imagen
-      : `https://nicaraguainformate.com${noticia.imagen || '/logo.png'}`;
-    
     const isLuto = isLutoNews(noticia);
 
     const related = await getRelatedNews(noticia.categoria, noticia.slug, 3);
