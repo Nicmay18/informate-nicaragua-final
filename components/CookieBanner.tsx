@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-type ConsentStatus = 'pending' | 'accepted' | 'rejected';
-
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -20,7 +18,6 @@ export default function CookieBanner() {
   const handleAccept = () => {
     localStorage.setItem('ni_cookie_consent', 'accepted');
     setShowBanner(false);
-    // Cargar Analytics y AdSense
     loadAnalytics();
   };
 
