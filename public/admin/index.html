@@ -1884,8 +1884,8 @@ ${descripcion}
         }
       }
 
-      const palabras = contenido.split(/\s+/).length;
-      if (palabras < 350) { showToast(`Contenido muy corto (${palabras} palabras). AdSense requiere mínimo 350.`, 'warning'); }
+      const palabras = contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+      if (palabras < 350) { showToast(`Contenido muy corto (${palabras} palabras). AdSense requiere mínimo 350. Amplía la noticia.`, 'error'); return; }
 
       const fbPatterns = ['facebook.com','fbcdn.net','fbcdn.com','scontent-','instagram.com','cdninstagram'];
       if (fbPatterns.some(p => imagenUrl.toLowerCase().includes(p))) { showToast('No se permiten imágenes de Facebook CDN', 'error'); return; }

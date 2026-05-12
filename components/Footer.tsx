@@ -46,6 +46,8 @@ export default function Footer() {
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {[
               { href: '/nosotros', label: 'Sobre Nosotros' },
+              { href: '/politica-editorial', label: 'Política Editorial' },
+              { href: '/correcciones', label: 'Correcciones' },
               { href: '/privacidad', label: 'Privacidad' },
               { href: '/cookies', label: 'Cookies' },
               { href: '/terminos', label: 'Términos de Uso' },
