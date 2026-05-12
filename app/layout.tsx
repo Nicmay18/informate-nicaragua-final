@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
@@ -53,8 +54,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
+        <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551939"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script
