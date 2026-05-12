@@ -62,7 +62,7 @@ export default function AdSlot({
         <ins
           className="adsbygoogle"
           style={{ display: 'block', width: '100%', minHeight: height }}
-          data-ad-client="ca-pub-4115203339551838"
+          data-ad-client="ca-pub-4115203339551939"
           data-ad-slot={slot}
           data-ad-format={format}
           data-full-width-responsive="true"
