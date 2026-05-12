@@ -1452,6 +1452,54 @@ a:hover { color: var(--accent-dark); }
 }
 
 /* ═══════════════════════════════════════════════════════════
+   DARK MODE — FIX TITULARES Y ARTÍCULOS
+   ═══════════════════════════════════════════════════════════ */
+[data-theme="dark"] body { background: #0f0f0f; color: #f5f5f5; }
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 { color: #f5f5f5 !important; }
+
+[data-theme="dark"] .article-title-pro,
+[data-theme="dark"] .article-lead-pro,
+[data-theme="dark"] .article-body-pro,
+[data-theme="dark"] .article-body-pro p,
+[data-theme="dark"] .article-body-pro h2,
+[data-theme="dark"] .article-body-pro h3,
+[data-theme="dark"] .article-body-pro strong,
+[data-theme="dark"] .article-body-pro li,
+[data-theme="dark"] .news-title,
+[data-theme="dark"] .hero-title,
+[data-theme="dark"] .side-card-title,
+[data-theme="dark"] .trending-title,
+[data-theme="dark"] .related-card-title,
+[data-theme="dark"] .section-title { color: #f5f5f5 !important; }
+
+[data-theme="dark"] .article-body-pro blockquote { color: #d4d4d4 !important; background: #1a1a1a; }
+[data-theme="dark"] .news-excerpt,
+[data-theme="dark"] .article-lead-pro { color: #b3b3b3 !important; }
+
+[data-theme="dark"] .side-card,
+[data-theme="dark"] .side-card:hover,
+[data-theme="dark"] .sidebar-widget,
+[data-theme="dark"] .author-box-pro,
+[data-theme="dark"] .share-bar-pro,
+[data-theme="dark"] .related-card-pro,
+[data-theme="dark"] .tag-pro,
+[data-theme="dark"] .featured-caption { background: #1a1a1a !important; border-color: #262626 !important; }
+
+[data-theme="dark"] .filter-tab,
+[data-theme="dark"] .btn-outline,
+[data-theme="dark"] .social-link,
+[data-theme="dark"] .mobile-nav,
+[data-theme="dark"] .newsletter-input { background: #1a1a1a !important; color: #f5f5f5; border-color: #333; }
+
+[data-theme="dark"] .news-item:hover { background: #1a1a1a !important; }
+[data-theme="dark"] .article-meta-bar { border-color: #262626 !important; }
+
+/* ═══════════════════════════════════════════════════════════
    GLASSMORPHISM & UTILITIES
    ═══════════════════════════════════════════════════════════ */
 .glass {

@@ -9,6 +9,7 @@ import SocialGrid from '@/components/home/SocialGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
+import AutoRefresh from '@/components/AutoRefresh';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -29,7 +30,8 @@ export default async function HomePage() {
   const tickerNews = noticias.slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
+      <AutoRefresh intervalSec={60} />
       <Header activeCategory="Todas" />
 
       {/* Breaking Ticker */}

@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fecha,
         section: noticia.categoria || 'Noticias',
-        tags: noticia.tags || [noticia.categoria],
+        tags: [noticia.categoria],
       },
       twitter: {
         card: 'summary_large_image',
@@ -110,7 +110,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen">
         <Header activeCategory={noticia.categoria} />
 
         {/* ===== TOP BANNER AD — Article ===== */}
