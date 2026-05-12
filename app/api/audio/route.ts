@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
-const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'OYTbf65OHHFELVut7v1H';
+// Rachel: voz profesional de locutora de noticias, muy natural y clara
+const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM';
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,9 +29,9 @@ export async function POST(req: NextRequest) {
           text: text.slice(0, 4500),
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
-            stability: 0.45,
-            similarity_boost: 0.75,
-            style: 0.35,
+            stability: 0.35,
+            similarity_boost: 0.85,
+            style: 0.5,
             use_speaker_boost: true,
           },
         }),
