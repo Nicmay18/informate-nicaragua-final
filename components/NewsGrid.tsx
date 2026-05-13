@@ -4,11 +4,13 @@ import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const [currentSrc, setCurrentSrc] = useState(isValid ? validSrc : FALLBACK_IMAGE);
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   return (
     <img
       src={currentSrc}

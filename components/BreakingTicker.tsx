@@ -81,14 +81,14 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
         </div>
 
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <button onClick={() => setPaused(p => !p)} style={btnStyle} title={paused ? 'Reanudar' : 'Pausar'}>
+          <button onClick={() => setPaused(p => !p)} style={btnStyle} title={paused ? 'Reanudar' : 'Pausar'} aria-label={paused ? 'Reanudar' : 'Pausar'}>
             {paused ? <Play size={12} fill="#fff" /> : <Pause size={12} fill="#fff" />}
           </button>
-          <button onClick={goPrev} style={btnStyle}><ChevronLeft size={14} /></button>
+          <button onClick={goPrev} style={btnStyle} aria-label="Noticia anterior"><ChevronLeft size={14} /></button>
           <span style={{ fontSize: 11, minWidth: 38, textAlign: 'center', color: 'rgba(255,255,255,0.65)', fontWeight: 700, flexShrink: 0 }}>
             {current + 1}/{noticias.length}
           </span>
-          <button onClick={goNext} style={btnStyle}><ChevronRight size={14} /></button>
+          <button onClick={goNext} style={btnStyle} aria-label="Noticia siguiente"><ChevronRight size={14} /></button>
         </div>
       </div>
     </div>

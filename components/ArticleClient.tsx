@@ -6,12 +6,14 @@ import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'luc
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import LutoImage from '@/components/LutoImage';
 
-function ArticleImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
+function ArticleImage({ src, alt, style, width = 800 }: { src: string; alt: string; style?: React.CSSProperties; width?: number }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const [currentSrc, setCurrentSrc] = useState(isValid ? validSrc : FALLBACK_IMAGE);
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
+  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   return (
     <img
       src={currentSrc}
@@ -468,7 +470,7 @@ export default function ArticleClient({
                 <Link key={n.slug} href={`/noticias/${n.slug}`} className="related-card-pro">
                   <article>
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
-                      <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} />
+                      <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} width={400} />
                     </div>
                     <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <span style={{
