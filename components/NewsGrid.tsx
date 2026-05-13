@@ -1,10 +1,26 @@
 'use client';
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
+
+function ArticleImage({ src, alt }: { src: string; alt: string }) {
+  const validSrc = src?.trim();
+  const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+  const [currentSrc, setCurrentSrc] = useState(isValid ? validSrc : FALLBACK_IMAGE);
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => {
+        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+  );
+}
 
 const CAT_COLORS: Record<string, string> = {
   Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
@@ -115,17 +131,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
           {shown.map(n => (
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card">
               <div className="ng-thumb">
-                <Image
-                  src={n.imagen || FALLBACK_IMAGE}
-                  alt={n.titulo}
-                  fill
-                  loading="lazy"
-                  quality={75}
-                  style={{ objectFit: 'cover' }}
-                  sizes="(max-width: 768px) 120px, 200px"
-                  unoptimized={!!(n.imagen && (n.imagen.includes('cdn.jsdelivr.net') || n.imagen.includes('raw.githubusercontent.com') || n.imagen.startsWith('data:')))}
-                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
-                />
+                <ArticleImage src={n.imagen} alt={n.titulo} />
                 <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
                   {n.categoria}
                 </span>

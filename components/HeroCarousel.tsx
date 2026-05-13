@@ -1,12 +1,28 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
 import { cleanImageUrl } from '@/lib/image-utils';
+
+function HeroImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
+  const validSrc = src?.trim();
+  const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+  const [currentSrc, setCurrentSrc] = useState(isValid ? validSrc : FALLBACK_IMAGE);
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => {
+        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
+    />
+  );
+}
 
 const MAX_SLIDES = 4;
 const FADE_DURATION_MS = 300;
@@ -85,17 +101,10 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
         aria-label="Noticias destacadas"
       >
         <Link href={`/noticias/${n.slug}`} style={{ display: 'block', position: 'relative', width: '100%', height: '100%', textDecoration: 'none' }}>
-          <Image
+          <HeroImage
             src={img}
             alt={n.titulo}
-            fill
-            priority={current === 0}
-            loading={current === 0 ? undefined : 'lazy'}
-            quality={75}
-            sizes="(max-width: 1024px) 100vw, 66vw"
-            style={{ objectFit: 'cover', objectPosition: 'center 30%', opacity: fading ? 0 : 1 }}
-            unoptimized={img.includes('cdn.jsdelivr.net') || img.includes('raw.githubusercontent.com') || img.startsWith('data:')}
-            onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
+            style={{ objectPosition: 'center 30%', opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 
@@ -142,17 +151,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
               <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
-                <Image
-                  src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)}
-                  alt={card.titulo}
-                  fill
-                  loading="lazy"
-                  quality={75}
-                  sizes="100px"
-                  style={{ objectFit: 'cover' }}
-                  unoptimized={!!(card.imagen && (card.imagen.includes('cdn.jsdelivr.net') || card.imagen.includes('raw.githubusercontent.com') || card.imagen.startsWith('data:')))}
-                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
-                />
+                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>

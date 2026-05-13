@@ -1,13 +1,29 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import LutoImage from '@/components/LutoImage';
+
+function ArticleImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
+  const validSrc = src?.trim();
+  const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+  const [currentSrc, setCurrentSrc] = useState(isValid ? validSrc : FALLBACK_IMAGE);
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => {
+        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
+    />
+  );
+}
 
 /* ================================================================
    TIPOS
@@ -377,16 +393,7 @@ export default function ArticleClient({
               />
             ) : (
               <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 12, overflow: 'hidden' }}>
-                <Image
-                  src={noticia.imagen || '/logo.png'}
-                  alt={noticia.titulo}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  priority
-                  style={{ objectFit: 'cover' }}
-                  unoptimized={!!(noticia.imagen && (noticia.imagen.includes('cdn.jsdelivr.net') || noticia.imagen.includes('raw.githubusercontent.com') || noticia.imagen.startsWith('data:')))}
-                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
-                />
+                <ArticleImage src={noticia.imagen || '/logo.png'} alt={noticia.titulo} />
               </div>
             )}
             <figcaption className="featured-caption">
@@ -461,17 +468,7 @@ export default function ArticleClient({
                 <Link key={n.slug} href={`/noticias/${n.slug}`} className="related-card-pro">
                   <article>
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
-                      <Image
-                        src={n.imagen || '/logo.png'}
-                        alt={n.titulo}
-                        fill
-                        loading="lazy"
-                        quality={75}
-                        style={{ objectFit: 'cover' }}
-                        sizes="(max-width: 768px) 100vw, 260px"
-                        unoptimized={!!(n.imagen && (n.imagen.includes('cdn.jsdelivr.net') || n.imagen.includes('raw.githubusercontent.com') || n.imagen.startsWith('data:')))}
-                        onError={(e) => { const t = e.currentTarget as HTMLImageElement; if (!t.src.includes('/logo.png')) { t.src = FALLBACK_IMAGE; } }}
-                      />
+                      <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} />
                     </div>
                     <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <span style={{
