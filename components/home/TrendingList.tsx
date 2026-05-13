@@ -34,7 +34,7 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
               <span className="trending-rank" style={{
                 fontSize: 24,
                 fontWeight: 900,
-                color: i === 0 ? '#c41e3a' : '#e8e8ec',
+                color: i === 0 ? '#c41e3a' : '#b0b0c0',
                 lineHeight: 1,
                 minWidth: 28,
                 fontFamily: 'var(--font-merri)',

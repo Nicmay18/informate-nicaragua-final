@@ -292,6 +292,8 @@
     .btn-icon.edit:hover { background: var(--primary-600); color: white; }
     .btn-icon.delete { background: var(--danger-light); color: var(--danger); }
     .btn-icon.delete:hover { background: var(--danger); color: white; }
+    .btn-icon.share { background: #dbeafe; color: #2563eb; }
+    .btn-icon.share:hover { background: #2563eb; color: white; }
 
     /* FILTER */
     .filter-bar { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; padding: 4px; background: var(--gray-100); border-radius: var(--radius-full); width: fit-content; }
@@ -507,16 +509,8 @@
 
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-header"><div><div class="stat-value" id="statVisitas">0</div><div class="stat-label">Visitas Totales</div></div><div class="stat-icon blue"><i class="fas fa-eye"></i></div></div>
-            <div class="stat-change"><i class="fas fa-arrow-up"></i><span>+12.5% vs mes pasado</span></div>
-          </div>
-          <div class="stat-card">
             <div class="stat-header"><div><div class="stat-value" id="statNoticias">0</div><div class="stat-label">Noticias Publicadas</div></div><div class="stat-icon green"><i class="fas fa-newspaper"></i></div></div>
-            <div class="stat-change"><i class="fas fa-arrow-up"></i><span id="statHoyVar">+0 hoy</span></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-header"><div><div class="stat-value" id="statHoy">0</div><div class="stat-label">Visitas Hoy</div></div><div class="stat-icon orange"><i class="fas fa-calendar-day"></i></div></div>
-            <div class="stat-change"><i class="fas fa-arrow-up"></i><span>+8.2% vs ayer</span></div>
+            <div class="stat-change"><i class="fas fa-database"></i><span>Total en base de datos</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-header"><div><div class="stat-value" id="statPromedio">0</div><div class="stat-label">Palabras Promedio</div></div><div class="stat-icon red"><i class="fas fa-font"></i></div></div>
@@ -653,9 +647,10 @@
                 <div style="margin-top: 12px;">
                   <label class="form-label" style="font-size: 12px;">URL directa o CDN:</label>
                   <div style="display: flex; gap: 8px;">
-                    <input type="url" class="form-input" id="imagenUrl" placeholder="https://..." onchange="actualizarPreview()" style="font-size: 13px;">
+                    <input type="url" class="form-input" id="imagenUrl" placeholder="https://..." oninput="actualizarEstadoImagen()" onchange="actualizarPreview()" style="font-size: 13px;">
                     <button type="button" class="btn btn-secondary btn-sm" onclick="buscarImagenUnsplash()" style="white-space: nowrap;"><i class="fas fa-search"></i> Stock</button>
                   </div>
+                  <div id="estadoImagen" style="margin-top: 6px; font-size: 12px; display: none;"></div>
                   <div id="unsplashResults" style="display: none; margin-top: 12px;"></div>
                 </div>
                 <div style="margin-top: 12px;">
@@ -1145,6 +1140,12 @@ sin texto ni marcas de agua, composición periodística"
                   <div class="form-group" style="margin-bottom: 10px;"><label class="form-label" style="font-size: 12px;">Page ID</label><input type="text" class="form-input" id="configFbPage2Id" placeholder="61577962970892" style="font-family: monospace; font-size: 12px;"></div>
                   <div class="form-group" style="margin-bottom: 0;"><label class="form-label" style="font-size: 12px;">Access Token</label><input type="password" class="form-input" id="configFbPage2Token" placeholder="EAAN..." style="font-family: monospace; font-size: 12px;"></div>
                 </div>
+                <div style="margin-bottom: 14px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid #6366f1;">
+                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fas fa-volume-up" style="color: #6366f1;"></i><h4 style="font-size: 13px; font-weight: 700;">ElevenLabs Audio (Voz Profesional)</h4></div>
+                  <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 10px;">Configurado en Vercel. Haz clic para verificar que la API key funciona.</div>
+                  <div id="statusElevenlabs" style="margin-bottom: 10px; font-size: 12px; font-weight: 600;">—</div>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="verificarElevenLabs()" style="font-size: 12px;"><i class="fas fa-plug"></i> Verificar conexión</button>
+                </div>
                 <div style="display: flex; gap: 8px;">
                   <button class="btn btn-primary" onclick="guardarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-save"></i><span>Guardar</span></button>
                   <button class="btn btn-secondary" onclick="cargarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-sync"></i><span>Recargar</span></button>
@@ -1371,12 +1372,30 @@ ${descripcion}
       }
     }
 
+    window.actualizarEstadoImagen = function() {
+      const url = document.getElementById('imagenUrl').value.trim();
+      const el = document.getElementById('estadoImagen');
+      if (!url) {
+        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-exclamation-circle"></i> Sin imagen — arrastra una foto o pega una URL antes de guardar</span>';
+        el.style.display = 'block';
+        return;
+      }
+      const isValid = url.startsWith('http') || url.startsWith('/') || url.startsWith('data:');
+      if (isValid) {
+        el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Imagen cargada: ' + url.substring(0, 60) + (url.length > 60 ? '...' : '') + '</span>';
+      } else {
+        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-exclamation-circle"></i> URL de imagen inválida</span>';
+      }
+      el.style.display = 'block';
+    };
+
     function actualizarPreview() {
       const url = document.getElementById('imagenUrl').value;
       const preview = document.getElementById('preview');
       const container = document.getElementById('imagePreviewContainer');
       if (url) { preview.src = url; container.classList.add('active'); document.getElementById('uploadZone').style.display = 'none'; }
       else { container.classList.remove('active'); document.getElementById('uploadZone').style.display = 'block'; }
+      actualizarEstadoImagen();
       actualizarPreviewHomepage();
     }
     window.clearImage = function() { document.getElementById('imagenUrl').value = ''; document.getElementById('fileInput').value = ''; actualizarPreview(); };
@@ -1652,50 +1671,214 @@ ${descripcion}
 
     window.formatearTextoPegado = function(e) {
       e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-      if (!text) return;
+      const cd = e.clipboardData || window.clipboardData;
+      let html = '';
+      let text = '';
+      try { html = cd.getData('text/html'); } catch(err) {}
+      try { text = cd.getData('text/plain'); } catch(err) {}
+      if (!text && !html) return;
 
-      const lineas = text.split('\n').map(l => l.trim()).filter(Boolean);
-      const resultado = [];
-      let bufferParrafo = [];
+      let resultado = '';
 
-      function flushParrafo() {
-        if (bufferParrafo.length === 0) return;
-        let textoPlano = bufferParrafo.join(' ');
-        // <strong> en textos entre comillas
-        textoPlano = textoPlano.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
-        textoPlano = textoPlano.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>"$1"</strong>');
-        resultado.push(`<p>${textoPlano}</p>`);
-        bufferParrafo = [];
+      if (html) {
+        // === MODO HTML: convertir formato Word/Docs a nuestro HTML limpio ===
+        resultado = limpiarHtmlPegado(html, text);
+      } else {
+        // === MODO TEXTO PLANO: detectar subtítulos, citas, listas ===
+        resultado = formatearTextoPlano(text);
       }
-
-      for (const linea of lineas) {
-        const palabras = linea.split(/\s+/).length;
-        const sinPuntoFinal = !/[.!?;:,]$/.test(linea);
-        const empiezaMayus = /^[A-ZÁÉÍÓÚÜÑ]/.test(linea);
-        // Subtítulo: corto (≤12 palabras), sin signo de puntuación al final, empieza con mayúscula, no comillas
-        const esSubtitulo = palabras <= 12 && sinPuntoFinal && empiezaMayus && !linea.includes('"') && !linea.includes('\u201c');
-
-        if (esSubtitulo) {
-          flushParrafo();
-          resultado.push(`<h2>${linea}</h2>`);
-        } else {
-          bufferParrafo.push(linea);
-        }
-      }
-      flushParrafo();
-
-      const formateado = resultado.join('\n\n');
 
       const textarea = document.getElementById('contenido');
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const val = textarea.value;
-      textarea.value = val.substring(0, start) + formateado + val.substring(end);
-      textarea.selectionStart = textarea.selectionEnd = start + formateado.length;
+      textarea.value = val.substring(0, start) + resultado + val.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + resultado.length;
       actualizarContadorPalabras();
-      showToast('Texto formateado automáticamente', 'success');
+      showToast('Texto formateado automáticamente (' + (html ? 'con formato' : 'texto plano') + ')', 'success');
     };
+
+    // ─── LIMPIAR HTML PEGADO (Word, Google Docs, navegador) ───
+    function limpiarHtmlPegado(html, fallbackText) {
+      if (!html) return formatearTextoPlano(fallbackText || '');
+
+      // Crear un div temporal para parsear
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+
+      // Eliminar basura de Word/Docs: meta, style, link, script
+      tmp.querySelectorAll('style, script, meta, link, noscript').forEach(el => el.remove());
+
+      // Eliminar atributos de estilo inline conservados por Word
+      const allEls = tmp.querySelectorAll('*');
+      allEls.forEach(el => {
+        // Conservar solo src, href, alt
+        const keep = ['src','href','alt'];
+        Array.from(el.attributes).forEach(attr => {
+          if (!keep.includes(attr.name)) el.removeAttribute(attr.name);
+        });
+      });
+
+      // Convertir elementos de Word/Docs a nuestros tags limpios
+      const map = {
+        'h1': 'h2', 'h2': 'h2', 'h3': 'h2', 'h4': 'h2', 'h5': 'h2', 'h6': 'h2',
+        'b': 'strong', 'i': 'em', 'u': 'span',
+        'ol': 'ul'
+      };
+      Object.entries(map).forEach(([from, to]) => {
+        tmp.querySelectorAll(from).forEach(el => {
+          const nuevo = document.createElement(to);
+          nuevo.innerHTML = el.innerHTML;
+          el.replaceWith(nuevo);
+        });
+      });
+
+      // Eliminar spans vacíos o con solo estilo
+      tmp.querySelectorAll('span').forEach(el => {
+        if (!el.textContent.trim()) { el.remove(); return; }
+        // Si solo contiene texto, reemplazar con el texto
+        if (el.children.length === 0) {
+          el.replaceWith(el.textContent);
+        }
+      });
+
+      // Eliminar divs vacíos o con solo <br>
+      tmp.querySelectorAll('div').forEach(el => {
+        if (!el.textContent.trim()) { el.remove(); }
+      });
+
+      // Convertir <br><br> o <p>&nbsp;</p> a separadores de párrafo
+      let raw = tmp.innerHTML;
+      // Normalizar <br> variants
+      raw = raw.replace(/<br\s*\/?>/gi, '\n');
+      // Eliminar comentarios XML de Word
+      raw = raw.replace(/<!--\[if[^\]]*\]>[\s\S]*?<!\[endif\]-->/gi, '');
+      raw = raw.replace(/<!--[\s\S]*?-->/g, '');
+
+      // Volver a parsear
+      tmp.innerHTML = raw;
+
+      // Extraer texto de cada párrafo y re-ensamblar
+      const bloques = [];
+      const parrafos = tmp.querySelectorAll('p, h2, blockquote, li');
+      if (parrafos.length > 0) {
+        parrafos.forEach(el => {
+          const tag = el.tagName.toLowerCase();
+          const txt = el.textContent.trim();
+          if (!txt) return;
+          if (tag === 'h2') bloques.push(`<h2>${escaparHtmlEntidades(txt)}</h2>`);
+          else if (tag === 'blockquote') bloques.push(`<blockquote>${escaparHtmlEntidades(txt)}</blockquote>`);
+          else if (tag === 'li') bloques.push(`<li>${escaparHtmlEntidades(txt)}</li>`);
+          else bloques.push(`<p>${escaparHtmlEntidades(txt)}</p>`);
+        });
+      } else {
+        // Si no hay elementos estructurados, usar texto plano
+        return formatearTextoPlano(fallbackText || tmp.textContent || '');
+      }
+
+      // Agrupar <li> consecutivos en <ul>
+      const final = [];
+      let enLista = false;
+      bloques.forEach(b => {
+        if (b.startsWith('<li>')) {
+          if (!enLista) { final.push('<ul>'); enLista = true; }
+          final.push(b);
+        } else {
+          if (enLista) { final.push('</ul>'); enLista = false; }
+          final.push(b);
+        }
+      });
+      if (enLista) final.push('</ul>');
+
+      return final.join('\n\n');
+    }
+
+    function escaparHtmlEntidades(texto) {
+      return texto
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // ─── FORMATEAR TEXTO PLANO CON DETECCIÓN INTELIGENTE ───
+    function formatearTextoPlano(texto) {
+      if (!texto) return '';
+      const lineas = texto.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const resultado = [];
+      let bufferParrafo = [];
+
+      function flushParrafo() {
+        if (bufferParrafo.length === 0) return;
+        let p = bufferParrafo.join(' ');
+        // Negrita en citas entre comillas
+        p = p.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
+        p = p.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>\u201c$1\u201d</strong>');
+        resultado.push(`<p>${p}</p>`);
+        bufferParrafo = [];
+      }
+
+      for (const linea of lineas) {
+        const l = linea.trim();
+        if (!l) continue;
+
+        const palabras = l.split(/\s+/).length;
+        const sinPuntoFinal = !/[.!?;:]$/.test(l);
+        const empiezaMayus = /^[A-ZÁÉÍÓÚÜÑ]/.test(l);
+        const esCorto = palabras <= 15;
+        const noEsOracion = !/[.!?]$/.test(l) || palabras <= 8;
+        const tieneComillas = l.includes('"') || l.includes('\u201c');
+        const esMayusculas = l === l.toUpperCase() && l.length > 3 && l.length < 70;
+        const patronSubtitulo = /^(el|la|los|las|un|una|nuevos?|antiguos?|impacto|alerta|riesgo|crisis|futuro|revelan?|exigen|denuncian?|declaran?|anuncian?|confirman?|detallan?|explican?|causan?|dejan?|provocan?)\s+/i;
+
+        // Detectar subtítulo (múltiples reglas combinadas)
+        let esSub = false;
+        if (esMayusculas) esSub = true;
+        else if (esCorto && sinPuntoFinal && empiezaMayus && !tieneComillas && (palabras <= 10 || patronSubtitulo.test(l))) esSub = true;
+        else if (palabras <= 6 && sinPuntoFinal && empiezaMayus && !tieneComillas) esSub = true;
+
+        if (esSub) {
+          flushParrafo();
+          resultado.push(`<h2>${l}</h2>`);
+          continue;
+        }
+
+        // Detectar cita
+        if (l.startsWith('"') && l.includes('"', 1) && l.length > 20) {
+          flushParrafo();
+          resultado.push(`<blockquote>${l}</blockquote>`);
+          continue;
+        }
+
+        // Detectar lista
+        if (/^[\-\*•✓✅⚠️🔍]\s/.test(l) || /^\d+[\.)]\s/.test(l)) {
+          flushParrafo();
+          resultado.push(`<li>${l.replace(/^[\-\*•✓✅⚠️🔍\d+[\.)]]\s*/, '')}</li>`);
+          continue;
+        }
+
+        // Párrafo normal
+        bufferParrafo.push(l);
+        // Flush si el buffer es muy largo
+        if (bufferParrafo.join(' ').length > 320) flushParrafo();
+      }
+      flushParrafo();
+
+      // Agrupar <li> en <ul>
+      const final = [];
+      let enLista = false;
+      resultado.forEach(b => {
+        if (b.startsWith('<li>')) {
+          if (!enLista) { final.push('<ul>'); enLista = true; }
+          final.push(b);
+        } else {
+          if (enLista) { final.push('</ul>'); enLista = false; }
+          final.push(b);
+        }
+      });
+      if (enLista) final.push('</ul>');
+
+      return final.join('\n\n');
+    }
 
     window.actualizarContadorPalabras = function() {
       const texto = document.getElementById('contenido').value;
@@ -1803,13 +1986,6 @@ ${descripcion}
 
         categorias.forEach(c => { const el = document.getElementById(`count${c.key}`); if (el) el.textContent = `${conteo[c.id] || 0} noticias`; });
 
-        try {
-          const statsRef = doc(db, "config", "estadisticas");
-          const statsSnap = await getDoc(statsRef);
-          document.getElementById('statVisitas').textContent = statsSnap.exists() ? (statsSnap.data().total || 0).toLocaleString() : '—';
-        } catch(e) { document.getElementById('statVisitas').textContent = '—'; }
-        document.getElementById('statHoy').textContent = Math.floor(Math.random() * 500 + 100).toLocaleString();
-        document.getElementById('statHoyVar').textContent = `+${Math.floor(Math.random() * 10)} hoy`;
       } catch (error) { console.error("Error estadísticas:", error); }
     }
 
@@ -1830,6 +2006,9 @@ ${descripcion}
                 <span class="news-badge" style="background:${n.publicado ? 'var(--success)' : 'var(--gray-400)'};color:#fff;font-size:10px;">${n.publicado ? 'PUBLICADO' : 'BORRADOR'}</span>
                 <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
               </div>
+            </div>
+            <div class="news-actions" style="opacity:1;">
+              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${(n.titulo || '').replace(/'/g, "\\'")}', '${(n.resumen || '').replace(/'/g, "\\'")}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
             </div>
           </div>
         `).join('');
@@ -1979,13 +2158,13 @@ ${descripcion}
               <div class="news-title">${n.titulo || '(Sin título)'}</div>
               <div class="news-meta">
                 <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
-                <span><i class="fas fa-eye" style="margin-right:4px;"></i>${n.vistas || 0}</span>
                 <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
                 <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
                 ${n.destacada ? '<span style="color: var(--warning);"><i class="fas fa-star"></i></span>' : ''}
               </div>
             </div>
             <div class="news-actions">
+              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${(n.titulo || '').replace(/'/g, "\\'")}', '${(n.resumen || '').replace(/'/g, "\\'")}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
               <button class="btn-icon edit" onclick="cargarNoticiaParaEditar('${n.id}')" data-tooltip="Editar"><i class="fas fa-edit"></i></button>
               <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
             </div>
@@ -2026,6 +2205,25 @@ ${descripcion}
     };
 
     window.cancelarEdicion = function() { limpiarFormulario(); showToast('Edición cancelada', 'info'); };
+
+    window.copiarParaRedes = async function(id, slug, titulo, resumen) {
+      const link = slug ? `https://nicaraguainformate.com/noticias/${slug}` : 'https://nicaraguainformate.com';
+      const texto = `${titulo}\n\n${resumen || ''}\n\n${link}`;
+      try {
+        await navigator.clipboard.writeText(texto);
+        showToast('Copiado para WhatsApp/Facebook', 'success');
+      } catch (err) {
+        // Fallback para navegadores antiguos
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Copiado para WhatsApp/Facebook', 'success');
+      }
+    };
+
     window.eliminarNoticia = async function(id) {
       if (!confirm('¿Eliminar permanentemente?')) return;
       showLoading(true, 'Eliminando...');
@@ -2211,6 +2409,26 @@ ${descripcion}
       localStorage.setItem('admin_fb_page1_id', fbPage1Id); localStorage.setItem('admin_fb_page1_token', fbPage1Token);
       localStorage.setItem('admin_fb_page2_id', fbPage2Id); localStorage.setItem('admin_fb_page2_token', fbPage2Token);
       showToast('Configuración guardada (repo de imágenes: informate-images)', 'success');
+    };
+
+    window.verificarElevenLabs = async function() {
+      const el = document.getElementById('statusElevenlabs');
+      el.textContent = 'Verificando...';
+      el.style.color = '#8a8a9e';
+      try {
+        const res = await fetch('/api/audio');
+        const data = await res.json();
+        if (data.configured) {
+          el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado</span> (Voice ID: ' + data.voiceId + ')';
+          showToast('ElevenLabs configurado correctamente', 'success');
+        } else {
+          el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> No configurado</span> — Agrega ELEVENLABS_API_KEY en Vercel → Settings → Environment Variables';
+          showToast('ElevenLabs no configurado', 'warning');
+        }
+      } catch (err) {
+        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Error de conexión</span>';
+        showToast('Error verificando ElevenLabs: ' + err.message, 'error');
+      }
     };
 
     setTimeout(() => { if (document.getElementById('configTgToken')) cargarConfiguracion(); }, 1000);

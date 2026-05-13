@@ -1499,6 +1499,19 @@ a:hover { color: var(--accent-dark); }
 [data-theme="dark"] .news-item:hover { background: #1a1a1a !important; }
 [data-theme="dark"] .article-meta-bar { border-color: #262626 !important; }
 
+/* Visually hidden — accesible para SEO y screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ═══════════════════════════════════════════════════════════
    DARK MODE — FIX SIDEBAR WIDGETS
    ═══════════════════════════════════════════════════════════ */

@@ -63,11 +63,13 @@ export function formatDateShortES(dateStr: string | Date): string {
 function esSubtitulo(linea: string): boolean {
   const l = linea.trim();
   if (l.length < 4 || l.length > 70) return false;
-  // MAYÚSCULAS puras
-  if (l === l.toUpperCase() && !l.endsWith('.')) return true;
-  // Patrones comunes de subtítulo
-  const patrones = /^(el|la|los|las|un|una|nuevos?|antiguos?|impacto|alerta|riesgo|crisis|futuro|revelan?|exigen|denuncian?|declaran?|anuncian?|confirman?)\s+/i;
-  if (patrones.test(l) && !l.endsWith('.')) return true;
+  // Si termina en ':' es título de lista, NO subtítulo del artículo
+  if (l.endsWith(':')) return false;
+  // MAYÚSCULAS puras (pero más de una palabra para evitar acrónimos sueltos)
+  if (l === l.toUpperCase() && !l.endsWith('.') && l.split(/\s+/).length > 1) return true;
+  // Patrones comunes de subtítulo periodístico (más específicos)
+  const patrones = /^(el|la|los|las|un|una|nuevos?|antiguos?|impacto|alerta|riesgo|crisis|futuro|revelan?|exigen|denuncian?|declaran?|anuncian?|confirman?|detalles|consecuencias|reacciones|declaraciones)\s+/i;
+  if (patrones.test(l) && !l.endsWith('.') && l.split(/\s+/).length > 1) return true;
   return false;
 }
 
@@ -78,7 +80,8 @@ function esCita(linea: string): boolean {
 
 function esLista(linea: string): boolean {
   const l = linea.trim();
-  return /^[\-\*•✓✅⚠️🔍]\s/.test(l) || /^\d+[\.)]\s/.test(l);
+  // Viñetas: guiones, asteriscos, bullets, checkmarks, warnings, emojis varios
+  return /^(\s*[-\*•✓✅⚠️🔍📖💡❗👉📌]\s)/.test(l) || /^(\s*\d+[\.)]\s)/.test(l);
 }
 
 /* ================================================================
@@ -150,6 +153,16 @@ export function formatearNoticia(texto: string): string {
 
     // Acumular párrafo
     if (linea.length < 50 && !linea.endsWith('.')) {
+      // Si termina en ':' es título de lista/descripción, NO subtítulo
+      if (linea.endsWith(':')) {
+        parrafoActual += (parrafoActual ? ' ' : '') + linea;
+        continue;
+      }
+      // Si es solo una palabra o número, no es subtítulo
+      if (linea.split(/\s+/).filter(Boolean).length <= 1) {
+        parrafoActual += (parrafoActual ? ' ' : '') + linea;
+        continue;
+      }
       // Posible fragmento de subtítulo no detectado
       flushParrafo();
       bloques.push(`<h2>${escaparHtml(linea)}</h2>`);
@@ -227,11 +240,16 @@ function partirParrafo(texto: string): string[] {
    Preserva estructura periodística, elimina basura
    ================================================================ */
 
+const BLOCK_TAG_RE = /<(p|h[1-6]|blockquote|ul|ol|li|div|section|article|br|table|tr|td)[\s>/]/i;
+
 export function limpiarHtml(html: string): string {
   if (!html) return '';
 
-  // Si es texto plano (sin HTML), pasar por formatearNoticia
-  if (!html.includes('<')) {
+  // Detectar si es REALMENTE HTML estructurado (tags de bloque), no un simple '<'
+  const hasBlockTags = BLOCK_TAG_RE.test(html);
+
+  // Si no es HTML estructurado, pasar por formatearNoticia que convierte \n a <p>
+  if (!hasBlockTags) {
     return formatearNoticia(html);
   }
 

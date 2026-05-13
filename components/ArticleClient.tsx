@@ -109,6 +109,32 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
     }, 500);
   };
 
+  const playNativeTTS = () => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      return false;
+    }
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.lang = 'es-NI';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    // Buscar voz en español (getVoices puede estar vacío inicialmente en algunos navegadores)
+    let voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) {
+      // Si no hay voces cargadas, usar voz por defecto del sistema
+      voices = [];
+    }
+    const esVoice = voices.find(v => v.lang.startsWith('es'));
+    if (esVoice) utterance.voice = esVoice;
+
+    utterance.onstart = () => { setIsPlaying(true); setIsLoading(false); };
+    utterance.onend = () => { setIsPlaying(false); setProgress(0); };
+    utterance.onerror = () => { setIsPlaying(false); setIsLoading(false); };
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+    return true;
+  };
+
   const play = async () => {
     if (isLoading) return;
 
@@ -127,20 +153,37 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
         body: JSON.stringify({ text: fullText, articleId }),
       });
       const data = await res.json();
-      if (!data.success || !data.audioBase64) throw new Error(data.error || 'Error generando audio');
+      if (!res.ok || !data.success || !data.audioBase64) {
+        throw new Error(data.error || data.detail || `Error del servidor (${res.status})`);
+      }
 
       const audio = new Audio(data.audioBase64);
       audioRef.current = audio;
       audio.onended = () => { setIsPlaying(false); setProgress(0); if (intervalRef.current) clearInterval(intervalRef.current); };
-      audio.onerror = () => { setIsPlaying(false); setIsLoading(false); alert('Error reproduciendo el audio'); };
+      audio.onerror = () => { setIsPlaying(false); setIsLoading(false); };
       await audio.play();
       setIsPlaying(true);
       setIsLoading(false);
       startProgressTracker();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error('Audio error:', err);
       setIsLoading(false);
-      alert('No se pudo generar el audio. Verifica tu conexión.');
+
+      const serverMsg = err?.message || '';
+
+      // Fallback a Web Speech API nativo del navegador
+      if (playNativeTTS()) {
+        return;
+      }
+
+      // Mostrar error específico
+      if (serverMsg.includes('API Key') || serverMsg.includes('no configurada')) {
+        alert('El servicio de voz profesional no está configurado.\n\nContacta al administrador para activar ElevenLabs.');
+      } else if (serverMsg.includes('Network') || serverMsg.includes('fetch')) {
+        alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+      } else {
+        alert('No se pudo generar el audio: ' + serverMsg);
+      }
     }
   };
 
@@ -326,6 +369,9 @@ export default function ArticleClient({
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
   }
 
+  // Debug: log imagen
+  console.log('[ArticleClient]', noticia.slug, 'imagen=', noticia.imagen);
+
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const rawAutor = (noticia.autor || '').trim();
@@ -384,26 +430,24 @@ export default function ArticleClient({
         </div>
 
         {/* ===== FEATURED IMAGE ===== */}
-        {noticia.imagen && (
-          <figure className="featured-figure" style={{ margin: '0 0 40px' }}>
-            {isLuto ? (
-              <LutoImage
-                src={noticia.imagen || '/logo.png'}
-                alt={noticia.titulo}
-                nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
-                className="featured-image-wrapper"
-              />
-            ) : (
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 12, overflow: 'hidden' }}>
-                <ArticleImage src={noticia.imagen || '/logo.png'} alt={noticia.titulo} />
-              </div>
-            )}
-            <figcaption className="featured-caption">
-              {noticia.titulo}
-              <span className="featured-credit">Foto: Nicaragua Informate</span>
-            </figcaption>
-          </figure>
-        )}
+        <figure className="featured-figure" style={{ margin: '0 0 40px' }}>
+          {isLuto ? (
+            <LutoImage
+              src={noticia.imagen || '/logo.png'}
+              alt={noticia.titulo}
+              nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
+              className="featured-image-wrapper"
+            />
+          ) : (
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 12, overflow: 'hidden' }}>
+              <ArticleImage src={noticia.imagen || '/logo.png'} alt={noticia.titulo} />
+            </div>
+          )}
+          <figcaption className="featured-caption">
+            {noticia.titulo}
+            <span className="featured-credit">Foto: Nicaragua Informate</span>
+          </figcaption>
+        </figure>
 
         {/* ===== AUDIO PLAYER ===== */}
         <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />

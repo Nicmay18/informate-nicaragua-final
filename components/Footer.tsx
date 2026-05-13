@@ -74,14 +74,17 @@ export default function Footer() {
             <FileText size={14} /> Formulario de contacto
           </Link>
           <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-            <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Facebook">
+            <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Facebook Nicaragua Informate">
               <BrandIcon name="facebook-f" size={13} />
+              <span className="visually-hidden">Facebook Nicaragua Informate</span>
             </a>
-            <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="WhatsApp">
+            <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Canal WhatsApp Nicaragua Informate">
               <BrandIcon name="whatsapp" size={13} />
+              <span className="visually-hidden">Canal WhatsApp Nicaragua Informate</span>
             </a>
-            <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Telegram">
+            <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', textDecoration: 'none' }} aria-label="Telegram Nicaragua Informate">
               <BrandIcon name="telegram" size={13} />
+              <span className="visually-hidden">Telegram Nicaragua Informate</span>
             </a>
           </div>
         </div>

@@ -49,6 +49,13 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const shown = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = shown.length < filtered.length;
 
+  // Debug: log URLs de imagen
+  if (typeof window !== 'undefined') {
+    shown.forEach(n => {
+      console.log(`[NewsGrid] ${n.slug}: imagen="${n.imagen}"`);
+    });
+  }
+
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
   function timeAgo(iso: string): string {
     return iso ? formatDateShortES(iso) : '';
@@ -131,7 +138,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
       ) : (
         <div className="news-list">
           {shown.map(n => (
-            <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card">
+            <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
               <div className="ng-thumb">
                 <ArticleImage src={n.imagen} alt={n.titulo} />
                 <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>

@@ -36,8 +36,8 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
     border: '1px solid rgba(255,255,255,0.15)',
     color: '#fff',
     cursor: 'pointer',
-    width: 28,
-    height: 28,
+    width: 40,
+    height: 40,
     borderRadius: 6,
     display: 'flex',
     alignItems: 'center',
@@ -45,6 +45,7 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
     fontSize: 11,
     transition: 'background 0.15s',
     flexShrink: 0,
+    padding: 0,
   };
 
   return (

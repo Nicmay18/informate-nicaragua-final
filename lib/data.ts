@@ -1,4 +1,5 @@
 import type { Noticia } from './types';
+import { FALLBACK_IMAGE } from './types';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -10,7 +11,7 @@ const MAX_COUNT = 100;
 // Firestore solo guarda el URL original; lo mapeamos a la ruta local
 // =============================================================================
 function normalizeImage(imagen: string): string {
-  if (!imagen) return '';
+  if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
 
   // Ya es ruta local
   if (imagen.startsWith('/images/')) return imagen;
@@ -41,7 +42,7 @@ function normalizeImage(imagen: string): string {
 
   // Solo nombre de archivo → asumir /images/
   const fn = imagen.split('/').pop()?.trim();
-  if (!fn || fn.length < 2) return '';
+  if (!fn || fn.length < 2) return FALLBACK_IMAGE;
   return `/images/${fn}`;
 }
 
