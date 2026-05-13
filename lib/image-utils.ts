@@ -28,8 +28,8 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     );
   }
 
-  // Si es data URI o ruta local, no aplicar proxy
-  if (cdnUrl.startsWith('data:') || cdnUrl.startsWith('/')) {
+  // Si es data URI, ruta local, o Firebase Storage (token requerido), no aplicar proxy
+  if (cdnUrl.startsWith('data:') || cdnUrl.startsWith('/') || cdnUrl.includes('firebasestorage.googleapis.com')) {
     return cdnUrl;
   }
 

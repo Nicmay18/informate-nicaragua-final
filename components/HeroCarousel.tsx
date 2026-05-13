@@ -1,6 +1,15 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+
+function useSyncedImage(src: string, width?: number) {
+  const validSrc = src?.trim();
+  const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round((width || 800) * 0.75)) : FALLBACK_IMAGE;
+  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
+  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+  return { currentSrc, setCurrentSrc };
+}
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
@@ -8,10 +17,11 @@ import { formatDateShortES } from '@/lib/formateo';
 import { cleanImageUrl, getResponsiveImageUrl } from '@/lib/image-utils';
 
 function HeroImage({ src, alt, style, width = 800, priority }: { src: string; alt: string; style?: React.CSSProperties; width?: number; priority?: boolean }) {
-  const validSrc = src?.trim();
-  const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.75)) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
+  const { currentSrc, setCurrentSrc } = useSyncedImage(src, width);
+  // Debug: cada vez que cambia src, loggear
+  useEffect(() => {
+    console.log('[HeroImage] src=' + src + ' -> currentSrc=' + currentSrc);
+  }, [src, currentSrc]);
   return (
     <img
       src={currentSrc}
@@ -19,6 +29,7 @@ function HeroImage({ src, alt, style, width = 800, priority }: { src: string; al
       loading={priority ? 'eager' : 'lazy'}
       {...(priority ? { fetchPriority: 'high' } : {})}
       onError={() => {
+        console.error('[HeroImage] onError for src=' + src + ', currentSrc=' + currentSrc);
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
       style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
@@ -60,6 +71,10 @@ interface HeroCarouselProps {
 export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const slides = noticias.slice(0, MAX_SLIDES);
   const sideCards = noticias.slice(1, 4);
+  // Debug: log todas las slides
+  useEffect(() => {
+    slides.forEach((s, i) => console.log('[HeroCarousel] slide ' + i + ': slug=' + s.slug + ' imagen=' + s.imagen));
+  }, [slides]);
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const [paused, setPaused] = useState(false);

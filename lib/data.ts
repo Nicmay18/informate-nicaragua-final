@@ -19,9 +19,9 @@ function normalizeImage(imagen: string): string {
   // Data URI (imagen inline del admin) → mantener
   if (imagen.startsWith('data:')) return imagen;
 
-  // Firebase Storage URL → mantener como URL externa (configurada en next.config.ts)
+  // Firebase Storage URL → MANTENER COMPLETA (incluyendo token de autenticación)
   if (imagen.includes('firebasestorage.googleapis.com') || imagen.includes('storage.googleapis.com')) {
-    return imagen.split('?')[0];
+    return imagen; // NO quitar query params, el token es obligatorio
   }
 
   // jsDelivr CDN / GitHub raw URLs → mantener como URL externa
