@@ -6,7 +6,7 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
   if (!noticias.length) return null;
 
   return (
-    <div style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
+    <div className="sidebar-widget trending-widget" style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
         <span style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%', animation: 'pulse 2s infinite', display: 'inline-block' }} />
@@ -54,7 +54,7 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
                 }}>
                   {n.categoria}
                 </span>
-                <p className="trending-title" style={{
+                <p className="trending-title sidebar-text" style={{
                   fontSize: 13,
                   fontWeight: 600,
                   lineHeight: 1.4,

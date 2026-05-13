@@ -10,7 +10,7 @@ const SOCIALS = [
 
 export default function SocialGrid() {
   return (
-    <div style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
+    <div className="sidebar-widget social-widget" style={{ background: '#faf9f7', borderRadius: 8, padding: 20, marginBottom: 24, border: '1px solid #f0f0f4' }}>
       {/* Widget Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
         <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Síguenos</h3>
@@ -19,6 +19,7 @@ export default function SocialGrid() {
       <style>{`
         .social-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .social-card { display: flex; align-items: center; gap: 10px; padding: 12px; background: #fff; border-radius: 4px; text-decoration: none; color: #1a1a2e; border: 1px solid #e8e8ec; transition: all 0.2s; }
+        .social-card .sidebar-text { color: #1a1a2e; }
         .social-card:hover { border-color: #c41e3a; transform: translateY(-1px); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
       `}</style>
       <div className="social-link-grid">
@@ -46,8 +47,8 @@ export default function SocialGrid() {
               {s.icon}
             </span>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 700 }}>{s.label}</div>
-              <div style={{ fontSize: 11, color: '#8a8a9e' }}>{s.hint}</div>
+              <div className="sidebar-text" style={{ fontSize: 13, fontWeight: 700 }}>{s.label}</div>
+              <div className="sidebar-muted" style={{ fontSize: 11, color: '#8a8a9e' }}>{s.hint}</div>
             </div>
           </a>
         ))}
