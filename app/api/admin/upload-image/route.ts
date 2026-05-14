@@ -96,8 +96,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // CDN URL via jsDelivr (no trigger deploys, global CDN)
-    const cdnUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}`;
+    // URL raw de GitHub — disponible inmediatamente tras el push
+    const cdnUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`;
 
     return NextResponse.json({
       success: true,

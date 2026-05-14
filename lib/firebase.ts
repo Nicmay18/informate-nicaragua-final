@@ -68,9 +68,9 @@ function normalizeImage(imagen: string): string {
     }
   }
 
+  // GitHub/jsDelivr URLs: mantener como URL externa (imágenes en repo separado)
   if (imagen.includes('githubusercontent.com') || imagen.includes('cdn.jsdelivr.net')) {
-    const m = imagen.match(/images\/([^/?#]+)/);
-    if (m?.[1]) return `/images/${m[1]}`;
+    return imagen;
   }
 
   if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;

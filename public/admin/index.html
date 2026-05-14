@@ -1590,8 +1590,8 @@ ${descripcion}
 
       const data = await res.json().catch(() => ({}));
       console.log('[GitHub Upload] OK:', data.content?.html_url || url);
-      // Devolver URL jsDelivr CDN — más rápido y confiable que raw.githubusercontent.com
-      return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}${filename}`;
+      // Devolver URL raw de GitHub — disponible inmediatamente tras el push (sin caché de jsDelivr)
+      return `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}${filename}`;
     }
 
     // SEO Preview

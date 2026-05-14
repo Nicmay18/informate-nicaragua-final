@@ -24,8 +24,18 @@ function normalizeImage(imagen: string): string {
     return imagen; // NO quitar query params, el token es obligatorio
   }
 
-  // jsDelivr CDN / GitHub raw URLs → mantener como URL externa
-  if (imagen.includes('cdn.jsdelivr.net') || imagen.includes('githubusercontent.com')) {
+  // jsDelivr CDN → convertir a GitHub raw (evita caché lento de jsDelivr)
+  if (imagen.includes('cdn.jsdelivr.net')) {
+    const jsdelivrMatch = imagen.match(/cdn\.jsdelivr\.net\/gh\/([^\/]+)\/([^\/]+)@([^\/]+)\/(.+)/);
+    if (jsdelivrMatch) {
+      const [, owner, repo, branch, path] = jsdelivrMatch;
+      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    }
+    return imagen.split('?')[0];
+  }
+
+  // GitHub raw URLs → mantener directo (disponible inmediatamente)
+  if (imagen.includes('githubusercontent.com')) {
     return imagen.split('?')[0];
   }
 
