@@ -11,4 +11,4 @@ Allow: /noticias?cat=*
 Allow: /noticias?*
 Crawl-delay: 1
 
-Sitemap: https://nicaraguainformate.com/sitemap.xml
+Sitemap: https://www.nicaraguainformate.com/sitemap.xml

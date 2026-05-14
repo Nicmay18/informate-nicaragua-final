@@ -28,12 +28,12 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   verification: {
-    google: 'GTM-PK3V8LZX', // Google Search Console verification
+    google: 'GTM-PK3V8LZX', // TODO: Reemplazar con código real de Google Search Console (no GTM)
   },
   openGraph: {
     type: 'website',
     locale: 'es_NI',
-    url: 'https://nicaraguainformate.com',
+    url: 'https://www.nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
