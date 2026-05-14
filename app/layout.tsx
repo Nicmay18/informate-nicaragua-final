@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
 import CookieBanner from '@/components/CookieBanner';
+import DeferredAds from '@/components/DeferredAds';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nicaraguainformate.com'),
+  metadataBase: new URL('https://www.nicaraguainformate.com'),
   manifest: '/manifest.json',
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   verification: {
-    google: 'TU_CODIGO_DE_VERIFICACION_AQUI', // Reemplaza con tu código real de Google Search Console
+    google: 'GTM-PK3V8LZX', // Google Search Console verification
   },
   openGraph: {
     type: 'website',
@@ -56,14 +56,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551939"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script
@@ -86,12 +80,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientOnly fallback={<div style={{ height: 58 }} />}>
           <StickyRadio />
         </ClientOnly>
-        <ClientOnly>
+        <ClientOnly fallback={<div style={{ height: 56 }} />}>
           <BottomNav />
         </ClientOnly>
-        <ClientOnly>
+        <ClientOnly fallback={<div style={{ height: 48 }} />}>
           <CookieBanner />
         </ClientOnly>
+        <DeferredAds />
       </body>
     </html>
   );

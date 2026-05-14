@@ -370,10 +370,7 @@ export default function ArticleClient({
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
   }
 
-  // Debug: log imagen
-  console.log('[ArticleClient]', noticia.slug, 'imagen=', noticia.imagen);
-
-  const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+  const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const rawAutor = (noticia.autor || '').trim();
   const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Rivera M.';

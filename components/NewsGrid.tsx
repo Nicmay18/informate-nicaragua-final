@@ -50,13 +50,6 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const shown = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = shown.length < filtered.length;
 
-  // Debug: log URLs de imagen
-  if (typeof window !== 'undefined') {
-    shown.forEach(n => {
-      console.log(`[NewsGrid] ${n.slug}: imagen="${n.imagen}"`);
-    });
-  }
-
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
   function timeAgo(iso: string): string {
     return iso ? formatDateShortES(iso) : '';
