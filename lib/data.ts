@@ -112,7 +112,7 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '1',
     slug: 'homicidio-jinotega',
-    titulo: 'Homicidio imprudente en Jinotega: Motociclista muere tras choque',
+    titulo: 'Colisión en Jinotega deja víctima fatal; Policía investiga',
     resumen: 'Marvin Antonio Tinoco Rivera falleció en la vía Jinotega–El Guayacán tras impactar contra un camión sin señales.',
     contenido: '<p>Marvin Antonio Tinoco Rivera perdió la vida en un trágico accidente...</p>',
     categoria: 'Sucesos',
@@ -124,7 +124,7 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '2',
     slug: 'incendio-mercado-oriental',
-    titulo: 'Incendio en el Mercado Oriental devora tres tramos de ropa',
+    titulo: 'Incendio afecta tramos de ropa en Mercado Oriental',
     resumen: 'Tres negocios de ropa quedaron reducidos a cenizas en el sector de la Casa de los Encajes.',
     contenido: '<p>Bomberos y AVEXI investigan las causas del incendio...</p>',
     categoria: 'Sucesos',
@@ -160,7 +160,7 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '5',
     slug: 'shakira-brasil',
-    titulo: 'Histórico: Shakira convoca a dos millones de fans en Brasil',
+    titulo: 'Shakira convoca a dos millones de fans en Brasil',
     resumen: 'La estrella colombiana rompe récords en su gira mundial.',
     contenido: '<p>Shakira demostró una vez más su poder...</p>',
     categoria: 'Espectáculos',
@@ -172,7 +172,7 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '6',
     slug: 'berman-espinoza',
-    titulo: 'Berman Espinoza hace historia: alcanza 1,450 ponches',
+    titulo: 'Berman Espinoza alcanza récord de 1,450 ponches',
     resumen: 'El pitcher nica se convierte en el nuevo Rey de los ponches.',
     contenido: '<p>Un logro histórico para el beisbol nicaragüense...</p>',
     categoria: 'Deportes',
@@ -184,7 +184,7 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '7',
     slug: 'muertes-accidentes-abril',
-    titulo: 'Abril cierra con 70 muertes por accidentes de tránsito',
+    titulo: '70 fallecimientos por accidentes de tránsito en abril',
     resumen: 'Managua y los motociclistas encabezan las alarmantes estadísticas.',
     contenido: '<p>Las autoridades hacen un llamado a la precaución...</p>',
     categoria: 'Nacionales',
