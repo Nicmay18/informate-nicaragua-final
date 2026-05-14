@@ -53,13 +53,6 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const shown = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = shown.length < filtered.length;
 
-  // Debug: log URLs de imagen
-  if (typeof window !== 'undefined') {
-    shown.forEach(n => {
-      console.log(`[NewsGrid] ${n.slug}: imagen="${n.imagen}"`);
-    });
-  }
-
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
   function timeAgo(iso: string): string {
     return iso ? formatDateShortES(iso) : '';
@@ -73,7 +66,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         .ng-card:last-child { border-bottom:none; }
         .ng-card:hover { background:#faf9f7; margin:0 -16px; padding-left:16px; padding-right:16px; border-radius:8px; border-bottom-color:transparent; }
         .ng-card:hover + .ng-card { border-top:1px solid transparent; }
-        .ng-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:4/3; }
+        .ng-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:4/3; background:#e8e8ec; }
         .ng-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; }
         .ng-card:hover .ng-thumb img { transform:scale(1.05); }
         .ng-thumb .category-badge { position:absolute; top:8px; left:8px; background:var(--accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }

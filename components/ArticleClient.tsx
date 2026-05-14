@@ -535,12 +535,12 @@ export default function ArticleClient({
                       }}>
                         {n.categoria}
                       </span>
-                      <h4 style={{
+                      <h3 style={{
                         fontSize: 15, fontWeight: 700, color: '#121212',
                         lineHeight: 1.35, margin: 0, flex: 1,
                       }}>
                         {n.titulo}
-                      </h4>
+                      </h3>
                       <div style={{ fontSize: 12, color: '#a0a0a0', marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Clock size={10} /> {fmtDate(n.fecha)}
                       </div>

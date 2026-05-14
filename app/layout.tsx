@@ -55,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
         <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
         <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
         <Script

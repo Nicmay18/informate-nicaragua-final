@@ -1,3 +1,20 @@
+# Windsurf IDE (se inyecta en el proyecto automáticamente)
+Windsurf.exe
+resources/
+d3dcompiler_47.dll
+dxcompiler.dll
+dxil.dll
+ffmpeg.dll
+libEGL.dll
+libGLESv2.dll
+v8_context_snapshot.bin
+vk_swiftshader.dll
+vk_swiftshader_icd.json
+vulkan-1.dll
+snapshot_blob.bin
+tools/
+unins000.*
+
 # Dependencias
 node_modules/
 npm-debug.log*
@@ -121,3 +138,6 @@ firebase
 temp-fixes/
 
 .vercel
+
+# TypeScript cache
+tsconfig.tsbuildinfo

@@ -20,7 +20,7 @@ export default function SiteFooter() {
 
           {/* Secciones */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Secciones</h4>
+            <h2 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Secciones</h2>
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {CATEGORIES.map((cat) => (
                 <li key={cat.name} style={{ marginBottom: 10 }}>
@@ -34,7 +34,7 @@ export default function SiteFooter() {
 
           {/* Legal */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Legal</h4>
+            <h2 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Legal</h2>
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {[
                 { href: '/nosotros', label: 'Sobre Nosotros' },
@@ -53,7 +53,7 @@ export default function SiteFooter() {
 
           {/* Contacto */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Contacto</h4>
+            <h2 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Contacto</h2>
             <p style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
               <span>📍</span> Estelí, Nicaragua
             </p>

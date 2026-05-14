@@ -86,18 +86,18 @@ export default function StickyRadio() {
           </div>
 
           {/* Play/Pause */}
-          <button onClick={toggle} style={{
-            width: 40, height: 40, borderRadius: '50%', border: 'none', cursor: 'pointer', flexShrink: 0,
+          <button onClick={toggle} aria-label={playing ? 'Pausar radio' : 'Reproducir radio'} style={{
+            width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer', flexShrink: 0,
             background: playing ? '#ef4444' : '#8c1d18', color: '#fff',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
             boxShadow: playing ? '0 0 0 4px rgba(239,68,68,0.2)' : 'none', transition: 'all 0.2s',
           }}>
-            {playing ? <Pause size={14} /> : <Play size={14} style={{ marginLeft: 2 }} />}
+            {playing ? <Pause size={16} /> : <Play size={16} style={{ marginLeft: 2 }} />}
           </button>
 
           {/* Station picker */}
           <div style={{ position: 'relative', flex: 1, minWidth: 0, maxWidth: 260 }}>
-            <button onClick={() => setOpen(!open)} style={{
+            <button onClick={() => setOpen(!open)} aria-label="Seleccionar emisora" aria-expanded={open} style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
               color: '#e2e8f0', borderRadius: 8, padding: '7px 12px', cursor: 'pointer',
               width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center',
@@ -139,18 +139,19 @@ export default function StickyRadio() {
 
           {/* Volume control (desktop) */}
           <div className="sradio-vol">
-            <button onClick={() => setMuted(m => !m)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 15, padding: '4px' }}>
+            <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Activar sonido' : 'Silenciar'} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 15, padding: '4px' }}>
               {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
             </button>
             <input type="range" min="0" max="1" step="0.05"
               value={muted ? 0 : volume}
               onChange={e => { setVolume(parseFloat(e.target.value)); setMuted(false); }}
+              aria-label="Volumen de la radio"
               style={{ width: 80, accentColor: '#ef4444', cursor: 'pointer' }}
             />
           </div>
 
           {/* Dismiss */}
-          <button onClick={dismiss} title="Cerrar" style={{ flexShrink: 0, background: 'none', border: 'none', color: '#334155', cursor: 'pointer', fontSize: 16, padding: '6px', borderRadius: 6 }}>
+          <button onClick={dismiss} aria-label="Cerrar radio" style={{ flexShrink: 0, background: 'none', border: 'none', color: '#334155', cursor: 'pointer', fontSize: 16, padding: '6px', borderRadius: 6 }}>
             <X size={16} />
           </button>
         </div>
