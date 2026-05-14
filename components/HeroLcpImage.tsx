@@ -1,10 +1,13 @@
+import Image from 'next/image';
+
 interface HeroLcpImageProps {
   src: string;
   alt: string;
   width?: number;
   height?: number;
+  priority?: boolean;
+  className?: string;
   style?: React.CSSProperties;
-  onError?: () => void;
 }
 
 export default function HeroLcpImage({
@@ -12,8 +15,9 @@ export default function HeroLcpImage({
   alt,
   width = 665,
   height = 531,
+  priority = false,
+  className = '',
   style,
-  onError,
 }: HeroLcpImageProps) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
@@ -21,6 +25,7 @@ export default function HeroLcpImage({
 
   return (
     <div
+      className={className}
       style={{
         position: 'relative',
         width: '100%',
@@ -30,24 +35,14 @@ export default function HeroLcpImage({
         ...style,
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={imgSrc}
         alt={alt}
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        width={width}
-        height={height}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center 30%',
-        }}
-        onError={onError}
+        fill
+        sizes="(max-width: 768px) 100vw, 665px"
+        style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
+        priority={priority}
+        loading={priority ? 'eager' : 'lazy'}
       />
     </div>
   );

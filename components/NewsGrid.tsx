@@ -39,7 +39,7 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
 };
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 6;
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
