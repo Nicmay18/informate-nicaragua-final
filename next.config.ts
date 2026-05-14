@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '**.googleusercontent.com', pathname: '/**' },
     ],
     formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 86400,
   },
   compress: true,
   poweredByHeader: false,
@@ -102,6 +103,14 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            key: 'Link',
+            value: '<https://raw.githubusercontent.com>; rel=preconnect',
           },
           {
             key: 'Content-Security-Policy',

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
@@ -15,15 +16,24 @@ function ArticleImage({ src, alt, style, width = 800 }: { src: string; alt: stri
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+
+  const isPriority = width > 400;
+  const sizes = width <= 400
+    ? '(max-width: 768px) 50vw, 400px'
+    : '(max-width: 768px) 100vw, 665px';
+
   return (
-    <img
+    <Image
       src={currentSrc}
       alt={alt}
-      loading="lazy"
+      fill
+      sizes={sizes}
+      style={{ objectFit: 'cover', ...style }}
+      loading={isPriority ? undefined : 'lazy'}
+      priority={isPriority}
       onError={() => {
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
     />
   );
 }

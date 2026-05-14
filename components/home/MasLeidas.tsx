@@ -31,7 +31,7 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
               <span className="masleidas-rank" style={{
                 fontSize: 24,
                 fontWeight: 900,
-                color: i === 0 ? '#c41e3a' : '#b0b0c0',
+                color: i === 0 ? '#c41e3a' : '#737373',
                 lineHeight: 1,
                 minWidth: 28,
                 fontFamily: 'var(--font-merri)',

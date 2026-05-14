@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
@@ -13,14 +14,16 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
   return (
-    <img
+    <Image
       src={currentSrc}
       alt={alt}
+      fill
+      sizes="(max-width: 480px) 100px, (max-width: 768px) 120px, 200px"
+      style={{ objectFit: 'cover' }}
       loading="lazy"
       onError={() => {
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
-      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
     />
   );
 }
@@ -114,7 +117,7 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
           <span style={{ width: 4, height: 24, background: '#c41e3a', borderRadius: 2, display: 'inline-block' }} />
           Últimas Noticias
         </h2>
-        <span className="ng-count" style={{ fontSize: 13, color: '#8a8a9e', fontWeight: 500 }}>{filtered.length} artículos</span>
+        <span className="ng-count" style={{ fontSize: 13, color: '#595959', fontWeight: 500 }}>{filtered.length} artículos</span>
       </div>
 
       {/* Filter Tabs */}
