@@ -1,32 +1,34 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
-import { cleanImageUrl, getResponsiveImageUrl } from '@/lib/image-utils';
+import { getResponsiveImageUrl, getSrcSet } from '@/lib/image-utils';
 import HeroLcpImage from '@/components/HeroLcpImage';
 
-function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean; sizes?: string }) {
+function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
+  const srcSet = getSrcSet(optimizedSrc, [400, 800, 1200]);
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
   return (
-    <Image
+    <img
       src={currentSrc}
+      srcSet={srcSet}
+      sizes="(max-width: 768px) 100vw, 665px"
       alt={alt}
-      fill
-      sizes={sizes || '(max-width: 768px) 100vw, 665px'}
-      style={{ objectFit: 'cover', ...style }}
       loading={priority ? 'eager' : 'lazy'}
-      priority={priority}
+      {...(priority ? { fetchPriority: 'high' } : {})}
+      width={800}
+      height={600}
       onError={() => {
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }}
     />
   );
 }

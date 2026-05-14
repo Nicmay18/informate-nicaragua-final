@@ -54,11 +54,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
-        <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
+        <style dangerouslySetInnerHTML={{ __html: `
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; }
+          header { position: relative; z-index: 50; }
+          .hero { position: relative; width: 100%; overflow: hidden; }
+          main { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 16px; }
+          @media (min-width: 1024px) { main { grid-template-columns: 1fr 340px; } }
+          nav[role="navigation"] { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #fff; border-top: 1px solid #e5e5e5; z-index: 40; }
+          .cookie-banner { position: fixed; bottom: 56px; left: 0; right: 0; padding: 12px 16px; background: #fff; border-top: 1px solid #e5e8ec; z-index: 45; }
+        `}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script

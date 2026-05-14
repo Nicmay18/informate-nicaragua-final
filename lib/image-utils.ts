@@ -25,12 +25,12 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return url;
   }
 
-  // GitHub raw URLs: usar directo sin proxy (más confiable y disponible inmediatamente)
-  if (url.includes('githubusercontent.com')) {
+  // GitHub raw URLs: usar directo sin proxy cuando no hay tamaño especificado
+  if (url.includes('githubusercontent.com') && !width && !height) {
     return url;
   }
 
-  // Otras imágenes externas: proxy weserv.nl para redimensionar
+  // Otras imágenes externas + GitHub con tamaño: proxy weserv.nl para redimensionar
   if (width || height) {
     const params = new URLSearchParams();
     params.set('url', url);
@@ -43,4 +43,22 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
   }
 
   return url;
+}
+
+/**
+ * Genera srcSet con múltiples tamaños para imágenes responsivas.
+ * Para GitHub raw y otras externas usa weserv.nl.
+ * Para Firebase devuelve solo la URL original (no se puede redimensionar vía proxy).
+ */
+export function getSrcSet(url: string, widths: number[] = [400, 800, 1200]): string {
+  if (!url) return url;
+  if (url.startsWith('data:') || url.startsWith('/') || url.includes('firebasestorage.googleapis.com')) {
+    return url;
+  }
+  return widths
+    .map((w) => {
+      const resized = getResponsiveImageUrl(url, w);
+      return `${resized} ${w}w`;
+    })
+    .join(', ');
 }

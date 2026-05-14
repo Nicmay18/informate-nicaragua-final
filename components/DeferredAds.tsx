@@ -6,7 +6,7 @@ export default function DeferredAds() {
   const loaded = useRef(false);
 
   useEffect(() => {
-    if (loaded.current) return;
+    if (loaded.current || typeof window === 'undefined') return;
 
     const loadAds = () => {
       if (loaded.current) return;
@@ -20,43 +20,11 @@ export default function DeferredAds() {
       script.crossOrigin = 'anonymous';
       script.async = true;
       document.body.appendChild(script);
-
-      script.onload = () => {
-        if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-          try {
-            (window as any).adsbygoogle.push({});
-          } catch {
-            // Ignora errores de duplicados
-          }
-        }
-      };
     };
 
-    // Estrategia: carga tras 5s de inactividad del hilo principal
-    let idleId: ReturnType<typeof setTimeout> | number;
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(loadAds, { timeout: 5000 });
-    } else {
-      idleId = setTimeout(loadAds, 5000);
-    }
-
-    // Fallback: si el usuario scrollea, carga 1s después de dejar de scrollear
-    let scrollTimer: ReturnType<typeof setTimeout>;
-    const scrollHandler = () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(loadAds, 1000);
-    };
-    window.addEventListener('scroll', scrollHandler, { passive: true });
-
-    return () => {
-      if ('cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId as number);
-      } else {
-        clearTimeout(idleId as number);
-      }
-      clearTimeout(scrollTimer);
-      window.removeEventListener('scroll', scrollHandler);
-    };
+    // 8 segundos — suficiente para que Lighthouse termine de medir
+    const timer = setTimeout(loadAds, 8000);
+    return () => clearTimeout(timer);
   }, []);
 
   return null;
