@@ -14,7 +14,8 @@ export function cleanImageUrl(url: string): string {
 /**
  * Convierte URLs de imágenes a formato optimizado:
  * - raw.githubusercontent.com → cdn.jsdelivr.net (mejor caché CDN)
- * - Aplica proxy weserv.nl para redimensionar según el viewport
+ * - Imágenes GitHub/jsDelivr: directo (sin proxy, evita fallos de weserv.nl)
+ * - Otras externas: proxy weserv.nl para redimensionar
  */
 export function getResponsiveImageUrl(url: string, width?: number, height?: number): string {
   if (!url) return url;
@@ -33,7 +34,12 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return cdnUrl;
   }
 
-  // Usar weserv.nl como proxy de redimensionamiento para imágenes externas
+  // Imágenes de jsDelivr/GitHub: usar directo sin proxy (más confiable)
+  if (cdnUrl.includes('cdn.jsdelivr.net')) {
+    return cdnUrl;
+  }
+
+  // Otras imágenes externas: proxy weserv.nl para redimensionar
   if (width || height) {
     const params = new URLSearchParams();
     params.set('url', cdnUrl);
