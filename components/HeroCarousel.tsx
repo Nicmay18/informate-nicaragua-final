@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
 import { cleanImageUrl, getResponsiveImageUrl } from '@/lib/image-utils';
+import HeroLcpImage from '@/components/HeroLcpImage';
 
 function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean; sizes?: string }) {
   const validSrc = src?.trim();
@@ -64,10 +65,6 @@ interface HeroCarouselProps {
 export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const slides = noticias.slice(0, MAX_SLIDES);
   const sideCards = noticias.slice(1, 4);
-  // Debug: log todas las slides
-  useEffect(() => {
-    slides.forEach((s, i) => console.log('[HeroCarousel] slide ' + i + ': slug=' + s.slug + ' imagen=' + s.imagen));
-  }, [slides]);
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -111,11 +108,12 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
         aria-label="Noticias destacadas"
       >
         <Link href={`/noticias/${n.slug}`} style={{ display: 'block', position: 'relative', width: '100%', height: '100%', textDecoration: 'none' }}>
-          <HeroImage
+          <HeroLcpImage
             src={img}
             alt={n.titulo}
-            style={{ objectPosition: 'center 30%', opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
-            priority
+            width={665}
+            height={531}
+            style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 

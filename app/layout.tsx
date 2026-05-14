@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
 import CookieBanner from '@/components/CookieBanner';
+import DeferredAds from '@/components/DeferredAds';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -51,19 +51,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Preconnect directo a GitHub raw — la imagen LCP carga desde aquí sin proxy */}
+        <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
+        {/* DNS prefetch para ads — útil pero no crítico para LCP */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
-        <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
-        <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551939"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script
@@ -92,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientOnly>
           <CookieBanner />
         </ClientOnly>
+        <DeferredAds />
       </body>
     </html>
   );

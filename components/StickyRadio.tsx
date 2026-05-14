@@ -6,8 +6,10 @@ const EMISORAS = [
   { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3' },
   { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream' },
   { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
-  { name: 'Radio Mía',            url: 'https://stream.zeno.fm/87am1q5d1v8uv' },
-  { name: 'Radio Fiesta',         url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
+  { name: 'Radio La Buenísima',   url: 'https://cast.tunzilla.com/http://alba-ni-nicaradios-labuenisima.stream.mediatiquestream.com/index.m3u8' },
+  { name: 'Radio Futura',         url: 'https://stream.zeno.fm/0r0gd02z2euvv' },
+  { name: 'VIV FM',               url: 'https://stream.zeno.fm/87am1q5d1v8uv' },
+  { name: 'Radio La Tuani',       url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];
@@ -18,35 +20,43 @@ export default function StickyRadio() {
   const [volume,    setVolume]    = useState(0.8);
   const [muted,     setMuted]     = useState(false);
   const [open,      setOpen]      = useState(false);
-  const [dismissed, setDismissed] = useState(true);
+  const [dismissed, setDismissed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    try {
-      if (!sessionStorage.getItem('radio-dismissed')) setDismissed(false);
-    } catch {}
-  }, []);
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = muted ? 0 : volume;
   }, [volume, muted]);
 
+  function handleAudioError() {
+    setPlaying(false);
+    setError('No se pudo conectar con la emisora. Intenta otra.');
+    setTimeout(() => setError(null), 4000);
+  }
+
   function startStation(idx: number) {
-    setSelected(idx); setOpen(false);
+    setSelected(idx); setOpen(false); setError(null);
     if (!audioRef.current) return;
     audioRef.current.src = EMISORAS[idx].url;
-    audioRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    audioRef.current.play().then(() => setPlaying(true)).catch(() => {
+      setPlaying(false);
+      setError('Error al reproducir. Verifica tu conexión.');
+    });
   }
 
   function toggle() {
     if (!audioRef.current) return;
     if (playing) { audioRef.current.pause(); setPlaying(false); }
-    else { audioRef.current.play().then(() => setPlaying(true)).catch(() => {}); }
+    else {
+      audioRef.current.play().then(() => { setPlaying(true); setError(null); }).catch(() => {
+        setError('No se pudo reproducir esta emisora.');
+      });
+    }
   }
 
   function dismiss() {
     audioRef.current?.pause(); setPlaying(false); setDismissed(true);
-    sessionStorage.setItem('radio-dismissed', '1');
+    try { sessionStorage.setItem('radio-dismissed', '1'); } catch {}
   }
 
   if (dismissed) {
@@ -156,7 +166,22 @@ export default function StickyRadio() {
           </button>
         </div>
 
-        <audio ref={audioRef} src={EMISORAS[selected].url} preload="none" />
+        {/* Error message */}
+        {error && (
+          <div style={{
+            position: 'absolute', bottom: 'calc(100% + 4px)', left: 0, right: 0,
+            background: '#ef4444', color: '#fff', padding: '8px 12px', fontSize: 12,
+            fontWeight: 600, borderRadius: 6, textAlign: 'center', zIndex: 202,
+          }}>
+            {error}
+          </div>
+        )}
+
+        <audio
+          ref={audioRef}
+          preload="none"
+          onError={handleAudioError}
+        />
       </div>
     </>
   );

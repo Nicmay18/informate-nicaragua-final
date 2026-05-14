@@ -4,11 +4,13 @@ import HeroCarousel from '@/components/HeroCarousel';
 import NewsletterForm from '@/components/NewsletterForm';
 import AdSlot from '@/components/AdSlot';
 import TrendingList from '@/components/home/TrendingList';
+import LazySidebar from '@/components/LazySidebar';
 import MasLeidas from '@/components/home/MasLeidas';
 import SocialGrid from '@/components/home/SocialGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
+import IndicadoresWidget from '@/components/IndicadoresWidget';
 import AutoRefresh from '@/components/AutoRefresh';
 import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
@@ -64,17 +66,22 @@ export default async function HomePage() {
         </div>
 
         {/* Right Column - Sidebar */}
-        <aside className="sidebar" style={{ position: 'sticky', top: 100 }}>
-          <TrendingList noticias={noticias.slice(0, 6)} />
-          {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
-          <AdSlot slot="homepage-sidebar-1" width={300} height={250} />
-          <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
-            <WeatherWidgetWrapper />
+        <LazySidebar>
+          <div className="sidebar" style={{ position: 'sticky', top: 100 }}>
+            <TrendingList noticias={noticias.slice(0, 6)} />
+            {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+            <AdSlot slot="homepage-sidebar-1" width={300} height={250} />
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
+              <IndicadoresWidget />
+            </div>
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
+              <WeatherWidgetWrapper />
+            </div>
+            <NewsletterForm />
+            <SocialGrid />
+            <DonationCard />
           </div>
-          <NewsletterForm />
-          <SocialGrid />
-          <DonationCard />
-        </aside>
+        </LazySidebar>
       </main>
 
       {/* ===== STICKY BOTTOM AD — Mobile only ===== */}

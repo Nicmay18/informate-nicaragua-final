@@ -12,7 +12,7 @@ import DonationCard from '@/components/DonationCard';
 
 import SocialJoinButtons from '@/components/SocialJoinButtons';
 
-import { getNews } from '@/lib/data';
+import { getNews, getNewsByCategory } from '@/lib/data';
 
 import type { Noticia } from '@/lib/types';
 
@@ -22,19 +22,23 @@ export const revalidate = 1;
 
 
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string }> }): Promise<Metadata> {
+
+  const params = await searchParams;
+
+  const cat = params.cat || 'Todas';
 
   const baseUrl = 'https://nicaraguainformate.com';
 
-  const url = `${baseUrl}/noticias`;
+  const url = `${baseUrl}/noticias${cat !== 'Todas' ? '?cat=' + encodeURIComponent(cat) : ''}`;
 
 
 
   return {
 
-    title: 'Todas las Noticias | Nicaragua Informate',
+    title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-    description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+    description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
 
     alternates: { canonical: url },
 
@@ -48,9 +52,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
       siteName: 'Nicaragua Informate',
 
-      title: 'Todas las Noticias | Nicaragua Informate',
+      title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-      description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
 
       images: [{ url: `${baseUrl}/logo.png`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
 
@@ -60,9 +64,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
       card: 'summary_large_image',
 
-      title: 'Todas las Noticias | Nicaragua Informate',
+      title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-      description: 'Portal de noticias de Nicaragua. Cobertura completa de sucesos, nacionales, deportes e internacionales.',
+      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
 
       images: [`${baseUrl}/logo.png`],
 
@@ -74,7 +78,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 
 
-export default async function NoticiasPage() {
+export default async function NoticiasPage({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
+
+  const params = await searchParams;
+
+  const cat = params.cat || 'Todas';
 
   let noticias: Noticia[] = [];
 
@@ -82,9 +90,17 @@ export default async function NoticiasPage() {
 
   try {
 
-    noticias = await getNews(50);
+    if (cat && cat !== 'Todas') {
 
-    console.log(`[NoticiasPage] Cargadas ${noticias.length} noticias desde Firebase`);
+      noticias = await getNewsByCategory(cat, 50);
+
+    } else {
+
+      noticias = await getNews(50);
+
+    }
+
+    console.log(`[NoticiasPage] Cargadas ${noticias.length} noticias${cat !== 'Todas' ? ' de ' + cat : ''}`);
   } catch (error) {
 
     console.error('[NoticiasPage] Error:', error);
@@ -99,7 +115,7 @@ export default async function NoticiasPage() {
 
       <AutoRefresh intervalSec={60} />
 
-      <Header activeCategory="Todas" />
+      <Header activeCategory={cat} />
 
 
 
@@ -109,13 +125,13 @@ export default async function NoticiasPage() {
 
           <h1 className="article-title-pro" style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, lineHeight: 1.08, marginBottom: 10, fontFamily: 'var(--font-merri)', letterSpacing: '-0.01em' }}>
 
-            Todas las Noticias
+            {cat !== 'Todas' ? cat : 'Todas las Noticias'}
 
           </h1>
 
           <p className="article-lead-pro" style={{ fontSize: 18, lineHeight: 1.6 }}>
 
-            Mantente informado con las últimas noticias de Nicaragua y el mundo.
+            {cat !== 'Todas' ? `Noticias de ${cat} en Nicaragua y el mundo.` : 'Mantente informado con las últimas noticias de Nicaragua y el mundo.'}
 
           </p>
 
