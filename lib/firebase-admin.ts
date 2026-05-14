@@ -12,7 +12,21 @@ function getAdminApp(): App {
   }
 
   const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  if (b64) {
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
+
+  // Diagnostic log (safe — no secrets revealed)
+  console.log('[firebase-admin] env check:', {
+    hasBase64: !!b64,
+    base64Length: b64?.length || 0,
+    hasProjectId: !!projectId,
+    hasClientEmail: !!clientEmail,
+    hasPrivateKey: !!privateKeyRaw,
+    privateKeyLength: privateKeyRaw?.length || 0,
+  });
+
+  if (b64 && b64.trim().length > 10) {
     try {
       const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
       
@@ -26,10 +40,6 @@ function getAdminApp(): App {
       throw new Error(`Failed to parse base64 service account: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
-
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
   if (!projectId || !clientEmail || !privateKeyRaw) {
     throw new Error('[firebase-admin] Missing required environment variables (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY)');
