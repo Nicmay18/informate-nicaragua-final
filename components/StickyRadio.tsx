@@ -6,8 +6,10 @@ const EMISORAS = [
   { name: 'Radio Nicaragua',      url: 'https://online.radionicaragua.com.ni:8443/stream.mp3' },
   { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream' },
   { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
-  { name: 'Radio Mía',            url: 'https://stream.zeno.fm/87am1q5d1v8uv' },
-  { name: 'Radio Fiesta',         url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
+  { name: 'Radio La Buenísima',   url: 'https://cast.tunzilla.com/http://alba-ni-nicaradios-labuenisima.stream.mediatiquestream.com/index.m3u8' },
+  { name: 'Radio Futura',         url: 'https://stream.zeno.fm/0r0gd02z2euvv' },
+  { name: 'VIV FM',               url: 'https://stream.zeno.fm/87am1q5d1v8uv' },
+  { name: 'Radio La Tuani',       url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];
@@ -18,35 +20,43 @@ export default function StickyRadio() {
   const [volume,    setVolume]    = useState(0.8);
   const [muted,     setMuted]     = useState(false);
   const [open,      setOpen]      = useState(false);
-  const [dismissed, setDismissed] = useState(true);
+  const [dismissed, setDismissed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    try {
-      if (!sessionStorage.getItem('radio-dismissed')) setDismissed(false);
-    } catch {}
-  }, []);
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = muted ? 0 : volume;
   }, [volume, muted]);
 
+  function handleAudioError() {
+    setPlaying(false);
+    setError('No se pudo conectar con la emisora. Intenta otra.');
+    setTimeout(() => setError(null), 4000);
+  }
+
   function startStation(idx: number) {
-    setSelected(idx); setOpen(false);
+    setSelected(idx); setOpen(false); setError(null);
     if (!audioRef.current) return;
     audioRef.current.src = EMISORAS[idx].url;
-    audioRef.current.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    audioRef.current.play().then(() => setPlaying(true)).catch(() => {
+      setPlaying(false);
+      setError('Error al reproducir. Verifica tu conexión.');
+    });
   }
 
   function toggle() {
     if (!audioRef.current) return;
     if (playing) { audioRef.current.pause(); setPlaying(false); }
-    else { audioRef.current.play().then(() => setPlaying(true)).catch(() => {}); }
+    else {
+      audioRef.current.play().then(() => { setPlaying(true); setError(null); }).catch(() => {
+        setError('No se pudo reproducir esta emisora.');
+      });
+    }
   }
 
   function dismiss() {
     audioRef.current?.pause(); setPlaying(false); setDismissed(true);
-    sessionStorage.setItem('radio-dismissed', '1');
+    try { sessionStorage.setItem('radio-dismissed', '1'); } catch {}
   }
 
   if (dismissed) {
@@ -86,18 +96,18 @@ export default function StickyRadio() {
           </div>
 
           {/* Play/Pause */}
-          <button onClick={toggle} style={{
-            width: 40, height: 40, borderRadius: '50%', border: 'none', cursor: 'pointer', flexShrink: 0,
+          <button onClick={toggle} aria-label={playing ? 'Pausar radio' : 'Reproducir radio'} style={{
+            width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer', flexShrink: 0,
             background: playing ? '#ef4444' : '#8c1d18', color: '#fff',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
             boxShadow: playing ? '0 0 0 4px rgba(239,68,68,0.2)' : 'none', transition: 'all 0.2s',
           }}>
-            {playing ? <Pause size={14} /> : <Play size={14} style={{ marginLeft: 2 }} />}
+            {playing ? <Pause size={16} /> : <Play size={16} style={{ marginLeft: 2 }} />}
           </button>
 
           {/* Station picker */}
           <div style={{ position: 'relative', flex: 1, minWidth: 0, maxWidth: 260 }}>
-            <button onClick={() => setOpen(!open)} style={{
+            <button onClick={() => setOpen(!open)} aria-label="Seleccionar emisora" aria-expanded={open} style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
               color: '#e2e8f0', borderRadius: 8, padding: '7px 12px', cursor: 'pointer',
               width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center',
@@ -139,23 +149,39 @@ export default function StickyRadio() {
 
           {/* Volume control (desktop) */}
           <div className="sradio-vol">
-            <button onClick={() => setMuted(m => !m)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 15, padding: '4px' }}>
+            <button onClick={() => setMuted(m => !m)} aria-label={muted ? 'Activar sonido' : 'Silenciar'} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 15, padding: '4px' }}>
               {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
             </button>
             <input type="range" min="0" max="1" step="0.05"
               value={muted ? 0 : volume}
               onChange={e => { setVolume(parseFloat(e.target.value)); setMuted(false); }}
+              aria-label="Volumen de la radio"
               style={{ width: 80, accentColor: '#ef4444', cursor: 'pointer' }}
             />
           </div>
 
           {/* Dismiss */}
-          <button onClick={dismiss} title="Cerrar" style={{ flexShrink: 0, background: 'none', border: 'none', color: '#334155', cursor: 'pointer', fontSize: 16, padding: '6px', borderRadius: 6 }}>
+          <button onClick={dismiss} aria-label="Cerrar radio" style={{ flexShrink: 0, background: 'none', border: 'none', color: '#334155', cursor: 'pointer', fontSize: 16, padding: '6px', borderRadius: 6 }}>
             <X size={16} />
           </button>
         </div>
 
-        <audio ref={audioRef} src={EMISORAS[selected].url} preload="none" />
+        {/* Error message */}
+        {error && (
+          <div style={{
+            position: 'absolute', bottom: 'calc(100% + 4px)', left: 0, right: 0,
+            background: '#ef4444', color: '#fff', padding: '8px 12px', fontSize: 12,
+            fontWeight: 600, borderRadius: 6, textAlign: 'center', zIndex: 202,
+          }}>
+            {error}
+          </div>
+        )}
+
+        <audio
+          ref={audioRef}
+          preload="none"
+          onError={handleAudioError}
+        />
       </div>
     </>
   );

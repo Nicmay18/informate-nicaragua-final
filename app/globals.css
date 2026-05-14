@@ -615,7 +615,7 @@ a:hover { color: var(--accent-dark); }
 .trending-rank {
   font-size: 24px;
   font-weight: 900;
-  color: var(--border);
+  color: #737373;
   line-height: 1;
   min-width: 28px;
   font-family: var(--font-merri);
@@ -1523,7 +1523,7 @@ a:hover { color: var(--accent-dark); }
   color: #f5f5f5 !important;
 }
 [data-theme="dark"] .sidebar-muted {
-  color: #a3a3a3 !important;
+  color: #737373 !important;
 }
 [data-theme="dark"] .trending-link,
 [data-theme="dark"] .masleidas-link {
@@ -1622,11 +1622,12 @@ a:hover { color: var(--accent-dark); }
    COMPONENT HELPERS
    ═══════════════════════════════════════════════════════════ */
 .pulse-green {
-  animation: pulse-green-anim 3s ease-in-out infinite;
+  animation: pulse-scale 2s ease-in-out infinite;
+  will-change: transform;
 }
-@keyframes pulse-green-anim {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.25); }
-  50% { box-shadow: 0 0 0 3px rgba(74,222,128,0); }
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
 }
 
 .logo-hover {
@@ -1769,7 +1770,66 @@ body {
   }
 }
 
-/* Reduced motion */
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY — CONTRAST FIXES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Muted text elements that need 4.5:1 on white/#faf9f7 bg */
+.news-meta,
+.social-desc,
+.related-card-date,
+.article-breadcrumb,
+.featured-caption,
+.featured-credit,
+.cookie-text,
+.sidebar-muted {
+  color: #595959 !important;
+}
+
+/* Footer contrast fixes on dark #1a1a2e background */
+.footer-desc,
+.footer-links a,
+.footer-contact p,
+.footer-contact a {
+  color: rgba(255,255,255,0.7) !important;
+}
+.footer-bottom,
+.footer-bottom p {
+  color: rgba(255,255,255,0.55) !important;
+}
+
+/* Top bar links */
+.top-bar a,
+.top-bar span {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY — ADDITIONAL CONTRAST OVERRIDES
+   Forzar contraste en elementos problemáticos de Lighthouse
+   ═══════════════════════════════════════════════════════════ */
+
+/* Ranking numbers sobre fondo gris #faf9f7 */
+.trending-rank,
+.masleidas-rank {
+  color: #737373 !important;
+}
+
+/* Cookie banner */
+.cookie-banner a,
+.cookie-banner button,
+.cookie-banner span {
+  color: #595959 !important;
+}
+
+/* Fechas en listados */
+.article-date,
+.news-date,
+time {
+  color: #595959 !important;
+}
+
+/* Reducido motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

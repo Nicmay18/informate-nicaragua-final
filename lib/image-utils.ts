@@ -13,30 +13,27 @@ export function cleanImageUrl(url: string): string {
 
 /**
  * Convierte URLs de imágenes a formato optimizado:
- * - raw.githubusercontent.com → cdn.jsdelivr.net (mejor caché CDN)
- * - Aplica proxy weserv.nl para redimensionar según el viewport
+ * - GitHub raw URLs: directo (disponible inmediatamente, sin caché de jsDelivr)
+ * - Firebase Storage: directo (token requerido)
+ * - Otras externas: proxy weserv.nl para redimensionar
  */
 export function getResponsiveImageUrl(url: string, width?: number, height?: number): string {
   if (!url) return url;
 
-  // Convertir raw.githubusercontent.com → jsDelivr CDN
-  let cdnUrl = url;
-  if (cdnUrl.includes('raw.githubusercontent.com')) {
-    cdnUrl = cdnUrl.replace(
-      /https:\/\/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/,
-      'https://cdn.jsdelivr.net/gh/$1/$2@$3/$4'
-    );
-  }
-
   // Si es data URI, ruta local, o Firebase Storage (token requerido), no aplicar proxy
-  if (cdnUrl.startsWith('data:') || cdnUrl.startsWith('/') || cdnUrl.includes('firebasestorage.googleapis.com')) {
-    return cdnUrl;
+  if (url.startsWith('data:') || url.startsWith('/') || url.includes('firebasestorage.googleapis.com')) {
+    return url;
   }
 
-  // Usar weserv.nl como proxy de redimensionamiento para imágenes externas
+  // GitHub raw URLs: usar directo sin proxy (más confiable y disponible inmediatamente)
+  if (url.includes('githubusercontent.com')) {
+    return url;
+  }
+
+  // Otras imágenes externas: proxy weserv.nl para redimensionar
   if (width || height) {
     const params = new URLSearchParams();
-    params.set('url', cdnUrl);
+    params.set('url', url);
     if (width) params.set('w', String(width));
     if (height) params.set('h', String(height));
     params.set('fit', 'cover');
@@ -45,5 +42,5 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return `https://images.weserv.nl/?${params.toString()}`;
   }
 
-  return cdnUrl;
+  return url;
 }

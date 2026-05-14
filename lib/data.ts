@@ -24,8 +24,18 @@ function normalizeImage(imagen: string): string {
     return imagen; // NO quitar query params, el token es obligatorio
   }
 
-  // jsDelivr CDN / GitHub raw URLs → mantener como URL externa
-  if (imagen.includes('cdn.jsdelivr.net') || imagen.includes('githubusercontent.com')) {
+  // jsDelivr CDN → convertir a GitHub raw (evita caché lento de jsDelivr)
+  if (imagen.includes('cdn.jsdelivr.net')) {
+    const jsdelivrMatch = imagen.match(/cdn\.jsdelivr\.net\/gh\/([^\/]+)\/([^\/]+)@([^\/]+)\/(.+)/);
+    if (jsdelivrMatch) {
+      const [, owner, repo, branch, path] = jsdelivrMatch;
+      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
+    }
+    return imagen.split('?')[0];
+  }
+
+  // GitHub raw URLs → mantener directo (disponible inmediatamente)
+  if (imagen.includes('githubusercontent.com')) {
     return imagen.split('?')[0];
   }
 
@@ -210,6 +220,55 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
   // Si no hay Firebase, usar noticias de ejemplo (para desarrollo local)
   console.log('[data.ts] Usando noticias de ejemplo para desarrollo local');
   return MOCK_NOTICIAS.slice(0, validatedCount);
+}
+
+export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
+  const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
+  
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('categoria', '==', categoria)
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount)
+      .get();
+    
+    const noticias = snap.docs
+      .filter((d: any) => d.data().publicado !== false)
+      .map((d: any) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido,
+          categoria: data.categoria || 'General',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+        };
+      });
+    
+    console.log(`[data.ts] Obtenidas ${noticias.length} noticias de categoría ${categoria} desde Firebase`);
+    return noticias;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes('index') || msg.includes('requires an index')) {
+      console.warn(`[data.ts] Se requiere índice compuesto en Firestore para categoría ${categoria}. Crear índice en consola Firebase.`);
+    } else {
+      console.error(`[data.ts] ERROR: No se pudieron obtener noticias de categoría ${categoria}:`, msg);
+    }
+  }
+  
+  // Fallback a noticias de ejemplo filtradas por categoría
+  const filtered = MOCK_NOTICIAS.filter(n => n.categoria === categoria);
+  console.log(`[data.ts] Usando noticias de ejemplo filtradas para categoría ${categoria}`);
+  return filtered.slice(0, validatedCount);
 }
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {

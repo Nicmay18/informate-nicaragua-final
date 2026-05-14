@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
@@ -9,21 +10,54 @@ import { FALLBACK_IMAGE } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import LutoImage from '@/components/LutoImage';
 
-function ArticleImage({ src, alt, style, width = 800 }: { src: string; alt: string; style?: React.CSSProperties; width?: number }) {
+function ArticleImage({ src, alt, style, width = 800, priority }: { src: string; alt: string; style?: React.CSSProperties; width?: number; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+  const imgSrc = isValid ? validSrc : FALLBACK_IMAGE;
+
+  if (priority) {
+    /* Imagen principal del artículo: <img> nativo para LCP directo sin proxy */
+    return (
+      <img
+        src={imgSrc}
+        alt={alt}
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        width={width}
+        height={Math.round(width * 0.56)}
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', ...style,
+        }}
+        onError={e => {
+          if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
+            (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
+          }
+        }}
+      />
+    );
+  }
+
+  /* Imágenes pequeñas (relacionadas): next/image normal con lazy loading */
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+  const sizes = width <= 400
+    ? '(max-width: 768px) 50vw, 400px'
+    : '(max-width: 768px) 100vw, 665px';
+
   return (
-    <img
+    <Image
       src={currentSrc}
       alt={alt}
+      fill
+      sizes={sizes}
+      style={{ objectFit: 'cover', ...style }}
       loading="lazy"
       onError={() => {
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
     />
   );
 }
@@ -438,7 +472,7 @@ export default function ArticleClient({
             />
           ) : (
             <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: 520, borderRadius: 12, overflow: 'hidden' }}>
-              <ArticleImage src={noticia.imagen || '/logo.png'} alt={noticia.titulo} />
+              <ArticleImage src={noticia.imagen || '/logo.png'} alt={noticia.titulo} priority />
             </div>
           )}
           <figcaption className="featured-caption">
@@ -522,12 +556,12 @@ export default function ArticleClient({
                       }}>
                         {n.categoria}
                       </span>
-                      <h4 style={{
+                      <h3 style={{
                         fontSize: 15, fontWeight: 700, color: '#121212',
                         lineHeight: 1.35, margin: 0, flex: 1,
                       }}>
                         {n.titulo}
-                      </h4>
+                      </h3>
                       <div style={{ fontSize: 12, color: '#a0a0a0', marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Clock size={10} /> {fmtDate(n.fecha)}
                       </div>

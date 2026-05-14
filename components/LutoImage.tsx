@@ -15,6 +15,9 @@ export default function LutoImage({ src, alt, nombre, className = '' }: LutoImag
       <style>{`
         .luto-image-container {
           position: relative;
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          max-height: 520px;
           overflow: hidden;
           border-radius: 8px;
         }

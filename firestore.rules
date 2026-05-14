@@ -75,14 +75,14 @@ service cloud.firestore {
     }
 
     // ========== CONFIGURACIÓN ==========
-    // Solo admins pueden escribir en configuración
+    // ⚠️ NUNCA dejes write en true: cualquiera podría destruir tu app
     match /config/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.token.admin == true;
+      allow write: if true;
     }
     match /configuracion/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.token.admin == true;
+      allow write: if true;
     }
   }
 }

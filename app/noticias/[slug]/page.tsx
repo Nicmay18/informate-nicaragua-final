@@ -5,6 +5,7 @@ import SocialGrid from '@/components/home/SocialGrid';
 import NewsletterForm from '@/components/NewsletterForm';
 import AdSlot from '@/components/AdSlot';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
+import IndicadoresWidget from '@/components/IndicadoresWidget';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas } from '@/lib/data';
@@ -132,6 +133,9 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
           <aside className="sidebar" style={{ position: 'sticky', top: 100, alignSelf: 'start' }}>
             <TrendingList noticias={noticiasTrending.slice(0, 6)} />
             {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
+              <IndicadoresWidget />
+            </div>
             <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
               <WeatherWidgetWrapper />
             </div>
