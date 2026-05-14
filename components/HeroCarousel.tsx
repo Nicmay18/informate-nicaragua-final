@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
-import { getResponsiveImageUrl, getSrcSet } from '@/lib/image-utils';
+import { cleanImageUrl, getResponsiveImageUrl, getSrcSet } from '@/lib/image-utils';
 import HeroLcpImage from '@/components/HeroLcpImage';
 
 function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
@@ -164,7 +164,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
               <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
-                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} sizes="200px" />
+                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>
