@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminDb } from '@/lib/firebase-admin';
+import { adminDb } from '@/lib/firebase-admin';
 
 const SECRET = 'update-titles-2026';
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const db = getAdminDb();
+    const db = adminDb;
     const results: { slug: string; ok: boolean; error?: string }[] = [];
 
     for (const u of UPDATES) {
