@@ -1,34 +1,32 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
-import { cleanImageUrl, getResponsiveImageUrl, getSrcSet } from '@/lib/image-utils';
+import { cleanImageUrl, getResponsiveImageUrl } from '@/lib/image-utils';
 import HeroLcpImage from '@/components/HeroLcpImage';
 
-function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
+function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean; sizes?: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
-  const srcSet = getSrcSet(optimizedSrc, [400, 800, 1200]);
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
   return (
-    <img
+    <Image
       src={currentSrc}
-      srcSet={srcSet}
-      sizes="(max-width: 768px) 100vw, 665px"
       alt={alt}
+      fill
+      sizes={sizes || '(max-width: 768px) 100vw, 665px'}
+      style={{ objectFit: 'cover', ...style }}
       loading={priority ? 'eager' : 'lazy'}
-      {...(priority ? { fetchPriority: 'high' } : {})}
-      width={800}
-      height={600}
+      priority={priority}
       onError={() => {
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', ...style }}
     />
   );
 }
@@ -164,7 +162,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
               <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
-                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} />
+                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} sizes="200px" />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>

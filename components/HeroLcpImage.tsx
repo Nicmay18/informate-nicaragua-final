@@ -1,5 +1,3 @@
-import { getSrcSet } from '@/lib/image-utils';
-
 interface HeroLcpImageProps {
   src: string;
   alt: string;
@@ -20,7 +18,6 @@ export default function HeroLcpImage({
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
   const imgSrc = isValid ? validSrc : '/logo.png';
-  const srcSet = getSrcSet(imgSrc, [400, 800, 1200]);
 
   return (
     <div
@@ -36,8 +33,6 @@ export default function HeroLcpImage({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imgSrc}
-        srcSet={srcSet}
-        sizes="(max-width: 768px) 380px, 665px"
         alt={alt}
         fetchPriority="high"
         loading="eager"
