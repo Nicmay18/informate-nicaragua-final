@@ -17,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // Leer service account
 let serviceAccount;
 try {
-  const raw = readFileSync(join(__dirname, '..', 'serviceAccountKey.json'), 'utf8');
+  const raw = readFileSync(join(__dirname, '..', '..', 'serviceAccountKey.json'), 'utf8');
   serviceAccount = JSON.parse(raw);
 } catch (err) {
   console.error('ERROR: No se encontró serviceAccountKey.json');
