@@ -28,7 +28,8 @@ const WeatherWidgetWrapper = nextDynamic(() => import('@/components/home/Weather
 
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
-import type { Metadata } from 'next';\nimport AutoRefresh from '@/components/AutoRefresh';
+import type { Metadata } from 'next';
+import AutoRefresh from '@/components/AutoRefresh';
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
