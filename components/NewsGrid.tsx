@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown } from 'lucide-react';
@@ -230,6 +230,3 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
     </div>
   );
 }
-/ /  
- t e s t  
- 
