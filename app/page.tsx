@@ -1,4 +1,4 @@
-import nextDynamic from 'next/dynamic';
+﻿import nextDynamic from 'next/dynamic';
 import NewsGrid from '@/components/NewsGrid';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -28,7 +28,7 @@ const WeatherWidgetWrapper = nextDynamic(() => import('@/components/home/Weather
 
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
-import type { Metadata } from 'next';
+import type { Metadata } from 'next';\nimport AutoRefresh from '@/components/AutoRefresh';
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
@@ -68,6 +68,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
+      <AutoRefresh />
       <Header activeCategory="Todas" />
 
       {/* Breaking Ticker */}
