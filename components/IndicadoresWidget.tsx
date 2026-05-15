@@ -1,4 +1,4 @@
-import { TrendingUp, Fuel } from 'lucide-react';
+﻿import { TrendingUp, Fuel } from 'lucide-react';
 
 const GAS_PRICES = [
   { label: 'Gasolina Regular', price: '47.80–48.00', unit: 'C$', trend: '→', change: '0.00%' },
@@ -37,9 +37,9 @@ const exchangeRows = [
 export default function IndicadoresWidget() {
   return (
     <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-      <div style={{ background: 'linear-gradient(135deg, #14532d 0%, #166534 100%)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <TrendingUp size={14} color="#4ade80" />
-        <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Indicadores Económicos</span>
+      <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <TrendingUp size={14} color="#38bdf8" />
+        <span style={{ color: '#f8fafc', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Indicadores Económicos</span>
       </div>
       <div style={{ padding: '8px 0' }}>
         {/* Exchange rates */}

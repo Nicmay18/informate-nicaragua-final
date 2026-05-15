@@ -28,8 +28,8 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
 }
 
 const CAT_COLORS: Record<string, string> = {
-  Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
-  Internacionales: '#7c3aed', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
+  Sucesos: '#b91c1c', Nacionales: '#1e40af', Deportes: '#15803d',
+  Internacionales: '#0369a1', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
 };
 
 const CAT_ICONS: Record<string, React.ReactNode> = {
@@ -158,7 +158,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
               <div className="ng-thumb">
                 <ArticleImage src={n.imagen} alt={n.titulo} />
-                <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
+                <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151', color: '#fff' }}>
                   {n.categoria}
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
                   <div className="ng-thumb">
                     <ArticleImage src={n.imagen} alt={n.titulo} />
-                    <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
+                    <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151', color: '#fff' }}>
                       {n.categoria}
                     </span>
                   </div>
