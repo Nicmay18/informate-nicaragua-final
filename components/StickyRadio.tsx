@@ -67,10 +67,15 @@ export default function StickyRadio() {
     <>
       <style>{`
         .sticky-radio { display:flex; }
-        @media(max-width:768px){ .sticky-radio { display:none !important; } }
         .sradio-vol { display:flex; align-items:center; gap:8px; }
         @media(max-width:900px){ .sradio-vol { display:none !important; } }
         @keyframes wvbar { from{transform:scaleY(0.3)} to{transform:scaleY(1.6)} }
+        @media(max-width:768px){
+          .sticky-radio { bottom:56px !important; height:48px !important; }
+          .sr-inner { height:48px !important; padding: '0 12px' !important; }
+          .sr-label { display:none !important; }
+          .sr-wave { display:none !important; }
+        }
       `}</style>
 
       <div className="sticky-radio" style={{
@@ -80,14 +85,14 @@ export default function StickyRadio() {
         boxShadow: '0 -6px 32px rgba(0,0,0,0.5)',
         alignItems: 'center',
       }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 14, width: '100%', height: 58 }}>
+        <div className="sr-inner" style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 14, width: '100%', height: 58 }}>
 
           {/* Icon + label + waveform */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             <Radio size={18} style={{ color: playing ? '#ef4444' : '#475569', transition: 'color 0.3s' }} />
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Radio en Vivo</span>
+            <span className="sr-label" style={{ fontSize: 11, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Radio en Vivo</span>
             {playing && (
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 16 }}>
+              <div className="sr-wave" style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 16 }}>
                 {BAR_H.map((h, i) => (
                   <span key={i} style={{ display: 'inline-block', width: 3, height: h, background: '#ef4444', borderRadius: 1.5, animation: `wvbar ${0.4 + (i % 3) * 0.15}s ease-in-out ${i * 0.04}s infinite alternate` }} />
                 ))}

@@ -1257,22 +1257,17 @@ sin texto ni marcas de agua, composición periodística"
       const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
       const categoria = noticia.categoria || 'Noticias';
 
-      // Formato tipo La Prensa (profesional para copiar/pegar en WhatsApp/Facebook)
-      const textoRedes = `${titulo}
+      // Formato con emojis para WhatsApp/Facebook
+      const hashtags = `#${categoria.replace(/\s+/g, '')} #Nicaragua`;
+      const textoRedes = `📌 ${titulo}
 
 ${descripcion}
 
-🔗 Leé más: ${url}`;
+🚨 Lea la nota completa aquí:
 
-      // Formato con emoji para Telegram
-      const textoTelegram = `📰 ${titulo}
-
-${descripcion}
-
-📂 ${categoria}
 🔗 ${url}
 
-📱 Nicaragua Informate - Periodismo de Precisión`;
+${hashtags}`;
 
       document.getElementById('shareTitulo').textContent = titulo;
       document.getElementById('shareDescripcion').textContent = descripcion;
@@ -2114,14 +2109,17 @@ ${descripcion}
             try {
               await postToApi('telegram', { noticia: noticiaData });
               showToast('Enviado a Telegram', 'success');
-              document.getElementById('telegramStatus').textContent = '✅ Enviado a Telegram';
+              const tgStatusEl = document.getElementById('telegramStatus');
+              if (tgStatusEl) tgStatusEl.textContent = '✅ Enviado a Telegram';
             } catch (err) {
               showToast('Error Telegram: ' + err.message, 'warning');
-              document.getElementById('telegramStatus').textContent = '❌ Error Telegram';
+              const tgStatusEl = document.getElementById('telegramStatus');
+              if (tgStatusEl) tgStatusEl.textContent = '❌ Error Telegram';
             }
           } else if (enviarTelegram && !tgToken) {
             showToast('Telegram: No hay token configurado. Ve a Configuración > Telegram Bot.', 'warning');
-            document.getElementById('telegramStatus').textContent = '⚠️ Sin token de Telegram';
+            const tgStatusEl = document.getElementById('telegramStatus');
+            if (tgStatusEl) tgStatusEl.textContent = '⚠️ Sin token de Telegram';
           }
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
@@ -2131,7 +2129,7 @@ ${descripcion}
           }
           progressBar.style.width = '100%';
         }
-        if (!prepararRedes) limpiarFormulario();
+        limpiarFormulario();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
       } catch (error) {

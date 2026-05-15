@@ -51,17 +51,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
         <style dangerouslySetInnerHTML={{ __html: `
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; }
-          header { position: relative; z-index: 50; }
-          .hero { position: relative; width: 100%; overflow: hidden; }
-          main { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 16px; }
-          @media (min-width: 1024px) { main { grid-template-columns: 1fr 340px; } }
-          nav[role="navigation"] { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #fff; border-top: 1px solid #e5e5e5; z-index: 40; }
-          .cookie-banner { position: fixed; bottom: 56px; left: 0; right: 0; padding: 12px 16px; background: #fff; border-top: 1px solid #e5e8ec; z-index: 45; }
+          *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+          html{font-family:var(--font-inter),system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+          body{background:#fff;color:#1a1a2e;overflow-x:hidden}
+          img{max-width:100%;display:block;height:auto}
+          .site-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid rgba(0,0,0,0.1)}
+          .hero-section{position:relative;width:100%;overflow:hidden;background:#0f172a}
+          .container-pro{width:100%;max-width:1200px;margin:0 auto;padding:0 16px}
+          .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#fff;border-top:1px solid rgba(0,0,0,0.1);z-index:40;display:flex;justify-content:space-around;align-items:center}
+          .cookie-banner{position:fixed;bottom:56px;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid rgba(0,0,0,0.1);z-index:45;font-size:13px}
+          @media(min-width:768px){.bottom-nav{display:none}}
         `}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />

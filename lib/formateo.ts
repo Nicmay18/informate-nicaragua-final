@@ -143,11 +143,11 @@ export function formatearNoticia(texto: string): string {
     // Detectar lista
     if (esLista(linea)) {
       flushParrafo();
-      // Agrupar items consecutivos
-      const items: string[] = [linea.replace(/^[\-\*•✓✅⚠️🔍\d+[\.)]]\s*/, '')];
-      // Nota: el loop externo ya avanza linea por linea, así que el manejo de listas
-      // múltiples lo haremos en post-proceso
-      bloques.push(`<li>${escaparHtml(items[0])}</li>`);
+      // Limpiar bullet: guiones, asteriscos, bullets, emojis o números
+      const cleanLine = linea
+        .replace(/^\s*[-\*•✓✅⚠️🔍📖💡❗👉📌]\s*/, '')
+        .replace(/^\s*\d+[\.)]\s*/, '');
+      bloques.push(`<li>${escaparHtml(cleanLine)}</li>`);
       continue;
     }
 

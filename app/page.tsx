@@ -1,18 +1,31 @@
+import nextDynamic from 'next/dynamic';
 import NewsGrid from '@/components/NewsGrid';
 import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
-import NewsletterForm from '@/components/NewsletterForm';
 import AdSlot from '@/components/AdSlot';
 import TrendingList from '@/components/home/TrendingList';
 import LazySidebar from '@/components/LazySidebar';
 import MasLeidas from '@/components/home/MasLeidas';
-import SocialGrid from '@/components/home/SocialGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
-import IndicadoresWidget from '@/components/IndicadoresWidget';
-import AutoRefresh from '@/components/AutoRefresh';
 import DonationCard from '@/components/DonationCard';
+
+const NewsletterForm = nextDynamic(() => import('@/components/NewsletterForm'), {
+  loading: () => <div style={{ height: 200 }} />
+});
+
+const SocialGrid = nextDynamic(() => import('@/components/home/SocialGrid'), {
+  loading: () => <div style={{ height: 300 }} />
+});
+
+const IndicadoresWidget = nextDynamic(() => import('@/components/IndicadoresWidget'), {
+  loading: () => <div className="mobile-widget-skeleton" style={{ height: 150 }} />
+});
+
+const WeatherWidgetWrapper = nextDynamic(() => import('@/components/home/WeatherWidgetWrapper'), {
+  loading: () => <div className="mobile-widget-skeleton" style={{ height: 100 }} />
+});
+
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -20,7 +33,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí. Sucesos, nacionales, deportes e internacionales.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com' },
   openGraph: {
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
@@ -56,7 +68,6 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <AutoRefresh intervalSec={30} />
       <Header activeCategory="Todas" />
 
       {/* Breaking Ticker */}
@@ -83,6 +94,16 @@ export default async function HomePage() {
           {/* ===== IN-CONTENT AD ===== */}
           <div style={{ marginTop: 32 }}>
             <AdSlot slot="homepage-in-content" width={336} height={280} />
+          </div>
+
+          {/* ===== MOBILE WIDGETS: Indicadores + Clima ===== */}
+          <div className="mobile-widgets">
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, marginTop: 24, minHeight: 120, position: 'relative' }}>
+              <IndicadoresWidget />
+            </div>
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, minHeight: 100, position: 'relative' }}>
+              <WeatherWidgetWrapper />
+            </div>
           </div>
         </div>
 

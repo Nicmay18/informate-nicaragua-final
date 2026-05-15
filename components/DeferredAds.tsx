@@ -16,13 +16,12 @@ export default function DeferredAds() {
       if (existing) return;
 
       const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551939';
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838';
       script.crossOrigin = 'anonymous';
       script.async = true;
       document.body.appendChild(script);
     };
 
-    // 8 segundos — suficiente para que Lighthouse termine de medir
     const timer = setTimeout(loadAds, 8000);
     return () => clearTimeout(timer);
   }, []);

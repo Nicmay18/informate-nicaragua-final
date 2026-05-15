@@ -8,7 +8,7 @@ import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -19,7 +19,14 @@ export const dynamicParams = true;
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  return [];
+  try {
+    const slugs = await getAllSlugs();
+    console.log(`[generateStaticParams] Generando ${slugs.length} páginas de noticias estáticas`);
+    return slugs.map((slug: string) => ({ slug }));
+  } catch (err) {
+    console.error('[generateStaticParams] ERROR:', err);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

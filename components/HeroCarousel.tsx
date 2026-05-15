@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
@@ -12,16 +11,15 @@ import HeroLcpImage from '@/components/HeroLcpImage';
 function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const currentSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
+  const currentSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   return (
-    <Image
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
       src={currentSrc}
       alt={alt}
-      fill
-      sizes="(max-width: 768px) 100vw, 200px"
-      style={{ objectFit: 'cover', ...style }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
       loading={priority ? 'eager' : 'lazy'}
-      priority={priority}
+      decoding="async"
     />
   );
 }

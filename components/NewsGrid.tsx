@@ -1,16 +1,16 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
+import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+import LazySection from '@/components/LazySection';
 
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   const [error, setError] = useState(false);
   const finalSrc = error ? FALLBACK_IMAGE : imgSrc;
   return (
@@ -18,6 +18,8 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
     <img
       src={finalSrc}
       alt={alt}
+      width={200}
+      height={150}
       loading="lazy"
       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       onError={() => setError(true)}
@@ -27,19 +29,24 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
 
 const CAT_COLORS: Record<string, string> = {
   Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
-  Internacionales: '#7c3aed', 'Espectáculos': '#db2777', General: '#374151',
+  Internacionales: '#7c3aed', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
 };
 
 const CAT_ICONS: Record<string, React.ReactNode> = {
   Sucesos: <AlertTriangle size={10} />, Nacionales: <Flag size={10} />,
   Deportes: <Trophy size={10} />, Internacionales: <Globe size={10} />, 'Espectáculos': <Star size={10} />,
+  'Tecnología': <Cpu size={10} />,
 };
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 15;
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
+}
+
+function timeAgo(iso: string): string {
+  return iso ? formatDateShortES(iso) : '';
 }
 
 export default function NewsGrid({ noticias, showAll = false }: { noticias: Noticia[]; showAll?: boolean }) {
@@ -51,9 +58,6 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
   const hasMore = !showAll && shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
-  function timeAgo(iso: string): string {
-    return iso ? formatDateShortES(iso) : '';
-  }
 
   return (
     <div>
@@ -79,14 +83,17 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         .ng-load-btn { padding:12px 28px; border-radius:4px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit; border:1px solid #e8e8ec; background:#fff; color:#1a1a2e; }
         .ng-load-btn:hover { border-color:#1a1a2e; background:#1a1a2e; color:#fff; }
         @media(max-width:768px){
-          .ng-card { grid-template-columns:120px 1fr; gap:14px; padding:16px 0; }
+          .ng-card { grid-template-columns:100px 1fr; gap:12px; padding:14px 0; content-visibility:auto; contain-intrinsic-size:auto 120px; }
           .ng-card:hover { margin:0 -8px; padding-left:8px; padding-right:8px; }
           .ng-thumb { aspect-ratio:4/3; }
-          .ng-title { font-size:15px; }
+          .ng-title { font-size:14px; margin-bottom:6px; }
           .ng-excerpt { display:none; }
+          .ng-thumb .category-badge { font-size:9px; padding:2px 6px; top:4px; left:4px; }
+          .ng-meta { gap:8px; font-size:11px; }
         }
         @media(max-width:480px){
-          .ng-card { grid-template-columns:100px 1fr; }
+          .ng-card { grid-template-columns:80px 1fr; gap:10px; }
+          .ng-thumb .category-badge { font-size:8px; padding:2px 5px; }
         }
         [data-theme="dark"] .ng-card { border-bottom-color: #333; }
         [data-theme="dark"] .ng-card:hover { background: #1a1a1a; }
@@ -111,11 +118,26 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        gap: 8,
+        marginBottom: 24,
+        overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        paddingBottom: 4,
+      }}>
+        <style>{`.cat-tabs::-webkit-scrollbar { display: none; }`}</style>
         {CATS.map(c => {
           const active = c === activeCat;
           return (
-            <button key={c} onClick={() => switchCat(c)} className={`ng-cat-btn${active ? ' active' : ''}`}>
+            <button
+              key={c}
+              onClick={() => switchCat(c)}
+              className={`ng-cat-btn${active ? ' active' : ''}`}
+              style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+            >
               {c !== 'Todas' && <span style={{ marginRight: 5 }}>{CAT_ICONS[c] || <Newspaper size={10} />}</span>}
               {c}
             </button>
@@ -131,7 +153,8 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         </div>
       ) : (
         <div className="news-list">
-          {shown.map(n => (
+          {/* Primeras 3 noticias — siempre visibles */}
+          {shown.slice(0, 3).map(n => (
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
               <div className="ng-thumb">
                 <ArticleImage src={n.imagen} alt={n.titulo} />
@@ -155,6 +178,36 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
               </div>
             </Link>
           ))}
+
+          {/* Resto — lazy render vía IntersectionObserver */}
+          {shown.length > 3 && (
+            <LazySection id="news-rest" minHeight="600px" rootMargin="100px">
+              {shown.slice(3).map(n => (
+                <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
+                  <div className="ng-thumb">
+                    <ArticleImage src={n.imagen} alt={n.titulo} />
+                    <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
+                      {n.categoria}
+                    </span>
+                  </div>
+
+                  <div className="ng-content">
+                    <div className="ng-meta">
+                      <span className="category">{n.categoria}</span>
+                      <span>{timeAgo(n.fecha)}</span>
+                      {readTime(n.titulo, n.resumen) > 2 && (
+                        <span>{readTime(n.titulo, n.resumen)} min lectura</span>
+                      )}
+                    </div>
+                    <h3 className="ng-title">{n.titulo}</h3>
+                    {n.resumen && (
+                      <p className="ng-excerpt">{n.resumen}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </LazySection>
+          )}
         </div>
       )}
 

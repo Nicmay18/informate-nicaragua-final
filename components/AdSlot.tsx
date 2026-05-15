@@ -31,7 +31,7 @@ export default function AdSlot({
         setReady(true);
         clearInterval(check);
       }
-    }, 500);
+    }, 2000);
     return () => clearInterval(check);
   }, []);
 

@@ -1,9 +1,27 @@
 'use client';
 
-import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useEffect } from 'react';
+import { Extension } from '@tiptap/core';
+
+// Extensión para permitir marks (negrita, cursiva) dentro de headings
+const HeadingWithMarks = Extension.create({
+  name: 'headingWithMarks',
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['heading'],
+        attributes: {
+          allowMarks: {
+            default: true,
+          },
+        },
+      },
+    ];
+  },
+});
 
 interface TipTapEditorProps {
   content?: string;
@@ -14,6 +32,7 @@ interface TipTapEditorProps {
 export default function TipTapEditor({ content = '', onChange, placeholder = 'Escribe el cuerpo de la noticia aquí...' }: TipTapEditorProps) {
   const editor = useEditor({
     extensions: [
+      HeadingWithMarks,
       StarterKit.configure({
         heading: { levels: [2] },
         bulletList: { keepMarks: true, keepAttributes: true },
@@ -38,7 +57,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
   // Actualizar contenido si cambia externamente
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content, false);
+      editor.commands.setContent(content, {});
     }
   }, [content, editor]);
 
@@ -67,7 +86,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
         .ttp-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px; padding: 0 10px; border-radius: 6px; border: 1px solid transparent; background: transparent; color: #475569; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
         .ttp-btn:hover { background: #e2e8f0; color: #1e293b; }
         .ttp-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; }
-        .tt-editor { min-height: 320px; }
+        .tt-editor { min-height: 600px; }
         .tt-editor .ProseMirror { outline: none; }
         .tt-editor .ProseMirror p { margin-bottom: 0.85em; line-height: 1.75; }
         .tt-editor .ProseMirror p:last-child { margin-bottom: 0; }

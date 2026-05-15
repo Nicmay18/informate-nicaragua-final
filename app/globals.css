@@ -112,6 +112,29 @@ a:hover { color: var(--accent-dark); }
   .container-pro { padding: 0 16px; }
 }
 
+.mobile-widgets { display: none; }
+@media (max-width: 768px) {
+  .mobile-widgets { display: block; }
+}
+
+/* Skeleton loader para widgets móviles */
+.mobile-widget-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #f0f0f4 25%, #e8e8ec 50%, #f0f0f4 75%);
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* ================================================================
    HEADER PROFESIONAL
    ================================================================ */
@@ -1370,10 +1393,11 @@ a:hover { color: var(--accent-dark); }
     gap: 8px;
     text-align: center;
   }
-  .radio-player { padding: 10px 16px; }
+  .radio-player { padding: 10px 16px; bottom: 56px; z-index: 140; }
   .radio-player .radio-info span { display: none; }
   .mobile-nav { display: flex; }
-  body { padding-bottom: 60px; }
+  body { padding-bottom: 110px; }
+  .site-footer { padding-bottom: 110px; }
 
   /* Article mobile */
   .article-page { padding: 24px 16px 0; }

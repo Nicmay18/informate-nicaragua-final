@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import LutoImage from '@/components/LutoImage';
 
 function ArticleImage({ src, alt, style, width = 800, priority }: { src: string; alt: string; style?: React.CSSProperties; width?: number; priority?: boolean }) {
@@ -39,24 +37,17 @@ function ArticleImage({ src, alt, style, width = 800, priority }: { src: string;
     );
   }
 
-  /* Imágenes pequeñas (relacionadas): next/image normal con lazy loading */
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
-  const sizes = width <= 400
-    ? '(max-width: 768px) 50vw, 400px'
-    : '(max-width: 768px) 100vw, 665px';
-
+  /* Imágenes pequeñas (relacionadas): img nativo para control total de errores */
   return (
-    <Image
-      src={currentSrc}
+    <img
+      src={imgSrc}
       alt={alt}
-      fill
-      sizes={sizes}
-      style={{ objectFit: 'cover', ...style }}
       loading="lazy"
-      onError={() => {
-        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
+      onError={e => {
+        if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
+          (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
+        }
       }}
     />
   );
@@ -101,6 +92,7 @@ const CAT_COLORS: Record<string, string> = {
   Deportes: '#16a34a',
   Internacionales: '#7c3aed',
   Espectáculos: '#db2777',
+  Tecnología: '#0ea5e9',
 };
 
 /* ================================================================
