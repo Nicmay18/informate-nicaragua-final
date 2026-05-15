@@ -2,15 +2,16 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { AlertTriangle, Flag, Trophy, Globe, Star, Newspaper, ArrowDown } from 'lucide-react';
+import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+import LazySection from '@/components/LazySection';
 
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
   return (
@@ -30,19 +31,24 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
 
 const CAT_COLORS: Record<string, string> = {
   Sucesos: '#dc2626', Nacionales: '#1d4ed8', Deportes: '#16a34a',
-  Internacionales: '#7c3aed', 'Espectáculos': '#db2777', General: '#374151',
+  Internacionales: '#7c3aed', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
 };
 
 const CAT_ICONS: Record<string, React.ReactNode> = {
   Sucesos: <AlertTriangle size={10} />, Nacionales: <Flag size={10} />,
   Deportes: <Trophy size={10} />, Internacionales: <Globe size={10} />, 'Espectáculos': <Star size={10} />,
+  'Tecnología': <Cpu size={10} />,
 };
 
-const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
+const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología'];
 const PAGE_SIZE = 8;
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
+}
+
+function timeAgo(iso: string): string {
+  return iso ? formatDateShortES(iso) : '';
 }
 
 export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
@@ -54,9 +60,6 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
   const hasMore = shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
-  function timeAgo(iso: string): string {
-    return iso ? formatDateShortES(iso) : '';
-  }
 
   return (
     <div>
@@ -114,11 +117,26 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        gap: 8,
+        marginBottom: 24,
+        overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        paddingBottom: 4,
+      }}>
+        <style>{`.cat-tabs::-webkit-scrollbar { display: none; }`}</style>
         {CATS.map(c => {
           const active = c === activeCat;
           return (
-            <button key={c} onClick={() => switchCat(c)} className={`ng-cat-btn${active ? ' active' : ''}`}>
+            <button
+              key={c}
+              onClick={() => switchCat(c)}
+              className={`ng-cat-btn${active ? ' active' : ''}`}
+              style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+            >
               {c !== 'Todas' && <span style={{ marginRight: 5 }}>{CAT_ICONS[c] || <Newspaper size={10} />}</span>}
               {c}
             </button>
@@ -134,7 +152,8 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
         </div>
       ) : (
         <div className="news-list">
-          {shown.map(n => (
+          {/* Primeras 3 noticias — siempre visibles */}
+          {shown.slice(0, 3).map(n => (
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
               <div className="ng-thumb">
                 <ArticleImage src={n.imagen} alt={n.titulo} />
@@ -158,6 +177,36 @@ export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
               </div>
             </Link>
           ))}
+
+          {/* Resto — lazy render vía IntersectionObserver */}
+          {shown.length > 3 && (
+            <LazySection id="news-rest" minHeight="600px" rootMargin="100px">
+              {shown.slice(3).map(n => (
+                <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
+                  <div className="ng-thumb">
+                    <ArticleImage src={n.imagen} alt={n.titulo} />
+                    <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151' }}>
+                      {n.categoria}
+                    </span>
+                  </div>
+
+                  <div className="ng-content">
+                    <div className="ng-meta">
+                      <span className="category">{n.categoria}</span>
+                      <span>{timeAgo(n.fecha)}</span>
+                      {readTime(n.titulo, n.resumen) > 2 && (
+                        <span>{readTime(n.titulo, n.resumen)} min lectura</span>
+                      )}
+                    </div>
+                    <h3 className="ng-title">{n.titulo}</h3>
+                    {n.resumen && (
+                      <p className="ng-excerpt">{n.resumen}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </LazySection>
+          )}
         </div>
       )}
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CATEGORY_COLORS, FALLBACK_IMAGE, type Noticia } from '@/lib/types';
@@ -12,19 +11,40 @@ import HeroLcpImage from '@/components/HeroLcpImage';
 function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean; sizes?: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+  const [hasError, setHasError] = useState(false);
+  useEffect(() => { setCurrentSrc(optimizedSrc); setHasError(false); }, [optimizedSrc]);
+
+  if (hasError || !currentSrc || currentSrc === FALLBACK_IMAGE) {
+    return (
+      <div style={{
+        width: '100%', height: '100%',
+        background: 'linear-gradient(135deg, #e8e8ec 0%, #d1d1d6 100%)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        ...style,
+      }}>
+        <span style={{
+          fontSize: 10, fontWeight: 700, color: '#8c8c8c',
+          textTransform: 'uppercase', letterSpacing: '0.5px',
+          textAlign: 'center', padding: '0 8px',
+        }}>Nicaragua<br/>Informate</span>
+      </div>
+    );
+  }
+
   return (
-    <Image
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
       src={currentSrc}
-      alt={alt}
-      fill
-      sizes={sizes || '(max-width: 768px) 100vw, 665px'}
-      style={{ objectFit: 'cover', ...style }}
+      alt=""
       loading={priority ? 'eager' : 'lazy'}
-      priority={priority}
+      decoding="async"
+      width={100}
+      height={75}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
       onError={() => {
+        setHasError(true);
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
     />

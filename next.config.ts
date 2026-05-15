@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.jsdelivr.net', pathname: '/**' },
+      { protocol: 'https', hostname: 'images.weserv.nl', pathname: '/**' },
       { protocol: 'https', hostname: 'raw.githubusercontent.com', pathname: '/**' },
       { protocol: 'https', hostname: 'firebasestorage.googleapis.com', pathname: '/**' },
       { protocol: 'https', hostname: 'storage.googleapis.com', pathname: '/**' },
@@ -43,6 +44,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/privacidad.html',
+        destination: '/privacidad',
+        permanent: true,
+      },
+      // Redirecciones para AdSense (URLs estándar)
+      {
+        source: '/quienes-somos',
+        destination: '/nosotros',
+        permanent: true,
+      },
+      {
+        source: '/politica-de-privacidad',
+        destination: '/privacidad',
+        permanent: true,
+      },
+      {
+        source: '/legal',
         destination: '/privacidad',
         permanent: true,
       },

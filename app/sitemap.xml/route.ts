@@ -16,11 +16,11 @@ function toIsoDate(d: Date) {
 }
 
 export async function GET() {
-  const baseUrl = 'https://nicaraguainformate.com';
+  const baseUrl = 'https://www.nicaraguainformate.com';
 
   const now = new Date();
 
-  const categories = ['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
+  const categories = ['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología'];
   const staticUrls = [
     { loc: `${baseUrl}/`, priority: 1.0, changefreq: 'daily' },
     { loc: `${baseUrl}/noticias`, priority: 0.9, changefreq: 'daily' },
@@ -30,6 +30,7 @@ export async function GET() {
     { loc: `${baseUrl}/cookies`, priority: 0.4, changefreq: 'yearly' },
     { loc: `${baseUrl}/privacidad`, priority: 0.3, changefreq: 'yearly' },
     { loc: `${baseUrl}/terminos`, priority: 0.3, changefreq: 'yearly' },
+    { loc: `${baseUrl}/terminos-de-uso`, priority: 0.3, changefreq: 'yearly' },
     { loc: `${baseUrl}/correcciones`, priority: 0.4, changefreq: 'monthly' },
     ...categories.map(cat => ({
       loc: `${baseUrl}/noticias?cat=${encodeURIComponent(cat)}`,
@@ -53,7 +54,7 @@ export async function GET() {
       .collection('noticias')
       .select('slug', 'fecha', 'fechaActualizacion', 'destacada', 'vistas')
       .orderBy('fecha', 'desc')
-      .limit(1000)
+      .limit(2000)
       .get();
 
     articleUrls = snapshot.docs
@@ -89,7 +90,9 @@ export async function GET() {
           changefreq: 'weekly',
         };
       });
-  } catch {
+    console.log(`[sitemap] Generado con ${articleUrls.length} noticias + ${staticUrls.length} estáticas`);
+  } catch (err) {
+    console.error('[sitemap] ERROR Firebase:', err instanceof Error ? err.message : String(err));
     // If Firebase is unavailable, return only static URLs.
   }
 

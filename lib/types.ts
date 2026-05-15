@@ -26,7 +26,7 @@ export type Article = Noticia;
 /**
  * Categorías válidas para noticias
  */
-export type Category = 'Sucesos' | 'Nacionales' | 'Deportes' | 'Internacionales' | 'Espectáculos';
+export type Category = 'Sucesos' | 'Nacionales' | 'Deportes' | 'Internacionales' | 'Espectáculos' | 'Tecnología';
 
 /**
  * Configuración de categorías con colores e iconos
@@ -38,6 +38,7 @@ export const CATEGORIES = [
   { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
   { name: 'Internacionales', color: '#7c3aed', icon: 'Globe' },
   { name: 'Espectáculos', color: '#db2777', icon: 'Star' },
+  { name: 'Tecnología', color: '#0ea5e9', icon: 'Cpu' },
 ] as const;
 
 /**

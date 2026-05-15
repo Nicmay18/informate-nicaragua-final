@@ -101,6 +101,7 @@ const CAT_COLORS: Record<string, string> = {
   Deportes: '#16a34a',
   Internacionales: '#7c3aed',
   Espectáculos: '#db2777',
+  Tecnología: '#0ea5e9',
 };
 
 /* ================================================================

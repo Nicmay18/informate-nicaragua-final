@@ -53,11 +53,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Preconnect directo a GitHub raw — la imagen LCP carga desde aquí sin proxy */}
-        <link rel="preconnect" href="https://raw.githubusercontent.com" crossOrigin="anonymous" />
-        {/* DNS prefetch para ads — útil pero no crítico para LCP */}
+        {/* Preconnect a los orígenes que REALMENTE usamos */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
+        {/* DNS prefetch para Ads (no preconnect, solo DNS) */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* === CSS CRÍTICO INLINE === */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+          html{font-family:var(--font-inter),system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+          body{background:#fff;color:#1a1a2e;overflow-x:hidden}
+          img{max-width:100%;display:block;height:auto}
+          .site-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid rgba(0,0,0,0.1)}
+          .hero-section{position:relative;width:100%;overflow:hidden;background:#0f172a}
+          .container-pro{width:100%;max-width:1200px;margin:0 auto;padding:0 16px}
+          .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#fff;border-top:1px solid rgba(0,0,0,0.1);z-index:40;display:flex;justify-content:space-around;align-items:center}
+          .cookie-banner{position:fixed;bottom:56px;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid rgba(0,0,0,0.1);z-index:45;font-size:13px}
+          @media(min-width:768px){.bottom-nav{display:none}}
+        `}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
         <script

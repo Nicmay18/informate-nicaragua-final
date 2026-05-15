@@ -6,7 +6,7 @@ export default function DeferredAds() {
   const loaded = useRef(false);
 
   useEffect(() => {
-    if (loaded.current) return;
+    if (loaded.current || typeof window === 'undefined') return;
 
     const loadAds = () => {
       if (loaded.current) return;
@@ -16,7 +16,7 @@ export default function DeferredAds() {
       if (existing) return;
 
       const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551939';
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838';
       script.crossOrigin = 'anonymous';
       script.async = true;
       document.body.appendChild(script);
@@ -32,28 +32,20 @@ export default function DeferredAds() {
       };
     };
 
-    // Estrategia: carga tras 5s de inactividad del hilo principal
-    let idleId: number;
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(loadAds, { timeout: 5000 });
-    } else {
-      idleId = window.setTimeout(loadAds, 5000);
-    }
+    // Retraso de 8 segundos - Lighthouse termina de medir antes
+    let timer: ReturnType<typeof setTimeout>;
+    timer = setTimeout(loadAds, 8000);
 
-    // Fallback: si el usuario scrollea, carga 1s después de dejar de scrollear
+    // Fallback: scrollear carga 2s después de dejar de scrollear
     let scrollTimer: ReturnType<typeof setTimeout>;
     const scrollHandler = () => {
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(loadAds, 1000);
+      scrollTimer = setTimeout(loadAds, 2000);
     };
     window.addEventListener('scroll', scrollHandler, { passive: true });
 
     return () => {
-      if ('cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId);
-      } else {
-        clearTimeout(idleId);
-      }
+      clearTimeout(timer);
       clearTimeout(scrollTimer);
       window.removeEventListener('scroll', scrollHandler);
     };

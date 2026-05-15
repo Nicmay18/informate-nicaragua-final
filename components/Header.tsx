@@ -92,7 +92,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
           <nav>
             <ul className="nav-pro">
               <li><Link href="/" className={activeCategory === 'Todas' ? 'active' : ''}>Inicio</Link></li>
-              {CATEGORIES.slice(0, 5).map((cat) => (
+              {CATEGORIES.map((cat) => (
                 <li key={cat.name}>
                   <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`} className={activeCategory === cat.name ? 'active' : ''}>
                     {cat.name}

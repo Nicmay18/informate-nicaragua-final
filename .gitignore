@@ -88,6 +88,14 @@ tokens-backup.json
 *key*.json
 *secret*.json
 
+# Scripts credenciales locales
+scripts/firebase-admin-key.json
+
+# Reportes temporales de análisis
+duplicate-bullets-report.json
+prompt-residue-report.json
+tmp_page.html
+
 # Notas internas / scratch
 ADMIN_BACKUP.txt
 BACKUP-README.md

@@ -25,12 +25,8 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return url;
   }
 
-  // GitHub raw URLs: usar directo sin proxy (más confiable y disponible inmediatamente)
-  if (url.includes('githubusercontent.com')) {
-    return url;
-  }
-
-  // Otras imágenes externas: proxy weserv.nl para redimensionar
+  // Todas las imágenes externas (GitHub raw, jsDelivr, etc.): proxy weserv.nl para redimensionar
+  // Nota: las imágenes LCP (hero) usan cleanImageUrl() directamente, sin pasar por aquí
   if (width || height) {
     const params = new URLSearchParams();
     params.set('url', url);
@@ -38,7 +34,7 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     if (height) params.set('h', String(height));
     params.set('fit', 'cover');
     params.set('output', 'webp');
-    params.set('q', '80');
+    params.set('q', '75');
     return `https://images.weserv.nl/?${params.toString()}`;
   }
 

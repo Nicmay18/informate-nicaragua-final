@@ -3,7 +3,7 @@ import { FALLBACK_IMAGE } from './types';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
-const MAX_COUNT = 100;
+const MAX_COUNT = 500;
 
 // =============================================================================
 // NORMALIZAR IMÁGENES: Firebase Storage URL → ruta local /images/
@@ -19,9 +19,29 @@ function normalizeImage(imagen: string): string {
   // Data URI (imagen inline del admin) → mantener
   if (imagen.startsWith('data:')) return imagen;
 
-  // Firebase Storage URL → MANTENER COMPLETA (incluyendo token de autenticación)
+  // Firebase Storage URL → extraer filename y mapear a /images/ local
   if (imagen.includes('firebasestorage.googleapis.com') || imagen.includes('storage.googleapis.com')) {
-    return imagen; // NO quitar query params, el token es obligatorio
+    try {
+      const url = new URL(imagen);
+      // Formato: /v0/b/BUCKET/o/images%2Ffilename.webp
+      const pathMatch = url.pathname.match(/\/(?:v0\/b\/[^/]+\/o\/)?(?:images%2F)?(.+)$/);
+      if (pathMatch) {
+        const encoded = pathMatch[1];
+        const decoded = decodeURIComponent(encoded);
+        const filename = decoded.split('/').pop()?.trim();
+        if (filename && filename.length > 1) return `/images/${filename}`;
+      }
+      // Fallback: extraer último segmento del pathname
+      const segments = url.pathname.split('/').filter(Boolean);
+      const last = segments.pop();
+      if (last && last.length > 1) return `/images/${last}`;
+    } catch {
+      // fallback a extract manual
+    }
+    // Último fallback: extraer nombre de archivo crudo
+    const raw = imagen.split('/').pop()?.split('?')[0]?.trim();
+    if (raw && raw.length > 1) return `/images/${raw}`;
+    return FALLBACK_IMAGE;
   }
 
   // jsDelivr CDN → convertir a GitHub raw (evita caché lento de jsDelivr)
@@ -359,6 +379,25 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   }
   
   return null;
+}
+
+export async function getAllSlugs(): Promise<string[]> {
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('publicado', '!=', false)
+      .select('slug')
+      .limit(2000)
+      .get();
+    
+    return snap.docs
+      .map((d: any) => d.data().slug)
+      .filter(Boolean);
+  } catch (err) {
+    console.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
+    return [];
+  }
 }
 
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {

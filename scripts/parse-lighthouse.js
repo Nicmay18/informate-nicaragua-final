@@ -1,0 +1,17 @@
+const r = require('e:/PROYECTO/informate-nicaragua-final/lighthouse-report.json');
+const c = r.categories;
+console.log('PERFORMANCE:', Math.round(c.performance.score * 100));
+console.log('ACCESSIBILITY:', Math.round(c.accessibility.score * 100));
+console.log('BEST_PRACTICES:', Math.round(c['best-practices'].score * 100));
+console.log('SEO:', Math.round(c.seo.score * 100));
+console.log('---');
+const a = r.audits;
+console.log('LCP:', a['largest-contentful-paint'].displayValue);
+console.log('TBT:', a['total-blocking-time'].displayValue);
+console.log('CLS:', a['cumulative-layout-shift'].displayValue);
+console.log('SI:', a['speed-index'].displayValue);
+console.log('FCP:', a['first-contentful-paint'].displayValue);
+console.log('Server response:', a['server-response-time'].displayValue);
+console.log('Render-blocking:', a['render-blocking-resources'].displayValue);
+console.log('Unused JS:', a['unused-javascript'].displayValue);
+console.log('Third-party:', a['third-party-summary']?.displayValue || 'N/A');
