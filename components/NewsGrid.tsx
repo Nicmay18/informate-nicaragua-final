@@ -28,8 +28,8 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
 }
 
 const CAT_COLORS: Record<string, string> = {
-  Sucesos: '#b91c1c', Nacionales: '#1e40af', Deportes: '#15803d',
-  Internacionales: '#0369a1', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
+  Sucesos: '#991b1b', Nacionales: '#1e3a8a', Deportes: '#166534',
+  Internacionales: '#0c4a6e', 'Espectáculos': '#db2777', 'Tecnología': '#0ea5e9', General: '#374151',
 };
 
 const CAT_ICONS: Record<string, React.ReactNode> = {
@@ -158,7 +158,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
             <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
               <div className="ng-thumb">
                 <ArticleImage src={n.imagen} alt={n.titulo} />
-                <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151', color: '#fff' }}>
+                <span className="category-badge" style={{ background: '#0f172a', color: '#94a3b8', padding: '2px 6px', borderRadius: '3px', fontSize: '8px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', position: 'absolute', top: '12px', left: '12px', zIndex: 10 }}>
                   {n.categoria}
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="ng-card" data-debug-imagen={n.imagen}>
                   <div className="ng-thumb">
                     <ArticleImage src={n.imagen} alt={n.titulo} />
-                    <span className="category-badge" style={{ background: CAT_COLORS[n.categoria] || '#374151', color: '#fff' }}>
+                    <span className="category-badge" style={{ background: '#0f172a', color: '#94a3b8', padding: '2px 6px', borderRadius: '3px', fontSize: '8px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.02em', position: 'absolute', top: '12px', left: '12px', zIndex: 10 }}>
                       {n.categoria}
                     </span>
                   </div>
