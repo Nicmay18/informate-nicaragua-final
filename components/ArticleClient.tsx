@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
@@ -39,24 +38,21 @@ function ArticleImage({ src, alt, style, width = 800, priority }: { src: string;
     );
   }
 
-  /* Imágenes pequeñas (relacionadas): next/image normal con lazy loading */
+  /* Imágenes pequeñas (relacionadas): img nativo para control total de errores */
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
-  const sizes = width <= 400
-    ? '(max-width: 768px) 50vw, 400px'
-    : '(max-width: 768px) 100vw, 665px';
 
   return (
-    <Image
+    <img
       src={currentSrc}
       alt={alt}
-      fill
-      sizes={sizes}
-      style={{ objectFit: 'cover', ...style }}
       loading="lazy"
-      onError={() => {
-        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
+      onError={e => {
+        if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
+          (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
+        }
       }}
     />
   );

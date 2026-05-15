@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
@@ -11,19 +10,19 @@ import LazySection from '@/components/LazySection';
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
+  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
   return (
-    <Image
+    <img
       src={currentSrc}
       alt={alt}
-      fill
-      sizes="(max-width: 480px) 100px, (max-width: 768px) 120px, 200px"
-      style={{ objectFit: 'cover' }}
       loading="lazy"
-      onError={() => {
-        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      onError={(e) => {
+        if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
+          (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
+        }
       }}
     />
   );
