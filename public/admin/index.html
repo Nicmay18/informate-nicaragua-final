@@ -1257,22 +1257,17 @@ sin texto ni marcas de agua, composición periodística"
       const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
       const categoria = noticia.categoria || 'Noticias';
 
-      // Formato tipo La Prensa (profesional para copiar/pegar en WhatsApp/Facebook)
-      const textoRedes = `${titulo}
+      // Formato con emojis para WhatsApp/Facebook
+      const hashtags = `#${categoria.replace(/\s+/g, '')} #Nicaragua`;
+      const textoRedes = `📌 ${titulo}
 
 ${descripcion}
 
-🔗 Leé más: ${url}`;
+🚨 Lea la nota completa aquí:
 
-      // Formato con emoji para Telegram
-      const textoTelegram = `📰 ${titulo}
-
-${descripcion}
-
-📂 ${categoria}
 🔗 ${url}
 
-📱 Nicaragua Informate - Periodismo de Precisión`;
+${hashtags}`;
 
       document.getElementById('shareTitulo').textContent = titulo;
       document.getElementById('shareDescripcion').textContent = descripcion;
