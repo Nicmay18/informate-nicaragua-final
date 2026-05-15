@@ -11,22 +11,18 @@ import Footer from '@/components/Footer';
 import DonationCard from '@/components/DonationCard';
 
 const NewsletterForm = nextDynamic(() => import('@/components/NewsletterForm'), {
-  ssr: false,
   loading: () => <div style={{ height: 200 }} />
 });
 
 const SocialGrid = nextDynamic(() => import('@/components/home/SocialGrid'), {
-  ssr: false,
   loading: () => <div style={{ height: 300 }} />
 });
 
 const IndicadoresWidget = nextDynamic(() => import('@/components/IndicadoresWidget'), {
-  ssr: false,
   loading: () => <div className="mobile-widget-skeleton" style={{ height: 150 }} />
 });
 
 const WeatherWidgetWrapper = nextDynamic(() => import('@/components/home/WeatherWidgetWrapper'), {
-  ssr: false,
   loading: () => <div className="mobile-widget-skeleton" style={{ height: 100 }} />
 });
 
