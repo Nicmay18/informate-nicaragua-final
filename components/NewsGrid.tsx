@@ -10,20 +10,17 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const [error, setError] = useState(false);
+  const finalSrc = error ? FALLBACK_IMAGE : imgSrc;
   return (
-    <Image
-      src={currentSrc}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={finalSrc}
       alt={alt}
-      fill
-      sizes="(max-width: 480px) 100px, (max-width: 768px) 120px, 200px"
-      style={{ objectFit: 'cover' }}
       loading="lazy"
-      onError={() => {
-        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
-      }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      onError={() => setError(true)}
     />
   );
 }
@@ -39,19 +36,19 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
 };
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 30;
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
 }
 
-export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
+export default function NewsGrid({ noticias, showAll = false }: { noticias: Noticia[]; showAll?: boolean }) {
   const [activeCat, setActiveCat] = useState('Todas');
   const [page, setPage] = useState(1);
 
   const filtered = activeCat === 'Todas' ? noticias : noticias.filter(n => n.categoria === activeCat);
-  const shown = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = shown.length < filtered.length;
+  const shown = showAll ? filtered : filtered.slice(0, page * PAGE_SIZE);
+  const hasMore = !showAll && shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
   function timeAgo(iso: string): string {

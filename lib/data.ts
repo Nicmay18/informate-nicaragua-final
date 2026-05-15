@@ -29,9 +29,15 @@ function normalizeImage(imagen: string): string {
     return imagen.split('?')[0];
   }
 
-  // GitHub raw URLs → mantener directo (disponible inmediatamente)
+  // GitHub raw URLs → convertir a jsDelivr CDN (más confiable para producción)
   if (imagen.includes('githubusercontent.com')) {
-    return imagen.split('?')[0];
+    const clean = imagen.split('?')[0];
+    const match = clean.match(/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/);
+    if (match) {
+      const [, user, repo, branch, path] = match;
+      return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+    }
+    return clean;
   }
 
   // URL externa (Unsplash, etc.) → quitar query params
@@ -73,11 +79,10 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
     const snap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
-      .limit(count)
+      .limit(102)
       .get();
-    
+
     return snap.docs
-      .filter((d: any) => d.data().publicado !== false)
       .map((d: any) => {
         const data = d.data();
         return {
@@ -230,7 +235,6 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .get();
     
     const noticias = snap.docs
-      .filter((d: any) => d.data().publicado !== false)
       .map((d: any) => {
         const data = d.data();
         return {

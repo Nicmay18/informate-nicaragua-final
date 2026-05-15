@@ -45,7 +45,7 @@ export default async function HomePage() {
   let masLeidas: Noticia[] = [];
 
   try {
-    [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
+    [noticias, masLeidas] = await Promise.all([getNews(100), getMasLeidas()]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
