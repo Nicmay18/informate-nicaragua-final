@@ -1374,6 +1374,7 @@ a:hover { color: var(--accent-dark); }
   .radio-player .radio-info span { display: none; }
   .mobile-nav { display: flex; }
   body { padding-bottom: 60px; }
+  .site-footer { padding-bottom: 110px; }
 
   /* Article mobile */
   .article-page { padding: 24px 16px 0; }
