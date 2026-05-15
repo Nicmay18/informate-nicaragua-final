@@ -2131,7 +2131,7 @@ ${descripcion}
           }
           progressBar.style.width = '100%';
         }
-        if (!prepararRedes) limpiarFormulario();
+        limpiarFormulario();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
       } catch (error) {
