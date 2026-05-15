@@ -20,7 +20,6 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí. Sucesos, nacionales, deportes e internacionales.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com' },
   openGraph: {
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
@@ -56,7 +55,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <AutoRefresh intervalSec={30} />
+      <AutoRefresh intervalSec={120} />
       <Header activeCategory="Todas" />
 
       {/* Breaking Ticker */}

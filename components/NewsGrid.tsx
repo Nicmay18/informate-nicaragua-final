@@ -10,7 +10,7 @@ import LazySection from '@/components/LazySection';
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   const [error, setError] = useState(false);
   const finalSrc = error ? FALLBACK_IMAGE : imgSrc;
   return (
@@ -18,6 +18,8 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
     <img
       src={finalSrc}
       alt={alt}
+      width={200}
+      height={150}
       loading="lazy"
       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       onError={() => setError(true)}
