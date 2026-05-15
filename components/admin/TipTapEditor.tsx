@@ -1,9 +1,27 @@
 'use client';
 
-import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useEffect } from 'react';
+import { Extension } from '@tiptap/core';
+
+// Extensión para permitir marks (negrita, cursiva) dentro de headings
+const HeadingWithMarks = Extension.create({
+  name: 'headingWithMarks',
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['heading'],
+        attributes: {
+          allowMarks: {
+            default: true,
+          },
+        },
+      },
+    ];
+  },
+});
 
 interface TipTapEditorProps {
   content?: string;
@@ -14,6 +32,7 @@ interface TipTapEditorProps {
 export default function TipTapEditor({ content = '', onChange, placeholder = 'Escribe el cuerpo de la noticia aquí...' }: TipTapEditorProps) {
   const editor = useEditor({
     extensions: [
+      HeadingWithMarks,
       StarterKit.configure({
         heading: { levels: [2] },
         bulletList: { keepMarks: true, keepAttributes: true },
@@ -38,7 +57,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
   // Actualizar contenido si cambia externamente
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content, false);
+      editor.commands.setContent(content, {});
     }
   }, [content, editor]);
 
