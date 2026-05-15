@@ -2109,14 +2109,17 @@ ${hashtags}`;
             try {
               await postToApi('telegram', { noticia: noticiaData });
               showToast('Enviado a Telegram', 'success');
-              document.getElementById('telegramStatus').textContent = '✅ Enviado a Telegram';
+              const tgStatusEl = document.getElementById('telegramStatus');
+              if (tgStatusEl) tgStatusEl.textContent = '✅ Enviado a Telegram';
             } catch (err) {
               showToast('Error Telegram: ' + err.message, 'warning');
-              document.getElementById('telegramStatus').textContent = '❌ Error Telegram';
+              const tgStatusEl = document.getElementById('telegramStatus');
+              if (tgStatusEl) tgStatusEl.textContent = '❌ Error Telegram';
             }
           } else if (enviarTelegram && !tgToken) {
             showToast('Telegram: No hay token configurado. Ve a Configuración > Telegram Bot.', 'warning');
-            document.getElementById('telegramStatus').textContent = '⚠️ Sin token de Telegram';
+            const tgStatusEl = document.getElementById('telegramStatus');
+            if (tgStatusEl) tgStatusEl.textContent = '⚠️ Sin token de Telegram';
           }
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
