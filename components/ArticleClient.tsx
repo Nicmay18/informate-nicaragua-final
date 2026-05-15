@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import LutoImage from '@/components/LutoImage';
 
 function ArticleImage({ src, alt, style, width = 800, priority }: { src: string; alt: string; style?: React.CSSProperties; width?: number; priority?: boolean }) {
@@ -39,13 +38,9 @@ function ArticleImage({ src, alt, style, width = 800, priority }: { src: string;
   }
 
   /* Imágenes pequeñas (relacionadas): img nativo para control total de errores */
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, width, Math.round(width * 0.56)) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
-
   return (
     <img
-      src={currentSrc}
+      src={imgSrc}
       alt={alt}
       loading="lazy"
       style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}

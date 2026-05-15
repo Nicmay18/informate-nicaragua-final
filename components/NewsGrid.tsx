@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown } from 'lucide-react';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
@@ -14,18 +14,6 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const [error, setError] = useState(false);
   const finalSrc = error ? FALLBACK_IMAGE : imgSrc;
   return (
-<<<<<<< HEAD
-    <img
-      src={currentSrc}
-      alt={alt}
-      loading="lazy"
-      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-      onError={(e) => {
-        if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
-          (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
-        }
-      }}
-=======
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={finalSrc}
@@ -33,7 +21,6 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
       loading="lazy"
       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       onError={() => setError(true)}
->>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
     />
   );
 }
@@ -49,27 +36,18 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
   'Tecnología': <Cpu size={10} />,
 };
 
-<<<<<<< HEAD
-const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología'];
-const PAGE_SIZE = 8;
-=======
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
 const PAGE_SIZE = 30;
->>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
 }
 
-<<<<<<< HEAD
 function timeAgo(iso: string): string {
   return iso ? formatDateShortES(iso) : '';
 }
 
-export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
-=======
 export default function NewsGrid({ noticias, showAll = false }: { noticias: Noticia[]; showAll?: boolean }) {
->>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
   const [activeCat, setActiveCat] = useState('Todas');
   const [page, setPage] = useState(1);
 

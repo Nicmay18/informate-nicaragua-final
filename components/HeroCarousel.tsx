@@ -11,55 +11,15 @@ import HeroLcpImage from '@/components/HeroLcpImage';
 function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-<<<<<<< HEAD
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  const [hasError, setHasError] = useState(false);
-  useEffect(() => { setCurrentSrc(optimizedSrc); setHasError(false); }, [optimizedSrc]);
-
-  if (hasError || !currentSrc || currentSrc === FALLBACK_IMAGE) {
-    return (
-      <div style={{
-        width: '100%', height: '100%',
-        background: 'linear-gradient(135deg, #e8e8ec 0%, #d1d1d6 100%)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        ...style,
-      }}>
-        <span style={{
-          fontSize: 10, fontWeight: 700, color: '#8c8c8c',
-          textTransform: 'uppercase', letterSpacing: '0.5px',
-          textAlign: 'center', padding: '0 8px',
-        }}>Nicaragua<br/>Informate</span>
-      </div>
-    );
-  }
-
-=======
   const currentSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
->>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
   return (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
       src={currentSrc}
-<<<<<<< HEAD
-      alt=""
+      alt={alt}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      width={100}
-      height={75}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
-      onError={() => {
-        setHasError(true);
-        if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
-      }}
-=======
-      alt={alt}
-      fill
-      sizes="(max-width: 768px) 100vw, 200px"
-      style={{ objectFit: 'cover', ...style }}
-      loading={priority ? 'eager' : 'lazy'}
-      priority={priority}
->>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
     />
   );
 }
