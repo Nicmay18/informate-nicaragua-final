@@ -44,19 +44,20 @@ function normalizeImage(imagen: string): string {
     return FALLBACK_IMAGE;
   }
 
-  // jsDelivr CDN → convertir a GitHub raw (evita caché lento de jsDelivr)
+  // jsDelivr CDN → mantener directo (CDN global rápido y confiable)
   if (imagen.includes('cdn.jsdelivr.net')) {
-    const jsdelivrMatch = imagen.match(/cdn\.jsdelivr\.net\/gh\/([^\/]+)\/([^\/]+)@([^\/]+)\/(.+)/);
-    if (jsdelivrMatch) {
-      const [, owner, repo, branch, path] = jsdelivrMatch;
-      return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`;
-    }
     return imagen.split('?')[0];
   }
 
-  // GitHub raw URLs → mantener directo (disponible inmediatamente)
+  // GitHub raw URLs → convertir a jsDelivr CDN (más confiable para producción)
   if (imagen.includes('githubusercontent.com')) {
-    return imagen.split('?')[0];
+    const clean = imagen.split('?')[0];
+    const match = clean.match(/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/);
+    if (match) {
+      const [, user, repo, branch, path] = match;
+      return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+    }
+    return clean;
   }
 
   // URL externa (Unsplash, etc.) → quitar query params
@@ -98,11 +99,10 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
     const snap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
-      .limit(count)
+      .limit(102)
       .get();
-    
+
     return snap.docs
-      .filter((d: any) => d.data().publicado !== false)
       .map((d: any) => {
         const data = d.data();
         return {
@@ -132,11 +132,11 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '1',
     slug: 'homicidio-jinotega',
-    titulo: 'Homicidio imprudente en Jinotega: Motociclista muere tras choque',
+    titulo: 'Colisión en Jinotega deja víctima fatal; Policía investiga',
     resumen: 'Marvin Antonio Tinoco Rivera falleció en la vía Jinotega–El Guayacán tras impactar contra un camión sin señales.',
     contenido: '<p>Marvin Antonio Tinoco Rivera perdió la vida en un trágico accidente...</p>',
     categoria: 'Sucesos',
-    imagen: 'https://images.unsplash.com/photo-1605218427306-635ba2439ddb?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-10T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 1500,
@@ -144,11 +144,11 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '2',
     slug: 'incendio-mercado-oriental',
-    titulo: 'Incendio en el Mercado Oriental devora tres tramos de ropa',
+    titulo: 'Incendio afecta tramos de ropa en Mercado Oriental',
     resumen: 'Tres negocios de ropa quedaron reducidos a cenizas en el sector de la Casa de los Encajes.',
     contenido: '<p>Bomberos y AVEXI investigan las causas del incendio...</p>',
     categoria: 'Sucesos',
-    imagen: 'https://images.unsplash.com/photo-1565514020176-6c2235c8c4bb?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-04T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 2300,
@@ -160,7 +160,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     resumen: 'Miles celebran el aniversario de Ríos de Agua Viva con artistas internacionales.',
     contenido: '<p>Una noche histórica de fe y unidad nacional...</p>',
     categoria: 'Nacionales',
-    imagen: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-08T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 3200,
@@ -172,7 +172,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     resumen: 'El proyecto alcanzará nuevas etapas de construcción para mejorar la atención médica.',
     contenido: '<p>La obra mejorará la atención médica especializada...</p>',
     categoria: 'Nacionales',
-    imagen: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 890,
@@ -180,11 +180,11 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '5',
     slug: 'shakira-brasil',
-    titulo: 'Histórico: Shakira convoca a dos millones de fans en Brasil',
+    titulo: 'Shakira convoca a dos millones de fans en Brasil',
     resumen: 'La estrella colombiana rompe récords en su gira mundial.',
     contenido: '<p>Shakira demostró una vez más su poder...</p>',
     categoria: 'Espectáculos',
-    imagen: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 4500,
@@ -192,11 +192,11 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '6',
     slug: 'berman-espinoza',
-    titulo: 'Berman Espinoza hace historia: alcanza 1,450 ponches',
+    titulo: 'Berman Espinoza alcanza récord de 1,450 ponches',
     resumen: 'El pitcher nica se convierte en el nuevo Rey de los ponches.',
     contenido: '<p>Un logro histórico para el beisbol nicaragüense...</p>',
     categoria: 'Deportes',
-    imagen: 'https://images.unsplash.com/photo-1461896836934-88f358215123?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 1800,
@@ -204,11 +204,11 @@ const MOCK_NOTICIAS: Noticia[] = [
   {
     id: '7',
     slug: 'muertes-accidentes-abril',
-    titulo: 'Abril cierra con 70 muertes por accidentes de tránsito',
+    titulo: '70 fallecimientos por accidentes de tránsito en abril',
     resumen: 'Managua y los motociclistas encabezan las alarmantes estadísticas.',
     contenido: '<p>Las autoridades hacen un llamado a la precaución...</p>',
     categoria: 'Nacionales',
-    imagen: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 2100,
@@ -220,7 +220,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     resumen: 'La plataforma expande el universo de la exitosa serie.',
     contenido: '<p>Una nueva mirada a la historia de la realeza...</p>',
     categoria: 'Espectáculos',
-    imagen: 'https://images.unsplash.com/photo-1574375927938-d5a98e8efe85?w=800',
+    imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
     autor: 'Keyling Rivera M.',
     vistas: 1200,
@@ -255,7 +255,6 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .get();
     
     const noticias = snap.docs
-      .filter((d: any) => d.data().publicado !== false)
       .map((d: any) => {
         const data = d.data();
         return {

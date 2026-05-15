@@ -8,9 +8,10 @@ import { formatDateShortES } from '@/lib/formateo';
 import { cleanImageUrl, getResponsiveImageUrl } from '@/lib/image-utils';
 import HeroLcpImage from '@/components/HeroLcpImage';
 
-function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean; sizes?: string }) {
+function HeroImage({ src, alt, style, priority }: { src: string; alt: string; style?: React.CSSProperties; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
+<<<<<<< HEAD
   const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 200, 150) : FALLBACK_IMAGE;
   const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   const [hasError, setHasError] = useState(false);
@@ -33,10 +34,14 @@ function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: str
     );
   }
 
+=======
+  const currentSrc = isValid ? getResponsiveImageUrl(validSrc, 800, 600) : FALLBACK_IMAGE;
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
   return (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
       src={currentSrc}
+<<<<<<< HEAD
       alt=""
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
@@ -47,6 +52,14 @@ function HeroImage({ src, alt, style, priority, sizes }: { src: string; alt: str
         setHasError(true);
         if (currentSrc !== FALLBACK_IMAGE) setCurrentSrc(FALLBACK_IMAGE);
       }}
+=======
+      alt={alt}
+      fill
+      sizes="(max-width: 768px) 100vw, 200px"
+      style={{ objectFit: 'cover', ...style }}
+      loading={priority ? 'eager' : 'lazy'}
+      priority={priority}
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
     />
   );
 }
@@ -133,6 +146,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             alt={n.titulo}
             width={665}
             height={531}
+            priority={current === 0}
             style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
@@ -182,7 +196,7 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
               onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
               <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
-                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} sizes="200px" />
+                <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} priority={false} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>

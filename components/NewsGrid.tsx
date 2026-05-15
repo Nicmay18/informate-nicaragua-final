@@ -10,10 +10,11 @@ import LazySection from '@/components/LazySection';
 function ArticleImage({ src, alt }: { src: string; alt: string }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
-  const optimizedSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
-  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
-  useEffect(() => { setCurrentSrc(optimizedSrc); }, [optimizedSrc]);
+  const imgSrc = isValid ? getResponsiveImageUrl(validSrc, 400, 300) : FALLBACK_IMAGE;
+  const [error, setError] = useState(false);
+  const finalSrc = error ? FALLBACK_IMAGE : imgSrc;
   return (
+<<<<<<< HEAD
     <img
       src={currentSrc}
       alt={alt}
@@ -24,6 +25,15 @@ function ArticleImage({ src, alt }: { src: string; alt: string }) {
           (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
         }
       }}
+=======
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={finalSrc}
+      alt={alt}
+      loading="lazy"
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      onError={() => setError(true)}
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
     />
   );
 }
@@ -39,24 +49,33 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
   'Tecnología': <Cpu size={10} />,
 };
 
+<<<<<<< HEAD
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología'];
 const PAGE_SIZE = 8;
+=======
+const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
+const PAGE_SIZE = 30;
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
 }
 
+<<<<<<< HEAD
 function timeAgo(iso: string): string {
   return iso ? formatDateShortES(iso) : '';
 }
 
 export default function NewsGrid({ noticias }: { noticias: Noticia[] }) {
+=======
+export default function NewsGrid({ noticias, showAll = false }: { noticias: Noticia[]; showAll?: boolean }) {
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
   const [activeCat, setActiveCat] = useState('Todas');
   const [page, setPage] = useState(1);
 
   const filtered = activeCat === 'Todas' ? noticias : noticias.filter(n => n.categoria === activeCat);
-  const shown = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = shown.length < filtered.length;
+  const shown = showAll ? filtered : filtered.slice(0, page * PAGE_SIZE);
+  const hasMore = !showAll && shown.length < filtered.length;
 
   function switchCat(c: string) { setActiveCat(c); setPage(1); }
 

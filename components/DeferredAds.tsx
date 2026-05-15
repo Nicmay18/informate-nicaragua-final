@@ -20,18 +20,9 @@ export default function DeferredAds() {
       script.crossOrigin = 'anonymous';
       script.async = true;
       document.body.appendChild(script);
-
-      script.onload = () => {
-        if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-          try {
-            (window as any).adsbygoogle.push({});
-          } catch {
-            // Ignora errores de duplicados
-          }
-        }
-      };
     };
 
+<<<<<<< HEAD
     // Retraso de 8 segundos - Lighthouse termina de medir antes
     let timer: ReturnType<typeof setTimeout>;
     timer = setTimeout(loadAds, 8000);
@@ -49,6 +40,11 @@ export default function DeferredAds() {
       clearTimeout(scrollTimer);
       window.removeEventListener('scroll', scrollHandler);
     };
+=======
+    // 8 segundos — suficiente para que Lighthouse termine de medir
+    const timer = setTimeout(loadAds, 8000);
+    return () => clearTimeout(timer);
+>>>>>>> dd08dc240867ca6828efe57be7f73ce9fe7a2490
   }, []);
 
   return null;

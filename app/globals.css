@@ -1836,3 +1836,64 @@ time {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   FIX CONTRASTE ACCESIBILIDAD - FORZADO
+   ============================================ */
+
+/* Fechas en listados de noticias */
+span,
+time,
+.article-date,
+.news-date,
+.meta-date {
+  color: #595959 !important;
+}
+
+/* Footer */
+.site-footer p,
+.site-footer span,
+.footer-text,
+.copyright {
+  color: #595959 !important;
+}
+
+/* Cookie banner */
+.cookie-banner p,
+.cookie-banner span,
+.cookie-banner button,
+.cookie-banner a {
+  color: #595959 !important;
+}
+
+/* Nav inferior fijo */
+nav[role="navigation"] span,
+.bottom-nav span,
+.mobile-nav span {
+  color: #595959 !important;
+}
+
+/* Ranking tendencias */
+.trending-rank,
+.masleidas-rank {
+  color: #737373 !important;
+}
+
+/* Texto muted sidebar */
+.sidebar-muted,
+.sidebar-muted-text,
+.social-label {
+  color: #595959 !important;
+}
+
+/* Donación */
+.donation-text,
+.donation p {
+  color: #595959 !important;
+}
+
+/* EN VIVO badge */
+.pulse-green {
+  background: rgb(34, 197, 94) !important;
+  color: rgb(255, 255, 255) !important;
+}

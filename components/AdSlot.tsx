@@ -19,17 +19,24 @@ export default function AdSlot({
   style = {},
   format = 'auto',
 }: AdSlotProps) {
-  const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const insRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Solo renderizar el slot cuando adsbygoogle esté disponible
+    const check = setInterval(() => {
+      if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
+        setReady(true);
+        clearInterval(check);
+      }
+    }, 500);
+    return () => clearInterval(check);
   }, []);
 
   useEffect(() => {
-    if (!mounted || pushed.current || !insRef.current) return;
+    if (!ready || pushed.current || !insRef.current) return;
     try {
       const w = window as any;
       if (w.adsbygoogle) {
@@ -39,10 +46,9 @@ export default function AdSlot({
     } catch {
       // AdSense no cargado — ignorar
     }
-    // Ocultar label "Publicidad" después de 3s si el anuncio cargó
     const t = setTimeout(() => setLoaded(true), 3000);
     return () => clearTimeout(t);
-  }, [mounted]);
+  }, [ready]);
 
   return (
     <div
@@ -62,7 +68,7 @@ export default function AdSlot({
         ...style,
       }}
     >
-      {mounted && (
+      {ready && (
         <ins
           className="adsbygoogle"
           style={{ display: 'block', width: '100%', minHeight: height }}
@@ -72,7 +78,7 @@ export default function AdSlot({
           {...(/^\d+$/.test(slot) ? { 'data-ad-slot': slot } : {})}
         />
       )}
-      {!loaded && (
+      {!ready && (
         <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
           Publicidad
         </span>

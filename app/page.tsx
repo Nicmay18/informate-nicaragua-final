@@ -15,6 +15,28 @@ import AutoRefresh from '@/components/AutoRefresh';
 import DonationCard from '@/components/DonationCard';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí. Sucesos, nacionales, deportes e internacionales.',
+  alternates: { canonical: 'https://www.nicaraguainformate.com' },
+  openGraph: {
+    title: 'Nicaragua Informate — Noticias de Nicaragua',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    url: 'https://www.nicaraguainformate.com',
+    siteName: 'Nicaragua Informate',
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+    locale: 'es_NI',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nicaragua Informate — Noticias de Nicaragua',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    images: ['/logo.png'],
+  },
+};
 
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +45,7 @@ export default async function HomePage() {
   let masLeidas: Noticia[] = [];
 
   try {
-    [noticias, masLeidas] = await Promise.all([getNews(30), getMasLeidas()]);
-    console.log(`[HomePage] Cargadas ${noticias.length} noticias, ${masLeidas.length} más leídas`);
+    [noticias, masLeidas] = await Promise.all([getNews(100), getMasLeidas()]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }

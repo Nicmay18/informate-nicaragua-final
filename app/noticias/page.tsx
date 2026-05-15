@@ -92,11 +92,11 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
 
     if (cat && cat !== 'Todas') {
 
-      noticias = await getNewsByCategory(cat, 50);
+      noticias = await getNewsByCategory(cat, 100);
 
     } else {
 
-      noticias = await getNews(50);
+      noticias = await getNews(100);
 
     }
 
@@ -145,7 +145,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
 
             <SocialJoinButtons />
 
-            <NewsGrid noticias={noticias} />
+            <NewsGrid noticias={noticias} showAll={true} />
 
             <div style={{ marginTop: 40, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto' }}>
 
