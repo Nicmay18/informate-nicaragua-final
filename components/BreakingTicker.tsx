@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const DURATION_MS = 6000;
+const DURATION_MS = 12000;
 
 interface BreakingNewsItem { id: string; slug: string; titulo: string; }
 interface BreakingTickerProps { noticias: BreakingNewsItem[]; }

@@ -39,7 +39,7 @@ const CAT_ICONS: Record<string, React.ReactNode> = {
 };
 
 const CATS = ['Todas', 'Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos'];
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 15;
 
 function readTime(titulo: string, resumen: string): number {
   return Math.max(1, Math.ceil((titulo + ' ' + resumen).split(/\s+/).length / 180));
@@ -83,7 +83,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         .ng-load-btn { padding:12px 28px; border-radius:4px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit; border:1px solid #e8e8ec; background:#fff; color:#1a1a2e; }
         .ng-load-btn:hover { border-color:#1a1a2e; background:#1a1a2e; color:#fff; }
         @media(max-width:768px){
-          .ng-card { grid-template-columns:120px 1fr; gap:14px; padding:16px 0; }
+          .ng-card { grid-template-columns:120px 1fr; gap:14px; padding:16px 0; content-visibility:auto; contain-intrinsic-size:auto 150px; }
           .ng-card:hover { margin:0 -8px; padding-left:8px; padding-right:8px; }
           .ng-thumb { aspect-ratio:4/3; }
           .ng-title { font-size:15px; }
