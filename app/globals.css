@@ -1370,10 +1370,10 @@ a:hover { color: var(--accent-dark); }
     gap: 8px;
     text-align: center;
   }
-  .radio-player { padding: 10px 16px; }
+  .radio-player { padding: 10px 16px; bottom: 56px; z-index: 140; }
   .radio-player .radio-info span { display: none; }
   .mobile-nav { display: flex; }
-  body { padding-bottom: 60px; }
+  body { padding-bottom: 110px; }
   .site-footer { padding-bottom: 110px; }
 
   /* Article mobile */
