@@ -22,13 +22,14 @@ const SocialGrid = nextDynamic(() => import('@/components/home/SocialGrid'), {
 
 const IndicadoresWidget = nextDynamic(() => import('@/components/IndicadoresWidget'), {
   ssr: false,
-  loading: () => <div style={{ height: 150 }} />
+  loading: () => <div className="mobile-widget-skeleton" style={{ height: 150 }} />
 });
 
 const WeatherWidgetWrapper = nextDynamic(() => import('@/components/home/WeatherWidgetWrapper'), {
   ssr: false,
-  loading: () => <div style={{ height: 100 }} />
+  loading: () => <div className="mobile-widget-skeleton" style={{ height: 100 }} />
 });
+
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -97,6 +98,16 @@ export default async function HomePage() {
           {/* ===== IN-CONTENT AD ===== */}
           <div style={{ marginTop: 32 }}>
             <AdSlot slot="homepage-in-content" width={336} height={280} />
+          </div>
+
+          {/* ===== MOBILE WIDGETS: Indicadores + Clima ===== */}
+          <div className="mobile-widgets">
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, marginTop: 24, minHeight: 120, position: 'relative' }}>
+              <IndicadoresWidget />
+            </div>
+            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, minHeight: 100, position: 'relative' }}>
+              <WeatherWidgetWrapper />
+            </div>
           </div>
         </div>
 
