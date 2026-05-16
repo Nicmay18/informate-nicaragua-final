@@ -6,10 +6,9 @@ import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X, SkipForward } from 
 const EMISORAS = [
   { name: 'Radio Corporación',    url: 'https://sh2.radioonlinehd.com:8008/stream' },
   { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
-  { name: 'Radio La Costeña',     url: 'https://stream.zeno.fm/3xk5v5t1bwv8uv' },
-  { name: 'Radio Stereo Kiss',    url: 'https://stream.zeno.fm/0r0v8t1bwv8uv' },
   { name: 'Radio Camoapa',        url: 'https://centova.solucionstreaming.net/proxy/gcfminis/stream' },
-  { name: 'Radio Ya Nicaragua',   url: 'https://stream.ecmdigital.net:8010/radioya' },
+  { name: 'Radio La Primerísima', url: 'https://stream.zeno.fm/0r0v8t1bwv8uv' },
+  { name: 'Radio Stereo Kiss',    url: 'https://stream.zeno.fm/3xk5v5t1bwv8uv' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];

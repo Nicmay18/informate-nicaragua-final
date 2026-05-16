@@ -1,53 +1,18 @@
 /**
  * SEO TOXIC SLUG DETECTOR
- * Detecta slugs con palabras sensibles para AdSense / desindexación.
+ * Bloquea ÚNICAMENTE slugs exactos listados manualmente.
+ * NO usa detección por palabras clave para evitar bloquear noticias legítimas.
  * Fecha: 2026-05-16
  */
 
-export const TOXIC_WORDS = [
-  'muere',
-  'muerte',
-  'tragedia',
-  'homicidio',
-  'asesinato',
-  'fallece',
-  'fallecimiento',
-  'fallecimientos',
-  'funeral',
-  'sepelio',
-  'matanza',
-  'masacre',
-  'suicidio',
-  'linchamiento',
-  'asesinado',
-  'asesinada',
-  'muerto',
-  'muerta',
-  'morir',
-  'murio',
-  'murió',
-  'violacion',
-  'violación',
-  'abuso',
-  'tortura',
-  'secuestro',
-  'secuestrado',
-];
-
-/** Slugs exactos conocidos a bloquear (410 o noindex) */
+/** Slugs exactos a bloquear (410 o noindex). Añadir manualmente según sea necesario. */
 export const BLOCKED_SLUGS: string[] = [
   'tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',
   'conductor-se-fuga-tras-causar-muerte-de-joven-en',
-  'homicidio-jinotega',
-  'muertes-accidentes-abril',
 ];
 
-/** Retorna true si el slug contiene palabras tóxicas */
+/** Retorna true solo si el slug está en la lista exacta de bloqueados */
 export function isToxicSlug(slug: string): boolean {
   if (!slug) return false;
-  const lower = slug.toLowerCase();
-  // Slugs exactos bloqueados
-  if (BLOCKED_SLUGS.includes(lower)) return true;
-  // Palabras tóxicas dentro del slug
-  return TOXIC_WORDS.some(word => lower.includes(word));
+  return BLOCKED_SLUGS.includes(slug.toLowerCase());
 }
