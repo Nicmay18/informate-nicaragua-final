@@ -12,11 +12,11 @@ export default function NosotrosPage() {
   return (
     <LegalPageShell title="Sobre Nicaragua Informate">
       <p style={{ fontSize: '1.15rem', color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado con el propósito de ofrecer a la ciudadanía nicaragüense —y a la diáspora en el exterior— información verificada, contextualizada y oportuna sobre los acontecimientos que marcan la vida nacional y regional.
+        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado por nicaragüenses para nicaragüenses —dentro del país y en la diáspora— con el propósito de ofrecer información verificada, contextualizada y sin censura sobre los acontecimientos que marcan la vida nacional y regional.
       </p>
 
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        En un entorno informativo cada vez más saturado y polarizado, creemos firmemente que el periodismo tiene una función social irrenunciable: servir como contrapeso del poder, dar voz a los ciudadanos y mantener a la población informada con rigor y responsabilidad. Por eso, cada noticia que publicamos pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
+        En Nicaragua, el derecho a la información libre enfrenta restricciones constantes. Creemos firmemente que el periodismo independiente no es un lujo, sino una necesidad: informar sin miedo, denunciar las injusticias, dar voz a los que el poder intenta silenciar y mantener a nuestra comunidad —incluyendo a los más de 500,000 nicaragüenses exiliados— conectada con la realidad del país. Por eso, cada noticia que publicamos pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
@@ -86,10 +86,10 @@ export default function NosotrosPage() {
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Por qué creamos este sitio?</h2>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.75 }}>
-        Nicaragua Informate nació de la convicción de que la información libre, verificada y accesible es un pilar fundamental para cualquier sociedad democrática. En un contexto donde la desinformación se propaga con velocidad alarmante, decidimos construir un espacio donde la rigurosidad periodística fuera la norma, no la excepción.
+        Nicaragua Informate nació de la convicción de que los nicaragüenses merecemos información que no nos mienta. En un país donde los medios tradicionales han sido cooptados o silenciados, decidimos construir un espacio digital donde la verdad, el rigor y la independencia sean innegociables. No respondemos a partidos políticos ni a intereses de poder: respondemos a ustedes, los lectores.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Cubrimos las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales. Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto y la relevancia para la población nicaragüense.
+        Cubrimos sucesos, política nacional, economía, derechos humanos, deportes, cultura y el exilio nicaragüense. Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto histórico y la relevancia para quienes viven en Nicaragua y quienes sueñan con volver.
       </p>
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Compromiso con la veracidad</h2>
