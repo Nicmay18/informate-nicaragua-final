@@ -57,7 +57,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <meta name="google-adsense-account" content="ca-pub-4115203339551939" />
+        <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
         <style dangerouslySetInnerHTML={{ __html: `
           *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
           html{font-family:var(--font-inter),system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
