@@ -12,11 +12,11 @@ export default function NosotrosPage() {
   return (
     <LegalPageShell title="Sobre Nicaragua Informate">
       <p style={{ fontSize: '1.15rem', color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado por nicaragüenses para nicaragüenses —dentro del país y en la diáspora— con el propósito de ofrecer información verificada, contextualizada y sin censura sobre los acontecimientos que marcan la vida nacional y regional.
+        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado por nicaragüenses con el propósito de informar, educar y conectar a nuestra comunidad —tanto a quienes viven en el país como a quienes están en el exterior— con noticias verificadas, contextualizadas y oportunas sobre los acontecimientos que marcan la vida nacional y regional.
       </p>
 
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        En Nicaragua, el derecho a la información libre enfrenta restricciones constantes. Creemos firmemente que el periodismo independiente no es un lujo, sino una necesidad: informar sin miedo, denunciar las injusticias, dar voz a los que el poder intenta silenciar y mantener a nuestra comunidad —incluyendo a los más de 500,000 nicaragüenses exiliados— conectada con la realidad del país. Por eso, cada noticia que publicamos pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
+        En un entorno informativo cada vez más saturado, creemos firmemente que el periodismo tiene una función social irrenunciable: mantener informada a la población con rigor, precisión y responsabilidad. Nos enfocamos en lo que publicamos: noticias de sucesos, economía, deportes, cultura, tecnología y las historias que afectan el día a día del nicaragüense. Por eso, cada pieza informativa pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
@@ -86,10 +86,10 @@ export default function NosotrosPage() {
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Por qué creamos este sitio?</h2>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.75 }}>
-        Nicaragua Informate nació de la convicción de que los nicaragüenses merecemos información que no nos mienta. En un país donde los medios tradicionales han sido cooptados o silenciados, decidimos construir un espacio digital donde la verdad, el rigor y la independencia sean innegociables. No respondemos a partidos políticos ni a intereses de poder: respondemos a ustedes, los lectores.
+        Nicaragua Informate nació de la convicción de que toda comunidad necesita una fuente de información confiable, cercana y profesional. Decidimos construir un espacio digital donde el rigor periodístico sea la norma: cubrimos lo que importa al nicaragüense, desde los sucesos del día hasta las oportunidades de crecimiento económico, el progreso deportivo y las tradiciones culturales que nos unen como país.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Cubrimos sucesos, política nacional, economía, derechos humanos, deportes, cultura y el exilio nicaragüense. Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto histórico y la relevancia para quienes viven en Nicaragua y quienes sueñan con volver.
+        Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto y la utilidad práctica para quienes viven en Nicaragua y quienes siguen la actualidad del país desde el exterior. Nuestra independencia editorial significa que no respondemos a partidos políticos ni a intereses corporativos: respondemos a ustedes, los lectores.
       </p>
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Compromiso con la veracidad</h2>
