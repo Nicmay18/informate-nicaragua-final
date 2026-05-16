@@ -16,5 +16,9 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /cgi-bin/
 
+# URLs tóxicas eliminadas del índice (AdSense remediation 2026-05-16)
+Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
+Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
+
 # Sitemap para descubrimiento de URLs
 Sitemap: https://www.nicaraguainformate.com/sitemap.xml

@@ -13,6 +13,7 @@ import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
+import { isToxicSlug } from '@/lib/seo-toxic';
 
 export const dynamic = 'force-static';
 export const dynamicParams = true;
@@ -33,6 +34,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const baseUrl = 'https://www.nicaraguainformate.com';
   const url = `${baseUrl}/noticias/${slug}`;
+
+  // Si el slug contiene palabras tóxicas, forzar noindex para desindexar de Google
+  if (isToxicSlug(slug)) {
+    return {
+      title: 'Contenido no disponible | Nicaragua Informate',
+      robots: 'noindex, nofollow',
+      alternates: { canonical: url },
+    };
+  }
 
   try {
     const noticia = await getNewsBySlug(slug);

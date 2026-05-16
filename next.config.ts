@@ -83,6 +83,17 @@ const nextConfig: NextConfig = {
         destination: '/cookies',
         permanent: true,
       },
+      // Redirecciones 301 para URLs tóxicas (AdSense remediation)
+      {
+        source: '/noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
   async headers() {

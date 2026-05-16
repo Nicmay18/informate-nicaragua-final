@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getNews } from '@/lib/data';
+import { isToxicSlug } from '@/lib/seo-toxic';
 
 const baseUrl = 'https://www.nicaraguainformate.com';
 
@@ -112,7 +113,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const articles = await getNews(500); // Obtener hasta 500 artículos
 
-    const articleUrls: MetadataRoute.Sitemap = articles.map((article) => {
+    // Excluir artículos con slugs tóxicos del sitemap (AdSense remediation)
+    const cleanArticles = articles.filter(article => !isToxicSlug(article.slug));
+
+    const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = article.fecha ? new Date(article.fecha) : new Date();
       const now = new Date();
       const daysSincePublished = Math.floor(
