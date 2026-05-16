@@ -298,7 +298,6 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
         </div>
       )}
 
-      <style>{`@keyframes spin{to{transform:rotate(360deg)}} @keyframes wvbar{from{transform:scaleY(0.3)}to{transform:scaleY(1)}}`}</style>
     </div>
   );
 }
