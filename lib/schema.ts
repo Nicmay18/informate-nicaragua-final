@@ -2,13 +2,13 @@ export function buildOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsMediaOrganization',
-    '@id': 'https://nicaraguainformate.com/#organization',
+    '@id': 'https://www.nicaraguainformate.com/#organization',
     name: 'Nicaragua Informate',
     alternateName: 'NicInformate',
-    url: 'https://nicaraguainformate.com',
+    url: 'https://www.nicaraguainformate.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.png',
+      url: 'https://www.nicaraguainformate.com/logo.png',
       width: 512,
       height: 512,
     },
@@ -32,7 +32,7 @@ export function buildWebSiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Nicaragua Informate',
-    url: 'https://nicaraguainformate.com',
+    url: 'https://www.nicaraguainformate.com',
   };
 }
 
@@ -62,7 +62,7 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
       cssSelector: ['.article-headline', '.article-body'],
     },
     publisher: {
-      '@id': 'https://nicaraguainformate.com/#organization',
+      '@id': 'https://www.nicaraguainformate.com/#organization',
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     inLanguage: 'es-NI',
