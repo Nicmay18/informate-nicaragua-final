@@ -1,9 +1,20 @@
+# robots.txt — Nicaragua Informate
+# https://www.nicaraguainformate.com/robots.txt
+
 User-agent: *
 Allow: /
+
+# Panel de administración
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /login/
+
+# API routes (no son páginas HTML)
 Disallow: /api/
+
+# Archivos internos de Next.js
+Disallow: /_next/
 Disallow: /cgi-bin/
 
+# Sitemap para descubrimiento de URLs
 Sitemap: https://www.nicaraguainformate.com/sitemap.xml
