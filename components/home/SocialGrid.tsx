@@ -16,12 +16,6 @@ export default function SocialGrid() {
         <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Síguenos</h3>
       </div>
 
-      <style>{`
-        .social-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .social-card { display: flex; align-items: center; gap: 10px; padding: 12px; background: #fff; border-radius: 4px; text-decoration: none; color: #1a1a2e; border: 1px solid #e8e8ec; transition: all 0.2s; }
-        .social-card .sidebar-text { color: #1a1a2e; }
-        .social-card:hover { border-color: #c41e3a; transform: translateY(-1px); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-      `}</style>
       <div className="social-link-grid">
         {SOCIALS.map((s) => (
           <a

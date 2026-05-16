@@ -13,17 +13,6 @@ export default function TrendingList({ noticias }: { noticias: Noticia[] }) {
         <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Tendencias</h3>
       </div>
 
-      <style>{`
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-      `}</style>
-
-      <style>{`
-        .trending-link { display: flex; gap: 12px; padding: 12px 0; text-decoration: none; color: inherit; transition: all 0.2s; border-bottom: 1px solid #f0f0f4; }
-        .trending-link:last-child { border-bottom: none; }
-        .trending-link:hover { padding-left: 8px; }
-        .trending-link:hover .trending-rank { color: #c41e3a; }
-        .trending-link:hover .trending-title { color: #c41e3a; }
-      `}</style>
       <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
         {noticias.map((n, i) => (
           <li key={n.id}>

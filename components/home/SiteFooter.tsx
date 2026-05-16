@@ -72,14 +72,6 @@ export default function SiteFooter() {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          footer > div > div { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
-        }
-        @media (max-width: 480px) {
-          footer > div > div { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </footer>
   );
 }

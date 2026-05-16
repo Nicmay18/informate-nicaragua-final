@@ -87,17 +87,6 @@ export default function LegalPageShell({ children, title }: { children: React.Re
           © 2025-2026 Nicaragua Informate. Todos los derechos reservados.
         </div>
       </footer>
-      <style>{`
-        .legal-nav-scroll {
-          display: flex;
-          overflow-x: auto;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        .legal-nav-scroll::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }

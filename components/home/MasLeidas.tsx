@@ -14,13 +14,6 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
         <h3 style={{ fontFamily: 'var(--font-merri)', fontSize: 16, fontWeight: 900, color: '#1a1a2e', margin: 0 }}>Más Leídas</h3>
       </div>
 
-      <style>{`
-        .masleidas-link { display: flex; gap: 12px; padding: 12px 0; text-decoration: none; color: inherit; transition: all 0.2s; border-bottom: 1px solid #f0f0f4; }
-        .masleidas-link:last-child { border-bottom: none; }
-        .masleidas-link:hover { padding-left: 8px; }
-        .masleidas-link:hover .masleidas-rank { color: #c41e3a; }
-        .masleidas-link:hover .masleidas-title { color: #c41e3a; }
-      `}</style>
       <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
         {noticias.map((n, i) => (
           <li key={n.id}>

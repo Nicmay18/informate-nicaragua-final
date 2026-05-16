@@ -206,11 +206,6 @@ export default function RadioBar() {
         )}
 
         <audio ref={audioRef} style={{ display: 'none' }} />
-        <style>{`
-          @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.3 } }
-          input[type="range"] { -webkit-appearance: none; background: #e2d9d0; border-radius: 2px; }
-          input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: #8c1d18; border-radius: 50%; cursor: pointer; }
-        `}</style>
       </div>
     </div>
   );
