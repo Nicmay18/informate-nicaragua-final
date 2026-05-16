@@ -97,7 +97,7 @@ export function formatearNoticia(texto: string): string {
   }
 
   // === FASE 1: LIMPIEZA INICIAL ===
-  let limpio = texto
+  const limpio = texto
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
     // Eliminar basura no editorial del final
@@ -253,7 +253,7 @@ export function limpiarHtml(html: string): string {
     return formatearNoticia(html);
   }
 
-  let limpio = html
+  const limpio = html
     // Quitar basura no editorial del final
     .replace(/\bcompartir\b[\s\S]*$/i, '')
     .replace(/\bno\s+hay\s+noticias\s+relacionadas\b[\s\S]*$/i, '')
