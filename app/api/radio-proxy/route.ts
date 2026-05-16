@@ -1,4 +1,3 @@
-// app/api/radio-proxy/route.ts
 import { NextResponse } from 'next/server';
 
 const RADIOS_NICARAGUA: Record<string, string> = {
@@ -12,15 +11,19 @@ const RADIOS_NICARAGUA: Record<string, string> = {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const radio = searchParams.get('radio');
+  const url = searchParams.get('url');
 
-  if (!radio || !RADIOS_NICARAGUA[radio]) {
-    return NextResponse.json({ 
-      error: 'Radio no encontrada',
+  let streamUrl: string;
+  if (url) {
+    streamUrl = decodeURIComponent(url);
+  } else if (radio && RADIOS_NICARAGUA[radio]) {
+    streamUrl = RADIOS_NICARAGUA[radio];
+  } else {
+    return NextResponse.json({
+      error: 'Radio no encontrada. Usa ?radio=nombre o ?url=encodeURIComponent(streamUrl)',
       available: Object.keys(RADIOS_NICARAGUA)
     }, { status: 400 });
   }
-
-  const streamUrl = RADIOS_NICARAGUA[radio];
   
   try {
     const controller = new AbortController();

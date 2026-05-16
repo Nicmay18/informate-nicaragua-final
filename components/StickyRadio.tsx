@@ -3,13 +3,19 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X, SkipForward } from 'lucide-react';
 
 const EMISORAS = [
-  { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream' },
-  { name: 'Radio Futura 91.3',    url: 'https://radio.garden/api/ara/content/listen/SjhzgGc8/channel.mp3' },
-  { name: 'Radio La Nueva YA',    url: 'https://radio.garden/api/ara/content/listen/TjqXGlH4/channel.mp3' },
-  { name: 'Clásica Nicaragua',    url: 'https://stream.zeno.fm/91gkqnhmns8uv' },
-  { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
-  { name: 'Radio La Tuani',       url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
+  { name: 'La Nueva Radio YA',      url: 'https://stream.zenolive.com/axr92qawesmtv' },
+  { name: 'Fiesta Latina 89.1 FM',  url: 'https://radios.solumedia.com/6596/stream' },
+  { name: 'Rock FM 105.5',          url: 'https://securestream.us/radio/8050/radio.mp3' },
+  { name: 'Radio Vandalica',        url: 'https://stream.zeno.fm/caq3fwn1fnruv' },
+  { name: 'Stereo Beso 94.5 FM',    url: 'https://a9.asurahosting.com:7140/radio.mp3' },
+  { name: 'Radio Estrella del Mar', url: 'https://streamer.radio.co/sd5242d0b6/listen' },
+  { name: 'Radio Stereo Mundo 91.9', url: 'https://ssl.hostingtico.com:8138/smundo2014' },
+  { name: 'Radio Sendas FM',        url: 'http://74.91.125.187:8028/stream' },
 ];
+
+function proxied(url: string) {
+  return `/api/radio-proxy?url=${encodeURIComponent(url)}`;
+}
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];
 
@@ -41,7 +47,7 @@ export default function StickyRadio() {
     setSelected(next);
     setError(null);
     if (!audioRef.current) return;
-    audioRef.current.src = EMISORAS[next].url;
+    audioRef.current.src = proxied(EMISORAS[next].url);
     audioRef.current.load();
     audioRef.current.play()
       .then(() => { setPlaying(true); setLoading(false); setError(null); })
@@ -56,7 +62,7 @@ export default function StickyRadio() {
     errorCountRef.current = 0;
     setSelected(idx); setOpen(false); setError(null); setLoading(true);
     if (!audioRef.current) return;
-    audioRef.current.src = EMISORAS[idx].url;
+    audioRef.current.src = proxied(EMISORAS[idx].url);
     audioRef.current.load();
     audioRef.current.play()
       .then(() => { setPlaying(true); setLoading(false); })
@@ -72,7 +78,7 @@ export default function StickyRadio() {
       errorCountRef.current = 0;
       setLoading(true);
       if (!audioRef.current.src) {
-        audioRef.current.src = EMISORAS[selected].url;
+        audioRef.current.src = proxied(EMISORAS[selected].url);
         audioRef.current.load();
       }
       audioRef.current.play()
