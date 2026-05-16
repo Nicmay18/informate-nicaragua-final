@@ -1,7 +1,7 @@
 import { Hash } from 'lucide-react';
 
 const TAGS = [
-  '#Nicaragua', '#Estelí', '#Sucesos', '#Deportes', '#Política',
+  '#Nicaragua', '#Managua', '#Sucesos', '#Deportes', '#Política',
   '#Economía', '#Cultura', '#Clima', '#Espectáculos', '#Centroamérica',
 ];
 

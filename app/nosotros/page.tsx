@@ -113,7 +113,7 @@ export default function NosotrosPage() {
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Equipo y operación</h2>
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Contamos con un equipo multidisciplinario de reporteros, editores y colaboradores distribuidos en distintas regiones de Nicaragua. Esta red territorial nos permite cubrir noticias desde Managua, León, Granada, Estelí, Matagalpa y otras zonas del país en tiempo real.
+        Contamos con un equipo multidisciplinario de reporteros, editores y colaboradores distribuidos en distintas regiones de Nicaragua. Esta red territorial nos permite cubrir noticias desde Managua, León, Granada, Matagalpa y otras zonas del país en tiempo real.
       </p>
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
