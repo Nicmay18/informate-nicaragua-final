@@ -9,6 +9,7 @@ import MasLeidas from '@/components/home/MasLeidas';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DonationCard from '@/components/DonationCard';
+import StickyAdMobile from '@/components/StickyAdMobile';
 
 const NewsletterForm = nextDynamic(() => import('@/components/NewsletterForm'), {
   loading: () => <div style={{ height: 200 }} />
@@ -138,9 +139,7 @@ export default async function HomePage() {
       </main>
 
       {/* ===== STICKY BOTTOM AD — Mobile only ===== */}
-      <div className="sticky-ad-mobile" style={{ position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: '#fff', borderTop: '1px solid #e8e8ec', padding: '8px 0' }}>
-        <AdSlot slot="homepage-sticky-bottom" width={320} height={50} format="horizontal" style={{ minHeight: 50 }} />
-      </div>
+      <StickyAdMobile />
 
       <Footer />
     </div>

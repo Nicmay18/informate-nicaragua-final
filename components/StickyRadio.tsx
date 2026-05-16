@@ -92,20 +92,6 @@ export default function StickyRadio() {
 
   return (
     <>
-      <style>{`
-        .sticky-radio { display:flex; }
-        .sradio-vol { display:flex; align-items:center; gap:8px; }
-        @media(max-width:900px){ .sradio-vol { display:none !important; } }
-        @keyframes wvbar { from{transform:scaleY(0.3)} to{transform:scaleY(1.6)} }
-        @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @media(max-width:768px){
-          .sticky-radio { bottom:56px !important; height:48px !important; }
-          .sr-inner { height:48px !important; }
-          .sr-label { display:none !important; }
-          .sr-wave { display:none !important; }
-        }
-      `}</style>
-
       <div className="sticky-radio" style={{
         position:'fixed', bottom:0, left:0, right:0, zIndex:200,
         background:'linear-gradient(90deg,#0a0f1e,#0f172a)',

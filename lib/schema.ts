@@ -54,8 +54,8 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
       '@type': 'Person',
       name: article.autor || 'Keyling Elieth Rivera Muñoz',
       jobTitle: 'Periodista',
-      url: 'https://nicaraguainformate.com/nosotros',
-      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
+      url: 'https://www.nicaraguainformate.com/autor/keyling-rivera',
+      worksFor: { '@id': 'https://www.nicaraguainformate.com/#organization' },
     },
     speakable: {
       '@type': 'SpeakableSpecification',
@@ -73,16 +73,31 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
   return base;
 }
 
+const CATEGORY_SLUG_MAP: Record<string, string> = {
+  'sucesos': 'Sucesos',
+  'nacionales': 'Nacionales',
+  'deportes': 'Deportes',
+  'internacionales': 'Internacionales',
+  'tecnologia': 'Tecnología',
+  'espectaculos': 'Espectáculos',
+};
+
+const SLUG_TO_CATEGORY: Record<string, string> = Object.fromEntries(
+  Object.entries(CATEGORY_SLUG_MAP).map(([k, v]) => [v, k])
+);
+
 export function buildBreadcrumbJsonLd(category?: string) {
+  const baseUrl = 'https://www.nicaraguainformate.com';
   const breadcrumbItems = [
-    { name: 'Inicio', item: 'https://nicaraguainformate.com' },
-    { name: 'Noticias', item: 'https://nicaraguainformate.com/noticias' },
+    { name: 'Inicio', item: baseUrl },
+    { name: 'Noticias', item: `${baseUrl}/noticias` },
   ];
 
   if (category && category !== 'General') {
+    const slug = SLUG_TO_CATEGORY[category] || category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     breadcrumbItems.push({
       name: category,
-      item: `https://nicaraguainformate.com/noticias/${encodeURIComponent(category.toLowerCase().replace(/\s+/g, '-'))}`,
+      item: `${baseUrl}/${slug}`,
     });
   }
 

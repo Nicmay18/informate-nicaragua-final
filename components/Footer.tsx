@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import BrandIcon from '@/components/BrandIcon';
-import { CATEGORIES } from '@/lib/types';
+import { CATEGORIES, categoryToSlug } from '@/lib/types';
 import { MapPin, Mail, FileText } from 'lucide-react';
 
 const SOCIAL_URLS = {
@@ -32,7 +32,7 @@ export default function Footer() {
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {CATEGORIES.map((cat) => (
               <li key={cat.name} style={{ marginBottom: 10 }}>
-                <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
+                <Link href={`/${categoryToSlug(cat.name)}`} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
                   {cat.name}
                 </Link>
               </li>

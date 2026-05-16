@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
 /* ================================================================
+   CLASES CRÍTICAS DE LAYOUT (antes inline en layout.tsx)
+   ================================================================ */
+.site-header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1); }
+.hero-section { position: relative; width: 100%; overflow: hidden; background: #0f172a; }
+.container-pro { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #fff; border-top: 1px solid rgba(0,0,0,0.1); z-index: 40; display: flex; justify-content: space-around; align-items: center; }
+.cookie-banner { position: fixed; bottom: 56px; left: 0; right: 0; padding: 12px 16px; background: #fff; border-top: 1px solid rgba(0,0,0,0.1); z-index: 45; font-size: 13px; }
+@media (min-width: 768px) { .bottom-nav { display: none !important; } }
+
+/* ================================================================
    FOCUS VISIBLE - Accesibilidad
    ================================================================ */
 :focus-visible {
@@ -880,6 +890,21 @@ a:hover { color: var(--accent-dark); }
   align-items: center;
   font-size: 13px;
   color: rgba(255,255,255,0.4);
+}
+
+/* ================================================================
+   STICKY RADIO (movido desde componente inline)
+   ================================================================ */
+.sticky-radio { display: flex; }
+.sradio-vol { display: flex; align-items: center; gap: 8px; }
+@keyframes wvbar { from { transform: scaleY(0.3); } to { transform: scaleY(1.6); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .sradio-vol { display: none !important; } }
+@media (max-width: 768px) {
+  .sticky-radio { bottom: 56px !important; height: 48px !important; }
+  .sr-inner { height: 48px !important; }
+  .sr-label { display: none !important; }
+  .sr-wave { display: none !important; }
 }
 
 /* ================================================================

@@ -18,6 +18,7 @@ export default function CookieBanner() {
   const handleAccept = () => {
     localStorage.setItem('ni_cookie_consent', 'accepted');
     setShowBanner(false);
+    window.dispatchEvent(new Event('ni-consent-updated'));
     loadAnalytics();
   };
 
