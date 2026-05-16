@@ -61,59 +61,13 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
 
   return (
     <div>
-      <style>{`
-        .ng-card { display:grid; grid-template-columns:200px 1fr; gap:20px; padding:24px 0; border-bottom:1px solid #f0f0f4; text-decoration:none; transition:all 0.2s; color:inherit; }
-        .ng-card:first-child { padding-top:0; }
-        .ng-card:last-child { border-bottom:none; }
-        .ng-card:hover { background:#faf9f7; margin:0 -16px; padding-left:16px; padding-right:16px; border-radius:8px; border-bottom-color:transparent; }
-        .ng-card:hover + .ng-card { border-top:1px solid transparent; }
-        .ng-thumb { position:relative; border-radius:8px; overflow:hidden; aspect-ratio:4/3; background:#e8e8ec; }
-        .ng-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; }
-        .ng-card:hover .ng-thumb img { transform:scale(1.05); }
-        .ng-thumb .category-badge { position:absolute; top:8px; left:8px; background:var(--accent); color:#fff; padding:3px 10px; border-radius:4px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-        .ng-content { display:flex; flex-direction:column; justify-content:center; }
-        .ng-meta { display:flex; gap:12px; align-items:center; margin-bottom:8px; font-size:12px; color:#8a8a9e; font-weight:500; }
-        .ng-meta .category { color:#c41e3a; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-        .ng-title { font-family:'Georgia',serif; font-size:18px; font-weight:700; line-height:1.35; color:#1a1a2e; margin-bottom:8px; transition:color 0.2s; }
-        .ng-card:hover .ng-title { color:#c41e3a; }
-        .ng-excerpt { font-size:14px; color:#5a5a6e; line-height:1.6; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-        .ng-cat-btn { padding:8px 18px; border-radius:100px; border:1px solid #e8e8ec; background:#fff; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; color:#5a5a6e; }
-        .ng-cat-btn:hover { border-color:#c41e3a; color:#c41e3a; }
-        .ng-cat-btn.active { background:#1a1a2e; color:#fff; border-color:#1a1a2e; }
-        .ng-load-btn { padding:12px 28px; border-radius:4px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit; border:1px solid #e8e8ec; background:#fff; color:#1a1a2e; }
-        .ng-load-btn:hover { border-color:#1a1a2e; background:#1a1a2e; color:#fff; }
-        @media(max-width:768px){
-          .ng-card { grid-template-columns:100px 1fr; gap:12px; padding:14px 0; content-visibility:auto; contain-intrinsic-size:auto 120px; }
-          .ng-card:hover { margin:0 -8px; padding-left:8px; padding-right:8px; }
-          .ng-thumb { aspect-ratio:4/3; }
-          .ng-title { font-size:14px; margin-bottom:6px; }
-          .ng-excerpt { display:none; }
-          .ng-thumb .category-badge { font-size:9px; padding:2px 6px; top:4px; left:4px; }
-          .ng-meta { gap:8px; font-size:11px; }
-        }
-        @media(max-width:480px){
-          .ng-card { grid-template-columns:80px 1fr; gap:10px; }
-          .ng-thumb .category-badge { font-size:8px; padding:2px 5px; }
-        }
-        [data-theme="dark"] .ng-card { border-bottom-color: #333; }
-        [data-theme="dark"] .ng-card:hover { background: #1a1a1a; }
-        [data-theme="dark"] .ng-title { color: #f5f5f5; }
-        [data-theme="dark"] .ng-excerpt { color: #a3a3a3; }
-        [data-theme="dark"] .ng-meta { color: #737373; }
-        [data-theme="dark"] .ng-cat-btn { background: #1a1a1a; border-color: #333; color: #a3a3a3; }
-        [data-theme="dark"] .ng-cat-btn.active { background: #f5f5f5; color: #1a1a2e; border-color: #f5f5f5; }
-        [data-theme="dark"] .ng-load-btn { background: #1a1a1a; border-color: #333; color: #f5f5f5; }
-        [data-theme="dark"] .ng-section-header { border-bottom-color: #f5f5f5 !important; }
-        [data-theme="dark"] .ng-section-title { color: #f5f5f5 !important; }
-        [data-theme="dark"] .ng-count { color: #737373 !important; }
-      `}</style>
-
       {/* Section Header */}
-      <div className="ng-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #1a1a2e' }}>
-        <h2 className="ng-section-title" style={{ fontFamily: 'var(--font-merri)', fontSize: 20, fontWeight: 900, color: '#1a1a2e', display: 'flex', alignItems: 'center', gap: 10, margin: 0 }}>
+      <div className="ng-section-header">
+        <h2 className="ng-section-title">
           <span style={{ width: 4, height: 24, background: '#c41e3a', borderRadius: 2, display: 'inline-block' }} />
           Últimas Noticias
         </h2>
+        <span className="ng-count">{filtered.length} artículos</span>
         <span className="ng-count" style={{ fontSize: 13, color: '#595959', fontWeight: 500 }}>{filtered.length} artículos</span>
       </div>
 
@@ -128,7 +82,6 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         msOverflowStyle: 'none',
         paddingBottom: 4,
       }}>
-        <style>{`.cat-tabs::-webkit-scrollbar { display: none; }`}</style>
         {CATS.map(c => {
           const active = c === activeCat;
           return (
