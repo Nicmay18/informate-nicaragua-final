@@ -19,7 +19,7 @@ export function buildOrganizationJsonLd() {
     ],
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Estelí',
+      addressLocality: 'Managua',
       addressCountry: 'NI',
     },
     areaServed: { '@type': 'Country', name: 'Nicaragua' },
@@ -52,7 +52,7 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
     dateModified: article.fechaActualizacion || article.fecha,
     author: {
       '@type': 'Person',
-      name: article.autor || 'Keyling Rivera M.',
+      name: article.autor || 'Juan Pérez',
       jobTitle: 'Periodista',
       url: 'https://nicaraguainformate.com/nosotros',
       worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },

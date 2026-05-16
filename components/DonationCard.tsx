@@ -58,7 +58,7 @@ export default function DonationCard() {
         marginBottom: 24,
         margin: '0 0 24px 0',
       }}>
-        Tu contribución nos permite seguir informando con independencia y veracidad desde Estelí.
+        Tu contribución nos permite seguir informando con independencia y veracidad desde Managua.
       </p>
 
       {/* Botón PayPal */}

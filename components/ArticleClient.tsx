@@ -399,7 +399,7 @@ export default function ArticleClient({
   const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const rawAutor = (noticia.autor || '').trim();
-  const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Rivera M.';
+  const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Juan Pérez';
   const autorInicial = autor.charAt(0).toUpperCase();
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen);
   const vistas = fmtViews(noticia.vistas);
@@ -523,7 +523,7 @@ export default function ArticleClient({
             Periodista | {noticia.categoria}
           </div>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 auto', maxWidth: 480 }}>
-            Periodista especializada en el análisis de sucesos y eventos de relevancia en el territorio nicaragüense. Enfocada en reportes detallados con rigor informativo y compromiso con la verdad.
+            Periodista nicaragüense con más de una década de trayectoria. Especializado en cobertura política, análisis económico y reportajes de investigación. Comprometido con la verdad periodística y el derecho del ciudadano a estar informado.
           </p>
         </div>
 

@@ -33,10 +33,10 @@ import AutoRefresh from '@/components/AutoRefresh';
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
-  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí. Sucesos, nacionales, deportes e internacionales.',
+  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua. Sucesos, nacionales, deportes e internacionales.',
   openGraph: {
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
     url: 'https://www.nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
     images: ['/logo.png'],
   },
 };

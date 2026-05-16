@@ -28,10 +28,10 @@ const FOOTER_COLS = [
     { label: 'Contacto', href: '/contacto' },
   ]},
   { title: 'Contacto', links: [
-    { label: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com' },
+    { label: 'contacto@nicaraguainformate.com', href: 'mailto:contacto@nicaraguainformate.com' },
     { label: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com' },
     { label: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com' },
-    { label: 'Estelí, Nicaragua', href: '#' },
+    { label: 'Managua, Nicaragua', href: '#' },
   ]},
 ];
 

@@ -21,14 +21,14 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.nicaraguainformate.com'),
   manifest: '/manifest.json',
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
-  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
   robots: 'index, follow',
   icons: { icon: '/logo.png', apple: '/logo.png' },
   alternates: {
     canonical: '/',
   },
   verification: {
-    google: 'GTM-PK3V8LZX', // TODO: Reemplazar con código real de Google Search Console (no GTM)
+    google: 'REEMPLAZAR_CON_CODIGO_SEARCH_CONSOLE', // INSTRUCCIONES: Ve a https://search.google.com/search-console, añade tu sitio, copia el meta tag de verificación y pégalo aquí. NO es un código GTM.
   },
   openGraph: {
     type: 'website',
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     url: 'https://www.nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
     images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Estelí.',
+    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
     images: ['/logo.png'],
   },
 };

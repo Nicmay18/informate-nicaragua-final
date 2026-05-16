@@ -38,7 +38,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
     title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-    description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
+    description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Managua.`,
 
     alternates: { canonical: url },
 
@@ -54,7 +54,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
       title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
+      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Managua.`,
 
       images: [{ url: `${baseUrl}/logo.png`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
 
@@ -66,7 +66,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
       title: `${cat !== 'Todas' ? cat + ' | ' : 'Todas las Noticias | '}Nicaragua Informate`,
 
-      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Estelí.`,
+      description: `Noticias de ${cat !== 'Todas' ? cat : 'Nicaragua y el mundo'}. Periodismo verificado desde Managua.`,
 
       images: [`${baseUrl}/logo.png`],
 

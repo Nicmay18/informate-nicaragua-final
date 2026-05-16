@@ -65,10 +65,10 @@ export default function Footer() {
         <div>
           <h2 style={{ fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16, color: 'rgba(255,255,255,0.9)' }}>Contacto</h2>
           <p style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
-            <MapPin size={14} /> Estelí, Nicaragua
+            <MapPin size={14} /> Managua, Nicaragua
           </p>
-          <a href="mailto:redaccion@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
-            <Mail size={14} /> redaccion@nicaraguainformate.com
+          <a href="mailto:contacto@nicaraguainformate.com" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+            <Mail size={14} /> contacto@nicaraguainformate.com
           </a>
           <Link href="/contacto" style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
             <FileText size={14} /> Formulario de contacto
@@ -92,7 +92,7 @@ export default function Footer() {
 
       <div style={{ maxWidth: 1280, margin: '32px auto 0', padding: '20px 24px 0', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
         <p suppressHydrationWarning>© 2026 Nicaragua Informate. Todos los derechos reservados.</p>
-        <p>Periodismo verificado desde Estelí, Nicaragua</p>
+        <p>Periodismo verificado desde Managua, Nicaragua</p>
       </div>
     </footer>
   );
