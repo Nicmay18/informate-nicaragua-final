@@ -5,7 +5,7 @@ import { CircleCheck, Scale, Eye, Users } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Política Editorial',
   description: 'Política editorial de Nicaragua Informate — Nuestros principios, autonomía y compromiso con el periodismo verificado.',
-  alternates: { canonical: 'https://nicaraguainformate.com/politica-editorial' },
+  alternates: { canonical: 'https://www.nicaraguainformate.com/politica-editorial' },
 };
 
 const PRINCIPIOS = [

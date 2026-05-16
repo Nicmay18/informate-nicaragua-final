@@ -5,7 +5,7 @@ import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield } from 'lucide
 export const metadata: Metadata = {
   title: 'Sobre Nosotros | Nicaragua Informate',
   description: 'Conoce a Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Managua, Nicaragua. Fundado por Maycol Nicaragua, Jose Luis Lopez y Keyling Rivera.',
-  alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
+  alternates: { canonical: 'https://www.nicaraguainformate.com/nosotros' },
 };
 
 export default function NosotrosPage() {
