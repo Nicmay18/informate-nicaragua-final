@@ -49,21 +49,6 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
 
   return (
     <>
-      <style>{`
-        .theme-btn { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-muted); transition:all .2s; }
-        .theme-btn:hover { border-color:var(--accent); color:var(--accent); }
-        .mobile-toggle { display:none; width:36px; height:36px; border-radius:8px; border:1px solid var(--border); background:transparent; cursor:pointer; align-items:center; justify-content:center; color:var(--text); }
-        .mobile-toggle:hover { background:var(--bg-warm); }
-        .mobile-drawer { position:fixed; inset:0; z-index:1001; display:flex; flex-direction:column; background:rgba(255,255,255,0.98); backdrop-filter:blur(16px); transform:translateX(100%); transition:transform .3s ease; }
-        .mobile-drawer.open { transform:translateX(0); }
-        .mobile-drawer-header { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid var(--border); }
-        .mobile-drawer-nav { display:flex; flex-direction:column; padding:16px 24px; gap:4px; }
-        .mobile-drawer-nav a { padding:12px 16px; border-radius:var(--radius-sm); font-size:15px; font-weight:600; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:10px; transition:all .15s; }
-        .mobile-drawer-nav a:hover { background:var(--bg-warm); color:var(--accent); }
-        .mobile-drawer-nav a.active { color:var(--accent); background:rgba(196,30,58,0.06); }
-        @media (max-width:768px) { .nav-pro { display:none !important; } .mobile-toggle { display:flex !important; } }
-      `}</style>
-
       {/* Top Bar */}
       <div className="top-bar" style={{
         transition: 'transform 0.3s ease',

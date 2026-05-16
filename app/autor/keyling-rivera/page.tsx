@@ -1,14 +1,27 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
-import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield } from 'lucide-react';
+import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield, CalendarDays } from 'lucide-react';
+import { getNews } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
   description: 'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
-  alternates: { canonical: 'https://nicaraguainformate.com/autor/keyling-rivera' },
+  alternates: { canonical: 'https://www.nicaraguainformate.com/autor/keyling-rivera' },
 };
 
-export default function AutorKeylingRiveraPage() {
+export default async function AutorKeylingRiveraPage() {
+  let articulos: { id: string; slug: string; titulo: string; fecha: string; categoria: string; imagen: string }[] = [];
+  try {
+    const noticias = await getNews(100);
+    articulos = noticias
+      .filter((n: any) => n.autor?.toLowerCase().includes('keyling') || n.autor?.toLowerCase().includes('rivera'))
+      .slice(0, 10)
+      .map((n: any) => ({ id: n.id, slug: n.slug, titulo: n.titulo, fecha: n.fecha, categoria: n.categoria, imagen: n.imagen }));
+  } catch {
+    articulos = [];
+  }
+
   return (
     <LegalPageShell title="Keyling Elieth Rivera Muñoz — Directora Editorial">
       <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
@@ -81,6 +94,32 @@ export default function AutorKeylingRiveraPage() {
           Conoce más sobre el equipo en nuestra página de <a href="/nosotros" style={{ color: '#60a5fa', textDecoration: 'none' }}>Sobre Nosotros</a>.
         </p>
       </div>
+
+      {/* Artículos del autor */}
+      {articulos.length > 0 && (
+        <>
+          <h3 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>Artículos publicados</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {articulos.map((a) => (
+              <Link key={a.id} href={`/noticias/${a.slug}`} style={{
+                display: 'flex', gap: 16, alignItems: 'center',
+                padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8,
+                textDecoration: 'none', color: 'inherit', transition: 'all 0.2s',
+              }}>
+                <img src={a.imagen} alt={a.titulo} style={{ width: 64, height: 48, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ color: '#fff', fontWeight: 600, fontSize: 14, marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.titulo}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 12 }}>
+                    <CalendarDays size={12} /> {new Date(a.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    <span style={{ marginLeft: 8, color: '#8c1d18', fontWeight: 700, textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.04em' }}>{a.categoria}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
 
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '2rem' }}>
         Consulta nuestra <a href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</a> completa para más detalles sobre nuestros estándares de publicación.
