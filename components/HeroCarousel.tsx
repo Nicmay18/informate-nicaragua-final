@@ -145,7 +145,6 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
             <div key={current} style={{ height: '100%', background: 'rgba(255,255,255,0.5)', transformOrigin: 'left', animation: 'hero-progress 5.5s linear forwards' }} />
           </div>
         )}
-        <style>{`@keyframes hero-progress { from { transform: scaleX(0) } to { transform: scaleX(1) } }`}</style>
       </section>
 
       {/* Side Cards - 1/3 */}
@@ -171,12 +170,6 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
         </aside>
       )}
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .hero-grid { grid-template-columns: 1fr !important; }
-          .hero-side { display: none !important; }
-        }
-      `}</style>
     </div>
   );
 }
