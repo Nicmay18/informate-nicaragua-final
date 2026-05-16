@@ -4,12 +4,13 @@ import { MapPin, Clock, Mail, Share2, Info, Send, Shield, Scale, Megaphone } fro
 import BrandIcon from '@/components/BrandIcon';
 
 export const metadata: Metadata = {
-  title: 'Contacto',
-  description: 'Contacta a Nicaragua Informate. Ubicación en Estelí, Nicaragua. Redacción: redaccion@nicaraguainformate.com. Horario: Lunes a Viernes 8:00 - 18:00',
+  title: 'Contacto | Nicaragua Informate',
+  description: 'Contacta a Nicaragua Informate. Correo: contacto@nicaraguainformate.com. Dirección en Managua, Nicaragua. Redes sociales y formulario de contacto.',
   alternates: { canonical: 'https://nicaraguainformate.com/contacto' },
 };
 
 const CONTACT_CHANNELS = [
+  { icon: <Mail size={14} />, label: 'Contacto general', val: 'contacto@nicaraguainformate.com', href: 'mailto:contacto@nicaraguainformate.com', desc: 'Consultas generales' },
   { icon: <Mail size={14} />, label: 'Redacción', val: 'redaccion@nicaraguainformate.com', href: 'mailto:redaccion@nicaraguainformate.com', desc: 'Noticias y prensa' },
   { icon: <Shield size={14} />, label: 'Privacidad', val: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com', desc: 'Datos personales' },
   { icon: <Scale size={14} />, label: 'Legal', val: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com', desc: 'Asuntos legales' },
@@ -26,8 +27,8 @@ export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
       <p style={{ color: '#cbd5e1', marginBottom: '2.5rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
-        ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte. 
-        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Estelí.
+        ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte.
+        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Managua, Nicaragua.
       </p>
 
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
@@ -38,22 +39,10 @@ export default function ContactoPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
             <h3 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Estelí, Nicaragua<br />
-              <span style={{ color: '#cbd5e1' }}>Departamento de Estelí</span>
+              Managua, Nicaragua<br />
+              <span style={{ color: '#cbd5e1' }}>Centroamérica</span>
             </p>
           </div>
-        </div>
-        
-        <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62288.01234567!2d-86.36!3d13.09!2m3!1f0!2f0!2f0!2f0!2m2!1s0x8f71249e5c41c0c3%3A0x5a0e7f1e0e3a6b0e!2sNicaragua%20Informate!5e0!3m2!1ses!2s!4v1714418659871!5m2!1ses!2s!4v1714418659871!5m2!1ses!2s"
-            width="100%" 
-            height="250" 
-            style={{ border: 0 }} 
-            allowFullScreen={false} 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-          />
         </div>
 
         <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
@@ -84,7 +73,7 @@ export default function ContactoPage() {
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '0.75rem', margin: '0 0 2rem' }}>
         {CONTACT_CHANNELS.map(c => (
-          <a key={c.label} href={c.href} 
+          <a key={c.label} href={c.href}
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem', textDecoration: 'none', transition: 'all 0.2s' }}
             className="contact-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>

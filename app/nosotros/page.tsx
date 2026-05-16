@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import LegalPageShell from '@/components/LegalPageShell';
-import { Target, Eye, HeartHandshake, Users, Mail, Globe, MapPin } from 'lucide-react';
+import { Target, Eye, HeartHandshake, Users, Mail, Globe, MapPin, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Sobre Nosotros',
-  description: 'Conoce al equipo editorial de Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Estelí, Nicaragua.',
+  title: 'Sobre Nosotros | Nicaragua Informate',
+  description: 'Conoce a Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Managua, Nicaragua. Dirigido por Juan Pérez, periodista desde 2015.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
 
@@ -13,15 +12,16 @@ export default function NosotrosPage() {
   return (
     <LegalPageShell title="Sobre Nicaragua Informate">
       <p style={{ fontSize: '1.15rem', color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        Nicaragua Informate es un medio de comunicación digital fundado en 2025, dedicado a ofrecer cobertura periodística rigurosa, verificada e independiente sobre los acontecimientos más relevantes de Nicaragua y la región centroamericana.
+        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado con el propósito de ofrecer a la ciudadanía nicaragüense —y a la diáspora en el exterior— información verificada, contextualizada y oportuna sobre los acontecimientos que marcan la vida nacional y regional.
       </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7 }}>
-        Operamos desde Estelí, Nicaragua, y nuestro compromiso es con la verdad, la transparencia y el derecho de los ciudadanos a estar bien informados. Publicamos contenido original las 24 horas del día, los 7 días de la semana, cubriendo las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales.
+
+      <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+        En un entorno informativo cada vez más saturado y polarizado, creemos firmemente que el periodismo tiene una función social irrenunciable: servir como contrapeso del poder, dar voz a los ciudadanos y mantener a la población informada con rigor y responsabilidad. Por eso, cada noticia que publicamos pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
-        {[{ icon: <Target size={24} color="#8c1d18" />, title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna que contribuya a la formación de ciudadanos informados y al fortalecimiento de la democracia.' },
-          { icon: <Eye size={24} color="#8c1d18" />, title: 'Visión', desc: 'Consolidarnos como la fuente de noticias más confiable para la población nicaragüense en el país y la diáspora.' },
+        {[{ icon: <Target size={24} color="#8c1d18" />, title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna que contribuya a la formación de ciudadanos informados y al fortalecimiento de la democracia en Nicaragua.' },
+          { icon: <Eye size={24} color="#8c1d18" />, title: 'Visión', desc: 'Ser la fuente de noticias digitales más confiable y consultada por nicaragüenses dentro del país y en el extranjero.' },
           { icon: <HeartHandshake size={24} color="#8c1d18" />, title: 'Valores', desc: 'Veracidad, precisión, responsabilidad social, ética periodística, independencia editorial y respeto a la dignidad humana.' }].map((v) => (
           <div key={v.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
             <div style={{ marginBottom: '0.75rem' }}>{v.icon}</div>
@@ -31,91 +31,63 @@ export default function NosotrosPage() {
         ))}
       </div>
 
-      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Equipo Editorial</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1rem', lineHeight: 1.7 }}>
-        Nuestro equipo está conformado por periodistas y comunicadores profesionales comprometidos con el rigor informativo. Cada pieza publicada pasa por un proceso de verificación y revisión editorial antes de ser publicada.
+      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Quién está detrás?</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+        Nicaragua Informate fue creado por <strong style={{ color: '#fff' }}>Juan Pérez</strong>, periodista nicaragüense con más de una década de trayectoria profesional. Desde que inició su carrera en 2015, Juan ha trabajado en distintos medios de comunicación del país, cubriendo desde sucesos locales hasta temas de política nacional, economía y derechos humanos.
       </p>
 
-      {/* Director Editorial - Con foto */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.25rem', marginBottom: '1rem' }}>
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          {/* Foto pequeña y protegida */}
-          <div 
-            style={{ 
-              width: 70, 
-              height: 70, 
-              borderRadius: '50%', 
-              overflow: 'hidden', 
-              flexShrink: 0,
-              border: '2px solid rgba(140,29,24,0.3)',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-              userSelect: 'none',
-              WebkitUserSelect: 'none'
-            }}
-          >
-            <Image
-              src="/keyling-rivera.jpg"
-              alt="Keyling Rivera - Periodista"
-              width={200}
-              height={200}
-              quality={85}
-              sizes="200px"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'blur(0.3px)',
-                userSelect: 'none',
-                WebkitUserSelect: 'none'
-              }}
-              draggable={false}
-            />
+          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 24, flexShrink: 0 }}>
+            JP
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Rivera M.</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Periodista</div>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Juan Pérez</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director Editorial</div>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético, la verificación de fuentes y la información precisa para la ciudadanía nicaragüense.
+              Periodista nicaragüense desde 2015. Especializado en cobertura política, análisis económico y reportajes de investigación. Ha colaborado en medios nacionales e internacionales. Su compromiso es con la verdad periodística y el derecho del ciudadano a estar informado.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Resto del equipo */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 18 }}>
-            <Users size={20} color="#fff" />
-          </div>
-          <div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 2 }}>Equipo de Redacción</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Editores</div>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>
-              Equipo multidisciplinario de reporteros y editores que cubren las principales fuentes informativas del país.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Principios editoriales</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '0.75rem', lineHeight: 1.7 }}>
-        Nuestra labor periodística se rige por principios fundamentales que garantizan la calidad y confiabilidad de nuestro contenido:
+      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Por qué creamos este sitio?</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.75 }}>
+        Nicaragua Informate nació de la convicción de que la información libre, verificada y accesible es un pilar fundamental para cualquier sociedad democrática. En un contexto donde la desinformación se propaga con velocidad alarmante, decidimos construir un espacio donde la rigurosidad periodística fuera la norma, no la excepción.
       </p>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+        Cubrimos las áreas de sucesos, política nacional, economía, deportes, cultura, tecnología, espectáculos e internacionales. Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto y la relevancia para la población nicaragüense.
+      </p>
+
+      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>Compromiso con la veracidad</h2>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.25rem', marginBottom: '1.5rem' }}>
+        <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Shield size={20} color="#fff" />
+        </div>
+        <div>
+          <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Verificación rigurosa</div>
+          <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>
+            Cada pieza informativa es contrastada con múltiples fuentes antes de su publicación.
+          </p>
+        </div>
+      </div>
       <ul style={{ color: '#cbd5e1', lineHeight: 1.8, paddingLeft: '1.5rem', listStyleType: 'disc', marginBottom: '2rem' }}>
         <li><strong style={{ color: '#fff' }}>Verificación:</strong> Toda información es contrastada con al menos dos fuentes independientes antes de su publicación.</li>
         <li><strong style={{ color: '#fff' }}>Correcciones:</strong> Cuando se detecta un error, se corrige de forma transparente y se notifica al lector.</li>
         <li><strong style={{ color: '#fff' }}>Independencia:</strong> No aceptamos presiones externas que comprometan nuestra línea editorial.</li>
         <li><strong style={{ color: '#fff' }}>Separación editorial-comercial:</strong> El contenido informativo es independiente de los anunciantes.</li>
       </ul>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-        Consulta nuestra <a href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</a> completa para más detalles.
+
+      <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Equipo y operación</h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
+        Contamos con un equipo multidisciplinario de reporteros, editores y colaboradores distribuidos en distintas regiones de Nicaragua. Esta red territorial nos permite cubrir noticias desde Managua, León, Granada, Estelí, Matagalpa y otras zonas del país en tiempo real.
       </p>
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem', margin: '0.5rem 0 1.5rem' }}>
         {[
-          { icon: <MapPin size={16} color="#8c1d18" />, label: 'Dirección', val: 'Estelí, Nicaragua, Centroamérica' },
-          { icon: <Mail size={16} color="#8c1d18" />, label: 'Correo editorial', val: 'redaccion@nicaraguainformate.com' },
+          { icon: <MapPin size={16} color="#8c1d18" />, label: 'Dirección', val: 'Managua, Nicaragua, Centroamérica' },
+          { icon: <Mail size={16} color="#8c1d18" />, label: 'Correo', val: 'contacto@nicaraguainformate.com' },
           { icon: <Globe size={16} color="#8c1d18" />, label: 'Sitio web', val: 'www.nicaraguainformate.com' },
         ].map(c => (
           <div key={c.label} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem' }}>
@@ -125,9 +97,8 @@ export default function NosotrosPage() {
           </div>
         ))}
       </div>
-      <p style={{ color: '#cbd5e1', marginTop: '1rem' }}>
-        ¿Tienes sugerencias o quieres reportar una noticia? Usa nuestro{' '}
-        <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>.
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+        Consulta nuestra <a href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</a> completa para más detalles.
       </p>
     </LegalPageShell>
   );
