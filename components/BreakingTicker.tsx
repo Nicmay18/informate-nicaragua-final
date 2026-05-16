@@ -67,8 +67,6 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
           }}
         />
       </div>
-      <style>{`@keyframes ticker-progress { from { transform: translateX(-100%) } to { transform: translateX(0) } }`}</style>
-
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', gap: 10, height: 34 }}>
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: 999, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
           <span style={{ fontSize: 9 }}>&#9889;</span> Última Hora

@@ -900,6 +900,7 @@ a:hover { color: var(--accent-dark); }
 @keyframes wvbar { from { transform: scaleY(0.3); } to { transform: scaleY(1.6); } }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes hero-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes ticker-progress { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 @media (max-width: 900px) { .sradio-vol { display: none !important; } }
 @media (max-width: 768px) {
   .sticky-radio { bottom: 56px !important; height: 48px !important; }
