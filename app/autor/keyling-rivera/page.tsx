@@ -4,7 +4,7 @@ import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield } from '
 
 export const metadata: Metadata = {
   title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
-  description: 'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con amplia trayectoria en cobertura de sucesos, política nacional y derechos humanos.',
+  description: 'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
   alternates: { canonical: 'https://nicaraguainformate.com/autor/keyling-rivera' },
 };
 
@@ -19,7 +19,7 @@ export default function AutorKeylingRiveraPage() {
           <h2 style={{ fontSize: '1.6rem', color: '#fff', marginBottom: 8, fontWeight: 800 }}>Keyling Elieth Rivera Muñoz</h2>
           <div style={{ color: '#8c1d18', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Directora Editorial — Nicaragua Informate</div>
           <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.75, marginBottom: 16 }}>
-            Periodista nicaragüense, co-fundadora y directora editorial de Nicaragua Informate. Especializada en cobertura de sucesos, análisis político nacional y reportajes de investigación sobre derechos humanos. Firme defensora del periodismo verificado y la independencia editorial en Nicaragua.
+            Periodista nicaragüense, co-fundadora y directora editorial de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos. Firme defensora del periodismo verificado y la independencia editorial en Nicaragua.
           </p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 13 }}>
@@ -37,7 +37,7 @@ export default function AutorKeylingRiveraPage() {
 
       <h3 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem', fontWeight: 700 }}>Trayectoria profesional</h3>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.95rem' }}>
-        Keyling Elieth Rivera Muñoz ha construido una sólida trayectoria en el periodismo nicaragüense, cubriendo desde sucesos locales hasta temas de política nacional, economía y derechos humanos. Su trabajo se caracteriza por la rigurosidad en la verificación de fuentes, el contexto profundo y el compromiso con la verdad.
+        Keyling Elieth Rivera Muñoz ha construido una sólida trayectoria en el periodismo nicaragüense, cubriendo Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos con rigor y precisión. Su trabajo se caracteriza por la rigurosidad en la verificación de fuentes, el contexto profundo y el compromiso con la verdad.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.95rem' }}>
         Como directora editorial de Nicaragua Informate, supervisa cada pieza informativa antes de su publicación, garantizando que cumpla con los estándares de veracidad, precisión y responsabilidad social que rigen al medio. Su liderazgo editorial ha sido fundamental para posicionar al portal como una fuente confiable de información nacional.
@@ -45,7 +45,7 @@ export default function AutorKeylingRiveraPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '2.5rem 0' }}>
         {[
-          { icon: <Award size={24} color="#8c1d18" />, title: 'Especialización', desc: 'Cobertura de sucesos, análisis político y reportajes de investigación sobre derechos humanos.' },
+          { icon: <Award size={24} color="#8c1d18" />, title: 'Especialización', desc: 'Cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.' },
           { icon: <Newspaper size={24} color="#8c1d18" />, title: 'Experiencia', desc: 'Amplia trayectoria en medios de comunicación nicaragüenses, cubriendo temas de relevancia nacional.' },
           { icon: <BookOpen size={24} color="#8c1d18" />, title: 'Enfoque', desc: 'Verificación rigurosa, contextualización profunda y defensa de la independencia editorial.' },
           { icon: <Shield size={24} color="#8c1d18" />, title: 'Compromiso', desc: 'Periodismo verificado como pilar de la democracia y el derecho a la información ciudadana.' },

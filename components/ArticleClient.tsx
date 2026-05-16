@@ -523,7 +523,7 @@ export default function ArticleClient({
             Periodista | {noticia.categoria}
           </div>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 auto', maxWidth: 480 }}>
-            Periodista nicaragüense, directora editorial de Nicaragua Informate. Especializada en cobertura de sucesos, análisis político y reportajes de investigación. Comprometida con la verdad periodística y el derecho del ciudadano a estar informado. <a href="/autor/keyling-rivera" style={{ color: '#2563eb', textDecoration: 'none' }}>Ver perfil →</a>
+            Periodista nicaragüense, directora editorial de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos. Comprometida con la verdad periodística y el derecho del ciudadano a estar informado. <a href="/autor/keyling-rivera" style={{ color: '#2563eb', textDecoration: 'none' }}>Ver perfil →</a>
           </p>
         </div>
 
