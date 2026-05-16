@@ -71,6 +71,32 @@ export function isValidCategory(category: string): category is Category {
   return CATEGORIES.some(cat => cat.name === category);
 }
 
+/** Convierte nombre de categoría a slug URL (sin tildes, minúsculas) */
+export function categoryToSlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/ó/g, 'o')
+    .replace(/á/g, 'a')
+    .replace(/é/g, 'e')
+    .replace(/í/g, 'i')
+    .replace(/ú/g, 'u')
+    .replace(/ñ/g, 'n')
+    .replace(/[^a-z0-9]/g, '');
+}
+
+/** Convierte slug URL a nombre de categoría (con tilde) */
+export function slugToCategory(slug: string): Category | null {
+  const map: Record<string, Category> = {
+    sucesos: 'Sucesos',
+    nacionales: 'Nacionales',
+    deportes: 'Deportes',
+    internacionales: 'Internacionales',
+    tecnologia: 'Tecnología',
+    espectaculos: 'Espectáculos',
+  };
+  return map[slug] || null;
+}
+
 /** Keywords que indican noticia de luto/fallecimiento */
 const LUTO_KEYWORDS = ['muere', 'fallece', 'falleció', 'fallecimiento', 'muerto', 'muerta', 'luto', 'sepelio', 'funeral', 'muert', 'víctima mortal', 'asesinad', 'homicidio', 'descansa en paz', 'd.e.p', 'dep.', ' DEP '];
 

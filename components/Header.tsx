@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Sun, Moon, Menu, X } from 'lucide-react';
-import { CATEGORIES } from '@/lib/types';
+import { CATEGORIES, categoryToSlug } from '@/lib/types';
 
 const THEME_STORAGE_KEY = 'ni_theme';
 type ThemeType = 'light' | 'dark';
@@ -94,7 +94,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
               <li><Link href="/" className={activeCategory === 'Todas' ? 'active' : ''}>Inicio</Link></li>
               {CATEGORIES.map((cat) => (
                 <li key={cat.name}>
-                  <Link href={`/noticias?cat=${encodeURIComponent(cat.name)}`} className={activeCategory === cat.name ? 'active' : ''}>
+                  <Link href={`/${categoryToSlug(cat.name)}`} className={activeCategory === cat.name ? 'active' : ''}>
                     {cat.name}
                   </Link>
                 </li>
@@ -126,7 +126,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
         <nav className="mobile-drawer-nav">
           <Link href="/" className={activeCategory === 'Todas' ? 'active' : ''} onClick={() => setMenuOpen(false)}>Inicio</Link>
           {CATEGORIES.map((cat) => (
-            <Link key={cat.name} href={`/noticias?cat=${encodeURIComponent(cat.name)}`} className={activeCategory === cat.name ? 'active' : ''} onClick={() => setMenuOpen(false)}>
+            <Link key={cat.name} href={`/${categoryToSlug(cat.name)}`} className={activeCategory === cat.name ? 'active' : ''} onClick={() => setMenuOpen(false)}>
               {cat.name}
             </Link>
           ))}
