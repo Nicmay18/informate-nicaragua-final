@@ -194,12 +194,15 @@ export default function StickyRadio() {
         </div>
 
         {error && (
-          <div style={{
-            position:'absolute', bottom:'calc(100% + 4px)', left:0, right:0,
-            background:'#b91c1c', color:'#fff', padding:'8px 12px', fontSize:12,
-            fontWeight:600, borderRadius:6, textAlign:'center', zIndex:202,
-          }}>
-            {error}
+          <div className="radio-error-toast">
+            <span style={{ opacity: 0.9 }}>{error}</span>
+            <button
+              onClick={() => setError(null)}
+              aria-label="Cerrar mensaje"
+              style={{ background:'none', border:'none', color:'inherit', cursor:'pointer', marginLeft:'auto', padding:0, display:'flex', alignItems:'center' }}
+            >
+              <X size={12} />
+            </button>
           </div>
         )}
 
