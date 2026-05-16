@@ -4,12 +4,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X, SkipForward } from 'lucide-react';
 
 const EMISORAS = [
-  { name: 'Radio La Primerísima', url: 'https://cloudstream2030.conectarhosting.com:7029/stream' },
-  { name: 'Radio Futura 91.3',    url: 'https://radio.garden/api/ara/content/listen/SjhzgGc8/channel.mp3' },
-  { name: 'Radio La Nueva YA',    url: 'https://radio.garden/api/ara/content/listen/TjqXGlH4/channel.mp3' },
-  { name: 'Clásica Nicaragua',    url: 'https://stream.zeno.fm/91gkqnhmns8uv' },
+  { name: 'Radio Corporación',    url: 'https://sh2.radioonlinehd.com:8008/stream' },
   { name: 'Radio Maranatha',      url: 'https://stream2.305stream.com/proxy/client032?mp=/stream' },
-  { name: 'Radio La Tuani',       url: 'https://stream.zeno.fm/dgndgx3bwv8uv' },
+  { name: 'Radio La Costeña',     url: 'https://stream.zeno.fm/3xk5v5t1bwv8uv' },
+  { name: 'Radio Stereo Kiss',    url: 'https://stream.zeno.fm/0r0v8t1bwv8uv' },
+  { name: 'Radio Camoapa',        url: 'https://centova.solucionstreaming.net/proxy/gcfminis/stream' },
+  { name: 'Radio Ya Nicaragua',   url: 'https://stream.ecmdigital.net:8010/radioya' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10];
