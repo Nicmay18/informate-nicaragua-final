@@ -28,9 +28,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  verification: {
-    google: 'REEMPLAZAR_CON_CODIGO_SEARCH_CONSOLE', // INSTRUCCIONES: Ve a https://search.google.com/search-console, añade tu sitio, copia el meta tag de verificación y pégalo aquí. NO es un código GTM.
-  },
   openGraph: {
     type: 'website',
     locale: 'es_NI',
