@@ -1,4 +1,5 @@
 ﻿// app/api/radio-proxy/route.ts
+// UTF-8 encoding fix
 import { NextResponse } from 'next/server';
 
 const RADIOS_NICARAGUA: Record<string, string> = {

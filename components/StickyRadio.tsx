@@ -1,4 +1,5 @@
 ﻿'use client';
+// UTF-8 encoding fix
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X, SkipForward } from 'lucide-react';
 
