@@ -399,7 +399,7 @@ export default function ArticleClient({
   const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const rawAutor = (noticia.autor || '').trim();
-  const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Juan Pérez';
+  const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Elieth Rivera Muñoz';
   const autorInicial = autor.charAt(0).toUpperCase();
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen);
   const vistas = fmtViews(noticia.vistas);
@@ -523,7 +523,7 @@ export default function ArticleClient({
             Periodista | {noticia.categoria}
           </div>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.65, margin: '0 auto', maxWidth: 480 }}>
-            Periodista nicaragüense con más de una década de trayectoria. Especializado en cobertura política, análisis económico y reportajes de investigación. Comprometido con la verdad periodística y el derecho del ciudadano a estar informado.
+            Periodista nicaragüense, directora editorial de Nicaragua Informate. Especializada en cobertura de sucesos, análisis político y reportajes de investigación. Comprometida con la verdad periodística y el derecho del ciudadano a estar informado. <a href="/autor/keyling-rivera" style={{ color: '#2563eb', textDecoration: 'none' }}>Ver perfil →</a>
           </p>
         </div>
 

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
-import { Target, Eye, HeartHandshake, Users, Mail, Globe, MapPin, Shield } from 'lucide-react';
+import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Sobre Nosotros | Nicaragua Informate',
-  description: 'Conoce a Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Managua, Nicaragua. Dirigido por Juan Pérez, periodista desde 2015.',
+  description: 'Conoce a Nicaragua Informate. Periodismo de precisión, verificado e independiente desde Managua, Nicaragua. Fundado por Maycol Nicaragua, Jose Luis Lopez y Keyling Rivera.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
 
@@ -33,19 +33,52 @@ export default function NosotrosPage() {
 
       <h2 style={{ fontSize: '1.3rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Quién está detrás?</h2>
       <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Nicaragua Informate fue creado por <strong style={{ color: '#fff' }}>Juan Pérez</strong>, periodista nicaragüense con más de una década de trayectoria profesional. Desde que inició su carrera en 2015, Juan ha trabajado en distintos medios de comunicación del país, cubriendo desde sucesos locales hasta temas de política nacional, economía y derechos humanos.
+        <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> es fruto del esfuerzo conjunto de tres profesionales nicaragüenses comprometidos con el periodismo verificado y el derecho a la información. Cada uno aporta su experiencia desde distintas áreas para mantener un medio digital riguroso, independiente y cercano a la realidad del país.
       </p>
 
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '2rem' }}>
+      {/* Fundador 1 */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '1rem' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 24, flexShrink: 0 }}>
-            JP
+          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
+            MN
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Juan Pérez</div>
-            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director Editorial</div>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Maycol Josue Nicaragua Rivas</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director Ejecutivo y Fundador</div>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Periodista nicaragüense desde 2015. Especializado en cobertura política, análisis económico y reportajes de investigación. Ha colaborado en medios nacionales e internacionales. Su compromiso es con la verdad periodística y el derecho del ciudadano a estar informado.
+              Co-fundador de Nicaragua Informate. Encargado de la estrategia general, desarrollo tecnológico y visión de crecimiento del medio. Su liderazgo impulsa la innovación digital y la expansión de la plataforma informativa a nivel nacional.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Fundador 2 */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#1d4ed8,#2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
+            JL
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Jose Luis Lopez Ramirez</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director de Operaciones y Co-fundador</div>
+            <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
+              Co-fundador de Nicaragua Informate. Responsable de la operación diaria, coordinación editorial y gestión de recursos. Su enfoque en la eficiencia garantiza la publicación oportuna y la calidad constante de cada pieza informativa.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Fundador 3 */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,#16a34a,#22c55e)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
+            KR
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Elieth Rivera Muñoz</div>
+            <div style={{ color: '#8c1d18', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial y Co-fundadora</div>
+            <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
+              Co-fundadora y directora editorial de Nicaragua Informate. Periodista con amplia trayectoria en cobertura de sucesos, política nacional y derechos humanos. Firme defensora del periodismo verificado y la independencia editorial. <a href="/autor/keyling-rivera" style={{ color: '#60a5fa', textDecoration: 'none' }}>Ver perfil completo →</a>
             </p>
           </div>
         </div>

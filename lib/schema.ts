@@ -52,7 +52,7 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
     dateModified: article.fechaActualizacion || article.fecha,
     author: {
       '@type': 'Person',
-      name: article.autor || 'Juan Pérez',
+      name: article.autor || 'Keyling Elieth Rivera Muñoz',
       jobTitle: 'Periodista',
       url: 'https://nicaraguainformate.com/nosotros',
       worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
