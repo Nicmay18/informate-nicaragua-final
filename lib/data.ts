@@ -138,7 +138,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Sucesos',
     imagen: '/logo.png',
     fecha: '2026-05-10T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 1500,
   },
   {
@@ -150,7 +150,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Sucesos',
     imagen: '/logo.png',
     fecha: '2026-05-04T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 2300,
   },
   {
@@ -162,7 +162,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Nacionales',
     imagen: '/logo.png',
     fecha: '2026-05-08T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 3200,
   },
   {
@@ -174,7 +174,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Nacionales',
     imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 890,
   },
   {
@@ -186,7 +186,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Espectáculos',
     imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 4500,
   },
   {
@@ -198,7 +198,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Deportes',
     imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 1800,
   },
   {
@@ -210,7 +210,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Nacionales',
     imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 2100,
   },
   {
@@ -222,7 +222,7 @@ const MOCK_NOTICIAS: Noticia[] = [
     categoria: 'Espectáculos',
     imagen: '/logo.png',
     fecha: '2026-05-09T00:00:00.000Z',
-    autor: 'Keyling Rivera M.',
+    autor: 'Keyling Elieth Rivera Muñoz',
     vistas: 1200,
   },
 ];
