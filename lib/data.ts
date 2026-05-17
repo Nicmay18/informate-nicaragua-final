@@ -93,7 +93,7 @@ function validateCount(count: number, defaultCount: number): number {
 // =============================================================================
 // Firebase Admin SDK - OBLIGATORIO para noticias reales
 // =============================================================================
-async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
+async function tryFirebaseAdmin(_count: number): Promise<Noticia[] | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -114,10 +114,12 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
           fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
           autor: data.autor,
           destacada: data.destacada,
           vistas: data.vistas,
           palabras: data.palabras,
+          tags: data.tags,
         };
       });
   } catch (err) {
@@ -361,10 +363,12 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         categoria: data.categoria || 'Actualidad',
         imagen: normalizeImage(data.imagen || ''),
         fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+        fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
         autor: data.autor,
         destacada: data.destacada,
         vistas: data.vistas,
         palabras: data.palabras,
+        tags: data.tags,
       };
     }
   } catch (err) {

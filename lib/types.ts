@@ -11,10 +11,12 @@ export interface Noticia {
   categoria: string;
   imagen: string;
   fecha: string;
+  fechaActualizacion?: string;
   autor?: string;
   destacada?: boolean;
   vistas?: number;
   palabras?: number;
+  tags?: string[];
 }
 
 /**

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const url = `https://www.nicaraguainformate.com/noticias/${slug}`;
     const excerpt = noticia.resumen || noticia.contenido?.substring(0, 160) + '...' || '';
     const category = noticia.categoria || 'Actualidad';
-    const rawTags = (noticia as any).tags;
+    const rawTags = noticia.tags;
     const tags = Array.isArray(rawTags) ? rawTags : [category, 'Nicaragua', 'noticias'];
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         locale: 'es_NI',
         type: 'article',
         publishedTime: noticia.fecha,
-        modifiedTime: (noticia as any).fechaActualizacion || noticia.fecha,
+        modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
         tags: tags,
         images: noticia.imagen

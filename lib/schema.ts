@@ -36,7 +36,9 @@ export function buildWebSiteJsonLd() {
   };
 }
 
-export function buildNewsArticleJsonLd(article: any, url: string, readingTime = 1) {
+import { Noticia } from './types';
+
+export function buildNewsArticleJsonLd(article: Noticia, url: string, readingTime = 1) {
   const keywords = [article.categoria, 'Nicaragua', 'noticias', 'actualidad'];
   if (article.tags && Array.isArray(article.tags)) {
     keywords.push(...article.tags.slice(0, 5));
@@ -46,7 +48,7 @@ export function buildNewsArticleJsonLd(article: any, url: string, readingTime = 
     ? article.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter((w: string) => w.length > 0).length
     : 0;
 
-  const base: any = {
+  const base: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: article.titulo,
