@@ -6,8 +6,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import AdSlot from '@/components/AdSlot';
 import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import ProLayout from '@/components/ProLayout';
 import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
@@ -124,9 +123,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     return (
-      <div className="min-h-screen">
-        <Header activeCategory={noticia.categoria} />
-
+      <ProLayout tickerText={noticia.titulo}>
         {/* ===== TOP BANNER AD — Article ===== */}
         <div className="container-pro" style={{ padding: '16px 0 0' }}>
           <AdSlot slot="article-top" width={728} height={90} format="horizontal" style={{ minHeight: 90, margin: '0 auto', maxWidth: 728 }} />
@@ -178,9 +175,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
         <div className="sticky-ad-mobile" style={{ position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: '#fff', borderTop: '1px solid #e8e8ec', padding: '8px 0' }}>
           <AdSlot slot="article-sticky-bottom" width={320} height={50} format="horizontal" style={{ minHeight: 50 }} />
         </div>
-
-        <Footer />
-      </div>
+      </ProLayout>
     );
   } catch (error) {
     console.error('Error cargando noticia:', error);

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown, Clock } from 'lucide-react';
@@ -51,7 +51,6 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
 
   return (
     <div>
-      {/* Section Header */}
       <div className="ni-section-header">
         <h2 className="ni-section-title">
           <span className="ni-section-accent" />
@@ -60,7 +59,6 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         <span className="ni-section-count">{filtered.length} artículos</span>
       </div>
 
-      {/* Filter Pills */}
       <div className="ni-filter-scroll">
         {CATS.map(c => {
           const active = c === activeCat;
@@ -125,7 +123,6 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
         </div>
       )}
 
-      {/* Load More */}
       <div className="flex gap-3 mt-8 justify-center">
         {hasMore && (
           <button onClick={() => setPage(p => p + 1)} className="ni-btn-outline">

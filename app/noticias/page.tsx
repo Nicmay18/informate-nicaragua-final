@@ -2,9 +2,7 @@ import { Metadata } from 'next';
 
 import NewsGrid from '@/components/NewsGrid';
 
-import Header from '@/components/Header';
-
-import Footer from '@/components/Footer';
+import ProLayout from '@/components/ProLayout';
 
 import AutoRefresh from '@/components/AutoRefresh';
 
@@ -111,13 +109,8 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
 
   return (
 
-    <div className="min-h-screen">
-
+    <ProLayout>
       <AutoRefresh intervalSec={60} />
-
-      <Header activeCategory={cat} />
-
-
 
       <main id="main-content" className="container-pro" style={{ padding: '32px 24px 48px' }}>
 
@@ -175,11 +168,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
 
       </main>
 
-
-
-      <Footer />
-
-    </div>
+    </ProLayout>
 
   );
 

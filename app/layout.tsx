@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
-import './mobile-pro.css';
+import './pro-design.css';
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
-import StickyRadio from '@/components/StickyRadio';
-import BottomNav from '@/components/BottomNav';
 import ScrollToTop from '@/components/ScrollToTop';
 import CookieBanner from '@/components/CookieBanner';
 import DeferredAds from '@/components/DeferredAds';
@@ -77,12 +75,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-link">Saltar al contenido</a>
         {children}
-        <ClientOnly fallback={<div style={{ height: 58 }} />}>
-          <StickyRadio />
-        </ClientOnly>
-        <ClientOnly fallback={<div style={{ height: 56 }} />}>
-          <BottomNav />
-        </ClientOnly>
         <ClientOnly fallback={<div style={{ height: 48 }} />}>
           <CookieBanner />
         </ClientOnly>
