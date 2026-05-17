@@ -8,7 +8,7 @@ const GAS_PRICES = [
 
 function TrendArrow({ trend }: { trend: string }) {
   const color = trend === '↑' ? '#16a34a' : trend === '↓' ? '#dc2626' : '#64748b';
-  return <span style={{ color, fontWeight: 700, fontSize: 13 }}>{trend}</span>;
+  return <span style={{ color, fontWeight: 700, fontSize: 12 }}>{trend}</span>;
 }
 
 function Sparkline({ trend }: { trend: string }) {
@@ -21,7 +21,7 @@ function Sparkline({ trend }: { trend: string }) {
     ? 'M0,2 L10,6 L20,10 L30,14 L40,18 L48,20'
     : 'M0,10 L12,8 L24,12 L36,9 L48,10';
   return (
-    <span className="sparkline-wrap">
+    <span className="ind-sparkline">
       <svg viewBox="0 0 48 20" preserveAspectRatio="none">
         <path d={path} fill="none" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -36,26 +36,26 @@ const exchangeRows = [
 
 export default function IndicadoresWidget() {
   return (
-    <div style={{ background: 'var(--paper-accent)', borderRadius: 14, border: '1px solid var(--border-light)', overflow: 'hidden' }}>
-      <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div className="ind-widget">
+      <div className="ind-header">
         <TrendingUp size={14} color="#38bdf8" />
-        <span style={{ color: '#f8fafc', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Indicadores Económicos</span>
+        <span>Indicadores Económicos</span>
       </div>
-      <div style={{ padding: '8px 0' }}>
+      <div className="ind-body">
         {/* Exchange rates */}
         {exchangeRows.map((row, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 16px', borderBottom: '1px solid var(--border-light)' }}>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{row.label}</div>
-              <div style={{ fontSize: 10, color: 'var(--ink-faint)', marginTop: 1 }}>Tasa de referencia</div>
+          <div key={i} className="ind-row">
+            <div className="ind-label-col">
+              <div className="ind-label">{row.label}</div>
+              <div className="ind-sublabel">Tasa de referencia</div>
             </div>
-            <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div className="ind-value-col">
               <Sparkline trend={row.trend} />
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--ink)' }}>{row.value}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
+              <div className="ind-value-wrap">
+                <div className="ind-value">{row.value}</div>
+                <div className="ind-change">
                   <TrendArrow trend={row.trend} />
-                  <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+                  <span>{row.change}</span>
                 </div>
               </div>
             </div>
@@ -63,26 +63,26 @@ export default function IndicadoresWidget() {
         ))}
 
         {/* Gas prices */}
-        <div style={{ padding: '8px 16px 4px', fontSize: 11, color: 'var(--ink-faint)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          <Fuel size={14} style={{ marginRight: 6, color: '#f97316' }} />Combustibles (C$/galón)
+        <div className="ind-gas-header">
+          <Fuel size={14} color="#f97316" />Combustibles (C$/galón)
         </div>
         {GAS_PRICES.map((row, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderBottom: i < GAS_PRICES.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
-            <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{row.label}</div>
-            <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div key={i} className="ind-row ind-row--gas">
+            <div className="ind-label" style={{ color: '#6b7280' }}>{row.label}</div>
+            <div className="ind-value-col">
               <Sparkline trend={row.trend} />
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{row.unit} {row.price}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'flex-end' }}>
+              <div className="ind-value-wrap">
+                <div className="ind-value">{row.unit} {row.price}</div>
+                <div className="ind-change">
                   <TrendArrow trend={row.trend} />
-                  <span style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{row.change}</span>
+                  <span>{row.change}</span>
                 </div>
               </div>
             </div>
           </div>
         ))}
 
-        <div style={{ padding: '8px 16px', fontSize: 10, color: 'var(--ink-faint)', borderTop: '1px solid var(--border-light)', textAlign: 'right' }}>
+        <div className="ind-footer">
           Fuente: BCN / INC — Datos referenciales
         </div>
       </div>

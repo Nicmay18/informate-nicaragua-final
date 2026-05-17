@@ -92,7 +92,7 @@ export default function WeatherWidget() {
         sessionStorage.setItem('ni_weather_cache', JSON.stringify({
           ts: Date.now(),
           data,
-          allTemps: allTemps.map((t, i) => t ?? CITIES[i].name),
+          allTemps,
         }));
       } catch {}
     }
