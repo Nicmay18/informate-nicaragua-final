@@ -1,8 +1,7 @@
 /* ================================================================
    NICARAGUA INFORMATE — Diseño Unificado Homepage + Artículo
    Fuente: HTML/CSS proporcionado por el usuario
-   ================================================================ */
-
+   ========================================/* ============ TOKENS DE DISEÑO ============ */
 :root {
   --c-primary: #1E3A5F;
   --c-primary-dark: #152A45;
@@ -15,8 +14,8 @@
   --c-border-light: #F1F5F9;
   --c-text: #111827;
   --c-text-secondary: #4B5563;
-  --c-text-tertiary: #6B7280;
-  --c-text-muted: #9CA3AF;
+  --c-text-tertiary: #94A3B8;
+  --c-text-muted: #64748B;
   --c-success: #059669;
   --c-danger: #DC2626;
   --c-radio-live: #EF4444;
@@ -36,6 +35,8 @@
   --s-4: 16px;  --s-5: 20px;  --s-6: 24px;
   --s-8: 32px;  --s-10: 40px; --s-12: 48px;
 
+  --page-gutter: 16px;
+
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
   --shadow-card: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
   --shadow-elevated: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
@@ -47,6 +48,11 @@
   --radius-full: 9999px;
 
   --touch-min: 48px;
+}
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: 24px;
+  }
 }
 
 [data-theme="dark"] {
@@ -67,7 +73,8 @@
   color: var(--c-text);
   line-height: 1.6;
   overflow-x: hidden;
-  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
   font-size: 16px !important;
@@ -380,16 +387,20 @@
   border-radius: var(--radius-lg);
   margin: 0 var(--s-4);
   box-shadow: 0 12px 48px rgba(0,0,0,0.35);
+  max-height: 40vh;
+}
+@media (min-width: 900px) {
+  .hero-pro { max-height: 50vh; }
 }
 .hero-pro__track {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
-  overflow: hidden;
+  max-height: 40vh;
   background: #0a0a0a;
 }
 @media (min-width: 900px) {
-  .hero-pro__track { aspect-ratio: 21/9; }
+  .hero-pro__track { aspect-ratio: 21/9; max-height: 50vh; }
 }
 .hero-pro__slide {
   position: absolute; inset: 0;
@@ -859,6 +870,8 @@
   background: linear-gradient(180deg, var(--c-surface) 0%, #f1f5f9 100%);
   border-top: 1px solid var(--c-border);
   padding: var(--s-10) var(--s-4) var(--s-6);
+  flex-shrink: 0;
+  margin-top: auto;
 }
 [data-theme="dark"] .footer {
   background: linear-gradient(180deg, var(--c-surface) 0%, #0f172a 100%);
@@ -961,6 +974,13 @@
   position: fixed; bottom: 24px; right: 24px; z-index: 500;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
+@media (max-width: 768px) {
+  .radio-fab {
+    bottom: 80px;
+    right: 16px;
+    transform: scale(0.9);
+  }
+}
 .radio-fab__label {
   display: flex; align-items: center; gap: 4px;
   background: var(--c-primary-dark);
@@ -1005,10 +1025,12 @@
 .radio-panel {
   position: fixed; bottom: 96px; right: 24px;
   width: 300px;
-  background: var(--c-primary-dark);
+  background: rgba(21, 42, 69, 0.95);
   color: white;
   border-radius: var(--radius-lg);
   box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
   transform: translateY(16px) scale(0.96);
   opacity: 0; pointer-events: none;
@@ -1487,22 +1509,98 @@
 .newsletter__btn {
   width: 100%; padding: var(--s-3);
   background: var(--c-primary); color: white;
-  border-radius: var(--radius-sm); font-size: 14px;
+  border-radius: var(--radius-md); font-size: 14px;
   font-weight: 700; border: none; cursor: pointer;
   transition: background 0.2s;
 }
 .newsletter__btn:hover { background: var(--c-primary-dark); }
+
+/* ============ AUDIO PLAYER CARD ============ */
+.audio-player-card {
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e5e7eb;
+  margin: 24px auto;
+}
+[data-theme="dark"] .audio-player-card {
+  background: rgba(30, 58, 95, 0.15);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ VIDEOS Y TABLAS RESPONSIVE ============ */
+/* Videos (YouTube, iframes) */
+.video-wrapper,
+.embed-responsive,
+.article-body-pro iframe {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 24px auto;
+  aspect-ratio: 16 / 9;
+}
+
+.video-wrapper iframe,
+.embed-responsive iframe,
+.article-body-pro iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* Tablas */
+.table-wrapper,
+.article-body-pro table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 24px 0;
+  border-radius: 8px;
+  border: 1px solid var(--c-border);
+}
+
+.table-wrapper table,
+.article-body-pro table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+.table-wrapper th,
+.table-wrapper td,
+.article-body-pro th,
+.article-body-pro td {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--c-border-light);
+  text-align: left;
+}
+.table-wrapper th,
+.article-body-pro th {
+  background: var(--c-surface);
+  font-weight: 700;
+  font-size: 13px;
+}
 
 /* ============ ARTÍCULO PRO (ArticleClient) ============ */
 .article-page {
   max-width: 800px;
   margin: 0 auto;
   padding: var(--s-6) var(--s-4) var(--s-10);
+  margin-top: 24px;
 }
 /* prevent body images from breaking layout */
 .article-page img:not(.featured-img) {
   max-width: 100% !important;
   height: auto !important;
+  display: block;
 }
 .article-body-pro { overflow-x: hidden; }
 .featured-figure {
@@ -1546,6 +1644,12 @@
 }
 .article-breadcrumb a { color: var(--c-text-muted); }
 .article-breadcrumb a:hover { color: var(--c-primary); }
+[data-theme="dark"] .article-breadcrumb {
+  color: #d1d5db;
+}
+[data-theme="dark"] .article-breadcrumb a {
+  color: #d1d5db;
+}
 .article-category-badge {
   display: inline-block;
   padding: 4px 12px; border-radius: var(--radius-sm);
@@ -1559,6 +1663,13 @@
   letter-spacing: -0.3px;
 }
 @media (min-width: 640px) { .article-title-pro { font-size: 36px; } }
+@media (max-width: 360px) {
+  .article-title-pro { font-size: 24px; }
+  .article-lead-pro { font-size: 16px; }
+  .article-body-pro { font-size: 16px; }
+  .article-page { padding: var(--s-6) 12px var(--s-10); }
+  .ni-body { padding: 0 12px; }
+}
 
 .article-lead-pro {
   font-size: 18px; line-height: 1.65;
@@ -1569,7 +1680,7 @@
   font-style: italic;
 }
 .article-meta-bar {
-  display: flex; align-items: center; gap: var(--s-3);
+  display: flex; align-items: center; gap: 8px;
   padding: var(--s-4) 0;
   border-top: 1px solid var(--c-border-light);
   border-bottom: 1px solid var(--c-border-light);
@@ -1581,6 +1692,8 @@
   color: white; font-size: 16px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  aspect-ratio: 1/1;
+  object-fit: cover;
 }
 .featured-figure { margin: 0 0 var(--s-8); }
 .featured-caption {
@@ -1619,7 +1732,11 @@
 .article-body-pro li { margin-bottom: var(--s-2); }
 .article-body-pro strong { font-weight: 700; color: var(--c-text); }
 .article-body-pro a { color: var(--c-primary); text-decoration: underline; }
-.article-body-pro img { border-radius: var(--radius-md); margin: var(--s-5) 0; }
+.article-body-pro img {
+  border-radius: var(--radius-md);
+  margin: var(--s-5) 0;
+  display: block;
+}
 .drop-cap > p:first-child::first-letter {
   font-family: var(--font-body);
   font-size: 4em; font-weight: 900; line-height: 0.75;
@@ -1725,9 +1842,16 @@
 .ni-header,
 .header-main-wrap {
   position: sticky; top: 0; z-index: 100;
-  background: var(--c-bg);
-  border-bottom: 1px solid var(--c-border-light);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+[data-theme="dark"] .ni-header,
+[data-theme="dark"] .header-main-wrap {
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ============ BADGE NUEVO ============ */
@@ -1833,7 +1957,7 @@
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   z-index: 50;
 }
-@media (max-width: 1100px) { .floating-share { display: none; } }
+@media (max-width: 1024px) { .floating-share { display: none; } }
 .floating-share__label {
   font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
   color: var(--c-text-muted); writing-mode: vertical-lr;
@@ -1861,6 +1985,11 @@
   border: none;
 }
 .font-size-ctrl__btn:hover { background: var(--c-surface); color: var(--c-primary); }
+.font-size-ctrl__btn:active,
+.font-size-ctrl__btn.active {
+  background: var(--c-primary);
+  color: white;
+}
 
 /* ============ AUTHOR BOX ENHANCED (BBC/NYT) ============ */
 .author-box-pro--enhanced {
@@ -1988,4 +2117,83 @@
   background: var(--c-primary); color: white;
   border-radius: 8px; z-index: 9999;
   text-decoration: none; font-weight: 600;
+}
+
+/* ============ ARTICLE LOGO REDUCTION (end of content) ============ */
+.article-body-pro > img:last-child[src*="logo"],
+.article-body-pro > img:last-child[alt*="logo" i],
+.article-body-pro > figure:last-child img[src*="logo"],
+.article-body-pro img[src*="logo"] {
+  max-width: 120px !important;
+  margin: 48px auto 24px !important;
+  opacity: 0.4;
+  display: block;
+}
+
+/* ============ ARTICLE CONTAINER CENTERED ============ */
+.article-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px var(--s-4);
+}
+
+/* ============ NEWS PLACEHOLDER ============ */
+.news-placeholder {
+  border-radius: 12px 12px 0 0;
+}
+.news-card--hero .news-placeholder {
+  border-radius: 12px 0 0 12px;
+}
+
+/* ============ NEWS GRID (homepage) ============ */
+.latest-news-section {
+  padding: 32px var(--s-4);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.latest-news-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: var(--c-text);
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+@media (max-width: 640px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============ CATEGORY NAV STICKY ============ */
+.category-nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px var(--s-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--c-border);
+  background: white;
+  position: sticky;
+  top: 60px;
+  z-index: 40;
+}
+.category-nav a {
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: var(--c-surface);
+  color: var(--c-text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.category-nav a:hover,
+.category-nav a.active {
+  background: var(--c-primary);
+  color: white;
 }

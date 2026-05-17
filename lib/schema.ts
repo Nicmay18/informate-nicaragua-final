@@ -36,11 +36,15 @@ export function buildWebSiteJsonLd() {
   };
 }
 
-export function buildNewsArticleJsonLd(article: any, url: string) {
+export function buildNewsArticleJsonLd(article: any, url: string, readingTime = 1) {
   const keywords = [article.categoria, 'Nicaragua', 'noticias', 'actualidad'];
   if (article.tags && Array.isArray(article.tags)) {
     keywords.push(...article.tags.slice(0, 5));
   }
+
+  const wordCount = article.contenido
+    ? article.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter((w: string) => w.length > 0).length
+    : 0;
 
   const base: any = {
     '@context': 'https://schema.org',
@@ -52,7 +56,7 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
     dateModified: article.fechaActualizacion || article.fecha,
     author: {
       '@type': 'Person',
-      name: article.autor || 'Keyling Elieth Rivera Muñoz',
+      name: article.autor || 'Redacción Nicaragua Informate',
       jobTitle: 'Periodista',
       url: 'https://www.nicaraguainformate.com/autor/keyling-rivera',
       worksFor: { '@id': 'https://www.nicaraguainformate.com/#organization' },
@@ -62,12 +66,19 @@ export function buildNewsArticleJsonLd(article: any, url: string) {
       cssSelector: ['.article-headline', '.article-body'],
     },
     publisher: {
-      '@id': 'https://www.nicaraguainformate.com/#organization',
+      '@type': 'Organization',
+      name: 'Nicaragua Informate',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.nicaraguainformate.com/logo.png',
+      },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     inLanguage: 'es-NI',
     articleSection: article.categoria,
     keywords: keywords.join(', '),
+    wordCount,
+    timeRequired: `PT${readingTime}M`,
   };
 
   return base;
@@ -93,7 +104,7 @@ export function buildBreadcrumbJsonLd(category?: string) {
     { name: 'Noticias', item: `${baseUrl}/noticias` },
   ];
 
-  if (category && category !== 'General') {
+  if (category && category !== 'Actualidad') {
     const slug = SLUG_TO_CATEGORY[category] || category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     breadcrumbItems.push({
       name: category,

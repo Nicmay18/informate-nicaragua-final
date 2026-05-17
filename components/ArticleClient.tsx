@@ -558,9 +558,9 @@ export default function ArticleClient({
                 🕐 {ago}
               </span>
             )}
-            <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <time dateTime={noticia.fecha} style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
               <CalendarDays size={12} /> {fechaStr}
-            </span>
+            </time>
             <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Clock size={12} /> {lecturaMin} min
             </span>
@@ -592,10 +592,10 @@ export default function ArticleClient({
               nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
               className="featured-image-wrapper"
             />
-          ) : (
+          ) : noticia.imagen && (noticia.imagen.startsWith('http') || noticia.imagen.startsWith('/')) ? (
             <div className="featured-image-wrap">
               <img
-                src={noticia.imagen && (noticia.imagen.startsWith('http') || noticia.imagen.startsWith('/')) ? noticia.imagen : '/logo.png'}
+                src={noticia.imagen}
                 alt={noticia.titulo}
                 fetchPriority="high"
                 loading="eager"
@@ -604,9 +604,27 @@ export default function ArticleClient({
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 onError={e => {
                   const t = e.target as HTMLImageElement;
-                  if (t.src !== '/logo.png') t.src = '/logo.png';
+                  t.style.display = 'none';
                 }}
               />
+            </div>
+          ) : (
+            <div
+              className="featured-image-wrap"
+              style={{
+                background: catColor,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 800,
+                fontSize: '1.2rem',
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                padding: 24,
+              }}
+            >
+              {noticia.categoria}
             </div>
           )}
           {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
@@ -678,7 +696,7 @@ export default function ArticleClient({
                 : `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada y el análisis contextual.`}
             </p>
             <div className="author-box-pro__links">
-              <Link href={autor === 'Keyling Elieth Rivera Muñoz' ? '/autor/keyling-rivera' : `/autor/${autor.toLowerCase().replace(/\s+/g, '-')}`} className="author-box-pro__link">
+              <Link href={autor === 'Keyling Elieth Rivera Muñoz' ? '/autor/keyling-rivera' : `/autor/${autor.toLowerCase().replace(/\s+/g, '-')}`} className="author-box-pro__link" rel="author">
                 Más artículos →
               </Link>
             </div>

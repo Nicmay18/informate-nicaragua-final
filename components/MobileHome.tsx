@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, Eye, TrendingUp, Flame, ChevronRight } from 'lucide-react';
 import ProLayout from '@/components/ProLayout';
-import type { Noticia } from '@/lib/types';
+import { Noticia, CATEGORY_COLORS } from '@/lib/types';
 
 interface MobileHomeProps {
   noticias: Noticia[];
@@ -47,6 +47,32 @@ function formatViews(n?: number) {
 function isNewArticle(fecha: string): boolean {
   try { return Date.now() - new Date(fecha).getTime() < 2 * 60 * 60 * 1000; }
   catch { return false; }
+}
+
+function NewsImagePlaceholder({ categoria, width, height, className }: { categoria: string; width?: number; height?: number; className?: string }) {
+  const color = CATEGORY_COLORS[categoria] || '#8c1d18';
+  return (
+    <div
+      className={className}
+      style={{
+        backgroundColor: color,
+        width: width ? `${width}px` : '100%',
+        height: height ? `${height}px` : '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontWeight: 700,
+        fontSize: '0.8rem',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        textAlign: 'center',
+        minHeight: 70,
+      }}
+    >
+      {categoria}
+    </div>
+  );
 }
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
@@ -93,14 +119,32 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           <div className="hero-pro__track">
             {heroNews.map((n, i) => (
               <article key={n.slug} className={`hero-pro__slide${i === currentSlide ? ' active' : ''}`}>
-                <Image
-                  src={n.imagen || '/logo.png'}
-                  alt={n.titulo}
-                  fill
-                  sizes="(max-width: 900px) 100vw, 70vw"
-                  className="hero-pro__img"
-                  priority={i === 0}
-                />
+                {n.imagen && n.imagen !== '/logo.png' ? (
+                  <Image
+                    src={n.imagen}
+                    alt={n.titulo}
+                    fill
+                    sizes="(max-width: 900px) calc(100vw - 32px), 70vw"
+                    className="hero-pro__img"
+                    priority={i === 0}
+                  />
+                ) : (
+                  <div
+                    className="hero-pro__img"
+                    style={{
+                      background: CATEGORY_COLORS[n.categoria] || '#8c1d18',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 800,
+                      fontSize: '1.2rem',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {n.categoria}
+                  </div>
+                )}
                 <div className="hero-pro__overlay">
                   <div className="hero-pro__content">
                     <span className={`hero-pro__badge news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>
@@ -178,13 +222,17 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             {/* Card Destacada */}
             {filteredNews[0] && (
               <Link href={`/noticias/${filteredNews[0].slug}`} className="news-featured-card">
-                <Image
-                  src={filteredNews[0].imagen || '/logo.png'}
-                  alt={filteredNews[0].titulo}
-                  width={800} height={450}
-                  className="news-featured-card__img"
-                  priority
-                />
+                {filteredNews[0].imagen && filteredNews[0].imagen !== '/logo.png' ? (
+                  <Image
+                    src={filteredNews[0].imagen}
+                    alt={filteredNews[0].titulo}
+                    width={800} height={450}
+                    className="news-featured-card__img"
+                    priority
+                  />
+                ) : (
+                  <NewsImagePlaceholder categoria={filteredNews[0].categoria} className="news-featured-card__img" />
+                )}
                 <div className="news-featured-card__overlay">
                   <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 4 }}>
                     <span className={`news-featured-card__badge news-badge--${CAT_MAP[filteredNews[0].categoria] || 'nacionales'}`}>
@@ -207,7 +255,11 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 {filteredNews.slice(1, 4).map(n => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card-sm">
                     <div className="news-card-sm__img-wrap">
-                      <Image src={n.imagen || '/logo.png'} alt={n.titulo} width={340} height={200} className="news-card-sm__img" />
+                      {n.imagen && n.imagen !== '/logo.png' ? (
+                        <Image src={n.imagen} alt={n.titulo} width={340} height={200} className="news-card-sm__img" />
+                      ) : (
+                        <NewsImagePlaceholder categoria={n.categoria} width={340} height={200} className="news-card-sm__img" />
+                      )}
                       <span className={`news-card-sm__badge news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>{n.categoria}</span>
                       {isNewArticle(n.fecha) && <span className="badge-nuevo badge-nuevo--card">NUEVO</span>}
                     </div>
@@ -231,7 +283,11 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 {filteredNews.slice(4, 10).map(n => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-list-item">
                     <div className="news-list-item__img-wrap">
-                      <Image src={n.imagen || '/logo.png'} alt={n.titulo} width={100} height={70} className="news-list-item__img" />
+                      {n.imagen && n.imagen !== '/logo.png' ? (
+                        <Image src={n.imagen} alt={n.titulo} width={100} height={70} className="news-list-item__img" />
+                      ) : (
+                        <NewsImagePlaceholder categoria={n.categoria} width={100} height={70} className="news-list-item__img" />
+                      )}
                     </div>
                     <div className="news-list-item__content">
                       <span className={`news-list-item__cat news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>{n.categoria}</span>

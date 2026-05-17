@@ -644,7 +644,7 @@ export default function AdminPage() {
                 </div>
                 <div className="admin-card__body">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                    {news.slice(0, 6).map((n, i) => (
+                    {news.slice(0, 6).map((n) => (
                       <div key={n.id} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                         <div style={{ width: 8, height: 8, borderRadius: '50%', background: CAT_META[n.categoria]?.color || '#94a3b8', marginTop: 6, flexShrink: 0 }} />
                         <div>

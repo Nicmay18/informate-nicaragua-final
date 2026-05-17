@@ -336,6 +336,7 @@ export default function ProLayout({
           <Link href="/noticias?cat=Internacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Globe size={18} /> Internacionales</Link>
           <Link href="/noticias?cat=Espectaculos" className="menu-link" onClick={() => setMenuOpen(false)}><Film size={18} /> Espectáculos</Link>
           <Link href="/noticias?cat=Tecnologia" className="menu-link" onClick={() => setMenuOpen(false)}><Laptop size={18} /> Tecnología</Link>
+          <Link href="/radio" className="menu-link" onClick={() => setMenuOpen(false)}><Radio size={18} /> Radio en Vivo</Link>
         </div>
         <div className="menu-section">
           <h4 className="menu-section__title">Información</h4>
