@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const DURATION_MS = 12000;
+const DURATION_MS = 8000;
 
 interface BreakingNewsItem { id: string; slug: string; titulo: string; }
 interface BreakingTickerProps { noticias: BreakingNewsItem[]; }
@@ -67,14 +67,15 @@ export default function BreakingTicker({ noticias }: BreakingTickerProps) {
           }}
         />
       </div>
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', gap: 10, height: 34 }}>
-        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5, background: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: 999, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-          <span style={{ fontSize: 9 }}>&#9889;</span> Última Hora
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center', gap: 12, height: 36 }}>
+        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6, background: '#C41E3A', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap', color: '#fff' }}>
+          <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#fff', animation: 'pulse 1.5s infinite' }} />
+          Última Hora
         </div>
 
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
           <Link href={`/noticias/${noticias[current].slug}`}
-            style={{ color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            style={{ color: '#e2e8f0', textDecoration: 'none', fontSize: 14, fontWeight: 500, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', transition: 'opacity 0.4s ease' }}>
             {noticias[current].titulo}
           </Link>
         </div>

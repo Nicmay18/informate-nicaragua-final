@@ -2194,29 +2194,33 @@ time {
 .ni-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.95);
+  z-index: 50;
+  background: var(--bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .ni-header--hidden { transform: translateY(-100%); }
+.ni-header--scrolled {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 .ni-header-inner {
-  max-width: var(--max-width);
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--header-mobile);
+  height: 80px;
   gap: 12px;
+  transition: height 0.3s ease;
 }
 
 /* Logo */
 .ni-header-logo {
   font-family: var(--font-merri);
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 900;
   color: var(--primary);
   text-decoration: none;
@@ -2224,6 +2228,7 @@ time {
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  transition: font-size 0.3s ease;
 }
 .ni-header-logo-bold { font-weight: 900; }
 .ni-header-logo-light { font-weight: 400; opacity: 0.8; }
@@ -2391,10 +2396,14 @@ time {
    ================================================================ */
 @media (min-width: 768px) {
   .ni-topbar { display: block; }
-  .ni-header-inner { height: var(--header-height); padding: 0 24px; }
-  .ni-header-logo { font-size: 24px; }
+  .ni-header-inner { height: 80px; padding: 0 24px; }
+  .ni-header--scrolled .ni-header-inner { height: 60px; }
+  .ni-header-logo { font-size: 26px; }
+  .ni-header--scrolled .ni-header-logo { font-size: 22px; }
   .ni-header-menu-btn { display: none; }
   .ni-header-nav { display: flex; }
+  .ni-header-radio-btn { display: flex; }
+  .ni-header-theme-btn { display: flex; }
   .ni-header-search-form { padding: 12px 24px; }
 }
 
@@ -3163,14 +3172,14 @@ time {
 }
 
 /* ================================================================
-   LAYOUT RESPONSIVE PAGE
+   LAYOUT RESPONSIVE PAGE — Escritorio profesional 70/30
    ================================================================ */
 
 .ni-main-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
-  max-width: var(--max-width);
+  max-width: 1280px;
   margin: 0 auto;
   padding: 24px 16px 48px;
 }
@@ -3182,17 +3191,17 @@ time {
   top: calc(var(--header-height) + 24px);
 }
 
-/* Responsive layout */
+/* Responsive layout: escritorio 70/30 */
 @media (min-width: 1024px) {
   .ni-main-layout {
-    grid-template-columns: 1fr 320px;
-    gap: 40px;
+    grid-template-columns: minmax(0, 70%) minmax(0, 30%);
+    gap: 32px;
     padding: 32px 24px 64px;
   }
   .ni-sidebar { display: block; }
 }
 @media (min-width: 1280px) {
-  .ni-main-layout { grid-template-columns: 1fr 340px; }
+  .ni-main-layout { gap: 40px; padding: 40px 24px 64px; }
 }
 
 /* Mobile widgets */

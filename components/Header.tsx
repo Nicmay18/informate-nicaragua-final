@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, X, Search } from 'lucide-react';
+import { Sun, Moon, Menu, X, Search, Radio } from 'lucide-react';
 import { categoryToSlug } from '@/lib/types';
 
 const THEME_STORAGE_KEY = 'ni_theme';
@@ -29,6 +29,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
   const [hidden, setHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     try {
@@ -42,6 +43,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
 
     const handleScroll = () => {
       const current = window.scrollY;
+      setScrolled(current > 30);
       // Móvil: oculta al bajar, revela al subir (>100px)
       if (window.innerWidth < 768) {
         if (current > lastScrollY && current > 100) setHidden(true);
@@ -84,7 +86,7 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
       </div>
 
       {/* ─── HEADER PRINCIPAL ─── */}
-      <header className={`ni-header${hidden ? ' ni-header--hidden' : ''}`}>
+      <header className={`ni-header${hidden ? ' ni-header--hidden' : ''}${scrolled ? ' ni-header--scrolled' : ''}`}>
         <div className="ni-header-inner">
           {/* Móvil: Menú hamburguesa */}
           <button className="ni-header-menu-btn" onClick={() => setMenuOpen(true)} aria-label="Abrir menú">
@@ -110,10 +112,18 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Acciones derecha: solo search en header; theme va al drawer móvil */}
+          {/* Acciones derecha: escritorio tiene search + radio + theme */}
           <div className="ni-header-actions">
             <button className="ni-header-icon-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
               <Search size={20} />
+            </button>
+            <button className="ni-header-icon-btn ni-header-radio-btn" aria-label="Radio">
+              <Radio size={20} />
+            </button>
+            <button className="ni-header-icon-btn ni-header-theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
+              <span suppressHydrationWarning>
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </span>
             </button>
           </div>
         </div>
