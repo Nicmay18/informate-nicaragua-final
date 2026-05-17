@@ -10,11 +10,17 @@ html {
   background: var(--c-bg, #ffffff);
   color: var(--c-text, #111827);
   transition: background-color 0.3s ease, color 0.3s ease;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 body {
   background: var(--c-bg, #ffffff);
   color: var(--c-text, #111827);
   transition: background-color 0.3s ease, color 0.3s ease;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 ul, ol { list-style: none; }
 

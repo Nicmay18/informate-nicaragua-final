@@ -15,7 +15,7 @@ const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['la
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // Al no poner maximumScale, el navegador permite zoom natural en móvil
+  maximumScale: 5,
 };
 
 export const metadata: Metadata = {
@@ -50,7 +50,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
