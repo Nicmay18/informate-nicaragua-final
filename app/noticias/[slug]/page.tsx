@@ -133,7 +133,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
         </div>
 
         {/* ===== MAIN CONTENT GRID ===== */}
-        <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, padding: '32px 24px 48px' }}>
+        <main id="main-content" className="ni-main-layout ni-article-layout">
           {/* Left Column - Article */}
           <div>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLd(noticia, url)) }} />
@@ -144,21 +144,33 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
               isLuto={isLuto}
               adSlot={<AdSlot slot="article-in-content" width={336} height={280} />}
             />
+
+            {/* Mobile widgets */}
+            <div className="mobile-widgets">
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, marginTop: 24, minHeight: 120, background: 'var(--bg-warm)' }}>
+                <IndicadoresWidget />
+              </div>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, minHeight: 100, background: 'var(--bg-warm)' }}>
+                <WeatherWidgetWrapper />
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Sidebar */}
-          <aside className="sidebar" style={{ position: 'sticky', top: 100, alignSelf: 'start' }}>
-            <TrendingList noticias={noticiasTrending.slice(0, 6)} />
-            {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
-              <IndicadoresWidget />
+          <aside className="ni-sidebar">
+            <div className="ni-sidebar-inner">
+              <TrendingList noticias={noticiasTrending.slice(0, 6)} />
+              {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+              <AdSlot slot="article-sidebar-1" width={300} height={250} />
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
+                <IndicadoresWidget />
+              </div>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
+                <WeatherWidgetWrapper />
+              </div>
+              <NewsletterForm />
+              <SocialGrid />
             </div>
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
-              <WeatherWidgetWrapper />
-            </div>
-            <AdSlot slot="article-sidebar-1" width={300} height={250} />
-            <NewsletterForm />
-            <SocialGrid />
           </aside>
         </main>
 

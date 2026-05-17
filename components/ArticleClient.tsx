@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
@@ -528,32 +528,24 @@ export default function ArticleClient({
 
         {/* ===== RELATED ARTICLES ===== */}
         {related.length > 0 && (
-          <div style={{ marginTop: 48 }}>
-            <div className="section-header" style={{ marginBottom: 20 }}>
-              <h3 className="section-title">Noticias relacionadas</h3>
+          <div className="ni-related">
+            <div className="ni-section-header">
+              <span className="ni-section-accent" />
+              <h3 className="ni-section-title">Noticias relacionadas</h3>
             </div>
-            <div className="related-grid-pro">
+            <div className="ni-related-grid">
               {related.map((n) => (
-                <Link key={n.slug} href={`/noticias/${n.slug}`} className="related-card-pro">
+                <Link key={n.slug} href={`/noticias/${n.slug}`} className="ni-related-card">
                   <article>
-                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
+                    <div className="ni-related-img">
                       <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} width={400} />
                     </div>
-                    <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <span style={{
-                        fontSize: 10, fontWeight: 800, textTransform: 'uppercase',
-                        letterSpacing: '0.06em', color: CAT_COLORS[n.categoria] || '#8c1d18',
-                        marginBottom: 8,
-                      }}>
+                    <div className="ni-related-body">
+                      <span className="ni-related-cat" style={{ color: CAT_COLORS[n.categoria] || '#8c1d18' }}>
                         {n.categoria}
                       </span>
-                      <h3 style={{
-                        fontSize: 15, fontWeight: 700, color: '#121212',
-                        lineHeight: 1.35, margin: 0, flex: 1,
-                      }}>
-                        {n.titulo}
-                      </h3>
-                      <div style={{ fontSize: 12, color: '#a0a0a0', marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <h3 className="ni-related-title">{n.titulo}</h3>
+                      <div className="ni-related-meta">
                         <Clock size={10} /> {fmtDate(n.fecha)}
                       </div>
                     </div>
