@@ -35,7 +35,7 @@ interface HeroCarouselProps {
 
 export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const slides = noticias.slice(0, MAX_SLIDES);
-  const sideCards = noticias.slice(1, 4);
+  const sideCards = noticias.slice(1, 3);
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
   const [paused, setPaused] = useState(false);

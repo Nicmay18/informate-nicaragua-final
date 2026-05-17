@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="ni-footer">
       <div className="ni-footer-inner">
-        {/* Columna 1: Brand + Newsletter */}
+        {/* Columna 1: Brand + Desc */}
         <div className="ni-footer-col">
           <Link href="/" className="ni-footer-logo">
             Nicaragua <span>Informate</span>
@@ -31,13 +31,6 @@ export default function Footer() {
           <p className="ni-footer-desc">
             Cubriendo las noticias más importantes de Nicaragua al instante, con compromiso y rigor informativo.
           </p>
-          <div className="ni-footer-newsletter">
-            <span className="ni-footer-label">Newsletter</span>
-            <form className="ni-footer-newsletter-form" action="/api/newsletter" method="POST">
-              <input type="email" name="email" placeholder="tu@email.com" required className="ni-footer-input" />
-              <button type="submit" className="ni-footer-btn">Suscribir</button>
-            </form>
-          </div>
         </div>
 
         {/* Columna 2: Secciones */}
