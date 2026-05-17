@@ -3,13 +3,20 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Radio, Play, Pause, ChevronUp, Volume2, VolumeX, X, SkipForward, Heart, Signal, Music } from 'lucide-react';
 
 const EMISORAS = [
+  // URL verificada vía cast.tunzilla.com (mediatiquestream)
+  { id: 'buenisima', name: 'La Buenísima', slogan: '¡La que te gusta!', url: 'https://cast.tunzilla.com/http://alba-ni-nicaradios-labuenisima.stream.mediatiquestream.com/index.m3u8', genre: 'Ranchera / Grupera / Cumbia', color: '#ef4444', freq: '93.1 FM', city: 'Managua' },
+  // URL vía Radio Garden (agregador confiable)
+  { id: 'pachanguera', name: 'La Pachanguera', slogan: '¡Pura pachanga!', url: 'https://radio.garden/api/ara/content/listen/la-pachanguera-95-1-fm-managua/channel.mp3', genre: 'Tropical / Salsa / Latin Hits', color: '#f59e0b', freq: '95.1 FM', city: 'Managua' },
+  // Confirmada por usuario que funciona
   { id: 'vivafm', name: 'Viva FM', slogan: 'La música que llevas dentro', url: 'https://stream.zeno.fm/78a5h5mfgg8uv', genre: 'Pop / Hits / Latino', color: '#10b981', freq: '98.3 FM', city: 'Managua' },
-  { id: 'futura', name: 'Radio Futura', slogan: 'La emisora líder de Nicaragua', url: 'https://stream-204.zeno.fm/iwmolyow6tivv', genre: 'Urbano / Reggaetón / Electrónica', color: '#8b5cf6', freq: '91.3 FM', city: 'Managua' },
-  { id: 'maranatha', name: 'Radio Maranatha', slogan: 'Música que edifica tu vida', url: 'https://stream2.305stream.com/proxy/client032?mp=/stream', genre: 'Cristiana / Alabanza', color: '#3b82f6', freq: '103.5 FM', city: 'Managua' },
-  { id: 'fiesta-latina', name: 'Fiesta Latina', slogan: '¡La fiesta no para!', url: 'https://radios.solumedia.com:6596/;', genre: 'Salsa / Merengue / Bachata / Reggaetón', color: '#ec4899', freq: '89.1 FM', city: 'Managua' },
-  { id: 'clasica', name: 'Clásica 101.9', slogan: 'Tu tiempo, tu música', url: 'https://stream-281.zeno.fm/3dsfqnhmns8uv', genre: 'Oldies / Clásicos / Instrumental', color: '#06b6d4', freq: '101.9 FM', city: 'Managua' },
-  { id: 'radio-ya', name: 'La Nueva Radio YA', slogan: 'La súper líder del dial', url: 'https://stream-281.zeno.fm/6nwu9a6uwz4tv', genre: 'Noticias / Deportes / Música', color: '#1e40af', freq: '99.1 FM', city: 'Managua' },
-  { id: 'la-tuani', name: 'La Tuani', slogan: '¡La radio que te cautiva!', url: 'https://server.multimediamb.com/9300/;', genre: 'Pop / Hits / Contemporánea', color: '#d946ef', freq: '102.5 FM', city: 'Managua' },
+  // URL vía Radio Garden
+  { id: 'futura', name: 'Radio Futura', slogan: 'La emisora líder de Nicaragua', url: 'https://radio.garden/api/ara/content/listen/SjhzgGc8/channel.mp3', genre: 'Urbano / Reggaetón / Electrónica', color: '#8b5cf6', freq: '91.3 FM', city: 'Managua' },
+  // URL vía Radio Garden
+  { id: 'maranatha', name: 'Radio Maranatha', slogan: 'Música que edifica tu vida', url: 'https://radio.garden/api/ara/content/listen/f7txZiwG/channel.mp3', genre: 'Cristiana / Alabanza', color: '#3b82f6', freq: '103.5 FM', city: 'Managua' },
+  // URL vía Radio Garden
+  { id: 'fiesta-latina', name: 'Fiesta Latina', slogan: '¡La fiesta no para!', url: 'https://radio.garden/api/ara/content/listen/VcCrAhT6/channel.mp3', genre: 'Salsa / Merengue / Bachata / Reggaetón', color: '#ec4899', freq: '89.1 FM', city: 'Managua' },
+  // URL vía Radio Garden
+  { id: 'clasica', name: 'Clásica 101.9', slogan: 'Tu tiempo, tu música', url: 'https://radio.garden/api/ara/content/listen/clasica-1019-fm-managua/channel.mp3', genre: 'Oldies / Clásicos / Instrumental', color: '#06b6d4', freq: '101.9 FM', city: 'Managua' },
 ];
 
 const BAR_H = [4, 8, 12, 9, 5, 11, 7, 14, 6, 10, 8, 5, 12, 7, 9];
