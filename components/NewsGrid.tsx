@@ -126,7 +126,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
       )}
 
       {/* Load More */}
-      <div className="ni-loadmore">
+      <div className="flex gap-3 mt-8 justify-center">
         {hasMore && (
           <button onClick={() => setPage(p => p + 1)} className="ni-btn-outline">
             <ArrowDown size={14} />

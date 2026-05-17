@@ -2732,51 +2732,51 @@ time {
 .ni-footer {
   background: var(--bg-dark);
   color: var(--text-muted);
-  padding: 40px 16px 0;
+  padding: 24px 16px 0;
 }
 .ni-footer-inner {
-  max-width: var(--max-width);
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 32px;
+  gap: 16px;
 }
 .ni-footer-logo {
   font-family: var(--font-merri);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
   color: #fff;
   text-decoration: none;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .ni-footer-logo span { color: var(--text-muted); font-weight: 400; }
 .ni-footer-desc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.6;
-  margin-bottom: 20px;
+  line-height: 1.5;
+  margin-bottom: 0;
 }
 .ni-footer-label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: rgba(255,255,255,0.9);
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 .ni-footer-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
+  gap: 6px 12px;
 }
 @media (min-width: 640px) {
   .ni-footer-links { grid-template-columns: 1fr; }
 }
 .ni-footer-links a {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -2860,31 +2860,31 @@ time {
 
 /* Bottom bar */
 .ni-footer-bottom {
-  max-width: var(--max-width);
-  margin: 32px auto 0;
-  padding: 16px;
+  max-width: 1280px;
+  margin: 16px auto 0;
+  padding: 12px 16px;
   border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   align-items: center;
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255,255,255,0.35);
 }
 
 /* Responsive footer */
 @media (min-width: 640px) {
-  .ni-footer { padding: 32px 24px 0; }
-  .ni-footer-inner { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .ni-footer { padding: 20px 24px 0; }
+  .ni-footer-inner { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .ni-footer-bottom {
     flex-direction: row;
     justify-content: space-between;
     text-align: left;
-    padding: 16px 24px;
+    padding: 12px 24px;
   }
 }
 @media (min-width: 1024px) {
-  .ni-footer-inner { grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+  .ni-footer-inner { grid-template-columns: 2fr 1fr 1fr; gap: 24px; }
 }
 
 .ni-bottomnav {

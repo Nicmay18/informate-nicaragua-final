@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Nicaragua Informate — Noticias de Nicaragua</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ============ TOKENS DE DISEÑO ============ */
+    :root {
+      --c-primary: #1E3A5F;
+      --c-primary-dark: #152A45;
+      --c-accent: #C41E3A;
+      --c-accent-hover: #A01830;
+      --c-bg: #FFFFFF;
+      --c-surface: #F8FAFC;
+      --c-surface-elevated: #FFFFFF;
+      --c-border: #E2E8F0;
+      --c-border-light: #F1F5F9;
+      --c-text: #111827;
+      --c-text-secondary: #4B5563;
+      --c-text-tertiary: #6B7280;
+      --c-text-muted: #9CA3AF;
+      --c-success: #059669;
+      --c-danger: #DC2626;
+      --c-radio-live: #EF4444;
+      --c-overlay: rgba(0,0,0,0.5);
+      --c-clima-sunny: #F59E0B;
+      --c-clima-cloudy: #6B7280;
+      --c-clima-rain: #3B82F6;
+      
+      --cat-sucesos: #DC2626;
+      --cat-nacionales: #2563EB;
+      --cat-deportes: #059669;
+      --cat-internacionales: #0891B2;
+      --cat-espectaculos: #7C3AED;
+      --cat-tecnologia: #D97706;
+      
+      --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-body: 'Merriweather', Georgia, serif;
+      
+      --s-1: 4px;   --s-2: 8px;   --s-3: 12px;
+      --s-4: 16px;  --s-5: 20px;  --s-6: 24px;
+      --s-8: 32px;  --s-10: 40px; --s-12: 48px;
+      
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-card: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-elevated: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-fab: 0 4px 12px rgba(30,58,95,0.25);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      --touch-min: 48px;
+    }
+
+    [data-theme="dark"] {
+      --c-bg: #0F172A;
+      --c-surface: #1E293B;
+      --c-surface-elevated: #1E293B;
+      --c-border: #334155;
+      --c-border-light: #1E293B;
+      --c-text: #F1F5F9;
+      --c-text-secondary: #CBD5E1;
+      --c-text-tertiary: #94A3B8;
+      --c-text-muted: #64748B;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-ui);
+      background: var(--c-bg);
+      color: var(--c-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* ============ HEADER SUPERIOR (CLIMA + FECHA) ============ */
+    .header-bar {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+      color: white;
+      padding: var(--s-2) var(--s-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .header-bar__left {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+    }
+    .header-bar__date {
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      gap: var(--s-1);
+    }
+    .header-bar__date i {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    
+    /* CLIMA WIDGET */
+    .clima-widget {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+      background: rgba(255,255,255,0.12);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(4px);
+    }
+    .clima-widget__icon {
+      font-size: 14px;
+    }
+    .clima-widget__icon--sunny { color: #FCD34D; }
+    .clima-widget__icon--cloudy { color: #D1D5DB; }
+    .clima-widget__icon--rain { color: #93C5FD; }
+    .clima-widget__temp {
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .clima-widget__city {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+    
+    .header-bar__right {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+    }
+    .header-bar__edition {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.8;
+      font-weight: 600;
+    }
+    .header-bar__social {
+      display: flex;
+      gap: var(--s-2);
+    }
+    .header-bar__social a {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.1);
+      font-size: 11px;
+      transition: background 0.2s;
+    }
+    .header-bar__social a:active {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ============ HEADER PRINCIPAL ============ */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-border-light);
+    }
+    .header-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s-3) var(--s-4);
+      height: 56px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .header-logo__mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .header-logo__text {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--c-text);
+    }
+    .header-logo__text span {
+      font-weight: 400;
+      color: var(--c-text-tertiary);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .header-btn {
+      width: var(--touch-min);
+      height: var(--touch-min);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      color: var(--c-text-secondary);
+      font-size: 18px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .header-btn:active {
+      background: var(--c-surface);
+    }
+
+    /* Search expandible */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-input {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      opacity: 0;
+      padding: var(--s-3) var(--s-4);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--radius-full);
+      background: var(--c-surface);
+      font-size: 14px;
+      transition: width 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    }
+    .search-input.active {
+      width: calc(100vw - 120px);
+      opacity: 1;
+      padding-right: var(--s-10);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--c-primary);
+    }
+
+    /* ============ TICKER ============ */
+    .ticker {
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-border-light);
+      padding: var(--s-2) var(--s-4);
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      overflow: hidden;
+    }
+    .ticker__label {
+      background: var(--c-accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ticker__text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--c-text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ============ NAVEGACIÓN CATEGORÍAS ============ */
+    .nav-categories {
+      display: flex;
+      gap: var(--s-2);
+      padding: var(--s-3) var(--s-4);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-categories::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-cat {
+      scroll-snap-align: start;
+      padding: var(--s-2) var(--s-4);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--c-text-secondary);
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      transition: all 0.2s;
+    }
+    .nav-cat.active {
+      background: var(--c-primary);
+      color: white;
+      border-color: var(--c-primary);
+    }
+
+    /* ============ HERO SLIDER ============ */
+    .hero-slider {
+      position: relative;
+      overflow: hidden;
+      margin: 0 var(--s-4);
+      border-radius: var(--radius-lg);
+    }
+    .hero-slide {
+      position: relative;
+      display: none;
+    }
+    .hero-slide.active {
+      display: block;
+    }
+    .hero-slide__img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+    }
+    .hero-slide__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 70%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--s-6) var(--s-4);
+    }
+    .hero-slide__badge {
+      position: absolute;
+      top: var(--s-3);
+      left: var(--s-3);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: white;
+    }
+    .hero-slide__badge--sucesos { background: var(--cat-sucesos); }
+    .hero-slide__badge--nacionales { background: var(--cat-nacionales); }
+    .hero-slide__badge--deportes { background: var(--cat-deportes); }
+    .hero-slide__badge--internacionales { background: var(--cat-internacionales); }
+    .hero-slide__badge--espectaculos { background: var(--cat-espectaculos); }
+    .hero-slide__badge--tecnologia { background: var(--cat-tecnologia); }
+    
+    .hero-slide__title {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.25;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: var(--s-2);
+    }
+    .hero-slide__meta {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+    }
+    .hero-dots {
+      display: flex;
+      justify-content: center;
+      gap: var(--s-2);
+      margin-top: var(--s-3);
+    }
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-full);
+      background: var(--c-border);
+      transition: all 0.3s;
+    }
+    .hero-dot.active {
+      width: 24px;
+      background: var(--c-primary);
+    }
+
+    /* ============ SECCIONES ============ */
+    .section {
+      padding: var(--s-6) var(--s-4);
+    }
+    .section__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--s-4);
+    }
+    .section__title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--c-text);
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .section__title i {
+      color: var(--c-primary);
+      font-size: 16px;
+    }
+    .section__link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-primary);
+    }
+
+    /* ============ CARDS ============ */
+    .news-card {
+      background: var(--c-surface-elevated);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--c-border-light);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .news-card:active {
+      transform: scale(0.98);
+    }
+    .news-card__img-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+    .news-card__img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .news-card:active .news-card__img {
+      transform: scale(1.03);
+    }
+    .news-card__badge {
+      position: absolute;
+      top: var(--s-3);
+      left: var(--s-3);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: white;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+    .news-card__badge--sucesos { background: rgba(220,38,38,0.85); }
+    .news-card__badge--nacionales { background: rgba(37,99,235,0.85); }
+    .news-card__badge--deportes { background: rgba(5,150,105,0.85); }
+    .news-card__badge--internacionales { background: rgba(8,145,178,0.85); }
+    .news-card__badge--espectaculos { background: rgba(124,58,237,0.85); }
+    .news-card__badge--tecnologia { background: rgba(217,119,6,0.85); }
+    
+    .news-card__content {
+      padding: var(--s-4);
+    }
+    .news-card__title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--c-text);
+      margin-bottom: var(--s-2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-card__excerpt {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--c-text-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: var(--s-3);
+    }
+    .news-card__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      font-size: 12px;
+      color: var(--c-text-tertiary);
+    }
+    .news-card__meta i {
+      font-size: 11px;
+    }
+    .news-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-5);
+    }
+
+    /* ============ INDICADORES ECONÓMICOS ============ */
+    .eco-widget {
+      background: var(--c-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--s-4);
+      border: 1px solid var(--c-border-light);
+    }
+    .eco-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-4);
+    }
+    .eco-item {
+      text-align: center;
+      padding: var(--s-3);
+      border-radius: var(--radius-md);
+      background: var(--c-bg);
+    }
+    .eco-item__label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--c-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--s-1);
+    }
+    .eco-item__value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--c-text);
+    }
+    .eco-item__change {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .eco-item__change--up { color: var(--c-success); }
+    .eco-item__change--down { color: var(--c-danger); }
+    .eco-item__change--same { color: var(--c-text-muted); }
+    .eco-fuel {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s-3) var(--s-4);
+    }
+    .eco-fuel__label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-text-secondary);
+    }
+    .eco-fuel__value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--c-text);
+    }
+    .eco-source {
+      font-size: 10px;
+      color: var(--c-text-muted);
+      text-align: center;
+      margin-top: var(--s-3);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--c-border-light);
+    }
+
+    /* ============ MÁS LEÍDAS ============ */
+    .trending-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+    }
+    .trending-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s-3);
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--c-border-light);
+    }
+    .trending-item:last-child {
+      border-bottom: none;
+    }
+    .trending-item__num {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--c-primary);
+      line-height: 1;
+      min-width: 28px;
+      opacity: 0.3;
+    }
+    .trending-item__num--top {
+      opacity: 1;
+    }
+    .trending-item__title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--c-text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ============ NEWSLETTER ============ */
+    .newsletter {
+      background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+      border-radius: var(--radius-lg);
+      padding: var(--s-6) var(--s-4);
+      color: white;
+    }
+    .newsletter__title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: var(--s-2);
+    }
+    .newsletter__desc {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-bottom: var(--s-4);
+    }
+    .newsletter__form {
+      display: flex;
+      gap: var(--s-2);
+    }
+    .newsletter__input {
+      flex: 1;
+      padding: var(--s-3) var(--s-4);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      outline: none;
+    }
+    .newsletter__input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    .newsletter__btn {
+      padding: var(--s-3) var(--s-5);
+      background: var(--c-accent);
+      color: white;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      background: var(--c-surface);
+      border-top: 1px solid var(--c-border-light);
+      padding: var(--s-6) var(--s-4);
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-6);
+      margin-bottom: var(--s-6);
+    }
+    .footer__col-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--c-text-tertiary);
+      margin-bottom: var(--s-3);
+    }
+    .footer__link {
+      display: block;
+      font-size: 13px;
+      color: var(--c-text-secondary);
+      padding: var(--s-1) 0;
+    }
+    .footer__bottom {
+      padding-top: var(--s-4);
+      border-top: 1px solid var(--c-border-light);
+      text-align: center;
+    }
+    .footer__logo {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: var(--s-2);
+    }
+    .footer__copy {
+      font-size: 12px;
+      color: var(--c-text-muted);
+    }
+
+    /* ============ RADIO FAB ============ */
+    .radio-fab {
+      position: fixed;
+      bottom: var(--s-4);
+      right: var(--s-4);
+      z-index: 200;
+    }
+    .radio-fab__btn {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      box-shadow: var(--shadow-fab);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .radio-fab__btn:active {
+      transform: scale(0.95);
+    }
+    .radio-fab__live {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 14px;
+      height: 14px;
+      background: var(--c-radio-live);
+      border-radius: var(--radius-full);
+      border: 2px solid var(--c-bg);
+      animation: pulseLive 2s infinite;
+    }
+    @keyframes pulseLive {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+    }
+    .radio-panel {
+      position: fixed;
+      bottom: 80px;
+      right: var(--s-4);
+      width: calc(100vw - var(--s-8));
+      max-width: 320px;
+      background: var(--c-surface-elevated);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-elevated);
+      border: 1px solid var(--c-border);
+      padding: var(--s-4);
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 199;
+    }
+    .radio-panel.active {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .radio-panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--s-3);
+    }
+    .radio-panel__title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .radio-panel__live {
+      width: 8px;
+      height: 8px;
+      background: var(--c-radio-live);
+      border-radius: var(--radius-full);
+      animation: pulseLive 2s infinite;
+    }
+    .radio-panel__close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--c-text-tertiary);
+      font-size: 16px;
+    }
+    .radio-panel__station {
+      font-size: 13px;
+      color: var(--c-text-secondary);
+      margin-bottom: var(--s-3);
+    }
+    .radio-panel__controls {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+    }
+    .radio-panel__play {
+      width: var(--touch-min);
+      height: var(--touch-min);
+      background: var(--c-primary);
+      color: white;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .radio-panel__vol {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--c-border);
+      border-radius: var(--radius-full);
+    }
+    .radio-panel__vol::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--c-primary);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+    }
+
+    /* ============ MENÚ ============ */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: var(--c-overlay);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .menu-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .menu-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 85%;
+      max-width: 320px;
+      background: var(--c-bg);
+      z-index: 301;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+    .menu-panel.active {
+      transform: translateX(0);
+    }
+    .menu-header {
+      padding: var(--s-6) var(--s-4) var(--s-4);
+      border-bottom: 1px solid var(--c-border-light);
+    }
+    .menu-header__logo {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: var(--s-2);
+    }
+    .menu-header__tagline {
+      font-size: 12px;
+      color: var(--c-text-tertiary);
+    }
+    .menu-section {
+      padding: var(--s-4);
+    }
+    .menu-section__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--c-text-muted);
+      margin-bottom: var(--s-3);
+    }
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      padding: var(--s-3) 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--c-text);
+    }
+    .menu-link i {
+      width: 24px;
+      color: var(--c-text-tertiary);
+      font-size: 16px;
+    }
+    .menu-footer {
+      padding: var(--s-4);
+      border-top: 1px solid var(--c-border-light);
+      margin-top: auto;
+    }
+    .menu-theme {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s-3) 0;
+    }
+    .menu-theme__label {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: var(--s-2);
+    }
+    .toggle {
+      width: 48px;
+      height: 28px;
+      background: var(--c-border);
+      border-radius: var(--radius-full);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .toggle.active {
+      background: var(--c-primary);
+    }
+    .toggle__knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: var(--radius-full);
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle.active .toggle__knob {
+      transform: translateX(20px);
+    }
+
+    /* ============ TOASTS ============ */
+    .toast-container {
+      position: fixed;
+      top: 100px;
+      left: var(--s-4);
+      right: var(--s-4);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s-3);
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--c-surface-elevated);
+      border-radius: var(--radius-md);
+      padding: var(--s-4);
+      box-shadow: var(--shadow-elevated);
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      border-left: 3px solid var(--c-primary);
+      animation: toastIn 0.3s ease;
+      pointer-events: all;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .toast--success {
+      border-color: var(--c-success);
+    }
+    .toast--error {
+      border-color: var(--c-danger);
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (min-width: 768px) {
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--s-5);
+      }
+      .hero-slide__title {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ TOASTS ============ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ============ HEADER SUPERIOR: CLIMA + FECHA + REDES ============ -->
+  <div class="header-bar">
+    <div class="header-bar__left">
+      <span class="header-bar__date">
+        <i class="far fa-calendar"></i>
+        <span id="currentDate">viernes, 16 de mayo de 2026</span>
+      </span>
+      <!-- CLIMA WIDGET -->
+      <div class="clima-widget" onclick="showToast('Managua: 32°C, Soleado. Humedad 65%. Viento 15 km/h', 'success')">
+        <span class="clima-widget__icon clima-widget__icon--sunny">
+          <i class="fas fa-sun"></i>
+        </span>
+        <div>
+          <div class="clima-widget__temp">32°C</div>
+          <div class="clima-widget__city">Managua</div>
+        </div>
+      </div>
+    </div>
+    <div class="header-bar__right">
+      <span class="header-bar__edition">Edición Nicaragua</span>
+      <div class="header-bar__social">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER PRINCIPAL ============ -->
+  <header class="header">
+    <div class="header-main">
+      <a href="#" class="header-logo">
+        <div class="header-logo__mark">NI</div>
+        <div class="header-logo__text">Nicaragua<span>Informate</span></div>
+      </a>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="searchInput" placeholder="Buscar noticias...">
+          <button class="header-btn" onclick="toggleSearch()" aria-label="Buscar">
+            <i class="fas fa-search" id="searchIcon"></i>
+          </button>
+        </div>
+        <button class="header-btn" onclick="toggleMenu()" aria-label="Menú">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker">
+    <span class="ticker__label">Última Hora</span>
+    <span class="ticker__text" id="tickerText">Autoridades investigan accidente en Rancho Grande, Matagalpa</span>
+  </div>
+
+  <!-- ============ NAVEGACIÓN CATEGORÍAS ============ -->
+  <nav class="nav-categories">
+    <button class="nav-cat active" onclick="filterCategory(this, 'all')">Todas</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'nacionales')">Nacionales</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'sucesos')">Sucesos</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'deportes')">Deportes</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'internacionales')">Internacionales</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'espectaculos')">Espectáculos</button>
+    <button class="nav-cat" onclick="filterCategory(this, 'tecnologia')">Tecnología</button>
+  </nav>
+
+  <!-- ============ HERO SLIDER ============ -->
+  <section class="hero-slider" id="heroSlider">
+    <article class="hero-slide active" data-category="internacionales">
+      <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=800&h=500&fit=crop" alt="Virus Hantavirus" class="hero-slide__img" loading="eager">
+      <div class="hero-slide__overlay">
+        <span class="hero-slide__badge hero-slide__badge--internacionales">Internacionales</span>
+        <h2 class="hero-slide__title">Canadá reporta caso de virus por roedores en Columbia Británica</h2>
+        <div class="hero-slide__meta">
+          <span><i class="far fa-clock"></i> 16 may</span>
+          <span><i class="far fa-eye"></i> 1.2k lecturas</span>
+        </div>
+      </div>
+    </article>
+    <div class="hero-dots">
+      <span class="hero-dot active" onclick="goToSlide(0)"></span>
+      <span class="hero-dot" onclick="goToSlide(1)"></span>
+    </div>
+  </section>
+
+  <!-- ============ NOTICIAS ============ -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title"><i class="fas fa-fire"></i> Noticias Destacadas</h2>
+      <a href="#" class="section__link">Ver todas <i class="fas fa-chevron-right" style="font-size:10px;"></i></a>
+    </div>
+    <div class="news-grid" id="newsGrid">
+    </div>
+  </section>
+
+  <!-- ============ INDICADORES ECONÓMICOS ============ -->
+  <section class="section" style="padding-top: 0;">
+    <div class="section__header">
+      <h2 class="section__title"><i class="fas fa-chart-line"></i> Indicadores Económicos</h2>
+      <span class="section__link" style="font-size: 12px; color: var(--c-text-muted);">BCN / INC</span>
+    </div>
+    <div class="eco-widget">
+      <div class="eco-grid">
+        <div class="eco-item">
+          <div class="eco-item__label">Dólar BCN</div>
+          <div class="eco-item__value">C$36.62</div>
+          <div class="eco-item__change eco-item__change--same">
+            <i class="fas fa-minus"></i> 0.00%
+          </div>
+        </div>
+        <div class="eco-item">
+          <div class="eco-item__label">Euro</div>
+          <div class="eco-item__value">C$43.11</div>
+          <div class="eco-item__change eco-item__change--up">
+            <i class="fas fa-arrow-up"></i> 1.25%
+          </div>
+        </div>
+        <div class="eco-fuel">
+          <span class="eco-fuel__label">Gasolina Regular</span>
+          <span class="eco-fuel__value">C$47.80–48.00</span>
+        </div>
+        <div class="eco-fuel">
+          <span class="eco-fuel__label">Gasolina Súper</span>
+          <span class="eco-fuel__value">C$49.00</span>
+        </div>
+        <div class="eco-fuel">
+          <span class="eco-fuel__label">Diesel</span>
+          <span class="eco-fuel__value">C$43.21–43.40</span>
+        </div>
+      </div>
+      <div class="eco-source">Fuente: BCN / INC — Datos referenciales</div>
+    </div>
+  </section>
+
+  <!-- ============ MÁS LEÍDAS ============ -->
+  <section class="section">
+    <div class="section__header">
+      <h2 class="section__title"><i class="fas fa-trophy"></i> Más Leídas</h2>
+    </div>
+    <div class="trending-list">
+      <div class="trending-item">
+        <span class="trending-item__num trending-item__num--top">1</span>
+        <span class="trending-item__title">Neymar Jr. analiza el panorama competitivo de cara al Mundial 2026</span>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__num trending-item__num--top">2</span>
+        <span class="trending-item__title">Turismo en Nicaragua crece 11% en primer trimestre de 2026 según INTUR</span>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__num">3</span>
+        <span class="trending-item__title">KFC anuncia apertura de sus primeros restaurantes en Managua</span>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__num">4</span>
+        <span class="trending-item__title">Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18 de mayo</span>
+      </div>
+      <div class="trending-item">
+        <span class="trending-item__num">5</span>
+        <span class="trending-item__title">INETER: pronostican lluvias fuertes y tormentas eléctricas en Nicaragua</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWSLETTER ============ -->
+  <section class="section" style="padding-top: 0;">
+    <div class="newsletter">
+      <h3 class="newsletter__title">Recibe las noticias en tu correo</h3>
+      <p class="newsletter__desc">Mantente informado con lo más importante de Nicaragua cada mañana.</p>
+      <form class="newsletter__form" onsubmit="event.preventDefault(); showToast('¡Suscripción exitosa!', 'success');">
+        <input type="email" class="newsletter__input" placeholder="tu@email.com" required>
+        <button type="submit" class="newsletter__btn">Suscribir</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__grid">
+      <div>
+        <h4 class="footer__col-title">Secciones</h4>
+        <a href="#" class="footer__link">Nacionales</a>
+        <a href="#" class="footer__link">Sucesos</a>
+        <a href="#" class="footer__link">Deportes</a>
+        <a href="#" class="footer__link">Internacionales</a>
+        <a href="#" class="footer__link">Espectáculos</a>
+        <a href="#" class="footer__link">Tecnología</a>
+      </div>
+      <div>
+        <h4 class="footer__col-title">Legal</h4>
+        <a href="#" class="footer__link">Términos de uso</a>
+        <a href="#" class="footer__link">Privacidad</a>
+        <a href="#" class="footer__link">Cookies</a>
+        <a href="#" class="footer__link">Contacto</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__logo">Nicaragua<span style="font-weight:400; color: var(--c-text-muted);">Informate</span></div>
+      <p class="footer__copy">© 2026 Nicaragua Informate. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ============ RADIO FAB ============ -->
+  <div class="radio-fab">
+    <div class="radio-panel" id="radioPanel">
+      <div class="radio-panel__header">
+        <span class="radio-panel__title">
+          <span class="radio-panel__live"></span>
+          En vivo
+        </span>
+        <button class="radio-panel__close" onclick="toggleRadio()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="radio-panel__station">La Buenisima 93.1 FM</div>
+      <div class="radio-panel__controls">
+        <button class="radio-panel__play" onclick="togglePlay()" id="playBtn">
+          <i class="fas fa-play"></i>
+        </button>
+        <input type="range" class="radio-panel__vol" min="0" max="100" value="70">
+      </div>
+    </div>
+    <button class="radio-fab__btn" onclick="toggleRadio()" aria-label="Radio">
+      <span class="radio-fab__live"></span>
+      <i class="fas fa-radio" id="radioIcon"></i>
+    </button>
+  </div>
+
+  <!-- ============ MENÚ HAMBURGUESA ============ -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+  <nav class="menu-panel" id="menuPanel">
+    <div class="menu-header">
+      <div class="menu-header__logo">Nicaragua Informate</div>
+      <p class="menu-header__tagline">Noticias de Nicaragua al instante</p>
+    </div>
+    <div class="menu-section">
+      <h4 class="menu-section__title">Secciones</h4>
+      <a href="#" class="menu-link"><i class="fas fa-flag"></i> Nacionales</a>
+      <a href="#" class="menu-link"><i class="fas fa-exclamation-triangle"></i> Sucesos</a>
+      <a href="#" class="menu-link"><i class="fas fa-futbol"></i> Deportes</a>
+      <a href="#" class="menu-link"><i class="fas fa-globe"></i> Internacionales</a>
+      <a href="#" class="menu-link"><i class="fas fa-film"></i> Espectáculos</a>
+      <a href="#" class="menu-link"><i class="fas fa-laptop"></i> Tecnología</a>
+    </div>
+    <div class="menu-section">
+      <h4 class="menu-section__title">Servicios</h4>
+      <a href="#" class="menu-link"><i class="fas fa-chart-line"></i> Indicadores Económicos</a>
+      <a href="#" class="menu-link"><i class="fas fa-radio"></i> Radio en Vivo</a>
+      <a href="#" class="menu-link"><i class="fas fa-envelope"></i> Newsletter</a>
+    </div>
+    <div class="menu-footer">
+      <div class="menu-theme">
+        <span class="menu-theme__label"><i class="fas fa-moon"></i> Modo oscuro</span>
+        <div class="toggle" id="themeToggle" onclick="toggleTheme()">
+          <div class="toggle__knob"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    // ============ FECHA ACTUAL ============
+    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const hoy = new Date();
+    document.getElementById('currentDate').textContent = `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
+
+    // ============ SLIDER ============
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    let slideInterval;
+
+    function goToSlide(n) {
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('active');
+      currentSlide = (n + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function startSlider() { slideInterval = setInterval(nextSlide, 6000); }
+    
+    let touchStartX = 0;
+    const slider = document.getElementById('heroSlider');
+    slider.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+    slider.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        clearInterval(slideInterval);
+        diff > 0 ? nextSlide() : goToSlide(currentSlide - 1);
+        startSlider();
+      }
+    });
+
+    // ============ TICKER ============
+    const tickerTexts = [
+      "Autoridades investigan accidente en Rancho Grande, Matagalpa",
+      "China clona cabras lecheras de alto rendimiento en avance científico",
+      "KFC anuncia apertura de sus primeros restaurantes en Managua",
+      "Turismo en Nicaragua crece 11% en primer trimestre de 2026"
+    ];
+    let tickerIndex = 0;
+    setInterval(() => {
+      tickerIndex = (tickerIndex + 1) % tickerTexts.length;
+      const el = document.getElementById('tickerText');
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.textContent = tickerTexts[tickerIndex];
+        el.style.opacity = '1';
+      }, 400);
+    }, 8000);
+
+    // ============ SEARCH ============
+    function toggleSearch() {
+      const input = document.getElementById('searchInput');
+      const icon = document.getElementById('searchIcon');
+      input.classList.toggle('active');
+      if (input.classList.contains('active')) {
+        input.focus();
+        icon.className = 'fas fa-times';
+      } else {
+        icon.className = 'fas fa-search';
+      }
+    }
+
+    // ============ MENÚ ============
+    function toggleMenu() {
+      document.getElementById('menuOverlay').classList.toggle('active');
+      document.getElementById('menuPanel').classList.toggle('active');
+      document.body.style.overflow = document.getElementById('menuPanel').classList.contains('active') ? 'hidden' : '';
+    }
+
+    // ============ RADIO ============
+    let radioPlaying = false;
+    function toggleRadio() {
+      document.getElementById('radioPanel').classList.toggle('active');
+    }
+    function togglePlay() {
+      radioPlaying = !radioPlaying;
+      const btn = document.getElementById('playBtn');
+      btn.innerHTML = radioPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+      showToast(radioPlaying ? 'Reproduciendo La Buenisima 93.1 FM' : 'Radio pausada', 'success');
+    }
+
+    // ============ FILTRO CATEGORÍAS ============
+    function filterCategory(btn, category) {
+      document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('.news-card');
+      cards.forEach(card => {
+        card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+      });
+    }
+
+    // ============ TEMA OSCURO ============
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeToggle').classList.toggle('active');
+    }
+
+    // ============ TOASTS ============
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast--${type}`;
+      toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}" style="color: var(--c-${type === 'success' ? 'success' : 'danger'});"></i>
+        <span style="font-size: 14px; font-weight: 500;">${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ============ INIT ============
+    startSlider();
+
+    document.addEventListener('click', e => {
+      const searchWrapper = document.querySelector('.search-wrapper');
+      if (!searchWrapper.contains(e.target)) {
+        document.getElementById('searchInput').classList.remove('active');
+        document.getElementById('searchIcon').className = 'fas fa-search';
+      }
+    });
+  </script>
+</body>
+</html>
