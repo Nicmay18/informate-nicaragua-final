@@ -1,0 +1,189 @@
+import ArticleClient from '@/components/ArticleClient';
+import TrendingList from '@/components/home/TrendingList';
+import MasLeidas from '@/components/home/MasLeidas';
+import SocialGrid from '@/components/home/SocialGrid';
+import NewsletterForm from '@/components/NewsletterForm';
+import AdSlot from '@/components/AdSlot';
+import WeatherWidgetWrapper from '@/components/home/WeatherWidgetWrapper';
+import IndicadoresWidget from '@/components/IndicadoresWidget';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getNewsBySlug, getRelatedNews, getNews, getMasLeidas, getAllSlugs } from '@/lib/data';
+import { isLutoNews } from '@/lib/types';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
+import { isToxicSlug } from '@/lib/seo-toxic';
+
+export const dynamic = 'force-static';
+export const dynamicParams = true;
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  try {
+    const slugs = await getAllSlugs();
+    console.log(`[generateStaticParams] Generando ${slugs.length} páginas de noticias estáticas`);
+    return slugs.map((slug: string) => ({ slug }));
+  } catch (err) {
+    console.error('[generateStaticParams] ERROR:', err);
+    return [];
+  }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const baseUrl = 'https://www.nicaraguainformate.com';
+  const url = `${baseUrl}/noticias/${slug}`;
+
+  // Si el slug contiene palabras tóxicas, forzar noindex para desindexar de Google
+  if (isToxicSlug(slug)) {
+    return {
+      title: 'Contenido no disponible | Nicaragua Informate',
+      robots: 'noindex, nofollow',
+      alternates: { canonical: url },
+    };
+  }
+
+  try {
+    const noticia = await getNewsBySlug(slug);
+    if (!noticia) {
+      return {
+        title: 'Noticia no encontrada | Nicaragua Informate',
+        robots: 'noindex, nofollow',
+      };
+    }
+
+    const title = noticia.titulo || 'Noticia | Nicaragua Informate';
+    const description = (noticia.resumen || '').slice(0, 155) || 'Noticias de Nicaragua en tiempo real.';
+    const image = noticia.imagen || `${baseUrl}/logo.png`;
+
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        title: noticia.titulo,
+        description: noticia.resumen,
+        url,
+        siteName: 'Nicaragua Informate',
+        images: [
+          {
+            url: image,
+            alt: noticia.titulo,
+            width: 1200,
+            height: 630,
+          },
+        ],
+        locale: 'es_NI',
+        type: 'article',
+        publishedTime: noticia.fecha,
+        modifiedTime: noticia.fecha,
+        section: noticia.categoria || 'Noticias',
+        tags: [noticia.categoria],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: noticia.titulo,
+        description: noticia.resumen,
+        images: [image],
+        site: '@nicaraguainformate',
+        creator: '@nicaraguainformate',
+      },
+      other: {
+        'whatsapp:title': noticia.titulo,
+        'whatsapp:description': noticia.resumen,
+        'whatsapp:image': image,
+        'telegram:title': noticia.titulo,
+        'telegram:description': noticia.resumen,
+        'telegram:image': image,
+      },
+    };
+  } catch (e) {
+    console.error('generateMetadata error:', e);
+    return {};
+  }
+}
+
+export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  try {
+    const [noticia, noticiasTrending, masLeidas] = await Promise.all([
+      getNewsBySlug(slug),
+      getNews(8),
+      getMasLeidas(),
+    ]);
+
+    if (!noticia) {
+      return notFound();
+    }
+
+    const isLuto = isLutoNews(noticia);
+
+    const related = await getRelatedNews(noticia.categoria, noticia.slug, 3);
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+
+    return (
+      <div className="min-h-screen">
+        <Header activeCategory={noticia.categoria} />
+
+        {/* ===== TOP BANNER AD — Article ===== */}
+        <div className="container-pro" style={{ padding: '16px 0 0' }}>
+          <AdSlot slot="article-top" width={728} height={90} format="horizontal" style={{ minHeight: 90, margin: '0 auto', maxWidth: 728 }} />
+        </div>
+
+        {/* ===== MAIN CONTENT GRID ===== */}
+        <main id="main-content" className="ni-main-layout ni-article-layout">
+          {/* Left Column - Article */}
+          <div>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLd(noticia, url)) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(noticia.categoria)) }} />
+            <ArticleClient
+              noticia={noticia}
+              related={related}
+              isLuto={isLuto}
+              adSlot={<AdSlot slot="article-in-content" width={336} height={280} />}
+            />
+
+            {/* Mobile widgets */}
+            <div className="mobile-widgets">
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, marginTop: 24, minHeight: 120, background: 'var(--bg-warm)' }}>
+                <IndicadoresWidget />
+              </div>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, minHeight: 100, background: 'var(--bg-warm)' }}>
+                <WeatherWidgetWrapper />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Sidebar */}
+          <aside className="ni-sidebar">
+            <div className="ni-sidebar-inner">
+              <TrendingList noticias={noticiasTrending.slice(0, 6)} />
+              {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
+              <AdSlot slot="article-sidebar-1" width={300} height={250} />
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
+                <IndicadoresWidget />
+              </div>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
+                <WeatherWidgetWrapper />
+              </div>
+              <NewsletterForm />
+              <SocialGrid />
+            </div>
+          </aside>
+        </main>
+
+        {/* ===== STICKY BOTTOM AD — Mobile only ===== */}
+        <div className="sticky-ad-mobile" style={{ position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'center', background: '#fff', borderTop: '1px solid #e8e8ec', padding: '8px 0' }}>
+          <AdSlot slot="article-sticky-bottom" width={320} height={50} format="horizontal" style={{ minHeight: 50 }} />
+        </div>
+
+        <Footer />
+      </div>
+    );
+  } catch (error) {
+    console.error('Error cargando noticia:', error);
+    return notFound();
+  }
+}

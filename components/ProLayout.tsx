@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import BrandIcon from '@/components/BrandIcon';
 import {
   Search, Menu, X, Moon, Sun,
   Radio, Play, Pause, Volume2,
-  Calendar, CloudSun,
+  Calendar,
   Home, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, Mail,
-  Info, FileText, Shield,
+  Info, FileText, Shield, ChevronRight,
   CheckCircle, AlertCircle
 } from 'lucide-react';
 
@@ -21,14 +22,31 @@ export default function ProLayout({
   tickerText?: string;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [dark, setDark] = useState(false);
-  const [radioOpen, setRadioOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [radioPlaying, setRadioPlaying] = useState(false);
+  const [radioOpen, setRadioOpen] = useState(false);
+  const [radioVol, setRadioVol] = useState(0.8);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Stream principal — actualizar con la URL real del cliente
+  const RADIO_STREAM = 'https://stm1.ssl-streams.com:18816/stream';
+  const RADIO_STATION = 'La Buenísima 93.1 FM';
+  const RADIO_DESC = 'Más música, menos problemas';
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [dateStr, setDateStr] = useState('');
+  const [worldTimes, setWorldTimes] = useState<string[]>([]);
+  const [clockIdx, setClockIdx] = useState(0);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const WORLD_CLOCKS = [
+    { label: 'Managua', flag: '🇳🇮', tz: 'America/Managua' },
+    { label: 'Miami',   flag: '🇺🇸', tz: 'America/New_York' },
+    { label: 'Madrid',  flag: '🇪🇸', tz: 'Europe/Madrid' },
+    { label: 'México',  flag: '🇲🇽', tz: 'America/Mexico_City' },
+    { label: 'Moscú',  flag: '🇷🇺', tz: 'Europe/Moscow' },
+  ];
 
   useEffect(() => {
     const hoy = new Date();
@@ -36,6 +54,43 @@ export default function ProLayout({
     const dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
     setDateStr(`${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`);
   }, []);
+
+  useEffect(() => {
+    const updateClocks = () => {
+      setWorldTimes(WORLD_CLOCKS.map(c => {
+        try {
+          return new Date().toLocaleTimeString('es-NI', {
+            timeZone: c.tz, hour: '2-digit', minute: '2-digit', hour12: false,
+          });
+        } catch { return '--:--'; }
+      }));
+    };
+    updateClocks();
+    const tickTime = setInterval(updateClocks, 30000);
+    const tickCity = setInterval(() => setClockIdx(i => (i + 1) % WORLD_CLOCKS.length), 4000);
+    return () => { clearInterval(tickTime); clearInterval(tickCity); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (radioPlaying) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(RADIO_STREAM);
+        audioRef.current.volume = radioVol;
+      }
+      audioRef.current.play().catch(() => setRadioPlaying(false));
+    } else {
+      audioRef.current?.pause();
+    }
+    return () => { audioRef.current?.pause(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [radioPlaying]);
+
+  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value);
+    setRadioVol(v);
+    if (audioRef.current) audioRef.current.volume = v;
+  };
 
   useEffect(() => {
     try {
@@ -74,29 +129,28 @@ export default function ProLayout({
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
   }, []);
 
+  // Notificar cambios de tema o acciones (opcional, habilitar si se desea)
+  // useEffect(() => { addToast('Tema actualizado', 'success'); }, [dark, addToast]);
+
   return (
-    <div>
+    <div className="ni-body">
       {/* === HEADER BAR === */}
       <div className="header-bar">
         <div className="header-bar__left">
           <div className="header-bar__date">
             <Calendar size={12} /> {dateStr}
           </div>
-          <div className="clima-widget">
-            <CloudSun size={16} className="clima-widget__icon clima-widget__icon--sunny" />
-            <div>
-              <div className="clima-widget__temp">32°C</div>
-              <div className="clima-widget__city">Managua</div>
-            </div>
+          <div key={clockIdx} className="world-clock-single">
+            <span className="world-clock__flag">{WORLD_CLOCKS[clockIdx].flag}</span>
+            <span className="world-clock__label">{WORLD_CLOCKS[clockIdx].label}</span>
+            <span className="world-clock__time">{worldTimes[clockIdx] || '--:--'}</span>
           </div>
         </div>
         <div className="header-bar__right">
-          <span className="header-bar__edition">Edición Nicaragua</span>
           <div className="header-bar__social">
             <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={12} /></a>
-            <a href="https://twitter.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><IconTwitter size={12} /></a>
-            <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconInstagram size={12} /></a>
-            <a href="https://youtube.com/@nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><IconYoutube size={12} /></a>
+            <a href="https://wa.me/?text=Nicaragua+Informate" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><BrandIcon name="whatsapp" size={12} /></a>
+            <a href="https://t.me/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><IconTelegram size={12} /></a>
           </div>
         </div>
       </div>
@@ -105,7 +159,7 @@ export default function ProLayout({
       <div className="header-main-wrap">
         <div className="header-main">
           <Link href="/" className="header-logo">
-            <div className="header-logo__mark">NI</div>
+            <img src="/logo.png" alt="Nicaragua Informate" className="header-logo__img" />
             <div className="header-logo__text">Nicaragua <span>Informate</span></div>
           </Link>
           <div className="header-actions">
@@ -131,11 +185,14 @@ export default function ProLayout({
         </div>
       </div>
 
-      {/* === TICKER === */}
+      {/* === TICKER (CNN/BBC style marquee) === */}
       {tickerText && (
-        <div className="ticker">
-          <span className="ticker__label">Última Hora</span>
-          <span className="ticker__text">{tickerText}</span>
+        <div className="ticker-wrap">
+          <div className="ticker-label">ÚLTIMA HORA</div>
+          <div className="ticker-marquee">
+            <span className="ticker-marquee__content">{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+            <span className="ticker-marquee__content">{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+          </div>
         </div>
       )}
 
@@ -147,45 +204,26 @@ export default function ProLayout({
         <div className="footer__grid">
           <div className="footer__brand">
             <div className="footer__brand-logo">
-              <span className="mark">NI</span>
+              <img src="/logo.png" alt="Nicaragua Informate" className="footer-logo-img" />
               Nicaragua <span>Informate</span>
             </div>
             <p className="footer__brand-desc">
-              Periodismo verificado desde Managua. Noticias de Nicaragua y el mundo, minuto a minuto.
+              Nicaragua Informate es un medio digital nicaragüense dedicado a informar con rigor, precisión y contexto. Cubrimos diariamente las secciones de Nacionales, Sucesos, Internacionales, Deportes, Espectáculos y Tecnología —con noticias verificadas y análisis que conectan a la comunidad nicaragüense dentro y fuera del país.
             </p>
             <div className="footer__social">
-              <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                </svg>
-              </a>
-              <a href="https://twitter.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
-                </svg>
-              </a>
-              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="https://youtube.com/@nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 7l-7 5 7 5M20 7v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7"/>
-                </svg>
-              </a>
+              <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={14} /></a>
+              <a href="https://wa.me/?text=Nicaragua+Informate" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
+              <a href="https://t.me/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><IconTelegram size={14} /></a>
             </div>
           </div>
           <div>
             <h4 className="footer__col-title">Secciones</h4>
-            <Link href="/noticias?cat=Nacionales" className="footer__link"><Flag size={12} /> Nacionales</Link>
-            <Link href="/noticias?cat=Sucesos" className="footer__link"><AlertTriangle size={12} /> Sucesos</Link>
-            <Link href="/noticias?cat=Deportes" className="footer__link"><Trophy size={12} /> Deportes</Link>
-            <Link href="/noticias?cat=Internacionales" className="footer__link"><Globe size={12} /> Internacionales</Link>
-            <Link href="/noticias?cat=Espectaculos" className="footer__link"><Film size={12} /> Espectáculos</Link>
-            <Link href="/noticias?cat=Tecnologia" className="footer__link"><Laptop size={12} /> Tecnología</Link>
+            <Link href="/nacionales" className="footer__link"><Flag size={12} /> Nacionales</Link>
+            <Link href="/sucesos" className="footer__link"><AlertTriangle size={12} /> Sucesos</Link>
+            <Link href="/deportes" className="footer__link"><Trophy size={12} /> Deportes</Link>
+            <Link href="/internacionales" className="footer__link"><Globe size={12} /> Internacionales</Link>
+            <Link href="/espectaculos" className="footer__link"><Film size={12} /> Espectáculos</Link>
+            <Link href="/tecnologia" className="footer__link"><Laptop size={12} /> Tecnología</Link>
           </div>
           <div>
             <h4 className="footer__col-title">Legal</h4>
@@ -196,52 +234,85 @@ export default function ProLayout({
           </div>
           <div>
             <h4 className="footer__col-title">Contacto</h4>
-            <p className="footer__link"><Mail size={12} /> hola@nicaraguainformate.com</p>
-            <p className="footer__link"><Globe size={12} /> nicaraguainformate.com</p>
-            <p className="footer__link"><MapPinIcon /> Managua, Nicaragua</p>
+            <Link href="/contacto" className="footer__link"><ChevronRight size={12} /> Redacción</Link>
+            <Link href="/contacto" className="footer__link"><ChevronRight size={12} /> Publicidad</Link>
           </div>
         </div>
         <div className="footer__divider" />
         <div className="footer__bottom">
           <div className="footer__bottom-links">
-            <Link href="/nosotros">Nosotros</Link>
-            <Link href="/privacidad">Privacidad</Link>
             <Link href="/terminos">Términos</Link>
-            <Link href="/contacto">Contacto</Link>
+            <Link href="/privacidad">Privacidad</Link>
+            <Link href="/cookies">Cookies</Link>
+            <Link href="/mapa-del-sitio">Mapa del sitio</Link>
           </div>
           <p className="footer__copy">
-            <strong>Nicaragua Informate</strong> — {new Date().getFullYear()}. Todos los derechos reservados.
+            © {new Date().getFullYear()} <strong>Nicaragua Informate.</strong> Todos los derechos reservados.<br />Managua, Nicaragua.
           </p>
         </div>
       </footer>
 
       {/* === RADIO FAB === */}
       <div className="radio-fab">
-        <button className="radio-fab__btn" onClick={() => setRadioOpen(!radioOpen)} aria-label="Radio">
-          <Radio size={24} />
+        <div className="radio-fab__label">
+          <span className="radio-fab__label-dot" />
+          RADIO
+        </div>
+        <button
+          className={`radio-fab__btn${radioPlaying ? ' playing' : ''}`}
+          onClick={() => setRadioOpen(o => !o)}
+          aria-label="Radio en vivo"
+        >
+          <Radio size={22} />
           <span className="radio-fab__live" />
         </button>
+
         <div className={`radio-panel${radioOpen ? ' active' : ''}`}>
           <div className="radio-panel__header">
-            <div className="radio-panel__title">
-              <span className="radio-panel__live" />
-              Radio en Vivo
+            <div className="radio-panel__brand">
+              <span className="radio-panel__live-dot" />
+              <span className="radio-panel__live-txt">EN VIVO</span>
             </div>
             <button className="radio-panel__close" onClick={() => setRadioOpen(false)} aria-label="Cerrar">
               <X size={16} />
             </button>
           </div>
-          <p className="radio-panel__station">La Buenísima 93.1 FM</p>
+
+          <div className="radio-panel__station-info">
+            <div className="radio-panel__station-icon"><Radio size={18} /></div>
+            <div>
+              <div className="radio-panel__station-name">{RADIO_STATION}</div>
+              <div className="radio-panel__station-desc">{RADIO_DESC}</div>
+            </div>
+          </div>
+
+          {/* Wave visualizer */}
+          {radioPlaying && (
+            <div className="radio-panel__wave">
+              {[...Array(12)].map((_, i) => (
+                <span key={i} className="radio-panel__wave-bar" style={{ animationDelay: `${i * 0.1}s` }} />
+              ))}
+            </div>
+          )}
+
           <div className="radio-panel__controls">
             <button
-              className="radio-panel__play"
-              onClick={() => setRadioPlaying(!radioPlaying)}
+              className={`radio-panel__play${radioPlaying ? ' active' : ''}`}
+              onClick={() => setRadioPlaying(p => !p)}
               aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
             >
               {radioPlaying ? <Pause size={20} /> : <Play size={20} />}
             </button>
-            <Volume2 size={16} className="text-tertiary" />
-            <input type="range" min="0" max="1" step="0.1" defaultValue="0.8" className="radio-panel__vol" />
+            <div className="radio-panel__vol-wrap">
+              <Volume2 size={14} style={{ color: 'var(--c-text-muted)', flexShrink: 0 }} />
+              <input
+                type="range" min="0" max="1" step="0.05"
+                value={radioVol}
+                onChange={handleVolume}
+                className="radio-panel__vol"
+                aria-label="Volumen"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -250,7 +321,10 @@ export default function ProLayout({
       <div className={`menu-overlay${menuOpen ? ' active' : ''}`} onClick={() => setMenuOpen(false)} />
       <div className={`menu-panel${menuOpen ? ' active' : ''}`}>
         <div className="menu-header">
-          <div className="menu-header__logo">Nicaragua <span>Informate</span></div>
+          <div className="menu-header__logo">
+            <img src="/logo.png" alt="Logo" className="menu-logo-img" />
+            Nicaragua <span>Informate</span>
+          </div>
           <p className="menu-header__tagline">Periodismo verificado desde Managua</p>
         </div>
         <div className="menu-section">
@@ -296,25 +370,8 @@ function IconFacebook({ size = 16 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
   );
 }
-function IconTwitter({ size = 16 }: { size?: number }) {
+function IconTelegram({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-  );
-}
-function IconInstagram({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-  );
-}
-function IconYoutube({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-  );
-}
-function MapPinIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
-    </svg>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
   );
 }
