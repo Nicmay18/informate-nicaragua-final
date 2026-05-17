@@ -22,7 +22,7 @@ export default function NosotrosPage() {
   return (
     <LegalPageShell title="Sobre Nicaragua Informate">
       <p style={{ fontSize: '1.15rem', color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es un portal de noticias digitales independiente, fundado por nicaragüenses con el propósito de informar, educar y conectar a nuestra comunidad —tanto a quienes viven en el país como a quienes están en el exterior— con noticias verificadas, contextualizadas y oportunas sobre los acontecimientos que marcan la vida nacional y regional.
+        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es un medio digital nicaragüense comprometido con informar de manera ágil, precisa y responsable. Brindamos cobertura diaria en las secciones de Nacionales, Sucesos, Internacionales, Deportes, Espectáculos y Tecnología, con contenido verificado y enfoque informativo que conecta a la comunidad nicaragüense dentro y fuera del país.
       </p>
 
       <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
@@ -86,9 +86,9 @@ export default function NosotrosPage() {
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Elieth Rivera Muñoz</div>
-            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial y Co-fundadora</div>
+            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial · Nacionales</div>
             <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Co-fundadora y directora editorial de Nicaragua Informate. Periodista con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes e Internacionales. Firme defensora del periodismo verificado y la independencia editorial. <a href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</a>
+              Directora editorial y cofundadora de Nicaragua Informate. Periodista especializada en la cobertura de Sucesos, Nacionales, Deportes e Internacionales. Comprometida con el periodismo verificado, la ética informativa y la independencia editorial. <a href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</a>
             </p>
           </div>
         </div>
