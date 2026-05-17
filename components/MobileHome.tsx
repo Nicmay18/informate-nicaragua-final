@@ -230,7 +230,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 width={800}
                 height={500}
                 priority={i === 0}
-                unoptimized
+                sizes="(max-width: 768px) 100vw, 70vw"
               />
               <div className="hero-slide__overlay">
                 <span className={`hero-slide__badge hero-slide__badge--${CAT_CLASS[n.categoria] || 'nacionales'}`}>
@@ -272,7 +272,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                   className="news-card__img"
                   width={600}
                   height={375}
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <span className={`news-card__badge news-card__badge--${CAT_CLASS[n.categoria] || 'nacionales'}`}>
                   {n.categoria}
@@ -291,38 +291,39 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
         </div>
       </section>
 
-      {/* ============ INDICADORES ECONÓMICOS ============ */}
+      {/* ============ INDICADORES ECONÓMICOS COMPACTO PROFESIONAL ============ */}
       <section className="section-pro" style={{ paddingTop: 0 }}>
-        <div className="section-pro__header">
-          <h2 className="section-pro__title"><TrendingUp size={18} color="var(--c-primary)" /> Indicadores Económicos</h2>
-          <span className="section-pro__link" style={{ fontSize: 12, color: 'var(--c-text-muted)' }}>BCN / INC</span>
-        </div>
-        <div className="eco-widget">
-          <div className="eco-grid">
-            <div className="eco-item">
-              <div className="eco-item__label">Dólar BCN</div>
-              <div className="eco-item__value">C$36.62</div>
-              <div className="eco-item__change eco-item__change--same"><Minus size={12} /> 0.00%</div>
+        <div className="eco-compact">
+          <div className="eco-compact__header">
+            <span className="eco-compact__title"><TrendingUp size={14} color="var(--c-primary)" /> Indicadores</span>
+            <span className="eco-compact__source">BCN / INC</span>
+          </div>
+          <div className="eco-compact__rates">
+            <div className="eco-rate">
+              <div className="eco-rate__label">Dólar BCN</div>
+              <div className="eco-rate__value">C$36.62</div>
+              <div className="eco-rate__change eco-rate__change--same"><Minus size={10} /> 0.00%</div>
             </div>
-            <div className="eco-item">
-              <div className="eco-item__label">Euro</div>
-              <div className="eco-item__value">C$43.11</div>
-              <div className="eco-item__change eco-item__change--up"><ArrowUp size={12} /> 1.25%</div>
-            </div>
-            <div className="eco-fuel">
-              <span className="eco-fuel__label">Gasolina Regular</span>
-              <span className="eco-fuel__value">C$47.80–48.00</span>
-            </div>
-            <div className="eco-fuel">
-              <span className="eco-fuel__label">Gasolina Súper</span>
-              <span className="eco-fuel__value">C$49.00</span>
-            </div>
-            <div className="eco-fuel">
-              <span className="eco-fuel__label">Diesel</span>
-              <span className="eco-fuel__value">C$43.21–43.40</span>
+            <div className="eco-rate">
+              <div className="eco-rate__label">Euro</div>
+              <div className="eco-rate__value">C$43.11</div>
+              <div className="eco-rate__change eco-rate__change--up"><ArrowUp size={10} /> 1.25%</div>
             </div>
           </div>
-          <div className="eco-source">Fuente: BCN / INC — Datos referenciales</div>
+          <div className="eco-compact__fuels">
+            <div className="eco-fuel-row">
+              <span className="eco-fuel-row__label">Gasolina Regular</span>
+              <span className="eco-fuel-row__value">C$47.80–48.00</span>
+            </div>
+            <div className="eco-fuel-row">
+              <span className="eco-fuel-row__label">Gasolina Súper</span>
+              <span className="eco-fuel-row__value">C$49.00</span>
+            </div>
+            <div className="eco-fuel-row">
+              <span className="eco-fuel-row__label">Diesel</span>
+              <span className="eco-fuel-row__value">C$43.21–43.40</span>
+            </div>
+          </div>
         </div>
       </section>
 
