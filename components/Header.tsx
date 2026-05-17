@@ -110,15 +110,10 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Acciones derecha */}
+          {/* Acciones derecha: solo search en header; theme va al drawer móvil */}
           <div className="ni-header-actions">
             <button className="ni-header-icon-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
               <Search size={20} />
-            </button>
-            <button className="ni-header-icon-btn" onClick={toggleTheme} aria-label="Cambiar tema">
-              <span suppressHydrationWarning>
-                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-              </span>
             </button>
           </div>
         </div>
@@ -170,6 +165,13 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
             <Link href="/nosotros" className="ni-drawer-link" onClick={() => setMenuOpen(false)}>Sobre Nosotros</Link>
             <Link href="/contacto" className="ni-drawer-link" onClick={() => setMenuOpen(false)}>Contacto</Link>
             <Link href="/politica-editorial" className="ni-drawer-link" onClick={() => setMenuOpen(false)}>Política Editorial</Link>
+            <div className="ni-drawer-divider" />
+            <button className="ni-drawer-link" onClick={() => { toggleTheme(); }} style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', background: 'none', border: 'none', cursor: 'pointer' }}>
+              <span suppressHydrationWarning style={{ display: 'flex', alignItems: 'center' }}>
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </span>
+              {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+            </button>
           </nav>
         </div>
       </div>

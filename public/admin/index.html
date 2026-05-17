@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -39,6 +39,13 @@
       --radius-lg: 16px; --radius-xl: 24px; --radius-full: 9999px;
       --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --gray-50: #0f172a; --gray-100: #1e293b; --gray-200: #334155;
+      --gray-300: #475569; --gray-400: #64748b; --gray-500: #94a3b8;
+      --gray-600: #cbd5e1; --gray-700: #e2e8f0; --gray-800: #f1f5f9; --gray-900: #f8fafc;
+      --primary-50: #1e1b4b; --primary-100: #312e81; --primary-200: #4338ca;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -413,6 +420,57 @@
 
     .skeleton { background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius); }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* THEME TOGGLE */
+    .theme-toggle {
+      width: 36px; height: 36px; border-radius: var(--radius-full);
+      border: 1px solid var(--gray-200); background: var(--gray-50);
+      color: var(--gray-500); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: var(--transition); font-size: 14px;
+    }
+    .theme-toggle:hover { background: var(--primary-50); color: var(--primary-600); transform: rotate(15deg); }
+
+    /* COPY PANEL */
+    .copy-panel {
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg); padding: 20px; margin-top: 20px;
+    }
+    .copy-section { margin-bottom: 16px; }
+    .copy-section:last-child { margin-bottom: 0; }
+    .copy-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--gray-400); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+    }
+    .copy-box {
+      background: white; border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-md); padding: 14px 16px;
+      font-size: 14px; line-height: 1.7; color: var(--gray-800);
+      position: relative; cursor: pointer; transition: var(--transition-fast);
+    }
+    [data-theme="dark"] .copy-box { background: var(--gray-100); }
+    .copy-box:hover { border-color: var(--primary-300); box-shadow: var(--shadow-sm); }
+    .copy-box .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--gray-100); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm); padding: 4px 10px;
+      font-size: 11px; font-weight: 600; color: var(--gray-500);
+      cursor: pointer; opacity: 0; transition: var(--transition-fast);
+    }
+    .copy-box:hover .copy-btn { opacity: 1; }
+    .copy-box .copy-btn:hover { background: var(--primary-600); color: white; border-color: var(--primary-600); }
+
+    /* EVALUATOR */
+    .eval-score-circle {
+      width: 140px; height: 140px; margin: 0 auto 16px; position: relative;
+    }
+    .eval-score-circle svg { transform: rotate(-90deg); }
+    .eval-score-value {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .eval-score-value span { font-size: 36px; font-weight: 800; line-height: 1; }
+    .eval-score-value small { font-size: 12px; color: var(--gray-400); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -463,6 +521,7 @@
             <li class="nav-item"><a class="nav-link" onclick="showTab('nueva-tab', this)"><i class="fas fa-plus-circle"></i><span>Nueva Noticia</span><span class="nav-badge">Nuevo</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('noticias-tab', this)"><i class="fas fa-newspaper"></i><span>Noticias</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('redaccion-tab', this)"><i class="fas fa-robot"></i><span>Redacción IA</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('evaluador-tab', this)"><i class="fas fa-microscope"></i><span>Evaluador</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('guias-tab', this)"><i class="fas fa-book"></i><span>Guías Editoriales</span></a></li>
           </ul>
         </div>
@@ -481,6 +540,7 @@
       </div>
       <div class="user-actions">
         <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="verSitio()"><i class="fas fa-external-link-alt"></i><span>Ver Sitio</span></button>
+        <button class="theme-toggle" onclick="toggleTheme()" data-tooltip="Cambiar tema" id="themeToggleBtn"><i class="fas fa-moon" id="themeIcon"></i></button>
         <button class="btn btn-ghost btn-icon-only" onclick="logout()" data-tooltip="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </aside>
@@ -916,6 +976,68 @@ RESTRICCIÓN: Entrega solo el cuerpo de la noticia. No incluyas 'Aquí tienes la
         </div>
       </div>
 
+      <!-- EVALUADOR -->
+      <div id="evaluador-tab" class="tab-content">
+        <div class="page-header">
+          <div class="page-title"><h1>Evaluador SEO</h1><p>Analiza la calidad editorial y optimización de tus noticias.</p></div>
+        </div>
+        <div class="content-grid">
+          <div>
+            <div class="card">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-list" style="color: var(--primary-500);"></i>Seleccionar Noticia</h3></div>
+              <div class="card-body">
+                <select class="form-select" id="evalSelectNoticia" onchange="cargarEvaluacion()">
+                  <option value="">Selecciona una noticia...</option>
+                </select>
+                <div id="evaluacionResultado" style="display: none; margin-top: 24px;">
+                  <div class="eval-score-circle">
+                    <svg viewBox="0 0 120 120" width="140" height="140">
+                      <circle cx="60" cy="60" r="54" fill="none" stroke="var(--gray-200)" stroke-width="8"/>
+                      <circle id="scoreCircle" cx="60" cy="60" r="54" fill="none" stroke="var(--primary-500)" stroke-width="8" stroke-dasharray="339.292" stroke-dashoffset="339.292" stroke-linecap="round" style="transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;"/>
+                    </svg>
+                    <div class="eval-score-value">
+                      <span id="scoreValor">0</span>
+                      <small id="scoreLabel">—</small>
+                    </div>
+                  </div>
+                  <p id="scoreDesc" style="text-align: center; font-size: 13px; color: var(--gray-500); margin-bottom: 20px;">—</p>
+                  <div class="progress-bar" style="margin-bottom: 20px;"><div class="progress-fill" id="scoreBar" style="width: 0%;"></div></div>
+                  <table class="eval-table" style="margin-top: 0;">
+                    <thead><tr><th>Criterio</th><th>Puntos</th><th>%</th><th>Observación</th></tr></thead>
+                    <tbody id="evalTableBody"></tbody>
+                  </table>
+                  <div style="margin-top: 20px; padding: 16px; background: var(--gray-50); border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
+                    <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 12px;"><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Recomendaciones</h4>
+                    <ul id="evalRecomendaciones" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;"></ul>
+                  </div>
+                  <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; font-size: 13px; color: var(--gray-500);">
+                    <div>CPM estimado: <strong id="evalCpm" style="color: var(--gray-900);">$1.10</strong></div>
+                    <div>Ingreso estimado: <strong id="evalRevenue" style="color: var(--gray-900);">$0.00</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-info-circle" style="color: var(--info);"></i>Cómo funciona</h3></div>
+              <div class="card-body">
+                <p style="font-size: 13px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px;">El evaluador analiza 7 criterios clave:</p>
+                <ul style="font-size: 13px; color: var(--gray-600); line-height: 1.8; padding-left: 18px;">
+                  <li><strong>Longitud:</strong> 350+ palabras meta mínima</li>
+                  <li><strong>Titular SEO:</strong> 30–70 caracteres ideal</li>
+                  <li><strong>Meta descripción:</strong> 120–160 caracteres</li>
+                  <li><strong>Imagen:</strong> Imagen destacada obligatoria</li>
+                  <li><strong>Estructura:</strong> Subtítulos y negritas</li>
+                  <li><strong>Categoría:</strong> Completa y geolocalizada</li>
+                  <li><strong>Originalidad:</strong> Revisión manual</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- GUÍAS EDITORIALES -->
       <div id="guias-tab" class="tab-content">
         <div class="page-header">
@@ -1258,6 +1380,24 @@ sin texto ni marcas de agua, composición periodística"
       const overlay = document.getElementById('loadingOverlay');
       overlay.querySelector('.loading-text').textContent = text;
       overlay.classList.toggle('show', show);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+      localStorage.setItem('ni_admin_theme', newTheme);
+    }
+
+    // Restore theme on load
+    const savedTheme = localStorage.getItem('ni_admin_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
 
     function slugCategoria(cat) {
@@ -2256,6 +2396,75 @@ ${hashtags}`;
     window.buscarNoticias = function(termino) { document.querySelectorAll('.news-item').forEach(item => { const titulo = item.querySelector('.news-title')?.textContent?.toLowerCase() || ''; item.style.display = titulo.includes(termino.toLowerCase()) ? 'flex' : 'none'; }); };
     window.filtrarNoticias = function(categoria, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); window.categoriaActiva = categoria; cargarNoticias(categoria); };
     window.filtrarPorCategoria = function(categoria) { showTab('noticias-tab', document.querySelectorAll('.nav-link')[2]); setTimeout(() => { document.querySelectorAll('.filter-btn').forEach(btn => { if (btn.textContent.includes(categoria)) btn.click(); }); }, 100); };
+
+    // EVALUADOR
+    window.cargarEvaluacion = async function() {
+      const select = document.getElementById('evalSelectNoticia');
+      const id = select.value;
+      const resultado = document.getElementById('evaluacionResultado');
+      if (!id) { resultado.style.display = 'none'; return; }
+      resultado.style.display = 'block';
+
+      try {
+        const docRef = doc(db, 'noticias', id);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) return;
+        const n = snap.data();
+        const palabras = (n.contenido || '').trim().split(/\s+/).length;
+
+        const criterios = [
+          { nombre: 'Longitud del contenido', puntos: palabras > 600 ? 20 : palabras > 350 ? 15 : palabras > 200 ? 10 : 5, max: 20, obs: palabras > 600 ? 'Óptimo' : palabras > 350 ? 'Bueno' : 'Corto' },
+          { nombre: 'Titular SEO', puntos: (n.titulo || '').length >= 30 && (n.titulo || '').length <= 70 ? 15 : 8, max: 15, obs: (n.titulo || '').length >= 30 && (n.titulo || '').length <= 70 ? 'Longitud ideal' : 'Ajustar longitud' },
+          { nombre: 'Meta descripción', puntos: (n.resumen || '').length >= 120 && (n.resumen || '').length <= 160 ? 15 : (n.resumen || '').length > 0 ? 8 : 0, max: 15, obs: (n.resumen || '').length >= 120 && (n.resumen || '').length <= 160 ? 'Perfecta' : (n.resumen || '').length > 0 ? 'Mejorable' : 'Falta' },
+          { nombre: 'Imagen destacada', puntos: n.imagen ? 15 : 0, max: 15, obs: n.imagen ? 'Presente' : 'No incluida' },
+          { nombre: 'Estructura / Subtítulos', puntos: (n.contenido || '').includes('**') || (n.contenido || '').includes('##') || (n.contenido || '').includes('<h2>') ? 15 : 8, max: 15, obs: (n.contenido || '').includes('**') || (n.contenido || '').includes('##') || (n.contenido || '').includes('<h2>') ? 'Bien estructurado' : 'Faltan subtítulos' },
+          { nombre: 'Categoría y ubicación', puntos: n.categoria && n.departamento ? 10 : 5, max: 10, obs: n.categoria && n.departamento ? 'Completo' : 'Incompleto' },
+          { nombre: 'Originalidad estimada', puntos: 10, max: 10, obs: 'Manual / No automatizado' }
+        ];
+
+        const total = criterios.reduce((a, b) => a + b.puntos, 0);
+        const maxTotal = criterios.reduce((a, b) => a + b.max, 0);
+        const porcentaje = Math.round((total / maxTotal) * 100);
+
+        document.getElementById('scoreValor').textContent = porcentaje;
+        const circle = document.getElementById('scoreCircle');
+        const offset = 339.292 - (339.292 * porcentaje / 100);
+        circle.style.strokeDashoffset = offset;
+        circle.style.stroke = porcentaje >= 80 ? 'var(--success)' : porcentaje >= 60 ? 'var(--warning)' : 'var(--danger)';
+
+        let label = '', desc = '';
+        if (porcentaje >= 90) { label = 'Excelente'; desc = 'Cumple estándares óptimos para indexación y monetización.'; }
+        else if (porcentaje >= 75) { label = 'Bueno'; desc = 'Cumple la mayoría de criterios. Pequeños ajustes mejorarán el rendimiento.'; }
+        else if (porcentaje >= 50) { label = 'Regular'; desc = 'Necesita mejoras en estructura y SEO para destacar.'; }
+        else { label = 'Bajo'; desc = 'Requiere trabajo significativo en contenido y formato.'; }
+        document.getElementById('scoreLabel').textContent = label;
+        document.getElementById('scoreDesc').textContent = desc;
+        document.getElementById('scoreBar').style.width = porcentaje + '%';
+
+        document.getElementById('evalTableBody').innerHTML = criterios.map(c => {
+          const pct = Math.round((c.puntos / c.max) * 100);
+          const cls = pct >= 80 ? 'score-excelente' : pct >= 60 ? 'score-bueno' : pct >= 40 ? 'score-medio' : 'score-bajo';
+          return `<tr><td style="font-size:13px;">${c.nombre}</td><td style="font-size:13px;font-weight:600;">${c.puntos}/${c.max}</td><td><span class="eval-score ${cls}">${pct}%</span></td><td style="font-size:12px;color:var(--gray-500);">${c.obs}</td></tr>`;
+        }).join('');
+
+        const recs = [];
+        if (palabras < 350) recs.push('Amplía el contenido a 350+ palabras para cumplir la meta mínima de AdSense.');
+        if (!n.resumen || (n.resumen || '').length < 120) recs.push('Añade un resumen SEO de 120-160 caracteres.');
+        if (!n.imagen) recs.push('Incluye una imagen destacada para mejorar engagement en redes.');
+        if (!(n.contenido || '').includes('**') && !(n.contenido || '').includes('##') && !(n.contenido || '').includes('<h2>')) recs.push('Usa subtítulos en negrita para dividir el contenido.');
+        if ((n.titulo || '').length < 30 || (n.titulo || '').length > 70) recs.push('Ajusta la longitud del titular a 30-70 caracteres.');
+        if (recs.length === 0) recs.push('¡Excelente trabajo! La noticia está lista para publicar y compartir.');
+
+        document.getElementById('evalRecomendaciones').innerHTML = recs.map(r => `<li style="display:flex;gap:10px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--success);margin-top:3px;"></i><span style="font-size:13px;color:var(--gray-600);line-height:1.5;">${r}</span></li>`).join('');
+
+        const cpm = n.categoria === 'Sucesos' ? 1.45 : n.categoria === 'Nacionales' ? 1.20 : n.categoria === 'Deportes' ? 0.95 : n.categoria === 'Tecnología' ? 1.80 : 1.10;
+        const revenue = ((n.vistas || 0) / 1000 * cpm).toFixed(2);
+        document.getElementById('evalCpm').textContent = '$' + cpm.toFixed(2);
+        document.getElementById('evalRevenue').textContent = '$' + revenue;
+      } catch (e) {
+        console.error('Error evaluando:', e);
+      }
+    };
 
     async function cargarResumenCategorias() {
       try {
