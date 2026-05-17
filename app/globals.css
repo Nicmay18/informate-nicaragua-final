@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --color-brand: #DC2626;
+  --color-brand-dark: #B91C1C;
+  --color-cat-sucesos: #DC2626;
+  --color-cat-nacionales: #1E40AF;
+  --color-cat-internacionales: #059669;
+  --color-cat-deportes: #D97706;
+  --color-cat-tecnologia: #7C3AED;
+  --color-cat-espectaculos: #EC4899;
+}
+
 /* ================================================================
    CLASES CRÍTICAS DE LAYOUT (antes inline en layout.tsx)
    ================================================================ */

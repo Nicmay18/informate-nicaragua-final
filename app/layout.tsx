@@ -5,6 +5,7 @@ import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 import ClientOnly from '@/components/ClientOnly';
 import StickyRadio from '@/components/StickyRadio';
 import BottomNav from '@/components/BottomNav';
+import ScrollToTop from '@/components/ScrollToTop';
 import CookieBanner from '@/components/CookieBanner';
 import DeferredAds from '@/components/DeferredAds';
 import ConsentScript from '@/components/ConsentScript';
@@ -86,6 +87,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ClientOnly>
         <ConsentScript />
         <DeferredAds />
+        <ClientOnly>
+          <ScrollToTop />
+        </ClientOnly>
       </body>
     </html>
   );
