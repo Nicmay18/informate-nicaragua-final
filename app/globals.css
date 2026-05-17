@@ -35,6 +35,24 @@ body {
 }
 ul, ol { list-style: none; }
 
+/* ===== TOUCH TARGETS (WCAG 2.1) ===== */
+button, a, [role="button"], input, textarea, select {
+  min-height: 44px;
+  min-width: 44px;
+}
+input, textarea, select {
+  font-size: 16px; /* Previene zoom en iOS Safari */
+}
+
+/* ===== FOCUS VISIBLE ===== */
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* ===== BODY PADDING FOR MOBILE FAB ===== */
 body {
   padding-bottom: 100px;
@@ -112,6 +130,18 @@ select:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 0;
   border-color: #2563eb;
+}
+
+/* ===== ADSENSE LABEL ===== */
+.ad-label {
+  display: block;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+  pointer-events: none;
 }
 
 /* ===== RADIO VISUALIZER ===== */

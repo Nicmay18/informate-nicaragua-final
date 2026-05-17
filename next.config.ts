@@ -31,6 +31,57 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
+      // 🔴 CRÍTICO: Unificar dominio sin-www → www
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'nicaraguainformate.com' }],
+        destination: 'https://www.nicaraguainformate.com/:path*',
+        permanent: true,
+      },
+      // Redirigir URLs de categoría con query params a rutas limpias /categoria/
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'cat' }],
+        destination: '/categoria/:cat',
+        permanent: true,
+      },
+      {
+        source: '/noticias',
+        has: [{ type: 'query', key: 'cat' }],
+        destination: '/categoria/:cat',
+        permanent: true,
+      },
+      // Redirigir rutas de categoría antiguas (root-level) a /categoria/
+      {
+        source: '/sucesos',
+        destination: '/categoria/sucesos',
+        permanent: true,
+      },
+      {
+        source: '/nacionales',
+        destination: '/categoria/nacionales',
+        permanent: true,
+      },
+      {
+        source: '/deportes',
+        destination: '/categoria/deportes',
+        permanent: true,
+      },
+      {
+        source: '/internacionales',
+        destination: '/categoria/internacionales',
+        permanent: true,
+      },
+      {
+        source: '/tecnologia',
+        destination: '/categoria/tecnologia',
+        permanent: true,
+      },
+      {
+        source: '/espectaculos',
+        destination: '/categoria/espectaculos',
+        permanent: true,
+      },
       {
         source: '/noticia.html',
         has: [{ type: 'query' as const, key: 'slug' }],

@@ -90,7 +90,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
     const isLuto = isLutoNews(noticia);
     const related = await getRelatedNews(noticia.categoria, noticia.slug, 4);
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
 
     const wordCount = noticia.contenido
       ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length

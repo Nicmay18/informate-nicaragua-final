@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Flag, Trophy, Globe, Star, Cpu, Newspaper, ArrowDown, Clock } from 'lucide-react';
-import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
+import { FALLBACK_IMAGE, type Noticia, categoryToSlug } from '@/lib/types';
 import { formatDateShortES } from '@/lib/formateo';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 
@@ -133,7 +133,7 @@ export default function NewsGrid({ noticias, showAll = false }: { noticias: Noti
             Cargar más
           </button>
         )}
-        <Link href={activeCat === 'Todas' ? '/noticias' : `/noticias?cat=${encodeURIComponent(activeCat)}`} className="ni-btn-primary">
+        <Link href={activeCat === 'Todas' ? '/noticias' : `/categoria/${categoryToSlug(activeCat)}`} className="ni-btn-primary">
           <Newspaper size={14} />
           {activeCat === 'Todas' ? 'Ver todas' : `Ver: ${activeCat}`}
         </Link>

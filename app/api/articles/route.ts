@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       id: articleRef.id,
       slug: finalSlug,
       wordCount,
-      url: `https://nicaraguainformate.com/noticias/${finalSlug}`,
+      url: `https://www.nicaraguainformate.com/noticias/${finalSlug}`,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error interno';

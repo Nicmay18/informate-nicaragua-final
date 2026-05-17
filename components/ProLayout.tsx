@@ -218,12 +218,12 @@ export default function ProLayout({
           </div>
           <div>
             <h4 className="footer__col-title">Secciones</h4>
-            <Link href="/nacionales" className="footer__link"><Flag size={12} /> Nacionales</Link>
-            <Link href="/sucesos" className="footer__link"><AlertTriangle size={12} /> Sucesos</Link>
-            <Link href="/deportes" className="footer__link"><Trophy size={12} /> Deportes</Link>
-            <Link href="/internacionales" className="footer__link"><Globe size={12} /> Internacionales</Link>
-            <Link href="/espectaculos" className="footer__link"><Film size={12} /> Espectáculos</Link>
-            <Link href="/tecnologia" className="footer__link"><Laptop size={12} /> Tecnología</Link>
+            <Link href="/categoria/nacionales" className="footer__link"><Flag size={12} /> Nacionales</Link>
+            <Link href="/categoria/sucesos" className="footer__link"><AlertTriangle size={12} /> Sucesos</Link>
+            <Link href="/categoria/deportes" className="footer__link"><Trophy size={12} /> Deportes</Link>
+            <Link href="/categoria/internacionales" className="footer__link"><Globe size={12} /> Internacionales</Link>
+            <Link href="/categoria/espectaculos" className="footer__link"><Film size={12} /> Espectáculos</Link>
+            <Link href="/categoria/tecnologia" className="footer__link"><Laptop size={12} /> Tecnología</Link>
           </div>
           <div>
             <h4 className="footer__col-title">Legal</h4>
@@ -330,12 +330,12 @@ export default function ProLayout({
         <div className="menu-section">
           <h4 className="menu-section__title">Secciones</h4>
           <Link href="/" className="menu-link" onClick={() => setMenuOpen(false)}><Home size={18} /> Inicio</Link>
-          <Link href="/noticias?cat=Nacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Flag size={18} /> Nacionales</Link>
-          <Link href="/noticias?cat=Sucesos" className="menu-link" onClick={() => setMenuOpen(false)}><AlertTriangle size={18} /> Sucesos</Link>
-          <Link href="/noticias?cat=Deportes" className="menu-link" onClick={() => setMenuOpen(false)}><Trophy size={18} /> Deportes</Link>
-          <Link href="/noticias?cat=Internacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Globe size={18} /> Internacionales</Link>
-          <Link href="/noticias?cat=Espectaculos" className="menu-link" onClick={() => setMenuOpen(false)}><Film size={18} /> Espectáculos</Link>
-          <Link href="/noticias?cat=Tecnologia" className="menu-link" onClick={() => setMenuOpen(false)}><Laptop size={18} /> Tecnología</Link>
+          <Link href="/categoria/nacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Flag size={18} /> Nacionales</Link>
+          <Link href="/categoria/sucesos" className="menu-link" onClick={() => setMenuOpen(false)}><AlertTriangle size={18} /> Sucesos</Link>
+          <Link href="/categoria/deportes" className="menu-link" onClick={() => setMenuOpen(false)}><Trophy size={18} /> Deportes</Link>
+          <Link href="/categoria/internacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Globe size={18} /> Internacionales</Link>
+          <Link href="/categoria/espectaculos" className="menu-link" onClick={() => setMenuOpen(false)}><Film size={18} /> Espectáculos</Link>
+          <Link href="/categoria/tecnologia" className="menu-link" onClick={() => setMenuOpen(false)}><Laptop size={18} /> Tecnología</Link>
           <Link href="/radio" className="menu-link" onClick={() => setMenuOpen(false)}><Radio size={18} /> Radio en Vivo</Link>
         </div>
         <div className="menu-section">

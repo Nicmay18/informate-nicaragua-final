@@ -13,11 +13,11 @@ const FOOTER_COLS = [
   { title: 'Secciones', links: [
     { label: 'Inicio', href: '/' },
     { label: 'Últimas Noticias', href: '/noticias' },
-    { label: 'Sucesos', href: '/noticias?cat=Sucesos' },
-    { label: 'Nacionales', href: '/noticias?cat=Nacionales' },
-    { label: 'Deportes', href: '/noticias?cat=Deportes' },
-    { label: 'Internacionales', href: '/noticias?cat=Internacionales' },
-    { label: 'Espectáculos', href: '/noticias?cat=Espectáculos' },
+    { label: 'Sucesos', href: '/categoria/sucesos' },
+    { label: 'Nacionales', href: '/categoria/nacionales' },
+    { label: 'Deportes', href: '/categoria/deportes' },
+    { label: 'Internacionales', href: '/categoria/internacionales' },
+    { label: 'Espectáculos', href: '/categoria/espectaculos' },
   ]},
   { title: 'Legal', links: [
     { label: 'Sobre Nosotros', href: '/nosotros' },

@@ -6,7 +6,7 @@ import { Home, Newspaper, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, File
 export const metadata: Metadata = {
   title: 'Mapa del Sitio | Nicaragua Informate',
   description: 'Explora todas las secciones y páginas de Nicaragua Informate. Noticias, categorías, legal y contacto.',
-  alternates: { canonical: 'https://nicaraguainformate.com/mapa-del-sitio' },
+  alternates: { canonical: 'https://www.nicaraguainformate.com/mapa-del-sitio' },
 };
 
 const SECTIONS = [
@@ -20,12 +20,12 @@ const SECTIONS = [
   {
     title: 'Categorías',
     links: [
-      { href: '/nacionales', label: 'Nacionales', icon: <Flag size={14} /> },
-      { href: '/sucesos', label: 'Sucesos', icon: <AlertTriangle size={14} /> },
-      { href: '/deportes', label: 'Deportes', icon: <Trophy size={14} /> },
-      { href: '/internacionales', label: 'Internacionales', icon: <Globe size={14} /> },
-      { href: '/espectaculos', label: 'Espectáculos', icon: <Film size={14} /> },
-      { href: '/tecnologia', label: 'Tecnología', icon: <Laptop size={14} /> },
+      { href: '/categoria/nacionales', label: 'Nacionales', icon: <Flag size={14} /> },
+      { href: '/categoria/sucesos', label: 'Sucesos', icon: <AlertTriangle size={14} /> },
+      { href: '/categoria/deportes', label: 'Deportes', icon: <Trophy size={14} /> },
+      { href: '/categoria/internacionales', label: 'Internacionales', icon: <Globe size={14} /> },
+      { href: '/categoria/espectaculos', label: 'Espectáculos', icon: <Film size={14} /> },
+      { href: '/categoria/tecnologia', label: 'Tecnología', icon: <Laptop size={14} /> },
     ],
   },
   {

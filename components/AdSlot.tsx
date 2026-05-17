@@ -11,6 +11,12 @@ interface AdSlotProps {
   format?: 'auto' | 'fluid' | 'rectangle' | 'vertical' | 'horizontal';
 }
 
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
 export default function AdSlot({
   slot,
   width = 336,
@@ -19,69 +25,70 @@ export default function AdSlot({
   style = {},
   format = 'auto',
 }: AdSlotProps) {
-  const [ready, setReady] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const insRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
 
   useEffect(() => {
-    // Solo renderizar el slot cuando adsbygoogle esté disponible
-    const check = setInterval(() => {
-      if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-        setReady(true);
-        clearInterval(check);
-      }
-    }, 2000);
-    return () => clearInterval(check);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!ready || pushed.current || !insRef.current) return;
+    if (!isVisible || pushed.current || !containerRef.current) return;
+    
     try {
-      const w = window as any;
-      if (w.adsbygoogle) {
-        w.adsbygoogle.push({});
+      if (typeof window !== 'undefined' && window.adsbygoogle) {
+        window.adsbygoogle.push({});
         pushed.current = true;
       }
-    } catch {
-      // AdSense no cargado — ignorar
+    } catch (e) {
+      console.error('AdSense error:', e);
     }
+    
     const t = setTimeout(() => setLoaded(true), 3000);
     return () => clearTimeout(t);
-  }, [ready]);
+  }, [isVisible]);
 
   return (
     <div
-      ref={insRef}
-      className={className}
+      ref={containerRef}
+      className={`ad-slot ${className || ''}`}
       style={{
         position: 'relative',
-        minHeight: height,
+        minHeight: format === 'horizontal' ? 90 : height,
         minWidth: width,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: loaded ? 'transparent' : '#f5f5f7',
-        border: loaded ? 'none' : '1px solid #e8e8ec',
+        background: loaded ? 'transparent' : '#f9fafb',
+        border: loaded ? 'none' : '1px solid #e5e7eb',
         borderRadius: 8,
         overflow: 'hidden',
         ...style,
       }}
     >
-      {ready && (
+      <span className="ad-label">Publicidad</span>
+      {isVisible && (
         <ins
           className="adsbygoogle"
-          style={{ display: 'block', width: '100%', minHeight: height }}
+          style={{ display: 'block', width: '100%', minHeight: format === 'horizontal' ? 90 : height }}
           data-ad-client="ca-pub-4115203339551838"
           data-ad-format={format}
           data-full-width-responsive="true"
           {...(/^\d+$/.test(slot) ? { 'data-ad-slot': slot } : {})}
         />
-      )}
-      {!ready && (
-        <span style={{ position: 'absolute', fontSize: 10, color: '#b0b0b8', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, pointerEvents: 'none', userSelect: 'none' }}>
-          Publicidad
-        </span>
       )}
     </div>
   );

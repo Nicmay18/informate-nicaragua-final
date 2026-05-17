@@ -21,42 +21,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.9,
     },
-    // CATEGORÍAS (rutas limpias /[categoria])
+    // CATEGORÍAS (rutas limpias /categoria/[slug])
     {
-      url: `${baseUrl}/sucesos`,
+      url: `${baseUrl}/categoria/sucesos`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/nacionales`,
+      url: `${baseUrl}/categoria/nacionales`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/deportes`,
+      url: `${baseUrl}/categoria/deportes`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/internacionales`,
+      url: `${baseUrl}/categoria/internacionales`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/tecnologia`,
+      url: `${baseUrl}/categoria/tecnologia`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/espectaculos`,
+      url: `${baseUrl}/categoria/espectaculos`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
+    },
+    // Listado de categorías
+    {
+      url: `${baseUrl}/categoria`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
     },
     // Páginas legales y de información
     {

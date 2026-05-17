@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     resumen = resumen.replace(/\n+/g, ' ').trim();
 
     const slug = noticia.slug || noticia.titulo?.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 60);
-    const url = `https://nicaraguainformate.com/noticias/${slug}`;
+    const url = `https://www.nicaraguainformate.com/noticias/${slug}`;
 
     const hashtags: string[] = [];
     if (noticia.categoria && noticia.categoria !== 'Nacionales') {

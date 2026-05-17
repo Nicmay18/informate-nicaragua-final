@@ -94,7 +94,7 @@ export default function PoliticaEditorialPage() {
         <strong style={{ color: '#fff' }}>Nuestros canales oficiales:</strong>
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}>Sitio web: <a href="https://nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>https://nicaraguainformate.com</a></li>
+        <li style={{ marginBottom: '0.5rem' }}>Sitio web: <a href="https://www.nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>https://www.nicaraguainformate.com</a></li>
         <li style={{ marginBottom: '0.5rem' }}>Facebook: <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>facebook.com/NicaraguaInformate</a></li>
         <li style={{ marginBottom: '0.5rem' }}>WhatsApp: <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>Canal oficial</a></li>
         <li style={{ marginBottom: '0.5rem' }}>Telegram: <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }}>Canal oficial</a></li>

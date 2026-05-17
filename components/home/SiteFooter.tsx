@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CATEGORIES } from '@/lib/types';
+import { CATEGORIES, categoryToSlug } from '@/lib/types';
 
 export default function SiteFooter() {
   return (
@@ -24,7 +24,7 @@ export default function SiteFooter() {
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
               {CATEGORIES.map((cat) => (
                 <li key={cat.name} style={{ marginBottom: 10 }}>
-                  <a href={`/?cat=${encodeURIComponent(cat.name)}`} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
+                  <a href={`/categoria/${categoryToSlug(cat.name)}`} style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: 14, transition: 'color 0.2s' }}>
                     {cat.name}
                   </a>
                 </li>

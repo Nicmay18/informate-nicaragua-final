@@ -64,7 +64,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
   if (!editor) return null;
 
   const isActive = (name: string, attrs?: Record<string, unknown>) =>
-    editor.isActive(name, attrs as any);
+    editor.isActive(name, attrs as Record<string, unknown>);
 
   const btn = (label: React.ReactNode, action: () => void, active = false) => (
     <button

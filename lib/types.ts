@@ -8,15 +8,39 @@ export interface Noticia {
   titulo: string;
   resumen: string;
   contenido?: string;
-  categoria: string;
+  excerpt?: string;
+  featuredImage?: string;
+  categoria: string | Categoria;
   imagen: string;
   fecha: string;
+  fechaPublicacion?: string;
   fechaActualizacion?: string;
-  autor?: string;
+  autor?: string | Autor;
   destacada?: boolean;
   vistas?: number;
   palabras?: number;
   tags?: string[];
+  estado?: 'publicado' | 'borrador' | 'archivado';
+}
+
+/**
+ * Interface para categoría
+ */
+export interface Categoria {
+  id: string;
+  nombre: string;
+  slug: string;
+  descripcion?: string;
+  color?: string;
+}
+
+/**
+ * Interface para autor
+ */
+export interface Autor {
+  id: string;
+  nombre: string;
+  avatar?: string;
 }
 
 /**
