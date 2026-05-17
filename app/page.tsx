@@ -4,7 +4,6 @@ import BreakingTicker from '@/components/BreakingTicker';
 import HeroCarousel from '@/components/HeroCarousel';
 import AdSlot from '@/components/AdSlot';
 import TrendingList from '@/components/home/TrendingList';
-import LazySidebar from '@/components/LazySidebar';
 import MasLeidas from '@/components/home/MasLeidas';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -98,7 +97,7 @@ export default async function HomePage() {
       </div>
 
       {/* ===== MAIN CONTENT GRID ===== */}
-      <main id="main-content" className="container-pro" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, paddingBottom: 48 }}>
+      <main id="main-content" className="ni-main-layout">
         {/* Left Column - News */}
         <div>
           <NewsGrid noticias={recientes.length > 0 ? recientes : noticias} />
@@ -110,32 +109,32 @@ export default async function HomePage() {
 
           {/* ===== MOBILE WIDGETS: Indicadores + Clima ===== */}
           <div className="mobile-widgets">
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, marginTop: 24, minHeight: 120, position: 'relative' }}>
+            <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, marginTop: 24, minHeight: 120, background: 'var(--bg-warm)' }}>
               <IndicadoresWidget />
             </div>
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 16, minHeight: 100, position: 'relative' }}>
+            <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16, minHeight: 100, background: 'var(--bg-warm)' }}>
               <WeatherWidgetWrapper />
             </div>
           </div>
         </div>
 
         {/* Right Column - Sidebar */}
-        <LazySidebar>
-          <div className="sidebar" style={{ position: 'sticky', top: 100 }}>
+        <aside className="ni-sidebar">
+          <div className="ni-sidebar-inner">
             <TrendingList noticias={noticias.slice(0, 6)} />
             {masLeidas.length > 0 && <MasLeidas noticias={masLeidas} />}
             <AdSlot slot="homepage-sidebar-1" width={300} height={250} />
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
+            <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
               <IndicadoresWidget />
             </div>
-            <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid #f0f0f4', marginBottom: 24 }}>
+            <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 24, background: 'var(--bg-warm)' }}>
               <WeatherWidgetWrapper />
             </div>
             <NewsletterForm />
             <SocialGrid />
             <DonationCard />
           </div>
-        </LazySidebar>
+        </aside>
       </main>
 
       {/* ===== STICKY BOTTOM AD — Mobile only ===== */}

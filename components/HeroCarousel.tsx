@@ -29,28 +29,6 @@ const FADE_DURATION_MS = 300;
 const AUTOPLAY_DELAY_MS = 4000;
 const SWIPE_THRESHOLD_PX = 48;
 
-const CONTROL_BUTTON_STYLE: React.CSSProperties = {
-  position: 'absolute', 
-  top: '50%', 
-  transform: 'translateY(-50%)',
-  width: 48, 
-  height: 48, 
-  borderRadius: '50%', 
-  border: '2px solid rgba(255,255,255,0.4)',
-  background: 'rgba(0,0,0,0.65)', 
-  backdropFilter: 'blur(8px)', 
-  WebkitBackdropFilter: 'blur(8px)',
-  color: '#fff', 
-  cursor: 'pointer', 
-  fontSize: 17, 
-  display: 'flex', 
-  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-  alignItems: 'center', 
-  justifyContent: 'center', 
-  zIndex: 10, 
-  transition: 'all 0.2s',
-};
-
 interface HeroCarouselProps {
   noticias: Noticia[];
 }
@@ -85,10 +63,10 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
   const img = cleanImageUrl(n.imagen || FALLBACK_IMAGE);
 
   return (
-    <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
-      {/* Hero Main - 2/3 */}
+    <div className="ni-hero">
+      {/* Hero Main - Full-width móvil, 60% desktop */}
       <section
-        style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#0f172a', aspectRatio: '16/9', maxHeight: 420 }}
+        className="ni-hero-main"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
@@ -100,25 +78,23 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
         }}
         aria-label="Noticias destacadas"
       >
-        <Link href={`/noticias/${n.slug}`} style={{ display: 'block', position: 'relative', width: '100%', height: '100%', textDecoration: 'none' }}>
+        <Link href={`/noticias/${n.slug}`} className="ni-hero-link">
           <HeroLcpImage
             src={img}
             alt={n.titulo}
-            width={665}
-            height={531}
+            width={800}
+            height={450}
             priority={current === 0}
             style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.3s ease' }}
           />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
+          <div className="ni-hero-overlay" />
 
-          <div className="hero-carousel-overlay" style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-            <span style={{ display: 'inline-block', background: col, color: '#fff', padding: '4px 12px', borderRadius: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 12 }}>
+          <div className="ni-hero-content">
+            <span className="ni-hero-cat" style={{ background: col }}>
               {n.categoria}
             </span>
-            <h2 className="hero-carousel-title" style={{ fontFamily: 'var(--font-merri)', fontWeight: 900, color: '#fff', textShadow: '0 2px 20px rgba(0,0,0,0.7)' }}>
-              {n.titulo}
-            </h2>
-            <div style={{ display: 'flex', gap: 16, color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
+            <h2 className="ni-hero-title">{n.titulo}</h2>
+            <div className="ni-hero-meta">
               <span>{formatDateShortES(n.fecha)}</span>
             </div>
           </div>
@@ -126,50 +102,48 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
 
         {slides.length > 1 && (
           <>
-            <button onClick={e => { e.preventDefault(); prev(); }} style={{ ...CONTROL_BUTTON_STYLE, left: 14 }} aria-label="Anterior"><ChevronLeft size={20} /></button>
-            <button onClick={e => { e.preventDefault(); next(); }} style={{ ...CONTROL_BUTTON_STYLE, right: 14 }} aria-label="Siguiente"><ChevronRight size={20} /></button>
+            <button onClick={e => { e.preventDefault(); prev(); }} className="ni-hero-btn ni-hero-btn--prev" aria-label="Anterior">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={e => { e.preventDefault(); next(); }} className="ni-hero-btn ni-hero-btn--next" aria-label="Siguiente">
+              <ChevronRight size={20} />
+            </button>
           </>
         )}
 
-        <div style={{ position: 'absolute', bottom: 18, left: 0, right: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, zIndex: 10 }}>
+        <div className="ni-hero-dots">
           {slides.map((_, i) => (
-            <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}
-              style={{ width: 48, height: 48, borderRadius: 4, border: 'none', cursor: 'pointer', padding: 0, background: 'transparent', transition: 'all 0.3s ease', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ width: 22, height: 7, borderRadius: 4, display: 'block', background: i === current ? '#fff' : 'rgba(255,255,255,0.35)' }} />
+            <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`} className="ni-hero-dot">
+              <span style={{ background: i === current ? '#fff' : 'rgba(255,255,255,0.35)' }} />
             </button>
           ))}
         </div>
 
         {!paused && (
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: 'rgba(255,255,255,0.12)' }}>
+          <div className="ni-hero-progress">
             <div key={current} style={{ height: '100%', background: 'rgba(255,255,255,0.5)', transformOrigin: 'left', animation: 'hero-progress 5.5s linear forwards' }} />
           </div>
         )}
       </section>
 
-      {/* Side Cards - 1/3 */}
+      {/* Side Cards - Solo escritorio */}
       {sideCards.length > 0 && (
-        <aside className="hero-side" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {sideCards.map((card) => (
-            <Link key={card.id} href={`/noticias/${card.slug}`} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 14, padding: 14, background: '#faf9f7', borderRadius: 8, border: '1px solid #f0f0f4', transition: 'all 0.2s', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#faf9f7'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-              <div style={{ position: 'relative', width: 100, height: 75, borderRadius: 4, overflow: 'hidden' }}>
+        <aside className="ni-hero-side">
+          {sideCards.map(card => (
+            <Link key={card.id} href={`/noticias/${card.slug}`} className="ni-hero-card">
+              <div className="ni-hero-card-img">
                 <HeroImage src={cleanImageUrl(card.imagen || FALLBACK_IMAGE)} alt={card.titulo} priority={false} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: CATEGORY_COLORS[card.categoria] || '#c41e3a', marginBottom: 6 }}>
+              <div className="ni-hero-card-body">
+                <span className="ni-hero-card-cat" style={{ color: CATEGORY_COLORS[card.categoria] || '#DC2626' }}>
                   {card.categoria}
                 </span>
-                <h3 style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.4, color: '#1a1a2e', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: 0 }}>
-                  {card.titulo}
-                </h3>
+                <h3 className="ni-hero-card-title">{card.titulo}</h3>
               </div>
             </Link>
           ))}
         </aside>
       )}
-
     </div>
   );
 }

@@ -72,8 +72,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body suppressHydrationWarning>
-        <a href="#main-content" style={{ position: 'absolute', top: -40, left: 0, background: '#c41e3a', color: '#fff', padding: '8px 16px', zIndex: 10000, transition: 'top 0.3s', fontSize: '14px', fontWeight: 600, textDecoration: 'none', borderRadius: '4px' }}>Saltar al contenido</a>
+      <body suppressHydrationWarning className="ni-body">
+        <a href="#main-content" className="skip-link">Saltar al contenido</a>
         {children}
         <ClientOnly fallback={<div style={{ height: 58 }} />}>
           <StickyRadio />
