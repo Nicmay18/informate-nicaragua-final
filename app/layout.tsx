@@ -25,9 +25,6 @@ export const metadata: Metadata = {
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
   robots: 'index, follow',
   icons: { icon: '/logo.png', apple: '/logo.png' },
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     type: 'website',
     locale: 'es_NI',

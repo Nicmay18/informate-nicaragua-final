@@ -141,6 +141,9 @@
 }
 .editorial-main { display: flex; flex-direction: column; gap: var(--s-5); }
 .editorial-sidebar { display: flex; flex-direction: column; gap: var(--s-5); }
+@media (min-width: 900px) {
+  .editorial-sidebar { position: sticky; top: 84px; align-self: flex-start; max-height: calc(100vh - 100px); overflow-y: auto; }
+}
 
 /* 3 columnas en desktop para el grid secundario */
 @media (min-width: 900px) {
