@@ -306,7 +306,6 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
     
     if (!snap.empty) {
       const masLeidas = snap.docs
-        .filter((d: any) => d.data().publicado !== false)
         .map((d: any) => {
           const data = d.data();
           return {
