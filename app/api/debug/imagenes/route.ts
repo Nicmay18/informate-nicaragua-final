@@ -37,9 +37,9 @@ export async function GET() {
       listaSinImagen: sinImagen,
       todas: noticias,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json(
-      { error: 'Error interno', detail: err.message },
+      { error: 'Error interno', detail: err instanceof Error ? err.message : String(err) },
       { status: 500 }
     );
   }

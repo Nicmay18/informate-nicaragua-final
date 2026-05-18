@@ -192,11 +192,11 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
       setIsPlaying(true);
       setIsLoading(false);
       startProgressTracker();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Audio error:', err);
       setIsLoading(false);
 
-      const serverMsg = err?.message || '';
+      const serverMsg = err instanceof Error ? err.message : '';
 
       // Fallback a Web Speech API nativo del navegador
       if (playNativeTTS()) {

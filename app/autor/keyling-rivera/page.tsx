@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield, CalendarDays } from 'lucide-react';
+import { formatDateShortES } from '@/lib/formateo';
 import { getNews } from '@/lib/data';
 
 export const metadata: Metadata = {
@@ -15,9 +16,9 @@ export default async function AutorKeylingRiveraPage() {
   try {
     const noticias = await getNews(100);
     articulos = noticias
-      .filter((n: any) => n.autor?.toLowerCase().includes('keyling') || n.autor?.toLowerCase().includes('rivera'))
+      .filter((n) => n.autor?.toLowerCase().includes('keyling') || n.autor?.toLowerCase().includes('rivera'))
       .slice(0, 10)
-      .map((n: any) => ({ id: n.id, slug: n.slug, titulo: n.titulo, fecha: n.fecha, categoria: n.categoria, imagen: n.imagen }));
+      .map((n) => ({ id: n.id, slug: n.slug, titulo: n.titulo, fecha: n.fecha, categoria: n.categoria, imagen: n.imagen }));
   } catch {
     articulos = [];
   }
@@ -107,11 +108,12 @@ export default async function AutorKeylingRiveraPage() {
                 border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8,
                 textDecoration: 'none', color: 'inherit', transition: 'all 0.2s',
               }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={a.imagen} alt={a.titulo} style={{ width: 64, height: 48, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ color: '#fff', fontWeight: 600, fontSize: 14, marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.titulo}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 12 }}>
-                    <CalendarDays size={12} /> {new Date(a.fecha).toLocaleDateString('es-NI', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    <CalendarDays size={12} /> {formatDateShortES(a.fecha)}
                     <span style={{ marginLeft: 8, color: '#8c1d18', fontWeight: 700, textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.04em' }}>{a.categoria}</span>
                   </div>
                 </div>

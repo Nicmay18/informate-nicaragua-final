@@ -655,6 +655,7 @@ export default function AdminPage() {
                 <div className="admin-card__body" style={{ padding: 0 }}>
                   {news.slice(0, 5).map((n) => (
                     <div key={n.id} className="admin-news-item">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={n.imagen || '/logo.png'} alt="" className="admin-news-item__thumb" loading="lazy" />
                       <div className="admin-news-item__content">
                         <div className="admin-news-item__title">{n.titulo}</div>
@@ -742,6 +743,7 @@ export default function AdminPage() {
               <div className="admin-card__body" style={{ padding: 0 }}>
                 {filteredNews.map((n) => (
                   <div key={n.id} className="admin-news-item">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={n.imagen || '/logo.png'} alt="" className="admin-news-item__thumb" loading="lazy" />
                     <div className="admin-news-item__content">
                       <div className="admin-news-item__title">{n.titulo}</div>
@@ -886,6 +888,7 @@ export default function AdminPage() {
                     </div>
                     {imagePreview && (
                       <div className="admin-image-preview">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={imagePreview} alt="Preview" />
                         <div className="admin-image-preview__overlay">
                           <button className="admin-btn admin-btn--danger admin-btn--sm" onClick={() => { setImagePreview(''); setForm((f) => ({ ...f, imagen: '' })); }}>

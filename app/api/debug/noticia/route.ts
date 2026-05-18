@@ -57,9 +57,9 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ found: false, slug }, { status: 404 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json(
-      { error: 'Error interno', detail: err.message },
+      { error: 'Error interno', detail: err instanceof Error ? err.message : String(err) },
       { status: 500 }
     );
   }

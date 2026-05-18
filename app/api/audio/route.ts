@@ -32,8 +32,8 @@ export async function GET() {
         const errText = await testRes.text().catch(() => '');
         connectionTest = { ok: false, status: testRes.status, message: errText };
       }
-    } catch (e: any) {
-      connectionTest = { ok: false, message: e.message };
+    } catch (e: unknown) {
+      connectionTest = { ok: false, message: e instanceof Error ? e.message : String(e) };
     }
   }
 
