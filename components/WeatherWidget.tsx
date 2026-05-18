@@ -84,20 +84,22 @@ export default function WeatherWidget() {
         const w = await fetchCity(CITIES[i].lat, CITIES[i].lon);
         if (w) {
           setAllTemps(prev => { const n = [...prev]; n[i] = w.temp; return n; });
-          if (i === cityIdx) setData(w);
         }
       }
-      // Guardar caché
-      try {
-        sessionStorage.setItem('ni_weather_cache', JSON.stringify({
-          ts: Date.now(),
-          data,
-          allTemps,
-        }));
-      } catch {}
     }
     bootstrap();
   }, [loadCity]);
+
+  useEffect(() => {
+    if (!data) return;
+    try {
+      sessionStorage.setItem('ni_weather_cache', JSON.stringify({
+        ts: Date.now(),
+        data,
+        allTemps,
+      }));
+    } catch {}
+  }, [data, allTemps]);
 
   // Auto-cycle cities every 10 s (más tiempo para ver los datos)
   useEffect(() => {

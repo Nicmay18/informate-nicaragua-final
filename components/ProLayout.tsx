@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import BrandIcon from '@/components/BrandIcon';
 import {
   Search, Menu, X, Moon, Sun,
@@ -47,6 +48,12 @@ export default function ProLayout({
     { label: 'México',  flag: '🇲🇽', tz: 'America/Mexico_City' },
     { label: 'Moscú',  flag: '🇷🇺', tz: 'Europe/Moscow' },
   ];
+
+  const addToast = useCallback((msg: string, type: 'success' | 'error') => {
+    const id = Date.now() + Math.random();
+    setToasts(prev => [...prev, { id, msg, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
+  }, []);
 
   useEffect(() => {
     const hoy = new Date();
@@ -105,9 +112,10 @@ export default function ProLayout({
       const next = !prev;
       try { localStorage.setItem('ni_theme', next ? 'dark' : 'light'); } catch {}
       document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+      addToast(next ? 'Modo oscuro activado' : 'Modo claro activado', 'success');
       return next;
     });
-  }, []);
+  }, [addToast]);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -122,15 +130,6 @@ export default function ProLayout({
   useEffect(() => {
     if (searchOpen && searchInputRef.current) searchInputRef.current.focus();
   }, [searchOpen]);
-
-  const addToast = useCallback((msg: string, type: 'success' | 'error') => {
-    const id = Date.now() + Math.random();
-    setToasts(prev => [...prev, { id, msg, type }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
-  }, []);
-
-  // Notificar cambios de tema o acciones (opcional, habilitar si se desea)
-  // useEffect(() => { addToast('Tema actualizado', 'success'); }, [dark, addToast]);
 
   return (
     <div className="ni-body">
@@ -159,7 +158,7 @@ export default function ProLayout({
       <div className="header-main-wrap">
         <div className="header-main">
           <Link href="/" className="header-logo">
-            <img src="/logo.png" alt="Nicaragua Informate" className="header-logo__img" />
+            <Image src="/logo.png" alt="Nicaragua Informate" width={64} height={64} className="header-logo__img" priority />
             <div className="header-logo__text">Nicaragua <span>Informate</span></div>
           </Link>
           <div className="header-actions">
@@ -204,7 +203,7 @@ export default function ProLayout({
         <div className="footer__grid">
           <div className="footer__brand">
             <div className="footer__brand-logo">
-              <img src="/logo.png" alt="Nicaragua Informate" className="footer-logo-img" />
+              <Image src="/logo.png" alt="Nicaragua Informate" width={48} height={48} className="footer-logo-img" />
               Nicaragua <span>Informate</span>
             </div>
             <p className="footer__brand-desc">
@@ -322,7 +321,7 @@ export default function ProLayout({
       <div className={`menu-panel${menuOpen ? ' active' : ''}`}>
         <div className="menu-header">
           <div className="menu-header__logo">
-            <img src="/logo.png" alt="Logo" className="menu-logo-img" />
+            <Image src="/logo.png" alt="Nicaragua Informate" width={48} height={48} className="menu-logo-img" />
             Nicaragua <span>Informate</span>
           </div>
           <p className="menu-header__tagline">Periodismo verificado desde Managua</p>

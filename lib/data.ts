@@ -1,3 +1,4 @@
+import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore';
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
 
@@ -103,7 +104,7 @@ async function tryFirebaseAdmin(_count: number): Promise<Noticia[] | null> {
       .get();
 
     return snap.docs
-      .map((d: any) => {
+      .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {
           id: d.id,
@@ -257,7 +258,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .get();
     
     const noticias = snap.docs
-      .map((d: any) => {
+      .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {
           id: d.id,
@@ -306,7 +307,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
     
     if (!snap.empty) {
       const masLeidas = snap.docs
-        .map((d: any) => {
+        .map((d: QueryDocumentSnapshot<DocumentData>) => {
           const data = d.data();
           return {
             id: d.id,
@@ -394,7 +395,7 @@ export async function getAllSlugs(): Promise<string[]> {
       .get();
     
     return snap.docs
-      .map((d: any) => d.data().slug)
+      .map((d: QueryDocumentSnapshot<DocumentData>) => d.data().slug)
       .filter(Boolean);
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
@@ -415,8 +416,8 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .get();
 
     const related = snap.docs
-      .filter((d: any) => d.data().publicado !== false)
-      .map((d: any) => {
+      .filter((d: QueryDocumentSnapshot<DocumentData>) => d.data().publicado !== false)
+      .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {
           id: d.id,
@@ -437,7 +438,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .slice(0, validatedCount);
 
     return related;
-  } catch (err: any) {
+  } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     // Firestore composite index missing → log helpful message, don't crash
     if (msg.includes('index') || msg.includes('requires an index')) {
