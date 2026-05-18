@@ -1,6 +1,6 @@
-import { adminDb } from '@/lib/firebase-admin';
+﻿import { adminDb } from '@/lib/firebase-admin';
 
-const SITE_URL = 'https://www.nicaraguainformate.com';
+const SITE_URL = 'https://nicaraguainformate.com';
 
 // Google News Sitemap: solo noticias de las últimas 48 horas
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245

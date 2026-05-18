@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         robots: { index: false },
       };
     }
-    const url = `https://www.nicaraguainformate.com/noticias/${slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${slug}`;
     const excerpt = noticia.resumen || noticia.contenido?.substring(0, 160) + '...' || '';
     const category = noticia.categoria || 'Actualidad';
     const rawTags = noticia.tags;
@@ -55,13 +55,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         tags: tags,
         images: noticia.imagen
           ? [{ url: noticia.imagen, width: 1200, height: 630 }]
-          : [{ url: 'https://www.nicaraguainformate.com/logo.png', width: 1200, height: 630 }],
+          : [{ url: 'https://nicaraguainformate.com/logo.png', width: 1200, height: 630 }],
       },
       twitter: {
         card: 'summary_large_image',
         title: noticia.titulo,
         description: excerpt,
-        images: noticia.imagen ? [noticia.imagen] : ['https://www.nicaraguainformate.com/logo.png'],
+        images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.png'],
       },
       robots: {
         index: true,
@@ -90,7 +90,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
     const isLuto = isLutoNews(noticia);
     const related = await getRelatedNews(noticia.categoria, noticia.slug, 4);
-    const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     const wordCount = noticia.contenido
       ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length

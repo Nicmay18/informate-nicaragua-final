@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slugify';
 
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       id: articleRef.id,
       slug: finalSlug,
       wordCount,
-      url: `https://www.nicaraguainformate.com/noticias/${finalSlug}`,
+      url: `https://nicaraguainformate.com/noticias/${finalSlug}`,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error interno';

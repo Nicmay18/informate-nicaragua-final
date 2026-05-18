@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MIDDLEWARE - Eliminación de resultados tóxicos de Google
  * Intercepta URLs con slugs tóxicos y devuelve 410 Gone.
  * Vercel/Next.js App Router compatible.
@@ -30,7 +30,7 @@ export function middleware(request: NextRequest) {
 <body>
   <h1>Contenido no disponible</h1>
   <p>Este contenido ha sido removido permanentemente.</p>
-  <p><a href="https://www.nicaraguainformate.com/">Volver al inicio de Nicaragua Informate</a></p>
+  <p><a href="https://nicaraguainformate.com/">Volver al inicio de Nicaragua Informate</a></p>
 </body>
 </html>`,
         {

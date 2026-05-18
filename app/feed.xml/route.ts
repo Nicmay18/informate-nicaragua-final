@@ -1,9 +1,9 @@
-import { adminDb } from '@/lib/firebase-admin';
+﻿import { adminDb } from '@/lib/firebase-admin';
 
 export const revalidate = 3600;
 
 export async function GET() {
-  const baseUrl = 'https://www.nicaraguainformate.com';
+  const baseUrl = 'https://nicaraguainformate.com';
 
   let articles: { title: string; slug: string; description: string; pubDate: string; category: string; imagen?: string }[] = [];
   try {

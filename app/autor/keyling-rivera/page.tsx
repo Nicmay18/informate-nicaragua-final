@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield, CalendarDays } from 'lucide-react';
@@ -7,7 +7,7 @@ import { getNews } from '@/lib/data';
 export const metadata: Metadata = {
   title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
   description: 'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com/autor/keyling-rivera' },
+  alternates: { canonical: 'https://nicaraguainformate.com/autor/keyling-rivera' },
 };
 
 export default async function AutorKeylingRiveraPage() {

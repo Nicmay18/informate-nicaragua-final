@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
 import { MapPin, Clock, Mail, Share2, Info, Send, Shield, Scale, Megaphone } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
@@ -6,7 +6,7 @@ import BrandIcon from '@/components/BrandIcon';
 export const metadata: Metadata = {
   title: 'Contacto | Nicaragua Informate',
   description: 'Contacta a Nicaragua Informate. Correo: contacto@nicaraguainformate.com. Dirección en Managua, Nicaragua. Redes sociales y formulario de contacto.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com/contacto' },
+  alternates: { canonical: 'https://nicaraguainformate.com/contacto' },
 };
 
 const CONTACT_CHANNELS = [

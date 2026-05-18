@@ -1,14 +1,14 @@
-export function buildOrganizationJsonLd() {
+﻿export function buildOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsMediaOrganization',
-    '@id': 'https://www.nicaraguainformate.com/#organization',
+    '@id': 'https://nicaraguainformate.com/#organization',
     name: 'Nicaragua Informate',
     alternateName: 'NicInformate',
-    url: 'https://www.nicaraguainformate.com',
+    url: 'https://nicaraguainformate.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://www.nicaraguainformate.com/logo.png',
+      url: 'https://nicaraguainformate.com/logo.png',
       width: 512,
       height: 512,
     },
@@ -32,7 +32,7 @@ export function buildWebSiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Nicaragua Informate',
-    url: 'https://www.nicaraguainformate.com',
+    url: 'https://nicaraguainformate.com',
   };
 }
 
@@ -60,8 +60,8 @@ export function buildNewsArticleJsonLd(article: Noticia, url: string, readingTim
       '@type': 'Person',
       name: article.autor || 'Redacción Nicaragua Informate',
       jobTitle: 'Periodista',
-      url: 'https://www.nicaraguainformate.com/autor/keyling-rivera',
-      worksFor: { '@id': 'https://www.nicaraguainformate.com/#organization' },
+      url: 'https://nicaraguainformate.com/autor/keyling-rivera',
+      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
     },
     speakable: {
       '@type': 'SpeakableSpecification',
@@ -72,7 +72,7 @@ export function buildNewsArticleJsonLd(article: Noticia, url: string, readingTim
       name: 'Nicaragua Informate',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo.png',
       },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
@@ -100,7 +100,7 @@ const SLUG_TO_CATEGORY: Record<string, string> = Object.fromEntries(
 );
 
 export function buildBreadcrumbJsonLd(category?: string) {
-  const baseUrl = 'https://www.nicaraguainformate.com';
+  const baseUrl = 'https://nicaraguainformate.com';
   const breadcrumbItems = [
     { name: 'Inicio', item: baseUrl },
     { name: 'Noticias', item: `${baseUrl}/noticias` },

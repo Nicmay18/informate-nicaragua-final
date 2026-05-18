@@ -1,8 +1,8 @@
-import { MetadataRoute } from 'next';
+﻿import { MetadataRoute } from 'next';
 import { getNews } from '@/lib/data';
 import { isToxicSlug } from '@/lib/seo-toxic';
 
-const baseUrl = 'https://www.nicaraguainformate.com';
+const baseUrl = 'https://nicaraguainformate.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // URLs estáticas del sitio

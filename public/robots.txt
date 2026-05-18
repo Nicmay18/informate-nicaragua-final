@@ -1,5 +1,5 @@
-# robots.txt — Nicaragua Informate
-# https://www.nicaraguainformate.com/robots.txt
+﻿# robots.txt — Nicaragua Informate
+# https://nicaraguainformate.com/robots.txt
 
 User-agent: *
 Allow: /
@@ -16,10 +16,14 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /cgi-bin/
 
+# Archivos no-HTML (JS, JSON, manifests)
+Disallow: /js/
+Disallow: /manifest.json
+
 # URLs tóxicas eliminadas del índice (AdSense remediation 2026-05-16)
 Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
 Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
 
 # Sitemaps para descubrimiento de URLs
-Sitemap: https://www.nicaraguainformate.com/sitemap.xml
-Sitemap: https://www.nicaraguainformate.com/news-sitemap.xml
+Sitemap: https://nicaraguainformate.com/sitemap.xml
+Sitemap: https://nicaraguainformate.com/news-sitemap.xml

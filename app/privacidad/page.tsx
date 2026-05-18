@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad | Nicaragua Informate',
   description: 'Política de privacidad de Nicaragua Informate — GDPR, CCPA, cookies, Google Analytics, AdSense y protección de datos personales.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com/privacidad' },
+  alternates: { canonical: 'https://nicaraguainformate.com/privacidad' },
 };
 
 export default function PrivacidadPage() {

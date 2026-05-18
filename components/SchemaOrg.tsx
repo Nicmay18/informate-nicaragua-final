@@ -1,4 +1,4 @@
-import { Article } from '@/lib/types';
+﻿import { Article } from '@/lib/types';
 import { buildNewsArticleJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
 
 interface ArticleJsonLdProps {
@@ -22,7 +22,7 @@ export function ArticleJsonLd({ article, url }: ArticleJsonLdProps) {
         categoria: article.categoria,
         contenido: article.contenido,
       },
-      url || `https://www.nicaraguainformate.com/noticias/${article.slug}/`
+      url || `https://nicaraguainformate.com/noticias/${article.slug}/`
     );
 
     return (

@@ -1,4 +1,4 @@
-import MobileHome from '@/components/MobileHome';
+﻿import MobileHome from '@/components/MobileHome';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
-  alternates: { canonical: 'https://www.nicaraguainformate.com' },
+  alternates: { canonical: 'https://nicaraguainformate.com' },
 };
 
 export const dynamic = 'force-dynamic';

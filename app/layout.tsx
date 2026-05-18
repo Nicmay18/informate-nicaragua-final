@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import './pro-design.css';
@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.nicaraguainformate.com'),
+  metadataBase: new URL('https://nicaraguainformate.com'),
   manifest: '/manifest.json',
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
   description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_NI',
-    url: 'https://www.nicaraguainformate.com',
+    url: 'https://nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',

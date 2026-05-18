@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CATEGORIES } from '@/lib/types';
 
-const SITE_URL = 'https://www.nicaraguainformate.com';
+const SITE_URL = 'https://nicaraguainformate.com';
 
 export const metadata: Metadata = {
   title: 'Categorías | Nicaragua Informate',

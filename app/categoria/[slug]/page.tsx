@@ -5,7 +5,7 @@ import { getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { slugToCategory, CATEGORIES } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
-const SITE_URL = 'https://www.nicaraguainformate.com';
+const SITE_URL = 'https://nicaraguainformate.com';
 
 /** Metadata atractiva por categoría para mejorar CTR */
 const CATEGORIA_META: Record<string, { titulo: string; description: string }> = {

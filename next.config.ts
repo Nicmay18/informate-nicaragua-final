@@ -31,11 +31,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
-      // 🔴 CRÍTICO: Unificar dominio sin-www → www
+      // 🔴 CRÍTICO: Unificar dominio www → non-www (canonical = sin www)
       {
         source: '/:path*',
-        has: [{ type: 'host', value: 'nicaraguainformate.com' }],
-        destination: 'https://www.nicaraguainformate.com/:path*',
+        has: [{ type: 'host', value: 'www.nicaraguainformate.com' }],
+        destination: 'https://nicaraguainformate.com/:path*',
         permanent: true,
       },
       // Redirigir URLs de categoría con query params a rutas limpias /categoria/
@@ -149,6 +149,20 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: '/js/:path*',
+        headers: [
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+      {
+        source: '/manifest.json',
+        headers: [
+          { key: 'Content-Type', value: 'application/manifest+json; charset=utf-8' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
       {
         source: '/',
         headers: [

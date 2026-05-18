@@ -505,7 +505,7 @@ export default function ArticleClient({
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
   }
 
-  const url = `https://www.nicaraguainformate.com/noticias/${noticia.slug}`;
+  const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
   const ago = timeAgo(noticia.fecha);
   const rawAutor = (noticia.autor || '').trim();
