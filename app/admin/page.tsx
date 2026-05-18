@@ -85,6 +85,44 @@ function estimateReadTime(text: string) {
   return Math.max(1, Math.ceil(w / 200));
 }
 
+async function readFileAsDataURL(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function convertFileToWebP(file: File): Promise<{ base64: string; preview: string }> {
+  const dataUrl = await readFileAsDataURL(file);
+  const base64FromDataUrl = (url: string) => (url.includes(',') ? url.split(',')[1] ?? '' : url);
+
+  if (file.type === 'image/webp' || typeof window === 'undefined') {
+    return { base64: base64FromDataUrl(dataUrl), preview: dataUrl };
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Canvas no soportado');
+        ctx.drawImage(img, 0, 0);
+        const webpUrl = canvas.toDataURL('image/webp', 0.9);
+        resolve({ base64: base64FromDataUrl(webpUrl), preview: webpUrl });
+      } catch (err) {
+        reject(err);
+      }
+    };
+    img.onerror = () => reject(new Error('No se pudo procesar la imagen'));
+    img.src = dataUrl;
+  });
+}
+
 // ===================== TOAST =====================
 function useToast() {
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
@@ -333,28 +371,27 @@ export default function AdminPage() {
     if (!file) return;
     setUploadingImage(true);
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = (reader.result as string).split(',')[1];
-        const filename = `noticia-${Date.now()}.webp`;
-        const res = await fetch('/api/admin/upload-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
-          body: JSON.stringify({ image: base64, filename }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          setForm((f) => ({ ...f, imagen: data.url }));
-          setImagePreview(data.url);
-          show('success', 'Imagen subida', data.url);
-        } else {
-          show('error', 'Error subiendo imagen', data.error || 'Error desconocido');
-        }
-        setUploadingImage(false);
-      };
-      reader.readAsDataURL(file);
+      const { base64, preview } = await convertFileToWebP(file);
+      setImagePreview(preview);
+
+      const filename = `noticia-${Date.now()}.webp`;
+      const res = await fetch('/api/admin/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
+        body: JSON.stringify({ image: base64, filename }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setForm((f) => ({ ...f, imagen: data.url }));
+        setImagePreview(data.url);
+        show('success', 'Imagen subida', data.url);
+      } else {
+        show('error', 'Error subiendo imagen', data.error || 'Error desconocido');
+      }
     } catch (err) {
-      show('error', 'Error', String(err));
+      const message = err instanceof Error ? err.message : String(err);
+      show('error', 'Error', message);
+    } finally {
       setUploadingImage(false);
     }
   }

@@ -7,12 +7,12 @@
   --font-serif: 'Merriweather', Georgia, serif;
   --font-mono: 'SF Mono', Monaco, Consolas, monospace;
 
-  --bg-body: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-sidebar: #ffffff;
+  --bg-body: #e2e8f0;
+  --bg-card: #f8fafc;
+  --bg-sidebar: #edf2fb;
   --bg-elevated: #ffffff;
-  --bg-hover: #f1f5f9;
-  --bg-active: #eef2ff;
+  --bg-hover: #e4e9f5;
+  --bg-active: #dbeafe;
   --bg-success: #ecfdf5;
   --bg-warning: #fffbeb;
   --bg-danger: #fef2f2;
@@ -23,8 +23,8 @@
   --text-tertiary: #94a3b8;
   --text-inverse: #ffffff;
 
-  --border-color: #e2e8f0;
-  --border-light: #f1f5f9;
+  --border-color: #cfd8e3;
+  --border-light: #e6eaf2;
 
   --primary-50: #eef2ff; --primary-100: #e0e7ff; --primary-200: #c7d2fe;
   --primary-300: #a5b4fc; --primary-400: #818cf8; --primary-500: #6366f1;
