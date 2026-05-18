@@ -4,7 +4,12 @@ import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { buildNewsArticleJsonLd, buildBreadcrumbJsonLd } from '@/lib/schema';
+import {
+  buildNewsArticleJsonLdEnhanced,
+  buildBreadcrumbJsonLdEnhanced,
+} from '@/lib/seo/schema';
+import { generateOptimizedTitle, validateTitle } from '@/lib/seo/title';
+import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 import { isToxicSlug } from '@/lib/seo-toxic';
 
 export const dynamicParams = true;
@@ -29,22 +34,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         robots: { index: false },
       };
     }
+
     const url = `https://nicaraguainformate.com/noticias/${slug}`;
-    const excerpt = noticia.resumen || noticia.contenido?.substring(0, 160) + '...' || '';
-    const category = noticia.categoria || 'Actualidad';
-    const rawTags = noticia.tags;
-    const tags = Array.isArray(rawTags) ? rawTags : [category, 'Nicaragua', 'noticias'];
+    const category = noticia.categoria || 'General';
+
+    // SEO Title optimization
+    const seoTitleResult = generateOptimizedTitle({
+      tipo: category as any,
+      tituloOriginal: noticia.titulo,
+      lugar: 'Nicaragua',
+      palabraClave: noticia.titulo.split(' ').slice(0, 3).join(' '),
+      contexto: noticia.resumen?.substring(0, 40),
+    });
+    const titleValidation = validateTitle(seoTitleResult);
+    const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
+
+    // Meta description
+    const description = generateMetaDescription(noticia);
+    const keywords = generateKeywords(noticia);
+    const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     return {
-      title: noticia.titulo,
-      description: excerpt,
-      keywords: tags.join(', '),
+      title: `${finalTitle} | Nicaragua Informate`,
+      description,
+      keywords,
       authors: [{ name: authorName }],
       alternates: { canonical: url },
       openGraph: {
-        title: noticia.titulo,
-        description: excerpt,
+        title: finalTitle,
+        description,
         url,
         siteName: 'Nicaragua Informate',
         locale: 'es_NI',
@@ -52,15 +71,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
-        tags: tags,
+        tags: keywords.split(', ').slice(0, 5),
         images: noticia.imagen
-          ? [{ url: noticia.imagen, width: 1200, height: 630 }]
-          : [{ url: 'https://nicaraguainformate.com/logo.png', width: 1200, height: 630 }],
+          ? [{ url: noticia.imagen, width: 1200, height: 630, alt: imageAlt }]
+          : [{ url: 'https://nicaraguainformate.com/logo.png', width: 1200, height: 630, alt: 'Nicaragua Informate' }],
       },
       twitter: {
         card: 'summary_large_image',
-        title: noticia.titulo,
-        description: excerpt,
+        title: finalTitle,
+        description,
         images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.png'],
       },
       robots: {
@@ -74,6 +93,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         'article:author': authorName,
         'article:section': category,
         'article:published_time': noticia.fecha,
+        'article:modified_time': noticia.fechaActualizacion || noticia.fecha,
       },
     };
   } catch {
@@ -99,8 +119,8 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
     return (
       <ProLayout tickerText={noticia.titulo}>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLd(noticia, url, readingTime)) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(noticia.categoria)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
         <ArticleClient noticia={noticia} related={related} isLuto={isLuto} />
       </ProLayout>
     );

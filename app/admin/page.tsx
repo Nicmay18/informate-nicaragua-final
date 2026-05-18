@@ -6,7 +6,7 @@ import {
   Settings, LogOut, Search, Moon, Sun, TrendingUp, Activity,
   AlertTriangle, Star, Globe, Trophy, Cpu, Flag, ChevronRight,
   Copy, Check, Sparkles, BarChart3, Type, Image as ImageIcon, Upload,
-  Send, RotateCcw, Zap, Hash, Award
+  Send, RotateCcw, Zap, Hash, Award, BookOpen
 } from 'lucide-react';
 import './admin.css';
 
@@ -1117,6 +1117,74 @@ export default function AdminPage() {
               <div className="admin-page__title">
                 <h1>Evaluador SEO</h1>
                 <p>Analice la optimización de sus noticias para motores de búsqueda</p>
+              </div>
+            </div>
+
+            {/* Guía SEO para Periodistas */}
+            <div className="admin-card" style={{ marginBottom: 24 }}>
+              <div className="admin-card__header">
+                <div className="admin-card__title"><BookOpen size={16} /> Guía SEO + Google Discover</div>
+              </div>
+              <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 8, letterSpacing: '0.5px' }}>TITULAR PERFECTO</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    <strong style={{ color: 'var(--text)' }}>Fórmula:</strong> [Hecho principal] + [impacto] + [lugar]<br/>
+                    <strong>Ejemplo correcto:</strong> <em>KFC abre sus primeros locales en Managua este año</em>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ background: 'rgba(5,150,105,0.08)', border: '1px solid rgba(5,150,105,0.2)', borderRadius: 8, padding: 12 }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#059669', textTransform: 'uppercase', marginBottom: 8 }}>Reglas Obligatorias</div>
+                    <ul style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.7, paddingLeft: 16, margin: 0 }}>
+                      <li>45–60 caracteres</li>
+                      <li>Verbo en presente</li>
+                      <li>Palabra clave al inicio</li>
+                      <li>Máximo 2 nombres propios</li>
+                      <li>Contexto geográfico si aplica</li>
+                      <li>Dato concreto cuando sea posible</li>
+                    </ul>
+                  </div>
+                  <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', borderRadius: 8, padding: 12 }}>
+                    <div style={{ fontSize: 10, fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', marginBottom: 8 }}>Prohibido</div>
+                    <ul style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.7, paddingLeft: 16, margin: 0 }}>
+                      <li>Clickbait</li>
+                      <li>"Increíble", "impactante", "escándalo"</li>
+                      <li>MAYÚSCULAS excesivas</li>
+                      <li>Emojis</li>
+                      <li>Signos de exclamación</li>
+                      <li>Puntos suspensivos</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 8, letterSpacing: '0.5px' }}>META DESCRIPTION & IMAGEN</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    <div><strong style={{ color: 'var(--text)' }}>Meta description:</strong> 150–160 caracteres. Resumen claro con contexto y palabra clave.</div>
+                    <div><strong style={{ color: 'var(--text)' }}>Imagen Discover:</strong> 1200x628 px. Sin texto encima. Rostros o acción real. Alta calidad.</div>
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 8, letterSpacing: '0.5px' }}>INDEXACIÓN RÁPIDA</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    Para noticias urgentes: publicar → actualizar sitemap → compartir en redes → enlazar desde home → solicitar indexación en Google Search Console.
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 8, letterSpacing: '0.5px' }}>CHECKLIST FINAL</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', fontSize: 12, color: 'var(--text-secondary)' }}>
+                    <span>✅ Título validado</span>
+                    <span>✅ Imagen optimizada</span>
+                    <span>✅ Categoría correcta</span>
+                    <span>✅ Meta description lista</span>
+                    <span>✅ Enlace interno agregado</span>
+                    <span>✅ SEO Title &lt; 60 caracteres</span>
+                  </div>
+                </div>
               </div>
             </div>
 

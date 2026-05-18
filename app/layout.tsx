@@ -2,7 +2,10 @@
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import './pro-design.css';
-import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/lib/schema';
+import {
+  buildOrganizationJsonLdEnhanced,
+  buildWebSiteJsonLdEnhanced,
+} from '@/lib/seo/schema';
 import ClientOnly from '@/components/ClientOnly';
 import ScrollToTop from '@/components/ScrollToTop';
 import CookieBanner from '@/components/CookieBanner';
@@ -50,8 +53,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
