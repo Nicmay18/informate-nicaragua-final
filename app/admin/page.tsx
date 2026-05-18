@@ -408,7 +408,6 @@ export default function AdminPage() {
     setAiLoading(true);
     setTimeout(() => {
       const p = aiPrompt.trim();
-      const titles: string[] = [];
       const templates: Record<string, string[]> = {
         periodistico: [
           `${p}: Lo que debes saber este ${new Date().toLocaleDateString('es-NI', { weekday: 'long' })}`,
