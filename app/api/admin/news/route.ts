@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 
+function isAuthorized(request: NextRequest): boolean {
+  const key = request.headers.get('x-admin-key');
+  const expected = process.env.ADMIN_API_KEY;
+  return !!expected && key === expected;
+}
+
 function slugify(str: string) {
   return str
     .toLowerCase()
@@ -11,7 +17,8 @@ function slugify(str: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const db = getAdminDb();
     const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
@@ -40,6 +47,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const body = await request.json();
     const { titulo, resumen, contenido, categoria, imagen, autor, destacada } = body;

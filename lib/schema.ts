@@ -110,7 +110,7 @@ export function buildBreadcrumbJsonLd(category?: string) {
     const slug = SLUG_TO_CATEGORY[category] || category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     breadcrumbItems.push({
       name: category,
-      item: `${baseUrl}/${slug}`,
+      item: `${baseUrl}/categoria/${slug}`,
     });
   }
 

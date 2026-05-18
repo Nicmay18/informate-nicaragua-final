@@ -20,9 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ categoria
   const { categoria } = await params;
   const catName = slugToCategory(categoria);
   if (!catName) return {};
+  const canonicalUrl = `https://nicaraguainformate.com/categoria/${categoria}`;
   return {
     title: `${catName} - Noticias de Nicaragua`,
     description: `Noticias de ${catName} en Nicaragua.`,
+    alternates: { canonical: canonicalUrl },
+    robots: { index: false, follow: true },
   };
 }
 

@@ -12,7 +12,14 @@ import { NextRequest, NextResponse } from 'next/server';
  *   - owner?: string (default: desde GITHUB_OWNER)
  *   - repo?: string (default: desde GITHUB_REPO)
  */
+function isAuthorized(request: NextRequest): boolean {
+  const key = request.headers.get('x-admin-key');
+  const expected = process.env.ADMIN_API_KEY;
+  return !!expected && key === expected;
+}
+
 export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const body = await request.json();
     const { image, filename } = body;

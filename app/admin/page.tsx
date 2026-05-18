@@ -126,6 +126,7 @@ function ToastContainer({ toasts, onRemove }: { toasts: ToastMsg[]; onRemove: (i
 export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState('');
+  const [adminKey, setAdminKey] = useState('');
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [darkMode, setDarkMode] = useState(false);
@@ -174,7 +175,7 @@ export default function AdminPage() {
   // Load news
   const fetchNews = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/news');
+      const res = await fetch('/api/admin/news', { headers: { 'x-admin-key': adminKey } });
       const data = await res.json();
       if (data.success) {
         setNews(data.news);
@@ -182,7 +183,7 @@ export default function AdminPage() {
     } catch (err) {
       console.error('Error cargando noticias', err);
     }
-  }, []);
+  }, [adminKey]);
 
   useEffect(() => {
     if (isLoggedIn) fetchNews();
@@ -208,21 +209,29 @@ export default function AdminPage() {
     return { total, vistas, destacadas, cats };
   }, [news]);
 
-  // Auth
-  function handleLogin(e: React.FormEvent) {
+  // Auth — verifica contra servidor (x-admin-key)
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (password === 'EditorPro2026') {
-      setIsLoggedIn(true);
-      setLoginError('');
-      show('success', 'Bienvenido', 'Panel Editorial Pro v6.1 activado');
-    } else {
-      setLoginError('Contraseña incorrecta');
-      show('error', 'Acceso denegado', 'Verifique su contraseña');
+    setLoginError('');
+    try {
+      const res = await fetch('/api/admin/news', { headers: { 'x-admin-key': password } });
+      if (res.ok) {
+        setAdminKey(password);
+        setIsLoggedIn(true);
+        setPassword('');
+        show('success', 'Bienvenido', 'Panel Editorial Pro v6.1 activado');
+      } else {
+        setLoginError('Contraseña incorrecta');
+        show('error', 'Acceso denegado', 'Verifique su contraseña');
+      }
+    } catch {
+      setLoginError('Error de conexión');
     }
   }
 
   function handleLogout() {
     setIsLoggedIn(false);
+    setAdminKey('');
     setPassword('');
     setActiveTab('dashboard');
     show('info', 'Sesión cerrada', 'Hasta pronto');
@@ -270,7 +279,7 @@ export default function AdminPage() {
       if (editingId) {
         const res = await fetch(`/api/admin/news/${editingId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
           body: JSON.stringify(form),
         });
         const data = await res.json();
@@ -284,7 +293,7 @@ export default function AdminPage() {
       } else {
         const res = await fetch('/api/admin/news', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
           body: JSON.stringify(form),
         });
         const data = await res.json();
@@ -306,7 +315,7 @@ export default function AdminPage() {
   async function handleDelete(id: string) {
     if (!confirm('¿Eliminar esta noticia permanentemente?')) return;
     try {
-      const res = await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/news/${id}`, { method: 'DELETE', headers: { 'x-admin-key': adminKey } });
       const data = await res.json();
       if (data.success) {
         show('success', 'Eliminado', 'Noticia eliminada correctamente');
@@ -330,7 +339,7 @@ export default function AdminPage() {
         const filename = `noticia-${Date.now()}.webp`;
         const res = await fetch('/api/admin/upload-image', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
           body: JSON.stringify({ image: base64, filename }),
         });
         const data = await res.json();
@@ -458,7 +467,6 @@ export default function AdminPage() {
                 />
               </div>
               {loginError && <p style={{ color: 'var(--danger)', fontSize: 13, marginTop: 8 }}>{loginError}</p>}
-              <p className="admin-input-hint">Contraseña: <strong>EditorPro2026</strong></p>
             </div>
             <button type="submit" className="admin-btn admin-btn--primary admin-btn--lg" style={{ width: '100%' }}>
               <Sparkles size={18} /> Acceder al Panel

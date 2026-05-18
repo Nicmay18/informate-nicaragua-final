@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 
+function isAuthorized(request: NextRequest): boolean {
+  const key = request.headers.get('x-admin-key');
+  const expected = process.env.ADMIN_API_KEY;
+  return !!expected && key === expected;
+}
+
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const { id } = await params;
     const body = await request.json();
@@ -42,7 +49,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const { id } = await params;
     const db = getAdminDb();

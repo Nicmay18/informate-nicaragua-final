@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
+  if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get('slug');
 
