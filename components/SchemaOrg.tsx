@@ -14,6 +14,8 @@ export function ArticleJsonLd({ article, url }: ArticleJsonLdProps) {
   try {
     const jsonLd = buildNewsArticleJsonLd(
       {
+        id: article.id || article.slug || '',
+        slug: article.slug || '',
         titulo: article.titulo,
         resumen: article.resumen,
         imagen: article.imagen,
