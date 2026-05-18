@@ -187,6 +187,7 @@ export default function AdminPage() {
     autor: 'Nicaragua Informate',
     destacada: false,
     publicado: true,
+    notificarTelegram: true,
   });
 
   const [aiPrompt, setAiPrompt] = useState('');
@@ -288,6 +289,7 @@ export default function AdminPage() {
         autor: noticia.autor || 'Nicaragua Informate',
         destacada: noticia.destacada,
         publicado: noticia.publicado,
+        notificarTelegram: false,
       });
       setImagePreview(noticia.imagen);
     } else {
@@ -301,6 +303,7 @@ export default function AdminPage() {
         autor: 'Nicaragua Informate',
         destacada: false,
         publicado: true,
+        notificarTelegram: true,
       });
       setImagePreview('');
     }
@@ -332,7 +335,7 @@ export default function AdminPage() {
         const res = await fetch('/api/admin/news', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
-          body: JSON.stringify(form),
+          body: JSON.stringify({ ...form, notificarTelegram: form.notificarTelegram }),
         });
         const data = await res.json();
         if (data.success) {
@@ -905,10 +908,89 @@ export default function AdminPage() {
                   </div>
                   <div className="admin-card__body">
                     <div className="admin-seo">
-                      <div className="admin-seo__url">www.nicaragua-informate.com/noticias/{slugify(form.titulo) || 'slug'}</div>
+                      <div className="admin-seo__url">nicaraguainformate.com/noticias/{slugify(form.titulo) || 'slug'}</div>
                       <div className="admin-seo__title">{form.titulo || 'Título de la noticia'}</div>
                       <div className="admin-seo__desc">{form.resumen || 'Resumen de la noticia que aparecerá en los resultados de búsqueda...'}</div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Textos listos para copiar en redes */}
+                <div className="admin-card" style={{ marginTop: 24 }}>
+                  <div className="admin-card__header">
+                    <div className="admin-card__title"><Send size={16} /> Textos para Redes Sociales</div>
+                    <button
+                      className="admin-btn admin-btn--ghost admin-btn--sm"
+                      onClick={() => setForm((f) => ({ ...f, titulo: '', resumen: '', contenido: '', imagen: '', notificarTelegram: true }))}
+                    >
+                      <RotateCcw size={13} /> Limpiar todo
+                    </button>
+                  </div>
+                  <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {(() => {
+                      const slug = form.titulo ? slugify(form.titulo) : 'slug-noticia';
+                      const url = `https://nicaraguainformate.com/noticias/${slug}/`;
+                      const catEmoji = ({ Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍', Espectáculos: '🎬', Tecnología: '💻', Economía: '📈', Cultura: '🎭' } as Record<string,string>)[form.categoria] || '📰';
+                      const titulo = form.titulo || 'Título de la noticia';
+                      const resumen = form.resumen || 'Resumen de la noticia...';
+
+                      const textos = [
+                        {
+                          red: 'Telegram',
+                          color: '#0088cc',
+                          sigla: 'T',
+                          texto: `${catEmoji} *${titulo}*\n\n${resumen}\n\n🔗 Leer noticia completa: ${url}`,
+                        },
+                        {
+                          red: 'WhatsApp',
+                          color: '#25d366',
+                          sigla: 'W',
+                          texto: `${catEmoji} *${titulo}*\n\n${resumen}\n\n👉 ${url}`,
+                        },
+                        {
+                          red: 'Facebook',
+                          color: '#1877f2',
+                          sigla: 'f',
+                          texto: `${titulo}\n\n${resumen}\n\nLee la noticia completa aquí 👇\n${url}\n\n#Nicaragua #Noticias #NicaraguaInformate`,
+                        },
+                      ];
+
+                      return textos.map(({ red, color, sigla, texto }) => (
+                        <div key={red}>
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 6, letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ width: 18, height: 18, background: color, borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10, fontWeight: 900 }}>{sigla}</span>
+                            {red}
+                          </div>
+                          <div style={{ position: 'relative' }}>
+                            <textarea
+                              readOnly
+                              value={texto}
+                              rows={4}
+                              style={{ width: '100%', resize: 'none', fontFamily: 'monospace', fontSize: 12, lineHeight: 1.5, padding: '10px 80px 10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', whiteSpace: 'pre-wrap' }}
+                            />
+                            <button
+                              onClick={() => copyToClipboard(texto, `${red}`)}
+                              style={{ position: 'absolute', top: 8, right: 8, padding: '5px 12px', borderRadius: 6, border: 'none', background: color, color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}
+                            >
+                              {copiedField === red ? <><Check size={12} /> Copiado</> : <><Copy size={12} /> Copiar</>}
+                            </button>
+                          </div>
+                        </div>
+                      ));
+                    })()}
+
+                    {/* Telegram auto-notify toggle */}
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, paddingTop: 4, borderTop: '1px solid var(--border)' }}>
+                      <input
+                        type="checkbox"
+                        checked={form.notificarTelegram}
+                        onChange={(e) => setForm({ ...form, notificarTelegram: e.target.checked })}
+                        style={{ width: 16, height: 16, accentColor: '#0088cc' }}
+                      />
+                      <span style={{ color: form.notificarTelegram ? '#0088cc' : 'var(--text-tertiary)' }}>
+                        {form.notificarTelegram ? '✅ Enviar automáticamente al canal de Telegram al publicar' : '⬜ No enviar a Telegram automáticamente'}
+                      </span>
+                    </label>
                   </div>
                 </div>
               </div>

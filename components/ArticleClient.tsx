@@ -511,6 +511,7 @@ export default function ArticleClient({
   const rawAutor = (noticia.autor || '').trim();
   const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Elieth Rivera Muñoz';
   const autorInicial = autor.charAt(0).toUpperCase();
+  const autorFoto = autor === 'Keyling Elieth Rivera Muñoz' ? '/keyling-rivera.jpg' : null;
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen);
   const vistas = fmtViews(noticia.vistas);
   const catColor = CAT_COLORS[noticia.categoria] || '#8c1d18';
@@ -682,17 +683,20 @@ export default function ArticleClient({
 
         {/* ===== AUTHOR BIO (BBC/NYT style) ===== */}
         <div className="author-box-pro author-box-pro--enhanced">
-          <div className="author-box-pro__avatar" style={{ background: catColor }}>
-            {autorInicial}
+          <div className="author-box-pro__avatar" style={{ background: catColor, overflow: 'hidden', padding: 0 }}>
+            {autorFoto ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={autorFoto} alt={autor} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : autorInicial}
           </div>
           <div className="author-box-pro__body">
             <div className="author-box-pro__name">{autor}</div>
             <div className="author-box-pro__role">
-              {autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial' : 'Periodista'} · {noticia.categoria}
+              {autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial y Cofundadora' : 'Periodista'} · {noticia.categoria}
             </div>
             <p className="author-box-pro__bio">
               {autor === 'Keyling Elieth Rivera Muñoz'
-                ? 'Directora editorial y co-fundadora de Nicaragua Informate. Periodista con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes e Internacionales. Firme defensora del periodismo verificado y la independencia editorial.'
+                ? 'Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.'
                 : `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada y el análisis contextual.`}
             </p>
             <div className="author-box-pro__links">

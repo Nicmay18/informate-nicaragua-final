@@ -21,8 +21,14 @@ export default function NosotrosPage() {
   const linkColor = isDark ? '#60a5fa' : '#2563eb';
   return (
     <LegalPageShell title="Sobre Nicaragua Informate">
-      <p style={{ fontSize: '1.15rem', color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es un medio digital nicaragüense comprometido con informar de manera ágil, precisa y responsable. Brindamos cobertura diaria en las secciones de Nacionales, Sucesos, Internacionales, Deportes, Espectáculos y Tecnología, con contenido verificado y enfoque informativo que conecta a la comunidad nicaragüense dentro y fuera del país.
+      <p style={{ fontSize: '1.15rem', color: 'var(--c-text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es un medio digital nicaragüense dedicado a compartir noticias e información de interés para los nicaragüenses dentro y fuera del país.
+      </p>
+      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+        Publicamos diariamente contenido sobre nacionales, sucesos, internacionales, deportes, espectáculos, tecnología y temas de actualidad, con información clara, rápida y verificada.
+      </p>
+      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.8 }}>
+        Nuestro objetivo es mantener informada a la comunidad con cobertura constante de los acontecimientos más relevantes de Nicaragua y el mundo, utilizando un formato digital accesible y actualizado.
       </p>
 
       <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
@@ -81,14 +87,13 @@ export default function NosotrosPage() {
       {/* Fundador 3 */}
       <div style={{ background: cardBg, border: cardBorder, borderRadius: 12, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,var(--c-accent),var(--c-primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
-            KR
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" style={{ width: 70, height: 70, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--c-accent)' }} />
           <div style={{ flex: 1 }}>
             <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Elieth Rivera Muñoz</div>
-            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial · Nacionales</div>
+            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial y Cofundadora</div>
             <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Directora editorial y cofundadora de Nicaragua Informate. Periodista especializada en la cobertura de Sucesos, Nacionales, Deportes e Internacionales. Comprometida con el periodismo verificado, la ética informativa y la independencia editorial. <a href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</a>
+              Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense. <a href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</a>
             </p>
           </div>
         </div>

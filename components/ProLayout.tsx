@@ -207,7 +207,7 @@ export default function ProLayout({
               Nicaragua <span>Informate</span>
             </div>
             <p className="footer__brand-desc">
-              Nicaragua Informate es un medio digital nicaragüense dedicado a informar con rigor, precisión y contexto. Cubrimos diariamente las secciones de Nacionales, Sucesos, Internacionales, Deportes, Espectáculos y Tecnología —con noticias verificadas y análisis que conectan a la comunidad nicaragüense dentro y fuera del país.
+              Nicaragua Informate es un medio digital nicaragüense dedicado a compartir noticias e información de interés para los nicaragüenses dentro y fuera del país. Publicamos diariamente contenido sobre nacionales, sucesos, internacionales, deportes, espectáculos, tecnología y temas de actualidad, con información clara, rápida y verificada.
             </p>
             <div className="footer__social">
               <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={14} /></a>

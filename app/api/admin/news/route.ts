@@ -46,11 +46,41 @@ export async function GET(request: NextRequest) {
   }
 }
 
+async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string) {
+  const token = process.env.TG_TOKEN;
+  const chatId = process.env.TG_CHAT;
+  if (!token || !chatId) return;
+  const url = `https://nicaraguainformate.com/noticias/${slug}/`;
+  const catEmojis: Record<string, string> = {
+    Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍',
+    Espectáculos: '🎬', Tecnología: '💻', Economía: '📈', Cultura: '🎭',
+  };
+  const emoji = catEmojis[categoria] || '📰';
+  const text = `${emoji} *${titulo}*\n\n${resumen}\n\n🔗 [Leer noticia completa](${url})`;
+  try {
+    if (imagen) {
+      await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, photo: imagen, caption: text, parse_mode: 'Markdown' }),
+      });
+    } else {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown', disable_web_page_preview: false }),
+      });
+    }
+  } catch (e) {
+    console.error('[Telegram notify]', e);
+  }
+}
+
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const body = await request.json();
-    const { titulo, resumen, contenido, categoria, imagen, autor, destacada } = body;
+    const { titulo, resumen, contenido, categoria, imagen, autor, destacada, publicado, notificarTelegram } = body;
 
     if (!titulo || !resumen || !contenido || !categoria) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
@@ -69,8 +99,12 @@ export async function POST(request: NextRequest) {
       destacada: !!destacada,
       vistas: 0,
       fecha: Timestamp.now(),
-      publicado: true,
+      publicado: publicado !== false,
     });
+
+    if (notificarTelegram !== false && publicado !== false) {
+      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '');
+    }
 
     return NextResponse.json({ success: true, id: docRef.id, slug });
   } catch (err) {

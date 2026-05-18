@@ -354,6 +354,9 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             {/* Newsletter */}
             <Newsletter />
 
+            {/* Escucha en vivo */}
+            <RadioWidget />
+
             {/* Síguenos */}
             <Siguenos />
 
@@ -482,42 +485,103 @@ function ClimaWidget() {
 }
 
 /* ============================================================
+   RADIO WIDGET
+   ============================================================ */
+const RADIO_STATIONS = [
+  { name: 'La Buenísima', freq: '93.1 FM', color: '#ef4444' },
+  { name: 'Viva FM', freq: '98.3 FM', color: '#10b981' },
+  { name: 'Radio Futura', freq: '91.3 FM', color: '#8b5cf6' },
+];
+function RadioWidget() {
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #0a0f1e 0%, #1a1f35 100%)',
+      borderRadius: 'var(--radius-md)',
+      overflow: 'hidden',
+      marginBottom: 24,
+    }}>
+      <div style={{
+        background: 'rgba(255,255,255,0.06)',
+        padding: '10px 16px',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        display: 'flex', alignItems: 'center', gap: 8,
+      }}>
+        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', display: 'inline-block', boxShadow: '0 0 6px #ef4444' }} />
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>EN VIVO — Radio Nicaragua</span>
+      </div>
+      <div style={{ padding: '14px 16px 16px' }}>
+        {RADIO_STATIONS.map((s, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '7px 0',
+            borderBottom: i < RADIO_STATIONS.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+          }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: s.color, flexShrink: 0, boxShadow: `0 0 6px ${s.color}80` }} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{s.name}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>{s.freq}</div>
+            </div>
+          </div>
+        ))}
+        <div style={{
+          marginTop: 14, fontSize: 11, color: 'rgba(255,255,255,0.4)', textAlign: 'center', paddingTop: 10,
+          borderTop: '1px solid rgba(255,255,255,0.05)',
+        }}>
+          Usa el reproductor ▼ en la barra inferior para escuchar
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
    SÍGUENOS
    ============================================================ */
+const MOBILE_SOCIALS = [
+  { href: 'https://facebook.com/profile.php?id=61578261125687', label: 'Facebook', action: 'Seguir página', color: '#1877F2', sigla: 'f' },
+  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', label: 'WhatsApp', action: 'Unirse al canal', color: '#25D366', sigla: 'W' },
+  { href: 'https://t.me/+fHHjncJqMQM3NjZh', label: 'Telegram', action: 'Unirse al grupo', color: '#0088cc', sigla: 'T' },
+  { href: '/feed.xml', label: 'RSS', action: 'Suscribirse al feed', color: '#e8590c', sigla: '★' },
+];
 function Siguenos() {
   return (
-    <div className="sidebar-widget">
-      <div className="sidebar-widget__title">📲 Síguenos</div>
-      <div className="siguenos-grid">
-        <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" className="siguenos-item siguenos-item--fb">
-          <span className="siguenos-item__icon">f</span>
-          <div>
-            <div className="siguenos-item__name">Facebook</div>
-            <div className="siguenos-item__desc">Noticias diarias</div>
-          </div>
-        </a>
-        <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" className="siguenos-item siguenos-item--wa">
-          <span className="siguenos-item__icon">W</span>
-          <div>
-            <div className="siguenos-item__name">WhatsApp</div>
-            <div className="siguenos-item__desc">Únete al canal</div>
-          </div>
-        </a>
-        <a href="https://t.me/nicaraguainformate" target="_blank" rel="noopener noreferrer" className="siguenos-item siguenos-item--tg">
-          <span className="siguenos-item__icon">✈</span>
-          <div>
-            <div className="siguenos-item__name">Telegram</div>
-            <div className="siguenos-item__desc">Alertas al instante</div>
-          </div>
-        </a>
-        <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="siguenos-item siguenos-item--rss">
-          <span className="siguenos-item__icon">◉</span>
-          <div>
-            <div className="siguenos-item__name">RSS</div>
-            <div className="siguenos-item__desc">Feed de noticias</div>
-          </div>
-        </a>
+    <div style={{
+      background: 'var(--c-surface-elevated)',
+      border: '1px solid var(--c-border-light)',
+      borderRadius: 'var(--radius-md)',
+      overflow: 'hidden',
+      marginBottom: 24,
+    }}>
+      <div style={{
+        padding: '10px 16px',
+        borderBottom: '2px solid var(--c-primary)',
+        display: 'flex', alignItems: 'center', gap: 6,
+      }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--c-accent)', display: 'inline-block' }} />
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Nuestras Redes</span>
       </div>
+      {MOBILE_SOCIALS.map((s, i) => (
+        <a
+          key={s.label}
+          href={s.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '11px 16px',
+            borderBottom: i < MOBILE_SOCIALS.length - 1 ? '1px solid var(--c-border-light)' : 'none',
+            borderLeft: `3px solid ${s.color}`,
+            background: 'transparent', textDecoration: 'none',
+          }}
+        >
+          <span style={{ width: 30, height: 30, borderRadius: 6, background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{s.sigla}</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--c-text)', lineHeight: 1.2 }}>{s.label}</div>
+            <div style={{ fontSize: 11, color: 'var(--c-text-muted)', marginTop: 1 }}>{s.action}</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--c-text-muted)', flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      ))}
     </div>
   );
 }
@@ -527,13 +591,69 @@ function Siguenos() {
    ============================================================ */
 function ApoyaPeriodismo() {
   return (
-    <div className="apoya-widget">
-      <div className="apoya-widget__heart">❤️</div>
-      <h3 className="apoya-widget__title">Apoya nuestro periodismo</h3>
-      <p className="apoya-widget__desc">
-        Tu contribución nos permite seguir informando con independencia y veracidad desde Managua.
-      </p>
-      <a href="https://www.paypal.com/paypalme/NicaraguaInformate" target="_blank" rel="noopener noreferrer" className="apoya-widget__btn">💙 Apoyar con PayPal</a>
+    <div style={{
+      background: 'linear-gradient(135deg, var(--c-primary) 0%, #0F2340 100%)',
+      borderRadius: 'var(--radius-md)',
+      overflow: 'hidden',
+      marginBottom: 24,
+    }}>
+      {/* Header bar */}
+      <div style={{
+        background: 'var(--c-accent)',
+        padding: '6px 16px',
+        fontSize: 10,
+        fontWeight: 800,
+        letterSpacing: '1.5px',
+        textTransform: 'uppercase',
+        color: '#fff',
+      }}>
+        Periodismo Independiente
+      </div>
+      <div style={{ padding: '20px 18px 22px' }}>
+        <p style={{
+          fontSize: 16,
+          fontWeight: 800,
+          color: '#fff',
+          lineHeight: 1.3,
+          marginBottom: 8,
+          fontFamily: 'var(--font-merri, Georgia, serif)',
+        }}>
+          Apoya nuestra redacción
+        </p>
+        <p style={{
+          fontSize: 12,
+          color: 'rgba(255,255,255,0.65)',
+          lineHeight: 1.6,
+          marginBottom: 18,
+        }}>
+          Tu aporte nos permite mantener el periodismo verificado e independiente desde Managua.
+        </p>
+        <a
+          href="https://www.paypal.com/paypalme/NicaraguaInformate"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            background: '#fff',
+            color: '#003087',
+            fontWeight: 800,
+            fontSize: 13,
+            padding: '10px 20px',
+            borderRadius: 6,
+            textDecoration: 'none',
+            letterSpacing: '0.2px',
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.828c-.666 0-1.226.49-1.33 1.146l-1.4 8.883a.64.64 0 0 0 .634.738h3.994c.524 0 .968-.382 1.051-.9l.437-2.766c.083-.518.527-.9 1.051-.9h.663c3.872 0 6.904-1.573 7.786-6.12.378-1.945.164-3.563-.492-4.876z"/></svg>
+          Donar con PayPal
+        </a>
+        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginTop: 10 }}>
+          Seguro · Cifrado · Verificado
+        </p>
+      </div>
     </div>
   );
 }

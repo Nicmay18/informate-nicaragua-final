@@ -1,110 +1,89 @@
 'use client';
 
-import { ExternalLink } from 'lucide-react';
-
 export default function DonationCard() {
   return (
-    <article style={{
-      background: '#fdf6f6',
-      borderRadius: '16px',
-      border: '1px solid #f0e0e0',
-      padding: '32px',
-      maxWidth: '384px',
-      width: '100%',
-      textAlign: 'center',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+    <div style={{
+      background: 'linear-gradient(150deg, var(--c-primary) 0%, #0F2340 100%)',
+      borderRadius: 'var(--radius-md)',
+      overflow: 'hidden',
       marginBottom: 24,
+      width: '100%',
     }}>
-      {/* Icono corazón */}
+      {/* Red accent bar */}
       <div style={{
-        margin: '0 auto 20px',
-        width: '56px',
-        height: '56px',
-        background: '#c53030',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+        background: 'var(--c-accent)',
+        padding: '6px 18px',
+        fontSize: 10,
+        fontWeight: 800,
+        letterSpacing: '1.5px',
+        textTransform: 'uppercase',
+        color: '#fff',
       }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          style={{ width: '28px', height: '28px', color: '#fff' }}
-          aria-hidden="true"
-        >
-          <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-        </svg>
+        Periodismo Independiente
       </div>
 
-      {/* Título */}
-      <h2 style={{
-        fontSize: '20px',
-        fontWeight: 700,
-        color: '#111827',
-        marginBottom: '12px',
-        lineHeight: 1.2,
-        fontFamily: 'var(--font-merri)',
-      }}>
-        Apoya nuestro periodismo
-      </h2>
-
-      {/* Descripción */}
-      <p style={{
-        color: '#4b5563',
-        fontSize: '14px',
-        lineHeight: 1.6,
-        marginBottom: 24,
-        margin: '0 0 24px 0',
-      }}>
-        Tu contribución nos permite seguir informando con independencia y veracidad desde Managua.
-      </p>
-
-      {/* Botón PayPal */}
-      <a
-        href="https://paypal.me/NicaraguaInformate"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          background: '#0070ba',
+      <div style={{ padding: '22px 20px 24px' }}>
+        {/* Title */}
+        <h3 style={{
+          fontSize: 17,
+          fontWeight: 800,
           color: '#fff',
-          fontWeight: 600,
-          fontSize: '14px',
-          padding: '12px 32px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          transition: 'all 0.2s',
-          boxShadow: '0 4px 6px rgba(0, 112, 186, 0.25)',
-          border: 'none',
-          cursor: 'pointer',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#005ea6';
-          e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 112, 186, 0.35)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = '#0070ba';
-          e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 112, 186, 0.25)';
-        }}
-      >
-        <span>Donar con PayPal</span>
-        <ExternalLink size={16} />
-      </a>
+          lineHeight: 1.3,
+          marginBottom: 8,
+          fontFamily: 'var(--font-merri, Georgia, serif)',
+        }}>
+          Apoya nuestra redacción
+        </h3>
 
-      {/* Texto de confianza */}
-      <p style={{
-        marginTop: '16px',
-        fontSize: '12px',
-        color: '#9ca3af',
-        fontWeight: 500,
-        margin: '16px 0 0 0',
-      }}>
-        Seguro y transparente
-      </p>
-    </article>
+        {/* Description */}
+        <p style={{
+          fontSize: 12,
+          color: 'rgba(255,255,255,0.62)',
+          lineHeight: 1.65,
+          marginBottom: 20,
+        }}>
+          Tu aporte garantiza el periodismo verificado e independiente desde Managua, sin presiones políticas ni comerciales.
+        </p>
+
+        {/* PayPal button */}
+        <a
+          href="https://paypal.me/NicaraguaInformate"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            background: '#fff',
+            color: '#003087',
+            fontWeight: 800,
+            fontSize: 13,
+            padding: '11px 20px',
+            borderRadius: 6,
+            textDecoration: 'none',
+            letterSpacing: '0.2px',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#f0f4ff'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#003087" aria-hidden="true">
+            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.828c-.666 0-1.226.49-1.33 1.146l-1.4 8.883a.64.64 0 0 0 .634.738h3.994c.524 0 .968-.382 1.051-.9l.437-2.766c.083-.518.527-.9 1.051-.9h.663c3.872 0 6.904-1.573 7.786-6.12.378-1.945.164-3.563-.492-4.876z"/>
+          </svg>
+          Donar con PayPal
+        </a>
+
+        {/* Trust badge */}
+        <p style={{
+          fontSize: 10,
+          color: 'rgba(255,255,255,0.3)',
+          textAlign: 'center',
+          marginTop: 10,
+          letterSpacing: '0.3px',
+        }}>
+          Seguro · Cifrado · Verificado
+        </p>
+      </div>
+    </div>
   );
 }

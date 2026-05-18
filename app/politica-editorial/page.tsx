@@ -103,14 +103,13 @@ export default function PoliticaEditorialPage() {
       <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>8. Director Editorial</h2>
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1.5rem', marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 28, flexShrink: 0 }}>
-            KR
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid #c41e3a' }} />
           <div>
-            <p style={{ color: '#fff', margin: '0 0 0.5rem', fontWeight: 700, fontSize: '1.1rem' }}>Keyling Rivera</p>
-            <p style={{ color: '#8c1d18', margin: '0 0 0.75rem', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Periodista</p>
+            <p style={{ color: '#fff', margin: '0 0 0.5rem', fontWeight: 700, fontSize: '1.1rem' }}>Keyling Elieth Rivera Muñoz</p>
+            <p style={{ color: '#c41e3a', margin: '0 0 0.75rem', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Directora Editorial y Cofundadora</p>
             <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.88rem', lineHeight: 1.65 }}>
-              Periodista y fundadora de Nicaragua Informate. Con más de 5 años de experiencia en comunicación digital y cobertura de noticias nacionales. Comprometida con el periodismo ético, la verificación de fuentes y la información precisa para la ciudadanía nicaragüense.
+              Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.
             </p>
           </div>
         </div>
