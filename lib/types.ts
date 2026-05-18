@@ -10,12 +10,12 @@ export interface Noticia {
   contenido?: string;
   excerpt?: string;
   featuredImage?: string;
-  categoria: string | Categoria;
+  categoria: string;
   imagen: string;
   fecha: string;
   fechaPublicacion?: string;
   fechaActualizacion?: string;
-  autor?: string | Autor;
+  autor?: string;
   destacada?: boolean;
   vistas?: number;
   palabras?: number;

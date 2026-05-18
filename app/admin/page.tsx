@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   LayoutDashboard, FileText, Newspaper, PlusCircle, Edit3, Trash2, Eye,
-  Settings, LogOut, Search, Bell, Moon, Sun, TrendingUp, Users, Activity,
-  AlertTriangle, Star, Globe, Trophy, Cpu, Flag, ChevronRight, X,
+  Settings, LogOut, Search, Moon, Sun, TrendingUp, Activity,
+  AlertTriangle, Star, Globe, Trophy, Cpu, Flag, ChevronRight,
   Copy, Check, Sparkles, BarChart3, Type, Image as ImageIcon, Upload,
-  Send, RotateCcw, Zap, MessageSquare, Hash, Link as LinkIcon, Award
+  Send, RotateCcw, Zap, Hash, Award
 } from 'lucide-react';
 import './admin.css';
 
@@ -408,8 +408,7 @@ export default function AdminPage() {
     }
     setEvalLoading(true);
     setTimeout(() => {
-      const items: EvalResult[] = (evalUrl.trim() ? [{ titulo: evalUrl, resumen: '', contenido: '', categoria: 'General', fecha: new Date().toISOString(), vistas: 0 }] : news.slice(0, 10)).map((n) => {
-        const text = `${n.titulo} ${n.resumen || ''}`;
+      const items: EvalResult[] = (evalUrl.trim() ? [{ titulo: evalUrl, resumen: '', contenido: '', categoria: 'General', fecha: new Date().toISOString(), vistas: 0, imagen: '' }] : news.slice(0, 10)).map((n) => {
         const wordCount = countWords(n.contenido || n.resumen || '');
         let puntaje = 50;
         if (n.titulo.length >= 40 && n.titulo.length <= 70) puntaje += 15;

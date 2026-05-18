@@ -30,6 +30,7 @@ function normalizeImage(imagen: string): string {
 }
 
 export async function GET() {
+  if (process.env.NODE_ENV === 'production') return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const raw = 'https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/iran-exige-garantias-a-la-fifa-por-falta-1778780214867.webp';
   const normalized = normalizeImage(raw);
   return NextResponse.json({ raw, normalized });

@@ -10,14 +10,13 @@ export default function LazySidebar({ children }: LazySidebarProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const id = window.requestIdleCallback
-      ? window.requestIdleCallback(() => setMounted(true), { timeout: 1500 })
-      : setTimeout(() => setMounted(true), 1500);
-
-    return () => {
-      if (typeof id === 'number') clearTimeout(id);
-      else window.cancelIdleCallback(id);
-    };
+    if (window.requestIdleCallback) {
+      const id = window.requestIdleCallback(() => setMounted(true), { timeout: 1500 });
+      return () => window.cancelIdleCallback(id);
+    } else {
+      const id = window.setTimeout(() => setMounted(true), 1500);
+      return () => window.clearTimeout(id);
+    }
   }, []);
 
   // Placeholder que reserva el espacio visual para evitar CLS

@@ -8,9 +8,11 @@ export const revalidate = 60;
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string }> }): Promise<Metadata> {
   const params = await searchParams;
   const cat = params.cat || 'Todas';
+  const canonical = cat !== 'Todas' ? `https://nicaraguainformate.com/noticias?cat=${cat}` : 'https://nicaraguainformate.com/noticias';
   return {
     title: cat !== 'Todas' ? `${cat} - Noticias` : 'Todas las Noticias',
     description: `Noticias de ${cat} en Nicaragua.`,
+    alternates: { canonical },
   };
 }
 
