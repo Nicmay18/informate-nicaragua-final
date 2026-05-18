@@ -31,7 +31,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
       }
     }
-    if (body.titulo && !body.slug) {
+    // Solo regenerar slug si el título cambió explícitamente y no hay slug fijo
+    if (body.titulo && body.regenerateSlug === true && !body.slug) {
       updateData.slug = body.titulo
         .toLowerCase()
         .normalize('NFD')
@@ -39,7 +40,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '') + '-' + Date.now();
     }
-    updateData.fecha = Timestamp.now();
+    updateData.fechaActualizacion = Timestamp.now();
 
     await ref.update(updateData);
     return NextResponse.json({ success: true });

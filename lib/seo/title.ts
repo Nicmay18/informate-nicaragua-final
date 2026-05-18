@@ -48,7 +48,6 @@ export function generateOptimizedTitle(input: SEOInput): string {
   const { tipo, tituloOriginal, lugar, pais, empresa, cifra, palabraClave, contexto } = input;
 
   // Detectar palabras clave del título original para contexto
-  const lower = tituloOriginal.toLowerCase();
   const hasVerbs = /\b(abre|inicia|deja|anuncia|estrena|confirma|investiga|amplia|revela|presenta|lanza)\b/i.test(tituloOriginal);
 
   let title = '';

@@ -46,9 +46,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string) {
-  const token = process.env.TG_TOKEN;
-  const chatId = process.env.TG_CHAT;
+async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string, customToken?: string, customChat?: string) {
+  const token = customToken || process.env.TG_TOKEN;
+  const chatId = customChat || process.env.TG_CHAT;
   if (!token || !chatId) return;
   const url = `https://nicaraguainformate.com/noticias/${slug}/`;
   const catEmojis: Record<string, string> = {
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (notificarTelegram !== false && publicado !== false) {
-      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '');
+      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '', body.telegramToken, body.telegramChat);
     }
 
     return NextResponse.json({ success: true, id: docRef.id, slug });

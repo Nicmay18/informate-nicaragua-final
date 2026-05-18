@@ -134,6 +134,12 @@ const nextConfig: NextConfig = {
         destination: '/cookies',
         permanent: true,
       },
+      // Admin viejo acceso directo
+      {
+        source: '/panel',
+        destination: '/api/panel',
+        permanent: false,
+      },
       // Redirecciones 301 para URLs tóxicas (AdSense remediation)
       {
         source: '/noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',

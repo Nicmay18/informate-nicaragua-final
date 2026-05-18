@@ -7,11 +7,11 @@
   --font-serif: 'Merriweather', Georgia, serif;
   --font-mono: 'SF Mono', Monaco, Consolas, monospace;
 
-  --bg-body: #e2e8f0;
-  --bg-card: #f8fafc;
-  --bg-sidebar: #edf2fb;
+  --bg-body: #eef1f7;
+  --bg-card: #ffffff;
+  --bg-sidebar: linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%);
   --bg-elevated: #ffffff;
-  --bg-hover: #e4e9f5;
+  --bg-hover: #e8ecf8;
   --bg-active: #dbeafe;
   --bg-success: #ecfdf5;
   --bg-warning: #fffbeb;
@@ -122,7 +122,7 @@
 
 /* === DASHBOARD LAYOUT === */
 .admin-dashboard { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
-.admin-sidebar { background: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 16px; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 100; }
+.admin-sidebar { background: var(--bg-sidebar); background-image: linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%); border-right: 1px solid var(--border-color); padding: 20px 16px; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 100; }
 .admin-sidebar__header { display: flex; align-items: center; gap: 12px; padding: 12px 12px 24px; border-bottom: 1px solid var(--border-light); margin-bottom: 24px; }
 .admin-sidebar__logo { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary-500), var(--primary-700)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 800; box-shadow: 0 4px 12px -2px rgba(79,70,229,0.3); }
 .admin-sidebar__brand h2 { font-size: 16px; font-weight: 800; line-height: 1.2; letter-spacing: -0.3px; }

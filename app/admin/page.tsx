@@ -177,6 +177,7 @@ export default function AdminPage() {
   const [imagePreview, setImagePreview] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const [form, setForm] = useState({
     titulo: '',
@@ -199,6 +200,31 @@ export default function AdminPage() {
   const [evalResults, setEvalResults] = useState<EvalResult[]>([]);
   const [evalLoading, setEvalLoading] = useState(false);
 
+  // Config tokens (persisted in localStorage like old admin)
+  const [config, setConfig] = useState({
+    tgToken: '',
+    tgChat: '',
+    githubToken: '',
+    githubOwner: 'Nicmay18',
+    githubRepo: 'informate-images',
+    githubPath: 'images/',
+  });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('ni_admin_config');
+      if (saved) setConfig((c) => ({ ...c, ...JSON.parse(saved) }));
+    } catch { /* ignore */ }
+  }, []);
+
+  const saveConfig = (patch: Partial<typeof config>) => {
+    setConfig((prev) => {
+      const next = { ...prev, ...patch };
+      localStorage.setItem('ni_admin_config', JSON.stringify(next));
+      return next;
+    });
+  };
+
   const { toasts, show, remove } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -220,13 +246,28 @@ export default function AdminPage() {
         setNews(data.news);
       }
     } catch (err) {
-      console.error('Error cargando noticias', err);
+      console.error('[fetchNews]', err);
+    }
+  }, [adminKey]);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/stats', { headers: { 'x-admin-key': adminKey } });
+      const data = await res.json();
+      if (data.success) {
+        setRealStats(data.stats);
+      }
+    } catch (err) {
+      console.error('[fetchStats]', err);
     }
   }, [adminKey]);
 
   useEffect(() => {
-    if (isLoggedIn) fetchNews();
-  }, [isLoggedIn, fetchNews]);
+    if (isLoggedIn) {
+      fetchNews();
+      fetchStats();
+    }
+  }, [isLoggedIn, fetchNews, fetchStats]);
 
   const filteredNews = useMemo(() => {
     let list = news;
@@ -240,13 +281,18 @@ export default function AdminPage() {
     return list;
   }, [news, categoryFilter, searchQuery]);
 
-  const stats = useMemo(() => {
-    const total = news.length;
-    const vistas = news.reduce((s, n) => s + (n.vistas || 0), 0);
-    const destacadas = news.filter((n) => n.destacada).length;
-    const cats = new Set(news.map((n) => n.categoria)).size;
-    return { total, vistas, destacadas, cats };
-  }, [news]);
+  // Real stats from Firebase
+  const [realStats, setRealStats] = useState({
+    total: 0, vistas: 0, publicadas: 0, destacadas: 0,
+    topCategories: [] as [string, number][], monthly: [] as [string, number][]
+  });
+
+  const stats = useMemo(() => ({
+    total: realStats.publicadas || news.length,
+    vistas: realStats.vistas || news.reduce((s, n) => s + (n.vistas || 0), 0),
+    destacadas: realStats.destacadas || news.filter((n) => n.destacada).length,
+    cats: new Set(news.map((n) => n.categoria)).size,
+  }), [news, realStats]);
 
   // Auth — verifica contra servidor (x-admin-key)
   async function handleLogin(e: React.FormEvent) {
@@ -335,7 +381,12 @@ export default function AdminPage() {
         const res = await fetch('/api/admin/news', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
-          body: JSON.stringify({ ...form, notificarTelegram: form.notificarTelegram }),
+          body: JSON.stringify({
+            ...form,
+            notificarTelegram: form.notificarTelegram,
+            telegramToken: config.tgToken,
+            telegramChat: config.tgChat,
+          }),
         });
         const data = await res.json();
         if (data.success) {
@@ -381,7 +432,13 @@ export default function AdminPage() {
       const res = await fetch('/api/admin/upload-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
-        body: JSON.stringify({ image: base64, filename }),
+        body: JSON.stringify({
+          image: base64,
+          filename,
+          token: config.githubToken,
+          owner: config.githubOwner,
+          repo: config.githubRepo,
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -537,6 +594,7 @@ export default function AdminPage() {
               { id: 'create', label: 'Nueva Noticia', icon: <PlusCircle size={18} /> },
               { id: 'ai', label: 'Herramientas AI', icon: <Sparkles size={18} /> },
               { id: 'seo', label: 'Evaluador SEO', icon: <BarChart3 size={18} /> },
+              { id: 'config', label: 'Configuración', icon: <Settings size={18} /> },
             ].map((item) => (
               <li key={item.id} className="admin-nav__item">
                 <a
@@ -705,6 +763,53 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+
+            <div className="admin-card" style={{ marginTop: 24 }}>
+              <div className="admin-card__header">
+                <div className="admin-card__title"><BarChart3 size={16} /> Analytics del Sitio</div>
+                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" className="admin-btn admin-btn--ghost admin-btn--sm">Abrir Search Console ↗</a>
+              </div>
+              <div className="admin-card__body">
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
+                  <div>
+                    <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--text-secondary)' }}>Noticias por mes</h4>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 100 }}>
+                      {realStats.monthly.length === 0 && <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Sin datos</span>}
+                      {realStats.monthly.map(([month, count]) => {
+                        const max = Math.max(...realStats.monthly.map((m) => m[1]), 1);
+                        const pct = (count / max) * 100;
+                        return (
+                          <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                            <div style={{ width: '100%', height: `${pct}%`, background: 'linear-gradient(180deg, #6366f1, #4338ca)', borderRadius: '4px 4px 0 0', minHeight: 4 }} />
+                            <span style={{ fontSize: 10, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>{month.slice(5)}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--text-secondary)' }}>Top Categorías</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {realStats.topCategories.length === 0 && <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>Sin datos</span>}
+                      {realStats.topCategories.map(([cat, count]) => {
+                        const max = Math.max(...realStats.topCategories.map((c) => c[1]), 1);
+                        const pct = (count / max) * 100;
+                        const meta = CAT_META[cat];
+                        return (
+                          <div key={cat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontSize: 12, fontWeight: 600, width: 110, color: meta?.color || 'var(--text-primary)' }}>{cat}</span>
+                            <div className="admin-progress" style={{ flex: 1, height: 6, marginTop: 0 }}>
+                              <div className="admin-progress__fill" style={{ width: `${pct}%`, background: meta?.color || '#6366f1' }} />
+                            </div>
+                            <span style={{ fontSize: 11, color: 'var(--text-tertiary)', width: 30, textAlign: 'right' }}>{count}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -785,7 +890,10 @@ export default function AdminPage() {
                 <p>{editingId ? 'Modifique los campos y guarde los cambios' : 'Complete todos los campos para publicar'}</p>
               </div>
               <div style={{ display: 'flex', gap: 10 }}>
-                <button className="admin-btn admin-btn--secondary" onClick={() => { setEditorOpen(false); setActiveTab('news'); }}>Cancelar</button>
+                <button className="admin-btn admin-btn--ghost" onClick={() => setShowPreview((p) => !p)}>
+                  <Eye size={16} /> {showPreview ? 'Ocultar' : 'Vista Previa'}
+                </button>
+                <button className="admin-btn admin-btn--secondary" onClick={() => { setEditorOpen(false); setActiveTab('news'); setShowPreview(false); }}>Cancelar</button>
                 <button className="admin-btn admin-btn--primary" onClick={handleSave} disabled={loading}>
                   {loading ? 'Guardando...' : <><Send size={16} /> {editingId ? 'Actualizar' : 'Publicar'}</>}
                 </button>
@@ -995,6 +1103,46 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+
+            {/* Article Preview */}
+            {showPreview && (
+              <div className="admin-card" style={{ marginTop: 24 }}>
+                <div className="admin-card__header">
+                  <div className="admin-card__title"><Eye size={16} /> Vista Previa de la Noticia</div>
+                </div>
+                <div className="admin-card__body" style={{ padding: 0 }}>
+                  <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 28px', background: '#ffffff', color: '#111827' }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', color: '#dc2626', marginBottom: 12, letterSpacing: '0.8px' }}>{form.categoria}</div>
+                    <h1 style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.25, marginBottom: 16, color: '#0f172a' }}>{form.titulo || 'Título de la noticia'}</h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, color: '#64748b', fontSize: 13 }}>
+                      <span style={{ fontWeight: 600 }}>{form.autor || 'Nicaragua Informate'}</span>
+                      <span>•</span>
+                      <span>{new Date().toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                      <span>•</span>
+                      <span>{estimateReadTime(form.contenido)} min de lectura</span>
+                    </div>
+                    {form.imagen && (
+                      <div style={{ marginBottom: 24, borderRadius: 12, overflow: 'hidden' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={form.imagen} alt={form.titulo} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      </div>
+                    )}
+                    <p style={{ fontSize: 17, lineHeight: 1.7, color: '#374151', marginBottom: 20, fontWeight: 500 }}>{form.resumen}</p>
+                    <div
+                      style={{ fontSize: 16, lineHeight: 1.8, color: '#374151' }}
+                      dangerouslySetInnerHTML={{ __html: form.contenido }}
+                    />
+                    <div style={{ marginTop: 32, paddingTop: 20, borderTop: '1px solid #e5e7eb' }}>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                        {['Nicaragua', form.categoria, 'Noticias'].map((tag) => (
+                          <span key={tag} style={{ background: '#f3f4f6', color: '#4b5563', fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 20 }}>#{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -1247,6 +1395,130 @@ export default function AdminPage() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Config Tab */}
+        {activeTab === 'config' && (
+          <div className="admin-tab active">
+            <div className="admin-page__header">
+              <div className="admin-page__title">
+                <h1>Configuración</h1>
+                <p>Integraciones y tokens del sistema</p>
+              </div>
+            </div>
+
+            <div className="admin-content-grid">
+              <div className="admin-card">
+                <div className="admin-card__header">
+                  <div className="admin-card__title"><Settings size={16} /> Telegram Bot</div>
+                </div>
+                <div className="admin-card__body">
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 16 }}>Configura el bot de Telegram para notificaciones automáticas al publicar.</p>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Bot Token</label>
+                    <input
+                      type="password"
+                      className="admin-form-input"
+                      placeholder="1234567890:ABC..."
+                      value={config.tgToken}
+                      onChange={(e) => saveConfig({ tgToken: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Chat ID</label>
+                    <input
+                      type="text"
+                      className="admin-form-input"
+                      placeholder="-100..."
+                      value={config.tgChat}
+                      onChange={(e) => saveConfig({ tgChat: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card__header">
+                  <div className="admin-card__title"><ImageIcon size={16} /> GitHub - Subida de Imágenes</div>
+                </div>
+                <div className="admin-card__body">
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 16 }}>Token para subir imágenes al repo de GitHub (CDN jsDelivr).</p>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Personal Access Token</label>
+                    <input
+                      type="password"
+                      className="admin-form-input"
+                      placeholder="ghp_xxxxxxxxxxxx"
+                      value={config.githubToken}
+                      onChange={(e) => saveConfig({ githubToken: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Owner</label>
+                    <input
+                      type="text"
+                      className="admin-form-input"
+                      placeholder="Nicmay18"
+                      value={config.githubOwner}
+                      onChange={(e) => saveConfig({ githubOwner: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Repo</label>
+                    <input
+                      type="text"
+                      className="admin-form-input"
+                      placeholder="informate-images"
+                      value={config.githubRepo}
+                      onChange={(e) => saveConfig({ githubRepo: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Ruta imágenes</label>
+                    <input
+                      type="text"
+                      className="admin-form-input"
+                      placeholder="images/"
+                      value={config.githubPath}
+                      onChange={(e) => saveConfig({ githubPath: e.target.value })}
+                      style={{ fontFamily: 'monospace', fontSize: 13 }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-card" style={{ marginTop: 20 }}>
+              <div className="admin-card__header">
+                <div className="admin-card__title"><Activity size={16} /> Estado del Sistema</div>
+              </div>
+              <div className="admin-card__body">
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+                  <div style={{ padding: 14, background: config.tgToken ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.08)', borderRadius: 8, border: `1px solid ${config.tgToken ? 'rgba(5,150,105,0.2)' : 'rgba(220,38,38,0.2)'}` }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: config.tgToken ? '#059669' : '#dc2626' }}>Telegram</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>{config.tgToken ? 'Configurado ✅' : 'No configurado ❌'}</div>
+                  </div>
+                  <div style={{ padding: 14, background: config.githubToken ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.08)', borderRadius: 8, border: `1px solid ${config.githubToken ? 'rgba(5,150,105,0.2)' : 'rgba(220,38,38,0.2)'}` }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: config.githubToken ? '#059669' : '#dc2626' }}>GitHub</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>{config.githubToken ? 'Configurado ✅' : 'No configurado ❌'}</div>
+                  </div>
+                  <div style={{ padding: 14, background: adminKey ? 'rgba(5,150,105,0.08)' : 'rgba(220,38,38,0.08)', borderRadius: 8, border: `1px solid ${adminKey ? 'rgba(5,150,105,0.2)' : 'rgba(220,38,38,0.2)'}` }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: adminKey ? '#059669' : '#dc2626' }}>Admin Key</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>{adminKey ? 'Autenticado ✅' : 'No autenticado ❌'}</div>
+                  </div>
+                  <div style={{ padding: 14, background: 'rgba(8,145,178,0.08)', borderRadius: 8, border: '1px solid rgba(8,145,178,0.2)' }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: '#0891b2' }}>Noticias</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>{news.length} publicadas</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
