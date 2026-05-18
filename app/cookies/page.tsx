@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
@@ -136,7 +137,7 @@ export default function CookiesPage() {
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
         <li style={{ marginBottom: '0.5rem' }}>Email: <a href="mailto:privacidad@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>privacidad@nicaraguainformate.com</a></li>
-        <li style={{ marginBottom: '0.5rem' }}>Formulario: <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>/contacto</a></li>
+        <li style={{ marginBottom: '0.5rem' }}>Formulario: <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>/contacto</Link></li>
       </ul>
     </LegalPageShell>
   );

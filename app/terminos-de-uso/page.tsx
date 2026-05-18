@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
@@ -65,7 +66,7 @@ export default function TerminosDeUsoPage() {
         Nicaragua Informate, su logotipo, nombre comercial y todo el contenido original son propiedad exclusiva de Nicaragua Informate o de sus licenciantes. Todos los derechos están reservados. No está permitida la reproducción total o parcial sin autorización previa y expresa por escrito.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Para solicitar permiso de uso de contenido, contáctanos a través de nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>.
+        Para solicitar permiso de uso de contenido, contáctanos a través de nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>6. Limitación de responsabilidad</h2>

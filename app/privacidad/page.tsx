@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
@@ -178,7 +179,7 @@ export default function PrivacidadPage() {
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
         Si tienes preguntas, comentarios o inquietudes sobre esta política de privacidad, o deseas ejercer tus derechos sobre tus datos personales, escríbenos a{' '}
         <a href="mailto:privacidad@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>privacidad@nicaraguainformate.com</a>{' '}
-        o usa nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>.{' '}
+        o usa nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>.{' '}
         Responderemos a tu solicitud en un plazo razonable, de conformidad con la legislación aplicable de Nicaragua y las normativas internacionales de protección de datos.
       </p>
     </LegalPageShell>

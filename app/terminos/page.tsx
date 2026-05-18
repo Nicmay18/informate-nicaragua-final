@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
@@ -56,7 +57,7 @@ export default function TerminosPage() {
         Se concede una licencia limitada, no exclusiva, intransferible y revocable para visualizar el contenido únicamente para uso personal y no comercial. Cualquier uso no autorizado del contenido, incluyendo pero no limitado a reproducción, modificación, distribución, exhibición pública, transmisión o creación de obras derivadas, está estrictamente prohibido y puede constituir una infracción de las leyes de derechos de autor, marcas registradas y otras leyes aplicables.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate, su logotipo, nombre comercial y todo el contenido original son propiedad exclusiva de Nicaragua Informate o de sus licenciantes. Todos los derechos están reservados. Para solicitar permiso de uso de contenido, contáctanos a través de nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a> o escribe a <a href="mailto:legal@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>legal@nicaraguainformate.com</a>.
+        Nicaragua Informate, su logotipo, nombre comercial y todo el contenido original son propiedad exclusiva de Nicaragua Informate o de sus licenciantes. Todos los derechos están reservados. Para solicitar permiso de uso de contenido, contáctanos a través de nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link> o escribe a <a href="mailto:legal@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>legal@nicaraguainformate.com</a>.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Política de contenido</h2>

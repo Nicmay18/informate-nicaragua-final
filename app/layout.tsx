@@ -32,13 +32,11 @@ export const metadata: Metadata = {
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
-    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'Nicaragua Informate' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
-    images: ['/logo.png'],
   },
 };
 

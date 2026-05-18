@@ -34,6 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <p style={{ color: '#6b7280', marginBottom: '24px' }}>Por favor, recarga la página o vuelve al inicio.</p>
           <a
             href="/"
+            onClick={() => window.location.replace('/')}
             style={{
               display: 'inline-block',
               padding: '12px 24px',

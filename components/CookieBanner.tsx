@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
@@ -138,7 +139,7 @@ export default function CookieBanner() {
         <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1rem', color: '#cbd5e1' }}>
           <strong>Nicaragua Informate</strong> utiliza cookies esenciales, de analítica y de publicidad para mejorar tu experiencia y mostrar anuncios relevantes. 
           Al continuar navegando, aceptas nuestro uso de cookies. 
-          <a href="/cookies" style={{ color: '#c41e3a', textDecoration: 'underline', marginLeft: '8px' }}>Política de cookies</a>
+          <Link href="/cookies" style={{ color: '#c41e3a', textDecoration: 'underline', marginLeft: '8px' }}>Política de cookies</Link>
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
