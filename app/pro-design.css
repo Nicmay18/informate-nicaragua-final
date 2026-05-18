@@ -540,7 +540,7 @@
 }
 .hero-pro__bars { display: flex; gap: 5px; flex: 1; }
 .hero-pro__bar {
-  height: 3px; flex: 1; border: none; padding: 0; cursor: pointer;
+  height: 3px; min-height: 3px; flex: 1; border: none; padding: 0; cursor: pointer;
   border-radius: 2px; overflow: hidden; position: relative;
   background: rgba(255,255,255,0.25);
   transition: background 0.3s;
