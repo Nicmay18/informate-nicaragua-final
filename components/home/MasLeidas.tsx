@@ -54,6 +54,9 @@ export default function MasLeidas({ noticias }: { noticias: Noticia[] }) {
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
                   overflow: 'hidden',
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
+                  hyphens: 'none',
                 }}>
                   {n.titulo}
                 </p>

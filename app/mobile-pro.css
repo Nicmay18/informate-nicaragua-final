@@ -402,8 +402,10 @@
   margin-bottom: var(--s-2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word; word-break: break-word; hyphens: none;
 }
 .mobile-pro .news-card__excerpt {
   font-size: 14px;
@@ -411,6 +413,7 @@
   color: var(--c-text-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: var(--s-3);
@@ -539,8 +542,10 @@
   color: var(--c-text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word; word-break: break-word; hyphens: none;
 }
 
 /* ============ NEWSLETTER ============ */
