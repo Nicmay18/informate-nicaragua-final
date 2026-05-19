@@ -3,19 +3,19 @@
    Fuente: HTML/CSS proporcionado por el usuario
    ========================================/* ============ TOKENS DE DISEÑO ============ */
 :root {
-  --c-primary: #1E3A5F;
-  --c-primary-dark: #152A45;
-  --c-accent: #C41E3A;
-  --c-accent-hover: #A01830;
+  --c-primary: #0A192F;
+  --c-primary-dark: #061220;
+  --c-accent: #E53E3E;
+  --c-accent-hover: #C53030;
   --c-bg: #FFFFFF;
   --c-surface: #F8FAFC;
   --c-surface-elevated: #FFFFFF;
   --c-border: #E2E8F0;
   --c-border-light: #F1F5F9;
-  --c-text: #111827;
-  --c-text-secondary: #4B5563;
-  --c-text-tertiary: #94A3B8;
-  --c-text-muted: #64748B;
+  --c-text: #1A202C;
+  --c-text-secondary: #4A5568;
+  --c-text-tertiary: #A0AEC0;
+  --c-text-muted: #718096;
   --c-success: #059669;
   --c-danger: #DC2626;
   --c-radio-live: #EF4444;
@@ -531,37 +531,24 @@
 @media (max-width: 400px) {
   .hero-pro__nav { display: none; }
 }
-/* Progress bars */
+/* Dot indicators */
 .hero-pro__indicators {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 10;
-  display: flex; align-items: center; gap: var(--s-3);
-  padding: var(--s-3) var(--s-5);
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: var(--s-4) var(--s-5);
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
 }
-.hero-pro__counter {
-  font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-  color: white;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-  min-width: 46px; flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
+.hero-pro__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  border: none; padding: 0; cursor: pointer;
+  background: rgba(255,255,255,0.3);
+  transition: background 0.3s, transform 0.2s;
 }
-.hero-pro__bars { display: flex; gap: 5px; flex: 1; }
-.hero-pro__bar {
-  height: 3px; min-height: 3px; flex: 1; border: none; padding: 0; cursor: pointer;
-  border-radius: 2px; overflow: hidden; position: relative;
-  background: rgba(255,255,255,0.25);
-  transition: background 0.3s;
-}
-.hero-pro__bar.done { background: rgba(255,255,255,0.75); }
-.hero-pro__bar.active::after {
-  content: '';
-  position: absolute; left: 0; top: 0;
-  height: 100%; background: white; border-radius: 2px;
-  animation: bar-progress 6s linear forwards;
-}
-@keyframes bar-progress {
-  from { width: 0%; }
-  to   { width: 100%; }
+.hero-pro__dot.active {
+  background: rgba(255,255,255,0.95);
+  transform: scale(1.2);
 }
 
 /* ============ SECCIONES (BBC/NYT style) ============ */
@@ -754,7 +741,7 @@
 }
 .news-list-item__img-wrap {
   flex-shrink: 0; border-radius: var(--radius-sm);
-  overflow: hidden; width: 88px; height: 62px;
+  overflow: hidden; width: 120px; height: 90px;
 }
 .news-list-item__img {
   width: 100%; height: 100%; object-fit: cover;
@@ -889,7 +876,7 @@
 .footer {
   background: linear-gradient(180deg, var(--c-surface) 0%, #f1f5f9 100%);
   border-top: 1px solid var(--c-border);
-  padding: var(--s-10) var(--s-4) 100px;
+  padding: var(--s-10) var(--s-4) 72px;
   flex-shrink: 0;
   margin-top: auto;
 }
@@ -994,73 +981,80 @@
   transition: width 0.1s linear;
 }
 
-/* ============ RADIO FAB ============ */
-.radio-fab {
-  position: fixed; bottom: 24px; right: 24px; z-index: 50;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+/* ============ RADIO BAR (sticky bottom) ============ */
+.radio-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+  min-height: 56px;
 }
-@media (max-width: 768px) {
-  .radio-fab {
-    bottom: 20px;
-    right: 20px;
-    transform: scale(0.9);
-  }
+.radio-bar__play {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.2s, transform 0.15s;
 }
-.radio-fab__label {
-  display: flex; align-items: center; gap: 4px;
-  background: var(--c-primary-dark);
-  color: white; font-size: 9px; font-weight: 800;
-  letter-spacing: 1.5px; padding: 3px 9px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  pointer-events: none; white-space: nowrap;
+.radio-bar__play:hover { background: rgba(255,255,255,0.25); }
+.radio-bar__play:active { transform: scale(0.95); }
+.radio-bar__info {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 2px;
 }
-.radio-fab__label-dot {
-  width: 6px; height: 6px; border-radius: 50%;
+.radio-bar__label {
+  display: flex; align-items: center; gap: 6px;
+}
+.radio-bar__live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
   background: var(--c-radio-live);
   animation: pulseLive 2s infinite;
   flex-shrink: 0;
-}
-.radio-fab__btn {
-  width: 58px; height: 58px;
-  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
-  border-radius: var(--radius-full);
-  display: flex; align-items: center; justify-content: center;
-  color: white;
-  box-shadow: 0 4px 20px rgba(30,58,95,0.4), 0 1px 4px rgba(0,0,0,0.2);
-  transition: transform 0.25s, box-shadow 0.25s;
-  position: relative; cursor: pointer;
-}
-.radio-fab__btn:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(30,58,95,0.5); }
-.radio-fab__btn:active { transform: scale(0.95); }
-.radio-fab__btn.playing { background: linear-gradient(135deg, var(--c-accent), #8b0000); }
-.radio-fab__live {
-  position: absolute; top: 0; right: 0;
-  width: 14px; height: 14px;
-  background: var(--c-radio-live); border-radius: var(--radius-full);
-  border: 2px solid white;
-  animation: pulseLive 2s infinite;
 }
 @keyframes pulseLive {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.4); opacity: 0.6; }
 }
+.radio-bar__live-txt {
+  font-size: 9px; font-weight: 800; letter-spacing: 1.2px;
+  color: rgba(255,255,255,0.7); text-transform: uppercase;
+}
+.radio-bar__station {
+  font-size: 13px; font-weight: 600; color: white;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.radio-bar__expand {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-full);
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.08);
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.2s;
+}
+.radio-bar__expand:hover { background: rgba(255,255,255,0.18); }
 
 /* Panel */
 .radio-panel {
-  position: fixed; bottom: 96px; right: 24px;
-  width: 300px;
-  background: rgba(21, 42, 69, 0.95);
+  position: fixed; bottom: 56px; left: 0; right: 0;
+  width: 100%; max-width: 420px; margin: 0 auto;
+  background: rgba(21, 42, 69, 0.96);
   color: white;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.3), 0 -2px 8px rgba(0,0,0,0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
   transform: translateY(16px) scale(0.96);
   opacity: 0; pointer-events: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 499;
+  z-index: 49;
 }
 .radio-panel.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
 .radio-panel__header {
@@ -1164,7 +1158,7 @@
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
   display: flex; flex-direction: column;
-  padding-bottom: 100px;
+  padding-bottom: 72px;
 }
 .menu-panel.active { transform: translateX(0); }
 .menu-header { padding: var(--s-6) var(--s-4) var(--s-4); border-bottom: 1px solid var(--c-border-light); }

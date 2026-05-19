@@ -118,7 +118,11 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           {/* Slides */}
           <div className="hero-pro__track">
             {heroNews.map((n, i) => (
-              <article key={n.slug} className={`hero-pro__slide${i === currentSlide ? ' active' : ''}`}>
+              <Link
+                key={n.slug}
+                href={`/noticias/${n.slug}`}
+                className={`hero-pro__slide${i === currentSlide ? ' active' : ''}`}
+              >
                 {n.imagen && n.imagen !== '/logo.png' ? (
                   <Image
                     src={n.imagen}
@@ -150,9 +154,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                     <span className={`hero-pro__badge news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>
                       {n.categoria}
                     </span>
-                    <Link href={`/noticias/${n.slug}`}>
-                      <h2 className="hero-pro__title">{n.titulo}</h2>
-                    </Link>
+                    <h2 className="hero-pro__title">{n.titulo}</h2>
                     {n.resumen && (
                       <p className="hero-pro__excerpt">{n.resumen}</p>
                     )}
@@ -167,13 +169,10 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                         <span><Clock size={11} /> {formatDateShort(n.fecha)}</span>
                         {n.vistas ? <span><Eye size={11} /> {formatViews(n.vistas)} lecturas</span> : null}
                       </div>
-                      <Link href={`/noticias/${n.slug}`} className="hero-pro__cta">
-                        Leer noticia →
-                      </Link>
                     </div>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 
@@ -191,19 +190,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
 
           {/* Indicadores */}
           <div className="hero-pro__indicators">
-            <span className="hero-pro__counter">
-              {String(currentSlide + 1).padStart(2, '0')}&nbsp;/&nbsp;{String(heroNews.length).padStart(2, '0')}
-            </span>
-            <div className="hero-pro__bars">
-              {heroNews.map((_, i) => (
-                <button
-                  key={i}
-                  className={`hero-pro__bar${i === currentSlide ? ' active' : i < currentSlide ? ' done' : ''}`}
-                  onClick={() => setCurrentSlide(i)}
-                  aria-label={`Ir a noticia ${i + 1}`}
-                />
-              ))}
-            </div>
+            {heroNews.map((_, i) => (
+              <button
+                key={i}
+                className={`hero-pro__dot${i === currentSlide ? ' active' : ''}`}
+                onClick={() => setCurrentSlide(i)}
+                aria-label={`Ir a noticia ${i + 1}`}
+              />
+            ))}
           </div>
         </section>
       )}
@@ -249,44 +243,16 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
               </Link>
             )}
 
-            {/* Grid 2/3 columnas */}
-            {filteredNews.slice(1, 4).length > 0 && (
-              <div className="news-grid-2col">
-                {filteredNews.slice(1, 4).map(n => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card-sm">
-                    <div className="news-card-sm__img-wrap">
-                      {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={340} height={200} className="news-card-sm__img" />
-                      ) : (
-                        <NewsImagePlaceholder categoria={n.categoria} width={340} height={200} className="news-card-sm__img" />
-                      )}
-                      <span className={`news-card-sm__badge news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>{n.categoria}</span>
-                      {isNewArticle(n.fecha) && <span className="badge-nuevo badge-nuevo--card">NUEVO</span>}
-                    </div>
-                    <div className="news-card-sm__body">
-                      <h3 className="news-card-sm__title">{n.titulo}</h3>
-                      <div className="news-card-sm__meta"><Clock size={10} /> {formatDateShort(n.fecha)}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* Lista horizontal compacta */}
-            {filteredNews.slice(4, 10).length > 0 && (
-              <div className="section-cat-divider">
-                <span>Más noticias</span>
-              </div>
-            )}
-            {filteredNews.slice(4, 10).length > 0 && (
+            {/* Lista horizontal unificada */}
+            {filteredNews.slice(1).length > 0 && (
               <div className="news-list-compact">
-                {filteredNews.slice(4, 10).map(n => (
+                {filteredNews.slice(1).map(n => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-list-item">
                     <div className="news-list-item__img-wrap">
                       {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={100} height={70} className="news-list-item__img" />
+                        <Image src={n.imagen} alt={n.titulo} width={120} height={90} className="news-list-item__img" />
                       ) : (
-                        <NewsImagePlaceholder categoria={n.categoria} width={100} height={70} className="news-list-item__img" />
+                        <NewsImagePlaceholder categoria={n.categoria} width={120} height={90} className="news-list-item__img" />
                       )}
                     </div>
                     <div className="news-list-item__content">

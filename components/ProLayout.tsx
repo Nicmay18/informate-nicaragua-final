@@ -6,7 +6,7 @@ import Image from 'next/image';
 import BrandIcon from '@/components/BrandIcon';
 import {
   Search, Menu, X, Moon, Sun,
-  Radio, Play, Pause, Volume2,
+  Radio, Play, Pause, Volume2, ChevronUp,
   Calendar,
   Home, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, Mail,
   Info, FileText, Shield, ChevronRight,
@@ -37,7 +37,6 @@ export default function ProLayout({
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [dateStr, setDateStr] = useState('');
   const [worldTimes, setWorldTimes] = useState<string[]>([]);
-  const [clockIdx, setClockIdx] = useState(0);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -74,8 +73,7 @@ export default function ProLayout({
     };
     updateClocks();
     const tickTime = setInterval(updateClocks, 30000);
-    const tickCity = setInterval(() => setClockIdx(i => (i + 1) % WORLD_CLOCKS.length), 4000);
-    return () => { clearInterval(tickTime); clearInterval(tickCity); };
+    return () => { clearInterval(tickTime); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -139,10 +137,10 @@ export default function ProLayout({
           <div className="header-bar__date">
             <Calendar size={12} /> {dateStr}
           </div>
-          <div key={clockIdx} className="world-clock-single">
-            <span className="world-clock__flag">{WORLD_CLOCKS[clockIdx].flag}</span>
-            <span className="world-clock__label">{WORLD_CLOCKS[clockIdx].label}</span>
-            <span className="world-clock__time">{worldTimes[clockIdx] || '--:--'}</span>
+          <div className="world-clock-single">
+            <span className="world-clock__flag">🇳🇮</span>
+            <span className="world-clock__label">Managua</span>
+            <span className="world-clock__time">{worldTimes[0] || '--:--'}</span>
           </div>
         </div>
         <div className="header-bar__right">
@@ -251,67 +249,77 @@ export default function ProLayout({
         </div>
       </footer>
 
-      {/* === RADIO FAB === */}
-      <div className="radio-fab">
-        <div className="radio-fab__label">
-          <span className="radio-fab__label-dot" />
-          RADIO
+      {/* === RADIO BAR (sticky bottom) === */}
+      <div className="radio-bar">
+        <button
+          className="radio-bar__play"
+          onClick={() => setRadioPlaying(p => !p)}
+          aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
+        >
+          {radioPlaying ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+        <div className="radio-bar__info">
+          <div className="radio-bar__label">
+            <span className="radio-bar__live-dot" />
+            <span className="radio-bar__live-txt">En Vivo</span>
+          </div>
+          <div className="radio-bar__station">{RADIO_STATION}</div>
         </div>
         <button
-          className={`radio-fab__btn${radioPlaying ? ' playing' : ''}`}
+          className="radio-bar__expand"
           onClick={() => setRadioOpen(o => !o)}
-          aria-label="Radio en vivo"
+          aria-label={radioOpen ? 'Cerrar panel' : 'Expandir radio'}
         >
-          <Radio size={22} />
-          <span className="radio-fab__live" />
+          <ChevronUp size={18} style={{ transform: radioOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
         </button>
+      </div>
 
-        <div className={`radio-panel${radioOpen ? ' active' : ''}`}>
-          <div className="radio-panel__header">
-            <div className="radio-panel__brand">
-              <span className="radio-panel__live-dot" />
-              <span className="radio-panel__live-txt">EN VIVO</span>
-            </div>
-            <button className="radio-panel__close" onClick={() => setRadioOpen(false)} aria-label="Cerrar">
-              <X size={16} />
-            </button>
+      {/* Radio panel (slides up from bottom bar) */}
+      <div className={`radio-panel${radioOpen ? ' active' : ''}`}>
+        <div className="radio-panel__header">
+          <div className="radio-panel__brand">
+            <span className="radio-panel__live-dot" />
+            <span className="radio-panel__live-txt">EN VIVO</span>
           </div>
+          <button className="radio-panel__close" onClick={() => setRadioOpen(false)} aria-label="Cerrar">
+            <X size={16} />
+          </button>
+        </div>
 
-          <div className="radio-panel__station-info">
-            <div className="radio-panel__station-icon"><Radio size={18} /></div>
-            <div>
-              <div className="radio-panel__station-name">{RADIO_STATION}</div>
-              <div className="radio-panel__station-desc">{RADIO_DESC}</div>
-            </div>
+        <div className="radio-panel__station-info">
+          <div className="radio-panel__station-icon"><Radio size={18} /></div>
+          <div>
+            <div className="radio-panel__station-name">{RADIO_STATION}</div>
+            <div className="radio-panel__station-desc">{RADIO_DESC}</div>
           </div>
+        </div>
 
-          {/* Wave visualizer */}
-          {radioPlaying && (
-            <div className="radio-panel__wave">
-              {[...Array(12)].map((_, i) => (
-                <span key={i} className="radio-panel__wave-bar" style={{ animationDelay: `${i * 0.1}s` }} />
-              ))}
-            </div>
-          )}
+        {/* Wave visualizer */}
+        {radioPlaying && (
+          <div className="radio-panel__wave">
+            {[...Array(12)].map((_, i) => (
+              <span key={i} className="radio-panel__wave-bar" style={{ animationDelay: `${i * 0.1}s` }} />
+            ))}
+          </div>
+        )}
 
-          <div className="radio-panel__controls">
-            <button
-              className={`radio-panel__play${radioPlaying ? ' active' : ''}`}
-              onClick={() => setRadioPlaying(p => !p)}
-              aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
-            >
-              {radioPlaying ? <Pause size={20} /> : <Play size={20} />}
-            </button>
-            <div className="radio-panel__vol-wrap">
-              <Volume2 size={14} style={{ color: 'var(--c-text-muted)', flexShrink: 0 }} />
-              <input
-                type="range" min="0" max="1" step="0.05"
-                value={radioVol}
-                onChange={handleVolume}
-                className="radio-panel__vol"
-                aria-label="Volumen"
-              />
-            </div>
+        <div className="radio-panel__controls">
+          <button
+            className={`radio-panel__play${radioPlaying ? ' active' : ''}`}
+            onClick={() => setRadioPlaying(p => !p)}
+            aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
+          >
+            {radioPlaying ? <Pause size={20} /> : <Play size={20} />}
+          </button>
+          <div className="radio-panel__vol-wrap">
+            <Volume2 size={14} style={{ color: 'var(--c-text-muted)', flexShrink: 0 }} />
+            <input
+              type="range" min="0" max="1" step="0.05"
+              value={radioVol}
+              onChange={handleVolume}
+              className="radio-panel__vol"
+              aria-label="Volumen"
+            />
           </div>
         </div>
       </div>
