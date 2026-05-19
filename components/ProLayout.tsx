@@ -28,9 +28,10 @@ export default function ProLayout({
   const [radioPlaying, setRadioPlaying] = useState(false);
   const [radioOpen, setRadioOpen] = useState(false);
   const [radioVol, setRadioVol] = useState(0.8);
+  const [breakingDismissed, setBreakingDismissed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Stream principal — actualizar con la URL real del cliente
+  // Stream principal
   const RADIO_STREAM = 'https://stm1.ssl-streams.com:18816/stream';
   const RADIO_STATION = 'La Buenísima 93.1 FM';
   const RADIO_DESC = 'Más música, menos problemas';
@@ -131,35 +132,42 @@ export default function ProLayout({
 
   return (
     <div className="ni-body">
-      {/* === HEADER BAR === */}
-      <div className="header-bar">
-        <div className="header-bar__left">
-          <div className="header-bar__date">
-            <Calendar size={12} /> {dateStr}
-          </div>
-          <div className="world-clock-single">
-            <span className="world-clock__flag">🇳🇮</span>
-            <span className="world-clock__label">Managua</span>
-            <span className="world-clock__time">{worldTimes[0] || '--:--'}</span>
-          </div>
-        </div>
-        <div className="header-bar__right">
-          <div className="header-bar__social">
-            <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={12} /></a>
-            <a href="https://wa.me/?text=Nicaragua+Informate" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><BrandIcon name="whatsapp" size={12} /></a>
-            <a href="https://t.me/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><IconTelegram size={12} /></a>
+      {/* === ÚLTIMA HORA BAR === */}
+      {tickerText && !breakingDismissed && (
+        <div className="breaking-bar">
+          <div className="breaking-bar__inner">
+            <span className="breaking-bar__label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              Última Hora
+            </span>
+            <span className="breaking-bar__text">{tickerText}</span>
+            <button className="breaking-bar__close" onClick={() => setBreakingDismissed(true)} aria-label="Cerrar">
+              <X size={14} />
+            </button>
           </div>
         </div>
-      </div>
+      )}
 
       {/* === HEADER MAIN === */}
-      <div className="header-main-wrap">
+      <header className="ni-header">
         <div className="header-main">
           <Link href="/" className="header-logo">
-            <Image src="/logo.png" alt="Nicaragua Informate" width={64} height={64} className="header-logo__img" priority />
+            <Image src="/logo.png" alt="Nicaragua Informate" width={32} height={32} className="header-logo__img" priority />
             <div className="header-logo__text">Nicaragua <span>Informate</span></div>
           </Link>
+
+          {/* Desktop Nav */}
+          <nav className="header-nav-desktop">
+            <Link href="/" className="header-nav-link">Inicio</Link>
+            <Link href="/categoria/nacionales" className="header-nav-link">Nacionales</Link>
+            <Link href="/categoria/sucesos" className="header-nav-link">Sucesos</Link>
+            <Link href="/categoria/internacionales" className="header-nav-link">Internacionales</Link>
+            <Link href="/categoria/deportes" className="header-nav-link">Deportes</Link>
+            <Link href="/categoria/tecnologia" className="header-nav-link">Tecnología</Link>
+          </nav>
+
           <div className="header-actions">
+            <span className="header-date-desktop">{dateStr}</span>
             <div className="search-wrapper" ref={searchRef}>
               <input
                 ref={searchInputRef}
@@ -175,23 +183,12 @@ export default function ProLayout({
             <button className="header-btn" onClick={toggleDark} aria-label="Cambiar tema">
               {dark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button className="header-btn" onClick={() => setMenuOpen(true)} aria-label="Menú">
+            <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
               <Menu size={20} />
             </button>
           </div>
         </div>
-      </div>
-
-      {/* === TICKER (CNN/BBC style marquee) === */}
-      {tickerText && (
-        <div className="ticker-wrap">
-          <div className="ticker-label">ÚLTIMA HORA</div>
-          <div className="ticker-marquee">
-            <span className="ticker-marquee__content">{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
-            <span className="ticker-marquee__content">{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;{tickerText}&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
-          </div>
-        </div>
-      )}
+      </header>
 
       {/* === MAIN === */}
       <main id="main-content">{children}</main>
@@ -201,11 +198,11 @@ export default function ProLayout({
         <div className="footer__grid">
           <div className="footer__brand">
             <div className="footer__brand-logo">
-              <Image src="/logo.png" alt="Nicaragua Informate" width={48} height={48} className="footer-logo-img" />
+              <span className="mark">NI</span>
               Nicaragua <span>Informate</span>
             </div>
             <p className="footer__brand-desc">
-              Nicaragua Informate es un medio digital nicaragüense dedicado a compartir noticias e información de interés para los nicaragüenses dentro y fuera del país. Publicamos diariamente contenido sobre nacionales, sucesos, internacionales, deportes, espectáculos, tecnología y temas de actualidad, con información clara, rápida y verificada.
+              Periodismo independiente desde Managua. Noticias verificadas de Nicaragua para nicaragüenses en el país y el exterior.
             </p>
             <div className="footer__social">
               <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={14} /></a>

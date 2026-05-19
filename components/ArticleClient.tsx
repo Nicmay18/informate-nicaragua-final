@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
+import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square, Flame } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
@@ -522,222 +522,308 @@ export default function ArticleClient({
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
       <article className="article-page">
-        {/* ===== BREADCRUMB ===== */}
-        <nav className="article-breadcrumb">
-          <Link href="/">Inicio</Link>
-          <span>›</span>
-          <span style={{ color: catColor, fontWeight: 700 }}>{noticia.categoria}</span>
-          <span>›</span>
-          <span>Artículo</span>
-        </nav>
+        <div className="article-page__main">
+          {/* ===== BREADCRUMB ===== */}
+          <nav className="article-breadcrumb">
+            <Link href="/">Inicio</Link>
+            <span>›</span>
+            <span style={{ color: catColor, fontWeight: 700 }}>{noticia.categoria}</span>
+            <span>›</span>
+            <span>Artículo</span>
+          </nav>
 
-        {/* ===== CATEGORY BADGE ===== */}
-        <span className="article-category-badge" style={{ background: catColor }}>
-          {noticia.categoria}
-        </span>
+          {/* ===== CATEGORY BADGE ===== */}
+          <span className="article-category-badge" style={{ background: catColor }}>
+            {noticia.categoria}
+          </span>
 
-        {/* ===== TITLE ===== */}
-        <h1 className="article-title-pro">{noticia.titulo}</h1>
+          {/* ===== TITLE ===== */}
+          <h1 className="article-title-pro">{noticia.titulo}</h1>
 
-        {/* ===== LEAD / SUMMARY ===== */}
-        {noticia.resumen && (
-          <p className="article-lead-pro">{noticia.resumen}</p>
-        )}
+          {/* ===== LEAD / SUMMARY ===== */}
+          {noticia.resumen && (
+            <p className="article-lead-pro">{noticia.resumen}</p>
+          )}
 
-        {/* ===== META BAR ===== */}
-        <div className="article-meta-bar">
-          <div className="author-avatar-pro" style={{ background: catColor }}>
-            {autorInicial}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--c-text)' }}>{autor}</div>
-            <div style={{ fontSize: 12, color: 'var(--c-text-muted)', fontWeight: 500 }}>Periodista</div>
-          </div>
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            {ago && (
-              <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                🕐 {ago}
+          {/* ===== META BAR ===== */}
+          <div className="article-meta-bar">
+            <div className="author-avatar-pro" style={{ background: catColor }}>
+              {autorInicial}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--c-text)' }}>{autor}</div>
+              <div style={{ fontSize: 12, color: 'var(--c-text-muted)', fontWeight: 500 }}>Periodista</div>
+            </div>
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+              {ago && (
+                <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  🕐 {ago}
+                </span>
+              )}
+              <time dateTime={noticia.fecha} style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <CalendarDays size={12} /> {fechaStr}
+              </time>
+              <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Clock size={12} /> {lecturaMin} min
               </span>
-            )}
-            <time dateTime={noticia.fecha} style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <CalendarDays size={12} /> {fechaStr}
-            </time>
-            <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Clock size={12} /> {lecturaMin} min
-            </span>
-            <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Eye size={12} /> {vistas}
-            </span>
-            {/* A- / A+ font control */}
-            <div className="font-size-ctrl">
-              <button
-                className="font-size-ctrl__btn"
-                onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })}
-                aria-label="Reducir texto" title="A−"
-              >A−</button>
-              <button
-                className="font-size-ctrl__btn"
-                onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })}
-                aria-label="Aumentar texto" title="A+"
-              >A+</button>
+              <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Eye size={12} /> {vistas}
+              </span>
+              {/* A- / A+ font control */}
+              <div className="font-size-ctrl">
+                <button
+                  className="font-size-ctrl__btn"
+                  onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })}
+                  aria-label="Reducir texto" title="A−"
+                >A−</button>
+                <button
+                  className="font-size-ctrl__btn"
+                  onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })}
+                  aria-label="Aumentar texto" title="A+"
+                >A+</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ===== FEATURED IMAGE ===== */}
-        <figure className="featured-figure">
-          {isLuto ? (
-            <LutoImage
-              src={noticia.imagen || '/logo.png'}
-              alt={noticia.titulo}
-              nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
-              className="featured-image-wrapper"
-            />
-          ) : noticia.imagen && (noticia.imagen.startsWith('http') || noticia.imagen.startsWith('/')) ? (
-            <div className="featured-image-wrap">
-              <img
-                src={noticia.imagen}
+          {/* ===== FEATURED IMAGE ===== */}
+          <figure className="featured-figure">
+            {isLuto ? (
+              <LutoImage
+                src={noticia.imagen || '/logo.png'}
                 alt={noticia.titulo}
-                fetchPriority="high"
-                loading="eager"
-                decoding="async"
-                className="featured-img"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                onError={e => {
-                  const t = e.target as HTMLImageElement;
-                  t.style.display = 'none';
-                }}
+                nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
+                className="featured-image-wrapper"
               />
-            </div>
-          ) : (
-            <div
-              className="featured-image-wrap"
-              style={{
-                background: catColor,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontWeight: 800,
-                fontSize: '1.2rem',
-                textTransform: 'uppercase',
-                textAlign: 'center',
-                padding: 24,
-              }}
-            >
-              {noticia.categoria}
+            ) : noticia.imagen && (noticia.imagen.startsWith('http') || noticia.imagen.startsWith('/')) ? (
+              <div className="featured-image-wrap">
+                <img
+                  src={noticia.imagen}
+                  alt={noticia.titulo}
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="async"
+                  className="featured-img"
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  onError={e => {
+                    const t = e.target as HTMLImageElement;
+                    t.style.display = 'none';
+                  }}
+                />
+              </div>
+            ) : (
+              <div
+                className="featured-image-wrap"
+                style={{
+                  background: catColor,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 800,
+                  fontSize: '1.2rem',
+                  textTransform: 'uppercase',
+                  textAlign: 'center',
+                  padding: 24,
+                }}
+              >
+                {noticia.categoria}
+              </div>
+            )}
+            {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
+              <figcaption className="featured-caption">
+                <span className="featured-credit">📷 Nicaragua Informate</span>
+              </figcaption>
+            )}
+          </figure>
+
+          {/* ===== AUDIO PLAYER ===== */}
+          <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
+
+          {/* ===== NOTICIA EN 3 PUNTOS ===== */}
+          <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+
+          {/* ===== ARTICLE BODY ===== */}
+          <div
+            className="article-body-pro drop-cap"
+            style={{ fontSize: `${fontSize}em` }}
+            dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
+          />
+
+          {/* ===== PULL QUOTE ===== */}
+          <PullQuote contenido={noticia.contenido || ''} />
+
+          {/* ===== IN-ARTICLE AD ===== */}
+          {adSlot && (
+            <div style={{ margin: '36px 0', maxWidth: 680 }}>
+              {adSlot}
             </div>
           )}
-          {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
-            <figcaption className="featured-caption">
-              <span className="featured-credit">📷 Nicaragua Informate</span>
-            </figcaption>
+
+          {/* ===== TAGS ===== */}
+          <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
+              🏷️ Etiquetas
+            </div>
+            <div className="tags-list">
+              {tags.map((tag) => (
+                <span key={tag} className="tag-pro">{tag}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* ===== SHARE BAR ===== */}
+          <div className="share-bar-pro">
+            <div className="share-label">📤 Compartir artículo</div>
+            <div className="share-buttons">
+              <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="📘 Facebook" bg="#1877f2" icon="facebook-f" />
+              <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="💬 WhatsApp" bg="#25d366" icon="whatsapp" />
+              <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="✈️ Telegram" bg="#0088cc" icon="telegram" />
+              <CopyButton url={url} />
+            </div>
+          </div>
+
+          {/* ===== AUTHOR BIO (BBC/NYT style) ===== */}
+          <div className="author-box-pro author-box-pro--enhanced">
+            <div className="author-box-pro__avatar" style={{ background: catColor, overflow: 'hidden', padding: 0 }}>
+              {autorFoto ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={autorFoto} alt={autor} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : autorInicial}
+            </div>
+            <div className="author-box-pro__body">
+              <div className="author-box-pro__name">{autor}</div>
+              <div className="author-box-pro__role">
+                {autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial y Cofundadora' : 'Periodista'} · {noticia.categoria}
+              </div>
+              <p className="author-box-pro__bio">
+                {autor === 'Keyling Elieth Rivera Muñoz'
+                  ? 'Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.'
+                  : `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada y el análisis contextual.`}
+              </p>
+              <div className="author-box-pro__links">
+                <Link href={autor === 'Keyling Elieth Rivera Muñoz' ? '/autor/keyling-rivera' : `/autor/${autor.toLowerCase().replace(/\s+/g, '-')}`} className="author-box-pro__link" rel="author">
+                  Más artículos →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* ===== NEWSLETTER ===== */}
+          <NewsletterInline />
+
+          {/* ===== PREV / NEXT NAVIGATION ===== */}
+          {related.length >= 2 && (
+            <PrevNextNav prev={related[0]} next={related[1]} />
           )}
-        </figure>
 
-        {/* ===== AUDIO PLAYER ===== */}
-        <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
-
-        {/* ===== NOTICIA EN 3 PUNTOS ===== */}
-        <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
-
-        {/* ===== ARTICLE BODY ===== */}
-        <div
-          className="article-body-pro drop-cap"
-          style={{ fontSize: `${fontSize}em` }}
-          dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
-        />
-
-        {/* ===== PULL QUOTE ===== */}
-        <PullQuote contenido={noticia.contenido || ''} />
-
-        {/* ===== IN-ARTICLE AD ===== */}
-        {adSlot && (
-          <div style={{ margin: '36px 0', maxWidth: 680 }}>
-            {adSlot}
-          </div>
-        )}
-
-        {/* ===== TAGS ===== */}
-        <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
-          <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
-            🏷️ Etiquetas
-          </div>
-          <div className="tags-list">
-            {tags.map((tag) => (
-              <span key={tag} className="tag-pro">{tag}</span>
-            ))}
-          </div>
-        </div>
-
-        {/* ===== SHARE BAR ===== */}
-        <div className="share-bar-pro">
-          <div className="share-label">📤 Compartir artículo</div>
-          <div className="share-buttons">
-            <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="📘 Facebook" bg="#1877f2" icon="facebook-f" />
-            <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="💬 WhatsApp" bg="#25d366" icon="whatsapp" />
-            <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="✈️ Telegram" bg="#0088cc" icon="telegram" />
-            <CopyButton url={url} />
-          </div>
-        </div>
-
-        {/* ===== AUTHOR BIO (BBC/NYT style) ===== */}
-        <div className="author-box-pro author-box-pro--enhanced">
-          <div className="author-box-pro__avatar" style={{ background: catColor, overflow: 'hidden', padding: 0 }}>
-            {autorFoto ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={autorFoto} alt={autor} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : autorInicial}
-          </div>
-          <div className="author-box-pro__body">
-            <div className="author-box-pro__name">{autor}</div>
-            <div className="author-box-pro__role">
-              {autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial y Cofundadora' : 'Periodista'} · {noticia.categoria}
-            </div>
-            <p className="author-box-pro__bio">
-              {autor === 'Keyling Elieth Rivera Muñoz'
-                ? 'Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.'
-                : `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada y el análisis contextual.`}
-            </p>
-            <div className="author-box-pro__links">
-              <Link href={autor === 'Keyling Elieth Rivera Muñoz' ? '/autor/keyling-rivera' : `/autor/${autor.toLowerCase().replace(/\s+/g, '-')}`} className="author-box-pro__link" rel="author">
-                Más artículos →
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ===== RELATED ARTICLES ===== */}
-        {related.length > 0 && (
-          <div className="ni-related">
-            <div className="ni-section-header">
-              <span className="ni-section-accent" />
-              <h3 className="ni-section-title">Otros están leyendo</h3>
-            </div>
-            <div className="ni-related-grid">
-              {related.map((n) => (
-                <Link key={n.slug} href={`/noticias/${n.slug}`} className="ni-related-card">
-                  <article>
-                    <div className="ni-related-img">
-                      <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} width={400} />
-                    </div>
-                    <div className="ni-related-body">
-                      <span className="ni-related-cat" style={{ color: CAT_COLORS[n.categoria] || '#8c1d18' }}>
-                        {n.categoria}
-                      </span>
-                      <h3 className="ni-related-title">{n.titulo}</h3>
-                      <div className="ni-related-meta">
-                        <Clock size={10} /> {fmtDate(n.fecha)}
+          {/* ===== RELATED ARTICLES ===== */}
+          {related.length > 0 && (
+            <div className="ni-related">
+              <div className="ni-section-header">
+                <span className="ni-section-accent" />
+                <h3 className="ni-section-title">Otros están leyendo</h3>
+              </div>
+              <div className="ni-related-grid">
+                {related.map((n) => (
+                  <Link key={n.slug} href={`/noticias/${n.slug}`} className="ni-related-card">
+                    <article>
+                      <div className="ni-related-img">
+                        <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} width={400} />
                       </div>
-                    </div>
-                  </article>
+                      <div className="ni-related-body">
+                        <span className="ni-related-cat" style={{ color: CAT_COLORS[n.categoria] || '#8c1d18' }}>
+                          {n.categoria}
+                        </span>
+                        <h3 className="ni-related-title">{n.titulo}</h3>
+                        <div className="ni-related-meta">
+                          <Clock size={10} /> {fmtDate(n.fecha)}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ===== SIDEBAR (desktop only) ===== */}
+        <aside className="article-page__sidebar">
+          <div className="sidebar-widget">
+            <div className="sidebar-widget__title"><Flame size={14} color="#C53030" /> Más Leídas</div>
+            <div className="sidebar-numbered-list">
+              {related.slice(0, 5).map((n, i) => (
+                <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
+                  <span className="sidebar-num">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="sidebar-numbered-content">
+                    <span className="sidebar-cat">{n.categoria}</span>
+                    <span className="sidebar-title">{n.titulo}</span>
+                  </div>
                 </Link>
               ))}
             </div>
           </div>
-        )}
+          <div className="sidebar-widget">
+            <div className="sidebar-widget__title">Lo último en {noticia.categoria}</div>
+            <div className="sidebar-numbered-list">
+              {related.slice(0, 5).map((n) => (
+                <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
+                  <div className="sidebar-numbered-content">
+                    <span className="sidebar-title">{n.titulo}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </aside>
       </article>
     </>
+  );
+}
+
+/* ===== NEWSLETTER INLINE ===== */
+function NewsletterInline() {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setSubmitted(true);
+    setEmail('');
+    setTimeout(() => setSubmitted(false), 4000);
+  };
+  return (
+    <div className="article-newsletter">
+      <h3 className="article-newsletter__title">Reciba las noticias importantes</h3>
+      <p className="article-newsletter__desc">Reciba cada mañana un resumen con las noticias más relevantes de Nicaragua.</p>
+      <form className="article-newsletter__form" onSubmit={onSubmit}>
+        <input
+          type="email"
+          placeholder="su@email.com"
+          className="article-newsletter__input"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <button type="submit" className="article-newsletter__btn">{submitted ? '¡Suscrito!' : 'Suscribirse'}</button>
+      </form>
+    </div>
+  );
+}
+
+/* ===== PREV / NEXT NAV ===== */
+function PrevNextNav({ prev, next }: { prev: NoticiaProps; next: NoticiaProps }) {
+  return (
+    <div className="article-prevnext">
+      <Link href={`/noticias/${prev.slug}`} className="article-prevnext__item article-prevnext__item--prev">
+        <span className="article-prevnext__label">← Anterior</span>
+        <span className="article-prevnext__title">{prev.titulo}</span>
+      </Link>
+      <Link href={`/noticias/${next.slug}`} className="article-prevnext__item article-prevnext__item--next">
+        <span className="article-prevnext__label">Siguiente →</span>
+        <span className="article-prevnext__title">{next.titulo}</span>
+      </Link>
+    </div>
   );
 }
 
