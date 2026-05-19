@@ -123,7 +123,7 @@ export default function TerminosPage() {
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
         Si tienes preguntas, comentarios o inquietudes sobre estos términos y condiciones, escríbenos a{' '}
         <a href="mailto:legal@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>legal@nicaraguainformate.com</a>{' '}
-        o usa nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>.{' '}
+        o usa nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>.{' '}
         Responderemos a tu solicitud en un plazo razonable, de conformidad con la legislación aplicable.
       </p>
     </LegalPageShell>

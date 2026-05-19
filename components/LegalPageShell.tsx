@@ -2,14 +2,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const LEGAL_LINKS = [
+type NavLink = { label: string; href: string };
+type FooterLink = { label: string; href?: string; external?: boolean };
+
+const LEGAL_LINKS: NavLink[] = [
   { label: 'Inicio', href: '/' },
   { label: 'Noticias', href: '/noticias' },
   { label: 'Nosotros', href: '/nosotros' },
   { label: 'Contacto', href: '/contacto' },
 ];
 
-const FOOTER_COLS = [
+const FOOTER_COLS: { title: string; links: FooterLink[] }[] = [
   { title: 'Secciones', links: [
     { label: 'Inicio', href: '/' },
     { label: 'Últimas Noticias', href: '/noticias' },
@@ -31,11 +34,12 @@ const FOOTER_COLS = [
     { label: 'contacto@nicaraguainformate.com', href: 'mailto:contacto@nicaraguainformate.com' },
     { label: 'privacidad@nicaraguainformate.com', href: 'mailto:privacidad@nicaraguainformate.com' },
     { label: 'legal@nicaraguainformate.com', href: 'mailto:legal@nicaraguainformate.com' },
-    { label: 'Managua, Nicaragua', href: '#' },
+    { label: 'Managua, Nicaragua' },
   ]},
 ];
 
 export default function LegalPageShell({ children, title }: { children: React.ReactNode; title: string }) {
+  const currentYear = new Date().getFullYear();
   return (
     <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", background: 'linear-gradient(135deg,#0f172a 0%,#1e293b 100%)', minHeight: '100vh', color: '#e2e8f0', lineHeight: 1.7 }}>
       {/* Sticky header */}
@@ -46,7 +50,7 @@ export default function LegalPageShell({ children, title }: { children: React.Re
             <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#8c1d18', lineHeight: 1 }}>Nicaragua <span style={{ color: '#fff' }}>Informate</span></span>
           </Link>
           <nav className="legal-nav-scroll"><ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0, whiteSpace: 'nowrap' }}>
-            {LEGAL_LINKS.map(l => (
+            {LEGAL_LINKS.map((l) => (
               <li key={l.href}><Link href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontWeight: 500, fontSize: 13 }}>{l.label}</Link></li>
             ))}
           </ul></nav>
@@ -76,15 +80,54 @@ export default function LegalPageShell({ children, title }: { children: React.Re
             <div key={col.title}>
               <h4 style={{ color: '#fff', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 14px' }}>{col.title}</h4>
               <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {col.links.map(l => (
-                  <li key={l.label}><Link href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 13 }} className="footer-link-hover">{l.label}</Link></li>
-                ))}
+                {col.links.map((l) => {
+                  if (!l.href) {
+                    return <li key={l.label} style={{ color: '#94a3b8', fontSize: 13 }}>{l.label}</li>;
+                  }
+
+                  const isExternal = l.external || l.href.startsWith('http') || l.href.startsWith('mailto:');
+                  const isMail = l.href.startsWith('mailto:');
+
+                  if (isExternal && !isMail) {
+                    return (
+                      <li key={l.label}>
+                        <a
+                          href={l.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 13 }}
+                          className="footer-link-hover"
+                        >
+                          {l.label}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  if (isMail) {
+                    return (
+                      <li key={l.label}>
+                        <a href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 13 }} className="footer-link-hover">
+                          {l.label}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={l.label}>
+                      <Link href={l.href} style={{ color: '#94a3b8', textDecoration: 'none', fontSize: 13 }} className="footer-link-hover">
+                        {l.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
-        <div style={{ maxWidth: 1000, margin: '32px auto 0', padding: '20px 20px 0', borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center', color: '#475569', fontSize: 12 }}>
-          © 2025-2026 Nicaragua Informate. Todos los derechos reservados.
+        <div style={{ maxWidth: 1000, margin: '32px auto 0', padding: '20px 20px 0', borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center', color: '#475569', fontSize: 12 }} suppressHydrationWarning>
+          © 2025-{currentYear} Nicaragua Informate. Todos los derechos reservados.
         </div>
       </footer>
     </div>

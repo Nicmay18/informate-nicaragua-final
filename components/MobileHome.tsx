@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, Eye, TrendingUp, Flame, ChevronRight } from 'lucide-react';
@@ -44,11 +44,6 @@ function formatViews(n?: number) {
   return String(n);
 }
 
-function isNewArticle(fecha: string): boolean {
-  try { return Date.now() - new Date(fecha).getTime() < 2 * 60 * 60 * 1000; }
-  catch { return false; }
-}
-
 function NewsImagePlaceholder({ categoria, width, height, className }: { categoria: string; width?: number; height?: number; className?: string }) {
   const color = CATEGORY_COLORS[categoria] || '#8c1d18';
   return (
@@ -76,116 +71,75 @@ function NewsImagePlaceholder({ categoria, width, height, className }: { categor
 }
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [activeCat, setActiveCat] = useState('all');
 
-  const heroNews = noticias.slice(0, 5);
-  const filteredNews = activeCat === 'all' ? noticias.slice(1) : noticias.filter(n => CAT_MAP[n.categoria] === activeCat);
+  // Deduplicate: hero uses noticias[0], list excludes it
+  const hero = noticias[0] || null;
+  const listNews = activeCat === 'all'
+    ? noticias.slice(1)
+    : noticias.filter(n => CAT_MAP[n.categoria] === activeCat);
 
-  useEffect(() => {
-    if (heroNews.length <= 1) return;
-    const id = setInterval(() => setCurrentSlide(i => (i + 1) % heroNews.length), 6000);
-    return () => clearInterval(id);
-  }, [heroNews.length]);
-
-  const tickerText = noticias[0]?.titulo || 'Nicaragua Informate — Noticias en tiempo real';
+  const tickerText = hero?.titulo || 'Nicaragua Informate — Noticias en tiempo real';
 
   return (
     <ProLayout tickerText={tickerText}>
-      {/* === NAV CATEGORIES (antes del hero) === */}
-      <nav className="nav-categories">
+      {/* === NAV CATEGORIES === */}
+      <nav className="nav-categories" aria-label="Categorías de noticias">
         {NAV_CATS.map(cat => (
           <button
             key={cat.key}
             className={`nav-cat${activeCat === cat.key ? ' active' : ''}`}
             onClick={() => setActiveCat(cat.key)}
+            aria-pressed={activeCat === cat.key}
           >
             {cat.label}
           </button>
         ))}
       </nav>
 
-      {/* === HERO PRO CAROUSEL === */}
-      {heroNews.length > 0 && (
-        <section className="hero-pro">
-          {/* Slides */}
-          <div className="hero-pro__track">
-            {heroNews.map((n, i) => (
-              <Link
-                key={n.slug}
-                href={`/noticias/${n.slug}`}
-                className={`hero-pro__slide${i === currentSlide ? ' active' : ''}`}
+      {/* === HERO: SINGLE FEATURED CARD === */}
+      {hero && (
+        <section className="hero-pro" aria-label="Noticia destacada">
+          <Link href={`/noticias/${hero.slug}`} className="hero-pro__track" style={{ display: 'block' }}>
+            {hero.imagen && hero.imagen !== '/logo.png' ? (
+              <Image
+                src={hero.imagen}
+                alt={hero.titulo}
+                fill
+                sizes="100vw"
+                className="hero-pro__img"
+                priority
+                fetchPriority="high"
+              />
+            ) : (
+              <div
+                className="hero-pro__img"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: CATEGORY_COLORS[hero.categoria] || '#8c1d18',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'white', fontWeight: 800, fontSize: '1.2rem', textTransform: 'uppercase',
+                }}
               >
-                {n.imagen && n.imagen !== '/logo.png' ? (
-                  <Image
-                    src={n.imagen}
-                    alt={n.titulo}
-                    fill
-                    sizes="(max-width: 900px) calc(100vw - 32px), 70vw"
-                    className="hero-pro__img"
-                    priority={i === 0}
-                  />
-                ) : (
-                  <div
-                    className="hero-pro__img"
-                    style={{
-                      background: CATEGORY_COLORS[n.categoria] || '#8c1d18',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontWeight: 800,
-                      fontSize: '1.2rem',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {n.categoria}
-                  </div>
-                )}
-                <div className="hero-pro__overlay">
-                  <div className="hero-pro__content">
-                    <span className={`hero-pro__badge news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>
-                      {n.categoria}
-                    </span>
-                    <h2 className="hero-pro__title">{n.titulo}</h2>
-                    {n.resumen && (
-                      <p className="hero-pro__excerpt">{n.resumen}</p>
-                    )}
-                    <div className="hero-pro__footer">
-                      <div className="hero-pro__meta">
-                        <span><Clock size={11} /> {formatDateShort(n.fecha)}</span>
-                        {n.vistas ? <span><Eye size={11} /> {formatViews(n.vistas)} lecturas</span> : null}
-                      </div>
-                    </div>
+                {hero.categoria}
+              </div>
+            )}
+            <div className="hero-pro__overlay">
+              <div className="hero-pro__content">
+                <span className={`hero-pro__badge news-badge--${CAT_MAP[hero.categoria] || 'nacionales'}`}>
+                  {hero.categoria}
+                </span>
+                <h2 className="hero-pro__title">{hero.titulo}</h2>
+                {hero.resumen && <p className="hero-pro__excerpt">{hero.resumen}</p>}
+                <div className="hero-pro__footer">
+                  <div className="hero-pro__meta">
+                    <span><Clock size={11} /> {formatDateShort(hero.fecha)}</span>
+                    {hero.vistas ? <span><Eye size={11} /> {formatViews(hero.vistas)} lecturas</span> : null}
                   </div>
                 </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Flechas */}
-          <button
-            className="hero-pro__nav hero-pro__nav--prev"
-            onClick={() => setCurrentSlide(i => (i - 1 + heroNews.length) % heroNews.length)}
-            aria-label="Anterior"
-          >‹</button>
-          <button
-            className="hero-pro__nav hero-pro__nav--next"
-            onClick={() => setCurrentSlide(i => (i + 1) % heroNews.length)}
-            aria-label="Siguiente"
-          >›</button>
-
-          {/* Indicadores */}
-          <div className="hero-pro__indicators">
-            {heroNews.map((_, i) => (
-              <button
-                key={i}
-                className={`hero-pro__dot${i === currentSlide ? ' active' : ''}`}
-                onClick={() => setCurrentSlide(i)}
-                aria-label={`Ir a noticia ${i + 1}`}
-              />
-            ))}
-          </div>
+              </div>
+            </div>
+          </Link>
         </section>
       )}
 
@@ -200,44 +154,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           {/* ===== COLUMNA PRINCIPAL ===== */}
           <div className="editorial-main">
 
-            {/* Card Destacada */}
-            {filteredNews[0] && (
-              <Link href={`/noticias/${filteredNews[0].slug}`} className="news-featured-card">
-                {filteredNews[0].imagen && filteredNews[0].imagen !== '/logo.png' ? (
-                  <Image
-                    src={filteredNews[0].imagen}
-                    alt={filteredNews[0].titulo}
-                    width={800} height={450}
-                    className="news-featured-card__img"
-                    priority
-                  />
-                ) : (
-                  <NewsImagePlaceholder categoria={filteredNews[0].categoria} className="news-featured-card__img" />
-                )}
-                <div className="news-featured-card__overlay">
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 4 }}>
-                    <span className={`news-featured-card__badge news-badge--${CAT_MAP[filteredNews[0].categoria] || 'nacionales'}`}>
-                      {filteredNews[0].categoria}
-                    </span>
-                    {isNewArticle(filteredNews[0].fecha) && <span className="badge-nuevo">NUEVO</span>}
-                  </div>
-                  <h3 className="news-featured-card__title">{filteredNews[0].titulo}</h3>
-                  <div className="news-featured-card__meta">
-                    <span><Clock size={11} /> {formatDateShort(filteredNews[0].fecha)}</span>
-                    {filteredNews[0].vistas ? <span><Eye size={11} /> {formatViews(filteredNews[0].vistas)}</span> : null}
-                  </div>
-                </div>
-              </Link>
-            )}
-
-            {/* Lista horizontal unificada */}
-            {filteredNews.slice(1).length > 0 && (
+            {/* Lista de noticias */}
+            {listNews.length > 0 ? (
               <div className="news-list-compact">
-                {filteredNews.slice(1).map(n => (
+                {listNews.map(n => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-list-item">
                     <div className="news-list-item__img-wrap">
                       {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={120} height={90} className="news-list-item__img" />
+                        <Image src={n.imagen} alt={n.titulo} width={120} height={90} className="news-list-item__img" loading="lazy" />
                       ) : (
                         <NewsImagePlaceholder categoria={n.categoria} width={120} height={90} className="news-list-item__img" />
                       )}
@@ -253,50 +177,35 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                   </Link>
                 ))}
               </div>
+            ) : (
+              <div className="news-list-empty">
+                <p>No hay noticias en esta categoría.</p>
+              </div>
             )}
           </div>
 
           {/* ===== SIDEBAR ===== */}
           <aside className="editorial-sidebar">
 
-            {/* Clima Widget */}
-            <ClimaWidget />
-
-            {/* Tendencias (Numbered) */}
-            <div className="sidebar-widget">
-              <div className="sidebar-widget__title">
-                <span className="dot-live" /> Tendencias
+            {/* Más Leídas (datos reales) */}
+            {masLeidas.length > 0 && (
+              <div className="sidebar-widget">
+                <div className="sidebar-widget__title">
+                  <Flame size={14} color="var(--c-accent)" /> Más Leídas
+                </div>
+                <div className="sidebar-numbered-list">
+                  {masLeidas.slice(0, 5).map((n, i) => (
+                    <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
+                      <span className="sidebar-num">{i + 1}</span>
+                      <div className="sidebar-numbered-content">
+                        <span className="sidebar-cat">{n.categoria}</span>
+                        <span className="sidebar-title">{n.titulo}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <div className="sidebar-numbered-list">
-                {noticias.slice(0, 6).map((n, i) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                    <span className="sidebar-num">{String(i + 1).padStart(2, '0')}</span>
-                    <div className="sidebar-numbered-content">
-                      <span className="sidebar-cat">{n.categoria}</span>
-                      <span className="sidebar-title">{n.titulo}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Más Leídas (Numbered) */}
-            <div className="sidebar-widget">
-              <div className="sidebar-widget__title">
-                <Flame size={14} color="#8c1d18" /> Más Leídas
-              </div>
-              <div className="sidebar-numbered-list">
-                {masLeidas.slice(0, 3).map((n, i) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                    <span className="sidebar-num">{String(i + 1).padStart(2, '0')}</span>
-                    <div className="sidebar-numbered-content">
-                      <span className="sidebar-cat">{n.categoria}</span>
-                      <span className="sidebar-title">{n.titulo}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
+            )}
 
             {/* Indicadores Económicos */}
             <div className="sidebar-widget">
@@ -350,12 +259,18 @@ function EcoCompact({ hideHeader = false }: { hideHeader?: boolean }) {
 function Newsletter() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [savedEmails, setSavedEmails] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem('ni_newsletter') || '[]'); } catch { return []; }
+  });
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !email.includes('@')) return;
+    const updated = [...savedEmails, email];
+    setSavedEmails(updated);
+    try { localStorage.setItem('ni_newsletter', JSON.stringify(updated)); } catch {}
     setSubmitted(true);
     setEmail('');
-    setTimeout(() => setSubmitted(false), 3000);
+    setTimeout(() => setSubmitted(false), 4000);
   };
   return (
     <div className="newsletter">
@@ -372,61 +287,6 @@ function Newsletter() {
         />
         <button type="submit" className="newsletter__btn">{submitted ? '¡Listo!' : 'Suscribirse'}</button>
       </form>
-    </div>
-  );
-}
-
-/* ============================================================
-   CLIMA WIDGET (sidebar)
-   ============================================================ */
-const CLIMA_DATA = [
-  { ciudad: 'Managua',        temp: 27, icon: '☀️',  cond: 'Soleado',            hum: 68, viento: 15 },
-  { ciudad: 'León',           temp: 29, icon: '☀️',  cond: 'Caluroso',           hum: 65, viento: 18 },
-  { ciudad: 'Granada',        temp: 26, icon: '⛅',  cond: 'Nublado parcial',    hum: 72, viento: 12 },
-  { ciudad: 'Rivas',          temp: 33, icon: '☀️',  cond: 'Muy soleado',        hum: 60, viento: 20 },
-  { ciudad: 'Estelí',         temp: 28, icon: '☀️',  cond: 'Despejado',          hum: 55, viento: 10 },
-  { ciudad: 'Bluefields',     temp: 26, icon: '🌦️', cond: 'Casi despejado',     hum: 91, viento: 20 },
-  { ciudad: 'Nueva Segovia',  temp: 27, icon: '☀️',  cond: 'Despejado',          hum: 58, viento: 8  },
-  { ciudad: 'Carazo',         temp: 31, icon: '⛅',  cond: 'Parcialmente nublado',hum: 70, viento: 16 },
-];
-
-function ClimaWidget() {
-  const [idx, setIdx] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setIdx(i => (i + 1) % CLIMA_DATA.length), 5000);
-    return () => clearInterval(id);
-  }, []);
-  const c = CLIMA_DATA[idx];
-  return (
-    <div className="clima-sidebar">
-      <div className="clima-sidebar__header">
-        <span className="clima-sidebar__label">🌡 CLIMA · {c.ciudad}</span>
-        <span className="clima-sidebar__tag">En vivo</span>
-      </div>
-      <div className="clima-sidebar__main">
-        <span className="clima-sidebar__icon">{c.icon}</span>
-        <div>
-          <div className="clima-sidebar__temp">{c.temp}°</div>
-          <div className="clima-sidebar__cond">{c.cond}</div>
-        </div>
-      </div>
-      <div className="clima-sidebar__stats">
-        <div className="clima-sidebar__stat">
-          <span className="clima-sidebar__stat-val">💧 {c.hum}</span>
-          <span className="clima-sidebar__stat-label">HUMEDAD</span>
-        </div>
-        <div className="clima-sidebar__stat">
-          <span className="clima-sidebar__stat-val">💨 {c.viento}</span>
-          <span className="clima-sidebar__stat-label">VIENTO km/h</span>
-        </div>
-      </div>
-      <div className="clima-sidebar__cities">
-        {CLIMA_DATA.filter((_, i) => i !== idx).slice(0, 4).map(d => (
-          <span key={d.ciudad} className="clima-sidebar__city-chip">
-            {d.ciudad.split(' ')[0]} {d.temp}°
-          </span>
-        ))}
-      </div>
     </div>
   );
 }

@@ -1,194 +1,173 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+
+type ConsentStatus = 'accepted' | 'rejected';
+type CookiePrefs = { analytics: boolean; ads: boolean };
+
+const CONSENT_KEY = 'ni_cookie_consent';
+const PREFS_KEY = 'ni_cookie_preferences';
 
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [allowAnalytics, setAllowAnalytics] = useState(true);
+  const [allowAds, setAllowAds] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ni_cookie_consent');
-    if (saved === 'accepted' || saved === 'rejected') {
+    const savedStatus = localStorage.getItem(CONSENT_KEY);
+    const prefRaw = localStorage.getItem(PREFS_KEY);
+    if (prefRaw) {
+      try {
+        const prefs = JSON.parse(prefRaw) as CookiePrefs;
+        setAllowAnalytics(prefs.analytics);
+        setAllowAds(prefs.ads);
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+
+    if (savedStatus === 'accepted' || savedStatus === 'rejected') {
       setShowBanner(false);
     } else {
       setShowBanner(true);
     }
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem('ni_cookie_consent', 'accepted');
-    setShowBanner(false);
+  useEffect(() => {
+    if (!showSettings) return;
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowSettings(false);
+      }
+    };
+
+    document.body.style.setProperty('overflow', 'hidden');
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.removeProperty('overflow');
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [showSettings]);
+
+  const persistConsent = useCallback((status: ConsentStatus, prefs: CookiePrefs) => {
+    localStorage.setItem(CONSENT_KEY, status);
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
     window.dispatchEvent(new Event('ni-consent-updated'));
-    loadAnalytics();
-  };
+  }, []);
 
-  const handleReject = () => {
-    localStorage.setItem('ni_cookie_consent', 'rejected');
+  const closeBanner = () => {
     setShowBanner(false);
+    setShowSettings(false);
   };
 
-  const handleCustomize = () => {
-    setShowSettings(true);
+  const acceptAll = () => {
+    const prefs = { analytics: true, ads: true };
+    setAllowAnalytics(true);
+    setAllowAds(true);
+    persistConsent('accepted', prefs);
+    closeBanner();
   };
 
-  const loadAnalytics = () => {
-    // Aquí puedes cargar Google Analytics si el usuario acepta
-    // Por ahora, AdSense ya está cargado en el layout
+  const rejectAll = () => {
+    const prefs = { analytics: false, ads: false };
+    setAllowAnalytics(false);
+    setAllowAds(false);
+    persistConsent('rejected', prefs);
+    closeBanner();
+  };
+
+  const saveCustom = () => {
+    const prefs = { analytics: allowAnalytics, ads: allowAds };
+    const status: ConsentStatus = prefs.analytics || prefs.ads ? 'accepted' : 'rejected';
+    persistConsent(status, prefs);
+    closeBanner();
   };
 
   if (!showBanner) return null;
 
-  if (showSettings) {
-    return (
-      <div style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        background: '#1a1a2e',
-        color: '#fff',
-        padding: '2rem',
-        zIndex: 9999,
-        borderTop: '3px solid #c41e3a',
-        boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
-      }}>
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
-          <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem', fontWeight: 700 }}>Configuración de Cookies</h3>
-          
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', cursor: 'pointer' }}>
-              <input type="checkbox" checked disabled style={{ marginRight: '12px', width: '18px', height: '18px' }} />
-              <div>
-                <strong style={{ display: 'block', marginBottom: '4px' }}>Cookies Esenciales</strong>
-                <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>Necesarias para el funcionamiento básico del sitio (sesión, tema)</span>
-              </div>
-            </label>
-
-            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', cursor: 'pointer' }}>
-              <input type="checkbox" defaultChecked style={{ marginRight: '12px', width: '18px', height: '18px' }} />
-              <div>
-                <strong style={{ display: 'block', marginBottom: '4px' }}>Cookies de Analítica</strong>
-                <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>Google Analytics para entender cómo usas el sitio</span>
-              </div>
-            </label>
-
-            <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <input type="checkbox" defaultChecked style={{ marginRight: '12px', width: '18px', height: '18px' }} />
-              <div>
-                <strong style={{ display: 'block', marginBottom: '4px' }}>Cookies de Publicidad</strong>
-                <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>Google AdSense para mostrar anuncios relevantes</span>
-              </div>
-            </label>
-          </div>
-
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => {
-                setShowSettings(false);
-                handleAccept();
-              }}
-              style={{
-                background: '#c41e3a',
-                color: '#fff',
-                border: 'none',
-                padding: '12px 24px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '1rem',
-              }}
-            >
-              Guardar Preferencias
-            </button>
-            <button
-              onClick={() => setShowSettings(false)}
-              style={{
-                background: 'transparent',
-                color: '#94a3b8',
-                border: '1px solid #4a4a5e',
-                padding: '12px 24px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '1rem',
-              }}
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      background: '#1a1a2e',
-      color: '#fff',
-      padding: '1.5rem',
-      zIndex: 9999,
-      borderTop: '3px solid #c41e3a',
-      boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
-    }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1rem', color: '#cbd5e1' }}>
-          <strong>Nicaragua Informate</strong> utiliza cookies esenciales, de analítica y de publicidad para mejorar tu experiencia y mostrar anuncios relevantes. 
-          Al continuar navegando, aceptas nuestro uso de cookies. 
-          <Link href="/cookies" style={{ color: '#c41e3a', textDecoration: 'underline', marginLeft: '8px' }}>Política de cookies</Link>
-        </p>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+    <>
+      {showSettings && (
+        <div className="cookie-settings">
           <button
-            onClick={handleAccept}
-            style={{
-              background: '#c41e3a',
-              color: '#fff',
-              border: 'none',
-              padding: '10px 20px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.95rem',
-            }}
-          >
-            Aceptar Todo
+            type="button"
+            className="cookie-settings__backdrop"
+            aria-label="Cerrar configuración de cookies"
+            onClick={() => setShowSettings(false)}
+          />
+          <div className="cookie-settings__card" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title">
+            <div className="cookie-settings__header">
+              <div>
+                <p className="cookie-settings__eyebrow">Preferencias de privacidad</p>
+                <h3 id="cookie-settings-title">Configura las cookies</h3>
+              </div>
+              <button type="button" className="cookie-btn cookie-btn--ghost" onClick={() => setShowSettings(false)}>
+                Cerrar
+              </button>
+            </div>
+
+            <div className="cookie-settings__content">
+              <label className="cookie-toggle">
+                <input type="checkbox" checked disabled />
+                <div>
+                  <strong>Cookies esenciales</strong>
+                  <p>Necesarias para funciones básicas como iniciar sesión, recordar el tema y garantizar la seguridad.</p>
+                </div>
+              </label>
+              <label className="cookie-toggle">
+                <input type="checkbox" checked={allowAnalytics} onChange={(event) => setAllowAnalytics(event.target.checked)} />
+                <div>
+                  <strong>Analítica</strong>
+                  <p>Nos permite medir el rendimiento del sitio para mejorar tu experiencia.</p>
+                </div>
+              </label>
+              <label className="cookie-toggle">
+                <input type="checkbox" checked={allowAds} onChange={(event) => setAllowAds(event.target.checked)} />
+                <div>
+                  <strong>Publicidad personalizada</strong>
+                  <p>Autoriza anuncios relevantes mediante Google AdSense.</p>
+                </div>
+              </label>
+            </div>
+
+            <div className="cookie-settings__actions">
+              <button type="button" className="cookie-btn cookie-btn--primary" onClick={saveCustom}>
+                Guardar preferencias
+              </button>
+              <button type="button" className="cookie-btn cookie-btn--secondary" onClick={rejectAll}>
+                Rechazar todo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div
+        className="cookie-banner"
+        role="dialog"
+        aria-live="polite"
+        aria-label="Aviso de cookies"
+        aria-hidden={showSettings}
+      >
+        <div className="cookie-banner__text">
+          <strong>Nicaragua Informate</strong> utiliza cookies esenciales, de analítica y publicidad para mejorar tu experiencia. Puedes revisar nuestra{' '}
+          <Link href="/cookies">Política de Cookies</Link> y cambiar tu elección cuando quieras.
+        </div>
+        <div className="cookie-banner__buttons">
+          <button type="button" className="cookie-btn cookie-btn--primary" onClick={acceptAll}>
+            Aceptar todo
           </button>
-          <button
-            onClick={handleReject}
-            style={{
-              background: 'transparent',
-              color: '#94a3b8',
-              border: '1px solid #4a4a5e',
-              padding: '10px 20px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.95rem',
-            }}
-          >
-            Rechazar Todo
+          <button type="button" className="cookie-btn cookie-btn--secondary" onClick={rejectAll}>
+            Rechazar
           </button>
-          <button
-            onClick={handleCustomize}
-            style={{
-              background: 'transparent',
-              color: '#c41e3a',
-              border: '1px solid #c41e3a',
-              padding: '10px 20px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.95rem',
-            }}
-          >
-            Configurar
+          <button type="button" className="cookie-btn cookie-btn--ghost" onClick={() => setShowSettings(true)}>
+            Personalizar
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

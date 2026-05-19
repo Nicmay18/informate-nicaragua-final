@@ -92,7 +92,7 @@ export default async function AutorKeylingRiveraPage() {
           </div>
         </div>
         <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.6 }}>
-          Conoce más sobre el equipo en nuestra página de <a href="/nosotros" style={{ color: '#60a5fa', textDecoration: 'none' }}>Sobre Nosotros</a>.
+          Conoce más sobre el equipo en nuestra página de <Link href="/nosotros" style={{ color: '#60a5fa', textDecoration: 'none' }}>Sobre Nosotros</Link>.
         </p>
       </div>
 
@@ -124,7 +124,7 @@ export default async function AutorKeylingRiveraPage() {
       )}
 
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '2rem' }}>
-        Consulta nuestra <a href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</a> completa para más detalles sobre nuestros estándares de publicación.
+        Consulta nuestra <Link href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</Link> completa para más detalles sobre nuestros estándares de publicación.
       </p>
     </LegalPageShell>
   );

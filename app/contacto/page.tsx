@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { MapPin, Clock, Mail, Share2, Info, Send, Shield, Scale, Megaphone } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
@@ -94,7 +95,7 @@ export default function ContactoPage() {
       </h2>
       <div style={{ display: 'flex', gap: 10, marginBottom: '2rem', flexWrap: 'wrap' }}>
         {SOCIAL_CHANNELS.map(s => (
-          <a key={s.label} href={s.href} target="_blank" rel="noopener"
+          <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
             style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
             className="social-contact-btn">
             <BrandIcon name={s.icon} size={18} />
@@ -141,7 +142,7 @@ export default function ContactoPage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
             <Info size={14} />
-            <span>Al enviar este formulario, aceptas nuestra <a href="/privacidad" style={{ color: '#60a5fa', textDecoration: 'none' }}>política de privacidad</a></span>
+            <span>Al enviar este formulario, aceptas nuestra <Link href="/privacidad" style={{ color: '#60a5fa', textDecoration: 'none' }}>política de privacidad</Link></span>
           </div>
           <button type="submit"
             style={{ padding: '14px 28px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>

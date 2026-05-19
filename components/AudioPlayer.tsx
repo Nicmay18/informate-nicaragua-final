@@ -16,19 +16,18 @@ export default function AudioPlayer({ src, title = 'Audio', autoPlay = false }: 
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if (!audioRef.current) return;
-    
+    const audioEl = audioRef.current;
+    if (!audioEl) return;
+
     const handleTimeUpdate = () => {
-      if (audioRef.current) {
-        const duration = audioRef.current.duration || 1;
-        const currentTime = audioRef.current.currentTime;
-        setProgress((currentTime / duration) * 100);
-      }
+      const duration = audioEl.duration || 1;
+      const currentTime = audioEl.currentTime;
+      setProgress((currentTime / duration) * 100);
     };
 
-    audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+    audioEl.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
-      audioRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
+      audioEl.removeEventListener('timeupdate', handleTimeUpdate);
     };
   }, []);
 

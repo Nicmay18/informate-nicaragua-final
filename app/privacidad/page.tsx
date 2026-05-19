@@ -155,7 +155,7 @@ export default function PrivacidadPage() {
       </ul>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
         Para ejercer estos derechos, contáctanos a través de nuestro{' '}
-        <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a> o escribe a{' '}
+        <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link> o escribe a{' '}
         <a href="mailto:privacidad@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>privacidad@nicaraguainformate.com</a>.{' '}
         Responderemos a tu solicitud en un plazo máximo de 30 días, de conformidad con la legislación aplicable.
       </p>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -93,7 +94,7 @@ export default function NosotrosPage() {
             <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Elieth Rivera Muñoz</div>
             <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial y Cofundadora</div>
             <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense. <a href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</a>
+              Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense. <Link href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</Link>
             </p>
           </div>
         </div>
@@ -146,7 +147,7 @@ export default function NosotrosPage() {
         ))}
       </div>
       <p style={{ color: textoSec, fontSize: '0.9rem' }}>
-        Consulta nuestra <a href="/politica-editorial" style={{ color: linkColor, textDecoration: 'none' }}>Política Editorial</a> completa para más detalles.
+        Consulta nuestra <Link href="/politica-editorial" style={{ color: linkColor, textDecoration: 'none' }}>Política Editorial</Link> completa para más detalles.
       </p>
     </LegalPageShell>
   );

@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { AlertCircle, Mail, Clock, FileText, CheckCircle } from 'lucide-react';
 
@@ -85,7 +86,7 @@ export default function CorreccionesPage() {
         Si detectas un error en alguna de nuestras publicaciones, te agradecemos que nos lo hagas saber. Puedes reportarlo a través de:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}>Nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a> seleccionando "Solicitar corrección"</li>
+        <li style={{ marginBottom: '0.5rem' }}>Nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link> seleccionando “Solicitar corrección”</li>
         <li style={{ marginBottom: '0.5rem' }}>Correo directo: <a href="mailto:redaccion@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>redaccion@nicaraguainformate.com</a></li>
       </ul>
       <p style={{ color: '#94a3b8', fontSize: '0.88rem', marginBottom: '2rem' }}>

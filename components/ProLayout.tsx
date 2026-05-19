@@ -5,15 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BrandIcon from '@/components/BrandIcon';
 import {
-  Search, Menu, X, Moon, Sun,
+  Search, Menu, X,
   Radio, Play, Pause, Volume2, ChevronUp,
-  Calendar,
   Home, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, Mail,
   Info, FileText, Shield, ChevronRight,
-  CheckCircle, AlertCircle
 } from 'lucide-react';
-
-interface ToastItem { id: number; msg: string; type: 'success' | 'error'; }
 
 export default function ProLayout({
   children,
@@ -23,59 +19,28 @@ export default function ProLayout({
   tickerText?: string;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [radioPlaying, setRadioPlaying] = useState(false);
   const [radioOpen, setRadioOpen] = useState(false);
   const [radioVol, setRadioVol] = useState(0.8);
-  const [breakingDismissed, setBreakingDismissed] = useState(false);
+  const [breakingDismissed, setBreakingDismissed] = useState(() => {
+    try { return localStorage.getItem('ni_breaking_dismissed') === 'true'; } catch { return false; }
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Stream principal
   const RADIO_STREAM = 'https://stm1.ssl-streams.com:18816/stream';
   const RADIO_STATION = 'La Buenísima 93.1 FM';
   const RADIO_DESC = 'Más música, menos problemas';
-  const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [dateStr, setDateStr] = useState('');
-  const [worldTimes, setWorldTimes] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const WORLD_CLOCKS = [
-    { label: 'Managua', flag: '🇳🇮', tz: 'America/Managua' },
-    { label: 'Miami',   flag: '🇺🇸', tz: 'America/New_York' },
-    { label: 'Madrid',  flag: '🇪🇸', tz: 'Europe/Madrid' },
-    { label: 'México',  flag: '🇲🇽', tz: 'America/Mexico_City' },
-    { label: 'Moscú',  flag: '🇷🇺', tz: 'Europe/Moscow' },
-  ];
-
-  const addToast = useCallback((msg: string, type: 'success' | 'error') => {
-    const id = Date.now() + Math.random();
-    setToasts(prev => [...prev, { id, msg, type }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
-  }, []);
 
   useEffect(() => {
     const hoy = new Date();
     const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
     const dias = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
     setDateStr(`${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`);
-  }, []);
-
-  useEffect(() => {
-    const updateClocks = () => {
-      setWorldTimes(WORLD_CLOCKS.map(c => {
-        try {
-          return new Date().toLocaleTimeString('es-NI', {
-            timeZone: c.tz, hour: '2-digit', minute: '2-digit', hour12: false,
-          });
-        } catch { return '--:--'; }
-      }));
-    };
-    updateClocks();
-    const tickTime = setInterval(updateClocks, 30000);
-    return () => { clearInterval(tickTime); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -88,9 +53,14 @@ export default function ProLayout({
     } else {
       audioRef.current?.pause();
     }
-    return () => { audioRef.current?.pause(); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [radioPlaying]);
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+    };
+  }, [radioPlaying, radioVol]);
 
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = parseFloat(e.target.value);
@@ -98,23 +68,10 @@ export default function ProLayout({
     if (audioRef.current) audioRef.current.volume = v;
   };
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('ni_theme');
-      if (saved === 'dark') { setDark(true); document.documentElement.setAttribute('data-theme', 'dark'); }
-      else { setDark(false); document.documentElement.setAttribute('data-theme', 'light'); }
-    } catch {}
+  const dismissBreaking = useCallback(() => {
+    setBreakingDismissed(true);
+    try { localStorage.setItem('ni_breaking_dismissed', 'true'); } catch {}
   }, []);
-
-  const toggleDark = useCallback(() => {
-    setDark(prev => {
-      const next = !prev;
-      try { localStorage.setItem('ni_theme', next ? 'dark' : 'light'); } catch {}
-      document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
-      addToast(next ? 'Modo oscuro activado' : 'Modo claro activado', 'success');
-      return next;
-    });
-  }, [addToast]);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -141,7 +98,7 @@ export default function ProLayout({
               Última Hora
             </span>
             <span className="breaking-bar__text">{tickerText}</span>
-            <button className="breaking-bar__close" onClick={() => setBreakingDismissed(true)} aria-label="Cerrar">
+            <button className="breaking-bar__close" onClick={dismissBreaking} aria-label="Cerrar">
               <X size={14} />
             </button>
           </div>
@@ -180,10 +137,7 @@ export default function ProLayout({
                 {searchOpen ? <X size={20} /> : <Search size={20} />}
               </button>
             </div>
-            <button className="header-btn" onClick={toggleDark} aria-label="Cambiar tema">
-              {dark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
+              <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
               <Menu size={20} />
             </button>
           </div>
@@ -205,9 +159,9 @@ export default function ProLayout({
               Periodismo independiente desde Managua. Noticias verificadas de Nicaragua para nicaragüenses en el país y el exterior.
             </p>
             <div className="footer__social">
-              <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook size={14} /></a>
-              <a href="https://wa.me/?text=Nicaragua+Informate" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
-              <a href="https://t.me/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><IconTelegram size={14} /></a>
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><IconFacebook size={14} /></a>
+              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
+              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram"><IconTelegram size={14} /></a>
             </div>
           </div>
           <div>
@@ -240,7 +194,7 @@ export default function ProLayout({
             <Link href="/cookies">Cookies</Link>
             <Link href="/mapa-del-sitio">Mapa del sitio</Link>
           </div>
-          <p className="footer__copy">
+          <p className="footer__copy" suppressHydrationWarning>
             © {new Date().getFullYear()} <strong>Nicaragua Informate.</strong> Todos los derechos reservados.<br />Managua, Nicaragua.
           </p>
         </div>
@@ -325,9 +279,14 @@ export default function ProLayout({
       <div className={`menu-overlay${menuOpen ? ' active' : ''}`} onClick={() => setMenuOpen(false)} />
       <div className={`menu-panel${menuOpen ? ' active' : ''}`}>
         <div className="menu-header">
-          <div className="menu-header__logo">
-            <Image src="/logo.png" alt="Nicaragua Informate" width={48} height={48} className="menu-logo-img" />
-            Nicaragua <span>Informate</span>
+          <div className="menu-header__top">
+            <div className="menu-header__logo">
+              <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} className="menu-logo-img" priority />
+              Nicaragua <span>Informate</span>
+            </div>
+            <button className="menu-header__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
+              <X size={24} />
+            </button>
           </div>
           <p className="menu-header__tagline">Periodismo verificado desde Managua</p>
         </div>
@@ -348,24 +307,10 @@ export default function ProLayout({
           <Link href="/contacto" className="menu-link" onClick={() => setMenuOpen(false)}><Mail size={18} /> Contacto</Link>
         </div>
         <div className="menu-footer">
-          <div className="menu-theme">
-            <span className="menu-theme__label">{dark ? <Moon size={16} /> : <Sun size={16} />} Modo oscuro</span>
-            <button className={`toggle${dark ? ' active' : ''}`} onClick={toggleDark} aria-label="Toggle dark mode">
-              <div className="toggle__knob" />
-            </button>
-          </div>
+          <p className="menu-footer__copy" suppressHydrationWarning>© {new Date().getFullYear()} Nicaragua Informate</p>
         </div>
       </div>
 
-      {/* === TOASTS === */}
-      <div className="toast-container">
-        {toasts.map(t => (
-          <div key={t.id} className={`toast toast--${t.type}`}>
-            {t.type === 'success' ? <CheckCircle size={18} color="var(--c-success)" /> : <AlertCircle size={18} color="var(--c-danger)" />}
-            <span style={{ fontSize: 14, fontWeight: 500 }}>{t.msg}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

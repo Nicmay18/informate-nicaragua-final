@@ -27,13 +27,22 @@ export function buildNewsArticleJsonLdEnhanced(
     '@type': 'NewsArticle',
     headline: article.titulo,
     description: article.resumen,
-    image: {
-      '@type': 'ImageObject',
-      url: article.imagen || 'https://nicaraguainformate.com/logo.png',
-      width: 1200,
-      height: 630,
-      caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
-    },
+    image: [
+      {
+        '@type': 'ImageObject',
+        url: article.imagen || 'https://nicaraguainformate.com/logo.png',
+        width: 1200,
+        height: 630,
+        caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
+      },
+      {
+        '@type': 'ImageObject',
+        url: article.imagen ? article.imagen.replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/icon-512x512.png',
+        width: 512,
+        height: 512,
+        caption: `Logo: ${article.titulo} — Nicaragua Informate`,
+      },
+    ],
     datePublished: article.fecha,
     dateModified: article.fechaActualizacion || article.fecha,
     author: {
@@ -42,7 +51,7 @@ export function buildNewsArticleJsonLdEnhanced(
       jobTitle: isKeyling ? 'Directora Editorial y Cofundadora' : 'Periodista',
       url: isKeyling
         ? 'https://nicaraguainformate.com/autor/keyling-rivera'
-        : 'https://nicaraguainformate.com',
+        : 'https://nicaraguainformate.com/nosotros',
       worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
     },
     editor: {
@@ -54,8 +63,18 @@ export function buildNewsArticleJsonLdEnhanced(
       '@type': 'SpeakableSpecification',
       cssSelector: ['.article-headline', '.article-body'],
     },
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': 'https://nicaraguainformate.com/#website',
+      name: 'Nicaragua Informate',
+      publisher: {
+        '@type': 'Organization',
+        '@id': 'https://nicaraguainformate.com/#organization',
+      },
+    },
     publisher: {
       '@type': 'Organization',
+      '@id': 'https://nicaraguainformate.com/#organization',
       name: 'Nicaragua Informate',
       logo: {
         '@type': 'ImageObject',
@@ -93,12 +112,20 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     name: 'Nicaragua Informate',
     alternateName: 'NicInformate',
     url: 'https://nicaraguainformate.com',
-    logo: {
-      '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.png',
-      width: 512,
-      height: 512,
-    },
+    image: [
+      {
+        '@type': 'ImageObject',
+        url: 'https://nicaraguainformate.com/logo.png',
+        width: 512,
+        height: 512,
+      },
+      {
+        '@type': 'ImageObject',
+        url: 'https://nicaraguainformate.com/og-home.jpg',
+        width: 1200,
+        height: 630,
+      },
+    ],
     sameAs: [
       'https://facebook.com/profile.php?id=61578261125687',
       'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
@@ -185,7 +212,12 @@ export function buildBreadcrumbJsonLdEnhanced(
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.item,
+      item: {
+        '@type': 'WebPage',
+        '@id': item.item,
+        name: item.name,
+        url: item.item,
+      },
     })),
   };
 }

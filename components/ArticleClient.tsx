@@ -1,5 +1,7 @@
 ﻿'use client';
 
+/* eslint-disable @next/next/no-img-element */
+
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square, Flame } from 'lucide-react';
@@ -104,8 +106,9 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [errorMsg, setErrorMsg] = useState('');
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const cleanText = (html: string) => {
     if (typeof window === 'undefined') return html;
@@ -203,14 +206,15 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
         return;
       }
 
-      // Mostrar error específico
+      // Mostrar error suave en UI
       if (serverMsg.includes('API Key') || serverMsg.includes('no configurada')) {
-        alert('El servicio de voz profesional no está configurado.\n\nContacta al administrador para activar ElevenLabs.');
+        setErrorMsg('Servicio de voz no configurado. Contacte al administrador.');
       } else if (serverMsg.includes('Network') || serverMsg.includes('fetch')) {
-        alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+        setErrorMsg('Error de conexión. Verifique su internet e intente de nuevo.');
       } else {
-        alert('No se pudo generar el audio: ' + serverMsg);
+        setErrorMsg('No se pudo generar el audio: ' + serverMsg);
       }
+      setTimeout(() => setErrorMsg(''), 6000);
     }
   };
 
@@ -297,7 +301,11 @@ export function AudioButton({ titulo, resumen, contenido, articleId = '' }: Audi
           <div style={{ width: `${progress}%`, height: '100%', background: '#8c1d18', borderRadius: 2, transition: 'width 0.3s linear' }} />
         </div>
       )}
-
+      {errorMsg && (
+        <div style={{ fontSize: 12, color: '#b91c1c', background: '#fef2f2', padding: '8px 12px', borderRadius: 8, border: '1px solid #fecaca' }}>
+          {errorMsg}
+        </div>
+      )}
     </div>
   );
 }
@@ -464,7 +472,7 @@ function PullQuote({ contenido }: { contenido: string }) {
   if (!quote) return null;
   return (
     <aside className="pull-quote-box">
-      <p className="pull-quote-text">"{quote}."</p>
+      <p className="pull-quote-text">“{quote}.”</p>
     </aside>
   );
 }
@@ -606,7 +614,7 @@ export default function ArticleClient({
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   onError={e => {
                     const t = e.target as HTMLImageElement;
-                    t.style.display = 'none';
+                    if (t.src !== FALLBACK_IMAGE) { t.src = FALLBACK_IMAGE; }
                   }}
                 />
               </div>
@@ -749,32 +757,22 @@ export default function ArticleClient({
 
         {/* ===== SIDEBAR (desktop only) ===== */}
         <aside className="article-page__sidebar">
-          <div className="sidebar-widget">
-            <div className="sidebar-widget__title"><Flame size={14} color="#C53030" /> Más Leídas</div>
-            <div className="sidebar-numbered-list">
-              {related.slice(0, 5).map((n, i) => (
-                <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                  <span className="sidebar-num">{String(i + 1).padStart(2, '0')}</span>
-                  <div className="sidebar-numbered-content">
-                    <span className="sidebar-cat">{n.categoria}</span>
-                    <span className="sidebar-title">{n.titulo}</span>
-                  </div>
-                </Link>
-              ))}
+          {related.length > 0 && (
+            <div className="sidebar-widget">
+              <div className="sidebar-widget__title"><Flame size={14} color="var(--c-accent)" /> Más Leídas</div>
+              <div className="sidebar-numbered-list">
+                {related.slice(0, 5).map((n, i) => (
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
+                    <span className="sidebar-num">{i + 1}</span>
+                    <div className="sidebar-numbered-content">
+                      <span className="sidebar-cat">{n.categoria}</span>
+                      <span className="sidebar-title">{n.titulo}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="sidebar-widget">
-            <div className="sidebar-widget__title">Lo último en {noticia.categoria}</div>
-            <div className="sidebar-numbered-list">
-              {related.slice(0, 5).map((n) => (
-                <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                  <div className="sidebar-numbered-content">
-                    <span className="sidebar-title">{n.titulo}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+          )}
         </aside>
       </article>
     </>
@@ -785,9 +783,15 @@ export default function ArticleClient({
 function NewsletterInline() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [saved, setSaved] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem('ni_newsletter') || '[]'); } catch { return []; }
+  });
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !email.includes('@')) return;
+    const updated = [...saved, email];
+    setSaved(updated);
+    try { localStorage.setItem('ni_newsletter', JSON.stringify(updated)); } catch {}
     setSubmitted(true);
     setEmail('');
     setTimeout(() => setSubmitted(false), 4000);

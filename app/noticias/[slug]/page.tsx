@@ -8,12 +8,30 @@ import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
 } from '@/lib/seo/schema';
-import { generateOptimizedTitle, validateTitle } from '@/lib/seo/title';
+import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 import { isToxicSlug } from '@/lib/seo-toxic';
 
 export const dynamicParams = true;
 export const revalidate = 60;
+
+const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
+  'Tecnología',
+  'Sucesos',
+  'Economía',
+  'Salud',
+  'Infraestructura',
+  'Judicial',
+  'Nacionales',
+  'Deportes',
+  'Internacionales',
+  'Espectáculos',
+  'General',
+];
+
+function toNoticiaTipo(value: string): NoticiaTipo {
+  return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
+}
 
 export async function generateStaticParams() {
   try {
@@ -37,10 +55,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const url = `https://nicaraguainformate.com/noticias/${slug}`;
     const category = noticia.categoria || 'General';
+    const seoTipo = toNoticiaTipo(category);
 
     // SEO Title optimization
     const seoTitleResult = generateOptimizedTitle({
-      tipo: category as any,
+      tipo: seoTipo,
       tituloOriginal: noticia.titulo,
       lugar: 'Nicaragua',
       palabraClave: noticia.titulo.split(' ').slice(0, 3).join(' '),

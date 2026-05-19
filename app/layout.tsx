@@ -7,9 +7,7 @@ import {
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
 import ClientOnly from '@/components/ClientOnly';
-import ScrollToTop from '@/components/ScrollToTop';
 import CookieBanner from '@/components/CookieBanner';
-import DeferredAds from '@/components/DeferredAds';
 import ConsentScript from '@/components/ConsentScript';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -18,16 +16,26 @@ const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['la
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  // maximumScale REMOVED — WCAG 2.1 requires users can zoom freely
+  themeColor: '#0A192F',
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nicaraguainformate.com'),
   manifest: '/manifest.json',
+  applicationName: 'Nicaragua Informate',
+  authors: [{ name: 'Keyling Elieth Rivera Muñoz', url: 'https://nicaraguainformate.com/nosotros' }],
+  generator: 'Next.js',
+  keywords: ['Nicaragua', 'noticias Nicaragua', 'actualidad Nicaragua', 'periodismo Nicaragua', 'Managua', 'Noticias de hoy'],
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
-  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
+  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua. Política, economía, deportes, cultura y más.',
   robots: 'index, follow',
-  icons: { icon: '/logo.png', apple: '/logo.png' },
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/icon-192x192.png',
+    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0A192F' }],
+  },
   openGraph: {
     type: 'website',
     locale: 'es_NI',
@@ -35,11 +43,41 @@ export const metadata: Metadata = {
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
+    images: [
+      {
+        url: 'https://nicaraguainformate.com/og-home.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@NicInformate',
+    creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
+    images: ['https://nicaraguainformate.com/og-home.jpg'],
+  },
+  alternates: {
+    canonical: 'https://nicaraguainformate.com',
+    types: {
+      'application/rss+xml': 'https://nicaraguainformate.com/feed.xml',
+    },
+  },
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION && { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }),
+    ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
+  },
+  other: {
+    'google-adsense-account': 'ca-pub-4115203339551838',
+    'publisher': 'Nicaragua Informate',
+    'msapplication-TileColor': '#0A192F',
+    'msapplication-TileImage': '/icon-192x192.png',
+    'apple-mobile-web-app-title': 'Nicaragua Informate',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
   },
 };
 
@@ -47,12 +85,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <meta charSet="utf-8" />
+        {/* Next.js injects charset=utf-8 automatically — do not duplicate */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <meta name="google-adsense-account" content="ca-pub-4115203339551838" />
+        <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         {process.env.NEXT_PUBLIC_GSC_VERIFICATION && (
           <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GSC_VERIFICATION} />
         )}
@@ -74,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
         <script
+          type="text/javascript"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -94,10 +135,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieBanner />
         </ClientOnly>
         <ConsentScript />
-        <DeferredAds />
-        <ClientOnly>
-          <ScrollToTop />
-        </ClientOnly>
       </body>
     </html>
   );

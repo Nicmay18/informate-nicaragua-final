@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     const caption = `<b>${catEmoji} ${titulo}</b>\n\n${resumen}\n\n${hashtags.join(' ')}\n\n→ <a href="${url}">Leer más en nicaraguainformate.com</a>`;
 
-    let imagen = noticia.imagenRedes || noticia.imagen;
+    const imagen = noticia.imagenRedes || noticia.imagen;
     const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
 
     let respuesta;

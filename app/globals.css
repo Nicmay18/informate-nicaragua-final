@@ -53,13 +53,13 @@ input, textarea, select {
   outline: none;
 }
 
-/* ===== BODY PADDING FOR MOBILE FAB ===== */
+/* ===== BODY PADDING FOR RADIO STICKY BAR ===== */
 body {
-  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 16px);
 }
 @media (min-width: 769px) {
   body {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 16px);
   }
 }
 
@@ -173,7 +173,7 @@ select:focus-visible {
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-/* Skip link */
+/* Skip link — MUST be highest z-index for accessibility */
 .skip-link {
   position: absolute; left: -9999px;
   width: 1px; height: 1px; overflow: hidden;
@@ -181,7 +181,8 @@ select:focus-visible {
 .skip-link:focus {
   position: fixed; left: 16px; top: 16px;
   width: auto; height: auto; padding: 12px 20px;
-  background: #1E3A5F; color: white;
-  border-radius: 8px; z-index: 9999;
+  background: var(--c-primary, #0A192F); color: white;
+  border-radius: 8px; z-index: 10001;
   text-decoration: none; font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }

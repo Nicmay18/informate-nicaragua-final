@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { CircleCheck, Scale, Eye, Users } from 'lucide-react';
 
@@ -67,7 +68,7 @@ export default function PoliticaEditorialPage() {
         Cuando se detecte un error relevante, Nicaragua Informate procederá a corregir, ampliar o actualizar la pieza correspondiente de manera transparente. Las correcciones significativas se indicarán claramente en el contenido con la fecha de modificación.
       </p>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Los usuarios pueden reportar errores o solicitar correcciones a través de nuestro <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>. Evaluaremos cada reporte en un plazo razonable.
+        Los usuarios pueden reportar errores o solicitar correcciones a través de nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>. Evaluaremos cada reporte en un plazo razonable.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Fuentes e integridad de la información</h2>
@@ -118,7 +119,7 @@ export default function PoliticaEditorialPage() {
       <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>9. Contacto editorial</h2>
       <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
         Para aclaraciones, consultas, correcciones o reportes sobre nuestro contenido, utiliza nuestro{' '}
-        <a href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</a>{' '}
+        <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>{' '}
         seleccionando el asunto correspondiente. También puedes escribir directamente a{' '}
         <a href="mailto:redaccion@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>redaccion@nicaraguainformate.com</a>.
       </p>

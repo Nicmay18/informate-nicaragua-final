@@ -64,13 +64,13 @@ export default function Footer() {
         <div className="ni-footer-col">
           <span className="ni-footer-label">Redes Sociales</span>
           <div className="ni-footer-social">
-            <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener" aria-label="Facebook">
+            <a href={SOCIAL_URLS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
               <BrandIcon name="facebook-f" size={16} />
             </a>
-            <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp">
+            <a href={SOCIAL_URLS.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
               <BrandIcon name="whatsapp" size={16} />
             </a>
-            <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener" aria-label="Telegram">
+            <a href={SOCIAL_URLS.telegram} target="_blank" rel="noopener noreferrer" aria-label="Telegram">
               <BrandIcon name="telegram" size={16} />
             </a>
           </div>

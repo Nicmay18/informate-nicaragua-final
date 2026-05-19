@@ -93,10 +93,11 @@ export function generateOptimizedTitle(input: SEOInput): string {
     title = cutToLimit(`${title} ${contexto}`);
   }
 
-  // Si no tiene verbo fuerte, forzar uno
+  // Si no tiene verbo fuerte, forzar uno (determinístico para SSR)
   if (!hasVerbs && title.length < MAX_LENGTH - 10) {
     const strongVerbs = ['Anuncian', 'Confirman', 'Investigan', 'Abren', 'Inician', 'Presentan'];
-    const verb = strongVerbs[Math.floor(Math.random() * strongVerbs.length)];
+    const hash = tituloOriginal.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const verb = strongVerbs[hash % strongVerbs.length];
     if (!title.toLowerCase().includes(verb.toLowerCase())) {
       title = `${verb} ${title.charAt(0).toLowerCase()}${title.slice(1)}`;
     }

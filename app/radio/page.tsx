@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Link from 'next/link';
 import ProLayout from '@/components/ProLayout';
 import { Play, Pause, Volume2, Radio } from 'lucide-react';
 
@@ -219,7 +220,7 @@ export default function RadioPage() {
           <p style={{ color: '#6b7280', maxWidth: 500, margin: '0 auto 20px' }}>
             Si deseas que tu radio aparezca en esta lista, contáctanos y verificaremos tu señal de streaming.
           </p>
-          <a
+          <Link
             href="/contacto"
             style={{
               display: 'inline-block',
@@ -233,7 +234,7 @@ export default function RadioPage() {
             }}
           >
             Contactar
-          </a>
+          </Link>
         </section>
       </main>
     </ProLayout>

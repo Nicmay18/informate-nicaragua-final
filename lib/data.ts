@@ -232,22 +232,15 @@ const MOCK_NOTICIAS: Noticia[] = [
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  
-  // Primero intentar Firebase
   const firebaseNews = await tryFirebaseAdmin(validatedCount);
   if (firebaseNews && firebaseNews.length > 0) {
-    console.log(`[data.ts] Obtenidas ${firebaseNews.length} noticias de Firebase`);
     return firebaseNews;
   }
-  
-  // Si no hay Firebase, usar noticias de ejemplo (para desarrollo local)
-  console.log('[data.ts] Usando noticias de ejemplo para desarrollo local');
   return MOCK_NOTICIAS.slice(0, validatedCount);
 }
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -256,7 +249,6 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .orderBy('fecha', 'desc')
       .limit(validatedCount)
       .get();
-    
     const noticias = snap.docs
       .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
@@ -275,28 +267,21 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
           palabras: data.palabras,
         };
       });
-    
-    console.log(`[data.ts] Obtenidas ${noticias.length} noticias de categoría ${categoria} desde Firebase`);
     return noticias;
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     if (msg.includes('index') || msg.includes('requires an index')) {
-      console.warn(`[data.ts] Se requiere índice compuesto en Firestore para categoría ${categoria}. Crear índice en consola Firebase.`);
+      console.warn(`[data.ts] Se requiere índice compuesto en Firestore para categoría ${categoria}.`);
     } else {
       console.error(`[data.ts] ERROR: No se pudieron obtener noticias de categoría ${categoria}:`, msg);
     }
   }
-  
-  // Fallback a noticias de ejemplo filtradas por categoría
   const filtered = MOCK_NOTICIAS.filter(n => n.categoria === categoria);
-  console.log(`[data.ts] Usando noticias de ejemplo filtradas para categoría ${categoria}`);
   return filtered.slice(0, validatedCount);
 }
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
-  
-  // FORZAR Firebase Admin SDK - sin fallback
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -304,7 +289,6 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .orderBy('vistas', 'desc')
       .limit(validatedCount)
       .get();
-    
     if (!snap.empty) {
       const masLeidas = snap.docs
         .map((d: QueryDocumentSnapshot<DocumentData>) => {
@@ -324,25 +308,18 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
             palabras: data.palabras,
           };
         });
-      
-      console.log(`[data.ts] Obtenidas ${masLeidas.length} noticias más leídas de Firebase`);
       return masLeidas;
     }
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
   }
-  
-  // Usar noticias de ejemplo si Firebase no está disponible
-  console.log('[data.ts] Usando noticias de ejemplo para más leídas');
   return MOCK_NOTICIAS.slice(0, validatedCount);
 }
 
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
-  // Verificar que el slug no llegue vacío
   if (!slug || typeof slug !== 'string') {
     return null;
   }
-  
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -350,7 +327,6 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       .where('slug', '==', slug)
       .limit(1)
       .get();
-    
     if (!snap.empty) {
       const doc = snap.docs[0];
       const data = doc.data();
@@ -374,13 +350,10 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
   }
-  
-  // Buscar en noticias de ejemplo
   const mockNoticia = MOCK_NOTICIAS.find(n => n.slug === slug);
   if (mockNoticia) {
     return mockNoticia;
   }
-  
   return null;
 }
 
@@ -389,7 +362,6 @@ export async function getAllSlugs(): Promise<string[]> {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
-      .where('publicado', '!=', false)
       .select('slug')
       .limit(2000)
       .get();
@@ -416,7 +388,6 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .get();
 
     const related = snap.docs
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => d.data().publicado !== false)
       .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {

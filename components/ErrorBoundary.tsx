@@ -1,6 +1,7 @@
 'use client';
 
 import { Component, ReactNode } from 'react';
+import Link from 'next/link';
 
 interface Props {
   children: ReactNode;
@@ -32,9 +33,8 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="error-fallback" style={{ padding: '48px 24px', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '16px' }}>Algo salió mal</h2>
           <p style={{ color: '#6b7280', marginBottom: '24px' }}>Por favor, recarga la página o vuelve al inicio.</p>
-          <a
+          <Link
             href="/"
-            onClick={() => window.location.replace('/')}
             style={{
               display: 'inline-block',
               padding: '12px 24px',
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
             }}
           >
             Ir al inicio
-          </a>
+          </Link>
         </div>
       );
     }

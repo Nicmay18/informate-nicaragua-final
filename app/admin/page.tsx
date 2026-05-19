@@ -475,9 +475,9 @@ export default function AdminPage() {
           `Impacto de ${p} en la economía nacional`,
         ],
         viral: [
-          `🔴 ¡URGENTE! ${p} — Esto cambia TODO`,
-          `¿Te enteraste? ${p} y las redes EXPLOTAN 💥`,
-          `${p}: El secreto que nadie te contó 😱`,
+          `Anuncian medidas urgentes sobre ${p}`,
+          `Reacciones en redes tras noticia sobre ${p}`,
+          `Detalles inéditos sobre ${p}`,
         ],
         serio: [
           `Análisis profundo: ${p} y sus consecuencias`,
@@ -1298,7 +1298,7 @@ export default function AdminPage() {
                     <div style={{ fontSize: 10, fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', marginBottom: 8 }}>Prohibido</div>
                     <ul style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.7, paddingLeft: 16, margin: 0 }}>
                       <li>Clickbait</li>
-                      <li>"Increíble", "impactante", "escándalo"</li>
+                      <li>“Increíble”, “impactante”, “escándalo”</li>
                       <li>MAYÚSCULAS excesivas</li>
                       <li>Emojis</li>
                       <li>Signos de exclamación</li>

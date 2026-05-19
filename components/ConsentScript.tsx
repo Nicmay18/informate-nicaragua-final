@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+type CookiePrefs = { analytics: boolean; ads: boolean };
+
 export default function ConsentScript() {
   const [consent, setConsent] = useState<string | null>(null);
 
@@ -20,6 +22,19 @@ export default function ConsentScript() {
 
   useEffect(() => {
     if (consent !== 'accepted') return;
+
+    const prefsRaw = localStorage.getItem('ni_cookie_preferences');
+    let shouldLoadAds = true;
+    if (prefsRaw) {
+      try {
+        const prefs = JSON.parse(prefsRaw) as CookiePrefs;
+        shouldLoadAds = !!prefs.ads;
+      } catch {
+        shouldLoadAds = true;
+      }
+    }
+
+    if (!shouldLoadAds) return;
 
     const id = 'adsbygoogle-script';
     if (document.getElementById(id)) return;
