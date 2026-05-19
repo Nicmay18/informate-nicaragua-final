@@ -1625,9 +1625,12 @@
 /* prevent body images from breaking layout */
 .article-page img:not(.featured-img) {
   max-width: 100% !important;
-  max-height: 70vh !important;
+  max-height: 500px !important;
   height: auto !important;
-  display: block;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 16px auto !important;
 }
 .article-body-pro { overflow-x: hidden; }
 .featured-figure {

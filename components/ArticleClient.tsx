@@ -642,19 +642,6 @@ export default function ArticleClient({
         <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
         {/* ===== ARTICLE BODY ===== */}
-        <style>{`
-          .article-body-pro img,
-          .article-body-pro figure img,
-          .article-body-pro p img {
-            max-width: 100% !important;
-            max-height: 500px !important;
-            height: auto !important;
-            width: auto !important;
-            object-fit: contain !important;
-            display: block !important;
-            margin: 16px auto !important;
-          }
-        `}</style>
         <div
           className="article-body-pro drop-cap"
           style={{ fontSize: `${fontSize}em` }}
