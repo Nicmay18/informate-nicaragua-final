@@ -1,345 +1,226 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, Eye, TrendingUp, Flame, ChevronRight } from 'lucide-react';
+import { Clock, Newspaper, Flame, ChevronRight, ArrowRight, TrendingUp } from 'lucide-react';
 import ProLayout from '@/components/ProLayout';
-import { Noticia, CATEGORY_COLORS } from '@/lib/types';
+import WeatherWidget from '@/components/WeatherWidget';
+import IndicadoresWidget from '@/components/IndicadoresWidget';
+import { tiempoLectura, formatDateES } from '@/lib/formateo';
+import type { Noticia } from '@/lib/types';
 
 interface MobileHomeProps {
   noticias: Noticia[];
   masLeidas: Noticia[];
 }
 
-const CAT_MAP: Record<string, string> = {
-  Sucesos: 'sucesos',
-  Nacionales: 'nacionales',
-  Deportes: 'deportes',
-  Internacionales: 'internacionales',
-  Espectaculos: 'espectaculos',
-  Tecnologia: 'tecnologia',
-};
-
-const NAV_CATS = [
-  { key: 'all', label: 'Todas' },
-  { key: 'nacionales', label: 'Nacionales' },
-  { key: 'sucesos', label: 'Sucesos' },
-  { key: 'deportes', label: 'Deportes' },
-  { key: 'internacionales', label: 'Internacionales' },
-  { key: 'espectaculos', label: 'Espectáculos' },
-  { key: 'tecnologia', label: 'Tecnología' },
+const SECTION_CONFIG = [
+  { label: 'Nacionales', key: 'Nacionales', slug: '/categoria/nacionales' },
+  { label: 'Sucesos', key: 'Sucesos', slug: '/categoria/sucesos' },
+  { label: 'Internacionales', key: 'Internacionales', slug: '/categoria/internacionales' },
+  { label: 'Deportes', key: 'Deportes', slug: '/categoria/deportes' },
 ];
 
-function formatDateShort(fecha: string) {
+const HERO_SIDE_LIMIT = 3;
+const LATEST_LIMIT = 12;
+
+function formatDate(date: string) {
   try {
-    const d = new Date(fecha);
-    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-  } catch { return fecha; }
+    return new Date(date).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' });
+  } catch {
+    return date;
+  }
 }
 
-function formatViews(n?: number) {
-  if (!n) return '';
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
+function readTime(resumen?: string, contenido?: string) {
+  return `${Math.max(1, tiempoLectura(contenido || resumen || ''))} min`;
 }
 
-function NewsImagePlaceholder({ categoria, width, height, className }: { categoria: string; width?: number; height?: number; className?: string }) {
-  const color = CATEGORY_COLORS[categoria] || '#8c1d18';
+function PlaceholderBadge({ label }: { label: string }) {
   return (
-    <div
-      className={className}
-      style={{
-        backgroundColor: color,
-        width: width ? `${width}px` : '100%',
-        height: height ? `${height}px` : '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontWeight: 700,
-        fontSize: '0.8rem',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-        textAlign: 'center',
-        minHeight: 70,
-      }}
-    >
-      {categoria}
+    <div className="card-image-placeholder">
+      <Newspaper size={28} />
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function CardImage({ src, alt, category }: { src?: string | null; alt: string; category: string }) {
+  if (!src || src === '/logo.png') {
+    return <PlaceholderBadge label={category} />;
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className="card-image"
+      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 320px"
+    />
+  );
+}
+
+function NewsCard({ noticia, highlight = false }: { noticia: Noticia; highlight?: boolean }) {
+  return (
+    <article className={`news-card${highlight ? ' news-card--highlight' : ''}`}>
+      <Link href={`/noticias/${noticia.slug}`} className="card-link">
+        <div className="card-image-wrapper">
+          <CardImage src={noticia.imagen} alt={noticia.titulo} category={noticia.categoria} />
+          <span className="card-category">{noticia.categoria}</span>
+        </div>
+        <div className="card-body">
+          <h3 className="card-title">{noticia.titulo}</h3>
+          <div className="card-meta">
+            <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
+            <span className="read-time">{readTime(noticia.resumen, noticia.contenido)}</span>
+          </div>
+          {noticia.resumen && <p className="card-excerpt">{noticia.resumen}</p>}
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function HeroCard({ noticia }: { noticia: Noticia }) {
+  return (
+    <article className="hero-card" aria-label="Noticia destacada">
+      <Link href={`/noticias/${noticia.slug}`} className="hero-card__link">
+        <div className="hero-card__image">
+          <CardImage src={noticia.imagen} alt={noticia.titulo} category={noticia.categoria} />
+        </div>
+        <div className="hero-card__content">
+          <span className="hero-card__badge">{noticia.categoria}</span>
+          <h2 className="hero-card__title">{noticia.titulo}</h2>
+          {noticia.resumen && <p className="hero-card__excerpt">{noticia.resumen}</p>}
+          <div className="hero-card__meta">
+            <time dateTime={noticia.fecha}>{formatDateES(noticia.fecha)}</time>
+            <span>·</span>
+            <span>{readTime(noticia.resumen, noticia.contenido)}</span>
+          </div>
+          <div className="hero-card__cta">
+            Leer noticia completa <ArrowRight size={16} />
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+function AdSlot({ label = 'Publicidad', variant = 'leaderboard' }: { label?: string; variant?: 'leaderboard' | 'inline' }) {
+  return (
+    <div className={`ad-slot ad-slot--${variant}`} aria-label={label} role="presentation">
+      <span>{label}</span>
+      <small>970x250 / Responsive</small>
     </div>
   );
 }
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
-  const [activeCat, setActiveCat] = useState('all');
-
-  // Deduplicate: hero uses noticias[0], list excludes it
-  const hero = noticias[0] || null;
-  const listNews = activeCat === 'all'
-    ? noticias.slice(1)
-    : noticias.filter(n => CAT_MAP[n.categoria] === activeCat);
-
-  const tickerText = hero?.titulo || 'Nicaragua Informate — Noticias en tiempo real';
+  const hero = noticias[0];
+  const heroSide = noticias.slice(1, HERO_SIDE_LIMIT + 1);
+  const latest = noticias.slice(1, LATEST_LIMIT + 1);
+  const tickerText = hero?.titulo || 'Nicaragua Informate — Noticias de Nicaragua en tiempo real';
 
   return (
     <ProLayout tickerText={tickerText}>
-      {/* === NAV CATEGORIES === */}
-      <nav className="nav-categories" aria-label="Categorías de noticias">
-        {NAV_CATS.map(cat => (
-          <button
-            key={cat.key}
-            className={`nav-cat${activeCat === cat.key ? ' active' : ''}`}
-            onClick={() => setActiveCat(cat.key)}
-            aria-pressed={activeCat === cat.key}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </nav>
-
-      {/* === HERO: SINGLE FEATURED CARD === */}
-      {hero && (
-        <section className="hero-pro" aria-label="Noticia destacada">
-          <Link href={`/noticias/${hero.slug}`} className="hero-pro__track" style={{ display: 'block' }}>
-            {hero.imagen && hero.imagen !== '/logo.png' ? (
-              <Image
-                src={hero.imagen}
-                alt={hero.titulo}
-                fill
-                sizes="100vw"
-                className="hero-pro__img"
-                priority
-                fetchPriority="high"
-              />
-            ) : (
-              <div
-                className="hero-pro__img"
-                style={{
-                  position: 'absolute', inset: 0,
-                  background: CATEGORY_COLORS[hero.categoria] || '#8c1d18',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'white', fontWeight: 800, fontSize: '1.2rem', textTransform: 'uppercase',
-                }}
-              >
-                {hero.categoria}
-              </div>
-            )}
-            <div className="hero-pro__overlay">
-              <div className="hero-pro__content">
-                <span className={`hero-pro__badge news-badge--${CAT_MAP[hero.categoria] || 'nacionales'}`}>
-                  {hero.categoria}
-                </span>
-                <h2 className="hero-pro__title">{hero.titulo}</h2>
-                {hero.resumen && <p className="hero-pro__excerpt">{hero.resumen}</p>}
-                <div className="hero-pro__footer">
-                  <div className="hero-pro__meta">
-                    <span><Clock size={11} /> {formatDateShort(hero.fecha)}</span>
-                    {hero.vistas ? <span><Eye size={11} /> {formatViews(hero.vistas)} lecturas</span> : null}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </section>
-      )}
-
-      {/* === CONTENIDO PRINCIPAL === */}
-      <div className="section">
-        <div className="section__header">
-          <h2 className="section__title"><TrendingUp size={18} /> Últimas Noticias</h2>
-          <Link href="/noticias" className="section__link">Ver todas <ChevronRight size={14} /></Link>
-        </div>
-
-        <div className="editorial-grid">
-          {/* ===== COLUMNA PRINCIPAL ===== */}
-          <div className="editorial-main">
-
-            {/* Lista de noticias */}
-            {listNews.length > 0 ? (
-              <div className="news-list-compact">
-                {listNews.map(n => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-list-item">
-                    <div className="news-list-item__img-wrap">
-                      {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={120} height={90} className="news-list-item__img" loading="lazy" />
-                      ) : (
-                        <NewsImagePlaceholder categoria={n.categoria} width={120} height={90} className="news-list-item__img" />
-                      )}
-                    </div>
-                    <div className="news-list-item__content">
-                      <span className={`news-list-item__cat news-badge--${CAT_MAP[n.categoria] || 'nacionales'}`}>{n.categoria}</span>
-                      <h3 className="news-list-item__title">{n.titulo}</h3>
-                      <div className="news-list-item__meta">
-                        <Clock size={10} /> {formatDateShort(n.fecha)}
-                        {n.vistas ? <><Eye size={10} /> {formatViews(n.vistas)}</> : null}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="news-list-empty">
-                <p>No hay noticias en esta categoría.</p>
-              </div>
-            )}
-          </div>
-
-          {/* ===== SIDEBAR ===== */}
-          <aside className="editorial-sidebar">
-
-            {/* Más Leídas (datos reales) */}
-            {masLeidas.length > 0 && (
-              <div className="sidebar-widget">
-                <div className="sidebar-widget__title">
-                  <Flame size={14} color="var(--c-accent)" /> Más Leídas
-                </div>
-                <div className="sidebar-numbered-list">
-                  {masLeidas.slice(0, 5).map((n, i) => (
-                    <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                      <span className="sidebar-num">{i + 1}</span>
-                      <div className="sidebar-numbered-content">
-                        <span className="sidebar-cat">{n.categoria}</span>
-                        <span className="sidebar-title">{n.titulo}</span>
-                      </div>
-                    </Link>
+      <div className="home-wrapper">
+        <div className="home-content">
+          {hero && (
+            <section className="home-hero">
+              <HeroCard noticia={hero} />
+              {heroSide.length > 0 && (
+                <div className="hero-side">
+                  {heroSide.map((n) => (
+                    <article key={n.slug} className="hero-side-card">
+                      <Link href={`/noticias/${n.slug}`}>
+                        <div className="hero-side-card__image">
+                          <CardImage src={n.imagen} alt={n.titulo} category={n.categoria} />
+                        </div>
+                        <div className="hero-side-card__body">
+                          <span className="hero-side-card__cat">{n.categoria}</span>
+                          <h3>{n.titulo}</h3>
+                          <div className="hero-side-card__meta">
+                            <Clock size={12} /> {readTime(n.resumen, n.contenido)}
+                          </div>
+                        </div>
+                      </Link>
+                    </article>
                   ))}
                 </div>
+              )}
+            </section>
+          )}
+
+          <AdSlot />
+
+          <section className="home-section">
+            <header className="section-header">
+              <div className="section-accent" />
+              <div>
+                <p className="section-eyebrow">Última hora</p>
+                <h2>Últimas Noticias</h2>
               </div>
-            )}
-
-            {/* Indicadores Económicos */}
-            <div className="sidebar-widget">
-              <div className="sidebar-widget__title"><TrendingUp size={14} /> Indicadores</div>
-              <EcoCompact hideHeader />
+              <Link href="/noticias" className="section-link">Ver todas <ChevronRight size={16} /></Link>
+            </header>
+            <div className="news-grid">
+              {latest.map((n) => <NewsCard key={n.slug} noticia={n} />)}
             </div>
+          </section>
 
-            {/* Newsletter */}
-            <Newsletter />
+          <AdSlot variant="inline" />
 
-            {/* Síguenos */}
-            <Siguenos />
-
-          </aside>
+          {SECTION_CONFIG.map((section) => {
+            const items = noticias.filter((n) => n.categoria === section.key).slice(0, 4);
+            if (items.length === 0) return null;
+            return (
+              <section key={section.key} className="home-section">
+                <header className="section-header">
+                  <div className="section-accent" />
+                  <div>
+                    <p className="section-eyebrow">Curado por la redacción</p>
+                    <h2>{section.label}</h2>
+                  </div>
+                  <Link href={section.slug} className="section-link">Ver más <ChevronRight size={16} /></Link>
+                </header>
+                <div className="news-row">
+                  {items.map((item) => (
+                    <NewsCard key={item.slug} noticia={item} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
+
+        <aside className="home-sidebar">
+          <div className="widget">
+            <div className="widget__title"><TrendingUp size={16} /> Indicadores Económicos</div>
+            <IndicadoresWidget />
+          </div>
+          <div className="widget">
+            <div className="widget__title">Clima en Nicaragua</div>
+            <WeatherWidget />
+          </div>
+          {masLeidas.length > 0 && (
+            <div className="widget">
+              <div className="widget__title"><Flame size={16} color="#dc2626" /> Más leídas</div>
+              <ol className="widget-list">
+                {masLeidas.slice(0, 6).map((n, idx) => (
+                  <li key={n.slug}>
+                    <Link href={`/noticias/${n.slug}`}>
+                      <span className="widget-list__index">{idx + 1}</span>
+                      <div>
+                        <p className="widget-list__title">{n.titulo}</p>
+                        <span className="widget-list__meta">{formatDate(n.fecha)}</span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </aside>
       </div>
     </ProLayout>
   );
 }
-
-function EcoCompact({ hideHeader = false }: { hideHeader?: boolean }) {
-  return (
-    <div className="eco-compact" style={hideHeader ? { border: 'none', borderRadius: 0 } : {}}>
-      {!hideHeader && (
-        <div className="eco-compact__header">
-          <div className="eco-compact__title"><TrendingUp size={14} /> Indicadores</div>
-          <span className="eco-compact__source">BCN/INC</span>
-        </div>
-      )}
-      <div className="eco-compact__rates">
-        <div className="eco-rate">
-          <div className="eco-rate__label">Dólar BCN</div>
-          <div className="eco-rate__value">C$36.62</div>
-          <div className="eco-rate__change eco-rate__change--same">−0.00%</div>
-        </div>
-        <div className="eco-rate">
-          <div className="eco-rate__label">Euro</div>
-          <div className="eco-rate__value">C$43.11</div>
-          <div className="eco-rate__change eco-rate__change--up">↑1.25%</div>
-        </div>
-      </div>
-      <div className="eco-compact__fuels">
-        <div className="eco-fuel"><span className="eco-fuel__label">Gasolina Regular</span><span className="eco-fuel__value">C$47.80–48.00</span></div>
-        <div className="eco-fuel"><span className="eco-fuel__label">Gasolina Súper</span><span className="eco-fuel__value">C$49.00</span></div>
-        <div className="eco-fuel"><span className="eco-fuel__label">Diesel</span><span className="eco-fuel__value">C$43.21–43.40</span></div>
-      </div>
-    </div>
-  );
-}
-
-function Newsletter() {
-  const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [savedEmails, setSavedEmails] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem('ni_newsletter') || '[]'); } catch { return []; }
-  });
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !email.includes('@')) return;
-    const updated = [...savedEmails, email];
-    setSavedEmails(updated);
-    try { localStorage.setItem('ni_newsletter', JSON.stringify(updated)); } catch {}
-    setSubmitted(true);
-    setEmail('');
-    setTimeout(() => setSubmitted(false), 4000);
-  };
-  return (
-    <div className="newsletter">
-      <h3 className="newsletter__title">Newsletter</h3>
-      <p className="newsletter__desc">Recibe las noticias más importantes cada mañana.</p>
-      <form className="newsletter__form" onSubmit={onSubmit}>
-        <input
-          type="email"
-          placeholder="tu@email.com"
-          className="newsletter__input"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit" className="newsletter__btn">{submitted ? '¡Listo!' : 'Suscribirse'}</button>
-      </form>
-    </div>
-  );
-}
-
-/* ============================================================
-   SÍGUENOS
-   ============================================================ */
-const MOBILE_SOCIALS = [
-  { href: 'https://facebook.com/profile.php?id=61578261125687', label: 'Facebook', action: 'Seguir página', color: '#1877F2', sigla: 'f' },
-  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', label: 'WhatsApp', action: 'Unirse al canal', color: '#25D366', sigla: 'W' },
-  { href: 'https://t.me/+fHHjncJqMQM3NjZh', label: 'Telegram', action: 'Unirse al grupo', color: '#0088cc', sigla: 'T' },
-  { href: '/feed.xml', label: 'RSS', action: 'Suscribirse al feed', color: '#e8590c', sigla: '★' },
-];
-function Siguenos() {
-  return (
-    <div style={{
-      background: 'var(--c-surface-elevated)',
-      border: '1px solid var(--c-border-light)',
-      borderRadius: 'var(--radius-md)',
-      overflow: 'hidden',
-      marginBottom: 24,
-    }}>
-      <div style={{
-        padding: '10px 16px',
-        borderBottom: '2px solid var(--c-primary)',
-        display: 'flex', alignItems: 'center', gap: 6,
-      }}>
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--c-accent)', display: 'inline-block' }} />
-        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--c-text-muted)' }}>Nuestras Redes</span>
-      </div>
-      {MOBILE_SOCIALS.map((s, i) => (
-        <a
-          key={s.label}
-          href={s.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            padding: '11px 16px',
-            borderBottom: i < MOBILE_SOCIALS.length - 1 ? '1px solid var(--c-border-light)' : 'none',
-            borderLeft: `3px solid ${s.color}`,
-            background: 'transparent', textDecoration: 'none',
-          }}
-        >
-          <span style={{ width: 30, height: 30, borderRadius: 6, background: s.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{s.sigla}</span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--c-text)', lineHeight: 1.2 }}>{s.label}</div>
-            <div style={{ fontSize: 11, color: 'var(--c-text-muted)', marginTop: 1 }}>{s.action}</div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--c-text-muted)', flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
-        </a>
-      ))}
-    </div>
-  );
-}
-

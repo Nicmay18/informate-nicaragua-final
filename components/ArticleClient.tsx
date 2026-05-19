@@ -97,6 +97,27 @@ const CAT_COLORS: Record<string, string> = {
   Tecnología: '#0ea5e9',
 };
 
+const SIDEBAR_CATEGORIES = [
+  { label: 'Nacionales', href: '/categoria/nacionales' },
+  { label: 'Sucesos', href: '/categoria/sucesos' },
+  { label: 'Internacionales', href: '/categoria/internacionales' },
+  { label: 'Economía', href: '/categoria/economia' },
+  { label: 'Deportes', href: '/categoria/deportes' },
+  { label: 'Tecnología', href: '/categoria/tecnologia' },
+  { label: 'Espectáculos', href: '/categoria/espectaculos' },
+];
+
+const slugifyCategory = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
+
+function AdPlaceholder({ id, label, size, variant = 'inline' }: { id: string; label: string; size: string; variant?: 'inline' | 'leaderboard' | 'sidebar' }) {
+  return (
+    <div className={`ad-slot ad-slot--${variant}`} id={id} aria-label={label} role="complementary">
+      <span>{label}</span>
+      <small>{size}</small>
+    </div>
+  );
+}
+
 /* ================================================================
    AUDIO BUTTON (reproductor con ondas animadas)
    ================================================================ */
@@ -524,77 +545,86 @@ export default function ArticleClient({
   const vistas = fmtViews(noticia.vistas);
   const catColor = CAT_COLORS[noticia.categoria] || '#8c1d18';
   const tags = extractTags(noticia.categoria, noticia.titulo);
+  const categorySlug = `/categoria/${slugifyCategory(noticia.categoria || 'actualidad')}`;
+  const publishedISO = noticia.fecha || new Date().toISOString();
+  const updatedISO = (noticia as { fechaActualizacion?: string }).fechaActualizacion || noticia.fecha || publishedISO;
+  const readAlso = related.slice(0, 3);
+  const moreFromCategory = related.slice(3, 6);
+  const sidebarLatest = related.slice(0, 5);
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(noticia.titulo);
+  const encodedShareCopy = encodeURIComponent(`${noticia.titulo} — ${url}`);
+  const isUpdated = updatedISO && updatedISO !== publishedISO;
 
   return (
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <article className="article-page">
+      <article className="article-page" itemScope itemType="https://schema.org/NewsArticle">
         <div className="article-page__main">
-          {/* ===== BREADCRUMB ===== */}
-          <nav className="article-breadcrumb">
-            <Link href="/">Inicio</Link>
-            <span>›</span>
-            <span style={{ color: catColor, fontWeight: 700 }}>{noticia.categoria}</span>
-            <span>›</span>
-            <span>Artículo</span>
+          <nav className="article-breadcrumb" aria-label="breadcrumb">
+            <ol>
+              <li><Link href="/">Inicio</Link></li>
+              <li><Link href={categorySlug}>{noticia.categoria}</Link></li>
+              <li aria-current="page">{noticia.titulo}</li>
+            </ol>
           </nav>
 
-          {/* ===== CATEGORY BADGE ===== */}
-          <span className="article-category-badge" style={{ background: catColor }}>
-            {noticia.categoria}
-          </span>
-
-          {/* ===== TITLE ===== */}
-          <h1 className="article-title-pro">{noticia.titulo}</h1>
-
-          {/* ===== LEAD / SUMMARY ===== */}
-          {noticia.resumen && (
-            <p className="article-lead-pro">{noticia.resumen}</p>
-          )}
-
-          {/* ===== META BAR ===== */}
-          <div className="article-meta-bar">
-            <div className="author-avatar-pro" style={{ background: catColor }}>
-              {autorInicial}
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--c-text)' }}>{autor}</div>
-              <div style={{ fontSize: 12, color: 'var(--c-text-muted)', fontWeight: 500 }}>Periodista</div>
-            </div>
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              {ago && (
-                <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                  🕐 {ago}
+          <header className="single-header">
+            <span className="article-category-badge" style={{ background: catColor }} itemProp="articleSection">
+              {noticia.categoria}
+            </span>
+            <h1 className="article-title-pro" itemProp="headline">{noticia.titulo}</h1>
+            {noticia.resumen && (
+              <p className="article-lead-pro" itemProp="description">{noticia.resumen}</p>
+            )}
+            <div className="article-meta-bar">
+              <div className="author-avatar-pro" style={{ background: catColor }}>
+                {autorInicial}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <div itemProp="author" itemScope itemType="https://schema.org/Person">
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--c-text)' }} itemProp="name">{autor}</span>
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--c-text-muted)', fontWeight: 500 }}>Periodista</div>
+              </div>
+              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+                {ago && (
+                  <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    🕐 {ago}
+                  </span>
+                )}
+                <time dateTime={publishedISO} itemProp="datePublished" style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <CalendarDays size={12} /> {fechaStr}
+                </time>
+                {isUpdated && (
+                  <time dateTime={updatedISO} itemProp="dateModified" className="article-updated" style={{ fontSize: 12, color: 'var(--c-text-muted)' }}>
+                    Actualizado
+                  </time>
+                )}
+                <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Clock size={12} /> {lecturaMin} min
                 </span>
-              )}
-              <time dateTime={noticia.fecha} style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <CalendarDays size={12} /> {fechaStr}
-              </time>
-              <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Clock size={12} /> {lecturaMin} min
-              </span>
-              <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Eye size={12} /> {vistas}
-              </span>
-              {/* A- / A+ font control */}
-              <div className="font-size-ctrl">
-                <button
-                  className="font-size-ctrl__btn"
-                  onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })}
-                  aria-label="Reducir texto" title="A−"
-                >A−</button>
-                <button
-                  className="font-size-ctrl__btn"
-                  onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })}
-                  aria-label="Aumentar texto" title="A+"
-                >A+</button>
+                <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Eye size={12} /> {vistas}
+                </span>
+                <div className="font-size-ctrl">
+                  <button
+                    className="font-size-ctrl__btn"
+                    onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })}
+                    aria-label="Reducir texto" title="A−"
+                  >A−</button>
+                  <button
+                    className="font-size-ctrl__btn"
+                    onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })}
+                    aria-label="Aumentar texto" title="A+"
+                  >A+</button>
+                </div>
               </div>
             </div>
-          </div>
+          </header>
 
-          {/* ===== FEATURED IMAGE ===== */}
-          <figure className="featured-figure">
+          <figure className="featured-figure" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
                 src={noticia.imagen || '/logo.png'}
@@ -612,6 +642,7 @@ export default function ArticleClient({
                   decoding="async"
                   className="featured-img"
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  itemProp="url"
                   onError={e => {
                     const t = e.target as HTMLImageElement;
                     if (t.src !== FALLBACK_IMAGE) { t.src = FALLBACK_IMAGE; }
@@ -642,56 +673,53 @@ export default function ArticleClient({
                 <span className="featured-credit">📷 Nicaragua Informate</span>
               </figcaption>
             )}
+            <meta itemProp="width" content="1200" />
+            <meta itemProp="height" content="630" />
           </figure>
 
-          {/* ===== AUDIO PLAYER ===== */}
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
-
-          {/* ===== NOTICIA EN 3 PUNTOS ===== */}
           <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
-          {/* ===== ARTICLE BODY ===== */}
+          <AdPlaceholder id="div-gpt-ad-inarticle-top" label="Publicidad" size="In-article 1" variant="inline" />
+
           <div
             className="article-body-pro drop-cap"
             style={{ fontSize: `${fontSize}em` }}
+            itemProp="articleBody"
             dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
           />
 
-          {/* ===== PULL QUOTE ===== */}
           <PullQuote contenido={noticia.contenido || ''} />
 
-          {/* ===== IN-ARTICLE AD ===== */}
+          <AdPlaceholder id="div-gpt-ad-inarticle-mid" label="Publicidad" size="In-article 2" variant="inline" />
+
           {adSlot && (
             <div style={{ margin: '36px 0', maxWidth: 680 }}>
               {adSlot}
             </div>
           )}
 
-          {/* ===== TAGS ===== */}
-          <div style={{ margin: '36px 0 28px', paddingTop: 24, borderTop: '1px solid var(--border-light)' }}>
-            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 12 }}>
-              🏷️ Etiquetas
-            </div>
+          <div className="tags-wrapper">
+            <div className="tags-label">🏷️ Etiquetas</div>
             <div className="tags-list">
-              {tags.map((tag) => (
-                <span key={tag} className="tag-pro">{tag}</span>
+              {tags.map(tag => (
+                <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="tag-pro">#{tag}</Link>
               ))}
             </div>
           </div>
 
-          {/* ===== SHARE BAR ===== */}
-          <div className="share-bar-pro">
-            <div className="share-label">📤 Compartir artículo</div>
+          <aside className="share-bar">
+            <span>Compartir:</span>
             <div className="share-buttons">
-              <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} label="📘 Facebook" bg="#1877f2" icon="facebook-f" />
-              <ShareChip href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + url)}`} label="💬 WhatsApp" bg="#25d366" icon="whatsapp" />
-              <ShareChip href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(noticia.titulo)}`} label="✈️ Telegram" bg="#0088cc" icon="telegram" />
+              <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} label="Facebook" bg="#1877f2" icon="facebook-f" />
+              <ShareChip href={`https://wa.me/?text=${encodedShareCopy}`} label="WhatsApp" bg="#25d366" icon="whatsapp" />
+              <ShareChip href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} label="X / Twitter" bg="#0f172a" icon="x-twitter" />
+              <ShareChip href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`} label="Telegram" bg="#0088cc" icon="telegram" />
               <CopyButton url={url} />
             </div>
-          </div>
+          </aside>
 
-          {/* ===== AUTHOR BIO (BBC/NYT style) ===== */}
-          <div className="author-box-pro author-box-pro--enhanced">
+          <div className="author-box-pro author-box-pro--enhanced" itemProp="author" itemScope itemType="https://schema.org/Person">
             <div className="author-box-pro__avatar" style={{ background: catColor, overflow: 'hidden', padding: 0 }}>
               {autorFoto ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -699,7 +727,7 @@ export default function ArticleClient({
               ) : autorInicial}
             </div>
             <div className="author-box-pro__body">
-              <div className="author-box-pro__name">{autor}</div>
+              <div className="author-box-pro__name" itemProp="name">{autor}</div>
               <div className="author-box-pro__role">
                 {autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial y Cofundadora' : 'Periodista'} · {noticia.categoria}
               </div>
@@ -716,63 +744,84 @@ export default function ArticleClient({
             </div>
           </div>
 
-          {/* ===== NEWSLETTER ===== */}
           <NewsletterInline />
 
-          {/* ===== PREV / NEXT NAVIGATION ===== */}
-          {related.length >= 2 && (
-            <PrevNextNav prev={related[0]} next={related[1]} />
-          )}
-
-          {/* ===== RELATED ARTICLES ===== */}
-          {related.length > 0 && (
-            <div className="ni-related">
-              <div className="ni-section-header">
-                <span className="ni-section-accent" />
-                <h3 className="ni-section-title">Otros están leyendo</h3>
-              </div>
-              <div className="ni-related-grid">
-                {related.map((n) => (
-                  <Link key={n.slug} href={`/noticias/${n.slug}`} className="ni-related-card">
+          {readAlso.length >= 1 && (
+            <section className="related-posts">
+              <h3>Lea también</h3>
+              <div className="related-grid">
+                {readAlso.map(item => (
+                  <Link key={item.slug} href={`/noticias/${item.slug}`}>
                     <article>
-                      <div className="ni-related-img">
-                        <ArticleImage src={n.imagen || '/logo.png'} alt={n.titulo} width={400} />
+                      <div className="related-thumb">
+                        <ArticleImage src={item.imagen} alt={item.titulo} width={320} />
                       </div>
-                      <div className="ni-related-body">
-                        <span className="ni-related-cat" style={{ color: CAT_COLORS[n.categoria] || '#8c1d18' }}>
-                          {n.categoria}
-                        </span>
-                        <h3 className="ni-related-title">{n.titulo}</h3>
-                        <div className="ni-related-meta">
-                          <Clock size={10} /> {fmtDate(n.fecha)}
-                        </div>
+                      <div className="related-body">
+                        <span>{item.categoria}</span>
+                        <h4>{item.titulo}</h4>
+                        <time dateTime={item.fecha}>{fmtDate(item.fecha)}</time>
                       </div>
                     </article>
                   </Link>
                 ))}
               </div>
-            </div>
+            </section>
           )}
-        </div>
 
-        {/* ===== SIDEBAR (desktop only) ===== */}
-        <aside className="article-page__sidebar">
-          {related.length > 0 && (
-            <div className="sidebar-widget">
-              <div className="sidebar-widget__title"><Flame size={14} color="var(--c-accent)" /> Más Leídas</div>
-              <div className="sidebar-numbered-list">
-                {related.slice(0, 5).map((n, i) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="sidebar-numbered-item">
-                    <span className="sidebar-num">{i + 1}</span>
-                    <div className="sidebar-numbered-content">
-                      <span className="sidebar-cat">{n.categoria}</span>
-                      <span className="sidebar-title">{n.titulo}</span>
-                    </div>
+          {moreFromCategory.length >= 1 && (
+            <section className="more-from-category">
+              <h3>Más de {noticia.categoria}</h3>
+              <div className="related-grid">
+                {moreFromCategory.map(item => (
+                  <Link key={item.slug} href={`/noticias/${item.slug}`}>
+                    <article>
+                      <div className="related-thumb">
+                        <ArticleImage src={item.imagen} alt={item.titulo} width={320} />
+                      </div>
+                      <div className="related-body">
+                        <span>{item.categoria}</span>
+                        <h4>{item.titulo}</h4>
+                        <time dateTime={item.fecha}>{fmtDate(item.fecha)}</time>
+                      </div>
+                    </article>
                   </Link>
                 ))}
               </div>
+            </section>
+          )}
+
+          <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
+        </div>
+
+        <aside className="article-page__sidebar">
+          <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
+          {sidebarLatest.length > 0 && (
+            <div className="widget">
+              <div className="widget__title"><Flame size={14} color="#dc2626" /> Lo último</div>
+              <ol className="widget-list widget-list--compact">
+                {sidebarLatest.map((item, index) => (
+                  <li key={item.slug}>
+                    <Link href={`/noticias/${item.slug}`}>
+                      <span className="widget-list__index">{index + 1}</span>
+                      <div>
+                        <p className="widget-list__title">{item.titulo}</p>
+                        <span className="widget-list__meta">{fmtDate(item.fecha)}</span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
             </div>
           )}
+          <AdPlaceholder id="div-gpt-ad-sidebar-2" label="Publicidad" size="300x250" variant="sidebar" />
+          <div className="widget">
+            <div className="widget__title">Categorías</div>
+            <ul className="widget-categories">
+              {SIDEBAR_CATEGORIES.map(cat => (
+                <li key={cat.href}><Link href={cat.href}>{cat.label}</Link></li>
+              ))}
+            </ul>
+          </div>
         </aside>
       </article>
     </>
@@ -814,20 +863,3 @@ function NewsletterInline() {
     </div>
   );
 }
-
-/* ===== PREV / NEXT NAV ===== */
-function PrevNextNav({ prev, next }: { prev: NoticiaProps; next: NoticiaProps }) {
-  return (
-    <div className="article-prevnext">
-      <Link href={`/noticias/${prev.slug}`} className="article-prevnext__item article-prevnext__item--prev">
-        <span className="article-prevnext__label">← Anterior</span>
-        <span className="article-prevnext__title">{prev.titulo}</span>
-      </Link>
-      <Link href={`/noticias/${next.slug}`} className="article-prevnext__item article-prevnext__item--next">
-        <span className="article-prevnext__label">Siguiente →</span>
-        <span className="article-prevnext__title">{next.titulo}</span>
-      </Link>
-    </div>
-  );
-}
-

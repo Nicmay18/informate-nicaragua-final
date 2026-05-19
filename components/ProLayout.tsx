@@ -11,6 +11,23 @@ import {
   Info, FileText, Shield, ChevronRight,
 } from 'lucide-react';
 
+const NAV_LINKS = [
+  { href: '/', label: 'Inicio' },
+  { href: '/categoria/nacionales', label: 'Nacionales' },
+  { href: '/categoria/sucesos', label: 'Sucesos' },
+  { href: '/categoria/internacionales', label: 'Internacionales' },
+  { href: '/categoria/tecnologia', label: 'Tecnología' },
+  { href: '/categoria/economia', label: 'Economía' },
+  { href: '/categoria/deportes', label: 'Deportes' },
+];
+
+const SOCIAL_LINKS = [
+  { href: 'https://facebook.com/profile.php?id=61578261125687', label: 'Facebook', icon: 'facebook-f' },
+  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', label: 'WhatsApp', icon: 'whatsapp' },
+  { href: 'https://t.me/+fHHjncJqMQM3NjZh', label: 'Telegram', icon: 'telegram' },
+  { href: 'https://x.com', label: 'X', icon: 'x-twitter' },
+];
+
 export default function ProLayout({
   children,
   tickerText,
@@ -89,6 +106,60 @@ export default function ProLayout({
 
   return (
     <div className="ni-body">
+      <div className="site-topbar">
+        <div className="site-topbar__left">
+          <span className="site-topbar__date">{dateStr}</span>
+        </div>
+        <div className="site-topbar__right">
+          <span>Síguenos</span>
+          <div className="site-topbar__socials">
+            {SOCIAL_LINKS.map(link => (
+              <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label}>
+                <BrandIcon name={link.icon} size={12} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <header className="site-header">
+        <div className="site-header__inner">
+          <Link href="/" className="site-logo">
+            <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} priority />
+            <div className="site-logo__text">Nicaragua <span>Informate</span></div>
+          </Link>
+          <nav className="site-nav">
+            {NAV_LINKS.map(link => (
+              <Link key={link.href} href={link.href} className="site-nav__link">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="site-actions">
+            <div className="search-wrapper" ref={searchRef}>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Buscar noticias..."
+                className={`search-input${searchOpen ? ' active' : ''}`}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    const q = (e.target as HTMLInputElement).value;
+                    if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`;
+                  }
+                }}
+              />
+              <button className="header-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
+                {searchOpen ? <X size={20} /> : <Search size={20} />}
+              </button>
+            </div>
+            <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
+              <Menu size={20} />
+            </button>
+          </div>
+        </div>
+      </header>
+
       {/* === ÚLTIMA HORA BAR === */}
       {tickerText && !breakingDismissed && (
         <div className="breaking-bar">
@@ -104,45 +175,6 @@ export default function ProLayout({
           </div>
         </div>
       )}
-
-      {/* === HEADER MAIN === */}
-      <header className="ni-header">
-        <div className="header-main">
-          <Link href="/" className="header-logo">
-            <Image src="/logo.png" alt="Nicaragua Informate" width={32} height={32} className="header-logo__img" priority />
-            <div className="header-logo__text">Nicaragua <span>Informate</span></div>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="header-nav-desktop">
-            <Link href="/" className="header-nav-link">Inicio</Link>
-            <Link href="/categoria/nacionales" className="header-nav-link">Nacionales</Link>
-            <Link href="/categoria/sucesos" className="header-nav-link">Sucesos</Link>
-            <Link href="/categoria/internacionales" className="header-nav-link">Internacionales</Link>
-            <Link href="/categoria/deportes" className="header-nav-link">Deportes</Link>
-            <Link href="/categoria/tecnologia" className="header-nav-link">Tecnología</Link>
-          </nav>
-
-          <div className="header-actions">
-            <span className="header-date-desktop">{dateStr}</span>
-            <div className="search-wrapper" ref={searchRef}>
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Buscar noticias..."
-                className={`search-input${searchOpen ? ' active' : ''}`}
-                onKeyDown={e => { if (e.key === 'Enter') { const q = (e.target as HTMLInputElement).value; if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`; }}}
-              />
-              <button className="header-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
-                {searchOpen ? <X size={20} /> : <Search size={20} />}
-              </button>
-            </div>
-              <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
-              <Menu size={20} />
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* === MAIN === */}
       <main id="main-content">{children}</main>

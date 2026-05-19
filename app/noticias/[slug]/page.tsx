@@ -128,7 +128,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     if (!noticia) return notFound();
 
     const isLuto = isLutoNews(noticia);
-    const related = await getRelatedNews(noticia.categoria, noticia.slug, 4);
+    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     const wordCount = noticia.contenido
