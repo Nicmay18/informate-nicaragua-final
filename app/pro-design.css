@@ -1625,6 +1625,7 @@
 /* prevent body images from breaking layout */
 .article-page img:not(.featured-img) {
   max-width: 100% !important;
+  max-height: 70vh !important;
   height: auto !important;
   display: block;
 }
@@ -1636,24 +1637,28 @@
   padding: 0 16px;
   box-sizing: border-box;
 }
-.featured-image-wrap {
+.featured-image-wrap,
+.luto-image-container {
   position: relative;
   width: 100%;
   height: 320px;
-  max-height: 450px;
+  max-height: 55vh;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
+  background: #0a0a0a;
   border-radius: 8px;
 }
 @media (min-width: 768px) {
-  .featured-image-wrap { height: 420px; }
+  .featured-image-wrap,
+  .luto-image-container { height: 420px; max-height: 50vh; }
   .featured-figure {
     padding: 0 12px;
   }
 }
 .featured-img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
   display: block;
 }
