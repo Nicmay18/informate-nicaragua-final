@@ -561,8 +561,9 @@ export default function ArticleClient({
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
       <article className="article-page" itemScope itemType="https://schema.org/NewsArticle">
-        <div className="article-page__main">
-          <nav className="article-breadcrumb" aria-label="breadcrumb">
+        <div className="article-page__main article-main">
+          <div className="article-content">
+            <nav className="article-breadcrumb" aria-label="breadcrumb">
             <ol>
               <li><Link href="/">Inicio</Link></li>
               <li><Link href={categorySlug}>{noticia.categoria}</Link></li>
@@ -571,14 +572,14 @@ export default function ArticleClient({
           </nav>
 
           <header className="single-header">
-            <span className="article-category-badge" style={{ background: catColor }} itemProp="articleSection">
+            <span className="article-tag" style={{ background: catColor }} itemProp="articleSection">
               {noticia.categoria}
             </span>
-            <h1 className="article-title-pro" itemProp="headline">{noticia.titulo}</h1>
+            <h1 className="article-title" itemProp="headline">{noticia.titulo}</h1>
             {noticia.resumen && (
-              <p className="article-lead-pro" itemProp="description">{noticia.resumen}</p>
+              <p className="article-lead" itemProp="description">{noticia.resumen}</p>
             )}
-            <div className="article-meta-bar">
+            <div className="article-meta">
               <div className="author-avatar-pro" style={{ background: catColor }}>
                 {autorInicial}
               </div>
@@ -624,7 +625,7 @@ export default function ArticleClient({
             </div>
           </header>
 
-          <figure className="featured-figure" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+          <figure className="article-hero" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
                 src={noticia.imagen || '/logo.png'}
@@ -669,9 +670,9 @@ export default function ArticleClient({
               </div>
             )}
             {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
-              <figcaption className="featured-caption">
-                <span className="featured-credit">📷 Nicaragua Informate</span>
-              </figcaption>
+              <div className="article-caption">
+                📷 Nicaragua Informate
+              </div>
             )}
             <meta itemProp="width" content="1200" />
             <meta itemProp="height" content="630" />
@@ -683,7 +684,7 @@ export default function ArticleClient({
           <AdPlaceholder id="div-gpt-ad-inarticle-top" label="Publicidad" size="In-article 1" variant="inline" />
 
           <div
-            className="article-body-pro drop-cap"
+            className="article-body article-body-pro drop-cap"
             style={{ fontSize: `${fontSize}em` }}
             itemProp="articleBody"
             dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
@@ -699,13 +700,33 @@ export default function ArticleClient({
             </div>
           )}
 
-          <div className="tags-wrapper">
-            <div className="tags-label">🏷️ Etiquetas</div>
-            <div className="tags-list">
-              {tags.map(tag => (
-                <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="tag-pro">#{tag}</Link>
-              ))}
+          <div className="article-tags">
+            {tags.map(tag => (
+              <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="article-tag-link">#{tag}</Link>
+            ))}
+          </div>
+
+          {(readAlso[0] || readAlso[1]) && (
+            <div className="article-nav">
+              {readAlso[0] && (
+                <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card">
+                  <div className="article-nav-label">← Artículo anterior</div>
+                  <div className="article-nav-title">{readAlso[0].titulo}</div>
+                </Link>
+              )}
+              {readAlso[1] && (
+                <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card next">
+                  <div className="article-nav-label">Artículo siguiente →</div>
+                  <div className="article-nav-title">{readAlso[1].titulo}</div>
+                </Link>
+              )}
             </div>
+          )}
+
+          <div className="comments-section">
+            <h3 className="comments-header">Comentarios (0)</h3>
+            <textarea className="comment-box" placeholder="Escribe tu comentario..."></textarea>
+            <button className="comment-submit">Publicar comentario</button>
           </div>
 
           <aside className="share-bar">
@@ -791,9 +812,9 @@ export default function ArticleClient({
           )}
 
           <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
-        </div>
+          </div>
 
-        <aside className="article-page__sidebar">
+        <aside className="article-page__sidebar sidebar">
           <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
           {sidebarLatest.length > 0 && (
             <div className="widget">
