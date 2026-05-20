@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -560,17 +560,11 @@ export default function ArticleClient({
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <article className="article-page" itemScope itemType="https://schema.org/NewsArticle">
-        <div className="article-page__main article-main">
-          <div className="article-content">
-            <nav className="article-breadcrumb" aria-label="breadcrumb">
-            <ol>
-              <li><Link href="/">Inicio</Link></li>
-              <li><Link href={categorySlug}>{noticia.categoria}</Link></li>
-              <li aria-current="page">{noticia.titulo}</li>
-            </ol>
-          </nav>
-
+      <main className="article-main" itemScope itemType="https://schema.org/NewsArticle">
+        <div className="breadcrumbs">
+          <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
+        </div>
+        <div className="article-content">
           <header className="single-header">
             <span className="article-tag" style={{ background: catColor }} itemProp="articleSection">
               {noticia.categoria}
@@ -812,9 +806,9 @@ export default function ArticleClient({
           )}
 
           <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
-          </div>
+        </div>
 
-        <aside className="article-page__sidebar sidebar">
+        <aside className="sidebar">
           <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
           {sidebarLatest.length > 0 && (
             <div className="widget">
@@ -844,7 +838,7 @@ export default function ArticleClient({
             </ul>
           </div>
         </aside>
-      </article>
+      </main>
     </>
   );
 }
