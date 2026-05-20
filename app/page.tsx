@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://nicaraguainformate.com' },
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'; // Force Vercel redeploy
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
