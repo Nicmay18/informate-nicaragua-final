@@ -113,8 +113,8 @@ export default function HeroCarousel({ noticias }: HeroCarouselProps) {
 
         <div className="ni-hero-dots">
           {slides.map((_, i) => (
-            <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`} className="ni-hero-dot">
-              <span style={{ background: i === current ? '#fff' : 'rgba(255,255,255,0.35)' }} />
+            <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`} className={`ni-hero-dot${i === current ? ' active' : ''}`}>
+              <span />
             </button>
           ))}
         </div>
