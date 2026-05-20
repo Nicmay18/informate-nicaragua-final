@@ -3281,19 +3281,11 @@
 /* ============ HERO CAROUSEL ============ */
 .ni-hero {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+  display: block;
   border-radius: 28px;
   overflow: hidden;
   background: var(--c-primary);
   box-shadow: 0 20px 60px rgba(15,23,42,0.18);
-}
-@media (min-width: 980px) {
-  .ni-hero {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 360px);
-    align-items: start;
-  }
 }
 .ni-hero-main {
   position: relative;
