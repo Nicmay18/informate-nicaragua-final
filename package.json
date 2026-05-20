@@ -25,6 +25,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "schema-dts": "^2.0.0",
+    "swiper": "^12.1.4",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {

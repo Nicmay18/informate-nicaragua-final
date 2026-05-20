@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Newspaper, Flame, ChevronRight, TrendingUp } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import ProLayout from '@/components/ProLayout';
-import HeroCarousel from '@/components/HeroCarousel';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
@@ -16,15 +19,6 @@ interface MobileHomeProps {
   masLeidas: Noticia[];
 }
 
-const SECTION_CONFIG = [
-  { label: 'Nacionales', key: 'Nacionales', slug: '/categoria/nacionales' },
-  { label: 'Sucesos', key: 'Sucesos', slug: '/categoria/sucesos' },
-  { label: 'Internacionales', key: 'Internacionales', slug: '/categoria/internacionales' },
-  { label: 'Deportes', key: 'Deportes', slug: '/categoria/deportes' },
-];
-
-const LATEST_LIMIT = 6;
-
 function formatDate(date: string) {
   try {
     return new Date(date).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -33,170 +27,170 @@ function formatDate(date: string) {
   }
 }
 
+function timeAgo(date: string) {
+  try {
+    const now = new Date();
+    const then = new Date(date);
+    const diff = Math.floor((now.getTime() - then.getTime()) / 1000);
+    if (diff < 60) return 'Hace un momento';
+    if (diff < 3600) return 'Hace ' + Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return 'Hace ' + Math.floor(diff / 3600) + ' horas';
+    return formatDate(date);
+  } catch { return date; }
+}
+
 function readTime(resumen?: string, contenido?: string) {
-  return `${Math.max(1, tiempoLectura(contenido || resumen || ''))} min`;
-}
-
-function PlaceholderBadge({ label }: { label: string }) {
-  return (
-    <div className="card-image-placeholder">
-      <Newspaper size={28} />
-      <span>{label}</span>
-    </div>
-  );
-}
-
-function CardImage({ src, alt, category }: { src?: string | null; alt: string; category: string }) {
-  if (!src || src === '/logo.png') {
-    return <PlaceholderBadge label={category} />;
-  }
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      className="card-image"
-      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 320px"
-    />
-  );
-}
-
-function NewsCard({ noticia, highlight = false }: { noticia: Noticia; highlight?: boolean }) {
-  return (
-    <article className={`news-card${highlight ? ' news-card--highlight' : ''}`}>
-      <Link href={`/noticias/${noticia.slug}`} className="card-link">
-        <div className="card-image-wrapper">
-          <CardImage src={noticia.imagen} alt={noticia.titulo} category={noticia.categoria} />
-          <span className="card-category">{noticia.categoria}</span>
-        </div>
-        <div className="card-body">
-          <h3 className="card-title">{noticia.titulo}</h3>
-          <div className="card-meta">
-            <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
-            <span className="read-time">{readTime(noticia.resumen, noticia.contenido)}</span>
-          </div>
-          {noticia.resumen && <p className="card-excerpt">{noticia.resumen}</p>}
-        </div>
-      </Link>
-    </article>
-  );
-}
-
-function AdSlot({ label = 'Publicidad', variant = 'leaderboard' }: { label?: string; variant?: 'leaderboard' | 'inline' }) {
-  return (
-    <div className={`ad-slot ad-slot--${variant}`} aria-label={label} role="presentation">
-      <span>{label}</span>
-      <small>970x250 / Responsive</small>
-    </div>
-  );
+  return Math.max(1, tiempoLectura(contenido || resumen || '')) + ' min lectura';
 }
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
   const hero = noticias[0];
-  const latest = noticias.slice(1, LATEST_LIMIT + 1);
-  const tickerText = hero?.titulo || 'Nicaragua Informate — Noticias de Nicaragua en tiempo real';
+  const latest = noticias.slice(1, 7);
+  const tickerText = hero?.titulo || 'Nicaragua Informate';
 
   return (
     <ProLayout tickerText={tickerText}>
-      <div className="home-wrapper">
-        <div className="home-content">
-          {noticias.length > 0 && (
-            <section className="home-hero">
-              <HeroCarousel noticias={noticias.slice(0, 5)} />
+      {noticias.length > 0 && (
+        <section className="swiper-section">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            loop={noticias.length > 1}
+            className="swiper"
+          >
+            {noticias.slice(0, 5).map((n) => (
+              <SwiperSlide key={n.slug}>
+                <Link href={`/noticias/${n.slug}`}>
+                  {n.imagen && n.imagen !== '/logo.png' ? (
+                    <Image src={n.imagen} alt={n.titulo} fill className="object-cover" sizes="100vw" />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#1e293b,#0f172a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800 }}>
+                      {n.categoria}
+                    </div>
+                  )}
+                  <div className="swiper-overlay">
+                    <span className="swiper-tag">{n.categoria}</span>
+                    <h2 className="swiper-title">{n.titulo}</h2>
+                    <div className="swiper-meta">
+                      <span>Por Redacción</span>
+                      <span>{formatDate(n.fecha)}</span>
+                      <span>{readTime(n.resumen, n.contenido)}</span>
+                    </div>
+                  </div>
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </section>
+      )}
+
+      <div className="main">
+        <div className="main-content">
+          {masLeidas.length > 0 && (
+            <section className="most-read-section">
+              <div className="section-header">
+                <h2 className="section-title">Más Leídas</h2>
+                <Link href="/mas-leidas" className="section-link">Ver todas →</Link>
+              </div>
+              <div className="most-read-grid">
+                {masLeidas.slice(0, 6).map((n, idx) => (
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
+                    <span className="most-read-number">{idx + 1}</span>
+                    <div className="most-read-content">
+                      <h3 className="most-read-title">{n.titulo}</h3>
+                      <div className="most-read-meta">{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </section>
           )}
 
-          <AdSlot />
-
-          <section className="home-section">
-            <header className="section-header">
-              <div className="section-accent" />
-              <div>
-                <p className="section-eyebrow">Última hora</p>
-                <h2>Últimas Noticias</h2>
+          {latest.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Últimas Noticias</h2>
+                <Link href="/noticias" className="section-link">Ver todas →</Link>
               </div>
-              <Link href="/noticias" className="section-link">Ver todas <ChevronRight size={16} /></Link>
-            </header>
-            <div className="news-grid">
-              {latest.map((n) => <NewsCard key={n.slug} noticia={n} />)}
-            </div>
-          </section>
-
-          <AdSlot variant="inline" />
-
-          {SECTION_CONFIG.map((section) => {
-            const items = noticias.filter((n) => n.categoria === section.key).slice(0, 3);
-            if (items.length === 0) return null;
-            return (
-              <section key={section.key} className="home-section">
-                <header className="section-header">
-                  <div className="section-accent" />
-                  <div>
-                    <p className="section-eyebrow">Curado por la redacción</p>
-                    <h2>{section.label}</h2>
-                  </div>
-                  <Link href={section.slug} className="section-link">Ver más <ChevronRight size={16} /></Link>
-                </header>
-                <div className="news-row">
-                  {items.map((item) => (
-                    <NewsCard key={item.slug} noticia={item} />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+              <div className="news-grid">
+                {latest.map((n) => (
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
+                    <div className="news-card-image">
+                      {n.imagen && n.imagen !== '/logo.png' ? (
+                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" style={{ width: '100%', height: 'auto', aspectRatio: '16/10', display: 'block' }} />
+                      ) : (
+                        <div style={{ width: '100%', aspectRatio: '16/10', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontWeight: 700, fontSize: 14 }}>
+                          {n.categoria}
+                        </div>
+                      )}
+                      <span className="news-card-tag">{n.categoria}</span>
+                    </div>
+                    <div className="news-card-body">
+                      <h3 className="news-card-title">{n.titulo}</h3>
+                      {n.resumen && <p className="news-card-excerpt">{n.resumen}</p>}
+                      <div className="news-card-meta">
+                        <span>{timeAgo(n.fecha)}</span>
+                        <span>{n.vistas?.toLocaleString() || 0} vistas</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
 
-        <aside className="home-sidebar">
-          <div className="widget">
+        <aside className="sidebar">
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Newsletter</h3>
             <NewsletterSignup variant="sidebar" />
           </div>
-          <div className="widget">
-            <div className="widget__title">Clima en Nicaragua</div>
+
+          <div className="sidebar-widget radio-widget">
+            <h3 className="widget-title">Radio en Vivo</h3>
+            <div className="radio-live-badge">
+              <span className="radio-live-dot"></span>
+              En Vivo
+            </div>
+            <div className="radio-station">Nicaragua Informate Radio</div>
+            <div className="radio-program">Música y noticias 24/7</div>
+            <div className="radio-controls">
+              <button className="radio-play">▶</button>
+              <div className="radio-volume">
+                <div className="radio-volume-fill"></div>
+                <div className="radio-volume-knob"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="sidebar-widget weather-widget">
+            <h3 className="widget-title">Clima en Nicaragua</h3>
             <WeatherWidget />
           </div>
-          {noticias.length > 1 && (
-            <div className="widget">
-              <div className="widget__title"><TrendingUp size={16} /> Tendencias</div>
-              <ol className="widget-list widget-list--compact">
-                {noticias.slice(1, 6).map((n, idx) => (
-                  <li key={n.slug}>
-                    <Link href={`/noticias/${n.slug}`}>
-                      <span className="widget-list__index">{idx + 1}</span>
-                      <div>
-                        <p className="widget-list__title">{n.titulo}</p>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-          {masLeidas.length > 0 && (
-            <div className="widget">
-              <div className="widget__title"><Flame size={16} color="#dc2626" /> Más leídas</div>
-              <ol className="widget-list">
-                {masLeidas.slice(0, 5).map((n, idx) => (
-                  <li key={n.slug}>
-                    <Link href={`/noticias/${n.slug}`}>
-                      {n.imagen && n.imagen !== '/logo.png' ? (
-                        <img src={n.imagen} alt="" width={48} height={48} style={{ borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
-                      ) : (
-                        <span className="widget-list__index">{idx + 1}</span>
-                      )}
-                      <div>
-                        <p className="widget-list__title">{n.titulo}</p>
-                        <span className="widget-list__meta">{formatDate(n.fecha)}</span>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-          <div className="widget">
-            <div className="widget__title"><TrendingUp size={16} /> Indicadores Económicos</div>
+
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Indicadores Económicos</h3>
             <IndicadoresWidget />
+          </div>
+
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Síguenos</h3>
+            <div className="social-grid">
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" className="social-btn social-facebook">
+                <span className="social-icon">📘</span>
+                Facebook
+              </a>
+              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" className="social-btn social-telegram">
+                <span className="social-icon">✈️</span>
+                Telegram
+              </a>
+              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" className="social-btn social-whatsapp">
+                <span className="social-icon">💬</span>
+                WhatsApp
+              </a>
+            </div>
           </div>
         </aside>
       </div>

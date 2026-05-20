@@ -1,13 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import BrandIcon from '@/components/BrandIcon';
 import {
-  Search, Menu, X,
-  Home, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, Mail,
-  Info, FileText, Shield, ChevronRight,
+  Search, Menu, X, Moon, Sun,
 } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -21,11 +17,29 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { href: 'https://facebook.com/profile.php?id=61578261125687', label: 'Facebook', icon: 'facebook-f' },
-  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', label: 'WhatsApp', icon: 'whatsapp' },
-  { href: 'https://t.me/+fHHjncJqMQM3NjZh', label: 'Telegram', icon: 'telegram' },
-  { href: 'https://x.com', label: 'X', icon: 'x-twitter' },
+  { href: 'https://facebook.com/profile.php?id=61578261125687', label: 'Facebook' },
+  { href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17', label: 'WhatsApp' },
+  { href: 'https://t.me/+fHHjncJqMQM3NjZh', label: 'Telegram' },
 ];
+
+function useTheme() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('ni_theme');
+      if (saved === 'light' || saved === 'dark') setTheme(saved);
+    } catch {}
+  }, []);
+  const toggle = useCallback(() => {
+    setTheme(prev => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      try { localStorage.setItem('ni_theme', next); } catch {}
+      document.documentElement.setAttribute('data-theme', next);
+      return next;
+    });
+  }, []);
+  return { theme, toggle };
+}
 
 export default function ProLayout({
   children,
@@ -36,13 +50,8 @@ export default function ProLayout({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [breakingDismissed, setBreakingDismissed] = useState(() => {
-    try { return localStorage.getItem('ni_breaking_dismissed') === 'true'; } catch { return false; }
-  });
-
   const [dateStr, setDateStr] = useState('');
-  const searchRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     const hoy = new Date();
@@ -51,201 +60,147 @@ export default function ProLayout({
     setDateStr(`${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`);
   }, []);
 
-  /* Radio removed per user request */
-
-  const dismissBreaking = useCallback(() => {
-    setBreakingDismissed(true);
-    try { localStorage.setItem('ni_breaking_dismissed', 'true'); } catch {}
-  }, []);
-
-  useEffect(() => {
-    function onClick(e: MouseEvent) {
-      if (searchOpen && searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setSearchOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', onClick);
-    return () => document.removeEventListener('mousedown', onClick);
-  }, [searchOpen]);
-
-  useEffect(() => {
-    if (searchOpen && searchInputRef.current) searchInputRef.current.focus();
-  }, [searchOpen]);
-
   return (
-    <div className="ni-body">
-      <div className="site-topbar">
-        <div className="site-topbar__left">
-          <span className="site-topbar__date">{dateStr}</span>
-        </div>
-        <div className="site-topbar__right">
-          <span>Síguenos</span>
-          <div className="site-topbar__socials">
+    <>
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="top-bar-inner">
+          <span className="top-bar-date">{dateStr}</span>
+          <ul className="top-bar-social">
             {SOCIAL_LINKS.map(link => (
-              <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label}>
-                <BrandIcon name={link.icon} size={12} />
-              </a>
+              <li key={link.label}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
-      <header className="site-header">
-        <div className="site-header__inner">
-          <Link href="/" className="site-logo">
-            <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} priority />
-            <div className="site-logo__text">Nicaragua <span>Informate</span></div>
-          </Link>
-          <nav className="site-nav">
-            {NAV_LINKS.map(link => (
-              <Link key={link.href} href={link.href} className="site-nav__link">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="site-actions">
-            <div className="search-wrapper" ref={searchRef}>
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Buscar noticias..."
-                className={`search-input${searchOpen ? ' active' : ''}`}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    const q = (e.target as HTMLInputElement).value;
-                    if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`;
-                  }
-                }}
-              />
-              <button className="header-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
-                {searchOpen ? <X size={20} /> : <Search size={20} />}
-              </button>
+      {/* Header */}
+      <header className="header">
+        <div className="header-inner">
+          <Link href="/" className="logo">
+            <div className="logo-img">NI</div>
+            <div className="logo-text">
+              Nicaragua Informate
+              <small>Noticias de Nicaragua y el mundo</small>
             </div>
-            <button className="header-btn header-btn--menu" onClick={() => setMenuOpen(true)} aria-label="Menú">
-              <Menu size={20} />
+          </Link>
+          <nav>
+            <ul className="nav">
+              {NAV_LINKS.map(link => (
+                <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
+              ))}
+            </ul>
+          </nav>
+          <div className="header-actions">
+            <button className="search-icon" title="Buscar" onClick={() => setSearchOpen(!searchOpen)}>
+              {searchOpen ? <X size={16} /> : <Search size={16} />}
+            </button>
+            <button className="theme-toggle" onClick={toggle} title="Cambiar tema">
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} title="Menú">
+              {menuOpen ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </div>
+        {searchOpen && (
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 12px' }}>
+            <input
+              type="text"
+              placeholder="Buscar noticias..."
+              style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14 }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  const q = (e.target as HTMLInputElement).value;
+                  if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`;
+                }
+              }}
+            />
+          </div>
+        )}
+        <div className={`mobile-nav${menuOpen ? ' active' : ''}`}>
+          <ul>
+            {NAV_LINKS.map(link => (
+              <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</Link></li>
+            ))}
+          </ul>
+        </div>
       </header>
 
-      {/* === ÚLTIMA HORA BAR === */}
-      {tickerText && !breakingDismissed && (
+      {/* Breaking Bar */}
+      {tickerText && (
         <div className="breaking-bar">
-          <div className="breaking-bar__inner">
-            <span className="breaking-bar__label">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-              Última Hora
-            </span>
-            <span className="breaking-bar__text">{tickerText}</span>
-            <button className="breaking-bar__close" onClick={dismissBreaking} aria-label="Cerrar">
-              <X size={14} />
-            </button>
+          <div className="breaking-inner">
+            <span className="breaking-label">Última Hora</span>
+            <div className="breaking-text">
+              <Link href="/noticias">{tickerText}</Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* === MAIN === */}
+      {/* Main */}
       <main id="main-content">{children}</main>
 
-      {/* === FOOTER === */}
+      {/* Footer */}
       <footer className="footer">
-        <div className="footer__grid">
-          <div className="footer__brand">
-            <div className="footer__brand-logo">
-              <span className="mark">NI</span>
-              Nicaragua <span>Informate</span>
+        <div className="footer-inner">
+          <div className="footer-top">
+            <Link href="/" className="footer-logo">
+              Nicaragua Informate
+              <small>Periodismo verificado</small>
+            </Link>
+            <Link href="/" className="footer-home-link">← Volver al inicio</Link>
+          </div>
+          <div className="footer-grid">
+            <div className="footer-column">
+              <h4>Secciones</h4>
+              <ul>
+                <li><Link href="/categoria/nacionales">Nacionales</Link></li>
+                <li><Link href="/categoria/sucesos">Sucesos</Link></li>
+                <li><Link href="/categoria/internacionales">Internacionales</Link></li>
+                <li><Link href="/categoria/deportes">Deportes</Link></li>
+                <li><Link href="/categoria/economia">Economía</Link></li>
+                <li><Link href="/categoria/tecnologia">Tecnología</Link></li>
+              </ul>
             </div>
-            <p className="footer__brand-desc">
-              Periodismo independiente desde Managua. Noticias verificadas de Nicaragua para nicaragüenses en el país y el exterior.
-            </p>
-            <div className="footer__social">
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><IconFacebook size={14} /></a>
-              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
-              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram"><IconTelegram size={14} /></a>
+            <div className="footer-column">
+              <h4>Legal</h4>
+              <ul>
+                <li><Link href="/nosotros">Nosotros</Link></li>
+                <li><Link href="/privacidad">Privacidad</Link></li>
+                <li><Link href="/terminos">Términos</Link></li>
+                <li><Link href="/cookies">Cookies</Link></li>
+                <li><Link href="/contacto">Contacto</Link></li>
+              </ul>
+            </div>
+            <div className="footer-column">
+              <h4>Síguenos</h4>
+              <ul>
+                <li><a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                <li><a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+                <li><a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+              </ul>
+            </div>
+            <div className="footer-column">
+              <h4>Contacto</h4>
+              <ul>
+                <li><Link href="/contacto">Redacción</Link></li>
+                <li><Link href="/contacto">Publicidad</Link></li>
+                <li><span>Estelí, Nicaragua</span></li>
+              </ul>
             </div>
           </div>
-          <div>
-            <h4 className="footer__col-title">Secciones</h4>
-            <Link href="/categoria/nacionales" className="footer__link"><Flag size={12} /> Nacionales</Link>
-            <Link href="/categoria/sucesos" className="footer__link"><AlertTriangle size={12} /> Sucesos</Link>
-            <Link href="/categoria/deportes" className="footer__link"><Trophy size={12} /> Deportes</Link>
-            <Link href="/categoria/internacionales" className="footer__link"><Globe size={12} /> Internacionales</Link>
-            <Link href="/categoria/espectaculos" className="footer__link"><Film size={12} /> Espectáculos</Link>
-            <Link href="/categoria/tecnologia" className="footer__link"><Laptop size={12} /> Tecnología</Link>
+          <div className="footer-bottom">
+            <p>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</p>
+            <ul className="footer-bottom-links">
+              <li><Link href="/terminos">Términos</Link></li>
+              <li><Link href="/privacidad">Privacidad</Link></li>
+              <li><Link href="/cookies">Cookies</Link></li>
+            </ul>
           </div>
-          <div>
-            <h4 className="footer__col-title">Legal</h4>
-            <Link href="/nosotros" className="footer__link"><Info size={12} /> Nosotros</Link>
-            <Link href="/privacidad" className="footer__link"><FileText size={12} /> Privacidad</Link>
-            <Link href="/terminos" className="footer__link"><Shield size={12} /> Términos</Link>
-            <Link href="/contacto" className="footer__link"><Mail size={12} /> Contacto</Link>
-          </div>
-          <div>
-            <h4 className="footer__col-title">Contacto</h4>
-            <Link href="/contacto" className="footer__link"><ChevronRight size={12} /> Redacción</Link>
-            <Link href="/contacto" className="footer__link"><ChevronRight size={12} /> Publicidad</Link>
-          </div>
-        </div>
-        <div className="footer__divider" />
-        <div className="footer__bottom">
-          <div className="footer__bottom-links">
-            <Link href="/terminos">Términos</Link>
-            <Link href="/privacidad">Privacidad</Link>
-            <Link href="/cookies">Cookies</Link>
-            <Link href="/mapa-del-sitio">Mapa del sitio</Link>
-          </div>
-          <p className="footer__copy" suppressHydrationWarning>
-            © {new Date().getFullYear()} <strong>Nicaragua Informate.</strong> Todos los derechos reservados.<br />Managua, Nicaragua.
-          </p>
         </div>
       </footer>
-
-      {/* === MENU OVERLAY === */}
-      <div className={`menu-overlay${menuOpen ? ' active' : ''}`} onClick={() => setMenuOpen(false)} />
-      <div className={`menu-panel${menuOpen ? ' active' : ''}`}>
-        <div className="menu-header">
-          <div className="menu-header__top">
-            <div className="menu-header__logo">
-              <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} className="menu-logo-img" priority />
-              Nicaragua <span>Informate</span>
-            </div>
-            <button className="menu-header__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
-              <X size={24} />
-            </button>
-          </div>
-          <p className="menu-header__tagline">Periodismo verificado desde Managua</p>
-        </div>
-        <div className="menu-section">
-          <h4 className="menu-section__title">Secciones</h4>
-          <Link href="/" className="menu-link" onClick={() => setMenuOpen(false)}><Home size={18} /> Inicio</Link>
-          <Link href="/categoria/nacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Flag size={18} /> Nacionales</Link>
-          <Link href="/categoria/sucesos" className="menu-link" onClick={() => setMenuOpen(false)}><AlertTriangle size={18} /> Sucesos</Link>
-          <Link href="/categoria/deportes" className="menu-link" onClick={() => setMenuOpen(false)}><Trophy size={18} /> Deportes</Link>
-          <Link href="/categoria/internacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Globe size={18} /> Internacionales</Link>
-          <Link href="/categoria/espectaculos" className="menu-link" onClick={() => setMenuOpen(false)}><Film size={18} /> Espectáculos</Link>
-          <Link href="/categoria/tecnologia" className="menu-link" onClick={() => setMenuOpen(false)}><Laptop size={18} /> Tecnología</Link>
-        </div>
-        <div className="menu-section">
-          <h4 className="menu-section__title">Información</h4>
-          <Link href="/nosotros" className="menu-link" onClick={() => setMenuOpen(false)}><Info size={18} /> Nosotros</Link>
-          <Link href="/contacto" className="menu-link" onClick={() => setMenuOpen(false)}><Mail size={18} /> Contacto</Link>
-        </div>
-        <div className="menu-footer">
-          <p className="menu-footer__copy" suppressHydrationWarning>© {new Date().getFullYear()} Nicaragua Informate</p>
-        </div>
-      </div>
-
-    </div>
-  );
-}
-
-function IconFacebook({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-  );
-}
-function IconTelegram({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+    </>
   );
 }
