@@ -136,11 +136,13 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+    const serverNow = Date.now();
+
     return (
       <ProLayout tickerText={noticia.titulo}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        <ArticleClient noticia={noticia} related={related} isLuto={isLuto} />
+        <ArticleClient noticia={noticia} related={related} isLuto={isLuto} serverNow={serverNow} />
       </ProLayout>
     );
   } catch (error) {

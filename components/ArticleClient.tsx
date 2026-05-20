@@ -83,6 +83,7 @@ interface ArticleClientProps {
   related: NoticiaProps[];
   isLuto?: boolean;
   adSlot?: React.ReactNode;
+  serverNow?: number;
 }
 
 /* ================================================================
@@ -436,9 +437,10 @@ function extractTags(categoria: string, titulo: string): string[] {
 /* ================================================================
    TIEMPO RELATIVO
    ================================================================ */
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, nowOverride?: number): string {
   try {
-    const mins = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
+    const now = typeof nowOverride === 'number' ? nowOverride : Date.now();
+    const mins = Math.floor((now - new Date(dateStr).getTime()) / 60000);
     if (mins < 2) return 'Hace un momento';
     if (mins < 60) return `Hace ${mins} min`;
     const h = Math.floor(mins / 60);
@@ -526,6 +528,7 @@ export default function ArticleClient({
   related = [],
   isLuto = false,
   adSlot,
+  serverNow,
 }: ArticleClientProps) {
   const [fontSize, setFontSize] = useState(1);
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
@@ -536,7 +539,7 @@ export default function ArticleClient({
 
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
   const fechaStr = fmtDate(noticia.fecha);
-  const ago = timeAgo(noticia.fecha);
+  const ago = timeAgo(noticia.fecha, serverNow);
   const rawAutor = (noticia.autor || '').trim();
   const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Elieth Rivera Muñoz';
   const autorInicial = autor.charAt(0).toUpperCase();
@@ -806,7 +809,7 @@ export default function ArticleClient({
           )}
 
           <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
-        </div>
+          </div>
 
         <aside className="sidebar">
           <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
