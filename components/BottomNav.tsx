@@ -3,12 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Home, Newspaper, Radio, Search, Menu } from 'lucide-react';
+import { Home, Newspaper, Search, Menu } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Inicio', href: '/', icon: Home },
   { label: 'Noticias', href: '/noticias', icon: Newspaper },
-  { label: 'Radio', href: '#radio', icon: Radio },
   { label: 'Buscar', href: '/buscar', icon: Search },
   { label: 'Menú', href: '#menu', icon: Menu },
 ];

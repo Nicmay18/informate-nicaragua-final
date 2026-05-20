@@ -27,9 +27,12 @@ const SOCIAL_CHANNELS = [
 export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
-      <p style={{ color: '#cbd5e1', marginBottom: '2.5rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
-        ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte.
-        Contáctanos por correo electrónico, redes sociales o visita nuestras oficinas en Managua, Nicaragua.
+      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
+        ¿Tienes una noticia, sugerencia, denuncia ciudadana o consulta? Estamos aquí para escucharte.
+        En <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
+      </p>
+      <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
+        Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#fff' }}>Policía Nacional 118</strong>, <strong style={{ color: '#fff' }}>Bomberos 911/115</strong>, <strong style={{ color: '#fff' }}>Cruz Roja 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
       </p>
 
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>

@@ -1,154 +1,180 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import LegalPageShell from '@/components/LegalPageShell';
 import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield } from 'lucide-react';
-import { useEffect, useState } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Sobre Nicaragua Informate — Noticias de Nicaragua',
+  description: 'Conoce a Nicaragua Informate: equipo, misión y visión del medio digital nicaragüense dedicado a noticias verificadas.',
+  alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
+};
+
+const ACENTO = '#dc2626';
+const TXT = '#0f172a';
+const TXT_SEC = '#334155';
+const BG_CARD = '#ffffff';
+const BORDER = '#e2e8f0';
+const LINK = '#2563eb';
 
 export default function NosotrosPage() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    const root = document.documentElement;
-    const check = () => setIsDark(root.getAttribute('data-theme') === 'dark');
-    check();
-    const mo = new MutationObserver(check);
-    mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => mo.disconnect();
-  }, []);
-  const acento = isDark ? '#f87171' : '#8c1d18';
-  const textoSec = isDark ? '#94a3b8' : '#64748B';
-  const cardBg = isDark ? 'rgba(255,255,255,0.04)' : 'var(--c-surface)';
-  const cardBorder = isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid var(--c-border)';
-  const linkColor = isDark ? '#60a5fa' : '#2563eb';
   return (
-    <LegalPageShell title="Sobre Nicaragua Informate">
-      <p style={{ fontSize: '1.15rem', color: 'var(--c-text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es un medio digital nicaragüense dedicado a compartir noticias e información de interés para los nicaragüenses dentro y fuera del país.
-      </p>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-        Publicamos diariamente contenido sobre nacionales, sucesos, internacionales, deportes, espectáculos, tecnología y temas de actualidad, con información clara, rápida y verificada.
-      </p>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-        Nuestro objetivo es mantener informada a la comunidad con cobertura constante de los acontecimientos más relevantes de Nicaragua y el mundo, utilizando un formato digital accesible y actualizado.
-      </p>
-
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        En un entorno informativo cada vez más saturado, creemos firmemente que el periodismo tiene una función social irrenunciable: mantener informada a la población con rigor, precisión y responsabilidad. Nos enfocamos en lo que publicamos: Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos. Por eso, cada pieza informativa pasa por un estricto proceso de verificación, análisis y revisión editorial antes de llegar a nuestros lectores.
-      </p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '0 0 2.5rem' }}>
-        {[{ icon: <Target size={24} color={acento} />, title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna que contribuya a la formación de ciudadanos informados y al fortalecimiento de la democracia en Nicaragua.' },
-          { icon: <Eye size={24} color={acento} />, title: 'Visión', desc: 'Ser la fuente de noticias digitales más confiable y consultada por nicaragüenses dentro del país y en el extranjero.' },
-          { icon: <HeartHandshake size={24} color={acento} />, title: 'Valores', desc: 'Veracidad, precisión, responsabilidad social, ética periodística, independencia editorial y respeto a la dignidad humana.' }].map((v) => (
-          <div key={v.title} style={{ background: cardBg, border: cardBorder, borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.75rem' }}>{v.icon}</div>
-            <h3 style={{ color: 'var(--c-text)', marginBottom: '0.4rem', fontSize: '1.05rem' }}>{v.title}</h3>
-            <p style={{ color: textoSec, fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>{v.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <h2 style={{ fontSize: '1.3rem', color: 'var(--c-text)', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Quién está detrás?</h2>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        <strong style={{ color: 'var(--c-text)' }}>Nicaragua Informate</strong> es fruto del esfuerzo conjunto de tres profesionales nicaragüenses comprometidos con el periodismo verificado y el derecho a la información. Cada uno aporta su experiencia desde distintas áreas para mantener un medio digital riguroso, independiente y cercano a la realidad del país.
-      </p>
-
-      {/* Fundador 1 */}
-      <div style={{ background: cardBg, border: cardBorder, borderRadius: 12, padding: '1.5rem', marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,var(--c-primary),var(--c-primary-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
-            MN
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Maycol Josue Nicaragua Rivas</div>
-            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director Ejecutivo y Fundador</div>
-            <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Co-fundador de Nicaragua Informate. Encargado de la estrategia general, desarrollo tecnológico y visión de crecimiento del medio. Su liderazgo impulsa la innovación digital y la expansión de la plataforma informativa a nivel nacional.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Fundador 2 */}
-      <div style={{ background: cardBg, border: cardBorder, borderRadius: 12, padding: '1.5rem', marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <div style={{ width: 70, height: 70, borderRadius: '50%', background: 'linear-gradient(135deg,var(--c-primary-dark),var(--c-primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
-            JL
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Jose Luis Lopez Ramirez</div>
-            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Director de Operaciones y Co-fundador</div>
-            <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Co-fundador de Nicaragua Informate. Responsable de la operación diaria, coordinación editorial y gestión de recursos. Su enfoque en la eficiencia garantiza la publicación oportuna y la calidad constante de cada pieza informativa.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Fundador 3 */}
-      <div style={{ background: cardBg, border: cardBorder, borderRadius: 12, padding: '1.5rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" style={{ width: 70, height: 70, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--c-accent)' }} />
-          <div style={{ flex: 1 }}>
-            <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 17, marginBottom: 4 }}>Keyling Elieth Rivera Muñoz</div>
-            <div style={{ color: 'var(--c-accent)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Directora Editorial y Cofundadora</div>
-            <p style={{ color: textoSec, fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
-              Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense. <Link href="/autor/keyling-rivera" style={{ color: linkColor, textDecoration: 'none' }}>Ver perfil completo →</Link>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h2 style={{ fontSize: '1.3rem', color: 'var(--c-text)', marginTop: '2rem', marginBottom: '0.75rem' }}>¿Por qué creamos este sitio?</h2>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.75 }}>
-        Nicaragua Informate nació de la convicción de que toda comunidad necesita una fuente de información confiable, cercana y profesional. Decidimos construir un espacio digital donde el rigor periodístico sea la norma: cubrimos lo que importa al nicaragüense, con secciones de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.
-      </p>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Publicamos contenido original las 24 horas del día, los 7 días de la semana, con un enfoque en la precisión, el contexto y la utilidad práctica para quienes viven en Nicaragua y quienes siguen la actualidad del país desde el exterior. Nuestra independencia editorial significa que no respondemos a partidos políticos ni a intereses corporativos: respondemos a ustedes, los lectores.
-      </p>
-
-      <h2 style={{ fontSize: '1.3rem', color: 'var(--c-text)', marginTop: '2rem', marginBottom: '0.75rem' }}>Compromiso con la veracidad</h2>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', background: cardBg, border: cardBorder, borderRadius: 10, padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,var(--c-primary),var(--c-accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Shield size={20} color="#fff" />
-        </div>
-        <div>
-          <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Verificación rigurosa</div>
-          <p style={{ color: textoSec, fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>
-            Cada pieza informativa es contrastada con múltiples fuentes antes de su publicación.
+    <main style={{ background: '#f8fafc', minHeight: '100vh' }}>
+      {/* Hero */}
+      <section style={{ background: '#0f172a', color: '#fff', padding: '64px 24px 48px' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 800, marginBottom: 16, lineHeight: 1.15 }}>
+            Sobre Nicaragua Informate
+          </h1>
+          <p style={{ fontSize: '1.15rem', color: '#cbd5e1', lineHeight: 1.7, maxWidth: 640 }}>
+            Nicaragua Informate es un medio digital nicaragüense creado para mantener informada a la comunidad nicaragüense dentro y fuera del país.
           </p>
         </div>
-      </div>
-      <ul style={{ color: 'var(--c-text-secondary)', lineHeight: 1.8, paddingLeft: '1.5rem', listStyleType: 'disc', marginBottom: '2rem' }}>
-        <li><strong style={{ color: 'var(--c-text)' }}>Verificación:</strong> Toda información es contrastada con al menos dos fuentes independientes antes de su publicación.</li>
-        <li><strong style={{ color: 'var(--c-text)' }}>Correcciones:</strong> Cuando se detecta un error, se corrige de forma transparente y se notifica al lector.</li>
-        <li><strong style={{ color: 'var(--c-text)' }}>Independencia:</strong> No aceptamos presiones externas que comprometan nuestra línea editorial.</li>
-        <li><strong style={{ color: 'var(--c-text)' }}>Separación editorial-comercial:</strong> El contenido informativo es independiente de los anunciantes.</li>
-      </ul>
+      </section>
 
-      <h2 style={{ fontSize: '1.3rem', color: 'var(--c-text)', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Equipo y operación</h2>
-      <p style={{ color: 'var(--c-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.75 }}>
-        Contamos con un equipo multidisciplinario de reporteros, editores y colaboradores distribuidos en distintas regiones de Nicaragua. Esta red territorial nos permite cubrir noticias desde Managua, León, Granada, Matagalpa y otras zonas del país en tiempo real.
-      </p>
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '40px 24px 80px' }}>
+        {/* Intro */}
+        <p style={{ fontSize: '1.1rem', color: TXT, lineHeight: 1.8, marginBottom: '1.25rem' }}>
+          <strong>Nicaragua Informate</strong> es un medio digital nicaragüense creado para mantener informada a la comunidad nicaragüense dentro y fuera del país. Publicamos contenido diario sobre sucesos, noticias nacionales, deportes, internacionales, tecnología y espectáculos, con información verificada y presentada de forma clara.
+        </p>
 
-      <h2 style={{ fontSize: '1.3rem', color: 'var(--c-text)', marginTop: '2.5rem', marginBottom: '0.75rem' }}>Ubicación y contacto</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem', margin: '0.5rem 0 1.5rem' }}>
+        {/* Misión / Visión / Valores */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 16, margin: '2.5rem 0' }}>
+          {[
+            { icon: <Target size={22} color={ACENTO} />, title: 'Misión', desc: 'Brindar información verificada, contextualizada y oportuna para ciudadanos informados.' },
+            { icon: <Eye size={22} color={ACENTO} />, title: 'Visión', desc: 'Ser la fuente de noticias digitales más confiable para nicaragüenses en el país y el extranjero.' },
+            { icon: <HeartHandshake size={22} color={ACENTO} />, title: 'Valores', desc: 'Veracidad, precisión, responsabilidad social, ética periodística e independencia editorial.' },
+          ].map((v) => (
+            <div key={v.title} style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: '1.5rem', textAlign: 'center' }}>
+              <div style={{ marginBottom: 10 }}>{v.icon}</div>
+              <h3 style={{ color: TXT, marginBottom: 6, fontSize: '1.05rem', fontWeight: 700 }}>{v.title}</h3>
+              <p style={{ color: TXT_SEC, fontSize: '0.9rem', margin: 0, lineHeight: 1.55 }}>{v.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ¿Quién está detrás? */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>
+          ¿Quiénes están detrás de Nicaragua Informate?
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Somos un equipo de tres personas que trabajamos juntas para que este medio funcione. Cada uno aporta desde su área:
+        </p>
+
+        {/* Equipo */}
         {[
-          { icon: <MapPin size={16} color={acento} />, label: 'Dirección', val: 'Managua, Nicaragua, Centroamérica' },
-          { icon: <Mail size={16} color={acento} />, label: 'Correo', val: 'contacto@nicaraguainformate.com' },
-          { icon: <Globe size={16} color={acento} />, label: 'Sitio web', val: 'www.nicaraguainformate.com' },
-        ].map(c => (
-          <div key={c.label} style={{ background: cardBg, border: cardBorder, borderRadius: 10, padding: '1rem' }}>
-            <div style={{ marginBottom: 8 }}>{c.icon}</div>
-            <div style={{ color: 'var(--c-text)', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{c.label}</div>
-            <div style={{ color: textoSec, fontSize: 13 }}>{c.val}</div>
+          { initials: 'MN', name: 'Maycol Josué Nicaragua Rivas', role: 'Director Técnico', bio: 'Ingeniero en Sistemas. Se encarga del desarrollo tecnológico, la infraestructura web y todo lo relacionado con que el sitio funcione correctamente. Es el responsable de que la plataforma esté disponible las 24 horas.' },
+          { initials: 'JL', name: 'José Luis López Ramírez', role: 'Director de Operaciones', bio: 'Ingeniero en Sistemas. Coordina la operación diaria, la publicación oportuna de contenido y la organización del equipo. Su trabajo es que todo salga a tiempo y con calidad.' },
+          { initials: 'KR', name: 'Keyling Elieth Rivera Muñoz', role: 'Directora Editorial', bio: 'Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Revisa y contrasta la información antes de publicarla para garantizar que sea precisa y confiable.', photo: '/keyling-rivera.jpg', link: '/autor/keyling-rivera' },
+        ].map((p) => (
+          <div key={p.name} style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: '1.5rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: 18, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              {p.photo ? (
+                <img src={p.photo} alt={p.name} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: `2px solid ${ACENTO}` }} />
+              ) : (
+                <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg,#0f172a,#334155)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
+                  {p.initials}
+                </div>
+              )}
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ color: TXT, fontWeight: 700, fontSize: '1.05rem', marginBottom: 4 }}>{p.name}</div>
+                <div style={{ color: ACENTO, fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>{p.role}</div>
+                <p style={{ color: TXT_SEC, fontSize: '0.95rem', margin: 0, lineHeight: 1.65 }}>
+                  {p.bio} {p.link && <Link href={p.link} style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>Ver perfil →</Link>}
+                </p>
+              </div>
+            </div>
           </div>
         ))}
+
+        {/* ¿Por qué creamos? */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>
+          ¿Por qué creamos Nicaragua Informate?
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.25rem', lineHeight: 1.75 }}>
+          Nació de la necesidad de tener un espacio informativo directo, accesible y hecho por nicaragüenses. En un entorno con tanta información, queríamos ofrecer algo que la gente pueda leer sin complicaciones y confiar en lo que dice.
+        </p>
+
+        {/* Enfoque */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>Nuestro enfoque</h2>
+        <ul style={{ color: TXT_SEC, lineHeight: 1.8, paddingLeft: '1.5rem', listStyleType: 'disc', marginBottom: '2rem' }}>
+          <li><strong style={{ color: TXT }}>Información verificada</strong> antes de publicar</li>
+          <li><strong style={{ color: TXT }}>Correcciones transparentes</strong> cuando nos equivocamos</li>
+          <li><strong style={{ color: TXT }}>Separación clara</strong> entre contenido editorial y publicidad</li>
+          <li><strong style={{ color: TXT }}>Publicación diaria,</strong> las 24 horas del día</li>
+        </ul>
+
+        {/* ¿Qué cubrimos? */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>¿Qué cubrimos?</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 12, marginBottom: '2.5rem' }}>
+          {[
+            { cat: 'Nacionales', desc: 'Noticias de Nicaragua: política, economía, sociedad' },
+            { cat: 'Sucesos', desc: 'Incidentes, accidentes, seguridad' },
+            { cat: 'Internacionales', desc: 'Lo que pasa fuera del país con relevancia local' },
+            { cat: 'Deportes', desc: 'Fútbol, béisbol y disciplinas populares en Nicaragua' },
+            { cat: 'Tecnología', desc: 'Avances, apps, redes sociales, consejos digitales' },
+            { cat: 'Espectáculos', desc: 'Farándula, cultura, eventos' },
+          ].map((s) => (
+            <div key={s.cat} style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '1rem 1.25rem' }}>
+              <div style={{ fontWeight: 700, color: TXT, fontSize: '0.95rem', marginBottom: 4 }}>{s.cat}</div>
+              <div style={{ color: TXT_SEC, fontSize: '0.85rem' }}>{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Compromiso */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>
+          Compromiso con la información
+        </h2>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center', background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '1.25rem', marginBottom: '1.5rem' }}>
+          <div style={{ width: 44, height: 44, borderRadius: '50%', background: ACENTO, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Shield size={20} color="#fff" />
+          </div>
+          <div>
+            <div style={{ color: TXT, fontWeight: 700, fontSize: 15, marginBottom: 2 }}>Verificación rigurosa</div>
+            <p style={{ color: TXT_SEC, fontSize: '0.9rem', margin: 0, lineHeight: 1.5 }}>
+              Contrastamos la información con al menos dos fuentes antes de publicar.
+            </p>
+          </div>
+        </div>
+        <ul style={{ color: TXT_SEC, lineHeight: 1.8, paddingLeft: '1.5rem', listStyleType: 'disc', marginBottom: '2rem' }}>
+          <li><strong style={{ color: TXT }}>Verificación:</strong> Contrastamos la información con al menos dos fuentes antes de publicar.</li>
+          <li><strong style={{ color: TXT }}>Correcciones:</strong> Si hay un error, lo corregimos y lo indicamos.</li>
+          <li><strong style={{ color: TXT }}>Independencia:</strong> El contenido editorial no responde a intereses políticos ni comerciales.</li>
+          <li><strong style={{ color: TXT }}>Disponibilidad:</strong> Publicamos todos los días, a toda hora.</li>
+        </ul>
+
+        {/* Contacto */}
+        <h2 style={{ fontSize: '1.4rem', color: TXT, marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>Contacto</h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.25rem', lineHeight: 1.75 }}>
+          Para consultas, sugerencias o reportes, puedes escribirnos a través de los canales de contacto disponibles en el sitio.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 12, margin: '0.5rem 0 2rem' }}>
+          {[
+            { icon: <MapPin size={16} color={ACENTO} />, label: 'Dirección', val: 'Managua, Nicaragua, Centroamérica' },
+            { icon: <Mail size={16} color={ACENTO} />, label: 'Correo', val: 'contacto@nicaraguainformate.com', href: 'mailto:contacto@nicaraguainformate.com' },
+            { icon: <Globe size={16} color={ACENTO} />, label: 'Sitio web', val: 'www.nicaraguainformate.com' },
+          ].map((c) => (
+            <div key={c.label} style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '1rem' }}>
+              <div style={{ marginBottom: 8 }}>{c.icon}</div>
+              <div style={{ color: TXT, fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{c.label}</div>
+              <div style={{ color: TXT_SEC, fontSize: 13 }}>
+                {c.href ? <a href={c.href} style={{ color: TXT_SEC, textDecoration: 'none' }}>{c.val}</a> : c.val}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer links */}
+        <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '1.5rem', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <Link href="/politica-editorial" style={{ color: LINK, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Política Editorial</Link>
+          <Link href="/contacto" style={{ color: LINK, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Contacto</Link>
+          <Link href="/terminos" style={{ color: LINK, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Términos</Link>
+        </div>
+
+        <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '2rem' }}>
+          © {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.
+        </p>
       </div>
-      <p style={{ color: textoSec, fontSize: '0.9rem' }}>
-        Consulta nuestra <Link href="/politica-editorial" style={{ color: linkColor, textDecoration: 'none' }}>Política Editorial</Link> completa para más detalles.
-      </p>
-    </LegalPageShell>
+    </main>
   );
 }

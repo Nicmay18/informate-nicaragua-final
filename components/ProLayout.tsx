@@ -6,7 +6,6 @@ import Image from 'next/image';
 import BrandIcon from '@/components/BrandIcon';
 import {
   Search, Menu, X,
-  Radio, Play, Pause, Volume2, ChevronUp,
   Home, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, Mail,
   Info, FileText, Shield, ChevronRight,
 } from 'lucide-react';
@@ -37,18 +36,10 @@ export default function ProLayout({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [radioPlaying, setRadioPlaying] = useState(false);
-  const [radioOpen, setRadioOpen] = useState(false);
-  const [radioVol, setRadioVol] = useState(0.8);
   const [breakingDismissed, setBreakingDismissed] = useState(() => {
     try { return localStorage.getItem('ni_breaking_dismissed') === 'true'; } catch { return false; }
   });
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Stream principal
-  const RADIO_STREAM = 'https://stm1.ssl-streams.com:18816/stream';
-  const RADIO_STATION = 'La Buenísima 93.1 FM';
-  const RADIO_DESC = 'Más música, menos problemas';
   const [dateStr, setDateStr] = useState('');
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -60,30 +51,7 @@ export default function ProLayout({
     setDateStr(`${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`);
   }, []);
 
-  useEffect(() => {
-    if (radioPlaying) {
-      if (!audioRef.current) {
-        audioRef.current = new Audio(RADIO_STREAM);
-        audioRef.current.volume = radioVol;
-      }
-      audioRef.current.play().catch(() => setRadioPlaying(false));
-    } else {
-      audioRef.current?.pause();
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-        audioRef.current = null;
-      }
-    };
-  }, [radioPlaying, radioVol]);
-
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = parseFloat(e.target.value);
-    setRadioVol(v);
-    if (audioRef.current) audioRef.current.volume = v;
-  };
+  /* Radio removed per user request */
 
   const dismissBreaking = useCallback(() => {
     setBreakingDismissed(true);
@@ -232,81 +200,6 @@ export default function ProLayout({
         </div>
       </footer>
 
-      {/* === RADIO BAR (sticky bottom) === */}
-      <div className="radio-bar">
-        <button
-          className="radio-bar__play"
-          onClick={() => setRadioPlaying(p => !p)}
-          aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
-        >
-          {radioPlaying ? <Pause size={18} /> : <Play size={18} />}
-        </button>
-        <div className="radio-bar__info">
-          <div className="radio-bar__label">
-            <span className="radio-bar__live-dot" />
-            <span className="radio-bar__live-txt">En Vivo</span>
-          </div>
-          <div className="radio-bar__station">{RADIO_STATION}</div>
-        </div>
-        <button
-          className="radio-bar__expand"
-          onClick={() => setRadioOpen(o => !o)}
-          aria-label={radioOpen ? 'Cerrar panel' : 'Expandir radio'}
-        >
-          <ChevronUp size={18} style={{ transform: radioOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-        </button>
-      </div>
-
-      {/* Radio panel (slides up from bottom bar) */}
-      <div className={`radio-panel${radioOpen ? ' active' : ''}`}>
-        <div className="radio-panel__header">
-          <div className="radio-panel__brand">
-            <span className="radio-panel__live-dot" />
-            <span className="radio-panel__live-txt">EN VIVO</span>
-          </div>
-          <button className="radio-panel__close" onClick={() => setRadioOpen(false)} aria-label="Cerrar">
-            <X size={16} />
-          </button>
-        </div>
-
-        <div className="radio-panel__station-info">
-          <div className="radio-panel__station-icon"><Radio size={18} /></div>
-          <div>
-            <div className="radio-panel__station-name">{RADIO_STATION}</div>
-            <div className="radio-panel__station-desc">{RADIO_DESC}</div>
-          </div>
-        </div>
-
-        {/* Wave visualizer */}
-        {radioPlaying && (
-          <div className="radio-panel__wave">
-            {[...Array(12)].map((_, i) => (
-              <span key={i} className="radio-panel__wave-bar" style={{ animationDelay: `${i * 0.1}s` }} />
-            ))}
-          </div>
-        )}
-
-        <div className="radio-panel__controls">
-          <button
-            className={`radio-panel__play${radioPlaying ? ' active' : ''}`}
-            onClick={() => setRadioPlaying(p => !p)}
-            aria-label={radioPlaying ? 'Pausar' : 'Reproducir'}
-          >
-            {radioPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </button>
-          <div className="radio-panel__vol-wrap">
-            <Volume2 size={14} style={{ color: 'var(--c-text-muted)', flexShrink: 0 }} />
-            <input
-              type="range" min="0" max="1" step="0.05"
-              value={radioVol}
-              onChange={handleVolume}
-              className="radio-panel__vol"
-              aria-label="Volumen"
-            />
-          </div>
-        </div>
-      </div>
-
       {/* === MENU OVERLAY === */}
       <div className={`menu-overlay${menuOpen ? ' active' : ''}`} onClick={() => setMenuOpen(false)} />
       <div className={`menu-panel${menuOpen ? ' active' : ''}`}>
@@ -331,7 +224,6 @@ export default function ProLayout({
           <Link href="/categoria/internacionales" className="menu-link" onClick={() => setMenuOpen(false)}><Globe size={18} /> Internacionales</Link>
           <Link href="/categoria/espectaculos" className="menu-link" onClick={() => setMenuOpen(false)}><Film size={18} /> Espectáculos</Link>
           <Link href="/categoria/tecnologia" className="menu-link" onClick={() => setMenuOpen(false)}><Laptop size={18} /> Tecnología</Link>
-          <Link href="/radio" className="menu-link" onClick={() => setMenuOpen(false)}><Radio size={18} /> Radio en Vivo</Link>
         </div>
         <div className="menu-section">
           <h4 className="menu-section__title">Información</h4>

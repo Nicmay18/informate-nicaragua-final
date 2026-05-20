@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, Newspaper, Flame, ChevronRight, ArrowRight, TrendingUp } from 'lucide-react';
+import { Newspaper, Flame, ChevronRight, TrendingUp } from 'lucide-react';
 import ProLayout from '@/components/ProLayout';
+import HeroCarousel from '@/components/HeroCarousel';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
-import { tiempoLectura, formatDateES } from '@/lib/formateo';
+import NewsletterSignup from '@/components/NewsletterSignup';
+import { tiempoLectura } from '@/lib/formateo';
 import type { Noticia } from '@/lib/types';
 
 interface MobileHomeProps {
@@ -21,8 +23,7 @@ const SECTION_CONFIG = [
   { label: 'Deportes', key: 'Deportes', slug: '/categoria/deportes' },
 ];
 
-const HERO_SIDE_LIMIT = 3;
-const LATEST_LIMIT = 12;
+const LATEST_LIMIT = 6;
 
 function formatDate(date: string) {
   try {
@@ -81,31 +82,6 @@ function NewsCard({ noticia, highlight = false }: { noticia: Noticia; highlight?
   );
 }
 
-function HeroCard({ noticia }: { noticia: Noticia }) {
-  return (
-    <article className="hero-card" aria-label="Noticia destacada">
-      <Link href={`/noticias/${noticia.slug}`} className="hero-card__link">
-        <div className="hero-card__image">
-          <CardImage src={noticia.imagen} alt={noticia.titulo} category={noticia.categoria} />
-        </div>
-        <div className="hero-card__content">
-          <span className="hero-card__badge">{noticia.categoria}</span>
-          <h2 className="hero-card__title">{noticia.titulo}</h2>
-          {noticia.resumen && <p className="hero-card__excerpt">{noticia.resumen}</p>}
-          <div className="hero-card__meta">
-            <time dateTime={noticia.fecha}>{formatDateES(noticia.fecha)}</time>
-            <span>·</span>
-            <span>{readTime(noticia.resumen, noticia.contenido)}</span>
-          </div>
-          <div className="hero-card__cta">
-            Leer noticia completa <ArrowRight size={16} />
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
 function AdSlot({ label = 'Publicidad', variant = 'leaderboard' }: { label?: string; variant?: 'leaderboard' | 'inline' }) {
   return (
     <div className={`ad-slot ad-slot--${variant}`} aria-label={label} role="presentation">
@@ -117,7 +93,6 @@ function AdSlot({ label = 'Publicidad', variant = 'leaderboard' }: { label?: str
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
   const hero = noticias[0];
-  const heroSide = noticias.slice(1, HERO_SIDE_LIMIT + 1);
   const latest = noticias.slice(1, LATEST_LIMIT + 1);
   const tickerText = hero?.titulo || 'Nicaragua Informate — Noticias de Nicaragua en tiempo real';
 
@@ -125,29 +100,9 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
     <ProLayout tickerText={tickerText}>
       <div className="home-wrapper">
         <div className="home-content">
-          {hero && (
+          {noticias.length > 0 && (
             <section className="home-hero">
-              <HeroCard noticia={hero} />
-              {heroSide.length > 0 && (
-                <div className="hero-side">
-                  {heroSide.map((n) => (
-                    <article key={n.slug} className="hero-side-card">
-                      <Link href={`/noticias/${n.slug}`}>
-                        <div className="hero-side-card__image">
-                          <CardImage src={n.imagen} alt={n.titulo} category={n.categoria} />
-                        </div>
-                        <div className="hero-side-card__body">
-                          <span className="hero-side-card__cat">{n.categoria}</span>
-                          <h3>{n.titulo}</h3>
-                          <div className="hero-side-card__meta">
-                            <Clock size={12} /> {readTime(n.resumen, n.contenido)}
-                          </div>
-                        </div>
-                      </Link>
-                    </article>
-                  ))}
-                </div>
-              )}
+              <HeroCarousel noticias={noticias.slice(0, 5)} />
             </section>
           )}
 
@@ -170,7 +125,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           <AdSlot variant="inline" />
 
           {SECTION_CONFIG.map((section) => {
-            const items = noticias.filter((n) => n.categoria === section.key).slice(0, 4);
+            const items = noticias.filter((n) => n.categoria === section.key).slice(0, 3);
             if (items.length === 0) return null;
             return (
               <section key={section.key} className="home-section">
@@ -194,21 +149,41 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
 
         <aside className="home-sidebar">
           <div className="widget">
-            <div className="widget__title"><TrendingUp size={16} /> Indicadores Económicos</div>
-            <IndicadoresWidget />
+            <NewsletterSignup variant="sidebar" />
           </div>
           <div className="widget">
             <div className="widget__title">Clima en Nicaragua</div>
             <WeatherWidget />
           </div>
+          {noticias.length > 1 && (
+            <div className="widget">
+              <div className="widget__title"><TrendingUp size={16} /> Tendencias</div>
+              <ol className="widget-list widget-list--compact">
+                {noticias.slice(1, 6).map((n, idx) => (
+                  <li key={n.slug}>
+                    <Link href={`/noticias/${n.slug}`}>
+                      <span className="widget-list__index">{idx + 1}</span>
+                      <div>
+                        <p className="widget-list__title">{n.titulo}</p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           {masLeidas.length > 0 && (
             <div className="widget">
               <div className="widget__title"><Flame size={16} color="#dc2626" /> Más leídas</div>
               <ol className="widget-list">
-                {masLeidas.slice(0, 6).map((n, idx) => (
+                {masLeidas.slice(0, 5).map((n, idx) => (
                   <li key={n.slug}>
                     <Link href={`/noticias/${n.slug}`}>
-                      <span className="widget-list__index">{idx + 1}</span>
+                      {n.imagen && n.imagen !== '/logo.png' ? (
+                        <img src={n.imagen} alt="" width={48} height={48} style={{ borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+                      ) : (
+                        <span className="widget-list__index">{idx + 1}</span>
+                      )}
                       <div>
                         <p className="widget-list__title">{n.titulo}</p>
                         <span className="widget-list__meta">{formatDate(n.fecha)}</span>
@@ -219,6 +194,10 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
               </ol>
             </div>
           )}
+          <div className="widget">
+            <div className="widget__title"><TrendingUp size={16} /> Indicadores Económicos</div>
+            <IndicadoresWidget />
+          </div>
         </aside>
       </div>
     </ProLayout>

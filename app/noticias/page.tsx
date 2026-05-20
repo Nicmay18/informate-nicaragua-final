@@ -24,7 +24,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   let masLeidas: Noticia[] = [];
   try {
     [noticias, masLeidas] = await Promise.all([
-      cat !== 'Todas' ? getNewsByCategory(cat, 100) : getNews(100),
+      cat !== 'Todas' ? getNewsByCategory(cat, 30) : getNews(30),
       getMasLeidas(),
     ]);
   } catch (error) {

@@ -1,131 +1,178 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
-import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | Nicaragua Informate',
-  description: 'Términos y condiciones de uso de Nicaragua Informate. Uso del sitio, propiedad intelectual, limitación de responsabilidad y leyes aplicables.',
+  description: 'Términos y condiciones de uso de Nicaragua Informate.',
   alternates: { canonical: 'https://nicaraguainformate.com/terminos' },
 };
 
+const TXT = '#0f172a';
+const TXT_SEC = '#334155';
+const BG = '#f8fafc';
+const CARD = '#ffffff';
+const BORDER = '#e2e8f0';
+const LINK = '#2563eb';
+
 export default function TerminosPage() {
   return (
-    <LegalPageShell title="Términos y Condiciones de Uso">
-      <div style={{ background: 'rgba(196,30,58,0.08)', borderLeft: '4px solid #c41e3a', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
-        <strong>Última actualización:</strong> 15 de mayo de 2026
-      </div>
+    <main style={{ background: BG, minHeight: '100vh' }}>
+      <section style={{ background: '#0f172a', color: '#fff', padding: '64px 24px 48px' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 800, marginBottom: 12, lineHeight: 1.15 }}>
+            Términos y Condiciones de Uso
+          </h1>
+          <p style={{ fontSize: '1rem', color: '#94a3b8' }}>
+            Última actualización: <strong style={{ color: '#fff' }}>20 de mayo de 2026</strong>
+          </p>
+        </div>
+      </section>
 
-      <div style={{ background: 'rgba(196,30,58,0.08)', border: '1px solid rgba(196,30,58,0.25)', borderRadius: '0.75rem', padding: '1.25rem', marginBottom: '2rem' }}>
-        <p style={{ margin: 0, color: '#fca5a5', fontSize: '0.92rem', lineHeight: 1.7 }}>
-          Al acceder y utilizar Nicaragua Informate, aceptas cumplir con estos términos y condiciones de uso. Si no estás de acuerdo con estos términos, por favor no utilices nuestro sitio web.
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '40px 24px 80px' }}>
+        <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '1.25rem', marginBottom: '2rem' }}>
+          <p style={{ margin: 0, color: TXT_SEC, fontSize: '1rem', lineHeight: 1.7 }}>
+            Al usar Nicaragua Informate, aceptás estas reglas. Si no estás de acuerdo, no uses el sitio.
+          </p>
+        </div>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          1. Aceptación
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Entrar a <a href="https://nicaraguainformate.com" style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>nicaraguainformate.com</a> significa que aceptás estos términos. Podemos cambiarlos cuando sea necesario. Si seguís usando el sitio después de un cambio, significa que aceptás la versión nueva.
         </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          2. Qué podés hacer
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '0.75rem', lineHeight: 1.75, fontWeight: 600 }}>
+          Te damos permiso para:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>Leer y compartir noticias</li>
+          <li>Navegar por las secciones del sitio</li>
+          <li>Suscribirte al boletín (si querés)</li>
+          <li>Compartir contenido en redes sociales</li>
+          <li>Contactarnos por el formulario oficial</li>
+        </ul>
+        <p style={{ color: TXT, marginBottom: '0.75rem', fontWeight: 700 }}>
+          Qué NO podés hacer:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>Copiar o redistribuir nuestro contenido sin permiso</li>
+          <li>Usar el sitio para actividades ilegales o fraudulentas</li>
+          <li>Intentar hackear el sitio o acceder a áreas restringidas</li>
+          <li>Extraer datos automáticamente (scraping) sin autorización</li>
+          <li>Usar programas o scripts para acceder masivamente al sitio</li>
+          <li>Hacerte pasar por otra persona o entidad</li>
+          <li>Introducir virus o código malicioso</li>
+        </ul>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          3. Propiedad intelectual
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.25rem', lineHeight: 1.75 }}>
+          Todo el contenido de Nicaragua Informate —textos, imágenes, videos, logos, diseño— es nuestro o de quienes nos autorizaron a usarlo. Está protegido por derechos de autor.
+        </p>
+        <p style={{ color: TXT_SEC, marginBottom: '0.5rem', lineHeight: 1.75, fontWeight: 600 }}>
+          Podés:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>Leer y compartir los enlaces en redes sociales</li>
+        </ul>
+        <p style={{ color: TXT_SEC, marginBottom: '0.5rem', lineHeight: 1.75, fontWeight: 600 }}>
+          No podés:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>Copiar, modificar, distribuir o crear obras derivadas sin permiso escrito</li>
+          <li>Usar nuestro nombre o logo sin autorización</li>
+        </ul>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Si querés usar algo de nuestro contenido, escribinos por el <Link href="/contacto" style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>formulario de contacto</Link>.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          4. Contenido del sitio
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.25rem', lineHeight: 1.75 }}>
+          Nos esforzamos por publicar información verificada y de calidad. Pero:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>La información es solo para fines informativos, no es asesoramiento profesional (legal, médico, financiero, etc.)</li>
+          <li>No garantizamos que todo esté 100% actualizado o completo</li>
+          <li>Las decisiones que tomes basadas en lo que leás acá son tu responsabilidad</li>
+        </ul>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          <strong>Correcciones:</strong> Si encontrás un error, avisanos y lo corregimos.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          5. Enlaces a otros sitios
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          A veces linkeamos a páginas de terceros (redes sociales, fuentes, anunciantes). Eso no significa que los respaldemos. No somos responsables de lo que hagan esos sitios ni de sus políticas de privacidad.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          6. Responsabilidad
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Nicaragua Informate no se hace responsable de daños directos o indirectos que puedan derivarse del uso del sitio. Esto incluye pérdida de datos, interrupciones, virus o cualquier otro problema técnico. Usás el sitio bajo tu propio riesgo.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          7. Indemnización
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Si alguien nos reclama por algo que hiciste vos (violación de estos términos, uso indebido del sitio, etc.), te comprometés a cubrirnos de ese reclamo, incluyendo gastos legales razonables.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          8. Ley aplicable
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Estos términos se rigen por las leyes de la República de Nicaragua. Cualquier disputa se resolverá en los tribunales competentes de Managua, Nicaragua.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          9. Cierre de acceso
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.25rem', lineHeight: 1.75 }}>
+          Podemos suspender o bloquear tu acceso al sitio si:
+        </p>
+        <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: TXT_SEC, lineHeight: 1.8 }}>
+          <li>Violás estos términos</li>
+          <li>Tu conducta representa un riesgo para el sitio o para terceros</li>
+          <li>Es necesario por cuestiones legales o de seguridad</li>
+        </ul>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          10. Si alguna parte no aplica
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Si alguna cláusula de estos términos es inválida, el resto sigue vigente. Reemplazaremos la parte inválida por otra que sea lo más parecida posible a lo que queríamos decir.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          11. Cambios a estos términos
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '1.5rem', lineHeight: 1.75 }}>
+          Podemos modificar estos términos cuando sea necesario. Los cambios entran en vigor al publicarse acá. Es tu responsabilidad revisarlos de vez en cuando.
+        </p>
+
+        <h2 style={{ fontSize: '1.3rem', color: TXT, marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
+          12. Contacto
+        </h2>
+        <p style={{ color: TXT_SEC, marginBottom: '2rem', lineHeight: 1.75 }}>
+          Si tenés preguntas sobre estos términos, escribinos a través del <Link href="/contacto" style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>formulario de contacto</Link> disponible en nuestro sitio, o al correo <a href="mailto:legal@nicaraguainformate.com" style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>legal@nicaraguainformate.com</a>.
+        </p>
+
+        <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '1.5rem' }}>
+          <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+            © 2026 Nicaragua Informate. Todos los derechos reservados.
+          </p>
+        </div>
       </div>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>1. Aceptación de los términos</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        El uso del sitio web Nicaragua Informate (<a href="https://nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>nicaraguainformate.com</a>) implica la aceptación plena y sin reservas de estas condiciones de uso. Nos reservamos el derecho de modificar estos términos en cualquier momento sin previo aviso individual. El uso continuado del sitio después de cualquier modificación constituye aceptación de los términos actualizados. Te recomendamos revisar esta página periódicamente.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>2. Uso permitido del sitio</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '0.75rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate te otorga una licencia limitada, no exclusiva, intransferible y revocable para acceder y utilizar nuestro sitio web con fines personales y no comerciales. Puedes usar Nicaragua Informate para:
-      </p>
-      <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}>Leer, compartir y comentar noticias y artículos publicados</li>
-        <li style={{ marginBottom: '0.5rem' }}>Navegar por las distintas secciones y categorías del portal</li>
-        <li style={{ marginBottom: '0.5rem' }}>Suscribirte a nuestro boletín informativo (previo consentimiento explícito)</li>
-        <li style={{ marginBottom: '0.5rem' }}>Compartir contenido en redes sociales a través de los botones proporcionados</li>
-        <li style={{ marginBottom: '0.5rem' }}>Contactarnos a través de los formularios oficiales del sitio</li>
-      </ul>
-      <p style={{ color: '#fca5a5', marginBottom: '0.75rem', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Queda estrictamente prohibido:</p>
-      <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}>Copiar, reproducir, distribuir, redistribuir o transmitir contenido sin autorización expresa por escrito</li>
-        <li style={{ marginBottom: '0.5rem' }}>Usar el sitio para actividades ilegales, fraudulentas, difamatorias o que violen derechos de terceros</li>
-        <li style={{ marginBottom: '0.5rem' }}>Intentar vulnerar la seguridad del sitio, acceder a áreas restringidas o interferir con su funcionamiento</li>
-        <li style={{ marginBottom: '0.5rem' }}>Publicar o difundir contenido ofensivo, discriminatorio, violento, obsceno o que incite al odio</li>
-        <li style={{ marginBottom: '0.5rem' }}>Extraer datos de forma automatizada (scraping, crawling, spidering) sin autorización previa y expresa</li>
-        <li style={{ marginBottom: '0.5rem' }}>Utilizar robots, scripts, herramientas automatizadas o acceso masivo no autorizado al sitio</li>
-        <li style={{ marginBottom: '0.5rem' }}>Suplantar la identidad de cualquier persona o entidad, o realizar declaraciones falsas sobre tu relación con Nicaragua Informate</li>
-        <li style={{ marginBottom: '0.5rem' }}>Introducir virus, malware, troyanos, gusanos o cualquier código malicioso que pueda dañar el sitio</li>
-      </ul>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>3. Propiedad intelectual</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Todo el contenido publicado en Nicaragua Informate —incluyendo pero no limitado a artículos, textos, imágenes, fotografías, videos, logotipos, diseño gráfico, código fuente, marcas comerciales y nombre del sitio— está protegido por derechos de autor, marcas registradas y otras leyes de propiedad intelectual aplicables en la República de Nicaragua y a nivel internacional, de conformidad con los tratados de la OMPI y el Convenio de Berna.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Se concede una licencia limitada, no exclusiva, intransferible y revocable para visualizar el contenido únicamente para uso personal y no comercial. Cualquier uso no autorizado del contenido, incluyendo pero no limitado a reproducción, modificación, distribución, exhibición pública, transmisión o creación de obras derivadas, está estrictamente prohibido y puede constituir una infracción de las leyes de derechos de autor, marcas registradas y otras leyes aplicables.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate, su logotipo, nombre comercial y todo el contenido original son propiedad exclusiva de Nicaragua Informate o de sus licenciantes. Todos los derechos están reservados. Para solicitar permiso de uso de contenido, contáctanos a través de nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link> o escribe a <a href="mailto:legal@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>legal@nicaraguainformate.com</a>.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Política de contenido</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate se compromete a mantener estándares de calidad, veracidad y respeto en todo el contenido publicado. Nuestra política de contenido se rige por los siguientes principios:
-      </p>
-      <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#fff' }}>Veracidad:</strong> Priorizamos información contrastada y contextualizada antes de publicar cada pieza periodística.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#fff' }}>Correcciones:</strong> Cuando se detecta un error, se corrige de forma transparente y visible para el lector.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#fff' }}>Independencia editorial:</strong> El contenido informativo es independiente de anunciantes, patrocinadores y grupos de interés.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#fff' }}>Respeto y dignidad:</strong> No publicamos contenido que atente contra la dignidad humana, promueva la violencia o incite al odio.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#fff' }}>Derecho de réplica:</strong> Las personas mencionadas en nuestras noticias tienen derecho a solicitar espacio para aclaraciones o réplicas.</li>
-      </ul>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Enlaces a terceros</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nuestro sitio puede contener enlaces a sitios web de terceros, incluyendo redes sociales, fuentes informativas y anunciantes. Estos enlaces se proporcionan únicamente para tu conveniencia informativa y no implican nuestro respaldo, afiliación o aprobación del contenido, productos, servicios o políticas de dichos sitios. Nicaragua Informate no revisa, controla ni es responsable por el contenido, exactitud, opiniones, productos, servicios o políticas de privacidad de sitios de terceros.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Tu interacción con estos sitios externos se rige íntegramente por sus propios términos y condiciones, políticas de privacidad y prácticas comerciales. Te recomendamos revisar dichos documentos antes de proporcionar cualquier información personal en sitios de terceros.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>6. Limitación de responsabilidad</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate no se hace responsable, en la medida permitida por la ley aplicable, de daños directos, indirectos, incidentales, especiales, consecuenciales o punitivos derivados del acceso, uso o imposibilidad de uso del sitio. Esto incluye, pero no se limita a, pérdida de datos, pérdida de beneficios, interrupción del negocio, daños a la reputación u otros daños, incluso si se nos ha advertido de la posibilidad de dichos daños.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        La información publicada en Nicaragua Informate se ofrece exclusivamente con fines informativos y educativos, y no constituye asesoramiento profesional de ninguna clase (legal, médico, financiero, fiscal o de otro tipo). No garantizamos la exactitud, integridad, actualidad o idoneidad de la información para fines particulares. Cualquier acción o decisión basada en la información presentada en este sitio es bajo tu propio riesgo y responsabilidad.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>7. Indemnización</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Al utilizar nuestro sitio, te comprometes a indemnizar y mantener indemne a Nicaragua Informate, sus directores, empleados, colaboradores, afiliados, agentes, licenciantes y terceros proveedores de servicios, de cualquier reclamo, demanda, responsabilidad, costo, gasto (incluyendo honorarios razonables de abogados) o pérdida derivada del incumplimiento de estos términos, del uso indebido del sitio, de la violación de derechos de terceros o de cualquier actividad relacionada con tu cuenta o dispositivo.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>8. Ley aplicable y jurisdicción</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Estos términos y condiciones se rigen e interpretan de conformidad con las leyes de la República de Nicaragua, sin dar efecto a sus principios de conflictos de leyes. Cualquier disputa, controversia o reclamación derivada de estos términos, del uso del sitio o de la interpretación de los mismos será sometida a la jurisdicción exclusiva de los tribunales competentes de la ciudad de Managua, República de Nicaragua.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Si eres consumidor residente en la Unión Europea, puedes tener derechos adicionales de conformidad con el Derecho de la Unión Europea, incluyendo el derecho a presentar reclamaciones ante las autoridades de protección del consumidor de tu país de residencia.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>9. Rescisión</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nicaragua Informate se reserva el derecho de suspender o terminar tu acceso al sitio, en cualquier momento y sin previo aviso, si determinamos que has violado estos términos y condiciones o que tu conducta representa un riesgo para la seguridad, integridad o reputación del sitio o de terceros. La rescisión no afectará los derechos y obligaciones acumulados antes de la fecha de terminación.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>10. Severabilidad e integridad del acuerdo</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Si alguna disposición de estos términos es considerada inválida, ilegal o inaplicable por cualquier tribunal o autoridad competente, dicha disposición será modificada o eliminada en la medida mínima necesaria, y las demás disposiciones continuarán en pleno vigor y efecto. La disposición inválida será reemplazada por una disposición válida que refleje, en la medida de lo posible, la intención original de las partes.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Estos términos constituyen el acuerdo completo entre tú y Nicaragua Informate respecto al uso del sitio web, y reemplazan cualquier acuerdo, comunicación o propuesta previa, ya sea oral o escrita, entre tú y nosotros.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>11. Modificaciones a los términos</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nos reservamos el derecho de modificar, suspender o discontinuar estos términos en cualquier momento y por cualquier motivo, incluyendo cambios legislativos, regulatorios, comerciales o técnicos. Los cambios entrarán en vigor inmediatamente después de su publicación en esta página. Es tu responsabilidad revisar estos términos periódicamente para estar al tanto de las modificaciones. El uso continuado del sitio después de la publicación de cambios constituirá tu aceptación de dichos cambios.
-      </p>
-
-      <h2 style={{ fontSize: '1.2rem', color: '#fff', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>12. Contacto</h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Si tienes preguntas, comentarios o inquietudes sobre estos términos y condiciones, escríbenos a{' '}
-        <a href="mailto:legal@nicaraguainformate.com" style={{ color: '#60a5fa', textDecoration: 'none' }}>legal@nicaraguainformate.com</a>{' '}
-        o usa nuestro <Link href="/contacto" style={{ color: '#60a5fa', textDecoration: 'none' }}>formulario de contacto</Link>.{' '}
-        Responderemos a tu solicitud en un plazo razonable, de conformidad con la legislación aplicable.
-      </p>
-    </LegalPageShell>
+    </main>
   );
 }

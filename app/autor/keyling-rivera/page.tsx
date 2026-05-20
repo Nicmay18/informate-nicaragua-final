@@ -1,13 +1,12 @@
 ﻿import type { Metadata } from 'next';
-import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
-import { MapPin, Mail, Globe, Award, BookOpen, Users, Newspaper, Shield, CalendarDays } from 'lucide-react';
-import { formatDateShortES } from '@/lib/formateo';
+import AuthorProfile from '@/components/AuthorProfile';
 import { getNews } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
-  description: 'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con amplia trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
+  description:
+    'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
   alternates: { canonical: 'https://nicaraguainformate.com/autor/keyling-rivera' },
 };
 
@@ -25,107 +24,36 @@ export default async function AutorKeylingRiveraPage() {
 
   return (
     <LegalPageShell title="Keyling Elieth Rivera Muñoz — Directora Editorial">
-      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-        <div style={{ width: 120, height: 120, borderRadius: '50%', background: 'linear-gradient(135deg,#16a34a,#22c55e)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 48, flexShrink: 0 }}>
-          KR
-        </div>
-        <div style={{ flex: 1, minWidth: 260 }}>
-          <h2 style={{ fontSize: '1.6rem', color: '#fff', marginBottom: 8, fontWeight: 800 }}>Keyling Elieth Rivera Muñoz</h2>
-          <div style={{ color: '#8c1d18', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Directora Editorial — Nicaragua Informate</div>
-          <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.75, marginBottom: 16 }}>
-            Periodista nicaragüense, co-fundadora y directora editorial de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos. Firme defensora del periodismo verificado y la independencia editorial en Nicaragua.
-          </p>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 13 }}>
-              <MapPin size={14} /> Managua, Nicaragua
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 13 }}>
-              <Mail size={14} /> contacto@nicaraguainformate.com
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 13 }}>
-              <Globe size={14} /> nicaraguainformate.com
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h3 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem', fontWeight: 700 }}>Trayectoria profesional</h3>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.95rem' }}>
-        Keyling Elieth Rivera Muñoz ha construido una sólida trayectoria en el periodismo nicaragüense, cubriendo Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos con rigor y precisión. Su trabajo se caracteriza por la rigurosidad en la verificación de fuentes, el contexto profundo y el compromiso con la verdad.
-      </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.95rem' }}>
-        Como directora editorial de Nicaragua Informate, supervisa cada pieza informativa antes de su publicación, garantizando que cumpla con los estándares de veracidad, precisión y responsabilidad social que rigen al medio. Su liderazgo editorial ha sido fundamental para posicionar al portal como una fuente confiable de información nacional.
-      </p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1.25rem', margin: '2.5rem 0' }}>
-        {[
-          { icon: <Award size={24} color="#8c1d18" />, title: 'Especialización', desc: 'Cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.' },
-          { icon: <Newspaper size={24} color="#8c1d18" />, title: 'Experiencia', desc: 'Amplia trayectoria en medios de comunicación nicaragüenses, cubriendo temas de relevancia nacional.' },
-          { icon: <BookOpen size={24} color="#8c1d18" />, title: 'Enfoque', desc: 'Verificación rigurosa, contextualización profunda y defensa de la independencia editorial.' },
-          { icon: <Shield size={24} color="#8c1d18" />, title: 'Compromiso', desc: 'Periodismo verificado como pilar de la democracia y el derecho a la información ciudadana.' },
-        ].map((v) => (
-          <div key={v.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.75rem' }}>{v.icon}</div>
-            <h4 style={{ color: '#fff', marginBottom: '0.4rem', fontSize: '1.05rem' }}>{v.title}</h4>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.55 }}>{v.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <h3 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2rem', marginBottom: '0.75rem', fontWeight: 700 }}>Principios editoriales</h3>
-      <ul style={{ color: '#cbd5e1', lineHeight: 1.8, paddingLeft: '1.5rem', listStyleType: 'disc', marginBottom: '2rem', fontSize: '0.95rem' }}>
-        <li><strong style={{ color: '#fff' }}>Verificación:</strong> Toda información es contrastada con al menos dos fuentes independientes antes de su publicación.</li>
-        <li><strong style={{ color: '#fff' }}>Correcciones:</strong> Cuando se detecta un error, se corrige de forma transparente y se notifica al lector.</li>
-        <li><strong style={{ color: '#fff' }}>Independencia:</strong> No se aceptan presiones externas que comprometan la línea editorial.</li>
-        <li><strong style={{ color: '#fff' }}>Separación editorial-comercial:</strong> El contenido informativo es independiente de los anunciantes.</li>
-        <li><strong style={{ color: '#fff' }}>Respeto y dignidad:</strong> No se publica contenido que atente contra la dignidad humana o incite al odio.</li>
-      </ul>
-
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 12 }}>
-          <Users size={24} color="#8c1d18" />
-          <div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>Equipo fundador</div>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '4px 0 0' }}>
-              Nicaragua Informate fue fundado junto a <strong style={{ color: '#fff' }}>Maycol Josue Nicaragua Rivas</strong> y <strong style={{ color: '#fff' }}>Jose Luis Lopez Ramirez</strong>.
-            </p>
-          </div>
-        </div>
-        <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: 0, lineHeight: 1.6 }}>
-          Conoce más sobre el equipo en nuestra página de <Link href="/nosotros" style={{ color: '#60a5fa', textDecoration: 'none' }}>Sobre Nosotros</Link>.
-        </p>
-      </div>
-
-      {/* Artículos del autor */}
-      {articulos.length > 0 && (
-        <>
-          <h3 style={{ fontSize: '1.15rem', color: '#fff', marginTop: '2.5rem', marginBottom: '1rem', fontWeight: 700 }}>Artículos publicados</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {articulos.map((a) => (
-              <Link key={a.id} href={`/noticias/${a.slug}`} style={{
-                display: 'flex', gap: 16, alignItems: 'center',
-                padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8,
-                textDecoration: 'none', color: 'inherit', transition: 'all 0.2s',
-              }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={a.imagen} alt={a.titulo} style={{ width: 64, height: 48, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ color: '#fff', fontWeight: 600, fontSize: 14, marginBottom: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.titulo}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 12 }}>
-                    <CalendarDays size={12} /> {formatDateShortES(a.fecha)}
-                    <span style={{ marginLeft: 8, color: '#8c1d18', fontWeight: 700, textTransform: 'uppercase', fontSize: 10, letterSpacing: '0.04em' }}>{a.categoria}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '2rem' }}>
-        Consulta nuestra <Link href="/politica-editorial" style={{ color: '#60a5fa', textDecoration: 'none' }}>Política Editorial</Link> completa para más detalles sobre nuestros estándares de publicación.
-      </p>
+      <AuthorProfile
+        name="Keyling Elieth Rivera Muñoz"
+        role="Directora Editorial y Cofundadora"
+        bio="Periodista nicaragüense, co-fundadora y directora editorial de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos. Firme defensora del periodismo verificado, la independencia editorial y el derecho a la información ciudadana en Nicaragua."
+        extendedBio="Keyling Elieth Rivera Muñoz ha construido una sólida trayectoria en el periodismo nicaragüense desde 2018, cubriendo con rigor y precisión los acontecimientos más relevantes del país. Su trabajo se distingue por la verificación rigurosa de fuentes, la contextualización profunda de los hechos y el compromiso inquebrantable con la verdad. Como directora editorial de Nicaragua Informate, supervisa cada pieza informativa antes de su publicación, garantizando que cumpla con los estándares de veracidad, precisión y responsabilidad social que rigen al medio. Bajo su liderazgo, el portal ha consolidado una cobertura diaria que abarca desde sucesos de emergencia hasta análisis de política nacional, deportes centroamericanos y tecnología. Ha impulsado la incorporación de datos estructurados, sitemaps dinámicos y optimización SEO como parte de la estrategia de distribución del medio. Ha formado a reporteros en métodos de verificación de fuentes, ética periodística y uso responsable de redes sociales para la difusión de noticias."
+        location="Managua, Nicaragua"
+        email="redaccion@nicaraguainformate.com"
+        photo="/keyling-rivera.jpg"
+        initials="KR"
+        articles={articulos}
+        socials={[
+          { name: 'LinkedIn', href: 'https://www.linkedin.com/in/keyling-rivera', icon: 'linkedin' },
+          { name: 'X / Twitter', href: 'https://x.com/keylingrivera', icon: 'twitter' },
+          { name: 'Web', href: 'https://nicaraguainformate.com/autor/keyling-rivera', icon: 'web' },
+        ]}
+        specialties={[
+          'Cobertura de Sucesos y Seguridad Ciudadana',
+          'Noticias Nacionales y Política Local',
+          'Deportes Nacionales e Internacionales',
+          'Tecnología e Innovación Digital',
+          'Espectáculos y Cultura Nicaragüense',
+        ]}
+        sinceYear="2025"
+        education="Universidad Nacional Autónoma de Nicaragua (UNAN-Managua)"
+        awards={[
+          'Miembro fundador de Nicaragua Informate (2025)',
+          'Coordinadora del área editorial del medio desde su lanzamiento',
+        ]}
+        schemaUrl="https://nicaraguainformate.com/autor/keyling-rivera"
+      />
     </LegalPageShell>
   );
 }

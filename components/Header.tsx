@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, X, Search, Radio } from 'lucide-react';
+import { Sun, Moon, Menu, X, Search } from 'lucide-react';
 import { categoryToSlug } from '@/lib/types';
 
 const THEME_STORAGE_KEY = 'ni_theme';
@@ -112,13 +112,10 @@ export default function Header({ activeCategory = 'Todas' }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Acciones derecha: escritorio tiene search + radio + theme */}
+          {/* Acciones derecha: escritorio tiene search + theme */}
           <div className="ni-header-actions">
             <button className="ni-header-icon-btn" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
               <Search size={20} />
-            </button>
-            <button className="ni-header-icon-btn ni-header-radio-btn" aria-label="Radio">
-              <Radio size={20} />
             </button>
             <button className="ni-header-icon-btn ni-header-theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
               <span suppressHydrationWarning>
