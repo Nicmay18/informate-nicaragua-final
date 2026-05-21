@@ -13,7 +13,8 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { isToxicSlug } from '@/lib/seo-toxic';
 
 export const dynamicParams = true;
-export const revalidate = 60;
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -33,13 +34,11 @@ function toNoticiaTipo(value: string): NoticiaTipo {
   return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
 }
 
+// Temporalmente deshabilitado: los slugs se regeneraron y necesitamos
+// que Next.js no use el cache estático de build anterior.
+// Se puede re-activar después de un deploy limpio.
 export async function generateStaticParams() {
-  try {
-    const slugs = await getAllSlugs();
-    return slugs.filter((s) => !isToxicSlug(s)).map((slug) => ({ slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
