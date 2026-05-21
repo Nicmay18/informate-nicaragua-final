@@ -553,6 +553,7 @@ export default function ArticleClient({
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
       <div className="article-page"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
+        <div>
         <div className="breadcrumbs">
           <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
         </div>
@@ -798,6 +799,7 @@ export default function ArticleClient({
 
           <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
           </div>
+        </div>
 
         <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: '340px', width: '340px' }}>
           <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
