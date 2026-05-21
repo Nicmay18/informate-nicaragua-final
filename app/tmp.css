@@ -2469,9 +2469,14 @@
   font-family: var(--font-serif);
   font-size: 18px;
   font-style: italic;
-  color: var(--c-text, #0f172a);
+  color: #0f172a !important;
   line-height: 1.6;
   border-radius: 0 8px 8px 0;
+}
+.article-body blockquote *,
+.article-body blockquote p,
+.article-body blockquote em {
+  color: #0f172a !important;
 }
 .article-body ul,
 .article-body ol {
