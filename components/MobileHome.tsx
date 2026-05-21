@@ -11,6 +11,7 @@ import ProLayout from '@/components/ProLayout';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import RadioPlayer from '@/components/RadioPlayer';
 import { tiempoLectura } from '@/lib/formateo';
 import type { Noticia } from '@/lib/types';
 
@@ -148,22 +149,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             <NewsletterSignup variant="sidebar" />
           </div>
 
-          <div className="sidebar-widget radio-widget">
-            <h3 className="widget-title">Radio en Vivo</h3>
-            <div className="radio-live-badge">
-              <span className="radio-live-dot"></span>
-              En Vivo
-            </div>
-            <div className="radio-station">Nicaragua Informate Radio</div>
-            <div className="radio-program">Música y noticias 24/7</div>
-            <div className="radio-controls">
-              <button className="radio-play">▶</button>
-              <div className="radio-volume">
-                <div className="radio-volume-fill"></div>
-                <div className="radio-volume-knob"></div>
-              </div>
-            </div>
-          </div>
+          <RadioPlayer />
 
           <div className="sidebar-widget weather-widget">
             <h3 className="widget-title">Clima en Nicaragua</h3>

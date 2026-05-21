@@ -618,6 +618,114 @@
         }
         .newsletter-form button:hover { background: var(--accent-hover); }
 
+        /* ===== INDICADORES ECONÓMICOS ===== */
+        .ind-widget {
+            background: var(--bg-white);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        .ind-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+        .ind-body { padding: 16px 20px; }
+        .ind-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .ind-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .ind-card-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .ind-card-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+            font-family: var(--font-serif);
+        }
+        .ind-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .ind-gas-section {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+        .ind-gas-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ind-gas-header small { font-weight: 500; color: var(--text-muted); }
+        .ind-gas-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .ind-gas-row:last-child { border-bottom: none; }
+        .ind-gas-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .ind-gas-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ind-gas-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            font-family: var(--font-serif);
+        }
+        .ind-source {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+        }
+
         /* Radio Widget */
         .radio-widget {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -685,6 +793,86 @@
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
+        }
+        .radio-station-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .radio-station-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: left;
+        }
+        .radio-station-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.15);
+        }
+        .radio-station-btn.active {
+            background: rgba(255,255,255,0.12);
+            border-color: var(--station-color, #ef4444);
+        }
+        .radio-station-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .radio-station-name { flex: 1; }
+        .radio-station-play {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            flex-shrink: 0;
+        }
+        .radio-volume-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .radio-volume-slider {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .radio-volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            cursor: pointer;
+        }
+        .radio-volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            cursor: pointer;
+            border: none;
         }
         .radio-controls {
             display: flex;
@@ -879,28 +1067,41 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 16px 8px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 700;
+            justify-content: center;
+            gap: 8px;
+            padding: 18px 8px;
+            border-radius: var(--radius);
             color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            text-decoration: none;
             transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            border: none;
+            position: relative;
+            overflow: hidden;
         }
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.1);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .social-btn:hover::before { opacity: 1; }
         .social-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .social-facebook { background: #1877f2; }
-        .social-telegram { background: #0088cc; }
-        .social-whatsapp { background: #25d366; }
-        .social-icon { font-size: 22px; }
+        .social-facebook { background: linear-gradient(135deg, #1877f2, #166fe5); }
+        .social-telegram { background: linear-gradient(135deg, #0088cc, #0099e6); }
+        .social-whatsapp { background: linear-gradient(135deg, #25d366, #1ebe57); }
+        .social-icon { font-size: 24px; position: relative; z-index: 1; }
 
         /* ===== FOOTER ===== */
         .footer {
             background: #0f172a;
-            margin-top: 60px;
-            padding: 56px 0 28px;
+            margin-top: 40px;
+            padding: 36px 0 20px;
             color: #94a3b8;
         }
         [data-theme="dark"] .footer { background: #020617; }
