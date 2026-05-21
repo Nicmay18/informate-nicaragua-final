@@ -489,7 +489,7 @@
         .most-read-section { margin-bottom: 48px; }
         .most-read-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: 1fr;
             gap: 16px;
         }
         .most-read-card {
@@ -1205,7 +1205,7 @@
             }
             .swiper { height: 360px; }
             .swiper-title { font-size: 24px; }
-            .most-read-grid { grid-template-columns: repeat(2, 1fr); }
+            .most-read-grid { grid-template-columns: 1fr; }
             .sidebar {
                 order: 2;
                 display: grid;

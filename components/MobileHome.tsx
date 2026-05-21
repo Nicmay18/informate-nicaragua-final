@@ -96,7 +96,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 <h2 className="section-title">Más Leídas</h2>
                 <Link href="/mas-leidas" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
-              <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+              <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
                 {masLeidas.slice(0, 6).map((n, idx) => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
                     <span className="most-read-number">{idx + 1}</span>
