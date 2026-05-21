@@ -113,27 +113,18 @@ export default function NewsletterSignup({ variant = 'inline' }: NewsletterSignu
           <CheckCircle size={20} /> {msg}
         </div>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', maxWidth: 480, margin: '0 auto' }}>
+        <form onSubmit={handleSubmit} className="newsletter-form">
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="tu@email.com"
-            style={{
-              flex: 1, minWidth: 200, padding: '12px 16px',
-              borderRadius: 'var(--radius-sm)', border: 'none',
-              fontSize: 15, outline: 'none', color: '#111827',
-            }}
+            className="newsletter-input"
           />
           <button
             type="submit"
             disabled={status === 'loading'}
-            style={{
-              padding: '12px 24px', borderRadius: 'var(--radius-sm)',
-              border: 'none', background: '#C41E3A', color: '#fff',
-              fontWeight: 700, fontSize: 14, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
-            }}
+            className="newsletter-btn"
           >
             {status === 'loading' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : null}
             {status === 'loading' ? 'Enviando...' : 'Suscribirme gratis'}
