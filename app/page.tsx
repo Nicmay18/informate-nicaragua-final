@@ -1,4 +1,5 @@
 ﻿import MobileHome from '@/components/MobileHome';
+import './homepage.css';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
