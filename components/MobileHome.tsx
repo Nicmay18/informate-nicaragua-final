@@ -51,7 +51,6 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
 
   return (
     <ProLayout tickerText={tickerText}>
-      <div className="homepage-wrap">
       {noticias.length > 0 && (
         <section className="swiper-section">
           <Swiper
@@ -180,7 +179,6 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             </div>
           </div>
         </aside>
-      </div>
       </div>
     </ProLayout>
   );

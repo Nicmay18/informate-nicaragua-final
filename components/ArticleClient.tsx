@@ -552,7 +552,7 @@ export default function ArticleClient({
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <div className="article-page-wrap"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle">
+      <div className="article-page"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle">
         <div className="breadcrumbs">
           <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
         </div>
