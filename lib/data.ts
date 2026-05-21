@@ -352,8 +352,39 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       };
     }
 
-    // 2) FALLBACK TEMPORAL: noticias sin campo slug → comparar generado desde título
-    // Esto se puede eliminar después de ejecutar el script de migración
+    // 2) FALLBACK: slug viejo con hash al final (ej: -pyq5j8t)
+    // Detectar patrón "-[a-z0-9]{6,}$" y buscar el slug base sin el hash
+    const hashMatch = slug.match(/^(.*)-[a-z0-9]{6,}$/i);
+    if (hashMatch) {
+      const baseSlug = hashMatch[1];
+      const baseSnap = await adminDb
+        .collection('noticias')
+        .where('slug', '==', baseSlug)
+        .limit(1)
+        .get();
+      if (!baseSnap.empty) {
+        const doc = baseSnap.docs[0];
+        const data = doc.data();
+        return {
+          id: doc.id,
+          slug: data.slug || baseSlug,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido || '',
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+          tags: data.tags,
+        };
+      }
+    }
+
+    // 3) FALLBACK TEMPORAL: noticias sin campo slug → comparar generado desde título
     const allSnap = await adminDb.collection('noticias').limit(200).get();
     for (const doc of allSnap.docs) {
       const data = doc.data();
