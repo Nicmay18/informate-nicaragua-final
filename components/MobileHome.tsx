@@ -87,15 +87,15 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
         </section>
       )}
 
-      <div className="main">
-        <div className="main-content">
+      <div className="main" style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
+        <div className="main-content" style={{ minWidth: 0, overflow: 'hidden' }}>
           {masLeidas.length > 0 && (
             <section className="most-read-section">
               <div className="section-header">
                 <h2 className="section-title">Más Leídas</h2>
                 <Link href="/mas-leidas" className="section-link">Ver todas →</Link>
               </div>
-              <div className="most-read-grid">
+              <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
                 {masLeidas.slice(0, 6).map((n, idx) => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
                     <span className="most-read-number">{idx + 1}</span>
@@ -115,7 +115,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 <h2 className="section-title">Últimas Noticias</h2>
                 <Link href="/noticias" className="section-link">Ver todas →</Link>
               </div>
-              <div className="news-grid">
+              <div className="news-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', width: '100%' }}>
                 {latest.map((n) => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
                     <div className="news-card-image">
@@ -143,7 +143,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           )}
         </div>
 
-        <aside className="sidebar">
+        <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: '340px', width: '340px' }}>
           <div className="sidebar-widget">
             <h3 className="widget-title">Newsletter</h3>
             <NewsletterSignup variant="sidebar" />
