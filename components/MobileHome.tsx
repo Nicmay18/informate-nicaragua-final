@@ -98,11 +98,11 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
               </div>
               <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
                 {masLeidas.slice(0, 6).map((n, idx) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
-                    <span className="most-read-number">{idx + 1}</span>
-                    <div className="most-read-content">
-                      <h3 className="most-read-title">{n.titulo}</h3>
-                      <div className="most-read-meta">{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} style={{ display: 'flex', gap: '16px', padding: '18px', background: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', alignItems: 'flex-start', width: '100%', boxSizing: 'border-box', textDecoration: 'none', color: 'inherit', overflow: 'hidden' }}>
+                    <span style={{ fontSize: '32px', fontWeight: 900, color: '#dc2626', lineHeight: 1, width: '40px', textAlign: 'center', flexShrink: 0, fontFamily: 'Merriweather, serif' }}>{idx + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: '#111827', margin: 0, overflowWrap: 'break-word', wordBreak: 'break-word', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.titulo}</h3>
+                      <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
                     </div>
                   </Link>
                 ))}
