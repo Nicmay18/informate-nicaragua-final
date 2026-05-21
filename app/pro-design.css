@@ -518,10 +518,12 @@
             color: var(--accent);
             line-height: 1;
             min-width: 36px;
+            width: 36px;
             text-align: center;
             opacity: 0.9;
+            flex-shrink: 0;
         }
-        .most-read-content { flex: 1; }
+        .most-read-content { flex: 1; min-width: 0; }
         .most-read-title {
             font-family: var(--font-serif);
             font-size: 14px;
@@ -530,6 +532,8 @@
             color: var(--text);
             margin-bottom: 6px;
             transition: color 0.2s;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .most-read-card:hover .most-read-title { color: var(--accent); }
         .most-read-meta {
@@ -1208,8 +1212,8 @@
             .most-read-grid { grid-template-columns: 1fr; }
             .sidebar {
                 order: 2;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+                display: flex;
+                flex-direction: column;
                 gap: 20px;
                 width: 100%;
                 min-width: unset;
