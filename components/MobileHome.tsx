@@ -51,15 +51,16 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
 
   return (
     <ProLayout tickerText={tickerText}>
+      <div className="homepage-wrap">
       {noticias.length > 0 && (
-        <section className="hp-swiper-section">
+        <section className="swiper-section">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             navigation
             pagination={{ clickable: true }}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             loop={noticias.length > 1}
-            className="hp-swiper"
+            className="swiper"
           >
             {noticias.slice(0, 5).map((n) => (
               <SwiperSlide key={n.slug}>
@@ -71,10 +72,10 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                       {n.categoria}
                     </div>
                   )}
-                  <div className="hp-swiper-overlay">
-                    <span className="hp-swiper-tag">{n.categoria}</span>
-                    <h2 className="hp-swiper-title">{n.titulo}</h2>
-                    <div className="hp-swiper-meta">
+                  <div className="swiper-overlay">
+                    <span className="swiper-tag">{n.categoria}</span>
+                    <h2 className="swiper-title">{n.titulo}</h2>
+                    <div className="swiper-meta">
                       <span>Por Redacción</span>
                       <span>{formatDate(n.fecha)}</span>
                       <span>{readTime(n.resumen, n.contenido)}</span>
@@ -87,21 +88,21 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
         </section>
       )}
 
-      <div className="hp-main">
-        <div className="hp-main-content">
+      <div className="main">
+        <div className="main-content">
           {masLeidas.length > 0 && (
-            <section className="hp-most-read-section">
-              <div className="hp-section-header">
-                <h2 className="hp-section-title">Más Leídas</h2>
-                <Link href="/mas-leidas" className="hp-section-link">Ver todas →</Link>
+            <section className="most-read-section">
+              <div className="section-header">
+                <h2 className="section-title">Más Leídas</h2>
+                <Link href="/mas-leidas" className="section-link">Ver todas →</Link>
               </div>
-              <div className="hp-most-read-grid">
+              <div className="most-read-grid">
                 {masLeidas.slice(0, 6).map((n, idx) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="hp-most-read-card">
-                    <span className="hp-most-read-number">{idx + 1}</span>
-                    <div className="hp-most-read-content">
-                      <h3 className="hp-most-read-title">{n.titulo}</h3>
-                      <div className="hp-most-read-meta">{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
+                    <span className="most-read-number">{idx + 1}</span>
+                    <div className="most-read-content">
+                      <h3 className="most-read-title">{n.titulo}</h3>
+                      <div className="most-read-meta">{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
                     </div>
                   </Link>
                 ))}
@@ -111,14 +112,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
 
           {latest.length > 0 && (
             <section>
-              <div className="hp-section-header">
-                <h2 className="hp-section-title">Últimas Noticias</h2>
-                <Link href="/noticias" className="hp-section-link">Ver todas →</Link>
+              <div className="section-header">
+                <h2 className="section-title">Últimas Noticias</h2>
+                <Link href="/noticias" className="section-link">Ver todas →</Link>
               </div>
-              <div className="hp-news-grid">
+              <div className="news-grid">
                 {latest.map((n) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="hp-news-card">
-                    <div className="hp-news-card-image">
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
+                    <div className="news-card-image">
                       {n.imagen && n.imagen !== '/logo.png' ? (
                         <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" style={{ width: '100%', height: 'auto', aspectRatio: '16/10', display: 'block' }} />
                       ) : (
@@ -126,12 +127,12 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                           {n.categoria}
                         </div>
                       )}
-                      <span className="hp-news-card-tag">{n.categoria}</span>
+                      <span className="news-card-tag">{n.categoria}</span>
                     </div>
-                    <div className="hp-news-card-body">
-                      <h3 className="hp-news-card-title">{n.titulo}</h3>
-                      {n.resumen && <p className="hp-news-card-excerpt">{n.resumen}</p>}
-                      <div className="hp-news-card-meta">
+                    <div className="news-card-body">
+                      <h3 className="news-card-title">{n.titulo}</h3>
+                      {n.resumen && <p className="news-card-excerpt">{n.resumen}</p>}
+                      <div className="news-card-meta">
                         <span>{timeAgo(n.fecha)}</span>
                         <span>{n.vistas?.toLocaleString() || 0} vistas</span>
                       </div>
@@ -143,26 +144,26 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           )}
         </div>
 
-        <aside className="hp-sidebar">
-          <div className="hp-sidebar-widget">
-            <h3 className="hp-widget-title">Newsletter</h3>
+        <aside className="sidebar">
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Newsletter</h3>
             <NewsletterSignup variant="sidebar" />
           </div>
 
           <RadioPlayer />
 
-          <div className="hp-sidebar-widget weather-widget">
-            <h3 className="hp-widget-title">Clima en Nicaragua</h3>
+          <div className="sidebar-widget weather-widget">
+            <h3 className="widget-title">Clima en Nicaragua</h3>
             <WeatherWidget />
           </div>
 
-          <div className="hp-sidebar-widget">
-            <h3 className="hp-widget-title">Indicadores Económicos</h3>
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Indicadores Económicos</h3>
             <IndicadoresWidget />
           </div>
 
-          <div className="hp-sidebar-widget">
-            <h3 className="hp-widget-title">Síguenos</h3>
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Síguenos</h3>
             <div className="social-grid">
               <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" className="social-btn social-facebook">
                 <span className="social-icon">📘</span>
@@ -179,6 +180,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             </div>
           </div>
         </aside>
+      </div>
       </div>
     </ProLayout>
   );

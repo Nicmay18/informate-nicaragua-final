@@ -78,7 +78,7 @@ export default function ProLayout({
       <header className="header">
         <div className="header-inner">
           <Link href="/" className="logo">
-            <div className="logo-img">NI</div>
+            <img src="/logo.png" alt="Nicaragua Informate" width={36} height={36} style={{ borderRadius: '50%', objectFit: 'cover' }} />
             <div className="logo-text">
               Nicaragua Informate
               <small>Noticias de Nicaragua y el mundo</small>
