@@ -8,14 +8,16 @@ import type { Noticia } from '@/lib/types';
 const SITE_URL = 'https://nicaraguainformate.com';
 
 /** Metadata atractiva por categoría para mejorar CTR */
-const CATEGORIA_META: Record<string, { titulo: string; description: string }> = {
+const CATEGORIA_META: Record<string, { titulo: string; description: string; robots: { index: boolean; follow: boolean } }> = {
   sucesos: {
     titulo: 'Sucesos en Nicaragua | Policíales y Accidentes Hoy',
     description: 'Reportes de sucesos en Nicaragua: accidentes de tránsito, hechos policiales y emergencias en tiempo real.',
+    robots: { index: true, follow: true },
   },
   nacionales: {
     titulo: 'Noticias Nacionales de Nicaragua | Política, Economía y Sociedad',
     description: 'Entérate de lo último en Nicaragua: noticias de política, economía, infraestructura y desarrollo social. Cobertura actualizada desde Managua.',
+    robots: { index: true, follow: true },
   },
   deportes: {
     titulo: 'Deportes en Nicaragua | Fútbol, Béisbol y Atletismo',
@@ -58,6 +60,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: meta.titulo,
     description: meta.description,
     alternates: { canonical: canonicalUrl },
+    robots: { index: true, follow: true },
     openGraph: {
       type: 'website',
       locale: 'es_NI',
