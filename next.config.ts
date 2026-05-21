@@ -38,6 +38,13 @@ const nextConfig: NextConfig = {
         destination: 'https://nicaraguainformate.com/:path*',
         permanent: true,
       },
+      // Forzar HTTPS si llega por HTTP (x-forwarded-proto es agregado por Vercel/nginx)
+      {
+        source: '/:path*',
+        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
+        destination: 'https://nicaraguainformate.com/:path*',
+        permanent: true,
+      },
       // Redirigir URLs de categoría con query params a rutas limpias /categoria/
       {
         source: '/',
