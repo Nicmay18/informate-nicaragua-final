@@ -76,7 +76,6 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                     <span className="swiper-tag">{n.categoria}</span>
                     <h2 className="swiper-title">{n.titulo}</h2>
                     <div className="swiper-meta">
-                      <span>Por Redacción</span>
                       <span>{formatDate(n.fecha)}</span>
                       <span>{readTime(n.resumen, n.contenido)}</span>
                     </div>
