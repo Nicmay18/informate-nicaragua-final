@@ -24,6 +24,5 @@ Disallow: /manifest.json
 Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
 Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
 
-# Sitemaps para descubrimiento de URLs
+# Sitemap para descubrimiento de URLs
 Sitemap: https://nicaraguainformate.com/sitemap.xml
-Sitemap: https://nicaraguainformate.com/news-sitemap.xml

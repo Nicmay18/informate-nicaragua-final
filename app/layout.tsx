@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/og-home.jpg',
+        url: 'https://nicaraguainformate.com/logo.png',
         width: 1200,
         height: 630,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
-    images: ['https://nicaraguainformate.com/og-home.jpg'],
+    images: ['https://nicaraguainformate.com/logo.png'],
   },
   alternates: {
     canonical: 'https://nicaraguainformate.com',

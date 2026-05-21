@@ -613,7 +613,7 @@
 .newsletter-form button:hover { background: var(--accent-hover); }
 
 /* ===== MOBILE ===== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .article-main { grid-template-columns: 1fr; gap: 32px; }
   .article-content { order: 1; }
 }

@@ -7,6 +7,7 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { ArrowRight } from 'lucide-react';
 import ProLayout from '@/components/ProLayout';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
@@ -93,7 +94,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             <section className="most-read-section">
               <div className="section-header">
                 <h2 className="section-title">Más Leídas</h2>
-                <Link href="/mas-leidas" className="section-link">Ver todas →</Link>
+                <Link href="/mas-leidas" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
               <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
                 {masLeidas.slice(0, 6).map((n, idx) => (
@@ -113,7 +114,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             <section>
               <div className="section-header">
                 <h2 className="section-title">Últimas Noticias</h2>
-                <Link href="/noticias" className="section-link">Ver todas →</Link>
+                <Link href="/noticias" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
               <div className="news-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', width: '100%' }}>
                 {latest.map((n) => (

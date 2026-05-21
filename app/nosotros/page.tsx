@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield } from 'lucide-react';
+import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Sobre Nicaragua Informate — Noticias de Nicaragua',
@@ -78,7 +78,7 @@ export default function NosotrosPage() {
                 <div style={{ color: TXT, fontWeight: 700, fontSize: '1.05rem', marginBottom: 4 }}>{p.name}</div>
                 <div style={{ color: ACENTO, fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>{p.role}</div>
                 <p style={{ color: TXT_SEC, fontSize: '0.95rem', margin: 0, lineHeight: 1.65 }}>
-                  {p.bio} {p.link && <Link href={p.link} style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>Ver perfil →</Link>}
+                  {p.bio} {p.link && <Link href={p.link} style={{ color: LINK, textDecoration: 'none', fontWeight: 600 }}>Ver perfil <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>}
                 </p>
               </div>
             </div>

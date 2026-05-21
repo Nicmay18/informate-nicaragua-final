@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  Search, Menu, X, Moon, Sun,
+  Search, Menu, X, Moon, Sun, ArrowLeft,
 } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -150,7 +150,7 @@ export default function ProLayout({
               Nicaragua Informate
               <small>Periodismo verificado</small>
             </Link>
-            <Link href="/" className="footer-home-link">← Volver al inicio</Link>
+            <Link href="/" className="footer-home-link"><ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} /> Volver al inicio</Link>
           </div>
           <div className="footer-grid">
             <div className="footer-column">

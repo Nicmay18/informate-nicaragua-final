@@ -2407,58 +2407,8 @@
   font-size: 12px; font-weight: 700; flex-shrink: 0;
 }
 
-/* Article page layout */
-.article-page {
-  padding: 24px 0 0;
-}
-.article-page__main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 20px 40px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 32px;
-  align-items: start;
-}
-.article-content {
-  min-width: 0;
-}
-.article-tag {
-  display: inline-block;
-  background: #dc2626;
-  color: #fff;
-  padding: 6px 14px;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 999px;
-  margin-bottom: 16px;
-}
-.article-title {
-  font-family: var(--font-serif);
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 900;
-  line-height: 1.1;
-  color: var(--c-text, #0f172a);
-  margin-bottom: 20px;
-}
-.article-lead {
-  font-size: 19px;
-  line-height: 1.7;
-  color: var(--c-text-muted, #475569);
-  margin-bottom: 28px;
-  font-weight: 500;
-}
-.article-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--c-border, #e2e8f0);
-  margin-bottom: 24px;
-}
+/* Article page layout - REMOVED: defined in articulo.css to avoid conflicts */
+
 .article-hero {
   width: 100%;
   max-width: 900px;

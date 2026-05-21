@@ -121,7 +121,7 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
       },
       {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/og-home.jpg',
+        url: 'https://nicaraguainformate.com/logo.png',
         width: 1200,
         height: 630,
       },
