@@ -4,7 +4,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square, Flame } from 'lucide-react';
+import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
 import { FALLBACK_IMAGE } from '@/lib/types';
@@ -97,16 +97,6 @@ const CAT_COLORS: Record<string, string> = {
   Espectáculos: '#db2777',
   Tecnología: '#0ea5e9',
 };
-
-const SIDEBAR_CATEGORIES = [
-  { label: 'Nacionales', href: '/categoria/nacionales' },
-  { label: 'Sucesos', href: '/categoria/sucesos' },
-  { label: 'Internacionales', href: '/categoria/internacionales' },
-  { label: 'Economía', href: '/categoria/economia' },
-  { label: 'Deportes', href: '/categoria/deportes' },
-  { label: 'Tecnología', href: '/categoria/tecnologia' },
-  { label: 'Espectáculos', href: '/categoria/espectaculos' },
-];
 
 const slugifyCategory = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
 
@@ -553,7 +543,6 @@ export default function ArticleClient({
   const updatedISO = (noticia as { fechaActualizacion?: string }).fechaActualizacion || noticia.fecha || publishedISO;
   const readAlso = related.slice(0, 3);
   const moreFromCategory = related.slice(3, 6);
-  const sidebarLatest = related.slice(0, 5);
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(noticia.titulo);
   const encodedShareCopy = encodeURIComponent(`${noticia.titulo} — ${url}`);
@@ -563,28 +552,28 @@ export default function ArticleClient({
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <main className="article-main-ref" itemScope itemType="https://schema.org/NewsArticle">
+      <div className="article-page-wrap"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle">
         <div className="breadcrumbs">
           <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
         </div>
-        <div className="article-content-ref">
-          <header className="article-header-ref">
-            <span className="article-tag-ref" style={{ background: catColor }} itemProp="articleSection">
+        <div className="article-content">
+          <header>
+            <span className="article-tag" style={{ background: catColor }} itemProp="articleSection">
               {noticia.categoria}
             </span>
-            <h1 className="article-title-ref" itemProp="headline">{noticia.titulo}</h1>
+            <h1 className="article-title" itemProp="headline">{noticia.titulo}</h1>
             {noticia.resumen && (
-              <p className="article-lead-ref" itemProp="description">{noticia.resumen}</p>
+              <p className="article-lead" itemProp="description">{noticia.resumen}</p>
             )}
-            <div className="article-meta-ref">
-              <div className="article-author-ref"><div className="author-avatar-ref" style={{ background: catColor }}>
+            <div className="article-meta">
+              <div className="article-author"><div className="author-avatar" style={{ background: catColor }}>
                 {autorInicial}
               </div>
-              <div className="author-info-ref">
+              <div className="author-info">
                 <div itemProp="author" itemScope itemType="https://schema.org/Person">
-                  <span className="author-name-ref" itemProp="name">{autor}</span>
+                  <span className="author-name" itemProp="name">{autor}</span>
                 </div>
-                <span className="author-role-ref">Periodista</span>
+                <span className="author-role">Periodista</span>
               </div></div>
               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
                 {ago && (
@@ -622,7 +611,7 @@ export default function ArticleClient({
             </div>
           </header>
 
-          <figure className="article-hero-ref" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+          <figure className="article-hero" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
                 src={noticia.imagen || '/logo.png'}
@@ -666,7 +655,7 @@ export default function ArticleClient({
               </div>
             )}
             {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
-              <div className="article-caption-ref">
+              <div className="article-caption">
                 📷 Nicaragua Informate
               </div>
             )}
@@ -680,7 +669,7 @@ export default function ArticleClient({
           <AdPlaceholder id="div-gpt-ad-inarticle-top" label="Publicidad" size="In-article 1" variant="inline" />
 
           <div
-            className="article-body-ref"
+            className="article-body"
             style={{ fontSize: `${fontSize}em` }}
             itemProp="articleBody"
             dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
@@ -696,33 +685,33 @@ export default function ArticleClient({
             </div>
           )}
 
-          <div className="article-tags-ref">
+          <div className="article-tags">
             {tags.map(tag => (
-              <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="article-tag-link-ref">#{tag}</Link>
+              <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="article-tag-link">#{tag}</Link>
             ))}
           </div>
 
           {(readAlso[0] || readAlso[1]) && (
-            <div className="article-nav-ref">
+            <div className="article-nav">
               {readAlso[0] && (
-                <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card-ref">
-                  <div className="article-nav-label-ref">← Artículo anterior</div>
-                  <div className="article-nav-title-ref">{readAlso[0].titulo}</div>
+                <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card">
+                  <div className="article-nav-label">← Artículo anterior</div>
+                  <div className="article-nav-title">{readAlso[0].titulo}</div>
                 </Link>
               )}
               {readAlso[1] && (
-                <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card-ref next-ref">
-                  <div className="article-nav-label-ref">Artículo siguiente →</div>
-                  <div className="article-nav-title-ref">{readAlso[1].titulo}</div>
+                <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card next">
+                  <div className="article-nav-label">Artículo siguiente →</div>
+                  <div className="article-nav-title">{readAlso[1].titulo}</div>
                 </Link>
               )}
             </div>
           )}
 
-          <div className="comments-section-ref">
-            <h3 className="comments-header-ref">Comentarios (0)</h3>
-            <textarea className="comment-box-ref" placeholder="Escribe tu comentario..."></textarea>
-            <button className="comment-submit-ref">Publicar comentario</button>
+          <div className="comments-section">
+            <h3 className="comments-header">Comentarios (0)</h3>
+            <textarea className="comment-box" placeholder="Escribe tu comentario..."></textarea>
+            <button className="comment-submit">Publicar comentario</button>
           </div>
 
           <aside className="share-bar">
@@ -812,35 +801,26 @@ export default function ArticleClient({
 
         <aside className="sidebar">
           <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
-          {sidebarLatest.length > 0 && (
-            <div className="widget">
-              <div className="widget__title"><Flame size={14} color="#dc2626" /> Lo último</div>
-              <ol className="widget-list widget-list--compact">
-                {sidebarLatest.map((item, index) => (
-                  <li key={item.slug}>
-                    <Link href={`/noticias/${item.slug}`}>
-                      <span className="widget-list__index">{index + 1}</span>
-                      <div>
-                        <p className="widget-list__title">{item.titulo}</p>
-                        <span className="widget-list__meta">{fmtDate(item.fecha)}</span>
-                      </div>
-                    </Link>
-                  </li>
+          {readAlso.length > 0 && (
+            <div className="sidebar-widget">
+              <h3 className="widget-title">Artículos Relacionados</h3>
+              <div className="related-list">
+                {readAlso.map(item => (
+                  <Link key={item.slug} href={`/noticias/${item.slug}`} className="related-item">
+                    <img src={item.imagen || '/logo.png'} alt={item.titulo} className="related-thumb" />
+                    <div className="related-content">
+                      <div className="related-tag">{item.categoria}</div>
+                      <div className="related-title">{item.titulo}</div>
+                      <div className="related-meta">{fmtDate(item.fecha)}</div>
+                    </div>
+                  </Link>
                 ))}
-              </ol>
+              </div>
             </div>
           )}
           <AdPlaceholder id="div-gpt-ad-sidebar-2" label="Publicidad" size="300x250" variant="sidebar" />
-          <div className="widget">
-            <div className="widget__title">Categorías</div>
-            <ul className="widget-categories">
-              {SIDEBAR_CATEGORIES.map(cat => (
-                <li key={cat.href}><Link href={cat.href}>{cat.label}</Link></li>
-              ))}
-            </ul>
-          </div>
         </aside>
-      </main>
+      </main></div>
     </>
   );
 }
