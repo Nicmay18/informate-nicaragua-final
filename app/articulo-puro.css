@@ -641,6 +641,27 @@
 }
 .article-page-wrap .newsletter-form button:hover { background: var(--accent-hover); }
 
+/* ===== ANULAR CONFLICTOS DE tmp.css ===== */
+.article-page-wrap .article-main,
+.article-page-wrap .article-content,
+.article-page-wrap .article-body,
+.article-page-wrap .share-bar,
+.article-page-wrap .tags,
+.article-page-wrap .single-header,
+.article-page-wrap .article-breadcrumb {
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.article-page-wrap .article-main {
+  max-width: var(--max-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 24px 20px 40px !important;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 1024px) {
   .article-page-wrap .article-main { grid-template-columns: 1fr; gap: 32px; }
