@@ -1,6 +1,6 @@
 import ArticleClient from '@/components/ArticleClient';
 import ProLayout from '@/components/ProLayout';
-import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -11,7 +11,6 @@ import {
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
-import { isToxicSlug } from '@/lib/seo-toxic';
 
 export const dynamicParams = true;
 export const revalidate = 0;
