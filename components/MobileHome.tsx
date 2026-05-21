@@ -74,7 +74,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                   {n.imagen && n.imagen !== '/logo.png' ? (
                     <Image src={n.imagen} alt={n.titulo} fill className="object-cover" sizes="100vw" />
                   ) : (
-                    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,#1e293b,#0f172a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800 }}>
+                    <div className="swiper-slide-fallback">
                       {n.categoria}
                     </div>
                   )}
@@ -93,21 +93,21 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
         </section>
       )}
 
-      <div className="main" style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
-        <div className="main-content" style={{ minWidth: 0, overflow: 'hidden' }}>
+      <div className="main">
+        <div className="main-content">
           {masLeidas.length > 0 && (
             <section className="most-read-section">
               <div className="section-header">
                 <h2 className="section-title">Más Leídas</h2>
                 <Link href="/mas-leidas" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
-              <div className="most-read-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+              <div className="most-read-grid">
                 {masLeidas.slice(0, 6).map((n, idx) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} style={{ display: 'flex', gap: '16px', padding: '18px', background: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', alignItems: 'flex-start', width: '100%', boxSizing: 'border-box', textDecoration: 'none', color: 'inherit', overflow: 'hidden' }}>
-                    <span style={{ fontSize: '32px', fontWeight: 900, color: '#dc2626', lineHeight: 1, width: '40px', textAlign: 'center', flexShrink: 0, fontFamily: 'Merriweather, serif' }}>{idx + 1}</span>
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: '#111827', margin: 0, overflowWrap: 'break-word', wordBreak: 'break-word', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.titulo}</h3>
-                      <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }} suppressHydrationWarning>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
+                    <span className="most-read-number">{idx + 1}</span>
+                    <div className="most-read-content">
+                      <h3 className="most-read-title">{n.titulo}</h3>
+                      <div className="most-read-meta" suppressHydrationWarning>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
                     </div>
                   </Link>
                 ))}
@@ -121,14 +121,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 <h2 className="section-title">Últimas Noticias</h2>
                 <Link href="/noticias" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
-              <div className="news-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', width: '100%' }}>
+              <div className="news-grid">
                 {latest.map((n) => (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
                     <div className="news-card-image">
                       {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" style={{ width: '100%', height: 'auto', aspectRatio: '16/10', display: 'block' }} />
+                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" />
                       ) : (
-                        <div style={{ width: '100%', aspectRatio: '16/10', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontWeight: 700, fontSize: 14 }}>
+                        <div className="news-card-image-fallback">
                           {n.categoria}
                         </div>
                       )}
@@ -149,7 +149,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           )}
         </div>
 
-        <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: '340px', width: '340px' }}>
+        <aside className="sidebar">
           <div className="sidebar-widget">
             <h3 className="widget-title">Newsletter</h3>
             <NewsletterSignup variant="sidebar" />
