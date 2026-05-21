@@ -489,7 +489,7 @@
         .most-read-section { margin-bottom: 48px; }
         .most-read-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 16px;
         }
         .most-read-card {
@@ -504,6 +504,7 @@
             transition: var(--transition);
             align-items: flex-start;
             overflow: hidden;
+            min-width: 0;
         }
         .most-read-card:hover {
             border-color: var(--accent);
