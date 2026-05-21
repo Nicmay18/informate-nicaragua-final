@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
+import { ensureUniqueSlug } from '@/lib/slug';
 
 function isAuthorized(request: NextRequest): boolean {
   const key = request.headers.get('x-admin-key');
   const expected = process.env.ADMIN_API_KEY;
   return !!expected && key === expected;
-}
-
-function slugify(str: string) {
-  return str
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }
 
 export async function GET(request: NextRequest) {
@@ -86,8 +78,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
-    const slug = slugify(titulo) + '-' + Date.now();
     const db = getAdminDb();
+    const slug = await ensureUniqueSlug(titulo, async (s) => {
+      const existing = await db.collection('noticias').where('slug', '==', s).limit(1).get();
+      return !existing.empty;
+    });
     const docRef = await db.collection('noticias').add({
       titulo,
       resumen,

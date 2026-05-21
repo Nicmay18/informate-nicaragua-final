@@ -1,6 +1,7 @@
 import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore';
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
+import { generateSlug } from './slug';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -322,11 +323,14 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   }
   try {
     const { adminDb } = await import('./firebase-admin');
+
+    // 1) Intentar búsqueda exacta por campo slug
     const snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
       .limit(1)
       .get();
+
     if (!snap.empty) {
       const doc = snap.docs[0];
       const data = doc.data();
@@ -346,6 +350,31 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         palabras: data.palabras,
         tags: data.tags,
       };
+    }
+
+    // 2) FALLBACK TEMPORAL: noticias sin campo slug → comparar generado desde título
+    // Esto se puede eliminar después de ejecutar el script de migración
+    const allSnap = await adminDb.collection('noticias').limit(200).get();
+    for (const doc of allSnap.docs) {
+      const data = doc.data();
+      if (generateSlug(data.titulo || '') === slug) {
+        return {
+          id: doc.id,
+          slug: data.slug || slug,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido || '',
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+          tags: data.tags,
+        };
+      }
     }
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
