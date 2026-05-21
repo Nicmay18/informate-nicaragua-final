@@ -563,29 +563,29 @@ export default function ArticleClient({
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <main className="article-main" itemScope itemType="https://schema.org/NewsArticle">
+      <main className="article-main-ref" itemScope itemType="https://schema.org/NewsArticle">
         <div className="breadcrumbs">
           <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
         </div>
-        <div className="article-content">
-          <header className="single-header">
-            <span className="article-tag" style={{ background: catColor }} itemProp="articleSection">
+        <div className="article-content-ref">
+          <header className="article-header-ref">
+            <span className="article-tag-ref" style={{ background: catColor }} itemProp="articleSection">
               {noticia.categoria}
             </span>
-            <h1 className="article-title" itemProp="headline">{noticia.titulo}</h1>
+            <h1 className="article-title-ref" itemProp="headline">{noticia.titulo}</h1>
             {noticia.resumen && (
-              <p className="article-lead" itemProp="description">{noticia.resumen}</p>
+              <p className="article-lead-ref" itemProp="description">{noticia.resumen}</p>
             )}
-            <div className="article-meta">
-              <div className="author-avatar-pro" style={{ background: catColor }}>
+            <div className="article-meta-ref">
+              <div className="article-author-ref"><div className="author-avatar-ref" style={{ background: catColor }}>
                 {autorInicial}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div className="author-info-ref">
                 <div itemProp="author" itemScope itemType="https://schema.org/Person">
-                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--c-text)' }} itemProp="name">{autor}</span>
+                  <span className="author-name-ref" itemProp="name">{autor}</span>
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--c-text-muted)', fontWeight: 500 }}>Periodista</div>
-              </div>
+                <span className="author-role-ref">Periodista</span>
+              </div></div>
               <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
                 {ago && (
                   <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -622,7 +622,7 @@ export default function ArticleClient({
             </div>
           </header>
 
-          <figure className="article-hero" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+          <figure className="article-hero-ref" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
                 src={noticia.imagen || '/logo.png'}
@@ -638,8 +638,7 @@ export default function ArticleClient({
                   fetchPriority="high"
                   loading="eager"
                   decoding="async"
-                  className="featured-img"
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{ width: '100%', height: 'auto', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }}
                   itemProp="url"
                   onError={e => {
                     const t = e.target as HTMLImageElement;
@@ -667,7 +666,7 @@ export default function ArticleClient({
               </div>
             )}
             {noticia.imagen && noticia.imagen.trim().startsWith('http') && (
-              <div className="article-caption">
+              <div className="article-caption-ref">
                 📷 Nicaragua Informate
               </div>
             )}
@@ -681,7 +680,7 @@ export default function ArticleClient({
           <AdPlaceholder id="div-gpt-ad-inarticle-top" label="Publicidad" size="In-article 1" variant="inline" />
 
           <div
-            className="article-body article-body-pro drop-cap"
+            className="article-body-ref"
             style={{ fontSize: `${fontSize}em` }}
             itemProp="articleBody"
             dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
@@ -697,33 +696,33 @@ export default function ArticleClient({
             </div>
           )}
 
-          <div className="article-tags">
+          <div className="article-tags-ref">
             {tags.map(tag => (
-              <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="article-tag-link">#{tag}</Link>
+              <Link key={tag} href={`/buscar?q=${encodeURIComponent(tag)}`} className="article-tag-link-ref">#{tag}</Link>
             ))}
           </div>
 
           {(readAlso[0] || readAlso[1]) && (
-            <div className="article-nav">
+            <div className="article-nav-ref">
               {readAlso[0] && (
-                <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card">
-                  <div className="article-nav-label">← Artículo anterior</div>
-                  <div className="article-nav-title">{readAlso[0].titulo}</div>
+                <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card-ref">
+                  <div className="article-nav-label-ref">← Artículo anterior</div>
+                  <div className="article-nav-title-ref">{readAlso[0].titulo}</div>
                 </Link>
               )}
               {readAlso[1] && (
-                <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card next">
-                  <div className="article-nav-label">Artículo siguiente →</div>
-                  <div className="article-nav-title">{readAlso[1].titulo}</div>
+                <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card-ref next-ref">
+                  <div className="article-nav-label-ref">Artículo siguiente →</div>
+                  <div className="article-nav-title-ref">{readAlso[1].titulo}</div>
                 </Link>
               )}
             </div>
           )}
 
-          <div className="comments-section">
-            <h3 className="comments-header">Comentarios (0)</h3>
-            <textarea className="comment-box" placeholder="Escribe tu comentario..."></textarea>
-            <button className="comment-submit">Publicar comentario</button>
+          <div className="comments-section-ref">
+            <h3 className="comments-header-ref">Comentarios (0)</h3>
+            <textarea className="comment-box-ref" placeholder="Escribe tu comentario..."></textarea>
+            <button className="comment-submit-ref">Publicar comentario</button>
           </div>
 
           <aside className="share-bar">
