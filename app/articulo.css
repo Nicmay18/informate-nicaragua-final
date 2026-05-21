@@ -272,9 +272,12 @@
   font-family: var(--font-serif);
   font-size: 18px;
   font-style: italic;
-  color: var(--text);
+  color: var(--text) !important;
   line-height: 1.6;
   border-radius: 0 8px 8px 0;
+}
+.article-body blockquote * {
+  color: var(--text) !important;
 }
 .article-body ul, .article-body ol {
   margin: 20px 0 20px 24px;
