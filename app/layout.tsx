@@ -2,6 +2,7 @@
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
 import './pro-design.css';
+import './tmp.css';
 import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
