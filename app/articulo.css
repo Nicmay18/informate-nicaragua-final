@@ -268,16 +268,21 @@
   border-left: 4px solid var(--accent);
   padding: 20px 28px;
   margin: 28px 0;
-  background: var(--accent-light);
+  background: #fef2f2;
   font-family: var(--font-serif);
   font-size: 18px;
   font-style: italic;
-  color: var(--text) !important;
+  color: #0f172a !important;
   line-height: 1.6;
   border-radius: 0 8px 8px 0;
 }
-.article-body blockquote * {
-  color: var(--text) !important;
+.article-body blockquote,
+.article-body blockquote *,
+.article-body blockquote p,
+.article-body blockquote em,
+.article-body blockquote strong,
+.article-body blockquote span {
+  color: #0f172a !important;
 }
 .article-body ul, .article-body ol {
   margin: 20px 0 20px 24px;
