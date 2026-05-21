@@ -4,6 +4,7 @@ import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { unstable_noStore } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -120,6 +121,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
+  unstable_noStore(); // Fuerza generación dinámica, sin cache estático ni ISR
   const { slug } = await params;
 
   try {
