@@ -1,6 +1,5 @@
 import ArticleClient from '@/components/ArticleClient';
 import ProLayout from '@/components/ProLayout';
-import '@/app/articulo.css';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
