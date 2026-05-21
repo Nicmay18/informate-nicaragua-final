@@ -21,9 +21,15 @@ interface MobileHomeProps {
   masLeidas: Noticia[];
 }
 
+const MONTHS_SHORT = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
 function formatDate(date: string) {
   try {
-    return new Date(date).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' });
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = MONTHS_SHORT[d.getMonth()];
+    const year = d.getFullYear();
+    return `${day} ${month} ${year}`;
   } catch {
     return date;
   }
@@ -76,8 +82,8 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                     <span className="swiper-tag">{n.categoria}</span>
                     <h2 className="swiper-title">{n.titulo}</h2>
                     <div className="swiper-meta">
-                      <span>{formatDate(n.fecha)}</span>
-                      <span>{readTime(n.resumen, n.contenido)}</span>
+                      <span suppressHydrationWarning>{formatDate(n.fecha)}</span>
+                      <span suppressHydrationWarning>{readTime(n.resumen, n.contenido)}</span>
                     </div>
                   </div>
                 </Link>
@@ -101,7 +107,7 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                     <span style={{ fontSize: '32px', fontWeight: 900, color: '#dc2626', lineHeight: 1, width: '40px', textAlign: 'center', flexShrink: 0, fontFamily: 'Merriweather, serif' }}>{idx + 1}</span>
                     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       <h3 style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: '#111827', margin: 0, overflowWrap: 'break-word', wordBreak: 'break-word', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.titulo}</h3>
-                      <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+                      <div style={{ fontSize: '12px', color: '#6b7280', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }} suppressHydrationWarning>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
                     </div>
                   </Link>
                 ))}
@@ -132,8 +138,8 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                       <h3 className="news-card-title">{n.titulo}</h3>
                       {n.resumen && <p className="news-card-excerpt">{n.resumen}</p>}
                       <div className="news-card-meta">
-                        <span>{timeAgo(n.fecha)}</span>
-                        <span>{n.vistas?.toLocaleString() || 0} vistas</span>
+                        <span suppressHydrationWarning>{timeAgo(n.fecha)}</span>
+                        <span suppressHydrationWarning>{n.vistas?.toLocaleString() || 0} vistas</span>
                       </div>
                     </div>
                   </Link>

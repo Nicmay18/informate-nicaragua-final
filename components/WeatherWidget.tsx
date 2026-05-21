@@ -50,6 +50,11 @@ export default function WeatherWidget() {
   const [allTemps, setAllTemps] = useState<(number | null)[]>(new Array(CITIES.length).fill(null));
   const [loading, setLoading]   = useState(false);
   const [paused, setPaused]     = useState(false);
+  const [mounted, setMounted]   = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const loadCity = useCallback(async (idx: number) => {
     setLoading(true);
@@ -116,6 +121,18 @@ export default function WeatherWidget() {
   };
 
   const wx = data ? (WX[data.code] ?? { label: 'Variable', emoji: '🌡️' }) : { label: 'Cargando...', emoji: '🌡️' };
+
+  if (!mounted) {
+    return (
+      <div style={{ background: 'linear-gradient(160deg, #1e3a5f 0%, #0f172a 100%)', borderRadius: 14, overflow: 'hidden', color: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.25)', padding: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <CloudSun size={15} color="#fbbf24" />
+          <span style={{ fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Clima</span>
+        </div>
+        <div style={{ color: '#94a3b8', fontSize: 13 }}>Cargando...</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ background: 'linear-gradient(160deg, #1e3a5f 0%, #0f172a 100%)', borderRadius: 14, overflow: 'hidden', color: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
