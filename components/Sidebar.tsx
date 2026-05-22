@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Mail, Heart } from 'lucide-react';
+// import { Mail, Heart } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 
 interface SidebarProps {

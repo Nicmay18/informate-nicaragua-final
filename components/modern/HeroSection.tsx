@@ -167,7 +167,7 @@ export default function HeroSection({ noticias }: HeroSectionProps) {
           <div className="hero-side-stories">
             <h3 className="side-stories-title">Otras noticias destacadas</h3>
             <div className="side-stories-list">
-              {heroNoticias.slice(1, 4).map((noticia, index) => (
+              {heroNoticias.slice(1, 4).map((noticia) => (
                 <Link
                   key={noticia.id}
                   href={`/noticias/${noticia.slug}`}

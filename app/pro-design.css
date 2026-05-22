@@ -1302,6 +1302,8 @@
             transition: color 0.2s;
         }
         .footer-bottom-links a:hover { color: #fff; }
+        .footer-social-link { color: rgba(255,255,255,0.7); transition: color 0.2s; }
+        .footer-social-link:hover { color: var(--accent); }
 
         /* ===== PROGRESS BAR ===== */
         .progress-bar {

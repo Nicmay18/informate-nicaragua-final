@@ -49,8 +49,8 @@ export default function NewsCard({ noticia }: NewsCardProps) {
         <div className="news-card-content">
           <h3 className="news-card-title">{noticia.titulo}</h3>
 
-          {noticia.descripcion && (
-            <p className="news-card-excerpt">{noticia.descripcion}</p>
+          {noticia.resumen && (
+            <p className="news-card-excerpt">{noticia.resumen}</p>
           )}
 
           <div className="news-card-meta">

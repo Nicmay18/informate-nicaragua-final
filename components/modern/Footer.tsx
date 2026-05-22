@@ -8,41 +8,41 @@ const FOOTER_SECTIONS = {
   navigation: {
     title: 'Navegación',
     links: [
-      { label: 'Inicio', href: '/' },
-      { label: 'Nacionales', href: '/categoria/nacionales' },
-      { label: 'Internacionales', href: '/categoria/internacionales' },
-      { label: 'Sucesos', href: '/categoria/sucesos' },
-      { label: 'Deportes', href: '/categoria/deportes' },
-      { label: 'Tecnología', href: '/categoria/tecnologia' },
+      { label: 'Inicio', href: '/', external: false },
+      { label: 'Nacionales', href: '/categoria/nacionales', external: false },
+      { label: 'Internacionales', href: '/categoria/internacionales', external: false },
+      { label: 'Sucesos', href: '/categoria/sucesos', external: false },
+      { label: 'Deportes', href: '/categoria/deportes', external: false },
+      { label: 'Tecnología', href: '/categoria/tecnologia', external: false },
     ]
   },
   company: {
     title: 'Nosotros',
     links: [
-      { label: 'Quiénes Somos', href: '/nosotros' },
-      { label: 'Nuestro Equipo', href: '/equipo' },
-      { label: 'Contacto', href: '/contacto' },
-      { label: 'Publicidad', href: '/publicidad' },
-      { label: 'Trabaja con Nosotros', href: '/empleos' },
+      { label: 'Quiénes Somos', href: '/nosotros', external: false },
+      { label: 'Nuestro Equipo', href: '/equipo', external: false },
+      { label: 'Contacto', href: '/contacto', external: false },
+      { label: 'Publicidad', href: '/publicidad', external: false },
+      { label: 'Trabaja con Nosotros', href: '/empleos', external: false },
     ]
   },
   legal: {
     title: 'Legal',
     links: [
-      { label: 'Política de Privacidad', href: '/privacidad' },
-      { label: 'Términos de Uso', href: '/terminos' },
-      { label: 'Política de Cookies', href: '/cookies' },
-      { label: 'Correcciones', href: '/correcciones' },
-      { label: 'Código de Ética', href: '/etica' },
+      { label: 'Política de Privacidad', href: '/privacidad', external: false },
+      { label: 'Términos de Uso', href: '/terminos', external: false },
+      { label: 'Política de Cookies', href: '/cookies', external: false },
+      { label: 'Correcciones', href: '/correcciones', external: false },
+      { label: 'Código de Ética', href: '/etica', external: false },
     ]
   },
   resources: {
     title: 'Recursos',
     links: [
       { label: 'RSS Feed', href: '/feed.xml', external: true },
-      { label: 'Mapa del Sitio', href: '/mapa-del-sitio' },
-      { label: 'Archivo de Noticias', href: '/archivo' },
-      { label: 'Newsletter', href: '/newsletter' },
+      { label: 'Mapa del Sitio', href: '/mapa-del-sitio', external: false },
+      { label: 'Archivo de Noticias', href: '/archivo', external: false },
+      { label: 'Newsletter', href: '/newsletter', external: false },
       { label: 'API Pública', href: '/api-docs', external: true },
     ]
   }
