@@ -1236,7 +1236,8 @@
             gap: 36px;
             margin-bottom: 36px;
         }
-        .footer-column h4 {
+        .footer-column h4,
+        .footer-column h3.footer-heading {
             font-size: 11px;
             font-weight: 900;
             text-transform: uppercase;

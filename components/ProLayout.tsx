@@ -154,7 +154,7 @@ export default function ProLayout({
           </div>
           <div className="footer-grid">
             <div className="footer-column">
-              <h4>Secciones</h4>
+              <h3 className="footer-heading">Secciones</h3>
               <ul>
                 <li><Link href="/categoria/nacionales">Nacionales</Link></li>
                 <li><Link href="/categoria/sucesos">Sucesos</Link></li>
@@ -165,7 +165,7 @@ export default function ProLayout({
               </ul>
             </div>
             <div className="footer-column">
-              <h4>Legal</h4>
+              <h3 className="footer-heading">Legal</h3>
               <ul>
                 <li><Link href="/nosotros">Nosotros</Link></li>
                 <li><Link href="/privacidad">Privacidad</Link></li>
@@ -175,7 +175,7 @@ export default function ProLayout({
               </ul>
             </div>
             <div className="footer-column">
-              <h4>Síguenos</h4>
+              <h3 className="footer-heading">Síguenos</h3>
               <ul>
                 <li><a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer">Facebook</a></li>
                 <li><a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
@@ -183,7 +183,7 @@ export default function ProLayout({
               </ul>
             </div>
             <div className="footer-column">
-              <h4>Contacto</h4>
+              <h3 className="footer-heading">Contacto</h3>
               <ul>
                 <li><Link href="/contacto">Redacción</Link></li>
                 <li><Link href="/contacto">Publicidad</Link></li>

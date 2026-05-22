@@ -186,3 +186,34 @@ select:focus-visible {
   text-decoration: none; font-weight: 600;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+
+/* ===== SEO HOME BLOCK ===== */
+.seo-hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 16px 8px;
+}
+.seo-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--c-primary, #0A192F);
+  margin-bottom: 16px;
+}
+[data-theme="dark"] .seo-h1 {
+  color: var(--c-text, #ffffff);
+}
+.seo-intro {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--c-text-secondary, #4b5563);
+  margin-bottom: 12px;
+}
+[data-theme="dark"] .seo-intro {
+  color: var(--c-text-muted, #9ca3af);
+}
+@media (min-width: 768px) {
+  .seo-h1 { font-size: 2rem; }
+  .seo-intro { font-size: 1rem; }
+}

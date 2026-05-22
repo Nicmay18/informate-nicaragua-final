@@ -1,10 +1,9 @@
 import ArticleClient from '@/components/ArticleClient';
 import ProLayout from '@/components/ProLayout';
-import { getNewsBySlug, getRelatedNews } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { isLutoNews } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { unstable_noStore } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -13,8 +12,7 @@ import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/s
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
 export const dynamicParams = true;
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -34,11 +32,13 @@ function toNoticiaTipo(value: string): NoticiaTipo {
   return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
 }
 
-// Temporalmente deshabilitado: los slugs se regeneraron y necesitamos
-// que Next.js no use el cache estático de build anterior.
-// Se puede re-activar después de un deploy limpio.
 export async function generateStaticParams() {
-  return [];
+  try {
+    const slugs = await getAllSlugs();
+    return slugs.slice(0, 100).map((slug) => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -120,7 +120,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
-  unstable_noStore(); // Fuerza generación dinámica, sin cache estático ni ISR
   const { slug } = await params;
 
   try {

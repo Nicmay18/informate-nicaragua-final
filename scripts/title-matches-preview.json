@@ -1,0 +1,809 @@
+{
+  "matches": [
+    {
+      "id": "pnxe5tdSosT15kgUKG0N",
+      "oldTitle": "Nicaragüense muere en accidente de tránsito en Costa Rica",
+      "newTitle": "Nicaragüense muere en accidente de tránsito en Costa Rica",
+      "score": 1
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "oldTitle": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "newTitle": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "score": 1
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "oldTitle": "Escolta de ULTRAVAL enfrenta juicio por robo de dinero en Managua",
+      "newTitle": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "score": 0.875
+    },
+    {
+      "id": "3FIrDPnlHKLQ9gqnCxKJ",
+      "oldTitle": "Autoridades alertan por tormentas eléctricas en Nicaragua",
+      "newTitle": "Autoridades alertan por tormentas eléctricas en Nicaragua",
+      "score": 1
+    },
+    {
+      "id": "uroqqoNRVgTvzUH1Gh4W",
+      "oldTitle": "Investigan accidentes de moto ocurridos este domingo",
+      "newTitle": "Investigan accidentes de moto ocurridos este domingo",
+      "score": 1
+    },
+    {
+      "id": "NF9Q4ORwPOcsXKKRHuMa",
+      "oldTitle": "Canadá reporta caso de virus por roedores en Columbia Británica",
+      "newTitle": "Canadá reporta virus por roedores en Columbia Británica",
+      "score": 0.875
+    },
+    {
+      "id": "SeoMG4MIHxsP87RjT5FI",
+      "oldTitle": "China clona cabras lecheras de alto rendimiento en avance científico",
+      "newTitle": "China clona cabras lecheras de alto rendimiento",
+      "score": 0.75
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "oldTitle": "KFC Nicaragua 2026: Apertura en Managua, menú y precios confirmados",
+      "newTitle": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+      "score": 0.75
+    },
+    {
+      "id": "Heiu8pzeZvYIqUAbxFno",
+      "oldTitle": "Nueva vía conecta Laureles Sur con carretera a El Coyotepe",
+      "newTitle": "Nueva vía conecta Laureles Sur con carretera a El Coyotepe",
+      "score": 1
+    },
+    {
+      "id": "tXBIl2x9SQj6C4v4s4i8",
+      "oldTitle": "Autoridades investigan accidente en Rancho Grande",
+      "newTitle": "Autoridades investigan accidente en Rancho Grande",
+      "score": 1
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "oldTitle": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18 de mayo",
+      "newTitle": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18 de mayo",
+      "score": 1
+    },
+    {
+      "id": "XTONg1lOfMlV1gNfMSm7",
+      "oldTitle": "Policía decomisa mercadería en operativo de Peñas Blancas",
+      "newTitle": "Policía decomisa mercadería en operativo de Peñas Blancas",
+      "score": 1
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "oldTitle": "Turismo en Nicaragua crece 11% en primer trimestre de 2026 según INTUR",
+      "newTitle": "Turismo en Nicaragua crece 11% en primer trimestre de 2026 según INTUR",
+      "score": 1
+    },
+    {
+      "id": "7wyj46FM3IdwNXpgj6x3",
+      "oldTitle": "Juzgado dicta sentencia por accidente en Nueva Segovia",
+      "newTitle": "Juzgado dicta sentencia por accidente en Nueva Segovia",
+      "score": 1
+    },
+    {
+      "id": "AD5DzaeJbwyygIQVqd3C",
+      "oldTitle": "INETER: pronostican lluvias fuertes y tormentas eléctricas en Nicaragua este sábado",
+      "newTitle": "INETER: pronostican lluvias y tormentas eléctricas en Nicaragua",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "n43KpIJvXSWRlC9rR0mh",
+      "oldTitle": "Amgen: alertas por Tavneos tras investigación de seguridad en Japón",
+      "newTitle": "Amgen: alertas por Tavneos tras investigación de seguridad",
+      "score": 0.875
+    },
+    {
+      "id": "gnnUjlF9z4wdg9jykpJm",
+      "oldTitle": "Neymar Jr. se prepara para el Mundial 2026 tras recuperación",
+      "newTitle": "Neymar Jr. se prepara para el Mundial 2026 tras recuperación",
+      "score": 1
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "oldTitle": "Metal Sonic se integrará oficialmente a la película ‘Sonic 4’",
+      "newTitle": "Metal Sonic se integra oficialmente a la película Sonic 4",
+      "score": 0.8
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "oldTitle": "Hospital Bertha Calderón ejecuta con éxito una nueva cirugía fetal",
+      "newTitle": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "score": 0.8
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "oldTitle": "Mirador San Francisco de Asís dinamiza el turismo en Carretera Norte",
+      "newTitle": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "score": 1
+    },
+    {
+      "id": "3S9dCTg2dafS0kMGMJ1V",
+      "oldTitle": "Temporada de huracanes del Pacífico 2026 inicia con calma aparente",
+      "newTitle": "Temporada de huracanes del Pacífico 2026 inicia con calma",
+      "score": 0.8888888888888888
+    },
+    {
+      "id": "wVCz0rhXOzMXEHmw9Jgw",
+      "oldTitle": "Microsoft corrige fallo de seguridad en navegador Edge",
+      "newTitle": "Microsoft corrige fallo de seguridad en navegador Edge",
+      "score": 1
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "oldTitle": "Cómo sacar y apostillar el récord policial de Nicaragua en 2026",
+      "newTitle": "Cómo sacar y apostillar récord policial de Nicaragua",
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "bJ64LMI2VMa1kNNZhZbo",
+      "oldTitle": "Congo activa alerta sanitaria tras nuevo brote de ébola",
+      "newTitle": "Congo activa alerta sanitaria tras nuevo brote de ébola",
+      "score": 1
+    },
+    {
+      "id": "XEBUgVpam4o7ucpmpqgD",
+      "oldTitle": "Descubren dinosaurio gigante en Asia: pesaba como nueve elefantes",
+      "newTitle": "Descubren dinosaurio gigante en Asia: pesaba 9 elefantes",
+      "score": 0.75
+    },
+    {
+      "id": "hMOJHKhFSSOUp4LrBDmo",
+      "oldTitle": "Familia recibe respuesta tras búsqueda en río Bravo",
+      "newTitle": "Familia recibe respuesta tras búsqueda en río Bravo",
+      "score": 1
+    },
+    {
+      "id": "eLJeY8NEp62lCIx7Tf5n",
+      "oldTitle": "Investigan fallecimiento de hombre en establecimiento de Managua",
+      "newTitle": "Investigan fallecimiento de hombre en local de Managua",
+      "score": 0.8
+    },
+    {
+      "id": "Bd0FR40BQL9MYKXutpSr",
+      "oldTitle": "OpenAI amenaza con demandar a Apple por crisis de ChatGPT en Siri",
+      "newTitle": "OpenAI amenaza con demandar a Apple por crisis de ChatGPT",
+      "score": 0.8888888888888888
+    },
+    {
+      "id": "XHsdnSKHniKyMI1AWBXL",
+      "oldTitle": "Costa Rica: investigan muerte de nicaragüense y buscan a sus familiare",
+      "newTitle": "Costa Rica: investigan muerte de nicaragüense y buscan a sus familiare",
+      "score": 1
+    },
+    {
+      "id": "DSupNkyxXjdYohRW1EHS",
+      "oldTitle": "Operativo contra caponeras deja multas y unidades retenida en Catarina",
+      "newTitle": "Operativo contra caponeras deja multas y unidades retenida en Catarina",
+      "score": 1
+    },
+    {
+      "id": "erLH7I7s1YQDVJqKKnRm",
+      "oldTitle": "Nacen trillizos en Mulukukú y llenan de alegría a una comunidad",
+      "newTitle": "Nacen trillizos en Mulukukú y llenan de alegría a comunidad",
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "2EQFdVtgjMWe3SN4A9yM",
+      "oldTitle": "Windows 11 ahora se instala más rápido tras cambio de Microsoft",
+      "newTitle": "Windows 11 se instala más rápido tras cambio de Microsoft",
+      "score": 0.875
+    },
+    {
+      "id": "IbgiPTV1eCWCfR7lfDOc",
+      "oldTitle": "Irán exige garantías a la FIFA por falta de visados para el Mundial",
+      "newTitle": "Irán exige garantías a FIFA por falta de visados para Mundial",
+      "score": 1
+    },
+    {
+      "id": "POzMmYcjC7Vy2JHS1KmW",
+      "oldTitle": "Reportan accidente laboral de repartidor nicaragüense",
+      "newTitle": "Reportan accidente laboral de repartidor nicaragüense",
+      "score": 1
+    },
+    {
+      "id": "rKNxcfeotxszuclpLCyI",
+      "oldTitle": "Tres colisiones dejan heridos en Managua y Matagalpa",
+      "newTitle": "Tres colisiones dejan heridos en Managua y Matagalpa",
+      "score": 1
+    },
+    {
+      "id": "DuaMg4XI8aPmAHw8otN1",
+      "oldTitle": "Accidente de moto en Puente Muco deja investigación abierta",
+      "newTitle": "Accidente de moto en Puente Muco deja investigación abierta",
+      "score": 1
+    },
+    {
+      "id": "ZbyMKAULev61O1TnfxSU",
+      "oldTitle": "Consulado asiste a nicaragüense tras accidente en Cartago",
+      "newTitle": "Consulado asiste a nicaragüense tras accidente en Cartago",
+      "score": 1
+    },
+    {
+      "id": "lsUzLddRdDCzSo3R9VkT",
+      "oldTitle": "Fiscalía de California investiga fraude de entradas de la FIFA",
+      "newTitle": "Fiscalía de California investiga fraude de entradas FIFA",
+      "score": 1
+    },
+    {
+      "id": "9r2T2MekDALgdPNQ2Byy",
+      "oldTitle": "Bomberos rescatan a trabajador tras caída en Estelí",
+      "newTitle": "Bomberos rescatan trabajador tras caída en Estelí",
+      "score": 1
+    },
+    {
+      "id": "OHzJfumT84hFTV5SQD6i",
+      "oldTitle": "MINSA atiende a tres menores tras accidente doméstico en Managua",
+      "newTitle": "MINSA atiende a tres menores tras accidente doméstico",
+      "score": 0.875
+    },
+    {
+      "id": "G9pgH30FxK9kUZ9Dqnai",
+      "oldTitle": "Accidente de tránsito en San Ramón deja dos heridos",
+      "newTitle": "Accidente de tránsito en San Ramón deja dos heridos",
+      "score": 1
+    },
+    {
+      "id": "dE7i2Dv4MhE3AVFioLG2",
+      "oldTitle": "Familia nicaragüense gestiona repatriación desde San Francisco",
+      "newTitle": "Familia nicaragüense gestiona repatriación desde San Francisco",
+      "score": 1
+    },
+    {
+      "id": "Api5UGT4aaOWGjHhS8Ya",
+      "oldTitle": "Policía refuerza seguridad en Waslala tras incidente nocturno",
+      "newTitle": "Policía refuerza seguridad en Waslala tras incidente nocturno",
+      "score": 1
+    },
+    {
+      "id": "sRiMFXA51EbxWNAd2GPl",
+      "oldTitle": "Shakira lanza “Dai Dai”, el himno oficial del Mundial 2026",
+      "newTitle": "Shakira lanza Dai Dai, himno oficial del Mundial 2026",
+      "score": 1
+    },
+    {
+      "id": "uERNXPtxMFmHU1rqAC0N",
+      "oldTitle": "Sony Music compra catálogo de Shakira y Beyoncé por millones",
+      "newTitle": "Sony Music compra catálogo de Shakira y Beyoncé",
+      "score": 0.75
+    },
+    {
+      "id": "dgjsES2KHZ3AFaGHIoLt",
+      "oldTitle": "Hallazgo de cuerpo en Muy Muy activa investigación fiscal",
+      "newTitle": "Hallazgo de cuerpo en Muy Muy activa investigación fiscal",
+      "score": 1
+    },
+    {
+      "id": "p3IKfmbWdUPIrSbbOynM",
+      "oldTitle": "Sequía extrema afecta 150 millones de hectáreas en América Latina",
+      "newTitle": "Sequía extrema afecta 150 millones de hectáreas en Latinoamérica",
+      "score": 0.75
+    },
+    {
+      "id": "sPHkzFFWQL3A8PetLIWO",
+      "oldTitle": "Motociclista que atropelló a dos menores es capturado en Jalapa",
+      "newTitle": "Motociclista que atropelló a dos menores es capturado en Jalapa",
+      "score": 1
+    },
+    {
+      "id": "tauy4uXG1uwf1g44zcZ3",
+      "oldTitle": "Semáforos solares modernos entran en funcionamiento en Managua",
+      "newTitle": "Semáforos solares modernos entran en funcionamiento en Managua",
+      "score": 1
+    },
+    {
+      "id": "2QXi7MqebN30PXzQoe2E",
+      "oldTitle": "Consulado asiste a familia nicaragüense tras emergencia en Miami",
+      "newTitle": "Consulado asiste a familia nicaragüense tras emergencia en Miami",
+      "score": 1
+    },
+    {
+      "id": "7ZxP4awpepmzCiOAUizI",
+      "oldTitle": "Tres ahogados en ríos de Nicaragua durante fin de semana",
+      "newTitle": "Tres ahogados en ríos de Nicaragua durante fin de semana",
+      "score": 1
+    },
+    {
+      "id": "ssxa0uOpOPCg9RqLqwpY",
+      "oldTitle": "Menor de edad es retenido tras incidente en Villa Libertad",
+      "newTitle": "Menor de edad es retenido tras incidente en Villa Libertad",
+      "score": 1
+    },
+    {
+      "id": "NPLJwHZ5rPg3bp79XVTO",
+      "oldTitle": "Conductor huye tras atropello mortal en La Ceiba, León",
+      "newTitle": "Conductor huye tras atropello mortal en La Ceiba, León",
+      "score": 1
+    },
+    {
+      "id": "OrxV5HoQWEZ3pjEHwSb8",
+      "oldTitle": "Hallazgo en Carretera Norte activa investigación policial",
+      "newTitle": "Hallazgo en Carretera Norte activa investigación policial",
+      "score": 1
+    },
+    {
+      "id": "CeqPObdhNdy5rBPPYcH5",
+      "oldTitle": "Apagón afecta a miles en León y Poneloya por falla eléctrica",
+      "newTitle": "Apagón afecta a miles en León y Poneloya por falla eléctrica",
+      "score": 1
+    },
+    {
+      "id": "4I2mdwQEGYN7N7M0KTkA",
+      "oldTitle": "Colisión en Jinotepe deja daños materiales y heridos leves",
+      "newTitle": "Colisión en Jinotepe deja daños materiales y heridos leves",
+      "score": 1
+    },
+    {
+      "id": "cW59E7JhZd9PT6Epx2aJ",
+      "oldTitle": "Shakira reúne a dos millones de fans en concierto de Brasil",
+      "newTitle": "Shakira reúne a dos millones de fans en concierto de Brasil",
+      "score": 1
+    },
+    {
+      "id": "lJv8InQKCuFu1Iu0oNRJ",
+      "oldTitle": "Familia busca a joven desaparecido en laguna de Xiloá, Managua",
+      "newTitle": "Familia busca a joven desaparecido en laguna de Xiloá, Managua",
+      "score": 1
+    },
+    {
+      "id": "erUOMi1fsv5GmP1bfFwu",
+      "oldTitle": "Accidente de moto en Jinotega deja un herido grave",
+      "newTitle": "Accidente de moto en Jinotega deja un herido grave",
+      "score": 1
+    },
+    {
+      "id": "c95BYHepil5Vdf9bOUGZ",
+      "oldTitle": "Carlos Vives y Maluma lideran premiación en gala de música latina",
+      "newTitle": "Carlos Vives y Maluma lideran premiación en gala de música latina",
+      "score": 1
+    },
+    {
+      "id": "d9DsarvHBnNcRzfXiwAy",
+      "oldTitle": "Berman Espinoza rompe récord histórico de 1,450 ponches en Nicaragua",
+      "newTitle": "Berman Espinoza rompe récord histórico de 1,450 ponches",
+      "score": 0.875
+    },
+    {
+      "id": "ZTVWiR99Nppa5L2P4wT1",
+      "oldTitle": "Incendio en puesto del Mercado Oriental es controlado por bomberos",
+      "newTitle": "Incendio en puesto del Mercado Oriental controlado por bomberos",
+      "score": 1
+    },
+    {
+      "id": "HkJY4CFD6FMDxksE4Zxf",
+      "oldTitle": "Consulado entrega cuerpo de nicaragüense fallecido en EE.UU.",
+      "newTitle": "Consulado entrega cuerpo de nicaragüense fallecido en EE.UU.",
+      "score": 1
+    },
+    {
+      "id": "8zQOUMwXyazg3NIkJHxg",
+      "oldTitle": "Miles participan en vigilia cristiana con Alex Zurdo en Managua",
+      "newTitle": "Miles participan en vigilia cristiana con Alex Zurdo en Managua",
+      "score": 1
+    },
+    {
+      "id": "MHJfaX05ygumyujBuPa5",
+      "oldTitle": "Hospital pediátrico de Estelí avanza y estará listo en 2026",
+      "newTitle": "Hospital pediátrico de Estelí avanza y estará listo en 2026",
+      "score": 1
+    },
+    {
+      "id": "oBetC1qDrdPvR7QifSDP",
+      "oldTitle": "Netflix anuncia precuela de The Crown sobre familia real británica",
+      "newTitle": "Netflix anuncia precuela The Crown sobre familia real británica",
+      "score": 1
+    },
+    {
+      "id": "jMCRlTyJPKxF2MSiOW3Z",
+      "oldTitle": "Academia de Hollywood limita uso de IA en películas para los Óscar",
+      "newTitle": "Academia de Hollywood limita uso de IA en películas para Óscar",
+      "score": 0.875
+    },
+    {
+      "id": "9nnYjOtCUS1HnZteGuf3",
+      "oldTitle": "Abril registra 70 accidentes de tránsito en Nicaragua",
+      "newTitle": "Abril registra 70 accidentes de tránsito en Nicaragua",
+      "score": 1
+    },
+    {
+      "id": "8TzGIMouh9sFySZbjBPx",
+      "oldTitle": "Fenómeno viral de frutinovelas genera debate sobre IA en redes",
+      "newTitle": "Fenómeno viral de frutinovelas genera debate sobre IA en redes",
+      "score": 1
+    },
+    {
+      "id": "gkAeVBYY9AQBzAYCmjWk",
+      "oldTitle": "Activistas intentan bloquear Wall Street en protesta climática",
+      "newTitle": "Activistas intentan bloquear Wall Street en protesta climática",
+      "score": 1
+    },
+    {
+      "id": "3Dlu4tCQZedztrompEgV",
+      "oldTitle": "Autoridades investigan incidente de tránsito en Matiguás",
+      "newTitle": "Autoridades investigan incidente de tránsito en Matiguás",
+      "score": 1
+    },
+    {
+      "id": "IalAiQKrqinKuD5U0TdE",
+      "oldTitle": "Autoridades investigan incidente acuático en Laguna de Xiloá",
+      "newTitle": "Autoridades investigan incidente acuático en Laguna de Xiloá",
+      "score": 1
+    },
+    {
+      "id": "XMFnv7gCDZtpNNP7wB69",
+      "oldTitle": "MINSA reporta tercer caso por picaduras de insectos en Chontales",
+      "newTitle": "MINSA reporta tercer caso por picaduras de insectos en Chontales",
+      "score": 1
+    },
+    {
+      "id": "5IlK17MUvaqPrJRTfUuR",
+      "oldTitle": "La Costanera: El nuevo motor de inversión inmobiliaria en Nicaragua",
+      "newTitle": "La Costanera: nuevo motor de inversión inmobiliaria en Nicaragua",
+      "score": 1
+    },
+    {
+      "id": "nTkEi14v12nHn18SHdQI",
+      "oldTitle": "Organización migrante reporta 13 decesos de nicaragüenses en EE.UU.",
+      "newTitle": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+      "score": 1
+    },
+    {
+      "id": "yCN8IBbWL1xxPvNhJqTx",
+      "oldTitle": "Justicia en Siuna: Cae sujeto que mató a joven con una piocha",
+      "newTitle": "Justicia en Siuna: Cae sujeto que mató a joven con una piocha",
+      "score": 1
+    },
+    {
+      "id": "yMsw7cfcGLlMbK2CD61L",
+      "oldTitle": "Policía atiende incidente de tránsito en Quilalí",
+      "newTitle": "Policía atiende incidente de tránsito en Quilalí",
+      "score": 1
+    },
+    {
+      "id": "XKRkS7QqHf13v0urZg9C",
+      "oldTitle": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "newTitle": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "score": 1
+    },
+    {
+      "id": "l2YJzk64Os0EVyIRVttN",
+      "oldTitle": "Autoridades investigan incidente vial entre Tipitapa y Boaco",
+      "newTitle": "Autoridades investigan incidente vial entre Tipitapa y Boaco",
+      "score": 1
+    },
+    {
+      "id": "LJTrq7D8iDUGWvO9kxaE",
+      "oldTitle": "Policía investiga hallazgo en carretera de El Jícaro",
+      "newTitle": "Policía investiga hallazgo en carretera de El Jícaro",
+      "score": 1
+    },
+    {
+      "id": "ji2rLsYoOn3VKOsKwQRI",
+      "oldTitle": "\"Michael\" rompe récords como el estreno biográfico más exitoso",
+      "newTitle": "Michael rompe récords como estreno biográfico más exitoso",
+      "score": 1
+    },
+    {
+      "id": "ICRNpizAeFDiL5d1HJvH",
+      "oldTitle": "Expertos analizan rol de IA en ciberseguridad global",
+      "newTitle": "Expertos analizan rol de IA en ciberseguridad global",
+      "score": 1
+    },
+    {
+      "id": "si1jE03Tu4WiIAEygA1I",
+      "oldTitle": "Siuna aplicará multas por arrojar basura desde transporte público",
+      "newTitle": "Siuna aplicará multas por arrojar basura desde transporte público",
+      "score": 1
+    },
+    {
+      "id": "9YSrsEdWBiO9Uu1CV8u6",
+      "oldTitle": "Australia: 7 de cada 10 menores burlan prohibición de redes sociales",
+      "newTitle": "Australia: 7 de cada 10 menores burlan prohibición de redes",
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "f19jnrsNZWCdyHfMbiT9",
+      "oldTitle": "Cae banda señalada de asesinar a guarda de seguridad en Masaya",
+      "newTitle": "Cae banda señalada de asesinar a guarda de seguridad en Masaya",
+      "score": 1
+    },
+    {
+      "id": "I5Ctqa8wJi0TYgi4lW3r",
+      "oldTitle": "Fiscalía investiga deceso de recluso en Matagalpa",
+      "newTitle": "Fiscalía investiga deceso de recluso en Matagalpa",
+      "score": 1
+    },
+    {
+      "id": "HHo7xV5BjPkOVWpafcvB",
+      "oldTitle": "Policía investiga incidente en Ciudad Sandino",
+      "newTitle": "Policía investiga incidente en Ciudad Sandino",
+      "score": 1
+    },
+    {
+      "id": "fyw1t5isNXwzDEjoT266",
+      "oldTitle": "Policía busca a conductor involucrado en incidente en Rosita",
+      "newTitle": "Policía busca a conductor involucrado en incidente en Rosita",
+      "score": 1
+    },
+    {
+      "id": "HASie7C63k5BAKuwsdQU",
+      "oldTitle": "Familiares localizan a adulto mayor tras búsqueda en Las Jagüitas",
+      "newTitle": "Familiares localizan a adulto mayor tras búsqueda en Las Jagüitas",
+      "score": 1
+    },
+    {
+      "id": "rRoTHosjEazP4NLRJul0",
+      "oldTitle": "La NASA presenta el telescopio Roman para descifrar el universo oscuro",
+      "newTitle": "La NASA presenta el telescopio Roman para descifrar el universo oscuro",
+      "score": 1
+    },
+    {
+      "id": "JgF9ievsdzhnOwtqh70S",
+      "oldTitle": "Taylor Swift busca registrar su voz como marca ante el auge de la IA",
+      "newTitle": "Taylor Swift busca registrar su voz como marca ante auge de la IA",
+      "score": 1
+    },
+    {
+      "id": "nBDHAoiCgbp81dSmIYqT",
+      "oldTitle": "Policía investiga caso en Sébaco; detienen a sospechoso",
+      "newTitle": "Policía investiga caso en Sébaco; detienen a sospechoso",
+      "score": 1
+    },
+    {
+      "id": "D1ga76tETxisZGZGAlst",
+      "oldTitle": "Luca Zidane recibe atención médica; evalúan su participación",
+      "newTitle": "Luca Zidane recibe atención médica; club evalúa recuperación",
+      "score": 0.625
+    },
+    {
+      "id": "hqG7Wlt0ce9IebupbCvy",
+      "oldTitle": "Policía guatemalteca reporta detención de nicaragüense",
+      "newTitle": "Policía guatemalteca reporta detención nicaragüense",
+      "score": 1
+    },
+    {
+      "id": "6W5tgAUCaM1w9lsSjA6Z",
+      "oldTitle": "MINSA reporta incidente vial de funcionario en Carretera Norte",
+      "newTitle": "MINSA reporta incidente vial de funcionario en Carretera Norte",
+      "score": 1
+    },
+    {
+      "id": "qAGYHKq4PG7PnXhkUvWa",
+      "oldTitle": "Costa Rica invita a Nicaragua a toma de posesión de Laura Fernández",
+      "newTitle": "Costa Rica invita a Nicaragua a toma posesión de Laura Fernández",
+      "score": 1
+    },
+    {
+      "id": "zwqEVVwFeeMooUBQpBR7",
+      "oldTitle": "Investigan muerte de mujer en bus de la ruta Jalapa-Ocotal",
+      "newTitle": "Investigan muerte de mujer en bus de la ruta Jalapa-Ocotal",
+      "score": 1
+    },
+    {
+      "id": "OKGf076aUjmSNv1k1ret",
+      "oldTitle": "Pena máxima para asesino de adolescente en Santo Domingo, Chontales",
+      "newTitle": "Pena máxima para asesino adolescente en Santo Domingo, Chontales",
+      "score": 1
+    },
+    {
+      "id": "sOZp2AGCVvYQ2I5oK0Dj",
+      "oldTitle": "Cae guatemalteco con 23 kilos de cocaína en frontera El Guasaule",
+      "newTitle": "Cae guatemalteco con 23 kilos de cocaína en frontera El Guasaule",
+      "score": 1
+    },
+    {
+      "id": "ZPJlw7kAwozc29ZakeiD",
+      "oldTitle": "Autoridades investigan incidente de tránsito en Jinotepe",
+      "newTitle": "Autoridades investigan incidente de tránsito en Jinotepe",
+      "score": 1
+    },
+    {
+      "id": "LtSsDQVXjtAAzNH0tUAH",
+      "oldTitle": "Policía investiga incidente vial entre Boaco y Camoapa",
+      "newTitle": "Policía investiga incidente vial entre Boaco y Camoapa",
+      "score": 1
+    },
+    {
+      "id": "T0RH7caMTB8Ydm3AgVPJ",
+      "oldTitle": "Clima extremo en Nicaragua: Tornado en Somotillo y granizo en Jinotepe",
+      "newTitle": "Clima extremo en Nicaragua: Tornado en Somotillo y granizo en Jinotepe",
+      "score": 1
+    },
+    {
+      "id": "ctq3W0kZtNipZL2X9KTN",
+      "oldTitle": "Autoridades investigan incidente con unidad de transporte",
+      "newTitle": "Autoridades investigan incidente con unidad de transporte",
+      "score": 1
+    },
+    {
+      "id": "Bad5bgJKE5uYOdW3NeRf",
+      "oldTitle": "Luka Modrić recibe tratamiento médico; club evalúa recuperación",
+      "newTitle": "Luka Modrić recibe tratamiento médico; club evalúa recuperación",
+      "score": 1
+    },
+    {
+      "id": "FCDK20FxyiuMz1kHDjqb",
+      "oldTitle": "MINSA evalúa situación de salud en evento en El Rama",
+      "newTitle": "MINSA evalúa situación de salud en evento en El Rama",
+      "score": 1
+    },
+    {
+      "id": "ta1dOmtT9uQpxvmhYtEu",
+      "oldTitle": "Autoridades reportan incidentes viales en Granada y Matagalpa",
+      "newTitle": "Autoridades reportan incidentes viales en Granada y Matagalpa",
+      "score": 1
+    },
+    {
+      "id": "7AszCzTNxJWBnt1daHag",
+      "oldTitle": "Canal de Panamá: Buques pagan hasta $4 millones por crisis en Ormuz",
+      "newTitle": "Canal de Panamá: buques pagan $4 millones por crisis en Ormuz",
+      "score": 0.8888888888888888
+    },
+    {
+      "id": "L23qf1SLBkKo49Z2OPIP",
+      "oldTitle": "¡Histórico! Sebastián Sawe rompe la barrera de las 2 horas en maratón",
+      "newTitle": "¡Histórico! Sebastián Sawe rompe barrera de 2 horas en maratón",
+      "score": 0.875
+    },
+    {
+      "id": "HQrOHqjbqOXB4ZTs22vl",
+      "oldTitle": "Bomberos controlan incendio en Masaya; evalúan daños materiales",
+      "newTitle": "Bomberos controlan incendio en Masaya; evalúan daños materiales",
+      "score": 1
+    },
+    {
+      "id": "PCNXb9Gqsio9AzUetMQJ",
+      "oldTitle": "Consulado gestiona caso de connacional en Puntarenas",
+      "newTitle": "Consulado gestiona caso de connacional en Puntarenas",
+      "score": 1
+    },
+    {
+      "id": "UQfMofCdPniSsNvGFf7J",
+      "oldTitle": "Policía investiga incidente en carretera Costanera, Rivas",
+      "newTitle": "Policía investiga incidente en carretera Costanera, Rivas",
+      "score": 1
+    },
+    {
+      "id": "OWppqYU03AfZQHIoqEL7",
+      "oldTitle": "Buscan a sospechoso de muerte de ciudadano en Asang, Waspam",
+      "newTitle": "Buscan a sospechoso de muerte de ciudadano en Asang, Waspam",
+      "score": 1
+    },
+    {
+      "id": "BN739xoxA2gVCf5KUWTV",
+      "oldTitle": "Samsung prepara revolución: Baterías de silicio-carbono para el Galaxy S27",
+      "newTitle": "Samsung prepara baterías silicio-carbono para Galaxy S27",
+      "score": 0.8888888888888888
+    },
+    {
+      "id": "7XhLLKm4xgL5vtfLLCU3",
+      "oldTitle": "MINSA intensifica vacunación contra el COVID-19 en San Francisco Libre",
+      "newTitle": "MINSA intensifica vacunación contra el COVID-19 en San Francisco Libre",
+      "score": 1
+    },
+    {
+      "id": "Bfl8jRGnLPIQDS1qXqGq",
+      "oldTitle": "MINSA reporta tercer caso médico por insectos en Chontales",
+      "newTitle": "MINSA reporta tercer caso médico por insectos en Chontales",
+      "score": 1
+    },
+    {
+      "id": "8ePAwlFzkvYLwHi08zCi",
+      "oldTitle": "Autoridades investigan incidente laboral en pozo de Madriz",
+      "newTitle": "Autoridades investigan incidente laboral en pozo de Madriz",
+      "score": 1
+    },
+    {
+      "id": "YlSYUQ3nTXWziLYkld74",
+      "oldTitle": "Policía investiga incidente vial en Jalapa, Nueva Segovia",
+      "newTitle": "Policía investiga incidente vial en Jalapa, Nueva Segovia",
+      "score": 1
+    },
+    {
+      "id": "TVgb0tVY15haE16LYOy3",
+      "oldTitle": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+      "newTitle": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+      "score": 1
+    },
+    {
+      "id": "sbg2Bm2F9YeslOZe4UXJ",
+      "oldTitle": "Pánico en México: Activan operativos por reto de TikTok en escuelas",
+      "newTitle": "Pánico en México: operativos por reto de TikTok en escuelas",
+      "score": 0.875
+    },
+    {
+      "id": "aNWsSWkbLlE6FiLkVqmF",
+      "oldTitle": "Miel San Marcos realiza concierto en centro de rehabilitación",
+      "newTitle": "Miel San Marcos realiza concierto en centro de rehabilitación",
+      "score": 1
+    },
+    {
+      "id": "Oejz1UtxGZb7LTATa6WP",
+      "oldTitle": "Jannik Sinner tras baja de Alcaraz: \"El tenis necesita a Carlos\"",
+      "newTitle": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
+      "score": 1
+    },
+    {
+      "id": "Rgbpy7e3fBdG8oDgfVEZ",
+      "oldTitle": "Avanza construcción del Hospital Pediátrico Las Segovias en Estelí",
+      "newTitle": "Avanza construcción Hospital Pediátrico Las Segovias, Estelí",
+      "score": 0.875
+    },
+    {
+      "id": "yXELqcLI6Xh3Mcfe4cSp",
+      "oldTitle": "Fiscalía abre investigación tras hallazgo en Telica, León",
+      "newTitle": "Fiscalía investiga hallazgo en Telica, León",
+      "score": 0.5714285714285714
+    },
+    {
+      "id": "DlEsvr8msov0zXZiUSfP",
+      "oldTitle": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+      "newTitle": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+      "score": 1
+    },
+    {
+      "id": "u8TvXrAQfYYIU8A6jnwM",
+      "oldTitle": "Google invierte USD 40,000 millones en IA y sacude el mercado",
+      "newTitle": "Google invierte USD 40,000 millones en IA y sacude el mercado",
+      "score": 1
+    },
+    {
+      "id": "D5bci9JLyako7ccewIGc",
+      "oldTitle": "Policía costarricense investiga caso de violencia",
+      "newTitle": "Policía costarricense investiga caso de violencia",
+      "score": 1
+    },
+    {
+      "id": "1PRR0VQRF8oXLfzFDhm5",
+      "oldTitle": "Oklahoma evalúa impacto de fenómenos climáticos recientes",
+      "newTitle": "Oklahoma evalúa impacto de fenómenos climáticos",
+      "score": 0.8333333333333334
+    },
+    {
+      "id": "spER21JvxCJDsMfv63cX",
+      "oldTitle": "Policía reporta incidentes viales con funcionarios en servicio",
+      "newTitle": "Policía reporta incidentes viales con funcionarios",
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "4rdCg3m1oNikSJP4nZjH",
+      "oldTitle": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+      "newTitle": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+      "score": 1
+    },
+    {
+      "id": "SlbddUkqFREvSt9QddmR",
+      "oldTitle": "Policía investiga incidente vial en carretera a Jalapa",
+      "newTitle": "Policía investiga incidente vial en carretera Jalapa",
+      "score": 1
+    },
+    {
+      "id": "Nl4bnTyEQONPW10OTmtc",
+      "oldTitle": "Magnicidio en Haití: Inicia en Miami juicio contra cómplices",
+      "newTitle": "Magnicidio en Haití: juicio contra cómplices inicia en Miami",
+      "score": 1
+    },
+    {
+      "id": "XFnwUlvyLVKUbFVdrTUL",
+      "oldTitle": "Guerra en Irán: Por qué subirán de precio los condones en el mundo",
+      "newTitle": "Guerra en Irán: por qué subirán precio de condones en el mundo",
+      "score": 0.8888888888888888
+    },
+    {
+      "id": "PvmeAqNv4cyfztLFhqMO",
+      "oldTitle": "Microsoft y Meta ajustan sus plantillas para acelerar la IA",
+      "newTitle": "Microsoft y Meta ajustan plantillas para acelerar la IA",
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "1EMwcTEbV1ugQWmqVUAt",
+      "oldTitle": "Accidente de tránsito en Larreynaga deja heridos y daños",
+      "newTitle": "Accidente de tránsito en Larreynaga deja heridos",
+      "score": 0.8333333333333334
+    }
+  ],
+  "unmatched": []
+}

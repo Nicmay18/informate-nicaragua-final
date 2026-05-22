@@ -1,1750 +1,826 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nicaragua Informate - Noticias de Nicaragua</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f1b33">
+  <title>Nicaragua Informate — Noticias de Nicaragua y el Mundo</title>
+  <meta name="description" content="Portal de noticias de Nicaragua. Cobertura nacional e internacional en tiempo real. Economía, política, deportes, tecnología y más.">
+  <base target="_blank">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f1b33;
+      --primary-light: #1a2d4d;
+      --primary-dark: #080f1f;
+      --accent: #c9a96e;
+      --accent-hover: #b8945a;
+      --accent-light: #e8dcc8;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --bg: #f0eeea;
+      --surface: #ffffff;
+      --surface-2: #f8f7f5;
+      --surface-3: #f2f1ef;
+      --text: #111111;
+      --text-secondary: #4a4a4a;
+      --text-muted: #737373;
+      --text-light: #a3a3a3;
+      --border: #e2e0db;
+      --border-light: #f0eeea;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+      --shadow-xl: 0 24px 80px rgba(0,0,0,0.14);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    [data-theme="dark"] {
+      --bg: #050810;
+      --surface: #0c1220;
+      --surface-2: #111827;
+      --surface-3: #161f32;
+      --text: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --text-muted: #6b7280;
+      --text-light: #4b5563;
+      --border: #1f2937;
+      --border-light: #111827;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.5);
+      --shadow-xl: 0 24px 80px rgba(0,0,0,0.6);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: var(--transition); -webkit-font-smoothing: antialiased; padding-bottom: 80px; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    ul, ol { list-style: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    .progress-bar { position: fixed; top: 0; left: 0; height: 3px; z-index: 9999; width: 0%; background: linear-gradient(90deg, var(--accent), var(--danger)); transition: width 0.1s linear; }
 
-        :root {
-            --bg: #f0f2f5;
-            --bg-white: #ffffff;
-            --bg-dark: #0f172a;
-            --bg-dark-secondary: #1e293b;
-            --text: #0f172a;
-            --text-dark: #e2e8f0;
-            --text-secondary: #475569;
-            --text-secondary-dark: #94a3b8;
-            --text-muted: #64748b;
-            --text-muted-dark: #94a3b8;
-            --border: #e2e8f0;
-            --border-dark: #334155;
-            --accent: #dc2626;
-            --accent-hover: #b91c1c;
-            --accent-light: #fef2f2;
-            --shadow: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.08);
-            --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
-            --radius: 16px;
-            --radius-sm: 12px;
-            --max-width: 1200px;
-            --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .topbar { background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%); color: rgba(255,255,255,0.88); font-size: 0.72rem; padding: 0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: relative; }
+    .topbar::-webkit-scrollbar { display: none; }
+    .topbar-inner { display: flex; align-items: stretch; gap: 0; max-width: 1400px; margin: 0 auto; }
+    .topbar-item { display: flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 14px; border-right: 1px solid rgba(255,255,255,0.08); }
+    .topbar-item .label { color: var(--accent); font-weight: 700; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.8px; }
+    .topbar-item .value { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 0.78rem; }
+    .topbar-item .up { color: #4ade80; font-size: 0.7rem; }
+    .topbar-item .down { color: #f87171; font-size: 0.7rem; }
+    .topbar-item .neutral { color: #fbbf24; font-size: 0.7rem; }
 
-        [data-theme="dark"] {
-            --bg: #0f172a;
-            --bg-white: #1e293b;
-            --text: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: #334155;
-            --shadow: 0 1px 3px rgba(0,0,0,0.3);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.4);
-            --shadow-xl: 0 20px 40px rgba(0,0,0,0.5);
-        }
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.3rem; letter-spacing: -0.5px; color: var(--primary); }
+    .logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--accent); }
+    .logo span { color: var(--accent); font-weight: 700; }
+    .nav-desktop { display: none; gap: 32px; align-items: center; }
+    .nav-desktop a { font-weight: 600; font-size: 0.82rem; color: var(--text-secondary); position: relative; padding: 4px 0; letter-spacing: 0.2px; }
+    .nav-desktop a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2.5px; background: var(--accent); transition: var(--transition); border-radius: 2px; }
+    .nav-desktop a:hover { color: var(--primary); }
+    .nav-desktop a:hover::after { width: 100%; }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-icon { width: 40px; height: 40px; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+    .btn-icon:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+    .btn-donate { display: none; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); color: var(--primary); padding: 8px 18px; border-radius: 100px; font-weight: 700; font-size: 0.8rem; transition: var(--transition); }
+    .btn-donate:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,169,110,0.4); }
 
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-        }
-        body {
-            font-family: var(--font-sans);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-            -webkit-font-smoothing: antialiased;
-        }
+    .radio-player { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 16px; position: sticky; top: 56px; z-index: 999; backdrop-filter: blur(20px); background: rgba(255,255,255,0.96); }
+    [data-theme="dark"] .radio-player { background: rgba(12,18,32,0.96); }
+    .radio-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+    .radio-btn { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); box-shadow: 0 3px 12px rgba(15,27,51,0.35); }
+    .radio-btn.playing { animation: radioPulse 2.2s infinite; }
+    @keyframes radioPulse { 0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,0.5)} 50%{box-shadow:0 0 0 14px rgba(201,169,110,0)} }
+    .radio-info { flex: 1; min-width: 0; }
+    .radio-info h4 { font-size: 0.82rem; font-weight: 800; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
+    [data-theme="dark"] .radio-info h4 { color: var(--text); }
+    .radio-info p { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .radio-station-selector { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .station-pill { padding: 6px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 100px; font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: var(--transition); white-space: nowrap; }
+    .station-pill:hover { border-color: var(--accent); }
+    .station-pill.active { background: var(--accent); color: var(--primary); border-color: var(--accent); }
+    .station-dropdown { display: none; position: relative; }
+    .station-dropdown-btn { padding: 8px 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); cursor: pointer; }
+    .station-dropdown-menu { position: absolute; top: calc(100% + 6px); right: 0; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); min-width: 200px; z-index: 100; overflow: hidden; display: none; }
+    .station-dropdown.open .station-dropdown-menu { display: block; }
+    .station-option { padding: 10px 14px; font-size: 0.85rem; cursor: pointer; transition: var(--transition); border-bottom: 1px solid var(--border-light); }
+    .station-option:last-child { border-bottom: none; }
+    .station-option:hover { background: var(--bg); }
+    .station-option.active { background: var(--accent-light); color: var(--primary); font-weight: 700; }
+    .radio-live { display: inline-flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 700; color: var(--danger); text-transform: uppercase; letter-spacing: 1px; }
+    .radio-live::before { content: ''; width: 7px; height: 7px; background: var(--danger); border-radius: 50%; animation: livePulse 1.5s infinite; }
+    @keyframes livePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+    .radio-wave { display: flex; align-items: flex-end; gap: 3px; height: 22px; }
+    .radio-wave span { width: 3.5px; background: linear-gradient(to top, var(--accent), var(--accent-hover)); border-radius: 3px; animation: wave 1.2s ease-in-out infinite; }
+    .radio-wave span:nth-child(1) { height: 7px; animation-delay: 0s; }
+    .radio-wave span:nth-child(2) { height: 18px; animation-delay: 0.15s; }
+    .radio-wave span:nth-child(3) { height: 12px; animation-delay: 0.3s; }
+    .radio-wave span:nth-child(4) { height: 22px; animation-delay: 0.1s; }
+    .radio-wave span:nth-child(5) { height: 9px; animation-delay: 0.25s; }
+    .radio-wave span:nth-child(6) { height: 15px; animation-delay: 0.05s; }
+    @keyframes wave { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(0.4)} }
+    .radio-wave.paused span { animation: none; height: 4px; opacity: 0.4; }
 
-        /* ===== TOP BAR ===== */
-        .top-bar {
-            background: #0f172a;
-            color: #fff;
-            font-size: 11px;
-            padding: 8px 0;
-            font-weight: 600;
-        }
-        .top-bar-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .top-bar-date { text-transform: uppercase; letter-spacing: 1px; }
-        .top-bar-social {
-            display: flex;
-            gap: 16px;
-            list-style: none;
-            font-size: 11px;
-        }
-        .top-bar-social a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        .top-bar-social a:hover { color: #fff; }
-        [data-theme="dark"] .top-bar { background: #020617; }
+    .breaking-news { background: linear-gradient(90deg, var(--danger) 0%, #991b1b 100%); color: white; overflow: hidden; position: relative; }
+    .breaking-inner { display: flex; align-items: center; max-width: 1400px; margin: 0 auto; height: 36px; }
+    .breaking-label { display: flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 0 14px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.25); height: 100%; }
+    .breaking-label::before { content: ''; width: 7px; height: 7px; background: white; border-radius: 50%; animation: livePulse 1.5s infinite; }
+    .breaking-ticker { flex: 1; overflow: hidden; position: relative; }
+    .breaking-ticker-track { display: flex; align-items: center; gap: 32px; animation: ticker 35s linear infinite; width: max-content; padding-left: 100%; }
+    .breaking-ticker-track:hover { animation-play-state: paused; }
+    .breaking-item { display: flex; align-items: center; gap: 10px; flex-shrink: 0; font-size: 0.78rem; white-space: nowrap; }
+    .breaking-item .time { background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 100px; font-size: 0.65rem; font-weight: 700; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* ===== HEADER ===== */
-        .header {
-            background: var(--bg-white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-        .header-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-        .logo-img {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 900;
-            font-size: 14px;
-        }
-        .logo-text {
-            font-family: var(--font-serif);
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--text);
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
-        .logo-text small {
-            display: block;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
-            margin-top: 2px;
-        }
-        .nav {
-            display: flex;
-            gap: 28px;
-            list-style: none;
-        }
-        .nav a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 13px;
-            transition: var(--transition);
-            position: relative;
-            padding-bottom: 4px;
-        }
-        .nav a:hover { color: var(--accent); }
-        .nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-        .nav a:hover::after { width: 100%; }
+    .hero { max-width: 1400px; margin: 0 auto; padding: 24px 16px 0; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .hero-main { position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
+    .hero-main img { width: 100%; height: 260px; object-fit: cover; }
+    .hero-main .overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(15,27,51,0.92)); padding: 40px 20px 20px; }
+    .hero-main .tag { display: inline-block; background: var(--accent); color: var(--primary); padding: 4px 12px; border-radius: 100px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .hero-main h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 900; color: white; line-height: 1.2; margin-bottom: 8px; }
+    .hero-main .meta { font-size: 0.78rem; color: rgba(255,255,255,0.75); }
+    .hero-side { display: flex; flex-direction: column; gap: 14px; }
+    .hero-card { display: flex; gap: 12px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 12px; transition: var(--transition); }
+    .hero-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .hero-card img { width: 90px; height: 70px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+    .hero-card .tag { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 4px; }
+    .hero-card h3 { font-size: 0.9rem; font-weight: 700; line-height: 1.35; color: var(--text); margin-bottom: 4px; }
+    .hero-card span { font-size: 0.75rem; color: var(--text-muted); }
 
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .theme-toggle, .search-icon, .menu-toggle {
-            background: none;
-            border: 1px solid var(--border);
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            cursor: pointer;
-            color: var(--text);
-            font-size: 15px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .theme-toggle:hover, .search-icon:hover, .menu-toggle:hover { 
-            background: var(--accent); 
-            color: #fff; 
-            border-color: var(--accent);
-        }
+    .trending { max-width: 1400px; margin: 0 auto; padding: 20px 16px; }
+    .trending-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .trending-title::before { content: ''; width: 4px; height: 22px; background: var(--accent); border-radius: 2px; }
+    .trending-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .trending-chip { padding: 8px 16px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 100px; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); transition: var(--transition); cursor: pointer; }
+    .trending-chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Mobile Menu */
-        .menu-toggle { display: none; }
-        .mobile-nav {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--bg-white);
-            border-bottom: 2px solid var(--accent);
-            padding: 20px;
-            box-shadow: var(--shadow-xl);
-            z-index: 999;
-        }
-        .mobile-nav.active { display: block; }
-        .mobile-nav ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-        .mobile-nav a {
-            display: block;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-        .mobile-nav a:hover { color: var(--accent); padding-left: 8px; }
+    .main-layout { max-width: 1400px; margin: 0 auto; padding: 0 16px 40px; display: grid; grid-template-columns: 1fr; gap: 24px; }
 
-        /* ===== BREAKING BAR ===== */
-        .breaking-bar {
-            background: var(--accent);
-            color: #fff;
-            padding: 12px 0;
-            font-size: 13px;
-            font-weight: 600;
-            overflow: hidden;
-        }
-        .breaking-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .breaking-label {
-            background: rgba(0,0,0,0.25);
-            padding: 5px 12px;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            border-radius: 4px;
-        }
-        .breaking-text {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            min-width: 0;
-        }
-        .breaking-text a { color: #fff; text-decoration: none; transition: opacity 0.2s; }
-        .breaking-text a:hover { opacity: 0.85; text-decoration: underline; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .section-title::before { content: ''; width: 4px; height: 24px; background: var(--accent); border-radius: 2px; }
 
-        /* ===== SWIPER ===== */
-        .swiper-section {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 32px 20px 0;
-            width: 100%;
-        }
-        .swiper {
-            width: 100%;
-            height: 460px;
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        .swiper-slide {
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border-radius: var(--radius);
-        }
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .swiper-slide:hover img { transform: scale(1.04); }
-        .swiper-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 80px 36px 36px;
-            background: linear-gradient(transparent 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.92) 100%);
-            color: #fff;
-            border-radius: 0 0 var(--radius) var(--radius);
-        }
-        .swiper-tag {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
-            margin-bottom: 14px;
-            background: var(--accent);
-            padding: 6px 14px;
-            border-radius: 4px;
-        }
-        .swiper-title {
-            font-family: var(--font-serif);
-            font-size: clamp(24px, 3.2vw, 38px);
-            font-weight: 900;
-            line-height: 1.15;
-            max-width: 720px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-        }
-        .swiper-meta {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-top: 14px;
-            display: flex;
-            gap: 18px;
-            font-weight: 500;
-        }
-        .swiper-pagination-bullet {
-            background: rgba(255,255,255,0.4);
-            width: 8px;
-            height: 8px;
-            opacity: 1;
-            transition: var(--transition);
-        }
-        .swiper-pagination-bullet-active {
-            background: var(--accent);
-            width: 28px;
-            border-radius: 4px;
-        }
-        .swiper-button-next, .swiper-button-prev {
-            color: #fff;
-            background: rgba(0,0,0,0.35);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            transition: var(--transition);
-            backdrop-filter: blur(4px);
-        }
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-            background: var(--accent);
-        }
-        .swiper-button-next::after, .swiper-button-prev::after {
-            font-size: 16px;
-            font-weight: 800;
-        }
+    .news-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .news-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: var(--transition); box-shadow: var(--shadow-sm); }
+    .news-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .news-card img { width: 100%; height: 180px; object-fit: cover; }
+    .news-card .content { padding: 16px; }
+    .news-card .tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); margin-bottom: 8px; }
+    .news-card h3 { font-size: 1.05rem; font-weight: 700; line-height: 1.35; color: var(--text); margin-bottom: 8px; }
+    .news-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 10px; }
+    .news-card .meta { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: var(--text-muted); }
 
-        /* ===== MAIN LAYOUT ===== */
-        .main {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 340px;
-            gap: 32px;
-            align-items: start;
-        }
-        .main-content {
-            min-width: 0;
-            overflow: hidden;
-        }
+    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .sidebar-widget { background: var(--surface); border-radius: var(--radius-md); padding: 20px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
+    .widget-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; margin-bottom: 16px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+    .widget-title::before { content: ''; width: 4px; height: 22px; background: var(--accent); border-radius: 2px; }
 
-        /* ===== SECTION HEADERS ===== */
-        .section-header {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
-            position: relative;
-        }
-        .section-header::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 80px;
-            height: 2px;
-            background: var(--accent);
-        }
-        .section-title {
-            font-family: var(--font-serif);
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--text);
-            letter-spacing: -0.3px;
-        }
-        .section-link {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--accent);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            transition: var(--transition);
-        }
-        .section-link:hover { color: var(--accent-hover); text-decoration: underline; }
+    .eco-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .eco-item { padding: 12px; background: var(--bg); border-radius: var(--radius-sm); text-align: center; }
+    .eco-item .label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; }
+    .eco-item .value { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .eco-item .change { font-size: 0.7rem; margin-top: 2px; }
+    .eco-fuels { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .eco-fuels-title { font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .eco-fuel-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.82rem; border-bottom: 1px solid var(--border-light); }
+    .eco-fuel-item:last-child { border-bottom: none; }
+    .eco-footer { font-size: 0.68rem; color: var(--text-light); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
 
-        /* ===== NEWS GRID ===== */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            width: 100%;
-        }
-        .news-card {
-            cursor: pointer;
-            transition: var(--transition);
-            background: var(--bg-white);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-        .news-card:hover { 
-            box-shadow: var(--shadow-lg); 
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-        .news-card-image {
-            position: relative;
-            overflow: hidden;
-        }
-        .news-card-image img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16/10;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-        .news-card:hover .news-card-image img { transform: scale(1.03); }
-        .news-card-tag {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            background: var(--accent);
-            color: #fff;
-            padding: 5px 12px;
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
-        }
-        .news-card-body { padding: 20px; }
-        .news-card-title {
-            font-family: var(--font-serif);
-            font-size: 17px;
-            font-weight: 800;
-            line-height: 1.45;
-            margin-bottom: 10px;
-            color: var(--text);
-            transition: color 0.2s;
-        }
-        .news-card:hover .news-card-title { color: var(--accent); }
-        .news-card-excerpt {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.65;
-            margin-bottom: 14px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .news-card-meta {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            gap: 14px;
-        }
+    .weather-widget { background: linear-gradient(160deg, #1e3a5f 0%, #0f172a 100%); border-radius: var(--radius-lg); padding: 20px; color: white; }
+    .weather-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .weather-header h4 { font-size: 0.95rem; font-weight: 800; }
+    .weather-header span { font-size: 0.75rem; opacity: 0.7; }
+    .weather-main { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .weather-main .icon { font-size: 2.8rem; }
+    .weather-main .temp { font-size: 2.4rem; font-weight: 900; }
+    .weather-main .info { font-size: 0.8rem; opacity: 0.85; }
+    .weather-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .weather-detail { text-align: center; padding: 8px; background: rgba(255,255,255,0.08); border-radius: var(--radius-sm); font-size: 0.7rem; }
+    .weather-detail .label { opacity: 0.7; margin-bottom: 2px; }
+    .weather-detail .val { font-weight: 700; font-size: 0.85rem; }
+    .weather-forecast { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .weather-forecast .day { text-align: center; padding: 8px 4px; background: rgba(255,255,255,0.08); border-radius: var(--radius-sm); font-size: 0.68rem; }
+    .weather-forecast .day .icon { font-size: 1.1rem; margin-bottom: 4px; }
+    .weather-forecast .day .temp { font-weight: 700; }
+    .weather-city-rotate { position: relative; height: 80px; overflow: hidden; }
+    .weather-city-slide { position: absolute; inset: 0; display: flex; align-items: center; gap: 14px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .weather-city-slide.active { opacity: 1; transform: translateY(0); }
+    .weather-city-slide .icon { font-size: 2.5rem; }
+    .weather-city-slide .name { font-size: 1.1rem; font-weight: 700; }
+    .weather-city-slide .temp { font-size: 1.6rem; font-weight: 900; margin-left: auto; }
 
-        /* ===== MÁS LEÍDAS ===== */
-        .most-read-section { margin-bottom: 48px; }
-        .most-read-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-        .most-read-card {
-            display: flex;
-            gap: 14px;
-            cursor: pointer;
-            padding: 18px;
-            background: var(--bg-white);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            align-items: flex-start;
-            overflow: hidden;
-        }
-        .most-read-card:hover {
-            border-color: var(--accent);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-2px);
-        }
-        .most-read-number {
-            font-family: var(--font-serif);
-            font-size: 32px;
-            font-weight: 900;
-            color: var(--accent);
-            line-height: 1;
-            min-width: 36px;
-            text-align: center;
-            opacity: 0.9;
-        }
-        .most-read-content { flex: 1; }
-        .most-read-title {
-            font-family: var(--font-serif);
-            font-size: 14px;
-            font-weight: 800;
-            line-height: 1.45;
-            color: var(--text);
-            margin-bottom: 6px;
-            transition: color 0.2s;
-        }
-        .most-read-card:hover .most-read-title { color: var(--accent); }
-        .most-read-meta {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+    .topbar-carousel { position: relative; overflow: hidden; flex: 1; height: 36px; }
+    .topbar-carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .topbar-carousel-item { display: flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 14px; font-size: 0.72rem; border-right: 1px solid rgba(255,255,255,0.08); }
+    .topbar-carousel-item .label { color: var(--accent); font-weight: 700; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.8px; }
+    .topbar-carousel-item .value { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 0.78rem; }
 
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            min-width: 340px;
-            width: 340px;
-        }
-        .sidebar-widget {
-            background: var(--bg-white);
-            border-radius: var(--radius);
-            padding: 24px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-        .widget-title {
-            font-family: var(--font-serif);
-            font-size: 13px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 18px;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .widget-title::before {
-            content: '';
-            width: 4px;
-            height: 18px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
+    .ad-sidebar { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 20px; text-align: center; position: relative; }
+    .ad-sidebar::before { content: 'PUBLICIDAD'; position: absolute; top: 6px; right: 10px; font-size: 0.55rem; font-weight: 800; color: var(--text-light); letter-spacing: 1.5px; }
+    .ad-sidebar img { width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-sm); margin-bottom: 12px; }
+    .ad-sidebar h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .ad-sidebar p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
+    .ad-sidebar .btn { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: white; padding: 8px 18px; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 700; }
+    .ad-sidebar .btn:hover { background: var(--accent); color: var(--primary); }
 
-        /* Newsletter */
-        .newsletter-box p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 14px;
-        }
-        .newsletter-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .newsletter-form input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 13px;
-            font-family: var(--font-sans);
-        }
-        .newsletter-form input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        .newsletter-form button {
-            width: 100%;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-family: var(--font-sans);
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .newsletter-form button:hover { background: var(--accent-hover); }
+    .trending-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1.5px solid var(--border); transition: var(--transition); }
+    .trending-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .trending-item:first-child { padding-top: 0; }
+    .trending-item:hover { padding-left: 6px; }
+    .trending-num { font-size: 1.3rem; font-weight: 900; color: var(--accent); line-height: 1; min-width: 26px; }
+    .trending-content h4 { font-size: 0.88rem; font-weight: 700; line-height: 1.4; margin-bottom: 3px; color: var(--text); }
+    .trending-content span { font-size: 0.75rem; color: var(--text-muted); }
 
-        /* Radio Widget */
-        .radio-widget {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #fff;
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-        .radio-widget::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 200px;
-            height: 200px;
-            background: rgba(220, 38, 38, 0.15);
-            border-radius: 50%;
-            filter: blur(40px);
-        }
-        .radio-widget .widget-title {
-            color: #fff;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-widget .widget-title::before {
-            background: #ef4444;
-        }
-        .radio-live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        .radio-station {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-program {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-play {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--accent);
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-        .radio-play:hover {
-            background: var(--accent-hover);
-            transform: scale(1.05);
-        }
-        .radio-volume {
-            flex: 1;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-        .radio-volume-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 70%;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        .radio-volume-knob {
-            position: absolute;
-            left: 70%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 14px;
-            height: 14px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
+    .cat-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cat-tag { padding: 8px 16px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 100px; font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); transition: var(--transition); cursor: pointer; }
+    .cat-tag:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Weather Dark Card */
-        .weather-widget {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #fff;
-            border: none;
-            padding: 0;
-            overflow: hidden;
-        }
-        .weather-widget .widget-title {
-            color: #fff;
-            padding: 20px 20px 0;
-        }
-        .weather-widget .widget-title::before {
-            background: #f59e0b;
-        }
-        .weather-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px 16px;
-        }
-        .weather-temp-main {
-            font-family: var(--font-serif);
-            font-size: 48px;
-            font-weight: 900;
-            color: #fff;
-            line-height: 1;
-        }
-        .weather-icon-main {
-            font-size: 48px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-        .weather-desc-main {
-            font-size: 14px;
-            color: #94a3b8;
-            padding: 0 20px 16px;
-            font-weight: 500;
-        }
-        .weather-details-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 0 20px 20px;
-        }
-        .weather-detail-card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 10px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .weather-detail-icon {
-            font-size: 18px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-        }
-        .weather-detail-info {
-            flex: 1;
-        }
-        .weather-detail-label {
-            font-size: 10px;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-        .weather-detail-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .weather-cities {
-            display: flex;
-            gap: 8px;
-            padding: 0 20px 20px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .weather-cities::-webkit-scrollbar { display: none; }
-        .weather-city-pill {
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05);
-            color: #94a3b8;
-        }
-        .weather-city-pill.active {
-            background: #f59e0b;
-            color: #0f172a;
-            border-color: #f59e0b;
-        }
-        .weather-city-pill:hover:not(.active) {
-            background: rgba(255,255,255,0.1);
-            color: #e2e8f0;
-        }
-        .weather-panel { display: none; }
-        .weather-panel.active { display: block; }
+    .newsletter-input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 12px; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 0.9rem; transition: var(--transition); }
+    .newsletter-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,169,110,0.15); }
+    .btn-primary-solid { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: white; padding: 12px 24px; border-radius: var(--radius-md); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: var(--transition); width: 100%; }
+    .btn-primary-solid:hover { background: var(--accent); color: var(--primary); }
 
-        /* Indicadores Económicos */
-        .eco-table {
-            width: 100%;
-            font-size: 13px;
-            border-collapse: collapse;
-        }
-        .eco-table td {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-        .eco-table td:last-child {
-            text-align: right;
-            font-weight: 800;
-            color: var(--text);
-        }
-        .eco-change-up { color: #16a34a; font-weight: 700; font-size: 11px; }
-        .eco-change-down { color: var(--accent); font-weight: 700; font-size: 11px; }
+    .footer { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: rgba(255,255,255,0.7); padding: 48px 16px 100px; margin-top: 40px; position: relative; overflow: hidden; }
+    .footer::before { content: ''; position: absolute; top: -50%; left: -10%; width: 400px; height: 400px; background: rgba(201,169,110,0.05); border-radius: 50%; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 28px; position: relative; }
+    .footer-brand { display: flex; align-items: center; gap: 12px; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .footer-brand img { width: 38px; height: 38px; border-radius: 50%; border: 2.5px solid var(--accent); }
+    .footer-desc { font-size: 0.88rem; line-height: 1.75; max-width: 320px; opacity: 0.85; }
+    .footer-title { font-weight: 800; color: white; margin-bottom: 16px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 2px; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { font-size: 0.88rem; transition: var(--transition); opacity: 0.85; }
+    .footer-links a:hover { color: var(--accent); padding-left: 6px; opacity: 1; }
+    .footer-social { display: flex; gap: 12px; margin-top: 18px; }
+    .footer-social a { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; transition: var(--transition); color: white; }
+    .footer-social a:hover { background: var(--accent); color: var(--primary); transform: translateY(-3px); }
+    .footer-bottom { max-width: 1400px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.78rem; opacity: 0.7; position: relative; }
 
-        /* Social */
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .social-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 16px 8px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .social-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-        .social-facebook { background: #1877f2; }
-        .social-telegram { background: #0088cc; }
-        .social-whatsapp { background: #25d366; }
-        .social-icon { font-size: 22px; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1.5px solid var(--border); display: flex; justify-content: space-around; align-items: center; height: 68px; z-index: 1002; padding-bottom: env(safe-area-inset-bottom, 0); backdrop-filter: blur(24px); background: rgba(255,255,255,0.97); box-shadow: 0 -4px 20px rgba(0,0,0,0.06); }
+    [data-theme="dark"] .bottom-nav { background: rgba(12,18,32,0.97); box-shadow: 0 -4px 20px rgba(0,0,0,0.3); }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 12px; border-radius: var(--radius-md); color: var(--text-muted); font-size: 0.62rem; font-weight: 600; transition: var(--transition); flex: 1; }
+    .bottom-nav-item svg { width: 22px; height: 22px; stroke-width: 2; }
+    .bottom-nav-item.active { color: var(--primary); }
+    [data-theme="dark"] .bottom-nav-item.active { color: var(--accent); }
+    .bottom-nav-item.active svg { stroke: var(--accent); }
+    .bottom-nav-item:hover { color: var(--primary); background: var(--bg); }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            background: #0f172a;
-            margin-top: 60px;
-            padding: 56px 0 28px;
-            color: #94a3b8;
-        }
-        [data-theme="dark"] .footer { background: #020617; }
-        .footer-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .footer-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 36px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid #334155;
-        }
-        .footer-logo {
-            font-family: var(--font-serif);
-            font-size: 24px;
-            font-weight: 900;
-            color: #fff;
-            text-decoration: none;
-        }
-        .footer-logo small {
-            display: block;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: var(--accent);
-            margin-top: 4px;
-        }
-        .footer-home-link {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--accent);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            transition: var(--transition);
-        }
-        .footer-home-link:hover { text-decoration: underline; }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 36px;
-            margin-bottom: 36px;
-        }
-        .footer-column h4 {
-            font-size: 11px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #e2e8f0;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #334155;
-        }
-        .footer-column ul { list-style: none; }
-        .footer-column li { margin-bottom: 10px; }
-        .footer-column a {
-            font-size: 13px;
-            color: #94a3b8;
-            text-decoration: none;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        .footer-column a:hover {
-            color: #fff;
-            text-decoration: none;
-        }
-        .footer-bottom {
-            border-top: 1px solid #334155;
-            padding-top: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: #64748b;
-            font-weight: 500;
-        }
-        .footer-bottom-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-        }
-        .footer-bottom-links a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-        .footer-bottom-links a:hover { color: #fff; }
+    .fade-in-up { opacity: 0; transform: translateY(30px); animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== MOBILE ===== */
-        @media (max-width: 1024px) {
-            .main {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-            .swiper { height: 360px; }
-            .swiper-title { font-size: 24px; }
-            .most-read-grid { grid-template-columns: repeat(2, 1fr); }
-            .sidebar {
-                order: 2;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-                width: 100%;
-                min-width: unset;
-            }
-            .news-grid { order: 1; }
-            .sidebar-widget { padding: 20px; }
-        }
-
-        @media (max-width: 768px) {
-            .top-bar-inner { padding: 0 16px; }
-            .top-bar-social { display: none; }
-            .header-inner { padding: 10px 16px; }
-            .logo-text { font-size: 18px; }
-            .logo-text small { font-size: 8px; letter-spacing: 1.5px; }
-            .nav { display: none; }
-            .menu-toggle { display: flex; }
-            .header-actions { gap: 6px; }
-
-            .breaking-bar { padding: 10px 0; font-size: 12px; }
-            .breaking-inner { padding: 0 16px; gap: 10px; }
-            .breaking-label { padding: 4px 8px; font-size: 9px; }
-
-            .swiper { height: 300px; border-radius: var(--radius-sm); }
-            .swiper-section { padding: 20px 16px 0; }
-            .swiper-overlay { padding: 50px 20px 24px; }
-            .swiper-title { font-size: 22px; line-height: 1.2; }
-            .swiper-tag { font-size: 9px; padding: 4px 10px; }
-            .swiper-meta { font-size: 11px; gap: 12px; }
-            .swiper-button-next, .swiper-button-prev { display: none; }
-
-            .main { padding: 24px 16px; gap: 28px; }
-            .section-header { margin-bottom: 20px; }
-            .section-title { font-size: 20px; }
-
-            .news-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .news-card-body { padding: 16px; }
-            .news-card-title {
-                font-size: 18px;
-                line-height: 1.4;
-                word-break: normal;
-                overflow-wrap: break-word;
-            }
-            .news-card-excerpt {
-                -webkit-line-clamp: 3;
-                font-size: 14px;
-            }
-            .news-card-meta { font-size: 11px; }
-
-            .most-read-section { margin-bottom: 36px; }
-            .most-read-grid { grid-template-columns: 1fr; gap: 12px; }
-            .most-read-card { padding: 14px; }
-            .most-read-number { font-size: 30px; min-width: 34px; }
-            .most-read-title { font-size: 15px; }
-
-            .sidebar {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 0;
-                width: 100%;
-                min-width: unset;
-            }
-            .sidebar-widget { padding: 20px; border-radius: var(--radius-sm); }
-
-            .weather-header { padding: 0 16px 12px; }
-            .weather-temp-main { font-size: 42px; }
-            .weather-icon-main { font-size: 42px; }
-            .weather-desc-main { padding: 0 16px 12px; font-size: 13px; }
-            .weather-details-row { padding: 0 16px 16px; gap: 6px; }
-            .weather-detail-card { padding: 10px; }
-            .weather-cities { padding: 0 16px 16px; gap: 6px; }
-            .weather-city-pill { padding: 6px 12px; font-size: 10px; }
-
-            .radio-station { font-size: 16px; }
-            .radio-program { font-size: 12px; }
-
-            .footer { margin-top: 40px; padding: 40px 0 24px; }
-            .footer-top { flex-direction: column; gap: 14px; align-items: flex-start; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-            .footer-bottom {
-                flex-direction: column;
-                gap: 14px;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .swiper { height: 260px; }
-            .swiper-overlay { padding: 40px 16px 20px; }
-            .swiper-title { font-size: 19px; }
-
-            .news-card-title { font-size: 17px; }
-            .news-card-excerpt { font-size: 13px; }
-
-            .most-read-grid { gap: 10px; }
-            .most-read-card { padding: 12px; gap: 10px; }
-            .most-read-number { font-size: 26px; min-width: 30px; }
-            .most-read-title { font-size: 14px; }
-
-            .footer-grid { grid-template-columns: 1fr; gap: 24px; }
-            .footer-logo { font-size: 20px; }
-            .section-header::after { width: 60px; }
-
-            .weather-temp-main { font-size: 36px; }
-            .weather-icon-main { font-size: 36px; }
-            .weather-details-row { grid-template-columns: 1fr; }
-
-            .eco-table { font-size: 12px; }
-            .eco-table td { padding: 10px 0; }
-            .eco-change-up, .eco-change-down { font-size: 10px; }
-
-            .social-grid { grid-template-columns: repeat(3, 1fr); }
-            .social-btn { padding: 12px 6px; font-size: 10px; }
-            .social-icon { font-size: 18px; }
-        }
-    </style>
-<base target="_blank">
-<base target="_blank">
+    @media(min-width: 640px) {
+      .hero-main img { height: 340px; }
+      .hero-main h2 { font-size: 1.6rem; }
+      .news-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media(min-width: 768px) {
+      .header-inner { height: 64px; padding: 0 24px; }
+      .nav-desktop { display: flex; }
+      .btn-donate { display: inline-flex; }
+      .radio-player { top: 64px; padding: 12px 24px; }
+      .hero { padding: 28px 24px 0; }
+      .trending { padding: 24px; }
+      .main-layout { padding: 0 24px 40px; }
+      .hero-grid { gap: 18px; }
+    }
+    @media(min-width: 1024px) {
+      .main-layout { grid-template-columns: 1fr 340px; gap: 32px; }
+      .sidebar { position: sticky; top: 130px; align-self: start; }
+      .bottom-nav { display: none; }
+      body { padding-bottom: 0; }
+      .footer { padding-bottom: 48px; }
+      .footer-inner { grid-template-columns: 2fr 1fr 1fr 1fr; }
+      .hero-grid { grid-template-columns: 1.6fr 1fr; }
+      .hero-main img { height: 380px; }
+      .hero-main h2 { font-size: 1.9rem; }
+    }
+    @media(min-width: 1280px) {
+      .hero-main img { height: 420px; }
+      .hero-main h2 { font-size: 2.1rem; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-inner">
-            <span class="top-bar-date" id="current-date">Miércoles, 20 de mayo de 2026</span>
-            <ul class="top-bar-social">
-                <li><a href="#">Facebook</a></li>
-                <li><a href="#">Telegram</a></li>
-                <li><a href="#">WhatsApp</a></li>
-            </ul>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="topbar">
+    <div class="topbar-inner" style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:36px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:700;color:var(--accent);flex-shrink:0">
+        <span>📅</span>
+        <span id="dateLocal">Jueves, 22 may 2026</span>
+      </div>
+      <div class="topbar-carousel" id="clockCarousel">
+        <div class="topbar-carousel-track" id="clockTrack">
+          <div class="topbar-carousel-item"><span class="label">🇳🇮 Managua</span><span class="value" id="c0">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇲🇽 CDMX</span><span class="value" id="c1">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇺🇸 Nueva York</span><span class="value" id="c2">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇬🇧 Londres</span><span class="value" id="c3">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇪🇸 Madrid</span><span class="value" id="c4">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇩🇪 Berlín</span><span class="value" id="c5">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇨🇳 Beijing</span><span class="value" id="c6">--:--</span></div>
+          <div class="topbar-carousel-item"><span class="label">🇯🇵 Tokio</span><span class="value" id="c7">--:--</span></div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-inner">
-            <a href="/" class="logo">
-                <div class="logo-img">NI</div>
-                <div class="logo-text">
-                    Nicaragua Informate
-                    <small>Noticias de Nicaragua y el mundo</small>
-                </div>
-            </a>
-            <nav>
-                <ul class="nav">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/nacionales">Nacionales</a></li>
-                    <li><a href="/sucesos">Sucesos</a></li>
-                    <li><a href="/internacionales">Internacionales</a></li>
-                    <li><a href="/tecnologia">Tecnología</a></li>
-                    <li><a href="/economia">Economía</a></li>
-                    <li><a href="/deportes">Deportes</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <button class="search-icon" title="Buscar">🔍</button>
-                <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">◐</button>
-                <button class="menu-toggle" onclick="toggleMenu()" title="Menú">☰</button>
-            </div>
-        </div>
-        <div class="mobile-nav" id="mobile-nav">
-            <ul>
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/nacionales">Nacionales</a></li>
-                <li><a href="/sucesos">Sucesos</a></li>
-                <li><a href="/internacionales">Internacionales</a></li>
-                <li><a href="/tecnologia">Tecnología</a></li>
-                <li><a href="/economia">Economía</a></li>
-                <li><a href="/deportes">Deportes</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <!-- Breaking Bar -->
-    <div class="breaking-bar">
-        <div class="breaking-inner">
-            <span class="breaking-label">Última Hora</span>
-            <div class="breaking-text">
-                <a href="#">Nicaragüense muere en trágico accidente de tránsito en Costa Rica</a>
-            </div>
-        </div>
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" target="_self"><img src="https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?w=80&h=80&fit=crop&crop=center" alt="Nicaragua Informate"><span>Nicaragua</span> Informate</a>
+      <nav class="nav-desktop">
+        <a href="index.html" target="_self">Inicio</a>
+        <a href="#nacionales">Nacionales</a>
+        <a href="#internacionales">Internacionales</a>
+        <a href="#">Sucesos</a>
+        <a href="#tecnologia">Tecnología</a>
+        <a href="#">Deportes</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" id="themeToggle" aria-label="Cambiar tema">
+          <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <!-- Swiper Carrusel -->
-    <section class="swiper-section">
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80" alt="Viviendas">
-                    <div class="swiper-overlay">
-                        <span class="swiper-tag">Nacionales</span>
-                        <h2 class="swiper-title">85 familias de Nagarote recibirán viviendas este 22 de mayo</h2>
-                        <div class="swiper-meta">
-                            <span>Por Redacción</span>
-                            <span>20 de mayo, 2026</span>
-                            <span>4 min lectura</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=1200&q=80" alt="Economía">
-                    <div class="swiper-overlay">
-                        <span class="swiper-tag">Economía</span>
-                        <h2 class="swiper-title">Nicaragua mantiene cero deuda con el FMI desde 2021</h2>
-                        <div class="swiper-meta">
-                            <span>Por Redacción</span>
-                            <span>20 de mayo, 2026</span>
-                            <span>3 min lectura</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168db5?w=1200&q=80" alt="Sucesos">
-                    <div class="swiper-overlay">
-                        <span class="swiper-tag">Sucesos</span>
-                        <h2 class="swiper-title">Escolta de ULTRAVAL enfrenta juicio por robo de dinero en Managua</h2>
-                        <div class="swiper-meta">
-                            <span>Por Redacción</span>
-                            <span>20 de mayo, 2026</span>
-                            <span>5 min lectura</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://images.unsplash.com/photo-1468581264429-2548ef9eb732?w=1200&q=80" alt="Internacionales">
-                    <div class="swiper-overlay">
-                        <span class="swiper-tag">Internacionales</span>
-                        <h2 class="swiper-title">Autoridades alertan por corrientes marinas en costas de Nicaragua</h2>
-                        <div class="swiper-meta">
-                            <span>Por Redacción</span>
-                            <span>20 de mayo, 2026</span>
-                            <span>2 min lectura</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=80" alt="Deportes">
-                    <div class="swiper-overlay">
-                        <span class="swiper-tag">Deportes</span>
-                        <h2 class="swiper-title">Selección nicaragüense se prepara para eliminatorias mundialistas</h2>
-                        <div class="swiper-meta">
-                            <span>Por Redacción</span>
-                            <span>20 de mayo, 2026</span>
-                            <span>6 min lectura</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+  <div class="radio-player">
+    <div class="radio-inner">
+      <button class="radio-btn" id="radioBtn" aria-label="Reproducir radio">
+        <svg id="radioPlayIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="radioPauseIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <div class="radio-info">
+        <h4 id="radioStationName">Radio Ya <span class="radio-live">En vivo</span></h4>
+        <p id="radioStationDesc">La radio líder de Nicaragua • Música, noticias y entretenimiento</p>
+      </div>
+      <div class="radio-wave paused" id="radioWave"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="station-dropdown" id="stationDropdown">
+        <button class="station-dropdown-btn" id="stationDropdownBtn" onclick="document.getElementById('stationDropdown').classList.toggle('open')">📻 Estaciones ▾</button>
+        <div class="station-dropdown-menu">
+          <div class="station-option active" data-name="Radio Ya" data-desc="La radio líder de Nicaragua • Música, noticias y entretenimiento" onclick="selectStation(this)">Radio Ya</div>
+          <div class="station-option" data-name="La Tuani" data-desc="La radio de los éxitos • Pop, reggaetón y música nicaragüense" onclick="selectStation(this)">La Tuani</div>
+          <div class="station-option" data-name="Radio Yes" data-desc="Música cristiana 24/7 • Alabanza y adoración" onclick="selectStation(this)">Radio Yes</div>
+          <div class="station-option" data-name="Viva FM" data-desc="La radio joven de Nicaragua • Hits del momento" onclick="selectStation(this)">Viva FM</div>
+          <div class="station-option" data-name="Radio Tigre" data-desc="La voz del pueblo • Noticias locales y deportes" onclick="selectStation(this)">Radio Tigre</div>
+          <div class="station-option" data-name="Radio Magic" data-desc="Música de los 80s, 90s y 2000s • Clásicos inolvidables" onclick="selectStation(this)">Radio Magic</div>
+          <div class="station-option" data-name="Radio Fiesta Latina" data-desc="Salsa, bachata, cumbia y merengue • La fiesta latina" onclick="selectStation(this)">Radio Fiesta Latina</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="main-content">
-            <!-- Más Leídas -->
-            <section class="most-read-section">
-                <div class="section-header">
-                    <h2 class="section-title">Más Leídas</h2>
-                    <a href="/mas-leidas" class="section-link">Ver todas →</a>
-                </div>
-                <div class="most-read-grid">
-                    <article class="most-read-card">
-                        <span class="most-read-number">1</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">85 familias de Nagarote recibirán viviendas este 22 de mayo</h3>
-                            <div class="most-read-meta">Hace 2 horas • 12.5k lecturas</div>
-                        </div>
-                    </article>
-                    <article class="most-read-card">
-                        <span class="most-read-number">2</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">Escolta de ULTRAVAL enfrenta juicio por robo de dinero</h3>
-                            <div class="most-read-meta">Hace 4 horas • 8.3k lecturas</div>
-                        </div>
-                    </article>
-                    <article class="most-read-card">
-                        <span class="most-read-number">3</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">Nicaragua mantiene cero deuda con el FMI desde 2021</h3>
-                            <div class="most-read-meta">Hace 6 horas • 6.7k lecturas</div>
-                        </div>
-                    </article>
-                    <article class="most-read-card">
-                        <span class="most-read-number">4</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">Autoridades alertan por corrientes marinas en Nicaragua</h3>
-                            <div class="most-read-meta">Hace 8 horas • 5.2k lecturas</div>
-                        </div>
-                    </article>
-                    <article class="most-read-card">
-                        <span class="most-read-number">5</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">Canadá reporta caso de virus transmitido por roedores</h3>
-                            <div class="most-read-meta">Hace 10 horas • 4.1k lecturas</div>
-                        </div>
-                    </article>
-                    <article class="most-read-card">
-                        <span class="most-read-number">6</span>
-                        <div class="most-read-content">
-                            <h3 class="most-read-title">Selección nicaragüense inicia preparación para eliminatorias</h3>
-                            <div class="most-read-meta">Hace 12 horas • 3.8k lecturas</div>
-                        </div>
-                    </article>
-                </div>
-            </section>
-
-            <!-- Últimas Noticias -->
-            <section>
-                <div class="section-header">
-                    <h2 class="section-title">Últimas Noticias</h2>
-                    <a href="/noticias" class="section-link">Ver todas →</a>
-                </div>
-                <div class="news-grid">
-                    <article class="news-card">
-                        <div class="news-card-image">
-                            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80" alt="Viviendas">
-                            <span class="news-card-tag">Nacionales</span>
-                        </div>
-                        <div class="news-card-body">
-                            <h3 class="news-card-title">85 familias de Nagarote recibirán viviendas este 22 de mayo</h3>
-                            <p class="news-card-excerpt">Programa Nuevas Victorias entregará 85 viviendas a familias de Nagarote como parte de los proyectos habitacionales impulsados en Nicaragua.</p>
-                            <div class="news-card-meta">
-                                <span>Hace 2 horas</span>
-                                <span>1.2k vistas</span>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="news-card">
-                        <div class="news-card-image">
-                            <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=80" alt="Economía">
-                            <span class="news-card-tag">Economía</span>
-                        </div>
-                        <div class="news-card-body">
-                            <h3 class="news-card-title">Nicaragua mantiene cero deuda con el FMI desde 2021</h3>
-                            <p class="news-card-excerpt">El gobierno de Nicaragua ha logrado mantener una política económica que le permite no depender de organismos internacionales de crédito.</p>
-                            <div class="news-card-meta">
-                                <span>Hace 4 horas</span>
-                                <span>856 vistas</span>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="news-card">
-                        <div class="news-card-image">
-                            <img src="https://images.unsplash.com/photo-1504711434969-e33886168db5?w=600&q=80" alt="Sucesos">
-                            <span class="news-card-tag">Sucesos</span>
-                        </div>
-                        <div class="news-card-body">
-                            <h3 class="news-card-title">Escolta de ULTRAVAL enfrenta juicio por robo de dinero</h3>
-                            <p class="news-card-excerpt">Un escolta de la empresa de transporte de valores ULTRAVAL fue capturado y enfrenta juicio por el robo de una considerable suma de dinero.</p>
-                            <div class="news-card-meta">
-                                <span>Hace 6 horas</span>
-                                <span>2.1k vistas</span>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="news-card">
-                        <div class="news-card-image">
-                            <img src="https://images.unsplash.com/photo-1468581264429-2548ef9eb732?w=600&q=80" alt="Internacionales">
-                            <span class="news-card-tag">Internacionales</span>
-                        </div>
-                        <div class="news-card-body">
-                            <h3 class="news-card-title">Autoridades alertan por corrientes marinas en Nicaragua</h3>
-                            <p class="news-card-excerpt">Las autoridades de Nicaragua emitieron una alerta por corrientes marinas que podrían afectar las costas del país durante los próximos días.</p>
-                            <div class="news-card-meta">
-                                <span>Hace 8 horas</span>
-                                <span>1.5k vistas</span>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </section>
+  <div class="breaking-news">
+    <div class="breaking-inner">
+      <div class="breaking-label">Última Hora</div>
+      <div class="breaking-ticker">
+        <div class="breaking-ticker-track">
+          <div class="breaking-item"><span class="time">12:30</span> KFC confirma apertura en Managua con 350 empleos</div>
+          <div class="breaking-item"><span class="time">12:15</span> Hospital Pediátrico Las Segovias inaugurado este 18 de mayo</div>
+          <div class="breaking-item"><span class="time">11:55</span> Costa Rica intensifica operativos en Peñas Blancas</div>
+          <div class="breaking-item"><span class="time">11:40</span> China logra clonación de cabras lecheras de alto rendimiento</div>
+          <div class="breaking-item"><span class="time">11:20</span> Nueva vía conecta Laureles Sur con carretera a El Coyotepe</div>
+          <div class="breaking-item"><span class="time">12:30</span> KFC confirma apertura en Managua con 350 empleos</div>
+          <div class="breaking-item"><span class="time">12:15</span> Hospital Pediátrico Las Segovias inaugurado este 18 de mayo</div>
+          <div class="breaking-item"><span class="time">11:55</span> Costa Rica intensifica operativos en Peñas Blancas</div>
+          <div class="breaking-item"><span class="time">11:40</span> China logra clonación de cabras lecheras de alto rendimiento</div>
+          <div class="breaking-item"><span class="time">11:20</span> Nueva vía conecta Laureles Sur con carretera a El Coyotepe</div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Newsletter -->
-            <div class="sidebar-widget">
-                <h3 class="widget-title">Newsletter</h3>
-                <div class="newsletter-box">
-                    <p>Las noticias más importantes de Nicaragua en tu correo.</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="tu@email.com" required>
-                        <button type="submit">Suscribirse</button>
-                    </form>
-                </div>
-            </div>
+  <section class="hero">
+    <div class="hero-grid">
+      <a href="articulo.html" class="hero-main" target="_self">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=600&fit=crop" alt="KFC Managua">
+        <div class="overlay">
+          <span class="tag">Nacionales</span>
+          <h2>KFC anuncia apertura de restaurante en Managua con 350 empleos</h2>
+          <div class="meta">Carlos Mendoza • 21 may 2026 • 5 min de lectura</div>
+        </div>
+      </a>
+      <div class="hero-side">
+        <a href="articulo.html" class="hero-card" target="_self">
+          <img src="https://images.unsplash.com/photo-1581578731117-104f2a42877b?w=300&h=200&fit=crop" alt="Hospital">
+          <div>
+            <div class="tag">Salud</div>
+            <h3>Hospital Pediátrico Las Segovias inaugurado este 18 de mayo</h3>
+            <span>18 may • 8 min</span>
+          </div>
+        </a>
+        <a href="articulo.html" class="hero-card" target="_self">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=200&fit=crop" alt="Carretera">
+          <div>
+            <div class="tag">Infraestructura</div>
+            <h3>Nueva vía conecta Laureles Sur con carretera a El Coyotepe</h3>
+            <span>20 may • 4 min</span>
+          </div>
+        </a>
+        <a href="articulo.html" class="hero-card" target="_self">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=200&fit=crop" alt="Tecnología">
+          <div>
+            <div class="tag">Tecnología</div>
+            <h3>Nicaragua implementa red 5G en Managua y León</h3>
+            <span>19 may • 6 min</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
 
-            <!-- Radio en Vivo -->
-            <div class="sidebar-widget radio-widget">
-                <h3 class="widget-title">Radio en Vivo</h3>
-                <div class="radio-live-badge">
-                    <span class="radio-live-dot"></span>
-                    En Vivo
-                </div>
-                <div class="radio-station">Nicaragua Informate Radio</div>
-                <div class="radio-program">Música y noticias 24/7</div>
-                <div class="radio-controls">
-                    <button class="radio-play" onclick="toggleRadio()" id="radio-play-btn">▶</button>
-                    <div class="radio-volume">
-                        <div class="radio-volume-fill"></div>
-                        <div class="radio-volume-knob"></div>
-                    </div>
-                </div>
-            </div>
+  <section class="trending">
+    <h2 class="trending-title">🔥 Tendencias</h2>
+    <div class="trending-chips">
+      <span class="trending-chip">KFC Nicaragua</span>
+      <span class="trending-chip">Hospital Las Segovias</span>
+      <span class="trending-chip">Bitcoin $120K</span>
+      <span class="trending-chip">Clonación China</span>
+      <span class="trending-chip">5G Nicaragua</span>
+      <span class="trending-chip">Peñas Blancas</span>
+      <span class="trending-chip">Copa Oro 2026</span>
+      <span class="trending-chip">Inflación Nicaragua</span>
+    </div>
+  </section>
 
-            <!-- Clima -->
-            <div class="sidebar-widget weather-widget">
-                <h3 class="widget-title">Clima en Nicaragua</h3>
-                <div class="weather-panel active" id="weather-managua">
-                    <div class="weather-header">
-                        <span class="weather-temp-main">37°</span>
-                        <span class="weather-icon-main">☀️</span>
-                    </div>
-                    <div class="weather-desc-main">Soleado, sensación térmica 41°</div>
-                    <div class="weather-details-row">
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💧</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Humedad</div>
-                                <div class="weather-detail-value">65%</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💨</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Viento</div>
-                                <div class="weather-detail-value">15 km/h</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">☀️</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">UV</div>
-                                <div class="weather-detail-value">Extremo</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">📊</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Presión</div>
-                                <div class="weather-detail-value">1013 hPa</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weather-panel" id="weather-leon">
-                    <div class="weather-header">
-                        <span class="weather-temp-main">37°</span>
-                        <span class="weather-icon-main">⛅</span>
-                    </div>
-                    <div class="weather-desc-main">Parcialmente nublado</div>
-                    <div class="weather-details-row">
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💧</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Humedad</div>
-                                <div class="weather-detail-value">70%</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💨</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Viento</div>
-                                <div class="weather-detail-value">12 km/h</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">☀️</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">UV</div>
-                                <div class="weather-detail-value">Alto</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">📊</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Presión</div>
-                                <div class="weather-detail-value">1012 hPa</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weather-panel" id="weather-granada">
-                    <div class="weather-header">
-                        <span class="weather-temp-main">34°</span>
-                        <span class="weather-icon-main">☀️</span>
-                    </div>
-                    <div class="weather-desc-main">Soleado intenso</div>
-                    <div class="weather-details-row">
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💧</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Humedad</div>
-                                <div class="weather-detail-value">60%</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💨</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Viento</div>
-                                <div class="weather-detail-value">10 km/h</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">☀️</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">UV</div>
-                                <div class="weather-detail-value">Extremo</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">📊</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Presión</div>
-                                <div class="weather-detail-value">1011 hPa</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weather-panel" id="weather-chinandega">
-                    <div class="weather-header">
-                        <span class="weather-temp-main">33°</span>
-                        <span class="weather-icon-main">🌧️</span>
-                    </div>
-                    <div class="weather-desc-main">Llovizna</div>
-                    <div class="weather-details-row">
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💧</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Humedad</div>
-                                <div class="weather-detail-value">85%</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">💨</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Viento</div>
-                                <div class="weather-detail-value">18 km/h</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">☀️</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">UV</div>
-                                <div class="weather-detail-value">Bajo</div>
-                            </div>
-                        </div>
-                        <div class="weather-detail-card">
-                            <div class="weather-detail-icon">📊</div>
-                            <div class="weather-detail-info">
-                                <div class="weather-detail-label">Presión</div>
-                                <div class="weather-detail-value">1008 hPa</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weather-cities">
-                    <button class="weather-city-pill active" onclick="switchWeather('managua', this)">Managua 37°</button>
-                    <button class="weather-city-pill" onclick="switchWeather('leon', this)">León 37°</button>
-                    <button class="weather-city-pill" onclick="switchWeather('granada', this)">Granada 34°</button>
-                    <button class="weather-city-pill" onclick="switchWeather('chinandega', this)">Chinandega 33°</button>
-                </div>
+  <div class="main-layout">
+    <main>
+      <section id="nacionales">
+        <h2 class="section-title">📰 Nacionales</h2>
+        <div class="news-grid">
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.1s">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=300&fit=crop" alt="KFC">
+            <div class="content">
+              <div class="tag">Economía</div>
+              <h3>KFC anuncia apertura en Managua con 350 empleos directos</h3>
+              <p>La cadena estadounidense invertirá $3.5 millones en tres locales durante 2026.</p>
+              <div class="meta">Carlos Mendoza • 21 may</div>
             </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.15s">
+            <img src="https://images.unsplash.com/photo-1581578731117-104f2a42877b?w=600&h=300&fit=crop" alt="Hospital">
+            <div class="content">
+              <div class="tag">Salud</div>
+              <h3>Hospital Pediátrico Las Segovias: nueva infraestructura de salud</h3>
+              <p>El centro médico atenderá a más de 50,000 niños al año con equipos de última generación.</p>
+              <div class="meta">Ana Castillo • 18 may</div>
+            </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.2s">
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=300&fit=crop" alt="Carretera">
+            <div class="content">
+              <div class="tag">Infraestructura</div>
+              <h3>Nueva vía conecta Laureles Sur con carretera a El Coyotepe</h3>
+              <p>La obra de 12 km reducirá el tiempo de traslado en 25 minutos para residentes del sur.</p>
+              <div class="meta">Pedro Ruiz • 20 may</div>
+            </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.25s">
+            <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=600&h=300&fit=crop" alt="Volcán">
+            <div class="content">
+              <div class="tag">Medio Ambiente</div>
+              <h3>Alerta verde en el Volcán Momotombo tras incremento de actividad</h3>
+              <p>INETER reporta emanaciones de gases y aumento de sismos volcánicos en las últimas 72 horas.</p>
+              <div class="meta">María López • 19 may</div>
+            </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.3s">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=300&fit=crop" alt="5G">
+            <div class="content">
+              <div class="tag">Tecnología</div>
+              <h3>Nicaragua implementa red 5G en Managua y León</h3>
+              <p>Enatel anuncia cobertura inicial en 45 zonas urbanas con velocidades de hasta 1 Gbps.</p>
+              <div class="meta">Roberto Vega • 19 may</div>
+            </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.35s">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=300&fit=crop" alt="Café">
+            <div class="content">
+              <div class="tag">Agricultura</div>
+              <h3>Exportaciones de café nicaragüense crecen 12% en primer trimestre</h3>
+              <p>Los principales mercados destino fueron Estados Unidos, Alemania y Japón.</p>
+              <div class="meta">Luis Torres • 17 may</div>
+            </div>
+          </a>
+        </div>
+      </section>
 
-            <!-- Indicadores Económicos -->
-            <div class="sidebar-widget">
-                <h3 class="widget-title">Indicadores Económicos</h3>
-                <table class="eco-table">
-                    <tr><td>Dólar USD</td><td>C$ 36.85 <span class="eco-change-up">↑ 0.2%</span></td></tr>
-                    <tr><td>Euro</td><td>C$ 40.12 <span class="eco-change-down">↓ 0.1%</span></td></tr>
-                    <tr><td>Gasolina</td><td>C$ 38.50 <span class="eco-change-up">↑ 1.5%</span></td></tr>
-                    <tr><td>Diesel</td><td>C$ 35.20 <span class="eco-change-down">↓ 0.8%</span></td></tr>
-                    <tr><td>Oro (oz)</td><td>$2,340 <span class="eco-change-up">↑ 0.5%</span></td></tr>
-                    <tr><td>Bitcoin</td><td>$67,200 <span class="eco-change-down">↓ 2.1%</span></td></tr>
-                </table>
+      <section id="internacionales" style="margin-top:40px">
+        <h2 class="section-title">🌍 Internacionales</h2>
+        <div class="news-grid">
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.1s">
+            <img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=600&h=300&fit=crop" alt="Bitcoin">
+            <div class="content">
+              <div class="tag">Economía</div>
+              <h3>Bitcoin supera los $120,000 por primera vez en su historia</h3>
+              <p>La criptomoneda lidera un rally alcista impulsado por la adopción institucional.</p>
+              <div class="meta">Reuters • 21 may</div>
             </div>
-
-            <!-- Redes Sociales -->
-            <div class="sidebar-widget">
-                <h3 class="widget-title">Síguenos</h3>
-                <div class="social-grid">
-                    <a href="#" class="social-btn social-facebook">
-                        <span class="social-icon">📘</span>
-                        <span>Facebook</span>
-                    </a>
-                    <a href="#" class="social-btn social-telegram">
-                        <span class="social-icon">✈️</span>
-                        <span>Telegram</span>
-                    </a>
-                    <a href="#" class="social-btn social-whatsapp">
-                        <span class="social-icon">💬</span>
-                        <span>WhatsApp</span>
-                    </a>
-                </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.15s">
+            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=300&fit=crop" alt="China">
+            <div class="content">
+              <div class="tag">Ciencia</div>
+              <h3>China logra clonación de cabras lecheras de alto rendimiento</h3>
+              <p>Científicos de la Academia de Ciencias de China producen rebaño de 240 cabras clonadas.</p>
+              <div class="meta">Xinhua • 20 may</div>
             </div>
-        </aside>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.2s">
+            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed56a310?w=600&h=300&fit=crop" alt="UE">
+            <div class="content">
+              <div class="tag">Política</div>
+              <h3>Unión Europea aprueba nuevas sanciones contra Rusia</h3>
+              <p>El paquete 16 incluye restricciones al sector energético y congelación de activos.</p>
+              <div class="meta">Euronews • 19 may</div>
+            </div>
+          </a>
+          <a href="articulo.html" class="news-card fade-in-up" target="_self" style="animation-delay:0.25s">
+            <img src="https://images.unsplash.com/photo-1569163139599-0f4518e36f51?w=600&h=300&fit=crop" alt="NASA">
+            <div class="content">
+              <div class="tag">Ciencia</div>
+              <h3>NASA confirma existencia de agua en forma de hielo en la Luna</h3>
+              <p>El rover Artemis III detectará depósitos en el polo sur para futuras misiones tripuladas.</p>
+              <div class="meta">NASA • 18 may</div>
+            </div>
+          </a>
+        </div>
+      </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-top">
-                <a href="/" class="footer-logo">
-                    Nicaragua Informate
-                    <small>Noticias de Nicaragua y el mundo</small>
-                </a>
-                <a href="/" class="footer-home-link">Ir a la página de inicio →</a>
-            </div>
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h4>Secciones</h4>
-                    <ul>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/nacionales">Nacionales</a></li>
-                        <li><a href="/sucesos">Sucesos</a></li>
-                        <li><a href="/internacionales">Internacionales</a></li>
-                        <li><a href="/tecnologia">Tecnología</a></li>
-                        <li><a href="/economia">Economía</a></li>
-                        <li><a href="/deportes">Deportes</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Información</h4>
-                    <ul>
-                        <li><a href="/acerca">Acerca de nosotros</a></li>
-                        <li><a href="/equipo">Equipo editorial</a></li>
-                        <li><a href="/publicidad">Publicidad</a></li>
-                        <li><a href="/suscripciones">Suscripciones</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="/privacidad">Política de privacidad</a></li>
-                        <li><a href="/terminos">Términos de servicio</a></li>
-                        <li><a href="/cookies">Política de cookies</a></li>
-                        <li><a href="/accesibilidad">Accesibilidad</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contacto</h4>
-                    <ul>
-                        <li><a href="mailto:contacto@nicaraguainformate.com">contacto@nicaraguainformate.com</a></li>
-                        <li><a href="mailto:redaccion@nicaraguainformate.com">redaccion@nicaraguainformate.com</a></li>
-                        <li><a href="mailto:publicidad@nicaraguainformate.com">publicidad@nicaraguainformate.com</a></li>
-                        <li><a href="/contacto">Formulario de contacto</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span>© 2026 Nicaragua Informate. Todos los derechos reservados.</span>
-                <ul class="footer-bottom-links">
-                    <li><a href="/privacidad">Privacidad</a></li>
-                    <li><a href="/terminos">Términos</a></li>
-                    <li><a href="/mapa">Mapa del sitio</a></li>
-                    <li><a href="/ayuda">Ayuda</a></li>
-                </ul>
-            </div>
+    <aside class="sidebar">
+      <div class="sidebar-widget">
+        <h3 class="widget-title">📊 Indicadores Económicos</h3>
+        <div class="eco-grid">
+          <div class="eco-item"><div class="label">Dólar BCN</div><div class="value">C$ 36.62</div><div class="change neutral">0.00%</div></div>
+          <div class="eco-item"><div class="label">Euro</div><div class="value">C$ 43.11</div><div class="change up" style="color:var(--success)">▲ 1.25%</div></div>
         </div>
-    </footer>
+        <div class="eco-fuels">
+          <div class="eco-fuels-title">⛽ Combustibles (C$/galón)</div>
+          <div class="eco-fuel-item"><span>Gasolina Regular</span><strong>C$ 47.80</strong></div>
+          <div class="eco-fuel-item"><span>Gasolina Súper</span><strong>C$ 49.00</strong></div>
+          <div class="eco-fuel-item"><span>Diésel</span><strong>C$ 43.21</strong> <span style="color:var(--success);font-size:0.75rem">▲ 0.44%</span></div>
+        </div>
+        <div class="eco-footer">Fuente: BCN / INE • Actualizado 21 may 2026</div>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        // Swiper
-        const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-                dynamicBullets: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            effect: "fade",
-            fadeEffect: { crossFade: true },
-            keyboard: { enabled: true },
-        });
+      <div class="weather-widget">
+        <div class="weather-header"><h4>🌤️ Clima en Nicaragua</h4><span id="weatherCityName">Managua</span></div>
+        <div class="weather-city-rotate" id="weatherRotate">
+          <div class="weather-city-slide active" data-city="Managua"><div class="icon">☀️</div><div><div class="name">Managua</div><div style="font-size:0.75rem;opacity:0.75">Soleado • Sensación 35°</div></div><div class="temp">32°</div></div>
+          <div class="weather-city-slide" data-city="Rivas"><div class="icon">⛅</div><div><div class="name">Rivas</div><div style="font-size:0.75rem;opacity:0.75">Parcialmente nublado</div></div><div class="temp">30°</div></div>
+          <div class="weather-city-slide" data-city="León"><div class="icon">☀️</div><div><div class="name">León</div><div style="font-size:0.75rem;opacity:0.75">Soleado • Caluroso</div></div><div class="temp">33°</div></div>
+          <div class="weather-city-slide" data-city="Estelí"><div class="icon">🌦️</div><div><div class="name">Estelí</div><div style="font-size:0.75rem;opacity:0.75">Lluvias dispersas</div></div><div class="temp">27°</div></div>
+          <div class="weather-city-slide" data-city="Matagalpa"><div class="icon">⛅</div><div><div class="name">Matagalpa</div><div style="font-size:0.75rem;opacity:0.75">Nublado</div></div><div class="temp">26°</div></div>
+          <div class="weather-city-slide" data-city="Nueva Segovia"><div class="icon">🌧️</div><div><div class="name">Nueva Segovia</div><div style="font-size:0.75rem;opacity:0.75">Lluvia moderada</div></div><div class="temp">24°</div></div>
+          <div class="weather-city-slide" data-city="Bluefields"><div class="icon">🌦️</div><div><div class="name">Bluefields</div><div style="font-size:0.75rem;opacity:0.75">Chubascos ocasionales</div></div><div class="temp">29°</div></div>
+          <div class="weather-city-slide" data-city="Jinotepe"><div class="icon">☀️</div><div><div class="name">Jinotepe</div><div style="font-size:0.75rem;opacity:0.75">Soleado</div></div><div class="temp">31°</div></div>
+          <div class="weather-city-slide" data-city="Jinotega"><div class="icon">⛅</div><div><div class="name">Jinotega</div><div style="font-size:0.75rem;opacity:0.75">Nublado</div></div><div class="temp">25°</div></div>
+          <div class="weather-city-slide" data-city="Masaya"><div class="icon">☀️</div><div><div class="name">Masaya</div><div style="font-size:0.75rem;opacity:0.75">Soleado • Caluroso</div></div><div class="temp">32°</div></div>
+          <div class="weather-city-slide" data-city="Chinandega"><div class="icon">☀️</div><div><div class="name">Chinandega</div><div style="font-size:0.75rem;opacity:0.75">Muy soleado</div></div><div class="temp">34°</div></div>
+          <div class="weather-city-slide" data-city="Siuna"><div class="icon">🌦️</div><div><div class="name">Siuna</div><div style="font-size:0.75rem;opacity:0.75">Lluvias dispersas</div></div><div class="temp">28°</div></div>
+        </div>
+        <div class="weather-details" style="margin-top:12px;margin-bottom:0">
+          <div class="weather-detail"><div class="label">Humedad</div><div class="val" id="wHum">68%</div></div>
+          <div class="weather-detail"><div class="label">Viento</div><div class="val" id="wWind">12 km/h</div></div>
+          <div class="weather-detail"><div class="label">Visibilidad</div><div class="val" id="wVis">10 km</div></div>
+        </div>
+      </div>
 
-        // Fecha actual
-        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-NI', dateOptions);
+      <div class="ad-sidebar">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=180&fit=crop" alt="Publicidad">
+        <h4>Tu marca aquí</h4>
+        <p>Alcance a miles de nicaragüenses diariamente</p>
+        <a href="#" class="btn">Más información</a>
+      </div>
 
-        // Mobile Menu
-        function toggleMenu() {
-            document.getElementById('mobile-nav').classList.toggle('active');
-        }
+      <div class="sidebar-widget">
+        <h3 class="widget-title">🔥 Lo más leído</h3>
+        <a href="articulo.html" class="trending-item" target="_self"><span class="trending-num">1</span><div class="trending-content"><h4>KFC anuncia apertura en Managua con 350 empleos</h4><span>5 min • Nacionales</span></div></a>
+        <a href="articulo.html" class="trending-item" target="_self"><span class="trending-num">2</span><div class="trending-content"><h4>Hospital Pediátrico Las Segovias inaugurado</h4><span>12 min • Salud</span></div></a>
+        <a href="articulo.html" class="trending-item" target="_self"><span class="trending-num">3</span><div class="trending-content"><h4>Bitcoin supera los $120,000</h4><span>18 min • Economía</span></div></a>
+        <a href="articulo.html" class="trending-item" target="_self"><span class="trending-num">4</span><div class="trending-content"><h4>Clonación de cabras en China</h4><span>25 min • Ciencia</span></div></a>
+        <a href="articulo.html" class="trending-item" target="_self"><span class="trending-num">5</span><div class="trending-content"><h4>Selección pinolera a la Copa Oro</h4><span>32 min • Deportes</span></div></a>
+      </div>
 
-        // Weather
-        function switchWeather(city, btn) {
-            document.querySelectorAll('.weather-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('weather-' + city).classList.add('active');
-            document.querySelectorAll('.weather-city-pill').forEach(p => p.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-        }
+      <div class="sidebar-widget">
+        <h3 class="widget-title">🏷️ Categorías</h3>
+        <div class="cat-cloud">
+          <span class="cat-tag">Nacionales</span>
+          <span class="cat-tag">Internacionales</span>
+          <span class="cat-tag">Sucesos</span>
+          <span class="cat-tag">Tecnología</span>
+          <span class="cat-tag">Deportes</span>
+          <span class="cat-tag">Economía</span>
+          <span class="cat-tag">Cultura</span>
+          <span class="cat-tag">Salud</span>
+        </div>
+      </div>
 
-        // Radio
-        let isPlaying = false;
-        function toggleRadio() {
-            isPlaying = !isPlaying;
-            document.getElementById('radio-play-btn').textContent = isPlaying ? '⏸' : '▶';
-        }
+      <div class="sidebar-widget">
+        <h3 class="widget-title">📧 Newsletter</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:12px">Recibe las noticias más importantes de Nicaragua cada mañana.</p>
+        <input type="email" class="newsletter-input" placeholder="Tu correo electrónico" aria-label="Correo electrónico">
+        <button class="btn-primary-solid">Suscribirme gratis</button>
+      </div>
+    </aside>
+  </div>
 
-        // Theme Toggle
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        }
-        const saved = localStorage.getItem('theme');
-        if (saved) {
-            document.documentElement.setAttribute('data-theme', saved);
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-    </script>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand"><img src="https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?w=80&h=80&fit=crop&crop=center" alt="Logo"> Nicaragua Informate</div>
+        <p class="footer-desc">Portal independiente de noticias de Nicaragua. Cobertura nacional e internacional con rigor periodístico desde 2020.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.53C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-title">Secciones</h4>
+        <ul class="footer-links">
+          <li><a href="#nacionales" target="_self">Nacionales</a></li>
+          <li><a href="#internacionales" target="_self">Internacionales</a></li>
+          <li><a href="#">Sucesos</a></li>
+          <li><a href="#tecnologia" target="_self">Tecnología</a></li>
+          <li><a href="#">Deportes</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Compañía</h4>
+        <ul class="footer-links">
+          <li><a href="#">Sobre nosotros</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li><a href="#">Publicidad</a></li>
+          <li><a href="#">Trabaja con nosotros</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Legal</h4>
+        <ul class="footer-links">
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Términos de uso</a></li>
+          <li><a href="#">Política editorial</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Nicaragua Informate. Todos los derechos reservados.</div>
+  </footer>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-item active" target="_self" aria-label="Inicio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </a>
+    <a href="#internacionales" class="bottom-nav-item" aria-label="Mundo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Mundo
+    </a>
+    <a href="#" class="bottom-nav-item" aria-label="Radio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+      Radio
+    </a>
+    <a href="#" class="bottom-nav-item" aria-label="Chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Chat
+    </a>
+    <a href="#" class="bottom-nav-item" aria-label="Perfil">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </a>
+  </nav>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+      }
+    });
+    const radioBtn = document.getElementById('radioBtn');
+    const radioWave = document.getElementById('radioWave');
+    const radioPlayIcon = document.getElementById('radioPlayIcon');
+    const radioPauseIcon = document.getElementById('radioPauseIcon');
+    let isPlaying = false;
+    radioBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      radioBtn.classList.toggle('playing', isPlaying);
+      radioWave.classList.toggle('paused', !isPlaying);
+      radioPlayIcon.style.display = isPlaying ? 'none' : 'block';
+      radioPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    });
+    const progressBar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      progressBar.style.width = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 + '%' : '0%';
+    });
+
+    // World Clocks Carousel
+    const clockZones = [
+      { id: 'c0', zone: 'America/Managua', label: '🇳🇮 Managua' },
+      { id: 'c1', zone: 'America/Mexico_City', label: '🇲🇽 CDMX' },
+      { id: 'c2', zone: 'America/New_York', label: '🇺🇸 Nueva York' },
+      { id: 'c3', zone: 'Europe/London', label: '🇬🇧 Londres' },
+      { id: 'c4', zone: 'Europe/Madrid', label: '🇪🇸 Madrid' },
+      { id: 'c5', zone: 'Europe/Berlin', label: '🇩🇪 Berlín' },
+      { id: 'c6', zone: 'Asia/Shanghai', label: '🇨🇳 Beijing' },
+      { id: 'c7', zone: 'Asia/Tokyo', label: '🇯🇵 Tokio' }
+    ];
+    function updateClocks() {
+      const now = new Date();
+      const opts = { hour: '2-digit', minute: '2-digit', hour12: false };
+      for (const c of clockZones) {
+        const el = document.getElementById(c.id);
+        if (el) el.textContent = new Intl.DateTimeFormat('es-ES', { ...opts, timeZone: c.zone }).format(now);
+      }
+      const dateEl = document.getElementById('dateLocal');
+      if (dateEl) {
+        const d = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/Managua' }).format(now);
+        dateEl.textContent = d.charAt(0).toUpperCase() + d.slice(1);
+      }
+    }
+    updateClocks();
+    setInterval(updateClocks, 1000);
+
+    // Clock carousel
+    let clockIndex = 0;
+    const clockTrack = document.getElementById('clockTrack');
+    const clockCarousel = document.getElementById('clockCarousel');
+    function rotateClock() {
+      if (!clockTrack || !clockCarousel) return;
+      const itemWidth = clockCarousel.offsetWidth;
+      clockIndex = (clockIndex + 1) % clockZones.length;
+      clockTrack.style.transform = 'translateX(-' + (clockIndex * itemWidth) + 'px)';
+    }
+    setInterval(rotateClock, 4000);
+
+    // Weather city rotation
+    const weatherSlides = document.querySelectorAll('.weather-city-slide');
+    const weatherCityName = document.getElementById('weatherCityName');
+    let weatherIdx = 0;
+    const weatherData = [
+      { hum: '68%', wind: '12 km/h', vis: '10 km' },
+      { hum: '72%', wind: '14 km/h', vis: '9 km' },
+      { hum: '65%', wind: '10 km/h', vis: '10 km' },
+      { hum: '78%', wind: '8 km/h', vis: '7 km' },
+      { hum: '80%', wind: '6 km/h', vis: '8 km' },
+      { hum: '82%', wind: '5 km/h', vis: '6 km' },
+      { hum: '75%', wind: '11 km/h', vis: '8 km' },
+      { hum: '70%', wind: '13 km/h', vis: '10 km' },
+      { hum: '79%', wind: '7 km/h', vis: '8 km' },
+      { hum: '66%', wind: '11 km/h', vis: '10 km' },
+      { hum: '64%', wind: '15 km/h', vis: '10 km' },
+      { hum: '76%', wind: '9 km/h', vis: '7 km' }
+    ];
+    function rotateWeather() {
+      weatherSlides[weatherIdx].classList.remove('active');
+      weatherIdx = (weatherIdx + 1) % weatherSlides.length;
+      weatherSlides[weatherIdx].classList.add('active');
+      if (weatherCityName) weatherCityName.textContent = weatherSlides[weatherIdx].dataset.city;
+      const w = weatherData[weatherIdx];
+      const h = document.getElementById('wHum');
+      const wi = document.getElementById('wWind');
+      const v = document.getElementById('wVis');
+      if (h) h.textContent = w.hum;
+      if (wi) wi.textContent = w.wind;
+      if (v) v.textContent = w.vis;
+    }
+    setInterval(rotateWeather, 5000);
+
+    // Radio station selector
+    function selectStation(el) {
+      const name = el.dataset.name;
+      const desc = el.dataset.desc;
+      document.getElementById('radioStationName').innerHTML = name + ' <span class="radio-live">En vivo</span>';
+      document.getElementById('radioStationDesc').textContent = desc;
+      document.querySelectorAll('.station-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('stationDropdown').classList.remove('open');
+    }
+    document.addEventListener('click', function(e) {
+      const dd = document.getElementById('stationDropdown');
+      if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f1b33">
+<title>Nicaragua Informate — Noticias de Nicaragua</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#0f1b33; --primary-light:#1a2d4d; --primary-dark:#080f1f;
+  --accent:#c9a96e; --accent-hover:#b8945a; --accent-light:#e8dcc8;
+  --danger:#dc2626; --success:#16a34a; --warning:#f59e0b;
+  --bg:#f0eeea; --surface:#ffffff; --surface-2:#f8f7f5; --surface-3:#f2f1ef;
+  --text:#111111; --text-secondary:#4a4a4a; --text-muted:#737373; --text-light:#a3a3a3;
+  --border:#e2e0db; --border-light:#f0eeea;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.04); --shadow-md:0 4px 20px rgba(0,0,0,0.06);
+  --shadow-lg:0 12px 48px rgba(0,0,0,0.1); --shadow-xl:0 24px 80px rgba(0,0,0,0.14);
+  --radius-sm:8px; --radius-md:14px; --radius-lg:20px; --radius-xl:28px;
+  --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="dark"] {
+  --bg:#050810; --surface:#0c1220; --surface-2:#111827; --surface-3:#161f32;
+  --text:#f5f5f5; --text-secondary:#a0a0a0; --text-muted:#6b7280; --text-light:#4b5563;
+  --border:#1f2937; --border-light:#111827;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.3); --shadow-md:0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg:0 12px 48px rgba(0,0,0,0.5); --shadow-xl:0 24px 80px rgba(0,0,0,0.6);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:var(--transition);-webkit-font-smoothing:antialiased;padding-bottom:80px;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit;transition:var(--transition)}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* PROGRESS BAR */
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent) 0%,var(--danger) 100%);z-index:9999;width:0%;transition:width 0.1s}
+
+/* ECONOMIC BAR */
+.econ-bar{background:linear-gradient(90deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);color:rgba(255,255,255,0.9);font-size:0.72rem;padding:0;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:relative;border-bottom:1px solid rgba(255,255,255,0.06)}
+.econ-bar::-webkit-scrollbar{display:none}
+.econ-inner{display:flex;align-items:stretch;gap:0;max-width:1400px;margin:0 auto}
+.econ-item{display:flex;align-items:center;gap:6px;flex-shrink:0;padding:8px 12px;border-right:1px solid rgba(255,255,255,0.08)}
+.econ-item .label{color:var(--accent);font-weight:700;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.8px}
+.econ-item .value{font-weight:800;font-variant-numeric:tabular-nums;font-size:0.78rem;color:white}
+.econ-item .sub{font-size:0.65rem;opacity:0.75;margin-left:4px}
+.econ-item .up{color:#4ade80;font-size:0.68rem;font-weight:700}
+.econ-item .down{color:#f87171;font-size:0.68rem;font-weight:700}
+.econ-item .neutral{color:#fbbf24;font-size:0.68rem;font-weight:700}
+.econ-divider{width:1px;height:18px;background:rgba(255,255,255,0.1);margin:auto 2px;flex-shrink:0}
+.econ-date{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:0.7rem;font-weight:600;color:rgba(255,255,255,0.7);border-right:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;letter-spacing:-0.5px;color:var(--primary)}
+.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2.5px solid var(--accent)}
+.logo span{color:var(--accent);font-weight:700}
+.nav-desktop{display:none;gap:32px;align-items:center}
+.nav-desktop a{font-weight:600;font-size:0.82rem;color:var(--text-secondary);position:relative;padding:4px 0;letter-spacing:0.2px}
+.nav-desktop a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2.5px;background:var(--accent);transition:var(--transition);border-radius:2px}
+.nav-desktop a:hover{color:var(--primary)}
+.nav-desktop a:hover::after{width:100%}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-icon{width:40px;height:40px;border-radius:var(--radius-md);border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.btn-icon:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-2px)}
+.btn-donate{display:none;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-hover) 100%);color:var(--primary);padding:8px 18px;border-radius:100px;font-weight:700;font-size:0.8rem;transition:var(--transition)}
+.btn-donate:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(201,169,110,0.4)}
+
+/* RADIO PLAYER */
+.radio-player{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;position:sticky;top:56px;z-index:999;backdrop-filter:blur(20px);background:rgba(255,255,255,0.96)}
+[data-theme="dark"] .radio-player{background:rgba(12,18,32,0.96)}
+.radio-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.radio-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);box-shadow:0 3px 12px rgba(15,27,51,0.35)}
+.radio-btn.playing{animation:radioPulse 2.2s infinite}
+@keyframes radioPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,0.5)}50%{box-shadow:0 0 0 14px rgba(201,169,110,0)}}
+.radio-info{flex:1;min-width:0}
+.radio-info h4{font-size:0.82rem;font-weight:800;color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.2px}
+.radio-info p{font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.radio-live{display:inline-flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:1px;margin-left:8px}
+.radio-live::before{content:'';width:7px;height:7px;background:var(--danger);border-radius:50%;animation:livePulse 1.5s infinite}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.radio-wave{display:flex;align-items:flex-end;gap:3px;height:22px}
+.radio-wave span{width:3.5px;background:linear-gradient(to top,var(--accent),var(--accent-hover));border-radius:3px;animation:wave 1.2s ease-in-out infinite}
+.radio-wave span:nth-child(1){height:7px;animation-delay:0s}
+.radio-wave span:nth-child(2){height:18px;animation-delay:0.15s}
+.radio-wave span:nth-child(3){height:12px;animation-delay:0.3s}
+.radio-wave span:nth-child(4){height:22px;animation-delay:0.1s}
+.radio-wave span:nth-child(5){height:9px;animation-delay:0.25s}
+.radio-wave span:nth-child(6){height:15px;animation-delay:0.05s}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.4)}}
+.radio-wave.paused span{animation:none;height:4px;opacity:0.4}
+.radio-volume{display:none;align-items:center;gap:10px}
+.radio-volume input[type="range"]{width:90px;accent-color:var(--accent);height:4px}
+
+/* BREAKING BAR */
+.breaking-bar{background:linear-gradient(90deg,var(--danger) 0%,#991b1b 100%);color:white;padding:10px 0;overflow:hidden;position:relative}
+.breaking-label{position:absolute;left:0;top:0;bottom:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);display:flex;align-items:center;padding:0 18px;font-weight:900;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;z-index:2;gap:8px}
+.breaking-label::before{content:'';width:8px;height:8px;background:white;border-radius:50%;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,0.5)}50%{opacity:0.6;transform:scale(0.75);box-shadow:0 0 0 8px rgba(255,255,255,0)}}
+.breaking-ticker{display:flex;gap:50px;animation:ticker 35s linear infinite;white-space:nowrap;padding-left:160px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.breaking-item{display:flex;align-items:center;gap:12px;font-size:0.88rem;font-weight:600}
+.breaking-item .time{font-size:0.72rem;opacity:0.75;font-weight:400;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px}
+
+/* HERO */
+.hero{max-width:1400px;margin:24px auto;padding:0 16px}
+.hero-card{display:grid;grid-template-columns:1fr;background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xl);border:1px solid var(--border)}
+.hero-image{position:relative;min-height:240px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);overflow:hidden}
+.hero-image img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.92}
+.hero-badge{position:absolute;top:18px;left:18px;background:var(--accent);color:var(--primary);padding:6px 16px;border-radius:100px;font-weight:900;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;z-index:2}
+.hero-content{padding:28px;display:flex;flex-direction:column;justify-content:center}
+.hero-meta{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:0.82rem;color:var(--text-muted)}
+.hero-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.hero-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1.15;margin-bottom:16px;color:var(--text);letter-spacing:-0.3px}
+.hero-excerpt{font-size:1rem;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--primary);color:white;padding:14px 28px;border-radius:var(--radius-md);font-weight:700;font-size:0.95rem;transition:var(--transition);width:fit-content}
+.btn-primary:hover{background:var(--accent);color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,169,110,0.3)}
+
+/* TRENDS */
+.trends-section{max-width:1400px;margin:0 auto;padding:0 16px 28px}
+.trends-bar{display:flex;gap:10px;overflow-x:auto;padding:4px 0 14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.trends-bar::-webkit-scrollbar{display:none}
+.trend-chip{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;font-size:0.85rem;font-weight:600;color:var(--text-secondary);transition:var(--transition);white-space:nowrap}
+.trend-chip:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.trend-chip .trend-rank{font-size:0.7rem;font-weight:900;color:var(--accent);background:rgba(201,169,110,0.12);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.trend-chip:hover .trend-rank{color:var(--primary);background:var(--accent)}
+
+/* MAIN LAYOUT */
+.main-layout{max-width:1400px;margin:0 auto;padding:0 16px 60px;display:grid;grid-template-columns:1fr;gap:28px}
+
+/* SECTIONS */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2.5px solid var(--border)}
+.section-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';width:5px;height:26px;background:linear-gradient(to bottom,var(--accent),var(--accent-hover));border-radius:3px}
+.section-link{font-size:0.82rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:4px}
+.section-link:hover{gap:8px}
+
+/* NEWS GRID */
+.news-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:44px}
+.news-card{background:var(--surface);border-radius:var(--radius-md);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);transition:var(--transition);display:flex;flex-direction:column}
+.news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.news-image{position:relative;height:200px;overflow:hidden;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)}
+.news-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
+.news-card:hover .news-image img{transform:scale(1.06)}
+.news-category{position:absolute;top:12px;left:12px;background:rgba(15,27,51,0.92);color:var(--accent);padding:5px 12px;border-radius:100px;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;backdrop-filter:blur(6px)}
+.news-body{padding:18px;flex:1;display:flex;flex-direction:column}
+.news-date{font-size:0.78rem;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.news-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;line-height:1.35;margin-bottom:12px;color:var(--text)}
+.news-excerpt{font-size:0.9rem;color:var(--text-secondary);line-height:1.6;flex:1}
+
+/* AD BANNERS */
+.ad-banner{background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface-3) 100%);border:1.5px dashed var(--border);border-radius:var(--radius-md);padding:24px;text-align:center;margin-bottom:28px;position:relative;overflow:hidden}
+.ad-banner::before{content:'PUBLICIDAD';position:absolute;top:6px;right:10px;font-size:0.58rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
+.ad-banner h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text-secondary);margin-bottom:8px}
+.ad-banner p{font-size:0.85rem;color:var(--text-muted);margin-bottom:14px}
+.ad-banner .ad-btn{display:inline-block;padding:8px 20px;background:var(--accent);color:var(--primary);border-radius:100px;font-weight:700;font-size:0.82rem;transition:var(--transition)}
+.ad-banner .ad-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.ad-sidebar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;margin-bottom:20px;position:relative}
+.ad-sidebar::before{content:'PUBLICIDAD';position:absolute;top:6px;right:10px;font-size:0.55rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
+.ad-sidebar img{width:100%;height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:12px}
+.ad-sidebar h4{font-size:0.95rem;font-weight:700;margin-bottom:6px}
+.ad-sidebar p{font-size:0.8rem;color:var(--text-muted);margin-bottom:12px}
+
+/* ECONOMIC WIDGET */
+.econ-widget{background:var(--surface);border-radius:var(--radius-lg);padding:22px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);margin-bottom:20px}
+.econ-widget-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;margin-bottom:16px;color:var(--primary);display:flex;align-items:center;gap:10px}
+.econ-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.econ-box{background:var(--surface-2);border-radius:var(--radius-sm);padding:14px;text-align:center;border:1.5px solid var(--border);transition:var(--transition)}
+.econ-box:hover{border-color:var(--accent);transform:translateY(-2px)}
+.econ-box-label{font-size:0.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px}
+.econ-box-value{font-size:1.25rem;font-weight:900;color:var(--primary);font-variant-numeric:tabular-nums;line-height:1}
+.econ-box-sub{font-size:0.72rem;color:var(--text-muted);margin-top:4px}
+.econ-box-change{font-size:0.75rem;font-weight:700;margin-top:4px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px}
+.econ-box-change.up{background:rgba(22,163,74,0.1);color:var(--success)}
+.econ-box-change.down{background:rgba(220,38,38,0.1);color:var(--danger)}
+.econ-box-change.neutral{background:rgba(245,158,11,0.1);color:var(--warning)}
+.econ-fuels-title{font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.econ-fuel-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem}
+.econ-fuel-row:last-child{border-bottom:none}
+.econ-fuel-name{font-weight:600;color:var(--text-secondary)}
+.econ-fuel-price{font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums}
+.econ-fuel-change{font-size:0.75rem;font-weight:700;margin-left:6px}
+.econ-fuel-change.up{color:var(--success)}
+.econ-fuel-change.down{color:var(--danger)}
+.econ-fuel-change.neutral{color:var(--warning)}
+.econ-source{font-size:0.68rem;color:var(--text-light);text-align:center;margin-top:14px;letter-spacing:0.5px}
+
+/* WEATHER WIDGET */
+.weather-widget-full{background:linear-gradient(135deg,#1e3a5f 0%,#0f1b33 100%);border-radius:var(--radius-lg);padding:24px;color:white;margin-bottom:20px;position:relative;overflow:hidden}
+.weather-widget-full::before{content:'';position:absolute;top:-30%;right:-10%;width:180px;height:180px;background:rgba(201,169,110,0.08);border-radius:50%}
+.weather-current{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:relative}
+.weather-current-main{display:flex;align-items:center;gap:16px}
+.weather-current-main svg{width:48px;height:48px;color:var(--accent)}
+.weather-current-temp{font-size:2.8rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.weather-current-info h4{font-size:1rem;font-weight:700;margin-bottom:2px}
+.weather-current-info p{font-size:0.8rem;opacity:0.75}
+.weather-current-details{display:flex;flex-direction:column;gap:6px;text-align:right;font-size:0.78rem;opacity:0.85}
+.weather-forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:relative}
+.weather-day{text-align:center;padding:12px 6px;background:rgba(255,255,255,0.08);border-radius:var(--radius-sm);transition:var(--transition)}
+.weather-day:hover{background:rgba(255,255,255,0.15);transform:translateY(-2px)}
+.weather-day-name{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.weather-day-icon{font-size:1.4rem;margin-bottom:6px}
+.weather-day-temp{font-size:0.9rem;font-weight:800}
+.weather-day-desc{font-size:0.65rem;opacity:0.7;margin-top:2px}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:20px}
+.sidebar-widget{background:var(--surface);border-radius:var(--radius-md);padding:22px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm)}
+.widget-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;margin-bottom:18px;color:var(--primary);display:flex;align-items:center;gap:10px}
+.trending-item{display:flex;gap:14px;padding:14px 0;border-bottom:1.5px solid var(--border);transition:var(--transition)}
+.trending-item:last-child{border-bottom:none;padding-bottom:0}
+.trending-item:first-child{padding-top:0}
+.trending-item:hover{padding-left:8px}
+.trending-num{font-size:1.5rem;font-weight:900;color:var(--accent);line-height:1;min-width:28px}
+.trending-content h4{font-size:0.9rem;font-weight:700;line-height:1.4;margin-bottom:4px;color:var(--text)}
+.trending-content span{font-size:0.75rem;color:var(--text-muted)}
+.categories-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.cat-tag{padding:8px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;font-size:0.85rem;font-weight:600;color:var(--text-secondary);transition:var(--transition)}
+.cat-tag:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.newsletter-input{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:0.9rem;transition:var(--transition)}
+.newsletter-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,169,110,0.15)}
+.btn-primary-solid{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:white;padding:12px 24px;border-radius:var(--radius-md);font-family:'Inter',sans-serif;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:var(--transition);width:100%}
+.btn-primary-solid:hover{background:var(--accent);color:var(--primary)}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:rgba(255,255,255,0.7);padding:56px 16px 100px;margin-top:48px;position:relative;overflow:hidden}
+.footer::before{content:'';position:absolute;top:-50%;left:-10%;width:400px;height:400px;background:rgba(201,169,110,0.05);border-radius:50%}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:32px;position:relative}
+.footer-brand{display:flex;align-items:center;gap:12px;font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;color:white;margin-bottom:14px}
+.footer-brand img{width:40px;height:40px;border-radius:50%;border:2.5px solid var(--accent)}
+.footer-desc{font-size:0.9rem;line-height:1.75;max-width:340px;opacity:0.85}
+.footer-title{font-weight:800;color:white;margin-bottom:18px;font-size:0.85rem;text-transform:uppercase;letter-spacing:2px}
+.footer-links li{margin-bottom:12px}
+.footer-links a{font-size:0.9rem;transition:var(--transition);opacity:0.85}
+.footer-links a:hover{color:var(--accent);padding-left:6px;opacity:1}
+.footer-social{display:flex;gap:12px;margin-top:20px}
+.footer-social a{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:var(--transition);color:white}
+.footer-social a:hover{background:var(--accent);color:var(--primary);transform:translateY(-3px)}
+.footer-bottom{max-width:1400px;margin:36px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;font-size:0.8rem;opacity:0.7;position:relative}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1.5px solid var(--border);display:flex;justify-content:space-around;align-items:center;height:68px;z-index:1002;padding-bottom:env(safe-area-inset-bottom,0);backdrop-filter:blur(24px);background:rgba(255,255,255,0.97);box-shadow:0 -4px 20px rgba(0,0,0,0.06)}
+[data-theme="dark"] .bottom-nav{background:rgba(12,18,32,0.97);box-shadow:0 -4px 20px rgba(0,0,0,0.3)}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:var(--radius-md);color:var(--text-muted);font-size:0.62rem;font-weight:600;transition:var(--transition);flex:1}
+.bottom-nav-item svg{width:22px;height:22px;stroke-width:2}
+.bottom-nav-item.active{color:var(--primary)}
+.bottom-nav-item.active svg{stroke:var(--accent)}
+.bottom-nav-item:hover{color:var(--primary);background:var(--bg)}
+
+/* RESPONSIVE */
+@media(min-width:640px){
+  .news-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+  .hero-image{min-height:320px}
+  .hero-title{font-size:2rem}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .weather-forecast{gap:12px}
+  .econ-grid{grid-template-columns:1fr 1fr}
+}
+@media(min-width:768px){
+  .econ-bar{font-size:0.78rem}
+  .header-inner{padding:0 24px;height:64px}
+  .logo{font-size:1.5rem}
+  .logo img{width:42px;height:42px}
+  .nav-desktop{display:flex}
+  .btn-donate{display:flex}
+  .radio-player{top:64px;padding:12px 24px}
+  .hero{margin:32px auto;padding:0 24px}
+  .hero-content{padding:36px}
+  .hero-title{font-size:2.4rem}
+  .hero-excerpt{font-size:1.05rem}
+  .main-layout{padding:0 24px 60px;gap:36px}
+  .trends-section{padding:0 24px 28px}
+  .footer{padding:64px 24px 100px}
+  .footer-inner{grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+  .footer-bottom{margin-top:40px;padding-top:28px;font-size:0.85rem}
+  .radio-volume{display:flex}
+}
+@media(min-width:1024px){
+  .main-layout{grid-template-columns:1fr 340px;gap:40px}
+  .hero-card{grid-template-columns:1.4fr 1fr}
+  .hero-image{min-height:420px}
+  .hero-title{font-size:2.8rem}
+  .bottom-nav{display:none}
+  body{padding-bottom:0}
+  .footer{padding-bottom:32px}
+  .sidebar{position:sticky;top:130px;height:fit-content}
+}
+@media(min-width:1280px){
+  .hero-title{font-size:3.2rem}
+}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.news-card,.hero-card,.sidebar-widget,.trend-chip,.ad-banner,.weather-widget-full,.econ-widget{animation:fadeInUp 0.6s ease forwards}
+.news-card:nth-child(2){animation-delay:0.1s}
+.news-card:nth-child(3){animation-delay:0.2s}
+.news-card:nth-child(4){animation-delay:0.3s}
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ECONOMIC INDICATORS BAR -->
+<div class="econ-bar">
+<div class="econ-inner">
+<div class="econ-date">📅 Jueves, 21 may 2026</div>
+<div class="econ-item"><span class="label">Dólar BCN</span><span class="value">C$ 36.62</span><span class="sub neutral">→ 0.00%</span></div>
+<div class="econ-item"><span class="label">Euro</span><span class="value">C$ 43.11</span><span class="sub up">▲ 1.25%</span></div>
+<div class="econ-divider"></div>
+<div class="econ-item"><span class="label">Gas. Reg.</span><span class="value">C$ 47.80</span><span class="sub neutral">→ 0.00%</span></div>
+<div class="econ-item"><span class="label">Gas. Súper</span><span class="value">C$ 49.00</span><span class="sub neutral">→ 0.00%</span></div>
+<div class="econ-item"><span class="label">Diésel</span><span class="value">C$ 43.21</span><span class="sub up">▲ 0.44%</span></div>
+<div class="econ-divider"></div>
+<div class="econ-item"><span class="label">Reservas</span><span class="value">9,657M USD</span><span class="sub up">▲ Est.</span></div>
+<div class="econ-item"><span class="label">Inflación</span><span class="value">3.0%</span><span class="sub neutral">→ Proy.</span></div>
+<div class="econ-item"><span class="label">PIB</span><span class="value">+4.0%</span><span class="sub up">▲ Proy.</span></div>
+</div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+<div class="header-inner">
+<a href="#" class="logo">
+<img src="https://images.unsplash.com/photo-1565128939501-29f8b991c7b7?w=100&h=100&fit=crop" alt="Logo">
+Nicaragua <span>Informate</span>
+</a>
+<nav class="nav-desktop">
+<a href="#">Inicio</a><a href="#">Nacionales</a><a href="#">Internacionales</a><a href="#">Sucesos</a><a href="#">Tecnología</a><a href="#">Deportes</a>
+</nav>
+<div class="header-actions">
+<button class="btn-donate" onclick="window.open('https://www.paypal.com/donate','_blank')">💛 Donar</button>
+<button class="btn-icon" onclick="toggleTheme()" title="Tema" aria-label="Cambiar tema">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+</div>
+</div>
+</header>
+
+<!-- RADIO -->
+<div class="radio-player">
+<div class="radio-inner">
+<button class="radio-btn" id="radioBtn" onclick="toggleRadio()" aria-label="Reproducir radio">
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" id="radioPlayIcon"/></svg>
+</button>
+<div class="radio-info">
+<h4>Radio Nicaragua Informate <span class="radio-live">En vivo</span></h4>
+<p>Cobertura informativa continua • Noticias de Nicaragua y el mundo en tiempo real</p>
+</div>
+<div class="radio-wave" id="radioWave"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="radio-volume">
+<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+<input type="range" min="0" max="100" value="70" aria-label="Volumen">
+</div>
+</div>
+</div>
+
+<!-- BREAKING -->
+<div class="breaking-bar">
+<div class="breaking-label">Última Hora</div>
+<div class="breaking-ticker">
+<div class="breaking-item"><span class="time">12:30</span> KFC confirma apertura en Managua con 350 empleos</div>
+<div class="breaking-item"><span class="time">12:15</span> Hospital Pediátrico Las Segovias inaugurado este 18 de mayo</div>
+<div class="breaking-item"><span class="time">11:55</span> Costa Rica intensifica operativos en Peñas Blancas</div>
+<div class="breaking-item"><span class="time">11:40</span> China logra clonación de cabras lecheras de alto rendimiento</div>
+<div class="breaking-item"><span class="time">11:20</span> Nueva vía conecta Laureles Sur con carretera a El Coyotepe</div>
+<div class="breaking-item"><span class="time">12:30</span> KFC confirma apertura en Managua con 350 empleos</div>
+<div class="breaking-item"><span class="time">12:15</span> Hospital Pediátrico Las Segovias inaugurado este 18 de mayo</div>
+<div class="breaking-item"><span class="time">11:55</span> Costa Rica intensifica operativos en Peñas Blancas</div>
+<div class="breaking-item"><span class="time">11:40</span> China logra clonación de cabras lecheras de alto rendimiento</div>
+<div class="breaking-item"><span class="time">11:20</span> Nueva vía conecta Laureles Sur con carretera a El Coyotepe</div>
+</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+<article class="hero-card">
+<div class="hero-image">
+<img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&h=600&fit=crop" alt="Noticia destacada">
+<span class="hero-badge">Destacada</span>
+</div>
+<div class="hero-content">
+<div class="hero-meta"><span>Nacionales</span><span class="dot"></span><span>21 de mayo, 2026</span></div>
+<h1 class="hero-title">KFC anuncia apertura de sus primeros restaurantes en Managua</h1>
+<p class="hero-excerpt">La reconocida cadena de comida rápida confirmó su llegada al país centroamericano con la apertura de múltiples sucursales en la capital, generando cientos de empleos.</p>
+<a href="#" class="btn-primary">Leer análisis completo <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div>
+</article>
+</section>
+
+<!-- TRENDS -->
+<section class="trends-section">
+<div class="section-header" style="margin-bottom:14px"><h2 class="section-title">🔥 Tendencias</h2></div>
+<div class="trends-bar">
+<a href="#" class="trend-chip"><span class="trend-rank">1</span> KFC Nicaragua</a>
+<a href="#" class="trend-chip"><span class="trend-rank">2</span> Hospital Estelí</a>
+<a href="#" class="trend-chip"><span class="trend-rank">3</span> Clonación China</a>
+<a href="#" class="trend-chip"><span class="trend-rank">4</span> Costa Rica</a>
+<a href="#" class="trend-chip"><span class="trend-rank">5</span> Laureles Sur</a>
+<a href="#" class="trend-chip"><span class="trend-rank">6</span> Hantavirus</a>
+<a href="#" class="trend-chip"><span class="trend-rank">7</span> Bitcoin</a>
+<a href="#" class="trend-chip"><span class="trend-rank">8</span> Dólar</a>
+<a href="#" class="trend-chip"><span class="trend-rank">9</span> Elecciones</a>
+<a href="#" class="trend-chip"><span class="trend-rank">10</span> Clima</a>
+</div>
+</section>
+
+<!-- MAIN -->
+<div class="main-layout">
+<main>
+<!-- AD BANNER -->
+<div class="ad-banner">
+<h4>¿Quieres llegar a miles de nicaragüenses?</h4>
+<p>Publicita tu negocio en Nicaragua Informate y conecta con nuestra audiencia fiel.</p>
+<a href="#" class="ad-btn">Conoce nuestros planes →</a>
+</div>
+
+<!-- NACIONALES -->
+<div class="section-header"><h2 class="section-title">Nacionales</h2><a href="#" class="section-link">Ver todas →</a></div>
+<div class="news-grid">
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&h=400&fit=crop" alt="Hospital"><span class="news-category">Nacionales</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 5 min de lectura</div><h3 class="news-title">Inaugurarán Hospital Pediátrico Las Segovias en Estelí</h3><p class="news-excerpt">El nuevo centro médico fortalecerá la atención especializada para la niñez del norte de Nicaragua.</p></div>
+</article>
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=600&h=400&fit=crop" alt="Vía"><span class="news-category">Nacionales</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 3 min de lectura</div><h3 class="news-title">Nueva vía conecta Laureles Sur con carretera a El Coyotepe</h3><p class="news-excerpt">La pista Miguel Ángel Ortez y Guillén mejora la movilidad urbana en Managua.</p></div>
+</article>
+</div>
+
+<!-- INTERNACIONALES -->
+<div class="section-header"><h2 class="section-title">Internacionales</h2><a href="#" class="section-link">Ver todas →</a></div>
+<div class="news-grid">
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1584036561566-b4521f22b781?w=600&h=400&fit=crop" alt="Virus"><span class="news-category">Internacionales</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 4 min de lectura</div><h3 class="news-title">Canadá reporta caso de virus por roedores en Columbia Británica</h3><p class="news-excerpt">Autoridades sanitarias confirmaron un caso de hantavirus relacionado con un brote internacional.</p></div>
+</article>
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=600&h=400&fit=crop" alt="Operativo"><span class="news-category">Internacionales</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 3 min de lectura</div><h3 class="news-title">Policía realiza operativo de control en Peñas Blancas</h3><p class="news-excerpt">Autoridades de Costa Rica decomisaron drogas, armas y dinero en efectivo durante allanamientos.</p></div>
+</article>
+</div>
+
+<!-- TECNOLOGÍA -->
+<div class="section-header"><h2 class="section-title">Tecnología</h2><a href="#" class="section-link">Ver todas →</a></div>
+<div class="news-grid">
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=400&fit=crop" alt="Clonación"><span class="news-category">Tecnología</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 6 min de lectura</div><h3 class="news-title">China clona cabras lecheras de alto rendimiento</h3><p class="news-excerpt">Investigadores lograron clonar seis cabras de alta producción en un avance biotecnológico.</p></div>
+</article>
+<article class="news-card">
+<div class="news-image"><img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&h=400&fit=crop" alt="Accidente"><span class="news-category">Sucesos</span></div>
+<div class="news-body"><div class="news-date">📅 21 may 2026 • 3 min de lectura</div><h3 class="news-title">Autoridades investigan accidente en Rancho Grande</h3><p class="news-excerpt">Un accidente de tránsito en Matagalpa dejó un joven fallecido y varias personas lesionadas.</p></div>
+</article>
+</div>
+</main>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+<!-- ECONOMIC INDICATORS WIDGET -->
+<div class="econ-widget">
+<h3 class="econ-widget-title">📊 Indicadores Económicos</h3>
+<div class="econ-grid">
+<div class="econ-box">
+<div class="econ-box-label">Dólar BCN</div>
+<div class="econ-box-value">C$ 36.62</div>
+<div class="econ-box-change neutral">→ 0.00%</div>
+</div>
+<div class="econ-box">
+<div class="econ-box-label">Euro</div>
+<div class="econ-box-value">C$ 43.11</div>
+<div class="econ-box-change up">▲ 1.25%</div>
+</div>
+</div>
+<div class="econ-fuels-title">⛽ Combustibles (C$/galón)</div>
+<div class="econ-fuel-row">
+<span class="econ-fuel-name">Gasolina Regular</span>
+<span><span class="econ-fuel-price">C$ 47.80</span><span class="econ-fuel-change neutral">→ 0.00%</span></span>
+</div>
+<div class="econ-fuel-row">
+<span class="econ-fuel-name">Gasolina Súper</span>
+<span><span class="econ-fuel-price">C$ 49.00</span><span class="econ-fuel-change neutral">→ 0.00%</span></span>
+</div>
+<div class="econ-fuel-row">
+<span class="econ-fuel-name">Diésel</span>
+<span><span class="econ-fuel-price">C$ 43.21</span><span class="econ-fuel-change up">▲ 0.44%</span></span>
+</div>
+<div class="econ-source">Fuente: BCN / INE • Actualizado 21 may 2026</div>
+</div>
+
+<!-- WEATHER -->
+<div class="weather-widget-full">
+<div class="weather-current">
+<div class="weather-current-main">
+<svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+<div class="weather-current-temp">32°</div>
+<div class="weather-current-info"><h4>Managua, Nicaragua</h4><p>Soleado • Sensación 35°</p></div>
+</div>
+<div class="weather-current-details"><span>💧 Humedad 68%</span><span>💨 Viento 12 km/h</span><span>👁️ Visibilidad 10 km</span></div>
+</div>
+<div class="weather-forecast">
+<div class="weather-day"><div class="weather-day-name">Hoy</div><div class="weather-day-icon">☀️</div><div class="weather-day-temp">32°</div><div class="weather-day-desc">Soleado</div></div>
+<div class="weather-day"><div class="weather-day-name">Vie</div><div class="weather-day-icon">⛅</div><div class="weather-day-temp">30°</div><div class="weather-day-desc">Parcial</div></div>
+<div class="weather-day"><div class="weather-day-name">Sáb</div><div class="weather-day-icon">🌧️</div><div class="weather-day-temp">28°</div><div class="weather-day-desc">Lluvia</div></div>
+<div class="weather-day"><div class="weather-day-name">Dom</div><div class="weather-day-icon">⛈️</div><div class="weather-day-temp">27°</div><div class="weather-day-desc">Tormenta</div></div>
+<div class="weather-day"><div class="weather-day-name">Lun</div><div class="weather-day-icon">☀️</div><div class="weather-day-temp">31°</div><div class="weather-day-desc">Soleado</div></div>
+</div>
+</div>
+
+<!-- AD SIDEBAR -->
+<div class="ad-sidebar">
+<img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop" alt="Publicidad">
+<h4>Impulsa tu negocio</h4>
+<p>Llega a más de 500,000 lectores mensuales</p>
+<a href="#" class="ad-btn">Más información</a>
+</div>
+
+<!-- TRENDING -->
+<div class="sidebar-widget">
+<h3 class="widget-title">🔥 Lo más leído</h3>
+<div class="trending-item"><span class="trending-num">1</span><div class="trending-content"><h4>KFC abrirá sus puertas en Managua este año</h4><span>Hace 2 horas • Nacionales</span></div></div>
+<div class="trending-item"><span class="trending-num">2</span><div class="trending-content"><h4>Hospital Pediátrico Las Segovias: esperanza para el norte</h4><span>Hace 4 horas • Nacionales</span></div></div>
+<div class="trending-item"><span class="trending-num">3</span><div class="trending-content"><h4>China logra clonación de cabras lecheras</h4><span>Hace 6 horas • Tecnología</span></div></div>
+<div class="trending-item"><span class="trending-num">4</span><div class="trending-content"><h4>Costa Rica intensifica operativos en frontera norte</h4><span>Hace 8 horas • Internacionales</span></div></div>
+<div class="trending-item"><span class="trending-num">5</span><div class="trending-content"><h4>Autoridades investigan accidente en Rancho Grande</h4><span>Hace 10 horas • Sucesos</span></div></div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="sidebar-widget">
+<h3 class="widget-title">🏷️ Categorías</h3>
+<div class="categories-cloud">
+<a href="#" class="cat-tag">Nacionales</a><a href="#" class="cat-tag">Internacionales</a><a href="#" class="cat-tag">Sucesos</a>
+<a href="#" class="cat-tag">Tecnología</a><a href="#" class="cat-tag">Deportes</a><a href="#" class="cat-tag">Economía</a>
+<a href="#" class="cat-tag">Cultura</a><a href="#" class="cat-tag">Salud</a>
+</div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="sidebar-widget">
+<h3 class="widget-title">📰 Newsletter</h3>
+<p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Recibe cada mañana las noticias más importantes de Nicaragua en tu correo.</p>
+<input type="email" class="newsletter-input" placeholder="tu@email.com">
+<button class="btn-primary-solid">Suscribirme gratis</button>
+</div>
+</aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer-inner">
+<div>
+<div class="footer-brand"><img src="https://images.unsplash.com/photo-1565128939501-29f8b991c7b7?w=100&h=100&fit=crop" alt="Logo">Nicaragua Informate</div>
+<p class="footer-desc">Tu fuente confiable de noticias sobre Nicaragua y el mundo. Información verificada y actualizada al instante.</p>
+<div class="footer-social">
+<a href="#" title="Facebook"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+<a href="#" title="Twitter"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 8v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+<a href="#" title="Instagram"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+<a href="#" title="YouTube"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+</div>
+</div>
+<div><h4 class="footer-title">Secciones</h4><ul class="footer-links"><li><a href="#">Nacionales</a></li><li><a href="#">Internacionales</a></li><li><a href="#">Sucesos</a></li><li><a href="#">Tecnología</a></li><li><a href="#">Deportes</a></li></ul></div>
+<div><h4 class="footer-title">Compañía</h4><ul class="footer-links"><li><a href="#">Sobre nosotros</a></li><li><a href="#">Contacto</a></li><li><a href="#">Publicidad</a></li><li><a href="#">Trabaja con nosotros</a></li></ul></div>
+<div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Términos de uso</a></li><li><a href="#">Privacidad</a></li><li><a href="#">Cookies</a></li></ul></div>
+</div>
+<div class="footer-bottom">© 2026 Nicaragua Informate. Todos los derechos reservados.</div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+<a href="#" class="bottom-nav-item active">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+Inicio
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+Mundo
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+Radio
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+Chat
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+Perfil
+</a>
+</nav>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute('data-theme');
+  html.setAttribute('data-theme',current==='dark'?'light':'dark');
+  localStorage.setItem('theme',current==='dark'?'light':'dark');
+}
+const saved=localStorage.getItem('theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+else if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+}
+
+let radioPlaying=false;
+function toggleRadio(){
+  radioPlaying=!radioPlaying;
+  const btn=document.getElementById('radioBtn');
+  const wave=document.getElementById('radioWave');
+  const icon=document.getElementById('radioPlayIcon');
+  if(radioPlaying){btn.classList.add('playing');wave.classList.remove('paused');icon.setAttribute('d','M6 4h4v16H6zm8 0h4v16h-4z');}
+  else{btn.classList.remove('playing');wave.classList.add('paused');icon.setAttribute('d','M8 5v14l11-7z');}
+}
+
+window.addEventListener('scroll',()=>{
+  const winScroll=document.body.scrollTop||document.documentElement.scrollTop;
+  const height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  const bar=document.getElementById('progressBar');
+  if(bar)bar.style.width=(winScroll/height*100)+'%';
+});
+</script>
+</body>
+</html>

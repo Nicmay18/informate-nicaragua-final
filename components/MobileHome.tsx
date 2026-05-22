@@ -19,6 +19,7 @@ import type { Noticia } from '@/lib/types';
 interface MobileHomeProps {
   noticias: Noticia[];
   masLeidas: Noticia[];
+  tickerText?: string;
 }
 
 const MONTHS_SHORT = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -51,13 +52,13 @@ function readTime(resumen?: string, contenido?: string) {
   return Math.max(1, tiempoLectura(contenido || resumen || '')) + ' min lectura';
 }
 
-export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
+export default function MobileHome({ noticias, masLeidas, tickerText }: MobileHomeProps) {
   const hero = noticias[0];
   const latest = noticias.slice(1, 7);
-  const tickerText = hero?.titulo || 'Nicaragua Informate';
+  const effectiveTicker = tickerText || hero?.titulo || 'Nicaragua Informate';
 
   return (
-    <ProLayout tickerText={tickerText}>
+    <ProLayout tickerText={effectiveTicker}>
       {noticias.length > 0 && (
         <section className="swiper-section">
           <Swiper

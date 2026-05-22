@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f1b33">
+<title>KFC en Managua — Nicaragua Informate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#0f1b33; --primary-light:#1a2d4d; --primary-dark:#080f1f;
+  --accent:#c9a96e; --accent-hover:#b8945a; --accent-light:#e8dcc8;
+  --danger:#dc2626; --success:#16a34a; --warning:#f59e0b;
+  --bg:#f0eeea; --surface:#ffffff; --surface-2:#f8f7f5; --surface-3:#f2f1ef;
+  --text:#111111; --text-secondary:#4a4a4a; --text-muted:#737373; --text-light:#a3a3a3;
+  --border:#e2e0db; --border-light:#f0eeea;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.04); --shadow-md:0 4px 20px rgba(0,0,0,0.06);
+  --shadow-lg:0 12px 48px rgba(0,0,0,0.1); --shadow-xl:0 24px 80px rgba(0,0,0,0.14);
+  --radius-sm:8px; --radius-md:14px; --radius-lg:20px; --radius-xl:28px;
+  --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="dark"] {
+  --bg:#050810; --surface:#0c1220; --surface-2:#111827; --surface-3:#161f32;
+  --text:#f5f5f5; --text-secondary:#a0a0a0; --text-muted:#6b7280; --text-light:#4b5563;
+  --border:#1f2937; --border-light:#111827;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.3); --shadow-md:0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg:0 12px 48px rgba(0,0,0,0.5); --shadow-xl:0 24px 80px rgba(0,0,0,0.6);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:var(--transition);-webkit-font-smoothing:antialiased;padding-bottom:80px}
+img{max-width:100%;height:auto;display:block}
+a{text-decoration:none;color:inherit;transition:var(--transition)}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* TOP BAR */
+.topbar{background:linear-gradient(90deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);color:rgba(255,255,255,0.88);font-size:0.72rem;padding:0;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:relative}
+.topbar::-webkit-scrollbar{display:none}
+.topbar-inner{display:flex;align-items:stretch;gap:0;max-width:1400px;margin:0 auto}
+.topbar-item{display:flex;align-items:center;gap:6px;flex-shrink:0;padding:8px 14px;border-right:1px solid rgba(255,255,255,0.08)}
+.topbar-item .label{color:var(--accent);font-weight:700;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.8px}
+.topbar-item .value{font-weight:700;font-variant-numeric:tabular-nums;font-size:0.78rem}
+.topbar-item .up{color:#4ade80;font-size:0.7rem}
+.topbar-item .down{color:#f87171;font-size:0.7rem}
+.topbar-item .neutral{color:#fbbf24;font-size:0.7rem}
+.world-clocks{display:flex;gap:0}
+.clock{text-align:center;line-height:1.15;padding:8px 12px;border-right:1px solid rgba(255,255,255,0.08)}
+.clock-time{font-weight:800;font-size:0.82rem;font-variant-numeric:tabular-nums;color:white}
+.clock-city{font-size:0.58rem;opacity:0.65;text-transform:uppercase;letter-spacing:0.5px}
+.weather-top{display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(201,169,110,0.12)}
+.weather-temp-main{font-weight:800;font-size:0.9rem;color:var(--accent)}
+.weather-desc-main{font-size:0.65rem;opacity:0.8}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;letter-spacing:-0.5px;color:var(--primary)}
+.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2.5px solid var(--accent)}
+.logo span{color:var(--accent);font-weight:700}
+.nav-desktop{display:none;gap:32px;align-items:center}
+.nav-desktop a{font-weight:600;font-size:0.82rem;color:var(--text-secondary);position:relative;padding:4px 0;letter-spacing:0.2px}
+.nav-desktop a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2.5px;background:var(--accent);transition:var(--transition);border-radius:2px}
+.nav-desktop a:hover{color:var(--primary)}
+.nav-desktop a:hover::after{width:100%}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-icon{width:40px;height:40px;border-radius:var(--radius-md);border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.btn-icon:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-2px)}
+.btn-donate{display:none;align-items:center;gap:6px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-hover) 100%);color:var(--primary);padding:8px 18px;border-radius:100px;font-weight:700;font-size:0.8rem;transition:var(--transition)}
+.btn-donate:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(201,169,110,0.4)}
+
+/* RADIO */
+.radio-player{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;position:sticky;top:56px;z-index:999;backdrop-filter:blur(20px);background:rgba(255,255,255,0.96)}
+[data-theme="dark"] .radio-player{background:rgba(12,18,32,0.96)}
+.radio-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.radio-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);box-shadow:0 3px 12px rgba(15,27,51,0.35)}
+.radio-btn.playing{animation:radioPulse 2.2s infinite}
+@keyframes radioPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,0.5)}50%{box-shadow:0 0 0 14px rgba(201,169,110,0)}}
+.radio-info{flex:1;min-width:0}
+.radio-info h4{font-size:0.82rem;font-weight:800;color:var(--primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.2px}
+.radio-info p{font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.radio-live{display:inline-flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:1px}
+.radio-live::before{content:'';width:7px;height:7px;background:var(--danger);border-radius:50%;animation:livePulse 1.5s infinite}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.radio-wave{display:flex;align-items:flex-end;gap:3px;height:22px}
+.radio-wave span{width:3.5px;background:linear-gradient(to top,var(--accent),var(--accent-hover));border-radius:3px;animation:wave 1.2s ease-in-out infinite}
+.radio-wave span:nth-child(1){height:7px;animation-delay:0s}
+.radio-wave span:nth-child(2){height:18px;animation-delay:0.15s}
+.radio-wave span:nth-child(3){height:12px;animation-delay:0.3s}
+.radio-wave span:nth-child(4){height:22px;animation-delay:0.1s}
+.radio-wave span:nth-child(5){height:9px;animation-delay:0.25s}
+.radio-wave span:nth-child(6){height:15px;animation-delay:0.05s}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.4)}}
+.radio-wave.paused span{animation:none;height:4px;opacity:0.4}
+.radio-volume{display:none;align-items:center;gap:10px}
+.radio-volume input[type="range"]{width:90px;accent-color:var(--accent);height:4px}
+
+/* PROGRESS */
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:1001;width:0%;transition:width 0.1s linear}
+
+/* ARTICLE HEADER */
+.article-header{max-width:1400px;margin:0 auto;padding:20px 16px 0}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;flex-wrap:wrap}
+.breadcrumb a:hover{color:var(--accent)}
+.breadcrumb-sep{opacity:0.5}
+.article-category{display:inline-block;background:var(--primary);color:var(--accent);padding:5px 14px;border-radius:100px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.article-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1.15;margin-bottom:16px;color:var(--text);letter-spacing:-0.3px}
+.article-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;font-size:0.82rem;color:var(--text-muted);padding-bottom:20px;border-bottom:1px solid var(--border)}
+.meta-author{display:flex;align-items:center;gap:10px}
+.meta-author img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
+.meta-author-info strong{display:block;color:var(--text);font-weight:600;font-size:0.85rem}
+.meta-author-info span{font-size:0.75rem}
+.meta-reading::before{content:'⏱️';margin-right:4px}
+
+/* ARTICLE HERO */
+.article-hero{max-width:1400px;margin:0 auto;padding:0 16px}
+.hero-img-container{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xl)}
+.hero-img-container img{width:100%;height:240px;object-fit:cover}
+.img-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(15,27,51,0.85));color:rgba(255,255,255,0.9);padding:40px 16px 14px;font-size:0.78rem}
+
+/* ARTICLE LAYOUT */
+.article-layout{max-width:1400px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:1fr;gap:24px}
+
+/* SUMMARY BOX — 3 PUNTOS CLAVE */
+.summary-box{background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface-3) 100%);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:24px 0;position:relative;overflow:hidden}
+.summary-box::before{content:'📋 RESUMEN';position:absolute;top:12px;right:16px;font-size:0.6rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
+.summary-box h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:800;color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.summary-box h3::before{content:'';width:4px;height:22px;background:var(--accent);border-radius:2px}
+.summary-points{list-style:none;padding:0;margin:0}
+.summary-points li{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.summary-points li:last-child{border-bottom:none;padding-bottom:0}
+.summary-points li:first-child{padding-top:0}
+.summary-points .point-num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;flex-shrink:0;margin-top:2px}
+.summary-points .point-text{font-size:0.92rem;color:var(--text-secondary);line-height:1.6}
+.summary-points .point-text strong{color:var(--text);font-weight:700}
+
+/* ANALYSIS BOX */
+.analysis-box{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:24px 0;box-shadow:var(--shadow-sm)}
+.analysis-box h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:800;color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.analysis-box h3::before{content:'';width:4px;height:22px;background:var(--accent);border-radius:2px}
+.analysis-box p{font-size:0.92rem;color:var(--text-secondary);line-height:1.75;margin-bottom:14px}
+.analysis-box p:last-child{margin-bottom:0}
+.analysis-box .analysis-tag{display:inline-block;padding:4px 12px;background:rgba(201,169,110,0.12);color:var(--accent);border-radius:100px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+
+/* ARTICLE CONTENT */
+.article-content{font-family:'Merriweather',serif;font-size:1.02rem;line-height:1.85;color:var(--text-secondary)}
+.article-content p{margin-bottom:1.4em}
+.article-content h2{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:800;color:var(--primary);margin:1.6em 0 0.7em;line-height:1.3}
+.article-content h3{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin:1.4em 0 0.6em}
+.article-content blockquote{border-left:4px solid var(--accent);padding:16px 20px;margin:1.4em 0;background:var(--surface-2);border-radius:0 var(--radius-md) var(--radius-md) 0;font-style:italic;color:var(--text)}
+.article-content blockquote p{margin:0;font-size:1.05rem}
+.article-content ul,.article-content ol{margin:1em 0 1.4em 1.4em;padding-left:0.4em}
+.article-content li{margin-bottom:0.5em}
+.article-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.article-content a:hover{color:var(--primary)}
+.article-content figure{margin:1.8em 0;border-radius:var(--radius-md);overflow:hidden}
+.article-content figcaption{font-family:'Inter',sans-serif;font-size:0.78rem;color:var(--text-muted);text-align:center;padding:10px;background:var(--surface-2)}
+.article-content img{width:100%;border-radius:var(--radius-md)}
+
+/* PAYPAL DONATION */
+.donation-box{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);border-radius:var(--radius-lg);padding:28px;color:white;margin:2em 0;text-align:center;position:relative;overflow:hidden}
+.donation-box::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(201,169,110,0.1);border-radius:50%}
+.donation-box h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;margin-bottom:10px;position:relative}
+.donation-box p{font-size:0.9rem;opacity:0.85;margin-bottom:18px;position:relative}
+.donation-amounts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;position:relative}
+.donation-btn{padding:10px 18px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.25);border-radius:var(--radius-md);color:white;font-weight:700;font-size:0.88rem;transition:var(--transition);cursor:pointer}
+.donation-btn:hover{background:var(--accent);color:var(--primary);border-color:var(--accent);transform:translateY(-2px)}
+.donation-btn.active{background:var(--accent);color:var(--primary);border-color:var(--accent)}
+.paypal-btn{display:inline-flex;align-items:center;gap:8px;background:#ffc439;color:#003087;padding:14px 32px;border-radius:var(--radius-md);font-weight:800;font-size:0.95rem;transition:var(--transition);position:relative;border:none;cursor:pointer}
+.paypal-btn:hover{background:#ffb91d;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+
+/* SHARE */
+.share-bar{display:flex;align-items:center;gap:10px;padding:18px 0;margin:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.share-label{font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;color:var(--text-muted)}
+.share-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);color:var(--text-secondary)}
+.share-btn:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-2px)}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.tag{padding:8px 16px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:100px;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--text-secondary);transition:var(--transition)}
+.tag:hover{background:var(--primary);color:white;border-color:var(--primary)}
+
+/* AUTHOR BOX */
+.author-box{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:24px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--shadow-sm);margin-bottom:32px}
+.author-box img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2.5px solid var(--accent);flex-shrink:0}
+.author-box h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.author-box p{font-family:'Inter',sans-serif;font-size:0.88rem;color:var(--text-secondary);line-height:1.6}
+.author-social{display:flex;gap:8px;margin-top:12px}
+.author-social a{width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-muted);transition:var(--transition)}
+.author-social a:hover{background:var(--accent);color:var(--primary)}
+
+/* RELATED */
+.related-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;color:var(--primary);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.related-title::before{content:'';width:4px;height:24px;background:var(--accent);border-radius:2px}
+.related-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.related-card{display:flex;gap:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:14px;transition:var(--transition)}
+.related-card:hover{border-color:var(--accent);transform:translateX(4px)}
+.related-card img{width:80px;height:80px;border-radius:var(--radius-sm);object-fit:cover;flex-shrink:0}
+.related-card h5{font-family:'Inter',sans-serif;font-size:0.92rem;font-weight:700;line-height:1.4;color:var(--text);margin-bottom:6px}
+.related-card span{font-size:0.75rem;color:var(--text-muted)}
+
+/* COMMENTS SECTION */
+.comments-section{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:32px 0;box-shadow:var(--shadow-sm)}
+.comments-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1.5px solid var(--border)}
+.comments-header h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:10px}
+.comments-header h3::before{content:'';width:4px;height:22px;background:var(--accent);border-radius:2px}
+.comments-count{font-size:0.82rem;color:var(--text-muted);font-weight:600;background:var(--bg);padding:4px 12px;border-radius:100px}
+.comment-form{margin-bottom:24px}
+.comment-form textarea{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-family:'Inter',sans-serif;font-size:0.92rem;background:var(--bg);color:var(--text);resize:vertical;min-height:100px;margin-bottom:12px;transition:var(--transition)}
+.comment-form textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,169,110,0.15)}
+.comment-form .form-row{display:flex;gap:10px;margin-bottom:12px}
+.comment-form input{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.88rem;background:var(--bg);color:var(--text);transition:var(--transition)}
+.comment-form input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,169,110,0.15)}
+.comment-form .btn-submit{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:white;padding:12px 24px;border-radius:var(--radius-md);font-weight:700;font-size:0.9rem;transition:var(--transition)}
+.comment-form .btn-submit:hover{background:var(--accent);color:var(--primary)}
+.comment-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid var(--border)}
+.comment-item:last-child{border-bottom:none;padding-bottom:0}
+.comment-item:first-child{padding-top:0}
+.comment-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0}
+.comment-body{flex:1}
+.comment-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.comment-name{font-weight:700;font-size:0.9rem;color:var(--text)}
+.comment-badge{display:inline-block;padding:2px 8px;background:var(--accent);color:var(--primary);border-radius:100px;font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px}
+.comment-time{font-size:0.75rem;color:var(--text-muted)}
+.comment-text{font-size:0.88rem;color:var(--text-secondary);line-height:1.7;margin-bottom:10px}
+.comment-actions{display:flex;gap:16px}
+.comment-actions button{display:flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:var(--transition)}
+.comment-actions button:hover{color:var(--accent)}
+.comment-replies{margin-left:56px;margin-top:14px;padding-left:18px;border-left:2px solid var(--border)}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:20px}
+.sidebar-widget{background:var(--surface);border-radius:var(--radius-md);padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm)}
+.widget-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;margin-bottom:16px;color:var(--primary);display:flex;align-items:center;gap:10px}
+.trending-item{display:flex;gap:12px;padding:12px 0;border-bottom:1.5px solid var(--border);transition:var(--transition)}
+.trending-item:last-child{border-bottom:none;padding-bottom:0}
+.trending-item:first-child{padding-top:0}
+.trending-item:hover{padding-left:6px}
+.trending-num{font-size:1.3rem;font-weight:900;color:var(--accent);line-height:1;min-width:26px}
+.trending-content h4{font-size:0.88rem;font-weight:700;line-height:1.4;margin-bottom:3px;color:var(--text)}
+.trending-content span{font-size:0.75rem;color:var(--text-muted)}
+.newsletter-input{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:0.9rem;transition:var(--transition)}
+.newsletter-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,169,110,0.15)}
+.btn-primary-solid{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary);color:white;padding:12px 24px;border-radius:var(--radius-md);font-family:'Inter',sans-serif;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:var(--transition);width:100%}
+.btn-primary-solid:hover{background:var(--accent);color:var(--primary)}
+
+/* AD SIDEBAR */
+.ad-sidebar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;margin-bottom:20px;position:relative}
+.ad-sidebar::before{content:'PUBLICIDAD';position:absolute;top:6px;right:10px;font-size:0.55rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
+.ad-sidebar img{width:100%;height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-bottom:12px}
+.ad-sidebar h4{font-size:0.95rem;font-weight:700;margin-bottom:6px}
+.ad-sidebar p{font-size:0.8rem;color:var(--text-muted);margin-bottom:12px}
+
+/* WEATHER SIDEBAR */
+.weather-sidebar{background:linear-gradient(135deg,#1e3a5f 0%,#0f1b33 100%);border-radius:var(--radius-lg);padding:20px;color:white;margin-bottom:20px}
+.weather-sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.weather-sidebar-header h4{font-size:0.95rem;font-weight:800}
+.weather-sidebar-header span{font-size:0.75rem;opacity:0.7}
+.weather-sidebar-main{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.weather-sidebar-main .temp{font-size:2.2rem;font-weight:900}
+.weather-sidebar-main .info{font-size:0.8rem;opacity:0.85}
+.weather-sidebar-forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.weather-sidebar-forecast .day{text-align:center;padding:8px 4px;background:rgba(255,255,255,0.08);border-radius:var(--radius-sm);font-size:0.7rem}
+.weather-sidebar-forecast .day .icon{font-size:1.2rem;margin-bottom:4px}
+.weather-sidebar-forecast .day .temp{font-weight:700}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:rgba(255,255,255,0.7);padding:48px 16px 100px;margin-top:40px;position:relative;overflow:hidden}
+.footer::before{content:'';position:absolute;top:-50%;left:-10%;width:400px;height:400px;background:rgba(201,169,110,0.05);border-radius:50%}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:28px;position:relative}
+.footer-brand{display:flex;align-items:center;gap:12px;font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:white;margin-bottom:12px}
+.footer-brand img{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--accent)}
+.footer-desc{font-size:0.88rem;line-height:1.75;max-width:320px;opacity:0.85}
+.footer-title{font-weight:800;color:white;margin-bottom:16px;font-size:0.82rem;text-transform:uppercase;letter-spacing:2px}
+.footer-links li{margin-bottom:10px}
+.footer-links a{font-size:0.88rem;transition:var(--transition);opacity:0.85}
+.footer-links a:hover{color:var(--accent);padding-left:6px;opacity:1}
+.footer-social{display:flex;gap:12px;margin-top:18px}
+.footer-social a{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:var(--transition);color:white}
+.footer-social a:hover{background:var(--accent);color:var(--primary);transform:translateY(-3px)}
+.footer-bottom{max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;font-size:0.78rem;opacity:0.7;position:relative}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1.5px solid var(--border);display:flex;justify-content:space-around;align-items:center;height:68px;z-index:1002;padding-bottom:env(safe-area-inset-bottom,0);backdrop-filter:blur(24px);background:rgba(255,255,255,0.97);box-shadow:0 -4px 20px rgba(0,0,0,0.06)}
+[data-theme="dark"] .bottom-nav{background:rgba(12,18,32,0.97);box-shadow:0 -4px 20px rgba(0,0,0,0.3)}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:var(--radius-md);color:var(--text-muted);font-size:0.62rem;font-weight:600;transition:var(--transition);flex:1}
+.bottom-nav-item svg{width:22px;height:22px;stroke-width:2}
+.bottom-nav-item.active{color:var(--primary)}
+.bottom-nav-item.active svg{stroke:var(--accent)}
+.bottom-nav-item:hover{color:var(--primary);background:var(--bg)}
+
+/* RESPONSIVE */
+@media(min-width:640px){
+  .hero-img-container img{height:320px}
+  .related-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .article-title{font-size:1.9rem}
+}
+@media(min-width:768px){
+  .topbar{font-size:0.78rem}
+  .header-inner{padding:0 24px;height:64px}
+  .logo{font-size:1.5rem}
+  .logo img{width:42px;height:42px}
+  .nav-desktop{display:flex}
+  .btn-donate{display:flex}
+  .radio-player{top:64px;padding:12px 24px}
+  .article-header{padding:28px 24px 0}
+  .article-hero{padding:0 24px}
+  .article-layout{padding:28px 24px 60px;gap:32px}
+  .article-title{font-size:2.6rem}
+  .article-content{font-size:1.1rem}
+  .hero-img-container img{height:400px}
+  .img-caption{padding:50px 24px 18px;font-size:0.85rem}
+  .author-box{padding:28px}
+  .author-box img{width:68px;height:68px}
+  .comments-section{padding:28px}
+  .footer{padding:56px 24px 100px}
+  .footer-inner{grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
+  .footer-bottom{margin-top:32px;padding-top:24px;font-size:0.82rem}
+  .radio-volume{display:flex}
+}
+@media(min-width:1024px){
+  .article-layout{grid-template-columns:1fr 340px;gap:44px}
+  .article-title{font-size:3.2rem;max-width:900px}
+  .hero-img-container img{height:500px}
+  .related-grid{grid-template-columns:1fr}
+  .bottom-nav{display:none}
+  body{padding-bottom:0}
+  .footer{padding-bottom:28px}
+  .sidebar{position:sticky;top:130px;height:fit-content}
+}
+@media(min-width:1280px){
+  .article-title{font-size:3.6rem}
+}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.article-content,.sidebar-widget,.author-box,.related-card,.donation-box,.comments-section,.summary-box,.analysis-box{animation:fadeInUp 0.5s ease forwards}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<!-- TOP BAR -->
+<div class="topbar">
+<div class="topbar-inner">
+<div class="topbar-item"><span class="label">USD/NIO</span><span class="value">36.85 <span class="up">▲ 0.12%</span></span></div>
+<div class="topbar-item"><span class="label">EUR/USD</span><span class="value">1.08 <span class="down">▼ 0.05%</span></span></div>
+<div class="topbar-item"><span class="label">Petroleo</span><span class="value">$78.40 <span class="up">▲ 1.2%</span></span></div>
+<div class="topbar-item"><span class="label">Oro</span><span class="value">$2,340 <span class="up">▲ 0.8%</span></span></div>
+<div class="topbar-item"><span class="label">Bitcoin</span><span class="value">$67,240 <span class="up">▲ 2.4%</span></span></div>
+<div class="topbar-item"><span class="label">S&P 500</span><span class="value">5,280 <span class="neutral">→ 0.0%</span></span></div>
+<div class="weather-top">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+<div><div class="weather-temp-main">32°C</div><div class="weather-desc-main">Managua — Soleado</div></div>
+</div>
+<div class="world-clocks">
+<div class="clock"><div class="clock-time" id="c-mga">12:45</div><div class="clock-city">Managua</div></div>
+<div class="clock"><div class="clock-time" id="c-mia">14:45</div><div class="clock-city">Miami</div></div>
+<div class="clock"><div class="clock-time" id="c-mex">13:45</div><div class="clock-city">CDMX</div></div>
+<div class="clock"><div class="clock-time" id="c-bog">13:45</div><div class="clock-city">Bogotá</div></div>
+<div class="clock"><div class="clock-time" id="c-lim">13:45</div><div class="clock-city">Lima</div></div>
+<div class="clock"><div class="clock-time" id="c-sao">15:45</div><div class="clock-city">São Paulo</div></div>
+<div class="clock"><div class="clock-time" id="c-mad">20:45</div><div class="clock-city">Madrid</div></div>
+<div class="clock"><div class="clock-time" id="c-lon">19:45</div><div class="clock-city">Londres</div></div>
+<div class="clock"><div class="clock-time" id="c-par">20:45</div><div class="clock-city">París</div></div>
+<div class="clock"><div class="clock-time" id="c-ber">20:45</div><div class="clock-city">Berlín</div></div>
+<div class="clock"><div class="clock-time" id="c-nyc">14:45</div><div class="clock-city">Nueva York</div></div>
+<div class="clock"><div class="clock-time" id="c-lax">11:45</div><div class="clock-city">Los Ángeles</div></div>
+<div class="clock"><div class="clock-time" id="c-tyo">03:45</div><div class="clock-city">Tokio</div></div>
+<div class="clock"><div class="clock-time" id="c-syd">04:45</div><div class="clock-city">Sídney</div></div>
+<div class="clock"><div class="clock-time" id="c-dub">22:45</div><div class="clock-city">Dubai</div></div>
+</div>
+</div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+<div class="header-inner">
+<a href="#" class="logo">
+<img src="https://images.unsplash.com/photo-1565128939501-29f8b991c7b7?w=100&h=100&fit=crop" alt="Logo">
+Nicaragua <span>Informate</span>
+</a>
+<nav class="nav-desktop">
+<a href="#">Inicio</a><a href="#">Nacionales</a><a href="#">Internacionales</a><a href="#">Sucesos</a><a href="#">Tecnología</a><a href="#">Deportes</a>
+</nav>
+<div class="header-actions">
+<button class="btn-donate" onclick="window.open('https://www.paypal.com/donate','_blank')">💛 Donar</button>
+<button class="btn-icon" onclick="toggleTheme()" title="Tema" aria-label="Cambiar tema">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+</div>
+</div>
+</header>
+
+<!-- RADIO -->
+<div class="radio-player">
+<div class="radio-inner">
+<button class="radio-btn" id="radioBtn" onclick="toggleRadio()" aria-label="Reproducir radio">
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" id="radioPlayIcon"/></svg>
+</button>
+<div class="radio-info">
+<h4>Radio Nicaragua Informate <span class="radio-live">En vivo</span></h4>
+<p>Noticias, análisis y música las 24 horas del día</p>
+</div>
+<div class="radio-wave" id="radioWave"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="radio-volume">
+<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+<input type="range" min="0" max="100" value="70" aria-label="Volumen">
+</div>
+</div>
+</div>
+
+<!-- ARTICLE HEADER -->
+<div class="article-header">
+<nav class="breadcrumb">
+<a href="#">Inicio</a><span class="breadcrumb-sep">/</span><a href="#">Nacionales</a><span class="breadcrumb-sep">/</span><span>KFC en Managua</span>
+</nav>
+<span class="article-category">Nacionales</span>
+<h1 class="article-title">KFC anuncia apertura de sus primeros restaurantes en Managua</h1>
+<div class="article-meta">
+<div class="meta-author">
+<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Autor">
+<div class="meta-author-info"><strong>María Elena Sandoval</strong><span>Editora de Nacionales</span></div>
+</div>
+<span>📅 16 de mayo, 2026</span>
+<span class="meta-reading">4 min de lectura</span>
+</div>
+</div>
+
+<!-- ARTICLE HERO -->
+<div class="article-hero">
+<div class="hero-img-container">
+<img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&h=600&fit=crop" alt="Restaurante KFC">
+<div class="img-caption">KFC proyecta abrir tres sucursales en Managua durante el último trimestre del año. Foto: Referencia</div>
+</div>
+</div>
+
+<!-- ARTICLE BODY -->
+<div class="article-layout">
+<article class="article-content">
+
+<!-- RESUMEN 3 PUNTOS -->
+<div class="summary-box">
+<h3>En 3 puntos clave</h3>
+<ul class="summary-points">
+<li><span class="point-num">1</span><span class="point-text"><strong>350 empleos directos:</strong> KFC creará cientos de puestos de trabajo en su fase inicial, priorizando contratación local y programas de capacitación continua.</span></li>
+<li><span class="point-num">2</span><span class="point-text"><strong>3 sucursales en 2026:</strong> Carretera a Masaya (julio), Galerías Santo Domingo (septiembre) y centro de Managua (noviembre).</span></li>
+<li><span class="point-num">3</span><span class="point-text"><strong>Menú adaptado local:</strong> Además de los clásicos de la marca, incluirán opciones con gallo pinto y variantes picantes para el paladar nicaragüense.</span></li>
+</ul>
+</div>
+
+<!-- ANÁLISIS -->
+<div class="analysis-box">
+<span class="analysis-tag">Análisis</span>
+<h3>¿Qué significa la llegada de KFC para Nicaragua?</h3>
+<p>La entrada de KFC al mercado nicaragüense representa más que una simple apertura de restaurantes. Es un <strong>indicador de confianza económica</strong> por parte de las multinacionales, que observan en el país centroamericano un destino viable para la inversión extranjera directa.</p>
+<p>Desde la perspectiva del empleo, los <strong>350 puestos iniciales</strong> —con potencial de duplicarse en 2027— alivianan la presión en un sector de servicios que ha mostrado recuperación sostenida desde 2024. La apuesta por proveedores locales también fortalece la cadena productiva nacional.</p>
+<p>En términos de competencia, la presencia de KFC obligará a las cadenas locales a elevar estándares de calidad y servicio, beneficiando al consumidor final. El mercado de comida rápida en Managua crecerá aproximadamente un <strong>18% en el próximo año</strong>, según proyecciones del sector.</p>
+</div>
+
+<p>La reconocida cadena internacional de comida rápida <strong>KFC</strong> confirmó oficialmente su llegada a Nicaragua con la apertura de sus primeros restaurantes en la capital, Managua. La noticia fue recibida con entusiasmo por los consumidores nicaragüenses, quienes desde hace años solicitaban la presencia de la marca en el país centroamericano.</p>
+
+<p>Durante una conferencia de prensa realizada este martes, representantes de la franquicia detallaron que el plan inicial contempla la inauguración de <strong>tres sucursales</strong> estratégicamente ubicadas en zonas de alta afluencia vehicular y peatonal, incluyendo el centro histórico de la ciudad, el sector de Carretera a Masaya y la zona de Galerías Santo Domingo.</p>
+
+<h2>Generación de empleo directo e indirecto</h2>
+<p>Una de las noticias más destacadas del anuncio es la creación de aproximadamente <strong>350 puestos de trabajo</strong> en su fase inicial. Los cargos abarcarán desde operarios de cocina y atención al cliente hasta posiciones administrativas y de supervisión. La empresa adelantó que priorizará la contratación de personal local y ofrecerá programas de capacitación continua.</p>
+
+<blockquote>
+<p>"Nicaragua representa un mercado con enorme potencial. Hemos observado el crecimiento económico sostenido y la apertura de nuevos centros comerciales, lo que nos da confianza para invertir aquí a largo plazo."</p>
+</blockquote>
+
+<p>Además del empleo directo, se espera un impacto positivo en la cadena de suministro local. Proveedores nicaragüenses de pollo, vegetales, pan y empaques ya han iniciado conversaciones para establecer alianzas comerciales con la cadena.</p>
+
+<h2>Menú adaptado al paladar nicaragüense</h2>
+<p>Aunque el menú mantendrá los clásicos de la marca como el pollo frito original y los famosos "bucket", la gerencia regional adelantó que se incluirán <strong>opciones especiales</strong> pensadas para el mercado local, incluyendo acompañamientos con gallo pinto en el desayuno y variantes picantes que respetan la tradición culinaria del país.</p>
+
+<figure>
+<img src="https://images.unsplash.com/photo-1513639776629-7b6115d56309?w=800&h=450&fit=crop" alt="Comida KFC">
+<figcaption>El menú incluirá opciones exclusivas para el mercado nicaragüense.</figcaption>
+</figure>
+
+<h3>Fechas de apertura proyectadas</h3>
+<ul>
+<li><strong>Julio 2026:</strong> Primera sucursal en Carretera a Masaya</li>
+<li><strong>Septiembre 2026:</strong> Segunda sucursal en Galerías Santo Domingo</li>
+<li><strong>Noviembre 2026:</strong> Tercera sucursal en el centro de Managua</li>
+</ul>
+
+<p>Las autoridades municipales de Managua celebraron la noticia, destacando que la inversión extranjera directa fortalece el desarrollo económico local y posiciona a la capital como un destino atractivo para nuevas franquicias internacionales.</p>
+
+<!-- PAYPAL DONATION -->
+<div class="donation-box">
+<h3>💛 Apoya el periodismo independiente</h3>
+<p>Tu donación nos permite seguir informando con verdad y compromiso. Cada aporte cuenta.</p>
+<div class="donation-amounts">
+<button class="donation-btn" onclick="selectAmount(this)">$5</button>
+<button class="donation-btn" onclick="selectAmount(this)">$10</button>
+<button class="donation-btn active" onclick="selectAmount(this)">$25</button>
+<button class="donation-btn" onclick="selectAmount(this)">$50</button>
+<button class="donation-btn" onclick="selectAmount(this)">Otro</button>
+</div>
+<button class="paypal-btn" onclick="window.open('https://www.paypal.com/donate?hosted_button_id=TU_ID_DE_BOTON','_blank')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.63l-1.496 9.478h2.79c.457 0 .85-.334.922-.788l.04-.19.73-4.627.047-.255a.933.933 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.355-1.828.174-3.342-.507-4.18z"/></svg>
+Donar con PayPal
+</button>
+</div>
+
+<!-- SHARE -->
+<div class="share-bar">
+<span class="share-label">Compartir:</span>
+<button class="share-btn" title="Facebook" onclick="shareTo('facebook')">
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+</button>
+<button class="share-btn" title="Twitter/X" onclick="shareTo('twitter')">
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 8v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+</button>
+<button class="share-btn" title="WhatsApp" onclick="shareTo('whatsapp')">
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</button>
+<button class="share-btn" title="Copiar enlace" onclick="copyLink()">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+</button>
+</div>
+
+<!-- TAGS -->
+<div class="tags">
+<a href="#" class="tag">Economía</a><a href="#" class="tag">Managua</a><a href="#" class="tag">Empleo</a>
+<a href="#" class="tag">Inversión extranjera</a><a href="#" class="tag">Comercio</a><a href="#" class="tag">Franquicias</a>
+</div>
+
+<!-- AUTHOR BOX -->
+<div class="author-box">
+<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" alt="María Elena Sandoval">
+<div>
+<h4>María Elena Sandoval</h4>
+<p>Periodista especializada en economía y desarrollo local. Cubre noticias nacionales desde 2019. Apasionada por contar historias que impactan la vida cotidiana de los nicaragüenses.</p>
+<div class="author-social">
+<a href="#" title="Twitter">𝕏</a><a href="#" title="Facebook">f</a><a href="#" title="Email">@</a><a href="#" title="LinkedIn">in</a>
+</div>
+</div>
+</div>
+
+<!-- RELATED -->
+<h3 class="related-title">Noticias relacionadas</h3>
+<div class="related-grid">
+<a href="#" class="related-card">
+<img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&h=200&fit=crop" alt="Hospital">
+<div><h5>Inaugurarán Hospital Pediátrico Las Segovias en Estelí</h5><span>16 may 2026 • Nacionales</span></div>
+</a>
+<a href="#" class="related-card">
+<img src="https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=200&h=200&fit=crop" alt="Vía">
+<div><h5>Nueva vía conecta Laureles Sur con carretera a El Coyotepe</h5><span>16 may 2026 • Nacionales</span></div>
+</a>
+<a href="#" class="related-card">
+<img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop" alt="Comercio">
+<div><h5>Pequeños negocios crecen un 12% en el primer trimestre</h5><span>15 may 2026 • Economía</span></div>
+</a>
+</div>
+
+<!-- COMMENTS -->
+<div class="comments-section">
+<div class="comments-header">
+<h3>💬 Comentarios</h3>
+<span class="comments-count">3 comentarios</span>
+</div>
+<div class="comment-form">
+<div class="form-row">
+<input type="text" placeholder="Nombre" id="commentName">
+<input type="email" placeholder="Email (no se publicará)" id="commentEmail">
+</div>
+<textarea placeholder="¿Qué opinas sobre esta noticia? Comparte tu perspectiva..." id="commentText"></textarea>
+<button class="btn-submit" onclick="submitComment()">
+<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+Publicar comentario
+</button>
+</div>
+<div id="commentsList">
+<div class="comment-item">
+<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" class="comment-avatar" alt="Usuario">
+<div class="comment-body">
+<div class="comment-header">
+<span class="comment-name">Carlos Mendoza</span>
+<span class="comment-time">Hace 2 horas</span>
+</div>
+<p class="comment-text">Excelente noticia para la economía local. La llegada de KFC no solo genera empleos directos, sino que también impulsa a los proveedores locales. Espero que mantengan los estándares de calidad internacional.</p>
+<div class="comment-actions">
+<button onclick="likeComment(this)">👍 24</button>
+<button>💬 Responder</button>
+</div>
+</div>
+</div>
+<div class="comment-item">
+<img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" class="comment-avatar" alt="Usuario">
+<div class="comment-body">
+<div class="comment-header">
+<span class="comment-name">Ana Lucia Pérez</span>
+<span class="comment-badge">Editor</span>
+<span class="comment-time">Hace 1 hora</span>
+</div>
+<p class="comment-text">Como editora del medio, puedo confirmar que esta información fue verificada directamente con fuentes de la franquicia. La inversión estimada supera los $2.5 millones en infraestructura para las tres primeras sucursales.</p>
+<div class="comment-actions">
+<button onclick="likeComment(this)">👍 45</button>
+<button>💬 Responder</button>
+</div>
+<div class="comment-replies">
+<div class="comment-item" style="padding-top:0">
+<img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" class="comment-avatar" alt="Usuario">
+<div class="comment-body">
+<div class="comment-header">
+<span class="comment-name">Roberto Flores</span>
+<span class="comment-time">Hace 30 min</span>
+</div>
+<p class="comment-text">@Ana Lucia, ¿tienes información sobre si habrá opciones vegetarianas en el menú local? Sería un gran avance para el mercado.</p>
+<div class="comment-actions">
+<button onclick="likeComment(this)">👍 8</button>
+<button>💬 Responder</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</article>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<!-- WEATHER SIDEBAR -->
+<div class="weather-sidebar">
+<div class="weather-sidebar-header"><h4>🌤️ Clima</h4><span>Managua</span></div>
+<div class="weather-sidebar-main">
+<div class="temp">32°</div>
+<div class="info">Soleado<br>Humedad 68%<br>Viento 12 km/h</div>
+</div>
+<div class="weather-sidebar-forecast">
+<div class="day"><div class="icon">☀️</div><div class="temp">32°</div><div style="font-size:0.6rem;opacity:0.7">Hoy</div></div>
+<div class="day"><div class="icon">⛅</div><div class="temp">30°</div><div style="font-size:0.6rem;opacity:0.7">Vie</div></div>
+<div class="day"><div class="icon">🌧️</div><div class="temp">28°</div><div style="font-size:0.6rem;opacity:0.7">Sáb</div></div>
+<div class="day"><div class="icon">⛈️</div><div class="temp">27°</div><div style="font-size:0.6rem;opacity:0.7">Dom</div></div>
+<div class="day"><div class="icon">☀️</div><div class="temp">31°</div><div style="font-size:0.6rem;opacity:0.7">Lun</div></div>
+</div>
+</div>
+
+<!-- AD SIDEBAR -->
+<div class="ad-sidebar">
+<img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop" alt="Publicidad">
+<h4>Impulsa tu negocio</h4>
+<p>Llega a más de 500,000 lectores mensuales</p>
+<a href="#" class="ad-btn">Más información</a>
+</div>
+
+<!-- TRENDING -->
+<div class="sidebar-widget">
+<h3 class="widget-title">🔥 Lo más leído</h3>
+<div class="trending-item"><span class="trending-num">1</span><div class="trending-content"><h4>KFC abrirá sus puertas en Managua este año</h4><span>Hace 2 horas • Nacionales</span></div></div>
+<div class="trending-item"><span class="trending-num">2</span><div class="trending-content"><h4>Hospital Pediátrico Las Segovias: esperanza para el norte</h4><span>Hace 4 horas • Nacionales</span></div></div>
+<div class="trending-item"><span class="trending-num">3</span><div class="trending-content"><h4>China logra clonación de cabras lecheras</h4><span>Hace 6 horas • Tecnología</span></div></div>
+<div class="trending-item"><span class="trending-num">4</span><div class="trending-content"><h4>Costa Rica intensifica operativos en frontera norte</h4><span>Hace 8 horas • Internacionales</span></div></div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="sidebar-widget">
+<h3 class="widget-title">📰 Newsletter</h3>
+<p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Recibe cada mañana las noticias más importantes de Nicaragua.</p>
+<input type="email" class="newsletter-input" placeholder="tu@email.com">
+<button class="btn-primary-solid">Suscribirme gratis</button>
+</div>
+
+<!-- CATEGORIES -->
+<div class="sidebar-widget">
+<h3 class="widget-title">🏷️ Categorías</h3>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<a href="#" class="tag">Nacionales</a><a href="#" class="tag">Internacionales</a><a href="#" class="tag">Sucesos</a>
+<a href="#" class="tag">Tecnología</a><a href="#" class="tag">Deportes</a><a href="#" class="tag">Economía</a>
+</div>
+</div>
+</aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer-inner">
+<div>
+<div class="footer-brand"><img src="https://images.unsplash.com/photo-1565128939501-29f8b991c7b7?w=100&h=100&fit=crop" alt="Logo">Nicaragua Informate</div>
+<p class="footer-desc">Tu fuente confiable de noticias sobre Nicaragua y el mundo. Información verificada y actualizada al instante.</p>
+<div class="footer-social">
+<a href="#" title="Facebook"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+<a href="#" title="Twitter"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 8v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+<a href="#" title="Instagram"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+<a href="#" title="YouTube"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+</div>
+</div>
+<div><h4 class="footer-title">Secciones</h4><ul class="footer-links"><li><a href="#">Nacionales</a></li><li><a href="#">Internacionales</a></li><li><a href="#">Sucesos</a></li><li><a href="#">Tecnología</a></li><li><a href="#">Deportes</a></li></ul></div>
+<div><h4 class="footer-title">Compañía</h4><ul class="footer-links"><li><a href="#">Sobre nosotros</a></li><li><a href="#">Contacto</a></li><li><a href="#">Publicidad</a></li><li><a href="#">Trabaja con nosotros</a></li></ul></div>
+<div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Términos de uso</a></li><li><a href="#">Privacidad</a></li><li><a href="#">Cookies</a></li></ul></div>
+</div>
+<div class="footer-bottom">© 2026 Nicaragua Informate. Todos los derechos reservados.</div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+<a href="#" class="bottom-nav-item active">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+Inicio
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+Mundo
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+Radio
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+Chat
+</a>
+<a href="#" class="bottom-nav-item">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+Perfil
+</a>
+</nav>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute('data-theme');
+  html.setAttribute('data-theme',current==='dark'?'light':'dark');
+  localStorage.setItem('theme',current==='dark'?'light':'dark');
+}
+const saved=localStorage.getItem('theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+else if(window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark');}
+
+let radioPlaying=false;
+function toggleRadio(){
+  radioPlaying=!radioPlaying;
+  const btn=document.getElementById('radioBtn');
+  const wave=document.getElementById('radioWave');
+  const icon=document.getElementById('radioPlayIcon');
+  if(radioPlaying){btn.classList.add('playing');wave.classList.remove('paused');icon.setAttribute('d','M6 4h4v16H6zm8 0h4v16h-4z');}
+  else{btn.classList.remove('playing');wave.classList.add('paused');icon.setAttribute('d','M8 5v14l11-7z');}
+}
+
+function updateClocks(){
+  const now=new Date();
+  const cities=[{id:'c-mga',o:-6},{id:'c-mia',o:-4},{id:'c-mex',o:-5},{id:'c-bog',o:-5},{id:'c-lim',o:-5},{id:'c-sao',o:-3},{id:'c-mad',o:2},{id:'c-lon',o:1},{id:'c-par',o:2},{id:'c-ber',o:2},{id:'c-nyc',o:-4},{id:'c-lax',o:-7},{id:'c-tyo',o:9},{id:'c-syd',o:10},{id:'c-dub',o:4}];
+  const utc=now.getTime()+now.getTimezoneOffset()*60000;
+  cities.forEach(c=>{
+    const local=new Date(utc+c.o*3600000);
+    const h=String(local.getHours()).padStart(2,'0');
+    const m=String(local.getMinutes()).padStart(2,'0');
+    const el=document.getElementById(c.id);
+    if(el)el.textContent=h+':'+m;
+  });
+}
+updateClocks();setInterval(updateClocks,60000);
+
+window.addEventListener('scroll',()=>{
+  const winScroll=document.body.scrollTop||document.documentElement.scrollTop;
+  const height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  const bar=document.getElementById('progressBar');
+  if(bar)bar.style.width=(winScroll/height*100)+'%';
+});
+
+function shareTo(platform){
+  const url=encodeURIComponent(window.location.href);
+  const text=encodeURIComponent('KFC anuncia apertura en Managua — Nicaragua Informate');
+  const links={facebook:'https://www.facebook.com/sharer/sharer.php?u='+url,twitter:'https://twitter.com/intent/tweet?url='+url+'&text='+text,whatsapp:'https://wa.me/?text='+text+'%20'+url};
+  window.open(links[platform],'_blank','width=600,height=400');
+}
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>{alert('Enlace copiado al portapapeles');});
+}
+function selectAmount(btn){
+  document.querySelectorAll('.donation-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function likeComment(btn){
+  const match=btn.textContent.match(/(\d+)/);
+  if(match){const num=parseInt(match[1])+1;btn.textContent='👍 '+num;}
+}
+function submitComment(){
+  const name=document.getElementById('commentName').value;
+  const text=document.getElementById('commentText').value;
+  if(!name||!text){alert('Por favor completa tu nombre y comentario');return;}
+  const list=document.getElementById('commentsList');
+  const newComment=document.createElement('div');
+  newComment.className='comment-item';
+  newComment.innerHTML='<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" class="comment-avatar" alt="Usuario"><div class="comment-body"><div class="comment-header"><span class="comment-name">'+name+'</span><span class="comment-time">Justo ahora</span></div><p class="comment-text">'+text+'</p><div class="comment-actions"><button onclick="likeComment(this)">👍 0</button><button>💬 Responder</button></div></div></div>';
+  list.insertBefore(newComment,list.firstChild);
+  document.getElementById('commentName').value='';
+  document.getElementById('commentEmail').value='';
+  document.getElementById('commentText').value='';
+  const count=document.querySelector('.comments-count');
+  if(count){const match=count.textContent.match(/(\d+)/);if(match)count.textContent=(parseInt(match[1])+1)+' comentarios';}
+}
+</script>
+</body>
+</html>
