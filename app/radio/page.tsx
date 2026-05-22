@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
-import ProLayout from '@/components/ProLayout';
 import { Play, Pause, Volume2, Radio } from 'lucide-react';
 
 const STATIONS = [
@@ -67,7 +66,7 @@ export default function RadioPage() {
   };
 
   return (
-    <ProLayout tickerText="Radio Nicaragua Informate — Escucha en vivo">
+    <>
       <main className="radio-page-main" style={{ minHeight: '80vh', padding: '48px 16px', maxWidth: '1200px', margin: '0 auto' }}>
         <header style={{ textAlign: 'center', marginBottom: 48 }}>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', marginBottom: 12 }}>
@@ -237,6 +236,6 @@ export default function RadioPage() {
           </Link>
         </section>
       </main>
-    </ProLayout>
+    </>
   );
 }

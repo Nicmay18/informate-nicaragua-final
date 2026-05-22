@@ -1,7 +1,5 @@
-import ArticleClient from '@/components/ArticleClient';
-import ProLayout from '@/components/ProLayout';
-import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
-import { isLutoNews } from '@/lib/types';
+import ArticlePage from '@/components/ArticlePage';
+import { getNewsBySlug, getRelatedNews, getMasLeidas, getAllSlugs } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -12,7 +10,7 @@ import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/s
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
 export const dynamicParams = true;
-export const revalidate = 60;
+export const revalidate = 300;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -35,10 +33,13 @@ function toNoticiaTipo(value: string): NoticiaTipo {
 export async function generateStaticParams() {
   try {
     const slugs = await getAllSlugs();
-    return slugs.slice(0, 100).map((slug) => ({ slug }));
+    if (slugs.length > 0) {
+      return slugs.map((slug) => ({ slug }));
+    }
   } catch {
-    return [];
+    // Firebase falló, generaremos dinámicamente
   }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -126,16 +127,17 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const noticia = await getNewsBySlug(slug);
     if (!noticia) return notFound();
 
-    const isLuto = isLutoNews(noticia);
-    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
+    const [related, trending] = await Promise.all([
+      getRelatedNews(noticia.categoria, noticia.slug, 6),
+      getMasLeidas(),
+    ]);
+
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     const wordCount = noticia.contenido
       ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length
       : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-    const serverNow = Date.now();
 
     const faqSchema = {
       '@context': 'https://schema.org',
@@ -179,14 +181,14 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const isRecordPolicial = noticia.titulo.toLowerCase().includes('récord policial') || noticia.titulo.toLowerCase().includes('record policial') || noticia.slug.toLowerCase().includes('record-policial');
 
     return (
-      <ProLayout tickerText={noticia.titulo}>
+      <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
         {isRecordPolicial && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         )}
-        <ArticleClient noticia={noticia} related={related} isLuto={isLuto} serverNow={serverNow} />
-      </ProLayout>
+        <ArticlePage noticia={noticia} relatedNews={related} trendingNews={trending} />
+      </>
     );
   } catch (error) {
     console.error('Error cargando noticia:', error);
