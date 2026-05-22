@@ -42,8 +42,8 @@ export default function HeroSection({ noticia }: HeroSectionProps) {
           <span>{timeAgo}</span>
         </div>
 
-        {noticia.descripcion && (
-          <p className="hero-description">{noticia.descripcion}</p>
+        {noticia.resumen && (
+          <p className="hero-description">{noticia.resumen}</p>
         )}
 
         <Link
