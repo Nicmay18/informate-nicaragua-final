@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  Search, Menu, X, Moon, Sun, ArrowLeft,
+  Search, Menu, X, Moon, Sun, ArrowLeft, Home, Globe, Radio, MessageSquare, User,
 } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -60,8 +60,24 @@ export default function ProLayout({
     setDateStr(`${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`);
   }, []);
 
+  // Progress bar scroll
+  const [scrollProgress, setScrollProgress] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = h.scrollTop || document.body.scrollTop;
+      const height = h.scrollHeight - h.clientHeight;
+      setScrollProgress(height > 0 ? (scrolled / height) * 100 : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <>
+      {/* Progress Bar */}
+      <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
+
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-inner">
@@ -201,6 +217,15 @@ export default function ProLayout({
           </div>
         </div>
       </footer>
+
+      {/* Bottom Nav Mobile */}
+      <nav className="bottom-nav">
+        <Link href="/" className="bottom-nav-item active"><Home size={22} strokeWidth={1.5} /><span>Inicio</span></Link>
+        <Link href="/categoria/internacionales" className="bottom-nav-item"><Globe size={22} strokeWidth={1.5} /><span>Mundo</span></Link>
+        <Link href="/radio" className="bottom-nav-item"><Radio size={22} strokeWidth={1.5} /><span>Radio</span></Link>
+        <Link href="/contacto" className="bottom-nav-item"><MessageSquare size={22} strokeWidth={1.5} /><span>Chat</span></Link>
+        <Link href="/nosotros" className="bottom-nav-item"><User size={22} strokeWidth={1.5} /><span>Perfil</span></Link>
+      </nav>
     </>
   );
 }
