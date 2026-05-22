@@ -5,9 +5,9 @@ import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+  title: 'Nicaragua Informate â€” Noticias de Nicaragua en tiempo real',
   description:
-    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre política, economía, deportes, tecnología, sucesos y cultura.',
+    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre polÃ­tica, economÃ­a, deportes, tecnologÃ­a, sucesos y cultura.',
   alternates: {
     canonical: 'https://nicaraguainformate.com',
     languages: {
@@ -39,7 +39,7 @@ export default async function HomePage() {
     <ProLayout tickerText={tickerText}>
       <section className="seo-hero" aria-label="Introduccion">
         <h1 className="seo-h1">
-          Noticias de Nicaragua en tiempo real — Nicaragua Informate
+          Noticias de Nicaragua en tiempo real â€” Nicaragua Informate
         </h1>
         <p className="seo-intro">
           Nicaragua Informate es el portal de noticias lider de Nicaragua. Desde nuestra redaccion en Managua y Esteli,
