@@ -1,8 +1,7 @@
 import ArticlePage from '@/components/ArticlePage';
-import { getNewsBySlug, getRelatedNews, getMasLeidas } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews, getMasLeidas, getAllSlugs } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { unstable_noStore } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -11,8 +10,7 @@ import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/s
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
 export const dynamicParams = true;
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -32,10 +30,15 @@ function toNoticiaTipo(value: string): NoticiaTipo {
   return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
 }
 
-// Temporalmente deshabilitado: los slugs se regeneraron y necesitamos
-// que Next.js no use el cache estático de build anterior.
-// Se puede re-activar después de un deploy limpio.
 export async function generateStaticParams() {
+  try {
+    const slugs = await getAllSlugs();
+    if (slugs.length > 0) {
+      return slugs.map((slug) => ({ slug }));
+    }
+  } catch {
+    // Firebase falló, generaremos dinámicamente
+  }
   return [];
 }
 
@@ -118,7 +121,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
-  unstable_noStore();
   const { slug } = await params;
 
   try {

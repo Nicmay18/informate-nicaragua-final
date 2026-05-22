@@ -1,3 +1,5 @@
+'use client';
+
 // File: components/ArticlePage.tsx
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,9 +27,7 @@ export default function ArticlePage({
     locale: es,
   });
 
-  const fullUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/noticias/${noticia.slug}`
-    : `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+  const fullUrl = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
   // Procesar contenido HTML
   const renderContent = () => {
