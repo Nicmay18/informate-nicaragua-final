@@ -1,6 +1,5 @@
-﻿import HeroSection from '@/components/HeroSection';
-import NewsGrid from '@/components/NewsGrid';
-import Sidebar from '@/components/Sidebar';
+﻿import ProLayout from '@/components/ProLayout';
+import MobileHome from '@/components/MobileHome';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -34,12 +33,10 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  const noticiaDestacada = noticias[0];
-  const noticiasPrincipales = noticias.slice(0, 12);
-  const noticiasTrending = masLeidas.slice(0, 5);
+  const tickerText = noticias[0]?.titulo || 'Nicaragua Informate';
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <ProLayout tickerText={tickerText}>
       {/* SEO Content — visible en HTML estático para crawlers */}
       <section className="seo-hero" aria-label="Introducción">
         <h1 className="seo-h1">
@@ -77,25 +74,7 @@ export default async function HomePage() {
         }}
       />
 
-      {/* Hero Section */}
-      {noticiaDestacada && (
-        <HeroSection noticia={noticiaDestacada} />
-      )}
-
-      {/* Main Grid con Sidebar */}
-      <div className="main-grid container" style={{ marginBottom: 'var(--spacing-3xl)', flex: 1 }}>
-        {/* Noticias Principales */}
-        <div style={{ minWidth: 0 }}>
-          <NewsGrid
-            title="Últimas noticias"
-            noticias={noticiasPrincipales}
-            viewAllLink="/noticias"
-          />
-        </div>
-
-        {/* Sidebar */}
-        <Sidebar trendingNews={noticiasTrending} />
-      </div>
-    </div>
+      <MobileHome noticias={noticias} masLeidas={masLeidas} />
+    </ProLayout>
   );
 }
