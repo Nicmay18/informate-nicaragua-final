@@ -1,5 +1,4 @@
 // File: components/AuthorBox.tsx
-import Link from 'next/link';
 import Image from 'next/image';
 import { Globe, Share2, Mail } from 'lucide-react';
 
