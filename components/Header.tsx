@@ -17,7 +17,7 @@ const CATEGORIES = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, toggleTheme, isMounted } = useTheme();
+  const { theme, toggleTheme, isLoaded: isMounted } = useTheme();
 
   return (
     <>
@@ -46,7 +46,7 @@ export default function Header() {
                 aria-label="Toggle theme"
                 title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
               >
-                {theme === 'light' || theme === 'system' ? (
+                {theme === 'light' ? (
                   <Moon size={18} />
                 ) : (
                   <Sun size={18} />
