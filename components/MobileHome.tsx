@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { ArrowRight } from 'lucide-react';
-import ProLayout from '@/components/ProLayout';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
@@ -54,10 +53,9 @@ function readTime(resumen?: string, contenido?: string) {
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
   const hero = noticias[0];
   const latest = noticias.slice(1, 7);
-  const tickerText = hero?.titulo || 'Nicaragua Informate';
 
   return (
-    <ProLayout tickerText={tickerText}>
+    <>
       {noticias.length > 0 && (
         <section className="swiper-section">
           <Swiper
@@ -186,6 +184,6 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
           </div>
         </aside>
       </div>
-    </ProLayout>
+    </>
   );
 }
