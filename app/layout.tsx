@@ -69,6 +69,14 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://nicaraguainformate.com',
+    languages: {
+      'es-NI': 'https://nicaraguainformate.com',
+      'es-US': 'https://nicaraguainformate.com',
+      'es-MX': 'https://nicaraguainformate.com',
+      'es-ES': 'https://nicaraguainformate.com',
+      'es': 'https://nicaraguainformate.com',
+      'x-default': 'https://nicaraguainformate.com',
+    },
     types: {
       'application/rss+xml': 'https://nicaraguainformate.com/feed.xml',
     },

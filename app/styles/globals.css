@@ -257,3 +257,34 @@ img {
 .animate-slideInLeft {
   animation: slideInLeft var(--transition-slow) ease-out;
 }
+
+/* ===== SEO HOME BLOCK ===== */
+.seo-hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-sm);
+}
+.seo-h1 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--primary);
+  margin-bottom: var(--spacing-md);
+}
+[data-theme="dark"] .seo-h1 {
+  color: var(--text);
+}
+.seo-intro {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+[data-theme="dark"] .seo-intro {
+  color: var(--text-muted);
+}
+@media (min-width: 768px) {
+  .seo-h1 { font-size: 2rem; }
+  .seo-intro { font-size: 1rem; }
+}
