@@ -1,6 +1,6 @@
 // File: components/Footer.tsx
 import Link from 'next/link';
-import { Globe, Share2, Camera, Rss, Mail } from 'lucide-react';
+import { Globe, Share2, Camera, Rss } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
