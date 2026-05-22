@@ -51,7 +51,6 @@ function readTime(resumen?: string, contenido?: string) {
 }
 
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
-  const hero = noticias[0];
   const latest = noticias.slice(1, 7);
 
   return (
