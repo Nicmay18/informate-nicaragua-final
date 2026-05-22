@@ -399,7 +399,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background-color: var(--background);
+  background-color: var(--bg);
   font-size: 13px;
 }
 
@@ -426,7 +426,7 @@
 
 .tag {
   display: inline-block;
-  background-color: var(--background);
+  background-color: var(--bg);
   border: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 12px;
@@ -615,7 +615,7 @@
 
 /* ═══ AUTHOR BOX ═══ */
 .author-box {
-  background-color: var(--background);
+  background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);

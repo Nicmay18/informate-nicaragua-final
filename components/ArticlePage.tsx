@@ -144,7 +144,7 @@ export default function ArticlePage({
               marginBottom: 'var(--spacing-xl)',
               fontStyle: 'italic',
               padding: 'var(--spacing-lg)',
-              background: 'var(--background)',
+              background: 'var(--bg)',
               borderLeft: '4px solid var(--accent)',
               borderRadius: 'var(--radius-md)',
             }}>
