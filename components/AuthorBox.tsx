@@ -1,7 +1,7 @@
 // File: components/AuthorBox.tsx
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Twitter, Mail } from 'lucide-react';
+import { Globe, Share2, Mail } from 'lucide-react';
 
 interface AuthorBoxProps {
   autor: string;
@@ -78,7 +78,7 @@ export default function AuthorBox({
                 title={`Twitter: @${autorTwitter}`}
                 aria-label={`Twitter de ${autor}`}
               >
-                <Twitter size={14} />
+                <Share2 size={14} />
               </a>
             )}
 
@@ -91,7 +91,7 @@ export default function AuthorBox({
                 title="Facebook"
                 aria-label={`Facebook de ${autor}`}
               >
-                <Facebook size={14} />
+                <Globe size={14} />
               </a>
             )}
           </div>

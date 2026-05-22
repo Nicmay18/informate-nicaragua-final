@@ -7,7 +7,6 @@ import { ArrowLeft } from 'lucide-react';
 import ShareBar from './ShareBar';
 import AuthorBox from './AuthorBox';
 import Sidebar from './Sidebar';
-import NewsGrid from './NewsGrid';
 import type { Noticia } from '@/lib/types';
 
 interface ArticlePageProps {
@@ -102,11 +101,11 @@ export default function ArticlePage({
             {noticia.autor && <span>{noticia.autor}</span>}
             {noticia.autor && <span>•</span>}
             <span>{timeAgo}</span>
-            {noticia.actualizacion && (
+            {noticia.fechaActualizacion && (
               <>
                 <span>•</span>
                 <span>
-                  Actualizado {formatDistanceToNow(new Date(noticia.actualizacion), {
+                  Actualizado {formatDistanceToNow(new Date(noticia.fechaActualizacion), {
                     addSuffix: true,
                     locale: es,
                   })}
@@ -136,7 +135,7 @@ export default function ArticlePage({
           )}
 
           {/* Descripción */}
-          {noticia.descripcion && (
+          {noticia.resumen && (
             <div style={{
               fontSize: '18px',
               fontWeight: 500,
@@ -149,7 +148,7 @@ export default function ArticlePage({
               borderLeft: '4px solid var(--accent)',
               borderRadius: 'var(--radius-md)',
             }}>
-              {noticia.descripcion}
+              {noticia.resumen}
             </div>
           )}
 
@@ -192,11 +191,11 @@ export default function ArticlePage({
           {noticia.autor && (
             <AuthorBox
               autor={noticia.autor}
-              autorBio={noticia.autorBio}
-              autorAvatar={noticia.autorAvatar}
-              autorEmail={noticia.autorEmail}
-              autorTwitter={noticia.autorTwitter}
-              autorFacebook={noticia.autorFacebook}
+              autorBio={undefined}
+              autorAvatar={undefined}
+              autorEmail={undefined}
+              autorTwitter={undefined}
+              autorFacebook={undefined}
             />
           )}
 

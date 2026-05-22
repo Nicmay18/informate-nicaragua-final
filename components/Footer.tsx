@@ -1,6 +1,6 @@
 // File: components/Footer.tsx
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Rss, Mail } from 'lucide-react';
+import { Globe, Share2, Camera, Rss, Mail } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -17,13 +17,13 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: 'var(--spacing-md)', marginTop: 'var(--spacing-md)' }}>
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: 'rgba(255, 255, 255, 0.7)', transition: 'color var(--transition-fast)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}>
-                <Facebook size={18} />
+                <Globe size={18} />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" style={{ color: 'rgba(255, 255, 255, 0.7)', transition: 'color var(--transition-fast)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}>
-                <Twitter size={18} />
+                <Share2 size={18} />
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: 'rgba(255, 255, 255, 0.7)', transition: 'color var(--transition-fast)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}>
-                <Instagram size={18} />
+                <Camera size={18} />
               </a>
               <a href="/feed.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed" style={{ color: 'rgba(255, 255, 255, 0.7)', transition: 'color var(--transition-fast)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}>
                 <Rss size={18} />

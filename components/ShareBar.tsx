@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Facebook, Twitter, MessageCircle, Copy, Check } from 'lucide-react';
+import { Globe, Share2, MessageCircle, Copy, Check } from 'lucide-react';
 
 interface ShareBarProps {
   title: string;
@@ -34,7 +34,7 @@ export default function ShareBar({ title, url }: ShareBarProps) {
           title="Compartir en Facebook"
           aria-label="Compartir en Facebook"
         >
-          <Facebook size={16} />
+          <Globe size={16} />
         </a>
 
         <a
@@ -45,7 +45,7 @@ export default function ShareBar({ title, url }: ShareBarProps) {
           title="Compartir en X (Twitter)"
           aria-label="Compartir en X"
         >
-          <Twitter size={16} />
+          <Share2 size={16} />
         </a>
 
         <a
