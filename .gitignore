@@ -46,6 +46,35 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Archivos de prueba locales (HTML, scripts temporales)
+*.html.bak
+tmp_*.html
+*_test.html
+*_v2.html
+*_v3.html
+argentina.html
+nicaragua_informate_single_v2.html
+Nuevo\ Documento\ de\ texto.txt
+*.tmp
+test-*.html
+demo-*.html
+
+# Scripts de deploy locales
+deploy-*.ps1
+deploy-*.sh
+deploy-*.bat
+check-*.ps1
+force-*.sh
+rebuild-*.ps1
+
+# Reportes y logs locales
+*-report.json
+diffstat.txt
+gitbranch.txt
+gitlog.txt
+status.txt
+audit-files.txt
+
 # Sistema
 .DS_Store
 Thumbs.db

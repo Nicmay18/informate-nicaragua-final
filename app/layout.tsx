@@ -1,6 +1,9 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 import './globals.css';
+import './styles/globals.css';
+import './styles/components.css';
+import './styles/responsive.css';
 import './tmp.css';
 import './pro-design.css';
 import {
@@ -10,6 +13,9 @@ import {
 import ClientOnly from '@/components/ClientOnly';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ProgressBar from '@/components/ProgressBar';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -130,8 +136,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body suppressHydrationWarning className="ni-body">
-        <a href="#main-content" className="skip-link">Saltar al contenido</a>
-        {children}
+        <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
+        <ProgressBar />
+        <Header />
+        <main id="main-content" style={{ flex: 1 }}>
+          {children}
+        </main>
+        <Footer />
         <ClientOnly fallback={<div style={{ height: 48 }} />}>
           <CookieBanner />
         </ClientOnly>

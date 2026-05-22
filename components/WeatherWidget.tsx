@@ -3,14 +3,18 @@ import { useState, useEffect, useCallback } from 'react';
 import { CloudSun, Droplets, Wind } from 'lucide-react';
 
 const CITIES = [
-  { name: 'Managua',    lat: 12.1364, lon: -86.2514 },
-  { name: 'León',       lat: 12.4337, lon: -86.8779 },
-  { name: 'Granada',    lat: 11.9299, lon: -85.9560 },
-  { name: 'Rivas',      lat: 11.4400, lon: -85.8284 },
-  { name: 'Estelí',     lat: 13.0919, lon: -86.3535 },
-  { name: 'Jinotega',   lat: 13.0917, lon: -86.0014 },
-  { name: 'Bluefields', lat: 12.0137, lon: -83.7627 },
-  { name: 'Chinandega', lat: 12.6292, lon: -87.1311 },
+  { name: 'Managua',       lat: 12.1364, lon: -86.2514 },
+  { name: 'León',          lat: 12.4337, lon: -86.8779 },
+  { name: 'Granada',       lat: 11.9299, lon: -85.9560 },
+  { name: 'Rivas',         lat: 11.4400, lon: -85.8284 },
+  { name: 'Estelí',        lat: 13.0919, lon: -86.3535 },
+  { name: 'Jinotega',      lat: 13.0917, lon: -86.0014 },
+  { name: 'Bluefields',    lat: 12.0137, lon: -83.7627 },
+  { name: 'Chinandega',    lat: 12.6292, lon: -87.1311 },
+  { name: 'Nueva Segovia', lat: 13.6320, lon: -86.4750 },
+  { name: 'Matagalpa',     lat: 12.9250, lon: -85.9170 },
+  { name: 'Río San Juan',  lat: 11.1230, lon: -84.7770 },
+  { name: 'Zelaya Central',lat: 12.1600, lon: -85.1700 },
 ];
 
 const WX: Record<number, { label: string; emoji: string }> = {

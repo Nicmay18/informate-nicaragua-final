@@ -1,7 +1,5 @@
-import ArticleClient from '@/components/ArticleClient';
-import ProLayout from '@/components/ProLayout';
-import { getNewsBySlug, getRelatedNews } from '@/lib/data';
-import { isLutoNews } from '@/lib/types';
+import ArticlePage from '@/components/ArticlePage';
+import { getNewsBySlug, getRelatedNews, getMasLeidas } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { unstable_noStore } from 'next/cache';
@@ -120,23 +118,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
-  unstable_noStore(); // Fuerza generación dinámica, sin cache estático ni ISR
+  unstable_noStore();
   const { slug } = await params;
 
   try {
     const noticia = await getNewsBySlug(slug);
     if (!noticia) return notFound();
 
-    const isLuto = isLutoNews(noticia);
-    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
+    const [related, trending] = await Promise.all([
+      getRelatedNews(noticia.categoria, noticia.slug, 6),
+      getMasLeidas(),
+    ]);
+
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
     const wordCount = noticia.contenido
       ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length
       : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-    const serverNow = Date.now();
 
     const faqSchema = {
       '@context': 'https://schema.org',
@@ -180,14 +179,14 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const isRecordPolicial = noticia.titulo.toLowerCase().includes('récord policial') || noticia.titulo.toLowerCase().includes('record policial') || noticia.slug.toLowerCase().includes('record-policial');
 
     return (
-      <ProLayout tickerText={noticia.titulo}>
+      <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
         {isRecordPolicial && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         )}
-        <ArticleClient noticia={noticia} related={related} isLuto={isLuto} serverNow={serverNow} />
-      </ProLayout>
+        <ArticlePage noticia={noticia} relatedNews={related} trendingNews={trending} />
+      </>
     );
   } catch (error) {
     console.error('Error cargando noticia:', error);
