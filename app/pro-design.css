@@ -30,14 +30,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-/* ===== WORLD CLOCK ===== */
-.world-clock{background:linear-gradient(90deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);color:rgba(255,255,255,0.9);font-size:0.72rem;padding:6px 0;overflow:hidden;position:relative;border-bottom:1px solid rgba(255,255,255,0.06)}
-.world-clock-inner{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:24px}
-.world-clock-item{display:flex;align-items:center;gap:6px;font-weight:600;white-space:nowrap}
-.world-clock-item .flag{font-size:1rem}
-.world-clock-item .country{color:var(--accent);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:700}
-.world-clock-item .time{color:white;font-size:0.85rem;font-weight:800;font-variant-numeric:tabular-nums}
-
 /* ===== PROGRESS BAR ===== */
 .progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent) 0%,var(--danger) 100%);z-index:9999;width:0%;transition:width 0.1s}
 

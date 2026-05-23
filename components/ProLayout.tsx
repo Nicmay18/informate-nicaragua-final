@@ -80,18 +80,18 @@ export default function ProLayout({
       {/* Progress Bar */}
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
 
-      {/* World Clock */}
-      <WorldClock />
-
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-inner">
           <time className="top-bar-date" dateTime={new Date().toISOString().split('T')[0]} suppressHydrationWarning>{dateStr}</time>
-          <ul className="top-bar-social">
-            {SOCIAL_LINKS.map(link => (
-              <li key={link.label}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>
-            ))}
-          </ul>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <WorldClock />
+            <ul className="top-bar-social">
+              {SOCIAL_LINKS.map(link => (
+                <li key={link.label}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
