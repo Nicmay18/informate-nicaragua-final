@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import WeatherWidget from './WeatherWidget';
 import IndicadoresWidget from './IndicadoresWidget';
@@ -40,23 +41,52 @@ const CATEGORIES = [
   { name: 'Cultura', slug: 'cultura' },
 ];
 
-function HeroCard({ noticia }: { noticia: Noticia }) {
+function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
+  const [idx, setIdx] = useState(0);
+  const items = noticias.slice(0, 5);
+
+  useEffect(() => {
+    if (items.length <= 1) return;
+    const t = setInterval(() => setIdx(p => (p + 1) % items.length), 6000);
+    return () => clearInterval(t);
+  }, [items.length]);
+
+  const noticia = items[idx];
+  if (!noticia) return null;
+
   return (
-    <section className="hero" aria-label="Noticia principal">
-      <article className="hero-card">
-        <div className="hero-image">
-          {noticia.imagen ? (
-            <Image
-              src={noticia.imagen}
-              alt={noticia.titulo}
-              fill
-              sizes="(max-width: 768px) 100vw, 60vw"
-              className="hero-img"
-              priority
-            />
-          ) : null}
+    <section className="hero" aria-label="Noticias destacadas">
+      <article className="hero-card" style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* Carousel slides */}
+        <div className="hero-slides" style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+          {items.map((n, i) => (
+            <div
+              key={n.id}
+              style={{
+                position: 'absolute', inset: 0,
+                opacity: i === idx ? 1 : 0,
+                transition: 'opacity 0.7s ease',
+                zIndex: i === idx ? 1 : 0,
+              }}
+            >
+              {n.imagen ? (
+                <Image
+                  src={n.imagen}
+                  alt={n.titulo}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  className="hero-img"
+                  priority={i === 0}
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : null}
+            </div>
+          ))}
+          {/* Badge del slide activo */}
           <span className="hero-badge">{noticia.categoria || 'Noticia'}</span>
         </div>
+
+        {/* Content flotante abajo */}
         <div className="hero-content">
           <div className="hero-meta">
             <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
@@ -68,7 +98,53 @@ function HeroCard({ noticia }: { noticia: Noticia }) {
           <Link href={`/noticias/${noticia.slug}`} className="btn-primary-hero">
             Leer más
           </Link>
+
+          {/* Dots */}
+          <div style={{ display: 'flex', gap: 6, marginTop: 12, justifyContent: 'center' }}>
+            {items.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIdx(i)}
+                aria-label={`Ir a noticia ${i + 1}`}
+                style={{
+                  width: i === idx ? 20 : 8, height: 8, borderRadius: 4,
+                  background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
+                  border: 'none', cursor: 'pointer', transition: 'all 0.3s',
+                }}
+              />
+            ))}
+          </div>
         </div>
+
+        {/* Flechas (solo desktop) */}
+        {items.length > 1 && (
+          <>
+            <button
+              onClick={() => setIdx(p => (p - 1 + items.length) % items.length)}
+              style={{
+                position: 'absolute', top: '50%', left: 12, transform: 'translateY(-50%)',
+                width: 36, height: 36, borderRadius: '50%', border: 'none',
+                background: 'rgba(0,0,0,0.4)', color: '#fff', display: 'flex',
+                alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
+              }}
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => setIdx(p => (p + 1) % items.length)}
+              style={{
+                position: 'absolute', top: '50%', right: 12, transform: 'translateY(-50%)',
+                width: 36, height: 36, borderRadius: '50%', border: 'none',
+                background: 'rgba(0,0,0,0.4)', color: '#fff', display: 'flex',
+                alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
+              }}
+              aria-label="Siguiente"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
       </article>
     </section>
   );
@@ -122,8 +198,8 @@ export default function MobileHome({
   noticias: Noticia[];
   masLeidas: Noticia[];
 }) {
-  const primera = noticias[0];
-  const resto = noticias.slice(1);
+  const heroNoticias = noticias.slice(0, 5);
+  const resto = noticias.slice(5);
 
   const nacionales = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'nacionales').slice(0, 4), [resto]);
   const sucesos = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'sucesos').slice(0, 4), [resto]);
@@ -145,7 +221,7 @@ export default function MobileHome({
 
   return (
     <>
-      {primera ? <HeroCard noticia={primera} /> : null}
+      <HeroCarousel noticias={heroNoticias} />
 
       {/* Trends */}
       <section className="trends-section">

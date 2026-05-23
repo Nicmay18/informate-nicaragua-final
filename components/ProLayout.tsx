@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   Search, Menu, X, Moon, Sun, ArrowLeft, Home, Globe, Radio, MessageSquare, User,
 } from 'lucide-react';
+import type { Noticia } from '@/lib/types';
 import WorldClock from './WorldClock';
 import RadioPlayer from './RadioPlayer';
 
@@ -45,15 +46,22 @@ function useTheme() {
 
 export default function ProLayout({
   children,
-  tickerText,
+  tickerItems,
 }: {
   children: React.ReactNode;
-  tickerText?: string;
+  tickerItems?: Noticia[];
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [dateStr, setDateStr] = useState('');
   const { theme, toggle } = useTheme();
+  const [tickerIdx, setTickerIdx] = useState(0);
+
+  useEffect(() => {
+    if (!tickerItems?.length) return;
+    const t = setInterval(() => setTickerIdx(p => (p + 1) % tickerItems.length), 5000);
+    return () => clearInterval(t);
+  }, [tickerItems]);
 
   useEffect(() => {
     const hoy = new Date();
@@ -168,19 +176,28 @@ export default function ProLayout({
       {/* Radio Player */}
       <RadioPlayer />
 
-      {/* Breaking Bar with ticker animation */}
-      {tickerText && (
+      {/* Breaking Bar with carousel */}
+      {tickerItems && tickerItems.length > 0 && (
         <div className="breaking-bar">
           <span className="breaking-label">Última Hora</span>
-          <div className="breaking-ticker">
-            <Link href="/noticias" className="breaking-item">
-              <span className="time">AHORA</span>
-              {tickerText}
-            </Link>
-            <Link href="/noticias" className="breaking-item">
-              <span className="time">AHORA</span>
-              {tickerText}
-            </Link>
+          <div className="breaking-ticker" style={{ overflow: 'hidden', flex: 1, position: 'relative', height: 28 }}>
+            {tickerItems.map((n, i) => (
+              <Link
+                key={n.id}
+                href={`/noticias/${n.slug}`}
+                className="breaking-item"
+                style={{
+                  position: 'absolute', top: 0, left: 0, right: 0,
+                  opacity: i === tickerIdx ? 1 : 0,
+                  transform: i === tickerIdx ? 'translateY(0)' : 'translateY(8px)',
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  pointerEvents: i === tickerIdx ? 'auto' : 'none',
+                }}
+              >
+                <span className="time">AHORA</span>
+                {n.titulo}
+              </Link>
+            ))}
           </div>
         </div>
       )}

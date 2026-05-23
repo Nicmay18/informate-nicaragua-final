@@ -33,10 +33,10 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  const tickerText = noticias[0]?.titulo || 'Nicaragua Informate';
+  const tickerItems = noticias.slice(0, 10);
 
   return (
-    <ProLayout tickerText={tickerText}>
+    <ProLayout tickerItems={tickerItems}>
       <section className="visually-hidden" aria-label="Introduccion SEO">
         <h1>Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
         <p>Nicaragua Informate es el portal de noticias lider de Nicaragua. Desde nuestra redaccion en Managua y Esteli, ofrecemos cobertura periodistica verificada sobre los acontecimientos mas importantes del pais y el mundo.</p>
