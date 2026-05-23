@@ -152,11 +152,13 @@ function NewsCard({ noticia }: { noticia: Noticia }) {
           <span className="news-category">{noticia.categoria || 'Noticia'}</span>
         </div>
         <div className="news-body">
+          <div>
+            <h2 className="news-title">{noticia.titulo}</h2>
+            {noticia.resumen ? (
+              <p className="news-excerpt">{noticia.resumen}</p>
+            ) : null}
+          </div>
           <time className="news-date" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
-          <h2 className="news-title">{noticia.titulo}</h2>
-          {noticia.resumen ? (
-            <p className="news-excerpt">{noticia.resumen}</p>
-          ) : null}
         </div>
       </Link>
     </article>

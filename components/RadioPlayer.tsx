@@ -108,7 +108,7 @@ export default function RadioPlayer() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Radio size={14} color="#ef4444" />
           <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '-0.2px' }}>Radio en Vivo</span>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+          <span className="radio-live-dot" />
         </div>
         <button onClick={() => setExpanded(!expanded)} style={{ fontSize: 11, color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
           {expanded ? 'Cerrar' : 'Ver emisoras'}
