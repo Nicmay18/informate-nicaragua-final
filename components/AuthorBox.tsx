@@ -1,5 +1,4 @@
 // File: components/AuthorBox.tsx
-import Image from 'next/image';
 import { Globe, Share2, Mail } from 'lucide-react';
 
 interface AuthorBoxProps {
@@ -11,6 +10,13 @@ interface AuthorBoxProps {
   autorFacebook?: string;
 }
 
+const KEYLING_DEFAULT = {
+  name: 'Keyling Rivera M.',
+  avatar: '/keyling-rivera.jpg',
+  role: 'Directora Editorial',
+  bio: 'Periodista de Nicaragua Informate. Especializada en cobertura nacional e internacional. Comprometida con el periodismo verificado.',
+};
+
 export default function AuthorBox({
   autor,
   autorBio,
@@ -19,20 +25,25 @@ export default function AuthorBox({
   autorTwitter,
   autorFacebook,
 }: AuthorBoxProps) {
+  const isKeyling = autor.toLowerCase().includes('keyling') || autor.toLowerCase().includes('rivera');
+  const displayName = isKeyling ? KEYLING_DEFAULT.name : autor;
+  const displayAvatar = autorAvatar || (isKeyling ? KEYLING_DEFAULT.avatar : null);
+  const displayBio = autorBio || (isKeyling ? KEYLING_DEFAULT.bio : null);
+
   return (
     <div className="author-box">
-      {autorAvatar ? (
-        <Image
-          src={autorAvatar}
-          alt={autor}
-          width={64}
-          height={64}
+      {displayAvatar ? (
+        <img
+          src={displayAvatar}
+          alt={displayName}
           className="author-avatar"
+          style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--accent)' }}
         />
       ) : (
         <div
           className="author-avatar"
           style={{
+            width: 80, height: 80, borderRadius: '50%',
             background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))',
             display: 'flex',
             alignItems: 'center',
@@ -47,11 +58,11 @@ export default function AuthorBox({
       )}
 
       <div className="author-content">
-        <div className="author-name">{autor}</div>
+        <div className="author-name">{displayName}</div>
 
-        {autorBio && (
+        {displayBio && (
           <p className="author-bio">
-            {autorBio}
+            {displayBio}
           </p>
         )}
 

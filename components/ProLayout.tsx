@@ -5,6 +5,8 @@ import Link from 'next/link';
 import {
   Search, Menu, X, Moon, Sun, ArrowLeft, Home, Globe, Radio, MessageSquare, User,
 } from 'lucide-react';
+import WorldClock from './WorldClock';
+import RadioPlayer from './RadioPlayer';
 
 const NAV_LINKS = [
   { href: '/', label: 'Inicio' },
@@ -78,6 +80,9 @@ export default function ProLayout({
       {/* Progress Bar */}
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
 
+      {/* World Clock */}
+      <WorldClock />
+
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-inner">
@@ -143,14 +148,22 @@ export default function ProLayout({
         </div>
       </header>
 
-      {/* Breaking Bar */}
+      {/* Radio Player */}
+      <RadioPlayer />
+
+      {/* Breaking Bar with ticker animation */}
       {tickerText && (
         <div className="breaking-bar">
-          <div className="breaking-inner">
-            <span className="breaking-label">Última Hora</span>
-            <div className="breaking-text">
-              <Link href="/noticias">{tickerText}</Link>
-            </div>
+          <span className="breaking-label">Última Hora</span>
+          <div className="breaking-ticker">
+            <Link href="/noticias" className="breaking-item">
+              <span className="time">AHORA</span>
+              {tickerText}
+            </Link>
+            <Link href="/noticias" className="breaking-item">
+              <span className="time">AHORA</span>
+              {tickerText}
+            </Link>
           </div>
         </div>
       )}

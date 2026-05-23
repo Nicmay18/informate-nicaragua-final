@@ -19,14 +19,14 @@ function timeAgo(dateStr: string) {
 }
 
 const TRENDS = [
-  { label: 'Elecciones 2026', rank: 1 },
-  { label: 'Economía Nicaragua', rank: 2 },
-  { label: 'Sucesos de hoy', rank: 3 },
-  { label: 'Dólar / Córdoba', rank: 4 },
-  { label: 'Tecnología', rank: 5 },
-  { label: 'Deportes', rank: 6 },
-  { label: 'Internacionales', rank: 7 },
-  { label: 'Clima', rank: 8 },
+  { label: 'Elecciones 2026', rank: 1, href: '/buscar?q=elecciones' },
+  { label: 'Economía Nicaragua', rank: 2, href: '/categoria/economia' },
+  { label: 'Sucesos de hoy', rank: 3, href: '/categoria/sucesos' },
+  { label: 'Dólar / Córdoba', rank: 4, href: '/buscar?q=dolar' },
+  { label: 'Tecnología', rank: 5, href: '/categoria/tecnologia' },
+  { label: 'Deportes', rank: 6, href: '/categoria/deportes' },
+  { label: 'Internacionales', rank: 7, href: '/categoria/internacionales' },
+  { label: 'Clima', rank: 8, href: '/buscar?q=clima' },
 ];
 
 const CATEGORIES = [
@@ -147,10 +147,10 @@ export default function MobileHome({
       <section className="trends-section">
         <div className="trends-bar">
           {TRENDS.map(t => (
-            <span key={t.rank} className="trend-chip">
+            <Link key={t.rank} href={t.href} className="trend-chip">
               <span className="trend-rank">{t.rank}</span>
               {t.label}
-            </span>
+            </Link>
           ))}
         </div>
       </section>

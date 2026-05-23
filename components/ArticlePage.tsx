@@ -126,8 +126,8 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
           {/* Autor real */}
           <div className="article-author">
             <img
-              src="https://ui-avatars.com/api/?name=Keyling+Rivera&background=c9a96e&color=0f1b33&size=128"
-              alt="Keyling Rivera Muñoz"
+              src="/keyling-rivera.jpg"
+              alt="Keyling Rivera M. - Directora Editorial"
               className="article-author-avatar"
             />
             <div className="article-author-info">

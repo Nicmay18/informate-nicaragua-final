@@ -35,9 +35,19 @@ export default function WeatherWidget() {
 
   return (
     <div className="weather-widget-full">
+      {/* Ciudad grande arriba */}
+      <div style={{ textAlign: 'center', marginBottom: 16, position: 'relative' }}>
+        <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'white', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          {city.name}
+        </div>
+        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: 2, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '2px' }}>
+          Nicaragua
+        </div>
+      </div>
+
       <div className="weather-current">
         <div className="weather-current-main">
-          <span style={{ fontSize: 40, lineHeight: 1 }}>{wx.emoji}</span>
+          <span style={{ fontSize: 44, lineHeight: 1, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}>{wx.emoji}</span>
           <div>
             <div className="weather-current-temp">{city.temp}°</div>
             <div style={{ fontSize: 13, opacity: 0.75 }}>{wx.label}</div>
