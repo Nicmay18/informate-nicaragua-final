@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   Search, Menu, X, Moon, Sun, Home, Globe, Radio, MessageSquare, User,
+  MessageCircle, Send, Mail,
 } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import WorldClock from './WorldClock';
@@ -223,9 +224,18 @@ export default function ProLayout({
                 Portal de noticias líder de Nicaragua. Cobertura periodística verificada sobre política, economía, deportes, tecnología, sucesos y cultura.
               </p>
               <div className="footer-premium-social">
-                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
-                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">TG</a>
+                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <Globe size={16} strokeWidth={2} />
+                </a>
+                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                  <MessageCircle size={16} strokeWidth={2} />
+                </a>
+                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                  <Send size={16} strokeWidth={2} />
+                </a>
+                <a href="mailto:info@nicaraguainformate.com" aria-label="Email">
+                  <Mail size={16} strokeWidth={2} />
+                </a>
               </div>
             </div>
 
