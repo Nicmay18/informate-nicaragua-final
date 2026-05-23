@@ -81,7 +81,7 @@ export default function ProLayout({
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-inner">
-          <span className="top-bar-date">{dateStr}</span>
+          <span className="top-bar-date" suppressHydrationWarning>{dateStr}</span>
           <ul className="top-bar-social">
             {SOCIAL_LINKS.map(link => (
               <li key={link.label}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>

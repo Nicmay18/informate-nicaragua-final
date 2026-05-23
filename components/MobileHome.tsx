@@ -1,170 +1,279 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
-import WeatherWidget from '@/components/WeatherWidget';
-import IndicadoresWidget from '@/components/IndicadoresWidget';
-import NewsletterSignup from '@/components/NewsletterSignup';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import type { Noticia } from '@/lib/types';
+import WeatherWidget from './WeatherWidget';
+import IndicadoresWidget from './IndicadoresWidget';
+import NewsletterSignup from './NewsletterSignup';
 
-interface MobileHomeProps {
+function timeAgo(dateStr: string) {
+  try {
+    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: es });
+  } catch {
+    return dateStr;
+  }
+}
+
+const TRENDS = [
+  { label: 'Elecciones 2026', rank: 1 },
+  { label: 'Economía Nicaragua', rank: 2 },
+  { label: 'Sucesos de hoy', rank: 3 },
+  { label: 'Dólar / Córdoba', rank: 4 },
+  { label: 'Tecnología', rank: 5 },
+  { label: 'Deportes', rank: 6 },
+  { label: 'Internacionales', rank: 7 },
+  { label: 'Clima', rank: 8 },
+];
+
+const CATEGORIES = [
+  { name: 'Nacionales', slug: 'nacionales' },
+  { name: 'Sucesos', slug: 'sucesos' },
+  { name: 'Internacionales', slug: 'internacionales' },
+  { name: 'Economía', slug: 'economia' },
+  { name: 'Deportes', slug: 'deportes' },
+  { name: 'Tecnología', slug: 'tecnologia' },
+  { name: 'Política', slug: 'politica' },
+  { name: 'Cultura', slug: 'cultura' },
+];
+
+function HeroCard({ noticia }: { noticia: Noticia }) {
+  return (
+    <section className="hero">
+      <div className="hero-card">
+        <div className="hero-image">
+          {noticia.imagen ? (
+            <Image
+              src={noticia.imagen}
+              alt={noticia.titulo}
+              fill
+              sizes="(max-width: 768px) 100vw, 60vw"
+              className="hero-img"
+              priority
+            />
+          ) : null}
+          <span className="hero-badge">{noticia.categoria || 'Noticia'}</span>
+        </div>
+        <div className="hero-content">
+          <div className="hero-meta">
+            <span>{timeAgo(noticia.fecha)}</span>
+            <span className="dot" />
+            <span>{noticia.autor || 'Nicaragua Informate'}</span>
+          </div>
+          <h1 className="hero-title">{noticia.titulo}</h1>
+          <p className="hero-excerpt">{noticia.resumen || noticia.titulo}</p>
+          <Link href={`/noticias/${noticia.slug}`} className="btn-primary">
+            Leer más
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewsCard({ noticia }: { noticia: Noticia }) {
+  return (
+    <Link href={`/noticias/${noticia.slug}`} className="news-card">
+      <div className="news-image">
+        {noticia.imagen ? (
+          <Image
+            src={noticia.imagen}
+            alt={noticia.titulo}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        ) : null}
+        <span className="news-category">{noticia.categoria || 'Noticia'}</span>
+      </div>
+      <div className="news-body">
+        <div className="news-date" suppressHydrationWarning>{timeAgo(noticia.fecha)}</div>
+        <h2 className="news-title">{noticia.titulo}</h2>
+        {noticia.resumen ? (
+          <p className="news-excerpt">{noticia.resumen}</p>
+        ) : null}
+      </div>
+    </Link>
+  );
+}
+
+function TrendingItem({ noticia, index }: { noticia: Noticia; index: number }) {
+  return (
+    <Link href={`/noticias/${noticia.slug}`} className="trending-item">
+      <span className="trending-num">{index + 1}</span>
+      <div className="trending-content">
+        <h4>{noticia.titulo}</h4>
+        <span suppressHydrationWarning>{timeAgo(noticia.fecha)}</span>
+      </div>
+    </Link>
+  );
+}
+
+export default function MobileHome({
+  noticias,
+  masLeidas,
+}: {
   noticias: Noticia[];
   masLeidas: Noticia[];
-}
+}) {
+  const primera = noticias[0];
+  const resto = noticias.slice(1);
 
-const MONTHS_SHORT = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const nacionales = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'nacionales').slice(0, 4), [resto]);
+  const sucesos = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'sucesos').slice(0, 4), [resto]);
+  const internacionales = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'internacionales').slice(0, 4), [resto]);
+  const tecnologia = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'tecnologia').slice(0, 4), [resto]);
+  const deportes = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'deportes').slice(0, 4), [resto]);
 
-function formatDate(date: string) {
-  try {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = MONTHS_SHORT[d.getMonth()];
-    const year = d.getFullYear();
-    return `${day} ${month} ${year}`;
-  } catch { return date; }
-}
+  const general = useMemo(() => {
+    const used = new Set<string>();
+    nacionales.forEach(n => used.add(n.id));
+    sucesos.forEach(n => used.add(n.id));
+    internacionales.forEach(n => used.add(n.id));
+    tecnologia.forEach(n => used.add(n.id));
+    deportes.forEach(n => used.add(n.id));
+    return resto.filter(n => !used.has(n.id)).slice(0, 4);
+  }, [resto, nacionales, sucesos, internacionales, tecnologia, deportes]);
 
-function timeAgo(date: string) {
-  try {
-    const now = new Date();
-    const then = new Date(date);
-    const diff = Math.floor((now.getTime() - then.getTime()) / 1000);
-    if (diff < 60) return 'Hace un momento';
-    if (diff < 3600) return 'Hace ' + Math.floor(diff / 60) + ' min';
-    if (diff < 86400) return 'Hace ' + Math.floor(diff / 3600) + ' horas';
-    return formatDate(date);
-  } catch { return date; }
-}
-
-export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
-  const hero = noticias[0];
-  const nacionales = noticias.filter(n => n.categoria === 'Nacionales').slice(0, 2);
-  const internacionales = noticias.filter(n => n.categoria === 'Internacionales').slice(0, 2);
-  const tecnologia = noticias.filter(n => n.categoria === 'Tecnología').slice(0, 2);
-  const sucesos = noticias.filter(n => n.categoria === 'Sucesos').slice(0, 2);
-  const deportes = noticias.filter(n => n.categoria === 'Deportes').slice(0, 2);
-
-  const categories = [
-    { title: 'Nacionales', items: nacionales, slug: 'nacionales' },
-    { title: 'Internacionales', items: internacionales, slug: 'internacionales' },
-    { title: 'Tecnología', items: tecnologia, slug: 'tecnologia' },
-    { title: 'Sucesos', items: sucesos, slug: 'sucesos' },
-    { title: 'Deportes', items: deportes, slug: 'deportes' },
-  ];
+  const trending = masLeidas.length >= 5 ? masLeidas.slice(0, 5) : resto.slice(0, 5);
 
   return (
     <>
-      {/* Hero simple */}
-      {hero && (
-        <section className="hero">
-          <article className="hero-card">
-            <div className="hero-image" style={{ minHeight: '320px' }}>
-              {hero.imagen && hero.imagen !== '/logo.png' ? (
-                <Image src={hero.imagen} alt={hero.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} />
-              ) : (
-                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)' }} />
-              )}
-              <span className="hero-badge">Destacada</span>
-            </div>
-            <div className="hero-content">
-              <div className="hero-meta">
-                <span>{hero.categoria || 'Noticias'}</span>
-                <span className="dot"></span>
-                <span>{formatDate(hero.fecha)}</span>
-              </div>
-              <h1 className="hero-title">{hero.titulo}</h1>
-              {hero.resumen && <p className="hero-excerpt">{hero.resumen}</p>}
-              <Link href={`/noticias/${hero.slug}`} className="btn-primary">
-                Leer análisis completo <ArrowRight size={16} />
-              </Link>
-            </div>
-          </article>
-        </section>
-      )}
+      {primera ? <HeroCard noticia={primera} /> : null}
 
-      {/* Tendencias */}
-      {masLeidas.length > 0 && (
-        <section className="trends-section">
-          <div className="section-header" style={{ marginBottom: '14px' }}>
-            <h2 className="section-title">Tendencias</h2>
-          </div>
-          <div className="trends-bar">
-            {masLeidas.slice(0, 10).map((n, i) => (
-              <Link href={`/noticias/${n.slug}`} key={n.slug} className="trend-chip">
-                <span className="trend-rank">{i + 1}</span>
-                {n.titulo.slice(0, 22)}…
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Trends */}
+      <section className="trends-section">
+        <div className="trends-bar">
+          {TRENDS.map(t => (
+            <span key={t.rank} className="trend-chip">
+              <span className="trend-rank">{t.rank}</span>
+              {t.label}
+            </span>
+          ))}
+        </div>
+      </section>
 
-      {/* Main layout */}
       <div className="main-layout">
         <main>
-          {/* Secciones por categoría */}
-          {categories.map((cat) => cat.items.length > 0 && (
-            <div key={cat.slug}>
+          {/* Últimas noticias */}
+          <section>
+            <div className="section-header">
+              <h2 className="section-title">Últimas noticias</h2>
+              <Link href="/noticias" className="section-link">Ver todas</Link>
+            </div>
+            <div className="news-grid">
+              {general.map(n => <NewsCard key={n.id} noticia={n} />)}
+            </div>
+          </section>
+
+          {/* Nacionales */}
+          {nacionales.length > 0 && (
+            <section>
               <div className="section-header">
-                <h2 className="section-title">{cat.title}</h2>
-                <Link href={`/categoria/${cat.slug}`} className="section-link">Ver todas →</Link>
+                <h2 className="section-title">Nacionales</h2>
+                <Link href="/categoria/nacionales" className="section-link">Ver todas</Link>
               </div>
               <div className="news-grid">
-                {cat.items.map((n) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.id} className="news-card">
-                    <div className="news-image">
-                      {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={600} height={400} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)', color: 'var(--accent)', fontWeight: 700 }}>
-                          {n.categoria}
-                        </div>
-                      )}
-                      <span className="news-category">{n.categoria}</span>
-                    </div>
-                    <div className="news-body">
-                      <div className="news-date">📅 {formatDate(n.fecha)}</div>
-                      <h3 className="news-title">{n.titulo}</h3>
-                      {n.resumen && <p className="news-excerpt">{n.resumen.slice(0, 100)}…</p>}
-                    </div>
-                  </Link>
-                ))}
+                {nacionales.map(n => <NewsCard key={n.id} noticia={n} />)}
               </div>
-            </div>
-          ))}
+            </section>
+          )}
+
+          {/* Banner mobile */}
+          <div className="ad-banner" style={{ marginBottom: 44 }}>
+            <h4>Publicidad</h4>
+            <p>Espacio disponible para tu marca</p>
+            <a href="mailto:info@nicaraguainformate.com" className="ad-btn">Anunciarse</a>
+          </div>
+
+          {/* Sucesos */}
+          {sucesos.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Sucesos</h2>
+                <Link href="/categoria/sucesos" className="section-link">Ver todas</Link>
+              </div>
+              <div className="news-grid">
+                {sucesos.map(n => <NewsCard key={n.id} noticia={n} />)}
+              </div>
+            </section>
+          )}
+
+          {/* Internacionales */}
+          {internacionales.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Internacionales</h2>
+                <Link href="/categoria/internacionales" className="section-link">Ver todas</Link>
+              </div>
+              <div className="news-grid">
+                {internacionales.map(n => <NewsCard key={n.id} noticia={n} />)}
+              </div>
+            </section>
+          )}
+
+          {/* Tecnología */}
+          {tecnologia.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Tecnología</h2>
+                <Link href="/categoria/tecnologia" className="section-link">Ver todas</Link>
+              </div>
+              <div className="news-grid">
+                {tecnologia.map(n => <NewsCard key={n.id} noticia={n} />)}
+              </div>
+            </section>
+          )}
+
+          {/* Deportes */}
+          {deportes.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Deportes</h2>
+                <Link href="/categoria/deportes" className="section-link">Ver todas</Link>
+              </div>
+              <div className="news-grid">
+                {deportes.map(n => <NewsCard key={n.id} noticia={n} />)}
+              </div>
+            </section>
+          )}
         </main>
 
         {/* Sidebar */}
         <aside className="sidebar">
+          <div className="ad-sidebar">
+            <h4>Publicidad</h4>
+            <p>Espacio disponible</p>
+            <a href="mailto:info@nicaraguainformate.com" className="ad-btn">Contactar</a>
+          </div>
+
+          <IndicadoresWidget />
+
+          <WeatherWidget />
+
           <div className="sidebar-widget">
-            <h3 className="widget-title">Indicadores Económicos</h3>
-            <IndicadoresWidget />
+            <h3 className="widget-title">Lo más leído</h3>
+            {trending.map((n, i) => (
+              <TrendingItem key={n.id} noticia={n} index={i} />
+            ))}
           </div>
 
-          <div className="sidebar-widget weather-widget">
-            <h3 className="widget-title">Clima en Nicaragua</h3>
-            <WeatherWidget />
-          </div>
-
-          {masLeidas.length > 0 && (
-            <div className="sidebar-widget">
-              <h3 className="widget-title">Lo más leído</h3>
-              {masLeidas.slice(0, 5).map((n, i) => (
-                <Link href={`/noticias/${n.slug}`} key={n.slug} className="trending-item">
-                  <span className="trending-num">{i + 1}</span>
-                  <div className="trending-content">
-                    <h4>{n.titulo}</h4>
-                    <span>{timeAgo(n.fecha)} • {n.categoria}</span>
-                  </div>
+          <div className="sidebar-widget">
+            <h3 className="widget-title">Categorías</h3>
+            <div className="categories-cloud">
+              {CATEGORIES.map(c => (
+                <Link key={c.slug} href={`/categoria/${c.slug}`} className="cat-tag">
+                  {c.name}
                 </Link>
               ))}
             </div>
-          )}
+          </div>
 
           <div className="sidebar-widget">
             <h3 className="widget-title">Newsletter</h3>
-            <NewsletterSignup variant="sidebar" />
+            <NewsletterSignup />
           </div>
         </aside>
       </div>
