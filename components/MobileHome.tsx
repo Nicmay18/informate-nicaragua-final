@@ -12,6 +12,7 @@ import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import RadioPlayer from '@/components/RadioPlayer';
+import WorldClock from '@/components/WorldClock';
 import { useState } from 'react';
 import { tiempoLectura } from '@/lib/formateo';
 import type { Noticia } from '@/lib/types';
@@ -156,22 +157,18 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
         </div>
 
         <aside className="sidebar">
+          <WorldClock />
+
+          <IndicadoresWidget />
+
+          <WeatherWidget />
+
           <div className="sidebar-widget">
             <h3 className="widget-title">Newsletter</h3>
             <NewsletterSignup variant="sidebar" />
           </div>
 
           <RadioPlayer />
-
-          <div className="sidebar-widget weather-widget">
-            <h3 className="widget-title">Clima en Nicaragua</h3>
-            <WeatherWidget />
-          </div>
-
-          <div className="sidebar-widget">
-            <h3 className="widget-title">Indicadores Económicos</h3>
-            <IndicadoresWidget />
-          </div>
 
           <div className="sidebar-widget">
             <h3 className="widget-title">Síguenos</h3>

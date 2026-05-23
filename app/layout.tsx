@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   generator: 'Next.js',
   keywords: ['Nicaragua', 'noticias Nicaragua', 'actualidad Nicaragua', 'periodismo Nicaragua', 'Managua', 'Noticias de hoy'],
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
-  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua. Política, economía, deportes, cultura y más.',
+  description: 'Noticias de Nicaragua en tiempo real. Periodismo verificado desde Managua sobre política, economía, deportes, tecnología y sucesos.',
   robots: 'index, follow',
   icons: {
     icon: '/logo.png',

@@ -103,7 +103,10 @@ export default function ArticleView({ noticia, relatedNews = [], trendingNews = 
           <span>{noticia.titulo.slice(0, 40)}...</span>
         </nav>
         <span className="av-category">{noticia.categoria}</span>
-        <h1 className="av-title">{noticia.titulo}</h1>
+        <h1 className="av-title">
+          <span className="av-kicker">Noticias de Nicaragua en tiempo real</span>
+          {noticia.titulo}
+        </h1>
         <div className="av-meta">
           <div className="av-meta-author">
             {autorFoto ? (
