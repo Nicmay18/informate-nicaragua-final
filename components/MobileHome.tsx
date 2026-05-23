@@ -56,26 +56,22 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
   return (
     <section className="hero" aria-label="Noticias destacadas">
-      <article className="hero-card" style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
-        {/* Imagen con overlay todo en uno */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', minHeight: 280, maxHeight: 480 }}>
+      <article className="hero-editorial">
+        {/* Imagen cinematográfica full-bleed */}
+        <div className="hero-editorial-media">
           {items.map((n, i) => (
             <div
               key={n.id}
-              style={{
-                position: 'absolute', inset: 0,
-                opacity: i === idx ? 1 : 0,
-                transition: 'opacity 0.7s ease',
-                zIndex: i === idx ? 1 : 0,
-              }}
+              className="hero-editorial-slide"
+              style={{ opacity: i === idx ? 1 : 0 }}
             >
               {n.imagen ? (
                 <Image
                   src={n.imagen}
                   alt={n.titulo}
                   fill
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                  className="hero-img"
+                  sizes="100vw"
+                  className="hero-editorial-img"
                   priority={i === 0}
                   style={{ objectFit: 'cover' }}
                 />
@@ -83,73 +79,57 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
             </div>
           ))}
 
-          {/* Overlay gradiente + contenido */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.15) 70%, transparent 100%)',
-            zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-            padding: '24px 20px 20px',
-          }}>
-            <span className="hero-badge" style={{ position: 'static', alignSelf: 'flex-start', marginBottom: 10 }}>{noticia.categoria || 'Noticia'}</span>
-            <div className="hero-meta" style={{ marginBottom: 6 }}>
-              <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
-              <span className="dot" />
-              <span>{noticia.autor || 'Nicaragua Informate'}</span>
-            </div>
-            <h1 className="hero-title" style={{ marginBottom: 6, fontSize: 'clamp(1.2rem, 3vw, 2rem)' }}>{noticia.titulo}</h1>
-            <p className="hero-excerpt" style={{ marginBottom: 12, fontSize: '0.85rem', lineHeight: 1.45, opacity: 0.85 }}>{noticia.resumen || noticia.titulo}</p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Link href={`/noticias/${noticia.slug}`} className="btn-primary-hero" style={{ marginTop: 0, padding: '8px 18px', fontSize: 13 }}>
-                Leer más
-              </Link>
+          {/* Overlay gradiente editorial */}
+          <div className="hero-editorial-overlay" />
 
-              {/* Dots circulitos profesionales */}
-              <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
-                {items.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIdx(i)}
-                    aria-label={`Ir a noticia ${i + 1}`}
-                    style={{
-                      width: i === idx ? 18 : 7, height: 7, borderRadius: 999,
-                      background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
-                      border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Categoría flotante */}
+          <span className="hero-editorial-category">{noticia.categoria || 'Noticia'}</span>
 
-          {/* Flechas sutiles */}
+          {/* Flechas editoriales */}
           {items.length > 1 && (
             <>
               <button
+                className="hero-editorial-arrow hero-editorial-arrow--prev"
                 onClick={() => setIdx(p => (p - 1 + items.length) % items.length)}
-                style={{
-                  position: 'absolute', top: '42%', left: 8, transform: 'translateY(-50%)',
-                  width: 28, height: 28, borderRadius: '50%', border: 'none',
-                  background: 'rgba(0,0,0,0.25)', color: '#fff', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 5,
-                }}
                 aria-label="Anterior"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={18} />
               </button>
               <button
+                className="hero-editorial-arrow hero-editorial-arrow--next"
                 onClick={() => setIdx(p => (p + 1) % items.length)}
-                style={{
-                  position: 'absolute', top: '42%', right: 8, transform: 'translateY(-50%)',
-                  width: 28, height: 28, borderRadius: '50%', border: 'none',
-                  background: 'rgba(0,0,0,0.25)', color: '#fff', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 5,
-                }}
                 aria-label="Siguiente"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={18} />
               </button>
             </>
           )}
+        </div>
+
+        {/* Contenido editorial abajo */}
+        <div className="hero-editorial-content">
+          <div className="hero-editorial-meta">
+            <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
+            <span className="hero-editorial-dot" />
+            <span>{noticia.autor || 'Nicaragua Informate'}</span>
+          </div>
+          <h1 className="hero-editorial-title">{noticia.titulo}</h1>
+          <p className="hero-editorial-lead">{noticia.resumen || noticia.titulo}</p>
+          <div className="hero-editorial-actions">
+            <Link href={`/noticias/${noticia.slug}`} className="hero-editorial-cta">
+              Leer noticia
+            </Link>
+            <div className="hero-editorial-dots">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIdx(i)}
+                  aria-label={`Noticia ${i + 1}`}
+                  className={i === idx ? 'active' : ''}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </article>
     </section>
