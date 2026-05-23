@@ -25,7 +25,8 @@ export default function AuthorBox({
   autorTwitter,
   autorFacebook,
 }: AuthorBoxProps) {
-  const isKeyling = autor.toLowerCase().includes('keyling') || autor.toLowerCase().includes('rivera');
+  const autorLower = autor.toLowerCase().trim();
+  const isKeyling = autorLower.includes('keyling') || autorLower.includes('rivera') || autorLower === 'directora editorial' || autorLower === '' || autorLower === 'periodista';
   const displayName = isKeyling ? KEYLING_DEFAULT.name : autor;
   const displayAvatar = autorAvatar || (isKeyling ? KEYLING_DEFAULT.avatar : null);
   const displayBio = autorBio || (isKeyling ? KEYLING_DEFAULT.bio : null);
