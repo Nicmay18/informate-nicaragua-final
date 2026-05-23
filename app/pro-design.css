@@ -62,7 +62,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2.5px solid var(--accent);flex-shrink:0}
 .logo-text{display:flex;flex-direction:column;line-height:1.15;white-space:nowrap}
 .logo-text small{font-family:'Inter',sans-serif;font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-top:1px;white-space:nowrap}
-.tagline-desktop{display:none;font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;margin-left:12px;padding-left:12px;border-left:1.5px solid var(--border);white-space:nowrap;flex-shrink:0}
+.tagline-desktop{display:none !important}
 .nav-desktop{display:none;gap:32px;align-items:center}
 .nav-desktop a{font-weight:600;font-size:0.82rem;color:var(--text-secondary);position:relative;padding:4px 0;letter-spacing:0.2px}
 .nav-desktop a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2.5px;background:var(--accent);transition:var(--transition);border-radius:2px}
@@ -148,10 +148,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ===== HERO ===== */
 .hero{max-width:1400px;margin:24px auto;padding:0 16px}
-.hero-card{display:grid;grid-template-columns:1fr;background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xl);border:1px solid var(--border)}
-.hero-image{position:relative;min-height:280px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);overflow:hidden}
+.hero-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xl);border:1px solid var(--border);min-height:320px}
+.hero-image{position:absolute;inset:0;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);overflow:hidden}
 .hero-image img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:0}
-.hero-image::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(8,15,31,0.82) 0%,rgba(8,15,31,0.35) 55%,rgba(8,15,31,0.15) 100%);z-index:1}
+.hero-image::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(8,15,31,0.88) 0%,rgba(8,15,31,0.4) 55%,rgba(8,15,31,0.15) 100%);z-index:1}
 .hero-badge{position:absolute;top:18px;left:18px;background:var(--accent);color:var(--primary);padding:6px 16px;border-radius:100px;font-weight:900;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;z-index:2}
 .hero-content{position:absolute;bottom:0;left:0;right:0;padding:28px;display:flex;flex-direction:column;justify-content:flex-end;z-index:2}
 .hero-meta{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:0.82rem;color:rgba(255,255,255,0.75)}
@@ -213,16 +213,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .news-card-meta{font-size:0.78rem;color:var(--text-muted);display:flex;gap:14px}
 
 /* ===== AD BANNERS ===== */
-.ad-banner{background:var(--surface);border:1.5px dashed var(--border);border-radius:var(--radius-md);padding:24px;text-align:center;margin-bottom:28px;position:relative}
+.ad-banner{background:var(--surface);border:1.5px dashed var(--border);border-radius:var(--radius-md);padding:24px;display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:28px;position:relative}
 .ad-banner::before{content:'PUBLICIDAD';position:absolute;top:8px;right:12px;font-size:0.55rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
-.ad-banner h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-secondary);margin-bottom:4px}
-.ad-banner p{font-size:0.8rem;color:var(--text-muted);margin-bottom:16px}
-.ad-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--accent);color:var(--primary-dark);border-radius:100px;font-weight:700;font-size:0.72rem;transition:var(--transition);text-decoration:none;border:none;cursor:pointer;white-space:nowrap}
-.ad-btn:hover{background:var(--primary);color:white;transform:translateY(-2px);box-shadow:var(--shadow-sm)}
-.ad-sidebar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;margin-bottom:20px;position:relative}
+.ad-banner h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-secondary);margin:0}
+.ad-banner p{font-size:0.8rem;color:var(--text-muted);margin:0}
+.ad-btn{display:inline-flex !important;align-items:center;gap:6px;padding:6px 14px !important;background:var(--accent) !important;color:var(--primary-dark) !important;border-radius:100px !important;font-weight:700 !important;font-size:0.72rem !important;transition:var(--transition);text-decoration:none;border:none;cursor:pointer;white-space:nowrap;width:auto !important;height:auto !important}
+.ad-btn:hover{background:var(--primary) !important;color:white !important;transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.ad-sidebar{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:20px;position:relative}
 .ad-sidebar::before{content:'PUBLICIDAD';position:absolute;top:8px;right:12px;font-size:0.55rem;font-weight:800;color:var(--text-light);letter-spacing:1.5px}
-.ad-sidebar h4{font-size:0.9rem;font-weight:700;margin-bottom:4px}
-.ad-sidebar p{font-size:0.75rem;color:var(--text-muted);margin-bottom:14px}
+.ad-sidebar h4{font-size:0.9rem;font-weight:700;margin:0}
+.ad-sidebar p{font-size:0.75rem;color:var(--text-muted);margin:0}
 
 /* ===== ECONOMIC WIDGET (Legacy compat) ===== */
 .econ-widget{background:var(--surface);border-radius:var(--radius-lg);padding:22px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);margin-bottom:20px}
@@ -509,9 +509,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .header-search-desktop svg{color:var(--text-light);flex-shrink:0}
   .search-icon{display:none}
   .logo{font-size:1.2rem}
+  .hero-card{min-height:420px}
+  .hero-title{font-size:2.4rem}
 }
 @media(min-width:1200px){
-  .tagline-desktop{display:inline-flex}
   .nav{gap:28px}
   .header-search-desktop{max-width:180px}
 }
