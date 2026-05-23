@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock } from 'lucide-react';
+import { useState } from 'react';
 import { Noticia, CATEGORY_COLORS } from '@/lib/types';
 import { formatDateES } from '@/lib/formateo';
 
@@ -48,9 +49,10 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
     return null;
   }
 
+  const [imgError, setImgError] = useState(false);
   const catColor = CATEGORY_COLORS[article.categoria] || '#8c1d18';
   const href = `/noticias/${article.slug}/`;
-  const hasImage = article.imagen && article.imagen !== '/logo.png';
+  const hasImage = article.imagen && article.imagen !== '/logo.png' && !imgError;
   const readTime = article.palabras ? Math.ceil(article.palabras / 200) : 3;
 
   if (hero) {
@@ -75,6 +77,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
                 quality={index === 0 ? 90 : 75}
                 sizes="(max-width: 1024px) 100vw, 55vw"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => setImgError(true)}
               />
             ) : (
               <CategoryPlaceholder category={article.categoria} color={catColor} />
@@ -114,6 +117,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
               quality={index < 6 ? 85 : 75}
               sizes="(max-width: 768px) 100vw, 33vw"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={() => setImgError(true)}
             />
           ) : (
             <CategoryPlaceholder category={article.categoria} color={catColor} />

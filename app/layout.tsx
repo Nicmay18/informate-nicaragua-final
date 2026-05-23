@@ -13,9 +13,7 @@ import {
 import ClientOnly from '@/components/ClientOnly';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import ProgressBar from '@/components/ProgressBar';
+// Header/Footer/ProgressBar removed — ProLayout handles them per-page
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -145,12 +143,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
-        <ProgressBar />
-        <Header />
         <main id="main-content" style={{ flex: 1 }}>
           {children}
         </main>
-        <Footer />
         <ClientOnly fallback={<div style={{ height: 48 }} />}>
           <CookieBanner />
         </ClientOnly>

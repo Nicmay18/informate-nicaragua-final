@@ -1,4 +1,5 @@
-import ArticlePage from '@/components/ArticlePage';
+import ArticleView from '@/components/ArticleView';
+import '@/app/articulo.css';
 import { getNewsBySlug, getRelatedNews, getMasLeidas, getAllSlugs } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -187,7 +188,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
         {isRecordPolicial && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         )}
-        <ArticlePage noticia={noticia} relatedNews={related} trendingNews={trending} />
+        <ArticleView noticia={noticia} relatedNews={related} trendingNews={trending} />
       </>
     );
   } catch (error) {

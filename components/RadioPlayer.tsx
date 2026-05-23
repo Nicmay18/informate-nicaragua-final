@@ -157,7 +157,7 @@ export default function RadioPlayer() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Radio size={18} color="#ef4444" />
-          <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.3px' }}>Radio en Vivo</span>
+          <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.3px' }}>Radio Nicaragua Informate</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 600, color: '#22c55e', background: 'rgba(34,197,94,0.15)', padding: '4px 10px', borderRadius: 20 }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s ease-in-out infinite' }} />

@@ -288,3 +288,35 @@ img {
   .seo-h1 { font-size: 2rem; }
   .seo-intro { font-size: 1rem; }
 }
+
+/* ===== ECONOMIC BAR RESPONSIVE ===== */
+.econ-bar {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.econ-bar::-webkit-scrollbar {
+  display: none;
+}
+.econ-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: max-content;
+}
+.econ-item {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ===== BOTTOM NAV SAFE AREA ===== */
+.bottom-nav {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+@media (max-width: 1024px) {
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+}

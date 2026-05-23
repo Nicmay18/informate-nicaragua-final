@@ -12,6 +12,7 @@ import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import RadioPlayer from '@/components/RadioPlayer';
+import { useState } from 'react';
 import { tiempoLectura } from '@/lib/formateo';
 import type { Noticia } from '@/lib/types';
 
@@ -65,11 +66,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
             loop={noticias.length > 1}
             className="swiper"
           >
-            {noticias.slice(0, 5).map((n) => (
+            {noticias.slice(0, 5).map((n) => {
+              const [imgErr, setImgErr] = useState(false);
+              const showImg = n.imagen && n.imagen !== '/logo.png' && !imgErr;
+              return (
               <SwiperSlide key={n.slug}>
                 <Link href={`/noticias/${n.slug}`}>
-                  {n.imagen && n.imagen !== '/logo.png' ? (
-                    <Image src={n.imagen} alt={n.titulo} fill className="object-cover" sizes="100vw" />
+                  {showImg ? (
+                    <Image src={n.imagen} alt={n.titulo} fill className="object-cover" sizes="100vw" onError={() => setImgErr(true)} />
                   ) : (
                     <div className="swiper-slide-fallback">
                       {n.categoria}
@@ -85,7 +89,8 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                   </div>
                 </Link>
               </SwiperSlide>
-            ))}
+              );
+            })}
           </Swiper>
         </section>
       )}
@@ -119,11 +124,14 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                 <Link href="/noticias" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
               </div>
               <div className="news-grid">
-                {latest.map((n) => (
+                {latest.map((n) => {
+                  const [imgErr2, setImgErr2] = useState(false);
+                  const showImg2 = n.imagen && n.imagen !== '/logo.png' && !imgErr2;
+                  return (
                   <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
                     <div className="news-card-image">
-                      {n.imagen && n.imagen !== '/logo.png' ? (
-                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" />
+                      {showImg2 ? (
+                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" onError={() => setImgErr2(true)} />
                       ) : (
                         <div className="news-card-image-fallback">
                           {n.categoria}
@@ -140,7 +148,8 @@ export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
                       </div>
                     </div>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
