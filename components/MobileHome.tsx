@@ -56,9 +56,9 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
   return (
     <section className="hero" aria-label="Noticias destacadas">
-      <article className="hero-card" style={{ position: 'relative', overflow: 'hidden' }}>
-        {/* Carousel slides */}
-        <div className="hero-slides" style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+      <article className="hero-card" style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
+        {/* Imagen con overlay todo en uno */}
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', minHeight: 280, maxHeight: 480 }}>
           {items.map((n, i) => (
             <div
               key={n.id}
@@ -82,69 +82,75 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
               ) : null}
             </div>
           ))}
-          {/* Badge del slide activo */}
-          <span className="hero-badge">{noticia.categoria || 'Noticia'}</span>
-        </div>
 
-        {/* Content flotante abajo */}
-        <div className="hero-content">
-          <div className="hero-meta">
-            <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
-            <span className="dot" />
-            <span>{noticia.autor || 'Nicaragua Informate'}</span>
+          {/* Overlay gradiente + contenido */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.15) 70%, transparent 100%)',
+            zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+            padding: '24px 20px 20px',
+          }}>
+            <span className="hero-badge" style={{ position: 'static', alignSelf: 'flex-start', marginBottom: 10 }}>{noticia.categoria || 'Noticia'}</span>
+            <div className="hero-meta" style={{ marginBottom: 6 }}>
+              <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
+              <span className="dot" />
+              <span>{noticia.autor || 'Nicaragua Informate'}</span>
+            </div>
+            <h1 className="hero-title" style={{ marginBottom: 6, fontSize: 'clamp(1.2rem, 3vw, 2rem)' }}>{noticia.titulo}</h1>
+            <p className="hero-excerpt" style={{ marginBottom: 12, fontSize: '0.85rem', lineHeight: 1.45, opacity: 0.85 }}>{noticia.resumen || noticia.titulo}</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Link href={`/noticias/${noticia.slug}`} className="btn-primary-hero" style={{ marginTop: 0, padding: '8px 18px', fontSize: 13 }}>
+                Leer más
+              </Link>
+
+              {/* Dots circulitos profesionales */}
+              <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                {items.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIdx(i)}
+                    aria-label={`Ir a noticia ${i + 1}`}
+                    style={{
+                      width: i === idx ? 18 : 7, height: 7, borderRadius: 999,
+                      background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.35)',
+                      border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          <h1 className="hero-title">{noticia.titulo}</h1>
-          <p className="hero-excerpt">{noticia.resumen || noticia.titulo}</p>
-          <Link href={`/noticias/${noticia.slug}`} className="btn-primary-hero">
-            Leer más
-          </Link>
 
-          {/* Dots */}
-          <div style={{ display: 'flex', gap: 6, marginTop: 12, justifyContent: 'center' }}>
-            {items.map((_, i) => (
+          {/* Flechas sutiles */}
+          {items.length > 1 && (
+            <>
               <button
-                key={i}
-                onClick={() => setIdx(i)}
-                aria-label={`Ir a noticia ${i + 1}`}
+                onClick={() => setIdx(p => (p - 1 + items.length) % items.length)}
                 style={{
-                  width: i === idx ? 20 : 8, height: 8, borderRadius: 4,
-                  background: i === idx ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
-                  border: 'none', cursor: 'pointer', transition: 'all 0.3s',
+                  position: 'absolute', top: '42%', left: 8, transform: 'translateY(-50%)',
+                  width: 28, height: 28, borderRadius: '50%', border: 'none',
+                  background: 'rgba(0,0,0,0.25)', color: '#fff', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 5,
                 }}
-              />
-            ))}
-          </div>
+                aria-label="Anterior"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => setIdx(p => (p + 1) % items.length)}
+                style={{
+                  position: 'absolute', top: '42%', right: 8, transform: 'translateY(-50%)',
+                  width: 28, height: 28, borderRadius: '50%', border: 'none',
+                  background: 'rgba(0,0,0,0.25)', color: '#fff', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 5,
+                }}
+                aria-label="Siguiente"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </>
+          )}
         </div>
-
-        {/* Flechas (solo desktop) */}
-        {items.length > 1 && (
-          <>
-            <button
-              onClick={() => setIdx(p => (p - 1 + items.length) % items.length)}
-              style={{
-                position: 'absolute', top: '50%', left: 12, transform: 'translateY(-50%)',
-                width: 36, height: 36, borderRadius: '50%', border: 'none',
-                background: 'rgba(0,0,0,0.4)', color: '#fff', display: 'flex',
-                alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
-              }}
-              aria-label="Anterior"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={() => setIdx(p => (p + 1) % items.length)}
-              style={{
-                position: 'absolute', top: '50%', right: 12, transform: 'translateY(-50%)',
-                width: 36, height: 36, borderRadius: '50%', border: 'none',
-                background: 'rgba(0,0,0,0.4)', color: '#fff', display: 'flex',
-                alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10,
-              }}
-              aria-label="Siguiente"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </>
-        )}
       </article>
     </section>
   );

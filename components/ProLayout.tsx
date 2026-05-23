@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  Search, Menu, X, Moon, Sun, ArrowLeft, Home, Globe, Radio, MessageSquare, User,
+  Search, Menu, X, Moon, Sun, Home, Globe, Radio, MessageSquare, User,
 } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import WorldClock from './WorldClock';
@@ -205,19 +205,33 @@ export default function ProLayout({
       {/* Main */}
       <main id="main-content">{children}</main>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-inner">
-          <div className="footer-top">
-            <Link href="/" className="footer-logo">
-              Nicaragua Informate
-              <small>Periodismo verificado</small>
-            </Link>
-            <Link href="/" className="footer-home-link"><ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} /> Volver al inicio</Link>
-          </div>
-          <div className="footer-grid">
-            <div className="footer-column">
-              <h3 className="footer-heading">Secciones</h3>
+      {/* Footer Premium */}
+      <footer className="footer-premium">
+        <div className="footer-premium-inner">
+          {/* Main Grid */}
+          <div className="footer-premium-grid">
+            {/* Brand */}
+            <div className="footer-premium-brand">
+              <Link href="/" className="footer-premium-logo">
+                <img src="/logo.png" alt="" width={40} height={40} />
+                <div>
+                  <span>Nicaragua Informate</span>
+                  <small>Periodismo verificado desde Estelí</small>
+                </div>
+              </Link>
+              <p className="footer-premium-desc">
+                Portal de noticias líder de Nicaragua. Cobertura periodística verificada sobre política, economía, deportes, tecnología, sucesos y cultura.
+              </p>
+              <div className="footer-premium-social">
+                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">TG</a>
+              </div>
+            </div>
+
+            {/* Secciones */}
+            <div className="footer-premium-col">
+              <h4>Secciones</h4>
               <ul>
                 <li><Link href="/categoria/nacionales">Nacionales</Link></li>
                 <li><Link href="/categoria/sucesos">Sucesos</Link></li>
@@ -227,8 +241,10 @@ export default function ProLayout({
                 <li><Link href="/categoria/tecnologia">Tecnología</Link></li>
               </ul>
             </div>
-            <div className="footer-column">
-              <h3 className="footer-heading">Legal</h3>
+
+            {/* Legal */}
+            <div className="footer-premium-col">
+              <h4>Legal</h4>
               <ul>
                 <li><Link href="/nosotros">Nosotros</Link></li>
                 <li><Link href="/privacidad">Privacidad</Link></li>
@@ -237,30 +253,41 @@ export default function ProLayout({
                 <li><Link href="/contacto">Contacto</Link></li>
               </ul>
             </div>
-            <div className="footer-column">
-              <h3 className="footer-heading">Síguenos</h3>
+
+            {/* Redes */}
+            <div className="footer-premium-col">
+              <h4>Síguenos</h4>
               <ul>
                 <li><a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer">Facebook</a></li>
                 <li><a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
                 <li><a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer">Telegram</a></li>
               </ul>
             </div>
-            <div className="footer-column">
-              <h3 className="footer-heading">Contacto</h3>
+
+            {/* Contacto */}
+            <div className="footer-premium-col">
+              <h4>Contacto</h4>
               <ul>
                 <li><Link href="/contacto">Redacción</Link></li>
                 <li><Link href="/contacto">Publicidad</Link></li>
                 <li><span>Estelí, Nicaragua</span></li>
+                <li><a href="mailto:info@nicaraguainformate.com">info@nicaraguainformate.com</a></li>
               </ul>
             </div>
           </div>
-          <div className="footer-bottom">
+
+          {/* Divider */}
+          <div className="footer-premium-divider" />
+
+          {/* Bottom */}
+          <div className="footer-premium-bottom">
             <p>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</p>
-            <ul className="footer-bottom-links">
-              <li><Link href="/terminos">Términos</Link></li>
-              <li><Link href="/privacidad">Privacidad</Link></li>
-              <li><Link href="/cookies">Cookies</Link></li>
-            </ul>
+            <nav aria-label="Enlaces legales">
+              <Link href="/terminos">Términos</Link>
+              <Link href="/privacidad">Privacidad</Link>
+              <Link href="/cookies">Cookies</Link>
+              <Link href="/politica-editorial">Política Editorial</Link>
+            </nav>
           </div>
         </div>
       </footer>
