@@ -42,8 +42,8 @@ const CATEGORIES = [
 
 function HeroCard({ noticia }: { noticia: Noticia }) {
   return (
-    <section className="hero">
-      <div className="hero-card">
+    <section className="hero" aria-label="Noticia principal">
+      <article className="hero-card">
         <div className="hero-image">
           {noticia.imagen ? (
             <Image
@@ -59,55 +59,59 @@ function HeroCard({ noticia }: { noticia: Noticia }) {
         </div>
         <div className="hero-content">
           <div className="hero-meta">
-            <span>{timeAgo(noticia.fecha)}</span>
+            <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
             <span className="dot" />
             <span>{noticia.autor || 'Nicaragua Informate'}</span>
           </div>
           <h1 className="hero-title">{noticia.titulo}</h1>
           <p className="hero-excerpt">{noticia.resumen || noticia.titulo}</p>
-          <Link href={`/noticias/${noticia.slug}`} className="btn-primary">
+          <Link href={`/noticias/${noticia.slug}`} className="btn-primary-hero">
             Leer más
           </Link>
         </div>
-      </div>
+      </article>
     </section>
   );
 }
 
 function NewsCard({ noticia }: { noticia: Noticia }) {
   return (
-    <Link href={`/noticias/${noticia.slug}`} className="news-card">
-      <div className="news-image">
-        {noticia.imagen ? (
-          <Image
-            src={noticia.imagen}
-            alt={noticia.titulo}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        ) : null}
-        <span className="news-category">{noticia.categoria || 'Noticia'}</span>
-      </div>
-      <div className="news-body">
-        <div className="news-date" suppressHydrationWarning>{timeAgo(noticia.fecha)}</div>
-        <h2 className="news-title">{noticia.titulo}</h2>
-        {noticia.resumen ? (
-          <p className="news-excerpt">{noticia.resumen}</p>
-        ) : null}
-      </div>
-    </Link>
+    <article className="news-card">
+      <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
+        <div className="news-image">
+          {noticia.imagen ? (
+            <Image
+              src={noticia.imagen}
+              alt={noticia.titulo}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          ) : null}
+          <span className="news-category">{noticia.categoria || 'Noticia'}</span>
+        </div>
+        <div className="news-body">
+          <time className="news-date" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+          <h2 className="news-title">{noticia.titulo}</h2>
+          {noticia.resumen ? (
+            <p className="news-excerpt">{noticia.resumen}</p>
+          ) : null}
+        </div>
+      </Link>
+    </article>
   );
 }
 
 function TrendingItem({ noticia, index }: { noticia: Noticia; index: number }) {
   return (
-    <Link href={`/noticias/${noticia.slug}`} className="trending-item">
-      <span className="trending-num">{index + 1}</span>
-      <div className="trending-content">
-        <h4>{noticia.titulo}</h4>
-        <span suppressHydrationWarning>{timeAgo(noticia.fecha)}</span>
-      </div>
-    </Link>
+    <article className="trending-item">
+      <Link href={`/noticias/${noticia.slug}`} className="trending-link">
+        <span className="trending-num">{index + 1}</span>
+        <div className="trending-content">
+          <h4>{noticia.titulo}</h4>
+          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+        </div>
+      </Link>
+    </article>
   );
 }
 

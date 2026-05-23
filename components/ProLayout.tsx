@@ -86,7 +86,7 @@ export default function ProLayout({
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-inner">
-          <span className="top-bar-date" suppressHydrationWarning>{dateStr}</span>
+          <time className="top-bar-date" dateTime={new Date().toISOString().split('T')[0]} suppressHydrationWarning>{dateStr}</time>
           <ul className="top-bar-social">
             {SOCIAL_LINKS.map(link => (
               <li key={link.label}><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>
@@ -105,7 +105,8 @@ export default function ProLayout({
               <small>Noticias de Nicaragua y el mundo</small>
             </div>
           </Link>
-          <nav>
+          <span className="tagline-desktop">Periodismo verificado desde Estelí, Nicaragua</span>
+          <nav aria-label="Navegación principal">
             <ul className="nav">
               {NAV_LINKS.map(link => (
                 <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
@@ -113,19 +114,34 @@ export default function ProLayout({
             </ul>
           </nav>
           <div className="header-actions">
-            <button className="search-icon" title="Buscar" onClick={() => setSearchOpen(!searchOpen)}>
-              {searchOpen ? <X size={16} /> : <Search size={16} />}
+            {/* Buscador visible en desktop */}
+            <div className="header-search-desktop">
+              <input
+                type="text"
+                placeholder="Buscar..."
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    const q = (e.target as HTMLInputElement).value;
+                    if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`;
+                  }
+                }}
+                aria-label="Buscar noticias"
+              />
+              <Search size={14} />
+            </div>
+            <button className="search-icon" title="Buscar" onClick={() => setSearchOpen(!searchOpen)} aria-label="Buscar">
+              {searchOpen ? <X size={18} /> : <Search size={18} />}
             </button>
-            <button className="theme-toggle" onClick={toggle} title="Cambiar tema">
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            <button className="theme-toggle" onClick={toggle} title="Cambiar tema" aria-label="Cambiar tema">
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} title="Menú">
-              {menuOpen ? <X size={16} /> : <Menu size={16} />}
+            <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} title="Menú" aria-label="Menú">
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
         {searchOpen && (
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 12px' }}>
+          <div className="mobile-search-overlay" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 12px' }}>
             <input
               type="text"
               placeholder="Buscar noticias..."
@@ -136,6 +152,7 @@ export default function ProLayout({
                   if (q) window.location.href = `/buscar?q=${encodeURIComponent(q)}`;
                 }
               }}
+              aria-label="Buscar noticias"
             />
           </div>
         )}

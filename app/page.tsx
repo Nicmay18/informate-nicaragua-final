@@ -57,6 +57,44 @@ export default async function HomePage() {
           }),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'NewsMediaOrganization',
+            name: 'Nicaragua Informate',
+            url: 'https://nicaraguainformate.com',
+            logo: 'https://nicaraguainformate.com/logo.png',
+            sameAs: [
+              'https://facebook.com/profile.php?id=61578261125687',
+              'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
+              'https://t.me/+fHHjncJqMQM3NjZh',
+            ],
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Estelí',
+              addressCountry: 'NI',
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Nicaragua Informate',
+            url: 'https://nicaraguainformate.com',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: 'https://nicaraguainformate.com/buscar?q={search_term_string}',
+              'query-input': 'required name=search_term_string',
+            },
+          }),
+        }}
+      />
 
       <MobileHome noticias={noticias} masLeidas={masLeidas} />
     </ProLayout>

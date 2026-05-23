@@ -78,7 +78,7 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
             <h1 className="article-hero-title">{noticia.titulo}</h1>
             <div className="article-hero-meta">
               {noticia.autor && <span><User size={14} /> {noticia.autor}</span>}
-              <span><Calendar size={14} /> {formatDate(noticia.fecha)}</span>
+              <span><Calendar size={14} /> <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time></span>
               <span><Clock size={14} /> {timeAgo(noticia.fecha)}</span>
             </div>
           </div>
