@@ -1,19 +1,11 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import { ArrowRight } from 'lucide-react';
 import WeatherWidget from '@/components/WeatherWidget';
 import IndicadoresWidget from '@/components/IndicadoresWidget';
 import NewsletterSignup from '@/components/NewsletterSignup';
-import RadioPlayer from '@/components/RadioPlayer';
-import { useState } from 'react';
-import { tiempoLectura } from '@/lib/formateo';
 import type { Noticia } from '@/lib/types';
 
 interface MobileHomeProps {
@@ -30,9 +22,7 @@ function formatDate(date: string) {
     const month = MONTHS_SHORT[d.getMonth()];
     const year = d.getFullYear();
     return `${day} ${month} ${year}`;
-  } catch {
-    return date;
-  }
+  } catch { return date; }
 }
 
 function timeAgo(date: string) {
@@ -47,148 +37,134 @@ function timeAgo(date: string) {
   } catch { return date; }
 }
 
-function readTime(resumen?: string, contenido?: string) {
-  return Math.max(1, tiempoLectura(contenido || resumen || '')) + ' min lectura';
-}
-
 export default function MobileHome({ noticias, masLeidas }: MobileHomeProps) {
-  const latest = noticias.slice(1, 7);
+  const hero = noticias[0];
+  const nacionales = noticias.filter(n => n.categoria === 'Nacionales').slice(0, 2);
+  const internacionales = noticias.filter(n => n.categoria === 'Internacionales').slice(0, 2);
+  const tecnologia = noticias.filter(n => n.categoria === 'Tecnología').slice(0, 2);
+  const sucesos = noticias.filter(n => n.categoria === 'Sucesos').slice(0, 2);
+  const deportes = noticias.filter(n => n.categoria === 'Deportes').slice(0, 2);
+
+  const categories = [
+    { title: 'Nacionales', items: nacionales, slug: 'nacionales' },
+    { title: 'Internacionales', items: internacionales, slug: 'internacionales' },
+    { title: 'Tecnología', items: tecnologia, slug: 'tecnologia' },
+    { title: 'Sucesos', items: sucesos, slug: 'sucesos' },
+    { title: 'Deportes', items: deportes, slug: 'deportes' },
+  ];
 
   return (
     <>
-      {noticias.length > 0 && (
-        <section className="swiper-section">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            loop={noticias.length > 1}
-            className="swiper"
-          >
-            {noticias.slice(0, 5).map((n) => {
-              const [imgErr, setImgErr] = useState(false);
-              const showImg = n.imagen && n.imagen !== '/logo.png' && !imgErr;
-              return (
-              <SwiperSlide key={n.slug}>
-                <Link href={`/noticias/${n.slug}`}>
-                  {showImg ? (
-                    <Image src={n.imagen} alt={n.titulo} fill className="object-cover" sizes="100vw" onError={() => setImgErr(true)} />
-                  ) : (
-                    <div className="swiper-slide-fallback">
-                      {n.categoria}
-                    </div>
-                  )}
-                  <div className="swiper-overlay">
-                    <span className="swiper-tag">{n.categoria}</span>
-                    <h2 className="swiper-title">{n.titulo}</h2>
-                    <div className="swiper-meta">
-                      <span suppressHydrationWarning>{formatDate(n.fecha)}</span>
-                      <span suppressHydrationWarning>{readTime(n.resumen, n.contenido)}</span>
-                    </div>
-                  </div>
-                </Link>
-              </SwiperSlide>
-              );
-            })}
-          </Swiper>
+      {/* Hero simple */}
+      {hero && (
+        <section className="hero">
+          <article className="hero-card">
+            <div className="hero-image" style={{ minHeight: '320px' }}>
+              {hero.imagen && hero.imagen !== '/logo.png' ? (
+                <Image src={hero.imagen} alt={hero.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} />
+              ) : (
+                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)' }} />
+              )}
+              <span className="hero-badge">Destacada</span>
+            </div>
+            <div className="hero-content">
+              <div className="hero-meta">
+                <span>{hero.categoria || 'Noticias'}</span>
+                <span className="dot"></span>
+                <span>{formatDate(hero.fecha)}</span>
+              </div>
+              <h1 className="hero-title">{hero.titulo}</h1>
+              {hero.resumen && <p className="hero-excerpt">{hero.resumen}</p>}
+              <Link href={`/noticias/${hero.slug}`} className="btn-primary">
+                Leer análisis completo <ArrowRight size={16} />
+              </Link>
+            </div>
+          </article>
         </section>
       )}
 
-      <div className="main">
-        <div className="main-content">
-          {masLeidas.length > 0 && (
-            <section className="most-read-section">
+      {/* Tendencias */}
+      {masLeidas.length > 0 && (
+        <section className="trends-section">
+          <div className="section-header" style={{ marginBottom: '14px' }}>
+            <h2 className="section-title">Tendencias</h2>
+          </div>
+          <div className="trends-bar">
+            {masLeidas.slice(0, 10).map((n, i) => (
+              <Link href={`/noticias/${n.slug}`} key={n.slug} className="trend-chip">
+                <span className="trend-rank">{i + 1}</span>
+                {n.titulo.slice(0, 22)}…
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Main layout */}
+      <div className="main-layout">
+        <main>
+          {/* Secciones por categoría */}
+          {categories.map((cat) => cat.items.length > 0 && (
+            <div key={cat.slug}>
               <div className="section-header">
-                <h2 className="section-title">Más Leídas</h2>
-                <Link href="/mas-leidas" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
+                <h2 className="section-title">{cat.title}</h2>
+                <Link href={`/categoria/${cat.slug}`} className="section-link">Ver todas →</Link>
               </div>
-              <div className="most-read-grid">
-                {masLeidas.slice(0, 6).map((n, idx) => (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="most-read-card">
-                    <span className="most-read-number">{idx + 1}</span>
-                    <div className="most-read-content">
-                      <h3 className="most-read-title">{n.titulo}</h3>
-                      <div className="most-read-meta" suppressHydrationWarning>{timeAgo(n.fecha)} • {n.vistas?.toLocaleString() || 0} lecturas</div>
+              <div className="news-grid">
+                {cat.items.map((n) => (
+                  <Link href={`/noticias/${n.slug}`} key={n.id} className="news-card">
+                    <div className="news-image">
+                      {n.imagen && n.imagen !== '/logo.png' ? (
+                        <Image src={n.imagen} alt={n.titulo} width={600} height={400} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)', color: 'var(--accent)', fontWeight: 700 }}>
+                          {n.categoria}
+                        </div>
+                      )}
+                      <span className="news-category">{n.categoria}</span>
+                    </div>
+                    <div className="news-body">
+                      <div className="news-date">📅 {formatDate(n.fecha)}</div>
+                      <h3 className="news-title">{n.titulo}</h3>
+                      {n.resumen && <p className="news-excerpt">{n.resumen.slice(0, 100)}…</p>}
                     </div>
                   </Link>
                 ))}
               </div>
-            </section>
-          )}
+            </div>
+          ))}
+        </main>
 
-          {latest.length > 0 && (
-            <section>
-              <div className="section-header">
-                <h2 className="section-title">Últimas Noticias</h2>
-                <Link href="/noticias" className="section-link">Ver todas <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 2 }} /></Link>
-              </div>
-              <div className="news-grid">
-                {latest.map((n) => {
-                  const [imgErr2, setImgErr2] = useState(false);
-                  const showImg2 = n.imagen && n.imagen !== '/logo.png' && !imgErr2;
-                  return (
-                  <Link href={`/noticias/${n.slug}`} key={n.slug} className="news-card">
-                    <div className="news-card-image">
-                      {showImg2 ? (
-                        <Image src={n.imagen} alt={n.titulo} width={600} height={375} className="object-cover" onError={() => setImgErr2(true)} />
-                      ) : (
-                        <div className="news-card-image-fallback">
-                          {n.categoria}
-                        </div>
-                      )}
-                      <span className="news-card-tag">{n.categoria}</span>
-                    </div>
-                    <div className="news-card-body">
-                      <h3 className="news-card-title">{n.titulo}</h3>
-                      {n.resumen && <p className="news-card-excerpt">{n.resumen}</p>}
-                      <div className="news-card-meta">
-                        <span suppressHydrationWarning>{timeAgo(n.fecha)}</span>
-                        <span suppressHydrationWarning>{n.vistas?.toLocaleString() || 0} vistas</span>
-                      </div>
-                    </div>
-                  </Link>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-        </div>
-
+        {/* Sidebar */}
         <aside className="sidebar">
           <div className="sidebar-widget">
-            <h3 className="widget-title">Newsletter</h3>
-            <NewsletterSignup variant="sidebar" />
+            <h3 className="widget-title">Indicadores Económicos</h3>
+            <IndicadoresWidget />
           </div>
-
-          <RadioPlayer />
 
           <div className="sidebar-widget weather-widget">
             <h3 className="widget-title">Clima en Nicaragua</h3>
             <WeatherWidget />
           </div>
 
-          <div className="sidebar-widget">
-            <h3 className="widget-title">Indicadores Económicos</h3>
-            <IndicadoresWidget />
-          </div>
+          {masLeidas.length > 0 && (
+            <div className="sidebar-widget">
+              <h3 className="widget-title">Lo más leído</h3>
+              {masLeidas.slice(0, 5).map((n, i) => (
+                <Link href={`/noticias/${n.slug}`} key={n.slug} className="trending-item">
+                  <span className="trending-num">{i + 1}</span>
+                  <div className="trending-content">
+                    <h4>{n.titulo}</h4>
+                    <span>{timeAgo(n.fecha)} • {n.categoria}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="sidebar-widget">
-            <h3 className="widget-title">Síguenos</h3>
-            <div className="social-grid">
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" className="social-btn social-facebook">
-                <span className="social-icon">📘</span>
-                Facebook
-              </a>
-              <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" className="social-btn social-telegram">
-                <span className="social-icon">✈️</span>
-                Telegram
-              </a>
-              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" className="social-btn social-whatsapp">
-                <span className="social-icon">💬</span>
-                WhatsApp
-              </a>
-            </div>
+            <h3 className="widget-title">Newsletter</h3>
+            <NewsletterSignup variant="sidebar" />
           </div>
         </aside>
       </div>
