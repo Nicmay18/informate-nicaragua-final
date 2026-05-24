@@ -1337,14 +1337,17 @@ main > section:first-child {
 /* ===== NICARAGUA INFORMATE — ARTÍCULO INDIVIDUAL (Mayo 2026) ===== */
 
 /* Breadcrumbs */
-.ni-breadcrumbs{max-width:800px;margin:0 auto;padding:16px 20px 0;font-size:0.8rem;color:var(--ni-text-light)}
+.ni-breadcrumbs{max-width:860px;margin:0 auto;padding:16px 24px 0;font-size:0.8rem;color:var(--ni-text-light)}
 .ni-breadcrumbs a{color:var(--ni-text-light);transition:color 0.2s}
 .ni-breadcrumbs a:hover{color:var(--ni-gold)}
 .ni-breadcrumbs__sep{margin:0 8px;opacity:0.5}
 
 /* Artículo header */
-.ni-article{max-width:800px;margin:0 auto;padding:20px 20px 60px}
+.ni-article{max-width:860px;margin:0 auto;padding:20px 24px 80px}
 .ni-article__header{margin-bottom:28px}
+.ni-article__back-wrapper{max-width:860px;margin:0 auto;padding:16px 24px 0;display:flex;justify-content:flex-start}
+.ni-article__back{background:transparent;border:1px solid var(--ni-border);color:var(--ni-text-light);border-radius:999px;padding:7px 18px;font-size:0.8rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
+.ni-article__back:hover{border-color:var(--ni-gold);color:var(--ni-gold);background:rgba(212,163,115,0.06)}
 .ni-article__badge{display:inline-block;padding:5px 14px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ni-white);margin-bottom:16px}
 .ni-article__badge--sucesos{background:var(--cat-sucesos)}
 .ni-article__badge--nacionales{background:var(--cat-nacionales)}
@@ -1361,14 +1364,14 @@ main > section:first-child {
 .ni-article__time::before{content:'•';margin-right:16px;color:var(--ni-border)}
 
 /* Imagen destacada */
-.ni-article__featured{position:relative;margin:0 -20px 32px;border-radius:0;overflow:hidden;background:var(--ni-bg-dark)}
-.ni-article__featured img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center top}
-.ni-article__caption{padding:12px 20px;font-size:0.8rem;color:var(--ni-text-light);background:var(--ni-bg);border-bottom:1px solid var(--ni-border)}
+.ni-article__featured{position:relative;margin:0 calc(-24px) 40px;border-radius:0;overflow:hidden;background:var(--ni-bg-dark);min-height:min(520px,55vh);box-shadow:0 24px 48px rgba(15,23,42,0.45)}
+.ni-article__featured img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;transform:scale(1.02);transition:transform 7s ease}
+.ni-article__caption{padding:10px 24px;font-size:0.8rem;color:var(--ni-text-light);background:var(--ni-bg);border-bottom:1px solid var(--ni-border);font-style:italic}
 
 /* Share buttons */
-.ni-share{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
-.ni-share__btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;font-size:0.85rem;font-weight:600;color:var(--ni-white);transition:all 0.2s;border:none;cursor:pointer}
-.ni-share__btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.ni-share{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;align-items:center}
+.ni-share__btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.03em;color:var(--ni-white);transition:all 0.2s cubic-bezier(0.16,1,0.3,1);border:none;cursor:pointer;text-transform:uppercase}
+.ni-share__btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.2)}
 .ni-share__btn--fb{background:#1877F2}
 .ni-share__btn--tw{background:#000000}
 .ni-share__btn--wa{background:#25D366}

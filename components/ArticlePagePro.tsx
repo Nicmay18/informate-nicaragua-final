@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Search } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import type { Noticia } from '@/lib/types';
 
 function timeAgo(dateStr: string) {
@@ -42,6 +43,7 @@ function formatDate(dateStr: string) {
 
 export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noticia; relatedNews: Noticia[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
   const cat = catClass(noticia.categoria);
   const categorySlug = noticia.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') || 'nacionales';
   const categoryLink = `/categoria/${categorySlug}`;
@@ -101,6 +103,12 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         <span className="ni-breadcrumbs__sep">/</span>
         <span>{noticia.titulo}</span>
       </nav>
+
+      <div className="ni-article__back-wrapper">
+        <button type="button" className="ni-article__back" onClick={() => router.back()}>
+          ← Volver a Noticias
+        </button>
+      </div>
 
       {/* ARTÍCULO */}
       <article className="ni-article">
