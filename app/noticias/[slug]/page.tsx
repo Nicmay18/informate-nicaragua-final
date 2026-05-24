@@ -1,6 +1,5 @@
-import ArticleView from '@/components/ArticleView';
-import '@/app/articulo.css';
-import { getNewsBySlug, getRelatedNews, getMasLeidas, getAllSlugs } from '@/lib/data';
+import ArticlePagePro from '@/components/ArticlePagePro';
+import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -127,10 +126,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     const noticia = await getNewsBySlug(slug);
     if (!noticia) return notFound();
 
-    const [related, trending] = await Promise.all([
-      getRelatedNews(noticia.categoria, noticia.slug, 6),
-      getMasLeidas(),
-    ]);
+    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
@@ -143,7 +139,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        <ArticleView noticia={noticia} relatedNews={related} trendingNews={trending} />
+        <ArticlePagePro noticia={noticia} relatedNews={related} />
       </>
     );
   } catch (error) {

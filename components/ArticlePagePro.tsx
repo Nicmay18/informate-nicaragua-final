@@ -1,0 +1,244 @@
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Search } from 'lucide-react';
+import type { Noticia } from '@/lib/types';
+
+function timeAgo(dateStr: string) {
+  try {
+    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: es });
+  } catch {
+    return dateStr;
+  }
+}
+
+const CATEGORIES = [
+  { name: 'Sucesos', slug: 'sucesos' },
+  { name: 'Nacionales', slug: 'nacionales' },
+  { name: 'Espectáculos', slug: 'espectaculos' },
+  { name: 'Deportes', slug: 'deportes' },
+  { name: 'Tecnología', slug: 'tecnologia' },
+  { name: 'Internacionales', slug: 'internacionales' },
+];
+
+function catClass(cat?: string) {
+  const slug = cat?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+  const map: Record<string, string> = { sucesos: 'sucesos', nacionales: 'nacionales', espectaculos: 'espectaculos', deportes: 'deportes', tecnologia: 'tecnologia', tecnologa: 'tecnologia', internacionales: 'internacionales' };
+  return map[slug || ''] || 'nacionales';
+}
+
+function formatDate(dateStr: string) {
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' }) + ' • ' + d.toLocaleTimeString('es-NI', { hour: '2-digit', minute: '2-digit' });
+  } catch {
+    return dateStr;
+  }
+}
+
+export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noticia; relatedNews: Noticia[] }) {
+  const cat = catClass(noticia.categoria);
+  const categorySlug = noticia.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') || 'nacionales';
+  const categoryLink = `/categoria/${categorySlug}`;
+
+  return (
+    <div>
+      {/* HEADER */}
+      <header className="ni-header">
+        <div className="ni-header__bar">
+          <Link href="/" className="ni-logo">
+            <div className="ni-logo__icon">NI</div>
+            <div>
+              Nicaragua Informate
+              <span className="ni-logo__tagline">Noticias de Nicaragua y el Mundo</span>
+            </div>
+          </Link>
+
+          <nav>
+            <ul className="ni-nav">
+              <li><Link href="/">Inicio</Link></li>
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="ni-header__actions">
+            <button className="ni-search-btn" aria-label="Buscar"><Search size={20} /></button>
+            <button className="ni-hamburger" aria-label="Menú">
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* BREADCRUMBS */}
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan">
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <Link href={categoryLink}>{noticia.categoria || 'Noticia'}</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>{noticia.titulo}</span>
+      </nav>
+
+      {/* ARTÍCULO */}
+      <article className="ni-article">
+        {/* Header del artículo */}
+        <header className="ni-article__header">
+          <span className={`ni-article__badge ni-article__badge--${cat}`}>{noticia.categoria || 'Noticia'}</span>
+          <h1 className="ni-article__title">{noticia.titulo}</h1>
+
+          <div className="ni-article__meta">
+            <div className="ni-article__author">
+              <div className="ni-article__author-avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+              <div className="ni-article__author-info">
+                <strong>{noticia.autor || 'Redacción Nicaragua Informate'}</strong>
+                <span>Periodista especializado en {noticia.categoria?.toLowerCase() || 'noticias'}</span>
+              </div>
+            </div>
+            <time className="ni-article__time" dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
+          </div>
+        </header>
+
+        {/* Imagen destacada */}
+        {noticia.imagen && (
+          <figure className="ni-article__featured">
+            <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority />
+            <figcaption className="ni-article__caption">{noticia.titulo}</figcaption>
+          </figure>
+        )}
+
+        {/* Share buttons */}
+        <div className="ni-share">
+          <button className="ni-share__btn ni-share__btn--fb">
+            <span>📘</span> <span>Facebook</span>
+          </button>
+          <button className="ni-share__btn ni-share__btn--tw">
+            <span>𝕏</span> <span>Twitter</span>
+          </button>
+          <button className="ni-share__btn ni-share__btn--wa">
+            <span>📱</span> <span>WhatsApp</span>
+          </button>
+          <button className="ni-share__btn ni-share__btn--tg">
+            <span>✈️</span> <span>Telegram</span>
+          </button>
+          <button className="ni-share__btn ni-share__btn--copy" onClick={() => navigator.clipboard.writeText(window.location.href)}>
+            <span>🔗</span> <span>Copiar link</span>
+          </button>
+        </div>
+
+        {/* CONTENIDO */}
+        <div className="ni-article__body" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+
+        {/* Tags */}
+        {noticia.tags && noticia.tags.length > 0 && (
+          <div className="ni-tags">
+            <span className="ni-tags__label">Tags:</span>
+            {noticia.tags.map((tag, i) => (
+              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} className="ni-tag">{tag}</Link>
+            ))}
+          </div>
+        )}
+
+        {/* Autor Box */}
+        <div className="ni-author-box">
+          <div className="ni-author-box__avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+          <div className="ni-author-box__info">
+            <h4>{noticia.autor || 'Redacción Nicaragua Informate'}</h4>
+            <p>Periodista de Nicaragua Informate. Comprometido con la información verificada y el análisis profundo de los eventos de actualidad.</p>
+            <div className="ni-author-box__social">
+              <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Noticias relacionadas */}
+        {relatedNews.length > 0 && (
+          <section className="ni-related">
+            <h2 className="ni-related__title">Noticias relacionadas</h2>
+            <div className="ni-related__grid">
+              {relatedNews.slice(0, 3).map((n) => (
+                <article key={n.id} className="ni-related__card">
+                  <div className="ni-related__thumb">
+                    {n.imagen ? (
+                      <Image src={n.imagen} alt={n.titulo} fill sizes="(max-width:768px) 100vw, 400px" style={{ objectFit: 'cover' }} />
+                    ) : null}
+                    <span className={`ni-related__cat ni-related__cat--${catClass(n.categoria)}`}>{n.categoria || 'Noticia'}</span>
+                  </div>
+                  <h3 className="ni-related__card-title">
+                    <Link href={`/noticias/${n.slug}`}>{n.titulo}</Link>
+                  </h3>
+                  <span className="ni-related__card-meta">{timeAgo(n.fecha)}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Comentarios */}
+        <section className="ni-comments">
+          <h2 className="ni-comments__title">💬 Comentarios</h2>
+          <div className="ni-comment-form">
+            <textarea placeholder="¿Qué opinas sobre la noticia? Escribe tu comentario..." />
+            <button className="ni-comment-form__btn">Publicar comentario</button>
+          </div>
+        </section>
+      </article>
+
+      {/* FOOTER */}
+      <footer className="ni-footer">
+        <div className="ni-footer__inner">
+          <div>
+            <div className="ni-footer__brand">Nicaragua Informate</div>
+            <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua.</p>
+            <div className="ni-footer__social">
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+              <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
+              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+              <a href="https://youtube.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Secciones</h4>
+            <ul className="ni-footer__links">
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Nosotros</h4>
+            <ul className="ni-footer__links">
+              <li><Link href="/nosotros">Quiénes somos</Link></li>
+              <li><Link href="/contacto">Contacto</Link></li>
+              <li><Link href="/politica-editorial">Política Editorial</Link></li>
+              <li><Link href="/publicidad">Publicidad</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Legal</h4>
+            <ul className="ni-footer__links">
+              <li><Link href="/privacidad">Política de privacidad</Link></li>
+              <li><Link href="/terminos">Términos y condiciones</Link></li>
+              <li><Link href="/cookies">Política de cookies</Link></li>
+              <li><Link href="/mapa-del-sitio">Mapa del sitio</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="ni-footer__bottom">
+          <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
+          <span>Hecho con ❤️ en Managua, Nicaragua</span>
+        </div>
+      </footer>
+    </div>
+  );
+}

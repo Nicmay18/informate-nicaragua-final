@@ -1340,3 +1340,130 @@ main > section:first-child {
 @media(prefers-reduced-motion:reduce){
   .ni-card,.ni-card__thumb img,.ni-hero__cta,.ni-hero__arrow{transition:none !important}
 }
+
+/* ===== NICARAGUA INFORMATE — ARTÍCULO INDIVIDUAL (Mayo 2026) ===== */
+
+/* Breadcrumbs */
+.ni-breadcrumbs{max-width:800px;margin:0 auto;padding:16px 20px 0;font-size:0.8rem;color:var(--ni-text-light)}
+.ni-breadcrumbs a{color:var(--ni-text-light);transition:color 0.2s}
+.ni-breadcrumbs a:hover{color:var(--ni-gold)}
+.ni-breadcrumbs__sep{margin:0 8px;opacity:0.5}
+
+/* Artículo header */
+.ni-article{max-width:800px;margin:0 auto;padding:20px 20px 60px}
+.ni-article__header{margin-bottom:28px}
+.ni-article__badge{display:inline-block;padding:5px 14px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ni-white);margin-bottom:16px}
+.ni-article__badge--sucesos{background:var(--cat-sucesos)}
+.ni-article__badge--nacionales{background:var(--cat-nacionales)}
+.ni-article__badge--espectaculos{background:var(--cat-espectaculos)}
+.ni-article__badge--deportes{background:var(--cat-deportes)}
+.ni-article__badge--tecnologia{background:var(--cat-tecnologia)}
+.ni-article__badge--internacionales{background:var(--cat-internacionales)}
+.ni-article__title{font-family:'Merriweather',serif;font-size:2.6rem;font-weight:700;line-height:1.15;color:var(--ni-navy);margin-bottom:20px}
+.ni-article__meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:0.9rem;color:var(--ni-text-light)}
+.ni-article__author{display:flex;align-items:center;gap:10px}
+.ni-article__author-avatar{width:40px;height:40px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem}
+.ni-article__author-info strong{display:block;color:var(--ni-navy);font-weight:600;font-size:0.9rem}
+.ni-article__author-info span{font-size:0.8rem;color:var(--ni-text-light)}
+.ni-article__time::before{content:'•';margin-right:16px;color:var(--ni-border)}
+
+/* Imagen destacada */
+.ni-article__featured{position:relative;margin:0 -20px 32px;border-radius:0;overflow:hidden;background:var(--ni-bg-dark)}
+.ni-article__featured img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center top}
+.ni-article__caption{padding:12px 20px;font-size:0.8rem;color:var(--ni-text-light);background:var(--ni-bg);border-bottom:1px solid var(--ni-border)}
+
+/* Share buttons */
+.ni-share{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.ni-share__btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;font-size:0.85rem;font-weight:600;color:var(--ni-white);transition:all 0.2s;border:none;cursor:pointer}
+.ni-share__btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.ni-share__btn--fb{background:#1877F2}
+.ni-share__btn--tw{background:#000000}
+.ni-share__btn--wa{background:#25D366}
+.ni-share__btn--tg{background:#0088cc}
+.ni-share__btn--copy{background:var(--ni-navy-light)}
+
+/* Contenido del artículo */
+.ni-article__body{font-size:1.125rem;line-height:1.75;color:var(--ni-text)}
+.ni-article__body p{margin-bottom:24px}
+.ni-article__body > p:first-child{font-size:1.25rem;line-height:1.6;color:var(--ni-navy);font-weight:500;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--ni-border)}
+.ni-article__body h2{font-family:'Merriweather',serif;font-size:1.6rem;font-weight:700;color:var(--ni-navy);margin-top:48px;margin-bottom:20px;padding-bottom:12px;border-bottom:3px solid var(--ni-gold);line-height:1.3}
+.ni-article__body h3{font-family:'Merriweather',serif;font-size:1.25rem;font-weight:700;color:var(--ni-navy);margin-top:32px;margin-bottom:14px}
+.ni-article__body a{color:var(--cat-deportes);text-decoration:underline;text-decoration-color:var(--ni-gold);text-underline-offset:3px;font-weight:500}
+.ni-article__body a:hover{color:var(--ni-navy)}
+.ni-article__body ul,.ni-article__body ol{margin-bottom:24px;padding-left:28px}
+.ni-article__body li{margin-bottom:10px;padding-left:4px}
+.ni-article__body ul li::marker{color:var(--ni-gold);font-size:1.2em}
+.ni-article__body blockquote{margin:32px 0;padding:24px 28px;background:var(--ni-bg);border-left:4px solid var(--ni-gold);border-radius:0 8px 8px 0;font-style:italic;color:var(--ni-navy)}
+.ni-article__body blockquote p:last-child{margin-bottom:0}
+
+/* Info box */
+.ni-info-box{margin:32px 0;padding:24px;background:linear-gradient(135deg,var(--ni-bg) 0%,#fff 100%);border:1px solid var(--ni-border);border-radius:12px}
+.ni-info-box__title{font-family:'Merriweather',serif;font-size:1.1rem;font-weight:700;color:var(--ni-navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ni-info-box ul{margin:0;padding-left:20px}
+.ni-info-box li{margin-bottom:8px;font-size:1rem}
+
+/* Imágenes dentro del artículo */
+.ni-article__body figure{margin:32px -20px}
+.ni-article__body figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0}
+.ni-article__body figcaption{padding:12px 20px 0;font-size:0.8rem;color:var(--ni-text-light);text-align:center}
+
+/* Tags */
+.ni-tags{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 32px;padding-top:24px;border-top:1px solid var(--ni-border)}
+.ni-tags__label{font-size:0.8rem;font-weight:700;color:var(--ni-text-light);margin-right:4px}
+.ni-tag{padding:6px 14px;background:var(--ni-bg);border:1px solid var(--ni-border);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--ni-text);transition:all 0.2s}
+.ni-tag:hover{background:var(--ni-navy);color:var(--ni-white);border-color:var(--ni-navy)}
+
+/* Autor box */
+.ni-author-box{display:flex;gap:20px;padding:28px;background:var(--ni-bg);border-radius:12px;margin:40px 0 32px;border:1px solid var(--ni-border)}
+.ni-author-box__avatar{width:64px;height:64px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;flex-shrink:0}
+.ni-author-box__info h4{font-family:'Merriweather',serif;font-size:1.1rem;font-weight:700;color:var(--ni-navy);margin-bottom:6px}
+.ni-author-box__info p{font-size:0.9rem;color:var(--ni-text-light);line-height:1.5;margin-bottom:12px}
+.ni-author-box__social{display:flex;gap:10px}
+.ni-author-box__social a{width:32px;height:32px;border-radius:50%;background:var(--ni-white);border:1px solid var(--ni-border);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--ni-text);transition:all 0.2s}
+.ni-author-box__social a:hover{background:var(--ni-navy);color:var(--ni-white);border-color:var(--ni-navy)}
+
+/* Noticias relacionadas */
+.ni-related{margin-top:48px;padding-top:32px;border-top:2px solid var(--ni-border)}
+.ni-related__title{font-family:'Merriweather',serif;font-size:1.3rem;font-weight:700;color:var(--ni-navy);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.ni-related__title::before{content:'';display:block;width:4px;height:22px;background:var(--cat-deportes);border-radius:2px}
+.ni-related__grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.ni-related__card{display:flex;flex-direction:column;gap:12px}
+.ni-related__thumb{position:relative;width:100%;aspect-ratio:16/10;border-radius:10px;overflow:hidden;background:var(--ni-border)}
+.ni-related__thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.ni-related__card:hover .ni-related__thumb img{transform:scale(1.05)}
+.ni-related__cat{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--ni-white);background:var(--cat-deportes)}
+.ni-related__card-title{font-family:'Merriweather',serif;font-size:0.95rem;font-weight:700;line-height:1.35;color:var(--ni-navy);display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ni-related__card-title:hover{color:var(--cat-deportes)}
+.ni-related__card-meta{font-size:0.75rem;color:var(--ni-text-light)}
+
+/* Comentarios */
+.ni-comments{margin-top:48px;padding-top:32px;border-top:2px solid var(--ni-border)}
+.ni-comments__title{font-family:'Merriweather',serif;font-size:1.3rem;font-weight:700;color:var(--ni-navy);margin-bottom:24px}
+.ni-comment-form{background:var(--ni-bg);padding:24px;border-radius:12px;margin-bottom:32px}
+.ni-comment-form textarea{width:100%;padding:14px;border:1px solid var(--ni-border);border-radius:8px;font-family:inherit;font-size:1rem;resize:vertical;min-height:100px;margin-bottom:12px}
+.ni-comment-form textarea:focus{outline:none;border-color:var(--ni-gold)}
+.ni-comment-form__btn{padding:12px 24px;background:var(--ni-navy);color:var(--ni-white);border:none;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.2s}
+.ni-comment-form__btn:hover{background:var(--ni-navy-light)}
+
+/* Responsive artículo */
+@media(max-width:1024px){
+  .ni-related__grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .ni-article{padding:16px 16px 40px}
+  .ni-article__title{font-size:1.8rem}
+  .ni-article__body{font-size:1rem}
+  .ni-article__body > p:first-child{font-size:1.1rem}
+  .ni-article__body h2{font-size:1.3rem;margin-top:36px}
+  .ni-article__body h3{font-size:1.1rem}
+  .ni-article__featured{margin:0 -16px 24px}
+  .ni-article__body figure{margin:24px -16px}
+  .ni-share{gap:8px}
+  .ni-share__btn{padding:8px 14px;font-size:0.8rem}
+  .ni-share__btn span{display:none}
+  .ni-author-box{flex-direction:column;text-align:center;align-items:center}
+  .ni-related__grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .ni-related__thumb img,.ni-share__btn,.ni-tag{transition:none !important}
+}
