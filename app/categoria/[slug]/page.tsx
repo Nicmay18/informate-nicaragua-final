@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import MobileHome from '@/components/MobileHome';
+import HomePagePro from '@/components/HomePagePro';
 import { getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { slugToCategory, CATEGORIES } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
@@ -96,5 +96,5 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
     console.error('[CategoriaPage] Error:', error);
   }
 
-  return <MobileHome noticias={noticias} masLeidas={masLeidas} />;
+  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
 }

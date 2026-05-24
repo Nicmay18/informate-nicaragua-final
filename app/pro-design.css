@@ -1375,6 +1375,40 @@ main > section:first-child {
   .ni-card,.ni-card__thumb img,.ni-hero__cta,.ni-hero__arrow{transition:none !important}
 }
 
+/* Cookie Banner */
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--ni-navy);color:var(--ni-white);padding:20px 24px;z-index:9999;box-shadow:0 -4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cookie-banner__text{font-size:0.85rem;line-height:1.5;max-width:700px;color:rgba(255,255,255,0.85)}
+.cookie-banner__text a{color:var(--ni-gold);text-decoration:underline}
+.cookie-banner__buttons{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.cookie-btn{border:none;border-radius:6px;padding:10px 20px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.cookie-btn--primary{background:var(--ni-gold);color:var(--ni-navy)}
+.cookie-btn--primary:hover{background:#ebd39e;transform:translateY(-1px)}
+.cookie-btn--secondary{background:rgba(255,255,255,0.1);color:var(--ni-white);border:1px solid rgba(255,255,255,0.2)}
+.cookie-btn--secondary:hover{background:rgba(255,255,255,0.2)}
+.cookie-btn--ghost{background:transparent;color:rgba(255,255,255,0.7);text-decoration:underline;padding:10px 12px}
+.cookie-btn--ghost:hover{color:var(--ni-white)}
+.cookie-settings{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center}
+.cookie-settings__backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.6);border:none;cursor:pointer}
+.cookie-settings__card{position:relative;background:var(--ni-white);border-radius:12px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.cookie-settings__header{display:flex;justify-content:space-between;align-items:start;margin-bottom:20px}
+.cookie-settings__header h3{font-size:1.1rem;font-weight:700;color:var(--ni-navy)}
+.cookie-settings__eyebrow{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--ni-text-light);margin-bottom:4px}
+.cookie-settings__content{margin-bottom:24px}
+.cookie-toggle{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--ni-border);cursor:pointer}
+.cookie-toggle:last-child{border-bottom:none}
+.cookie-toggle input[type="checkbox"]{width:18px;height:18px;accent-color:var(--ni-gold);flex-shrink:0;margin-top:2px}
+.cookie-toggle strong{font-size:0.85rem;color:var(--ni-navy);display:block;margin-bottom:2px}
+.cookie-toggle p{font-size:0.78rem;color:var(--ni-text-light);line-height:1.4;margin:0}
+.cookie-settings__actions{display:flex;gap:10px}
+.cookie-settings__actions .cookie-btn--primary{background:var(--ni-navy);color:var(--ni-white)}
+.cookie-settings__actions .cookie-btn--primary:hover{background:var(--ni-navy-light)}
+.cookie-settings__actions .cookie-btn--secondary{background:transparent;color:var(--ni-text-light);border:1px solid var(--ni-border)}
+@media(max-width:768px){
+  .cookie-banner{flex-direction:column;align-items:stretch;padding:16px;gap:12px}
+  .cookie-banner__buttons{justify-content:stretch}
+  .cookie-banner__buttons .cookie-btn{flex:1;text-align:center}
+}
+
 /* ===== NICARAGUA INFORMATE — ARTÍCULO INDIVIDUAL (Mayo 2026) ===== */
 
 /* Breadcrumbs */

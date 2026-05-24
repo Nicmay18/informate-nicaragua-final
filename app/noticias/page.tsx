@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import MobileHome from '@/components/MobileHome';
+import HomePagePro from '@/components/HomePagePro';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
@@ -24,12 +24,12 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   let masLeidas: Noticia[] = [];
   try {
     [noticias, masLeidas] = await Promise.all([
-      cat !== 'Todas' ? getNewsByCategory(cat, 30) : getNews(30),
+      cat !== 'Todas' ? getNewsByCategory(cat, 50) : getNews(50),
       getMasLeidas(),
     ]);
   } catch (error) {
     console.error('[NoticiasPage] Error:', error);
   }
 
-  return <MobileHome noticias={noticias} masLeidas={masLeidas} />;
+  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
 }
