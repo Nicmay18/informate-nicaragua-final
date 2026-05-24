@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { Globe, Share2, Camera, Rss } from 'lucide-react';
 
 const CATEGORIES = [
-  { slug: 'nacionales', label: 'Nacionales' },
   { slug: 'sucesos', label: 'Sucesos' },
-  { slug: 'internacionales', label: 'Internacionales' },
-  { slug: 'tecnologia', label: 'Tecnología' },
-  { slug: 'economia', label: 'Economía' },
+  { slug: 'nacionales', label: 'Nacionales' },
+  { slug: 'espectaculos', label: 'Espectáculos' },
   { slug: 'deportes', label: 'Deportes' },
+  { slug: 'tecnologia', label: 'Tecnología' },
+  { slug: 'internacionales', label: 'Internacionales' },
 ];
 
 export default function Footer() {
