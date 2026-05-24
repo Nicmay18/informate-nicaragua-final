@@ -52,9 +52,9 @@ export function generateMetaDescription(noticia: Noticia): string {
 
   let desc = template(noticia.titulo);
 
-  // Limitar a 160 caracteres
-  if (desc.length > 160) {
-    desc = desc.substring(0, 157).trim() + '...';
+  // Limitar a 150 caracteres (especialmente para evitar truncado en SERPs)
+  if (desc.length > 150) {
+    desc = desc.substring(0, 147).trim() + '...';
   }
 
   return desc;

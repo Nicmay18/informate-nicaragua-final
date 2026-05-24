@@ -14,11 +14,10 @@ const GAS_PRICES = [
 function TrendPill({ trend, change }: { trend: string; change: string }) {
   const up = trend === '↑';
   const down = trend === '↓';
-  const bg = up ? '#dcfce7' : down ? '#fee2e2' : '#f3f4f6';
-  const color = up ? '#16a34a' : down ? '#dc2626' : '#64748b';
+  const className = up ? 'econ-box-change up' : down ? 'econ-box-change down' : 'econ-box-change neutral';
   const Icon = up ? ArrowUp : down ? ArrowDown : Minus;
   return (
-    <span className="ind-pill" style={{ background: bg, color }}>
+    <span className={className}>
       <Icon size={12} strokeWidth={2.5} />
       {change}
     </span>
@@ -27,45 +26,41 @@ function TrendPill({ trend, change }: { trend: string; change: string }) {
 
 export default function IndicadoresWidget() {
   return (
-    <div className="ind-widget">
-      <div className="ind-header">
-        <TrendingUp size={16} color="#38bdf8" />
-        <span>Indicadores Económicos</span>
+    <div className="econ-widget">
+      <h3 className="econ-widget-title">
+        <TrendingUp size={18} />
+        Indicadores Económicos
+      </h3>
+
+      {/* Divisas - Grid 2 columnas */}
+      <div className="econ-grid">
+        {EXCHANGE.map((row, i) => (
+          <div key={i} className="econ-box">
+            <div className="econ-box-label">{row.label}</div>
+            <div className="econ-box-value">{row.unit} {row.value}</div>
+            <TrendPill trend={row.trend} change={row.change} />
+          </div>
+        ))}
       </div>
 
-      <div className="ind-body">
-        {/* Divisas - Grid 2 columnas */}
-        <div className="ind-grid-2">
-          {EXCHANGE.map((row, i) => (
-            <div key={i} className="ind-card">
-              <div className="ind-card-label">{row.label}</div>
-              <div className="ind-card-value">{row.unit} {row.value}</div>
-              <TrendPill trend={row.trend} change={row.change} />
-            </div>
-          ))}
-        </div>
-
-        {/* Combustibles - Full width */}
-        <div className="ind-gas-section">
-          <div className="ind-gas-header">
-            <Fuel size={14} color="#f97316" />
-            <span>Combustibles <small>(C$/galón)</small></span>
-          </div>
-          <div className="ind-gas-list">
-            {GAS_PRICES.map((row, i) => (
-              <div key={i} className="ind-gas-row">
-                <div className="ind-gas-name">{row.label}</div>
-                <div className="ind-gas-right">
-                  <span className="ind-gas-price">{row.unit} {row.price}</span>
-                  <TrendPill trend={row.trend} change={row.change} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="ind-source">BCN / INC</div>
+      {/* Combustibles - Full width */}
+      <div className="econ-fuels-title">
+        <Fuel size={14} />
+        Combustibles (C$/galón)
       </div>
+      {GAS_PRICES.map((row, i) => (
+        <div key={i} className="econ-fuel-row">
+          <span className="econ-fuel-name">{row.label}</span>
+          <span>
+            <span className="econ-fuel-price">{row.unit} {row.price}</span>
+            <span className={`econ-fuel-change ${row.trend === '↑' ? 'up' : row.trend === '↓' ? 'down' : 'neutral'}`}>
+              {row.trend === '↑' ? '▲' : row.trend === '↓' ? '▼' : '→'} {row.change}
+            </span>
+          </span>
+        </div>
+      ))}
+
+      <div className="econ-source">Fuente: BCN / INE • Actualizado 21 may 2026</div>
     </div>
   );
 }

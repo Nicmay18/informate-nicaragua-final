@@ -7,6 +7,8 @@
 .av-breadcrumb-sep { opacity: 0.5; }
 .av-category { display: inline-block; background: var(--primary); color: var(--accent); padding: 5px 14px; border-radius: 100px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
 .av-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; line-height: 1.15; margin-bottom: 16px; color: var(--text); letter-spacing: -0.3px; }
+/* Kicker / short descriptor above H1 to reinforce keywords */
+.av-kicker { display: block; font-size: 0.7rem; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
 .av-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; font-size: 0.82rem; color: var(--text-muted); padding-bottom: 20px; border-bottom: 1px solid var(--border); }
 .av-meta-author { display: flex; align-items: center; gap: 10px; }
 .av-meta-author img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
