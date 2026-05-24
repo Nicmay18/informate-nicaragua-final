@@ -216,23 +216,41 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .hero-editorial-slide{position:absolute;inset:0;transition:opacity 0.9s cubic-bezier(0.4,0,0.2,1);z-index:0}
 .hero-editorial-slide[style*="opacity: 1"]{z-index:1}
 .hero-editorial-img{width:100%;height:100%;object-fit:cover;background-color:#f0f0f0;background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d1d5db"%3E%3Cpath d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:center;background-size:64px}
-.hero-editorial-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.3) 40%,rgba(0,0,0,0.75) 75%,rgba(0,0,0,0.92) 100%);z-index:2;pointer-events:none}
-.hero-editorial-category{position:absolute;top:24px;left:24px;z-index:3;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);color:var(--accent);padding:6px 16px;border-radius:100px;font-weight:800;font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;border:1px solid rgba(201,169,110,0.2)}
-.hero-editorial-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.2);backdrop-filter:blur(8px);color:rgba(255,255,255,0.7);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease}
+/* Gradiente de seguridad #0f172a — garantiza legibilidad del texto blanco */
+.hero-editorial-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9) 0%,rgba(15,23,42,0.4) 40%,rgba(15,23,42,0.2) 100%);z-index:2;pointer-events:none}
+/* Badge de categoría con color distintivo — fondo opacidad 0.9, texto blanco 11px bold */
+.hero-editorial-category{position:absolute;top:24px;left:24px;z-index:3;padding:4px 12px;border-radius:4px;font-family:var(--font-body);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:white;line-height:1;white-space:nowrap}
+/* Colores de categoría en el hero */
+.hero-editorial-category[data-cat="sucesos"]{background:rgba(220,38,38,0.9)}
+.hero-editorial-category[data-cat="nacionales"]{background:rgba(37,99,235,0.9)}
+.hero-editorial-category[data-cat="espectaculos"]{background:rgba(219,39,119,0.9)}
+.hero-editorial-category[data-cat="deportes"]{background:rgba(234,88,12,0.9)}
+.hero-editorial-category[data-cat="tecnologia"]{background:rgba(124,58,237,0.9)}
+.hero-editorial-category[data-cat="internacionales"]{background:rgba(5,150,105,0.9)}
+.hero-editorial-category[data-cat="noticia"]{background:rgba(100,116,139,0.9)}
+/* Flechas: visibles en hover (desktop), siempre visibles (móvil) */
+.hero-editorial-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.2);backdrop-filter:blur(8px);color:rgba(255,255,255,0.7);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;opacity:0}
+.hero-editorial:hover .hero-editorial-arrow{opacity:1}
 .hero-editorial-arrow:hover{background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.25)}
 .hero-editorial-arrow--prev{left:16px}
 .hero-editorial-arrow--next{right:16px}
 .hero-editorial-content{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:0 28px 28px}
-.hero-editorial-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:0.78rem;color:rgba(255,255,255,0.65);font-weight:500}
+/* Metadatos: 13px, opacidad 0.7 */
+.hero-editorial-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:rgba(255,255,255,0.7);font-weight:500}
 .hero-editorial-dot{width:3px;height:3px;border-radius:50%;background:var(--accent);opacity:0.7}
-.hero-editorial-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4.2vw,3.2rem);font-weight:900;line-height:1.1;margin-bottom:14px;color:white;letter-spacing:-0.025em;text-shadow:0 2px 20px rgba(0,0,0,0.5);max-width:900px}
-.hero-editorial-lead{font-size:clamp(0.85rem,1.5vw,1.05rem);color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px;max-width:680px;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,0.4)}
+/* Título: Serif bold, 36px desktop / 24px móvil, máx ~70 caracteres controlado por CMS */
+.hero-editorial-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4.2vw,2.25rem);font-weight:700;line-height:1.15;margin-bottom:14px;color:white;letter-spacing:-0.02em;text-shadow:0 2px 20px rgba(0,0,0,0.5);max-width:900px}
+/* Extracto: Sans-serif 16px, opacidad 0.9, máx ~120 caracteres controlado por CMS */
+.hero-editorial-lead{font-size:16px;color:rgba(255,255,255,0.9);line-height:1.6;margin-bottom:20px;max-width:680px;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,0.4);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .hero-editorial-actions{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.hero-editorial-cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--primary-dark);padding:10px 24px;border-radius:9999px;font-weight:800;font-size:0.85rem;transition:all 0.25s ease;text-decoration:none;letter-spacing:0.3px;white-space:nowrap}
-.hero-editorial-cta:hover{background:white;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+/* CTA dorado #d4a373, texto #0f172a, pill 999px */
+.hero-editorial-cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--primary-dark);padding:10px 20px;border-radius:999px;font-weight:700;font-size:14px;transition:all 0.25s ease;text-decoration:none;letter-spacing:0.3px;white-space:nowrap}
+.hero-editorial-cta:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+/* Indicador: "1 de 5" textual + cuadrados de navegación */
 .hero-editorial-dots{display:flex;gap:8px;align-items:center}
-.hero-editorial-dots button{width:24px;height:3px;border-radius:2px;border:none;background:rgba(255,255,255,0.3);cursor:pointer;padding:0;transition:all 0.3s ease}
-.hero-editorial-dots button.active{width:40px;background:var(--accent)}
+.hero-editorial-counter{font-size:12px;color:rgba(255,255,255,0.6);font-weight:600;margin-right:8px;min-width:42px;text-align:right}
+.hero-editorial-dots button{width:8px;height:8px;border-radius:2px;border:none;background:rgba(255,255,255,0.3);cursor:pointer;padding:0;transition:all 0.3s ease}
+.hero-editorial-dots button.active{background:var(--accent)}
 .hero-editorial-dots button:hover{background:rgba(255,255,255,0.5)}
 
 /* Fix 1: Reducir hero en móvil + indicador de scroll */
@@ -644,7 +662,8 @@ main > section:first-child {
 @media (max-width:768px){
 .hero-editorial{border-radius:12px}
 .hero-editorial-media{min-height:280px;aspect-ratio:3/4}
-.hero-editorial-arrow{width:34px;height:34px}
+/* Flechas siempre visibles en móvil (no hay hover) */
+.hero-editorial-arrow{width:34px;height:34px;opacity:1}
 .hero-editorial-arrow--prev{left:10px}
 .hero-editorial-arrow--next{right:10px}
 .hero-editorial-content{padding:0 18px 22px}

@@ -42,22 +42,46 @@ const CATEGORIES = [
   { name: 'Internacionales', slug: 'internacionales' },
 ];
 
+/* 6 categorías reales del sitio — NUNCA mostrar "Economía" */
+const VALID_CATEGORIES = new Set([
+  'sucesos', 'nacionales', 'espectaculos', 'deportes', 'tecnologia', 'internacionales',
+]);
+
+/* Normaliza categoría: si no coincide con las 6 válidas, muestra "Noticia" */
+function normalizeCategory(raw?: string): string {
+  const slug = raw?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+  if (!slug) return 'Noticia';
+  if (VALID_CATEGORIES.has(slug)) return raw!;
+  return 'Noticia';
+}
+
 function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
   const items = noticias.slice(0, 5);
 
   useEffect(() => {
-    if (items.length <= 1) return;
-    const t = setInterval(() => setIdx(p => (p + 1) % items.length), 6000);
+    if (items.length <= 1 || paused) return;
+    const t = setInterval(() => setIdx(p => (p + 1) % items.length), 5000);
     return () => clearInterval(t);
-  }, [items.length]);
+  }, [items.length, paused]);
 
   const noticia = items[idx];
   if (!noticia) return null;
 
+  const category = normalizeCategory(noticia.categoria);
+  const categorySlug = category !== 'Noticia'
+    ? category.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '')
+    : '';
+
   return (
     <section className="hero" aria-label="Noticias destacadas">
-      <article className="hero-editorial">
+      <article
+        className="hero-editorial"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={() => setPaused(true)}
+      >
         {/* Imagen cinematográfica full-bleed */}
         <div className="hero-editorial-media">
           {items.map((n, i) => (
@@ -80,11 +104,19 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
             </div>
           ))}
 
-          {/* Overlay gradiente editorial */}
+          {/* Overlay gradiente de seguridad #0f172a */}
           <div className="hero-editorial-overlay" />
 
-          {/* Categoría flotante */}
-          <span className="hero-editorial-category">{noticia.categoria || 'Noticia'}</span>
+          {/* Badge de categoría con color distintivo */}
+          {categorySlug && (
+            <span
+              className="hero-editorial-category"
+              data-cat={categorySlug}
+              aria-label={`Categoría: ${category}`}
+            >
+              {category}
+            </span>
+          )}
 
           {/* Flechas editoriales */}
           {items.length > 1 && (
@@ -92,14 +124,14 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
               <button
                 className="hero-editorial-arrow hero-editorial-arrow--prev"
                 onClick={() => setIdx(p => (p - 1 + items.length) % items.length)}
-                aria-label="Anterior"
+                aria-label="Anterior noticia"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 className="hero-editorial-arrow hero-editorial-arrow--next"
                 onClick={() => setIdx(p => (p + 1) % items.length)}
-                aria-label="Siguiente"
+                aria-label="Siguiente noticia"
               >
                 <ChevronRight size={18} />
               </button>
@@ -111,7 +143,7 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
         <div className="hero-editorial-content">
           <div className="hero-editorial-meta">
             <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
-            <span className="hero-editorial-dot" />
+            <span className="hero-editorial-dot" aria-hidden="true" />
             <span>{noticia.autor || 'Nicaragua Informate'}</span>
           </div>
           <h1 className="hero-editorial-title">{noticia.titulo}</h1>
@@ -120,12 +152,16 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
             <Link href={`/noticias/${noticia.slug}`} className="hero-editorial-cta">
               Leer artículo completo
             </Link>
-            <div className="hero-editorial-dots">
+            <div className="hero-editorial-dots" aria-label="Navegación de noticias">
+              <span className="hero-editorial-counter" aria-live="polite">
+                {idx + 1} de {items.length}
+              </span>
               {items.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setIdx(i)}
-                  aria-label={`Noticia ${i + 1}`}
+                  aria-label={`Ir a noticia ${i + 1}`}
+                  aria-current={i === idx ? 'true' : undefined}
                   className={i === idx ? 'active' : ''}
                 />
               ))}
