@@ -677,6 +677,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .logo{font-size:1.3rem}
 }
 
+/* ===== FLOATING SHARE (desktop sticky) ===== */
+.floating-share{position:fixed;left:20px;top:200px;display:none;flex-direction:column;gap:8px;z-index:50}
+@media(min-width:1100px){.floating-share{display:flex}}
+.floating-share__label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);text-align:center;margin-bottom:4px}
+.floating-share__btn{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;border:2px solid rgba(255,255,255,0.1);transition:transform 0.2s,border-color 0.2s;text-decoration:none}
+.floating-share__btn:hover{transform:scale(1.05);border-color:rgba(255,255,255,0.3)}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .news-card,.hero-card,.sidebar-widget,.trend-chip,.ad-banner,.weather-widget-full,.econ-widget,.ind-widget{animation:fadeInUp 0.6s ease forwards}

@@ -502,9 +502,9 @@ function FloatingShare({ url, titulo }: { url: string; titulo: string }) {
       <span className="floating-share__label">COMPARTIR</span>
       <a href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#1877f2' }} aria-label="Facebook"><BrandIcon name="facebook-f" size={14} /></a>
       <a href={`https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(titulo)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#000000' }} aria-label="X"><BrandIcon name="x-twitter" size={14} /></a>
-      <a href={`https://wa.me/?text=${enc(titulo + ' — ' + url)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#25d366' }} aria-label="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
-      <a href={`https://t.me/share/url?url=${enc(url)}&text=${enc(titulo)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#0088cc' }} aria-label="Telegram"><BrandIcon name="telegram" size={14} /></a>
-      <button onClick={copy} className="floating-share__btn" style={{ background: copied ? '#059669' : '#6b7280' }} aria-label="Copiar enlace">
+      <a href={`https://wa.me/?text=${enc(titulo + ' — ' + url)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#128c7e' }} aria-label="WhatsApp"><BrandIcon name="whatsapp" size={14} /></a>
+      <a href={`https://t.me/share/url?url=${enc(url)}&text=${enc(titulo)}`} target="_blank" rel="noopener noreferrer" className="floating-share__btn" style={{ background: '#0066aa' }} aria-label="Telegram"><BrandIcon name="telegram" size={14} /></a>
+      <button onClick={copy} className="floating-share__btn" style={{ background: copied ? '#059669' : '#4b5563' }} aria-label="Copiar enlace">
         {copied ? <Check size={14} /> : <Link2 size={14} />}
       </button>
     </div>
@@ -720,9 +720,9 @@ export default function ArticleClient({
             <span>Compartir:</span>
             <div className="share-buttons">
               <ShareChip href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} label="Facebook" bg="#1877f2" icon="facebook-f" />
-              <ShareChip href={`https://wa.me/?text=${encodedShareCopy}`} label="WhatsApp" bg="#25d366" icon="whatsapp" />
+              <ShareChip href={`https://wa.me/?text=${encodedShareCopy}`} label="WhatsApp" bg="#128c7e" icon="whatsapp" />
               <ShareChip href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} label="X / Twitter" bg="#0f172a" icon="x-twitter" />
-              <ShareChip href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`} label="Telegram" bg="#0088cc" icon="telegram" />
+              <ShareChip href={`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`} label="Telegram" bg="#0066aa" icon="telegram" />
               <CopyButton url={url} />
             </div>
           </aside>
