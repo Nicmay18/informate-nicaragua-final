@@ -19,24 +19,27 @@ function timeAgo(dateStr: string) {
   }
 }
 
+/* CHIPS / TENDENCIAS: Tags temáticos nicaragüenses actuales
+   REGLA DE ORO: Si una palabra está en el menú como categoría,
+   NO puede aparecer repetida aquí. Las chips son TEMAS, no categorías. */
 const TRENDS = [
   { label: 'Elecciones 2026', rank: 1, href: '/buscar?q=elecciones' },
-  { label: 'Economía Nicaragua', rank: 2, href: '/categoria/economia' },
-  { label: 'Sucesos de hoy', rank: 3, href: '/categoria/sucesos' },
-  { label: 'Dólar / Córdoba', rank: 4, href: '/buscar?q=dolar' },
-  { label: 'Tecnología', rank: 5, href: '/categoria/tecnologia' },
-  { label: 'Deportes', rank: 6, href: '/categoria/deportes' },
-  { label: 'Internacionales', rank: 7, href: '/categoria/internacionales' },
-  { label: 'Clima', rank: 8, href: '/buscar?q=clima' },
+  { label: 'Dólar / Córdoba', rank: 2, href: '/buscar?q=dolar' },
+  { label: 'Liga Primera', rank: 3, href: '/buscar?q=liga+primera' },
+  { label: 'Bluefields', rank: 4, href: '/buscar?q=bluefields' },
+  { label: 'Costa Caribe', rank: 5, href: '/buscar?q=costa+caribe' },
+  { label: 'Clima', rank: 6, href: '/buscar?q=clima' },
+  { label: 'Volcán', rank: 7, href: '/buscar?q=volcan' },
+  { label: 'Migración', rank: 8, href: '/buscar?q=migracion' },
 ];
 
 const CATEGORIES = [
-  { name: 'Nacionales', slug: 'nacionales' },
   { name: 'Sucesos', slug: 'sucesos' },
-  { name: 'Internacionales', slug: 'internacionales' },
-  { name: 'Economía', slug: 'economia' },
+  { name: 'Nacionales', slug: 'nacionales' },
+  { name: 'Espectáculos', slug: 'espectaculos' },
   { name: 'Deportes', slug: 'deportes' },
   { name: 'Tecnología', slug: 'tecnologia' },
+  { name: 'Internacionales', slug: 'internacionales' },
 ];
 
 function HeroCarousel({ noticias }: { noticias: Noticia[] }) {

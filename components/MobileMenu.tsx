@@ -64,6 +64,7 @@ export default function MobileMenu({
                     className="mobile-menu-link"
                     onClick={onClose}
                     style={{ fontSize: '14px' }}
+                    data-cat={cat.slug}
                   >
                     {cat.label}
                   </Link>
