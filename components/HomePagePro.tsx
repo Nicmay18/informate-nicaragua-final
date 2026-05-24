@@ -45,13 +45,26 @@ function catClass(cat?: string) {
 
 function Hero({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
+  const [progress, setProgress] = useState(0);
   const items = noticias.slice(0, 5);
 
   useEffect(() => {
     if (items.length <= 1) return;
-    const t = setInterval(() => setIdx(p => (p + 1) % items.length), 5000);
+    setProgress(0);
+    const duration = 6000;
+    const tick = 50;
+    let elapsed = 0;
+    const t = setInterval(() => {
+      elapsed += tick;
+      setProgress((elapsed / duration) * 100);
+      if (elapsed >= duration) {
+        setIdx(p => (p + 1) % items.length);
+        elapsed = 0;
+        setProgress(0);
+      }
+    }, tick);
     return () => clearInterval(t);
-  }, [items.length]);
+  }, [items.length, idx]);
 
   return (
     <section className="ni-hero" aria-label="Noticias destacadas">
@@ -60,32 +73,36 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
           <article key={item.id} className={`ni-hero__slide${i === idx ? ' is-active' : ''}`}>
             <div className="ni-hero__media">
               {item.imagen ? (
-                <Image src={item.imagen} alt={item.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority={i === 0} />
+                <Image src={item.imagen} alt={item.titulo} fill sizes="(max-width:768px) 100vw, 65vw" style={{ objectFit: 'cover', objectPosition: 'center center' }} priority={i === 0} />
               ) : null}
-              <div className="ni-hero__overlay" />
-            </div>
-            <div className="ni-hero__content">
-              <span className={`ni-hero__badge ni-hero__badge--${catClass(item.categoria)}`}>{item.categoria || 'Noticia'}</span>
-              <h2 className="ni-hero__title">{item.titulo}</h2>
-              <p className="ni-hero__lead">{item.resumen || item.titulo}</p>
-              <div className="ni-hero__meta">
-                <time dateTime={item.fecha}>{timeAgo(item.fecha)}</time>
-                <span>•</span>
-                <span>{item.autor || 'Nicaragua Informate'}</span>
-              </div>
-              <Link href={`/noticias/${item.slug}`} className="ni-hero__cta">Leer artículo completo →</Link>
             </div>
           </article>
         ))}
       </div>
 
+      <div className="ni-hero__info">
+        <span className={`ni-hero__badge ni-hero__badge--${catClass(items[idx]?.categoria)}`}>{items[idx]?.categoria || 'Noticia'}</span>
+        <h2 className="ni-hero__title">
+          <Link href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</Link>
+        </h2>
+        <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
+        <div className="ni-hero__meta">
+          <time dateTime={items[idx]?.fecha}>{timeAgo(items[idx]?.fecha || '')}</time>
+          <span>•</span>
+          <span>{items[idx]?.autor || 'Nicaragua Informate'}</span>
+        </div>
+      </div>
+
       {items.length > 1 && (
         <>
-          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => setIdx(p => (p - 1 + items.length) % items.length)} aria-label="Anterior">‹</button>
-          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => setIdx(p => (p + 1) % items.length)} aria-label="Siguiente">›</button>
-          <div className="ni-hero__bullets">
-            {items.map((_, i) => (
-              <button key={i} className={i === idx ? 'is-active' : ''} onClick={() => setIdx(i)} aria-label={`Noticia ${i + 1}`} />
+          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => { setIdx(p => (p - 1 + items.length) % items.length); setProgress(0); }} aria-label="Anterior">‹</button>
+          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => { setIdx(p => (p + 1) % items.length); setProgress(0); }} aria-label="Siguiente">›</button>
+          <div className="ni-hero__indicators">
+            {items.map((item, i) => (
+              <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => { setIdx(i); setProgress(0); }} aria-label={`Noticia ${i + 1}`}>
+                <span className="ni-hero__ind-label">{item.categoria}</span>
+                {i === idx && <span className="ni-hero__ind-bar" style={{ width: `${progress}%` }} />}
+              </button>
             ))}
           </div>
         </>
@@ -180,31 +197,34 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
     <div>
       {/* HEADER */}
       <header className="ni-header">
-        <div className="ni-header__bar">
+        <div className="ni-header__top">
           <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
-            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={48} height={48} className="ni-logo__img" priority />
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={42} height={42} className="ni-logo__img" priority />
             <div className="ni-logo__text">
               <strong>Nicaragua Informate</strong>
               <span className="ni-logo__tagline">Infórmate al Instante</span>
             </div>
           </Link>
 
-          <nav aria-label="Navegación principal">
-            <ul className="ni-nav">
-              <li><Link href="/">Inicio</Link></li>
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </nav>
+          <time className="ni-header__date" dateTime={new Date().toISOString()}>
+            {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </time>
 
           <div className="ni-header__actions">
-            <button className="ni-search-btn" aria-label="Buscar"><Search size={20} /></button>
+            <button className="ni-search-btn" aria-label="Buscar"><Search size={18} /></button>
             <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú">
               <span /><span /><span />
             </button>
           </div>
         </div>
+        <nav className="ni-header__nav" aria-label="Navegación principal">
+          <ul className="ni-nav">
+            <li><Link href="/">Inicio</Link></li>
+            {CATEGORIES.map(c => (
+              <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+            ))}
+          </ul>
+        </nav>
       </header>
 
       {/* Menú móvil */}

@@ -52,31 +52,30 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
     <div>
       {/* HEADER */}
       <header className="ni-header">
-        <div className="ni-header__bar">
+        <div className="ni-header__top">
           <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
-            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={48} height={48} className="ni-logo__img" priority />
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={42} height={42} className="ni-logo__img" priority />
             <div className="ni-logo__text">
               <strong>Nicaragua Informate</strong>
               <span className="ni-logo__tagline">Infórmate al Instante</span>
             </div>
           </Link>
 
-          <nav aria-label="Navegación principal">
-            <ul className="ni-nav">
-              <li><Link href="/">Inicio</Link></li>
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </nav>
-
           <div className="ni-header__actions">
-            <button className="ni-search-btn" aria-label="Buscar"><Search size={20} /></button>
+            <button className="ni-search-btn" aria-label="Buscar"><Search size={18} /></button>
             <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
               <span /><span /><span />
             </button>
           </div>
         </div>
+        <nav className="ni-header__nav" aria-label="Navegación principal">
+          <ul className="ni-nav">
+            <li><Link href="/">Inicio</Link></li>
+            {CATEGORIES.map(c => (
+              <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+            ))}
+          </ul>
+        </nav>
       </header>
 
       {/* Menú móvil */}
