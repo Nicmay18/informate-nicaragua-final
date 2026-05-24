@@ -1296,6 +1296,29 @@ main > section:first-child {
 .ni-widget-compact{padding:16px;margin-bottom:20px}
 .ni-widget-compact__title{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--ni-navy);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--ni-gold)}
 
+/* Economic Widget */
+.econ-widget{font-size:0.85rem;color:var(--ni-text)}
+.econ-widget__section{margin-bottom:12px}
+.econ-widget__subtitle{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--ni-navy);margin-bottom:8px}
+.econ-widget__row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--ni-border)}
+.econ-widget__row:last-child{border-bottom:none}
+.econ-widget__label{font-weight:600;color:var(--ni-text);flex:1}
+.econ-widget__value{font-weight:700;color:var(--ni-navy);font-variant-numeric:tabular-nums;margin-right:8px}
+.econ-widget__change{font-size:0.72rem;font-weight:700;white-space:nowrap}
+.econ-widget__change--up{color:#16a34a}
+.econ-widget__change--down{color:#dc2626}
+.econ-widget__change--neutral{color:var(--ni-text-light)}
+.econ-widget__divider{height:1px;background:var(--ni-border);margin:12px 0}
+.econ-widget__source{font-size:0.65rem;color:var(--ni-text-light);text-align:right;margin-top:8px;font-style:italic}
+
+/* Clock Widget */
+.clock-widget{font-size:0.85rem}
+.clock-widget__row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ni-border)}
+.clock-widget__row:last-child{border-bottom:none}
+.clock-widget__city{display:flex;align-items:center;gap:6px;font-weight:500;color:var(--ni-text)}
+.clock-widget__flag{font-size:1rem}
+.clock-widget__time{font-variant-numeric:tabular-nums;font-weight:700;font-size:0.8rem;color:var(--ni-navy);font-family:'JetBrains Mono',monospace}
+
 /* Footer */
 .ni-footer{background:var(--ni-navy);color:rgba(255,255,255,0.7);padding:48px 20px 24px;margin-top:40px}
 .ni-footer__inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
