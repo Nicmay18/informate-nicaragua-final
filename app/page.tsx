@@ -1,5 +1,4 @@
-import ProLayout from '@/components/ProLayout';
-import MobileHome from '@/components/MobileHome';
+import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -33,16 +32,14 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  const tickerItems = noticias.slice(0, 10);
-
   return (
-    <ProLayout tickerItems={tickerItems}>
+    <>
       <section className="visually-hidden" aria-label="Introduccion SEO">
         <h1>Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
         <p>Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí.</p>
       </section>
 
-      <MobileHome noticias={noticias} masLeidas={masLeidas} />
-    </ProLayout>
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+    </>
   );
 }
