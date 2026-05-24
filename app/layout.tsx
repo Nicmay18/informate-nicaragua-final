@@ -31,7 +31,17 @@ export const metadata: Metadata = {
   keywords: ['Nicaragua', 'noticias Nicaragua', 'actualidad Nicaragua', 'periodismo Nicaragua', 'Managua', 'Noticias de hoy'],
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
   description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
-  robots: 'index, follow',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: '/logo.png',
     shortcut: '/logo.png',
@@ -118,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
-        <main id="main-content" style={{ flex: 1 }}>
+        <main id="main-content" role="main" aria-label="Contenido principal" style={{ flex: 1 }}>
           {children}
         </main>
         

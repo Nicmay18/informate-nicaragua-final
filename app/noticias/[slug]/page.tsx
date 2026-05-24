@@ -103,9 +103,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       robots: {
         index: true,
         follow: true,
-        'max-snippet': -1,
-        'max-image-preview': 'large',
-        'max-video-preview': -1,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+        },
       },
       other: {
         'article:author': authorName,
