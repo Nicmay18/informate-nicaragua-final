@@ -1,6 +1,8 @@
 ﻿import { MetadataRoute } from 'next';
 import { getNews } from '@/lib/data';
 import { isToxicSlug } from '@/lib/seo-toxic';
+import { getAllAuthors } from '@/lib/authors';
+import { getAllEvergreen } from '@/lib/evergreen';
 
 const baseUrl = 'https://nicaraguainformate.com';
 
@@ -116,6 +118,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // URLs de autores
+  const authors = getAllAuthors();
+  const authorUrls: MetadataRoute.Sitemap = authors.map((author) => ({
+    url: `${baseUrl}/autor/${author.slug}`,
+    lastModified: new Date('2026-05-24'),
+    changeFrequency: 'monthly',
+    priority: 0.3,
+  }));
+
+  // URLs de evergreen (guías)
+  const evergreen = getAllEvergreen();
+  const evergreenUrls: MetadataRoute.Sitemap = evergreen.map((article) => ({
+    url: `${baseUrl}/guia/${article.slug}`,
+    lastModified: new Date(article.updatedDate),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
   // ARTÍCULOS DINÁMICOS desde Firebase
   try {
     const articles = await getNews(500); // Obtener hasta 500 artículos
@@ -147,10 +167,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-    return [...staticUrls, ...articleUrls];
+    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...articleUrls];
   } catch (error) {
     console.error('[Sitemap] Error fetching articles:', error);
-    // Fallback: solo URLs estáticas si Firebase falla
-    return staticUrls;
+    // Fallback: URLs estáticas + autores + evergreen si Firebase falla
+    return [...staticUrls, ...authorUrls, ...evergreenUrls];
   }
 }

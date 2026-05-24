@@ -138,27 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ClientOnly>
         <ConsentScript />
         <Analytics />
-        
-        {/* Google Analytics 4 — Measurement ID: G-W1B5J61WEP */}
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-W1B5J61WEP', {
-                send_page_view: true,
-                page_path: window.location.pathname,
-                cookie_flags: 'SameSite=None;Secure'
-              });
-            `,
-          }}
-        />
-        
+
         <script
           defer
           dangerouslySetInnerHTML={{
