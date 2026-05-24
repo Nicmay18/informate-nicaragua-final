@@ -6,15 +6,16 @@ import { useState, useEffect } from 'react';
 interface EconomicData {
   label: string;
   value: string;
-  change?: number;
+  change?: string;
+  up?: boolean;
 }
 
-const mockData: EconomicData[] = [
-  { label: 'USD/NIO', value: '36.45', change: 0.12 },
-  { label: 'EUR/NIO', value: '39.82', change: -0.05 },
-  { label: 'GBP/NIO', value: '46.23', change: 0.18 },
-  { label: 'BTC', value: '$42,350', change: 2.5 },
-  { label: 'Oro (oz)', value: '$2,145', change: 1.2 },
+const nicaData: EconomicData[] = [
+  { label: 'Dólar/NIO', value: 'C$ 36.62', change: '0.00%', up: true },
+  { label: 'Euro/NIO', value: 'C$ 43.11', change: '1.25%', up: true },
+  { label: 'Súper/Galón', value: 'C$ 49.00', change: '0.00%', up: true },
+  { label: 'Regular/Galón', value: 'C$ 47.80', change: '0.00%', up: true },
+  { label: 'Diésel/Galón', value: 'C$ 43.21', change: '0.44%', up: true },
 ];
 
 export default function EconomicBar() {
@@ -27,7 +28,7 @@ export default function EconomicBar() {
   if (!isClient) return null;
 
   return (
-    <div className="econ-bar" role="region" aria-label="Economic indicators">
+    <div className="econ-bar" role="region" aria-label="Indicadores económicos">
       <div className="econ-inner">
         <div className="econ-date">
           {new Date().toLocaleDateString('es-NI', {
@@ -38,15 +39,15 @@ export default function EconomicBar() {
           })}
         </div>
 
-        {mockData.map((item, idx) => (
+        {nicaData.map((item, idx) => (
           <div key={`${item.label}-${idx}`} className="econ-item">
-            <span className="label">{item.label}</span>
-            <span className="value">{item.value}</span>
-            {item.change !== undefined && (
+            <span className="label" style={{ fontWeight: 700, color: 'var(--ni-gold)' }}>{item.label}</span>
+            <span className="value" style={{ fontWeight: 600 }}>{item.value}</span>
+            {item.change && (
               <>
-                <span className="divider">•</span>
-                <span className={item.change > 0 ? 'up' : 'down'}>
-                  {item.change > 0 ? '▲' : '▼'} {Math.abs(item.change)}%
+                <span className="divider" style={{ margin: '0 4px', opacity: 0.5 }}>•</span>
+                <span className={item.up ? 'up' : 'down'} style={{ color: item.up ? '#22c55e' : '#ef4444', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                  {item.up ? '▲' : '▼'} {item.change}
                 </span>
               </>
             )}

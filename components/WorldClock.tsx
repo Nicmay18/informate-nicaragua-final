@@ -14,9 +14,9 @@ const CITIES = [
 
 function getTime(tz: string) {
   try {
-    return new Date().toLocaleTimeString('es-NI', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: true });
+    return new Date().toLocaleTimeString('es-NI', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
   } catch {
-    return '--:--';
+    return '--:--:--';
   }
 }
 
@@ -32,7 +32,7 @@ export default function WorldClock() {
       setTimes(t);
     };
     update();
-    const interval = setInterval(update, 30000);
+    const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -57,7 +57,7 @@ export default function WorldClock() {
         }}
       >
         <span style={{ fontSize: 11 }}>🌍</span>
-        <span>{times['Managua'] || '--:--'}</span>
+        <span>{times['Managua'] || '--:--:--'}</span>
         <ChevronDown size={10} style={{ opacity: 0.6, transform: open ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
       </button>
 

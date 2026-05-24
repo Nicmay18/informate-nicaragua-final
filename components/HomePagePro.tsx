@@ -327,7 +327,10 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
       <footer className="ni-footer">
         <div className="ni-footer__inner">
           <div>
-            <div className="ni-footer__brand">Nicaragua Informate</div>
+            <div className="ni-footer__brand" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ display: 'inline-flex', width: '28px', height: '28px', background: 'var(--ni-gold)', color: 'var(--ni-navy)', borderRadius: '4px', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.9rem' }}>NI</span>
+              Nicaragua Informate
+            </div>
             <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua.</p>
             <div className="ni-footer__social">
               <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
@@ -369,7 +372,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
         <div className="ni-footer__bottom">
           <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
-          <span>Hecho con ❤️ en Managua, Nicaragua</span>
+          <span>Managua, Nicaragua • Periodismo Profesional Independiente</span>
         </div>
       </footer>
     </div>
