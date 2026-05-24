@@ -1,5 +1,20 @@
 /* Fonts loaded via next/font/google in layout.tsx for optimal performance */
 
+/* ===== ACCESSIBILITY ===== */
+/* Skip-to-content link for screen readers */
+.skip-to-content{position:absolute;top:-40px;left:0;background:var(--primary);color:white;padding:8px 16px;z-index:10000;transition:top 0.3s;text-decoration:none;font-weight:600;font-size:14px}
+.skip-to-content:focus{top:0;outline:2px solid var(--accent);outline-offset:2px}
+
+/* Focus visible styles for keyboard navigation */
+:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px}
+
+/* Touch targets minimum 44x44px */
+button,a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+/* Exception for inline text links */
+a:not([class]){min-height:auto;min-width:auto;display:inline}
+button{cursor:pointer}
+
 :root {
   --primary:#0f1b33; --primary-light:#1a2d4d; --primary-dark:#080f1f;
   --accent:#c9a96e; --accent-hover:#b8945a; --accent-light:#e8dcc8;
@@ -547,7 +562,52 @@ main > section:first-child {
   .footer-grid{grid-template-columns:1fr;gap:28px}
 }
 
-/* Header Responsive */
+/* ===== RESPONSIVE BREAKPOINTS (Mobile-First) ===== */
+
+/* 375px (Base - Móvil pequeño) */
+/* Estilos base ya definidos arriba */
+
+/* 768px (Tablet) */
+@media (min-width: 768px) {
+  .header-inner{height:64px;padding:0 24px}
+  .logo{font-size:1.5rem}
+  .logo img{width:42px;height:42px}
+  .nav{display:flex;gap:28px}
+  .nav a{font-size:0.82rem}
+  .menu-toggle{display:none}
+  .news-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .footer{padding:48px 24px 24px}
+  .article-hero{height:420px}
+  .typo-body{font-size:18px}
+  .typo-h1{font-size:clamp(32px,5vw,42px)}
+}
+
+/* 1024px (Desktop) */
+@media (min-width: 1024px) {
+  .header-inner{max-width:1200px;margin:0 auto}
+  .nav{gap:28px}
+  .main-layout{grid-template-columns:3fr 1fr;gap:48px}
+  .sidebar{display:flex}
+  .footer-grid{grid-template-columns:repeat(4,1fr);gap:40px}
+  .footer{padding:64px 24px 32px}
+  .article-layout{grid-template-columns:1fr 340px;gap:40px}
+  .article-sidebar{display:block}
+  .article-hero{height:480px}
+  .typo-h1{font-size:clamp(36px,5vw,42px)}
+}
+
+/* 1440px (Desktop grande) */
+@media (min-width: 1440px) {
+  .header-inner{max-width:1360px;margin:0 auto}
+  .main-layout{max-width:1360px;margin:0 auto;padding:0 24px 60px}
+  .footer-content{max-width:1360px;margin:0 auto}
+  .typo-h1{font-size:42px}
+  .typo-body{font-size:18px}
+  .typo-lead{font-size:20px}
+}
+
+/* Header Responsive (legacy, mantenido para compatibilidad) */
 @media (max-width:1024px){
   .nav{gap:20px}
   .nav a{font-size:0.72rem}

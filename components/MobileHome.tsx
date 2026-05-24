@@ -145,6 +145,7 @@ function NewsCard({ noticia, featured }: { noticia: Noticia; featured?: boolean 
               alt={noticia.titulo}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
+              loading="lazy"
             />
           ) : null}
           <span className="news-category">{noticia.categoria || 'Noticia'}</span>
