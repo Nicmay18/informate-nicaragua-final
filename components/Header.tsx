@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { Sun, Moon, Menu, X, Search } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import MobileMenu from './MobileMenu';
 
@@ -18,20 +18,27 @@ const CATEGORIES = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { theme, toggleTheme, isLoaded: isMounted } = useTheme();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = `/buscar?q=${encodeURIComponent(searchQuery.trim())}`;
+    }
+  };
 
   return (
     <>
       <header className="header">
-        <div className="header-container">
-          <Link href="/" className="header-logo">
-            <span>🇳🇮</span>
+        <div className="header-inner">
+          <Link href="/" className="logo">
             <span>Nicaragua Informate</span>
           </Link>
 
-          <nav className="header-nav">
+          <nav className="nav">
             <li><Link href="/">Inicio</Link></li>
-            <li><Link href="/noticias">Noticias</Link></li>
             {CATEGORIES.map((cat) => (
               <li key={cat.slug}>
                 <Link href={`/categoria/${cat.slug}`}>{cat.label}</Link>
@@ -40,9 +47,31 @@ export default function Header() {
           </nav>
 
           <div className="header-actions">
+            <form
+              className={`header-search${searchExpanded ? ' expanded' : ''}`}
+              onSubmit={handleSearch}
+            >
+              <input
+                type="text"
+                className="header-search-input"
+                placeholder="Buscar noticias de Nicaragua..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Buscar noticias"
+              />
+              <button
+                type="button"
+                className="header-search-btn"
+                onClick={() => setSearchExpanded(!searchExpanded)}
+                aria-label="Abrir búsqueda"
+              >
+                <Search size={20} />
+              </button>
+            </form>
+
             {isMounted && (
               <button
-                className="btn-theme"
+                className="theme-toggle"
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
                 title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
@@ -56,7 +85,7 @@ export default function Header() {
             )}
 
             <button
-              className="btn-menu-toggle"
+              className="menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
