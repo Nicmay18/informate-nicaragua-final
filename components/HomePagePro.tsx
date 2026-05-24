@@ -69,7 +69,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
               <h2 className="ni-hero__title">{item.titulo}</h2>
               <p className="ni-hero__lead">{item.resumen || item.titulo}</p>
               <div className="ni-hero__meta">
-                <time>{timeAgo(item.fecha)}</time>
+                <time dateTime={item.fecha}>{timeAgo(item.fecha)}</time>
                 <span>•</span>
                 <span>{item.autor || 'Nicaragua Informate'}</span>
               </div>
@@ -110,7 +110,7 @@ function Card({ noticia }: { noticia: Noticia }) {
         </h3>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta">
-          <span>{timeAgo(noticia.fecha)}</span>
+          <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
           <span className="ni-card__meta-dot" />
           <span>{noticia.autor || 'Redacción'}</span>
         </div>
@@ -167,15 +167,15 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
       {/* HEADER */}
       <header className="ni-header">
         <div className="ni-header__bar">
-          <Link href="/" className="ni-logo">
-            <div className="ni-logo__icon">NI</div>
+          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
+            <div className="ni-logo__icon" aria-hidden="true">NI</div>
             <div>
               Nicaragua Informate
               <span className="ni-logo__tagline">Noticias de Nicaragua y el Mundo</span>
             </div>
           </Link>
 
-          <nav>
+          <nav aria-label="Navegación principal">
             <ul className="ni-nav">
               <li><Link href="/">Inicio</Link></li>
               {CATEGORIES.map(c => (
@@ -297,8 +297,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
             <p style={{ fontSize: '0.85rem', color: 'var(--ni-text-light)', marginBottom: 12 }}>
               Recibe las noticias más importantes de Nicaragua cada mañana.
             </p>
-            <input type="email" placeholder="tucorreo@gmail.com" />
-            <button>Suscribirme gratis</button>
+            <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
+            <input id="newsletter-email" type="email" placeholder="tucorreo@gmail.com" aria-label="Tu correo electrónico para el newsletter" />
+            <button type="submit" aria-label="Suscribirse al newsletter">Suscribirme gratis</button>
           </div>
 
           {/* Publicidad */}

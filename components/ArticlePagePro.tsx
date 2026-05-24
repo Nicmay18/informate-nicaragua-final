@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
@@ -40,6 +41,7 @@ function formatDate(dateStr: string) {
 }
 
 export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noticia; relatedNews: Noticia[] }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const cat = catClass(noticia.categoria);
   const categorySlug = noticia.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') || 'nacionales';
   const categoryLink = `/categoria/${categorySlug}`;
@@ -49,15 +51,15 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
       {/* HEADER */}
       <header className="ni-header">
         <div className="ni-header__bar">
-          <Link href="/" className="ni-logo">
-            <div className="ni-logo__icon">NI</div>
+          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
+            <div className="ni-logo__icon" aria-hidden="true">NI</div>
             <div>
               Nicaragua Informate
               <span className="ni-logo__tagline">Noticias de Nicaragua y el Mundo</span>
             </div>
           </Link>
 
-          <nav>
+          <nav aria-label="Navegación principal">
             <ul className="ni-nav">
               <li><Link href="/">Inicio</Link></li>
               {CATEGORIES.map(c => (
@@ -68,12 +70,28 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
           <div className="ni-header__actions">
             <button className="ni-search-btn" aria-label="Buscar"><Search size={20} /></button>
-            <button className="ni-hamburger" aria-label="Menú">
+            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
               <span /><span /><span />
             </button>
           </div>
         </div>
       </header>
+
+      {/* Menú móvil */}
+      {menuOpen && (
+        <div className="ni-mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
+          <nav className="ni-mobile-menu__content" aria-label="Menú móvil">
+            <button className="ni-mobile-menu__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">✕</button>
+            <ul className="ni-mobile-menu__nav">
+              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`} onClick={() => setMenuOpen(false)}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* BREADCRUMBS */}
       <nav className="ni-breadcrumbs" aria-label="Miga de pan">
@@ -99,7 +117,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
                 <span>Periodista especializado en {noticia.categoria?.toLowerCase() || 'noticias'}</span>
               </div>
             </div>
-            <time className="ni-article__time" dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
+            <time className="ni-article__time" dateTime={noticia.fecha} title={formatDate(noticia.fecha)}>{formatDate(noticia.fecha)}</time>
           </div>
         </header>
 
@@ -112,26 +130,26 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         )}
 
         {/* Share buttons */}
-        <div className="ni-share">
-          <button className="ni-share__btn ni-share__btn--fb">
-            <span>📘</span> <span>Facebook</span>
-          </button>
-          <button className="ni-share__btn ni-share__btn--tw">
-            <span>𝕏</span> <span>Twitter</span>
-          </button>
-          <button className="ni-share__btn ni-share__btn--wa">
-            <span>📱</span> <span>WhatsApp</span>
-          </button>
-          <button className="ni-share__btn ni-share__btn--tg">
-            <span>✈️</span> <span>Telegram</span>
-          </button>
-          <button className="ni-share__btn ni-share__btn--copy" onClick={() => navigator.clipboard.writeText(window.location.href)}>
-            <span>🔗</span> <span>Copiar link</span>
+        <div className="ni-share" role="group" aria-label="Compartir este artículo">
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--fb" aria-label="Compartir en Facebook">
+            <span aria-hidden="true">📘</span> <span>Facebook</span>
+          </a>
+          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--tw" aria-label="Compartir en X (Twitter)">
+            <span aria-hidden="true">𝕏</span> <span>Twitter</span>
+          </a>
+          <a href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + (typeof window !== 'undefined' ? window.location.href : ''))}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--wa" aria-label="Compartir en WhatsApp">
+            <span aria-hidden="true">📱</span> <span>WhatsApp</span>
+          </a>
+          <a href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--tg" aria-label="Compartir en Telegram">
+            <span aria-hidden="true">✈️</span> <span>Telegram</span>
+          </a>
+          <button className="ni-share__btn ni-share__btn--copy" onClick={() => navigator.clipboard.writeText(window.location.href)} aria-label="Copiar enlace al portapapeles">
+            <span aria-hidden="true">🔗</span> <span>Copiar link</span>
           </button>
         </div>
 
         {/* CONTENIDO */}
-        <div className="ni-article__body" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+        <div className="ni-article__body" aria-label="Contenido del artículo" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
 
         {/* Tags */}
         {noticia.tags && noticia.tags.length > 0 && (

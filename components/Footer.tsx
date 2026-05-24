@@ -1,6 +1,6 @@
 // File: components/Footer.tsx
 import Link from 'next/link';
-import { Globe, Share2, Camera, Rss } from 'lucide-react';
+import { Rss } from 'lucide-react';
 
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
@@ -15,13 +15,13 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer">
+    <footer className="footer" role="contentinfo" aria-label="Pie de página de Nicaragua Informate">
       <div className="footer-content">
         <div className="footer-grid">
           {/* Columna 1: Categorías */}
           <div>
             <h3 className="footer-section-title">Categorías</h3>
-            <nav className="footer-links">
+            <nav className="footer-links" aria-label="Categorías de noticias">
               {CATEGORIES.map((cat) => (
                 <Link key={cat.slug} href={`/categoria/${cat.slug}`}>{cat.label}</Link>
               ))}
@@ -35,7 +35,7 @@ export default function Footer() {
             <p style={{ fontSize: '13px', lineHeight: 1.6, marginBottom: '16px', color: 'rgba(255, 255, 255, 0.7)' }}>
               Portal de noticias independiente dedicado a informar sobre los hechos más relevantes de Nicaragua, Centroamérica y el mundo.
             </p>
-            <nav className="footer-links">
+            <nav className="footer-links" aria-label="Información sobre nosotros">
               <Link href="/nosotros">Quiénes somos</Link>
               <Link href="/politica-editorial">Política editorial</Link>
               <Link href="/mapa-del-sitio">Mapa del sitio</Link>
@@ -45,7 +45,7 @@ export default function Footer() {
           {/* Columna 3: Contacto */}
           <div>
             <h3 className="footer-section-title">Contacto</h3>
-            <nav className="footer-links">
+            <nav className="footer-links" aria-label="Contacto y legal">
               <Link href="/contacto">Escríbenos</Link>
               <a href="mailto:info@nicaraguainformate.com">info@nicaraguainformate.com</a>
               <Link href="/privacidad">Privacidad</Link>
@@ -60,20 +60,20 @@ export default function Footer() {
             <p style={{ fontSize: '13px', lineHeight: 1.6, marginBottom: '16px', color: 'rgba(255, 255, 255, 0.7)' }}>
               Mantente informado a través de nuestras redes sociales.
             </p>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-              <a href="https://facebook.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="footer-social-link">
-                <Globe size={18} />
+            <nav className="footer-social-nav" aria-label="Redes sociales">
+              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Facebook" className="footer-social-link">
+                <span aria-hidden="true">f</span>
               </a>
-              <a href="https://x.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="footer-social-link">
-                <Share2 size={18} />
+              <a href="https://x.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en X (Twitter)" className="footer-social-link">
+                <span aria-hidden="true">𝕏</span>
               </a>
-              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="footer-social-link">
-                <Camera size={18} />
+              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Instagram" className="footer-social-link">
+                <span aria-hidden="true">📷</span>
               </a>
-              <a href="/feed.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed" className="footer-social-link">
-                <Rss size={18} />
+              <a href="/feed.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed de Nicaragua Informate" className="footer-social-link">
+                <Rss size={16} aria-hidden="true" />
               </a>
-            </div>
+            </nav>
           </div>
         </div>
       </div>
