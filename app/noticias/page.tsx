@@ -11,7 +11,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const canonical = cat !== 'Todas' ? `https://nicaraguainformate.com/noticias?cat=${cat}` : 'https://nicaraguainformate.com/noticias';
   return {
     title: cat !== 'Todas' ? `${cat} - Noticias` : 'Todas las Noticias',
-    description: `Noticias de ${cat} en Nicaragua.`,
+    description: cat !== 'Todas' ? `Últimas noticias de ${cat} en Nicaragua. Cobertura periodística verificada desde Managua.` : 'Últimas noticias de Nicaragua. Cobertura nacional e internacional verificada desde Managua.',
     alternates: { canonical },
   };
 }

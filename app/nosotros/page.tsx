@@ -26,7 +26,7 @@ export default function NosotrosPage() {
 
       <div className="article-content-wrapper">
         <p className="article-body">
-          <strong>Nicaragua Informate</strong> es un medio digital nicaragüense creado para mantener informada a la comunidad nicaragüense dentro y fuera del país. Publicamos contenido diario sobre sucesos, noticias nacionales, deportes, internacionales, tecnología y espectáculos, con información verificada y presentada de forma clara.
+          <strong>Nicaragua Informate</strong> es un medio digital nicaragüense creado para mantener informada a la comunidad nicaragüense dentro y fuera del país. Publicamos contenido diario sobre nacionales, sucesos, internacionales, tecnología, economía y deportes, con información verificada y presentada de forma clara.
         </p>
       </div>
 
@@ -92,12 +92,12 @@ export default function NosotrosPage() {
       <h2 className="article-summary-title" style={{ marginBottom: 16 }}>¿Qué cubrimos?</h2>
       <div className="article-related-grid" style={{ marginBottom: 44 }}>
         {[
-          { cat: 'Nacionales', desc: 'Noticias de Nicaragua: política, economía, sociedad' },
+          { cat: 'Nacionales', desc: 'Noticias de Nicaragua: economía, sociedad' },
           { cat: 'Sucesos', desc: 'Incidentes, accidentes, seguridad' },
           { cat: 'Internacionales', desc: 'Lo que pasa fuera del país con relevancia local' },
-          { cat: 'Deportes', desc: 'Fútbol, béisbol y disciplinas populares en Nicaragua' },
           { cat: 'Tecnología', desc: 'Avances, apps, redes sociales, consejos digitales' },
-          { cat: 'Espectáculos', desc: 'Farándula, cultura, eventos' },
+          { cat: 'Economía', desc: 'Finanzas, dólar córdoba, mercado' },
+          { cat: 'Deportes', desc: 'Fútbol, béisbol y disciplinas populares en Nicaragua' },
         ].map((s) => (
           <div key={s.cat} className="sidebar-widget">
             <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: '0.95rem', marginBottom: 4 }}>{s.cat}</div>

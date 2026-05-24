@@ -37,8 +37,6 @@ const CATEGORIES = [
   { name: 'Economía', slug: 'economia' },
   { name: 'Deportes', slug: 'deportes' },
   { name: 'Tecnología', slug: 'tecnologia' },
-  { name: 'Política', slug: 'politica' },
-  { name: 'Cultura', slug: 'cultura' },
 ];
 
 function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
@@ -136,9 +134,9 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
   );
 }
 
-function NewsCard({ noticia }: { noticia: Noticia }) {
+function NewsCard({ noticia, featured }: { noticia: Noticia; featured?: boolean }) {
   return (
-    <article className="news-card">
+    <article className={`news-card${featured ? ' featured' : ''}`}>
       <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
         <div className="news-image">
           {noticia.imagen ? (
@@ -232,7 +230,7 @@ export default function MobileHome({
               <Link href="/noticias" className="section-link">Ver todas las noticias</Link>
             </div>
             <div className="news-grid">
-              {general.map(n => <NewsCard key={n.id} noticia={n} />)}
+              {general.map((n, i) => <NewsCard key={n.id} noticia={n} featured={i < 3} />)}
             </div>
           </section>
 

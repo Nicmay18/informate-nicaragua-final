@@ -140,54 +140,10 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
-    const faqSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: '¿Cuánto cuesta anular el récord policial en Nicaragua 2026?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'El trámite tiene un costo aproximado de 330 córdobas en 2026, incluyendo constancia judicial (150 C$), constancia de Fiscalía (50 C$), récord policial (80 C$) y trámite administrativo (50 C$).',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: '¿Qué documentos necesito para anular el récord policial en Nicaragua?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Necesitás: constancia judicial del Poder Judicial, constancia de no acción judicial de la Fiscalía, récord policial actualizado de la Policía Nacional, cédula de identidad vigente y carta formal dirigida al área legal de la Policía Nacional.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: '¿Dónde se tramita la anulación del récord policial en Nicaragua?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'El trámite se realiza en Managua ante el Poder Judicial (constancia judicial), la Fiscalía General (constancia de no acción) y la Policía Nacional (récord policial y solicitud formal).',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: '¿Cuánto tiempo tarda la anulación del récord policial?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'El proceso completo toma aproximadamente 3 a 7 días hábiles, dependiendo de la carga administrativa de cada institución. La constancia judicial suele entregarse en 48 horas.',
-          },
-        },
-      ],
-    };
-
-    const isRecordPolicial = noticia.titulo.toLowerCase().includes('récord policial') || noticia.titulo.toLowerCase().includes('record policial') || noticia.slug.toLowerCase().includes('record-policial');
-
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        {isRecordPolicial && (
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-        )}
         <ArticleView noticia={noticia} relatedNews={related} trendingNews={trending} />
       </>
     );

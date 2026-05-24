@@ -8,11 +8,12 @@ import { useTheme } from '@/hooks/useTheme';
 import MobileMenu from './MobileMenu';
 
 const CATEGORIES = [
-  { slug: 'sucesos', label: 'Sucesos' },
   { slug: 'nacionales', label: 'Nacionales' },
-  { slug: 'deportes', label: 'Deportes' },
+  { slug: 'sucesos', label: 'Sucesos' },
+  { slug: 'internacionales', label: 'Internacionales' },
   { slug: 'tecnologia', label: 'Tecnología' },
-  { slug: 'espectaculos', label: 'Espectáculos' },
+  { slug: 'economia', label: 'Economía' },
+  { slug: 'deportes', label: 'Deportes' },
 ];
 
 export default function Header() {

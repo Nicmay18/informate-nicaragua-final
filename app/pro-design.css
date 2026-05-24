@@ -159,6 +159,30 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .hero-editorial-dots button.active{width:40px;background:var(--accent)}
 .hero-editorial-dots button:hover{background:rgba(255,255,255,0.5)}
 
+/* Fix 1: Reducir hero en móvil + indicador de scroll */
+@media (max-width: 640px) {
+  .hero-editorial-media {
+    min-height: 240px;
+    max-height: 360px;
+  }
+  .hero-editorial-content {
+    padding: 0 20px 20px;
+  }
+  .hero-editorial-title {
+    font-size: clamp(1.25rem, 5vw, 1.8rem);
+    margin-bottom: 8px;
+  }
+  .hero-editorial-lead {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
 /* Legacy hero */
 .hero-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xl);border:1px solid var(--border);min-height:320px}
 .hero-image{position:absolute;inset:0;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);overflow:hidden}
@@ -185,7 +209,26 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .trend-chip:hover .trend-rank{color:var(--primary);background:var(--accent)}
 
 /* ===== MAIN LAYOUT ===== */
-.main-layout{max-width:1360px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:3fr 1fr;gap:32px;align-items:start}
+.main-layout{max-width:1360px;margin:0 auto;padding:0 24px 60px;display:grid;gap:32px;align-items:start;grid-template-columns:1fr}
+
+/* Fix 5: Sidebar responsive con reordenamiento */
+@media (min-width: 768px) {
+  .main-layout {
+    grid-template-columns: 3fr 1fr;
+    gap: 48px;
+  }
+}
+
+aside.sidebar {
+  order: 999;
+  margin-top: 24px;
+}
+@media (min-width: 768px) {
+  aside.sidebar {
+    order: 0;
+    margin-top: 0;
+  }
+}
 
 /* Legacy main (used by some pages) */
 .main{max-width:1360px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:3fr 1fr;gap:32px;align-items:start}
@@ -193,6 +236,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ===== SECTIONS ===== */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2.5px solid var(--border)}
+
+/* Fix 4: Aire entre secciones con padding y separadores */
+main > section {
+  padding: 32px 0;
+}
+main > section:first-child {
+  padding-top: 0;
+}
+.section-header {
+  margin-bottom: 24px;
+}
 .section-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:10px}
 .section-title::before{content:'';width:5px;height:26px;background:linear-gradient(to bottom,var(--accent),var(--accent-hover));border-radius:3px}
 .section-link{font-size:0.82rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:4px}
@@ -201,6 +255,20 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ===== NEWS GRID ===== */
 .news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:44px}
 .news-grid.single-col{grid-template-columns:1fr}
+
+/* Fix 2: Forzar 1 columna en grid móvil */
+@media (max-width: 640px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .news-image {
+    aspect-ratio: 16/9;
+  }
+  .news-title {
+    font-size: 1.05rem;
+  }
+}
 .news-card{background:var(--surface);border-radius:var(--radius-md);overflow:hidden;border:none;box-shadow:0 1px 4px rgba(0,0,0,0.05);transition:var(--transition);display:flex;flex-direction:column;height:100%}
 .news-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.08)}
 .news-card-link{display:flex;flex-direction:column;color:inherit;text-decoration:none;flex:1}
@@ -217,6 +285,23 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .news-date{font-size:0.75rem;color:var(--text-muted);margin-top:12px;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:400}
 .news-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;line-height:1.35;margin-bottom:10px;color:var(--text)}
 .news-excerpt{font-size:0.88rem;color:var(--text-secondary);line-height:1.6;flex:1;font-family:'Inter',sans-serif;font-weight:400}
+
+/* Fix 3: Layout horizontal en cards destacadas (imagen 40% / texto 60%) */
+@media (max-width: 640px) {
+  .news-card.featured .news-card-link {
+    flex-direction: row;
+    gap: 16px;
+  }
+  .news-card.featured .news-image {
+    aspect-ratio: 1/1;
+    width: 40%;
+    flex-shrink: 0;
+  }
+  .news-card.featured .news-body {
+    padding: 0;
+    justify-content: center;
+  }
+}
 
 /* Legacy news card styles for other components */
 .news-card-image{position:relative;overflow:hidden}

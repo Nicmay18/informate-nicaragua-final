@@ -16,12 +16,11 @@ interface NewsGridProps {
 const CATEGORIES = [
   { id: 'all', label: 'Todas', color: 'bg-gray-600' },
   { id: 'nacionales', label: 'Nacionales', color: 'bg-blue-600' },
-  { id: 'internacionales', label: 'Internacionales', color: 'bg-purple-600' },
   { id: 'sucesos', label: 'Sucesos', color: 'bg-red-600' },
-  { id: 'deportes', label: 'Deportes', color: 'bg-green-600' },
+  { id: 'internacionales', label: 'Internacionales', color: 'bg-purple-600' },
   { id: 'tecnología', label: 'Tecnología', color: 'bg-cyan-600' },
   { id: 'economía', label: 'Economía', color: 'bg-orange-600' },
-  { id: 'espectáculos', label: 'Espectáculos', color: 'bg-pink-600' },
+  { id: 'deportes', label: 'Deportes', color: 'bg-green-600' },
 ];
 
 const SORT_OPTIONS = [

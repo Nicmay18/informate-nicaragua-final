@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description:
-    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre política, economía, deportes, tecnología, sucesos y cultura.',
+    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre nacionales, sucesos, internacionales, tecnología, economía y deportes.',
   alternates: {
     canonical: 'https://nicaraguainformate.com',
     languages: {
@@ -39,62 +39,8 @@ export default async function HomePage() {
     <ProLayout tickerItems={tickerItems}>
       <section className="visually-hidden" aria-label="Introduccion SEO">
         <h1>Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
-        <p>Nicaragua Informate es el portal de noticias líder de Nicaragua. Desde nuestra redacción en Managua y Estelí, ofrecemos cobertura periodística verificada sobre los acontecimientos más importantes del país y el mundo.</p>
+        <p>Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí.</p>
       </section>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ItemList',
-            itemListElement: noticias.slice(0, 6).map((n, i) => ({
-              '@type': 'ListItem',
-              position: i + 1,
-              url: `https://nicaraguainformate.com/noticias/${n.slug}`,
-              name: n.titulo,
-            })),
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'NewsMediaOrganization',
-            name: 'Nicaragua Informate',
-            url: 'https://nicaraguainformate.com',
-            logo: 'https://nicaraguainformate.com/logo.png',
-            sameAs: [
-              'https://facebook.com/profile.php?id=61578261125687',
-              'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
-              'https://t.me/+fHHjncJqMQM3NjZh',
-            ],
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: 'Estelí',
-              addressCountry: 'NI',
-            },
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'Nicaragua Informate',
-            url: 'https://nicaraguainformate.com',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: 'https://nicaraguainformate.com/buscar?q={search_term_string}',
-              'query-input': 'required name=search_term_string',
-            },
-          }),
-        }}
-      />
 
       <MobileHome noticias={noticias} masLeidas={masLeidas} />
     </ProLayout>

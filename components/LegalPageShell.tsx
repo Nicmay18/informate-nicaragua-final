@@ -16,11 +16,12 @@ const FOOTER_COLS: { title: string; links: FooterLink[] }[] = [
   { title: 'Secciones', links: [
     { label: 'Inicio', href: '/' },
     { label: 'Últimas Noticias', href: '/noticias' },
-    { label: 'Sucesos', href: '/categoria/sucesos' },
     { label: 'Nacionales', href: '/categoria/nacionales' },
-    { label: 'Deportes', href: '/categoria/deportes' },
+    { label: 'Sucesos', href: '/categoria/sucesos' },
     { label: 'Internacionales', href: '/categoria/internacionales' },
-    { label: 'Espectáculos', href: '/categoria/espectaculos' },
+    { label: 'Tecnología', href: '/categoria/tecnologia' },
+    { label: 'Economía', href: '/categoria/economia' },
+    { label: 'Deportes', href: '/categoria/deportes' },
   ]},
   { title: 'Legal', links: [
     { label: 'Sobre Nosotros', href: '/nosotros' },

@@ -14,12 +14,8 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
     description: 'Reportes de sucesos en Nicaragua: accidentes de tránsito, hechos policiales y emergencias en tiempo real.',
   },
   nacionales: {
-    titulo: 'Noticias Nacionales de Nicaragua | Política, Economía y Sociedad',
-    description: 'Entérate de lo último en Nicaragua: noticias de política, economía, infraestructura y desarrollo social. Cobertura actualizada desde Managua.',
-  },
-  deportes: {
-    titulo: 'Deportes en Nicaragua | Fútbol, Béisbol y Atletismo',
-    description: 'Resultados, fichajes y noticias del deporte nicaragüense. Liga Primera, selección nacional y eventos deportivos.',
+    titulo: 'Noticias Nacionales de Nicaragua | Actualidad y Sociedad',
+    description: 'Entérate de lo último en Nicaragua: noticias nacionales, economía, infraestructura y desarrollo social. Cobertura actualizada desde Managua.',
   },
   internacionales: {
     titulo: 'Noticias Internacionales | Centroamérica y el Mundo',
@@ -29,9 +25,13 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
     titulo: 'Tecnología en Nicaragua | Innovación y Digital',
     description: 'Avances tecnológicos en Nicaragua: internet, telecomunicaciones, startups y transformación digital.',
   },
-  espectaculos: {
-    titulo: 'Espectáculos y Farándula Nicaragua | Celebridades y Eventos',
-    description: 'Lo último del entretenimiento nicaragüense: farándula, celebridades, eventos y cultura pop.',
+  economia: {
+    titulo: 'Economía de Nicaragua | Finanzas, Dólar y Mercado',
+    description: 'Noticias económicas de Nicaragua: tipo de cambio dólar córdoba, inflación, precios y mercado financiero.',
+  },
+  deportes: {
+    titulo: 'Deportes en Nicaragua | Fútbol, Béisbol y Atletismo',
+    description: 'Resultados, fichajes y noticias del deporte nicaragüense. Liga Primera, selección nacional y eventos deportivos.',
   },
 };
 
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       siteName: 'Nicaragua Informate',
       title: meta.titulo,
       description: meta.description,
-      images: [{ url: `${SITE_URL}/logo.png`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
+      images: [{ url: `${SITE_URL}/logo.png`, width: 1200, height: 630, alt: 'Nicaragua Informate' }],
     },
     twitter: {
       card: 'summary_large_image',

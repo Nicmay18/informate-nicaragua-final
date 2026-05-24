@@ -52,19 +52,19 @@ export type Article = Noticia;
 /**
  * Categorías válidas para noticias
  */
-export type Category = 'Sucesos' | 'Nacionales' | 'Deportes' | 'Internacionales' | 'Espectáculos' | 'Tecnología';
+export type Category = 'Nacionales' | 'Sucesos' | 'Internacionales' | 'Tecnología' | 'Economía' | 'Deportes';
 
 /**
  * Configuración de categorías con colores e iconos
  * @description Fuente única de verdad para datos de categorías
  */
 export const CATEGORIES = [
-  { name: 'Sucesos', color: '#dc2626', icon: 'AlertTriangle' },
   { name: 'Nacionales', color: '#1d4ed8', icon: 'Flag' },
-  { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
+  { name: 'Sucesos', color: '#dc2626', icon: 'AlertTriangle' },
   { name: 'Internacionales', color: '#7c3aed', icon: 'Globe' },
-  { name: 'Espectáculos', color: '#db2777', icon: 'Star' },
   { name: 'Tecnología', color: '#0ea5e9', icon: 'Cpu' },
+  { name: 'Economía', color: '#f97316', icon: 'TrendingUp' },
+  { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
 ] as const;
 
 /**
@@ -113,12 +113,12 @@ export function categoryToSlug(category: string): string {
 /** Convierte slug URL a nombre de categoría (con tilde) */
 export function slugToCategory(slug: string): Category | null {
   const map: Record<string, Category> = {
-    sucesos: 'Sucesos',
     nacionales: 'Nacionales',
-    deportes: 'Deportes',
+    sucesos: 'Sucesos',
     internacionales: 'Internacionales',
     tecnologia: 'Tecnología',
-    espectaculos: 'Espectáculos',
+    economia: 'Economía',
+    deportes: 'Deportes',
   };
   return map[slug] || null;
 }
