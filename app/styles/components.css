@@ -505,6 +505,35 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.footer-social-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.footer-social-link:hover {
+  background: var(--accent);
+  color: var(--primary);
+  border-color: var(--accent);
+}
+
 /* ═══ MOBILE MENU ═══ */
 .mobile-menu {
   position: fixed;

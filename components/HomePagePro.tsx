@@ -219,6 +219,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
         </div>
       )}
 
+      {/* H1 SEO oculto visualmente, visible para crawlers */}
+      <h1 className="sr-only">Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
+
       {/* HERO */}
       <Hero noticias={heroNoticias} />
 

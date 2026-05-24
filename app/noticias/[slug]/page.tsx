@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     return {
-      title: `${finalTitle} | Nicaragua Informate`,
+      title: finalTitle,
       description,
       keywords,
       authors: [{ name: authorName }],

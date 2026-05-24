@@ -56,28 +56,5 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  return (
-    <>
-      <section className="seo-hero" aria-label="Introducción">
-        <h1 className="seo-h1">
-          Noticias de Nicaragua en tiempo real — Nicaragua Informate
-        </h1>
-        <p className="seo-intro">
-          Nicaragua Informate es el portal de noticias líder de Nicaragua. Desde nuestra redacción en Managua y Estelí,
-          ofrecemos cobertura periodística verificada sobre los acontecimientos más relevantes del país y el mundo.
-          Nuestro equipo trabaja las 24 horas para mantenerte al día con lo último en deportes, tecnología,
-          sucesos de última hora y entretenimiento. Fundado en 2020, nos hemos consolidado
-          como una fuente confiable de información para los nicaragüenses dentro del territorio nacional y para la
-          diáspora en Estados Unidos, España, México y Centroamérica.
-        </p>
-        <p className="seo-intro">
-          Explora nuestras secciones de Nacionales, Internacionales, Sucesos, Tecnología, Deportes y
-          Espectáculos. Cada publicación es validada minuciosamente por nuestro equipo editorial, garantizando
-          inmediatez, precisión y los más altos estándares del periodismo independiente.
-        </p>
-      </section>
-
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
-    </>
-  );
+  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
 }
