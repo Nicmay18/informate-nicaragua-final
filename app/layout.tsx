@@ -12,6 +12,7 @@ import {
 import ClientOnly from '@/components/ClientOnly';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import Analytics from '@/components/Analytics';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -136,25 +137,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieBanner />
         </ClientOnly>
         <ConsentScript />
+        <Analytics />
         
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script 
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} 
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });
-                `,
-              }}
-            />
-          </>
-        )}
+        {/* Google Analytics 4 — Measurement ID: G-W1B5J61WEP */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-W1B5J61WEP', {
+                send_page_view: true,
+                page_path: window.location.pathname,
+                cookie_flags: 'SameSite=None;Secure'
+              });
+            `,
+          }}
+        />
         
         <script
           defer
