@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

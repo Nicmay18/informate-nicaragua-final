@@ -3,7 +3,7 @@ import HomePagePro from '@/components/HomePagePro';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-export const revalidate = 10;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string }> }): Promise<Metadata> {
   const params = await searchParams;
