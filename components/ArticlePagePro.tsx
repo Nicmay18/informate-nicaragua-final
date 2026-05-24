@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import type { Noticia } from '@/lib/types';
 import AuthorCard from './AuthorCard';
 import AdSlot from './AdSlot';
+import KeyPoints from './KeyPoints';
 
 function timeAgo(dateStr: string) {
   try {
@@ -162,15 +163,13 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           </button>
         </div>
 
-        {/* 3 PUNTOS CLAVE — Estilo Editorial BBC/RT */}
-        <div className="ni-key-points" aria-label="Resumen de puntos clave">
-          <h2 className="ni-key-points__title">⚡ 3 Puntos Clave:</h2>
-          <ul className="ni-key-points__list">
-            <li><strong>Desarrollo de los hechos:</strong> Sucesos de última hora bajo cobertura periodística verificada desde Managua y Estelí.</li>
-            <li><strong>Contexto local:</strong> Análisis profundo del impacto económico, social y de seguridad en el territorio nicaragüense.</li>
-            <li><strong>Perspectiva futura:</strong> Qué significa este acontecimiento para el desarrollo del país en el mediano plazo.</li>
-          </ul>
-        </div>
+        {/* 3 PUNTOS CLAVE — Generados dinámicamente desde el contenido */}
+        <KeyPoints
+          titulo={noticia.titulo}
+          resumen={noticia.resumen}
+          contenido={noticia.contenido}
+          categoria={noticia.categoria}
+        />
 
         {/* CONTENIDO */}
         <div className="ni-article__body" aria-label="Contenido del artículo" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
