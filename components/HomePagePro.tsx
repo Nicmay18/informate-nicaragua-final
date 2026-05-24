@@ -141,7 +141,15 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const heroNoticias = noticias.slice(0, 5);
-  const resto = noticias.slice(5);
+
+  // IDs del carousel: ninguna otra sección puede mostrar estas noticias
+  const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
+
+  // "resto" excluye EXPLÍCITAMENTE las del carousel aunque haya duplicados en el array
+  const resto = useMemo(
+    () => noticias.slice(5).filter(n => !heroIds.has(n.id)),
+    [noticias, heroIds]
+  );
 
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
@@ -160,7 +168,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
     return resto.filter(n => !usados.has(n.id)).slice(0, 3);
   }, [resto, porCategoria]);
 
-  const trending = masLeidas.length >= 5 ? masLeidas.slice(0, 5) : resto.slice(0, 5);
+  const trending = masLeidas.length >= 5
+    ? masLeidas.filter(n => !heroIds.has(n.id)).slice(0, 5)
+    : resto.slice(0, 5);
 
   return (
     <div>
