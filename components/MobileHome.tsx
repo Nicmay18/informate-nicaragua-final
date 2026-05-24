@@ -229,6 +229,7 @@ export default function MobileHome({
 
   const nacionales = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'nacionales').slice(0, 4), [resto]);
   const sucesos = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'sucesos').slice(0, 4), [resto]);
+  const espectaculos = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'espectaculos').slice(0, 4), [resto]);
   const internacionales = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'internacionales').slice(0, 4), [resto]);
   const tecnologia = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'tecnologia').slice(0, 4), [resto]);
   const deportes = useMemo(() => resto.filter(n => n.categoria?.toLowerCase() === 'deportes').slice(0, 4), [resto]);
@@ -237,11 +238,12 @@ export default function MobileHome({
     const used = new Set<string>();
     nacionales.forEach(n => used.add(n.id));
     sucesos.forEach(n => used.add(n.id));
+    espectaculos.forEach(n => used.add(n.id));
     internacionales.forEach(n => used.add(n.id));
     tecnologia.forEach(n => used.add(n.id));
     deportes.forEach(n => used.add(n.id));
     return resto.filter(n => !used.has(n.id)).slice(0, 4);
-  }, [resto, nacionales, sucesos, internacionales, tecnologia, deportes]);
+  }, [resto, nacionales, sucesos, espectaculos, internacionales, tecnologia, deportes]);
 
   const trending = masLeidas.length >= 5 ? masLeidas.slice(0, 5) : resto.slice(0, 5);
 
@@ -303,6 +305,19 @@ export default function MobileHome({
               </div>
               <div className="news-grid">
                 {sucesos.map(n => <NewsCard key={n.id} noticia={n} />)}
+              </div>
+            </section>
+          )}
+
+          {/* Espectáculos */}
+          {espectaculos.length > 0 && (
+            <section>
+              <div className="section-header">
+                <h2 className="section-title">Espectáculos</h2>
+                <Link href="/categoria/espectaculos" className="section-link">Más espectáculos</Link>
+              </div>
+              <div className="news-grid">
+                {espectaculos.map(n => <NewsCard key={n.id} noticia={n} />)}
               </div>
             </section>
           )}
