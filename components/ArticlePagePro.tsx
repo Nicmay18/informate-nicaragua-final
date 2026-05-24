@@ -54,10 +54,10 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
       <header className="ni-header">
         <div className="ni-header__bar">
           <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
-            <div className="ni-logo__icon" aria-hidden="true">NI</div>
-            <div>
-              Nicaragua Informate
-              <span className="ni-logo__tagline">Noticias de Nicaragua y el Mundo</span>
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={48} height={48} className="ni-logo__img" priority />
+            <div className="ni-logo__text">
+              <strong>Nicaragua Informate</strong>
+              <span className="ni-logo__tagline">Infórmate al Instante</span>
             </div>
           </Link>
 

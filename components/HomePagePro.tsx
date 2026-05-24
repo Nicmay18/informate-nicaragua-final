@@ -182,10 +182,10 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
       <header className="ni-header">
         <div className="ni-header__bar">
           <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
-            <div className="ni-logo__icon" aria-hidden="true">NI</div>
-            <div>
-              Nicaragua Informate
-              <span className="ni-logo__tagline">Noticias de Nicaragua y el Mundo</span>
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={48} height={48} className="ni-logo__img" priority />
+            <div className="ni-logo__text">
+              <strong>Nicaragua Informate</strong>
+              <span className="ni-logo__tagline">Infórmate al Instante</span>
             </div>
           </Link>
 
@@ -331,11 +331,11 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
       <footer className="ni-footer">
         <div className="ni-footer__inner">
           <div>
-            <div className="ni-footer__brand" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ display: 'inline-flex', width: '28px', height: '28px', background: 'var(--ni-gold)', color: 'var(--ni-navy)', borderRadius: '4px', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.9rem' }}>NI</span>
-              Nicaragua Informate
+            <div className="ni-footer__brand">
+              <Image src="/logo-ni.png" alt="Nicaragua Informate" width={40} height={40} className="ni-footer__logo" />
+              <span>Nicaragua Informate</span>
             </div>
-            <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua.</p>
+            <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Infórmate al Instante desde Managua.</p>
             <div className="ni-footer__social">
               <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
               <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
