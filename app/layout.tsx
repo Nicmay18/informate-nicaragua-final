@@ -4,7 +4,6 @@ import './globals.css';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
-import './tmp.css';
 import './pro-design.css';
 import {
   buildOrganizationJsonLdEnhanced,
@@ -109,6 +108,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {process.env.NEXT_PUBLIC_GSC_VERIFICATION && (
           <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GSC_VERIFICATION} />
         )}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
+      </head>
+      <body suppressHydrationWarning className="ni-body">
+        <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
+        <main id="main-content" style={{ flex: 1 }}>
+          {children}
+        </main>
+        <ClientOnly fallback={<div style={{ height: 48 }} />}>
+          <CookieBanner />
+        </ClientOnly>
+        <ConsentScript />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
@@ -124,10 +135,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
           </>
         )}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
         <script
-          type="text/javascript"
+          defer
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -140,16 +149,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-      </head>
-      <body suppressHydrationWarning className="ni-body">
-        <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
-        <main id="main-content" style={{ flex: 1 }}>
-          {children}
-        </main>
-        <ClientOnly fallback={<div style={{ height: 48 }} />}>
-          <CookieBanner />
-        </ClientOnly>
-        <ConsentScript />
       </body>
     </html>
   );
