@@ -13,10 +13,10 @@ const NAV_LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/categoria/nacionales', label: 'Nacionales' },
   { href: '/categoria/sucesos', label: 'Sucesos' },
-  { href: '/categoria/internacionales', label: 'Internacionales' },
-  { href: '/categoria/tecnologia', label: 'Tecnología' },
-  { href: '/categoria/economia', label: 'Economía' },
+  { href: '/categoria/espectaculos', label: 'Espectáculos' },
   { href: '/categoria/deportes', label: 'Deportes' },
+  { href: '/categoria/tecnologia', label: 'Tecnología' },
+  { href: '/categoria/internacionales', label: 'Internacionales' },
 ];
 
 function useTheme() {
@@ -56,7 +56,7 @@ export default function ProLayout({
     return () => clearInterval(t);
   }, [tickerItems]);
 
-  // Progress bar scroll
+  // Progress bar scroll + header compacto
   const [scrollProgress, setScrollProgress] = useState(0);
   useEffect(() => {
     const onScroll = () => {
@@ -64,6 +64,16 @@ export default function ProLayout({
       const scrolled = h.scrollTop || document.body.scrollTop;
       const height = h.scrollHeight - h.clientHeight;
       setScrollProgress(height > 0 ? (scrolled / height) * 100 : 0);
+      
+      // Header compacto al hacer scroll
+      const header = document.querySelector('.header');
+      if (header) {
+        if (scrolled > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -73,6 +83,12 @@ export default function ProLayout({
     <>
       {/* Progress Bar */}
       <div className="progress-bar" style={{ width: `${scrollProgress}%` }} />
+
+      {/* Radio en Vivo Bar */}
+      <div className="radio-live-bar" aria-live="polite">
+        <div className="radio-live-indicator" />
+        <span className="radio-live-text">Radio en Vivo</span>
+      </div>
 
       {/* Header profesional TN8 */}
       <header className="header">
@@ -130,7 +146,15 @@ export default function ProLayout({
         <div className={`mobile-nav${menuOpen ? ' active' : ''}`}>
           <ul>
             {NAV_LINKS.map(link => (
-              <li key={link.href}><Link href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</Link></li>
+              <li key={link.href}>
+                <Link 
+                  href={link.href} 
+                  onClick={() => setMenuOpen(false)}
+                  data-cat={link.href.includes('categoria/') ? link.href.split('/')[2] : undefined}
+                >
+                  {link.label}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>
