@@ -145,28 +145,32 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
 
-  // "resto" excluye EXPLÍCITAMENTE las del carousel aunque haya duplicados en el array
+  // Resto excluye hero explícitamente
   const resto = useMemo(
     () => noticias.slice(5).filter(n => !heroIds.has(n.id)),
     [noticias, heroIds]
   );
 
+  // "Últimas noticias" = los 6 más recientes tras el hero (siempre noticias del día)
+  const ultimas = useMemo(() => resto.slice(0, 6), [resto]);
+  const ultimasIds = useMemo(() => new Set(ultimas.map(n => n.id)), [ultimas]);
+
+  // Categorías usan solo artículos que NO están en hero NI en últimas
+  const paraCategoria = useMemo(
+    () => resto.filter(n => !ultimasIds.has(n.id)),
+    [resto, ultimasIds]
+  );
+
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
     CATEGORIES.forEach(c => { map[c.slug] = []; });
-    resto.forEach(n => {
+    paraCategoria.forEach(n => {
       const slug = n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
       if (slug && map[slug]) map[slug].push(n);
     });
     CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 4); });
     return map;
-  }, [resto]);
-
-  const ultimas = useMemo(() => {
-    const usados = new Set<string>();
-    Object.values(porCategoria).forEach(arr => arr.forEach(n => usados.add(n.id)));
-    return resto.filter(n => !usados.has(n.id)).slice(0, 3);
-  }, [resto, porCategoria]);
+  }, [paraCategoria]);
 
   const trending = masLeidas.length >= 5
     ? masLeidas.filter(n => !heroIds.has(n.id)).slice(0, 5)

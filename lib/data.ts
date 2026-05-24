@@ -285,31 +285,61 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
   try {
     const { adminDb } = await import('./firebase-admin');
+
+    // Solo traer artículos con vistas REALES (>= 1) para evitar mostrar artículos
+    // viejos que sólo tienen vistas: 0 explícito en Firestore.
     const snap = await adminDb
       .collection('noticias')
+      .where('vistas', '>=', 1)
       .orderBy('vistas', 'desc')
       .limit(validatedCount)
       .get();
+
     if (!snap.empty) {
-      const masLeidas = snap.docs
-        .map((d: QueryDocumentSnapshot<DocumentData>) => {
-          const data = d.data();
-          return {
-            id: d.id,
-            slug: data.slug || d.id,
-            titulo: data.titulo || '',
-            resumen: data.resumen || '',
-            contenido: data.contenido,
-            categoria: data.categoria || 'Actualidad',
-            imagen: normalizeImage(data.imagen || ''),
-            fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-            autor: data.autor,
-            destacada: data.destacada,
-            vistas: data.vistas,
-            palabras: data.palabras,
-          };
-        });
-      return masLeidas;
+      return snap.docs.map((d: QueryDocumentSnapshot<DocumentData>) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido,
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+        };
+      });
+    }
+
+    // Si no hay artículos con vistas reales, fallback a los más recientes
+    const recentSnap = await adminDb
+      .collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount)
+      .get();
+
+    if (!recentSnap.empty) {
+      return recentSnap.docs.map((d: QueryDocumentSnapshot<DocumentData>) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          slug: data.slug || d.id,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido,
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          autor: data.autor,
+          destacada: data.destacada,
+          vistas: data.vistas || 0,
+          palabras: data.palabras,
+        };
+      });
     }
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
