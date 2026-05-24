@@ -697,13 +697,13 @@ export default function ArticleClient({
             <div className="article-nav">
               {readAlso[0] && (
                 <Link href={`/noticias/${readAlso[0].slug}`} className="article-nav-card">
-                  <div className="article-nav-label"><ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} /> Artículo anterior</div>
+                  <div className="article-nav-label"><ArrowLeft size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} /> Anterior</div>
                   <div className="article-nav-title">{readAlso[0].titulo}</div>
                 </Link>
               )}
               {readAlso[1] && (
                 <Link href={`/noticias/${readAlso[1].slug}`} className="article-nav-card next">
-                  <div className="article-nav-label">Artículo siguiente <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 4 }} /></div>
+                  <div className="article-nav-label">Siguiente <ArrowRight size={14} style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 4 }} /></div>
                   <div className="article-nav-title">{readAlso[1].titulo}</div>
                 </Link>
               )}

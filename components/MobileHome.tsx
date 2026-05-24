@@ -117,7 +117,7 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
           <p className="hero-editorial-lead">{noticia.resumen || noticia.titulo}</p>
           <div className="hero-editorial-actions">
             <Link href={`/noticias/${noticia.slug}`} className="hero-editorial-cta">
-              Leer noticia
+              Leer artículo completo
             </Link>
             <div className="hero-editorial-dots">
               {items.map((_, i) => (
@@ -229,7 +229,7 @@ export default function MobileHome({
           <section>
             <div className="section-header">
               <h2 className="section-title">Últimas noticias</h2>
-              <Link href="/noticias" className="section-link">Ver todas</Link>
+              <Link href="/noticias" className="section-link">Ver todas las noticias</Link>
             </div>
             <div className="news-grid">
               {general.map(n => <NewsCard key={n.id} noticia={n} />)}
@@ -241,7 +241,7 @@ export default function MobileHome({
             <section>
               <div className="section-header">
                 <h2 className="section-title">Nacionales</h2>
-                <Link href="/categoria/nacionales" className="section-link">Ver todas</Link>
+                <Link href="/categoria/nacionales" className="section-link">Más noticias nacionales</Link>
               </div>
               <div className="news-grid">
                 {nacionales.map(n => <NewsCard key={n.id} noticia={n} />)}
@@ -261,7 +261,7 @@ export default function MobileHome({
             <section>
               <div className="section-header">
                 <h2 className="section-title">Sucesos</h2>
-                <Link href="/categoria/sucesos" className="section-link">Ver todas</Link>
+                <Link href="/categoria/sucesos" className="section-link">Más sucesos</Link>
               </div>
               <div className="news-grid">
                 {sucesos.map(n => <NewsCard key={n.id} noticia={n} />)}
@@ -274,7 +274,7 @@ export default function MobileHome({
             <section>
               <div className="section-header">
                 <h2 className="section-title">Internacionales</h2>
-                <Link href="/categoria/internacionales" className="section-link">Ver todas</Link>
+                <Link href="/categoria/internacionales" className="section-link">Más internacionales</Link>
               </div>
               <div className="news-grid">
                 {internacionales.map(n => <NewsCard key={n.id} noticia={n} />)}
@@ -287,7 +287,7 @@ export default function MobileHome({
             <section>
               <div className="section-header">
                 <h2 className="section-title">Tecnología</h2>
-                <Link href="/categoria/tecnologia" className="section-link">Ver todas</Link>
+                <Link href="/categoria/tecnologia" className="section-link">Más tecnología</Link>
               </div>
               <div className="news-grid">
                 {tecnologia.map(n => <NewsCard key={n.id} noticia={n} />)}
@@ -300,7 +300,7 @@ export default function MobileHome({
             <section>
               <div className="section-header">
                 <h2 className="section-title">Deportes</h2>
-                <Link href="/categoria/deportes" className="section-link">Ver todas</Link>
+                <Link href="/categoria/deportes" className="section-link">Más deportes</Link>
               </div>
               <div className="news-grid">
                 {deportes.map(n => <NewsCard key={n.id} noticia={n} />)}

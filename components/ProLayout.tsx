@@ -229,8 +229,8 @@ export default function ProLayout({
         <Link href="/" className="bottom-nav-item active"><Home size={22} strokeWidth={1.5} /><span>Inicio</span></Link>
         <Link href="/categoria/internacionales" className="bottom-nav-item"><Globe size={22} strokeWidth={1.5} /><span>Mundo</span></Link>
         <Link href="/radio" className="bottom-nav-item"><Radio size={22} strokeWidth={1.5} /><span>Radio</span></Link>
-        <Link href="/contacto" className="bottom-nav-item"><MessageSquare size={22} strokeWidth={1.5} /><span>Chat</span></Link>
-        <Link href="/nosotros" className="bottom-nav-item"><User size={22} strokeWidth={1.5} /><span>Perfil</span></Link>
+        <Link href="/contacto" className="bottom-nav-item"><MessageSquare size={22} strokeWidth={1.5} /><span>Contacto</span></Link>
+        <Link href="/nosotros" className="bottom-nav-item"><User size={22} strokeWidth={1.5} /><span>Nosotros</span></Link>
       </nav>
     </>
   );
