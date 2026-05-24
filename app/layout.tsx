@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   generator: 'Next.js',
   keywords: ['Nicaragua', 'noticias Nicaragua', 'actualidad Nicaragua', 'periodismo Nicaragua', 'Managua', 'Noticias de hoy'],
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
-  description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua. Política, economía, deportes, cultura y más.',
+  description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, tecnología, economía y deportes desde Managua.',
   robots: 'index, follow',
   icons: {
     icon: '/logo.png',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     url: 'https://nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
+    description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, tecnología, economía y deportes desde Managua.',
     images: [
       {
         url: 'https://nicaraguainformate.com/logo.png',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     site: '@NicInformate',
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
-    description: 'Portal de noticias de Nicaragua. Periodismo verificado desde Managua.',
+    description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, tecnología, economía y deportes desde Managua.',
     images: ['https://nicaraguainformate.com/logo.png'],
   },
   alternates: {
