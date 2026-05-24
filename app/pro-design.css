@@ -1467,3 +1467,9 @@ main > section:first-child {
 @media(prefers-reduced-motion:reduce){
   .ni-related__thumb img,.ni-share__btn,.ni-tag{transition:none !important}
 }
+
+/* SEO Hero */
+.seo-hero{max-width:1200px;margin:0 auto;padding:28px 20px 0;font-size:0.95rem;line-height:1.65;color:var(--ni-text);border-bottom:1px solid var(--ni-border)}
+.seo-h1{font-family:'Merriweather',serif;font-size:1.4rem;font-weight:700;color:var(--ni-navy);margin-bottom:10px}
+.seo-intro{margin-bottom:12px;max-width:900px}
+.seo-intro:last-child{margin-bottom:0}
