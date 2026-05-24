@@ -31,6 +31,14 @@
   /* Colores de texto (WCAG AA 4.5:1+) */
   --text-primary:#111111; --text-secondary:#333333; --text-tertiary:#666666;
   --text-meta:#4a4a4a;
+
+  /* ===== BADGES DE CATEGORÍA ===== */
+  --cat-nacionales:#2563eb; --cat-nacionales-bg:rgba(37,99,235,0.12);
+  --cat-sucesos:#dc2626;     --cat-sucesos-bg:rgba(220,38,38,0.12);
+  --cat-internacionales:#16a34a; --cat-internacionales-bg:rgba(22,163,74,0.12);
+  --cat-tecnologia:#9333ea;  --cat-tecnologia-bg:rgba(147,51,234,0.12);
+  --cat-economia:#d97706;    --cat-economia-bg:rgba(217,119,6,0.12);
+  --cat-deportes:#ea580c;    --cat-deportes-bg:rgba(234,88,12,0.12);
 }
 [data-theme="dark"] {
   --bg:#050810; --surface:#0c1220; --surface-2:#111827; --surface-3:#161f32;
@@ -791,6 +799,53 @@ main > section:first-child {
   .hero-title{font-size:3.2rem}
   .logo{font-size:1.3rem}
 }
+
+/* ===== CARD SYSTEM ===== */
+/* Regla: Nunca más de 3 tamaños de card diferentes en la misma pantalla */
+
+/* --- CARD PRINCIPAL (Hero) --- */
+.card-hero{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow-md);transition:var(--transition);display:flex;flex-direction:column}
+.card-hero:hover{box-shadow:var(--shadow-lg)}
+.card-hero .card-image{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)}
+.card-hero .card-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.card-hero:hover .card-image img{transform:scale(1.02)}
+.card-hero .card-body{padding:24px}
+.card-hero .card-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.card-hero .card-title{font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:var(--font-extrabold);line-height:var(--leading-tight);color:var(--text-primary);margin-bottom:12px;letter-spacing:-0.02em}
+.card-hero .card-excerpt{font-family:var(--font-body);font-size:clamp(1rem,2vw,1.15rem);font-weight:var(--font-normal);line-height:var(--leading-relaxed);color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* --- CARD SECUNDARIA (Grid 2-3 cols) --- */
+.card-grid{background:var(--surface);border-radius:var(--radius-md);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);transition:var(--transition);display:flex;flex-direction:column;height:100%}
+.card-grid:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.card-grid .card-image{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)}
+.card-grid .card-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.card-grid:hover .card-image img{transform:scale(1.04)}
+.card-grid .card-body{padding:18px}
+.card-grid .card-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.card-grid .card-title{font-family:var(--font-display);font-size:clamp(1.05rem,2.5vw,1.25rem);font-weight:var(--font-bold);line-height:var(--leading-snug);color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:-0.01em}
+.card-grid .card-excerpt{font-family:var(--font-body);font-size:0.85rem;font-weight:var(--font-normal);line-height:var(--leading-normal);color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;margin-top:8px}
+
+/* --- CARD LISTADO (Vertical móvil) --- */
+.card-list{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #e0e0e0;transition:var(--transition)}
+.card-list:first-child{padding-top:0}
+.card-list:last-child{border-bottom:none}
+.card-list .card-image{position:relative;width:100px;height:75px;flex-shrink:0;border-radius:var(--radius-sm);overflow:hidden;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%)}
+.card-list .card-image img{width:100%;height:100%;object-fit:cover}
+.card-list .card-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.card-list .card-meta{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.card-list .card-title{font-family:var(--font-display);font-size:1rem;font-weight:var(--font-bold);line-height:var(--leading-snug);color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* --- BADGE DE CATEGORÍA --- */
+.cat-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:100px;font-family:var(--font-body);font-size:11px;font-weight:var(--font-bold);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;line-height:1}
+.cat-badge--nacionales{color:var(--cat-nacionales);background:var(--cat-nacionales-bg)}
+.cat-badge--sucesos{color:var(--cat-sucesos);background:var(--cat-sucesos-bg)}
+.cat-badge--internacionales{color:var(--cat-internacionales);background:var(--cat-internacionales-bg)}
+.cat-badge--tecnologia{color:var(--cat-tecnologia);background:var(--cat-tecnologia-bg)}
+.cat-badge--economia{color:var(--cat-economia);background:var(--cat-economia-bg)}
+.cat-badge--deportes{color:var(--cat-deportes);background:var(--cat-deportes-bg)}
+
+/* Time meta */
+.time-meta{font-family:var(--font-body);font-size:12px;font-weight:var(--font-semibold);color:var(--text-muted);display:flex;align-items:center;gap:4px}
 
 /* ===== FLOATING SHARE (desktop sticky) ===== */
 .floating-share{position:fixed;left:20px;top:200px;display:none;flex-direction:column;gap:8px;z-index:50}
