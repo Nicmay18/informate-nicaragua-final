@@ -1108,3 +1108,58 @@ main > section:first-child {
 .news-card:nth-child(2){animation-delay:0.1s}
 .news-card:nth-child(3){animation-delay:0.2s}
 .news-card:nth-child(4){animation-delay:0.3s}
+
+/* ===== PULIDA EXTREMA – Mayo 2026 ===== */
+
+/* 1. HERO MÁS CHICO – no bloquea la pantalla */
+.hero,.hero-section,.hero-card,.article-hero,.featured-hero{max-height:70vh !important;min-height:auto !important}
+.hero img,.hero-section img,.hero-card img,.article-hero img{object-fit:cover;object-position:center;width:100%;height:100%}
+
+/* 2. LISTADOS CON FOTOS – cards profesionales */
+.news-card,.card-grid,.card-list,.av-related-card{display:grid !important;grid-template-columns:180px 1fr;gap:16px;align-items:start;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #e2e8f0;background:#fff;border-radius:12px;overflow:hidden;transition:box-shadow 0.2s}
+.news-card:hover,.card-grid:hover,.card-list:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+
+/* Thumbnail en listados */
+.news-card .news-card-image-container,.card-grid .card-image,.card-list .card-image,.av-related-card img{display:block !important;width:180px;height:120px;object-fit:cover;border-radius:8px;background:#e2e8f0;flex-shrink:0}
+.news-card .news-card-image-container img,.card-grid .card-image img,.card-list .card-image img{width:100%;height:100%;object-fit:cover}
+
+/* Ocultar imágenes vacías */
+.news-card img[src=""],.news-card img:not([src]){display:none !important}
+
+/* Cuando no hay foto, texto ocupa todo */
+.news-card:not(:has(img)){grid-template-columns:1fr !important;padding:20px}
+
+/* Títulos de listado más grandes y bold */
+.news-card .news-card-title,.card-grid .card-title,.card-list .card-title,.av-related-card h5{font-size:18px !important;font-weight:700 !important;line-height:1.3 !important;margin:0 0 8px 0 !important;color:#0f172a}
+
+/* Extracto más legible */
+.news-card .news-card-excerpt,.card-grid .card-excerpt,.card-list .card-excerpt{font-size:14px !important;line-height:1.5 !important;color:#475569 !important;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* Meta más aesthetic */
+.news-card .news-card-meta,.card-grid .card-meta,.card-list .card-meta{font-size:12px;color:#94a3b8;margin-top:8px;display:flex;gap:8px;align-items:center}
+
+/* 3. MÓVIL: cards verticales */
+@media(max-width:768px){
+  .news-card,.card-grid,.card-list,.av-related-card{grid-template-columns:1fr !important;padding:0}
+  .news-card .news-card-image-container,.card-grid .card-image,.card-list .card-image,.av-related-card img{width:100% !important;height:200px !important;margin-bottom:0;border-radius:8px 8px 0 0}
+  .news-card .news-card-content,.card-grid .card-body,.card-list .card-body{padding:16px}
+}
+
+/* 4. ARTÍCULO INDIVIDUAL – texto que no de sueño */
+.article-view .av-body,.article-content,.entry-content{font-size:18px !important;line-height:1.7 !important;color:#334155 !important;max-width:720px}
+.article-view .av-body h2,.article-content h2,.entry-content h2{font-size:26px;font-weight:700;color:#0f172a;margin-top:40px;margin-bottom:16px;padding-bottom:8px;border-bottom:3px solid #d4a373}
+.article-view .av-body p,.article-content p,.entry-content p{margin-bottom:20px}
+
+/* 5. BOTONES COMPARTIR GRANDES */
+.av-share,.share-buttons{display:flex !important;gap:12px;margin:32px 0;flex-wrap:wrap}
+.av-share-btn,.share-buttons a{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;color:#fff;transition:transform 0.2s;border:none;cursor:pointer}
+.av-share-btn:hover,.share-buttons a:hover{transform:translateY(-2px)}
+.av-share-btn[title="Facebook"],.share-facebook{background:#1877F2}
+.av-share-btn[title="Twitter"],.share-twitter{background:#000}
+.av-share-btn[title="WhatsApp"],.share-whatsapp{background:#25D366}
+.av-share-btn[title="Telegram"],.share-telegram{background:#0088cc}
+
+/* 6. SIDEBAR MÁS LIMPIO */
+.av-sidebar,.sidebar .sidebar-widget{background:#f8fafc;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #e2e8f0}
+.av-sidebar-widget,.sidebar-widget{padding:0;margin-bottom:24px}
+.av-widget-title,.sidebar-widget h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#0f172a;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #d4a373}
