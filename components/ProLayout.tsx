@@ -7,8 +7,6 @@ import {
   MessageCircle, Send, Mail,
 } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
-import RadioPlayer from './RadioPlayer';
-
 const NAV_LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/categoria/nacionales', label: 'Nacionales' },
@@ -159,9 +157,6 @@ export default function ProLayout({
           </ul>
         </div>
       </header>
-
-      {/* Radio Player */}
-      <RadioPlayer />
 
       {/* Breaking Bar with carousel */}
       {tickerItems && tickerItems.length > 0 && (
