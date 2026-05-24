@@ -16,12 +16,21 @@ a:not([class]){min-height:auto;min-width:auto;display:inline}
 button{cursor:pointer}
 
 :root {
-  --primary:#0f1b33; --primary-light:#1a2d4d; --primary-dark:#080f1f;
+  /* ===== SISTEMA DE COLOR ===== */
+  /* Primario: azul institucional (confianza, periodismo) */
+  --color-primary:#1e3a8a; --color-primary-hover:#172e6e; --color-primary-light:#e0e7ff;
+  /* Secundario: naranja/rojo tinto (alertas, urgencia, CTA) */
+  --color-secondary:#c2410c; --color-secondary-hover:#9a3412; --color-secondary-light:#ffedd5;
+  /* Accent dorado (legado, transicionando a secondary) */
   --accent:#c9a96e; --accent-hover:#b8945a; --accent-light:#e8dcc8;
+  /* Estados de semaforo */
   --danger:#dc2626; --success:#16a34a; --warning:#f59e0b;
-  --bg:#ffffff; --surface:#ffffff; --surface-2:#f8f7f5; --surface-3:#f2f1ef;
-  --text:#111111; --text-secondary:#4a4a4a; --text-muted:#737373; --text-light:#a3a3a3;
-  --border:#f0eeea; --border-light:#f8f7f5;
+  /* Neutros */
+  --bg:#ffffff; --surface:#ffffff; --surface-2:#fafafa; --surface-3:#f2f1ef;
+  --text:#1a1a1a; --text-secondary:#4a4a4a; --text-muted:#737373; --text-light:#a3a3a3;
+  --border:#e5e5e5; --border-light:#f8f7f5;
+  /* Legacy aliases */
+  --primary:#0f1b33; --primary-light:#1a2d4d; --primary-dark:#080f1f;
   --shadow-sm:0 1px 3px rgba(0,0,0,0.04); --shadow-md:0 4px 20px rgba(0,0,0,0.06);
   --shadow-lg:0 12px 48px rgba(0,0,0,0.1); --shadow-xl:0 24px 80px rgba(0,0,0,0.14);
   --radius-sm:8px; --radius-md:14px; --radius-lg:20px; --radius-xl:28px;
@@ -47,13 +56,13 @@ button{cursor:pointer}
   --text-primary:#111111; --text-secondary:#333333; --text-tertiary:#666666;
   --text-meta:#4a4a4a;
 
-  /* ===== BADGES DE CATEGORÍA ===== */
-  --cat-nacionales:#2563eb; --cat-nacionales-bg:rgba(37,99,235,0.12);
-  --cat-sucesos:#dc2626;     --cat-sucesos-bg:rgba(220,38,38,0.12);
-  --cat-internacionales:#16a34a; --cat-internacionales-bg:rgba(22,163,74,0.12);
-  --cat-tecnologia:#9333ea;  --cat-tecnologia-bg:rgba(147,51,234,0.12);
-  --cat-economia:#d97706;    --cat-economia-bg:rgba(217,119,6,0.12);
-  --cat-deportes:#ea580c;    --cat-deportes-bg:rgba(234,88,12,0.12);
+  /* ===== BADGES DE CATEGORÍA (6 colores, NUNCA el primario de marca) ===== */
+  --cat-nacionales:#2563eb;    --cat-nacionales-bg:rgba(37,99,235,0.12);
+  --cat-sucesos:#dc2626;       --cat-sucesos-bg:rgba(220,38,38,0.12);
+  --cat-internacionales:#059669; --cat-internacionales-bg:rgba(5,150,105,0.12);
+  --cat-tecnologia:#7c3aed;    --cat-tecnologia-bg:rgba(124,58,237,0.12);
+  --cat-espectaculo:#d97706;     --cat-espectaculo-bg:rgba(217,119,6,0.12);
+  --cat-deportes:#ea580c;      --cat-deportes-bg:rgba(234,88,12,0.12);
 }
 [data-theme="dark"] {
   --bg:#050810; --surface:#0c1220; --surface-2:#111827; --surface-3:#161f32;
@@ -938,7 +947,7 @@ main > section:first-child {
 .cat-badge--sucesos{color:var(--cat-sucesos);background:var(--cat-sucesos-bg)}
 .cat-badge--internacionales{color:var(--cat-internacionales);background:var(--cat-internacionales-bg)}
 .cat-badge--tecnologia{color:var(--cat-tecnologia);background:var(--cat-tecnologia-bg)}
-.cat-badge--economia{color:var(--cat-economia);background:var(--cat-economia-bg)}
+.cat-badge--espectaculo{color:var(--cat-espectaculo);background:var(--cat-espectaculo-bg)}
 .cat-badge--deportes{color:var(--cat-deportes);background:var(--cat-deportes-bg)}
 
 /* Time meta */
