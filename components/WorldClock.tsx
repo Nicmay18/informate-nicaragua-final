@@ -49,36 +49,36 @@ export default function WorldClock() {
       <button
         onClick={() => setOpen(!open)}
         style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: 11, fontWeight: 700, color: 'white',
-          background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)',
-          borderRadius: 100, padding: '4px 10px', cursor: 'pointer',
-          whiteSpace: 'nowrap', letterSpacing: '0.3px',
+          display: 'flex', alignItems: 'center', gap: 4,
+          fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.85)',
+          background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 6, padding: '2px 8px', cursor: 'pointer',
+          whiteSpace: 'nowrap', letterSpacing: '0.2px',
         }}
       >
-        <span style={{ fontSize: 13 }}>🌍</span>
+        <span style={{ fontSize: 11 }}>🌍</span>
         <span>{times['Managua'] || '--:--'}</span>
-        <ChevronDown size={12} style={{ opacity: 0.7, transform: open ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
+        <ChevronDown size={10} style={{ opacity: 0.6, transform: open ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
       </button>
 
       {open && (
         <div style={{
-          position: 'absolute', top: 'calc(100% + 6px)', right: 0,
+          position: 'absolute', top: 'calc(100% + 4px)', right: 0,
           background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 12, padding: '8px 0', minWidth: 180,
-          boxShadow: '0 12px 40px rgba(0,0,0,0.4)', zIndex: 10000,
+          borderRadius: 8, padding: '4px 0', minWidth: 150,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.35)', zIndex: 10000,
         }}>
           {CITIES.map(c => (
             <div key={c.country} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '6px 14px', fontSize: 12, color: 'rgba(255,255,255,0.85)',
-              gap: 16,
+              padding: '4px 10px', fontSize: 11, color: 'rgba(255,255,255,0.85)',
+              gap: 12,
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 14 }}>{c.flag}</span>
-                <span style={{ fontWeight: 600 }}>{c.country}</span>
+                <span style={{ fontSize: 12 }}>{c.flag}</span>
+                <span style={{ fontWeight: 500 }}>{c.country}</span>
               </span>
-              <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 700, color: 'var(--accent)', fontSize: 11 }}>
+              <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 700, color: 'var(--accent)', fontSize: 10 }}>
                 {times[c.country] || '--:--'}
               </span>
             </div>
