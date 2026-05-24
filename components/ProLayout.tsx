@@ -180,25 +180,27 @@ export default function ProLayout({
       {/* Breaking Bar with carousel */}
       {tickerItems && tickerItems.length > 0 && (
         <div className="breaking-bar">
-          <span className="breaking-label">Última Hora</span>
-          <div className="breaking-ticker" style={{ overflow: 'hidden', flex: 1, position: 'relative', height: 28 }}>
-            {tickerItems.map((n, i) => (
-              <Link
-                key={n.id}
-                href={`/noticias/${n.slug}`}
-                className="breaking-item"
-                style={{
-                  position: 'absolute', top: 0, left: 0, right: 0,
-                  opacity: i === tickerIdx ? 1 : 0,
-                  transform: i === tickerIdx ? 'translateY(0)' : 'translateY(8px)',
-                  transition: 'opacity 0.5s ease, transform 0.5s ease',
-                  pointerEvents: i === tickerIdx ? 'auto' : 'none',
-                }}
-              >
-                <span className="time">AHORA</span>
-                {n.titulo}
-              </Link>
-            ))}
+          <div className="breaking-inner">
+            <span className="breaking-label">Última Hora</span>
+            <div className="breaking-ticker" style={{ overflow: 'hidden', flex: 1, position: 'relative', height: 44 }}>
+              {tickerItems.map((n, i) => (
+                <Link
+                  key={n.id}
+                  href={`/noticias/${n.slug}`}
+                  className="breaking-item"
+                  style={{
+                    position: 'absolute', top: 0, left: 0, right: 0,
+                    opacity: i === tickerIdx ? 1 : 0,
+                    transform: i === tickerIdx ? 'translateY(0)' : 'translateY(8px)',
+                    transition: 'opacity 0.5s ease, transform 0.5s ease',
+                    pointerEvents: i === tickerIdx ? 'auto' : 'none',
+                  }}
+                >
+                  <span className="time">AHORA</span>
+                  {n.titulo}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}
