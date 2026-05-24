@@ -119,16 +119,15 @@ function Card({ noticia }: { noticia: Noticia }) {
         {noticia.imagen ? (
           <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:768px) 100vw, 220px" style={{ objectFit: 'cover' }} />
         ) : null}
-        <span className={`ni-card__cat ni-card__cat--${cat}`}>{noticia.categoria || 'Noticia'}</span>
       </div>
       <div className="ni-card__content">
+        <span className={`ni-card__pill ni-card__pill--${cat}`}>{noticia.categoria || 'Noticia'}</span>
         <h3 className="ni-card__title">
           <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
         </h3>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta">
           <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
-          <span className="ni-card__meta-dot" />
           <span>{noticia.autor || 'Redacción'}</span>
         </div>
       </div>
