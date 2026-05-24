@@ -1,5 +1,6 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
+import Script from 'next/script'; // Optimización para scripts de terceros (AdSense / Analytics)
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
@@ -11,7 +12,6 @@ import {
 import ClientOnly from '@/components/ClientOnly';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
-// Header/Footer/ProgressBar removed — ProLayout handles them per-page
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -19,7 +19,6 @@ const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['la
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // maximumScale REMOVED — WCAG 2.1 requires users can zoom freely
   themeColor: '#0A192F',
 };
 
@@ -96,7 +95,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        {/* Next.js injects charset=utf-8 automatically — do not duplicate */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
@@ -104,9 +102,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        {process.env.NEXT_PUBLIC_GSC_VERIFICATION && (
-          <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GSC_VERIFICATION} />
-        )}
+        
+        {/* CORRECCIÓN: Se remueve la metaetiqueta duplicada de google-site-verification ya que Next.js la inyecta mediante el objeto metadata */}
+
+        {/* Carga inteligente de Google AdSense: No bloquea el hilo principal (Mejora INP/LCP) */}
+        <Script
+          id="adsense-global"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          crossOrigin="anonymous"
+        />
+
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
       </head>
@@ -115,25 +121,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main-content" style={{ flex: 1 }}>
           {children}
         </main>
+        
         <ClientOnly fallback={<div style={{ height: 48 }} />}>
           <CookieBanner />
         </ClientOnly>
         <ConsentScript />
+        
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <Script 
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} 
+            />
             <script
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });
                 `,
               }}
             />
           </>
         )}
+        
         <script
           defer
           dangerouslySetInnerHTML={{
