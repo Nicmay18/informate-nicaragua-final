@@ -38,6 +38,7 @@ export default function Footer() {
             <nav className="footer-links" aria-label="Información sobre nosotros">
               <Link href="/nosotros">Quiénes somos</Link>
               <Link href="/politica-editorial">Política editorial</Link>
+              <Link href="/correcciones">Correcciones</Link>
               <Link href="/mapa-del-sitio">Mapa del sitio</Link>
             </nav>
           </div>

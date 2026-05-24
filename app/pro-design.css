@@ -1516,6 +1516,30 @@ main > section:first-child {
 .ni-comment-form__btn{padding:12px 24px;background:var(--ni-navy);color:var(--ni-white);border:none;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.2s}
 .ni-comment-form__btn:hover{background:var(--ni-navy-light)}
 
+/* Author Card */
+.author-card{background:var(--ni-bg);border:1px solid var(--ni-border);border-radius:12px;padding:24px;margin-top:32px}
+.author-card__header{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--ni-border)}
+.author-card__title{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--ni-navy);margin:0}
+.author-card__content{display:flex;flex-direction:column;gap:16px}
+.author-card__main{display:flex;align-items:center;gap:16px}
+.author-card__photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--ni-gold)}
+.author-card__avatar{width:64px;height:64px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;border:2px solid var(--ni-gold)}
+.author-card__info{display:flex;flex-direction:column}
+.author-card__name{font-size:1rem;font-weight:700;color:var(--ni-navy);text-decoration:none;transition:color 0.2s}
+.author-card__name:hover{color:var(--ni-gold)}
+.author-card__role{font-size:0.78rem;color:var(--ni-text-light);font-weight:500}
+.author-card__bio{font-size:0.9rem;line-height:1.6;color:var(--ni-text);margin:0}
+.author-card__meta{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid var(--ni-border)}
+.author-card__meta-item{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--ni-text-light)}
+.author-card__meta-item svg{flex-shrink:0}
+
+/* Ad Slots */
+.ni-article__ad-slot{margin:32px 0;display:flex;justify-content:center}
+.ni-article__ad-slot--top{margin-top:24px}
+.ni-article__ad-slot--bottom{margin-bottom:24px}
+.ad-slot{position:relative}
+.ad-label{position:absolute;top:8px;left:8px;font-size:0.65rem;color:var(--ni-text-light);background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:3px;z-index:1}
+
 /* Responsive artículo */
 @media(max-width:1024px){
   .ni-related__grid{grid-template-columns:1fr 1fr}

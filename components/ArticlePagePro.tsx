@@ -8,6 +8,8 @@ import { es } from 'date-fns/locale';
 import { Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { Noticia } from '@/lib/types';
+import AuthorCard from './AuthorCard';
+import AdSlot from './AdSlot';
 
 function timeAgo(dateStr: string) {
   try {
@@ -136,6 +138,11 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           </figure>
         )}
 
+        {/* AdSlot 1: Debajo del título (top banner) */}
+        <div className="ni-article__ad-slot ni-article__ad-slot--top">
+          <AdSlot slot="placeholder" format="horizontal" width={728} height={90} />
+        </div>
+
         {/* Share buttons */}
         <div className="ni-share" role="group" aria-label="Compartir este artículo">
           <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--fb" aria-label="Compartir en Facebook">
@@ -168,6 +175,11 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         {/* CONTENIDO */}
         <div className="ni-article__body" aria-label="Contenido del artículo" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
 
+        {/* AdSlot 2: Entre párrafos (in-article) */}
+        <div className="ni-article__ad-slot">
+          <AdSlot slot="placeholder" format="rectangle" width={336} height={280} />
+        </div>
+
         {/* Tags */}
         {noticia.tags && noticia.tags.length > 0 && (
           <div className="ni-tags">
@@ -178,20 +190,19 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           </div>
         )}
 
-        {/* Autor Box */}
-        <div className="ni-author-box">
-          <div className="ni-author-box__avatar">
-            <Image src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" fill sizes="80px" style={{ objectFit: 'cover' }} />
-          </div>
-          <div className="ni-author-box__info">
-            <h4>Keyling Elieth Rivera Muñoz</h4>
-            <p><strong>Directora Editorial</strong> — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.</p>
-            <div className="ni-author-box__social">
-              <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
-            </div>
-          </div>
+        {/* Author Card */}
+        <AuthorCard
+          authorName={noticia.autor || 'Redacción Nicaragua Informate'}
+          authorPhoto={noticia.autor === 'Keyling Elieth Rivera Muñoz' ? '/keyling-rivera.jpg' : undefined}
+          authorBio={noticia.autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.' : undefined}
+          authorSlug={noticia.autor === 'Keyling Elieth Rivera Muñoz' ? 'keyling-rivera' : undefined}
+          publishedDate={noticia.fecha}
+          updatedDate={noticia.fechaActualizacion}
+        />
+
+        {/* AdSlot 3: Al final del artículo (bottom banner) */}
+        <div className="ni-article__ad-slot ni-article__ad-slot--bottom">
+          <AdSlot slot="placeholder" format="horizontal" width={728} height={90} />
         </div>
 
         {/* Noticias relacionadas */}

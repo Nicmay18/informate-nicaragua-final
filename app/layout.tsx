@@ -1,6 +1,6 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
-import Script from 'next/script'; // Optimización para scripts de terceros (AdSense / Analytics)
+import Script from 'next/script';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
