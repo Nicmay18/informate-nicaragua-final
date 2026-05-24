@@ -2,11 +2,36 @@ import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
+import { buildWebSiteJsonLdEnhanced, buildOrganizationJsonLdEnhanced } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description:
     'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',
+  openGraph: {
+    type: 'website',
+    locale: 'es_NI',
+    url: 'https://nicaraguainformate.com',
+    siteName: 'Nicaragua Informate',
+    title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+    description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
+    images: [
+      {
+        url: 'https://nicaraguainformate.com/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@NicInformate',
+    creator: '@NicInformate',
+    title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+    description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
+    images: ['https://nicaraguainformate.com/logo.png'],
+  },
   alternates: {
     canonical: 'https://nicaraguainformate.com',
     languages: {
@@ -34,6 +59,9 @@ export default async function HomePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
+
       <section className="seo-hero" aria-label="Introducción">
         <h1 className="seo-h1">
           Noticias de Nicaragua en tiempo real — Nicaragua Informate

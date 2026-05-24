@@ -1,6 +1,5 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
-import './globals.css';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';

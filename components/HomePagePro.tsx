@@ -139,6 +139,7 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const heroNoticias = noticias.slice(0, 5);
   const resto = noticias.slice(5);
 
@@ -185,12 +186,28 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
           <div className="ni-header__actions">
             <button className="ni-search-btn" aria-label="Buscar"><Search size={20} /></button>
-            <button className="ni-hamburger" aria-label="Menú">
+            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú">
               <span /><span /><span />
             </button>
           </div>
         </div>
       </header>
+
+      {/* Menú móvil */}
+      {menuOpen && (
+        <div className="ni-mobile-menu" role="dialog" aria-modal="true">
+          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
+          <nav className="ni-mobile-menu__content">
+            <button className="ni-mobile-menu__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">✕</button>
+            <ul className="ni-mobile-menu__nav">
+              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`} onClick={() => setMenuOpen(false)}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* HERO */}
       <Hero noticias={heroNoticias} />
