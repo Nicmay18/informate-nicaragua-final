@@ -1176,7 +1176,7 @@ main > section:first-child {
 .ni-mobile-menu__nav a:hover{color:var(--ni-gold)}
 
 /* Hero — Full-width cinematic carousel */
-.ni-hero{position:relative;width:100vw;margin-left:calc(-50vw + 50%);background:#050a14;overflow:hidden}
+.ni-hero{position:relative;width:100%;background:#050a14;overflow:hidden}
 .ni-hero__track{position:relative;width:100%;height:480px}
 .ni-hero__slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity 0.8s ease,visibility 0.8s ease}
 .ni-hero__slide.is-active{opacity:1;visibility:visible}
@@ -1211,14 +1211,15 @@ main > section:first-child {
   .ni-hero__content{max-width:560px}
 }
 @media(max-width:768px){
-  .ni-hero__track{height:380px}
-  .ni-hero__title{font-size:1.5rem}
-  .ni-hero__lead{font-size:0.9rem}
-  .ni-hero__content{max-width:90%;padding:0 20px}
-  .ni-hero__overlay{background:linear-gradient(to top, rgba(5,10,20,0.95) 0%, rgba(5,10,20,0.6) 50%, rgba(5,10,20,0.3) 100%)}
-  .ni-hero__content{top:auto;bottom:20px;transform:none}
-  .ni-hero__bullets{bottom:12px;left:20px}
+  .ni-hero__track{height:420px}
+  .ni-hero__title{font-size:1.4rem}
+  .ni-hero__lead{font-size:0.85rem;-webkit-line-clamp:2;line-clamp:2}
+  .ni-hero__content{max-width:100%;padding:0 16px;top:auto;bottom:24px;transform:none}
+  .ni-hero__overlay{background:linear-gradient(to top, rgba(5,10,20,0.97) 0%, rgba(5,10,20,0.7) 45%, rgba(5,10,20,0.15) 100%)}
+  .ni-hero__bullets{bottom:10px;left:16px}
   .ni-hero__arrow{display:none}
+  .ni-hero__cta{padding:9px 18px;font-size:0.75rem}
+  .ni-hero__meta{font-size:0.75rem;flex-wrap:wrap}
 }
 
 /* Chips */
@@ -1258,8 +1259,8 @@ main > section:first-child {
 .ni-card__cat--deportes{background:var(--cat-deportes)}
 .ni-card__cat--tecnologia{background:var(--cat-tecnologia)}
 .ni-card__cat--internacionales{background:var(--cat-internacionales)}
-.ni-card__content{display:flex;flex-direction:column;justify-content:center}
-.ni-card__title{font-family:'Merriweather',serif;font-size:1.15rem;font-weight:700;line-height:1.3;color:var(--ni-navy);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ni-card__content{display:flex;flex-direction:column;justify-content:center;overflow:hidden;min-width:0}
+.ni-card__title{font-family:'Merriweather',serif;font-size:1.15rem;font-weight:700;line-height:1.3;color:var(--ni-navy);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .ni-card__title:hover{color:var(--cat-nacionales)}
 .ni-card__excerpt{font-size:0.9rem;line-height:1.5;color:var(--ni-text-light);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ni-card__meta{font-size:0.75rem;color:var(--ni-text-light);display:flex;gap:8px;align-items:center}
@@ -1275,7 +1276,8 @@ main > section:first-child {
 .ni-sidebar__widget{background:var(--ni-bg);border:1px solid var(--ni-border);border-radius:12px;padding:24px;margin-bottom:24px}
 .ni-sidebar__title{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--ni-navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--ni-gold)}
 .ni-trending{list-style:none;margin:0;padding:0}
-.ni-trending li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--ni-border)}
+.ni-trending li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--ni-border);overflow:hidden;min-width:0}
+.ni-trending li div{overflow:hidden;min-width:0}
 .ni-trending li:first-child{padding-top:0}
 .ni-trending li:last-child{border-bottom:none;padding-bottom:0}
 .ni-trending__num{font-family:'Merriweather',serif;font-size:1.5rem;font-weight:900;color:var(--ni-gold);line-height:1;min-width:28px}
@@ -1342,15 +1344,23 @@ main > section:first-child {
   .ni-footer__inner{grid-template-columns:1fr 1fr}
 }
 @media(max-width:768px){
-  .ni-header__bar{height:56px}
+  .ni-header__bar{height:56px;padding:0 12px}
   .ni-nav{display:none}
   .ni-hamburger{display:flex}
-  .ni-logo__text strong{font-size:0.95rem}
-  .ni-logo__img{width:36px;height:36px}
-  .ni-card{grid-template-columns:1fr;gap:12px}
-  .ni-card__thumb{width:100%;height:200px}
+  .ni-logo{gap:8px}
+  .ni-logo__img{width:34px;height:34px}
+  .ni-logo__text strong{font-size:0.9rem}
+  .ni-logo__tagline{font-size:0.5rem}
+  .ni-card{grid-template-columns:1fr;gap:12px;overflow:hidden}
+  .ni-card__thumb{width:100%;height:180px;max-width:100%}
+  .ni-card__content{width:100%}
+  .ni-card__body{padding:12px 0}
+  .ni-card__title{font-size:1.05rem}
   .ni-grid-2{grid-template-columns:1fr}
+  .ni-main{padding:16px 12px 40px;gap:24px}
   .ni-sidebar{grid-template-columns:1fr}
+  .ni-section__title{font-size:1.1rem}
+  .ni-trending__text{font-size:0.85rem}
   .ni-footer__inner{grid-template-columns:1fr;gap:32px}
   .ni-footer__bottom{flex-direction:column;gap:8px;text-align:center}
 }
