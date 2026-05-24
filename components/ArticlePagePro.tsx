@@ -121,10 +121,20 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
           <div className="ni-article__meta">
             <div className="ni-article__author">
-              <div className="ni-article__author-avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+              {noticia.autor === 'Keyling Elieth Rivera Muñoz' ? (
+                <Image
+                  src="/keyling-rivera.jpg"
+                  alt="Keyling Elieth Rivera Muñoz"
+                  width={40}
+                  height={40}
+                  className="ni-article__author-photo"
+                />
+              ) : (
+                <div className="ni-article__author-avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+              )}
               <div className="ni-article__author-info">
                 <strong>{noticia.autor || 'Redacción Nicaragua Informate'}</strong>
-                <span>Periodista especializado en {noticia.categoria?.toLowerCase() || 'noticias'}</span>
+                <span>{noticia.autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial — Nicaragua Informate' : `Periodista | Nicaragua Informate`}</span>
               </div>
             </div>
             <time className="ni-article__time" dateTime={noticia.fecha} title={formatDate(noticia.fecha)}>{formatDate(noticia.fecha)}</time>

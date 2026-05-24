@@ -1435,6 +1435,7 @@ main > section:first-child {
 .ni-article__meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:0.9rem;color:var(--ni-text-light)}
 .ni-article__author{display:flex;align-items:center;gap:10px}
 .ni-article__author-avatar{width:40px;height:40px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem}
+.ni-article__author-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--ni-gold)}
 .ni-article__author-info strong{display:block;color:var(--ni-navy);font-weight:600;font-size:0.9rem}
 .ni-article__author-info span{font-size:0.8rem;color:var(--ni-text-light)}
 .ni-article__time::before{content:'•';margin-right:16px;color:var(--ni-border)}

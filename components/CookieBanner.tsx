@@ -33,6 +33,14 @@ export default function CookieBanner() {
     } else {
       setShowBanner(true);
     }
+
+    // Escuchar evento para reabrir configuración desde footer
+    const openSettings = () => {
+      setShowBanner(true);
+      setShowSettings(true);
+    };
+    window.addEventListener('ni-open-cookie-settings', openSettings);
+    return () => window.removeEventListener('ni-open-cookie-settings', openSettings);
   }, []);
 
   useEffect(() => {

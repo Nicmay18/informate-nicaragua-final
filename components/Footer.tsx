@@ -52,6 +52,16 @@ export default function Footer() {
               <Link href="/privacidad">Privacidad</Link>
               <Link href="/terminos">Términos de uso</Link>
               <Link href="/cookies">Cookies</Link>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.dispatchEvent(new Event('ni-open-cookie-settings'));
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                Configurar cookies
+              </a>
             </nav>
           </div>
 

@@ -9,7 +9,6 @@ import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
-import ClientOnly from '@/components/ClientOnly';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
@@ -133,9 +132,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         
-        <ClientOnly fallback={<div style={{ height: 48 }} />}>
-          <CookieBanner />
-        </ClientOnly>
+        <CookieBanner />
         <ConsentScript />
         <Analytics />
 
