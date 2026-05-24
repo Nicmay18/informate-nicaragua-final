@@ -1466,6 +1466,100 @@ main > section:first-child {
 .seo-hero{max-width:1200px;margin:0 auto;padding:28px 20px 0;font-size:0.95rem;line-height:1.65;color:var(--ni-text);border-bottom:1px solid var(--ni-border)}
 
 /* ==========================================================================
+   DISEÑO EDITORIAL INMERSIVO — ESTILO BBC / NEW YORK TIMES
+   ========================================================================== */
+
+/* Bloque 3 Puntos Clave (BBC News) */
+.ni-key-points {
+  background: rgba(212, 163, 115, 0.05);
+  border-left: 4px solid var(--ni-gold);
+  border-radius: 4px;
+  padding: 24px;
+  margin: 32px 0;
+}
+.ni-key-points__title {
+  font-family: 'Merriweather', serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ni-navy);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-theme="dark"] .ni-key-points__title {
+  color: var(--ni-white);
+}
+.ni-key-points__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ni-key-points__list li {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ni-text);
+  margin-bottom: 12px;
+  position: relative;
+  padding-left: 20px;
+}
+.ni-key-points__list li:last-child {
+  margin-bottom: 0;
+}
+.ni-key-points__list li::before {
+  content: '•';
+  color: var(--ni-gold);
+  font-weight: 900;
+  font-size: 1.2rem;
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+/* Drop-cap Capitular Clásica (NYT Style) */
+.ni-article__body > p:first-of-type::first-letter {
+  font-family: 'Merriweather', serif;
+  float: left;
+  font-size: 4.8rem;
+  line-height: 0.85;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-left: 3px;
+  font-weight: 900;
+  color: var(--ni-navy);
+}
+[data-theme="dark"] .ni-article__body > p:first-of-type::first-letter {
+  color: var(--ni-gold);
+}
+
+/* Alineación Áurea de Lectura del Artículo (BBC Style) */
+.ni-article {
+  max-width: 760px; /* Ancho de lectura áureo optimiza movimiento ocular */
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+.ni-article__title {
+  font-family: 'Merriweather', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ni-navy);
+  margin-bottom: 24px;
+}
+[data-theme="dark"] .ni-article__title {
+  color: var(--ni-white);
+}
+.ni-article__body p {
+  font-family: 'Merriweather', serif; /* Híbrido para lectura cómoda */
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--ni-text);
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
    ARQUITECTURA DE DISEÑO PRO - ADAPTACIÓN MÓVIL Y ESCRITORIO DE ALTA PRECISIÓN
    ========================================================================== */
 
