@@ -2,7 +2,7 @@
 
 **Objetivo:** Aumentar de 6 a 50+ backlinks en 6 meses  
 **Nicho:** Medio de noticias nicaragüense  
-**Mercado:** Nicaragua, diáspora (USA, España, Costa Rica)
+**Mercado:** Nicaragua y comunidades nicaragüenses en el exterior (USA, España, Costa Rica)
 
 ---
 
@@ -38,12 +38,12 @@
 | 14 | **UNICIT - Carrera de Comunicación** | Colaboración | Fácil | Formulario de contacto institucional |
 | 15 | **Universidad Hispanoamericana** | Cita | Fácil | Email a coordinación de medios |
 
-### Blogs y Sitios de Diáspora
+### Blogs y Sitios de Comunidad Nicaragüense en el Exterior
 
 | # | Sitio | Tipo | Dificultad | Primer Paso |
 |---|-------|------|------------|-------------|
-| 16 | **Nicaragua Gringa (blog diáspora USA)** | Guest post | Fácil | Email a editor para propuesta de artículo |
-| 17 | **Voz del Pueblo (diáspora Costa Rica)** | Colaboración | Medio | Contacto vía WhatsApp/Instagram |
+| 16 | **Nicaragua Gringa (blog USA)** | Guest post | Fácil | Email a editor para propuesta de artículo |
+| 17 | **Voz del Pueblo (Costa Rica)** | Colaboración | Medio | Contacto vía WhatsApp/Instagram |
 | 18 | **Nicaragua Actual (blog España)** | Cita | Fácil | Comentario en artículos + propuesta |
 | 19 | **El Faro (Centroamérica)** | Cita | Difícil | Pitch de datos exclusivos para cobertura |
 | 20 | **Confidencial (alternativa)** | Cita | Difícil | Propuesta de intercambio de fuentes |
@@ -70,7 +70,7 @@ Estimado/a [Nombre del editor/dueño],
 
 Le escribo desde Nicaragua Informate, un medio de noticias digital con cobertura nacional e internacional desde Managua y Estelí, Nicaragua.
 
-He estado siguiendo el trabajo de [Nombre del Sitio] y me parece valioso su enfoque en [tema específico del sitio: periodismo independiente/diáspora/educación/etc.]. Me gustaría proponer una colaboración que podría beneficiar a ambas audiencias:
+He estado siguiendo el trabajo de [Nombre del Sitio] y me parece valioso su enfoque en [tema específico del sitio: periodismo independiente/cultura/educación/etc.]. Me gustaría proponer una colaboración que podría beneficiar a ambas audiencias:
 
 **Opción 1: Intercambio de enlaces temáticos**
 Si cubren temas relacionados con Nicaragua o Centroamérica, podríamos referirnos mutuamente en artículos relevantes. Por ejemplo, cuando publiquemos sobre [tema específico], podríamos citar su cobertura, y viceversa.
@@ -110,7 +110,7 @@ https://nicaraguainformate.com
 - **Acciones:**
   1. Afiliación a APN (Asociación de Periodistas de Nicaragua)
   2. Contacto con IPYLE para colaboración
-  3. Outreach a blogs de diáspora (Nicaragua Gringa, Voz del Pueblo)
+  3. Outreach a blogs de comunidad nicaragüense en el exterior (Nicaragua Gringa, Voz del Pueblo)
   4. Guest posts en universidades (UNAN Managua, UCA)
 - **KPI:** 12-15 backlinks obtenidos
 
