@@ -13,9 +13,9 @@ interface SidebarProps {
 }
 
 const POPULAR_TAGS = [
-  'Nicaragua', 'Managua', 'Política', 'Economía', 'Deportes',
+  'Nicaragua', 'Managua', 'Política', 'Deportes',
   'Tecnología', 'Salud', 'Educación', 'Cultura', 'Turismo',
-  'Medio Ambiente', 'Seguridad', 'Elecciones', 'COVID-19'
+  'Medio Ambiente', 'Seguridad', 'Elecciones', 'Espectáculos'
 ];
 
 const QUICK_LINKS = [

@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description:
-    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre nacionales, sucesos, internacionales, tecnología, economía y deportes.',
+    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',
   alternates: {
     canonical: 'https://nicaraguainformate.com',
     languages: {

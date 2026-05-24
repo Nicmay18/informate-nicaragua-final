@@ -18,9 +18,9 @@ const FOOTER_COLS: { title: string; links: FooterLink[] }[] = [
     { label: 'Últimas Noticias', href: '/noticias' },
     { label: 'Nacionales', href: '/categoria/nacionales' },
     { label: 'Sucesos', href: '/categoria/sucesos' },
+    { label: 'Espectáculos', href: '/categoria/espectaculos' },
     { label: 'Internacionales', href: '/categoria/internacionales' },
     { label: 'Tecnología', href: '/categoria/tecnologia' },
-    { label: 'Economía', href: '/categoria/economia' },
     { label: 'Deportes', href: '/categoria/deportes' },
   ]},
   { title: 'Legal', links: [

@@ -16,7 +16,6 @@ export const revalidate = 60;
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
   'Sucesos',
-  'Economía',
   'Salud',
   'Infraestructura',
   'Judicial',

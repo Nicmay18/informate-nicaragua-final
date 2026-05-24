@@ -41,10 +41,9 @@ export default function NewsCard({
       'nacionales': 'bg-blue-600',
       'internacionales': 'bg-purple-600',
       'sucesos': 'bg-red-600',
+      'espectaculos': 'bg-pink-600',
       'deportes': 'bg-green-600',
       'tecnología': 'bg-cyan-600',
-      'economía': 'bg-orange-600',
-      'espectáculos': 'bg-pink-600',
     };
     return colors[categoria?.toLowerCase()] || 'bg-gray-600';
   };

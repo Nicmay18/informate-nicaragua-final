@@ -328,7 +328,7 @@ export default function ArticleView({ noticia, relatedNews = [], trendingNews = 
           <div className="av-sidebar-widget">
             <h3 className="av-widget-title">Categorías</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {['Nacionales', 'Internacionales', 'Sucesos', 'Tecnología', 'Deportes', 'Economía'].map((cat) => (
+              {['Nacionales', 'Internacionales', 'Sucesos', 'Espectáculos', 'Tecnología', 'Deportes'].map((cat) => (
                 <Link key={cat} href={`/categoria/${cat.toLowerCase()}`} className="av-tag">{cat}</Link>
               ))}
             </div>

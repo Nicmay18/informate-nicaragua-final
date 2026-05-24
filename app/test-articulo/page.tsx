@@ -31,13 +31,13 @@ const noticiaDemo = {
   fecha: '2026-05-16T10:00:00Z',
   autor: 'María Elena Sandoval',
   vistas: 1245,
-  tags: ['Economía', 'Managua', 'Empleo', 'Inversión extranjera', 'Comercio', 'Franquicias'],
+  tags: ['Nacionales', 'Managua', 'Empleo', 'Inversión extranjera', 'Comercio', 'Franquicias'],
 };
 
 const relatedDemo = [
   { id: 'r1', slug: 'hospital-esteli', titulo: 'Inaugurarán Hospital Pediátrico Las Segovias en Estelí', resumen: '...', categoria: 'Nacionales', imagen: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&h=200&fit=crop', fecha: '2026-05-16T08:00:00Z' },
   { id: 'r2', slug: 'via-coyotepe', titulo: 'Nueva vía conecta Laureles Sur con carretera a El Coyotepe', resumen: '...', categoria: 'Nacionales', imagen: 'https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=200&h=200&fit=crop', fecha: '2026-05-16T06:00:00Z' },
-  { id: 'r3', slug: 'negocios-crecimiento', titulo: 'Pequeños negocios crecen un 12% en el primer trimestre', resumen: '...', categoria: 'Economía', imagen: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop', fecha: '2026-05-15T14:00:00Z' },
+  { id: 'r3', slug: 'negocios-crecimiento', titulo: 'Pequeños negocios crecen un 12% en el primer trimestre', resumen: '...', categoria: 'Nacionales', imagen: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop', fecha: '2026-05-15T14:00:00Z' },
 ];
 
 const trendingDemo = [
