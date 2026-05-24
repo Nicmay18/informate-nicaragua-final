@@ -145,10 +145,12 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* Autor Box */}
         <div className="ni-author-box">
-          <div className="ni-author-box__avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+          <div className="ni-author-box__avatar">
+            <Image src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" fill sizes="80px" style={{ objectFit: 'cover' }} />
+          </div>
           <div className="ni-author-box__info">
-            <h4>{noticia.autor || 'Redacción Nicaragua Informate'}</h4>
-            <p>Periodista de Nicaragua Informate. Comprometido con la información verificada y el análisis profundo de los eventos de actualidad.</p>
+            <h4>Keyling Elieth Rivera Muñoz</h4>
+            <p><strong>Directora Editorial</strong> — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.</p>
             <div className="ni-author-box__social">
               <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
               <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
