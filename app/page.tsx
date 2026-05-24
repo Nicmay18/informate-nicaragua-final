@@ -39,7 +39,7 @@ export default async function HomePage() {
     <ProLayout tickerItems={tickerItems}>
       <section className="visually-hidden" aria-label="Introduccion SEO">
         <h1>Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
-        <p>Nicaragua Informate es el portal de noticias lider de Nicaragua. Desde nuestra redaccion en Managua y Esteli, ofrecemos cobertura periodistica verificada sobre los acontecimientos mas importantes del pais y el mundo.</p>
+        <p>Nicaragua Informate es el portal de noticias líder de Nicaragua. Desde nuestra redacción en Managua y Estelí, ofrecemos cobertura periodística verificada sobre los acontecimientos más importantes del país y el mundo.</p>
       </section>
 
       <script
