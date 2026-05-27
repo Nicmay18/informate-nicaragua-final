@@ -119,8 +119,8 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           <span className={`ni-article__badge ni-article__badge--${cat}`}>{noticia.categoria || 'Noticia'}</span>
           <h1 className="ni-article__title">{noticia.titulo}</h1>
 
-          <div className="ni-article__meta">
-            <div className="ni-article__author">
+          <div className="ni-article__meta" style={{ flexWrap: 'wrap', gap: '8px 16px' }}>
+            <div className="ni-article__author" style={{ flex: '1 1 auto', minWidth: 0 }}>
               {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? (
                 <Image
                   src="/keyling-rivera.jpg"
@@ -132,12 +132,22 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
               ) : (
                 <div className="ni-article__author-avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
               )}
-              <div className="ni-article__author-info">
-                <strong>{noticia.autor === 'Directora Editorial' ? 'Keyling Elieth Rivera Muñoz' : (noticia.autor || 'Redacción Nicaragua Informate')}</strong>
-                <span>{noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? 'Directora Editorial — Nicaragua Informate' : `Periodista | Nicaragua Informate`}</span>
+              <div className="ni-article__author-info" style={{ minWidth: 0 }}>
+                {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? (
+                  <Link href="/autor/keyling-eliet-rivera-munoz" rel="author" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <strong>Keyling Elieth Rivera Muñoz</strong>
+                  </Link>
+                ) : (
+                  <strong>{noticia.autor || 'Redacción Nicaragua Informate'}</strong>
+                )}
+                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>
+                  {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? 'Directora Editorial — Nicaragua Informate' : `Periodista | Nicaragua Informate`}
+                </span>
               </div>
             </div>
-            <time className="ni-article__time" dateTime={noticia.fecha} title={formatDate(noticia.fecha)}>{formatDate(noticia.fecha)}</time>
+            <time className="ni-article__time" dateTime={noticia.fecha} title={formatDate(noticia.fecha)} style={{ flexShrink: 0, marginLeft: 'auto' }}>
+              {formatDate(noticia.fecha)}
+            </time>
           </div>
         </header>
 

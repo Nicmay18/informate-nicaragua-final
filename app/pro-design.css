@@ -1433,12 +1433,22 @@ main > section:first-child {
 .ni-article__badge--internacionales{background:var(--cat-internacionales)}
 .ni-article__title{font-family:'Merriweather',serif;font-size:2.6rem;font-weight:700;line-height:1.15;color:var(--ni-navy);margin-bottom:20px}
 .ni-article__meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:0.9rem;color:var(--ni-text-light)}
-.ni-article__author{display:flex;align-items:center;gap:10px}
-.ni-article__author-avatar{width:40px;height:40px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem}
-.ni-article__author-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--ni-gold)}
+.ni-article__author{display:flex;align-items:center;gap:10px;min-width:0}
+.ni-article__author-avatar{width:40px;height:40px;border-radius:50%;background:var(--ni-navy);color:var(--ni-white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0}
+.ni-article__author-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--ni-gold);flex-shrink:0}
+.ni-article__author-info{min-width:0}
 .ni-article__author-info strong{display:block;color:var(--ni-navy);font-weight:600;font-size:0.9rem}
-.ni-article__author-info span{font-size:0.8rem;color:var(--ni-text-light)}
+.ni-article__author-info span{font-size:0.8rem;color:var(--ni-text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:100%}
+.ni-article__time{flex-shrink:0;margin-left:auto}
 .ni-article__time::before{content:'•';margin-right:16px;color:var(--ni-border)}
+
+/* Responsive meta */
+@media (max-width:640px){
+  .ni-article__meta{flex-direction:column;align-items:flex-start;gap:10px}
+  .ni-article__time{margin-left:50px;font-size:0.8rem}
+  .ni-article__time::before{content:none;margin-right:0}
+  .ni-article__author-info span{white-space:normal;overflow:visible;text-overflow:clip}
+}
 
 /* Imagen destacada */
 .ni-article__featured{position:relative;margin:0 calc(-24px) 40px;border-radius:0;overflow:hidden;background:var(--ni-bg-dark);min-height:min(520px,55vh);box-shadow:0 24px 48px rgba(15,23,42,0.45)}
