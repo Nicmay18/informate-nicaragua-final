@@ -1687,7 +1687,7 @@ ${hashtags}`;
     async function uploadImageToGitHub(blob, filename) {
       const token = localStorage.getItem('admin_github_token') || '';
       const owner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
-      // Forzar repo de imagenes separado (ignorar localStorage antiguo)
+      // Forzar repo de imagenes separado
       const repo = 'informate-images';
       const path = 'images/';
 
@@ -2600,48 +2600,133 @@ ${hashtags}`;
       */
     };
 
-    window.cargarConfiguracion = function() {
-      const githubToken = localStorage.getItem('admin_github_token') || '';
-      const githubOwner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
-      // Forzar repo de imagenes separado (ignorar configuracion antigua)
-      const githubRepo = 'informate-images';
-      const githubPath = 'images/';
-      const tgToken = localStorage.getItem('admin_tg_token') || ''; const tgChat = localStorage.getItem('admin_tg_chat') || '';
-      const fbPage1Id = localStorage.getItem('admin_fb_page1_id') || ''; const fbPage1Token = localStorage.getItem('admin_fb_page1_token') || '';
-      const fbPage2Id = localStorage.getItem('admin_fb_page2_id') || ''; const fbPage2Token = localStorage.getItem('admin_fb_page2_token') || '';
-      const githubTokenInput = document.getElementById('configGithubToken');
-      const githubOwnerInput = document.getElementById('configGithubOwner');
-      const githubRepoInput = document.getElementById('configGithubRepo');
-      const githubPathInput = document.getElementById('configGithubPath');
-      const tokenInput = document.getElementById('configTgToken'); const chatInput = document.getElementById('configTgChat');
-      const page1IdInput = document.getElementById('configFbPage1Id'); const page1TokenInput = document.getElementById('configFbPage1Token');
-      const page2IdInput = document.getElementById('configFbPage2Id'); const page2TokenInput = document.getElementById('configFbPage2Token');
-      if (githubTokenInput) githubTokenInput.value = githubToken;
-      if (githubOwnerInput) githubOwnerInput.value = githubOwner;
-      if (githubRepoInput) githubRepoInput.value = githubRepo;
-      if (githubPathInput) githubPathInput.value = githubPath;
-      if (tokenInput) tokenInput.value = tgToken; if (chatInput) chatInput.value = tgChat;
-      if (page1IdInput) page1IdInput.value = fbPage1Id; if (page1TokenInput) page1TokenInput.value = fbPage1Token;
-      if (page2IdInput) page2IdInput.value = fbPage2Id; if (page2TokenInput) page2TokenInput.value = fbPage2Token;
+    window.cargarConfiguracion = async function() {
+      try {
+        const res = await fetch('/api/admin/config', {
+          headers: { 'x-admin-key': ADMIN_API_KEY }
+        });
+        const data = await res.json();
+        
+        const githubToken = data.config?.github?.token || '';
+        const githubOwner = data.config?.github?.owner || 'Nicmay18';
+        const githubRepo = data.config?.github?.repo || 'informate-images';
+        const githubPath = data.config?.github?.path || 'images/';
+        const tgToken = data.config?.telegram?.token || '';
+        const tgChat = data.config?.telegram?.chatId || '';
+        
+        // Guardar en localStorage para que las funciones existentes funcionen
+        localStorage.setItem('admin_github_token', githubToken);
+        localStorage.setItem('admin_github_owner', githubOwner);
+        localStorage.setItem('admin_github_repo', githubRepo);
+        localStorage.setItem('admin_github_path', githubPath);
+        localStorage.setItem('admin_tg_token', tgToken);
+        localStorage.setItem('admin_tg_chat', tgChat);
+        
+        // Mostrar con máscara en el input
+        const maskedGithubToken = githubToken ? '••••••••••••' : '';
+        const maskedTgToken = tgToken ? '••••••••••••' : '';
+        
+        // Facebook config (se mantiene en localStorage por ahora)
+        const fbPage1Id = localStorage.getItem('admin_fb_page1_id') || '';
+        const fbPage1Token = localStorage.getItem('admin_fb_page1_token') || '';
+        const fbPage2Id = localStorage.getItem('admin_fb_page2_id') || '';
+        const fbPage2Token = localStorage.getItem('admin_fb_page2_token') || '';
+        
+        const githubTokenInput = document.getElementById('configGithubToken');
+        const githubOwnerInput = document.getElementById('configGithubOwner');
+        const githubRepoInput = document.getElementById('configGithubRepo');
+        const githubPathInput = document.getElementById('configGithubPath');
+        const tokenInput = document.getElementById('configTgToken');
+        const chatInput = document.getElementById('configTgChat');
+        const page1IdInput = document.getElementById('configFbPage1Id');
+        const page1TokenInput = document.getElementById('configFbPage1Token');
+        const page2IdInput = document.getElementById('configFbPage2Id');
+        const page2TokenInput = document.getElementById('configFbPage2Token');
+        
+        if (githubTokenInput) githubTokenInput.value = maskedGithubToken;
+        if (githubOwnerInput) githubOwnerInput.value = githubOwner;
+        if (githubRepoInput) githubRepoInput.value = githubRepo;
+        if (githubPathInput) githubPathInput.value = githubPath;
+        if (tokenInput) tokenInput.value = maskedTgToken;
+        if (chatInput) chatInput.value = tgChat;
+        if (page1IdInput) page1IdInput.value = fbPage1Id;
+        if (page1TokenInput) page1TokenInput.value = fbPage1Token;
+        if (page2IdInput) page2IdInput.value = fbPage2Id;
+        if (page2TokenInput) page2TokenInput.value = fbPage2Token;
+      } catch (err) {
+        console.error('Error cargando configuración:', err);
+        // Fallback a localStorage si falla la API
+        const githubToken = localStorage.getItem('admin_github_token') || '';
+        const githubOwner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
+        const tgToken = localStorage.getItem('admin_tg_token') || '';
+        const tgChat = localStorage.getItem('admin_tg_chat') || '';
+        const githubTokenInput = document.getElementById('configGithubToken');
+        const tokenInput = document.getElementById('configTgToken');
+        const chatInput = document.getElementById('configTgChat');
+        if (githubTokenInput) githubTokenInput.value = githubToken;
+        if (tokenInput) tokenInput.value = tgToken;
+        if (chatInput) chatInput.value = tgChat;
+      }
     };
 
-    window.guardarConfiguracion = function() {
+    window.guardarConfiguracion = async function() {
       const githubToken = document.getElementById('configGithubToken').value.trim();
       const githubOwner = document.getElementById('configGithubOwner').value.trim() || 'Nicmay18';
-      // Forzar repo de imagenes separado
       const githubRepo = 'informate-images';
       const githubPath = 'images/';
-      const tgToken = document.getElementById('configTgToken').value.trim(); const tgChat = document.getElementById('configTgChat').value.trim();
-      const fbPage1Id = document.getElementById('configFbPage1Id').value.trim(); const fbPage1Token = document.getElementById('configFbPage1Token').value.trim();
-      const fbPage2Id = document.getElementById('configFbPage2Id').value.trim(); const fbPage2Token = document.getElementById('configFbPage2Token').value.trim();
-      localStorage.setItem('admin_github_token', githubToken);
-      localStorage.setItem('admin_github_owner', githubOwner);
-      localStorage.setItem('admin_github_repo', githubRepo);
-      localStorage.setItem('admin_github_path', githubPath);
-      localStorage.setItem('admin_tg_token', tgToken); localStorage.setItem('admin_tg_chat', tgChat);
-      localStorage.setItem('admin_fb_page1_id', fbPage1Id); localStorage.setItem('admin_fb_page1_token', fbPage1Token);
-      localStorage.setItem('admin_fb_page2_id', fbPage2Id); localStorage.setItem('admin_fb_page2_token', fbPage2Token);
-      showToast('Configuración guardada (repo de imágenes: informate-images)', 'success');
+      const tgToken = document.getElementById('configTgToken').value.trim();
+      const tgChat = document.getElementById('configTgChat').value.trim();
+      
+      // Facebook config (se mantiene en localStorage por ahora)
+      const fbPage1Id = document.getElementById('configFbPage1Id').value.trim();
+      const fbPage1Token = document.getElementById('configFbPage1Token').value.trim();
+      const fbPage2Id = document.getElementById('configFbPage2Id').value.trim();
+      const fbPage2Token = document.getElementById('configFbPage2Token').value.trim();
+      
+      try {
+        // Guardar en Firebase
+        const res = await fetch('/api/admin/config', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-admin-key': ADMIN_API_KEY
+          },
+          body: JSON.stringify({
+            github: { token: githubToken, owner: githubOwner, repo: githubRepo, path: githubPath },
+            telegram: { token: tgToken, chatId: tgChat }
+          })
+        });
+        
+        if (!res.ok) throw new Error('Error guardando en Firebase');
+        
+        // También guardar en localStorage como backup
+        localStorage.setItem('admin_github_token', githubToken);
+        localStorage.setItem('admin_github_owner', githubOwner);
+        localStorage.setItem('admin_github_repo', githubRepo);
+        localStorage.setItem('admin_github_path', githubPath);
+        localStorage.setItem('admin_tg_token', tgToken);
+        localStorage.setItem('admin_tg_chat', tgChat);
+        localStorage.setItem('admin_fb_page1_id', fbPage1Id);
+        localStorage.setItem('admin_fb_page1_token', fbPage1Token);
+        localStorage.setItem('admin_fb_page2_id', fbPage2Id);
+        localStorage.setItem('admin_fb_page2_token', fbPage2Token);
+        
+        showToast('Configuración guardada en Firebase (repo de imágenes: informate-images)', 'success');
+      } catch (err) {
+        console.error('Error guardando configuración:', err);
+        // Fallback a localStorage si falla Firebase
+        localStorage.setItem('admin_github_token', githubToken);
+        localStorage.setItem('admin_github_owner', githubOwner);
+        localStorage.setItem('admin_github_repo', githubRepo);
+        localStorage.setItem('admin_github_path', githubPath);
+        localStorage.setItem('admin_tg_token', tgToken);
+        localStorage.setItem('admin_tg_chat', tgChat);
+        localStorage.setItem('admin_fb_page1_id', fbPage1Id);
+        localStorage.setItem('admin_fb_page1_token', fbPage1Token);
+        localStorage.setItem('admin_fb_page2_id', fbPage2Id);
+        localStorage.setItem('admin_fb_page2_token', fbPage2Token);
+        showToast('Configuración guardada en localStorage (backup)', 'warning');
+      }
     };
 
     window.verificarElevenLabs = async function() {
