@@ -76,10 +76,21 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
           <div className="article-hero-content">
             {noticia.categoria && <span className="article-hero-badge">{noticia.categoria}</span>}
             <h1 className="article-hero-title">{noticia.titulo}</h1>
-            <div className="article-hero-meta">
-              {noticia.autor && <span><User size={14} /> {noticia.autor}</span>}
-              <span><Calendar size={14} /> <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time></span>
-              <span><Clock size={14} /> {timeAgo(noticia.fecha)}</span>
+            <div className="article-hero-meta" style={{
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+              gap: '6px 14px', marginTop: 12
+            }}>
+              {noticia.autor && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
+                  <User size={14} /> {noticia.autor}
+                </span>
+              )}
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
+                <Calendar size={14} /> <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
+                <Clock size={14} /> {timeAgo(noticia.fecha)}
+              </span>
             </div>
           </div>
         </div>
@@ -123,24 +134,60 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
             </div>
           )}
 
-          {/* Autor real */}
-          <div className="article-author">
-            <img
-              src="/keyling-rivera.jpg"
-              alt="Keyling Rivera M. - Directora Editorial"
-              className="article-author-avatar"
-            />
-            <div className="article-author-info">
-              <div className="article-author-name">Keyling Rivera M.</div>
-              <div className="article-author-role">Directora Editorial</div>
-              <p className="article-author-bio">
+          {/* Autor — CORREGIDO RESPONSIVE */}
+          <div className="article-author" style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '12px 16px',
+            padding: '20px', background: 'var(--bg-secondary, #f9fafb)', borderRadius: 12,
+            border: '1px solid var(--border, #e5e7eb)'
+          }}>
+            <Link href="/autor/keyling-eliet-rivera-munoz" rel="author">
+              <img
+                src="/keyling-rivera.jpg"
+                alt="Keyling Elieth Rivera Muñoz - Directora Editorial"
+                className="article-author-avatar"
+                style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+              />
+            </Link>
+            <div className="article-author-info" style={{ flex: '1 1 auto', minWidth: 0 }}>
+              <Link href="/autor/keyling-eliet-rivera-munoz" rel="author" style={{ textDecoration: 'none' }}>
+                <div className="article-author-name" style={{
+                  fontSize: 16, fontWeight: 700, color: 'var(--text, #111)',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                }}>
+                  {noticia.autor || 'Keyling Elieth Rivera Muñoz'}
+                </div>
+              </Link>
+              <div className="article-author-role" style={{
+                fontSize: 13, color: 'var(--accent, #8c1d18)', fontWeight: 600,
+                marginTop: 2
+              }}>
+                Directora Editorial — Nicaragua Informate
+              </div>
+              <p className="article-author-bio" style={{
+                fontSize: 13, color: 'var(--text-secondary, #6b7280)',
+                lineHeight: 1.6, marginTop: 8, marginBottom: 0
+              }}>
                 Periodista de Nicaragua Informate. Especializada en cobertura nacional e internacional.
                 Comprometida con el periodismo verificado y la información de calidad para nicaragüenses.
               </p>
-              <div className="article-author-social">
-                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">W</a>
-                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">T</a>
+              <div className="article-author-social" style={{
+                display: 'flex', gap: 10, marginTop: 12
+              }}>
+                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#1877f2',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
+                }}>f</a>
+                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#128c7e',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
+                }}>W</a>
+                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#0066aa',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
+                }}>T</a>
               </div>
             </div>
           </div>

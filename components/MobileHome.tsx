@@ -141,10 +141,21 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 
         {/* Contenido editorial abajo */}
         <div className="hero-editorial-content">
-          <div className="hero-editorial-meta">
-            <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
-            <span className="hero-editorial-dot" aria-hidden="true" />
-            <span>{noticia.autor || 'Nicaragua Informate'}</span>
+          <div className="hero-editorial-meta" style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+            gap: '4px 10px', marginBottom: 8
+          }}>
+            <time dateTime={noticia.fecha} suppressHydrationWarning style={{
+              fontSize: 12, color: 'var(--text-secondary, #6b7280)', whiteSpace: 'nowrap'
+            }}>{timeAgo(noticia.fecha)}</time>
+            <span className="hero-editorial-dot" aria-hidden="true" style={{
+              width: 4, height: 4, borderRadius: '50%', background: 'var(--text-secondary)', flexShrink: 0
+            }} />
+            <span style={{
+              fontSize: 12, color: 'var(--text-secondary, #6b7280)',
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+              maxWidth: '100%'
+            }}>{noticia.autor || 'Nicaragua Informate'}</span>
           </div>
           <h1 className="hero-editorial-title">{noticia.titulo}</h1>
           <p className="hero-editorial-lead">{noticia.resumen || noticia.titulo}</p>
@@ -176,7 +187,7 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
 function NewsCard({ noticia, featured }: { noticia: Noticia; featured?: boolean }) {
   return (
     <article className={`news-card${featured ? ' featured' : ''}`}>
-      <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
+      <Link href={`/noticias/${noticia.slug}`} className="news-card-link" style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="news-image">
           {noticia.imagen ? (
             <Image
@@ -196,7 +207,25 @@ function NewsCard({ noticia, featured }: { noticia: Noticia; featured?: boolean 
               <p className="news-excerpt">{noticia.resumen}</p>
             ) : null}
           </div>
-          <time className="news-date" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+            gap: '4px 10px', marginTop: 'auto'
+          }}>
+            <time className="news-date" dateTime={noticia.fecha} suppressHydrationWarning style={{
+              fontSize: 12, color: 'var(--text-secondary, #6b7280)', whiteSpace: 'nowrap'
+            }}>
+              {timeAgo(noticia.fecha)}
+            </time>
+            {noticia.autor && (
+              <span style={{
+                fontSize: 12, color: 'var(--text-secondary, #6b7280)',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                maxWidth: '100%'
+              }}>
+                {noticia.autor}
+              </span>
+            )}
+          </div>
         </div>
       </Link>
     </article>

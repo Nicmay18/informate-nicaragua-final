@@ -1886,15 +1886,644 @@ main > section:first-child {
 .seo-intro{margin-bottom:12px;max-width:900px}
 .seo-intro:last-child{margin-bottom:0}
 
-/* ===== BYLINE RESPONSIVE ===== */
-@media (max-width:640px){
-  .ni-article__meta{flex-direction:column;align-items:flex-start;gap:8px}
-  .ni-article__time{margin-left:50px;font-size:11px}
-  .ni-article__time::before{content:none;margin-right:0}
-  .ni-article__author-info span{white-space:normal;overflow:visible;text-overflow:clip}
-  .article-meta{flex-direction:column;align-items:flex-start;gap:8px}
-  .article-author{width:100%}
-  .author-role{white-space:normal;overflow:visible;text-overflow:clip}
-  .news-card-author{max-width:200px}
-  .ni-card__meta{gap:2px 8px}
+/* ================================================================
+   NICARAGUA INFORMATE — BYLINE / META RESPONSIVE (MÓVIL PULIDO)
+   Aplica a TODOS los componentes: ArticlePagePro, ArticleClient,
+   ArticlePage, ArticleView, NewsCard, HomePagePro, NewHomepage,
+   MobileHome, ArticleCard, AuthorCard, AuthorBox
+   ================================================================ */
+
+/* ================================================================
+   1. RESET DE BYLINES — Base común
+   ================================================================ */
+
+/* Todos los contenedores de meta usan flex-wrap */
+[class*="meta"],
+[class*="author"],
+[class*="byline"] {
+  box-sizing: border-box;
+}
+
+/* ================================================================
+   2. ARTICLEPAGEPRO — Byline principal
+   ================================================================ */
+
+.ni-article__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border, #e5e7eb);
+}
+
+.ni-article__author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ni-article__author-photo,
+.ni-article__author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.ni-article__author-avatar {
+  background: linear-gradient(135deg, var(--primary, #8c1d18), var(--accent, #dc2626));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.ni-article__author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ni-article__author-info a,
+.ni-article__author-info strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text, #111);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ni-article__author-info span {
+  font-size: 12px;
+  color: var(--c-text-muted, #6b7280);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ni-article__time {
+  font-size: 12px;
+  color: var(--c-text-muted, #6b7280);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ================================================================
+   3. ARTICLECLIENT — Byline alternativo
+   ================================================================ */
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border, #e5e7eb);
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.author-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-accent, #8c1d18);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author-role {
+  font-size: 12px;
+  color: var(--c-text-muted, #6b7280);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================================================
+   4. ARTICLEPAGE — Byline fijo
+   ================================================================ */
+
+.article-author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 16px;
+  padding: 20px;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 12;
+  border: 1px solid var(--border, #e5e7eb);
+}
+
+.article-author-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.article-author-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.article-author-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text, #111);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.article-author-role {
+  font-size: 13px;
+  color: var(--accent, #8c1d18);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.article-author-bio {
+  font-size: 13px;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.6;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.article-author-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.article-author-social a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.article-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 12px;
+}
+
+/* ================================================================
+   5. ARTICLEVIEW — Byline con schema extendido
+   ================================================================ */
+
+.av-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 12px;
+}
+
+.av-meta-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.av-meta-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.av-meta-author-info strong,
+.av-meta-author-info a strong {
+  font-size: 14px;
+  color: var(--text, #111);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-meta-author-info span {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.av-meta-reading {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.av-author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 16px;
+  padding: 20px;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 12;
+  border: 1px solid var(--border, #e5e7eb);
+}
+
+/* ================================================================
+   6. NEWSCARD — Tarjetas en listados
+   ================================================================ */
+
+.news-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: auto;
+}
+
+.news-card-date {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.news-card-author {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ================================================================
+   7. HOMEPAGEPRO CARD — Tarjetas homepage
+   ================================================================ */
+
+.ni-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: auto;
+}
+
+/* ================================================================
+   8. NEWHOMEPAGE — Hero + NewsCard
+   ================================================================ */
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-bottom: 8px;
+}
+
+.news-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* ================================================================
+   9. MOBILEHOME — Hero editorial + NewsCard
+   ================================================================ */
+
+.hero-editorial-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-bottom: 8px;
+}
+
+/* ================================================================
+   10. ARTICLECARD — Tarjetas artículo
+   ================================================================ */
+
+.news-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: auto;
+}
+
+/* ================================================================
+   11. AUTHORCARD — Caja de autor
+   ================================================================ */
+
+.author-card__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.author-card__info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.author-card__name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text, #111);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author-card__role {
+  font-size: 13px;
+  color: var(--accent, #8c1d18);
+  font-weight: 600;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================================================
+   12. AUTHORBOX — Caja de autor alternativa
+   ================================================================ */
+
+.author-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 20px;
+  padding: 20px;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 12;
+  border: 1px solid var(--border, #e5e7eb);
+}
+
+.author-box .author-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.author-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.author-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author-bio {
+  font-size: 13px;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.author-social {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.author-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* ================================================================
+   MÓVIL (< 640px) — AJUSTES ESPECÍFICOS
+   ================================================================ */
+@media (max-width: 640px) {
+  /* ArticlePagePro: apilar */
+  .ni-article__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ni-article__author {
+    width: 100%;
+  }
+
+  .ni-article__author-info span {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .ni-article__time {
+    margin-left: 50px;
+    font-size: 11px;
+  }
+
+  /* ArticleClient: apilar */
+  .article-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .article-author {
+    width: 100%;
+  }
+
+  .author-role {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  /* ArticlePage: autor apilado */
+  .article-author {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .article-author-info {
+    width: 100%;
+  }
+
+  .article-author-name {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .article-author-role {
+    white-space: normal;
+  }
+
+  /* ArticleView: apilar */
+  .av-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .av-meta-author {
+    width: 100%;
+  }
+
+  .av-meta-author-info span {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .av-author {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* NewsCard: truncar autor */
+  .news-card-author {
+    max-width: 200px;
+  }
+
+  /* HomePagePro Card: ajustar */
+  .ni-card__meta {
+    gap: 2px 8px;
+  }
+
+  /* AuthorCard: apilar */
+  .author-card__main {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .author-card__info {
+    width: 100%;
+  }
+
+  .author-card__name,
+  .author-card__role {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  /* AuthorBox: apilar */
+  .author-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .author-content {
+    width: 100%;
+  }
+
+  .author-name {
+    white-space: normal;
+    overflow: visible;
+  }
+}
+
+/* ================================================================
+   TABLET (641px - 1024px)
+   ================================================================ */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .ni-article__meta,
+  .article-meta,
+  .av-meta {
+    flex-wrap: wrap;
+  }
+
+  .ni-article__author-info span,
+  .author-role,
+  .av-meta-author-info span {
+    max-width: 200px;
+  }
+}
+
+/* ================================================================
+   DESKTOP (> 1024px)
+   ================================================================ */
+@media (min-width: 1025px) {
+  .ni-article__meta,
+  .article-meta,
+  .av-meta {
+    flex-wrap: nowrap;
+  }
 }

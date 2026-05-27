@@ -48,6 +48,7 @@ export default function ArticleView({ noticia, relatedNews = [], trendingNews = 
 
   // Autor: autorNombre extendido o autor estándar
   const autorName = (noticia as any).autorNombre || noticia.autor || 'Redacción';
+  const autorSlug = autorName === 'Keyling Elieth Rivera Muñoz' ? 'keyling-eliet-rivera-munoz' : undefined;
   const autorBio = (noticia as any).autorBio || `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada.`;
   const autorFoto = (noticia as any).autorFoto;
   const autorRedes = (noticia as any).autorRedes;
@@ -107,22 +108,64 @@ export default function ArticleView({ noticia, relatedNews = [], trendingNews = 
           <span className="av-kicker">Noticias de Nicaragua en tiempo real</span>
           {noticia.titulo}
         </h1>
-        <div className="av-meta">
-          <div className="av-meta-author">
+        <div className="av-meta" style={{
+          display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+          gap: '8px 16px', marginTop: 12
+        }}>
+          <div className="av-meta-author" style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            flex: '1 1 auto', minWidth: 0
+          }}>
             {autorFoto ? (
-              <img src={autorFoto} alt={autorName} style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }} />
+              <Link href={autorSlug ? `/autor/${autorSlug}` : '#'}>
+                <img src={autorFoto} alt={autorName} style={{
+                  width: 36, height: 36, borderRadius: '50%', objectFit: 'cover',
+                  border: '2px solid var(--border)', flexShrink: 0
+                }} />
+              </Link>
             ) : (
-              <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 700, fontSize: 14 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: '50%',
+                background: 'var(--primary)', display: 'flex',
+                alignItems: 'center', justifyContent: 'center',
+                color: 'var(--accent)', fontWeight: 700, fontSize: 14, flexShrink: 0
+              }}>
                 {autorName[0].toUpperCase()}
               </div>
             )}
-            <div className="av-meta-author-info">
-              <strong>{autorName}</strong>
-              <span>Periodista</span>
+            <div className="av-meta-author-info" style={{
+              display: 'flex', flexDirection: 'column', gap: 1,
+              minWidth: 0, overflow: 'hidden'
+            }}>
+              {autorSlug ? (
+                <Link href={`/autor/${autorSlug}`} style={{ textDecoration: 'none' }}>
+                  <strong style={{
+                    fontSize: 14, color: 'var(--text, #111)',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                  }}>{autorName}</strong>
+                </Link>
+              ) : (
+                <strong style={{
+                  fontSize: 14, color: 'var(--text, #111)',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                }}>{autorName}</strong>
+              )}
+              <span style={{
+                fontSize: 12, color: 'var(--text-secondary, #6b7280)',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+              }}>
+                {(noticia as any).autorRole || ((noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial') ? 'Directora Editorial' : 'Periodista')} | Nicaragua Informate
+              </span>
             </div>
           </div>
-          <span>{formatDateES(noticia.fecha)}</span>
-          <span className="av-meta-reading">{readTime} min de lectura</span>
+          <span style={{
+            fontSize: 12, color: 'var(--text-secondary, #6b7280)',
+            whiteSpace: 'nowrap', flexShrink: 0
+          }}>{formatDateES(noticia.fecha)}</span>
+          <span className="av-meta-reading" style={{
+            fontSize: 12, color: 'var(--text-secondary, #6b7280)',
+            whiteSpace: 'nowrap', flexShrink: 0
+          }}>{readTime} min de lectura</span>
         </div>
       </div>
 
@@ -228,28 +271,77 @@ export default function ArticleView({ noticia, relatedNews = [], trendingNews = 
             </div>
           )}
 
-          {/* AUTHOR BOX */}
-          <div className="av-author">
+          {/* AUTHOR BOX — CORREGIDO RESPONSIVE */}
+          <div className="av-author" style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start',
+            gap: '12px 16px', padding: '20px', background: 'var(--bg-secondary, #f9fafb)',
+            borderRadius: 12, border: '1px solid var(--border, #e5e7eb)'
+          }}>
             {autorFoto ? (
-              <img src={autorFoto} alt={autorName} style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', border: '2.5px solid var(--accent)', flexShrink: 0 }} />
+              <Link href={autorSlug ? `/autor/${autorSlug}` : '#'}>
+                <img src={autorFoto} alt={autorName} style={{
+                  width: 60, height: 60, borderRadius: '50%', objectFit: 'cover',
+                  border: '2.5px solid var(--accent)', flexShrink: 0
+                }} />
+              </Link>
             ) : (
-              <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', fontWeight: 800, fontSize: 24, flexShrink: 0 }}>
+              <div style={{
+                width: 60, height: 60, borderRadius: '50%', background: 'var(--primary)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--accent)', fontWeight: 800, fontSize: 24, flexShrink: 0
+              }}>
                 {autorName[0].toUpperCase()}
               </div>
             )}
-            <div>
-              <h4>{autorName}</h4>
-              <p>{autorBio}</p>
-              <div className="av-author-social">
-                {autorRedes?.twitter && <a href={autorRedes.twitter} title="Twitter" target="_blank" rel="noopener noreferrer">𝕏</a>}
-                {autorRedes?.facebook && <a href={autorRedes.facebook} title="Facebook" target="_blank" rel="noopener noreferrer">f</a>}
-                {autorRedes?.email && <a href={`mailto:${autorRedes.email}`} title="Email">@</a>}
-                {autorRedes?.linkedin && <a href={autorRedes.linkedin} title="LinkedIn" target="_blank" rel="noopener noreferrer">in</a>}
+            <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+              <h4 style={{
+                fontSize: 16, fontWeight: 700, margin: '0 0 4px',
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+              }}>{autorName}</h4>
+              <p style={{
+                fontSize: 13, color: 'var(--text-secondary, #6b7280)',
+                lineHeight: 1.6, margin: 0
+              }}>{autorBio}</p>
+              <div className="av-author-social" style={{
+                display: 'flex', gap: 10, marginTop: 12
+              }}>
+                {autorRedes?.twitter && <a href={autorRedes.twitter} title="Twitter" target="_blank" rel="noopener noreferrer" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#000',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none', fontSize: 14
+                }}>𝕏</a>}
+                {autorRedes?.facebook && <a href={autorRedes.facebook} title="Facebook" target="_blank" rel="noopener noreferrer" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#1877f2',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none', fontSize: 14, fontWeight: 700
+                }}>f</a>}
+                {autorRedes?.email && <a href={`mailto:${autorRedes.email}`} title="Email" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: 'var(--text-secondary)',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none', fontSize: 14
+                }}>@</a>}
+                {autorRedes?.linkedin && <a href={autorRedes.linkedin} title="LinkedIn" target="_blank" rel="noopener noreferrer" style={{
+                  width: 32, height: 32, borderRadius: '50%', background: '#0a66c2',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none', fontSize: 14, fontWeight: 700
+                }}>in</a>}
                 {!autorRedes && (
                   <>
-                    <a href="#" title="Twitter">𝕏</a>
-                    <a href="#" title="Facebook">f</a>
-                    <a href="#" title="Email">@</a>
+                    <a href="#" title="Twitter" style={{
+                      width: 32, height: 32, borderRadius: '50%', background: '#000',
+                      color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      textDecoration: 'none', fontSize: 14
+                    }}>𝕏</a>
+                    <a href="#" title="Facebook" style={{
+                      width: 32, height: 32, borderRadius: '50%', background: '#1877f2',
+                      color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      textDecoration: 'none', fontSize: 14, fontWeight: 700
+                    }}>f</a>
+                    <a href="#" title="Email" style={{
+                      width: 32, height: 32, borderRadius: '50%', background: 'var(--text-secondary)',
+                      color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      textDecoration: 'none', fontSize: 14
+                    }}>@</a>
                   </>
                 )}
               </div>

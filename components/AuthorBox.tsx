@@ -32,13 +32,17 @@ export default function AuthorBox({
   const displayBio = autorBio || (isKeyling ? KEYLING_DEFAULT.bio : null);
 
   return (
-    <div className="author-box">
+    <div className="author-box" style={{
+      display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '16px 20px',
+      padding: '20px', background: 'var(--bg-secondary, #f9fafb)', borderRadius: 12,
+      border: '1px solid var(--border, #e5e7eb)'
+    }}>
       {displayAvatar ? (
         <img
           src={displayAvatar}
           alt={displayName}
           className="author-avatar"
-          style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--accent)' }}
+          style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--accent)', flexShrink: 0 }}
         />
       ) : (
         <div
@@ -52,29 +56,41 @@ export default function AuthorBox({
             color: 'var(--primary)',
             fontSize: '28px',
             fontWeight: 700,
+            flexShrink: 0,
           }}
         >
           {autor.charAt(0).toUpperCase()}
         </div>
       )}
 
-      <div className="author-content">
-        <div className="author-name">{displayName}</div>
+      <div className="author-content" style={{ flex: '1 1 auto', minWidth: 0 }}>
+        <div className="author-name" style={{
+          fontSize: 18, fontWeight: 700, marginBottom: 4,
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+        }}>{displayName}</div>
 
         {displayBio && (
-          <p className="author-bio">
+          <p className="author-bio" style={{
+            fontSize: 13, color: 'var(--text-secondary, #6b7280)',
+            lineHeight: 1.6, margin: '0 0 12px'
+          }}>
             {displayBio}
           </p>
         )}
 
         {(autorEmail || autorTwitter || autorFacebook) && (
-          <div className="author-social">
+          <div className="author-social" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {autorEmail && (
               <a
                 href={`mailto:${autorEmail}`}
                 className="author-social-link"
                 title={`Email: ${autorEmail}`}
                 aria-label={`Email a ${autor}`}
+                style={{
+                  width: 36, height: 36, borderRadius: '50%', background: 'var(--text-secondary)',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none'
+                }}
               >
                 <Mail size={14} />
               </a>
@@ -88,6 +104,11 @@ export default function AuthorBox({
                 className="author-social-link"
                 title={`Twitter: @${autorTwitter}`}
                 aria-label={`Twitter de ${autor}`}
+                style={{
+                  width: 36, height: 36, borderRadius: '50%', background: '#000',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none'
+                }}
               >
                 <Share2 size={14} />
               </a>
@@ -101,6 +122,11 @@ export default function AuthorBox({
                 className="author-social-link"
                 title="Facebook"
                 aria-label={`Facebook de ${autor}`}
+                style={{
+                  width: 36, height: 36, borderRadius: '50%', background: '#1877f2',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none'
+                }}
               >
                 <Globe size={14} />
               </a>

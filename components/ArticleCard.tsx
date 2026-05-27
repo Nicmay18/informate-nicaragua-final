@@ -86,9 +86,16 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
           <div className="news-card-body">
             <h2 className="news-card-title">{article.titulo}</h2>
             <p className="news-card-excerpt">{article.resumen}</p>
-            <div className="news-card-meta">
-              <span>{formatDateES(article.fecha)}</span>
-              <span><Clock size={12} /> {readTime} min</span>
+            <div className="news-card-meta" style={{
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+              gap: '4px 12px', marginTop: 'auto'
+            }}>
+              <span style={{ fontSize: 12, color: 'var(--text-secondary, #6b7280)', whiteSpace: 'nowrap' }}>
+                {formatDateES(article.fecha)}
+              </span>
+              <span style={{ fontSize: 12, color: 'var(--text-secondary, #6b7280)', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
+                <Clock size={12} /> {readTime} min
+              </span>
             </div>
           </div>
         </Link>

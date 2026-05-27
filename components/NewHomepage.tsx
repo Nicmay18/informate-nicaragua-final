@@ -242,7 +242,7 @@ function NewsCard({ noticia }: { noticia: Noticia }) {
   const showImg = noticia.imagen && noticia.imagen !== '/logo.png' && !imgErr;
 
   return (
-    <Link href={`/noticias/${noticia.slug}`} className="news-card">
+    <Link href={`/noticias/${noticia.slug}`} className="news-card" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="news-image">
         {showImg ? (
           <Image src={noticia.imagen} alt={noticia.titulo} fill className="object-cover" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" onError={() => setImgErr(true)} />
@@ -254,7 +254,13 @@ function NewsCard({ noticia }: { noticia: Noticia }) {
         <span className="news-category">{noticia.categoria}</span>
       </div>
       <div className="news-body">
-        <div className="news-date">{formatDate(noticia.fecha)} • {noticia.categoria}</div>
+        <div className="news-date" style={{
+          display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+          gap: '2px 8px', fontSize: 12, color: 'var(--text-secondary, #6b7280)'
+        }}>
+          <span style={{ whiteSpace: 'nowrap' }}>{formatDate(noticia.fecha)}</span>
+          <span style={{ whiteSpace: 'nowrap' }}>• {noticia.categoria}</span>
+        </div>
         <h3 className="news-title">{noticia.titulo}</h3>
         {noticia.resumen && <p className="news-excerpt">{noticia.resumen}</p>}
       </div>
@@ -273,7 +279,7 @@ export default function NewHomepage({ noticias, masLeidas }: Props) {
 
       {hero && (
         <section className="hero">
-          <Link href={`/noticias/${hero.slug}`} className="hero-card">
+          <Link href={`/noticias/${hero.slug}`} className="hero-card" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="hero-image">
               {hero.imagen && hero.imagen !== '/logo.png' ? (
                 <Image src={hero.imagen} alt={hero.titulo} fill className="object-cover" sizes="100vw" priority />
@@ -285,10 +291,13 @@ export default function NewHomepage({ noticias, masLeidas }: Props) {
               <span className="hero-badge">Destacada</span>
             </div>
             <div className="hero-content">
-              <div className="hero-meta">
-                <span>{hero.categoria}</span>
-                <span className="dot" />
-                <span>{formatDate(hero.fecha)}</span>
+              <div className="hero-meta" style={{
+                display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+                gap: '4px 10px', marginBottom: 8
+              }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent, #8c1d18)', whiteSpace: 'nowrap' }}>{hero.categoria}</span>
+                <span className="dot" style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--text-secondary)', flexShrink: 0 }} />
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>{formatDate(hero.fecha)}</span>
               </div>
               <h1 className="hero-title">{hero.titulo}</h1>
               {hero.resumen && <p className="hero-excerpt">{hero.resumen}</p>}
