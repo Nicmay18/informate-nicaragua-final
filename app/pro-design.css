@@ -1885,3 +1885,16 @@ main > section:first-child {
 .seo-h1{font-family:'Merriweather',serif;font-size:1.4rem;font-weight:700;color:var(--ni-navy);margin-bottom:10px}
 .seo-intro{margin-bottom:12px;max-width:900px}
 .seo-intro:last-child{margin-bottom:0}
+
+/* ===== BYLINE RESPONSIVE ===== */
+@media (max-width:640px){
+  .ni-article__meta{flex-direction:column;align-items:flex-start;gap:8px}
+  .ni-article__time{margin-left:50px;font-size:11px}
+  .ni-article__time::before{content:none;margin-right:0}
+  .ni-article__author-info span{white-space:normal;overflow:visible;text-overflow:clip}
+  .article-meta{flex-direction:column;align-items:flex-start;gap:8px}
+  .article-author{width:100%}
+  .author-role{white-space:normal;overflow:visible;text-overflow:clip}
+  .news-card-author{max-width:200px}
+  .ni-card__meta{gap:2px 8px}
+}

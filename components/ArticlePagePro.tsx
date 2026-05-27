@@ -50,6 +50,11 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
   const cat = catClass(noticia.categoria);
   const categorySlug = noticia.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') || 'nacionales';
   const categoryLink = `/categoria/${categorySlug}`;
+  const isKeyling = noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial';
+  const displayAuthor = isKeyling ? 'Keyling Elieth Rivera Muñoz' : (noticia.autor || 'Redacción Nicaragua Informate');
+  const displayRole = isKeyling ? 'Directora Editorial — Nicaragua Informate' : 'Periodista | Nicaragua Informate';
+  const authorSlug = isKeyling ? 'keyling-eliet-rivera-munoz' : undefined;
+  const authorPhoto = isKeyling ? '/keyling-rivera.jpg' : undefined;
 
   return (
     <div>
@@ -121,31 +126,36 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
           <div className="ni-article__meta" style={{ flexWrap: 'wrap', gap: '8px 16px' }}>
             <div className="ni-article__author" style={{ flex: '1 1 auto', minWidth: 0 }}>
-              {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? (
+              {authorPhoto ? (
                 <Image
-                  src="/keyling-rivera.jpg"
-                  alt="Keyling Elieth Rivera Muñoz"
+                  src={authorPhoto}
+                  alt={displayAuthor}
                   width={40}
                   height={40}
                   className="ni-article__author-photo"
                 />
               ) : (
-                <div className="ni-article__author-avatar">{(noticia.autor || 'R')[0].toUpperCase()}</div>
+                <div className="ni-article__author-avatar">{displayAuthor[0].toUpperCase()}</div>
               )}
               <div className="ni-article__author-info" style={{ minWidth: 0 }}>
-                {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? (
-                  <Link href="/autor/keyling-eliet-rivera-munoz" rel="author" style={{ color: 'inherit', textDecoration: 'none' }}>
-                    <strong>Keyling Elieth Rivera Muñoz</strong>
+                {authorSlug ? (
+                  <Link href={`/autor/${authorSlug}`} rel="author" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <strong>{displayAuthor}</strong>
                   </Link>
                 ) : (
-                  <strong>{noticia.autor || 'Redacción Nicaragua Informate'}</strong>
+                  <strong>{displayAuthor}</strong>
                 )}
                 <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>
-                  {noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? 'Directora Editorial — Nicaragua Informate' : `Periodista | Nicaragua Informate`}
+                  {displayRole}
                 </span>
               </div>
             </div>
-            <time className="ni-article__time" dateTime={noticia.fecha} title={formatDate(noticia.fecha)} style={{ flexShrink: 0, marginLeft: 'auto' }}>
+            <time
+              className="ni-article__time"
+              dateTime={noticia.fecha}
+              title={formatDate(noticia.fecha)}
+              style={{ flexShrink: 0, marginLeft: 'auto', whiteSpace: 'nowrap' }}
+            >
               {formatDate(noticia.fecha)}
             </time>
           </div>
@@ -211,10 +221,10 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* Author Card */}
         <AuthorCard
-          authorName={noticia.autor === 'Directora Editorial' ? 'Keyling Elieth Rivera Muñoz' : (noticia.autor || 'Redacción Nicaragua Informate')}
-          authorPhoto={noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? '/keyling-rivera.jpg' : undefined}
-          authorBio={noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? 'Directora Editorial — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.' : undefined}
-          authorSlug={noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial' ? 'keyling-rivera' : undefined}
+          authorName={displayAuthor}
+          authorPhoto={authorPhoto}
+          authorBio={isKeyling ? 'Directora Editorial — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.' : undefined}
+          authorSlug={authorSlug}
           publishedDate={noticia.fecha}
           updatedDate={noticia.fechaActualizacion}
         />

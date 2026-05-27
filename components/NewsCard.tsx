@@ -53,13 +53,13 @@ export default function NewsCard({ noticia }: NewsCardProps) {
             <p className="news-card-excerpt">{noticia.resumen}</p>
           )}
 
-          <div className="news-card-meta">
-            <time className="news-card-date" dateTime={noticia.fecha} suppressHydrationWarning>
-              <span>📅</span>
+          <div className="news-card-meta" style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:'4px 12px', marginTop:'auto' }}>
+            <time className="news-card-date" dateTime={noticia.fecha} suppressHydrationWarning style={{ fontSize:12, color:'var(--text-secondary,#6b7280)', display:'flex', alignItems:'center', gap:4, whiteSpace:'nowrap' }}>
+              <span aria-hidden="true">📅</span>
               {timeAgo}
             </time>
             {noticia.autor && (
-              <span className="news-card-author">{noticia.autor}</span>
+              <span className="news-card-author" style={{ fontSize:12, color:'var(--text-secondary,#6b7280)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:'100%' }}>{noticia.autor}</span>
             )}
           </div>
         </div>

@@ -567,47 +567,31 @@ export default function ArticleClient({
             {noticia.resumen && (
               <p className="article-lead" itemProp="description">{noticia.resumen}</p>
             )}
-            <div className="article-meta">
-              <div className="article-author"><div className="author-avatar" style={{ background: catColor }}>
-                {autorInicial}
-              </div>
-              <div className="author-info">
-                <div itemProp="author" itemScope itemType="https://schema.org/Person">
-                  <span className="author-name" itemProp="name">{autor}</span>
+            <div className="article-meta" style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:'10px 16px', paddingTop:16, borderTop:'1px solid var(--c-border,#e5e7eb)' }}>
+              <div className="article-author" style={{ display:'flex', alignItems:'center', gap:10, flex:'1 1 auto', minWidth:0 }}>
+                <div className="author-avatar" style={{ background:catColor, width:40, height:40, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontWeight:700, fontSize:16, flexShrink:0, overflow:'hidden' }}>
+                  {autorFoto ? <img src={autorFoto} alt={autor} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : autorInicial}
                 </div>
-                <span className="author-role">Periodista</span>
-              </div></div>
-              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-                {ago && (
-                  <span style={{ fontSize: 13, color: 'var(--c-accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    🕐 {ago}
-                  </span>
-                )}
-                <time dateTime={publishedISO} itemProp="datePublished" style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <CalendarDays size={12} /> {fechaStr}
-                </time>
-                {isUpdated && (
-                  <time dateTime={updatedISO} itemProp="dateModified" className="article-updated" style={{ fontSize: 12, color: 'var(--c-text-muted)' }}>
-                    Actualizado
-                  </time>
-                )}
-                <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Clock size={12} /> {lecturaMin} min
-                </span>
-                <span style={{ fontSize: 13, color: 'var(--c-text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Eye size={12} /> {vistas}
-                </span>
-                <div className="font-size-ctrl">
-                  <button
-                    className="font-size-ctrl__btn"
-                    onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })}
-                    aria-label="Reducir texto" title="A−"
-                  >A−</button>
-                  <button
-                    className="font-size-ctrl__btn"
-                    onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })}
-                    aria-label="Aumentar texto" title="A+"
-                  >A+</button>
+                <div className="author-info" style={{ display:'flex', flexDirection:'column', gap:2, minWidth:0, overflow:'hidden' }}>
+                  <div itemProp="author" itemScope itemType="https://schema.org/Person" style={{minWidth:0}}>
+                    {autorSlug ? (
+                      <Link href={`/autor/${autorSlug}`} rel="author" className="author-name" itemProp="name" style={{ color:'var(--c-accent)', textDecoration:'none', fontWeight:700, fontSize:14 }}>{autor}</Link>
+                    ) : (
+                      <span className="author-name" itemProp="name" style={{ fontWeight:700, fontSize:14 }}>{autor}</span>
+                    )}
+                  </div>
+                  <span className="author-role" style={{ fontSize:12, color:'var(--c-text-muted,#6b7280)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{autorRole}</span>
+                </div>
+              </div>
+              <div style={{ display:'flex', alignItems:'center', gap:'10px 16px', flexWrap:'wrap', flex:'1 1 auto', justifyContent:'flex-end' }}>
+                {ago && <span style={{ fontSize:13, color:'var(--c-accent)', fontWeight:700, display:'flex', alignItems:'center', gap:4, whiteSpace:'nowrap' }}>🕐 {ago}</span>}
+                <time dateTime={publishedISO} itemProp="datePublished" style={{ fontSize:13, color:'var(--c-text-muted)', display:'flex', alignItems:'center', gap:6, whiteSpace:'nowrap' }}><CalendarDays size={12} /> {fechaStr}</time>
+                {isUpdated && <time dateTime={updatedISO} itemProp="dateModified" className="article-updated" style={{ fontSize:12, color:'var(--c-text-muted)', whiteSpace:'nowrap' }}>Actualizado</time>}
+                <span style={{ fontSize:13, color:'var(--c-text-muted)', display:'flex', alignItems:'center', gap:6, whiteSpace:'nowrap' }}><Clock size={12} /> {lecturaMin} min</span>
+                <span style={{ fontSize:13, color:'var(--c-text-muted)', display:'flex', alignItems:'center', gap:6, whiteSpace:'nowrap' }}><Eye size={12} /> {vistas}</span>
+                <div className="font-size-ctrl" style={{ display:'flex', gap:4 }}>
+                  <button className="font-size-ctrl__btn" onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })} aria-label="Reducir texto" title="A−">A−</button>
+                  <button className="font-size-ctrl__btn" onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })} aria-label="Aumentar texto" title="A+">A+</button>
                 </div>
               </div>
             </div>

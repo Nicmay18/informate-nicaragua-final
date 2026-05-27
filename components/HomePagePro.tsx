@@ -126,9 +126,9 @@ function Card({ noticia }: { noticia: Noticia }) {
           <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
         </h3>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
-        <div className="ni-card__meta">
-          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
-          <span>{noticia.autor || 'Redacción'}</span>
+        <div className="ni-card__meta" style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:'4px 10px', marginTop:'auto' }}>
+          <time dateTime={noticia.fecha} suppressHydrationWarning style={{ fontSize:12, color:'var(--ni-text-light,#6b7280)', whiteSpace:'nowrap' }}>{timeAgo(noticia.fecha)}</time>
+          <span style={{ fontSize:12, color:'var(--ni-text-light,#6b7280)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:'100%' }}>{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
       </div>
     </article>
