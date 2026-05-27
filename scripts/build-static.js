@@ -57,7 +57,6 @@ function pageHTML(n, canonical, body, relatedHTML){
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#8c1d18"><meta name="description" content="${esc(n.resumen||n.titulo)}">
 <meta name="author" content="${esc(autor)}"><meta name="robots" content="index, follow">
-<meta name="google-adsense-account" content="ca-pub-4115203339551838">
 <link rel="canonical" href="${canonical}"><link rel="icon" href="/favicon.svg"><link rel="manifest" href="/manifest.json">
 <meta property="og:type" content="article"><meta property="og:url" content="${canonical}">
 <meta property="og:title" content="${esc(n.titulo)}"><meta property="og:description" content="${esc(n.resumen||n.titulo)}">
@@ -65,7 +64,6 @@ function pageHTML(n, canonical, body, relatedHTML){
 <script type="application/ld+json">${schema}</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossorigin="anonymous"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-W1B5J61WEP');</script>
 <title>${esc(n.titulo)} | Nicaragua Informate</title>

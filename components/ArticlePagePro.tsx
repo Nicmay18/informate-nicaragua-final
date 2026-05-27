@@ -230,7 +230,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
                   <h3 className="ni-related__card-title">
                     <Link href={`/noticias/${n.slug}`}>{n.titulo}</Link>
                   </h3>
-                  <span className="ni-related__card-meta">{timeAgo(n.fecha)}</span>
+                  <time className="ni-related__card-meta" dateTime={n.fecha} suppressHydrationWarning>{timeAgo(n.fecha)}</time>
                 </article>
               ))}
             </div>

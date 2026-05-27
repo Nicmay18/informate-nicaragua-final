@@ -39,7 +39,7 @@ export default function HeroSection({ noticia }: HeroSectionProps) {
         <div className="hero-meta">
           {noticia.autor && <span>{noticia.autor}</span>}
           {noticia.autor && <span> • </span>}
-          <span>{timeAgo}</span>
+          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo}</time>
         </div>
 
         {noticia.resumen && (

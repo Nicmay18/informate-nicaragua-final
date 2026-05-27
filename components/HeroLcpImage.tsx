@@ -30,7 +30,7 @@ export default function HeroLcpImage({
         position: 'relative',
         width: '100%',
         aspectRatio: `${width}/${height}`,
-        background: '#e5e5e5',
+        background: '#0f172a',
         overflow: 'hidden',
         ...style,
       }}

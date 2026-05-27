@@ -160,7 +160,7 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
                     <div className="related-card-body">
                       <span className="related-card-category">{news.categoria}</span>
                       <h4 className="related-card-title">{news.titulo}</h4>
-                      <span className="related-card-date">{timeAgo(news.fecha)}</span>
+                      <time className="related-card-date" dateTime={news.fecha} suppressHydrationWarning>{timeAgo(news.fecha)}</time>
                     </div>
                   </Link>
                 ))}

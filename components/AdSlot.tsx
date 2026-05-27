@@ -1,21 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
 
 interface AdSlotProps {
-  slot: string;
+  slot?: string;
   width?: number;
   height?: number;
   className?: string;
   style?: React.CSSProperties;
   format?: 'auto' | 'fluid' | 'rectangle' | 'vertical' | 'horizontal';
-}
-
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    adsbygoogle: any[];
-  }
+  label?: string;
 }
 
 export default function AdSlot({
@@ -25,72 +19,34 @@ export default function AdSlot({
   className = '',
   style = {},
   format = 'auto',
+  label = 'Publicidad',
 }: AdSlotProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pushed = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '100px' }
-    );
-
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isVisible || pushed.current || !containerRef.current) return;
-    
-    try {
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        window.adsbygoogle.push({});
-        pushed.current = true;
-      }
-    } catch (e) {
-      console.error('AdSense error:', e);
-    }
-    
-    const t = setTimeout(() => setLoaded(true), 3000);
-    return () => clearTimeout(t);
-  }, [isVisible]);
+  const minHeight = useMemo(() => (format === 'horizontal' ? 90 : height), [format, height]);
 
   return (
     <div
-      ref={containerRef}
       className={`ad-slot ${className || ''}`}
+      data-slot={slot}
       style={{
         position: 'relative',
-        minHeight: format === 'horizontal' ? 90 : height,
+        minHeight,
         minWidth: width,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: loaded ? 'transparent' : '#f9fafb',
-        border: loaded ? 'none' : '1px solid #e5e7eb',
+        background: '#f9fafb',
+        border: '1px dashed #e5e7eb',
         borderRadius: 8,
         overflow: 'hidden',
         ...style,
       }}
+      aria-hidden="true"
     >
-      <span className="ad-label">Publicidad</span>
-      {isVisible && (
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block', width: '100%', minHeight: format === 'horizontal' ? 90 : height }}
-          data-ad-client="ca-pub-4115203339551838"
-          data-ad-format={format}
-          data-full-width-responsive="true"
-          {...(/^\d+$/.test(slot) ? { 'data-ad-slot': slot } : {})}
-        />
-      )}
+      <span className="ad-label">{label}</span>
+      <div className="ad-slot__placeholder">
+        <p>Espacio reservado para Monetag</p>
+        <small>Zona {slot || 'predeterminada'} · {format}</small>
+      </div>
     </div>
   );
 }

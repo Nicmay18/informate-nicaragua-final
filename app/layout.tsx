@@ -1,6 +1,5 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
-import Script from 'next/script';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
@@ -12,6 +11,7 @@ import {
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
+import MonetagGate from '@/components/MonetagGate';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -91,7 +91,6 @@ export const metadata: Metadata = {
     ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
   },
   other: {
-    'google-adsense-account': 'ca-pub-4115203339551838',
     'publisher': 'Nicaragua Informate',
     'msapplication-TileColor': '#0A192F',
     'msapplication-TileImage': '/icon-192x192.png',
@@ -109,19 +108,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         
         {/* CORRECCIÓN: Se remueve la metaetiqueta duplicada de google-site-verification ya que Next.js la inyecta mediante el objeto metadata */}
-
-        {/* Carga inteligente de Google AdSense: No bloquea el hilo principal (Mejora INP/LCP) */}
-        <Script
-          id="adsense-global"
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          crossOrigin="anonymous"
-        />
+        <meta name="monetag" content="b6b5bd78135f12004d0d90c7c2b82f6c" />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
@@ -134,6 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         
         <CookieBanner />
         <ConsentScript />
+        <MonetagGate />
         <Analytics />
 
         <script

@@ -142,7 +142,7 @@ function HeroCarousel({ noticias }: { noticias: Noticia[] }) {
         {/* Contenido editorial abajo */}
         <div className="hero-editorial-content">
           <div className="hero-editorial-meta">
-            <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
+            <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
             <span className="hero-editorial-dot" aria-hidden="true" />
             <span>{noticia.autor || 'Nicaragua Informate'}</span>
           </div>

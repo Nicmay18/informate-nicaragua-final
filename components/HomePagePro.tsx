@@ -87,7 +87,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
         </h2>
         <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
         <div className="ni-hero__meta">
-          <time dateTime={items[idx]?.fecha}>{timeAgo(items[idx]?.fecha || '')}</time>
+          <time dateTime={items[idx]?.fecha} suppressHydrationWarning>{timeAgo(items[idx]?.fecha || '')}</time>
           <span>•</span>
           <span>{items[idx]?.autor || 'Nicaragua Informate'}</span>
         </div>
@@ -127,7 +127,7 @@ function Card({ noticia }: { noticia: Noticia }) {
         </h3>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta">
-          <time dateTime={noticia.fecha}>{timeAgo(noticia.fecha)}</time>
+          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
           <span>{noticia.autor || 'Redacción'}</span>
         </div>
       </div>
@@ -156,6 +156,14 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [headerDateIso, setHeaderDateIso] = useState('');
+  const [headerDateHuman, setHeaderDateHuman] = useState('');
+
+  useEffect(() => {
+    const now = new Date();
+    setHeaderDateIso(now.toISOString());
+    setHeaderDateHuman(now.toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
+  }, []);
   const heroNoticias = noticias.slice(0, 5);
 
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
@@ -205,8 +213,8 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
             </div>
           </Link>
 
-          <time className="ni-header__date" dateTime={new Date().toISOString()}>
-            {new Date().toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          <time className="ni-header__date" dateTime={headerDateIso} suppressHydrationWarning>
+            {headerDateHuman}
           </time>
 
           <div className="ni-header__actions">
@@ -286,7 +294,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
                   <span className="ni-trending__num">{i + 1}</span>
                   <div>
                     <Link href={`/noticias/${n.slug}`} className="ni-trending__text">{n.titulo}</Link>
-                    <span className="ni-trending__time">{timeAgo(n.fecha)}</span>
+                    <time className="ni-trending__time" dateTime={n.fecha} suppressHydrationWarning>{timeAgo(n.fecha)}</time>
                   </div>
                 </li>
               ))}

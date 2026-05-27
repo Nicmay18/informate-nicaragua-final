@@ -54,10 +54,10 @@ export default function NewsCard({ noticia }: NewsCardProps) {
           )}
 
           <div className="news-card-meta">
-            <span className="news-card-date">
+            <time className="news-card-date" dateTime={noticia.fecha} suppressHydrationWarning>
               <span>📅</span>
               {timeAgo}
-            </span>
+            </time>
             {noticia.autor && (
               <span className="news-card-author">{noticia.autor}</span>
             )}

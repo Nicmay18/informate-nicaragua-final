@@ -6,8 +6,8 @@ import Link from 'next/link';
 type ConsentStatus = 'accepted' | 'rejected';
 type CookiePrefs = { analytics: boolean; ads: boolean };
 
-const CONSENT_KEY = 'ni_cookie_consent';
-const PREFS_KEY = 'ni_cookie_preferences';
+const CONSENT_KEYS = ['ni_cookie_consent', 'cookie_consent_ni'] as const;
+const PREF_KEYS = ['ni_cookie_preferences', 'cookie_preferences_ni'] as const;
 
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
@@ -16,8 +16,8 @@ export default function CookieBanner() {
   const [allowAds, setAllowAds] = useState(true);
 
   useEffect(() => {
-    const savedStatus = localStorage.getItem(CONSENT_KEY);
-    const prefRaw = localStorage.getItem(PREFS_KEY);
+    const savedStatus = CONSENT_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
+    const prefRaw = PREF_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
     if (prefRaw) {
       try {
         const prefs = JSON.parse(prefRaw) as CookiePrefs;
@@ -61,8 +61,8 @@ export default function CookieBanner() {
   }, [showSettings]);
 
   const persistConsent = useCallback((status: ConsentStatus, prefs: CookiePrefs) => {
-    localStorage.setItem(CONSENT_KEY, status);
-    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+    CONSENT_KEYS.forEach((key) => localStorage.setItem(key, status));
+    PREF_KEYS.forEach((key) => localStorage.setItem(key, JSON.stringify(prefs)));
     window.dispatchEvent(new Event('ni-consent-updated'));
   }, []);
 

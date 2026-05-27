@@ -87,7 +87,6 @@ img,
 
 /* ===== AD SLOTS (PREVENT CLS) ===== */
 .ad-slot,
-.adsbygoogle,
 [class*="ad-"] {
   min-height: 250px;
   display: flex;
