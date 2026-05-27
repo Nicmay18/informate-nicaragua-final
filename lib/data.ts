@@ -281,66 +281,97 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   return filtered.slice(0, validatedCount);
 }
 
+function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
+  const data = d.data();
+  return {
+    id: d.id,
+    slug: data.slug || d.id,
+    titulo: data.titulo || '',
+    resumen: data.resumen || '',
+    contenido: data.contenido,
+    categoria: data.categoria || 'Actualidad',
+    imagen: normalizeImage(data.imagen || ''),
+    fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+    autor: data.autor,
+    destacada: data.destacada,
+    vistas: data.vistas || 0,
+    palabras: data.palabras,
+  };
+}
+
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
   try {
     const { adminDb } = await import('./firebase-admin');
+    const { Timestamp } = await import('firebase-admin/firestore');
 
-    // Solo traer artículos con vistas REALES (>= 1) para evitar mostrar artículos
-    // viejos que sólo tienen vistas: 0 explícito en Firestore.
-    const snap = await adminDb
+    // Ventana de 30 días: preferir artículos recientes con más vistas
+    const cutoff30 = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+
+    // 1. Artículos de los últimos 30 días con al menos 1 vista, ordenados por fecha
+    //    (Firestore no permite orderBy en dos campos distintos sin índice compuesto,
+    //     así que traemos más y ordenamos en memoria)
+    const snap30 = await adminDb
+      .collection('noticias')
+      .where('fecha', '>=', cutoff30)
+      .orderBy('fecha', 'desc')
+      .limit(30)
+      .get();
+
+    if (!snap30.empty) {
+      const withViews = snap30.docs
+        .map(mapNoticia)
+        .filter(n => (n.vistas ?? 0) >= 1)
+        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+
+      if (withViews.length >= validatedCount) {
+        return withViews.slice(0, validatedCount);
+      }
+
+      // Si hay algunos con vistas pero menos del conteo, completar con los más recientes sin vistas
+      if (withViews.length > 0) {
+        const ids = new Set(withViews.map(n => n.id));
+        const rest = snap30.docs.map(mapNoticia).filter(n => !ids.has(n.id));
+        return [...withViews, ...rest].slice(0, validatedCount);
+      }
+    }
+
+    // 2. Fallback: ventana 90 días con vistas
+    const cutoff90 = Timestamp.fromDate(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000));
+    const snap90 = await adminDb
+      .collection('noticias')
+      .where('vistas', '>=', 1)
+      .where('fecha', '>=', cutoff90)
+      .orderBy('fecha', 'desc')
+      .limit(30)
+      .get();
+
+    if (!snap90.empty) {
+      return snap90.docs
+        .map(mapNoticia)
+        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0))
+        .slice(0, validatedCount);
+    }
+
+    // 3. Fallback final: todo el tiempo, más vistas
+    const snapAll = await adminDb
       .collection('noticias')
       .where('vistas', '>=', 1)
       .orderBy('vistas', 'desc')
       .limit(validatedCount)
       .get();
 
-    if (!snap.empty) {
-      return snap.docs.map((d: QueryDocumentSnapshot<DocumentData>) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: data.titulo || '',
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          autor: data.autor,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-        };
-      });
-    }
+    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
 
-    // Si no hay artículos con vistas reales, fallback a los más recientes
+    // 4. Si nadie tiene vistas, mostrar las más recientes
     const recentSnap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
       .limit(validatedCount)
       .get();
 
-    if (!recentSnap.empty) {
-      return recentSnap.docs.map((d: QueryDocumentSnapshot<DocumentData>) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: data.titulo || '',
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          autor: data.autor,
-          destacada: data.destacada,
-          vistas: data.vistas || 0,
-          palabras: data.palabras,
-        };
-      });
-    }
+    if (!recentSnap.empty) return recentSnap.docs.map(mapNoticia);
+
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
   }
