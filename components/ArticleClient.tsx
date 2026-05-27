@@ -535,6 +535,8 @@ export default function ArticleClient({
   const autor = rawAutor && rawAutor.toLowerCase() !== 'directora editorial' ? rawAutor : 'Keyling Elieth Rivera Muñoz';
   const autorInicial = autor.charAt(0).toUpperCase();
   const autorFoto = autor === 'Keyling Elieth Rivera Muñoz' ? '/keyling-rivera.jpg' : null;
+  const autorSlug = autor === 'Keyling Elieth Rivera Muñoz' ? 'keyling-eliet-rivera-munoz' : undefined;
+  const autorRole = autor === 'Keyling Elieth Rivera Muñoz' ? 'Directora Editorial' : 'Periodista';
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen);
   const vistas = fmtViews(noticia.vistas);
   const catColor = CAT_COLORS[noticia.categoria] || '#8c1d18';
