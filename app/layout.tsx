@@ -11,7 +11,6 @@ import {
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
-import MonetagGate from '@/components/MonetagGate';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -116,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
+        <script src="https://quge5.com/88/tag.min.js" data-zone="11065476" async data-cfasync="false"></script>
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
@@ -125,7 +125,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         
         <CookieBanner />
         <ConsentScript />
-        <MonetagGate />
         <Analytics />
 
         <script
