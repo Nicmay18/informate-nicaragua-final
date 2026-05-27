@@ -46,7 +46,17 @@ export default function MonetagGate() {
     return () => window.removeEventListener('ni-consent-updated', evaluateConsent);
   }, []);
 
-  if (!shouldRender) return null;
+  useEffect(() => {
+    if (!shouldRender) return;
+    if (document.querySelector('script[data-zone="' + DATA_ZONE + '"]')) return;
 
-  return <script src={MONETAG_SRC} data-zone={DATA_ZONE} async onError={() => console.error('Monetag script failed to load')} />;
+    const script = document.createElement('script');
+    script.src = MONETAG_SRC;
+    script.async = true;
+    script.dataset.zone = DATA_ZONE;
+    script.onerror = () => console.error('Monetag script failed to load');
+    document.body.appendChild(script);
+  }, [shouldRender]);
+
+  return null;
 }

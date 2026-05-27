@@ -151,7 +151,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* AdSlot 1: Debajo del título (top banner) */}
         <div className="ni-article__ad-slot ni-article__ad-slot--top">
-          <AdSlot slot="placeholder" format="horizontal" width={728} height={90} />
+          <AdSlot zoneId="11061275" format="horizontal" width={728} height={90} />
         </div>
 
         {/* Share buttons */}
@@ -186,7 +186,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* AdSlot 2: Entre párrafos (in-article) */}
         <div className="ni-article__ad-slot">
-          <AdSlot slot="placeholder" format="rectangle" width={336} height={280} />
+          <AdSlot zoneId="11061275" format="rectangle" width={336} height={280} />
         </div>
 
         {/* Tags */}
@@ -211,7 +211,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* AdSlot 3: Al final del artículo (bottom banner) */}
         <div className="ni-article__ad-slot ni-article__ad-slot--bottom">
-          <AdSlot slot="placeholder" format="horizontal" width={728} height={90} />
+          <AdSlot zoneId="11061275" format="horizontal" width={728} height={90} />
         </div>
 
         {/* Noticias relacionadas */}

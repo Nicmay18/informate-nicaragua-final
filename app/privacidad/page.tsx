@@ -120,7 +120,7 @@ export default function PrivacidadPage() {
         <li>Usa el <strong style={{ color: '#0f172a' }}>banner de cookies</strong> en nuestro sitio para rechazar anuncios personalizados</li>
         <li>Opciones de exclusión de anuncios: <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>optout.aboutads.info</a></li>
         <li>Opciones de exclusión en Europa: <a href="https://www.youronlinechoices.eu" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>youronlinechoices.eu</a></li>
-        <li>Si en el futuro incorporamos Google AdSense u otras redes, esta sección será actualizada</li>
+        <li>Si en el futuro incorporamos otras redes publicitarias, esta sección será actualizada</li>
       </ul>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Para qué usamos tu información</h2>

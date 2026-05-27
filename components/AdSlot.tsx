@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 
 interface AdSlotProps {
-  slot?: string;
+  zoneId?: string;
   width?: number;
   height?: number;
   className?: string;
@@ -13,7 +13,7 @@ interface AdSlotProps {
 }
 
 export default function AdSlot({
-  slot,
+  zoneId,
   width = 336,
   height = 280,
   className = '',
@@ -26,7 +26,7 @@ export default function AdSlot({
   return (
     <div
       className={`ad-slot ${className || ''}`}
-      data-slot={slot}
+      data-zone={zoneId}
       style={{
         position: 'relative',
         minHeight,
@@ -45,7 +45,7 @@ export default function AdSlot({
       <span className="ad-label">{label}</span>
       <div className="ad-slot__placeholder">
         <p>Espacio reservado para Monetag</p>
-        <small>Zona {slot || 'predeterminada'} · {format}</small>
+        <small>Zona {zoneId || 'predeterminada'} · {format}</small>
       </div>
     </div>
   );

@@ -105,7 +105,7 @@ const nextConfig: NextConfig = {
         destination: '/privacidad',
         permanent: true,
       },
-      // Redirecciones para AdSense (URLs estándar)
+      // Redirecciones estándar
       {
         source: '/quienes-somos',
         destination: '/nosotros',
@@ -147,7 +147,7 @@ const nextConfig: NextConfig = {
         destination: '/api/panel',
         permanent: false,
       },
-      // Redirecciones 301 para URLs tóxicas (AdSense remediation)
+      // Redirecciones 301 para URLs tóxicas
       {
         source: '/noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',
         destination: '/',
@@ -225,7 +225,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.googleadservices.com https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://*.adtrafficquality.google https://static.cloudflareinsights.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.doubleclick.net https://*.googleadservices.com https://*.google.com https://*.google https://*.adtrafficquality.google https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com https://csi.gstatic.com; frame-src https://googleads.g.doubleclick.net https://*.doubleclick.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://accounts.google.com https://*.adtrafficquality.google https://www.google.com https://*.firebaseapp.com https://*.firebaseio.com https://*.googleusercontent.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://5gvci.com https://*.5gvci.com https://static.cloudflareinsights.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com https://5gvci.com https://*.5gvci.com; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.firebaseio.com https://*.googleusercontent.com https://5gvci.com https://*.5gvci.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
           },
         ],
       },

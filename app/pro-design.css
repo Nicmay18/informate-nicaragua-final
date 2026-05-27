@@ -1752,7 +1752,7 @@ main > section:first-child {
   letter-spacing: 0.5px;
 }
 
-/* Control de Estabilidad Publicitaria (Evita CLS de AdSense) */
+/* Control de Estabilidad Publicitaria (Evita CLS) */
 .pro-ad-sidebar {
   width: 100%;
 }
