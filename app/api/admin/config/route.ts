@@ -4,7 +4,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 function isAuthorized(request: NextRequest): boolean {
   const key = request.headers.get('x-admin-key');
   const expected = process.env.ADMIN_API_KEY;
-  return Boolean(expected && key === expected);
+  if (!expected) return false;
+  return key === expected;
 }
 
 export async function GET(request: NextRequest) {
@@ -13,10 +14,6 @@ export async function GET(request: NextRequest) {
     const db = getAdminDb();
     const docRef = db.collection('config').doc('admin');
     const snap = await docRef.get();
-    
-    if (!snap.exists()) {
-      return NextResponse.json({ success: true, config: {} });
-    }
     
     const data = snap.data();
     if (!data) {
