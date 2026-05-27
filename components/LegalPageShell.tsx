@@ -47,7 +47,7 @@ export default function LegalPageShell({ children, title }: { children: React.Re
       <header style={{ background: 'rgba(15,23,42,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.08)', position: 'sticky', top: 0, zIndex: 100 }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <Image src="/logo.png" alt="Nicaragua Informate" width={34} height={34} style={{ borderRadius: 8 }} />
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={34} height={34} style={{ borderRadius: 8 }} />
             <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#8c1d18', lineHeight: 1 }}>Nicaragua <span style={{ color: '#fff' }}>Informate</span></span>
           </Link>
           <nav className="legal-nav-scroll"><ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0, whiteSpace: 'nowrap' }}>
