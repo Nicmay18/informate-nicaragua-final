@@ -11,6 +11,9 @@ export const metadata: Metadata = {
 export default function PrivacidadPage() {
   return (
     <LegalPageShell title="Política de Privacidad">
+      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+        <img src="/logo-ni.png" alt="Nicaragua Informate Logo" style={{ width: 120, height: 'auto' }} />
+      </div>
       <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
         <strong>Última actualización:</strong> 27 de mayo de 2026
       </div>
