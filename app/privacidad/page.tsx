@@ -109,16 +109,18 @@ export default function PrivacidadPage() {
         <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>tools.google.com/dlpage/gaoptout</a>
       </p>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Google AdSense y publicidad</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Publicidad y redes publicitarias</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        Usamos Google AdSense para mostrar anuncios. Google usa cookies para mostrarte anuncios basados en tu historial de navegación, tanto en nuestro sitio como en otros.
+        Nicaragua Informate trabaja con redes publicitarias de terceros para mostrar anuncios que financian el funcionamiento del sitio. Actualmente usamos <strong style={{ color: '#0f172a' }}>Monetag</strong> como proveedor principal de publicidad. Estas redes pueden usar cookies y tecnologías similares para mostrarte anuncios relevantes según tu historial de navegación.
       </p>
       <p style={{ color: '#64748b', marginBottom: '0.5rem', lineHeight: 1.75, fontWeight: 600, fontSize: '0.92rem' }}>
-        Cómo controlar los anuncios personalizados:
+        Cómo controlar la publicidad personalizada:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
-        <li>Configuración de Google: <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>adssettings.google.com</a></li>
-        <li>Rechazar publicidad personalizada de terceros: <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>optout.aboutads.info</a></li>
+        <li>Usa el <strong style={{ color: '#0f172a' }}>banner de cookies</strong> en nuestro sitio para rechazar anuncios personalizados</li>
+        <li>Opciones de exclusión de anuncios: <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>optout.aboutads.info</a></li>
+        <li>Opciones de exclusión en Europa: <a href="https://www.youronlinechoices.eu" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>youronlinechoices.eu</a></li>
+        <li>Si en el futuro incorporamos Google AdSense u otras redes, esta sección será actualizada</li>
       </ul>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Para qué usamos tu información</h2>

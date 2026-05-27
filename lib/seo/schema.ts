@@ -110,22 +110,61 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     '@type': 'NewsMediaOrganization',
     '@id': 'https://nicaraguainformate.com/#organization',
     name: 'Nicaragua Informate',
-    alternateName: 'NicInformate',
+    alternateName: ['NicInformate', 'nicaraguainformate.com'],
+    description: 'Medio digital nicaragüense de noticias verificadas fundado en 2024. Cobertura de actualidad nacional e internacional desde Managua.',
     url: 'https://nicaraguainformate.com',
-    image: [
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://nicaraguainformate.com/logo.png',
+      width: 512,
+      height: 512,
+    },
+    image: {
+      '@type': 'ImageObject',
+      url: 'https://nicaraguainformate.com/logo.png',
+      width: 1200,
+      height: 630,
+    },
+    foundingDate: '2024',
+    foundingLocation: {
+      '@type': 'Place',
+      name: 'Managua, Nicaragua',
+    },
+    founder: [
       {
-        '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
-        width: 512,
-        height: 512,
+        '@type': 'Person',
+        name: 'Maycol Josué Nicaragua Rivas',
+        jobTitle: 'Director Técnico y Cofundador',
+        url: 'https://nicaraguainformate.com/nosotros',
       },
       {
-        '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
-        width: 1200,
-        height: 630,
+        '@type': 'Person',
+        name: 'José Luis López Ramírez',
+        jobTitle: 'Director de Operaciones y Cofundador',
+        url: 'https://nicaraguainformate.com/nosotros',
+      },
+      {
+        '@type': 'Person',
+        name: 'Keyling Elieth Rivera Muñoz',
+        jobTitle: 'Directora Editorial y Cofundadora',
+        url: 'https://nicaraguainformate.com/autor/keyling-rivera',
       },
     ],
+    employee: [
+      {
+        '@type': 'Person',
+        name: 'Keyling Elieth Rivera Muñoz',
+        jobTitle: 'Directora Editorial',
+        url: 'https://nicaraguainformate.com/autor/keyling-rivera',
+      },
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'editorial',
+      email: 'contacto@nicaraguainformate.com',
+      url: 'https://nicaraguainformate.com/contacto',
+      availableLanguage: 'Spanish',
+    },
     sameAs: [
       'https://facebook.com/profile.php?id=61578261125687',
       'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
@@ -134,17 +173,19 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Managua',
+      addressRegion: 'Managua',
       addressCountry: 'NI',
     },
     areaServed: { '@type': 'Country', name: 'Nicaragua' },
     inLanguage: 'es-NI',
-    // Google News Publisher Center
+    knowsAbout: ['Noticias Nicaragua', 'Actualidad Nacional', 'Sucesos', 'Política Nicaragua', 'Deportes Nicaragua', 'Tecnología'],
     ethicsPolicy: 'https://nicaraguainformate.com/politica-editorial',
     masthead: 'https://nicaraguainformate.com/nosotros',
-    diversityPolicy: 'https://nicaraguainformate.com/politica-editorial',
-    correctionsPolicy: 'https://nicaraguainformate.com/politica-editorial',
+    correctionsPolicy: 'https://nicaraguainformate.com/correcciones',
     actionableFeedbackPolicy: 'https://nicaraguainformate.com/contacto',
     ownershipFundingInfo: 'https://nicaraguainformate.com/nosotros',
+    verificationFactCheckingPolicy: 'https://nicaraguainformate.com/politica-editorial',
+    privacyPolicy: 'https://nicaraguainformate.com/privacidad',
   };
 }
 

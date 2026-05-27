@@ -1,6 +1,43 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield, ArrowRight } from 'lucide-react';
+import { buildOrganizationJsonLdEnhanced } from '@/lib/seo/schema';
+
+const TEAM_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  '@id': 'https://nicaraguainformate.com/nosotros',
+  name: 'Sobre Nicaragua Informate',
+  url: 'https://nicaraguainformate.com/nosotros',
+  description: 'Equipo editorial, misión y valores de Nicaragua Informate, medio digital de noticias verificadas desde Managua.',
+  mainEntity: {
+    '@id': 'https://nicaraguainformate.com/#organization',
+  },
+  mentions: [
+    {
+      '@type': 'Person',
+      name: 'Maycol Josué Nicaragua Rivas',
+      jobTitle: 'Director Técnico y Cofundador',
+      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
+      knowsAbout: ['Desarrollo web', 'Infraestructura digital', 'Next.js', 'Firebase'],
+    },
+    {
+      '@type': 'Person',
+      name: 'José Luis López Ramírez',
+      jobTitle: 'Director de Operaciones y Cofundador',
+      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
+      knowsAbout: ['Gestión editorial', 'Operaciones de medios digitales'],
+    },
+    {
+      '@type': 'Person',
+      name: 'Keyling Elieth Rivera Muñoz',
+      jobTitle: 'Directora Editorial',
+      url: 'https://nicaraguainformate.com/autor/keyling-rivera',
+      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
+      knowsAbout: ['Periodismo', 'Sucesos Nicaragua', 'Noticias nacionales', 'Deportes', 'Verificación de hechos'],
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   title: 'Sobre Nicaragua Informate — Noticias de Nicaragua',
@@ -11,6 +48,8 @@ export const metadata: Metadata = {
 export default function NosotrosPage() {
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(TEAM_SCHEMA) }} />
       {/* Hero */}
       <section className="article-hero" style={{ height: 'auto', minHeight: 220 }}>
         <div style={{ background: 'var(--primary)', position: 'absolute', inset: 0 }} />

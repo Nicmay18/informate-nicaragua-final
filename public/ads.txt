@@ -1,0 +1,7 @@
+# ads.txt — Nicaragua Informate
+# https://nicaraguainformate.com/ads.txt
+# Última actualización: mayo 2026
+
+# Monetag (red publicitaria principal)
+# Verificar publisher ID en: https://monetag.com/publishers/
+monetag.com, 11061275, DIRECT
