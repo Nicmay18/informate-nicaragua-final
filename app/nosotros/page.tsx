@@ -1,40 +1,52 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Target, Eye, HeartHandshake, Mail, Globe, MapPin, Shield, ArrowRight } from 'lucide-react';
-import { buildOrganizationJsonLdEnhanced } from '@/lib/seo/schema';
-
-const TEAM_SCHEMA = {
+const ORG_SCHEMA = {
   '@context': 'https://schema.org',
-  '@type': 'AboutPage',
-  '@id': 'https://nicaraguainformate.com/nosotros',
-  name: 'Sobre Nicaragua Informate',
-  url: 'https://nicaraguainformate.com/nosotros',
-  description: 'Equipo editorial, misión y valores de Nicaragua Informate, medio digital de noticias verificadas desde Managua.',
-  mainEntity: {
-    '@id': 'https://nicaraguainformate.com/#organization',
+  '@type': 'Organization',
+  name: 'Nicaragua Informate',
+  alternateName: 'NicaraguaInformate.com',
+  url: 'https://nicaraguainformate.com',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://nicaraguainformate.com/logo.png',
+    width: 600,
+    height: 60,
   },
-  mentions: [
-    {
-      '@type': 'Person',
-      name: 'Maycol Josué Nicaragua Rivas',
-      jobTitle: 'Director Técnico y Cofundador',
-      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
-      knowsAbout: ['Desarrollo web', 'Infraestructura digital', 'Next.js', 'Firebase'],
-    },
-    {
-      '@type': 'Person',
-      name: 'José Luis López Ramírez',
-      jobTitle: 'Director de Operaciones y Cofundador',
-      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
-      knowsAbout: ['Gestión editorial', 'Operaciones de medios digitales'],
-    },
+  description:
+    'Medio digital nicaragüense creado para mantener informada a la comunidad dentro y fuera del país. Noticias verificadas sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',
+  foundingDate: '2026',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Managua',
+    addressCountry: 'NI',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'contacto@nicaraguainformate.com',
+    contactType: 'Contacto editorial',
+    availableLanguage: 'Spanish',
+  },
+  sameAs: ['https://www.facebook.com/nicaraguainformate'],
+  employee: [
     {
       '@type': 'Person',
       name: 'Keyling Elieth Rivera Muñoz',
       jobTitle: 'Directora Editorial',
-      url: 'https://nicaraguainformate.com/autor/keyling-rivera',
-      worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
-      knowsAbout: ['Periodismo', 'Sucesos Nicaragua', 'Noticias nacionales', 'Deportes', 'Verificación de hechos'],
+      url: 'https://nicaraguainformate.com/autor/keyling-eliet-rivera-munoz',
+      sameAs: ['https://www.facebook.com/keyling.elieth.rivera.munoz'],
+    },
+    {
+      '@type': 'Person',
+      name: 'Maycol Josué Nicaragua Rivas',
+      jobTitle: 'Director Técnico',
+      sameAs: ['https://www.facebook.com/share/18dZryG94G/'],
+    },
+    {
+      '@type': 'Person',
+      name: 'José Luis López Ramírez',
+      jobTitle: 'Director de Operaciones',
+      sameAs: ['https://www.facebook.com/ramirez.lopezz.2025'],
     },
   ],
 };
@@ -48,8 +60,7 @@ export const metadata: Metadata = {
 export default function NosotrosPage() {
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(TEAM_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }} />
       {/* Hero */}
       <section className="article-hero" style={{ height: 'auto', minHeight: 220 }}>
         <div style={{ background: 'var(--primary)', position: 'absolute', inset: 0 }} />
