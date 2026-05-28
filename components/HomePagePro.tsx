@@ -406,7 +406,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
         <div className="ni-footer__bottom">
           <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
-          <span>Managua, Nicaragua • Medio digital comprometido con informar</span>
+          <span>Managua, Nicaragua • Periodismo verificado</span>
         </div>
       </footer>
     </div>
