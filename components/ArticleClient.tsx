@@ -727,7 +727,7 @@ export default function ArticleClient({
               </div>
               <p className="author-box-pro__bio">
                 {autor === 'Keyling Elieth Rivera Muñoz'
-                  ? 'Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales, con experiencia en producción de contenido digital informativo y actualizado. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.'
+                  ? 'Directora editorial y cofundadora de Nicaragua Informate. Especializada en cobertura de Sucesos, Nacionales, Deportes e Internacionales. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.'
                   : `Periodista de Nicaragua Informate. Especializado en la sección de ${noticia.categoria}. Comprometido con la información verificada y el análisis contextual.`}
               </p>
               <div className="author-box-pro__links">
