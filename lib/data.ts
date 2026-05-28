@@ -325,9 +325,8 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       }
     }
 
-    // 2. Fallback: mostrar las noticias más recientes de la última semana
+    // 2. Fallback: mostrar las noticias más recientes
     //    (mientras se acumulan vistas reales, esto garantiza contenido fresco)
-    const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
     const recentSnap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
