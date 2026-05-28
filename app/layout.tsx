@@ -1,4 +1,5 @@
 ﻿import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Inter, Merriweather } from 'next/font/google';
 import './styles/globals.css';
 import './styles/components.css';
@@ -111,7 +112,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
-        <script src="https://quge5.com/88/tag.min.js" data-zone="11065476" async data-cfasync="false"></script>
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
@@ -122,6 +122,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieBanner />
         <ConsentScript />
         <Analytics />
+
+        {/* Monetag scripts */}
+        <Script
+          id="monetag-zone"
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="11065476"
+          async
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="monetag-popunder"
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="243623"
+          async
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
 
         <script
           defer
