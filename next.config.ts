@@ -46,6 +46,17 @@ const nextConfig: NextConfig = {
         destination: 'https://nicaraguainformate.com/:path*',
         permanent: true,
       },
+      // Redirigir URLs alternativas de páginas legales (AdSense busca estas rutas)
+      {
+        source: '/sobre-nosotros',
+        destination: '/nosotros',
+        permanent: true,
+      },
+      {
+        source: '/politica-de-privacidad',
+        destination: '/privacidad',
+        permanent: true,
+      },
       // Redirigir URLs de categoría con query params a rutas limpias /categoria/
       {
         source: '/',
