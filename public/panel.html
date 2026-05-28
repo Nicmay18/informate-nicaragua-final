@@ -2256,7 +2256,7 @@ ${hashtags}`;
         let esNueva = !noticiaId;
 
         if (noticiaId) {
-          noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug; delete noticiaData.vistas;
+          noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
           showToast(publicado ? 'Noticia publicada' : 'Borrador guardado', 'success');
         } else {

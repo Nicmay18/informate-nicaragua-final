@@ -166,7 +166,10 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
     setHeaderDateIso(now.toISOString());
     setHeaderDateHuman(now.toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
   }, []);
-  const heroNoticias = noticias.slice(0, 5);
+  // Carrusel: primero noticias destacadas, luego las más recientes para completar
+  const destacadas = noticias.filter(n => n.destacada).slice(0, 5);
+  const restoParaHero = noticias.filter(n => !n.destacada).slice(0, 5 - destacadas.length);
+  const heroNoticias = destacadas.length > 0 ? [...destacadas, ...restoParaHero] : noticias.slice(0, 5);
 
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
