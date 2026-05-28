@@ -74,9 +74,9 @@ button{cursor:pointer}
   --cat-sucesos:#dc2626;         --cat-sucesos-bg:rgba(220,38,38,0.12);
   --cat-nacionales:#2563eb;      --cat-nacionales-bg:rgba(37,99,235,0.12);
   --cat-espectaculos:#db2777;    --cat-espectaculos-bg:rgba(219,39,119,0.12);
-  --cat-deportes:#ea580c;        --cat-deportes-bg:rgba(234,88,12,0.12);
+  --cat-deportes:#c2410c;        --cat-deportes-bg:rgba(194,65,12,0.12);
   --cat-tecnologia:#7c3aed;      --cat-tecnologia-bg:rgba(124,58,237,0.12);
-  --cat-internacionales:#059669; --cat-internacionales-bg:rgba(5,150,105,0.12);
+  --cat-internacionales:#047857; --cat-internacionales-bg:rgba(4,120,87,0.12);
 }
 [data-theme="dark"] {
   --bg:#050810; --surface:#0c1220; --surface-2:#111827; --surface-3:#161f32;
@@ -798,8 +798,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 :root{
   --ni-navy:#0f172a;
   --ni-navy-light:#1e293b;
-  --ni-gold:#d4a373;
-  --ni-gold-hover:#b8935f;
+  --ni-gold:#b07d3a;
+  --ni-gold-hover:#8f6329;
   --ni-white:#ffffff;
   --ni-text:#334155;
   --ni-text-light:#64748b;
@@ -816,7 +816,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-logo:hover .ni-logo__img{transform:scale(1.05)}
 .ni-logo__text{display:flex;flex-direction:column;line-height:1.2}
 .ni-logo__text strong{font-size:1.1rem;letter-spacing:-0.01em;color:var(--ni-navy)}
-.ni-logo__tagline{font-family:'Inter',sans-serif;font-size:0.55rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ni-gold);margin-top:1px}
+.ni-logo__tagline{font-family:'Inter',sans-serif;font-size:0.55rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ni-text-light);margin-top:1px}
 .ni-header__nav{background:var(--ni-navy)}
 .ni-nav{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;gap:0;list-style:none;height:40px;align-items:center}
 .ni-nav li{height:100%;display:flex;align-items:center}
@@ -922,8 +922,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-section__title--deportes::before{background:var(--cat-deportes)}
 .ni-section__title--tecnologia::before{background:var(--cat-tecnologia)}
 .ni-section__title--internacionales::before{background:var(--cat-internacionales)}
-.ni-section__more{font-size:0.8rem;font-weight:600;color:var(--ni-gold);text-transform:uppercase;letter-spacing:0.03em}
-.ni-section__more:hover{color:var(--ni-gold-hover)}
+.ni-section__more{font-size:0.8rem;font-weight:600;color:var(--ni-navy);text-transform:uppercase;letter-spacing:0.03em}
+.ni-section__more:hover{color:var(--ni-gold)}
 
 /* Cards */
 .ni-card{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid var(--ni-border)}
@@ -931,7 +931,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-card__thumb{position:relative;width:220px;height:150px;border-radius:10px;overflow:hidden;background:var(--ni-border);flex-shrink:0}
 .ni-card__thumb img{width:100%;height:100%;object-fit:cover;object-position:center}
 .ni-card__content{display:flex;flex-direction:column;justify-content:center;overflow:hidden;min-width:0}
-.ni-card__pill{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ni-gold);margin-bottom:6px;width:fit-content}
+.ni-card__pill{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ni-navy);margin-bottom:6px;width:fit-content}
 .ni-card__title{font-family:'Merriweather',serif;font-size:1.18rem;font-weight:700;line-height:1.28;color:var(--ni-navy);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .ni-card__title a{display:inline;min-width:auto;min-height:auto;color:inherit;text-decoration:none;transition:color 0.2s}
 .ni-card__title a:hover{color:var(--ni-gold)}
@@ -954,7 +954,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-trending li div{overflow:hidden;min-width:0}
 .ni-trending li:first-child{padding-top:0}
 .ni-trending li:last-child{border-bottom:none;padding-bottom:0}
-.ni-trending__num{font-family:'Merriweather',serif;font-size:1.5rem;font-weight:900;color:var(--ni-gold);line-height:1;min-width:28px}
+.ni-trending__num{font-family:'Merriweather',serif;font-size:1.5rem;font-weight:900;color:var(--ni-navy);line-height:1;min-width:28px}
 .ni-trending__text{display:inline;min-width:auto;min-height:auto;font-size:0.85rem;font-weight:600;line-height:1.4;color:var(--ni-navy)}
 .ni-trending__text:hover{color:var(--cat-nacionales)}
 .ni-trending__time{font-size:0.75rem;color:var(--ni-text-light);margin-top:4px;display:block}
@@ -1045,7 +1045,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-grid-2 .ni-card__thumb{width:100px;height:75px;border-radius:8px;margin-bottom:0;overflow:hidden;background:var(--ni-border);position:relative}
   .ni-card__thumb img{position:static !important;width:100% !important;height:100% !important;object-fit:cover;display:block}
   .ni-card__content{width:100%;padding:0;min-width:0}
-  .ni-card__pill{font-size:0.6rem;margin-bottom:2px;color:var(--ni-gold);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+  .ni-card__pill{font-size:0.6rem;margin-bottom:2px;color:var(--ni-navy);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
   .ni-card__title{font-size:0.95rem;line-height:1.25;margin-bottom:3px}
   .ni-card__excerpt{font-size:0.8rem;line-height:1.4;margin-bottom:4px;color:var(--ni-text-light);display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .ni-card__meta{font-size:0.68rem;color:var(--ni-text-light);gap:4px 8px;margin-top:0}

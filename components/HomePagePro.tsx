@@ -119,7 +119,7 @@ function Card({ noticia }: { noticia: Noticia }) {
     <article className="ni-card">
       <div className="ni-card__thumb">
         {noticia.imagen ? (
-          <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:768px) 100vw, 220px" style={{ objectFit: 'cover' }} quality={75} />
+          <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:900px) 100px, 220px" style={{ objectFit: 'cover' }} quality={75} />
         ) : null}
       </div>
       <div className="ni-card__content">
