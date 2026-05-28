@@ -357,7 +357,7 @@ export default function NewHomepage({ noticias, masLeidas }: Props) {
           <WeatherWidget />
 
           <div className="sidebar-widget">
-            <h3 className="widget-title">🔥 Lo más leído</h3>
+            <h3 className="widget-title">🔥 Destacados esta semana</h3>
             {masLeidas.slice(0, 5).map((n, i) => (
               <Link key={n.slug} href={`/noticias/${n.slug}`} className="trending-item">
                 <span className="trending-num">{i + 1}</span>

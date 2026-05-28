@@ -16,7 +16,7 @@ export const AUTHORS: Record<string, Author> = {
     slug: 'keyling-rivera',
     name: 'Keyling Elieth Rivera Muñoz',
     role: 'Directora Editorial',
-    bio: 'Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Revisa y contrasta la información antes de publicarla para garantizar que sea precisa y confiable. Comprometida con los más altos estándares éticos del periodismo independiente.',
+    bio: 'Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Revisa y contrasta la información antes de publicarla para garantizar que sea precisa y confiable. Comprometida con la verdad y la verificación de la información.',
     photo: '/keyling-rivera.jpg',
     social: {
       twitter: 'https://twitter.com/nicinformate',

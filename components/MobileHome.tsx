@@ -404,7 +404,7 @@ export default function MobileHome({
           <WeatherWidget />
 
           <div className="sidebar-widget">
-            <h3 className="widget-title">Lo más leído</h3>
+            <h3 className="widget-title">Destacados esta semana</h3>
             {trending.map((n, i) => (
               <TrendingItem key={n.id} noticia={n} index={i} />
             ))}

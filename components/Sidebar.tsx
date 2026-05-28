@@ -37,11 +37,11 @@ export default function Sidebar({
 
   return (
     <aside className="sidebar">
-      {/* Lo más leído */}
+      {/* Destacados esta semana */}
       {trendingNews.length > 0 && (
         <div className="sidebar-section">
           <h3 className="sidebar-title">
-            <span style={{ color: 'var(--accent)' }}>🔥</span> Lo más leído
+            <span style={{ color: 'var(--accent)' }}>🔥</span> Destacados esta semana
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
             {trendingNews.slice(0, 5).map((noticia, idx) => (

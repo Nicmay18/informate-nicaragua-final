@@ -305,12 +305,8 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
     const { adminDb } = await import('./firebase-admin');
     const { Timestamp } = await import('firebase-admin/firestore');
 
-    // Ventana de 30 días: preferir artículos recientes con más vistas
+    // 1. Intentar: artículos con vistas reales de los últimos 30 días
     const cutoff30 = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
-
-    // 1. Artículos de los últimos 30 días con al menos 1 vista, ordenados por fecha
-    //    (Firestore no permite orderBy en dos campos distintos sin índice compuesto,
-    //     así que traemos más y ordenamos en memoria)
     const snap30 = await adminDb
       .collection('noticias')
       .where('fecha', '>=', cutoff30)
@@ -327,43 +323,11 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       if (withViews.length >= validatedCount) {
         return withViews.slice(0, validatedCount);
       }
-
-      // Si hay algunos con vistas pero menos del conteo, completar con los más recientes sin vistas
-      if (withViews.length > 0) {
-        const ids = new Set(withViews.map(n => n.id));
-        const rest = snap30.docs.map(mapNoticia).filter(n => !ids.has(n.id));
-        return [...withViews, ...rest].slice(0, validatedCount);
-      }
     }
 
-    // 2. Fallback: ventana 90 días con vistas
-    const cutoff90 = Timestamp.fromDate(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000));
-    const snap90 = await adminDb
-      .collection('noticias')
-      .where('vistas', '>=', 1)
-      .where('fecha', '>=', cutoff90)
-      .orderBy('fecha', 'desc')
-      .limit(30)
-      .get();
-
-    if (!snap90.empty) {
-      return snap90.docs
-        .map(mapNoticia)
-        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0))
-        .slice(0, validatedCount);
-    }
-
-    // 3. Fallback final: todo el tiempo, más vistas
-    const snapAll = await adminDb
-      .collection('noticias')
-      .where('vistas', '>=', 1)
-      .orderBy('vistas', 'desc')
-      .limit(validatedCount)
-      .get();
-
-    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
-
-    // 4. Si nadie tiene vistas, mostrar las más recientes
+    // 2. Fallback: mostrar las noticias más recientes de la última semana
+    //    (mientras se acumulan vistas reales, esto garantiza contenido fresco)
+    const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
     const recentSnap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
@@ -371,6 +335,15 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .get();
 
     if (!recentSnap.empty) return recentSnap.docs.map(mapNoticia);
+
+    // 3. Fallback final: cualquier noticia reciente
+    const snapAll = await adminDb
+      .collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount)
+      .get();
+
+    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
 
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));

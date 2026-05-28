@@ -147,7 +147,7 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
         <AuthorCard
           authorName={article.author}
           authorPhoto={article.authorSlug === 'keyling-rivera' ? '/keyling-rivera.jpg' : undefined}
-          authorBio={article.authorSlug === 'keyling-rivera' ? 'Directora Editorial — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado.' : undefined}
+          authorBio={article.authorSlug === 'keyling-rivera' ? 'Directora Editorial — Nicaragua Informate. Licenciada en Periodismo. Comprometida con la verdad y la verificación de la información.' : undefined}
           authorSlug={article.authorSlug}
           publishedDate={article.publishedDate}
           updatedDate={article.updatedDate}

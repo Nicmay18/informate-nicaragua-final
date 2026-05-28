@@ -290,9 +290,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
         {/* SIDEBAR */}
         <aside className="ni-sidebar">
-          {/* Lo más leído */}
+          {/* Destacados esta semana */}
           <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title">🔥 Lo más leído</h3>
+            <h3 className="ni-sidebar__title">🔥 Destacados esta semana</h3>
             <ol className="ni-trending">
               {trending.map((n, i) => (
                 <li key={n.id}>
@@ -406,7 +406,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
         <div className="ni-footer__bottom">
           <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
-          <span>Managua, Nicaragua • Periodismo Profesional Independiente</span>
+          <span>Managua, Nicaragua • Medio digital comprometido con informar</span>
         </div>
       </footer>
     </div>

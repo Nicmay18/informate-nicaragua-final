@@ -223,7 +223,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         <AuthorCard
           authorName={displayAuthor}
           authorPhoto={authorPhoto}
-          authorBio={isKeyling ? 'Directora Editorial — Nicaragua Informate. Periodista profesional con más de 10 años de experiencia en periodismo verificado. Comprometida con la verdad y los más altos estándares éticos del periodismo independiente.' : undefined}
+          authorBio={isKeyling ? 'Directora Editorial — Nicaragua Informate. Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Comprometida con la verdad y la verificación de la información.' : undefined}
           authorSlug={authorSlug}
           publishedDate={noticia.fecha}
           updatedDate={noticia.fechaActualizacion}
