@@ -10,7 +10,7 @@ import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/s
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
 export const dynamicParams = true;
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',

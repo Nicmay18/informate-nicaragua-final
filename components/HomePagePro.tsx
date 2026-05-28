@@ -7,10 +7,12 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Search } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
-import RadioPlayer from './RadioPlayer';
-import EconomicBar from './EconomicBar';
-import WeatherWidget from './WeatherWidget';
-import WorldClock from './WorldClock';
+import dynamic from 'next/dynamic';
+
+const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
+const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading: () => <div style={{ height: 60, background: '#f1f5f9', borderRadius: 8 }} /> });
+const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
+const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 100, background: '#f1f5f9', borderRadius: 8 }} /> });
 
 function timeAgo(dateStr: string) {
   try {
@@ -73,7 +75,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
           <article key={item.id} className={`ni-hero__slide${i === idx ? ' is-active' : ''}`}>
             <div className="ni-hero__media">
               {item.imagen ? (
-                <Image src={item.imagen} alt={item.titulo} fill sizes="(max-width:768px) 100vw, 65vw" style={{ objectFit: 'cover', objectPosition: 'center center' }} priority={i === 0} />
+                <Image src={item.imagen} alt={item.titulo} fill sizes="(max-width:768px) 100vw, 65vw" style={{ objectFit: 'cover', objectPosition: 'center center' }} priority={i === 0} fetchPriority="high" />
               ) : null}
             </div>
           </article>
@@ -117,7 +119,7 @@ function Card({ noticia }: { noticia: Noticia }) {
     <article className="ni-card">
       <div className="ni-card__thumb">
         {noticia.imagen ? (
-          <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:768px) 100vw, 220px" style={{ objectFit: 'cover' }} />
+          <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:768px) 100vw, 220px" style={{ objectFit: 'cover' }} quality={75} />
         ) : null}
       </div>
       <div className="ni-card__content">

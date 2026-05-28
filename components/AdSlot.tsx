@@ -30,7 +30,9 @@ export default function AdSlot({
       style={{
         position: 'relative',
         minHeight,
-        minWidth: width,
+        minWidth: 0,
+        width: '100%',
+        maxWidth: width,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

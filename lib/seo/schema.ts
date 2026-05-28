@@ -172,7 +172,7 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     ],
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'De la Rotonda Rubén Darío 150 metros al norte, Managua',
+      streetAddress: 'Managua, Medicina Legal, 3 cuadras al oeste, 1 c al lago',
       addressLocality: 'Managua',
       addressRegion: 'Managua',
       postalCode: '11001',
@@ -180,7 +180,7 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     },
     areaServed: { '@type': 'Country', name: 'Nicaragua' },
     inLanguage: 'es-NI',
-    knowsAbout: ['Noticias Nicaragua', 'Actualidad Nacional', 'Sucesos', 'Política Nicaragua', 'Deportes Nicaragua', 'Tecnología'],
+    knowsAbout: ['Noticias Nicaragua', 'Actualidad Nacional', 'Sucesos', 'Deportes Nicaragua', 'Tecnología'],
     ethicsPolicy: 'https://nicaraguainformate.com/politica-editorial',
     masthead: 'https://nicaraguainformate.com/nosotros',
     correctionsPolicy: 'https://nicaraguainformate.com/correcciones',

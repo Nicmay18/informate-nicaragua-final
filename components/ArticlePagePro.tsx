@@ -164,7 +164,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         {/* Imagen destacada */}
         {noticia.imagen && (
           <figure className="ni-article__featured">
-            <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority />
+            <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority quality={75} />
             <figcaption className="ni-article__caption">{noticia.titulo}</figcaption>
           </figure>
         )}
@@ -243,7 +243,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
                 <article key={n.id} className="ni-related__card">
                   <div className="ni-related__thumb">
                     {n.imagen ? (
-                      <Image src={n.imagen} alt={n.titulo} fill sizes="(max-width:768px) 100vw, 400px" style={{ objectFit: 'cover' }} />
+                      <Image src={n.imagen} alt={n.titulo} fill sizes="(max-width:768px) 100vw, 400px" style={{ objectFit: 'cover' }} quality={75} />
                     ) : null}
                     <span className={`ni-related__cat ni-related__cat--${catClass(n.categoria)}`}>{n.categoria || 'Noticia'}</span>
                   </div>
