@@ -172,8 +172,10 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     ],
     address: {
       '@type': 'PostalAddress',
+      streetAddress: 'De la Rotonda Rubén Darío 150 metros al norte, Managua',
       addressLocality: 'Managua',
       addressRegion: 'Managua',
+      postalCode: '11001',
       addressCountry: 'NI',
     },
     areaServed: { '@type': 'Country', name: 'Nicaragua' },
