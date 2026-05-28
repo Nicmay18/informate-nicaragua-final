@@ -1034,20 +1034,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 @media(max-width:900px){
   .ni-main{padding:18px 14px 44px}
-  .ni-card,
-  .ni-grid-2 .ni-card{grid-template-columns:minmax(0,1fr);gap:0;padding:18px 0}
-  .ni-card__thumb,
-  .ni-grid-2 .ni-card__thumb{width:100%;height:auto;aspect-ratio:16/9;margin-bottom:12px}
-  .ni-card__content{width:100%;padding:0 2px}
   .ni-sidebar{grid-template-columns:minmax(0,1fr)}
   .ni-section{margin-bottom:34px}
-}
-@media(max-width:768px){
-  /* Tarjetas: layout horizontal compacto en movil */
-  .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
+  /* Tarjetas: layout horizontal compacto (tablet + movil) */
+  .ni-card,
+  .ni-grid-2 .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
   .ni-card:first-child{padding-top:0}
   .ni-card:last-child{border-bottom:none}
-  .ni-card__thumb{width:100px;height:75px;border-radius:8px;margin-bottom:0;overflow:hidden;background:var(--ni-border);position:relative}
+  .ni-card__thumb,
+  .ni-grid-2 .ni-card__thumb{width:100px;height:75px;border-radius:8px;margin-bottom:0;overflow:hidden;background:var(--ni-border);position:relative}
   .ni-card__thumb img{position:static !important;width:100% !important;height:100% !important;object-fit:cover;display:block}
   .ni-card__content{width:100%;padding:0;min-width:0}
   .ni-card__pill{font-size:0.6rem;margin-bottom:2px;color:var(--ni-gold);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
@@ -1055,8 +1050,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-card__excerpt{font-size:0.8rem;line-height:1.4;margin-bottom:4px;color:var(--ni-text-light);display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .ni-card__meta{font-size:0.68rem;color:var(--ni-text-light);gap:4px 8px;margin-top:0}
   .ni-grid-2{grid-template-columns:1fr;gap:0}
-  .ni-grid-2 .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0}
-  .ni-grid-2 .ni-card__thumb{width:100px;height:75px;border-radius:8px;margin-bottom:0}
+}
+@media(max-width:768px){
   .ni-main{padding:12px 12px 32px;gap:20px}
   .ni-sidebar{display:none}
   .ni-section__title{font-size:1rem}
