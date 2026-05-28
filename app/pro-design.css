@@ -178,12 +178,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ===== WEATHER WIDGET ===== */
 .weather-widget-full{background:linear-gradient(135deg,#1e3a5f 0%,#0f1b33 100%);border-radius:var(--radius-lg);padding:24px;color:white;margin-bottom:20px;position:relative;overflow:hidden}
+.ni-sidebar .weather-widget-full{max-width:100%;min-width:0;margin-bottom:0}
 .weather-widget-full::before{content:'';position:absolute;top:-30%;right:-10%;width:180px;height:180px;background:rgba(201,169,110,0.08);border-radius:50%}
 .weather-current{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;position:relative}
+.ni-sidebar .weather-current{min-width:0;gap:12px}
 .weather-current-main{display:flex;align-items:center;gap:16px}
+.ni-sidebar .weather-current-main{min-width:0}
 .weather-current-main svg{width:48px;height:48px;color:var(--accent)}
 .weather-current-temp{font-size:2.8rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
 .weather-current-info h4{font-size:1rem;font-weight:700;margin-bottom:2px}
+.ni-sidebar .weather-current-info{min-width:0;overflow:hidden}
+.ni-sidebar .weather-current-info h4{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .weather-current-info p{font-size:0.8rem;opacity:0.75}
 .weather-current-details{display:flex;flex-direction:column;gap:6px;text-align:right;font-size:0.78rem;opacity:0.85}
 .weather-forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:relative}
@@ -207,6 +212,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .weather-detail-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
 .weather-detail-value{font-size:14px;font-weight:700;color:white}
 .weather-cities{display:flex;gap:8px;padding:0 20px 20px;overflow-x:auto;scrollbar-width:none}
+.ni-sidebar .weather-cities{max-width:100%;padding-left:0;padding-right:0}
 .weather-cities::-webkit-scrollbar{display:none}
 .weather-city-pill{padding:8px 14px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;transition:var(--transition);white-space:nowrap;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#94a3b8}
 .weather-city-pill.active{background:#f59e0b;color:#0f172a;border-color:#f59e0b}
@@ -902,7 +908,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-chip:hover{background:var(--ni-navy);color:var(--ni-white);border-color:var(--ni-navy)}
 
 /* Main layout */
-.ni-main{max-width:1200px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:1fr 320px;gap:40px}
+.ni-main{max-width:1200px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:40px;overflow:hidden}
+.ni-content,.ni-sidebar{min-width:0}
 
 /* Sections */
 .ni-section{margin-bottom:48px}
@@ -940,7 +947,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-grid-2 .ni-card__title{font-size:1rem}
 
 /* Sidebar */
-.ni-sidebar__widget{background:var(--ni-bg);border:1px solid var(--ni-border);border-radius:12px;padding:24px;margin-bottom:24px}
+.ni-sidebar__widget{background:var(--ni-bg);border:1px solid var(--ni-border);border-radius:12px;padding:24px;margin-bottom:24px;min-width:0;overflow:hidden}
 .ni-sidebar__title{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--ni-navy);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--ni-gold)}
 .ni-trending{list-style:none;margin:0;padding:0}
 .ni-trending li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--ni-border);overflow:hidden;min-width:0}
@@ -952,6 +959,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-trending__text:hover{color:var(--cat-nacionales)}
 .ni-trending__time{font-size:0.75rem;color:var(--ni-text-light);margin-top:4px;display:block}
 .ni-cat-list{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.ni-sidebar .ni-cat-list{max-width:100%;overflow:hidden}
 .ni-cat-list a{display:inline-block;padding:8px 16px;background:var(--ni-white);border:1px solid var(--ni-border);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--ni-text);transition:all 0.2s}
 .ni-cat-list a:hover{background:var(--ni-navy);color:var(--ni-white);border-color:var(--ni-navy)}
 .ni-newsletter input{width:100%;padding:12px 16px;border:1px solid var(--ni-border);border-radius:8px;font-size:0.9rem;margin-bottom:10px;font-family:inherit}
@@ -984,12 +992,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* Clock Widget */
 .clock-widget{font-size:0.85rem}
 .clock-widget__featured{display:flex;align-items:center;gap:12px;padding:16px;background:var(--ni-navy);border-radius:8px;margin-bottom:12px;animation:clockFadeIn 0.5s ease}
+.ni-sidebar .clock-widget__featured{min-width:0;overflow:hidden}
 @keyframes clockFadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .clock-widget__big-flag{font-size:2rem}
 .clock-widget__featured-info{display:flex;flex-direction:column}
 .clock-widget__featured-city{font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:2px}
 .clock-widget__featured-time{font-size:1.3rem;font-weight:900;color:var(--ni-white);font-variant-numeric:tabular-nums;font-family:'JetBrains Mono','Courier New',monospace;letter-spacing:0.02em}
+.ni-sidebar .clock-widget__featured-time{font-size:clamp(1rem,3.5vw,1.3rem);white-space:normal;overflow-wrap:anywhere}
 .clock-widget__list{display:flex;gap:4px;flex-wrap:wrap}
+.ni-sidebar .clock-widget__list{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr))}
 .clock-widget__item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border:1px solid var(--ni-border);border-radius:6px;background:var(--ni-white);cursor:pointer;transition:all 0.2s;font-size:0.65rem;color:var(--ni-text-light);flex:1;min-width:0}
 .clock-widget__item.is-active{border-color:var(--ni-gold);background:rgba(212,163,115,0.08)}
 .clock-widget__item span:first-child{font-size:1rem}
@@ -1013,9 +1024,23 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* Responsive */
 @media(max-width:1024px){
-  .ni-main{grid-template-columns:1fr}
-  .ni-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .ni-main{grid-template-columns:minmax(0,1fr);padding:20px 16px 48px;gap:28px}
+  .ni-grid-2{grid-template-columns:minmax(0,1fr);gap:0}
+  .ni-grid-2 .ni-card{grid-template-columns:220px minmax(0,1fr);gap:18px}
+  .ni-grid-2 .ni-card__thumb{width:220px;height:150px}
+  .ni-sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .ni-sidebar__widget{margin-bottom:0}
   .ni-footer__inner{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .ni-main{padding:18px 14px 44px}
+  .ni-card,
+  .ni-grid-2 .ni-card{grid-template-columns:minmax(0,1fr);gap:0;padding:18px 0}
+  .ni-card__thumb,
+  .ni-grid-2 .ni-card__thumb{width:100%;height:auto;aspect-ratio:16/9;margin-bottom:12px}
+  .ni-card__content{width:100%;padding:0 2px}
+  .ni-sidebar{grid-template-columns:minmax(0,1fr)}
+  .ni-section{margin-bottom:34px}
 }
 @media(max-width:768px){
   .ni-card{grid-template-columns:1fr;gap:0;padding:14px 0;border-bottom:1px solid var(--ni-border);overflow:hidden}
