@@ -1,0 +1,51 @@
+name: Compress Images
+on:
+  pull_request:
+    paths:
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.png'
+      - '**.webp'
+      - '**.gif'
+  push:
+    branches:
+      - master
+    paths:
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.png'
+      - '**.webp'
+      - '**.gif'
+  workflow_dispatch:
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Compress Images
+        id: calibre
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: false
+          jpegQuality: '80'
+          jpegProgressive: true
+          pngQuality: '80'
+          webpQuality: '80'
+          ignorePaths: 'node_modules/**,build/**,.next/**,out/**'
+
+      - name: Create Pull Request
+        if: steps.calibre.outputs.markdown != ''
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: '[bot] Comprimir imágenes automáticamente'
+          branch-suffix: timestamp
+          commit-message: 'chore: comprimir imágenes optimizadas [skip ci]'
+          body: ${{ steps.calibre.outputs.markdown }}
+          labels: automação, imagens
