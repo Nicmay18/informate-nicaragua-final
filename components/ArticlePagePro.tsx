@@ -70,7 +70,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           </Link>
 
           <div className="ni-header__actions">
-            <button className="ni-search-btn" aria-label="Buscar"><Search size={18} /></button>
+            <Link href="/buscar" className="ni-search-btn" aria-label="Buscar noticias"><Search size={18} /></Link>
             <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
               <span /><span /><span />
             </button>

@@ -81,6 +81,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
+      url: `${baseUrl}/buscar`,
+      lastModified: new Date('2026-05-28'),
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/publicidad`,
+      lastModified: new Date('2026-05-28'),
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    },
+    {
       url: `${baseUrl}/privacidad`,
       lastModified: new Date('2026-05-15'),
       changeFrequency: 'monthly',
@@ -107,6 +119,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${baseUrl}/correcciones`,
       lastModified: new Date('2026-05-15'),
+      changeFrequency: 'monthly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/mapa-del-sitio`,
+      lastModified: new Date('2026-05-28'),
       changeFrequency: 'monthly',
       priority: 0.3,
     },

@@ -128,9 +128,9 @@ function Card({ noticia }: { noticia: Noticia }) {
           <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
         </h3>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
-        <div className="ni-card__meta" style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:'4px 10px', marginTop:'auto' }}>
-          <time dateTime={noticia.fecha} suppressHydrationWarning style={{ fontSize:12, color:'var(--ni-text-light,#6b7280)', whiteSpace:'nowrap' }}>{timeAgo(noticia.fecha)}</time>
-          <span style={{ fontSize:12, color:'var(--ni-text-light,#6b7280)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:'100%' }}>{noticia.autor || 'Nicaragua Informate'}</span>
+        <div className="ni-card__meta">
+          <time className="ni-card__time" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+          <span className="ni-card__author">{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
       </div>
     </article>
@@ -220,8 +220,8 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
           </time>
 
           <div className="ni-header__actions">
-            <button className="ni-search-btn" aria-label="Buscar"><Search size={18} /></button>
-            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú">
+            <Link href="/buscar" className="ni-search-btn" aria-label="Buscar noticias"><Search size={18} /></Link>
+            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
               <span /><span /><span />
             </button>
           </div>
@@ -340,9 +340,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
           {/* Newsletter */}
           <div className="ni-sidebar__widget ni-newsletter">
             <h3 className="ni-sidebar__title">📧 Newsletter</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--ni-text-light)', marginBottom: 12 }}>
-              Recibe las noticias más importantes de Nicaragua cada mañana.
-            </p>
+            <p>Recibe las noticias más importantes de Nicaragua cada mañana.</p>
             <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
             <input id="newsletter-email" type="email" placeholder="tucorreo@gmail.com" aria-label="Tu correo electrónico para el newsletter" />
             <button type="submit" aria-label="Suscribirse al newsletter">Suscribirme gratis</button>
