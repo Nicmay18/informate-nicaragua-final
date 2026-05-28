@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ categoria
     title: `${catName} - Noticias de Nicaragua`,
     description: `Noticias de ${catName} en Nicaragua.`,
     alternates: { canonical: canonicalUrl },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
   };
 }
 

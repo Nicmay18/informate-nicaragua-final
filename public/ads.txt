@@ -1,0 +1,9 @@
+# ads.txt — Nicaragua Informate (Monetización)
+# https://nicaraguainformate.com/ads.txt
+# Agregue aquí sus líneas de AdSense u otros partners publicitarios autorizados.
+
+# Google AdSense (Remplace pub-0000000000000000 con su ID de Editor real cuando reciba aprobación)
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+
+# Monetag / PropellerAds
+# propellerads.com, 11065476, DIRECT, 80c0587d0c8d1720
