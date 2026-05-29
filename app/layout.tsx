@@ -43,10 +43,13 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
     apple: '/icon-192x192.png',
-    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0A192F' }],
+    other: [
+      { rel: 'icon', type: 'image/svg+xml', url: '/favicon.svg' },
+      { rel: 'mask-icon', url: '/favicon.svg', color: '#0A192F' },
+    ],
   },
   openGraph: {
     type: 'website',
