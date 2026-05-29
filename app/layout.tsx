@@ -103,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous"></script>
         
