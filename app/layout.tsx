@@ -1,5 +1,4 @@
 ﻿import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import { Inter, Merriweather } from 'next/font/google';
 import './styles/globals.css';
 import './styles/components.css';
@@ -106,8 +105,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         
         {/* CORRECCIÓN: Se remueve la metaetiqueta duplicada de google-site-verification ya que Next.js la inyecta mediante el objeto metadata */}
-        <meta name="monetag" content="b6b5bd78135f12004d0d90c7c2b82f6c" />
-
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
       </head>
@@ -121,15 +118,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ConsentScript />
         <Analytics />
 
-        {/* Monetag script — cargado lazy para no bloquear LCP */}
-        <Script
-          id="monetag"
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="243623"
-          async
-          data-cfasync="false"
-          strategy="lazyOnload"
-        />
+        {/* Monetag DESACTIVADO — mostraba anuncios maliciosos (kaninhop.info) */}
+        {/* <Script id="monetag" src="https://quge5.com/88/tag.min.js" data-zone="243623" async strategy="lazyOnload" /> */}
 
         <script
           defer
