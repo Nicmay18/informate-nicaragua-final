@@ -41,7 +41,7 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
       await new Promise(resolve => setTimeout(resolve, 1000));
       setSubscriptionStatus('success');
       setEmail('');
-    } catch (error) {
+    } catch {
       setSubscriptionStatus('error');
     } finally {
       setIsSubscribing(false);

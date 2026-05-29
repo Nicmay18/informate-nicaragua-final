@@ -148,8 +148,15 @@ function EconWidget() {
   );
 }
 
+interface WeatherData {
+  main?: { temp: number; feels_like: number; humidity: number };
+  weather?: Array<{ icon: string; description: string; main?: string }>;
+  wind?: { speed: number };
+  visibility?: number;
+}
+
 function WeatherWidget() {
-  const [data, setData] = useState<Record<string, any>>({});
+  const [data, setData] = useState<Record<string, WeatherData>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -174,7 +181,7 @@ function WeatherWidget() {
         } catch { return null; }
       })
     ).then(results => {
-      const mapped: Record<string, any> = {};
+      const mapped: Record<string, WeatherData> = {};
       results.forEach((r, i) => {
         if (r) mapped[CITIES[i].name] = r;
       });
@@ -184,7 +191,7 @@ function WeatherWidget() {
     });
   }, []);
 
-  const main = data['Managua'];
+  const main = data['Managua'] || {};
 
   return (
     <div className="weather-widget-full">

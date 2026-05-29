@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Search, Menu, X, Home, Globe, Radio, MessageSquare, User,
@@ -92,7 +93,7 @@ export default function ProLayout({
       <header className="header">
         <div className="header-inner">
           <Link href="/" className="logo">
-            <img src="/logo.png" alt="Nicaragua Informate" width={32} height={32} />
+            <Image src="/logo.png" alt="Nicaragua Informate" width={32} height={32} />
             <div className="logo-text">
               Nicaragua Informate
               <small>Noticias de Nicaragua y el mundo</small>
@@ -198,7 +199,7 @@ export default function ProLayout({
           {/* Fila superior: Logo + redes + links principales */}
           <div className="footer-premium-top">
             <div className="footer-premium-top-left">
-              <img src="/logo.png" alt="Nicaragua Informate" width={40} height={40} />
+              <Image src="/logo.png" alt="Nicaragua Informate" width={40} height={40} />
               <div>
                 <div className="brand-name">Nicaragua Informate</div>
                 <div className="brand-tag">Periodismo verificado desde Estelí</div>

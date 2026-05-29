@@ -29,7 +29,7 @@ export default function Sidebar({
       setNewsletterStatus('success');
       setEmail('');
       setTimeout(() => setNewsletterStatus('idle'), 3000);
-    } catch (error) {
+    } catch {
       setNewsletterStatus('error');
       setTimeout(() => setNewsletterStatus('idle'), 3000);
     }
