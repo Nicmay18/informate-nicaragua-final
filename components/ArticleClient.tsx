@@ -596,19 +596,15 @@ export default function ArticleClient({
                 className="featured-image-wrapper"
               />
             ) : noticia.imagen && (noticia.imagen.startsWith('http') || noticia.imagen.startsWith('/')) ? (
-              <div className="featured-image-wrap">
-                <img
+              <div className="featured-image-wrap" style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+                <Image
                   src={noticia.imagen}
                   alt={noticia.titulo}
-                  fetchPriority="high"
-                  loading="eager"
-                  decoding="async"
-                  style={{ width: '100%', height: 'auto', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  priority
                   itemProp="url"
-                  onError={e => {
-                    const t = e.target as HTMLImageElement;
-                    if (t.src !== FALLBACK_IMAGE) { t.src = FALLBACK_IMAGE; }
-                  }}
                 />
               </div>
             ) : (

@@ -49,7 +49,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
   const [progress, setProgress] = useState(0);
   const items = noticias.slice(0, 5);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const elapsedRef = useRef(0);
   const isPausedRef = useRef(false);
 
