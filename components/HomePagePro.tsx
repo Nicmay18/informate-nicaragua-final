@@ -258,6 +258,13 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
       {/* H1 SEO oculto visualmente, visible para crawlers */}
       <h1 className="sr-only">Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
 
+      {/* Párrafo introductorio para reforzar keywords del H1 */}
+      <p className="sr-only">
+        Nicaragua Informate es tu portal de noticias de Nicaragua en tiempo real.
+        Cobertura actualizada de sucesos, nacionales, deportes, tecnología, espectáculos e internacionales.
+        Periodismo verificado desde Managua con las últimas noticias del día.
+      </p>
+
       {/* HERO */}
       <Hero noticias={heroNoticias} />
 
