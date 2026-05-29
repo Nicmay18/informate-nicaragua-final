@@ -176,24 +176,41 @@ select:focus-visible {
   border-radius: 14px;
   padding: 12px 16px;
   color: #fff;
-  position: relative;
   max-width: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
 }
+
 .radio-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .radio-title-group {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .radio-title {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
+
+.radio-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .radio-toggle-btn {
   font-size: 11px;
   color: #94a3b8;
@@ -205,29 +222,141 @@ select:focus-visible {
   border-radius: 6px;
   transition: background 0.2s;
 }
+
 .radio-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+
+/* Now Playing */
+.radio-now-playing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+
+.radio-station-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.radio-playing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse-dot 2s infinite;
+}
+
+.radio-playing-name {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.radio-playing-genre {
+  font-size: 10px;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.radio-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.radio-control-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-control-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.radio-volume {
+  width: 60px;
+  height: 4px;
+  accent-color: #ef4444;
+}
+
+/* Loading & Error */
+.radio-loading,
+.radio-error {
+  padding: 8px 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.radio-loading {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+
+.radio-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+/* Spinner */
+.radio-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: radio-spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes radio-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Stations List */
 .radio-stations-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 10px;
-  max-height: 320px;
+  max-height: 300px;
   overflow-y: auto;
 }
+
 .radio-station-item {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.2s;
 }
+
 .radio-station-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
 }
+
 .radio-play-btn {
   width: 28px;
   height: 28px;
@@ -241,102 +370,86 @@ select:focus-visible {
   transition: background 0.2s;
   flex-shrink: 0;
 }
+
 .radio-play-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
 }
+
+.radio-play-btn--link {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.radio-play-btn--link:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.radio-play-btn.is-loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .radio-station-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .radio-station-name {
   flex: 1;
   font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .radio-station-genre {
   font-size: 10px;
   color: #64748b;
-}
-.radio-website-link {
-  color: #64748b;
-  transition: color 0.2s;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
 }
-.radio-website-link:hover {
-  color: #94a3b8;
-}
-.radio-now-playing {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  margin-top: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-}
-.radio-station-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.radio-playing-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  animation: pulse-live-dot 2s infinite;
-}
-.radio-playing-name {
-  font-size: 12px;
-  font-weight: 600;
-}
-.radio-control-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 4px;
+
+.radio-station-badge {
+  font-size: 9px;
+  padding: 2px 6px;
   border-radius: 4px;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  flex-shrink: 0;
 }
-.radio-control-btn:hover {
+
+/* Scrollbar */
+.radio-stations-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.radio-stations-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.radio-stations-list::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
 }
-.radio-error {
-  padding: 8px 10px;
-  margin-top: 8px;
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  font-size: 11px;
-  border-radius: 6px;
-}
-.radio-spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: radio-spin 0.8s linear infinite;
-  display: inline-block;
-}
-@keyframes radio-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-.radio-play-btn.is-loading {
-  opacity: 0.7;
-  cursor: wait;
-}
+
+/* Mobile */
 @media (max-width: 640px) {
   .radio-player {
     padding: 10px 12px;
   }
+
+  .radio-now-playing {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .radio-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   .radio-station-name {
     font-size: 11px;
   }

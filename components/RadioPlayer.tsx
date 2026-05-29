@@ -1,80 +1,69 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Radio, Play, Pause, ExternalLink } from 'lucide-react';
+import { Radio, Play, Pause, Volume2, VolumeX, ExternalLink } from 'lucide-react';
 
 interface Station {
   id: string;
   name: string;
-  website: string;
   streamUrl: string;
+  website: string;
   color: string;
   genre: string;
 }
 
-/*
-  URLs de streaming verificadas o marcadas con TODO.
-  Para verificar: F12 → Network → Media en sitio de la emisora.
-*/
+/* Streams confirmados + Zeno.fm + sin stream */
 const STATIONS: Station[] = [
-  { id: 'radioya', name: 'Radio Ya', website: 'https://www.radioya.com.ni/', streamUrl: 'https://streaming.radioya.com.ni:8000/live', color: '#dc2626', genre: 'Noticias' },
-  { id: 'vivafm', name: 'Viva FM', website: 'https://www.vivafm.com.ni/', streamUrl: 'https://streaming.vivafm.com.ni:8000/live', color: '#0ea5e9', genre: 'Música' },
-  { id: 'buenisima', name: 'La Buenísima', website: 'https://www.labuenisimanicaragua.com/', streamUrl: '', color: '#f97316', genre: 'Tropical' },
-  { id: 'pachanguera', name: 'La Pachanguera', website: 'https://www.lapachanguera.com.ni/', streamUrl: '', color: '#ec4899', genre: 'Variedad' },
-  { id: 'futura', name: 'Radio Futura', website: 'https://www.radiofutura.com.ni/', streamUrl: '', color: '#06b6d4', genre: 'Juvenil' },
-  { id: 'clasica', name: 'Radio Clásica', website: 'https://www.radioclasica.com.ni/', streamUrl: '', color: '#8b5cf6', genre: 'Clásica' },
-  { id: 'yes', name: 'Radio Yes', website: 'https://www.radioyes.com.ni/', streamUrl: '', color: '#ef4444', genre: 'Pop' },
-  { id: 'fiestalatina', name: 'Fiesta Latina', website: 'https://fiestalatina.com.ni/', streamUrl: '', color: '#16a34a', genre: 'Tropical' },
+  { id: 'fiestalatina', name: 'Fiesta Latina', streamUrl: 'https://radios.solumedia.com/6596/stream', website: 'https://fiestalatina.com.ni/', color: '#16a34a', genre: 'Tropical' },
+  { id: 'radiotigre', name: 'Radio Tigre', streamUrl: 'https://stream-280.zeno.fm/muckqtmpfvatv', website: 'https://radiotigre.com.ni/', color: '#f59e0b', genre: 'Variedad' },
+  { id: 'radioabc', name: 'Radio ABC', streamUrl: 'https://hoth.alonhosting.com:4205/stream', website: 'https://radioabc.com.ni/', color: '#8b5cf6', genre: 'Noticias' },
+  { id: 'radiojinotega', name: 'Radio Jinotega', streamUrl: 'https://stream.pinedahost.com/radio/8060/radio', website: 'https://radiojinotega.com.ni/', color: '#ec4899', genre: 'Regional' },
+  { id: 'vivafm', name: 'Viva FM', streamUrl: 'https://stream-284.zeno.fm/78a5h5mfgg8uv', website: 'https://www.vivafm.com.ni/', color: '#0ea5e9', genre: 'Música' },
+  { id: 'radioya', name: 'Radio Ya', streamUrl: 'https://stream-281.zeno.fm/axr92qawesmtv', website: 'https://www.radioya.com.ni/', color: '#dc2626', genre: 'Noticias' },
+  { id: 'radiofutura', name: 'Radio Futura', streamUrl: 'https://stream-291.zeno.fm/iwmolyow6tivv', website: 'https://www.radiofutura.com.ni/', color: '#06b6d4', genre: 'Juvenil' },
+  { id: 'buenisima', name: 'La Buenísima', streamUrl: '', website: 'https://www.labuenisimanicaragua.com/', color: '#f97316', genre: 'Tropical' },
 ];
 
 export default function RadioPlayer() {
   const [expanded, setExpanded] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [volume, setVolume] = useState(0.8);
+  const [isMuted, setIsMuted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
-  /* Inicializar MediaSession para controles en pantalla de bloqueo */
-  useEffect(() => {
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', () => {
-        if (audioRef.current && !audioRef.current.paused) return;
-        const station = STATIONS.find(s => s.id === playing);
-        if (station) playStation(station);
-      });
-      navigator.mediaSession.setActionHandler('pause', () => {
-        audioRef.current?.pause();
-        setPlaying(null);
-      });
-      navigator.mediaSession.setActionHandler('stop', () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.src = '';
-        }
-        setPlaying(null);
-        setLoading(null);
-      });
-    }
-    return () => {
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.setActionHandler('play', null);
-        navigator.mediaSession.setActionHandler('pause', null);
-        navigator.mediaSession.setActionHandler('stop', null);
-      }
-    };
-  }, [playing]);
+  const currentStation = STATIONS.find(s => s.id === playing);
 
-  /* Solicitar Wake Lock cuando se reproduce (mantiene procesador activo) */
+  /* MediaSession — controles en pantalla de bloqueo */
+  useEffect(() => {
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (currentStation) playStation(currentStation);
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      audioRef.current?.pause();
+      setPlaying(null);
+    });
+    navigator.mediaSession.setActionHandler('stop', () => {
+      handleStop();
+    });
+    return () => {
+      navigator.mediaSession.setActionHandler('play', null);
+      navigator.mediaSession.setActionHandler('pause', null);
+      navigator.mediaSession.setActionHandler('stop', null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStation]);
+
+  /* Wake Lock — mantiene procesador activo con pantalla apagada */
   const requestWakeLock = async () => {
-    if ('wakeLock' in navigator && !wakeLockRef.current) {
-      try {
-        wakeLockRef.current = await navigator.wakeLock.request('screen');
-        wakeLockRef.current.addEventListener('release', () => {
-          wakeLockRef.current = null;
-        });
-      } catch { /* wake lock puede fallar en algunos navegadores */ }
-    }
+    if (!('wakeLock' in navigator) || wakeLockRef.current) return;
+    try {
+      wakeLockRef.current = await navigator.wakeLock.request('screen');
+      wakeLockRef.current.addEventListener('release', () => { wakeLockRef.current = null; });
+    } catch { /* noop */ }
   };
 
   const releaseWakeLock = () => {
@@ -82,58 +71,55 @@ export default function RadioPlayer() {
     wakeLockRef.current = null;
   };
 
-  /* Cleanup al desmontar */
+  /* Cleanup */
   useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-      }
-      releaseWakeLock();
-    };
+    return () => { handleStop(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setupMediaSession = (station: Station) => {
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: station.name,
-        artist: station.genre,
-        album: 'Radio Nicaragua',
-        artwork: [
-          { src: '/logo-ni.png', sizes: '512x512', type: 'image/png' },
-        ],
-      });
-      navigator.mediaSession.playbackState = 'playing';
-    }
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: station.name,
+      artist: station.genre,
+      album: 'Radio Nicaragua',
+      artwork: [{ src: '/logo-ni.png', sizes: '512x512', type: 'image/png' }],
+    });
+    navigator.mediaSession.playbackState = 'playing';
   };
 
   const clearMediaSession = () => {
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = null;
-      navigator.mediaSession.playbackState = 'paused';
-    }
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = null;
+    navigator.mediaSession.playbackState = 'paused';
   };
 
-  const playStation = async (station: Station) => {
+  const handleStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    setPlaying(null);
+    setLoading(null);
+    clearMediaSession();
+    releaseWakeLock();
+  };
+
+  const playStation = (station: Station) => {
     setError(null);
 
-    if (playing === station.id) {
-      audioRef.current?.pause();
-      setPlaying(null);
-      clearMediaSession();
-      releaseWakeLock();
+    if (!station.streamUrl) {
+      window.open(station.website, '_blank', 'noopener,noreferrer');
       return;
     }
 
-    if (!station.streamUrl) {
-      setError(`${station.name}: streaming no disponible. Abrí el sitio web.`);
-      setPlaying(null);
+    if (playing === station.id) {
+      handleStop();
       return;
     }
 
     setLoading(station.id);
 
-    /* Crear o reutilizar elemento <audio> persistente (mejor que new Audio() para background) */
     let audio = audioRef.current;
     if (!audio) {
       audio = document.createElement('audio');
@@ -141,17 +127,14 @@ export default function RadioPlayer() {
       audioRef.current = audio;
     }
 
-    /* Limpiar handlers anteriores */
     audio.oncanplay = null;
     audio.onerror = null;
     audio.onplaying = null;
-    audio.onended = null;
 
     audio.pause();
     audio.src = station.streamUrl;
-    audio.volume = 0.8;
+    audio.volume = isMuted ? 0 : volume;
 
-    /* Configurar handlers nuevos */
     audio.oncanplay = () => {
       audio?.play().then(() => {
         setPlaying(station.id);
@@ -159,14 +142,14 @@ export default function RadioPlayer() {
         setupMediaSession(station);
         requestWakeLock();
       }).catch(() => {
-        setError(`No se pudo iniciar ${station.name}. Intentá de nuevo.`);
+        setError(`No se pudo iniciar ${station.name}.`);
         setPlaying(null);
         setLoading(null);
       });
     };
 
     audio.onerror = () => {
-      setError(`${station.name} no disponible. La emisora puede estar offline.`);
+      setError(`${station.name} no disponible.`);
       setPlaying(null);
       setLoading(null);
       clearMediaSession();
@@ -178,24 +161,28 @@ export default function RadioPlayer() {
       setLoading(null);
     };
 
-    /* Cargar stream */
     audio.load();
   };
 
-  const handlePause = () => {
-    audioRef.current?.pause();
-    setPlaying(null);
-    clearMediaSession();
-    releaseWakeLock();
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    setIsMuted(newVolume === 0);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+      audioRef.current.muted = newVolume === 0;
+    }
   };
 
   return (
     <div className="radio-player">
-      {/* Elemento audio oculto — persistente para background playback */}
-      <div style={{ position: 'absolute', left: -9999, width: 0, height: 0, overflow: 'hidden' }}>
-        <audio ref={(el) => { if (el && !audioRef.current) audioRef.current = el; }} preload="none" />
-      </div>
-
       <div className="radio-header">
         <div className="radio-title-group">
           <Radio size={14} color="#ef4444" />
@@ -211,19 +198,36 @@ export default function RadioPlayer() {
         </button>
       </div>
 
-      {/* Now playing bar */}
-      {playing && (
+      {/* Now Playing con controles */}
+      {currentStation && (
         <div className="radio-now-playing">
           <div className="radio-station-info">
-            <span className="radio-playing-dot" style={{ backgroundColor: STATIONS.find(s => s.id === playing)?.color }} />
-            <span className="radio-playing-name">{STATIONS.find(s => s.id === playing)?.name}</span>
+            <span className="radio-playing-dot" style={{ backgroundColor: currentStation.color }} />
+            <span className="radio-playing-name">{currentStation.name}</span>
+            <span className="radio-playing-genre">{currentStation.genre}</span>
           </div>
-          <button onClick={handlePause} className="radio-control-btn" aria-label="Pausar">
-            <Pause size={16} />
-          </button>
+          <div className="radio-controls">
+            <button onClick={handleStop} className="radio-control-btn" aria-label="Pausar">
+              <Pause size={16} />
+            </button>
+            <button onClick={toggleMute} className="radio-control-btn" aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}>
+              {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            </button>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="radio-volume"
+              aria-label="Volumen"
+            />
+          </div>
         </div>
       )}
 
+      {loading && !playing && <div className="radio-loading">Conectando...</div>}
       {error && <div className="radio-error">{error}</div>}
 
       {expanded && (
@@ -231,16 +235,20 @@ export default function RadioPlayer() {
           {STATIONS.map(station => {
             const isPlaying = playing === station.id;
             const isLoading = loading === station.id;
+            const hasStream = !!station.streamUrl;
+
             return (
               <div key={station.id} className="radio-station-item">
                 <button
                   onClick={() => playStation(station)}
-                  className={`radio-play-btn${isLoading ? ' is-loading' : ''}`}
-                  aria-label={isPlaying ? `Pausar ${station.name}` : `Reproducir ${station.name}`}
+                  className={`radio-play-btn${isLoading ? ' is-loading' : ''} ${!hasStream ? ' radio-play-btn--link' : ''}`}
+                  aria-label={!hasStream ? `Visitar ${station.name}` : isPlaying ? `Pausar ${station.name}` : `Reproducir ${station.name}`}
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <span className="radio-spinner" />
+                  ) : !hasStream ? (
+                    <ExternalLink size={14} color="#fff" />
                   ) : isPlaying ? (
                     <Pause size={14} color="#fff" />
                   ) : (
@@ -250,9 +258,7 @@ export default function RadioPlayer() {
                 <span className="radio-station-dot" style={{ backgroundColor: station.color }} />
                 <span className="radio-station-name">{station.name}</span>
                 <span className="radio-station-genre">{station.genre}</span>
-                <a href={station.website} target="_blank" rel="noopener noreferrer" className="radio-website-link" aria-label={`Visitar sitio de ${station.name}`}>
-                  <ExternalLink size={12} />
-                </a>
+                {!hasStream && <span className="radio-station-badge">Web</span>}
               </div>
             );
           })}
