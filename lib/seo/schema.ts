@@ -30,7 +30,7 @@ export function buildNewsArticleJsonLdEnhanced(
     image: [
       {
         '@type': 'ImageObject',
-        url: article.imagen || 'https://nicaraguainformate.com/logo.png',
+        url: article.imagen || 'https://nicaraguainformate.com/logo-ni.png',
         width: 1200,
         height: 630,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
@@ -78,7 +78,7 @@ export function buildNewsArticleJsonLdEnhanced(
       name: 'Nicaragua Informate',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo-ni.png',
         width: 512,
         height: 512,
       },
@@ -115,13 +115,13 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     url: 'https://nicaraguainformate.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.png',
+      url: 'https://nicaraguainformate.com/logo-ni.png',
       width: 512,
       height: 512,
     },
     image: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.png',
+      url: 'https://nicaraguainformate.com/logo-ni.png',
       width: 1200,
       height: 630,
     },
