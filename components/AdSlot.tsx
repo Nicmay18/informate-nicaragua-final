@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface AdSlotProps {
-  zoneId?: string;
+  slot?: string;
   width?: number;
   height?: number;
   className?: string;
@@ -13,7 +13,7 @@ interface AdSlotProps {
 }
 
 export default function AdSlot({
-  zoneId,
+  slot = 'default-slot',
   width = 336,
   height = 280,
   className = '',
@@ -21,34 +21,53 @@ export default function AdSlot({
   format = 'auto',
   label = 'Publicidad',
 }: AdSlotProps) {
-  const minHeight = useMemo(() => (format === 'horizontal' ? 90 : height), [format, height]);
+  const adRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try {
+      if (adRef.current && typeof window !== 'undefined') {
+        const adsbygoogle = (window as any).adsbygoogle;
+        if (adsbygoogle) {
+          adsbygoogle.push({});
+        }
+      }
+    } catch {
+      // Silenciar errores si AdSense no carga
+    }
+  }, [slot]);
 
   return (
     <div
       className={`ad-slot ${className || ''}`}
-      data-zone={zoneId}
       style={{
         position: 'relative',
-        minHeight,
+        minHeight: format === 'horizontal' ? 90 : height,
         minWidth: 0,
         width: '100%',
         maxWidth: width,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#f9fafb',
-        border: '1px dashed #e5e7eb',
-        borderRadius: 8,
         overflow: 'hidden',
         ...style,
       }}
       aria-hidden="true"
     >
-      <span className="ad-label">{label}</span>
-      <div className="ad-slot__placeholder">
-        <p>Espacio publicitario</p>
-        <small>Zona {zoneId || 'predeterminada'} · {format}</small>
-      </div>
+      <span className="ad-label" style={{ fontSize: 10, color: '#9ca3af', marginBottom: 4 }}>{label}</span>
+      <ins
+        ref={adRef as any}
+        className="adsbygoogle"
+        style={{
+          display: 'block',
+          width: '100%',
+          minHeight: format === 'horizontal' ? 90 : height,
+        }}
+        data-ad-client="ca-pub-4115203339551838"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
     </div>
   );
 }

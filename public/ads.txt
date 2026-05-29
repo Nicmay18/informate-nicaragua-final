@@ -1,2 +1,5 @@
 # Nicaragua Informate - Ads.txt
-# Vacio hasta aprobacion de AdSense
+# Actualizado: 29 mayo 2026
+
+# Google AdSense
+google.com, pub-4115203339551838, DIRECT, f08c47fec0942fa0
