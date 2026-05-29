@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.jsdelivr.net', pathname: '/**' },
       { protocol: 'https', hostname: 'images.weserv.nl', pathname: '/**' },
@@ -241,7 +242,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://static.cloudflareinsights.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://www.google.com https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.firebaseio.com https://*.googleusercontent.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://static.cloudflareinsights.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://www.google.com https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com https://ep1.adtrafficquality.google; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.firebaseio.com https://*.googleusercontent.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';"
           },
         ],
       },
