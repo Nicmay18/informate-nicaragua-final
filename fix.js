@@ -1,0 +1,1 @@
+const fs=require('fs');let c=fs.readFileSync('next.config.ts','utf8');c=c.replace(/    unoptimized: true,\n    remotePatterns/,'    remotePatterns');fs.writeFileSync('next.config.ts.new',c);console.log('done');  
