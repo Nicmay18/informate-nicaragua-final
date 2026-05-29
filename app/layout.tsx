@@ -125,15 +125,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Monetag scripts */}
         <Script
-          id="monetag-zone"
+          id="monetag-244075"
           src="https://quge5.com/88/tag.min.js"
-          data-zone="11065476"
+          data-zone="244075"
           async
           data-cfasync="false"
           strategy="afterInteractive"
         />
         <Script
-          id="monetag-popunder"
+          id="monetag-243623"
           src="https://quge5.com/88/tag.min.js"
           data-zone="243623"
           async
