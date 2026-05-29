@@ -136,7 +136,7 @@ export default function CookieBanner() {
                 <input type="checkbox" checked={allowAds} onChange={(event) => setAllowAds(event.target.checked)} />
                 <div>
                   <strong>Publicidad personalizada</strong>
-                  <p>Autoriza anuncios relevantes mediante Monetag.</p>
+                  <p>Autoriza anuncios relevantes (actualmente desactivados).</p>
                 </div>
               </label>
             </div>

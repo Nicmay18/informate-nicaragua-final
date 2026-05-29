@@ -21,7 +21,7 @@ export default function PublicidadPage() {
         <li>Banners display en portada, categorias y articulos.</li>
         <li>Patrocinios editoriales identificados de forma transparente.</li>
         <li>Campanas por temporada, eventos, servicios locales y marcas nacionales.</li>
-        <li>Integracion con plataformas publicitarias como Google AdSense y Monetag cuando aplique.</li>
+        <li>Integracion con plataformas publicitarias verificadas como Google AdSense.</li>
       </ul>
 
       <h2 style={{ fontSize: '1.2rem', color: '#f8fafc', marginTop: '2rem', marginBottom: '.75rem', fontWeight: 700 }}>Politica comercial</h2>

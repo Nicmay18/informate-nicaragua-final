@@ -39,7 +39,7 @@ export default function PrivacidadPage() {
 
       <h2 style={{ fontSize: '1.2rem', color: '#f8fafc', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>3. Uso de cookies y publicidad</h2>
       <p style={{ color: '#94a3b8', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        Utilizamos <strong style={{ color: '#f8fafc' }}>Monetag</strong> para mostrar anuncios en nuestro sitio. Monetag puede usar cookies y tecnologías similares para personalizar la publicidad que ves.
+        Actualmente no utilizamos publicidad de terceros. Cuando implementemos publicidad, utilizaremos proveedores verificados como Google AdSense.
       </p>
       <p style={{ color: '#94a3b8', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Al navegar en Nicaragua Informate, aceptas el uso de estas tecnologías según lo descrito en esta política. Puedes gestionar tus preferencias en el banner de cookies que aparece al ingresar al sitio.

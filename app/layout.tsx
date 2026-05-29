@@ -118,9 +118,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ConsentScript />
         <Analytics />
 
-        {/* Monetag DESACTIVADO — mostraba anuncios maliciosos (kaninhop.info) */}
-        {/* <Script id="monetag" src="https://quge5.com/88/tag.min.js" data-zone="243623" async strategy="lazyOnload" /> */}
-
         <script
           defer
           dangerouslySetInnerHTML={{

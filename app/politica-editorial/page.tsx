@@ -95,7 +95,7 @@ export default function PoliticaEditorialPage() {
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>6. Publicidad y contenido comercial</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        La publicidad (incluidos los anuncios de Monetag) no determina qué noticias cubrimos ni cómo las tratamos.
+        La publicidad no determina qué noticias cubrimos ni cómo las tratamos.
       </p>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Los contenidos patrocinados o publirreportajes se identifican claramente para que no se confundan con noticias.

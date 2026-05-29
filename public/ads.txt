@@ -1,1 +1,2 @@
-monetag.com, 3348505, DIRECT
+# Nicaragua Informate - Ads.txt
+# Vacio hasta aprobacion de AdSense

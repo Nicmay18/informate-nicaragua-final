@@ -46,7 +46,7 @@ export default function AdSlot({
     >
       <span className="ad-label">{label}</span>
       <div className="ad-slot__placeholder">
-        <p>Espacio reservado para Monetag</p>
+        <p>Espacio publicitario</p>
         <small>Zona {zoneId || 'predeterminada'} · {format}</small>
       </div>
     </div>

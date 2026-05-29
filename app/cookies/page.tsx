@@ -29,7 +29,7 @@ const COOKIE_TYPES = [
   },
   {
     name: 'Cookies de Publicidad',
-    description: 'Utilizadas por Monetag para mostrar anuncios relevantes basados en tus intereses.',
+    description: 'Actualmente desactivadas. Se utilizaran solo con proveedores verificados como Google AdSense.',
     examples: '__gads, __gpi, NID, 1P_JAR',
     duration: '13 meses',
   },
@@ -79,18 +79,17 @@ export default function CookiesPage() {
         Utilizamos servicios de terceros que también pueden establecer cookies en tu dispositivo:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#475569', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Monetag:</strong> Para mostrar publicidad personalizada y medir el rendimiento de los anuncios.</li>
+        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Google AdSense:</strong> Para mostrar publicidad personalizada cuando sea implementado.</li>
         <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Google Analytics:</strong> Para analizar el tráfico del sitio y entender el comportamiento de los usuarios.</li>
         <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Firebase:</strong> Para el funcionamiento de la base de datos en tiempo real de noticias.</li>
         <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Open-Meteo:</strong> Para proporcionar información meteorológica localizada.</li>
       </ul>
 
       <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 10, padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <h3 style={{ fontSize: '0.95rem', color: '#2563eb', fontWeight: 600, marginBottom: '0.75rem' }}>Monetag y publicidad personalizada</h3>
+        <h3 style={{ fontSize: '0.95rem', color: '#2563eb', fontWeight: 600, marginBottom: '0.75rem' }}>Publicidad personalizada</h3>
         <p style={{ color: '#475569', fontSize: '0.9rem', lineHeight: 1.7 }}>
-          Utilizamos Monetag para mostrar anuncios en nuestro sitio. Monetag utiliza cookies para personalizar 
-          los anuncios según tus visitas previas a nuestro sitio y a otros sitios de Internet. Puedes optar por 
-          no recibir publicidad personalizada visitando{' '}
+          Actualmente no utilizamos publicidad de terceros. Cuando implementemos publicidad, utilizaremos 
+          proveedores verificados como Google AdSense. Puedes optar por no recibir publicidad personalizada visitando{' '}
           <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'underline' }}>Opciones de publicidad</a>.
         </p>
       </div>

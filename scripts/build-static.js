@@ -140,7 +140,7 @@ ${latest.map(n=>'<url><loc>https://nicaraguainformate.com/noticias/'+n.slug+'/</
   idx = idx.replace(/<div class="news-grid" id="newsGrid"[^>]*>[\s\S]*?<\/div>/, `<div class="news-grid" id="newsGrid" aria-live="polite">\n${allCards}\n</div>`);
   // Update sitemap reference in robots
   if(!idx.includes('sitemap.xml')){
-    idx = idx.replace(/<meta name="monetag"[^>]*>/, m=>m+'\n  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">');
+    idx = idx.replace(/<meta name="monetag"[^>]*>/, '');
   }
   fs.writeFileSync(path.join(PUBLIC, 'index.html'), idx, 'utf8');
   console.log('[Build] index.html injected with real content');
