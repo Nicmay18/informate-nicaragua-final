@@ -84,7 +84,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             )}
           </div>
           <div className="news-card-body">
-            <h2 className="news-card-title">{article.titulo}</h2>
+            <span className="news-card-title">{article.titulo}</span>
             <p className="news-card-excerpt">{article.resumen}</p>
             <div className="news-card-meta" style={{
               display: 'flex', flexWrap: 'wrap', alignItems: 'center',
@@ -131,7 +131,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
           )}
         </div>
         <div className="news-card-body">
-          <h2 className="news-card-title">{article.titulo}</h2>
+          <span className="news-card-title">{article.titulo}</span>
           <p className="news-card-excerpt">{article.resumen}</p>
           <div className="news-card-meta">
             <span>{formatDateES(article.fecha)}</span>

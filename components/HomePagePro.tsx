@@ -84,9 +84,9 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
 
       <div className="ni-hero__info">
         <span className={`ni-hero__badge ni-hero__badge--${catClass(items[idx]?.categoria)}`}>{items[idx]?.categoria || 'Noticia'}</span>
-        <h2 className="ni-hero__title">
+        <span className="ni-hero__title">
           <Link href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</Link>
-        </h2>
+        </span>
         <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
         <div className="ni-hero__meta">
           <time dateTime={items[idx]?.fecha} suppressHydrationWarning>{timeAgo(items[idx]?.fecha || '')}</time>
@@ -124,9 +124,9 @@ function Card({ noticia }: { noticia: Noticia }) {
       </div>
       <div className="ni-card__content">
         <span className={`ni-card__pill ni-card__pill--${cat}`}>{noticia.categoria || 'Noticia'}</span>
-        <h3 className="ni-card__title">
+        <span className="ni-card__title">
           <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
-        </h3>
+        </span>
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta">
           <time className="ni-card__time" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>

@@ -11,6 +11,7 @@ import type { Noticia } from '@/lib/types';
 import AuthorCard from './AuthorCard';
 import AdSlot from './AdSlot';
 import KeyPoints from './KeyPoints';
+import ShareButtons from './ShareButtons';
 
 function timeAgo(dateStr: string) {
   try {
@@ -203,6 +204,12 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
 
         {/* CONTENIDO */}
         <div className="ni-article__body" aria-label="Contenido del artículo" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+
+        {/* BOTONES COMPARTIR */}
+        <ShareButtons
+          url={`https://nicaraguainformate.com/noticias/${noticia.slug}`}
+          title={noticia.titulo}
+        />
 
         {/* AdSlot 2: Entre párrafos (in-article) */}
         <div className="ni-article__ad-slot">

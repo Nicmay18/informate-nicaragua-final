@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description:
-    'Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',
+    'Noticias de Nicaragua en tiempo real. Cobertura nacional e internacional de política, deportes, tecnología y sucesos desde Managua.',
   openGraph: {
     type: 'website',
     locale: 'es_NI',
@@ -51,7 +51,7 @@ export default async function HomePage() {
   let masLeidas: Noticia[] = [];
 
   try {
-    [noticias, masLeidas] = await Promise.all([getNews(50), getMasLeidas()]);
+    [noticias, masLeidas] = await Promise.all([getNews(12), getMasLeidas()]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
