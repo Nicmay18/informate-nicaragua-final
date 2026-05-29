@@ -170,6 +170,161 @@ select:focus-visible {
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
+/* ===== RADIO PLAYER (streaming) ===== */
+.radio-player {
+  background: #0f172a;
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: #fff;
+  position: relative;
+  max-width: 100%;
+}
+.radio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.radio-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.radio-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.radio-toggle-btn {
+  font-size: 11px;
+  color: #94a3b8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.radio-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.radio-stations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.radio-station-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s;
+}
+.radio-station-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.radio-play-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.radio-play-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.radio-station-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.radio-station-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+}
+.radio-station-genre {
+  font-size: 10px;
+  color: #64748b;
+}
+.radio-website-link {
+  color: #64748b;
+  transition: color 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.radio-website-link:hover {
+  color: #94a3b8;
+}
+.radio-now-playing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+.radio-station-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.radio-playing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse-live-dot 2s infinite;
+}
+.radio-playing-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+.radio-control-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radio-control-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.radio-error {
+  padding: 8px 10px;
+  margin-top: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  font-size: 11px;
+  border-radius: 6px;
+}
+@media (max-width: 640px) {
+  .radio-player {
+    padding: 10px 12px;
+  }
+  .radio-station-name {
+    font-size: 11px;
+  }
+}
+
 /* Skip link — MUST be highest z-index for accessibility */
 .skip-link {
   position: absolute; left: -9999px;

@@ -1,68 +1,132 @@
 'use client';
 
-import { useState } from 'react';
-import { Radio, ExternalLink } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Radio, Play, Pause, ExternalLink } from 'lucide-react';
 
 interface Station {
   id: string;
   name: string;
-  url: string;
+  website: string;
+  streamUrl: string;
   color: string;
   genre: string;
 }
 
+/*
+  URLs de streaming marcadas con TODO — deben verificarse contra
+  los sitios oficiales de cada emisora (F12 → Network → Media).
+  Si fallan, el reproductor muestra error y link al sitio web.
+*/
 const STATIONS: Station[] = [
-  { id: 'radioya', name: 'Radio Ya', url: 'https://www.radioya.com.ni/', color: '#dc2626', genre: 'Noticias' },
-  { id: 'vivafm', name: 'Viva FM', url: 'https://www.vivafm.com.ni/', color: '#0ea5e9', genre: 'Música' },
-  { id: 'fiestalatina', name: 'Fiesta Latina', url: 'https://fiestalatina.com.ni/', color: '#16a34a', genre: 'Tropical' },
-  { id: 'radiojuvenil', name: 'Radio Juvenil', url: 'https://radiojuvenil.com.ni/', color: '#eab308', genre: 'Variada' },
-  { id: 'radionicaragua', name: 'Radio Nicaragua', url: 'https://www.radionicaragua.com/', color: '#8b5cf6', genre: 'Noticias' },
+  { id: 'radioya', name: 'Radio Ya', website: 'https://www.radioya.com.ni/', streamUrl: 'https://streaming.radioya.com.ni:8000/live', color: '#dc2626', genre: 'Noticias' },
+  { id: 'vivafm', name: 'Viva FM', website: 'https://www.vivafm.com.ni/', streamUrl: 'https://streaming.vivafm.com.ni:8000/live', color: '#0ea5e9', genre: 'Música' },
+  { id: 'buenisima', name: 'La Buenísima', website: 'https://www.labuenisimanicaragua.com/', streamUrl: '', color: '#f97316', genre: 'Tropical' },
+  { id: 'pachanguera', name: 'La Pachanguera', website: 'https://www.lapachanguera.com.ni/', streamUrl: '', color: '#ec4899', genre: 'Variedad' },
+  { id: 'futura', name: 'Radio Futura', website: 'https://www.radiofutura.com.ni/', streamUrl: '', color: '#06b6d4', genre: 'Juvenil' },
+  { id: 'clasica', name: 'Radio Clásica', website: 'https://www.radioclasica.com.ni/', streamUrl: '', color: '#8b5cf6', genre: 'Clásica' },
+  { id: 'yes', name: 'Radio Yes', website: 'https://www.radioyes.com.ni/', streamUrl: '', color: '#ef4444', genre: 'Pop' },
+  { id: 'fiestalatina', name: 'Fiesta Latina', website: 'https://fiestalatina.com.ni/', streamUrl: '', color: '#16a34a', genre: 'Tropical' },
 ];
 
 export default function RadioPlayer() {
   const [expanded, setExpanded] = useState(false);
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
+
+  const playStation = (station: Station) => {
+    if (playing === station.id) {
+      audioRef.current?.pause();
+      setPlaying(null);
+      setError(null);
+      return;
+    }
+
+    if (!station.streamUrl) {
+      setError(`${station.name}: URL de streaming pendiente. Abrí el sitio web.`);
+      setPlaying(null);
+      return;
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+
+    const audio = new Audio(station.streamUrl);
+    audio.volume = 0.8;
+
+    audio.oncanplay = () => {
+      audio.play();
+      setPlaying(station.id);
+      setError(null);
+    };
+
+    audio.onerror = () => {
+      setError(`No se pudo conectar con ${station.name}. La emisora puede estar offline.`);
+      setPlaying(null);
+    };
+
+    audioRef.current = audio;
+  };
 
   return (
-    <div style={{ background: '#0f172a', borderRadius: 14, padding: '12px 16px', color: '#fff', position: 'relative' }}>
-      {/* Header compacto */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div className="radio-player">
+      <div className="radio-header">
+        <div className="radio-title-group">
           <Radio size={14} color="#ef4444" />
-          <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '-0.2px' }}>Radio Nicaragua</span>
-          <span className="radio-live-dot" />
+          <span className="radio-title">Radio Nicaragua</span>
+          {playing && <span className="radio-live-dot" />}
         </div>
-        <button onClick={() => setExpanded(!expanded)} style={{ fontSize: 11, color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="radio-toggle-btn"
+          aria-label={expanded ? 'Cerrar emisoras' : 'Ver emisoras'}
+        >
           {expanded ? 'Cerrar' : 'Ver emisoras'}
         </button>
       </div>
 
-      {/* Lista de estaciones (colapsable) */}
+      {playing && (
+        <div className="radio-now-playing">
+          <div className="radio-station-info">
+            <span className="radio-playing-dot" style={{ backgroundColor: STATIONS.find(s => s.id === playing)?.color }} />
+            <span className="radio-playing-name">{STATIONS.find(s => s.id === playing)?.name}</span>
+          </div>
+          <button onClick={() => { audioRef.current?.pause(); setPlaying(null); }} className="radio-control-btn" aria-label="Pausar">
+            <Pause size={16} />
+          </button>
+        </div>
+      )}
+
+      {error && <div className="radio-error">{error}</div>}
+
       {expanded && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 10 }}>
+        <div className="radio-stations-list">
           {STATIONS.map(station => (
-            <a
-              key={station.id}
-              href={station.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '8px 10px', borderRadius: 8,
-                background: 'rgba(255,255,255,0.05)',
-                color: '#fff', textDecoration: 'none', width: '100%', transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
-            >
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: station.color, flexShrink: 0 }} />
-              <span style={{ flex: 1, fontSize: 12, fontWeight: 500 }}>{station.name}</span>
-              <span style={{ fontSize: 10, color: '#64748b' }}>{station.genre}</span>
-              <ExternalLink size={12} color="#64748b" />
-            </a>
+            <div key={station.id} className="radio-station-item">
+              <button onClick={() => playStation(station)} className="radio-play-btn" aria-label={playing === station.id ? `Pausar ${station.name}` : `Reproducir ${station.name}`}>
+                {playing === station.id ? <Pause size={14} color="#fff" /> : <Play size={14} color="#fff" />}
+              </button>
+              <span className="radio-station-dot" style={{ backgroundColor: station.color }} />
+              <span className="radio-station-name">{station.name}</span>
+              <span className="radio-station-genre">{station.genre}</span>
+              <a href={station.website} target="_blank" rel="noopener noreferrer" className="radio-website-link" aria-label={`Visitar sitio de ${station.name}`}>
+                <ExternalLink size={12} />
+              </a>
+            </div>
           ))}
         </div>
       )}
     </div>
   );
 }
-
