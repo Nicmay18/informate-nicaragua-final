@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
   description:
-    'Noticias de Nicaragua en tiempo real. Cobertura nacional e internacional de política, deportes, tecnología y sucesos desde Managua.',
+    'Noticias de Nicaragua en tiempo real. Cobertura de sucesos, nacionales, deportes, tecnología, espectáculos e internacionales desde Managua.',
   openGraph: {
     type: 'website',
     locale: 'es_NI',
