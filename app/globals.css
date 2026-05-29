@@ -316,6 +316,23 @@ select:focus-visible {
   font-size: 11px;
   border-radius: 6px;
 }
+.radio-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: radio-spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes radio-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.radio-play-btn.is-loading {
+  opacity: 0.7;
+  cursor: wait;
+}
 @media (max-width: 640px) {
   .radio-player {
     padding: 10px 12px;
