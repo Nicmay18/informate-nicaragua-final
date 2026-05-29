@@ -121,22 +121,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ConsentScript />
         <Analytics />
 
-        {/* Monetag scripts */}
+        {/* Monetag script — cargado lazy para no bloquear LCP */}
         <Script
-          id="monetag-244075"
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="244075"
-          async
-          data-cfasync="false"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="monetag-243623"
+          id="monetag"
           src="https://quge5.com/88/tag.min.js"
           data-zone="243623"
           async
           data-cfasync="false"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
 
         <script

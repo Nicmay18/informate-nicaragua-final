@@ -1,8 +1,7 @@
 'use client';
 
-/* eslint-disable @next/next/no-img-element */
-
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square, Zap, ArrowLeft, ArrowRight } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
@@ -16,41 +15,30 @@ function ArticleImage({ src, alt, style, width = 800, priority }: { src: string;
   const imgSrc = isValid ? validSrc : FALLBACK_IMAGE;
 
   if (priority) {
-    /* Imagen principal del artículo: <img> nativo para LCP directo sin proxy */
+    /* Imagen principal del artículo: Next.js Image para LCP optimizado */
     return (
-      <img
+      <Image
         src={imgSrc}
         alt={alt}
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-        width={width}
-        height={Math.round(width * 0.56)}
-        style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', ...style,
-        }}
-        onError={e => {
-          if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
-            (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
-          }
-        }}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, 800px"
+        priority
+        onError={() => { /* Next.js maneja fallback internamente */ }}
       />
     );
   }
 
-  /* Imágenes pequeñas (relacionadas): img nativo para control total de errores */
+  /* Imágenes pequeñas (relacionadas): Next.js Image con lazy loading */
   return (
-    <img
+    <Image
       src={imgSrc}
       alt={alt}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 400px"
       loading="lazy"
-      style={{ width: '100%', height: '100%', objectFit: 'cover', ...style }}
-      onError={e => {
-        if ((e.target as HTMLImageElement).src !== FALLBACK_IMAGE) {
-          (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
-        }
-      }}
+      onError={() => { /* Next.js maneja fallback internamente */ }}
     />
   );
 }

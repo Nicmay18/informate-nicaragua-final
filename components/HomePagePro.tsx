@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
@@ -49,24 +49,47 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
   const [progress, setProgress] = useState(0);
   const items = noticias.slice(0, 5);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const elapsedRef = useRef(0);
+  const isPausedRef = useRef(false);
+
+  const nextSlide = useCallback(() => {
+    setIdx(p => (p + 1) % items.length);
+    elapsedRef.current = 0;
+    setProgress(0);
+  }, [items.length]);
 
   useEffect(() => {
     if (items.length <= 1) return;
+
+    // Limpiar timer anterior
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    elapsedRef.current = 0;
     setProgress(0);
+
     const duration = 6000;
     const tick = 50;
-    let elapsed = 0;
-    const t = setInterval(() => {
-      elapsed += tick;
-      setProgress((elapsed / duration) * 100);
-      if (elapsed >= duration) {
-        setIdx(p => (p + 1) % items.length);
-        elapsed = 0;
-        setProgress(0);
+
+    timerRef.current = setInterval(() => {
+      if (isPausedRef.current) return;
+      elapsedRef.current += tick;
+      setProgress((elapsedRef.current / duration) * 100);
+      if (elapsedRef.current >= duration) {
+        nextSlide();
       }
     }, tick);
-    return () => clearInterval(t);
-  }, [items.length, idx]);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [items.length, nextSlide]);
 
   return (
     <section className="ni-hero" aria-label="Noticias destacadas">
