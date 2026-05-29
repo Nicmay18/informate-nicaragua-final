@@ -156,7 +156,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ARTÍCULOS DINÁMICOS desde Firebase
   try {
-    const articles = await getNews(500); // Obtener hasta 500 artículos
+    const articles = await getNews(100); // Obtener hasta 100 artículos recientes
 
     // Excluir artículos con slugs tóxicos del sitemap (AdSense remediation)
     const cleanArticles = articles.filter(article => !isToxicSlug(article.slug));

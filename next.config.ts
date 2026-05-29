@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
     ignoreBuildErrors: false,
@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
-    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.jsdelivr.net', pathname: '/**' },
       { protocol: 'https', hostname: 'images.weserv.nl', pathname: '/**' },
@@ -22,6 +21,11 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
       { protocol: 'https', hostname: 'i.ytimg.com', pathname: '/**' },
       { protocol: 'https', hostname: '**.googleusercontent.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'nicaraguainformate.com', pathname: '/**' },
+      { protocol: 'https', hostname: '**.nicaraguainformate.com', pathname: '/**' },
+      { protocol: 'https', hostname: '**.cloudinary.com', pathname: '/**' },
+      { protocol: 'https', hostname: '**.imgur.com', pathname: '/**' },
+      { protocol: 'https', hostname: '**.wp.com', pathname: '/**' },
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 86400,
