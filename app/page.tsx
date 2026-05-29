@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -51,5 +51,20 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
+  const heroImage = noticias[0]?.imagen;
+
+  return (
+    <>
+      {heroImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={heroImage}
+          type="image/webp"
+          fetchPriority="high"
+        />
+      )}
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+    </>
+  );
 }
