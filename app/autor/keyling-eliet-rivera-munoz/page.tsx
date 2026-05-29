@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -88,12 +89,12 @@ export default function AutorKeylingPage() {
         <h2 className="article-summary-title" style={{ marginBottom: 16 }}>Artículos recientes</h2>
         <ul style={{ margin: 0, padding: 0, listStyle: 'none', marginBottom: 32 }}>
           <li style={{ marginBottom: 12 }}>
-            <a
+            <Link
               href="/noticias/accidente-transito-carretera-norte-managua-heridos"
               style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}
             >
               Accidente en carretera norte de Managua deja tres heridos
-            </a>
+            </Link>
           </li>
         </ul>
 

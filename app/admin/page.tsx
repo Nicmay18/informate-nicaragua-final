@@ -88,9 +88,9 @@ export default function AdminPage() {
           <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16, color: '#1e293b' }}>Panel Editorial</h1>
           <p style={{ color: '#64748b', marginBottom: 24, fontSize: 14 }}>Acceso restringido. Ingresa con tu cuenta autorizada.</p>
           <button onClick={() => router.push('/admin/nueva')} style={{ display: 'none' }} />
-          <a href="/admin/index.html" style={{ display: 'inline-block', padding: '12px 24px', background: '#4f46e5', color: '#fff', borderRadius: 10, textDecoration: 'none', fontWeight: 600 }}>
+          <Link href="/admin/index.html" style={{ display: 'inline-block', padding: '12px 24px', background: '#4f46e5', color: '#fff', borderRadius: 10, textDecoration: 'none', fontWeight: 600 }}>
             Ir al Admin Original
-          </a>
+          </Link>
         </div>
       </div>
     );

@@ -9,7 +9,7 @@ import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/li
 import { FALLBACK_IMAGE } from '@/lib/types';
 import LutoImage from '@/components/LutoImage';
 
-function ArticleImage({ src, alt, style, width = 800, priority }: { src: string; alt: string; style?: React.CSSProperties; width?: number; priority?: boolean }) {
+function ArticleImage({ src, alt, priority }: { src: string; alt: string; priority?: boolean }) {
   const validSrc = src?.trim();
   const isValid = validSrc && (validSrc.startsWith('http') || validSrc.startsWith('/') || validSrc.startsWith('data:'));
   const imgSrc = isValid ? validSrc : FALLBACK_IMAGE;
@@ -546,7 +546,7 @@ export default function ArticleClient({
       <div className="article-page"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
         <div>
         <div className="breadcrumbs">
-          <a href="/">Inicio</a> / <a href={categorySlug}>{noticia.categoria}</a> / <span>{noticia.titulo}</span>
+          <Link href="/">Inicio</Link> / <Link href={categorySlug}>{noticia.categoria}</Link> / <span>{noticia.titulo}</span>
         </div>
         <div className="article-content">
           <header>
@@ -732,7 +732,7 @@ export default function ArticleClient({
                   <Link key={item.slug} href={`/noticias/${item.slug}`}>
                     <article>
                       <div className="related-thumb">
-                        <ArticleImage src={item.imagen} alt={item.titulo} width={320} />
+                        <ArticleImage src={item.imagen} alt={item.titulo} />
                       </div>
                       <div className="related-body">
                         <span>{item.categoria}</span>
@@ -754,7 +754,7 @@ export default function ArticleClient({
                   <Link key={item.slug} href={`/noticias/${item.slug}`}>
                     <article>
                       <div className="related-thumb">
-                        <ArticleImage src={item.imagen} alt={item.titulo} width={320} />
+                        <ArticleImage src={item.imagen} alt={item.titulo} />
                       </div>
                       <div className="related-body">
                         <span>{item.categoria}</span>

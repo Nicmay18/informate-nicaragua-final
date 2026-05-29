@@ -1,0 +1,23 @@
+
+> informate-nicaragua-final@2.0.0 build
+> next build
+
+   ▲ Next.js 15.3.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 8.0s
+   Linting and checking validity of types ...
+Failed to compile.
+
+./components/ArticleClient.tsx:12:35
+Type error: 'style' is declared but its value is never read.
+
+[0m [90m 10 |[39m [36mimport[39m [33mLutoImage[39m [36mfrom[39m [32m'@/components/LutoImage'[39m[33m;[39m[0m
+[0m [90m 11 |[39m[0m
+[0m[31m[1m>[22m[39m[90m 12 |[39m [36mfunction[39m [33mArticleImage[39m({ src[33m,[39m alt[33m,[39m style[33m,[39m width [33m=[39m [35m800[39m[33m,[39m priority }[33m:[39m { src[33m:[39m string[33m;[39m alt[33m:[39m string[33m;[39m style[33m?[39m[33m:[39m [33mReact[39m[33m.[39m[33mCSSProperties[39m[33m;[39m width[33m?[39m[33m:[39m number[33m;[39m priority[33m?[39m[33m:[39m boolean }) {[0m
+[0m [90m    |[39m                                   [31m[1m^[22m[39m[0m
+[0m [90m 13 |[39m   [36mconst[39m validSrc [33m=[39m src[33m?[39m[33m.[39mtrim()[33m;[39m[0m
+[0m [90m 14 |[39m   [36mconst[39m isValid [33m=[39m validSrc [33m&&[39m (validSrc[33m.[39mstartsWith([32m'http'[39m) [33m||[39m validSrc[33m.[39mstartsWith([32m'/'[39m) [33m||[39m validSrc[33m.[39mstartsWith([32m'data:'[39m))[33m;[39m[0m
+[0m [90m 15 |[39m   [36mconst[39m imgSrc [33m=[39m isValid [33m?[39m validSrc [33m:[39m [33mFALLBACK_IMAGE[39m[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

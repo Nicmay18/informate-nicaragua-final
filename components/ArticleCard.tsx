@@ -45,11 +45,11 @@ function CategoryPlaceholder({ category, color }: { category: string; color: str
  * @returns Tarjeta de artículo
  */
 export default function ArticleCard({ article, hero = false, index = 0 }: ArticleCardProps) {
+  const [imgError, setImgError] = useState(false);
+
   if (!article || !article.slug || !article.titulo) {
     return null;
   }
-
-  const [imgError, setImgError] = useState(false);
   const catColor = CATEGORY_COLORS[article.categoria] || '#8c1d18';
   const href = `/noticias/${article.slug}/`;
   const hasImage = article.imagen && article.imagen !== '/logo.png' && !imgError;
