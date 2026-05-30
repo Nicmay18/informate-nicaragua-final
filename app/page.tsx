@@ -1,5 +1,4 @@
 import HomePagePro from '@/components/HomePagePro';
-import MasVistas from '@/components/MasVistas';
 import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -67,7 +66,6 @@ export default async function HomePage() {
         />
       )}
       <HomePagePro noticias={noticias} masLeidas={masLeidas} />
-      <MasVistas noticias={masLeidas} />
     </>
   );
 }
