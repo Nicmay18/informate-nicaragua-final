@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Radio, Volume2, VolumeX, Play, Pause, ExternalLink, Signal, WifiOff } from 'lucide-react';
+import { Radio, Volume2, VolumeX, Pause, ExternalLink, Signal, WifiOff } from 'lucide-react';
 
 interface Station {
   id: string;
@@ -50,7 +50,6 @@ function AudioVisualizer({ color, isPlaying }: { color: string; isPlaying: boole
 }
 
 export default function RadioPlayer() {
-  const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
@@ -189,9 +188,6 @@ export default function RadioPlayer() {
             <p className="text-slate-400 text-[10px] uppercase tracking-wider">Nicaragua</p>
           </div>
         </div>
-        <button onClick={() => setExpanded(!expanded)} className="text-slate-400 hover:text-white transition-colors text-xs font-medium">
-          {expanded ? 'Ocultar' : 'Ver emisoras'}
-        </button>
       </div>
 
       {/* Now Playing Card */}
@@ -266,83 +262,42 @@ export default function RadioPlayer() {
         </div>
       )}
 
-      {/* Station List */}
-      {expanded && (
-        <div className="max-h-[320px] overflow-y-auto">
-          <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Emisoras disponibles</div>
-          {STATIONS.map((station) => {
-            const isPlaying = playing === station.id;
-            const isLoading = loading === station.id;
-            const hasStream = !!station.streamUrl;
-
-            return (
-              <div
-                key={station.id}
-                onClick={() => hasStream && playStation(station)}
-                className={`
-                  group flex items-center gap-3 px-4 py-3 cursor-pointer transition-all border-l-[3px]
-                  ${isPlaying ? 'bg-slate-50 border-l-current' : 'border-l-transparent hover:bg-slate-50'}
-                `}
-                style={isPlaying ? { borderLeftColor: station.color } : undefined}
-              >
-                {/* Play button / Status */}
-                <div className="shrink-0">
-                  {isLoading ? (
-                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center">
-                      <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin" />
-                    </div>
-                  ) : isPlaying ? (
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: station.color }}>
-                      <Pause size={16} fill="currentColor" />
-                    </div>
-                  ) : !hasStream ? (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); window.open(station.website, '_blank', 'noopener,noreferrer'); }}
-                      className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors"
-                      title="Visitar web"
-                    >
-                      <ExternalLink size={14} />
-                    </button>
-                  ) : (
-                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:text-slate-700 group-hover:bg-slate-200 transition-all">
-                      <Play size={16} fill="currentColor" className="ml-0.5" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-slate-800 truncate">{station.name}</span>
-                    {!hasStream && (
-                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-200 text-slate-600 uppercase">Web</span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[11px] text-slate-500">{station.genre}</span>
-                    {isPlaying && (
-                      <span className="flex items-center gap-1 text-[10px] font-bold" style={{ color: station.color }}>
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: station.color }} />
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: station.color }} />
-                        </span>
-                        Reproduciendo
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Color dot */}
-                <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: station.color }} />
-              </div>
-            );
-          })}
+      {/* Station Selector */}
+      <div className="px-5 py-4 bg-white border-b border-slate-100">
+        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Seleccionar emisora</label>
+        <div className="relative">
+          <select
+            value={playing || ''}
+            onChange={(e) => {
+              const id = e.target.value;
+              if (!id) return;
+              const station = STATIONS.find(s => s.id === id);
+              if (station) playStation(station);
+            }}
+            className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent cursor-pointer"
+          >
+            <option value="">-- Elegir emisora --</option>
+            {STATIONS.map((station) => (
+              <option key={station.id} value={station.id}>
+                {station.name} {station.streamUrl ? '' : '(Web)'}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
-      )}
-
-      {/* Footer */}
-      <div className="px-4 py-2 bg-slate-50 border-t border-slate-200 text-center">
-        <p className="text-[10px] text-slate-400">Seleccioná una emisora para comenzar</p>
+        {playing && (
+          <div className="flex items-center gap-2 mt-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-red-500" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+            </span>
+            <span className="text-xs text-slate-500">Reproduciendo {currentStation?.name}</span>
+          </div>
+        )}
       </div>
     </div>
   );

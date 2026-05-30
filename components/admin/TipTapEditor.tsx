@@ -80,7 +80,14 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
     <div className="tt-editor-wrapper">
       <div className="tt-toolbar">
         <div className="tt-toolbar-group">
-          {btn('H2', () => editor.chain().focus().toggleHeading({ level: 2 }).run(), isActive('heading', { level: 2 }))}
+          {btn('H2', () => {
+            const isH2 = editor.isActive('heading', { level: 2 });
+            if (isH2) {
+              editor.chain().focus().toggleHeading({ level: 2 }).unsetBold().run();
+            } else {
+              editor.chain().focus().toggleHeading({ level: 2 }).setBold().run();
+            }
+          }, isActive('heading', { level: 2 }))}
         </div>
         <div className="tt-toolbar-group">
           {btn(<b>B</b>, () => editor.chain().focus().toggleBold().run(), isActive('bold'))}
