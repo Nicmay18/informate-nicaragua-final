@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Zap } from 'lucide-react';
 import { getCategory } from '@/lib/constants';
 import { stripHtml, extractFirstSentence, extractKeySentence } from '@/lib/formateo';
 
@@ -10,7 +9,6 @@ interface KeyPointsProps {
   resumen?: string;
   contenido?: string;
   categoria?: string;
-  className?: string;
 }
 
 function generateImpactPoint(categoria: string): { label: string; text: string } {
@@ -50,18 +48,16 @@ function generateImpactPoint(categoria: string): { label: string; text: string }
   };
 }
 
-export default function KeyPoints({ titulo, resumen, contenido, categoria, className = '' }: KeyPointsProps) {
+export default function KeyPoints({ titulo, resumen, contenido, categoria }: KeyPointsProps) {
   const points = useMemo(() => {
     const plainContent = stripHtml(contenido || resumen || '');
     const plainResumen = stripHtml(resumen || '');
 
-    // Punto 1: primera oración completa del contenido
     let punto1 = extractFirstSentence(plainContent);
     if (!punto1 || punto1.length < 20) {
       punto1 = `${titulo}. Información verificada bajo estándares periodísticos.`;
     }
 
-    // Punto 2: del resumen o del medio del contenido
     let punto2 = plainResumen ? extractFirstSentence(plainResumen) : extractKeySentence(plainContent, 'middle');
     if (!punto2 || punto2.length < 20 || punto2 === punto1) {
       punto2 = extractKeySentence(plainContent, 'end');
@@ -70,23 +66,41 @@ export default function KeyPoints({ titulo, resumen, contenido, categoria, class
       punto2 = 'La información fue verificada a través de fuentes oficiales y testigos presenciales antes de su publicación.';
     }
 
-    // Punto 3: impacto según categoría
     const impact = generateImpactPoint(categoria || '');
 
     return { punto1, punto2, punto3: impact };
   }, [titulo, resumen, contenido, categoria]);
 
+  const sectionStyle: React.CSSProperties = {
+    maxWidth: 768,
+    margin: '32px auto',
+    padding: 24,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    border: '1px solid #e5e5e5',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+  };
+
+  const titleStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 18,
+    fontWeight: 700,
+    color: '#111827',
+    paddingBottom: 12,
+    marginBottom: 16,
+    borderBottom: '2px solid #111827',
+  };
+
   return (
-    <section 
-      className={`max-w-3xl mx-auto my-8 p-6 bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}
-      aria-label="Resumen de puntos clave"
-    >
-      <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900 pb-3 mb-4 border-b-2 border-gray-900">
-        <Zap size={18} className="text-amber-500" aria-hidden="true" />
+    <section style={sectionStyle} aria-label="Resumen de puntos clave">
+      <h2 style={titleStyle}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10" /></svg>
         3 Puntos Clave
       </h2>
 
-      <div className="space-y-4">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <Point label="Qué ocurrió" text={points.punto1} />
         <Point label="Contexto" text={points.punto2} />
         <Point label={points.punto3.label} text={points.punto3.text} />
@@ -96,16 +110,23 @@ export default function KeyPoints({ titulo, resumen, contenido, categoria, class
 }
 
 function Point({ label, text }: { label: string; text: string }) {
+  const dotStyle: React.CSSProperties = {
+    position: 'absolute',
+    left: 0,
+    top: 8,
+    width: 6,
+    height: 6,
+    borderRadius: '50%',
+    backgroundColor: '#2563eb',
+  };
+
   return (
-    <div className="relative pl-5">
-      <span 
-        className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-blue-600"
-        aria-hidden="true"
-      />
-      <span className="block text-xs font-semibold text-gray-900 uppercase tracking-wider mb-1">
+    <div style={{ position: 'relative', paddingLeft: 20 }}>
+      <span style={dotStyle} aria-hidden="true" />
+      <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#111827', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
         {label}
       </span>
-      <p className="text-sm text-gray-600 leading-relaxed">
+      <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>
         {text}
       </p>
     </div>

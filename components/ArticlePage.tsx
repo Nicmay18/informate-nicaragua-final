@@ -4,7 +4,6 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CalendarDays, Clock, Eye, Play, Pause, Square, ArrowLeft, ArrowRight } from 'lucide-react';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { timeAgo, tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
 import KeyPoints from './KeyPoints';
@@ -29,9 +28,26 @@ function ReadingProgress() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const barStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 3,
+    zIndex: 9999,
+    backgroundColor: '#e5e5e5',
+  };
+
+  const fillStyle: React.CSSProperties = {
+    height: '100%',
+    backgroundColor: '#991b1b',
+    transition: 'width 0.15s ease-out',
+    width: `${progress}%`,
+  };
+
   return (
-    <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-gray-200" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
-      <div className="h-full bg-red-800 transition-all duration-150" style={{ width: `${progress}%` }} />
+    <div style={barStyle} role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
+      <div style={fillStyle} />
     </div>
   );
 }
@@ -130,45 +146,88 @@ function AudioButton({ titulo, resumen, contenido }: { titulo: string; resumen: 
 
   useEffect(() => () => stop(), [stop]);
 
+  const btnBase: React.CSSProperties = {
+    width: 48,
+    height: 48,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: 'none',
+    cursor: 'pointer',
+    flexShrink: 0,
+  };
+
+  const wrapStyle: React.CSSProperties = {
+    margin: '24px 0',
+    padding: 20,
+    backgroundColor: '#fef3c7',
+    border: '1px solid #fde68a',
+    borderRadius: 12,
+  };
+
   return (
-    <div className="my-6 p-5 bg-amber-50 border border-amber-200 rounded-xl">
-      <div className="flex items-center gap-4">
+    <div style={wrapStyle}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <button
           onClick={togglePlay}
           disabled={isLoading}
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-all ${isLoading ? 'bg-gray-400 cursor-wait' : 'bg-red-800 hover:bg-red-900'}`}
+          style={{
+            ...btnBase,
+            backgroundColor: isLoading ? '#9ca3af' : '#991b1b',
+            color: '#fff',
+            cursor: isLoading ? 'wait' : 'pointer',
+          }}
           aria-label={isPlaying ? 'Pausar' : isLoading ? 'Cargando' : 'Reproducir audio'}
         >
           {isLoading ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
           ) : isPlaying ? (
-            <Pause size={18} />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
           ) : (
-            <Play size={18} className="ml-0.5" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21" /></svg>
           )}
         </button>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-900 text-sm">
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#111827' }}>
             {isLoading ? 'Generando audio profesional...' : isPlaying ? 'Reproduciendo noticia' : 'Escuchar noticia en voz profesional'}
           </p>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
             {isLoading ? 'Esto puede tomar unos segundos' : 'Voz generada con inteligencia artificial'}
           </p>
         </div>
+
         {isPlaying && (
-          <button onClick={stop} className="px-3 py-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50" aria-label="Detener reproducción">
-            <Square size={10} className="inline mr-1" fill="currentColor" />
+          <button
+            onClick={stop}
+            style={{
+              padding: '6px 12px',
+              fontSize: 12,
+              fontWeight: 600,
+              color: '#4b5563',
+              backgroundColor: '#fff',
+              border: '1px solid #e5e5e5',
+              borderRadius: 8,
+              cursor: 'pointer',
+            }}
+            aria-label="Detener reproducción"
+          >
             Detener
           </button>
         )}
       </div>
+
       {isPlaying && (
-        <div className="mt-3 h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-red-800 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div style={{ marginTop: 12, height: 4, backgroundColor: '#e5e5e5', borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{ height: '100%', backgroundColor: '#991b1b', borderRadius: 2, transition: 'width 0.3s ease', width: `${progress}%` }} />
         </div>
       )}
+
       {errorMsg && (
-        <p className="mt-3 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{errorMsg}</p>
+        <p style={{ margin: '12px 0 0', fontSize: 12, color: '#b91c1c', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '8px 12px' }}>
+          {errorMsg}
+        </p>
       )}
     </div>
   );
@@ -184,8 +243,10 @@ function PullQuote({ contenido }: { contenido: string }) {
   if (!quote) return null;
 
   return (
-    <aside className="my-8 pl-6 border-l-4 border-red-800 py-2">
-      <p className="text-xl font-serif italic text-gray-800 leading-relaxed">"{quote}."</p>
+    <aside style={{ margin: '32px 0', paddingLeft: 24, borderLeft: '4px solid #991b1b', paddingTop: 8, paddingBottom: 8 }}>
+      <p style={{ fontSize: 20, fontFamily: 'Georgia, serif', fontStyle: 'italic', color: '#1f2937', lineHeight: 1.6, margin: 0 }}>
+        &ldquo;{quote}.&rdquo;
+      </p>
     </aside>
   );
 }
@@ -195,15 +256,15 @@ function PullQuote({ contenido }: { contenido: string }) {
    ================================================================ */
 function AdPlaceholder({ label, size }: { label: string; size: string }) {
   return (
-    <div className="my-8 py-8 px-4 bg-gray-50 border border-gray-200 rounded-lg text-center" role="complementary" aria-label={label}>
-      <span className="text-xs text-gray-400 uppercase tracking-wider">{label}</span>
-      <p className="text-sm text-gray-500 mt-1">{size}</p>
+    <div style={{ margin: '32px 0', padding: '32px 16px', backgroundColor: '#f9fafb', border: '1px solid #e5e5e5', borderRadius: 8, textAlign: 'center' }} role="complementary" aria-label={label}>
+      <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1, color: '#9ca3af' }}>{label}</span>
+      <p style={{ fontSize: 14, color: '#6b7280', margin: '4px 0 0' }}>{size}</p>
     </div>
   );
 }
 
 /* ================================================================
-   ARTICLE PAGE - CON PIE DE FOTO SIEMPRE VISIBLE
+   ARTICLE PAGE — ESTILOS INLINE COMPLETOS (sin Tailwind)
    ================================================================ */
 interface ArticlePageProps {
   noticia: Noticia;
@@ -217,9 +278,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   if (!noticia) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <p className="text-gray-500">Noticia no encontrada</p>
-        <button onClick={() => router.back()} className="mt-4 text-red-800 hover:underline">← Volver</button>
+      <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
+        <p style={{ color: '#6b7280' }}>Noticia no encontrada</p>
+        <button onClick={() => router.back()} style={{ marginTop: 16, color: '#991b1b', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>← Volver</button>
       </div>
     );
   }
@@ -231,74 +292,166 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const tags = [noticia.categoria, ...extractPoints(noticia.titulo, 3)];
   const readAlso = related.slice(0, 3);
 
-  // Pie de foto con atribución por defecto si no existe en Firebase
   const pieDeFoto = noticia.pieFoto?.trim()
     ? noticia.pieFoto
     : 'Foto: Nicaragua Informate / Archivo';
+
+  // Container principal
+  const containerStyle: React.CSSProperties = {
+    maxWidth: 896,
+    margin: '0 auto',
+    padding: '24px 16px 64px',
+  };
+
+  const metaStyle: React.CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: '8px 16px',
+    fontSize: 14,
+    color: '#6b7280',
+    paddingBottom: 16,
+    marginBottom: 24,
+    borderBottom: '1px solid #e5e5e5',
+  };
+
+  const badgeStyle: React.CSSProperties = {
+    display: 'inline-block',
+    padding: '4px 12px',
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#fff',
+    borderRadius: 9999,
+    marginBottom: 12,
+    backgroundColor: category.color,
+  };
+
+  const fontBtnStyle: React.CSSProperties = {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    border: '1px solid #e5e5e5',
+    backgroundColor: '#fff',
+    fontSize: 14,
+    fontWeight: 700,
+    cursor: 'pointer',
+    color: '#374151',
+  };
+
+  const imgContainerStyle: React.CSSProperties = {
+    position: 'relative',
+    width: '100%',
+    height: 480,
+    maxHeight: 480,
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 8,
+    backgroundColor: '#f3f4f6',
+  };
+
+  const captionStyle: React.CSSProperties = {
+    fontSize: 12,
+    color: '#6b7280',
+    textAlign: 'right',
+    marginBottom: 24,
+    padding: '4px 8px',
+    backgroundColor: '#f9fafb',
+    borderRadius: 4,
+  };
+
+  const contentStyle: React.CSSProperties = {
+    fontSize: `${fontSize}em`,
+    lineHeight: 1.8,
+    color: '#374151',
+  };
+
+  const tagStyle: React.CSSProperties = {
+    display: 'inline-block',
+    padding: '4px 12px',
+    fontSize: 13,
+    fontWeight: 500,
+    color: '#4b5563',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 9999,
+    textDecoration: 'none',
+  };
+
+  const navCardStyle: React.CSSProperties = {
+    display: 'block',
+    padding: 16,
+    backgroundColor: '#f9fafb',
+    border: '1px solid #e5e5e5',
+    borderRadius: 12,
+    textDecoration: 'none',
+    transition: 'border-color 0.2s',
+  };
+
+  const relatedCardStyle: React.CSSProperties = {
+    display: 'block',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    border: '1px solid #e5e5e5',
+    overflow: 'hidden',
+    textDecoration: 'none',
+    transition: 'box-shadow 0.2s',
+  };
 
   return (
     <>
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <article className="max-w-4xl mx-auto px-4 pt-6 pb-16" itemScope itemType="https://schema.org/NewsArticle">
+      <article style={containerStyle} itemScope itemType="https://schema.org/NewsArticle">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4" aria-label="Miga de pan">
-          <Link href="/" className="hover:text-red-800 transition-colors">Inicio</Link>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#6b7280', marginBottom: 16 }} aria-label="Miga de pan">
+          <Link href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Inicio</Link>
           <span>/</span>
-          <Link href={`/categoria/${category.slug}`} className="hover:text-red-800 transition-colors">{category.name}</Link>
+          <Link href={`/categoria/${category.slug}`} style={{ color: '#6b7280', textDecoration: 'none' }}>{category.name}</Link>
           <span>/</span>
-          <span className="text-gray-400 truncate max-w-[200px]">{noticia.titulo}</span>
+          <span style={{ color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>{noticia.titulo}</span>
         </nav>
 
         {/* Category Badge */}
-        <span className="inline-block px-3 py-1 text-xs font-bold text-white rounded-full mb-3" style={{ backgroundColor: category.color }} itemProp="articleSection">
-          {category.name}
-        </span>
+        <span style={badgeStyle} itemProp="articleSection">{category.name}</span>
 
         {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4" itemProp="headline">
+        <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, margin: '0 0 16px' }} itemProp="headline">
           {noticia.titulo}
         </h1>
 
-        {/* Lead / Resumen */}
+        {/* Resumen */}
         {noticia.resumen && (
-          <p className="text-lg text-gray-600 leading-relaxed mb-6" itemProp="description">
+          <p style={{ fontSize: 18, color: '#4b5563', lineHeight: 1.6, marginBottom: 24 }} itemProp="description">
             {noticia.resumen}
           </p>
         )}
 
         {/* Meta bar */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 pb-4 mb-6 border-b border-gray-200">
-          <span className="flex items-center gap-1.5">
-            <CalendarDays size={14} aria-hidden="true" />
+        <div style={metaStyle}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
             <time dateTime={noticia.fecha} itemProp="datePublished">{formatDateES(noticia.fecha)}</time>
           </span>
-          <span className="flex items-center gap-1.5">
-            <Clock size={14} aria-hidden="true" />
+          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
             {lecturaMin} min de lectura
           </span>
-          <span className="flex items-center gap-1.5">
-            <Eye size={14} aria-hidden="true" />
+          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
             {vistas} vistas
           </span>
           {timeAgo(noticia.fecha) && (
-            <span className="text-red-800 font-medium">{timeAgo(noticia.fecha)}</span>
+            <span style={{ color: '#991b1b', fontWeight: 600 }}>{timeAgo(noticia.fecha)}</span>
           )}
-          <div className="ml-auto flex items-center gap-1">
-            <button onClick={() => setFontSize(s => FONT_STEPS[Math.max(0, FONT_STEPS.indexOf(s) - 1)])} className="w-8 h-8 rounded border border-gray-200 text-sm font-bold hover:bg-gray-50" aria-label="Reducir texto">A−</button>
-            <button onClick={() => setFontSize(s => FONT_STEPS[Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(s) + 1)])} className="w-8 h-8 rounded border border-gray-200 text-sm font-bold hover:bg-gray-50" aria-label="Aumentar texto">A+</button>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+            <button onClick={() => setFontSize(s => FONT_STEPS[Math.max(0, FONT_STEPS.indexOf(s) - 1)])} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
+            <button onClick={() => setFontSize(s => FONT_STEPS[Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(s) + 1)])} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
           </div>
         </div>
 
-        {/* Imagen destacada */}
+        {/* Imagen destacada — ALTURA FIJA 480px */}
         {noticia.imagen && (
-          <figure
-            style={{ position: 'relative', width: '100%', maxHeight: 480, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', marginBottom: 8, backgroundColor: '#f3f4f6' }}
-            itemProp="image"
-            itemScope
-            itemType="https://schema.org/ImageObject"
-          >
+          <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             <Image
               src={noticia.imagen}
               alt={noticia.titulo}
@@ -313,11 +466,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
-        {/* Pie de foto: SIEMPRE VISIBLE */}
-        <figcaption className="text-xs text-gray-500 text-right mb-6 px-1 py-1 bg-gray-50 rounded">
-          <span className="font-medium">{pieDeFoto}</span>
+        {/* Pie de foto */}
+        <figcaption style={captionStyle}>
+          <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
           {noticia.pieFoto?.trim() && (
-            <span className="text-gray-400 ml-1">| Nicaragua Informate</span>
+            <span style={{ color: '#9ca3af', marginLeft: 4 }}>| Nicaragua Informate</span>
           )}
         </figcaption>
 
@@ -330,13 +483,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Ad Top */}
         <AdPlaceholder label="Publicidad" size="In-article Top" />
 
-        {/* Content */}
-        <div
-          className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-800 prose-a:no-underline hover:prose-a:underline"
-          style={{ fontSize: `${fontSize}em` }}
-          itemProp="articleBody"
-          dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }}
-        />
+        {/* Contenido */}
+        <div style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
 
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />
@@ -346,9 +494,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Tags */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-8">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
             {tags.map((tag, i) => (
-              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} className="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} style={tagStyle}>
                 #{tag}
               </Link>
             ))}
@@ -356,12 +504,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         )}
 
         {/* Share */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #e5e5e5' }}>
           <ShareBar url={url} title={noticia.titulo} variant="chips" />
         </div>
 
         {/* Author */}
-        <div className="mt-8">
+        <div style={{ marginTop: 32 }}>
           <AuthorCard
             name={noticia.autor}
             publishedDate={noticia.fecha}
@@ -369,23 +517,25 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           />
         </div>
 
-        {/* Navigation */}
+        {/* Navegación */}
         {readAlso.length > 0 && (
-          <nav className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
             {readAlso[0] && (
-              <Link href={`/noticias/${readAlso[0].slug}`} className="group p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-red-200 transition-colors">
-                <span className="flex items-center gap-1 text-xs font-semibold text-gray-500 uppercase mb-1">
-                  <ArrowLeft size={14} /> Anterior
+              <Link href={`/noticias/${readAlso[0].slug}`} style={navCardStyle}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
+                  Anterior
                 </span>
-                <p className="font-semibold text-gray-900 group-hover:text-red-800 transition-colors line-clamp-2">{readAlso[0].titulo}</p>
+                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[0].titulo}</p>
               </Link>
             )}
             {readAlso[1] && (
-              <Link href={`/noticias/${readAlso[1].slug}`} className="group p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-red-200 transition-colors md:text-right">
-                <span className="flex items-center justify-end gap-1 text-xs font-semibold text-gray-500 uppercase mb-1">
-                  Siguiente <ArrowRight size={14} />
+              <Link href={`/noticias/${readAlso[1].slug}`} style={{ ...navCardStyle, textAlign: 'right' }}>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+                  Siguiente
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6" /></svg>
                 </span>
-                <p className="font-semibold text-gray-900 group-hover:text-red-800 transition-colors line-clamp-2">{readAlso[1].titulo}</p>
+                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[1].titulo}</p>
               </Link>
             )}
           </nav>
@@ -393,34 +543,37 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Related News */}
         {related.length > 3 && (
-          <section className="mt-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Lea también</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <section style={{ marginTop: 48 }}>
+            <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Lea también</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
               {related.slice(3, 6).map(item => (
-                <Link key={item.slug} href={`/noticias/${item.slug}`} className="group">
-                  <article className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                    {item.imagen && (
-                      <div className="relative aspect-video bg-gray-100">
-                        <Image src={item.imagen} alt={item.titulo} fill className="object-cover" sizes="300px" loading="lazy" />
-                      </div>
-                    )}
-                    <div className="p-4">
-                      <span className="text-xs font-semibold text-red-800">{item.categoria}</span>
-                      <h3 className="font-semibold text-gray-900 mt-1 line-clamp-2 group-hover:text-red-800 transition-colors">{item.titulo}</h3>
-                      <time className="text-xs text-gray-500 mt-2 block" dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
+                <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
+                  {item.imagen && (
+                    <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
+                      <Image src={item.imagen} alt={item.titulo} fill style={{ objectFit: 'cover' }} sizes="300px" loading="lazy" />
                     </div>
-                  </article>
+                  )}
+                  <div style={{ padding: 16 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: '#991b1b' }}>{item.categoria}</span>
+                    <h3 style={{ margin: '4px 0 0', fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{item.titulo}</h3>
+                    <time style={{ fontSize: 12, color: '#9ca3af', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
+                  </div>
                 </Link>
               ))}
             </div>
           </section>
         )}
 
-        {/* Comments Placeholder */}
-        <section className="mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Comentarios (0)</h2>
-          <textarea className="w-full p-4 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-red-800 focus:border-transparent" rows={4} placeholder="¿Qué opinas sobre esta noticia? Comparte tu perspectiva..." />
-          <button className="mt-2 px-6 py-2 bg-red-800 text-white font-semibold rounded-lg hover:bg-red-900 transition-colors">Publicar comentario</button>
+        {/* Comments */}
+        <section style={{ marginTop: 48 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Comentarios (0)</h2>
+          <textarea
+            style={{ width: '100%', padding: 16, border: '1px solid #e5e5e5', borderRadius: 12, resize: 'none', fontFamily: 'inherit', fontSize: 15, minHeight: 100 }}
+            placeholder="¿Qué opinas sobre esta noticia? Comparte tu perspectiva..."
+          />
+          <button style={{ marginTop: 8, padding: '10px 24px', backgroundColor: '#991b1b', color: '#fff', fontWeight: 600, borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 15 }}>
+            Publicar comentario
+          </button>
         </section>
 
         {/* Ad Bottom */}

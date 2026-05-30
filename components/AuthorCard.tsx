@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { User, Calendar, Clock, ExternalLink } from 'lucide-react';
 import { formatDateTime } from '@/lib/formateo';
 
 interface AuthorCardProps {
@@ -13,10 +12,8 @@ interface AuthorCardProps {
   slug?: string;
   publishedDate?: string;
   updatedDate?: string;
-  className?: string;
 }
 
-// Fallback para autores sin datos completos
 const DEFAULT_AUTHOR = {
   name: 'Redacción Nicaragua Informate',
   role: 'Periodista',
@@ -32,7 +29,6 @@ export default function AuthorCard({
   slug,
   publishedDate,
   updatedDate,
-  className = '',
 }: AuthorCardProps) {
   const displayName = name?.trim() || DEFAULT_AUTHOR.name;
   const displayRole = role?.trim() || DEFAULT_AUTHOR.role;
@@ -41,84 +37,135 @@ export default function AuthorCard({
   const hasSlug = slug && slug.trim().length > 0;
   const isUpdated = updatedDate && updatedDate !== publishedDate;
 
+  const wrapperStyle: React.CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    gap: 16,
+    padding: 20,
+    backgroundColor: '#f9fafb',
+    borderRadius: 12,
+    border: '1px solid #e5e5e5',
+  };
+
+  const avatarImgStyle: React.CSSProperties = {
+    position: 'relative',
+    width: 64,
+    height: 64,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    flexShrink: 0,
+    border: '2px solid #e5e5e5',
+  };
+
+  const avatarFallbackStyle: React.CSSProperties = {
+    width: 64,
+    height: 64,
+    borderRadius: '50%',
+    backgroundColor: '#991b1b',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: 20,
+    flexShrink: 0,
+  };
+
+  const infoStyle: React.CSSProperties = {
+    flex: 1,
+    minWidth: 0,
+  };
+
+  const nameStyle: React.CSSProperties = {
+    fontSize: 16,
+    fontWeight: 700,
+    color: '#111827',
+    textDecoration: 'none',
+  };
+
+  const roleStyle: React.CSSProperties = {
+    fontSize: 14,
+    color: '#991b1b',
+    fontWeight: 600,
+    margin: '2px 0 0',
+  };
+
+  const bioStyle: React.CSSProperties = {
+    fontSize: 14,
+    color: '#4b5563',
+    lineHeight: 1.6,
+    margin: '8px 0 0',
+  };
+
+  const dateStyle: React.CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 12,
+    fontSize: 12,
+    color: '#6b7280',
+  };
+
+  const linkStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+    fontSize: 14,
+    fontWeight: 600,
+    color: '#991b1b',
+    textDecoration: 'none',
+    marginTop: 12,
+  };
+
   return (
-    <aside 
-      className={`flex flex-wrap items-start gap-4 p-5 bg-gray-50 rounded-xl border border-gray-200 ${className}`}
-      aria-label={`Información del autor: ${displayName}`}
-    >
-      {/* Avatar */}
+    <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`}>
       {hasPhoto ? (
-        <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200">
-          <Image
-            src={photo}
-            alt={displayName}
-            fill
-            className="object-cover"
-            sizes="64px"
-          />
+        <div style={avatarImgStyle}>
+          <Image src={photo!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="64px" />
         </div>
       ) : (
-        <div className="w-16 h-16 rounded-full bg-red-800 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-          <User size={28} strokeWidth={2} />
+        <div style={avatarFallbackStyle}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
         </div>
       )}
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
+      <div style={infoStyle}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           {hasSlug ? (
-            <Link 
-              href={`/autor/${slug}`} 
-              className="text-base font-bold text-gray-900 hover:text-red-800 transition-colors"
-              rel="author"
-            >
+            <Link href={`/autor/${slug}`} style={nameStyle} rel="author">
               {displayName}
             </Link>
           ) : (
-            <span className="text-base font-bold text-gray-900">
-              {displayName}
-            </span>
+            <span style={nameStyle}>{displayName}</span>
           )}
         </div>
 
-        <p className="text-sm text-red-800 font-medium mt-0.5">
-          {displayRole}
-        </p>
+        <p style={roleStyle}>{displayRole}</p>
+        <p style={bioStyle}>{displayBio}</p>
 
-        <p className="text-sm text-gray-600 leading-relaxed mt-2">
-          {displayBio}
-        </p>
-
-        {/* Fechas */}
         {(publishedDate || updatedDate) && (
-          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-gray-500">
+          <div style={dateStyle}>
             {publishedDate && (
-              <span className="flex items-center gap-1">
-                <Calendar size={12} aria-hidden="true" />
-                <time dateTime={publishedDate}>
-                  Publicado: {formatDateTime(publishedDate)}
-                </time>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                <time dateTime={publishedDate}>Publicado: {formatDateTime(publishedDate)}</time>
               </span>
             )}
             {isUpdated && (
-              <span className="flex items-center gap-1">
-                <Clock size={12} aria-hidden="true" />
-                <time dateTime={updatedDate}>
-                  Actualizado: {formatDateTime(updatedDate)}
-                </time>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                <time dateTime={updatedDate}>Actualizado: {formatDateTime(updatedDate)}</time>
               </span>
             )}
           </div>
         )}
 
-        {/* Link a más artículos */}
         {hasSlug && (
-          <Link
-            href={`/autor/${slug}`}
-            className="inline-flex items-center gap-1 text-sm font-medium text-red-800 hover:text-red-900 mt-3 transition-colors"
-          >
+          <Link href={`/autor/${slug}`} style={linkStyle}>
             Más artículos
-            <ExternalLink size={14} aria-hidden="true" />
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15,3 21,3 21,9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
           </Link>
         )}
       </div>
