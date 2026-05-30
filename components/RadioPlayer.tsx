@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Radio, Play, Pause, Volume2, VolumeX, ExternalLink } from 'lucide-react';
+import { Radio, Volume2, VolumeX } from 'lucide-react';
 
 interface Station {
   id: string;
@@ -33,6 +33,11 @@ export default function RadioPlayer() {
   const [loading, setLoading] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+
+  /* Íconos Unicode como fallback absoluto */
+  const IconPlay = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9654;</span>;
+  const IconPause = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9208;</span>;
+  const IconLink = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#8599;</span>;
 
   const currentStation = STATIONS.find(s => s.id === playing);
 
@@ -120,11 +125,11 @@ export default function RadioPlayer() {
 
     setLoading(station.id);
 
-    let audio = audioRef.current;
+    const audio = audioRef.current;
     if (!audio) {
-      audio = document.createElement('audio');
-      audio.preload = 'none';
-      audioRef.current = audio;
+      setError('Error interno: no se encontró el reproductor.');
+      setLoading(null);
+      return;
     }
 
     audio.oncanplay = null;
@@ -136,7 +141,7 @@ export default function RadioPlayer() {
     audio.volume = isMuted ? 0 : volume;
 
     audio.oncanplay = () => {
-      audio?.play().then(() => {
+      audio.play().then(() => {
         setPlaying(station.id);
         setLoading(null);
         setupMediaSession(station);
@@ -183,6 +188,13 @@ export default function RadioPlayer() {
 
   return (
     <div className="radio-player">
+      {/* Audio REAL en el DOM — sin esto el navegador mata el stream al bloquear pantalla */}
+      <audio
+        ref={audioRef}
+        preload="none"
+        style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
+      />
+
       <div className="radio-header">
         <div className="radio-title-group">
           <Radio size={14} color="#ef4444" />
@@ -208,7 +220,7 @@ export default function RadioPlayer() {
           </div>
           <div className="radio-controls">
             <button onClick={handleStop} className="radio-control-btn" aria-label="Pausar">
-              <Pause size={16} />
+              <IconPause />
             </button>
             <button onClick={toggleMute} className="radio-control-btn" aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}>
               {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
@@ -248,15 +260,16 @@ export default function RadioPlayer() {
                   {isLoading ? (
                     <span className="radio-spinner" />
                   ) : !hasStream ? (
-                    <ExternalLink size={14} color="#fff" />
+                    <IconLink />
                   ) : isPlaying ? (
-                    <Pause size={14} color="#fff" />
+                    <IconPause />
                   ) : (
-                    <Play size={14} color="#fff" />
+                    <IconPlay />
                   )}
                 </button>
                 <span className="radio-station-dot" style={{ backgroundColor: station.color }} />
                 <span className="radio-station-name">{station.name}</span>
+                <span className="radio-station-sep">·</span>
                 <span className="radio-station-genre">{station.genre}</span>
                 {!hasStream && <span className="radio-station-badge">Web</span>}
               </div>
