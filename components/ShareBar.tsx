@@ -144,18 +144,17 @@ export default function ShareBar({ url, title, variant = 'chips' }: ShareBarProp
   if (variant === 'floating') {
     return (
       <div
+        className="share-floating-desktop"
         style={{
           position: 'fixed',
           left: 16,
           top: '50%',
           transform: 'translateY(-50%)',
-          display: 'flex',
           flexDirection: 'column',
           gap: 10,
           zIndex: 40,
           alignItems: 'center',
         }}
-        className="share-floating-desktop"
       >
         <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 1, writingMode: 'vertical-rl' }}>
           Compartir

@@ -541,10 +541,10 @@ export default function ArticleClient({
   const isUpdated = updatedISO && updatedISO !== publishedISO;
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <div className="article-page" suppressHydrationWarning><main className="article-main" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
+      <div className="article-page"><main className="article-main" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
         <div>
         <div className="breadcrumbs">
           <Link href="/">Inicio</Link> / <Link href={categorySlug}>{noticia.categoria}</Link> / <span>{noticia.titulo}</span>
@@ -793,7 +793,7 @@ export default function ArticleClient({
           <AdPlaceholder id="div-gpt-ad-sidebar-2" label="Publicidad" size="300x250" variant="sidebar" />
         </aside>
       </main></div>
-    </>
+    </div>
   );
 }
 

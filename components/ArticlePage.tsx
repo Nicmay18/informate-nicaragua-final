@@ -399,11 +399,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   };
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <article style={containerStyle} suppressHydrationWarning>
+      <article style={containerStyle}>
         {/* Breadcrumb */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#6b7280', marginBottom: 16 }} aria-label="Miga de pan">
           <Link href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Inicio</Link>
@@ -605,6 +605,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Ad Bottom */}
         <AdPlaceholder label="Publicidad" size="728x90" />
       </article>
-    </>
+    </div>
   );
 }
