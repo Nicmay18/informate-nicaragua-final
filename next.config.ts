@@ -12,8 +12,7 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
-    loader: 'custom',
-    loaderFile: './lib/image-loader.ts',
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.jsdelivr.net', pathname: '/**' },
       { protocol: 'https', hostname: 'images.weserv.nl', pathname: '/**' },

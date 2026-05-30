@@ -7,6 +7,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import dynamic from 'next/dynamic';
 
 const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
@@ -150,7 +151,7 @@ function Card({ noticia }: { noticia: Noticia }) {
     <article className="ni-card">
       <div className="ni-card__thumb">
         {noticia.imagen ? (
-          <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="(max-width:900px) 100px, 220px" style={{ objectFit: 'cover' }} quality={75} />
+          <Image src={getResponsiveImageUrl(noticia.imagen, 400)} alt={noticia.titulo} fill sizes="(max-width:900px) 100px, 220px" style={{ objectFit: 'cover' }} />
         ) : null}
       </div>
       <div className="ni-card__content">

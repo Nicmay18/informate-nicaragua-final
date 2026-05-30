@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { timeAgo, tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -551,7 +552,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
                   {item.imagen && (
                     <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
-                      <Image src={item.imagen} alt={item.titulo} fill style={{ objectFit: 'cover' }} sizes="300px" loading="lazy" />
+                      <Image src={getResponsiveImageUrl(item.imagen, 400)} alt={item.titulo} fill style={{ objectFit: 'cover' }} sizes="300px" loading="lazy" />
                     </div>
                   )}
                   <div style={{ padding: 16 }}>
