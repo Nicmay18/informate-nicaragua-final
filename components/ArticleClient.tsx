@@ -509,8 +509,9 @@ export default function ArticleClient({
   adSlot,
   serverNow,
 }: ArticleClientProps) {
-  const [fontSize, setFontSize] = useState(1);
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
+  const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
+  const fontSize = FONT_STEPS[fontIndex];
 
   if (!noticia) {
     return <div style={{ padding: 40, textAlign: 'center' }}>Noticia no encontrada</div>;
@@ -580,8 +581,8 @@ export default function ArticleClient({
                 <span style={{ fontSize:13, color:'var(--c-text-muted)', display:'flex', alignItems:'center', gap:6, whiteSpace:'nowrap' }}><Clock size={12} /> {lecturaMin} min</span>
                 <span style={{ fontSize:13, color:'var(--c-text-muted)', display:'flex', alignItems:'center', gap:6, whiteSpace:'nowrap' }}><Eye size={12} /> {vistas}</span>
                 <div className="font-size-ctrl" style={{ display:'flex', gap:4 }}>
-                  <button className="font-size-ctrl__btn" onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.max(0, i - 1)]; })} aria-label="Reducir texto" title="A−">A−</button>
-                  <button className="font-size-ctrl__btn" onClick={() => setFontSize(s => { const i = FONT_STEPS.indexOf(s); return FONT_STEPS[Math.min(FONT_STEPS.length - 1, i + 1)]; })} aria-label="Aumentar texto" title="A+">A+</button>
+                  <button className="font-size-ctrl__btn" onClick={() => setFontIndex(i => Math.max(0, i - 1))} aria-label="Reducir texto" title="A−">A−</button>
+                  <button className="font-size-ctrl__btn" onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} aria-label="Aumentar texto" title="A+">A+</button>
                 </div>
               </div>
             </div>

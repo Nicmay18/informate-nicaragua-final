@@ -274,8 +274,9 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
   const router = useRouter();
-  const [fontSize, setFontSize] = useState(1);
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
+  const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
+  const fontSize = FONT_STEPS[fontIndex];
 
   if (!noticia) {
     return (
@@ -445,8 +446,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <span style={{ color: '#991b1b', fontWeight: 600 }} suppressHydrationWarning>{timeAgo(noticia.fecha)}</span>
           )}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
-            <button onClick={() => setFontSize(s => FONT_STEPS[Math.max(0, FONT_STEPS.indexOf(s) - 1)])} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
-            <button onClick={() => setFontSize(s => FONT_STEPS[Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(s) + 1)])} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
+            <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
+            <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
           </div>
         </div>
 
