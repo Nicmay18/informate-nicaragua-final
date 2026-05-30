@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Droplets, Wind } from 'lucide-react';
 
 const CITIES = [
-  { name: 'Managua', temp: 31, humidity: 68, wind: 14, code: 2, region: 'Managua' },
+  { name: 'Managua', temp: 26, humidity: 68, wind: 14, code: 2, region: 'Managua' },
   { name: 'León', temp: 34, humidity: 55, wind: 18, code: 1, region: 'León' },
   { name: 'Granada', temp: 32, humidity: 62, wind: 12, code: 2, region: 'Granada' },
   { name: 'Estelí', temp: 27, humidity: 58, wind: 16, code: 1, region: 'Estelí' },

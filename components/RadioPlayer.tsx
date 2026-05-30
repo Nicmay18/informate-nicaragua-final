@@ -150,7 +150,7 @@ export default function RadioPlayer() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 font-sans select-none">
+    <div className="w-full bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 font-sans select-none">
       {/* Audio element */}
       <audio ref={audioRef} preload="none" crossOrigin="anonymous" playsInline className="hidden" />
 
@@ -306,12 +306,14 @@ export default function RadioPlayer() {
         <div className="px-3 py-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
           {STATIONS.map((station) => {
             const isPlaying = playing === station.id;
+            const shortName = station.name.replace('Radio ', 'R.').replace('La ', '').split(' ')[0];
             return (
               <button
                 key={station.id}
                 onClick={() => playStation(station)}
+                title={station.name}
                 className={`
-                  shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all
+                  shrink-0 px-2 py-1 rounded-full text-[10px] font-medium transition-all truncate max-w-[70px]
                   ${isPlaying
                     ? 'text-white shadow-md'
                     : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
@@ -319,7 +321,7 @@ export default function RadioPlayer() {
                 `}
                 style={isPlaying ? { backgroundColor: station.color } : undefined}
               >
-                {station.name}
+                {shortName}
               </button>
             );
           })}

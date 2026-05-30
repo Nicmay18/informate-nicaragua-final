@@ -7,6 +7,8 @@ const CITIES = [
   { country: 'Ciudad de México', flag: '🇲🇽', tz: 'America/Mexico_City' },
   { country: 'Miami', flag: '🇺🇸', tz: 'America/New_York' },
   { country: 'Madrid', flag: '🇪🇸', tz: 'Europe/Madrid' },
+  { country: 'Moscú', flag: '🇷🇺', tz: 'Europe/Moscow' },
+  { country: 'Beijing', flag: '🇨🇳', tz: 'Asia/Shanghai' },
   { country: 'Buenos Aires', flag: '🇦🇷', tz: 'America/Argentina/Buenos_Aires' },
   { country: 'Bogotá', flag: '🇨🇴', tz: 'America/Bogota' },
 ];
