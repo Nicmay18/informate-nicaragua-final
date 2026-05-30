@@ -442,7 +442,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             {vistas} vistas
           </span>
           {timeAgo(noticia.fecha) && (
-            <span style={{ color: '#991b1b', fontWeight: 600 }}>{timeAgo(noticia.fecha)}</span>
+            <span style={{ color: '#991b1b', fontWeight: 600 }} suppressHydrationWarning>{timeAgo(noticia.fecha)}</span>
           )}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
             <button onClick={() => setFontSize(s => FONT_STEPS[Math.max(0, FONT_STEPS.indexOf(s) - 1)])} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
