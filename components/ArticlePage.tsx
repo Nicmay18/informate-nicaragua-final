@@ -512,6 +512,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         <div style={{ marginTop: 32 }}>
           <AuthorCard
             name={noticia.autor}
+            photo={noticia.autorFoto}
             publishedDate={noticia.fecha}
             updatedDate={(noticia as any).fechaActualizacion}
           />

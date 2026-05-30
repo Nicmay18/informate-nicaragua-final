@@ -16,6 +16,7 @@ export interface Noticia {
   fechaPublicacion?: string;
   fechaActualizacion?: string;
   autor?: string;
+  autorFoto?: string;
   destacada?: boolean;
   vistas?: number;
   palabras?: number;
