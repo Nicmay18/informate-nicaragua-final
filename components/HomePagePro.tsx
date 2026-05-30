@@ -205,24 +205,18 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
   // "Últimas noticias" = los 6 más recientes tras el hero (siempre noticias del día)
   const ultimas = useMemo(() => resto.slice(0, 6), [resto]);
-  const ultimasIds = useMemo(() => new Set(ultimas.map(n => n.id)), [ultimas]);
 
-  // Categorías usan solo artículos que NO están en hero NI en últimas
-  const paraCategoria = useMemo(
-    () => resto.filter(n => !ultimasIds.has(n.id)),
-    [resto, ultimasIds]
-  );
-
+  // Categorías usan TODAS las noticias (incluyendo hero y ultimas) para no quedar vacías
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
     CATEGORIES.forEach(c => { map[c.slug] = []; });
-    paraCategoria.forEach(n => {
+    noticias.forEach(n => {
       const slug = n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
       if (slug && map[slug]) map[slug].push(n);
     });
     CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 4); });
     return map;
-  }, [paraCategoria]);
+  }, [noticias]);
 
   const trending = masLeidas.length >= 5
     ? masLeidas.filter(n => !heroIds.has(n.id)).slice(0, 5)
