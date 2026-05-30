@@ -51,25 +51,19 @@ const FOOTER_SECTIONS = {
 const SOCIAL_LINKS = [
   {
     name: 'Facebook',
-    href: 'https://facebook.com/nicaraguainformate',
+    href: 'https://www.facebook.com/profile.php?id=61578261125687',
     icon: '📘',
     color: '#1877f2'
   },
   {
-    name: 'Instagram',
-    href: 'https://instagram.com/nicaraguainformate',
-    icon: '📷',
-    color: '#e4405f'
-  },
-  {
     name: 'WhatsApp',
-    href: 'https://wa.me/50588888888',
+    href: 'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
     icon: '💬',
     color: '#25d366'
   },
   {
     name: 'Telegram',
-    href: 'https://t.me/nicaraguainformate',
+    href: 'https://t.me/fHHjncJqMQM3NjZh',
     icon: '✈️',
     color: '#0088cc'
   }

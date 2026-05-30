@@ -27,7 +27,7 @@ const ORG_SCHEMA = {
     contactType: 'Contacto editorial',
     availableLanguage: 'Spanish',
   },
-  sameAs: ['https://www.facebook.com/nicaraguainformate'],
+  sameAs: ['https://www.facebook.com/profile.php?id=61578261125687'],
   employee: [
     {
       '@type': 'Person',

@@ -110,9 +110,9 @@ export default function PoliticaEditorialPage() {
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.25rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
         <li>Sitio web: <a href="https://nicaraguainformate.com" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>nicaraguainformate.com</a></li>
-        <li>Facebook: <a href="https://facebook.com/NicaraguaInformate" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>facebook.com/NicaraguaInformate</a></li>
-        <li>WhatsApp: Canal oficial (enlace en el sitio)</li>
-        <li>Telegram: Canal oficial (enlace en el sitio)</li>
+        <li>Facebook: <a href="https://www.facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>facebook.com/profile.php?id=61578261125687</a></li>
+        <li>WhatsApp: <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Canal oficial</a></li>
+        <li>Telegram: <a href="https://t.me/fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Canal oficial</a></li>
       </ul>
       <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         No nos hacemos responsables de información publicada en cuentas no oficiales.

@@ -192,7 +192,7 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
         
         <div className="social-links">
           <a
-            href="https://facebook.com/nicaraguainformate"
+            href="https://www.facebook.com/profile.php?id=61578261125687"
             target="_blank"
             rel="noopener noreferrer"
             className="social-link facebook"
@@ -202,16 +202,6 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
             <span className="social-label">Facebook</span>
           </a>
           
-          <a
-            href="https://instagram.com/nicaraguainformate"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link instagram"
-            aria-label="Síguenos en Instagram"
-          >
-            <span className="social-icon">📷</span>
-            <span className="social-label">Instagram</span>
-          </a>
         </div>
       </div>
     </aside>

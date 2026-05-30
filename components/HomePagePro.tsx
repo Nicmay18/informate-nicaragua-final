@@ -405,10 +405,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
             </div>
             <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Infórmate al Instante desde Managua.</p>
             <div className="ni-footer__social">
-              <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-              <a href="https://twitter.com/nicinformate" target="_blank" rel="noopener noreferrer" aria-label="Twitter">𝕏</a>
-              <a href="https://instagram.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
-              <a href="https://youtube.com/nicaraguainformate" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
+              <a href="https://www.facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">W</a>
+              <a href="https://t.me/fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">T</a>
             </div>
           </div>
 

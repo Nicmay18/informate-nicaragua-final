@@ -19,9 +19,7 @@ export const AUTHORS: Record<string, Author> = {
     bio: 'Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Revisa y contrasta la información antes de publicarla para garantizar que sea precisa y confiable. Comprometida con la verdad y la verificación de la información.',
     photo: '/keyling-rivera.jpg',
     social: {
-      twitter: 'https://twitter.com/nicinformate',
-      facebook: 'https://facebook.com/profile.php?id=61578261125687',
-      instagram: 'https://instagram.com/nicaraguainformate',
+      facebook: 'https://www.facebook.com/profile.php?id=61578261125687',
     },
   },
   'maycol-nicaragua': {
