@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Radio, Volume2, VolumeX } from 'lucide-react';
 
 interface Station {
@@ -12,7 +12,6 @@ interface Station {
   genre: string;
 }
 
-/* Streams confirmados + Zeno.fm + sin stream */
 const STATIONS: Station[] = [
   { id: 'fiestalatina', name: 'Fiesta Latina', streamUrl: 'https://radios.solumedia.com/6596/stream', website: 'https://fiestalatina.com.ni/', color: '#16a34a', genre: 'Tropical' },
   { id: 'radiotigre', name: 'Radio Tigre', streamUrl: 'https://stream-280.zeno.fm/muckqtmpfvatv', website: 'https://radiotigre.com.ni/', color: '#f59e0b', genre: 'Variedad' },
@@ -35,16 +34,34 @@ export default function RadioPlayer() {
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /* Íconos Unicode como fallback absoluto */
   const IconPlay = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9654;</span>;
   const IconPause = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9208;</span>;
   const IconLink = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#8599;</span>;
 
   const currentStation = STATIONS.find(s => s.id === playing);
 
-  /* MediaSession — controles en pantalla de bloqueo */
-  useEffect(() => {
+  const requestWakeLock = useCallback(async () => {
+    if (!('wakeLock' in navigator) || wakeLockRef.current) return;
+    try {
+      wakeLockRef.current = await navigator.wakeLock.request('screen');
+      wakeLockRef.current.addEventListener('release', () => { wakeLockRef.current = null; });
+    } catch { /* noop */ }
+  }, []);
+
+  const releaseWakeLock = useCallback(() => {
+    wakeLockRef.current?.release().catch(() => {});
+    wakeLockRef.current = null;
+  }, []);
+
+  const setupMediaSession = useCallback((station: Station) => {
     if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: station.name,
+      artist: station.genre,
+      album: 'Radio Nicaragua',
+      artwork: [{ src: '/logo-ni.png', sizes: '512x512', type: 'image/png' }],
+    });
+    navigator.mediaSession.playbackState = 'playing';
     navigator.mediaSession.setActionHandler('play', () => {
       if (currentStation) playStation(currentStation);
     });
@@ -55,64 +72,33 @@ export default function RadioPlayer() {
     navigator.mediaSession.setActionHandler('stop', () => {
       handleStop();
     });
-    return () => {
-      navigator.mediaSession.setActionHandler('play', null);
-      navigator.mediaSession.setActionHandler('pause', null);
-      navigator.mediaSession.setActionHandler('stop', null);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStation]);
 
-  /* Wake Lock — mantiene procesador activo con pantalla apagada */
-  const requestWakeLock = async () => {
-    if (!('wakeLock' in navigator) || wakeLockRef.current) return;
-    try {
-      wakeLockRef.current = await navigator.wakeLock.request('screen');
-      wakeLockRef.current.addEventListener('release', () => { wakeLockRef.current = null; });
-    } catch { /* noop */ }
-  };
-
-  const releaseWakeLock = () => {
-    wakeLockRef.current?.release().catch(() => {});
-    wakeLockRef.current = null;
-  };
-
-  /* Cleanup */
-  useEffect(() => {
-    return () => { handleStop(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const setupMediaSession = (station: Station) => {
-    if (!('mediaSession' in navigator)) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: station.name,
-      artist: station.genre,
-      album: 'Radio Nicaragua',
-      artwork: [{ src: '/logo-ni.png', sizes: '512x512', type: 'image/png' }],
-    });
-    navigator.mediaSession.playbackState = 'playing';
-  };
-
-  const clearMediaSession = () => {
+  const clearMediaSession = useCallback(() => {
     if (!('mediaSession' in navigator)) return;
     navigator.mediaSession.metadata = null;
     navigator.mediaSession.playbackState = 'paused';
-  };
+    navigator.mediaSession.setActionHandler('play', null);
+    navigator.mediaSession.setActionHandler('pause', null);
+    navigator.mediaSession.setActionHandler('stop', null);
+  }, []);
 
-  const handleStop = () => {
+  const handleStop = useCallback(() => {
     if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.src = '';
+      audio.load();
     }
     setPlaying(null);
     setLoading(null);
+    setError(null);
     clearMediaSession();
     releaseWakeLock();
-  };
+  }, [clearMediaSession, releaseWakeLock]);
 
-  const playStation = (station: Station) => {
+  const playStation = useCallback((station: Station) => {
     setError(null);
 
     if (!station.streamUrl) {
@@ -125,33 +111,35 @@ export default function RadioPlayer() {
       return;
     }
 
+    // Detener lo anterior completamente antes de cargar nuevo
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current.load();
+    }
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+
     setLoading(station.id);
 
     const audio = audioRef.current;
     if (!audio) {
-      setError('Error interno: no se encontró el reproductor.');
+      setError('Error interno: reproductor no disponible.');
       setLoading(null);
       return;
     }
 
-    audio.oncanplay = null;
-    audio.onerror = null;
-    audio.onplaying = null;
-    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-
-    audio.pause();
-    audio.src = station.streamUrl;
-    audio.volume = isMuted ? 0 : volume;
-
-    /* Timeout: si en 5s no reproduce, algo esta mal */
-    loadTimeoutRef.current = setTimeout(() => {
-      setError(`timeout:${station.id}`);
+    const onError = () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+      console.error(`[Radio] Error ${audio.error?.code} en ${station.name}:`, audio.error);
+      setError(`No se pudo reproducir ${station.name}. El stream no responde.`);
       setPlaying(null);
       setLoading(null);
-      audio.pause();
-    }, 5000);
+      clearMediaSession();
+      releaseWakeLock();
+      cleanup();
+    };
 
-    audio.oncanplay = () => {
+    const onCanPlay = () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
       audio.play().then(() => {
         setPlaying(station.id);
@@ -163,31 +151,37 @@ export default function RadioPlayer() {
         setPlaying(null);
         setLoading(null);
       });
+      cleanup();
     };
 
-    audio.onerror = () => {
-      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-      const code = audio.error?.code;
-      let msg = `error:${station.id}`;
-      if (code === 2) msg = `error:${station.id}`;
-      if (code === 3) msg = `error:${station.id}`;
-      if (code === 4) msg = `error:${station.id}`;
-      console.error(`[Radio] Error ${code} en ${station.name}:`, audio.error);
-      setError(msg);
+    const cleanup = () => {
+      audio.removeEventListener('error', onError);
+      audio.removeEventListener('canplay', onCanPlay);
+      audio.removeEventListener('canplaythrough', onCanPlay);
+    };
+
+    audio.addEventListener('error', onError);
+    audio.addEventListener('canplay', onCanPlay);
+    audio.addEventListener('canplaythrough', onCanPlay);
+
+    audio.src = station.streamUrl;
+    audio.volume = isMuted ? 0 : volume;
+    audio.muted = isMuted;
+
+    loadTimeoutRef.current = setTimeout(() => {
+      setError(`${station.name} no responde. Intentá por la web.`);
       setPlaying(null);
       setLoading(null);
-      clearMediaSession();
-      releaseWakeLock();
-    };
-
-    audio.onplaying = () => {
-      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-      setPlaying(station.id);
-      setLoading(null);
-    };
+      audio.pause();
+      cleanup();
+    }, 8000);
 
     audio.load();
-  };
+  }, [playing, isMuted, volume, handleStop, setupMediaSession, requestWakeLock, clearMediaSession, releaseWakeLock]);
+
+  useEffect(() => {
+    return () => { handleStop(); };
+  }, [handleStop]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
@@ -208,10 +202,12 @@ export default function RadioPlayer() {
 
   return (
     <div className="radio-player">
-      {/* Audio REAL en el DOM — sin esto el navegador mata el stream al bloquear pantalla */}
+      {/* crossOrigin="anonymous" es CRÍTICO para streams de terceros */}
       <audio
         ref={audioRef}
         preload="none"
+        crossOrigin="anonymous"
+        playsInline
         style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
       />
 
@@ -230,7 +226,6 @@ export default function RadioPlayer() {
         </button>
       </div>
 
-      {/* Now Playing con controles */}
       {currentStation && (
         <div className="radio-now-playing">
           <div className="radio-station-info">
@@ -263,8 +258,8 @@ export default function RadioPlayer() {
       {error && (
         <div className="radio-error">
           {(() => {
-            const stationId = error.startsWith('timeout:') || error.startsWith('error:') ? error.split(':')[1] : null;
-            const st = stationId ? STATIONS.find(s => s.id === stationId) : null;
+            const stationId = error.includes(' no responde') ? error.split(' no responde')[0] : null;
+            const st = stationId ? STATIONS.find(s => s.name === stationId) : null;
             if (st) {
               return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
