@@ -8,6 +8,7 @@ import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
+import Script from 'next/script';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
@@ -105,8 +106,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous"></script>
-        
         {/* CORRECCIÓN: Se remueve la metaetiqueta duplicada de google-site-verification ya que Next.js la inyecta mediante el objeto metadata */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
@@ -121,6 +120,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ConsentScript />
         <Analytics />
         <ThemeScript />
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );
