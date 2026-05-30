@@ -543,6 +543,31 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </nav>
         )}
 
+        {/* Volver al inicio */}
+        <div style={{ marginTop: 24, textAlign: 'center' }}>
+          <Link
+            href="/"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '10px 20px',
+              backgroundColor: '#f3f4f6',
+              color: '#4b5563',
+              borderRadius: 8,
+              textDecoration: 'none',
+              fontSize: 14,
+              fontWeight: 600,
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = '#e5e7eb'; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = '#f3f4f6'; }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+            Volver al inicio
+          </Link>
+        </div>
+
         {/* Related News */}
         {related.length > 3 && (
           <section style={{ marginTop: 48 }}>
