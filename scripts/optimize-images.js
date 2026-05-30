@@ -1,23 +1,20 @@
 /**
- * Script de optimización batch de imágenes para informate-images
+ * Script de optimización batch de imágenes
+ * Optimiza todas las imágenes de public/images/ y las guarda en public/images-optimized/
  *
  * Uso:
- *   1. Clonar el repo de imágenes junto a este proyecto:
- *      git clone https://github.com/Nicmay18/informate-images.git ../informate-images
+ *   node scripts/optimize-images.js
  *
- *   2. Correr el script:
- *      node scripts/optimize-images.js
- *
- *   3. Subir las imágenes optimizadas de vuelta al repo:
- *      cd ../informate-images && git add -A && git commit -m "optimize: compress all images to WebP" && git push
+ * Luego mover las optimizadas a public/images/ para reemplazar las originales:
+ *   mv public/images-optimized/* public/images/
  */
 
 const fs = require('fs');
 const path = require('path');
 
 // Rutas
-const INPUT_DIR = path.resolve(__dirname, '../../informate-images/images');
-const OUTPUT_DIR = path.resolve(__dirname, '../../informate-images/images-optimized');
+const INPUT_DIR = path.resolve(__dirname, '../public/images');
+const OUTPUT_DIR = path.resolve(__dirname, '../public/images-optimized');
 
 // Configuración por tipo de uso
 const PRESETS = {
@@ -115,8 +112,9 @@ async function optimize() {
   console.log(`   Ahorro total:   ${((1 - totalAfter / totalBefore) * 100).toFixed(1)}%`);
   console.log('\n📁 Imágenes optimizadas en:');
   console.log(`   ${OUTPUT_DIR}`);
-  console.log('\n🚀 Siguiente paso: subí las imágenes de vuelta al repo:');
-  console.log(`   cd ../informate-images && git add images-optimized && git commit -m "optimize: images" && git push`);
+  console.log('\n🚀 Siguiente paso: reemplazar originales por optimizadas:');
+  console.log('   xcopy /s /y public\\images-optimized\\* public\\images\\');
+  console.log('   rmdir /s /q public\\images-optimized');
 }
 
 optimize();
