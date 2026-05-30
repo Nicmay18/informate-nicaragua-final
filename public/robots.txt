@@ -16,4 +16,12 @@ Disallow: /buscar
 Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
 Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
 
+# Categorías que no existen en el sitio (evita rastreo innecesario)
+Disallow: /categoria/economia
+Disallow: /categoria/cultura
+Disallow: /categoria/politica
+
+# URL antigua del sistema anterior
+Disallow: /noticia.html
+
 Sitemap: https://nicaraguainformate.com/sitemap.xml
