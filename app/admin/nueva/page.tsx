@@ -8,6 +8,8 @@ import nextDynamic from 'next/dynamic';
 
 const TipTapEditor = nextDynamic(() => import('@/components/admin/TipTapEditor'), { ssr: false });
 
+import { categoryToSlug } from '@/lib/types';
+
 // Firebase imports (dynamic to avoid SSR issues)
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, type User } from 'firebase/auth';
@@ -187,6 +189,19 @@ export default function AdminNuevaPage() {
         // Reset form
         setTitulo(''); setResumen(''); setContenido(''); setImagenUrl(''); setPieFoto('');
         setDestacada(false); setPublicado(true);
+      }
+
+      // Revalidar página principal y categoría para que aparezca inmediatamente
+      try {
+        const catSlug = categoryToSlug(categoria);
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: '/', categorySlug: catSlug }),
+        });
+        console.log('[Admin] Revalidado:', catSlug);
+      } catch (revErr) {
+        console.error('[Admin] Fallo revalidación:', revErr);
       }
     } catch (err: any) {
       setMsg('Error: ' + err.message);
