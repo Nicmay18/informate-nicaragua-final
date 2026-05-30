@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Search } from 'lucide-react';
+import { Search, Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import dynamic from 'next/dynamic';
 
@@ -330,7 +330,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
         <aside className="ni-sidebar">
           {/* Destacados esta semana */}
           <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title">🔥 Destacados esta semana</h3>
+            <h3 className="ni-sidebar__title"><Flame size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados esta semana</h3>
             <ol className="ni-trending">
               {trending.map((n, i) => (
                 <li key={n.id}>
@@ -346,31 +346,31 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
           {/* Radio en vivo */}
           <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title">📻 Radio en Vivo</h3>
+            <h3 className="ni-widget-compact__title"><Radio size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Radio en Vivo</h3>
             <RadioPlayer />
           </div>
 
           {/* Indicadores económicos */}
           <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title">📊 Indicadores</h3>
+            <h3 className="ni-widget-compact__title"><BarChart3 size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Indicadores</h3>
             <EconomicBar />
           </div>
 
           {/* Clima */}
           <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title">🌤️ Clima Nicaragua</h3>
+            <h3 className="ni-widget-compact__title"><CloudSun size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Clima Nicaragua</h3>
             <WeatherWidget />
           </div>
 
           {/* Reloj mundial */}
           <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title">🌍 Reloj Mundial</h3>
+            <h3 className="ni-widget-compact__title"><Globe size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Reloj Mundial</h3>
             <WorldClock />
           </div>
 
           {/* Categorías */}
           <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title">📂 Categorías</h3>
+            <h3 className="ni-sidebar__title"><FolderOpen size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Categorías</h3>
             <ul className="ni-cat-list">
               {CATEGORIES.map(c => (
                 <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
@@ -380,7 +380,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
           {/* Newsletter */}
           <div className="ni-sidebar__widget ni-newsletter">
-            <h3 className="ni-sidebar__title">📧 Newsletter</h3>
+            <h3 className="ni-sidebar__title"><Mail size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Newsletter</h3>
             <p>Recibe las noticias más importantes de Nicaragua cada mañana.</p>
             <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
             <input id="newsletter-email" type="email" placeholder="tucorreo@gmail.com" aria-label="Tu correo electrónico para el newsletter" />

@@ -12,7 +12,7 @@ interface Props {
   masLeidas: Noticia[];
 }
 
-const CATEGORIES = ['Nacionales', 'Internacionales', 'Sucesos', 'Tecnología', 'Deportes', 'Economía'];
+const CATEGORIES = ['Nacionales', 'Internacionales', 'Sucesos', 'Tecnología', 'Deportes', 'Espectáculos'];
 
 const CITIES = [
   { name: 'Rivas', lat: 11.44, lon: -85.8284 },
