@@ -56,22 +56,10 @@ const SOCIAL_LINKS = [
     color: '#1877f2'
   },
   {
-    name: 'Twitter',
-    href: 'https://twitter.com/nicinformate',
-    icon: '🐦',
-    color: '#1da1f2'
-  },
-  {
     name: 'Instagram',
     href: 'https://instagram.com/nicaraguainformate',
     icon: '📷',
     color: '#e4405f'
-  },
-  {
-    name: 'YouTube',
-    href: 'https://youtube.com/nicaraguainformate',
-    icon: '📺',
-    color: '#ff0000'
   },
   {
     name: 'WhatsApp',

@@ -1,35 +1,110 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Droplets, Wind } from 'lucide-react';
+import { Droplets, Wind, Loader2 } from 'lucide-react';
 
-const CITIES = [
-  { name: 'Managua', temp: 26, humidity: 68, wind: 14, code: 2, region: 'Managua' },
-  { name: 'León', temp: 34, humidity: 55, wind: 18, code: 1, region: 'León' },
-  { name: 'Granada', temp: 32, humidity: 62, wind: 12, code: 2, region: 'Granada' },
-  { name: 'Estelí', temp: 27, humidity: 58, wind: 16, code: 1, region: 'Estelí' },
-  { name: 'Matagalpa', temp: 24, humidity: 75, wind: 10, code: 3, region: 'Matagalpa' },
-  { name: 'Jinotega', temp: 23, humidity: 78, wind: 11, code: 3, region: 'Jinotega' },
-  { name: 'Carazo', temp: 29, humidity: 65, wind: 13, code: 2, region: 'Carazo' },
-  { name: 'Rivas', temp: 30, humidity: 70, wind: 15, code: 2, region: 'Rivas' },
-  { name: 'Masaya', temp: 28, humidity: 64, wind: 12, code: 1, region: 'Masaya' },
-  { name: 'Boaco', temp: 26, humidity: 72, wind: 14, code: 2, region: 'Boaco' },
-  { name: 'Bluefields', temp: 29, humidity: 82, wind: 18, code: 2, region: 'RAAS' },
-  { name: 'Siuna', temp: 27, humidity: 80, wind: 10, code: 3, region: 'RACCN' },
-  { name: 'Río San Juan', temp: 30, humidity: 76, wind: 12, code: 2, region: 'Río San Juan' },
-  { name: 'Chontales', temp: 27, humidity: 74, wind: 11, code: 3, region: 'Chontales' },
+interface City {
+  name: string;
+  region: string;
+  lat: number;
+  lon: number;
+}
+
+const CITIES: City[] = [
+  { name: 'Managua', region: 'Managua', lat: 12.1328, lon: -86.2504 },
+  { name: 'León', region: 'León', lat: 12.4379, lon: -86.8780 },
+  { name: 'Granada', region: 'Granada', lat: 11.9299, lon: -85.9560 },
+  { name: 'Estelí', region: 'Estelí', lat: 13.0850, lon: -86.3630 },
+  { name: 'Matagalpa', region: 'Matagalpa', lat: 12.9250, lon: -85.9170 },
+  { name: 'Jinotega', region: 'Jinotega', lat: 13.0910, lon: -86.0010 },
+  { name: 'Masaya', region: 'Masaya', lat: 11.9734, lon: -86.0730 },
+  { name: 'Carazo', region: 'Carazo', lat: 11.8589, lon: -86.2394 },
+  { name: 'Rivas', region: 'Rivas', lat: 11.4372, lon: -85.8263 },
+  { name: 'Boaco', region: 'Boaco', lat: 12.4722, lon: -85.6596 },
+  { name: 'Bluefields', region: 'RAAS', lat: 12.0067, lon: -83.7651 },
+  { name: 'Siuna', region: 'RACCN', lat: 13.7333, lon: -84.7667 },
+  { name: 'Río San Juan', region: 'Río San Juan', lat: 11.1233, lon: -84.7771 },
+  { name: 'Chontales', region: 'Chontales', lat: 12.1063, lon: -85.3645 },
 ];
 
-const WX: Record<number, { label: string; emoji: string }> = {
-  0: { label: 'Despejado', emoji: '☀️' },
-  1: { label: 'Casi despejado', emoji: '🌤️' },
-  2: { label: 'Parcialmente nublado', emoji: '⛅' },
-  3: { label: 'Nublado', emoji: '☁️' },
-};
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind: number;
+  code: number;
+}
+
+function wmoToEmoji(code: number): string {
+  if (code === 0 || code === 1) return '☀️';
+  if (code === 2) return '⛅';
+  if (code === 3) return '☁️';
+  if (code === 45 || code === 48) return '🌫️';
+  if (code >= 51 && code <= 55) return '🌦️';
+  if (code >= 61 && code <= 65) return '🌧️';
+  if (code >= 71 && code <= 75) return '🌨️';
+  if (code >= 80 && code <= 82) return '🌦️';
+  if (code >= 95) return '⛈️';
+  return '🌡️';
+}
+
+function wmoToLabel(code: number): string {
+  if (code === 0) return 'Despejado';
+  if (code === 1) return 'Casi despejado';
+  if (code === 2) return 'Parcialmente nublado';
+  if (code === 3) return 'Nublado';
+  if (code === 45 || code === 48) return 'Niebla';
+  if (code >= 51 && code <= 55) return 'Llovizna';
+  if (code >= 61 && code <= 65) return 'Lluvia';
+  if (code >= 71 && code <= 75) return 'Nieve';
+  if (code >= 80 && code <= 82) return 'Chubascos';
+  if (code >= 95) return 'Tormenta';
+  return 'Variable';
+}
+
+async function fetchWeather(lat: number, lon: number): Promise<WeatherData> {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=America%2FManagua`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Open-Meteo error');
+  const data = await res.json();
+  return {
+    temp: Math.round(data.current.temperature_2m),
+    humidity: data.current.relative_humidity_2m,
+    wind: Math.round(data.current.wind_speed_10m),
+    code: data.current.weather_code,
+  };
+}
 
 export default function WeatherWidget() {
   const [cityIdx, setCityIdx] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const [weather, setWeather] = useState<Record<string, WeatherData>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch all cities on mount
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const results: Record<string, WeatherData> = {};
+        for (const city of CITIES) {
+          if (cancelled) return;
+          try {
+            results[city.name] = await fetchWeather(city.lat, city.lon);
+          } catch {
+            results[city.name] = { temp: 0, humidity: 0, wind: 0, code: -1 };
+          }
+        }
+        if (!cancelled) setWeather(results);
+      } catch {
+        if (!cancelled) setError('No se pudo cargar el clima');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, []);
 
   // Auto-rotate every 4 seconds
   useEffect(() => {
@@ -40,21 +115,37 @@ export default function WeatherWidget() {
   }, []);
 
   const city = CITIES[cityIdx];
-  const wx = WX[city.code] ?? { label: 'Variable', emoji: '🌡️' };
+  const w = weather[city.name];
 
   const handleClick = useCallback((i: number) => setCityIdx(i), []);
 
-  if (!mounted) {
+  if (loading) {
     return (
       <div className="weather-widget-full">
-        <div style={{ padding: 20, color: '#94a3b8', fontSize: 14 }}>Cargando clima...</div>
+        <div style={{ padding: 20, display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', fontSize: 14, justifyContent: 'center' }}>
+          <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+          Cargando clima real...
+        </div>
+        <style>{'@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}'}</style>
       </div>
     );
   }
 
+  if (error) {
+    return (
+      <div className="weather-widget-full">
+        <div style={{ padding: 20, color: '#f87171', fontSize: 14, textAlign: 'center' }}>{error}</div>
+      </div>
+    );
+  }
+
+  const temp = w?.temp ?? 0;
+  const humidity = w?.humidity ?? 0;
+  const wind = w?.wind ?? 0;
+  const code = w?.code ?? -1;
+
   return (
     <div className="weather-widget-full">
-      {/* Ciudad grande arriba */}
       <div style={{ textAlign: 'center', marginBottom: 16, position: 'relative' }}>
         <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'white', letterSpacing: '1px', textTransform: 'uppercase' }}>
           {city.name}
@@ -66,18 +157,20 @@ export default function WeatherWidget() {
 
       <div className="weather-current">
         <div className="weather-current-main">
-          <span style={{ fontSize: 44, lineHeight: 1, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}>{wx.emoji}</span>
+          <span style={{ fontSize: 44, lineHeight: 1, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}>
+            {wmoToEmoji(code)}
+          </span>
           <div>
-            <div className="weather-current-temp">{city.temp}°</div>
-            <div style={{ fontSize: 13, opacity: 0.75 }}>{wx.label}</div>
+            <div className="weather-current-temp">{temp}°</div>
+            <div style={{ fontSize: 13, opacity: 0.75 }}>{wmoToLabel(code)}</div>
           </div>
         </div>
         <div className="weather-current-details">
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Droplets size={12} /> {city.humidity}%
+            <Droplets size={12} /> {humidity}%
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Wind size={12} /> {city.wind} km/h
+            <Wind size={12} /> {wind} km/h
           </span>
         </div>
       </div>

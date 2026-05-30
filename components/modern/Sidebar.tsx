@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TrendingUp, Tag, Mail, ChevronRight, ExternalLink } from 'lucide-react';
 import NewsCard from './NewsCard';
@@ -162,27 +162,7 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
       </div>
 
       {/* Weather Widget */}
-      <div className="sidebar-widget weather-widget">
-        <div className="widget-header">
-          <h3 className="widget-title">Clima en Managua</h3>
-        </div>
-        
-        <div className="weather-content">
-          <div className="weather-main">
-            <div className="weather-icon">☀️</div>
-            <div className="weather-temp">
-              <span className="temp-value">32°</span>
-              <span className="temp-unit">C</span>
-            </div>
-          </div>
-          
-          <div className="weather-details">
-            <div className="weather-condition">Soleado</div>
-            <div className="weather-range">Min: 24° / Max: 35°</div>
-            <div className="weather-humidity">Humedad: 65%</div>
-          </div>
-        </div>
-      </div>
+      <SidebarWeather />
 
       {/* Quick Links */}
       <div className="sidebar-widget links-widget">
@@ -223,17 +203,6 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
           </a>
           
           <a
-            href="https://twitter.com/nicinformate"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link twitter"
-            aria-label="Síguenos en Twitter"
-          >
-            <span className="social-icon">🐦</span>
-            <span className="social-label">Twitter</span>
-          </a>
-          
-          <a
             href="https://instagram.com/nicaraguainformate"
             target="_blank"
             rel="noopener noreferrer"
@@ -243,19 +212,93 @@ export default function Sidebar({ masLeidas = [], tags = POPULAR_TAGS, className
             <span className="social-icon">📷</span>
             <span className="social-label">Instagram</span>
           </a>
-          
-          <a
-            href="https://youtube.com/nicaraguainformate"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link youtube"
-            aria-label="Síguenos en YouTube"
-          >
-            <span className="social-icon">📺</span>
-            <span className="social-label">YouTube</span>
-          </a>
         </div>
       </div>
     </aside>
   );
+}
+
+// Mini widget de clima real para Managua (Open-Meteo, sin API key)
+function SidebarWeather() {
+  const [data, setData] = useState<{ temp: number; humidity: number; condition: string; emoji: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=12.1328&longitude=-86.2504&current=temperature_2m,relative_humidity_2m,weather_code&timezone=America%2FManagua'
+        );
+        if (!res.ok) throw new Error('fail');
+        const json = await res.json();
+        const code = json.current.weather_code;
+        const condition = wmoLabel(code);
+        const emoji = wmoEmoji(code);
+        setData({
+          temp: Math.round(json.current.temperature_2m),
+          humidity: json.current.relative_humidity_2m,
+          condition,
+          emoji,
+        });
+      } catch {
+        setData({ temp: 0, humidity: 0, condition: 'Error', emoji: '⚠️' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="sidebar-widget weather-widget">
+        <div className="widget-header"><h3 className="widget-title">Clima en Managua</h3></div>
+        <div style={{ padding: 16, color: '#94a3b8', fontSize: 13, textAlign: 'center' }}>Cargando...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="sidebar-widget weather-widget">
+      <div className="widget-header"><h3 className="widget-title">Clima en Managua</h3></div>
+      <div className="weather-content">
+        <div className="weather-main">
+          <div className="weather-icon">{data?.emoji}</div>
+          <div className="weather-temp">
+            <span className="temp-value">{data?.temp}°</span>
+            <span className="temp-unit">C</span>
+          </div>
+        </div>
+        <div className="weather-details">
+          <div className="weather-condition">{data?.condition}</div>
+          <div className="weather-humidity">Humedad: {data?.humidity}%</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function wmoLabel(code: number): string {
+  if (code === 0) return 'Despejado';
+  if (code === 1) return 'Casi despejado';
+  if (code === 2) return 'Parcialmente nublado';
+  if (code === 3) return 'Nublado';
+  if (code === 45 || code === 48) return 'Niebla';
+  if (code >= 51 && code <= 55) return 'Llovizna';
+  if (code >= 61 && code <= 65) return 'Lluvia';
+  if (code >= 80 && code <= 82) return 'Chubascos';
+  if (code >= 95) return 'Tormenta';
+  return 'Variable';
+}
+
+function wmoEmoji(code: number): string {
+  if (code === 0 || code === 1) return '☀️';
+  if (code === 2) return '⛅';
+  if (code === 3) return '☁️';
+  if (code === 45 || code === 48) return '🌫️';
+  if (code >= 51 && code <= 55) return '🌦️';
+  if (code >= 61 && code <= 65) return '🌧️';
+  if (code >= 80 && code <= 82) return '🌦️';
+  if (code >= 95) return '⛈️';
+  return '🌡️';
 }
