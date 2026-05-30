@@ -99,7 +99,12 @@ export default function AdminNuevaPage() {
       if (snap.exists()) {
         const d = snap.data();
         setTitulo(d.titulo || '');
-        setCategoria(d.categoria || 'Sucesos');
+        const loadedCat = (d.categoria || 'Sucesos').trim();
+        const validCat = Object.keys(CAT_COLORS).find(c => 
+          c.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') === 
+          loadedCat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        );
+        setCategoria(validCat || loadedCat);
         setDepartamento(d.departamento || 'Managua');
         setDateline(d.dateline || 'MANAGUA / NICARAGUA');
         setResumen(d.resumen || '');

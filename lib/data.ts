@@ -246,15 +246,16 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
     // Obtenemos noticias recientes (sin filtro de categoría para evitar índice compuesto)
     // y filtramos por categoría en JavaScript
     const allNews = await getNews(200);
+    const normalizeCat = (s: string) => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
     const filtered = allNews.filter(n =>
-      n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') ===
-      categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '')
+      normalizeCat(n.categoria || '') === normalizeCat(categoria)
     );
     return filtered.slice(0, validatedCount);
   } catch (err) {
     console.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
   }
-  const filtered = MOCK_NOTICIAS.filter(n => n.categoria === categoria);
+  const normalizeCat = (s: string) => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+  const filtered = MOCK_NOTICIAS.filter(n => normalizeCat(n.categoria) === normalizeCat(categoria));
   return filtered.slice(0, validatedCount);
 }
 
