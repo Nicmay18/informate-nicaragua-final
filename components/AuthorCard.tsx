@@ -2,113 +2,126 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { User, Calendar, Clock } from 'lucide-react';
+import { User, Calendar, Clock, ExternalLink } from 'lucide-react';
+import { formatDateTime } from '@/lib/formateo';
 
 interface AuthorCardProps {
-  authorName?: string;
-  authorPhoto?: string;
-  authorBio?: string;
-  authorSlug?: string;
-  publishedDate: string;
+  name?: string;
+  photo?: string;
+  bio?: string;
+  role?: string;
+  slug?: string;
+  publishedDate?: string;
   updatedDate?: string;
+  className?: string;
 }
 
+// Fallback para autores sin datos completos
+const DEFAULT_AUTHOR = {
+  name: 'Redacción Nicaragua Informate',
+  role: 'Periodista',
+  bio: 'Equipo editorial de Nicaragua Informate. Comprometido con el periodismo verificado y la información de calidad para nicaragüenses.',
+  photo: null,
+};
+
 export default function AuthorCard({
-  authorName = 'Redacción Nicaragua Informate',
-  authorPhoto,
-  authorBio,
-  authorSlug,
+  name,
+  photo,
+  bio,
+  role,
+  slug,
   publishedDate,
   updatedDate,
+  className = '',
 }: AuthorCardProps) {
-  const formatDate = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' });
-    } catch {
-      return dateStr;
-    }
-  };
-
-  const formatTime = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleTimeString('es-NI', { hour: '2-digit', minute: '2-digit' });
-    } catch {
-      return '';
-    }
-  };
+  const displayName = name?.trim() || DEFAULT_AUTHOR.name;
+  const displayRole = role?.trim() || DEFAULT_AUTHOR.role;
+  const displayBio = bio?.trim() || DEFAULT_AUTHOR.bio;
+  const hasPhoto = photo && photo.trim().length > 0;
+  const hasSlug = slug && slug.trim().length > 0;
+  const isUpdated = updatedDate && updatedDate !== publishedDate;
 
   return (
-    <div className="author-card">
-      <div className="author-card__header">
-        <h3 className="author-card__title">Autor</h3>
-      </div>
+    <aside 
+      className={`flex flex-wrap items-start gap-4 p-5 bg-gray-50 rounded-xl border border-gray-200 ${className}`}
+      aria-label={`Información del autor: ${displayName}`}
+    >
+      {/* Avatar */}
+      {hasPhoto ? (
+        <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200">
+          <Image
+            src={photo}
+            alt={displayName}
+            fill
+            className="object-cover"
+            sizes="64px"
+          />
+        </div>
+      ) : (
+        <div className="w-16 h-16 rounded-full bg-red-800 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+          <User size={28} strokeWidth={2} />
+        </div>
+      )}
 
-      <div className="author-card__content">
-        <div className="author-card__main" style={{
-          display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 16px'
-        }}>
-          {authorPhoto ? (
-            <Image
-              src={authorPhoto}
-              alt={authorName}
-              width={64}
-              height={64}
-              className="author-card__photo"
-            />
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          {hasSlug ? (
+            <Link 
+              href={`/autor/${slug}`} 
+              className="text-base font-bold text-gray-900 hover:text-red-800 transition-colors"
+              rel="author"
+            >
+              {displayName}
+            </Link>
           ) : (
-            <div className="author-card__avatar">
-              <User size={28} />
-            </div>
-          )}
-
-          <div className="author-card__info" style={{ flex: '1 1 auto', minWidth: 0 }}>
-            {authorSlug ? (
-              <Link href={`/autor/${authorSlug}`} className="author-card__name" style={{
-                fontSize: 16, fontWeight: 700, color: 'var(--text, #111)',
-                display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-              }}>
-                {authorName}
-              </Link>
-            ) : (
-              <span className="author-card__name" style={{
-                fontSize: 16, fontWeight: 700, color: 'var(--text, #111)',
-                display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-              }}>{authorName}</span>
-            )}
-            <span className="author-card__role" style={{
-              fontSize: 13, color: 'var(--accent, #8c1d18)', fontWeight: 600,
-              display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-            }}>
-              Periodista | Nicaragua Informate
+            <span className="text-base font-bold text-gray-900">
+              {displayName}
             </span>
-          </div>
-        </div>
-
-        {authorBio && <p className="author-card__bio">{authorBio}</p>}
-
-        <div className="author-card__meta" style={{
-          display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '6px 16px', marginTop: 12
-        }}>
-          <div className="author-card__meta-item" style={{
-            display: 'flex', alignItems: 'center', gap: 6, fontSize: 12,
-            color: 'var(--text-secondary, #6b7280)', whiteSpace: 'nowrap'
-          }}>
-            <Calendar size={14} />
-            <span>Publicado: {formatDate(publishedDate)} {formatTime(publishedDate)}</span>
-          </div>
-          {updatedDate && updatedDate !== publishedDate && (
-            <div className="author-card__meta-item" style={{
-              display: 'flex', alignItems: 'center', gap: 6, fontSize: 12,
-              color: 'var(--text-secondary, #6b7280)', whiteSpace: 'nowrap'
-            }}>
-              <Clock size={14} />
-              <span>Actualizado: {formatDate(updatedDate)} {formatTime(updatedDate)}</span>
-            </div>
           )}
         </div>
+
+        <p className="text-sm text-red-800 font-medium mt-0.5">
+          {displayRole}
+        </p>
+
+        <p className="text-sm text-gray-600 leading-relaxed mt-2">
+          {displayBio}
+        </p>
+
+        {/* Fechas */}
+        {(publishedDate || updatedDate) && (
+          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-gray-500">
+            {publishedDate && (
+              <span className="flex items-center gap-1">
+                <Calendar size={12} aria-hidden="true" />
+                <time dateTime={publishedDate}>
+                  Publicado: {formatDateTime(publishedDate)}
+                </time>
+              </span>
+            )}
+            {isUpdated && (
+              <span className="flex items-center gap-1">
+                <Clock size={12} aria-hidden="true" />
+                <time dateTime={updatedDate}>
+                  Actualizado: {formatDateTime(updatedDate)}
+                </time>
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Link a más artículos */}
+        {hasSlug && (
+          <Link
+            href={`/autor/${slug}`}
+            className="inline-flex items-center gap-1 text-sm font-medium text-red-800 hover:text-red-900 mt-3 transition-colors"
+          >
+            Más artículos
+            <ExternalLink size={14} aria-hidden="true" />
+          </Link>
+        )}
       </div>
-    </div>
+    </aside>
   );
 }

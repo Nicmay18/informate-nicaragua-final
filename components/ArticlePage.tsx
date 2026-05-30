@@ -1,227 +1,315 @@
 'use client';
 
-import Image from 'next/image';
+import { useState } from 'react';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Calendar, Clock, User } from 'lucide-react';
-import ShareBar from './ShareBar';
-import Sidebar from './Sidebar';
+import Image from 'next/image';
+import { Search } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import type { Noticia } from '@/lib/types';
+import { timeAgo } from '@/lib/formateo';
+import { CATEGORIES } from '@/lib/constants';
+import AuthorCard from './AuthorCard';
+import AdSlot from './AdSlot';
+import KeyPoints from './KeyPoints';
+import ShareBar from './ShareBar';
+import PayPalDonate from './PayPalDonate';
 
-interface ArticlePageProps {
-  noticia: Noticia;
-  relatedNews?: Noticia[];
-  trendingNews?: Noticia[];
+function catClass(cat?: string) {
+  const slug = cat?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+  const map: Record<string, string> = { sucesos: 'sucesos', nacionales: 'nacionales', espectaculos: 'espectaculos', deportes: 'deportes', tecnologia: 'tecnologia', tecnologa: 'tecnologia', internacionales: 'internacionales' };
+  return map[slug || ''] || 'nacionales';
 }
 
-function formatDate(date: string) {
+function formatDate(dateStr: string) {
   try {
-    const d = new Date(date);
-    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    return `${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
-  } catch { return date; }
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('es-NI', { day: 'numeric', month: 'long', year: 'numeric' }) + ' • ' + d.toLocaleTimeString('es-NI', { hour: '2-digit', minute: '2-digit' });
+  } catch {
+    return dateStr;
+  }
 }
 
-function timeAgo(date: string) {
-  try {
-    return formatDistanceToNow(new Date(date), { addSuffix: true, locale: es });
-  } catch { return date; }
-}
-
-export default function ArticlePage({ noticia, relatedNews = [], trendingNews = [] }: ArticlePageProps) {
-  const fullUrl = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-
-  const renderContent = () => {
-    if (!noticia.contenido) return null;
-    if (typeof noticia.contenido === 'string') {
-      return <div className="article-body" dangerouslySetInnerHTML={{ __html: noticia.contenido }} />;
-    }
-    return <p className="article-body">{noticia.contenido}</p>;
-  };
-
-  // Parsear puntos clave del resumen si vienen con numeración
-  const puntosClave = noticia.resumen
-    ? noticia.resumen.split(/\n|•/).filter(s => s.trim().length > 10).slice(0, 3)
-    : [];
+export default function ArticlePage({ noticia, relatedNews }: { noticia: Noticia; relatedNews: Noticia[] }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const cat = catClass(noticia.categoria);
+  const categorySlug = noticia.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') || 'nacionales';
+  const categoryLink = `/categoria/${categorySlug}`;
+  const isKeyling = noticia.autor === 'Keyling Elieth Rivera Muñoz' || noticia.autor === 'Directora Editorial';
+  const displayAuthor = isKeyling ? 'Keyling Elieth Rivera Muñoz' : (noticia.autor || 'Redacción Nicaragua Informate');
+  const displayRole = isKeyling ? 'Directora Editorial — Nicaragua Informate' : 'Periodista | Nicaragua Informate';
+  const authorSlug = isKeyling ? 'keyling-eliet-rivera-munoz' : undefined;
+  const authorPhoto = isKeyling ? '/keyling-rivera.jpg' : undefined;
 
   return (
-    <article className="article-page">
-      {/* Breadcrumb grande */}
-      <nav className="article-breadcrumb" aria-label="Breadcrumb">
-        <Link href="/" className="breadcrumb-link">Inicio</Link>
-        <span className="breadcrumb-sep">/</span>
-        {noticia.categoria && (
-          <>
-            <Link href={`/categoria/${noticia.categoria.toLowerCase()}`} className="breadcrumb-link">{noticia.categoria}</Link>
-            <span className="breadcrumb-sep">/</span>
-          </>
-        )}
-        <span className="breadcrumb-current">{noticia.titulo.slice(0, 40)}…</span>
-      </nav>
-
-      {/* Hero con imagen + overlay oscuro + texto blanco */}
-      {noticia.imagen && (
-        <div className="article-hero">
-          <Image
-            src={noticia.imagen}
-            alt={noticia.titulo}
-            fill
-            priority
-            className="article-hero-img"
-            sizes="100vw"
-            style={{ objectFit: 'cover', objectPosition: 'center top' }}
-          />
-          <div className="article-hero-overlay" />
-          <div className="article-hero-content">
-            {noticia.categoria && <span className="article-hero-badge">{noticia.categoria}</span>}
-            <h1 className="article-hero-title">{noticia.titulo}</h1>
-            <div className="article-hero-meta" style={{
-              display: 'flex', flexWrap: 'wrap', alignItems: 'center',
-              gap: '6px 14px', marginTop: 12
-            }}>
-              {noticia.autor && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
-                  <User size={14} /> {noticia.autor}
-                </span>
-              )}
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
-                <Calendar size={14} /> <time dateTime={noticia.fecha}>{formatDate(noticia.fecha)}</time>
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, whiteSpace: 'nowrap' }}>
-                <Clock size={14} /> {timeAgo(noticia.fecha)}
-              </span>
+    <div>
+      {/* HEADER */}
+      <header className="ni-header">
+        <div className="ni-header__top">
+          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
+            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={42} height={42} className="ni-logo__img" priority />
+            <div className="ni-logo__text">
+              <strong>Nicaragua Informate</strong>
+              <span className="ni-logo__tagline">Infórmate al Instante</span>
             </div>
+          </Link>
+
+          <div className="ni-header__actions">
+            <Link href="/buscar" className="ni-search-btn" aria-label="Buscar noticias"><Search size={18} /></Link>
+            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
+              <span /><span /><span />
+            </button>
           </div>
+        </div>
+        <nav className="ni-header__nav" aria-label="Navegación principal">
+          <ul className="ni-nav">
+            <li><Link href="/">Inicio</Link></li>
+            {CATEGORIES.map(c => (
+              <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+
+      {/* Menú móvil */}
+      {menuOpen && (
+        <div className="ni-mobile-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
+          <nav className="ni-mobile-menu__content" aria-label="Menú móvil">
+            <button className="ni-mobile-menu__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">✕</button>
+            <ul className="ni-mobile-menu__nav">
+              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`} onClick={() => setMenuOpen(false)}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </nav>
         </div>
       )}
 
-      {/* Layout principal */}
-      <div className="article-layout">
-        <div className="article-main">
-          {/* Puntos clave grandes */}
-          {puntosClave.length > 0 && (
-            <div className="article-summary">
-              <h2 className="article-summary-title">En {puntosClave.length} puntos clave</h2>
-              <ol className="article-summary-list">
-                {puntosClave.map((punto, i) => (
-                  <li key={i} className="article-summary-item">
-                    <span className="article-summary-num">{i + 1}</span>
-                    <p>{punto.trim()}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
+      {/* BREADCRUMBS */}
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan">
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <Link href={categoryLink}>{noticia.categoria || 'Noticia'}</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>{noticia.titulo}</span>
+      </nav>
 
-          {/* Contenido */}
-          <div className="article-content-wrapper">
-            {renderContent()}
-          </div>
+      <div className="ni-article__back-wrapper">
+        <button type="button" className="ni-article__back" onClick={() => router.back()}>
+          ← Volver a Noticias
+        </button>
+      </div>
 
-          {/* Share */}
-          <ShareBar title={noticia.titulo} url={fullUrl} />
+      {/* ARTÍCULO */}
+      <article className="ni-article">
+        {/* Header del artículo */}
+        <header className="ni-article__header">
+          <span className={`ni-article__badge ni-article__badge--${cat}`}>{noticia.categoria || 'Noticia'}</span>
+          <h1 className="ni-article__title">{noticia.titulo}</h1>
 
-          {/* Tags */}
-          {noticia.tags && noticia.tags.length > 0 && (
-            <div className="article-tags">
-              <h3>Etiquetas</h3>
-              <div className="tags-row">
-                {noticia.tags.map((tag) => (
-                  <Link key={tag} href={`/noticias?tag=${encodeURIComponent(tag)}`} className="tag-pill">{tag}</Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Autor — CORREGIDO RESPONSIVE */}
-          <div className="article-author" style={{
-            display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '12px 16px',
-            padding: '20px', background: 'var(--bg-secondary, #f9fafb)', borderRadius: 12,
-            border: '1px solid var(--border, #e5e7eb)'
-          }}>
-            <Link href="/autor/keyling-eliet-rivera-munoz" rel="author">
-              <Image
-                src="/keyling-rivera.jpg"
-                alt="Keyling Elieth Rivera Muñoz - Directora Editorial"
-                width={60}
-                height={60}
-                className="article-author-avatar"
-                style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
-              />
-            </Link>
-            <div className="article-author-info" style={{ flex: '1 1 auto', minWidth: 0 }}>
-              <Link href="/autor/keyling-eliet-rivera-munoz" rel="author" style={{ textDecoration: 'none' }}>
-                <div className="article-author-name" style={{
-                  fontSize: 16, fontWeight: 700, color: 'var(--text, #111)',
-                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
-                }}>
-                  {noticia.autor || 'Keyling Elieth Rivera Muñoz'}
-                </div>
-              </Link>
-              <div className="article-author-role" style={{
-                fontSize: 13, color: 'var(--accent, #8c1d18)', fontWeight: 600,
-                marginTop: 2
-              }}>
-                Directora Editorial — Nicaragua Informate
-              </div>
-              <p className="article-author-bio" style={{
-                fontSize: 13, color: 'var(--text-secondary, #6b7280)',
-                lineHeight: 1.6, marginTop: 8, marginBottom: 0
-              }}>
-                Periodista de Nicaragua Informate. Especializada en cobertura nacional e internacional.
-                Comprometida con el periodismo verificado y la información de calidad para nicaragüenses.
-              </p>
-              <div className="article-author-social" style={{
-                display: 'flex', gap: 10, marginTop: 12
-              }}>
-                <a href="https://facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{
-                  width: 32, height: 32, borderRadius: '50%', background: '#1877f2',
-                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
-                }}>f</a>
-                <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{
-                  width: 32, height: 32, borderRadius: '50%', background: '#128c7e',
-                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
-                }}>W</a>
-                <a href="https://t.me/+fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram" style={{
-                  width: 32, height: 32, borderRadius: '50%', background: '#0066aa',
-                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 14, fontWeight: 700, textDecoration: 'none'
-                }}>T</a>
-              </div>
-            </div>
-          </div>
-
-          {/* Noticias relacionadas limpias */}
-          {relatedNews.length > 0 && (
-            <section className="article-related">
-              <h2 className="article-related-title">Noticias relacionadas</h2>
-              <div className="article-related-grid">
-                {relatedNews.slice(0, 3).map((news) => (
-                  <Link href={`/noticias/${news.slug}`} key={news.id} className="related-card">
-                    {news.imagen && (
-                      <div className="related-card-image">
-                        <Image src={news.imagen} alt={news.titulo} fill sizes="300px" style={{ objectFit: 'cover' }} />
-                      </div>
-                    )}
-                    <div className="related-card-body">
-                      <span className="related-card-category">{news.categoria}</span>
-                      <h4 className="related-card-title">{news.titulo}</h4>
-                      <time className="related-card-date" dateTime={news.fecha} suppressHydrationWarning>{timeAgo(news.fecha)}</time>
-                    </div>
+          <div className="ni-article__meta" style={{ flexWrap: 'wrap', gap: '8px 16px' }}>
+            <div className="ni-article__author" style={{ flex: '1 1 auto', minWidth: 0 }}>
+              {authorPhoto ? (
+                <Image
+                  src={authorPhoto}
+                  alt={displayAuthor}
+                  width={40}
+                  height={40}
+                  className="ni-article__author-photo"
+                />
+              ) : (
+                <div className="ni-article__author-avatar">{displayAuthor[0].toUpperCase()}</div>
+              )}
+              <div className="ni-article__author-info" style={{ minWidth: 0 }}>
+                {authorSlug ? (
+                  <Link href={`/autor/${authorSlug}`} rel="author" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <strong>{displayAuthor}</strong>
                   </Link>
-                ))}
+                ) : (
+                  <strong>{displayAuthor}</strong>
+                )}
+                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>
+                  {displayRole}
+                </span>
               </div>
-            </section>
-          )}
+            </div>
+            <time
+              className="ni-article__time"
+              dateTime={noticia.fecha}
+              title={formatDate(noticia.fecha)}
+              style={{ flexShrink: 0, marginLeft: 'auto', whiteSpace: 'nowrap' }}
+            >
+              {formatDate(noticia.fecha)}
+            </time>
+          </div>
+        </header>
+
+        {/* Imagen destacada */}
+        {noticia.imagen && (
+          <figure className="ni-article__featured">
+            <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority quality={75} />
+            <figcaption className="ni-article__caption">{noticia.pieFoto || noticia.titulo}</figcaption>
+          </figure>
+        )}
+
+        {/* AdSlot 1: Debajo del título (top banner) */}
+        <div className="ni-article__ad-slot ni-article__ad-slot--top">
+          <AdSlot slot="11061275" format="horizontal" width={728} height={90} />
         </div>
 
-        <aside className="article-sidebar">
-          <Sidebar trendingNews={trendingNews} />
-        </aside>
-      </div>
-    </article>
+        {/* Share buttons */}
+        <div className="ni-share" role="group" aria-label="Compartir este artículo">
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--fb" aria-label="Compartir en Facebook">
+            <span aria-hidden="true">📘</span> <span>Facebook</span>
+          </a>
+          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--tw" aria-label="Compartir en X (Twitter)">
+            <span aria-hidden="true">𝕏</span> <span>Twitter</span>
+          </a>
+          <a href={`https://wa.me/?text=${encodeURIComponent(noticia.titulo + ' — ' + (typeof window !== 'undefined' ? window.location.href : ''))}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--wa" aria-label="Compartir en WhatsApp">
+            <span aria-hidden="true">📱</span> <span>WhatsApp</span>
+          </a>
+          <a href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer" className="ni-share__btn ni-share__btn--tg" aria-label="Compartir en Telegram">
+            <span aria-hidden="true">✈️</span> <span>Telegram</span>
+          </a>
+          <button className="ni-share__btn ni-share__btn--copy" onClick={() => navigator.clipboard.writeText(window.location.href)} aria-label="Copiar enlace al portapapeles">
+            <span aria-hidden="true">🔗</span> <span>Copiar link</span>
+          </button>
+        </div>
+
+        {/* 3 PUNTOS CLAVE — Generados dinámicamente desde el contenido */}
+        <KeyPoints
+          titulo={noticia.titulo}
+          resumen={noticia.resumen}
+          contenido={noticia.contenido}
+          categoria={noticia.categoria}
+        />
+
+        {/* CONTENIDO */}
+        <div className="ni-article__body" aria-label="Contenido del artículo" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+
+        {/* BOTONES COMPARTIR */}
+        <ShareBar
+          url={`https://nicaraguainformate.com/noticias/${noticia.slug}`}
+          title={noticia.titulo}
+          variant="chips"
+        />
+
+        {/* AdSlot 2: Entre párrafos (in-article) */}
+        <div className="ni-article__ad-slot">
+          <AdSlot slot="11061275" format="rectangle" width={336} height={280} />
+        </div>
+
+        {/* Tags */}
+        {noticia.tags && noticia.tags.length > 0 && (
+          <div className="ni-tags">
+            <span className="ni-tags__label">Tags:</span>
+            {noticia.tags.map((tag, i) => (
+              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} className="ni-tag">{tag}</Link>
+            ))}
+          </div>
+        )}
+
+        {/* Author Card */}
+        <AuthorCard
+          name={displayAuthor}
+          photo={authorPhoto}
+          bio={isKeyling ? 'Directora Editorial — Nicaragua Informate. Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Comprometida con la verdad y la verificación de la información.' : undefined}
+          slug={authorSlug}
+          publishedDate={noticia.fecha}
+          updatedDate={noticia.fechaActualizacion}
+        />
+
+        {/* Donación PayPal inline */}
+        <PayPalDonate variant="inline" />
+
+        {/* AdSlot 3: Al final del artículo (bottom banner) */}
+        <div className="ni-article__ad-slot ni-article__ad-slot--bottom">
+          <AdSlot slot="11061275" format="horizontal" width={728} height={90} />
+        </div>
+
+        {/* Noticias relacionadas */}
+        {relatedNews.length > 0 && (
+          <section className="ni-related">
+            <h2 className="ni-related__title">Noticias relacionadas</h2>
+            <div className="ni-related__grid">
+              {relatedNews.slice(0, 3).map((n) => (
+                <article key={n.id} className="ni-related__card">
+                  <div className="ni-related__thumb">
+                    {n.imagen ? (
+                      <Image src={n.imagen} alt={n.titulo} fill sizes="(max-width:768px) 100vw, 400px" style={{ objectFit: 'cover' }} quality={75} />
+                    ) : null}
+                    <span className={`ni-related__cat ni-related__cat--${catClass(n.categoria)}`}>{n.categoria || 'Noticia'}</span>
+                  </div>
+                  <h3 className="ni-related__card-title">
+                    <Link href={`/noticias/${n.slug}`}>{n.titulo}</Link>
+                  </h3>
+                  <time className="ni-related__card-meta" dateTime={n.fecha} suppressHydrationWarning>{timeAgo(n.fecha)}</time>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Comentarios */}
+        <section className="ni-comments">
+          <h2 className="ni-comments__title">💬 Comentarios</h2>
+          <div className="ni-comment-form">
+            <textarea placeholder="¿Qué opinas sobre la noticia? Escribe tu comentario..." />
+            <button className="ni-comment-form__btn">Publicar comentario</button>
+          </div>
+        </section>
+      </article>
+
+      {/* FOOTER */}
+      <footer className="ni-footer">
+        <div className="ni-footer__inner">
+          <div>
+            <div className="ni-footer__brand">Nicaragua Informate</div>
+            <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Periodismo verificado desde Managua.</p>
+            <div className="ni-footer__social">
+              <a href="https://www.facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">W</a>
+              <a href="https://t.me/fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">T</a>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Secciones</h4>
+            <ul className="ni-footer__links">
+              {CATEGORIES.map(c => (
+                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Nosotros</h4>
+            <ul className="ni-footer__links">
+              <li><Link href="/nosotros">Quiénes somos</Link></li>
+              <li><Link href="/contacto">Contacto</Link></li>
+              <li><Link href="/politica-editorial">Política Editorial</Link></li>
+              <li><Link href="/publicidad">Publicidad</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="ni-footer__col-title">Legal</h4>
+            <ul className="ni-footer__links">
+              <li><Link href="/privacidad">Política de privacidad</Link></li>
+              <li><Link href="/terminos">Términos y condiciones</Link></li>
+              <li><Link href="/cookies">Política de cookies</Link></li>
+              <li><Link href="/mapa-del-sitio">Mapa del sitio</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="ni-footer__bottom">
+          <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
+          <span>Hecho con ❤️ en Managua, Nicaragua</span>
+        </div>
+      </footer>
+    </div>
   );
 }
