@@ -47,16 +47,20 @@ function normalizeImage(imagen: string): string {
     return FALLBACK_IMAGE;
   }
 
-  // jsDelivr CDN → pasar por weserv.nl para compresión WebP + resize
+  // jsDelivr CDN → mantener directo (CDN global rápido y confiable)
   if (imagen.includes('cdn.jsdelivr.net')) {
-    const clean = imagen.split('?')[0];
-    return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=900&q=75&output=webp`;
+    return imagen.split('?')[0];
   }
 
-  // GitHub raw URLs → pasar por weserv.nl directamente
+  // GitHub raw URLs → convertir a jsDelivr CDN (más confiable para producción)
   if (imagen.includes('githubusercontent.com')) {
     const clean = imagen.split('?')[0];
-    return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=900&q=75&output=webp`;
+    const match = clean.match(/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/);
+    if (match) {
+      const [, user, repo, branch, path] = match;
+      return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+    }
+    return clean;
   }
 
   // URL externa (Unsplash, etc.) → quitar query params

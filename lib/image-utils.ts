@@ -41,13 +41,12 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return FALLBACK_IMAGE;
   }
 
-  // Data URI o ruta local: devolver directo
-  if (url.startsWith('data:') || url.startsWith('/')) {
+  // Data URI, ruta local, o jsDelivr (ya optimizado): devolver directo
+  if (url.startsWith('data:') || url.startsWith('/') || url.includes('cdn.jsdelivr.net')) {
     return url;
   }
 
-  // Todas las imágenes externas (GitHub raw, jsDelivr, etc.): proxy weserv.nl para redimensionar
-  // Nota: las imágenes LCP (hero) usan cleanImageUrl() directamente, sin pasar por aquí
+  // Otras imágenes externas: proxy weserv.nl para redimensionar
   if (width || height) {
     const params = new URLSearchParams();
     params.set('url', url);
