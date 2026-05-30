@@ -150,62 +150,53 @@ export default function RadioPlayer() {
   };
 
   return (
-    <div className="w-full bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 font-sans select-none">
-      {/* Audio element */}
-      <audio ref={audioRef} preload="none" crossOrigin="anonymous" playsInline className="hidden" />
+    <div style={{ width: '100%', backgroundColor: '#0f172a', borderRadius: 16, overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)', border: '1px solid #334155', fontFamily: 'system-ui, sans-serif', userSelect: 'none' }}>
+      <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+      <audio ref={audioRef} preload="none" crossOrigin="anonymous" playsInline style={{ display: 'none' }} />
 
       {/* ===== HEADER ===== */}
-      <div className="bg-slate-800 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Radio size={16} className="text-red-500" />
-          <span className="text-white font-bold text-sm tracking-wide">RADIO EN VIVO</span>
+      <div style={{ backgroundColor: '#1e293b', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Radio size={16} style={{ color: '#ef4444', flexShrink: 0 }} />
+          <span style={{ color: '#fff', fontWeight: 700, fontSize: 14, letterSpacing: '0.5px' }}>RADIO EN VIVO</span>
           {currentStation && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-red-400 uppercase">
-              <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 700, color: '#f87171', textTransform: 'uppercase' }}>
+              <span style={{ width: 6, height: 6, backgroundColor: '#ef4444', borderRadius: '50%' }} />
               EN VIVO
             </span>
           )}
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-slate-400 hover:text-white text-xs font-medium transition-colors"
+          style={{ color: '#94a3b8', fontSize: 12, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
         >
           {isExpanded ? 'Ocultar' : 'Ver todo'}
         </button>
       </div>
 
-      {/* ===== NOW PLAYING (siempre visible si hay emisora) ===== */}
+      {/* ===== NOW PLAYING ===== */}
       {currentStation && (
-        <div className="px-4 py-3 bg-slate-800/50 border-b border-slate-700">
-          <div className="flex items-center gap-3">
-            {/* Botón Play/Pause grande */}
+        <div style={{ padding: '12px 16px', backgroundColor: 'rgba(30,41,59,0.5)', borderBottom: '1px solid #334155' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <button
               onClick={handleStop}
-              className="w-11 h-11 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg active:scale-95 transition-transform"
-              style={{ backgroundColor: currentStation.color }}
+              style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0, backgroundColor: currentStation.color, border: 'none', cursor: 'pointer', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }}
             >
               <Pause size={18} fill="currentColor" />
             </button>
-
-            {/* Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-bold text-sm truncate">{currentStation.name}</p>
-              <p className="text-slate-400 text-xs">{currentStation.genre}</p>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ color: '#fff', fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', margin: 0 }}>{currentStation.name}</p>
+              <p style={{ color: '#94a3b8', fontSize: 12, margin: 0 }}>{currentStation.genre}</p>
             </div>
-
-            {/* Volumen */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button onClick={toggleMute} className="text-slate-400 hover:text-white transition-colors">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+              <button onClick={toggleMute} style={{ color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer' }}>
                 {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
               </button>
               <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
+                type="range" min="0" max="1" step="0.1"
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-16 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-white"
+                style={{ width: 64, height: 4, accentColor: '#fff' }}
               />
             </div>
           </div>
@@ -214,14 +205,11 @@ export default function RadioPlayer() {
 
       {/* ===== ERROR ===== */}
       {error && (
-        <div className="px-4 py-2 bg-red-900/30 border-b border-red-800">
-          <div className="flex items-center gap-2">
-            <span className="text-red-400 text-xs">{error}</span>
+        <div style={{ padding: '8px 16px', backgroundColor: 'rgba(127,29,29,0.3)', borderBottom: '1px solid #7f1d1d' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ color: '#f87171', fontSize: 12 }}>{error}</span>
             {currentStation && (
-              <button
-                onClick={() => window.open(currentStation.website, '_blank', 'noopener,noreferrer')}
-                className="text-red-300 text-xs underline hover:text-red-200"
-              >
+              <button onClick={() => window.open(currentStation.website, '_blank', 'noopener,noreferrer')} style={{ color: '#fca5a5', fontSize: 12, textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
                 Web
               </button>
             )}
@@ -231,9 +219,9 @@ export default function RadioPlayer() {
 
       {/* ===== LOADING ===== */}
       {loading && !playing && (
-        <div className="px-4 py-2 bg-slate-800/30 border-b border-slate-700">
-          <div className="flex items-center gap-2 text-slate-400 text-xs">
-            <Loader2 size={14} className="animate-spin" />
+        <div style={{ padding: '8px 16px', backgroundColor: 'rgba(30,41,59,0.3)', borderBottom: '1px solid #334155' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#94a3b8', fontSize: 12 }}>
+            <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
             Conectando con {STATIONS.find(s => s.id === loading)?.name}...
           </div>
         </div>
@@ -241,58 +229,46 @@ export default function RadioPlayer() {
 
       {/* ===== STATION LIST ===== */}
       {isExpanded && (
-        <div className="max-h-64 overflow-y-auto">
+        <div style={{ maxHeight: 256, overflowY: 'auto' }}>
           {STATIONS.map((station) => {
             const isPlaying = playing === station.id;
             const isLoading = loading === station.id;
             const hasStream = !!station.streamUrl;
-
             return (
               <button
                 key={station.id}
                 onClick={() => playStation(station)}
-                className={`
-                  w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors
-                  ${isPlaying ? 'bg-slate-700' : 'hover:bg-slate-800'}
-                `}
+                style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', textAlign: 'left', backgroundColor: isPlaying ? '#334155' : 'transparent', border: 'none', cursor: 'pointer', color: 'inherit' }}
               >
-                {/* Play/Pause/Link icon */}
-                <div className="shrink-0">
+                <div style={{ flexShrink: 0 }}>
                   {isLoading ? (
-                    <Loader2 size={16} className="text-slate-400 animate-spin" />
+                    <Loader2 size={16} style={{ color: '#94a3b8', animation: 'spin 1s linear infinite' }} />
                   ) : isPlaying ? (
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: station.color }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', backgroundColor: station.color }}>
                       <Pause size={12} fill="currentColor" />
                     </div>
                   ) : !hasStream ? (
-                    <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
                       <ExternalLink size={12} />
                     </div>
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-slate-400 group-hover:text-white">
-                      <Play size={12} fill="currentColor" className="ml-0.5" />
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8' }}>
+                      <Play size={12} fill="currentColor" style={{ marginLeft: 2 }} />
                     </div>
                   )}
                 </div>
-
-                {/* Station info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-white text-sm font-medium truncate">{station.name}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ color: '#fff', fontSize: 14, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{station.name}</span>
                     {!hasStream && (
-                      <span className="shrink-0 px-1 py-0.5 rounded text-[9px] font-bold bg-slate-700 text-slate-400">WEB</span>
+                      <span style={{ flexShrink: 0, padding: '2px 6px', borderRadius: 4, fontSize: 9, fontWeight: 700, backgroundColor: '#334155', color: '#94a3b8' }}>WEB</span>
                     )}
                   </div>
-                  <span className="text-slate-500 text-xs">{station.genre}</span>
+                  <span style={{ color: '#64748b', fontSize: 12 }}>{station.genre}</span>
                 </div>
-
-                {/* Status dot */}
                 {isPlaying && (
-                  <div className="flex items-center gap-1 shrink-0">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: station.color }} />
-                      <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: station.color }} />
-                    </span>
+                  <div style={{ flexShrink: 0 }}>
+                    <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', backgroundColor: station.color }} />
                   </div>
                 )}
               </button>
@@ -301,9 +277,9 @@ export default function RadioPlayer() {
         </div>
       )}
 
-      {/* ===== COLLAPSED MINI VIEW (solo muestra emisoras como chips) ===== */}
+      {/* ===== COLLAPSED MINI VIEW ===== */}
       {!isExpanded && (
-        <div className="px-3 py-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
+        <div style={{ padding: '8px 12px', display: 'flex', gap: 6, overflowX: 'auto' }}>
           {STATIONS.map((station) => {
             const isPlaying = playing === station.id;
             const shortName = station.name.replace('Radio ', 'R.').replace('La ', '').split(' ')[0];
@@ -312,14 +288,21 @@ export default function RadioPlayer() {
                 key={station.id}
                 onClick={() => playStation(station)}
                 title={station.name}
-                className={`
-                  shrink-0 px-2 py-1 rounded-full text-[10px] font-medium transition-all truncate max-w-[70px]
-                  ${isPlaying
-                    ? 'text-white shadow-md'
-                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
-                  }
-                `}
-                style={isPlaying ? { backgroundColor: station.color } : undefined}
+                style={{
+                  flexShrink: 0,
+                  padding: '4px 10px',
+                  borderRadius: 9999,
+                  fontSize: 11,
+                  fontWeight: 500,
+                  whiteSpace: 'nowrap',
+                  maxWidth: 80,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  backgroundColor: isPlaying ? station.color : '#1e293b',
+                  color: isPlaying ? '#fff' : '#94a3b8',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
               >
                 {shortName}
               </button>
