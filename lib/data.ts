@@ -2,6 +2,7 @@ import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firesto
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
 import { generateSlug } from './slug';
+import { capitalizeFirst } from './formateo';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -106,7 +107,7 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
         return {
           id: d.id,
           slug: data.slug || d.id,
-          titulo: data.titulo || '',
+          titulo: capitalizeFirst(data.titulo || ''),
           resumen: data.resumen || '',
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
@@ -262,7 +263,7 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
   return {
     id: d.id,
     slug: data.slug || d.id,
-    titulo: data.titulo || '',
+    titulo: capitalizeFirst(data.titulo || ''),
     resumen: data.resumen || '',
     contenido: data.contenido,
     categoria: data.categoria || 'Actualidad',
@@ -348,7 +349,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       return {
         id: doc.id,
         slug: data.slug || doc.id,
-        titulo: data.titulo || '',
+        titulo: capitalizeFirst(data.titulo || ''),
         resumen: data.resumen || '',
         contenido: data.contenido || '',
         categoria: data.categoria || 'Actualidad',
@@ -381,7 +382,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         return {
           id: doc.id,
           slug: data.slug || baseSlug,
-          titulo: data.titulo || '',
+          titulo: capitalizeFirst(data.titulo || ''),
           resumen: data.resumen || '',
           contenido: data.contenido || '',
           categoria: data.categoria || 'Actualidad',
@@ -407,7 +408,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         return {
           id: doc.id,
           slug: data.slug || slug,
-          titulo: data.titulo || '',
+          titulo: capitalizeFirst(data.titulo || ''),
           resumen: data.resumen || '',
           contenido: data.contenido || '',
           categoria: data.categoria || 'Actualidad',
@@ -470,7 +471,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
         return {
           id: d.id,
           slug: data.slug || d.id,
-          titulo: data.titulo || '',
+          titulo: capitalizeFirst(data.titulo || ''),
           resumen: data.resumen || '',
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
