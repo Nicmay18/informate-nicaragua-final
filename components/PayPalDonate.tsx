@@ -45,71 +45,68 @@ export default function PayPalDonate({ variant = 'floating' }: PayPalDonateProps
         {/* Botón flotante */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all font-semibold text-sm"
+          style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 50, display: 'flex', alignItems: 'center', gap: 8, padding: '12px 20px', background: 'linear-gradient(to right, #2563eb, #1d4ed8)', color: '#fff', borderRadius: 9999, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
           aria-label="Donar"
         >
-          <Heart size={18} className={isOpen ? 'fill-white' : ''} />
-          <span className="hidden sm:inline">Apoyanos</span>
+          <Heart size={18} />
+          <span style={{ display: 'none' }} className="sm-show">Apoyanos</span>
         </button>
 
         {/* Modal */}
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
-            <div
-              className="w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4"
-              onClick={e => e.stopPropagation()}
-            >
+          <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, background: 'rgba(0,0,0,0.5)' }} onClick={() => setIsOpen(false)}>
+            <div style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 16, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
               {/* Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center justify-between">
+              <div style={{ background: 'linear-gradient(to right, #2563eb, #1d4ed8)', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <h3 className="text-white font-bold text-lg">Apoyá Nicaragua Informate</h3>
-                  <p className="text-blue-100 text-xs mt-0.5">Tu donación mantiene el periodismo Digital</p>
+                  <h3 style={{ color: '#fff', fontWeight: 700, fontSize: 18, margin: 0 }}>Apoyá Nicaragua Informate</h3>
+                  <p style={{ color: '#bfdbfe', fontSize: 12, margin: '4px 0 0' }}>Tu donación mantiene el periodismo Digital</p>
                 </div>
-                <button onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white">
+                <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
                   <X size={20} />
                 </button>
               </div>
 
               {/* Presets */}
-              <div className="p-6 space-y-3">
+              <div style={{ padding: 24 }}>
                 {PRESETS.map((preset) => (
                   <button
                     key={preset.amount}
                     onClick={() => handleDonate(preset.amount)}
-                    className="w-full flex items-center gap-4 p-3 rounded-xl border-2 border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all group text-left"
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 16, padding: 12, borderRadius: 12, border: '2px solid #f1f5f9', background: '#fff', marginBottom: 8, cursor: 'pointer', textAlign: 'left' }}
                   >
-                    <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#dbeafe', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {preset.icon}
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">${preset.amount}</span>
-                        <span className="text-sm text-slate-500">— {preset.label}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontWeight: 700, color: '#0f172a' }}>${preset.amount}</span>
+                        <span style={{ fontSize: 14, color: '#64748b' }}>— {preset.label}</span>
                       </div>
-                      <p className="text-xs text-slate-400">{preset.description}</p>
+                      <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>{preset.description}</p>
                     </div>
                   </button>
                 ))}
 
                 {/* Custom amount */}
-                <div className="pt-3 border-t border-slate-100">
-                  <p className="text-xs font-medium text-slate-500 mb-2">Otro monto</p>
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                <div style={{ paddingTop: 12, borderTop: '1px solid #f1f5f9', marginTop: 8 }}>
+                  <p style={{ fontSize: 12, fontWeight: 500, color: '#64748b', marginBottom: 8 }}>Otro monto</p>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontWeight: 700 }}>$</span>
                       <input
                         type="number"
                         min="1"
                         placeholder="20"
                         value={customAmount}
                         onChange={e => setCustomAmount(e.target.value)}
-                        className="w-full pl-7 pr-3 py-2.5 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none text-sm font-semibold"
+                        style={{ width: '100%', padding: '10px 12px 10px 28px', border: '2px solid #e2e8f0', borderRadius: 12, fontSize: 14, fontWeight: 600 }}
                       />
                     </div>
                     <button
                       onClick={handleCustomDonate}
                       disabled={!customAmount || parseFloat(customAmount) <= 0}
-                      className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      style={{ padding: '10px 20px', background: '#2563eb', color: '#fff', borderRadius: 12, fontWeight: 600, fontSize: 14, border: 'none', cursor: 'pointer', opacity: (!customAmount || parseFloat(customAmount) <= 0) ? 0.5 : 1 }}
                     >
                       Donar
                     </button>
@@ -118,8 +115,8 @@ export default function PayPalDonate({ variant = 'floating' }: PayPalDonateProps
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-3 bg-slate-50 text-center">
-                <p className="text-[10px] text-slate-400">Pagos seguros vía PayPal. Podés cancelar en cualquier momento.</p>
+              <div style={{ padding: '12px 24px', background: '#f8fafc', textAlign: 'center' }}>
+                <p style={{ fontSize: 10, color: '#94a3b8', margin: 0 }}>Pagos seguros vía PayPal. Podés cancelar en cualquier momento.</p>
               </div>
             </div>
           </div>
@@ -131,29 +128,29 @@ export default function PayPalDonate({ variant = 'floating' }: PayPalDonateProps
   // Variante inline (dentro de artículos)
   if (variant === 'inline') {
     return (
-      <div className="w-full max-w-md mx-auto my-6 p-5 bg-slate-50 rounded-xl border border-slate-200">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+      <div style={{ width: '100%', maxWidth: 480, margin: '24px auto', padding: 20, background: '#f8fafc', borderRadius: 12, border: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#dbeafe', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Heart size={20} />
           </div>
           <div>
-            <h4 className="font-bold text-slate-900 text-sm">¿Te gustó esta noticia?</h4>
-            <p className="text-xs text-slate-500">Apoyá el periodismo Digital</p>
+            <h4 style={{ fontWeight: 700, color: '#0f172a', fontSize: 14, margin: 0 }}>¿Te gustó esta noticia?</h4>
+            <p style={{ fontSize: 12, color: '#64748b', margin: '2px 0 0' }}>Apoyá el periodismo Digital</p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {[5, 10, 25].map(amount => (
             <button
               key={amount}
               onClick={() => handleDonate(amount)}
-              className="px-4 py-2 bg-white border-2 border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-colors"
+              style={{ padding: '8px 16px', background: '#fff', border: '2px solid #e2e8f0', borderRadius: 8, fontSize: 14, fontWeight: 600, color: '#334155', cursor: 'pointer' }}
             >
               ${amount}
             </button>
           ))}
           <button
             onClick={() => setIsOpen(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+            style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}
           >
             Otro monto
           </button>
@@ -164,18 +161,18 @@ export default function PayPalDonate({ variant = 'floating' }: PayPalDonateProps
 
   // Variante sidebar (widget lateral)
   return (
-    <div className="w-full p-4 bg-slate-900 rounded-xl text-white">
-      <div className="flex items-center gap-2 mb-3">
-        <Heart size={16} className="text-red-400" />
-        <h4 className="font-bold text-sm">Apoyanos</h4>
+    <div style={{ width: '100%', padding: 16, background: '#0f172a', borderRadius: 12, color: '#fff' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <Heart size={16} style={{ color: '#f87171' }} />
+        <h4 style={{ fontWeight: 700, fontSize: 14, margin: 0 }}>Apoyanos</h4>
       </div>
-      <p className="text-xs text-slate-400 mb-3">Tu donación mantiene este medio Digital</p>
-      <div className="space-y-2">
+      <p style={{ fontSize: 12, color: '#94a3b8', marginBottom: 12 }}>Tu donación mantiene este medio Digital</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {[5, 10, 25].map(amount => (
           <button
             key={amount}
             onClick={() => handleDonate(amount)}
-            className="w-full py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-semibold transition-colors"
+            style={{ width: '100%', padding: '8px 0', background: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 8, fontSize: 14, fontWeight: 600, border: 'none', cursor: 'pointer' }}
           >
             ${amount} USD
           </button>
