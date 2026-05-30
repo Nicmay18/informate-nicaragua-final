@@ -107,6 +107,40 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/economia',
+        destination: '/categoria/nacionales',
+        permanent: true,
+      },
+      {
+        source: '/categoria/economia',
+        destination: '/categoria/nacionales',
+        permanent: true,
+      },
+      // Redirigir URLs con query params basura a URLs limpias
+      {
+        source: '/noticias/:slug',
+        has: [{ type: 'query' as const, key: 'slug' }],
+        destination: '/noticias/:slug',
+        permanent: true,
+      },
+      {
+        source: '/noticias/:slug',
+        has: [{ type: 'query' as const, key: 'id' }],
+        destination: '/noticias/:slug',
+        permanent: true,
+      },
+      // Redirigir categorías inexistentes a existentes similares
+      {
+        source: '/categoria/cultura',
+        destination: '/categoria/espectaculos',
+        permanent: true,
+      },
+      {
+        source: '/categoria/politica',
+        destination: '/categoria/nacionales',
+        permanent: true,
+      },
+      {
         source: '/noticia.html',
         has: [{ type: 'query' as const, key: 'slug' }],
         destination: '/noticias/:slug',
