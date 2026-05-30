@@ -293,12 +293,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Imagen destacada */}
         {noticia.imagen && (
-          <figure className="relative w-full aspect-video rounded-xl overflow-hidden mb-2 bg-gray-100" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+          <figure
+            style={{ position: 'relative', width: '100%', maxHeight: 480, aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden', marginBottom: 8, backgroundColor: '#f3f4f6' }}
+            itemProp="image"
+            itemScope
+            itemType="https://schema.org/ImageObject"
+          >
             <Image
               src={noticia.imagen}
               alt={noticia.titulo}
               fill
-              className="object-cover"
+              style={{ objectFit: 'cover' }}
               sizes="(max-width: 768px) 100vw, 800px"
               priority
               itemProp="url"
