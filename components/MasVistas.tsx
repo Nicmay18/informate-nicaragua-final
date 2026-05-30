@@ -1,32 +1,13 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { TrendingUp, Eye } from 'lucide-react';
+import type { Noticia } from '@/lib/types';
 
-interface NoticiaTop {
-  id: string;
-  titulo: string;
-  slug: string;
-  categoria: string;
-  vistas: number;
-  imagen: string | null;
-  fecha: string | null;
+interface MasVistasProps {
+  noticias: Noticia[];
 }
 
-async function getTopNoticias(): Promise<NoticiaTop[]> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/top-noticias`, {
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.noticias || [];
-  } catch {
-    return [];
-  }
-}
-
-export default async function MasVistas() {
-  const noticias = await getTopNoticias();
-
+export default function MasVistas({ noticias }: MasVistasProps) {
   if (noticias.length === 0) return null;
 
   return (
@@ -67,11 +48,13 @@ export default async function MasVistas() {
             </div>
 
             {noticia.imagen && (
-              <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-slate-100">
-                <img
+              <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-slate-100 relative">
+                <Image
                   src={noticia.imagen}
                   alt=""
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="64px"
+                  className="object-cover"
                   loading="lazy"
                 />
               </div>

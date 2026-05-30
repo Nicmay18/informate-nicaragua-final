@@ -66,7 +66,7 @@ export default async function HomePage() {
         />
       )}
       <HomePagePro noticias={noticias} masLeidas={masLeidas} />
-      <MasVistas />
+      <MasVistas noticias={masLeidas} />
     </>
   );
 }

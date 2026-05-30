@@ -141,11 +141,13 @@ export default function ArticlePage({ noticia, relatedNews = [], trendingNews = 
             border: '1px solid var(--border, #e5e7eb)'
           }}>
             <Link href="/autor/keyling-eliet-rivera-munoz" rel="author">
-              <img
+              <Image
                 src="/keyling-rivera.jpg"
                 alt="Keyling Elieth Rivera Muñoz - Directora Editorial"
+                width={60}
+                height={60}
                 className="article-author-avatar"
-                style={{ width: 60, height: 60, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
               />
             </Link>
             <div className="article-author-info" style={{ flex: '1 1 auto', minWidth: 0 }}>
