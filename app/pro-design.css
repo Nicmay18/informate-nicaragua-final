@@ -1052,8 +1052,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-grid-2{grid-template-columns:1fr;gap:0}
 }
 @media(max-width:768px){
-  .ni-main{padding:12px 12px 32px;gap:20px}
-  .ni-sidebar{display:none}
+  .ni-main{grid-template-columns:1fr;padding:12px 12px 32px;gap:20px}
+  .ni-sidebar{grid-template-columns:1fr}
   .ni-section__title{font-size:1rem}
   .ni-section__header{margin-bottom:12px;padding-bottom:8px}
   .ni-trending__text{font-size:0.82rem}
