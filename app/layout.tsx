@@ -75,7 +75,6 @@ export const metadata: Metadata = {
     images: ['https://nicaraguainformate.com/logo.png'],
   },
   alternates: {
-    canonical: 'https://nicaraguainformate.com',
     languages: {
       'x-default': 'https://nicaraguainformate.com',
     },
