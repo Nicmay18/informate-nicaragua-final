@@ -143,13 +143,13 @@ export default function RadioPlayer() {
     audio.src = station.streamUrl;
     audio.volume = isMuted ? 0 : volume;
 
-    /* Timeout: si en 8s no reproduce, algo esta mal */
+    /* Timeout: si en 5s no reproduce, algo esta mal */
     loadTimeoutRef.current = setTimeout(() => {
-      setError(`${station.name}: conexión lenta / no responde.`);
+      setError(`timeout:${station.id}`);
       setPlaying(null);
       setLoading(null);
       audio.pause();
-    }, 8000);
+    }, 5000);
 
     audio.oncanplay = () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
@@ -168,11 +168,10 @@ export default function RadioPlayer() {
     audio.onerror = () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
       const code = audio.error?.code;
-      let msg = `${station.name} no disponible.`;
-      if (code === 1) msg = `${station.name}: operación abortada.`;
-      if (code === 2) msg = `${station.name}: error de red (CORS/bloqueado).`;
-      if (code === 3) msg = `${station.name}: formato no soportado.`;
-      if (code === 4) msg = `${station.name}: stream no encontrado (404).`;
+      let msg = `error:${station.id}`;
+      if (code === 2) msg = `error:${station.id}`;
+      if (code === 3) msg = `error:${station.id}`;
+      if (code === 4) msg = `error:${station.id}`;
       console.error(`[Radio] Error ${code} en ${station.name}:`, audio.error);
       setError(msg);
       setPlaying(null);
@@ -213,7 +212,6 @@ export default function RadioPlayer() {
       <audio
         ref={audioRef}
         preload="none"
-        crossOrigin="anonymous"
         style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
       />
 
@@ -262,7 +260,29 @@ export default function RadioPlayer() {
       )}
 
       {loading && !playing && <div className="radio-loading">Conectando...</div>}
-      {error && <div className="radio-error">{error}</div>}
+      {error && (
+        <div className="radio-error">
+          {(() => {
+            const stationId = error.startsWith('timeout:') || error.startsWith('error:') ? error.split(':')[1] : null;
+            const st = stationId ? STATIONS.find(s => s.id === stationId) : null;
+            if (st) {
+              return (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <span>{st.name} no responde. Intentá por la web:</span>
+                  <button
+                    onClick={() => window.open(st.website, '_blank', 'noopener,noreferrer')}
+                    className="radio-play-btn radio-play-btn--link"
+                    style={{ fontSize: 11, padding: '4px 10px' }}
+                  >
+                    <IconLink /> Abrir
+                  </button>
+                </div>
+              );
+            }
+            return <span>{error}</span>;
+          })()}
+        </div>
+      )}
 
       {expanded && (
         <div className="radio-stations-list">

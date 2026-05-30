@@ -11,6 +11,7 @@ import {
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
+import ThemeScript from '@/components/ThemeScript';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -119,21 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieBanner />
         <ConsentScript />
         <Analytics />
-
-        <script
-          defer
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var saved = localStorage.getItem('ni_theme');
-                  var theme = (saved === 'light' || saved === 'dark') ? saved : 'light';
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        <ThemeScript />
       </body>
     </html>
   );
