@@ -12,6 +12,7 @@ import AuthorCard from './AuthorCard';
 import AdSlot from './AdSlot';
 import KeyPoints from './KeyPoints';
 import ShareButtons from './ShareButtons';
+import PayPalDonate from './PayPalDonate';
 
 function timeAgo(dateStr: string) {
   try {
@@ -235,6 +236,9 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
           publishedDate={noticia.fecha}
           updatedDate={noticia.fechaActualizacion}
         />
+
+        {/* Donación PayPal inline */}
+        <PayPalDonate variant="inline" />
 
         {/* AdSlot 3: Al final del artículo (bottom banner) */}
         <div className="ni-article__ad-slot ni-article__ad-slot--bottom">
