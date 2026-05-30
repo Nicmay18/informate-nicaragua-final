@@ -543,7 +543,7 @@ export default function ArticleClient({
     <>
       <ReadingProgress />
       <FloatingShare url={url} titulo={noticia.titulo} />
-      <div className="article-page"><main className="article-main" itemScope itemType="https://schema.org/NewsArticle" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
+      <div className="article-page" suppressHydrationWarning><main className="article-main" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 40px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '32px', alignItems: 'start' }}>
         <div>
         <div className="breadcrumbs">
           <Link href="/">Inicio</Link> / <Link href={categorySlug}>{noticia.categoria}</Link> / <span>{noticia.titulo}</span>
@@ -590,7 +590,7 @@ export default function ArticleClient({
           <figure className="article-hero" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
-                src={noticia.imagen || '/logo.png'}
+                src={noticia.imagen || '/logo.webp'}
                 alt={noticia.titulo}
                 nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
                 className="featured-image-wrapper"

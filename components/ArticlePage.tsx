@@ -402,7 +402,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <article style={containerStyle} itemScope itemType="https://schema.org/NewsArticle">
+      <article style={containerStyle} suppressHydrationWarning>
         {/* Breadcrumb */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#6b7280', marginBottom: 16 }} aria-label="Miga de pan">
           <Link href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Inicio</Link>
