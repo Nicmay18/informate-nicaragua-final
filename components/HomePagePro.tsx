@@ -53,23 +53,30 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   const elapsedRef = useRef(0);
   const isPausedRef = useRef(false);
 
-  const nextSlide = useCallback(() => {
-    setIdx(p => (p + 1) % items.length);
+  const resetTimer = useCallback(() => {
     elapsedRef.current = 0;
     setProgress(0);
-  }, [items.length]);
+  }, []);
+
+  const goToSlide = useCallback((i: number) => {
+    setIdx(i);
+    resetTimer();
+  }, [resetTimer]);
+
+  const nextSlide = useCallback(() => {
+    setIdx(p => (p + 1) % items.length);
+    resetTimer();
+  }, [items.length, resetTimer]);
 
   useEffect(() => {
     if (items.length <= 1) return;
 
-    // Limpiar timer anterior
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
 
-    elapsedRef.current = 0;
-    setProgress(0);
+    resetTimer();
 
     const duration = 6000;
     const tick = 50;
@@ -79,7 +86,8 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
       elapsedRef.current += tick;
       setProgress((elapsedRef.current / duration) * 100);
       if (elapsedRef.current >= duration) {
-        nextSlide();
+        setIdx(p => (p + 1) % items.length);
+        resetTimer();
       }
     }, tick);
 
@@ -89,7 +97,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
         timerRef.current = null;
       }
     };
-  }, [items.length, nextSlide]);
+  }, [items.length, resetTimer]);
 
   return (
     <section className="ni-hero" aria-label="Noticias destacadas">
@@ -120,11 +128,11 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
 
       {items.length > 1 && (
         <>
-          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => { setIdx(p => (p - 1 + items.length) % items.length); setProgress(0); }} aria-label="Anterior">‹</button>
-          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => { setIdx(p => (p + 1) % items.length); setProgress(0); }} aria-label="Siguiente">›</button>
+          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => goToSlide((idx - 1 + items.length) % items.length)} aria-label="Anterior">‹</button>
+          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => nextSlide()} aria-label="Siguiente">›</button>
           <div className="ni-hero__indicators">
             {items.map((item, i) => (
-              <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => { setIdx(i); setProgress(0); }} aria-label={`Noticia ${i + 1}`}>
+              <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => goToSlide(i)} aria-label={`Noticia ${i + 1}`}>
                 <span className="ni-hero__ind-label">{item.categoria}</span>
                 {i === idx && <span className="ni-hero__ind-bar" style={{ width: `${progress}%` }} />}
               </button>
