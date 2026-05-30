@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Radio, Volume2, VolumeX, Pause, ExternalLink, Signal, WifiOff } from 'lucide-react';
+import { Volume2, VolumeX, Pause, ExternalLink, Signal, WifiOff } from 'lucide-react';
+import ClockFace from './ClockFace';
 
 interface Station {
   id: string;
@@ -178,11 +179,8 @@ export default function RadioPlayer() {
 
       {/* Header */}
       <div className="bg-slate-900 px-5 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="relative">
-            <Radio size={18} className="text-red-500" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          </div>
+        <div className="flex items-center gap-3">
+          <ClockFace size={48} />
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide">RADIO EN VIVO</h3>
             <p className="text-slate-400 text-[10px] uppercase tracking-wider">Nicaragua</p>
