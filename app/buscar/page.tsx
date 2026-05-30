@@ -11,15 +11,8 @@ export const metadata: Metadata = {
   description: 'Busca noticias publicadas por Nicaragua Informate sobre sucesos, nacionales, deportes, tecnología, espectáculos e internacionales.',
   alternates: { canonical: 'https://nicaraguainformate.com/buscar' },
   robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-      'max-video-preview': -1,
-    },
+    index: false,
+    follow: false,
   },
 };
 

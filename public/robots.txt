@@ -1,28 +1,19 @@
-﻿# robots.txt — Nicaragua Informate
-# https://nicaraguainformate.com/robots.txt
-
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-# Panel de administración
+# Admin y auth
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /login/
 
-# API routes (no son páginas HTML)
+# API
 Disallow: /api/
 
-# Archivos internos de Next.js
-Disallow: /_next/
-Disallow: /cgi-bin/
+# Búsqueda interna (no indexar)
+Disallow: /buscar
 
-# Archivos no-HTML (JS, JSON, manifests)
-Disallow: /js/
-Disallow: /manifest.json
-
-# URLs tóxicas eliminadas del índice (AdSense remediation 2026-05-16)
+# URLs tóxicas eliminadas
 Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
 Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
 
-# Sitemap para descubrimiento de URLs
 Sitemap: https://nicaraguainformate.com/sitemap.xml

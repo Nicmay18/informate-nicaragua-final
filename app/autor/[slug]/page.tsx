@@ -22,11 +22,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${author.name} — Nicaragua Informate`,
+    title: `Artículos de ${author.name} | Nicaragua Informate`,
     description: author.bio,
     alternates: {
       canonical: `https://nicaraguainformate.com/autor/${slug}`,
     },
+    robots: { index: true, follow: true },
     openGraph: {
       title: `${author.name} — Nicaragua Informate`,
       description: author.bio,
