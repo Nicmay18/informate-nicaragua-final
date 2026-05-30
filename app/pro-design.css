@@ -451,6 +451,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .article-body li{margin-bottom:8px}
 .article-body blockquote{border-left:4px solid var(--accent);padding:16px 20px;margin:20px 0;background:var(--surface-2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-style:italic}
 
+/* Letra capitular (drop cap) en el primer párrafo */
+.article-body > p:first-of-type::first-letter{
+  font-family:'Merriweather',serif;
+  font-size:3.6em;
+  font-weight:700;
+  line-height:0.85;
+  float:left;
+  padding-right:10px;
+  padding-top:4px;
+  color:var(--primary);
+}
+
 .article-tags{margin-bottom:36px}
 .article-tags h3{font-size:0.85rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;color:var(--text-secondary)}
 .tags-row{display:flex;flex-wrap:wrap;gap:10px}
@@ -554,6 +566,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .article-body{font-size:0.95rem;line-height:1.7}
   .article-body h2{font-size:1.2rem;margin:24px 0 12px}
   .article-body h3{font-size:1rem;margin:18px 0 10px}
+  .article-body > p:first-of-type::first-letter{font-size:2.8em;padding-right:6px}
 
   /* Publicidad */
   .ad-banner{padding:20px;margin-bottom:20px}

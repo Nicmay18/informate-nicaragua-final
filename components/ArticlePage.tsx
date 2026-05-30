@@ -485,7 +485,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         <AdPlaceholder label="Publicidad" size="In-article Top" />
 
         {/* Contenido */}
-        <div style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
 
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />
