@@ -33,6 +33,7 @@ export default function RadioPlayer() {
   const [loading, setLoading] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+  const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* Íconos Unicode como fallback absoluto */
   const IconPlay = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9654;</span>;
@@ -100,6 +101,7 @@ export default function RadioPlayer() {
   };
 
   const handleStop = () => {
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
@@ -135,12 +137,22 @@ export default function RadioPlayer() {
     audio.oncanplay = null;
     audio.onerror = null;
     audio.onplaying = null;
+    if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
 
     audio.pause();
     audio.src = station.streamUrl;
     audio.volume = isMuted ? 0 : volume;
 
+    /* Timeout: si en 8s no reproduce, algo esta mal */
+    loadTimeoutRef.current = setTimeout(() => {
+      setError(`${station.name}: conexión lenta / no responde.`);
+      setPlaying(null);
+      setLoading(null);
+      audio.pause();
+    }, 8000);
+
     audio.oncanplay = () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
       audio.play().then(() => {
         setPlaying(station.id);
         setLoading(null);
@@ -154,7 +166,15 @@ export default function RadioPlayer() {
     };
 
     audio.onerror = () => {
-      setError(`${station.name} no disponible.`);
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
+      const code = audio.error?.code;
+      let msg = `${station.name} no disponible.`;
+      if (code === 1) msg = `${station.name}: operación abortada.`;
+      if (code === 2) msg = `${station.name}: error de red (CORS/bloqueado).`;
+      if (code === 3) msg = `${station.name}: formato no soportado.`;
+      if (code === 4) msg = `${station.name}: stream no encontrado (404).`;
+      console.error(`[Radio] Error ${code} en ${station.name}:`, audio.error);
+      setError(msg);
       setPlaying(null);
       setLoading(null);
       clearMediaSession();
@@ -162,6 +182,7 @@ export default function RadioPlayer() {
     };
 
     audio.onplaying = () => {
+      if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
       setPlaying(station.id);
       setLoading(null);
     };
@@ -192,6 +213,7 @@ export default function RadioPlayer() {
       <audio
         ref={audioRef}
         preload="none"
+        crossOrigin="anonymous"
         style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
       />
 
