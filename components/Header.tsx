@@ -1,11 +1,8 @@
-// File: components/Header.tsx
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { Sun, Moon, Menu, X, Search } from 'lucide-react';
-import { useTheme } from '@/hooks/useTheme';
-import MobileMenu from './MobileMenu';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
@@ -17,10 +14,18 @@ const CATEGORIES = [
 ];
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [headerDateIso, setHeaderDateIso] = useState('');
+  const [headerDateHuman, setHeaderDateHuman] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const { theme, toggleTheme, isLoaded: isMounted } = useTheme();
+
+  useEffect(() => {
+    const now = new Date();
+    setHeaderDateIso(now.toISOString());
+    setHeaderDateHuman(
+      now.toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    );
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,80 +36,114 @@ export default function Header() {
 
   return (
     <>
-      <header className="header">
-        <div className="header-inner">
-          <Link href="/" className="logo">
-            <span>Nicaragua Informate</span>
+      <header className="ni-header">
+        {/* Top bar: logo + fecha + acciones */}
+        <div className="ni-header__top">
+          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
+            <Image
+              src="/logo-ni.png"
+              alt="Nicaragua Informate"
+              width={42}
+              height={42}
+              className="ni-logo__img"
+              priority
+            />
+            <div className="ni-logo__text">
+              <strong>Nicaragua Informate</strong>
+              <span className="ni-logo__tagline">Infórmate al Instante</span>
+            </div>
           </Link>
 
-          <nav className="nav">
+          <time className="ni-header__date" dateTime={headerDateIso} suppressHydrationWarning>
+            {headerDateHuman}
+          </time>
+
+          <div className="ni-header__actions">
+            {/* Buscador */}
+            <form
+              onSubmit={handleSearch}
+              style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar..."
+                aria-label="Buscar noticias"
+                style={{
+                  width: 140,
+                  height: 36,
+                  padding: '0 12px',
+                  border: '1px solid #e5e5e5',
+                  borderRadius: 20,
+                  fontSize: 13,
+                  outline: 'none',
+                  transition: 'width 0.2s, box-shadow 0.2s',
+                }}
+                onFocus={(e) => { e.currentTarget.style.width = '200px'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.05)'; }}
+                onBlur={(e) => { if (!searchQuery) { e.currentTarget.style.width = '140px'; e.currentTarget.style.boxShadow = 'none'; } }}
+              />
+              <button
+                type="submit"
+                className="ni-search-btn"
+                aria-label="Buscar noticias"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+            </form>
+
+            {/* Menú hamburguesa */}
+            <button
+              className="ni-hamburger"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menú"
+              aria-expanded={menuOpen}
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+
+        {/* Barra de navegación */}
+        <nav className="ni-header__nav" aria-label="Navegación principal">
+          <ul className="ni-nav">
             <li><Link href="/">Inicio</Link></li>
             {CATEGORIES.map((cat) => (
               <li key={cat.slug}>
                 <Link href={`/categoria/${cat.slug}`}>{cat.label}</Link>
               </li>
             ))}
-          </nav>
-
-          <div className="header-actions">
-            <form
-              className={`header-search${searchExpanded ? ' expanded' : ''}`}
-              onSubmit={handleSearch}
-            >
-              <input
-                type="text"
-                className="header-search-input"
-                placeholder="Buscar noticias de Nicaragua..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Buscar noticias"
-              />
-              <button
-                type="button"
-                className="header-search-btn"
-                onClick={() => setSearchExpanded(!searchExpanded)}
-                aria-label="Abrir búsqueda"
-              >
-                <Search size={20} />
-              </button>
-            </form>
-
-            {isMounted && (
-              <button
-                className="theme-toggle"
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-              >
-                {theme === 'light' ? (
-                  <Moon size={18} />
-                ) : (
-                  <Sun size={18} />
-                )}
-              </button>
-            )}
-
-            <button
-              className="menu-toggle"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle mobile menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? (
-                <X size={24} />
-              ) : (
-                <Menu size={24} />
-              )}
-            </button>
-          </div>
-        </div>
+          </ul>
+        </nav>
       </header>
 
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        categories={CATEGORIES}
-      />
+      {/* Menú móvil */}
+      {menuOpen && (
+        <div className="ni-mobile-menu" role="dialog" aria-modal="true">
+          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
+          <nav className="ni-mobile-menu__content">
+            <button
+              className="ni-mobile-menu__close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Cerrar menú"
+            >
+              ✕
+            </button>
+            <ul className="ni-mobile-menu__nav">
+              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+              {CATEGORIES.map((cat) => (
+                <li key={cat.slug}>
+                  <Link href={`/categoria/${cat.slug}`} onClick={() => setMenuOpen(false)}>
+                    {cat.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
     </>
   );
 }
