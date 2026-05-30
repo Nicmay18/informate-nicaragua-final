@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo.webp',
         width: 1200,
         height: 630,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
     description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
-    images: ['https://nicaraguainformate.com/logo.png'],
+    images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
     canonical: 'https://nicaraguainformate.com',
@@ -63,6 +63,7 @@ export default async function HomePage() {
           href={heroImage}
           type="image/webp"
           fetchPriority="high"
+          crossOrigin="anonymous"
         />
       )}
       <HomePagePro noticias={noticias} masLeidas={masLeidas} />

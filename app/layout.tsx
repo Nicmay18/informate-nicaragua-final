@@ -10,8 +10,6 @@ import {
 } from '@/lib/seo/schema';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
-import Analytics from '@/components/Analytics';
-import ThemeScript from '@/components/ThemeScript';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -45,7 +43,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/icon-192x192.png',
+    apple: '/icon-192x192.webp',
     other: [
       { rel: 'icon', type: 'image/svg+xml', url: '/favicon.svg' },
       { rel: 'mask-icon', url: '/favicon.svg', color: '#0A192F' },
@@ -60,7 +58,7 @@ export const metadata: Metadata = {
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo.webp',
         width: 1200,
         height: 630,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
@@ -73,7 +71,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
-    images: ['https://nicaraguainformate.com/logo.png'],
+    images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
     languages: {
@@ -90,7 +88,7 @@ export const metadata: Metadata = {
   other: {
     'publisher': 'Nicaragua Informate',
     'msapplication-TileColor': '#0A192F',
-    'msapplication-TileImage': '/icon-192x192.png',
+    'msapplication-TileImage': '/icon-192x192.webp',
     'apple-mobile-web-app-title': 'Nicaragua Informate',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
@@ -105,7 +103,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        {/* CORRECCIÓN: Se remueve la metaetiqueta duplicada de google-site-verification ya que Next.js la inyecta mediante el objeto metadata */}
+        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('ni_theme');document.documentElement.setAttribute('data-theme',s==='light'||s==='dark'?s:'light');}catch(e){}})();` }} />
+        <script defer src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP" />
+        <script defer dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});gtag('config','G-W1B5J61WEP');` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
       </head>
@@ -117,8 +117,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         
         <CookieBanner />
         <ConsentScript />
-        <Analytics />
-        <ThemeScript />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
       </body>
     </html>

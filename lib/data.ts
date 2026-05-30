@@ -95,13 +95,13 @@ function validateCount(count: number, defaultCount: number): number {
 // =============================================================================
 // Firebase Admin SDK - OBLIGATORIO para noticias reales
 // =============================================================================
-async function tryFirebaseAdmin(_count: number): Promise<Noticia[] | null> {
+async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
-      .limit(102)
+      .limit(Math.min(count, 200))
       .get();
 
     return snap.docs

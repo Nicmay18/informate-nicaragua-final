@@ -52,7 +52,7 @@ export type Article = Noticia;
 /**
  * Categorías válidas para noticias
  */
-export type Category = 'Nacionales' | 'Sucesos' | 'Internacionales' | 'Tecnología' | 'Economía' | 'Deportes';
+export type Category = 'Nacionales' | 'Sucesos' | 'Internacionales' | 'Tecnología' | 'Economía' | 'Deportes' | 'Espectáculos';
 
 /**
  * Configuración de categorías con colores e iconos
@@ -65,6 +65,7 @@ export const CATEGORIES = [
   { name: 'Tecnología', color: '#0ea5e9', icon: 'Cpu' },
   { name: 'Economía', color: '#f97316', icon: 'TrendingUp' },
   { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
+  { name: 'Espectáculos', color: '#ec4899', icon: 'Star' },
 ] as const;
 
 /**
@@ -86,7 +87,7 @@ export const CAT_ICONS: Record<string, string> = CATEGORIES.reduce(
 /**
  * Imagen por defecto para noticias sin imagen
  */
-export const FALLBACK_IMAGE = '/logo.png';
+export const FALLBACK_IMAGE = '/logo.webp';
 
 /**
  * Valida si una categoría es válida
@@ -119,6 +120,7 @@ export function slugToCategory(slug: string): Category | null {
     tecnologia: 'Tecnología',
     economia: 'Economía',
     deportes: 'Deportes',
+    espectaculos: 'Espectáculos',
   };
   return map[slug] || null;
 }
