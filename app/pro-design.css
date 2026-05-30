@@ -1281,54 +1281,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    DISEÑO EDITORIAL INMERSIVO — ESTILO BBC / NEW YORK TIMES
    ========================================================================== */
 
-/* Bloque 3 Puntos Clave (BBC News) */
-.ni-key-points {
-  background: rgba(212, 163, 115, 0.05);
-  border-left: 4px solid var(--ni-gold);
-  border-radius: 4px;
-  padding: 24px;
-  margin: 32px 0;
-}
-.ni-key-points__title {
-  font-family: 'Merriweather', serif;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--ni-navy);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-[data-theme="dark"] .ni-key-points__title {
-  color: var(--ni-white);
-}
-.ni-key-points__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.ni-key-points__list li {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--ni-text);
-  margin-bottom: 12px;
-  position: relative;
-  padding-left: 20px;
-}
-.ni-key-points__list li:last-child {
-  margin-bottom: 0;
-}
-.ni-key-points__list li::before {
-  content: '•';
-  color: var(--ni-gold);
-  font-weight: 900;
-  font-size: 1.2rem;
-  position: absolute;
-  left: 0;
-  top: -2px;
-}
-
 /* Drop-cap Capitular Clásica (NYT Style) */
 .ni-article__body > p:first-of-type::first-letter {
   font-family: 'Merriweather', serif;

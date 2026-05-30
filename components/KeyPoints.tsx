@@ -18,22 +18,24 @@ function stripHtml(html: string): string {
     .trim();
 }
 
+/** Extrae la primera oración completa sin cortar */
 function extractFirstSentence(text: string): string {
   const cleaned = text.replace(/^\s+/, '');
   const match = cleaned.match(/^[^.!?]+[.!?]/);
-  return match ? match[0].trim() : cleaned.slice(0, 120) + '...';
+  return match ? match[0].trim() : cleaned.trim();
 }
 
+/** Extrae una oración completa del medio o del final */
 function extractKeySentence(text: string, position: 'middle' | 'end'): string {
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 20);
+  const sentences = text.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 20 && s.length < 300);
   if (sentences.length === 0) return '';
 
   if (position === 'middle') {
     const mid = Math.floor(sentences.length / 2);
-    return sentences[mid]?.trim().slice(0, 140) + '.' || '';
+    return sentences[mid] ? sentences[mid] + '.' : '';
   } else {
-    const last = sentences[sentences.length - 1]?.trim();
-    return last ? last.slice(0, 140) + '.' : '';
+    const last = sentences[sentences.length - 1];
+    return last ? last + '.' : '';
   }
 }
 
@@ -78,45 +80,49 @@ export default function KeyPoints({ titulo, resumen, contenido, categoria }: Key
     const plainContent = stripHtml(contenido || resumen || '');
     const plainResumen = stripHtml(resumen || '');
 
-    // Punto 1: Qué pasó (del título + primera oración del contenido)
-    const firstSentence = plainContent ? extractFirstSentence(plainContent) : '';
-    const punto1 = firstSentence.length > 20
-      ? firstSentence
-      : `${titulo}. Hecho ocurrido en territorio nicaragüense bajo cobertura periodística verificada.`;
+    // Punto 1: primera oración completa del contenido
+    let punto1 = extractFirstSentence(plainContent);
+    if (!punto1 || punto1.length < 20) {
+      punto1 = `${titulo}. Información verificada bajo estándares periodísticos de Nicaragua Informate.`;
+    }
 
-    // Punto 2: Contexto (del resumen o una oración del medio del contenido)
-    let punto2 = plainResumen.length > 30
-      ? plainResumen.slice(0, 160) + (plainResumen.length > 160 ? '...' : '')
-      : extractKeySentence(plainContent, 'middle');
-
+    // Punto 2: del resumen (primera oración) o del medio del contenido
+    let punto2 = plainResumen ? extractFirstSentence(plainResumen) : extractKeySentence(plainContent, 'middle');
+    // Evitar duplicar el punto 1
+    if (!punto2 || punto2.length < 20 || punto2 === punto1) {
+      punto2 = extractKeySentence(plainContent, 'end');
+    }
     if (!punto2 || punto2.length < 20) {
       punto2 = 'La información fue verificada a través de fuentes oficiales y testigos presenciales antes de su publicación.';
     }
 
-    // Punto 3: Impacto/consecuencia (generado según categoría)
+    // Punto 3: impacto según categoría
     const impact = generateImpactPoint(categoria || '');
 
-    return {
-      punto1: punto1.slice(0, 180),
-      punto2: punto2.slice(0, 180),
-      punto3: impact,
-    };
+    return { punto1, punto2, punto3: impact };
   }, [titulo, resumen, contenido, categoria]);
 
   return (
-    <div className="ni-key-points" aria-label="Resumen de puntos clave">
-      <h2 className="ni-key-points__title">⚡ 3 Puntos Clave:</h2>
-      <ul className="ni-key-points__list">
-        <li>
-          <strong>Qué ocurrió:</strong> {points.punto1}
-        </li>
-        <li>
-          <strong>Contexto:</strong> {points.punto2}
-        </li>
-        <li>
-          <strong>{points.punto3.label}:</strong> {points.punto3.text}
-        </li>
-      </ul>
+    <div style={{ maxWidth: 720, margin: '2rem auto', padding: '2rem', background: '#ffffff', borderRadius: 8, fontFamily: '"Inter", "Segoe UI", Roboto, system-ui, sans-serif', color: '#1a1a1a', lineHeight: 1.6, boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e5e5' }} aria-label="Resumen de puntos clave">
+      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 1.5rem 0', paddingBottom: '0.75rem', borderBottom: '2px solid #1a1a1a', color: '#111', letterSpacing: '-0.02em' }}>3 Puntos Clave</h2>
+
+      <Point label="Qué ocurrió" text={points.punto1} />
+      <Point label="Contexto" text={points.punto2} />
+      <Point label={points.punto3.label} text={points.punto3.text} />
+    </div>
+  );
+}
+
+function Point({ label, text }: { label: string; text: string }) {
+  return (
+    <div style={{ marginBottom: '1.25rem', paddingLeft: '1.25rem', position: 'relative' }}>
+      <span style={{
+        position: 'absolute', left: 0, top: '0.5rem', width: 6, height: 6, background: '#2563eb', borderRadius: '50%', display: 'block'
+      }} />
+      <span style={{
+        display: 'block', fontWeight: 600, fontSize: '0.85rem', color: '#111', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.03em'
+      }}>{label}</span>
+      <p style={{ fontSize: '0.95rem', color: '#4a4a4a', margin: 0, lineHeight: 1.6 }}>{text}</p>
     </div>
   );
 }
