@@ -243,39 +243,16 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
   try {
-    const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb
-      .collection('noticias')
-      .where('categoria', '==', categoria)
-      .orderBy('fecha', 'desc')
-      .limit(validatedCount)
-      .get();
-    const noticias = snap.docs
-      .map((d: QueryDocumentSnapshot<DocumentData>) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: data.titulo || '',
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          autor: data.autor,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-        };
-      });
-    return noticias;
+    // Obtenemos noticias recientes (sin filtro de categoría para evitar índice compuesto)
+    // y filtramos por categoría en JavaScript
+    const allNews = await getNews(200);
+    const filtered = allNews.filter(n =>
+      n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') ===
+      categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '')
+    );
+    return filtered.slice(0, validatedCount);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (msg.includes('index') || msg.includes('requires an index')) {
-      console.warn(`[data.ts] Se requiere índice compuesto en Firestore para categoría ${categoria}.`);
-    } else {
-      console.error(`[data.ts] ERROR: No se pudieron obtener noticias de categoría ${categoria}:`, msg);
-    }
+    console.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
   }
   const filtered = MOCK_NOTICIAS.filter(n => n.categoria === categoria);
   return filtered.slice(0, validatedCount);

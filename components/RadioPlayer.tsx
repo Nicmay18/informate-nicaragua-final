@@ -187,16 +187,16 @@ export default function RadioPlayer() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl font-sans" style={{ background: '#0f172a' }}>
+    <div className="w-full rounded-2xl overflow-hidden shadow-xl font-sans" style={{ background: '#0f172a' }}>
       <audio ref={audioRef} preload="none" crossOrigin="anonymous" playsInline style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }} />
 
       {/* === HEADER === */}
-      <div className="px-5 pt-5 pb-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <ClockFace size={40} />
+      <div className="px-3 pt-3 pb-2 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <ClockFace size={32} />
           <div>
-            <h3 className="text-white font-bold text-sm tracking-wider">RADIO EN VIVO</h3>
-            <p className="text-slate-400 text-[10px] uppercase tracking-widest font-medium">Nicaragua</p>
+            <h3 className="text-white font-bold text-xs tracking-wider">RADIO EN VIVO</h3>
+            <p className="text-slate-400 text-[9px] uppercase tracking-widest font-medium">Nicaragua</p>
           </div>
         </div>
         {currentStation && (
@@ -212,63 +212,53 @@ export default function RadioPlayer() {
 
       {/* === NOW PLAYING SCREEN === */}
       {currentStation ? (
-        <div className="mx-4 mb-4 rounded-2xl p-5 relative overflow-hidden" style={{ background: `linear-gradient(145deg, ${currentStation.color}22, ${currentStation.color}08)` }}>
-          {/* Glow */}
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-20 blur-2xl" style={{ background: currentStation.color }} />
+        <div className="mx-3 mb-3 rounded-xl p-3 relative overflow-hidden" style={{ background: `linear-gradient(145deg, ${currentStation.color}22, ${currentStation.color}08)` }}>
+          <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20 blur-2xl" style={{ background: currentStation.color }} />
 
-          <div className="relative flex flex-col items-center text-center">
-            {/* Logo grande */}
-            <div className="mb-4">
-              <StationLogo station={currentStation} size={90} />
+          <div className="relative flex items-center gap-3">
+            <StationLogo station={currentStation} size={48} />
+            <div className="flex-1 min-w-0">
+              <h4 className="text-white font-black text-sm truncate">{currentStation.name}</h4>
+              <span className="inline-block text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ background: currentStation.color, color: '#fff' }}>
+                {currentStation.genre}
+              </span>
+              <div className="mt-1 scale-75 origin-left">
+                <Equalizer color={currentStation.color} active={!loading} />
+              </div>
             </div>
+            <button
+              onClick={handleStop}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-lg transition-transform active:scale-90 shrink-0"
+              style={{ background: `linear-gradient(135deg, ${currentStation.color}, ${currentStation.color}dd)` }}
+              aria-label="Pausar"
+            >
+              <Pause size={18} fill="currentColor" />
+            </button>
+          </div>
 
-            {/* Nombre estación */}
-            <h4 className="text-white font-black text-xl mb-1 tracking-tight">{currentStation.name}</h4>
-            <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4" style={{ background: currentStation.color, color: '#fff' }}>
-              {currentStation.genre}
-            </span>
-
-            {/* Ecualizador */}
-            <div className="mb-5">
-              <Equalizer color={currentStation.color} active={!loading} />
-            </div>
-
-            {/* Controles */}
-            <div className="flex items-center gap-5">
-              <button
-                onClick={handleStop}
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl transition-transform active:scale-90"
-                style={{ background: `linear-gradient(135deg, ${currentStation.color}, ${currentStation.color}dd)` }}
-                aria-label="Pausar"
-              >
-                <Pause size={28} fill="currentColor" />
-              </button>
-            </div>
-
-            {/* Volumen */}
-            <div className="flex items-center gap-3 mt-5 w-full max-w-[200px]">
-              <button onClick={toggleMute} className="text-slate-400 hover:text-white transition-colors">
-                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-              </button>
-              <input
-                type="range" min="0" max="1" step="0.05"
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="flex-1 h-1.5 rounded-full appearance-none cursor-pointer"
-                style={{ background: `linear-gradient(to right, ${currentStation.color} 0%, ${currentStation.color} ${(isMuted ? 0 : volume) * 100}%, #334155 ${(isMuted ? 0 : volume) * 100}%, #334155 100%)` }}
-                aria-label="Volumen"
-              />
-            </div>
+          {/* Volumen */}
+          <div className="flex items-center gap-2 mt-2">
+            <button onClick={toggleMute} className="text-slate-400 hover:text-white transition-colors">
+              {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            </button>
+            <input
+              type="range" min="0" max="1" step="0.05"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="flex-1 h-1 rounded-full appearance-none cursor-pointer"
+              style={{ background: `linear-gradient(to right, ${currentStation.color} 0%, ${currentStation.color} ${(isMuted ? 0 : volume) * 100}%, #334155 ${(isMuted ? 0 : volume) * 100}%, #334155 100%)` }}
+              aria-label="Volumen"
+            />
           </div>
         </div>
       ) : (
         /* === IDLE SCREEN === */
-        <div className="mx-4 mb-4 rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(145deg, #1e293b, #0f172a)' }}>
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}>
-            <Play size={32} className="text-white ml-1" />
+        <div className="mx-3 mb-3 rounded-xl p-4 text-center" style={{ background: 'linear-gradient(145deg, #1e293b, #0f172a)' }}>
+          <div className="w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}>
+            <Play size={20} className="text-white ml-0.5" />
           </div>
-          <h4 className="text-white font-bold text-lg mb-1">Seleccioná una emisora</h4>
-          <p className="text-slate-400 text-xs">Elegí tu radio favorita de Nicaragua</p>
+          <h4 className="text-white font-bold text-sm mb-0.5">Seleccioná una emisora</h4>
+          <p className="text-slate-400 text-[10px]">Radio de Nicaragua</p>
         </div>
       )}
 
@@ -303,9 +293,9 @@ export default function RadioPlayer() {
       )}
 
       {/* === STATION GRID === */}
-      <div className="px-4 pb-5">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3 px-1">Emisoras</p>
-        <div className="grid grid-cols-4 gap-3">
+      <div className="px-3 pb-3">
+        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-2 px-1">Emisoras</p>
+        <div className="grid grid-cols-4 gap-2">
           {STATIONS.map((station) => {
             const isActive = playing === station.id;
             const isLoading = loading === station.id;
@@ -315,31 +305,31 @@ export default function RadioPlayer() {
                 key={station.id}
                 onClick={() => hasStream && playStation(station)}
                 disabled={isLoading}
-                className="flex flex-col items-center gap-2 group"
+                className="flex flex-col items-center gap-1 group min-w-0"
                 title={station.name}
               >
                 <div
-                  className="relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all"
+                  className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all shrink-0"
                   style={{
                     background: isActive ? station.color : 'linear-gradient(135deg, #1e293b, #0f172a)',
-                    boxShadow: isActive ? `0 0 20px ${station.color}55` : '0 2px 8px rgba(0,0,0,0.3)',
+                    boxShadow: isActive ? `0 0 12px ${station.color}55` : '0 1px 4px rgba(0,0,0,0.3)',
                     transform: isActive ? 'scale(1.05)' : 'scale(1)',
                     border: isActive ? `2px solid ${station.color}` : '2px solid transparent',
                   }}
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    <span className="font-black text-white text-sm" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                    <span className="font-black text-white text-xs" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
                       {station.name.charAt(0)}
                     </span>
                   )}
                   {!hasStream && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-slate-600 text-[7px] text-white font-bold flex items-center justify-center">W</span>
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-slate-600 text-[6px] text-white font-bold flex items-center justify-center">W</span>
                   )}
                 </div>
-                <span className={`text-[9px] font-semibold text-center leading-tight ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                  {station.name.split(' ')[0]}
+                <span className={`text-[8px] font-semibold text-center leading-tight truncate w-full ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                  {station.name}
                 </span>
               </button>
             );

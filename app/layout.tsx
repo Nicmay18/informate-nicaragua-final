@@ -8,7 +8,6 @@ import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
-import Script from 'next/script';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Analytics from '@/components/Analytics';
@@ -120,11 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ConsentScript />
         <Analytics />
         <ThemeScript />
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          strategy="lazyOnload"
-          crossOrigin="anonymous"
-        />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
       </body>
     </html>
   );

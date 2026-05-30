@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = 'force-static';
-export const revalidate = 1800;
+export const revalidate = 300;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
