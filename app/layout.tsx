@@ -10,6 +10,8 @@ import {
 } from '@/lib/seo/schema';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -111,10 +113,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
-        <main id="main-content" role="main" aria-label="Contenido principal" style={{ flex: 1 }}>
-          {children}
-        </main>
-        
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Header />
+          <main id="main-content" role="main" aria-label="Contenido principal" style={{ flex: 1 }}>
+            {children}
+          </main>
+          <Footer />
+        </div>
         <CookieBanner />
         <ConsentScript />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Search, Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail } from 'lucide-react';
+import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import dynamic from 'next/dynamic';
 
@@ -188,15 +188,6 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [headerDateIso, setHeaderDateIso] = useState('');
-  const [headerDateHuman, setHeaderDateHuman] = useState('');
-
-  useEffect(() => {
-    const now = new Date();
-    setHeaderDateIso(now.toISOString());
-    setHeaderDateHuman(now.toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
-  }, []);
   // Carrusel: primero noticias destacadas, luego las más recientes para completar
   const destacadas = noticias.filter(n => n.destacada).slice(0, 5);
   const restoParaHero = noticias.filter(n => !n.destacada).slice(0, 5 - destacadas.length);
@@ -238,64 +229,6 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
   return (
     <div>
-      {/* HEADER */}
-      <header className="ni-header">
-        <div className="ni-header__top">
-          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
-            <Image src="/logo-ni.png" alt="Nicaragua Informate" width={42} height={42} className="ni-logo__img" priority />
-            <div className="ni-logo__text">
-              <strong>Nicaragua Informate</strong>
-              <span className="ni-logo__tagline">Infórmate al Instante</span>
-            </div>
-          </Link>
-
-          <time className="ni-header__date" dateTime={headerDateIso} suppressHydrationWarning>
-            {headerDateHuman}
-          </time>
-
-          <div className="ni-header__actions">
-            <Link href="/buscar" className="ni-search-btn" aria-label="Buscar noticias"><Search size={18} /></Link>
-            <button className="ni-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú" aria-expanded={menuOpen}>
-              <span /><span /><span />
-            </button>
-          </div>
-        </div>
-        <nav className="ni-header__nav" aria-label="Navegación principal">
-          <ul className="ni-nav">
-            <li><Link href="/">Inicio</Link></li>
-            {CATEGORIES.map(c => (
-              <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-
-      {/* Menú móvil */}
-      {menuOpen && (
-        <div className="ni-mobile-menu" role="dialog" aria-modal="true">
-          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
-          <nav className="ni-mobile-menu__content">
-            <button className="ni-mobile-menu__close" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">✕</button>
-            <ul className="ni-mobile-menu__nav">
-              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`} onClick={() => setMenuOpen(false)}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      )}
-
-      {/* H1 SEO oculto visualmente, visible para crawlers */}
-      <h1 className="sr-only">Noticias de Nicaragua en tiempo real — Nicaragua Informate</h1>
-
-      {/* Párrafo introductorio para reforzar keywords del H1 */}
-      <p className="sr-only">
-        Nicaragua Informate es tu portal de noticias de Nicaragua en tiempo real.
-        Cobertura actualizada de sucesos, nacionales, deportes, tecnología, espectáculos e internacionales.
-        Periodismo verificado desde Managua con las últimas noticias del día.
-      </p>
-
       {/* HERO */}
       <Hero noticias={heroNoticias} />
 
@@ -395,57 +328,6 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
         </aside>
       </div>
 
-      {/* FOOTER */}
-      <footer className="ni-footer">
-        <div className="ni-footer__inner">
-          <div>
-            <div className="ni-footer__brand">
-              <Image src="/logo-ni.png" alt="Nicaragua Informate" width={40} height={40} className="ni-footer__logo" />
-              <span>Nicaragua Informate</span>
-            </div>
-            <p className="ni-footer__desc">Portal de noticias de Nicaragua con cobertura nacional e internacional. Infórmate al Instante desde Managua.</p>
-            <div className="ni-footer__social">
-              <a href="https://www.facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
-              <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">W</a>
-              <a href="https://t.me/fHHjncJqMQM3NjZh" target="_blank" rel="noopener noreferrer" aria-label="Telegram">T</a>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="ni-footer__col-title">Secciones</h4>
-            <ul className="ni-footer__links">
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="ni-footer__col-title">Nosotros</h4>
-            <ul className="ni-footer__links">
-              <li><Link href="/nosotros">Quiénes somos</Link></li>
-              <li><Link href="/contacto">Contacto</Link></li>
-              <li><Link href="/politica-editorial">Política Editorial</Link></li>
-              <li><Link href="/publicidad">Publicidad</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="ni-footer__col-title">Legal</h4>
-            <ul className="ni-footer__links">
-              <li><Link href="/privacidad">Política de privacidad</Link></li>
-              <li><Link href="/terminos">Términos y condiciones</Link></li>
-              <li><Link href="/cookies">Política de cookies</Link></li>
-              <li><Link href="/mapa-del-sitio">Mapa del sitio</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="ni-footer__bottom">
-          <span>© {new Date().getFullYear()} Nicaragua Informate. Todos los derechos reservados.</span>
-          <span>Managua, Nicaragua • Periodismo verificado</span>
-        </div>
-      </footer>
     </div>
   );
 }
