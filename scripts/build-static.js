@@ -49,7 +49,7 @@ function pageHTML(n, canonical, body, relatedHTML){
     headline: n.titulo, description: n.resumen||n.titulo, image: img,
     datePublished: fISO, dateModified: fMod,
     author:{'@type':'Person',name:autor,url:'https://nicaraguainformate.com'},
-    publisher:{'@type':'Organization',name:'Nicaragua Informate',logo:{'@type':'ImageObject',url:'https://nicaraguainformate.com/logo.png'}},
+    publisher:{'@type':'Organization',name:'Nicaragua Informate',logo:{'@type':'ImageObject',url:'https://nicaraguainformate.com/logo.webp'}},
     mainEntityOfPage:{'@type':'WebPage','@id':canonical},
     articleSection:n.categoria||'General',wordCount:wCount(n.contenido)
   },null,2);
@@ -103,7 +103,7 @@ async function build() {
 <description>Periodismo de Precision. Noticias de Nicaragua al instante.</description>
 <language>es-ni</language><lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 <atom:link href="https://nicaraguainformate.com/rss.xml" rel="self" type="application/rss+xml"/>
-<image><url>https://nicaraguainformate.com/logo.png</url><title>Nicaragua Informate</title><link>https://nicaraguainformate.com</link></image>
+<image><url>https://nicaraguainformate.com/logo.webp</url><title>Nicaragua Informate</title><link>https://nicaraguainformate.com</link></image>
 ${latest.map(n=>{
   const u='https://nicaraguainformate.com/noticias/' + n.slug + '/';
   const d=esc(n.resumen||n.titulo);

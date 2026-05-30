@@ -81,7 +81,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Link href="/" className="footer-logo">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Nicaragua Informate"
                 width={48}
                 height={48}

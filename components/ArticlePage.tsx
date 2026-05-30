@@ -452,7 +452,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Imagen destacada — ALTURA FIJA 480px */}
         {noticia.imagen && (
-          <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+          <figure style={imgContainerStyle} itemScope itemType="https://schema.org/ImageObject">
             <Image
               src={noticia.imagen}
               alt={noticia.titulo}
@@ -460,10 +460,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               style={{ objectFit: 'cover' }}
               sizes="(max-width: 768px) 100vw, 800px"
               priority
-              itemProp="url"
+              crossOrigin="anonymous"
             />
-            <meta itemProp="width" content="1200" />
-            <meta itemProp="height" content="630" />
           </figure>
         )}
 

@@ -54,7 +54,7 @@ export default function NewsCard({
         <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
           <div className="news-card-image-container horizontal-image">
             <Image
-              src={noticia.imagen || '/logo.png'}
+              src={noticia.imagen || '/logo.webp'}
               alt={noticia.titulo}
               width={120}
               height={80}
@@ -97,7 +97,7 @@ export default function NewsCard({
         <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
           <div className="news-card-image-container compact-image">
             <Image
-              src={noticia.imagen || '/logo.png'}
+              src={noticia.imagen || '/logo.webp'}
               alt={noticia.titulo}
               width={60}
               height={60}
@@ -126,7 +126,7 @@ export default function NewsCard({
       <Link href={`/noticias/${noticia.slug}`} className="news-card-link">
         <div className="news-card-image-container">
           <Image
-            src={noticia.imagen || '/logo.png'}
+            src={noticia.imagen || '/logo.webp'}
             alt={noticia.titulo}
             width={variant === 'featured' ? 600 : 400}
             height={variant === 'featured' ? 400 : 250}

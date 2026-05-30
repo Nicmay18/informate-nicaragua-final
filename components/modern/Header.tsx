@@ -41,7 +41,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="header-logo">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Nicaragua Informate"
               width={40}
               height={40}
@@ -98,7 +98,7 @@ export default function Header() {
             <div className="mobile-menu-header">
               <Link href="/" className="mobile-logo" onClick={toggleMenu}>
                 <Image
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Nicaragua Informate"
                   width={32}
                   height={32}

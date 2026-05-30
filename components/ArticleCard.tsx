@@ -52,7 +52,7 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
   }
   const catColor = CATEGORY_COLORS[article.categoria] || '#8c1d18';
   const href = `/noticias/${article.slug}/`;
-  const hasImage = article.imagen && article.imagen !== '/logo.png' && !imgError;
+  const hasImage = article.imagen && article.imagen !== '/logo.webp' && !imgError;
   const readTime = article.palabras ? Math.ceil(article.palabras / 200) : 3;
 
   if (hero) {
