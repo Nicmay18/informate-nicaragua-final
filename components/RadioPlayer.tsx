@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Radio, Volume2, VolumeX } from 'lucide-react';
+import { Radio, Volume2, VolumeX, Play, Pause, ExternalLink, Signal, WifiOff } from 'lucide-react';
 
 interface Station {
   id: string;
@@ -23,8 +23,34 @@ const STATIONS: Station[] = [
   { id: 'buenisima', name: 'La Buenísima', streamUrl: '', website: 'https://www.labuenisimanicaragua.com/', color: '#f97316', genre: 'Tropical' },
 ];
 
+/* Visualizador de ondas animado */
+function AudioVisualizer({ color, isPlaying }: { color: string; isPlaying: boolean }) {
+  return (
+    <div className="flex items-end gap-[3px] h-6">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span
+          key={i}
+          className="w-[3px] rounded-full transition-all duration-300"
+          style={{
+            backgroundColor: color,
+            height: isPlaying ? '100%' : '20%',
+            animation: isPlaying ? `eq-bounce 0.6s ease-in-out ${i * 0.1}s infinite alternate` : 'none',
+            opacity: isPlaying ? 1 : 0.3,
+          }}
+        />
+      ))}
+      <style jsx>{`
+        @keyframes eq-bounce {
+          0% { height: 20%; }
+          100% { height: 100%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function RadioPlayer() {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [playing, setPlaying] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
@@ -33,10 +59,6 @@ export default function RadioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
   const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const IconPlay = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9654;</span>;
-  const IconPause = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#9208;</span>;
-  const IconLink = () => <span style={{ fontSize: 12, lineHeight: 1 }}>&#8599;</span>;
 
   const currentStation = STATIONS.find(s => s.id === playing);
 
@@ -62,17 +84,10 @@ export default function RadioPlayer() {
       artwork: [{ src: '/logo-ni.png', sizes: '512x512', type: 'image/png' }],
     });
     navigator.mediaSession.playbackState = 'playing';
-    navigator.mediaSession.setActionHandler('play', () => {
-      if (currentStation) playStation(currentStation);
-    });
-    navigator.mediaSession.setActionHandler('pause', () => {
-      audioRef.current?.pause();
-      setPlaying(null);
-    });
-    navigator.mediaSession.setActionHandler('stop', () => {
-      handleStop();
-    });
-  }, [currentStation]);
+    navigator.mediaSession.setActionHandler('play', () => playStation(station));
+    navigator.mediaSession.setActionHandler('pause', () => { audioRef.current?.pause(); setPlaying(null); });
+    navigator.mediaSession.setActionHandler('stop', () => handleStop());
+  }, []);
 
   const clearMediaSession = useCallback(() => {
     if (!('mediaSession' in navigator)) return;
@@ -100,65 +115,34 @@ export default function RadioPlayer() {
 
   const playStation = useCallback((station: Station) => {
     setError(null);
+    if (!station.streamUrl) { window.open(station.website, '_blank', 'noopener,noreferrer'); return; }
+    if (playing === station.id) { handleStop(); return; }
 
-    if (!station.streamUrl) {
-      window.open(station.website, '_blank', 'noopener,noreferrer');
-      return;
-    }
+    const audio = audioRef.current;
+    if (!audio) { setError('Error interno: reproductor no disponible.'); setLoading(null); return; }
 
-    if (playing === station.id) {
-      handleStop();
-      return;
-    }
-
-    // Detener lo anterior completamente antes de cargar nuevo
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      audioRef.current.load();
-    }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; audioRef.current.load(); }
     if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
 
     setLoading(station.id);
 
-    const audio = audioRef.current;
-    if (!audio) {
-      setError('Error interno: reproductor no disponible.');
-      setLoading(null);
-      return;
-    }
-
     const onError = () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
-      console.error(`[Radio] Error ${audio.error?.code} en ${station.name}:`, audio.error);
       setError(`No se pudo reproducir ${station.name}. El stream no responde.`);
-      setPlaying(null);
-      setLoading(null);
-      clearMediaSession();
-      releaseWakeLock();
-      cleanup();
+      setPlaying(null); setLoading(null);
+      clearMediaSession(); releaseWakeLock(); cleanup();
     };
 
     const onCanPlay = () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
       audio.play().then(() => {
-        setPlaying(station.id);
-        setLoading(null);
-        setupMediaSession(station);
-        requestWakeLock();
-      }).catch(() => {
-        setError(`No se pudo iniciar ${station.name}.`);
-        setPlaying(null);
-        setLoading(null);
-      });
+        setPlaying(station.id); setLoading(null);
+        setupMediaSession(station); requestWakeLock();
+      }).catch(() => { setError(`No se pudo iniciar ${station.name}.`); setPlaying(null); setLoading(null); });
       cleanup();
     };
 
-    const cleanup = () => {
-      audio.removeEventListener('error', onError);
-      audio.removeEventListener('canplay', onCanPlay);
-      audio.removeEventListener('canplaythrough', onCanPlay);
-    };
+    const cleanup = () => { audio.removeEventListener('error', onError); audio.removeEventListener('canplay', onCanPlay); audio.removeEventListener('canplaythrough', onCanPlay); };
 
     audio.addEventListener('error', onError);
     audio.addEventListener('canplay', onCanPlay);
@@ -169,151 +153,197 @@ export default function RadioPlayer() {
     audio.muted = isMuted;
 
     loadTimeoutRef.current = setTimeout(() => {
-      setError(`${station.name} no responde. Intentá por la web.`);
-      setPlaying(null);
-      setLoading(null);
-      audio.pause();
-      cleanup();
+      setError(`${station.name} no responde. Intentá por la web.`); setPlaying(null); setLoading(null); audio.pause(); cleanup();
     }, 8000);
 
     audio.load();
   }, [playing, isMuted, volume, handleStop, setupMediaSession, requestWakeLock, clearMediaSession, releaseWakeLock]);
 
-  useEffect(() => {
-    return () => { handleStop(); };
-  }, [handleStop]);
+  useEffect(() => { return () => handleStop(); }, [handleStop]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-    }
+    if (audioRef.current) { audioRef.current.muted = !isMuted; }
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    setIsMuted(newVolume === 0);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-      audioRef.current.muted = newVolume === 0;
-    }
+    setVolume(newVolume); setIsMuted(newVolume === 0);
+    if (audioRef.current) { audioRef.current.volume = newVolume; audioRef.current.muted = newVolume === 0; }
   };
 
   return (
-    <div className="radio-player">
-      {/* crossOrigin="anonymous" es CRÍTICO para streams de terceros */}
-      <audio
-        ref={audioRef}
-        preload="none"
-        crossOrigin="anonymous"
-        playsInline
-        style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
-      />
+    <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden font-sans">
+      {/* Audio element */}
+      <audio ref={audioRef} preload="none" crossOrigin="anonymous" playsInline style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }} />
 
-      <div className="radio-header">
-        <div className="radio-title-group">
-          <Radio size={14} color="#ef4444" />
-          <span className="radio-title">Radio Nicaragua</span>
-          {playing && <span className="radio-live-dot" />}
+      {/* Header */}
+      <div className="bg-slate-900 px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="relative">
+            <Radio size={18} className="text-red-500" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+          </div>
+          <div>
+            <h3 className="text-white font-semibold text-sm tracking-wide">RADIO EN VIVO</h3>
+            <p className="text-slate-400 text-[10px] uppercase tracking-wider">Nicaragua</p>
+          </div>
         </div>
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="radio-toggle-btn"
-          aria-label={expanded ? 'Cerrar emisoras' : 'Ver emisoras'}
-        >
-          {expanded ? 'Cerrar' : 'Ver emisoras'}
+        <button onClick={() => setExpanded(!expanded)} className="text-slate-400 hover:text-white transition-colors text-xs font-medium">
+          {expanded ? 'Ocultar' : 'Ver emisoras'}
         </button>
       </div>
 
+      {/* Now Playing Card */}
       {currentStation && (
-        <div className="radio-now-playing">
-          <div className="radio-station-info">
-            <span className="radio-playing-dot" style={{ backgroundColor: currentStation.color }} />
-            <span className="radio-playing-name">{currentStation.name}</span>
-            <span className="radio-playing-genre">{currentStation.genre}</span>
-          </div>
-          <div className="radio-controls">
-            <button onClick={handleStop} className="radio-control-btn" aria-label="Pausar">
-              <IconPause />
+        <div className="px-5 py-4 bg-slate-50 border-b border-slate-100">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleStop}
+              className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg transition-transform active:scale-95 shrink-0"
+              style={{ backgroundColor: currentStation.color }}
+              aria-label="Pausar"
+            >
+              <Pause size={20} fill="currentColor" />
             </button>
-            <button onClick={toggleMute} className="radio-control-btn" aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}>
-              {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={isMuted ? 0 : volume}
-              onChange={handleVolumeChange}
-              className="radio-volume"
-              aria-label="Volumen"
-            />
-          </div>
-        </div>
-      )}
-
-      {loading && !playing && <div className="radio-loading">Conectando...</div>}
-      {error && (
-        <div className="radio-error">
-          {(() => {
-            const stationId = error.includes(' no responde') ? error.split(' no responde')[0] : null;
-            const st = stationId ? STATIONS.find(s => s.name === stationId) : null;
-            if (st) {
-              return (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                  <span>{st.name} no responde. Intentá por la web:</span>
-                  <button
-                    onClick={() => window.open(st.website, '_blank', 'noopener,noreferrer')}
-                    className="radio-play-btn radio-play-btn--link"
-                    style={{ fontSize: 11, padding: '4px 10px' }}
-                  >
-                    <IconLink /> Abrir
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white uppercase tracking-wide" style={{ backgroundColor: currentStation.color }}>
+                  {currentStation.genre}
+                </span>
+                <span className="flex items-center gap-1 text-[10px] text-red-500 font-semibold uppercase">
+                  <Signal size={10} /> En vivo
+                </span>
+              </div>
+              <h4 className="text-slate-900 font-bold text-base truncate">{currentStation.name}</h4>
+              <div className="flex items-center justify-between mt-2">
+                <AudioVisualizer color={currentStation.color} isPlaying={true} />
+                <div className="flex items-center gap-2">
+                  <button onClick={toggleMute} className="text-slate-500 hover:text-slate-800 transition-colors">
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
                   </button>
+                  <input
+                    type="range" min="0" max="1" step="0.05"
+                    value={isMuted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    className="w-20 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900"
+                    aria-label="Volumen"
+                  />
                 </div>
-              );
-            }
-            return <span>{error}</span>;
-          })()}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
+      {/* Loading */}
+      {loading && !playing && (
+        <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
+          <div className="w-5 h-5 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin" />
+          <span className="text-sm text-slate-600">Conectando con {STATIONS.find(s => s.id === loading)?.name}...</span>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="px-5 py-3 bg-red-50 border-b border-red-100 flex items-center gap-3">
+          <WifiOff size={16} className="text-red-500 shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm text-red-700">{error}</p>
+            {(() => {
+              const name = error.split(' no responde')[0] || error.split('No se pudo reproducir ')[1]?.split('.')[0];
+              const st = name ? STATIONS.find(s => s.name === name) : null;
+              return st ? (
+                <button
+                  onClick={() => window.open(st.website, '_blank', 'noopener,noreferrer')}
+                  className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-800 underline underline-offset-2"
+                >
+                  <ExternalLink size={12} /> Escuchar en web oficial
+                </button>
+              ) : null;
+            })()}
+          </div>
+        </div>
+      )}
+
+      {/* Station List */}
       {expanded && (
-        <div className="radio-stations-list">
-          {STATIONS.map(station => {
+        <div className="max-h-[320px] overflow-y-auto">
+          <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Emisoras disponibles</div>
+          {STATIONS.map((station) => {
             const isPlaying = playing === station.id;
             const isLoading = loading === station.id;
             const hasStream = !!station.streamUrl;
 
             return (
-              <div key={station.id} className="radio-station-item">
-                <button
-                  onClick={() => playStation(station)}
-                  className={`radio-play-btn${isLoading ? ' is-loading' : ''} ${!hasStream ? ' radio-play-btn--link' : ''}`}
-                  aria-label={!hasStream ? `Visitar ${station.name}` : isPlaying ? `Pausar ${station.name}` : `Reproducir ${station.name}`}
-                  disabled={isLoading}
-                >
+              <div
+                key={station.id}
+                onClick={() => hasStream && playStation(station)}
+                className={`
+                  group flex items-center gap-3 px-4 py-3 cursor-pointer transition-all border-l-[3px]
+                  ${isPlaying ? 'bg-slate-50 border-l-current' : 'border-l-transparent hover:bg-slate-50'}
+                `}
+                style={isPlaying ? { borderLeftColor: station.color } : undefined}
+              >
+                {/* Play button / Status */}
+                <div className="shrink-0">
                   {isLoading ? (
-                    <span className="radio-spinner" />
-                  ) : !hasStream ? (
-                    <IconLink />
+                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center">
+                      <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin" />
+                    </div>
                   ) : isPlaying ? (
-                    <IconPause />
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: station.color }}>
+                      <Pause size={16} fill="currentColor" />
+                    </div>
+                  ) : !hasStream ? (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); window.open(station.website, '_blank', 'noopener,noreferrer'); }}
+                      className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors"
+                      title="Visitar web"
+                    >
+                      <ExternalLink size={14} />
+                    </button>
                   ) : (
-                    <IconPlay />
+                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:text-slate-700 group-hover:bg-slate-200 transition-all">
+                      <Play size={16} fill="currentColor" className="ml-0.5" />
+                    </div>
                   )}
-                </button>
-                <span className="radio-station-dot" style={{ backgroundColor: station.color }} />
-                <span className="radio-station-name">{station.name}</span>
-                <span className="radio-station-sep">·</span>
-                <span className="radio-station-genre">{station.genre}</span>
-                {!hasStream && <span className="radio-station-badge">Web</span>}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-slate-800 truncate">{station.name}</span>
+                    {!hasStream && (
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-200 text-slate-600 uppercase">Web</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[11px] text-slate-500">{station.genre}</span>
+                    {isPlaying && (
+                      <span className="flex items-center gap-1 text-[10px] font-bold" style={{ color: station.color }}>
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: station.color }} />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: station.color }} />
+                        </span>
+                        Reproduciendo
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Color dot */}
+                <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: station.color }} />
               </div>
             );
           })}
         </div>
       )}
+
+      {/* Footer */}
+      <div className="px-4 py-2 bg-slate-50 border-t border-slate-200 text-center">
+        <p className="text-[10px] text-slate-400">Seleccioná una emisora para comenzar</p>
+      </div>
     </div>
   );
 }
