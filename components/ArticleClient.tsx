@@ -631,8 +631,6 @@ export default function ArticleClient({
                 📷 Nicaragua Informate
               </div>
             )}
-            <meta itemProp="width" content="1200" />
-            <meta itemProp="height" content="630" />
           </figure>
 
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
