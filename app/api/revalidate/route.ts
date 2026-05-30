@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 
 export async function POST(request: NextRequest) {
   try {
-    const { path, categorySlug } = await request.json();
+    const { path, categorySlug, articleSlug } = await request.json();
 
     // Revalidar la página principal
     revalidatePath('/');
@@ -11,6 +11,11 @@ export async function POST(request: NextRequest) {
     // Revalidar la categoría si se proporciona
     if (categorySlug) {
       revalidatePath(`/categoria/${categorySlug}`);
+    }
+
+    // Revalidar página del artículo individual
+    if (articleSlug) {
+      revalidatePath(`/noticias/${articleSlug}`);
     }
 
     // Revalidar páginas de listados

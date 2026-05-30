@@ -64,6 +64,7 @@ export default function AdminNuevaPage() {
   const [pieFoto, setPieFoto] = useState('');
   const [destacada, setDestacada] = useState(false);
   const [publicado, setPublicado] = useState(true);
+  const [existingSlug, setExistingSlug] = useState('');
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -113,6 +114,7 @@ export default function AdminNuevaPage() {
         setContenido(d.contenido || '');
         setImagenUrl(d.imagen || '');
         setPieFoto(d.pieFoto || '');
+        setExistingSlug(d.slug || '');
         setDestacada(!!d.destacada);
         setPublicado(d.publicado !== false);
       }
@@ -191,15 +193,16 @@ export default function AdminNuevaPage() {
         setDestacada(false); setPublicado(true);
       }
 
-      // Revalidar página principal y categoría para que aparezca inmediatamente
+      // Revalidar página principal, categoría y artículo individual para que aparezca inmediatamente
       try {
         const catSlug = categoryToSlug(categoria);
+        const articleSlug = editId ? existingSlug : generarSlug(titulo);
         await fetch('/api/revalidate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ path: '/', categorySlug: catSlug }),
+          body: JSON.stringify({ path: '/', categorySlug: catSlug, articleSlug }),
         });
-        console.log('[Admin] Revalidado:', catSlug);
+        console.log('[Admin] Revalidado:', catSlug, articleSlug);
       } catch (revErr) {
         console.error('[Admin] Fallo revalidación:', revErr);
       }
