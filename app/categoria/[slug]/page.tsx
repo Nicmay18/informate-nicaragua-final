@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import HomePagePro from '@/components/HomePagePro';
-import { getNewsByCategory, getMasLeidas } from '@/lib/data';
+import CategoryPagePro from '@/components/CategoryPagePro';
+import { getNewsByCategory } from '@/lib/data';
 import { slugToCategory, CATEGORIES, categoryToSlug } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
@@ -91,15 +91,11 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
   if (!catName) return notFound();
 
   let noticias: Noticia[] = [];
-  let masLeidas: Noticia[] = [];
   try {
-    [noticias, masLeidas] = await Promise.all([
-      getNewsByCategory(catName, 100),
-      getMasLeidas(),
-    ]);
+    noticias = await getNewsByCategory(catName, 100);
   } catch (error) {
     console.error('[CategoriaPage] Error:', error);
   }
 
-  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
+  return <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} />;
 }
