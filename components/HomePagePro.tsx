@@ -97,7 +97,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
         timerRef.current = null;
       }
     };
-  }, [items.length, resetTimer]);
+  }, [items.length, idx]);
 
   return (
     <section className="ni-hero" aria-label="Noticias destacadas">
