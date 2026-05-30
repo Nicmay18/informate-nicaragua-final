@@ -122,6 +122,7 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           vistas: data.vistas,
           palabras: data.palabras,
           tags: data.tags,
+          pieFoto: data.pieFoto,
         };
       });
   } catch (err) {
@@ -274,6 +275,7 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
     destacada: data.destacada,
     vistas: data.vistas || 0,
     palabras: data.palabras,
+    pieFoto: data.pieFoto,
   };
 }
 
@@ -360,6 +362,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         vistas: data.vistas,
         palabras: data.palabras,
         tags: data.tags,
+        pieFoto: data.pieFoto,
       };
     }
 
@@ -391,6 +394,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
           vistas: data.vistas,
           palabras: data.palabras,
           tags: data.tags,
+          pieFoto: data.pieFoto,
         };
       }
     }
@@ -415,6 +419,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
           vistas: data.vistas,
           palabras: data.palabras,
           tags: data.tags,
+          pieFoto: data.pieFoto,
         };
       }
     }
@@ -474,6 +479,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           destacada: data.destacada,
           vistas: data.vistas,
           palabras: data.palabras,
+          pieFoto: data.pieFoto,
         };
       })
       .filter((n: Noticia) => n.slug !== excludeSlug)

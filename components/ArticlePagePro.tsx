@@ -167,7 +167,7 @@ export default function ArticlePagePro({ noticia, relatedNews }: { noticia: Noti
         {noticia.imagen && (
           <figure className="ni-article__featured">
             <Image src={noticia.imagen} alt={noticia.titulo} fill sizes="100vw" style={{ objectFit: 'cover' }} priority quality={75} />
-            <figcaption className="ni-article__caption">{noticia.titulo}</figcaption>
+            <figcaption className="ni-article__caption">{noticia.pieFoto || noticia.titulo}</figcaption>
           </figure>
         )}
 
