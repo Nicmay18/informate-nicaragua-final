@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface AdSlotProps {
   slot?: string;
@@ -22,8 +22,14 @@ export default function AdSlot({
   label = 'Publicidad',
 }: AdSlotProps) {
   const adRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     try {
       if (adRef.current && typeof window !== 'undefined') {
         const adsbygoogle = (window as any).adsbygoogle;
@@ -34,7 +40,7 @@ export default function AdSlot({
     } catch {
       // Silenciar errores si AdSense no carga
     }
-  }, [slot]);
+  }, [mounted, slot]);
 
   return (
     <div
@@ -55,19 +61,21 @@ export default function AdSlot({
       aria-hidden="true"
     >
       <span className="ad-label" style={{ fontSize: 10, color: '#9ca3af', marginBottom: 4 }}>{label}</span>
-      <ins
-        ref={adRef as any}
-        className="adsbygoogle"
-        style={{
-          display: 'block',
-          width: '100%',
-          minHeight: format === 'horizontal' ? 90 : height,
-        }}
-        data-ad-client="ca-pub-4115203339551838"
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-      />
+      {mounted && (
+        <ins
+          ref={adRef as any}
+          className="adsbygoogle"
+          style={{
+            display: 'block',
+            width: '100%',
+            minHeight: format === 'horizontal' ? 90 : height,
+          }}
+          data-ad-client="ca-pub-4115203339551838"
+          data-ad-slot={slot}
+          data-ad-format={format}
+          data-full-width-responsive="true"
+        />
+      )}
     </div>
   );
 }

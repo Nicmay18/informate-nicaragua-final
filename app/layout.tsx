@@ -12,6 +12,7 @@ import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ThemeScript from '@/components/ThemeScript';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -105,7 +106,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('ni_theme');document.documentElement.setAttribute('data-theme',s==='light'||s==='dark'?s:'light');}catch(e){}})();` }} />
         <script defer src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP" />
         <script defer dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});gtag('config','G-W1B5J61WEP');` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
@@ -122,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <CookieBanner />
         <ConsentScript />
+        <ThemeScript />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
       </body>
     </html>

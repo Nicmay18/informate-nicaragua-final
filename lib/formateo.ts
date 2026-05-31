@@ -11,7 +11,7 @@ export function formatDateES(date: string | Date | undefined): string {
   try {
     const d = typeof date === 'string' ? new Date(date) : date;
     const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    return `${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+    return `${d.getUTCDate()} de ${meses[d.getUTCMonth()]} de ${d.getUTCFullYear()}`;
   } catch {
     return String(date);
   }
@@ -22,7 +22,7 @@ export function formatDateShortES(date: string | Date | undefined): string {
   try {
     const d = typeof date === 'string' ? new Date(date) : date;
     const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-    return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`;
+    return `${d.getUTCDate()} ${meses[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
   } catch {
     return String(date);
   }

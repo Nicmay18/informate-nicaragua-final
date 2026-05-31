@@ -1,21 +1,15 @@
 'use client';
+import { useEffect } from 'react';
 
 export default function ThemeScript() {
-  return (
-    <script
-      defer
-      suppressHydrationWarning
-      dangerouslySetInnerHTML={{
-        __html: `
-          (function() {
-            try {
-              var saved = localStorage.getItem('ni_theme');
-              var theme = (saved === 'light' || saved === 'dark') ? saved : 'light';
-              document.documentElement.setAttribute('data-theme', theme);
-            } catch (e) {}
-          })();
-        `,
-      }}
-    />
-  );
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('ni_theme');
+      const theme = (saved === 'light' || saved === 'dark') ? saved : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+  return null;
 }
