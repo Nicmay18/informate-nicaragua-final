@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
-import { timeAgo, tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
+import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
@@ -442,9 +442,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
             {vistas} vistas
           </span>
-          {timeAgo(noticia.fecha) && (
-            <span style={{ color: '#991b1b', fontWeight: 600 }} suppressHydrationWarning>{timeAgo(noticia.fecha)}</span>
-          )}
+          <span style={{ color: '#991b1b', fontWeight: 600 }}>{formatDateES(noticia.fecha)}</span>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
             <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
             <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
