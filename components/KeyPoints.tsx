@@ -1,75 +1,17 @@
 'use client';
 
-import { useMemo } from 'react';
-import { getCategory } from '@/lib/constants';
-import { stripHtml, extractFirstSentence, extractKeySentence } from '@/lib/formateo';
+// No imports needed for useMemo
 
 interface KeyPointsProps {
   titulo: string;
   resumen?: string;
   contenido?: string;
   categoria?: string;
+  puntosClave?: string[];
 }
 
-function generateImpactPoint(categoria: string): { label: string; text: string } {
-  const cat = getCategory(categoria);
-  const slug = cat.slug;
-
-  const templates: Record<string, { label: string; text: string }> = {
-    sucesos: {
-      label: 'Siguientes pasos',
-      text: 'Las autoridades competentes continúan con las investigaciones correspondientes para esclarecer los hechos y determinar responsabilidades.',
-    },
-    nacionales: {
-      label: 'Impacto nacional',
-      text: 'Este acontecimiento podría influir en las políticas públicas y el debate social en Nicaragua durante las próximas semanas.',
-    },
-    deportes: {
-      label: 'Próximos encuentros',
-      text: 'Los equipos involucrados se preparan para sus próximos compromisos que definirán posiciones en la tabla de clasificación.',
-    },
-    espectaculos: {
-      label: 'Repercusión',
-      text: 'La noticia genera reacciones en redes sociales y medios de comunicación, ampliando su alcance entre el público nicaragüense.',
-    },
-    tecnologia: {
-      label: 'Implicaciones',
-      text: 'Este avance o evento tecnológico podría transformar la forma en que los nicaragüenses interactúan con la tecnología digital.',
-    },
-    internacionales: {
-      label: 'Contexto global',
-      text: 'La situación internacional continúa evolucionando y podría tener repercusiones en la región centroamericana.',
-    },
-  };
-
-  return templates[slug] || {
-    label: 'Relevancia',
-    text: 'Este tema mantendrá la atención de la comunidad nicaragüense en los próximos días a medida que surgen nuevos detalles.',
-  };
-}
-
-export default function KeyPoints({ titulo, resumen, contenido, categoria }: KeyPointsProps) {
-  const points = useMemo(() => {
-    const plainContent = stripHtml(contenido || resumen || '');
-    const plainResumen = stripHtml(resumen || '');
-
-    let punto1 = extractFirstSentence(plainContent);
-    if (!punto1 || punto1.length < 20) {
-      punto1 = `${titulo}. Información verificada bajo estándares periodísticos.`;
-    }
-
-    let punto2 = plainResumen ? extractFirstSentence(plainResumen) : extractKeySentence(plainContent, 'middle');
-    if (!punto2 || punto2.length < 20 || punto2 === punto1) {
-      punto2 = extractKeySentence(plainContent, 'end');
-    }
-    if (!punto2 || punto2.length < 20) {
-      punto2 = 'La información fue verificada a través de fuentes oficiales y testigos presenciales antes de su publicación.';
-    }
-
-    const impact = generateImpactPoint(categoria || '');
-
-    return { punto1, punto2, punto3: impact };
-  }, [titulo, resumen, contenido, categoria]);
+export default function KeyPoints({ puntosClave }: KeyPointsProps) {
+  if (!puntosClave || puntosClave.length === 0) return null;
 
   const sectionStyle: React.CSSProperties = {
     maxWidth: 768,
@@ -93,17 +35,21 @@ export default function KeyPoints({ titulo, resumen, contenido, categoria }: Key
     borderBottom: '2px solid #111827',
   };
 
+  const labels = ['Ubicación', 'Dato personal / Detalle', 'Estado actual'];
+
   return (
     <section style={sectionStyle} aria-label="Resumen de puntos clave">
       <h2 style={titleStyle}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10" /></svg>
-        3 Puntos Clave
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
+        </svg>
+        Puntos Clave
       </h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <Point label="Qué ocurrió" text={points.punto1} />
-        <Point label="Contexto" text={points.punto2} />
-        <Point label={points.punto3.label} text={points.punto3.text} />
+        {puntosClave.map((point, i) => (
+          <Point key={i} label={labels[i] || `Punto ${i + 1}`} text={point} />
+        ))}
       </div>
     </section>
   );

@@ -23,6 +23,7 @@ export interface Noticia {
   tags?: string[];
   estado?: 'publicado' | 'borrador' | 'archivado';
   pieFoto?: string;
+  puntosClave?: string[];
 }
 
 /**

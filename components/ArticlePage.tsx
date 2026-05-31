@@ -476,7 +476,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
         {/* 3 Puntos Clave */}
-        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} />
+        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
 
         {/* Ad Top */}
         <AdPlaceholder label="Publicidad" size="In-article Top" />
