@@ -1,4 +1,5 @@
 ﻿import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Inter, Merriweather } from 'next/font/google';
 import './styles/globals.css';
 import './styles/components.css';
@@ -123,7 +124,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieBanner />
         <ConsentScript />
         <ThemeScript />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838" crossOrigin="anonymous" />
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );

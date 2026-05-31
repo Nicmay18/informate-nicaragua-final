@@ -89,6 +89,14 @@ const CAT_COLORS: Record<string, string> = {
 const slugifyCategory = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
 
 function AdPlaceholder({ id, label, size, variant = 'inline' }: { id: string; label: string; size: string; variant?: 'inline' | 'leaderboard' | 'sidebar' }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return (
+    <div className={`ad-slot ad-slot--${variant}`} aria-label={label} role="complementary" style={{ minHeight: 90 }}>
+      <span>{label}</span>
+      <small>{size}</small>
+    </div>
+  );
   return (
     <div className={`ad-slot ad-slot--${variant}`} id={id} aria-label={label} role="complementary">
       <span>{label}</span>
