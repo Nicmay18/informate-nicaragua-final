@@ -30,11 +30,19 @@ export default function AuthorCard({
   publishedDate,
   updatedDate,
 }: AuthorCardProps) {
+  const isKeyling = name?.trim() === 'Keyling Elieth Rivera Muñoz';
+
   const displayName = name?.trim() || DEFAULT_AUTHOR.name;
-  const displayRole = role?.trim() || DEFAULT_AUTHOR.role;
-  const displayBio = bio?.trim() || DEFAULT_AUTHOR.bio;
-  const hasPhoto = photo && photo.trim().length > 0;
-  const hasSlug = slug && slug.trim().length > 0;
+  const displayRole = isKeyling ? 'Directora Editorial' : (role?.trim() || DEFAULT_AUTHOR.role);
+  const displayBio = isKeyling 
+    ? 'Directora editorial y cofundadora de Nicaragua Informate. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.' 
+    : (bio?.trim() || DEFAULT_AUTHOR.bio);
+  
+  const finalPhoto = isKeyling ? '/keyling-rivera.jpg' : photo;
+  const finalSlug = isKeyling ? 'keyling-eliet-rivera-munoz' : slug;
+
+  const hasPhoto = finalPhoto && finalPhoto.trim().length > 0;
+  const hasSlug = finalSlug && finalSlug.trim().length > 0;
   const isUpdated = updatedDate && updatedDate !== publishedDate;
 
   const wrapperStyle: React.CSSProperties = {
@@ -123,7 +131,7 @@ export default function AuthorCard({
     <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`}>
       {hasPhoto ? (
         <div style={avatarImgStyle}>
-          <Image src={photo!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="64px" />
+          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="64px" />
         </div>
       ) : (
         <div style={avatarFallbackStyle}>
@@ -134,7 +142,7 @@ export default function AuthorCard({
       <div style={infoStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           {hasSlug ? (
-            <Link href={`/autor/${slug}`} style={nameStyle} rel="author">
+            <Link href={`/autor/${finalSlug}`} style={nameStyle} rel="author">
               {displayName}
             </Link>
           ) : (
@@ -143,7 +151,7 @@ export default function AuthorCard({
         </div>
 
         <p style={roleStyle}>{displayRole}</p>
-        <p style={bioStyle}>{displayBio}</p>
+        <p style={displayBio ? { ...bioStyle } : bioStyle}>{displayBio}</p>
 
         {(publishedDate || updatedDate) && (
           <div style={dateStyle}>
@@ -163,7 +171,7 @@ export default function AuthorCard({
         )}
 
         {hasSlug && (
-          <Link href={`/autor/${slug}`} style={linkStyle}>
+          <Link href={`/autor/${finalSlug}`} style={linkStyle}>
             Más artículos
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15,3 21,3 21,9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
           </Link>
