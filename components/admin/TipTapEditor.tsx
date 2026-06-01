@@ -50,7 +50,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
         class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-[300px] px-5 py-4',
         style: 'line-height: 1.8;',
       },
-      handlePaste(view, event) {
+      handlePaste(_view, event) {
         const text = event.clipboardData?.getData('text/plain') || '';
         
         // Detectar si el texto contiene etiquetas HTML como <p>, <h2>, etc.
