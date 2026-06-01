@@ -1844,8 +1844,13 @@ ${hashtags}`;
         // === MODO HTML: convertir formato Word/Docs a nuestro HTML limpio ===
         resultado = limpiarHtmlPegado(html, text);
       } else {
-        // === MODO TEXTO PLANO: detectar subtítulos, citas, listas ===
-        resultado = formatearTextoPlano(text);
+        // === MODO TEXTO PLANO: detectar si ya viene con HTML crudo (ej. de ChatGPT) ===
+        const tieneHtmlEnTexto = /<\/?(p|h1|h2|h3|h4|h5|h6|div|span|ul|ol|li|blockquote|strong|b|em|i|br|s|strike|a)\b[^>]*>/i.test(text);
+        if (tieneHtmlEnTexto) {
+          resultado = limpiarHtmlTextoCrudo(text);
+        } else {
+          resultado = formatearTextoPlano(text);
+        }
       }
 
       const textarea = document.getElementById('contenido');
@@ -1857,6 +1862,41 @@ ${hashtags}`;
       actualizarContadorPalabras();
       showToast('Texto formateado automáticamente (' + (html ? 'con formato' : 'texto plano') + ')', 'success');
     };
+
+    // ─── LIMPIAR HTML DE TEXTO PLANO CRUDO (ej. de ChatGPT) ───
+    function limpiarHtmlTextoCrudo(text) {
+      if (!text) return '';
+      
+      // Normalizar encabezados h1, h3, h4, h5, h6 a h2
+      let normalized = text
+        .replace(/<h[13456]\b([^>]*)>/gi, '<h2$1>')
+        .replace(/<\/h[13456]>/gi, '</h2>');
+        
+      // Convertir Markdown **negrita** e *itálica* a HTML
+      normalized = normalized
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/_([^_]+)_/g, '<em>$1</em>');
+
+      const blocks = normalized.split(/\r?\n\r?\n+/);
+      const htmlContent = blocks
+        .map(block => {
+          const trimmed = block.trim();
+          if (!trimmed) return '';
+          
+          const hasBlockTag = /^\s*<(p|h2|ul|ol|li|blockquote|div)\b[^>]*>/i.test(trimmed);
+          if (hasBlockTag) {
+            return trimmed;
+          }
+          
+          const formatted = trimmed.replace(/\r?\n/g, '<br>');
+          return `<p>${formatted}</p>`;
+        })
+        .filter(Boolean)
+        .join('\n\n');
+        
+      return htmlContent;
+    }
 
     // ─── LIMPIAR HTML PEGADO (Word, Google Docs, navegador) ───
     function limpiarHtmlPegado(html, fallbackText) {
@@ -1970,6 +2010,10 @@ ${hashtags}`;
       function flushParrafo() {
         if (bufferParrafo.length === 0) return;
         let p = bufferParrafo.join(' ');
+        // Convertir Markdown **negrita** e *itálica* a HTML
+        p = p.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        p = p.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+        p = p.replace(/_([^_]+)_/g, '<em>$1</em>');
         // Negrita en citas entre comillas
         p = p.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
         p = p.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>\u201c$1\u201d</strong>');

@@ -3,7 +3,7 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Extension } from '@tiptap/core';
 
 // Extensión para permitir marks (negrita, cursiva) dentro de headings
@@ -30,6 +30,8 @@ interface TipTapEditorProps {
 }
 
 export default function TipTapEditor({ content = '', onChange, placeholder = 'Escribe el cuerpo de la noticia aquí...' }: TipTapEditorProps) {
+  const editorRef = useRef<any>(null);
+
   const editor = useEditor({
     extensions: [
       HeadingWithMarks,
@@ -48,11 +50,55 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
         class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none min-h-[300px] px-5 py-4',
         style: 'line-height: 1.8;',
       },
+      handlePaste(view, event) {
+        const text = event.clipboardData?.getData('text/plain') || '';
+        
+        // Detectar si el texto contiene etiquetas HTML como <p>, <h2>, etc.
+        const hasHtmlTags = /<\/?(p|h1|h2|h3|h4|h5|h6|div|span|ul|ol|li|blockquote|strong|b|em|i|br|s|strike|a)\b[^>]*>/i.test(text);
+        
+        if (hasHtmlTags && editorRef.current) {
+          // Normalizar encabezados (convertir h1, h3, h4, h5, h6 a h2 que es el admitido)
+          let normalized = text
+            .replace(/<h[13456]\b([^>]*)>/gi, '<h2$1>')
+            .replace(/<\/h[13456]>/gi, '</h2>');
+            
+          // Separar por bloques de salto de línea dobles
+          const blocks = normalized.split(/\r?\n\r?\n+/);
+          const htmlContent = blocks
+            .map(block => {
+              const trimmed = block.trim();
+              if (!trimmed) return '';
+              
+              // Si ya tiene etiquetas de bloque HTML comunes al inicio, se deja como está
+              const hasBlockTag = /^\s*<(p|h2|ul|ol|li|blockquote|div)\b[^>]*>/i.test(trimmed);
+              if (hasBlockTag) {
+                return trimmed;
+              }
+              
+              // Si es un párrafo de texto plano suelto, lo envolvemos en <p> y cambiamos saltos de línea simples por <br />
+              const formatted = trimmed.replace(/\r?\n/g, '<br />');
+              return `<p>${formatted}</p>`;
+            })
+            .filter(Boolean)
+            .join('');
+            
+          editorRef.current.commands.insertContent(htmlContent);
+          return true; // Evitar el comportamiento de pegado predeterminado
+        }
+        return false; // Pegado por defecto para texto normal
+      },
     },
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   });
+
+  // Guardar referencia del editor para handlePaste
+  useEffect(() => {
+    if (editor) {
+      editorRef.current = editor;
+    }
+  }, [editor]);
 
   // Actualizar contenido si cambia externamente
   useEffect(() => {
