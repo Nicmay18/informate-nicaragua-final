@@ -1867,8 +1867,13 @@ ${hashtags}`;
     function limpiarHtmlTextoCrudo(text) {
       if (!text) return '';
       
+      // Eliminar bloques de código Markdown (```html, ```javascript, etc.)
+      let cleaned = text
+        .replace(/```[a-z]*\s*\n?/gi, '')
+        .replace(/```/g, '');
+      
       // Normalizar encabezados h1, h3, h4, h5, h6 a h2
-      let normalized = text
+      let normalized = cleaned
         .replace(/<h[13456]\b([^>]*)>/gi, '<h2$1>')
         .replace(/<\/h[13456]>/gi, '</h2>');
         
@@ -2003,6 +2008,12 @@ ${hashtags}`;
     // ─── FORMATEAR TEXTO PLANO CON DETECCIÓN INTELIGENTE ───
     function formatearTextoPlano(texto) {
       if (!texto) return '';
+      
+      // Eliminar bloques de código Markdown (```html, ```javascript, etc.)
+      texto = texto
+        .replace(/```[a-z]*\s*\n?/gi, '')
+        .replace(/```/g, '');
+      
       const lineas = texto.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
       const resultado = [];
       let bufferParrafo = [];
