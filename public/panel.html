@@ -1265,6 +1265,14 @@ sin texto ni marcas de agua, composición periodística"
                 <div id="revalidateStatus" style="display: none; margin-top: 12px; padding: 10px; background: var(--primary-50); border-radius: var(--radius-md); font-size: 12px;"></div>
               </div>
             </div>
+            <div class="card" style="margin-bottom: 20px; border-left: 3px solid var(--success);">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-upload" style="color: var(--success);"></i>Publicar Noticias</h3></div>
+              <div class="card-body">
+                <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Publica todas las noticias guardadas en borrador para que aparezcan en el sitio.</p>
+                <button class="btn btn-success" onclick="publicarTodasLasNoticias()" id="btnPublicarTodas" style="width: 100%; font-size: 13px;"><i class="fas fa-globe"></i><span>Publicar Todas las Noticias</span></button>
+                <div id="publicarTodasStatus" style="display: none; margin-top: 12px; padding: 10px; background: var(--success-light); border-radius: var(--radius-md); font-size: 12px;"></div>
+              </div>
+            </div>
             <div class="card">
               <div class="card-header"><h3 class="card-title">Mantenimiento</h3></div>
               <div class="card-body">
@@ -2712,6 +2720,28 @@ ${hashtags}`;
         if (res.ok) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ Página principal actualizada. Refrescá el sitio (F5) para ver los cambios.</span>'; showToast('Sitio actualizado', 'success'); }
         else { statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-times-circle"></i> Error al actualizar. Revisá el token.</span>'; showToast('Error actualizando sitio', 'error'); }
       } catch (err) { statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-times-circle"></i> Error de conexión: ' + err.message + '</span>'; }
+      finally { btn.disabled = false; }
+    };
+
+    window.publicarTodasLasNoticias = async function() {
+      const btn = document.getElementById('btnPublicarTodas');
+      const statusDiv = document.getElementById('publicarTodasStatus');
+      if (!confirm('¿Estás seguro que querés publicar TODAS las noticias en borrador?')) return;
+      btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando noticias en borrador...';
+      try {
+        const snapshot = await getDocs(collection(db, 'noticias'));
+        const borradores = [];
+        snapshot.forEach(d => { const data = d.data(); if (data.publicado !== true) borradores.push(d.id); });
+        if (borradores.length === 0) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> No hay noticias en borrador. Todas ya están publicadas.</span>'; btn.disabled = false; return; }
+        statusDiv.innerHTML = `⚙️ Publicando ${borradores.length} noticias... <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="publicarProgress" style="width:0%"></div></div>`;
+        for (let i = 0; i < borradores.length; i++) {
+          await updateDoc(doc(db, 'noticias', borradores[i]), { publicado: true, fechaActualizacion: serverTimestamp() });
+          document.getElementById('publicarProgress').style.width = ((i + 1) / borradores.length * 100) + '%';
+        }
+        statusDiv.innerHTML = `<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ ${borradores.length} noticias publicadas exitosamente.</span>`;
+        showToast(`${borradores.length} noticias publicadas`, 'success');
+        await cargarUltimasNoticias(); await cargarEstadisticas(); await cargarNoticias();
+      } catch (err) { statusDiv.innerHTML = `<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Error: ${err.message}</span>`; showToast('Error publicando: ' + err.message, 'error'); }
       finally { btn.disabled = false; }
     };
 
