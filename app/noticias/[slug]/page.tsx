@@ -10,9 +10,9 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
-export const revalidate = false; // On-Demand Revalidation
+export const revalidate = 0; // Sin caché - datos frescos de Firebase en cada visita
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
