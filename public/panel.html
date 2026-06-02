@@ -273,10 +273,11 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { max-height: 600px; overflow-y: auto; }
+    .news-list { display: flex; flex-direction: column; overflow-y: auto; }
     .news-item {
       display: flex; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
+      cursor: pointer; width: 100%; box-sizing: border-box; flex: 0 0 auto;
     }
     .news-item:hover { background: var(--gray-50); }
     .news-thumb { width: 72px; height: 54px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200); }
