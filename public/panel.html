@@ -273,7 +273,7 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: flex; flex-direction: column; overflow-y: auto; }
+    .news-list { display: flex; flex-direction: column; }
     .news-item {
       display: flex; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
@@ -882,7 +882,7 @@
       <!-- NOTICIAS -->
       <div id="noticias-tab" class="tab-content">
         <div class="page-header">
-          <div class="page-title"><h1>Gestión de Noticias</h1><p>Administra el archivo editorial completo.</p></div>
+          <div class="page-title"><h1 id="noticiasCountTitle">Gestión de Noticias</h1><p>Administra el archivo editorial completo.</p></div>
           <div class="header-actions">
             <div class="search-wrapper"><i class="fas fa-search"></i><input type="text" class="form-input" placeholder="Buscar noticias..." onkeyup="buscarNoticias(this.value)"></div>
             <button class="btn btn-primary" onclick="showTab('nueva-tab', document.querySelectorAll('.nav-link')[1])"><i class="fas fa-plus"></i><span>Nueva</span></button>
@@ -2373,6 +2373,8 @@ ${hashtags}`;
         const snapshot = await getDocs(q);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         if (filtro !== 'todas') noticias = noticias.filter(n => n.categoria === filtro);
+        const titleEl = document.getElementById('noticiasCountTitle');
+        if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
         container.innerHTML = noticias.map(n => `
           <div class="news-item" data-id="${n.id}">
