@@ -52,7 +52,9 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  const heroImage = noticias[0]?.imagen;
+  // Mirror HomePagePro hero logic: destacadas first, then resto — so the preload matches what's actually rendered
+  const heroFirst = noticias.find(n => n.destacada) ?? noticias[0];
+  const heroImage = heroFirst?.imagen;
 
   return (
     <>

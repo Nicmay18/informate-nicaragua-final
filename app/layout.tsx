@@ -133,9 +133,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieBanner />
         <ConsentScript />
         <ThemeScript />
-        <Script
+        {/* AdSense: plain async script avoids Next.js data-nscript attribute that AdSense rejects */}
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
       </body>
