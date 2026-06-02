@@ -1338,7 +1338,7 @@ sin texto ni marcas de agua, composición periodística"
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -2369,7 +2369,7 @@ ${hashtags}`;
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
-        const snapshot = await getDocs(collection(db, "noticias"));
+        const snapshot = await getDocs(query(collection(db, "noticias"), limit(500)));
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         // Ordenar en cliente para incluir noticias sin campo fecha
         noticias.sort((a, b) => {
