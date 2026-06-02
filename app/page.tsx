@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-static';
-export const revalidate = 60; // 1 minute - temporary for quick updates
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; // Sin caché - datos frescos de Firebase en cada visita
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
