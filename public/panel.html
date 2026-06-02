@@ -1299,6 +1299,11 @@ sin texto ni marcas de agua, composición periodística"
                   <div id="statusElevenlabs" style="margin-bottom: 10px; font-size: 12px; font-weight: 600;">—</div>
                   <button type="button" class="btn btn-secondary btn-sm" onclick="verificarElevenLabs()" style="font-size: 12px;"><i class="fas fa-plug"></i> Verificar conexión</button>
                 </div>
+                <div style="margin-bottom: 16px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid #10b981;">
+                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fas fa-sync-alt" style="color: #10b981;"></i><h4 style="font-size: 13px; font-weight: 700;">Revalidación Vercel</h4></div>
+                  <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 10px;">Token para actualizar la página principal al instante cuando guardás una noticia.</div>
+                  <div class="form-group" style="margin-bottom: 0;"><label class="form-label" style="font-size: 12px;">REVALIDATE_SECRET</label><input type="password" class="form-input" id="configRevalidateToken" placeholder="pega aquí el token..." style="font-family: monospace; font-size: 12px;"></div>
+                </div>
                 <div style="display: flex; gap: 8px;">
                   <button class="btn btn-primary" onclick="guardarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-save"></i><span>Guardar</span></button>
                   <button class="btn btn-secondary" onclick="cargarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-sync"></i><span>Recargar</span></button>
@@ -2359,6 +2364,20 @@ ${hashtags}`;
         limpiarFormulario();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
+        
+        // Revalidar la página principal en Vercel para que los cambios se vean al instante
+        const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
+        if (revalidateToken && noticiaId) {
+          try {
+            const revalidateRes = await fetch('/api/revalidate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': revalidateToken },
+              body: JSON.stringify({ type: 'noticia', slug: slug || noticiaId, category: categoria })
+            });
+            if (revalidateRes.ok) { showToast('Página principal actualizada', 'success'); }
+            else { showToast('No se pudo revalidar la caché, esperá 1 hora', 'warning'); }
+          } catch (e) { console.error('Revalidate error:', e); }
+        }
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
       } finally {
@@ -2723,8 +2742,11 @@ ${hashtags}`;
         const page1TokenInput = document.getElementById('configFbPage1Token');
         const page2IdInput = document.getElementById('configFbPage2Id');
         const page2TokenInput = document.getElementById('configFbPage2Token');
+        const revalidateInput = document.getElementById('configRevalidateToken');
+        const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
         
         if (githubTokenInput) githubTokenInput.value = githubToken;
+        if (revalidateInput) revalidateInput.value = revalidateToken;
         if (githubOwnerInput) githubOwnerInput.value = githubOwner;
         if (githubRepoInput) githubRepoInput.value = githubRepo;
         if (githubPathInput) githubPathInput.value = githubPath;
@@ -2791,6 +2813,12 @@ ${hashtags}`;
         localStorage.setItem('admin_fb_page2_id', fbPage2Id);
         localStorage.setItem('admin_fb_page2_token', fbPage2Token);
         
+        let revalidateToken = document.getElementById('configRevalidateToken').value.trim();
+        if (revalidateToken === '••••••••••••' || revalidateToken.includes('•••')) {
+          revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
+        }
+        localStorage.setItem('admin_revalidate_token', revalidateToken);
+        
         showToast('Configuración guardada de forma permanente en Firebase Cloud', 'success');
       } catch (err) {
         console.error('Error guardando configuración:', err);
@@ -2805,6 +2833,11 @@ ${hashtags}`;
         localStorage.setItem('admin_fb_page1_token', fbPage1Token);
         localStorage.setItem('admin_fb_page2_id', fbPage2Id);
         localStorage.setItem('admin_fb_page2_token', fbPage2Token);
+        let revalidateTokenFallback = document.getElementById('configRevalidateToken').value.trim();
+        if (revalidateTokenFallback === '••••••••••••' || revalidateTokenFallback.includes('•••')) {
+          revalidateTokenFallback = localStorage.getItem('admin_revalidate_token') || '';
+        }
+        localStorage.setItem('admin_revalidate_token', revalidateTokenFallback);
         showToast('Configuración guardada localmente en este navegador (backup)', 'warning');
       }
     };
