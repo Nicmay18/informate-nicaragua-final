@@ -907,10 +907,10 @@
 
         <div class="ai-panel">
           <h3><i class="fas fa-robot"></i> Asistente Editorial Gemini</h3>
-          <p>Configura los parámetros y genera una noticia con estructura de pirámide invertida, tono Reuters/AP y optimización AdSense.</p>
+          <p>Configura los parámetros, pega la información cruda o borrador, y genera una noticia con estructura de pirámide invertida, tono Reuters/AP y optimización AdSense.</p>
           <div class="ai-controls">
             <div>
-              <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">TITULAR BASE</label>
+              <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">TITULAR BASE / TEMA</label>
               <input type="text" id="iaTitulo" class="ai-select" placeholder="Ej: Protestas en Mercado Oriental" style="width: 100%;">
             </div>
             <div>
@@ -941,8 +941,16 @@
                 <option value="Tecnología">Tecnología</option>
               </select>
             </div>
-            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Generar</button>
+          </div>
+          
+          <div style="margin-top: 16px;">
+            <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">INFORMACIÓN CRUDA / BORRADOR / DETALLES DE LA NOTICIA</label>
+            <textarea id="iaContenidoCrudo" class="ai-select" style="width: 100%; min-height: 120px; resize: vertical; font-family: inherit; line-height: 1.6;" placeholder="Pega aquí todo lo que tengas: apuntes policiales, testimonios de testigos, reportes preliminares, detalles sueltos o la nota cruda sin procesar. La IA usará todo esto para construir el artículo impecablemente..."></textarea>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
             <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857);"><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
+            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Redactar Noticia Completa</button>
           </div>
           <div id="iaStatus" style="margin-top: 12px; font-size: 13px; color: #fbbf24; font-weight: 500;"></div>
         </div>
@@ -2918,6 +2926,7 @@ ${hashtags}`;
       const titulo = document.getElementById('iaTitulo').value.trim();
       const departamento = document.getElementById('iaDepartamento').value;
       const categoria = document.getElementById('iaCategoria').value;
+      const contenidoCrudo = document.getElementById('iaContenidoCrudo').value.trim();
       
       if (!titulo) { showToast('Escribe el titular base primero', 'warning'); return; }
 
@@ -2936,6 +2945,7 @@ Actúa como un corresponsal senior destacado en Nicaragua y redacta una noticia 
 - Departamento/Ubicación de los hechos: '${departamento}'
 - Categoría: '${categoria}'
 - Dateline: '${departamento.toUpperCase()} / NICARAGUA'
+- Información Cruda / Borrador / Datos de entrada: '${contenidoCrudo || 'No provista (Generar artículo informativo general coherente basado únicamente en el titular base)'}'
 
 ═══════════════════════════════════════
 ROL Y PRINCIPIOS ABSOLUTOS
@@ -2989,8 +2999,12 @@ Al final del todo, agrega estos dos bloques estrictamente:
 - La meta descripción sugerida (debe tener exactamente entre 150 y 160 caracteres, descriptiva, sin clickbait) encerrada entre las etiquetas <meta> y </meta>.
 
 ═══════════════════════════════════════
-PROHIBICIONES ABSOLUTAS
+PROHIBICIONES ABSOLUTAS Y EVITAR TONADA DE IA
 ═══════════════════════════════════════
+- Prohibición absoluta de conectores robóticos clisé de IA como: "en este contexto", "por su parte", "por otro lado", "es importante destacar", "cabe señalar", "asimismo", "además de esto", "en conclusión", "un hito", "un antes y un después", "sin duda", "por ende", "consecuentemente".
+- Escribe como un reportero humano, con voz activa. No uses frases de transición artificiales. Si vas de una idea a otra, hazlo directamente.
+- Si hay pequeñas imperfecciones naturales en el flujo de la redacción humana, son preferibles a la perfección sintética, aburrida y repetitiva de un robot.
+- Toda información debe ser atractiva, directa y captar el interés del lector desde el primer segundo. Si una frase es "relleno bonito", elimínala.
 - Opiniones del redactor o interpretaciones subjetivas.
 - Adjetivos emocionales o dramáticos.
 - Titulares engañosos o exagerados.

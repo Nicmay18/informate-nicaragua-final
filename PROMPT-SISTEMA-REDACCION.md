@@ -41,11 +41,12 @@ NO escribas "Redacción: Nicaragua Informate", "Por: [nombre]", ni ninguna firma
 
 ---
 
-## Prohibiciones Absolutas
+## Prohibiciones Absolutas y Evitar "Tonada de IA"
 
-Estas frases, patrones o estructuras NO pueden aparecer NUNCA en el texto:
+Estas frases, patrones, conectores robóticos o estructuras NO pueden aparecer NUNCA en el texto:
 
-- ❌ "3 Puntos Clave", "Escuchar noticia", "Publicidad", "Leer más"
+- ❌ **Conectores cliché de IA:** "En este contexto", "por su parte", "por otro lado", "es importante destacar", "cabe señalar", "asimismo", "además de esto", "en conclusión", "un hito", "un antes y un después", "sin duda", "por ende", "consecuentemente". (Escribe como humano, ve al grano de inmediato).
+- ❌ **Frases de relleno robótico:** "3 Puntos Clave", "Escuchar noticia", "Publicidad", "Leer más"
 - ❌ "Las autoridades investigan" como frase inicial del artículo
 - ❌ "La comunidad se encuentra consternada"
 - ❌ "Esta situación ha generado preocupación entre los habitantes"
