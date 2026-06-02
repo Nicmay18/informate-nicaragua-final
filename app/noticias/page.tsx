@@ -4,7 +4,7 @@ import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
 export const dynamic = 'force-static';
-export const revalidate = 60;
+export const revalidate = 3600; // 1 hour
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string }> }): Promise<Metadata> {
   const params = await searchParams;

@@ -12,7 +12,7 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 
 export const dynamic = 'force-static';
 export const dynamicParams = true;
-export const revalidate = 60;
+export const revalidate = false; // On-Demand Revalidation
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
