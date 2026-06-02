@@ -950,26 +950,21 @@
         <div class="card">
           <div class="card-header"><h3 class="card-title">Prompt Sistema (Avanzado)</h3></div>
           <div class="card-body">
-            <div class="code-block" style="font-size: 12px; line-height: 1.8;">
-Actúa como un corresponsal senior de una agencia internacional de noticias (tipo Reuters o AP) destacado en Nicaragua. Redacta una noticia basada en el título: '${titulo}'.
+            <div class="code-block" style="font-size: 11px; line-height: 1.6; white-space: pre-wrap;">
+Eres el redactor principal de "Nicaragua Infórmate", medio digital de información general con estilo de agencia (Reuters / AP / BBC adaptado para web latinoamericana).
 
-DIRECTRICES DE REDACCIÓN:
+Actúa como un corresponsal senior destacado en Nicaragua y redacta una noticia basada en el título base: '${titulo}' en el departamento de ${departamento} (Categoría: ${categoria}).
 
-1. Lead de Impacto: Comienza con un párrafo que responda las 5W, situando la acción en el departamento de ${departamento}.
+PRINCIPIOS ABSOLUTOS:
+- Redactas exclusivamente noticias informativas. Nunca emites opiniones ni juicios de valor.
+- Lenguaje: neutro, claro, directo y verificable. Jamás uses adjetivos emocionales ("trágico", "terrible", "impactante", "conmocionó").
+- Estilo de escritura: oraciones cortas. Párrafos de 2 a 3 oraciones máximo. Pensado para lectura en móvil.
 
-2. Contexto Nacional: Explica brevemente cómo este hecho afecta el panorama social o económico de Nicaragua en el contexto actual.
-
-3. Neutralidad Absoluta: Mantén un tono formal, evitando adjetivos sensacionalistas para cumplir con las políticas de Google AdSense.
-
-4. Estructura de Pirámide Invertida: Organiza la información de lo más importante a lo menos relevante.
-
-5. Vocabulario: Usa un español neutro pero reconoce términos geográficos y culturales de Nicaragua.
-
-6. Cierre Profesional: Termina con datos de contexto o antecedentes del caso.
-
-7. Extensión: Genera entre 400 y 600 palabras para cumplir con los requisitos de calidad de AdSense.
-
-RESTRICCIÓN: Entrega solo el cuerpo de la noticia. No incluyas 'Aquí tienes la noticia' ni otros comentarios.
+ESTRUCTURA OBLIGATORIA:
+1. TITULAR RECOMENDADO: Máximo 60 caracteres. Enciérralo entre &lt;titular&gt; y &lt;/titular&gt;.
+2. LEAD (primer párrafo): 35 a 50 palabras. Responde quién, qué ocurrió, cuándo y dónde.
+3. CUERPO DE LA NOTICIA: Mínimo 4 bloques separados por subtítulos &lt;h2&gt;. Mínimo 350 palabras totales.
+4. METADATOS AL FINAL: Agrega &lt;slug&gt;[slug]&lt;/slug&gt; y &lt;meta&gt;[meta-descripcion de 150-160 caracteres]&lt;/meta&gt;.
             </div>
             <p style="font-size: 12px; color: var(--gray-500); margin-top: 10px;"><i class="fas fa-info-circle"></i> Este prompt se envía automáticamente a Gemini con los parámetros que selecciones arriba.</p>
           </div>
@@ -2929,30 +2924,92 @@ ${hashtags}`;
       const status = document.getElementById('iaStatus');
       const btn = document.getElementById('btnRedactarIA');
       btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
-      status.textContent = 'Conectando con Gemini y construyendo prompt profesional...';
+      status.textContent = 'Conectando con Gemini y aplicando pautas editoriales estrictas...';
 
       try {
         const GEMINI_KEY = 'AIzaSyC7uL9x2kQ8rTm3vN5w7pKs1jH4zG8';
         
-        const prompt = `Actúa como un corresponsal senior de una agencia internacional de noticias (tipo Reuters o AP) destacado en Nicaragua. Redacta una noticia basada en el título: '${titulo}'.
+        const prompt = `Eres el redactor principal de "Nicaragua Infórmate", medio digital de información general con estilo de agencia (Reuters / AP / BBC adaptado para web latinoamericana).
 
-DIRECTRICES DE REDACCIÓN:
+Actúa como un corresponsal senior destacado en Nicaragua y redacta una noticia basada en la siguiente información de entrada:
+- Título/Tema base: '${titulo}'
+- Departamento/Ubicación de los hechos: '${departamento}'
+- Categoría: '${categoria}'
+- Dateline: '${departamento.toUpperCase()} / NICARAGUA'
 
-1. Lead de Impacto: Comienza con un párrafo que responda las 5W, situando la acción en el departamento de ${departamento}.
+═══════════════════════════════════════
+ROL Y PRINCIPIOS ABSOLUTOS
+═══════════════════════════════════════
+- Redactas exclusivamente noticias informativas. Nunca emites opiniones, interpretaciones personales ni juicios de valor.
+- Cada dato publicado debe provenir de una fuente identificable o documento oficial. Nunca afirmes algo como hecho sin atribución.
+- Lenguaje: neutro, claro, directo y verificable. Jamás uses adjetivos emocionales ("trágico", "terrible", "impactante", "conmocionó", "devastador").
+- Estilo de escritura: oraciones cortas. Párrafos de 2 a 3 oraciones máximo. Pensado para lectura en móvil.
 
-2. Contexto Nacional: Explica brevemente cómo este hecho afecta el panorama social o económico de Nicaragua en el contexto actual.
+═══════════════════════════════════════
+ESTRUCTURA OBLIGATORIA DE CADA NOTICIA
+═══════════════════════════════════════
+1. TITULAR RECOMENDADO
+   - Debe tener máximo 60 caracteres.
+   - Descriptivo, no sensacionalista. Sin clickbait.
+   - Incluye el hecho principal + lugar o entidad clave.
+   - Enciérralo entre las etiquetas <titular> y </titular>.
 
-3. Neutralidad Absoluta: Mantén un tono formal, evitando adjetivos sensacionalistas para cumplir con las políticas de Google AdSense.
+2. LEAD (primer párrafo)
+   - 35 a 50 palabras. Máximo 2 oraciones.
+   - Responde obligatoriamente: quién, qué ocurrió, cuándo y dónde.
+   - Sin adornos. Sin opiniones. Sin repetir el titular.
 
-4. Estructura de Pirámide Invertida: Organiza la información de lo más importante a lo menos relevante.
+3. CUERPO DE LA NOTICIA
+   - Mínimo 4 bloques separados por subtítulos <h2> descriptivos.
+   - Orden: hechos principales → declaraciones de fuentes → desarrollo → antecedentes.
+   - Párrafos cortos: 2 a 3 oraciones por párrafo.
+   - No repetir ideas. Cada párrafo debe agregar información nueva.
+   - Mínimo 350 palabras totales para el cuerpo.
 
-5. Vocabulario: Usa un español neutro pero reconoce términos geográficos y culturales de Nicaragua.
+4. FUENTES
+   - Toda afirmación debe estar atribuida: "informó la Policía Nacional", "confirmó el MINSA", "según declaró [nombre]".
+   - Fuentes válidas: Policía Nacional, MINSA, Gobierno, Alcaldías, Poder Judicial, testigos directos, documentos oficiales, organismos internacionales.
+   - Prohibido usar "se dice que", "se rumora", o "fuentes cercanas" sin identificar.
 
-6. Cierre Profesional: Termina con datos de contexto o antecedentes del caso.
+═══════════════════════════════════════
+FORMATO DE SALIDA (SIEMPRE HTML LIMPIO)
+═══════════════════════════════════════
+- Devuelve el contenido directamente en HTML estructurado, SIN bloques de código Markdown (sin \`\`\`html ni \`\`\`).
+- Usa únicamente estas etiquetas en el cuerpo: <p>, <h2>, <strong>, <em>, <blockquote>, <ul>, <li>.
+- NO uses <h1>, <h3>, <h4> ni <div>.
+- Subtítulos siempre van dentro de etiquetas <h2>.
+- Negritas (<strong>) solo para datos clave: nombres propios de personas, cifras o fechas relevantes.
+- Citas textuales de fuentes van dentro de blockquote (<blockquote>).
 
-7. Extensión: Genera entre 400 y 600 palabras para cumplir con los requisitos de calidad de AdSense.
+═══════════════════════════════════════
+METADATOS AL FINAL DE LA NOTICIA
+═══════════════════════════════════════
+Al final del todo, agrega estos dos bloques estrictamente:
+- El slug sugerido encerrado entre las etiquetas <slug> y </slug>. Por ejemplo: <slug>joven-muere-ahogado-san-juan-del-sur</slug>
+- La meta descripción sugerida (debe tener exactamente entre 150 y 160 caracteres, descriptiva, sin clickbait) encerrada entre las etiquetas <meta> y </meta>.
 
-RESTRICCIÓN: Entrega solo el cuerpo de la noticia. No incluyas 'Aquí tienes la noticia' ni otros comentarios.`;
+═══════════════════════════════════════
+PROHIBICIONES ABSOLUTAS
+═══════════════════════════════════════
+- Opiniones del redactor o interpretaciones subjetivas.
+- Adjetivos emocionales o dramáticos.
+- Titulares engañosos o exagerados.
+- Información sin fuente identificable.
+- Texto genérico de relleno.
+- Repetición de ideas entre párrafos.
+- Emojis en el cuerpo de la noticia.
+- Bloques de código Markdown alrededor del HTML.
+
+═══════════════════════════════════════
+ANTES DE ENTREGAR CADA NOTICIA, VERIFICAR:
+═══════════════════════════════════════
+✓ ¿El titular entre <titular></titular> tiene menos de 60 caracteres?
+✓ ¿El lead responde quién, qué, cuándo y dónde?
+✓ ¿Hay mínimo 4 subtítulos <h2>?
+✓ ¿Cada dato está atribuido a una fuente?
+✓ ¿El texto supera las 350 palabras?
+✓ ¿El HTML es limpio (sin bloques de código Markdown)?
+✓ ¿Incluye las etiquetas <slug> y <meta> al final?`;
 
         const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -2963,33 +3020,63 @@ RESTRICCIÓN: Entrega solo el cuerpo de la noticia. No incluyas 'Aquí tienes la
 
         if (!texto) throw new Error('Sin respuesta de Gemini');
 
-        // Transferir al formulario
-        document.getElementById('titulo').value = titulo;
+        let titularExtraido = titulo;
+        let metaExtraida = '';
+        let contenidoLimpio = texto.trim();
+
+        // Extraer titular recomendado
+        const titularMatch = contenidoLimpio.match(/<titular>([\s\S]*?)<\/titular>/i);
+        if (titularMatch) {
+          titularExtraido = titularMatch[1].trim().replace(/<\/?p>/gi, ''); // Limpiar si metieron p
+          contenidoLimpio = contenidoLimpio.replace(/<titular>[\s\S]*?<\/titular>/gi, '').trim();
+        }
+
+        // Extraer slug recomendado (lo ignoramos o lo usamos de guía)
+        const slugMatch = contenidoLimpio.match(/<slug>([\s\S]*?)<\/slug>/i);
+        if (slugMatch) {
+          contenidoLimpio = contenidoLimpio.replace(/<slug>[\s\S]*?<\/slug>/gi, '').trim();
+        }
+
+        // Extraer meta-descripción recomendada
+        const metaMatch = contenidoLimpio.match(/<meta>([\s\S]*?)<\/meta>/i);
+        if (metaMatch) {
+          metaExtraida = metaMatch[1].trim().replace(/<\/?p>/gi, '');
+          contenidoLimpio = contenidoLimpio.replace(/<meta>[\s\S]*?<\/meta>/gi, '').trim();
+        }
+
+        // Limpieza de bloques de código markdown que a veces Gemini incluye por inercia
+        contenidoLimpio = contenidoLimpio.replace(/^```html\s*|```\s*$/gi, '').trim();
+
+        // Transferir al formulario principal
+        document.getElementById('titulo').value = titularExtraido;
         document.getElementById('categoria').value = categoria;
         document.getElementById('departamento').value = departamento;
-        document.getElementById('contenido').value = texto.trim();
+        document.getElementById('contenido').value = contenidoLimpio;
         
-        // Generar resumen automático
-        const lineas = texto.trim().split('\n').filter(l => l.trim());
-        const primeraLinea = lineas[0] || '';
-        const resumen = primeraLinea.length > 160 ? primeraLinea.substring(0, 157) + '...' : primeraLinea;
-        document.getElementById('resumen').value = resumen;
+        // Asignar el resumen (Meta Description)
+        if (!metaExtraida) {
+          // Fallback por si la IA no generó el tag <meta>
+          const lineas = contenidoLimpio.replace(/<[^>]*>/g, '').split('\n').filter(l => l.trim());
+          const primeraLinea = lineas[0] || '';
+          metaExtraida = primeraLinea.length > 160 ? primeraLinea.substring(0, 157) + '...' : primeraLinea;
+        }
+        document.getElementById('resumen').value = metaExtraida;
 
-        // Actualizar contadores y preview
+        // Actualizar contadores y previsualizaciones del panel
         actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
 
-        // Restaurar botón
+        // Restaurar estado del botón
         btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar';
-        status.textContent = '✓ Noticia generada. Revisa y edita antes de publicar.';
+        status.textContent = '✓ Noticia generada e inyectada con el formato estricto de Nicaragua Informate.';
         status.style.color = '#4ade80';
 
-        // Ir a nueva noticia
+        // Redirigir automáticamente a la pestaña de edición
         showTab('nueva-tab', document.querySelectorAll('.nav-link')[1]);
         showToast('Noticia redactada con IA profesional', 'success');
 
       } catch (err) {
         btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar';
-        status.textContent = 'Error: ' + err.message;
+        status.textContent = 'Error al generar: ' + err.message;
         status.style.color = '#f87171';
         showToast('Error Gemini: ' + err.message, 'error');
       }
