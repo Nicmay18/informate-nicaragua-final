@@ -2369,9 +2369,14 @@ ${hashtags}`;
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
-        const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, "noticias"));
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+        // Ordenar en cliente para incluir noticias sin campo fecha
+        noticias.sort((a, b) => {
+          const fa = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
+          const fb = b.fecha?.toMillis ? b.fecha.toMillis() : (b.fecha ? new Date(b.fecha).getTime() : 0);
+          return fb - fa;
+        });
         if (filtro !== 'todas') noticias = noticias.filter(n => n.categoria === filtro);
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
