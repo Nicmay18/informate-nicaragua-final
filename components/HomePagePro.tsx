@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, ChevronRight, TrendingUp, Clock } from 'lucide-react';
+import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp, Clock } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import dynamic from 'next/dynamic';
@@ -288,9 +288,6 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
     return map;
   }, [noticias]);
 
-  const trending = masLeidas.length >= 5
-    ? masLeidas.filter(n => !heroIds.has(n.id)).slice(0, 5)
-    : resto.slice(0, 5);
 
   return (
     <div>
