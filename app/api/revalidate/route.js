@@ -19,10 +19,21 @@ export async function POST(request) {
       revalidated.push(`/noticias/${slug}`);
       revalidateTag(`noticia-${slug}`);
       revalidateTag('noticias');
+      revalidatePath('/noticias');
+      revalidated.push('/noticias');
     }
 
-    // Revalidar categoría
-    if (category) {
+    // Revalidar categoría(s)
+    if (category === 'all') {
+      const categorias = ['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología'];
+      for (const cat of categorias) {
+        revalidatePath(`/categoria/${cat}`);
+        revalidated.push(`/categoria/${cat}`);
+        revalidateTag(`categoria-${cat}`);
+      }
+      revalidatePath('/noticias');
+      revalidated.push('/noticias');
+    } else if (category) {
       revalidatePath(`/categoria/${category}`);
       revalidated.push(`/categoria/${category}`);
       revalidateTag(`categoria-${category}`);

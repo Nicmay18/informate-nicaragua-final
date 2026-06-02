@@ -1257,6 +1257,14 @@ sin texto ni marcas de agua, composición periodística"
                 <button class="btn btn-secondary" onclick="verificarConexiones()" style="margin-top: 12px; width: 100%; font-size: 13px;"><i class="fas fa-sync"></i><span>Verificar Conexiones</span></button>
               </div>
             </div>
+            <div class="card" style="margin-bottom: 20px;">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-bolt" style="color: var(--warning);"></i>Revalidación Rápida</h3></div>
+              <div class="card-body">
+                <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Si corregiste noticias y no se ven en el sitio, hacé clic aquí para actualizar todo al instante.</p>
+                <button class="btn btn-primary" onclick="actualizarPaginaPrincipal()" id="btnRevalidate" style="width: 100%; font-size: 13px;"><i class="fas fa-sync-alt"></i><span>Actualizar Página Principal</span></button>
+                <div id="revalidateStatus" style="display: none; margin-top: 12px; padding: 10px; background: var(--primary-50); border-radius: var(--radius-md); font-size: 12px;"></div>
+              </div>
+            </div>
             <div class="card">
               <div class="card-header"><h3 class="card-title">Mantenimiento</h3></div>
               <div class="card-body">
@@ -2686,6 +2694,24 @@ ${hashtags}`;
         for (let i = 0; i < afectadas.length; i++) { const n = afectadas[i]; const seeds = IMAGENES_RESPALDO[n.categoria] || IMAGENES_RESPALDO['default']; const nuevaImg = `https://picsum.photos/seed/${seeds[i%seeds.length]}/800/500`; await updateDoc(doc(db, 'noticias', n.id), { imagen: nuevaImg }); document.getElementById('migrarProgress').style.width = ((i+1)/afectadas.length*100)+'%'; }
         statusDiv.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> ✓ ${afectadas.length} imágenes reparadas.`; showToast(`${afectadas.length} imágenes migradas`, 'success'); await cargarUltimasNoticias();
       } catch (err) { statusDiv.innerHTML = `<i class="fas fa-exclamation-circle" style="color:var(--danger);"></i> Error: ${err.message}`; showToast('Error migración: ' + err.message, 'error'); }
+      finally { btn.disabled = false; }
+    };
+
+    window.actualizarPaginaPrincipal = async function() {
+      const btn = document.getElementById('btnRevalidate');
+      const statusDiv = document.getElementById('revalidateStatus');
+      const token = localStorage.getItem('admin_revalidate_token') || '';
+      if (!token) { statusDiv.style.display = 'block'; statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Configurá el token en Configuración > Revalidación Vercel</span>'; return; }
+      btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando página principal...';
+      try {
+        const res = await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': token },
+          body: JSON.stringify({ type: 'category', category: 'all' })
+        });
+        if (res.ok) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ Página principal actualizada. Refrescá el sitio (F5) para ver los cambios.</span>'; showToast('Sitio actualizado', 'success'); }
+        else { statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-times-circle"></i> Error al actualizar. Revisá el token.</span>'; showToast('Error actualizando sitio', 'error'); }
+      } catch (err) { statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-times-circle"></i> Error de conexión: ' + err.message + '</span>'; }
       finally { btn.disabled = false; }
     };
 
