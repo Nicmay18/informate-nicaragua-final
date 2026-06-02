@@ -293,6 +293,7 @@
     .badge-deportes { background: var(--success-light); color: #065f46; }
     .badge-tecnologia { background: var(--primary-50); color: #1e40af; }
     .badge-internacionales { background: var(--info-light); color: #155e75; }
+    .recent-dot { display: inline-block; width: 8px; height: 8px; background: var(--success); border-radius: 50%; margin-left: 4px; vertical-align: middle; }
     .news-actions { display: flex; gap: 6px; opacity: 0; transition: var(--transition); }
     .news-item:hover .news-actions { opacity: 1; }
     .btn-icon { width: 28px; height: 28px; border-radius: var(--radius); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); font-size: 12px; }
@@ -890,6 +891,7 @@
         </div>
         <div class="filter-bar">
           <button class="filter-btn active" onclick="filtrarNoticias('todas', this)">Todas</button>
+          <button class="filter-btn" onclick="filtrarNoticias('recientes', this)">🕐 Recientes</button>
           <button class="filter-btn" onclick="filtrarNoticias('Sucesos', this)">🚨 Sucesos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Nacionales', this)">🇳🇮 Nacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Deportes', this)">⚽ Deportes</button>
@@ -2379,16 +2381,27 @@ ${hashtags}`;
           const fb = b.fecha?.toMillis ? b.fecha.toMillis() : (b.fecha ? new Date(b.fecha).getTime() : 0);
           return fb - fa;
         });
-        if (filtro !== 'todas') noticias = noticias.filter(n => n.categoria === filtro);
+        const hace7Dias = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        if (filtro === 'recientes') {
+          noticias = noticias.filter(n => {
+            const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
+            return f > hace7Dias;
+          });
+        } else if (filtro !== 'todas') {
+          noticias = noticias.filter(n => n.categoria === filtro);
+        }
         console.log('[DEBUG] Noticias después de filtro:', noticias.length, 'filtro:', filtro);
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
-        container.innerHTML = noticias.map(n => `
+        container.innerHTML = noticias.map(n => {
+          const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
+          const esReciente = f > hace7Dias;
+          return `
           <div class="news-item" data-id="${n.id}">
             <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
             <div class="news-content">
-              <div class="news-title">${n.titulo || '(Sin título)'}</div>
+              <div class="news-title">${n.titulo || '(Sin título)'}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
               <div class="news-meta">
                 <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
                 <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
@@ -2402,7 +2415,11 @@ ${hashtags}`;
               <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
+        // Forzar scroll en el contenedor padre
+        const cardBody = container.parentElement;
+        if (cardBody) { cardBody.style.maxHeight = (window.innerHeight * 0.65) + 'px'; cardBody.style.overflowY = 'auto'; }
       } catch (error) { showToast('Error cargando noticias', 'error'); }
     };
 
