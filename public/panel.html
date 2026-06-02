@@ -208,7 +208,7 @@
 
     /* CONTENT GRID */
     .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
-    .card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm); }
     .card-header { padding: 20px 24px; border-bottom: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: center; }
     .card-title { font-size: 15px; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
     .card-body { padding: 24px; }
@@ -273,7 +273,7 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: flex; flex-direction: column; max-height: calc(100vh - 300px); overflow-y: auto; }
+    .news-list { display: flex; flex-direction: column; }
     .news-item {
       display: flex; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
@@ -897,7 +897,7 @@
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
         </div>
-        <div class="card"><div class="card-body" style="padding: 0;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
+        <div class="card"><div class="card-body" style="padding: 0; max-height: 65vh; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
 
       <!-- REDACCIÓN IA -->
