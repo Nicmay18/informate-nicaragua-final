@@ -273,7 +273,7 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: flex; flex-direction: column; }
+    .news-list { display: flex; flex-direction: column; max-height: calc(100vh - 300px); overflow-y: auto; }
     .news-item {
       display: flex; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
