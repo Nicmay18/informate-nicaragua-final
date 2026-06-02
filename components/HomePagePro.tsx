@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp, Clock } from 'lucide-react';
+import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import dynamic from 'next/dynamic';
@@ -84,7 +84,7 @@ function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noti
     <div className="ni-sidebar__widget ni-tab-widget">
       <div className="ni-tab-widget__header">
         <button className={`ni-tab-widget__btn ${activeTab === 'ultimas' ? 'is-active' : ''}`} onClick={() => setActiveTab('ultimas')}>
-          <Clock size={12} style={{ marginRight: 4 }} /> Últimas
+          <TrendingUp size={12} style={{ marginRight: 4 }} /> Más leídas
         </button>
         <button className={`ni-tab-widget__btn ${activeTab === 'populares' ? 'is-active' : ''}`} onClick={() => setActiveTab('populares')}>
           <Flame size={12} style={{ marginRight: 4 }} /> Populares
@@ -329,7 +329,7 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
         {/* SIDEBAR */}
         <aside className="ni-sidebar">
           {/* TABBED WIDGET (Últimas, Populares, Tendencias) */}
-          <TabbedSidebarWidget ultimas={resto.slice(0, 5)} populares={masLeidas} tendencias={resto.slice(5, 10)} />
+          <TabbedSidebarWidget ultimas={masLeidas} populares={resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
 
           {/* Radio en vivo */}
           <div className="ni-sidebar__widget ni-widget-compact">
