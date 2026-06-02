@@ -895,8 +895,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-hero__ind{position:relative;border:none;background:transparent;padding:10px 8px;cursor:pointer;text-align:left;transition:background 0.2s;overflow:hidden}
 .ni-hero__ind.is-active{background:rgba(255,255,255,0.05)}
 .ni-hero__ind-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.5);display:block;position:relative;z-index:1}
-.ni-hero__ind.is-active .ni-hero__ind-label{color:var(--ni-gold)}
-.ni-hero__ind-bar{position:absolute;bottom:0;left:0;height:3px;background:var(--ni-gold);transition:width 0.05s linear}
+.ni-hero__ind.is-active .ni-hero__ind-label{color:#ffffff;text-shadow:0 0 4px rgba(0,0,0,0.6);font-weight:700}
+.ni-hero__ind-bar{position:absolute;bottom:0;left:0;height:3px;background:#ffd88f;transition:width 0.05s linear}
 
 @media(max-width:1024px){
   .ni-hero{grid-template-columns:1fr 1.2fr}
@@ -929,16 +929,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* Sections */
 .ni-section{margin-bottom:48px}
-.ni-section__header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--ni-border)}
-.ni-section__title{font-family:'Merriweather',serif;font-size:1.3rem;font-weight:700;color:var(--ni-navy);display:flex;align-items:center;gap:10px}
-.ni-section__title::before{content:'';display:block;width:4px;height:22px;border-radius:2px}
-.ni-section__title--sucesos::before{background:var(--cat-sucesos)}
-.ni-section__title--nacionales::before{background:var(--cat-nacionales)}
-.ni-section__title--espectaculos::before{background:var(--cat-espectaculos)}
-.ni-section__title--deportes::before{background:var(--cat-deportes)}
-.ni-section__title--tecnologia::before{background:var(--cat-tecnologia)}
-.ni-section__title--internacionales::before{background:var(--cat-internacionales)}
-.ni-section__more{font-size:0.8rem;font-weight:600;color:var(--ni-navy);text-transform:uppercase;letter-spacing:0.03em}
+.ni-section__header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;border-bottom:2px solid var(--ni-navy);padding-bottom:0}
+.ni-section__header:has(.ni-section__title--sucesos){border-bottom-color:var(--cat-sucesos)}
+.ni-section__header:has(.ni-section__title--nacionales){border-bottom-color:var(--cat-nacionales)}
+.ni-section__header:has(.ni-section__title--espectaculos){border-bottom-color:var(--cat-espectaculos)}
+.ni-section__header:has(.ni-section__title--deportes){border-bottom-color:var(--cat-deportes)}
+.ni-section__header:has(.ni-section__title--tecnologia){border-bottom-color:var(--cat-tecnologia)}
+.ni-section__header:has(.ni-section__title--internacionales){border-bottom-color:var(--cat-internacionales)}
+
+.ni-section__title{font-family:'Merriweather',serif;font-size:1.15rem;font-weight:800;color:white !important;background:var(--ni-navy);padding:8px 32px 8px 16px;margin:0;text-transform:uppercase;letter-spacing:0.05em;display:inline-block;clip-path:polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);position:relative;line-height:1}
+.ni-section__title::before{display:none !important}
+.ni-section__more{font-size:0.8rem;font-weight:600;color:var(--ni-navy);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:6px}
 .ni-section__more:hover{color:var(--ni-gold)}
 
 /* Cards */
@@ -1966,3 +1967,267 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-search-empty a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border-radius:8px;background:var(--primary);color:#fff;padding:0 18px;font-weight:800}
 @media(max-width:900px){.ni-search-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.ni-search-page{padding:22px 12px 48px}.ni-search-form{grid-template-columns:1fr}.ni-search-form button{width:100%}.ni-search-grid{grid-template-columns:1fr;gap:14px}.ni-search-card__image{min-height:190px}}
+
+/* ================================================================
+   NUEVOS COMPONENTES ESTILO PERIODÍSTICO PREMIUM (PRENSA CINCO)
+   ================================================================ */
+
+/* 1. Barra de Etiquetas Principales */
+.ni-top-tags {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+.ni-top-tags__label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--ni-navy);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.ni-top-tags__list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none; /* Firefox */
+}
+.ni-top-tags__list::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+.ni-top-tag {
+  font-size: 0.75rem;
+  color: var(--ni-text-light);
+  text-decoration: none;
+  background: white;
+  border: 1px solid var(--ni-border);
+  padding: 4px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.ni-top-tag:hover {
+  background: var(--ni-navy);
+  color: white;
+  border-color: var(--ni-navy);
+}
+
+/* 2. Marque de Últimas Noticias (Marquee Bar) */
+.ni-marquee-bar {
+  max-width: 1200px;
+  margin: 12px auto 0;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  height: 40px;
+  background: #f8fafc;
+  border: 1px solid var(--ni-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ni-marquee-bar__badge {
+  background: #111111;
+  color: white;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  z-index: 2;
+}
+.ni-marquee-bar__content {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.ni-marquee-bar__scroll {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  white-space: nowrap;
+  animation: scroll-marquee 40s linear infinite;
+}
+.ni-marquee-bar__scroll:hover {
+  animation-play-state: paused;
+}
+.ni-marquee-bar__item {
+  color: #111111;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s ease;
+}
+.ni-marquee-bar__item:hover {
+  color: var(--ni-gold);
+}
+.ni-marquee-bar__arrow {
+  color: var(--ni-gold);
+  font-size: 0.8rem;
+}
+
+@keyframes scroll-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 3. Sidebar Tabbed Widget */
+.ni-tab-widget {
+  padding: 0 !important;
+  background: white;
+  border: 1px solid var(--ni-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ni-tab-widget__header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #f8fafc;
+  border-bottom: 1px solid var(--ni-border);
+}
+.ni-tab-widget__btn {
+  border: none;
+  background: transparent;
+  padding: 12px 4px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ni-text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+.ni-tab-widget__btn:not(:last-child) {
+  border-right: 1px solid var(--ni-border);
+}
+.ni-tab-widget__btn.is-active {
+  background: white;
+  color: var(--ni-navy);
+  box-shadow: inset 0 -3px 0 var(--ni-gold);
+}
+.ni-tab-widget__body {
+  padding: 16px;
+}
+.ni-tab-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ni-tab-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 12px;
+}
+.ni-tab-item:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+.ni-tab-item__img {
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+.ni-tab-item__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ni-tab-item__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: #f1f5f9;
+}
+.ni-tab-item__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ni-tab-item__pill {
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ni-navy);
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+.ni-tab-item__pill--sucesos { color: var(--cat-sucesos); }
+.ni-tab-item__pill--nacionales { color: var(--cat-nacionales); }
+.ni-tab-item__pill--espectaculos { color: var(--cat-espectaculos); }
+.ni-tab-item__pill--deportes { color: var(--cat-deportes); }
+.ni-tab-item__pill--tecnologia { color: var(--cat-tecnologia); }
+.ni-tab-item__pill--internacionales { color: var(--cat-internacionales); }
+
+.ni-tab-item__title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #111827;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.15s ease;
+}
+.ni-tab-item__title:hover {
+  color: var(--ni-gold);
+}
+
+/* Responsivo para marcas superiores */
+@media(max-width:768px) {
+  .ni-top-tags {
+    margin-top: 10px;
+    padding: 0 12px;
+  }
+  .ni-marquee-bar {
+    margin-top: 8px;
+    padding: 0 12px;
+    grid-template-columns: auto 1fr;
+    height: 36px;
+  }
+  .ni-marquee-bar__badge {
+    font-size: 0.72rem;
+    padding: 0 12px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .ni-marquee-bar__item {
+    font-size: 0.78rem;
+  }
+}

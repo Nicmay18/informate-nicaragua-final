@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail } from 'lucide-react';
+import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, ChevronRight, TrendingUp, Clock } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import dynamic from 'next/dynamic';
@@ -44,6 +44,76 @@ function catClass(cat?: string) {
   const slug = cat?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
   const map: Record<string, string> = { sucesos: 'sucesos', nacionales: 'nacionales', espectaculos: 'espectaculos', deportes: 'deportes', tecnologia: 'tecnologia', tecnologa: 'tecnologia', internacionales: 'internacionales' };
   return map[slug || ''] || 'nacionales';
+}
+
+function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
+  const list = useMemo(() => noticias.slice(0, 6), [noticias]);
+  if (list.length === 0) return null;
+  return (
+    <div className="ni-marquee-bar">
+      <div className="ni-marquee-bar__badge">Última entrada</div>
+      <div className="ni-marquee-bar__content">
+        <div className="ni-marquee-bar__scroll">
+          {list.map((n) => (
+            <Link key={n.id} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
+              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
+            </Link>
+          ))}
+          {/* Duplicado para loop continuo fluido */}
+          {list.map((n) => (
+            <Link key={`${n.id}-dup`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
+              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noticia[]; populares: Noticia[]; tendencias: Noticia[] }) {
+  const [activeTab, setActiveTab] = useState<'ultimas' | 'populares' | 'tendencias'>('ultimas');
+
+  const list = useMemo(() => {
+    if (activeTab === 'ultimas') return ultimas.slice(0, 5);
+    if (activeTab === 'populares') return populares.slice(0, 5);
+    return tendencias.slice(0, 5);
+  }, [activeTab, ultimas, populares, tendencias]);
+
+  return (
+    <div className="ni-sidebar__widget ni-tab-widget">
+      <div className="ni-tab-widget__header">
+        <button className={`ni-tab-widget__btn ${activeTab === 'ultimas' ? 'is-active' : ''}`} onClick={() => setActiveTab('ultimas')}>
+          <Clock size={12} style={{ marginRight: 4 }} /> Últimas
+        </button>
+        <button className={`ni-tab-widget__btn ${activeTab === 'populares' ? 'is-active' : ''}`} onClick={() => setActiveTab('populares')}>
+          <Flame size={12} style={{ marginRight: 4 }} /> Populares
+        </button>
+        <button className={`ni-tab-widget__btn ${activeTab === 'tendencias' ? 'is-active' : ''}`} onClick={() => setActiveTab('tendencias')}>
+          <TrendingUp size={12} style={{ marginRight: 4 }} /> Tendencias
+        </button>
+      </div>
+      <div className="ni-tab-widget__body">
+        <ul className="ni-tab-list">
+          {list.map((n) => (
+            <li key={n.id} className="ni-tab-item">
+              <div className="ni-tab-item__img">
+                {n.imagen ? (
+                  <Image src={getResponsiveImageUrl(n.imagen, 100)} alt={n.titulo} width={64} height={64} style={{ objectFit: 'cover' }} unoptimized={n.imagen.endsWith('.gif')} />
+                ) : (
+                  <div className="ni-tab-item__fallback">🇳🇮</div>
+                )}
+              </div>
+              <div className="ni-tab-item__content">
+                <span className={`ni-tab-item__pill ni-tab-item__pill--${catClass(n.categoria)}`}>{n.categoria}</span>
+                <Link href={`/noticias/${n.slug}`} className="ni-tab-item__title">{n.titulo}</Link>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
 
 function Hero({ noticias }: { noticias: Noticia[] }) {
@@ -224,16 +294,21 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
   return (
     <div>
+      {/* ETIQUETAS PRINCIPALES */}
+      <div className="ni-top-tags">
+        <span className="ni-top-tags__label"># Etiquetas principales</span>
+        <div className="ni-top-tags__list">
+          {TRENDS.map(t => (
+            <Link key={t.label} href={t.href} className="ni-top-tag">{t.label}</Link>
+          ))}
+        </div>
+      </div>
+
+      {/* MARQUEE / TICKER */}
+      <BreakingMarquee noticias={noticias} />
+
       {/* HERO */}
       <Hero noticias={heroNoticias} />
-
-      {/* CHIPS */}
-      <div className="ni-chips">
-        <span className="ni-chips__label">Tendencias:</span>
-        {TRENDS.map(t => (
-          <Link key={t.label} href={t.href} className="ni-chip">{t.label}</Link>
-        ))}
-      </div>
 
       {/* MAIN */}
       <div className="ni-main">
@@ -256,21 +331,8 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
         {/* SIDEBAR */}
         <aside className="ni-sidebar">
-          {/* Destacados esta semana */}
-          <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title"><Flame size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados esta semana</h3>
-            <ol className="ni-trending">
-              {trending.map((n, i) => (
-                <li key={n.id}>
-                  <span className="ni-trending__num">{i + 1}</span>
-                  <div>
-                    <Link href={`/noticias/${n.slug}`} className="ni-trending__text">{n.titulo}</Link>
-                    <time className="ni-trending__time" dateTime={n.fecha} suppressHydrationWarning>{timeAgo(n.fecha)}</time>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+          {/* TABBED WIDGET (Últimas, Populares, Tendencias) */}
+          <TabbedSidebarWidget ultimas={resto.slice(0, 5)} populares={masLeidas} tendencias={resto.slice(5, 10)} />
 
           {/* Radio en vivo */}
           <div className="ni-sidebar__widget ni-widget-compact">
