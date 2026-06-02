@@ -546,7 +546,7 @@ export default function ArticleClient({
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(noticia.titulo);
   const encodedShareCopy = encodeURIComponent(`${noticia.titulo} — ${url}`);
-  const isUpdated = updatedISO && updatedISO !== publishedISO;
+  const isUpdated = false; // Desactivado temporalmente para ocultar fecha de corrección en lote de noticias históricas
 
   return (
     <div suppressHydrationWarning>

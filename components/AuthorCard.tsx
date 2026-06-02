@@ -43,7 +43,7 @@ export default function AuthorCard({
 
   const hasPhoto = finalPhoto && finalPhoto.trim().length > 0;
   const hasSlug = finalSlug && finalSlug.trim().length > 0;
-  const isUpdated = updatedDate && updatedDate !== publishedDate;
+  const isUpdated = false; // Desactivado temporalmente para ocultar fechas de corrección/actualización en lote
 
   const wrapperStyle: React.CSSProperties = {
     display: 'flex',
