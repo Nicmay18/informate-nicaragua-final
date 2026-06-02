@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = 'force-static';
-export const revalidate = 3600; // 1 hour
+export const revalidate = 60; // 1 minute - temporary for quick updates
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
