@@ -2370,7 +2370,9 @@ ${hashtags}`;
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
         const snapshot = await getDocs(query(collection(db, "noticias"), limit(500)));
+        console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+        console.log('[DEBUG] Noticias en array:', noticias.length);
         // Ordenar en cliente para incluir noticias sin campo fecha
         noticias.sort((a, b) => {
           const fa = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
@@ -2378,6 +2380,7 @@ ${hashtags}`;
           return fb - fa;
         });
         if (filtro !== 'todas') noticias = noticias.filter(n => n.categoria === filtro);
+        console.log('[DEBUG] Noticias después de filtro:', noticias.length, 'filtro:', filtro);
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
