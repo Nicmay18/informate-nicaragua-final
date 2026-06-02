@@ -288,17 +288,18 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
     const { adminDb } = await import('./firebase-admin');
     const { Timestamp } = await import('firebase-admin/firestore');
 
-    // 1. Intentar: artículos con vistas reales de los últimos 30 días
-    const cutoff30 = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
-    const snap30 = await adminDb
+    // 1. ÚLTIMOS 7 DÍAS: solo noticias recientes con vistas
+    //    Evita que noticias viejas con vistas acumuladas históricas dominen el ranking
+    const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+    const snap7 = await adminDb
       .collection('noticias')
-      .where('fecha', '>=', cutoff30)
+      .where('fecha', '>=', cutoff7)
       .orderBy('fecha', 'desc')
-      .limit(30)
+      .limit(15)
       .get();
 
-    if (!snap30.empty) {
-      const withViews = snap30.docs
+    if (!snap7.empty) {
+      const withViews = snap7.docs
         .map(mapNoticia)
         .filter(n => (n.vistas ?? 0) >= 1)
         .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
@@ -308,17 +309,18 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       }
     }
 
-    // 2. Fallback: mostrar las noticias más recientes
-    //    (mientras se acumulan vistas reales, esto garantiza contenido fresco)
-    const recentSnap = await adminDb
+    // 2. Fallback: últimos 3 días sin importar vistas (contenido fresco)
+    const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
+    const snap3 = await adminDb
       .collection('noticias')
+      .where('fecha', '>=', cutoff3)
       .orderBy('fecha', 'desc')
       .limit(validatedCount)
       .get();
 
-    if (!recentSnap.empty) return recentSnap.docs.map(mapNoticia);
+    if (!snap3.empty) return snap3.docs.map(mapNoticia);
 
-    // 3. Fallback final: cualquier noticia reciente
+    // 3. Fallback final: noticias más recientes que haya
     const snapAll = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
