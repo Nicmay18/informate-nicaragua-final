@@ -613,6 +613,7 @@
           <div class="card-body">
             <form id="formNoticia" onsubmit="guardarNoticia(event)">
               <input type="hidden" id="noticiaId" value="">
+              <input type="hidden" id="noticiaSlug" value="">
 
               <div class="form-row">
                 <div class="form-group" style="flex: 2;">
@@ -2381,18 +2382,21 @@ ${hashtags}`;
         await cargarUltimasNoticias();
         await cargarEstadisticas();
         
-        // Revalidar la página principal en Vercel para que los cambios se vean al instante
+        // Revalidar en Vercel para que los cambios se vean al instante
         const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
-        if (revalidateToken && noticiaId) {
+        const slugReal = document.getElementById('noticiaSlug').value || slug || noticiaId;
+        if (!revalidateToken) {
+          showToast('Falta token de revalidación. Configuralo en Configuración > Revalidación Vercel para ver los cambios al instante.', 'warning');
+        } else if (noticiaId) {
           try {
             const revalidateRes = await fetch('/api/revalidate', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': revalidateToken },
-              body: JSON.stringify({ type: 'noticia', slug: slug || noticiaId, category: categoria })
+              body: JSON.stringify({ type: 'noticia', slug: slugReal, category: categoria })
             });
-            if (revalidateRes.ok) { showToast('Página principal actualizada', 'success'); }
-            else { showToast('No se pudo revalidar la caché, esperá 1 hora', 'warning'); }
-          } catch (e) { console.error('Revalidate error:', e); }
+            if (revalidateRes.ok) { showToast('Noticia y página principal actualizadas', 'success'); }
+            else { showToast('No se pudo revalidar la caché. Verificá el token en Configuración.', 'warning'); }
+          } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
         }
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
@@ -2465,6 +2469,7 @@ ${hashtags}`;
         if (!docSnap.exists()) { showToast('No encontrada', 'error'); return; }
         const data = docSnap.data();
         document.getElementById('noticiaId').value = id;
+        document.getElementById('noticiaSlug').value = data.slug || '';
         document.getElementById('titulo').value = data.titulo || '';
         document.getElementById('categoria').value = data.categoria || '';
         document.getElementById('departamento').value = data.departamento || 'Managua';
@@ -2607,7 +2612,7 @@ ${hashtags}`;
     }
 
     window.limpiarFormulario = function() {
-      document.getElementById('formNoticia').reset(); document.getElementById('noticiaId').value = ''; clearImage();
+      document.getElementById('formNoticia').reset(); document.getElementById('noticiaId').value = ''; document.getElementById('noticiaSlug').value = ''; clearImage();
       document.getElementById('tituloFormulario').textContent = 'Nueva Noticia';
       document.getElementById('subtituloFormulario').textContent = 'Redacción profesional optimizada para AdSense y SEO.';
       document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span>';
