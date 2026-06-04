@@ -2410,13 +2410,7 @@ ${hashtags}`;
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
-        let q;
-        if (filtro !== 'todas' && filtro !== 'recientes') {
-          q = query(collection(db, "noticias"), where("categoria", "==", filtro));
-        } else {
-          q = collection(db, "noticias");
-        }
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, "noticias"));
         console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         console.log('[DEBUG] Noticias en array:', noticias.length);
@@ -2432,6 +2426,8 @@ ${hashtags}`;
             const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
             return f > hace7Dias;
           });
+        } else if (filtro !== 'todas') {
+          noticias = noticias.filter(n => n.categoria === filtro);
         }
         console.log('[DEBUG] Noticias después de filtro:', noticias.length, 'filtro:', filtro);
         const titleEl = document.getElementById('noticiasCountTitle');
