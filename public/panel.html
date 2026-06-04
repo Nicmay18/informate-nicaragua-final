@@ -899,7 +899,7 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
-          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." oninput="buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
+          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
         <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
@@ -2214,7 +2214,14 @@ ${hashtags}`;
       if (tabElement) tabElement.classList.add('active');
     };
 
-    async function cargarDatosIniciales() { await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]); }
+    async function cargarDatosIniciales() {
+      await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
+      // Event listener para buscador
+      const searchInput = document.getElementById('searchNoticias');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => buscarNoticias(e.target.value));
+      }
+    }
 
     async function cargarEstadisticas() {
       try {
