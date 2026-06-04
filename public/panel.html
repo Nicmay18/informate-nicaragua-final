@@ -2414,7 +2414,7 @@ ${hashtags}`;
         if (filtro !== 'todas' && filtro !== 'recientes') {
           q = query(collection(db, "noticias"), where("categoria", "==", filtro));
         } else {
-          q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+          q = collection(db, "noticias");
         }
         const snapshot = await getDocs(q);
         console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
