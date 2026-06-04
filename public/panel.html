@@ -899,6 +899,7 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
+          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." oninput="buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
         <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
@@ -2480,6 +2481,18 @@ ${hashtags}`;
           container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div><h3>Error renderizando</h3><p>Hay una noticia con caracteres que rompen el HTML. Abre la consola para ver detalles.</p></div>`;
         }
       } catch (error) { showToast('Error cargando noticias', 'error'); }
+    };
+
+    window.buscarNoticias = function(query) {
+      const container = document.getElementById('listaNoticiasCompleta');
+      const items = container.querySelectorAll('.news-item');
+      const q = query.toLowerCase().trim();
+      items.forEach(item => {
+        const titulo = item.querySelector('.news-title')?.textContent.toLowerCase() || '';
+        const categoria = item.querySelector('.news-badge')?.textContent.toLowerCase() || '';
+        const match = titulo.includes(q) || categoria.includes(q);
+        item.style.display = match ? 'flex' : 'none';
+      });
     };
 
     window.cargarNoticiaParaEditar = async function(id) {
