@@ -275,7 +275,7 @@
     /* NEWS LIST */
     .news-list { display: flex; flex-direction: column; }
     .news-item {
-      display: flex; align-items: center; gap: 14px; padding: 14px 20px;
+      display: flex !important; flex-direction: row !important; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
       cursor: pointer; width: 100%; box-sizing: border-box; flex: 0 0 auto;
     }
@@ -901,7 +901,7 @@
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
           <input type="text" id="searchNoticias" placeholder="Buscar noticias..." style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
-        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
+        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto; display: flex; flex-direction: column;"><div class="news-list" id="listaNoticiasCompleta" style="display: flex; flex-direction: column; width: 100%;"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
 
       <!-- REDACCIÓN IA -->
@@ -2559,7 +2559,6 @@ ${hashtags}`;
       showLoading(true, 'Eliminando...');
       try { await deleteDoc(doc(db, "noticias", id)); showToast('Eliminada', 'success'); await cargarNoticias(window.categoriaActiva); await cargarUltimasNoticias(); await cargarEstadisticas(); } catch (error) { showToast('Error: ' + error.message, 'error'); } finally { showLoading(false); }
     };
-    window.buscarNoticias = function(termino) { document.querySelectorAll('.news-item').forEach(item => { const titulo = item.querySelector('.news-title')?.textContent?.toLowerCase() || ''; item.style.display = titulo.includes(termino.toLowerCase()) ? 'flex' : 'none'; }); };
     window.filtrarNoticias = function(categoria, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); window.categoriaActiva = categoria; cargarNoticias(categoria); };
     window.filtrarPorCategoria = function(categoria) { showTab('noticias-tab', document.querySelectorAll('.nav-link')[2]); setTimeout(() => { document.querySelectorAll('.filter-btn').forEach(btn => { if (btn.textContent.includes(categoria)) btn.click(); }); }, 100); };
 
