@@ -273,11 +273,11 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: flex !important; flex-direction: column !important; width: 100% !important; }
+    .news-list { display: block !important; width: 100% !important; }
     .news-item {
-      display: flex !important; flex-direction: row !important; align-items: center; gap: 14px; padding: 14px 20px;
+      display: flex !important; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
-      cursor: pointer; width: 100%; box-sizing: border-box; flex: 0 0 auto;
+      cursor: pointer; width: 100%; box-sizing: border-box;
     }
     .news-item:hover { background: var(--gray-50); }
     .news-thumb { width: 72px; height: 54px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200); }
@@ -311,8 +311,8 @@
     .filter-btn.active { background: white; color: var(--primary-700); box-shadow: var(--shadow-sm); }
 
     /* TABS */
-    .tab-content { display: none; animation: fadeIn 0.3s ease; }
-    .tab-content.active { display: block; }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; width: 100%; }
+    .tab-content.active { display: block !important; width: 100% !important; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* GUIDES */
@@ -898,9 +898,9 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
-          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
+          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." oninput="window.buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
-        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto; display: flex; flex-direction: column;"><div class="news-list" id="listaNoticiasCompleta" style="display: flex; flex-direction: column; width: 100%;"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
+        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto; display: flex; flex-direction: column; width: 100%; max-width: none;"><div class="news-list" id="listaNoticiasCompleta" style="display: flex; flex-direction: column; width: 100%; max-width: none;"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
 
       <!-- REDACCIÓN IA -->
@@ -2215,11 +2215,6 @@ ${hashtags}`;
 
     async function cargarDatosIniciales() {
       await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
-      // Event listener para buscador
-      const searchInput = document.getElementById('searchNoticias');
-      if (searchInput) {
-        searchInput.addEventListener('input', (e) => buscarNoticias(e.target.value));
-      }
     }
 
     async function cargarEstadisticas() {
