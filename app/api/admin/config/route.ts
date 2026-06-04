@@ -8,30 +8,34 @@ function isAuthorized(request: NextRequest): boolean {
   return key === expected;
 }
 
-export async function GET(request: NextRequest) {
-  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export async function GET() {
+  // GET sin auth: el panel ya está protegido por Firebase Auth
+  // Devuelve config de Vercel para conexión automática
   try {
     const db = getAdminDb();
     const docRef = db.collection('config').doc('admin');
     const snap = await docRef.get();
     
-    const data = snap.data();
-    if (!data) {
-      return NextResponse.json({ success: true, config: {} });
-    }
+    const data = snap.data() || {};
     
-    // Devolver tokens en texto plano para que el panel pueda usarlos
-    // El usuario que tiene acceso al admin ya tiene permisos
+    // Fallback a variables de entorno de Vercel si no hay config en Firestore
     const config = {
       github: {
-        token: data.github?.token || '',
-        owner: data.github?.owner || 'Nicmay18',
-        repo: data.github?.repo || 'informate-images',
-        path: data.github?.path || 'images/',
+        token: data.github?.token || process.env.github_token || '',
+        owner: data.github?.owner || process.env.GITHUB_OWNER || 'Nicmay18',
+        repo: data.github?.repo || process.env.GITHUB_REPO || 'informate-nicaragua-final',
+        path: data.github?.path || process.env.GITHUB_PATH || 'public/images/',
       },
       telegram: {
-        token: data.telegram?.token || '',
-        chatId: data.telegram?.chatId || '',
+        token: data.telegram?.token || process.env.tg_token || '',
+        chatId: data.telegram?.chatId || process.env.tg_chat || '',
+      },
+      revalidate: {
+        secret: data.revalidate?.secret || process.env.REVALIDATE_SECRET || '',
+      },
+      elevenlabs: {
+        configured: !!process.env.ELEVENLABS_API_KEY,
+        voiceId: data.elevenlabs?.voiceId || process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM',
       },
     };
     

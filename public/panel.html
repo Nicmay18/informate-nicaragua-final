@@ -2774,16 +2774,30 @@ ${hashtags}`;
 
     window.cargarConfiguracion = async function() {
       try {
+        // 1. Intentar obtener config de Vercel (env vars) via API primero
+        let vercelConfig = null;
+        try {
+          const res = await fetch('/api/admin/config');
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success && json.config) vercelConfig = json.config;
+          }
+        } catch (apiErr) {
+          console.warn('API config no disponible, usando Firestore/localStorage', apiErr);
+        }
+
+        // 2. Fallback a Firestore config/admin
         const docRef = doc(db, 'config', 'admin');
         const snap = await getDoc(docRef);
         const data = snap.exists() ? snap.data() : {};
         
-        const githubToken = data.github?.token || localStorage.getItem('admin_github_token') || '';
-        const githubOwner = data.github?.owner || localStorage.getItem('admin_github_owner') || 'Nicmay18';
-        const githubRepo = data.github?.repo || localStorage.getItem('admin_github_repo') || 'informate-images';
-        const githubPath = data.github?.path || localStorage.getItem('admin_github_path') || 'images/';
-        const tgToken = data.telegram?.token || localStorage.getItem('admin_tg_token') || '';
-        const tgChat = data.telegram?.chatId || localStorage.getItem('admin_tg_chat') || '';
+        const githubToken = vercelConfig?.github?.token || data.github?.token || localStorage.getItem('admin_github_token') || '';
+        const githubOwner = vercelConfig?.github?.owner || data.github?.owner || localStorage.getItem('admin_github_owner') || 'Nicmay18';
+        const githubRepo = vercelConfig?.github?.repo || data.github?.repo || localStorage.getItem('admin_github_repo') || 'informate-images';
+        const githubPath = vercelConfig?.github?.path || data.github?.path || localStorage.getItem('admin_github_path') || 'images/';
+        const tgToken = vercelConfig?.telegram?.token || data.telegram?.token || localStorage.getItem('admin_tg_token') || '';
+        const tgChat = vercelConfig?.telegram?.chatId || data.telegram?.chatId || localStorage.getItem('admin_tg_chat') || '';
+        const revalidateToken = vercelConfig?.revalidate?.secret || data.revalidate?.secret || localStorage.getItem('admin_revalidate_token') || '';
         
         // Guardar en localStorage para que las funciones existentes funcionen
         localStorage.setItem('admin_github_token', githubToken);
@@ -2792,6 +2806,7 @@ ${hashtags}`;
         localStorage.setItem('admin_github_path', githubPath);
         localStorage.setItem('admin_tg_token', tgToken);
         localStorage.setItem('admin_tg_chat', tgChat);
+        localStorage.setItem('admin_revalidate_token', revalidateToken);
         
         // Facebook config (se mantiene en localStorage por ahora)
         const fbPage1Id = localStorage.getItem('admin_fb_page1_id') || '';
@@ -2810,7 +2825,6 @@ ${hashtags}`;
         const page2IdInput = document.getElementById('configFbPage2Id');
         const page2TokenInput = document.getElementById('configFbPage2Token');
         const revalidateInput = document.getElementById('configRevalidateToken');
-        const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
         
         if (githubTokenInput) githubTokenInput.value = githubToken;
         if (revalidateInput) revalidateInput.value = revalidateToken;
@@ -2823,11 +2837,17 @@ ${hashtags}`;
         if (page1TokenInput) page1TokenInput.value = fbPage1Token;
         if (page2IdInput) page2IdInput.value = fbPage2Id;
         if (page2TokenInput) page2TokenInput.value = fbPage2Token;
+        
+        // Mostrar indicadores de que la config vino de Vercel
+        if (vercelConfig) {
+          if (githubToken) { const el = document.getElementById('statusGithub'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
+          if (tgToken) { const el = document.getElementById('statusTelegramConfig'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
+          if (revalidateToken) { const el = document.getElementById('statusVercel'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
+        }
       } catch (err) {
         console.error('Error cargando configuración:', err);
-        // Fallback a localStorage si falla la API
+        // Fallback a localStorage si falla todo
         const githubToken = localStorage.getItem('admin_github_token') || '';
-        const githubOwner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
         const tgToken = localStorage.getItem('admin_tg_token') || '';
         const tgChat = localStorage.getItem('admin_tg_chat') || '';
         const githubTokenInput = document.getElementById('configGithubToken');
