@@ -2442,7 +2442,8 @@ ${hashtags}`;
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
-        container.innerHTML = noticias.map(n => {
+        try {
+          const html = noticias.map(n => {
           const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
           const esReciente = f > hace7Dias;
           const tituloSafe = (n.titulo || '(Sin título)').replace(/'/g, "\\'").replace(/"/g, '\\"');
@@ -2469,9 +2470,15 @@ ${hashtags}`;
           </div>
         `;
         }).join('');
-        // Forzar scroll en el contenedor padre
+        console.log('[DEBUG] HTML generado, longitud:', html.length);
+        container.innerHTML = html;
+        // Permitir scroll natural sin altura forzada
         const cardBody = container.parentElement;
-        if (cardBody) { cardBody.style.maxHeight = (window.innerHeight * 0.65) + 'px'; cardBody.style.overflowY = 'auto'; }
+        if (cardBody) { cardBody.style.maxHeight = 'none'; cardBody.style.overflowY = 'auto'; }
+        } catch (renderErr) {
+          console.error('[DEBUG] Error renderizando noticias:', renderErr);
+          container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div><h3>Error renderizando</h3><p>Hay una noticia con caracteres que rompen el HTML. Abre la consola para ver detalles.</p></div>`;
+        }
       } catch (error) { showToast('Error cargando noticias', 'error'); }
     };
 
