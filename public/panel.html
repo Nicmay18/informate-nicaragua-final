@@ -2410,7 +2410,7 @@ ${hashtags}`;
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
-        const snapshot = await getDocs(query(collection(db, "noticias"), limit(500)));
+        const snapshot = await getDocs(query(collection(db, "noticias"), orderBy("fecha", "desc"), limit(500)));
         console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         console.log('[DEBUG] Noticias en array:', noticias.length);
