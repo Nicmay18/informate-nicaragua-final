@@ -2412,7 +2412,7 @@ ${hashtags}`;
       try {
         let q;
         if (filtro !== 'todas' && filtro !== 'recientes') {
-          q = query(collection(db, "noticias"), where("categoria", "==", filtro), orderBy("fecha", "desc"), limit(500));
+          q = query(collection(db, "noticias"), where("categoria", "==", filtro));
         } else {
           q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
         }
