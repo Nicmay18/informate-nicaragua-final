@@ -2420,6 +2420,9 @@ ${hashtags}`;
         console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         console.log('[DEBUG] Noticias en array:', noticias.length);
+        // DEBUG: buscar noticia especifica
+        const caponera = noticias.find(n => n.id === 'DSupNkyxXjdYohRW1EHS');
+        console.log('[DEBUG] Caponera en array?', !!caponera, caponera ? caponera.titulo : 'NO');
         // Ordenar en cliente para incluir noticias sin campo fecha
         noticias.sort((a, b) => {
           const fa = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
@@ -2442,20 +2445,24 @@ ${hashtags}`;
         container.innerHTML = noticias.map(n => {
           const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
           const esReciente = f > hace7Dias;
+          const tituloSafe = (n.titulo || '(Sin título)').replace(/'/g, "\\'").replace(/"/g, '\\"');
+          const slugSafe = (n.slug || '').replace(/'/g, "\\'").replace(/"/g, '\\"');
+          const resumenSafe = (n.resumen || '').replace(/'/g, "\\'").replace(/"/g, '\\"');
+          const categoriaSafe = (n.categoria || '—').replace(/'/g, "\\'").replace(/"/g, '\\"');
           return `
           <div class="news-item" data-id="${n.id}">
             <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
             <div class="news-content">
-              <div class="news-title">${n.titulo || '(Sin título)'}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
+              <div class="news-title">${tituloSafe}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
               <div class="news-meta">
-                <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
+                <span class="news-badge badge-${slugCategoria(n.categoria)}">${categoriaSafe}</span>
                 <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
                 <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
                 ${n.destacada ? '<span style="color: var(--warning);"><i class="fas fa-star"></i></span>' : ''}
               </div>
             </div>
             <div class="news-actions">
-              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${(n.titulo || '').replace(/'/g, "\\'")}', '${(n.resumen || '').replace(/'/g, "\\'")}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
+              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${slugSafe}', '${tituloSafe}', '${resumenSafe}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
               <button class="btn-icon edit" onclick="cargarNoticiaParaEditar('${n.id}')" data-tooltip="Editar"><i class="fas fa-edit"></i></button>
               <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
             </div>
@@ -2786,10 +2793,15 @@ ${hashtags}`;
           console.warn('API config no disponible, usando Firestore/localStorage', apiErr);
         }
 
-        // 2. Fallback a Firestore config/admin
-        const docRef = doc(db, 'config', 'admin');
-        const snap = await getDoc(docRef);
-        const data = snap.exists() ? snap.data() : {};
+        // 2. Fallback a Firestore config/admin (silencioso si no hay permisos)
+        let data = {};
+        try {
+          const docRef = doc(db, 'config', 'admin');
+          const snap = await getDoc(docRef);
+          if (snap.exists()) data = snap.data();
+        } catch (fsErr) {
+          // Sin permisos o offline, seguimos con localStorage
+        }
         
         const githubToken = vercelConfig?.github?.token || data.github?.token || localStorage.getItem('admin_github_token') || '';
         const githubOwner = vercelConfig?.github?.owner || data.github?.owner || localStorage.getItem('admin_github_owner') || 'Nicmay18';
