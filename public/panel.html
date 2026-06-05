@@ -273,12 +273,12 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: block !important; width: 100% !important; clear: both !important; }
+    .news-list { display: flex !important; flex-direction: column !important; width: 100% !important; }
     .news-item {
-      display: flex !important; align-items: center; gap: 14px; padding: 14px 20px;
+      display: flex !important; flex-direction: row !important; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
       cursor: pointer; width: 100% !important; max-width: 100% !important; box-sizing: border-box;
-      clear: both !important; float: none !important;
+      flex: 0 0 auto !important;
     }
     .news-item:hover { background: var(--gray-50); }
     .news-thumb { width: 72px; height: 54px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200); }
@@ -899,7 +899,7 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
-          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
+          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
         <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
@@ -2482,6 +2482,15 @@ ${hashtags}`;
         }).join('');
         console.log('[DEBUG] HTML generado, longitud:', html.length);
         container.innerHTML = html;
+        // Forzar layout vertical
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.querySelectorAll('.news-item').forEach(el => {
+          el.style.display = 'flex';
+          el.style.flexDirection = 'row';
+          el.style.width = '100%';
+          el.style.flex = '0 0 auto';
+        });
         // Permitir scroll natural sin altura forzada
         const cardBody = container.parentElement;
         if (cardBody) { cardBody.style.maxHeight = 'none'; cardBody.style.overflowY = 'auto'; }
