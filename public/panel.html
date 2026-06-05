@@ -2485,15 +2485,21 @@ ${hashtags}`;
     };
 
     window.buscarNoticias = function(query) {
+      console.log('[BUSCADOR] Buscando:', query);
       const container = document.getElementById('listaNoticiasCompleta');
+      if (!container) { console.error('[BUSCADOR] No se encontró contenedor listaNoticiasCompleta'); return; }
       const items = container.querySelectorAll('.news-item');
+      console.log('[BUSCADOR] Items encontrados:', items.length);
       const q = query.toLowerCase().trim();
+      let visibleCount = 0;
       items.forEach(item => {
         const titulo = item.querySelector('.news-title')?.textContent.toLowerCase() || '';
         const categoria = item.querySelector('.news-badge')?.textContent.toLowerCase() || '';
         const match = titulo.includes(q) || categoria.includes(q);
         item.style.display = match ? 'flex' : 'none';
+        if (match) visibleCount++;
       });
+      console.log('[BUSCADOR] Items visibles:', visibleCount);
     };
 
     window.cargarNoticiaParaEditar = async function(id) {
