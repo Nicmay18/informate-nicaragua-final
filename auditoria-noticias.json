@@ -1382,35 +1382,30 @@
     "id": "Bd0FR40BQL9MYKXutpSr",
     "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
     "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en dispositivos en Nicaragua",
-    "palabras": 521,
+    "palabras": 734,
     "score": 35,
     "nivel": "🔴 PELIGRO",
     "densidad": 0,
-    "relleno": 1,
+    "relleno": 0,
     "transiciones_ia": 1,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 4,
+    "contexto_local": 3,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 4,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "amado",
-          "contexto": "PI funciona mediante clavesde acceso que los programadores pueden solicitar directamente desde la pl"
-        }
-      ],
+      "relleno": [],
       "transiciones": [
         {
-          "transicion": "no obstante",
+          "transicion": "sin embargo",
           "cantidad": 1
         }
       ],
@@ -1420,8 +1415,7 @@
       "lugares": [
         "managua",
         "león",
-        "granada",
-        "san juan del sur"
+        "granada"
       ]
     },
     "publicado": true
@@ -4082,12 +4076,12 @@
     "id": "XTONg1lOfMlV1gNfMSm7",
     "slug": "policia-decomisa-mercaderia-en-operativo-de-penas-blancas",
     "titulo": "Ocho capturados y decomiso de drogas y armas en operativo en Peñas Blancas, Costa Rica",
-    "palabras": 577,
-    "score": 25,
+    "palabras": 624,
+    "score": 40,
     "nivel": "🔴 PELIGRO",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -4103,12 +4097,7 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -4387,12 +4376,12 @@
     "id": "aNWsSWkbLlE6FiLkVqmF",
     "slug": "miel-san-marcos-realiza-concierto-en-centro-de-rehabilitacion",
     "titulo": "Miel San Marcos realiza concierto en centro de rehabilitación",
-    "palabras": 625,
-    "score": 30,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
+    "palabras": 615,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.3,
     "relleno": 0,
-    "transiciones_ia": 2,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -4400,7 +4389,7 @@
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
-      "fechas": 1,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 2,
@@ -4408,16 +4397,7 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        },
-        {
-          "transicion": "por su parte",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -5315,12 +5295,12 @@
     "id": "iowQzBgiwSPPXCC4EsJD",
     "slug": "como-sacar-y-apostillar-record-policial-de-nicaragua",
     "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
-    "palabras": 781,
-    "score": 30,
+    "palabras": 733,
+    "score": 35,
     "nivel": "🔴 PELIGRO",
     "densidad": 0,
-    "relleno": 0,
-    "transiciones_ia": 2,
+    "relleno": 1,
+    "transiciones_ia": 1,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -5335,12 +5315,13 @@
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [],
-      "transiciones": [
+      "relleno": [
         {
-          "transicion": "no obstante",
-          "cantidad": 1
-        },
+          "frase": "querido",
+          "contexto": "umento oficial emitido por la Policía Nacional, requerido en trámites migratorios, laborales y legal"
+        }
+      ],
+      "transiciones": [
         {
           "transicion": "sin embargo",
           "cantidad": 1
@@ -6350,37 +6331,39 @@
     "id": "sH5OCUULzSvZFhRcHXzb",
     "slug": "seis-policias-mueren-en-operativo-antidrogas-en-honduras",
     "titulo": "Seis policías mueren en operativo antidrogas en Honduras",
-    "palabras": 457,
-    "score": 30,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
+    "palabras": 698,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.3,
     "relleno": 1,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
-      "fechas": 1,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [
         {
           "frase": "amado",
-          "contexto": "dos fue identificado el subcomisario Lester Josué Amador Herrera, según datos divulgados por la Poli"
+          "contexto": "intervenido.</p>\n\n<p>El subcomisario Lester Josué Amador Herrera fue confirmado entre los fallecidos"
         }
       ],
       "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
