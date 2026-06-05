@@ -1659,23 +1659,23 @@
     "id": "D5bci9JLyako7ccewIGc",
     "slug": "policia-costarricense-investiga-caso-de-violencia",
     "titulo": "Policía costarricense investiga caso de violencia",
-    "palabras": 553,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
+    "palabras": 529,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.8,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 3,
     "datos_concretos": {
-      "edades": 0,
-      "horas": 0,
+      "edades": 2,
+      "horas": 1,
       "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
@@ -1686,7 +1686,11 @@
       ],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua",
+        "ciudad sandino",
+        "mateare"
+      ]
     },
     "publicado": true
   },
@@ -3127,7 +3131,7 @@
     "id": "PCNXb9Gqsio9AzUetMQJ",
     "slug": "consulado-gestiona-caso-de-connacional-en-puntarenas",
     "titulo": "Nicaragüense muere en riña dentro de cárcel de Puntarenas, Costa Rica",
-    "palabras": 668,
+    "palabras": 453,
     "score": 40,
     "nivel": "🔴 PELIGRO",
     "densidad": 0,
@@ -3136,23 +3140,29 @@
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 3,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
       "transiciones": [],
-      "fuentesGenericas": [],
+      "fuentesGenericas": [
+        "hasta el cierre"
+      ],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua",
+        "tipitapa",
+        "ciudad sandino"
+      ]
     },
     "publicado": true
   },
@@ -6909,9 +6919,9 @@
     "id": "y3wh5fh7uBD2Rhc5EjBO",
     "slug": "dos-personas-mueren-ahogadas-en-tipitapa-y-rivas-este-fin-de-semana-mpu2iuqu",
     "titulo": "Dos personas mueren ahogadas en Managua y Rivas durante el fin de semana",
-    "palabras": 498,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 568,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
     "transiciones_ia": 0,
@@ -6983,10 +6993,10 @@
     "id": "yCN8IBbWL1xxPvNhJqTx",
     "slug": "justicia-en-siuna-cae-sujeto-que-mato-a-joven-con-una-piocha",
     "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
-    "palabras": 473,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 1.1,
+    "palabras": 500,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 1,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
