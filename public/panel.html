@@ -273,9 +273,9 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: block !important; width: 100% !important; }
+    .news-list { display: block; width: 100%; }
     .news-item {
-      display: flex !important; align-items: center; gap: 14px; padding: 14px 20px;
+      display: flex; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
       cursor: pointer; width: 100%; box-sizing: border-box;
     }
@@ -898,9 +898,9 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
-          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." oninput="window.buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
+          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
-        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto; display: flex; flex-direction: column; width: 100%; max-width: none;"><div class="news-list" id="listaNoticiasCompleta" style="display: flex; flex-direction: column; width: 100%; max-width: none;"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
+        <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
 
       <!-- REDACCIÓN IA -->
@@ -2215,6 +2215,13 @@ ${hashtags}`;
 
     async function cargarDatosIniciales() {
       await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
+      const searchInput = document.getElementById('searchNoticias');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          console.log('[BUSCADOR] input:', e.target.value);
+          buscarNoticias(e.target.value);
+        });
+      }
     }
 
     async function cargarEstadisticas() {
