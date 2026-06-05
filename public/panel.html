@@ -2457,52 +2457,94 @@ ${hashtags}`;
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
-        const htmlParts = [];
+        // Renderizado con DOM API para evitar problemas de HTML parsing
+        container.innerHTML = '';
         let erroresRender = 0;
         noticias.forEach(n => {
           try {
             const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
             const esReciente = f > hace7Dias;
-            const esc = (str) => (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-            const tituloEsc = esc(n.titulo || '(Sin título)');
-            const slugEsc = esc(n.slug || '');
-            const resumenEsc = esc(n.resumen || '');
-            const categoriaEsc = esc(n.categoria || '—');
-            htmlParts.push(`
-            <div class="news-item" data-id="${n.id}">
-              <img src="${esc(n.imagen) || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
-              <div class="news-content">
-                <div class="news-title">${tituloEsc}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
-                <div class="news-meta">
-                  <span class="news-badge badge-${slugCategoria(n.categoria)}">${categoriaEsc}</span>
-                  <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
-                  <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
-                  ${n.destacada ? '<span style="color: var(--warning);"><i class="fas fa-star"></i></span>' : ''}
-                </div>
-              </div>
-              <div class="news-actions">
-                <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${slugEsc}', '${tituloEsc}', '${resumenEsc}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
-                <button class="btn-icon edit" onclick="cargarNoticiaParaEditar('${n.id}')" data-tooltip="Editar"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
-          `);
+            // Crear elemento
+            const item = document.createElement('div');
+            item.className = 'news-item';
+            item.setAttribute('data-id', n.id);
+            item.style.cssText = 'display: flex !important; flex-direction: row !important; width: 100% !important; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; box-sizing: border-box;';
+            // Imagen
+            const img = document.createElement('img');
+            img.src = n.imagen || 'https://picsum.photos/seed/10/80/60';
+            img.className = 'news-thumb';
+            img.alt = '';
+            img.onerror = function() { this.src = 'https://picsum.photos/seed/10/80/60'; };
+            img.style.cssText = 'width: 72px; height: 54px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200);';
+            item.appendChild(img);
+            // Contenido
+            const content = document.createElement('div');
+            content.style.cssText = 'flex: 1; min-width: 0;';
+            // Título
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'news-title';
+            titleDiv.style.cssText = 'font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px;';
+            titleDiv.textContent = (n.titulo || '(Sin título)') + (esReciente ? ' ●' : '');
+            content.appendChild(titleDiv);
+            // Meta
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'news-meta';
+            metaDiv.style.cssText = 'display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-500);';
+            // Badge
+            const badge = document.createElement('span');
+            badge.className = 'news-badge badge-' + slugCategoria(n.categoria);
+            badge.textContent = n.categoria || '—';
+            metaDiv.appendChild(badge);
+            // Palabras
+            const wordsSpan = document.createElement('span');
+            wordsSpan.innerHTML = '<i class="fas fa-font" style="margin-right:4px;"></i>' + (n.palabras || 0) + ' pal.';
+            metaDiv.appendChild(wordsSpan);
+            // Fecha
+            const fechaSpan = document.createElement('span');
+            fechaSpan.innerHTML = '<i class="fas fa-clock" style="margin-right:4px;"></i>' + formatearFecha(n.fecha);
+            metaDiv.appendChild(fechaSpan);
+            // Destacada
+            if (n.destacada) {
+              const starSpan = document.createElement('span');
+              starSpan.style.color = 'var(--warning)';
+              starSpan.innerHTML = '<i class="fas fa-star"></i>';
+              metaDiv.appendChild(starSpan);
+            }
+            content.appendChild(metaDiv);
+            item.appendChild(content);
+            // Acciones
+            const actions = document.createElement('div');
+            actions.className = 'news-actions';
+            actions.style.cssText = 'display: flex; gap: 6px;';
+            // Botón compartir
+            const btnShare = document.createElement('button');
+            btnShare.className = 'btn-icon share';
+            btnShare.innerHTML = '<i class="fas fa-share-alt"></i>';
+            btnShare.title = 'Copiar para redes';
+            btnShare.onclick = function() { copiarParaRedes(n.id, n.slug || '', n.titulo || '', n.resumen || ''); };
+            actions.appendChild(btnShare);
+            // Botón editar
+            const btnEdit = document.createElement('button');
+            btnEdit.className = 'btn-icon edit';
+            btnEdit.innerHTML = '<i class="fas fa-edit"></i>';
+            btnEdit.title = 'Editar';
+            btnEdit.onclick = function() { cargarNoticiaParaEditar(n.id); };
+            actions.appendChild(btnEdit);
+            // Botón eliminar
+            const btnDelete = document.createElement('button');
+            btnDelete.className = 'btn-icon delete';
+            btnDelete.innerHTML = '<i class="fas fa-trash"></i>';
+            btnDelete.title = 'Eliminar';
+            btnDelete.onclick = function() { eliminarNoticia(n.id); };
+            actions.appendChild(btnDelete);
+            item.appendChild(actions);
+            container.appendChild(item);
           } catch (itemErr) {
             erroresRender++;
             console.error('[DEBUG] Error renderizando noticia', n.id, itemErr);
           }
         });
-        console.log('[DEBUG] Noticias renderizadas:', htmlParts.length, 'Errores:', erroresRender);
-        container.innerHTML = htmlParts.join('');
-        // Forzar layout vertical
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.querySelectorAll('.news-item').forEach(el => {
-          el.style.display = 'flex';
-          el.style.flexDirection = 'row';
-          el.style.width = '100%';
-          el.style.flex = '0 0 auto';
-        });
+        console.log('[DEBUG] Noticias renderizadas:', container.children.length, 'Errores:', erroresRender);
         // Permitir scroll natural sin altura forzada
         const cardBody = container.parentElement;
         if (cardBody) { cardBody.style.maxHeight = 'none'; cardBody.style.overflowY = 'auto'; }
