@@ -2452,36 +2452,43 @@ ${hashtags}`;
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
-        try {
-          const html = noticias.map(n => {
-          const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
-          const esReciente = f > hace7Dias;
-          const tituloSafe = (n.titulo || '(Sin título)').replace(/'/g, "\\'").replace(/"/g, '\\"');
-          const slugSafe = (n.slug || '').replace(/'/g, "\\'").replace(/"/g, '\\"');
-          const resumenSafe = (n.resumen || '').replace(/'/g, "\\'").replace(/"/g, '\\"');
-          const categoriaSafe = (n.categoria || '—').replace(/'/g, "\\'").replace(/"/g, '\\"');
-          return `
-          <div class="news-item" data-id="${n.id}">
-            <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
-            <div class="news-content">
-              <div class="news-title">${tituloSafe}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
-              <div class="news-meta">
-                <span class="news-badge badge-${slugCategoria(n.categoria)}">${categoriaSafe}</span>
-                <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
-                <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
-                ${n.destacada ? '<span style="color: var(--warning);"><i class="fas fa-star"></i></span>' : ''}
+        const htmlParts = [];
+        let erroresRender = 0;
+        noticias.forEach(n => {
+          try {
+            const f = n.fecha?.toMillis ? n.fecha.toMillis() : (n.fecha ? new Date(n.fecha).getTime() : 0);
+            const esReciente = f > hace7Dias;
+            const esc = (str) => (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+            const tituloEsc = esc(n.titulo || '(Sin título)');
+            const slugEsc = esc(n.slug || '');
+            const resumenEsc = esc(n.resumen || '');
+            const categoriaEsc = esc(n.categoria || '—');
+            htmlParts.push(`
+            <div class="news-item" data-id="${n.id}">
+              <img src="${esc(n.imagen) || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
+              <div class="news-content">
+                <div class="news-title">${tituloEsc}${esReciente ? ' <span class="recent-dot" title="Editada recientemente"></span>' : ''}</div>
+                <div class="news-meta">
+                  <span class="news-badge badge-${slugCategoria(n.categoria)}">${categoriaEsc}</span>
+                  <span><i class="fas fa-font" style="margin-right:4px;"></i>${n.palabras || 0} pal.</span>
+                  <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
+                  ${n.destacada ? '<span style="color: var(--warning);"><i class="fas fa-star"></i></span>' : ''}
+                </div>
+              </div>
+              <div class="news-actions">
+                <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${slugEsc}', '${tituloEsc}', '${resumenEsc}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
+                <button class="btn-icon edit" onclick="cargarNoticiaParaEditar('${n.id}')" data-tooltip="Editar"><i class="fas fa-edit"></i></button>
+                <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
               </div>
             </div>
-            <div class="news-actions">
-              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${slugSafe}', '${tituloSafe}', '${resumenSafe}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
-              <button class="btn-icon edit" onclick="cargarNoticiaParaEditar('${n.id}')" data-tooltip="Editar"><i class="fas fa-edit"></i></button>
-              <button class="btn-icon delete" onclick="eliminarNoticia('${n.id}')" data-tooltip="Eliminar"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        `;
-        }).join('');
-        console.log('[DEBUG] HTML generado, longitud:', html.length);
-        container.innerHTML = html;
+          `);
+          } catch (itemErr) {
+            erroresRender++;
+            console.error('[DEBUG] Error renderizando noticia', n.id, itemErr);
+          }
+        });
+        console.log('[DEBUG] Noticias renderizadas:', htmlParts.length, 'Errores:', erroresRender);
+        container.innerHTML = htmlParts.join('');
         // Forzar layout vertical
         container.style.display = 'flex';
         container.style.flexDirection = 'column';
@@ -2500,10 +2507,6 @@ ${hashtags}`;
           searchInput.removeEventListener('input', window._buscarHandler);
           window._buscarHandler = (e) => buscarNoticias(e.target.value);
           searchInput.addEventListener('input', window._buscarHandler);
-        }
-        } catch (renderErr) {
-          console.error('[DEBUG] Error renderizando noticias:', renderErr);
-          container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div><h3>Error renderizando</h3><p>Hay una noticia con caracteres que rompen el HTML. Abre la consola para ver detalles.</p></div>`;
         }
       } catch (error) { showToast('Error cargando noticias', 'error'); }
     };
