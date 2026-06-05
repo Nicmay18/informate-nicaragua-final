@@ -917,37 +917,36 @@
     "id": "9YSrsEdWBiO9Uu1CV8u6",
     "slug": "australia-7-de-cada-10-menores-burlan-prohibicion-de-redes",
     "titulo": "Australia: el 70% de los menores evade restricciones en redes sociales",
-    "palabras": 600,
-    "score": 25,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.7,
+    "palabras": 617,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.6,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 3,
     "datos_concretos": {
       "edades": 4,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua",
+        "león",
+        "matagalpa"
+      ]
     },
     "publicado": true
   },
@@ -5012,40 +5011,34 @@
     "id": "fIgt55qqhg6ysMQHEsl4",
     "slug": "joao-fonseca-remonta-dos-sets-y-elimina-a-djokovic-en-roland-garros-mprxw6qx",
     "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland Garros",
-    "palabras": 478,
-    "score": 5,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
-    "relleno": 0,
-    "transiciones_ia": 3,
-    "fuentes_atribuidas": 0,
+    "palabras": 653,
+    "score": 55,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.5,
+    "relleno": 1,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 1,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 0,
     "datos_concretos": {
-      "edades": 1,
+      "edades": 2,
       "horas": 0,
-      "fechas": 0,
+      "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 0,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [],
-      "transiciones": [
+      "relleno": [
         {
-          "transicion": "además",
-          "cantidad": 2
-        },
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
+          "frase": "amado",
+          "contexto": " en superficie de arcilla. El encuentro está programado dentro del calendario oficial del torneo en "
         }
       ],
-      "fuentesGenericas": [
-        "hasta el momento"
-      ],
+      "transiciones": [],
+      "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": []
