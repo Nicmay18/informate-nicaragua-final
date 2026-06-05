@@ -995,14 +995,14 @@
     "id": "9nnYjOtCUS1HnZteGuf3",
     "slug": "abril-registra-70-accidentes-de-transito-en-nicaragua",
     "titulo": "Abril registra 70 accidentes de tránsito en Nicaragua",
-    "palabras": 631,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 1,
-    "relleno": 3,
-    "transiciones_ia": 3,
+    "palabras": 787,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.8,
+    "relleno": 0,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
-    "citas": 1,
+    "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 13,
     "datos_concretos": {
@@ -1015,34 +1015,8 @@
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "tragedia",
-          "contexto": "nto de Managua continúa siendo el epicentro de la tragedia vial con 14 fallecidos, cifra impulsada p"
-        },
-        {
-          "frase": "dolor",
-          "contexto": "s y desarrollo futuro</h2>\n\n<p>Además, destaca la dolorosa cifra de ocho menores de edad que perdier"
-        },
-        {
-          "frase": "dolorosa",
-          "contexto": "s y desarrollo futuro</h2>\n\n<p>Además, destaca la dolorosa cifra de ocho menores de edad que perdier"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        },
-        {
-          "transicion": "por su parte",
-          "cantidad": 1
-        },
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -1382,12 +1356,12 @@
     "id": "Bd0FR40BQL9MYKXutpSr",
     "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
     "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en dispositivos en Nicaragua",
-    "palabras": 734,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 831,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -1403,12 +1377,7 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -1515,13 +1484,13 @@
     "id": "C1UJ83ospxOXOtNGLwgr",
     "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua-mprx2mdt",
     "titulo": "Dos obreros mueren y otros dos resultan heridos en accidentes laboral",
-    "palabras": 794,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.4,
+    "palabras": 805,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.5,
     "relleno": 0,
     "transiciones_ia": 1,
-    "fuentes_atribuidas": 0,
+    "fuentes_atribuidas": 2,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 6,
@@ -1530,7 +1499,7 @@
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
-      "cantidades": 0,
+      "cantidades": 1,
       "lugares": 6,
       "nombres_completos": 0
     },
@@ -1543,7 +1512,7 @@
         }
       ],
       "fuentesGenericas": [
-        "hasta el momento"
+        "hasta el cierre"
       ],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -1690,10 +1659,10 @@
     "id": "D5bci9JLyako7ccewIGc",
     "slug": "policia-costarricense-investiga-caso-de-violencia",
     "titulo": "Policía costarricense investiga caso de violencia",
-    "palabras": 594,
+    "palabras": 553,
     "score": 40,
     "nivel": "🔴 PELIGRO",
-    "densidad": 0,
+    "densidad": 0.2,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
@@ -1703,7 +1672,7 @@
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
-      "fechas": 0,
+      "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 0,
@@ -1712,7 +1681,9 @@
     "detalle": {
       "relleno": [],
       "transiciones": [],
-      "fuentesGenericas": [],
+      "fuentesGenericas": [
+        "hasta el cierre"
+      ],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": []
@@ -1758,37 +1729,34 @@
     "id": "DlEsvr8msov0zXZiUSfP",
     "slug": "florinda-meza-revela-secreto-a-angela-aguilar-para-un-amor-eterno",
     "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
-    "palabras": 643,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 691,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
-    "citas": 5,
+    "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "finalmente",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -1954,20 +1922,20 @@
     "id": "FpUdWXERRhgbU6ZD7bKI",
     "slug": "fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita-mpr4o7i9",
     "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en Rosita",
-    "palabras": 604,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
+    "palabras": 614,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.5,
     "relleno": 1,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 2,
     "datos_concretos": {
       "edades": 0,
-      "horas": 1,
-      "fechas": 0,
+      "horas": 2,
+      "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 2,
@@ -1977,17 +1945,11 @@
       "relleno": [
         {
           "frase": "amado",
-          "contexto": "a región.</p>\n\n<p>Las autoridades reiteraron el llamado a la población a mantenerse informada por ca"
+          "contexto": "e semana.</p>\n\n<p>Las autoridades reiteraron el llamado a la población a no cruzar cauces crecidos, "
         }
       ],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [
-        "hasta el momento",
         "hasta el cierre"
       ],
       "fuentesAtribuidas": [],
@@ -2090,12 +2052,12 @@
     "id": "HASie7C63k5BAKuwsdQU",
     "slug": "familiares-localizan-a-adulto-mayor-tras-busqueda-en-las-jaguitas",
     "titulo": "Familiares localizan a adulto mayor tras búsqueda en Las Jagüitas",
-    "palabras": 718,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.1,
-    "relleno": 1,
-    "transiciones_ia": 1,
+    "palabras": 542,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.2,
+    "relleno": 0,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -2110,18 +2072,8 @@
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "honras fúnebres",
-          "contexto": "egado a sus familiares para la realización de las honras fúnebres en Managua.</p>\n\n<p>Mientras tanto"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "finalmente",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -2220,42 +2172,33 @@
     "id": "HQrOHqjbqOXB4ZTs22vl",
     "slug": "bomberos-controlan-incendio-en-masaya-evaluan-danos-materiales",
     "titulo": "Incendio en vivienda de Masaya deja daños materiales",
-    "palabras": 621,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
-    "relleno": 1,
-    "transiciones_ia": 1,
+    "palabras": 581,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.5,
+    "relleno": 0,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 1,
+    "contexto_local": 2,
     "datos_concretos": {
       "edades": 1,
-      "horas": 0,
-      "fechas": 0,
+      "horas": 1,
+      "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 1,
+      "lugares": 2,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "amado",
-          "contexto": " el presente año. Las autoridades reiteraron el llamado a la población para realizar inspecciones pe"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
+        "managua",
         "masaya"
       ]
     },
@@ -2399,37 +2342,34 @@
     "id": "ICRNpizAeFDiL5d1HJvH",
     "slug": "expertos-analizan-rol-de-ia-en-ciberseguridad-global",
     "titulo": "Expertos analizan rol de IA en ciberseguridad global",
-    "palabras": 873,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 710,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
-    "relleno": 1,
+    "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "querido",
-          "contexto": "nformático en períodos mucho más cortos que los requeridos mediante procesos manuales.</p>\n\n<p>Tarea"
-        }
-      ],
+      "relleno": [],
       "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -2629,12 +2569,12 @@
     "id": "JgF9ievsdzhnOwtqh70S",
     "slug": "taylor-swift-busca-registrar-su-voz-como-marca-ante-auge-de-la-ia",
     "titulo": "Taylor Swift busca registrar su voz como marca ante auge de la IA",
-    "palabras": 879,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 839,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0.1,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
@@ -2650,12 +2590,7 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -2916,40 +2851,39 @@
     "id": "NF9Q4ORwPOcsXKKRHuMa",
     "slug": "canada-reporta-virus-por-roedores-en-columbia-britanica",
     "titulo": "Canadá confirma caso de hantavirus ligado a crucero MV Hondius",
-    "palabras": 653,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0,
+    "palabras": 645,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.3,
     "relleno": 1,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
-      "fechas": 0,
-      "kilometros": 0,
+      "fechas": 1,
+      "kilometros": 1,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [
         {
           "frase": "dolor",
-          "contexto": "as iniciales del hantavirus incluyen fiebre alta, dolores musculares, fatiga intensa, dolor de cabez"
+          "contexto": "ntomas iniciales incluyen fiebre superior a 38°C, dolor muscular, fatiga intensa y malestar general."
         }
       ],
       "transiciones": [],
-      "fuentesGenericas": [
-        "hasta el momento",
-        "se espera que"
-      ],
+      "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -3112,37 +3046,33 @@
     "id": "Oejz1UtxGZb7LTATa6WP",
     "slug": "jannik-sinner-tras-baja-de-alcaraz-el-tenis-necesita-a-carlos",
     "titulo": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
-    "palabras": 917,
-    "score": 35,
+    "palabras": 853,
+    "score": 40,
     "nivel": "🔴 PELIGRO",
-    "densidad": 0,
-    "relleno": 0,
-    "transiciones_ia": 2,
+    "densidad": 0.6,
+    "relleno": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
-    "citas": 5,
+    "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 0,
     "datos_concretos": {
-      "edades": 0,
-      "horas": 0,
-      "fechas": 0,
+      "edades": 1,
+      "horas": 1,
+      "fechas": 2,
       "kilometros": 0,
-      "cantidades": 0,
+      "cantidades": 1,
       "lugares": 0,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [],
-      "transiciones": [
+      "relleno": [
         {
-          "transicion": "además",
-          "cantidad": 1
-        },
-        {
-          "transicion": "no obstante",
-          "cantidad": 1
+          "frase": "amado",
+          "contexto": "el cuadro principal de Roland Garros, torneo programado en París, Francia, del 25 de mayo al 8 de ju"
         }
       ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -3197,13 +3127,13 @@
     "id": "PCNXb9Gqsio9AzUetMQJ",
     "slug": "consulado-gestiona-caso-de-connacional-en-puntarenas",
     "titulo": "Nicaragüense muere en riña dentro de cárcel de Puntarenas, Costa Rica",
-    "palabras": 702,
+    "palabras": 668,
     "score": 40,
     "nivel": "🔴 PELIGRO",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 1,
-    "fuentes_atribuidas": 1,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 0,
@@ -3218,15 +3148,8 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        }
-      ],
-      "fuentesGenericas": [
-        "hasta el momento"
-      ],
+      "transiciones": [],
+      "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": []
@@ -3237,42 +3160,34 @@
     "id": "POzMmYcjC7Vy2JHS1KmW",
     "slug": "reportan-accidente-laboral-de-repartidor-nicaraguense",
     "titulo": "Reportan accidente laboral de repartidor nicaragüense",
-    "palabras": 720,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0,
-    "relleno": 1,
-    "transiciones_ia": 1,
-    "fuentes_atribuidas": 1,
+    "palabras": 713,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.4,
+    "relleno": 0,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
-      "edades": 0,
-      "horas": 0,
-      "fechas": 0,
+      "edades": 1,
+      "horas": 1,
+      "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "querido",
-          "contexto": "e Miami mientras concluyen los trámites legales requeridos por las autoridades estadounidenses. Post"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -3405,24 +3320,24 @@
     "id": "SM2fzy975dM5oxuoPgQx",
     "slug": "muere-esposa-de-marvin-benard-en-accidente-vial-en-california-mpiggi3q",
     "titulo": "Fallece esposa de Marvin Benard en accidente de tránsito en California",
-    "palabras": 351,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.9,
+    "palabras": 688,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.4,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 1,
+    "contexto_local": 4,
     "datos_concretos": {
       "edades": 1,
       "horas": 0,
-      "fechas": 1,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 1,
-      "nombres_completos": 1
+      "lugares": 4,
+      "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
@@ -3433,6 +3348,9 @@
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
+        "managua",
+        "león",
+        "caribe sur",
         "bluefields"
       ]
     },
@@ -3482,54 +3400,28 @@
     "id": "SlbddUkqFREvSt9QddmR",
     "slug": "policia-investiga-incidente-vial-en-carretera-jalapa",
     "titulo": "Policía investiga incidente vial en carretera Jalapa",
-    "palabras": 806,
-    "score": 45,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.7,
-    "relleno": 4,
-    "transiciones_ia": 2,
-    "fuentes_atribuidas": 1,
+    "palabras": 616,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 1.1,
+    "relleno": 0,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 4,
     "datos_concretos": {
-      "edades": 5,
-      "horas": 0,
-      "fechas": 1,
+      "edades": 4,
+      "horas": 1,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 4,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "trágico",
-          "contexto": "ciales H. , de 16 años de edad.\n\n<h2>Detalles del trágico hecho en Ocotal</h2>\n\nEl menor permaneció "
-        },
-        {
-          "frase": "consternación",
-          "contexto": "ones sufridas resultaron irreversibles, generando consternación en el sector norte del país.\n\n<h2>In"
-        },
-        {
-          "frase": "dolor",
-          "contexto": "vitar que más familias nicaragüenses enfrenten el dolor de un sepelio prematuro debido a causas que "
-        },
-        {
-          "frase": "honras fúnebres",
-          "contexto": "r fue entregado a sus parientes para realizar las honras fúnebres en Namaslí. El proceso de duelo fa"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "por su parte",
-          "cantidad": 1
-        },
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -3832,37 +3724,33 @@
     "id": "Vd53UqkuV45BIcRs4Miu",
     "slug": "incautan-502-kilos-de-cocaina-en-operativo-en-wiwili",
     "titulo": "Incautan 502 kilos de cocaína en operativo en Wiwilí, Jinotega",
-    "palabras": 586,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.2,
+    "palabras": 710,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.4,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 3,
+    "contexto_local": 4,
     "datos_concretos": {
-      "edades": 0,
+      "edades": 2,
       "horas": 0,
       "fechas": 1,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 3,
+      "lugares": 4,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
+        "managua",
         "jinotega",
         "nueva segovia",
         "wiwilí"
@@ -3909,41 +3797,34 @@
     "id": "XFnwUlvyLVKUbFVdrTUL",
     "slug": "guerra-en-iran-por-que-subiran-precio-de-condones-en-el-mundo",
     "titulo": "Guerra en Irán: por qué subirán precio de condones en el mundo",
-    "palabras": 699,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 696,
+    "score": 65,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 2,
-    "fuentes_atribuidas": 0,
-    "citas": 1,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 1,
+    "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        },
-        {
-          "transicion": "por lo tanto",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -4076,23 +3957,23 @@
     "id": "XTONg1lOfMlV1gNfMSm7",
     "slug": "policia-decomisa-mercaderia-en-operativo-de-penas-blancas",
     "titulo": "Ocho capturados y decomiso de drogas y armas en operativo en Peñas Blancas, Costa Rica",
-    "palabras": 624,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 715,
+    "score": 65,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
     "transiciones_ia": 0,
-    "fuentes_atribuidas": 0,
+    "fuentes_atribuidas": 1,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
@@ -4101,7 +3982,9 @@
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -4338,10 +4221,10 @@
     "id": "aFK0buUKVMKOICj3gVvA",
     "slug": "francisco-rios-duarte-recibe-30-anos-por-feminicidio-en-telica-mppzdgih",
     "titulo": "30 años de cárcel para feminicida que estranguló a mujer en Telica",
-    "palabras": 403,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 1,
+    "palabras": 615,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.5,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
@@ -4349,7 +4232,7 @@
     "variacion": "ALTA",
     "contexto_local": 2,
     "datos_concretos": {
-      "edades": 3,
+      "edades": 2,
       "horas": 0,
       "fechas": 1,
       "kilometros": 0,
@@ -4360,9 +4243,7 @@
     "detalle": {
       "relleno": [],
       "transiciones": [],
-      "fuentesGenericas": [
-        "autoridades confirmaron"
-      ],
+      "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
@@ -4499,9 +4380,9 @@
     "id": "cBUKld5uQPl1KuHX1JpJ",
     "slug": "incendio-destruye-negocio-y-deja-perdidas-por-c-200-mil-en-nindiri-mpz1vb5e",
     "titulo": "Incendio destruye negocio y deja pérdidas por C$200 mil en Nindirí",
-    "palabras": 376,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 580,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0.3,
     "relleno": 0,
     "transiciones_ia": 0,
@@ -4511,7 +4392,7 @@
     "contexto_local": 1,
     "datos_concretos": {
       "edades": 1,
-      "horas": 0,
+      "horas": 1,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
@@ -4569,37 +4450,34 @@
     "id": "cW59E7JhZd9PT6Epx2aJ",
     "slug": "shakira-reune-a-dos-millones-de-fans-en-concierto-de-brasil",
     "titulo": "Shakira reúne a dos millones de fans en concierto de Brasil",
-    "palabras": 643,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 704,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
-    "citas": 5,
+    "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -4842,9 +4720,9 @@
     "id": "ect24qCFMfiygezE3j9D",
     "slug": "investigan-homicidio-de-ciudadano-conocido-como-la-reina-menguena-mpo8rr3t",
     "titulo": "Investigan homicidio de joven en Santo Domingo, Chontales",
-    "palabras": 372,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 622,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0.5,
     "relleno": 0,
     "transiciones_ia": 1,
@@ -4855,7 +4733,7 @@
     "datos_concretos": {
       "edades": 1,
       "horas": 0,
-      "fechas": 1,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 0,
       "lugares": 2,
@@ -4869,7 +4747,9 @@
           "cantidad": 1
         }
       ],
-      "fuentesGenericas": [],
+      "fuentesGenericas": [
+        "hasta el momento"
+      ],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
@@ -5221,36 +5101,33 @@
     "slug": "familia-recibe-respuesta-tras-busqueda-en-rio-bravo",
     "titulo": "Autoridades de Texas identifican a nicaragüense desaparecido.",
     "palabras": 539,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
+    "score": 65,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
-    "relleno": 1,
+    "relleno": 0,
     "transiciones_ia": 0,
-    "fuentes_atribuidas": 0,
+    "fuentes_atribuidas": 1,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "querido",
-          "contexto": "os sin información sobre el paradero de sus seres queridos.</p>\n\n<h2>Gestiones posteriores y situaci"
-        }
-      ],
+      "relleno": [],
       "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
     },
     "publicado": true
   },
@@ -5295,43 +5172,41 @@
     "id": "iowQzBgiwSPPXCC4EsJD",
     "slug": "como-sacar-y-apostillar-record-policial-de-nicaragua",
     "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
-    "palabras": 733,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
+    "palabras": 707,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 1,
-    "transiciones_ia": 1,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 1,
+    "contexto_local": 4,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 1,
+      "lugares": 4,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [
         {
           "frase": "querido",
-          "contexto": "umento oficial emitido por la Policía Nacional, requerido en trámites migratorios, laborales y legal"
+          "contexto": "El récord policial continúa siendo un documento requerido en procesos migratorios y laborales dentro"
         }
       ],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
-        "managua"
+        "managua",
+        "león",
+        "masaya",
+        "matagalpa"
       ]
     },
     "publicado": true
@@ -5415,65 +5290,23 @@
     "id": "jMCRlTyJPKxF2MSiOW3Z",
     "slug": "academia-de-hollywood-limita-uso-de-ia-en-peliculas-para-oscar",
     "titulo": "Academia de Hollywood limita uso de IA en películas para Óscar",
-    "palabras": 652,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0,
-    "relleno": 0,
-    "transiciones_ia": 2,
-    "fuentes_atribuidas": 0,
-    "citas": 1,
-    "variacion": "ALTA",
-    "contexto_local": 0,
-    "datos_concretos": {
-      "edades": 0,
-      "horas": 0,
-      "fechas": 0,
-      "kilometros": 0,
-      "cantidades": 0,
-      "lugares": 0,
-      "nombres_completos": 0
-    },
-    "detalle": {
-      "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        },
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
-      "fuentesGenericas": [],
-      "fuentesAtribuidas": [],
-      "citas": [],
-      "lugares": []
-    },
-    "publicado": true
-  },
-  {
-    "id": "ji2rLsYoOn3VKOsKwQRI",
-    "slug": "michael-rompe-records-como-estreno-biografico-mas-exitoso",
-    "titulo": "Michael rompe récords como estreno biográfico más exitoso",
     "palabras": 691,
-    "score": 55,
+    "score": 50,
     "nivel": "🟡 BRONCE",
     "densidad": 0,
     "relleno": 0,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
-    "citas": 12,
+    "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 1,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 1,
       "nombres_completos": 0
     },
     "detalle": {
@@ -5482,7 +5315,45 @@
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua"
+      ]
+    },
+    "publicado": true
+  },
+  {
+    "id": "ji2rLsYoOn3VKOsKwQRI",
+    "slug": "michael-rompe-records-como-estreno-biografico-mas-exitoso",
+    "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+    "palabras": 714,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0,
+    "relleno": 0,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 0,
+    "citas": 0,
+    "variacion": "ALTA",
+    "contexto_local": 2,
+    "datos_concretos": {
+      "edades": 0,
+      "horas": 0,
+      "fechas": 0,
+      "kilometros": 0,
+      "cantidades": 0,
+      "lugares": 2,
+      "nombres_completos": 0
+    },
+    "detalle": {
+      "relleno": [],
+      "transiciones": [],
+      "fuentesGenericas": [],
+      "fuentesAtribuidas": [],
+      "citas": [],
+      "lugares": [
+        "managua",
+        "santo domingo"
+      ]
     },
     "publicado": true
   },
@@ -5680,20 +5551,20 @@
     "id": "lJv8InQKCuFu1Iu0oNRJ",
     "slug": "familia-busca-a-joven-desaparecido-en-laguna-de-xiloa-managua",
     "titulo": "Joven desaparece mientras nadaba en la laguna de Xiloá",
-    "palabras": 662,
+    "palabras": 603,
     "score": 50,
     "nivel": "🟡 BRONCE",
-    "densidad": 1.1,
+    "densidad": 1,
     "relleno": 0,
-    "transiciones_ia": 1,
-    "fuentes_atribuidas": 1,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
     "contexto_local": 3,
     "datos_concretos": {
       "edades": 1,
       "horas": 2,
-      "fechas": 3,
+      "fechas": 2,
       "kilometros": 0,
       "cantidades": 1,
       "lugares": 3,
@@ -5701,12 +5572,7 @@
     },
     "detalle": {
       "relleno": [],
-      "transiciones": [
-        {
-          "transicion": "además",
-          "cantidad": 1
-        }
-      ],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
@@ -5722,37 +5588,43 @@
     "id": "lsUzLddRdDCzSo3R9VkT",
     "slug": "fiscalia-de-california-investiga-fraude-de-entradas-fifa",
     "titulo": "Fiscalía de California investiga fraude de entradas FIFA",
-    "palabras": 913,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.3,
-    "relleno": 0,
-    "transiciones_ia": 1,
-    "fuentes_atribuidas": 0,
-    "citas": 4,
+    "palabras": 680,
+    "score": 65,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.4,
+    "relleno": 1,
+    "transiciones_ia": 0,
+    "fuentes_atribuidas": 2,
+    "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 0,
+    "contexto_local": 3,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
       "fechas": 3,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 0,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [],
-      "transiciones": [
+      "relleno": [
         {
-          "transicion": "finalmente",
-          "cantidad": 1
+          "frase": "amado",
+          "contexto": "na de las sedes principales, con 14 partidos programados: ocho en Los Ángeles y seis en Santa Clara,"
         }
       ],
-      "fuentesGenericas": [],
+      "transiciones": [],
+      "fuentesGenericas": [
+        "hasta el momento"
+      ],
       "fuentesAtribuidas": [],
       "citas": [],
-      "lugares": []
+      "lugares": [
+        "managua",
+        "león",
+        "chinandega"
+      ]
     },
     "publicado": true
   },
@@ -6256,23 +6128,23 @@
     "id": "qhlHd01R4IC9TDdMx0re",
     "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres-mpiluv8a",
     "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
-    "palabras": 428,
-    "score": 40,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 1.2,
+    "palabras": 689,
+    "score": 65,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.9,
     "relleno": 0,
     "transiciones_ia": 0,
-    "fuentes_atribuidas": 0,
+    "fuentes_atribuidas": 1,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 5,
+    "contexto_local": 8,
     "datos_concretos": {
       "edades": 0,
       "horas": 0,
-      "fechas": 5,
+      "fechas": 6,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 5,
+      "lugares": 8,
       "nombres_completos": 0
     },
     "detalle": {
@@ -6286,7 +6158,10 @@
         "león",
         "granada",
         "masaya",
-        "chinandega"
+        "chinandega",
+        "chontales",
+        "ciudad sandino",
+        "san juan del sur"
       ]
     },
     "publicado": true
@@ -7186,30 +7061,30 @@
     "id": "yXELqcLI6Xh3Mcfe4cSp",
     "slug": "fiscalia-investiga-hallazgo-en-telica-leon",
     "titulo": "Fiscalía investiga hallazgo de cuerpo sin vida en Telica, León",
-    "palabras": 705,
+    "palabras": 697,
     "score": 50,
     "nivel": "🟡 BRONCE",
-    "densidad": 0,
+    "densidad": 1.4,
     "relleno": 1,
     "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 2,
+    "contexto_local": 3,
     "datos_concretos": {
-      "edades": 0,
-      "horas": 0,
-      "fechas": 0,
+      "edades": 1,
+      "horas": 3,
+      "fechas": 6,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 2,
+      "lugares": 3,
       "nombres_completos": 0
     },
     "detalle": {
       "relleno": [
         {
-          "frase": "trágico",
-          "contexto": " sector alertaron a la Policía.\n\n<h2>Detalles del trágico hecho en León</h2>\n\nLos agentes acudieron "
+          "frase": "amado",
+          "contexto": "ciales.</p>\n\n<p>La Policía Nacional mantiene el llamado a la población para que aporte información q"
         }
       ],
       "transiciones": [],
@@ -7218,6 +7093,7 @@
       "citas": [],
       "lugares": [
         "león",
+        "chinandega",
         "telica"
       ]
     },
@@ -7227,46 +7103,33 @@
     "id": "zwqEVVwFeeMooUBQpBR7",
     "slug": "investigan-muerte-de-mujer-en-bus-de-la-ruta-jalapa-ocotal",
     "titulo": "Fallece mujer en bus de la ruta Jalapa-Ocotal; investigan el caso",
-    "palabras": 774,
-    "score": 35,
-    "nivel": "🔴 PELIGRO",
-    "densidad": 0.3,
-    "relleno": 2,
-    "transiciones_ia": 1,
+    "palabras": 763,
+    "score": 50,
+    "nivel": "🟡 BRONCE",
+    "densidad": 0.1,
+    "relleno": 0,
+    "transiciones_ia": 0,
     "fuentes_atribuidas": 0,
     "citas": 0,
     "variacion": "ALTA",
-    "contexto_local": 4,
+    "contexto_local": 5,
     "datos_concretos": {
-      "edades": 2,
+      "edades": 1,
       "horas": 0,
       "fechas": 0,
       "kilometros": 0,
       "cantidades": 0,
-      "lugares": 4,
+      "lugares": 5,
       "nombres_completos": 0
     },
     "detalle": {
-      "relleno": [
-        {
-          "frase": "honras fúnebres",
-          "contexto": "egado a sus familiares para la realización de las honras fúnebres en San Juan de Río Coco, departame"
-        },
-        {
-          "frase": "amado",
-          "contexto": "vil en uno de los asientos y no respondía a los llamados de otras personas que viajaban en el autobú"
-        }
-      ],
-      "transiciones": [
-        {
-          "transicion": "sin embargo",
-          "cantidad": 1
-        }
-      ],
+      "relleno": [],
+      "transiciones": [],
       "fuentesGenericas": [],
       "fuentesAtribuidas": [],
       "citas": [],
       "lugares": [
+        "managua",
         "madriz",
         "nueva segovia",
         "ocotal",
