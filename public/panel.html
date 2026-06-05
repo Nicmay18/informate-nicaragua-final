@@ -901,6 +901,11 @@
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
           <input type="text" id="searchNoticias" placeholder="Buscar noticias..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
         </div>
+        <div style="padding: 8px 16px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; gap: 8px; align-items: center; font-size: 12px;">
+          <span style="color: var(--gray-500); font-weight: 600;">ELIMINAR POR ID:</span>
+          <input type="text" id="deleteById" placeholder="Pega el ID aquí..." style="padding: 6px 10px; border: 1px solid var(--gray-300); border-radius: var(--radius-md); font-size: 12px; width: 280px;">
+          <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="const id=document.getElementById('deleteById').value.trim();if(id)window.eliminarNoticia(id);else showToast('Pega un ID primero','warning');"><i class="fas fa-trash"></i> ELIMINAR</button>
+        </div>
         <div class="card"><div class="card-body" style="padding: 0; overflow-y: auto;"><div class="news-list" id="listaNoticiasCompleta"><div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando archivo...</h3></div></div></div></div>
       </div>
 
@@ -2514,19 +2519,30 @@ ${hashtags}`;
     window.buscarNoticias = function(query) {
       console.log('[BUSCADOR] Buscando:', query);
       const container = document.getElementById('listaNoticiasCompleta');
-      if (!container) { console.error('[BUSCADOR] No se encontró contenedor listaNoticiasCompleta'); return; }
+      if (!container) { console.error('[BUSCADOR] No se encontró contenedor'); return; }
       const items = container.querySelectorAll('.news-item');
-      console.log('[BUSCADOR] Items encontrados:', items.length);
+      console.log('[BUSCADOR] Total items:', items.length);
       const q = query.toLowerCase().trim();
       let visibleCount = 0;
       items.forEach(item => {
         const titulo = item.querySelector('.news-title')?.textContent.toLowerCase() || '';
         const categoria = item.querySelector('.news-badge')?.textContent.toLowerCase() || '';
         const match = titulo.includes(q) || categoria.includes(q);
-        item.style.display = match ? 'flex' : 'none';
+        // Usar setProperty con !important para sobreescribir CSS
+        item.style.setProperty('display', match ? 'flex' : 'none', 'important');
         if (match) visibleCount++;
       });
       console.log('[BUSCADOR] Items visibles:', visibleCount);
+      // Mostrar contador de resultados
+      let counter = document.getElementById('searchCounter');
+      if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'searchCounter';
+        counter.style.cssText = 'padding: 8px 16px; font-size: 12px; color: var(--gray-500); border-bottom: 1px solid var(--gray-100);';
+        container.parentElement.insertBefore(counter, container);
+      }
+      counter.textContent = q ? `Mostrando ${visibleCount} de ${items.length} noticias` : `${items.length} noticias`;
+      counter.style.display = 'block';
     };
 
     window.cargarNoticiaParaEditar = async function(id) {
