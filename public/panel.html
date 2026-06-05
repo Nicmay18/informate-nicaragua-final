@@ -273,11 +273,12 @@
     .word-counter .count.bad { color: var(--danger); }
 
     /* NEWS LIST */
-    .news-list { display: block; width: 100%; }
+    .news-list { display: block !important; width: 100% !important; clear: both !important; }
     .news-item {
-      display: flex; align-items: center; gap: 14px; padding: 14px 20px;
+      display: flex !important; align-items: center; gap: 14px; padding: 14px 20px;
       border-bottom: 1px solid var(--gray-100); transition: var(--transition);
-      cursor: pointer; width: 100%; box-sizing: border-box;
+      cursor: pointer; width: 100% !important; max-width: 100% !important; box-sizing: border-box;
+      clear: both !important; float: none !important;
     }
     .news-item:hover { background: var(--gray-50); }
     .news-thumb { width: 72px; height: 54px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200); }
@@ -2484,6 +2485,13 @@ ${hashtags}`;
         // Permitir scroll natural sin altura forzada
         const cardBody = container.parentElement;
         if (cardBody) { cardBody.style.maxHeight = 'none'; cardBody.style.overflowY = 'auto'; }
+        // Inicializar buscador después de renderizar
+        const searchInput = document.getElementById('searchNoticias');
+        if (searchInput) {
+          searchInput.removeEventListener('input', window._buscarHandler);
+          window._buscarHandler = (e) => buscarNoticias(e.target.value);
+          searchInput.addEventListener('input', window._buscarHandler);
+        }
         } catch (renderErr) {
           console.error('[DEBUG] Error renderizando noticias:', renderErr);
           container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-exclamation-triangle"></i></div><h3>Error renderizando</h3><p>Hay una noticia con caracteres que rompen el HTML. Abre la consola para ver detalles.</p></div>`;
