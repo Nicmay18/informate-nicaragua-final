@@ -81,7 +81,7 @@ export default async function HomePage() {
         <link
           rel="preload"
           as="image"
-          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=640&q=75`}
+          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=1200&q=75`}
           type="image/webp"
           fetchPriority="high"
           crossOrigin="anonymous"
