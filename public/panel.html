@@ -992,16 +992,21 @@ ESTRUCTURA OBLIGATORIA:
       <!-- EVALUADOR -->
       <div id="evaluador-tab" class="tab-content">
         <div class="page-header">
-          <div class="page-title"><h1>Evaluador SEO</h1><p>Analiza la calidad editorial y optimización de tus noticias.</p></div>
+          <div class="page-title"><h1>Corrector IA</h1><p>Identifica errores, mejora SEO y corrige tu noticia antes de publicar.</p></div>
         </div>
         <div class="content-grid">
           <div>
             <div class="card">
               <div class="card-header"><h3 class="card-title"><i class="fas fa-list" style="color: var(--primary-500);"></i>Seleccionar Noticia</h3></div>
               <div class="card-body">
-                <select class="form-select" id="evalSelectNoticia" onchange="cargarEvaluacion()">
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                  <input type="text" id="evalBuscarNoticia" placeholder="Buscar noticia por título..." oninput="filtrarSelectEvaluador(this.value)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px;">
+                  <button class="btn btn-secondary" onclick="recargarSelectEvaluador()" style="padding: 8px 12px; font-size: 13px;"><i class="fas fa-sync"></i></button>
+                </div>
+                <select class="form-select" id="evalSelectNoticia" onchange="cargarEvaluacion()" size="8" style="width: 100%; min-height: 200px;">
                   <option value="">Selecciona una noticia...</option>
                 </select>
+                <div id="evalLoading" style="display: none; padding: 16px; text-align: center; color: var(--gray-400); font-size: 13px;"><i class="fas fa-spinner fa-spin"></i> Cargando noticias...</div>
                 <div id="evaluacionResultado" style="display: none; margin-top: 24px;">
                   <div class="eval-score-circle">
                     <svg viewBox="0 0 120 120" width="140" height="140">
@@ -1020,12 +1025,24 @@ ESTRUCTURA OBLIGATORIA:
                     <tbody id="evalTableBody"></tbody>
                   </table>
                   <div style="margin-top: 20px; padding: 16px; background: var(--gray-50); border-radius: var(--radius-md); border: 1px solid var(--gray-200);">
-                    <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 12px;"><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Recomendaciones</h4>
+                    <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 12px;"><i class="fas fa-robot" style="color: var(--primary-500);"></i> Diagnóstico IA</h4>
                     <ul id="evalRecomendaciones" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;"></ul>
                   </div>
                   <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; font-size: 13px; color: var(--gray-500);">
                     <div>CPM estimado: <strong id="evalCpm" style="color: var(--gray-900);">$1.10</strong></div>
                     <div>Ingreso estimado: <strong id="evalRevenue" style="color: var(--gray-900);">$0.00</strong></div>
+                  </div>
+                  <div style="margin-top: 20px; padding: 16px; background: var(--primary-50); border-radius: var(--radius-md); border: 1px solid var(--primary-200);">
+                    <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--primary-700); margin-bottom: 12px;"><i class="fas fa-search" style="color: var(--primary-500);"></i> Buscar en contenido</h4>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                      <input type="text" id="evalBuscarPalabra" placeholder="Escribí una palabra o frase..." onkeydown="if(event.key==='Enter')buscarEnContenido()" style="flex: 1; padding: 8px 12px; border: 1px solid var(--primary-200); border-radius: var(--radius-md); font-size: 13px;">
+                      <button class="btn btn-primary" onclick="buscarEnContenido()" style="padding: 8px 16px; font-size: 13px;"><i class="fas fa-search"></i> Buscar</button>
+                    </div>
+                    <div id="evalResultadoBusqueda" style="max-height: 200px; overflow-y: auto; font-size: 12px; color: var(--gray-600); line-height: 1.6;"></div>
+                  </div>
+                  <div id="evalVistaPreviaContenido" style="margin-top: 20px; padding: 16px; background: white; border-radius: var(--radius-md); border: 1px solid var(--gray-200); display: none;">
+                    <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 12px;"><i class="fas fa-file-alt" style="color: var(--gray-500);"></i> Vista del contenido</h4>
+                    <div id="evalContenidoTexto" style="font-size: 13px; line-height: 1.6; color: var(--gray-700); max-height: 300px; overflow-y: auto; white-space: pre-wrap;"></div>
                   </div>
                 </div>
               </div>
@@ -1033,9 +1050,9 @@ ESTRUCTURA OBLIGATORIA:
           </div>
           <div>
             <div class="card">
-              <div class="card-header"><h3 class="card-title"><i class="fas fa-info-circle" style="color: var(--info);"></i>Cómo funciona</h3></div>
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-info-circle" style="color: var(--info);"></i>Cómo funciona el Corrector</h3></div>
               <div class="card-body">
-                <p style="font-size: 13px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px;">El evaluador analiza 7 criterios clave:</p>
+                <p style="font-size: 13px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px;">El corrector IA analiza tu noticia y detecta problemas específicos:</p>
                 <ul style="font-size: 13px; color: var(--gray-600); line-height: 1.8; padding-left: 18px;">
                   <li><strong>Longitud:</strong> 350+ palabras meta mínima</li>
                   <li><strong>Titular SEO:</strong> 30–70 caracteres ideal</li>
@@ -1043,7 +1060,7 @@ ESTRUCTURA OBLIGATORIA:
                   <li><strong>Imagen:</strong> Imagen destacada obligatoria</li>
                   <li><strong>Estructura:</strong> Subtítulos y negritas</li>
                   <li><strong>Categoría:</strong> Completa y geolocalizada</li>
-                  <li><strong>Originalidad:</strong> Revisión manual</li>
+                  <li><strong>Palabras prohibidas:</strong> Detecta relleno emocional</li>
                 </ul>
               </div>
             </div>
@@ -2210,6 +2227,7 @@ ${hashtags}`;
       if (tabId === 'categorias-tab') cargarResumenCategorias();
       if (tabId === 'analytics-tab') cargarMetricas();
       if (tabId === 'config-tab') cargarConfiguracion();
+      if (tabId === 'evaluador-tab') cargarSelectEvaluador();
     };
 
     window.showGuide = function(panelId, tabElement) {
@@ -2647,7 +2665,115 @@ ${hashtags}`;
     window.filtrarNoticias = function(categoria, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); window.categoriaActiva = categoria; cargarNoticias(categoria); };
     window.filtrarPorCategoria = function(categoria) { showTab('noticias-tab', document.querySelectorAll('.nav-link')[2]); setTimeout(() => { document.querySelectorAll('.filter-btn').forEach(btn => { if (btn.textContent.includes(categoria)) btn.click(); }); }, 100); };
 
-    // EVALUADOR
+    // EVALUADOR / CORRECTOR IA
+    window._evalNoticiasCache = [];
+
+    window.cargarSelectEvaluador = async function() {
+      const select = document.getElementById('evalSelectNoticia');
+      const loading = document.getElementById('evalLoading');
+      if (!select || select.options.length > 1 && window._evalNoticiasCache.length > 0) return; // Ya cargado
+      select.innerHTML = '<option value="">Selecciona una noticia...</option>';
+      loading.style.display = 'block';
+      try {
+        const snapshot = await getDocs(collection(db, 'noticias'));
+        const noticias = [];
+        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+        noticias.sort((a, b) => {
+          const fa = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
+          const fb = b.fecha?.toMillis ? b.fecha.toMillis() : (b.fecha ? new Date(b.fecha).getTime() : 0);
+          return fb - fa;
+        });
+        window._evalNoticiasCache = noticias;
+        noticias.forEach(n => {
+          const opt = document.createElement('option');
+          opt.value = n.id;
+          const titulo = (n.titulo || '(Sin título)').substring(0, 60);
+          const cat = n.categoria || 'Sin cat';
+          const palabras = (n.contenido || '').trim().split(/\s+/).length;
+          opt.textContent = `${titulo} [${cat}] — ${palabras} pal.`;
+          select.appendChild(opt);
+        });
+        console.log('[EVALUADOR] Noticias cargadas:', noticias.length);
+      } catch (e) {
+        console.error('Error cargando select evaluador:', e);
+        select.innerHTML = '<option value="">Error cargando noticias</option>';
+      } finally {
+        loading.style.display = 'none';
+      }
+    };
+
+    window.filtrarSelectEvaluador = function(query) {
+      const select = document.getElementById('evalSelectNoticia');
+      const q = query.toLowerCase().trim();
+      select.innerHTML = '<option value="">Selecciona una noticia...</option>';
+      let count = 0;
+      window._evalNoticiasCache.forEach(n => {
+        const titulo = (n.titulo || '').toLowerCase();
+        const categoria = (n.categoria || '').toLowerCase();
+        if (!q || titulo.includes(q) || categoria.includes(q)) {
+          const opt = document.createElement('option');
+          opt.value = n.id;
+          const tituloCorto = (n.titulo || '(Sin título)').substring(0, 60);
+          const palabras = (n.contenido || '').trim().split(/\s+/).length;
+          opt.textContent = `${tituloCorto} [${n.categoria || 'Sin cat'}] — ${palabras} pal.`;
+          select.appendChild(opt);
+          count++;
+        }
+      });
+      if (q) {
+        const info = document.createElement('option');
+        info.disabled = true;
+        info.textContent = `─── ${count} resultado${count !== 1 ? 's' : ''} ───`;
+        select.insertBefore(info, select.options[1]);
+      }
+    };
+
+    window.recargarSelectEvaluador = async function() {
+      window._evalNoticiasCache = [];
+      document.getElementById('evalSelectNoticia').innerHTML = '<option value="">Selecciona una noticia...</option>';
+      document.getElementById('evaluacionResultado').style.display = 'none';
+      await cargarSelectEvaluador();
+    };
+
+    window.buscarEnContenido = function() {
+      const select = document.getElementById('evalSelectNoticia');
+      const id = select.value;
+      const query = document.getElementById('evalBuscarPalabra').value.trim();
+      const resultadoDiv = document.getElementById('evalResultadoBusqueda');
+      if (!id) { resultadoDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Seleccioná una noticia primero.</span>'; return; }
+      if (!query) { resultadoDiv.innerHTML = '<span style="color:var(--warning);"><i class="fas fa-info-circle"></i> Escribí una palabra para buscar.</span>'; return; }
+
+      const noticia = window._evalNoticiasCache.find(n => n.id === id);
+      if (!noticia) { resultadoDiv.innerHTML = '<span style="color:var(--danger);">Noticia no encontrada en caché.</span>'; return; }
+
+      const contenido = noticia.contenido || '';
+      const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      const matches = [];
+      let match;
+      while ((match = regex.exec(contenido)) !== null) {
+        const start = Math.max(0, match.index - 40);
+        const end = Math.min(contenido.length, match.index + query.length + 40);
+        const snippet = contenido.substring(start, end);
+        matches.push(snippet);
+      }
+
+      if (matches.length === 0) {
+        resultadoDiv.innerHTML = `<span style="color:var(--gray-500);"><i class="fas fa-times-circle"></i> "<strong>${query}</strong>" no aparece en el contenido.</span>`;
+      } else {
+        resultadoDiv.innerHTML = `<div style="margin-bottom:8px;font-weight:600;color:var(--primary-700);"><i class="fas fa-check-circle" style="color:var(--success);"></i> "${query}" encontrado ${matches.length} vez${matches.length !== 1 ? 'es' : ''}:</div>` +
+          matches.map((m, i) => `<div style="padding:6px 8px;background:var(--gray-50);border-radius:4px;margin-bottom:4px;font-family:monospace;">${i+1}. …${m.replace(regex, '<mark style="background:var(--warning-light);padding:2px 4px;border-radius:3px;font-weight:600;">$&</mark>')}…</div>`).join('');
+      }
+
+      // Mostrar vista previa del contenido
+      const vistaDiv = document.getElementById('evalVistaPreviaContenido');
+      const textoDiv = document.getElementById('evalContenidoTexto');
+      vistaDiv.style.display = 'block';
+      // Destacar las palabras encontradas en el contenido completo
+      const contenidoEscapado = contenido.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const regexSafe = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      textoDiv.innerHTML = contenidoEscapado.replace(regexSafe, '<mark style="background:var(--warning);color:#000;padding:2px 4px;border-radius:3px;">$&</mark>');
+    };
+
     window.cargarEvaluacion = async function() {
       const select = document.getElementById('evalSelectNoticia');
       const id = select.value;
@@ -2660,16 +2786,35 @@ ${hashtags}`;
         const snap = await getDoc(docRef);
         if (!snap.exists()) return;
         const n = snap.data();
-        const palabras = (n.contenido || '').trim().split(/\s+/).length;
+        const contenido = n.contenido || '';
+        const palabras = contenido.trim().split(/\s+/).length;
+        const tituloLen = (n.titulo || '').length;
+        const resumenLen = (n.resumen || '').length;
+
+        // Detectar problemas de estilo
+        const frasesRelleno = ['increíble', 'impactante', 'sorprendente', 'dramático', 'terrible', 'horrible', 'inimaginable', 'insólito', 'escandaloso', 'escalofriante'];
+        const frasesEncontradas = [];
+        const contenidoLower = contenido.toLowerCase();
+        frasesRelleno.forEach(f => {
+          if (contenidoLower.includes(f)) frasesEncontradas.push(f);
+        });
+
+        // Detectar falta de atribución
+        const tieneAtribucion = /dijo|declaró|según|afirmó|señaló|manifestó|aseguró/i.test(contenido);
+        const tieneCitas = /".*?"|'.*?'/s.test(contenido) || contenido.includes('«') || contenido.includes('»');
+
+        // Detectar densidad de datos (números, fechas, datos concretos)
+        const numeros = contenido.match(/\d+/g) || [];
+        const datosPor100 = palabras > 0 ? ((numeros.length / palabras) * 100).toFixed(1) : 0;
 
         const criterios = [
-          { nombre: 'Longitud del contenido', puntos: palabras > 600 ? 20 : palabras > 350 ? 15 : palabras > 200 ? 10 : 5, max: 20, obs: palabras > 600 ? 'Óptimo' : palabras > 350 ? 'Bueno' : 'Corto' },
-          { nombre: 'Titular SEO', puntos: (n.titulo || '').length >= 30 && (n.titulo || '').length <= 70 ? 15 : 8, max: 15, obs: (n.titulo || '').length >= 30 && (n.titulo || '').length <= 70 ? 'Longitud ideal' : 'Ajustar longitud' },
-          { nombre: 'Meta descripción', puntos: (n.resumen || '').length >= 120 && (n.resumen || '').length <= 160 ? 15 : (n.resumen || '').length > 0 ? 8 : 0, max: 15, obs: (n.resumen || '').length >= 120 && (n.resumen || '').length <= 160 ? 'Perfecta' : (n.resumen || '').length > 0 ? 'Mejorable' : 'Falta' },
+          { nombre: 'Longitud del contenido', puntos: palabras > 600 ? 20 : palabras > 350 ? 15 : palabras > 200 ? 10 : 5, max: 20, obs: palabras > 600 ? `Óptimo (${palabras} pal.)` : palabras > 350 ? `Bueno (${palabras} pal.)` : `Corto (${palabras} pal.)` },
+          { nombre: 'Titular SEO', puntos: tituloLen >= 30 && tituloLen <= 70 ? 15 : 8, max: 15, obs: tituloLen >= 30 && tituloLen <= 70 ? `${tituloLen} chars — Ideal` : `${tituloLen} chars — Ajustar a 30-70` },
+          { nombre: 'Meta descripción', puntos: resumenLen >= 120 && resumenLen <= 160 ? 15 : resumenLen > 0 ? 8 : 0, max: 15, obs: resumenLen >= 120 && resumenLen <= 160 ? `${resumenLen} chars — Perfecta` : resumenLen > 0 ? `${resumenLen} chars — Mejorable` : 'Falta resumen' },
           { nombre: 'Imagen destacada', puntos: n.imagen ? 15 : 0, max: 15, obs: n.imagen ? 'Presente' : 'No incluida' },
-          { nombre: 'Estructura / Subtítulos', puntos: (n.contenido || '').includes('**') || (n.contenido || '').includes('##') || (n.contenido || '').includes('<h2>') ? 15 : 8, max: 15, obs: (n.contenido || '').includes('**') || (n.contenido || '').includes('##') || (n.contenido || '').includes('<h2>') ? 'Bien estructurado' : 'Faltan subtítulos' },
-          { nombre: 'Categoría y ubicación', puntos: n.categoria && n.departamento ? 10 : 5, max: 10, obs: n.categoria && n.departamento ? 'Completo' : 'Incompleto' },
-          { nombre: 'Originalidad estimada', puntos: 10, max: 10, obs: 'Manual / No automatizado' }
+          { nombre: 'Estructura / Subtítulos', puntos: contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') ? 15 : 8, max: 15, obs: contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') ? 'Bien estructurado' : 'Faltan subtítulos' },
+          { nombre: 'Categoría y ubicación', puntos: n.categoria && n.departamento ? 10 : 5, max: 10, obs: n.categoria && n.departamento ? `${n.categoria}, ${n.departamento}` : 'Incompleto' },
+          { nombre: 'Densidad de datos', puntos: datosPor100 >= 5 ? 10 : datosPor100 >= 2 ? 6 : 3, max: 10, obs: `${datosPor100} datos/100pal — ${datosPor100 >= 5 ? 'Buena' : 'Baja'}` }
         ];
 
         const total = criterios.reduce((a, b) => a + b.puntos, 0);
@@ -2697,20 +2842,39 @@ ${hashtags}`;
           return `<tr><td style="font-size:13px;">${c.nombre}</td><td style="font-size:13px;font-weight:600;">${c.puntos}/${c.max}</td><td><span class="eval-score ${cls}">${pct}%</span></td><td style="font-size:12px;color:var(--gray-500);">${c.obs}</td></tr>`;
         }).join('');
 
+        // DIAGNÓSTICO IA - Recomendaciones inteligentes
         const recs = [];
-        if (palabras < 350) recs.push('Amplía el contenido a 350+ palabras para cumplir la meta mínima de AdSense.');
-        if (!n.resumen || (n.resumen || '').length < 120) recs.push('Añade un resumen SEO de 120-160 caracteres.');
-        if (!n.imagen) recs.push('Incluye una imagen destacada para mejorar engagement en redes.');
-        if (!(n.contenido || '').includes('**') && !(n.contenido || '').includes('##') && !(n.contenido || '').includes('<h2>')) recs.push('Usa subtítulos en negrita para dividir el contenido.');
-        if ((n.titulo || '').length < 30 || (n.titulo || '').length > 70) recs.push('Ajusta la longitud del titular a 30-70 caracteres.');
-        if (recs.length === 0) recs.push('¡Excelente trabajo! La noticia está lista para publicar y compartir.');
+        if (palabras < 350) recs.push(`<strong>CONTENIDO CORTO:</strong> Tenés ${palabras} palabras. AdSense requiere 350+. Agregá contexto, citas o datos.`);
+        else if (palabras < 500) recs.push(`<strong>CONTENIDO ACEPTABLE:</strong> ${palabras} palabras. Para mejor monetización, llegá a 600+.`);
+        if (!n.resumen || resumenLen < 120) recs.push(`<strong>META FALTANTE:</strong> El resumen tiene ${resumenLen || 0} caracteres. Escribí uno de 120-160 chars para SEO.`);
+        else if (resumenLen > 160) recs.push(`<strong>META LARGA:</strong> ${resumenLen} caracteres. Acortala a 160 máximo.`);
+        if (!n.imagen) recs.push('<strong>SIN IMAGEN:</strong> Incluí una imagen destacada. Las noticias con imagen tienen 3x más clicks.');
+        if (!contenido.includes('**') && !contenido.includes('##') && !contenido.includes('<h2>')) recs.push('<strong>SIN ESTRUCTURA:</strong> Agregá subtítulos en negrita (**Subtítulo**) para dividir el texto.');
+        if (tituloLen < 30) recs.push(`<strong>TÍTULO CORTO:</strong> ${tituloLen} caracteres. Ampliá a 30-70 para mejor SEO.`);
+        if (tituloLen > 70) recs.push(`<strong>TÍTULO LARGO:</strong> ${tituloLen} caracteres. Google corta después de 60. Resumí.`);
+        if (frasesEncontradas.length > 0) recs.push(`<strong>RELLENO EMOCIONAL:</strong> Detectadas palabras sensacionalistas: "${frasesEncontradas.join(', ')}". Reemplazá por datos concretos.`);
+        if (!tieneAtribucion) recs.push('<strong>SIN ATRIBUCIÓN:</strong> No hay fuentes citadas. Incluí "según...", "dijo..." o "afirmó...".');
+        if (!tieneCitas) recs.push('<strong>SIN CITAS TEXTUALES:</strong> Agregá comillas con declaraciones de testigos o autoridades.');
+        if (datosPor100 < 2) recs.push(`<strong>POCOS DATOS:</strong> ${datosPor100} números cada 100 palabras. Agregá fechas, montos, cantidades.`);
+        if (recs.length === 0) recs.push('<strong>¡EXCELENTE!</strong> La noticia cumple todos los criterios. Lista para publicar.');
 
-        document.getElementById('evalRecomendaciones').innerHTML = recs.map(r => `<li style="display:flex;gap:10px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--success);margin-top:3px;"></i><span style="font-size:13px;color:var(--gray-600);line-height:1.5;">${r}</span></li>`).join('');
+        document.getElementById('evalRecomendaciones').innerHTML = recs.map((r, i) => {
+          const isError = r.includes('SIN') || r.includes('CORTO') || r.includes('FALTANTE') || r.includes('POCOS');
+          const icon = isError ? 'fa-exclamation-circle' : r.includes('¡EXCELENTE!') ? 'fa-check-circle' : 'fa-lightbulb';
+          const color = isError ? 'var(--danger)' : r.includes('¡EXCELENTE!') ? 'var(--success)' : 'var(--warning)';
+          return `<li style="display:flex;gap:10px;align-items:flex-start;padding:8px;background:var(--gray-50);border-radius:6px;border-left:3px solid ${color};"><i class="fas ${icon}" style="color:${color};margin-top:3px;flex-shrink:0;"></i><span style="font-size:13px;color:var(--gray-700);line-height:1.5;">${r}</span></li>`;
+        }).join('');
 
         const cpm = n.categoria === 'Sucesos' ? 1.45 : n.categoria === 'Nacionales' ? 1.20 : n.categoria === 'Deportes' ? 0.95 : n.categoria === 'Tecnología' ? 1.80 : 1.10;
         const revenue = ((n.vistas || 0) / 1000 * cpm).toFixed(2);
         document.getElementById('evalCpm').textContent = '$' + cpm.toFixed(2);
         document.getElementById('evalRevenue').textContent = '$' + revenue;
+
+        // Mostrar contenido completo
+        const vistaDiv = document.getElementById('evalVistaPreviaContenido');
+        const textoDiv = document.getElementById('evalContenidoTexto');
+        vistaDiv.style.display = 'block';
+        textoDiv.textContent = contenido;
       } catch (e) {
         console.error('Error evaluando:', e);
       }
