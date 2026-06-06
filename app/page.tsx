@@ -1,8 +1,25 @@
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
+
+// ===================================================================
+// CACHE DE FIRESTORE — Esto es lo que falta
+// unstable_cache envuelve las llamadas directas a Firestore y las cachea
+// ===================================================================
+
+const getCachedNews = unstable_cache(
+  async () => getNews(12),
+  ['homepage-news'],
+  { revalidate: 60, tags: ['news'] }
+);
+
+const getCachedMasLeidas = unstable_cache(
+  async () => getMasLeidas(),
+  ['homepage-masleidas'],
+  { revalidate: 60, tags: ['news'] }
+);
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
@@ -48,7 +65,10 @@ export default async function HomePage() {
   let masLeidas: Noticia[] = [];
 
   try {
-    [noticias, masLeidas] = await Promise.all([getNews(12), getMasLeidas()]);
+    [noticias, masLeidas] = await Promise.all([
+      getCachedNews(),    // ← Usar la versión cacheada
+      getCachedMasLeidas() // ← Usar la versión cacheada
+    ]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
@@ -57,11 +77,11 @@ export default async function HomePage() {
 
   return (
     <>
-      {heroImage && (
+      {heroImage && !heroImage.startsWith('/') && (
         <link
           rel="preload"
           as="image"
-          href={getResponsiveImageUrl(heroImage, 1200)}
+          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=1200&q=75`}
           type="image/webp"
           fetchPriority="high"
           crossOrigin="anonymous"

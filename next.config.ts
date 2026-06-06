@@ -229,18 +229,8 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
-      {
-        source: '/',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
-        ],
-      },
-      {
-        source: '/noticias',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
-        ],
-      },
+      // Cache-Control para / y /noticias manejado por Next.js ISR (force-static + revalidate)
+      // No forzar max-age=0 para evitar anular cache de Vercel
       {
         source: '/:path*',
         headers: [
