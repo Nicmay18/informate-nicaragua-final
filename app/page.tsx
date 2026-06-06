@@ -52,5 +52,21 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
+  const heroImage = noticias[0]?.imagen || null;
+
+  return (
+    <>
+      {heroImage && !heroImage.startsWith('/') && (
+        <link
+          rel="preload"
+          as="image"
+          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=1200&q=75`}
+          type="image/webp"
+          fetchPriority="high"
+          crossOrigin="anonymous"
+        />
+      )}
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+    </>
+  );
 }
