@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   applicationName: 'Nicaragua Informate',
   authors: [{ name: 'Keyling Elieth Rivera Muñoz', url: 'https://nicaraguainformate.com/nosotros' }],
   generator: 'Next.js',
-  keywords: ['Nicaragua', 'noticias Nicaragua', 'actualidad Nicaragua', 'periodismo Nicaragua', 'Managua', 'Noticias de hoy'],
+  // keywords eliminadas — Google ignora meta keywords desde 2009; usar keywords en schema JSON-LD
   title: { default: 'Nicaragua Informate — Noticias de Nicaragua', template: '%s | Nicaragua Informate' },
   description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
   robots: {
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/logo.webp',
+        url: 'https://nicaraguainformate.com/logo.svg',
         width: 1200,
         height: 630,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
-    images: ['https://nicaraguainformate.com/logo.webp'],
+    images: ['https://nicaraguainformate.com/logo.svg'],
   },
   alternates: {
     languages: {
@@ -108,6 +108,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://images.weserv.nl" />
+        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         {/* Preconnect a Google Fonts eliminado — no se usan fuentes externas, Next.js/font las auto-hospeda */}
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />

@@ -43,6 +43,13 @@ export async function GET() {
     <description>Periodismo de Precisión. Noticias de Nicaragua en tiempo real.</description>
     <language>es</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <image>
+      <url>${baseUrl}/logo.svg</url>
+      <title>Nicaragua Informate</title>
+      <link>${baseUrl}</link>
+      <width>42</width>
+      <height>42</height>
+    </image>
     <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml"/>
     ${articles.map((a) => `
     <item>

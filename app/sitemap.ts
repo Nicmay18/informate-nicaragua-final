@@ -3,8 +3,15 @@ import { getNews } from '@/lib/data';
 import { isToxicSlug } from '@/lib/seo-toxic';
 import { getAllAuthors } from '@/lib/authors';
 import { getAllEvergreen } from '@/lib/evergreen';
+import { unstable_cache } from 'next/cache';
 
 const baseUrl = 'https://nicaraguainformate.com';
+
+const cachedGetNews = unstable_cache(
+  async () => getNews(100),
+  ['sitemap-news'],
+  { revalidate: 3600 }
+);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // URLs estáticas del sitio
@@ -144,7 +151,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ARTÍCULOS DINÁMICOS desde Firebase
   try {
-    const articles = await getNews(100); // Obtener hasta 100 artículos recientes
+    const articles = await cachedGetNews(); // Cacheado: revalida cada 1h
 
     // Excluir artículos con slugs tóxicos del sitemap (AdSense remediation)
     const cleanArticles = articles.filter(article => !isToxicSlug(article.slug));

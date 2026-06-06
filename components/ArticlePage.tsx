@@ -402,7 +402,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <article style={containerStyle}>
+      <article style={containerStyle} itemScope itemType="https://schema.org/NewsArticle">
         {/* Breadcrumb */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#6b7280', marginBottom: 16 }} aria-label="Miga de pan">
           <Link href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Inicio</Link>
@@ -450,7 +450,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Imagen destacada — ALTURA FIJA 480px */}
         {noticia.imagen && (
-          <figure style={imgContainerStyle} itemScope itemType="https://schema.org/ImageObject">
+          <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+            <meta itemProp="url" content={noticia.imagen} />
             <OptimizedImage
               src={noticia.imagen}
               alt={noticia.titulo}
@@ -458,16 +459,14 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               fill
               priority
             />
+            <figcaption style={captionStyle}>
+              <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
+              {noticia.pieFoto?.trim() && (
+                <span style={{ color: '#9ca3af', marginLeft: 4 }}>| Nicaragua Informate</span>
+              )}
+            </figcaption>
           </figure>
         )}
-
-        {/* Pie de foto */}
-        <figcaption style={captionStyle}>
-          <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
-          {noticia.pieFoto?.trim() && (
-            <span style={{ color: '#9ca3af', marginLeft: 4 }}>| Nicaragua Informate</span>
-          )}
-        </figcaption>
 
         {/* Audio */}
         <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
