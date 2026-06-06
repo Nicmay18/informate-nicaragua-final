@@ -1,5 +1,6 @@
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -39,8 +40,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Sin caché - datos frescos de Firebase en cada visita
+export const dynamic = 'force-static';
+export const revalidate = 60;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -62,8 +63,10 @@ export default async function HomePage() {
         <link
           rel="preload"
           as="image"
-          href={heroImage}
+          href={getResponsiveImageUrl(heroImage, 1200)}
           type="image/webp"
+          imageSrcSet={`${getResponsiveImageUrl(heroImage, 640)} 640w, ${getResponsiveImageUrl(heroImage, 1200)} 1200w`}
+          imageSizes="(max-width: 768px) 100vw, 65vw"
           fetchPriority="high"
           crossOrigin="anonymous"
         />

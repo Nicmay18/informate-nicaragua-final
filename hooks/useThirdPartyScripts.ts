@@ -64,6 +64,14 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
     const { gtmId, adsClient, fundingChoices } = config;
     if (!gtmId && !adsClient && !fundingChoices) return;
 
+    // Inicializar dataLayer y gtag INMEDIATAMENTE (antes de cargar script externo)
+    (window as unknown as Record<string, unknown>).dataLayer =
+      ((window as unknown as Record<string, unknown>).dataLayer as Array<Record<string, unknown>>) || [];
+    const gtag = function(...args: unknown[]) {
+      ((window as unknown as Record<string, unknown>).dataLayer as Array<unknown>).push(args);
+    };
+    (window as unknown as Record<string, unknown>).gtag = gtag;
+
     // ─── 1. GTM después de LCP ───
     const loadGTM = () => {
       if (!gtmId || gtmLoaded.current) return;
@@ -72,15 +80,8 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         `https://www.googletagmanager.com/gtag/js?id=${gtmId}`,
         'gtm-script',
         true,
-        false
+        true
       ).then(() => {
-        // Inicializar dataLayer
-        (window as unknown as Record<string, unknown>).dataLayer =
-          ((window as unknown as Record<string, unknown>).dataLayer as Array<Record<string, unknown>>) || [];
-        const gtag = function(...args: unknown[]) {
-          ((window as unknown as Record<string, unknown>).dataLayer as Array<unknown>).push(args);
-        };
-        (window as unknown as Record<string, unknown>).gtag = gtag;
         gtag('js', new Date());
         gtag('config', gtmId);
         flushQueue();
