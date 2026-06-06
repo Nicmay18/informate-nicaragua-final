@@ -38,41 +38,7 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        maxInitialRequests: 25,
-        minSize: 20000,
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          react: {
-            name: 'react',
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            priority: 40,
-            enforce: true,
-          },
-          dateFns: {
-            name: 'date-fns',
-            test: /[\\/]node_modules[\\/](date-fns)[\\/]/,
-            priority: 30,
-            enforce: true,
-          },
-          lucide: {
-            name: 'lucide',
-            test: /[\\/]node_modules[\\/](lucide-react)[\\/]/,
-            priority: 20,
-            enforce: true,
-          },
-          vendor: {
-            name: 'vendor',
-            test: /[\\/]node_modules[\\/]/,
-            priority: 10,
-            enforce: true,
-          },
-        },
-      };
-    }
+    // Next.js maneja splitChunks automáticamente; no sobreescribir
     return config;
   },
   async redirects() {
