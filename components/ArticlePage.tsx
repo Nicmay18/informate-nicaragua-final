@@ -571,7 +571,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
                   {item.imagen && (
                     <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
-                      <Image src={getResponsiveImageUrl(item.imagen, 400)} alt={item.titulo} fill style={{ objectFit: 'cover' }} sizes="300px" loading="lazy" />
+                      <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
                     </div>
                   )}
                   <div style={{ padding: 16 }}>
