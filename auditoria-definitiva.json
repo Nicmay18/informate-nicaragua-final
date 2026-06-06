@@ -936,14 +936,17 @@
   {
     "id": "TwKzSdGWnzIYeAW801nD",
     "titulo": "Juez deja libre a nicaragüense investigada por muerte de su hermana",
-    "palabras": 518,
-    "relleno": [],
-    "transiciones": [
-      "no obstante"
+    "palabras": 467,
+    "relleno": [
+      "pesar"
     ],
-    "nivel": "🟠 ORO",
-    "score": 95,
-    "problemas": []
+    "transiciones": [],
+    "nivel": "🟡 BRONCE",
+    "score": 40,
+    "problemas": [
+      "CUERPO MEDIO: 467 palabras",
+      "RELLENO: pesar"
+    ]
   },
   {
     "id": "U3K2REamwdCUoxFRermC",

@@ -1,19 +1,21 @@
-User-agent: *
-Allow: /
-
-# Admin y auth (no indexar)
-Disallow: /admin/
-Disallow: /admin.html
-Disallow: /login/
-
-# API routes
-Disallow: /api/
-
-# Búsqueda interna (evita indexación de resultados de búsqueda)
-Disallow: /buscar
-
-# URLs tóxicas eliminadas (410 Gone en middleware)
-Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
-Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
-
-Sitemap: https://nicaraguainformate.com/sitemap.xml
+# Nicaragua Informate - Robots.txt  
+  
+User-agent: *  
+Allow: /  
+  
+# Admin y auth (no indexar)  
+Disallow: /admin/  
+Disallow: /admin.html  
+Disallow: /login/  
+  
+# API routes  
+Disallow: /api/  
+  
+# B�squeda interna  
+Disallow: /buscar  
+  
+# P�ginas de test eliminadas  
+Disallow: /test-articulo/  
+Disallow: /test-zoom/  
+  
+Sitemap: https://nicaraguainformate.com/sitemap.xml 
