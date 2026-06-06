@@ -1,5 +1,6 @@
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -56,11 +57,11 @@ export default async function HomePage() {
 
   return (
     <>
-      {heroImage && !heroImage.startsWith('/') && (
+      {heroImage && (
         <link
           rel="preload"
           as="image"
-          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=1200&q=75`}
+          href={getResponsiveImageUrl(heroImage, 1200)}
           type="image/webp"
           fetchPriority="high"
           crossOrigin="anonymous"
