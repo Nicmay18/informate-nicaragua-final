@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
 const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading: () => <div style={{ height: 60, background: '#f1f5f9', borderRadius: 8 }} /> });
 const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
-const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 100, background: '#f1f5f9', borderRadius: 8 }} /> });
+const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
 function timeAgo(dateStr: string) {
   try {

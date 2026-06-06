@@ -833,6 +833,20 @@
                 </div>
               </div>
 
+              <!-- EVALUADOR ORO v2 -->
+              <div class="form-group" style="margin-top: 24px;">
+                <label class="form-label" style="display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-microscope" style="color: var(--warning);"></i>
+                  Evaluador de Calidad — 6 Filtros ORO
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarValidacionOro()" style="margin-left: auto;">
+                    <i class="fas fa-play"></i> Evaluar Ahora
+                  </button>
+                </label>
+                <div id="panelValidacionOro" style="display: none; margin-top: 10px; border-radius: var(--radius-md); overflow: hidden;">
+                  <div id="resultadoValidacionOro"></div>
+                </div>
+              </div>
+
               <div style="display: flex; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
                 <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span></button>
                 <button type="button" class="btn btn-secondary btn-lg" onclick="vistaPreviaNoticia()"><i class="fas fa-eye"></i><span>Vista previa</span></button>
@@ -2298,6 +2312,163 @@ ${hashtags}`;
       } catch (error) { console.error("Error últimas noticias:", error); }
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // VALIDADOR DE NOTICIAS — 6 FILTROS ORO v2
+    // ═══════════════════════════════════════════════════════════════
+    const VALIDADOR = {
+      MIN_PALABRAS: 500,
+      MAX_PALABRAS_RESUMEN: 50,
+      MAX_TRANSICIONES_IA: 2,
+      MAX_RELLENO_EMO: 0,
+
+      TRANSICIONES_IA: new Set([
+        'además','por su parte','asimismo','en consecuencia','es importante destacar','cabe señalar','por lo tanto','no obstante','finalmente','sin embargo','por otro lado','en este sentido','en primer lugar','en segundo lugar','dicho esto','de igual manera','en tanto que','así mismo','de la misma forma','en contraste','por ende','consecuentemente','en conclusión','para finalizar','en resumen','de hecho','en efecto','a su vez','en el marco de','en el contexto de','en este orden de ideas','por consiguiente','en tal sentido','bajo esta premisa','en virtud de lo anterior'
+      ]),
+
+      RELLENO_EMO: new Set([
+        'tragedia','trágico','trágica','consternación','consternado','consternada','dolor','dolorosa','doloroso','lamentan','lamentable','lamentablemente','perdió la batalla','perdió la vida','vida truncada','jóven promesa','honras fúnebres','cristiana sepultura','amado','querido','enluta','profundo dolor','profunda conmoción','asombro','indignación','escandalizado','coraje','rabia','impotencia','tristeza','devastado','desolado','pesar','pesaroso','pena','luto','duelo','funesto','desoladora','desgarrador','desgarradora','conmovedor','conmovedora','dramático','dramática','fatal'
+      ]),
+
+      limpiarHTML(texto) {
+        if (!texto) return '';
+        return texto.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&[a-z]+;/gi,' ').replace(/\s+/g,' ').trim();
+      },
+
+      extraerPalabras(texto) {
+        const limpio = this.limpiarHTML(texto).toLowerCase();
+        return limpio.split(/[^a-zA-ZáéíóúñÁÉÍÓÚÑ0-9]+/).filter(p => p.length >= 2);
+      },
+
+      extraerNgramas(texto, n) {
+        const palabras = this.extraerPalabras(texto);
+        const ngramas = [];
+        for (let i = 0; i <= palabras.length - n; i++) ngramas.push(palabras.slice(i, i + n).join(' '));
+        return ngramas;
+      },
+
+      contarPalabras(texto) {
+        return this.extraerPalabras(texto).length;
+      },
+
+      filtroExtension(noticia) {
+        const cuerpo = noticia.contenido || noticia.contenidoHtml || '';
+        const palabras = this.contarPalabras(cuerpo);
+        if (palabras < 350) return { ok:false, filtro:'Extensión', mensaje:`Cuerpo muy corto: ${palabras} palabras (mínimo 350)`, detalle:`Actual: ${palabras} | Requerido: ${this.MIN_PALABRAS} (ideal)` };
+        if (palabras < this.MIN_PALABRAS) return { ok:false, filtro:'Extensión', mensaje:`Cuerpo insuficiente: ${palabras} (ideal ${this.MIN_PALABRAS})`, detalle:`Actual: ${palabras} | Recomendado: ${this.MIN_PALABRAS}+` };
+        return { ok:true, filtro:'Extensión', mensaje:`${palabras} palabras ✅` };
+      },
+
+      filtroLead(noticia) {
+        const resumen = noticia.resumen || '';
+        const palabras = this.contarPalabras(resumen);
+        if (palabras === 0) return { ok:false, filtro:'Lead', mensaje:'No tiene resumen/lead', detalle:'Agregá un párrafo inicial de 30-45 palabras' };
+        if (palabras > this.MAX_PALABRAS_RESUMEN) return { ok:false, filtro:'Lead', mensaje:`Resumen muy largo: ${palabras} palabras (máx ${this.MAX_PALABRAS_RESUMEN})`, detalle:'El lead debe ser conciso: qué, quién, cuándo, dónde' };
+        if (palabras < 20) return { ok:false, filtro:'Lead', mensaje:`Resumen muy corto: ${palabras} palabras (mínimo 20)`, detalle:'El lead debe responder qué pasó, dónde y cuándo' };
+        return { ok:true, filtro:'Lead', mensaje:`${palabras} palabras ✅` };
+      },
+
+      filtroRelleno(noticia) {
+        const cuerpo = this.limpiarHTML(noticia.contenido||'').toLowerCase();
+        const resumen = this.limpiarHTML(noticia.resumen||'').toLowerCase();
+        const textoCompleto = cuerpo + ' ' + resumen;
+        const encontrados = [];
+        const palabras = this.extraerPalabras(textoCompleto);
+        palabras.forEach(p => { if (this.RELLENO_EMO.has(p)) encontrados.push(p); });
+        [...this.extraerNgramas(textoCompleto,2), ...this.extraerNgramas(textoCompleto,3)].forEach(ng => { if (this.RELLENO_EMO.has(ng)) encontrados.push(ng); });
+        const unicos = [...new Set(encontrados)];
+        if (unicos.length > this.MAX_RELLENO_EMO) return { ok:false, filtro:'Relleno emocional', mensaje:`Detectadas ${unicos.length} palabras prohibidas`, detalle:`Reemplazar: ${unicos.join(', ')}`, palabras:unicos };
+        return { ok:true, filtro:'Relleno emocional', mensaje:'Ninguna ✅' };
+      },
+
+      filtroTransiciones(noticia) {
+        const cuerpo = this.limpiarHTML(noticia.contenido||'').toLowerCase();
+        const encontrados = [];
+        this.TRANSICIONES_IA.forEach(t => {
+          const idx = cuerpo.indexOf(t);
+          if (idx !== -1) {
+            const antes = idx===0 || !/[a-záéíóúñ]/.test(cuerpo[idx-1]);
+            const despues = idx+t.length >= cuerpo.length || !/[a-záéíóúñ]/.test(cuerpo[idx+t.length]);
+            if (antes && despues) encontrados.push(t);
+          }
+        });
+        if (encontrados.length > this.MAX_TRANSICIONES_IA) return { ok:false, filtro:'Transiciones IA', mensaje:`${encontrados.length} transiciones robóticas (máx ${this.MAX_TRANSICIONES_IA})`, detalle:`Eliminar: ${encontrados.join(', ')}`, palabras:encontrados };
+        return { ok:true, filtro:'Transiciones IA', mensaje:`${encontrados.length} detectadas ✅` };
+      },
+
+      filtroVeracidad(noticia) {
+        const cuerpo = noticia.contenido || '';
+        const problemas = [];
+        const citasSinFuente = (cuerpo.match(/"[^"]{20,200}"/g)||[]).length;
+        const fuentesGenericas = (cuerpo.match(/según (fuentes|informes|datos|reportes)/gi)||[]).length;
+        const estadisticasExactas = (cuerpo.match(/\b\d{1,3}(?:\.\d{3})+\s+(habitantes|personas|kilómetros|metros|toneladas|millones)\b/gi)||[]).length;
+        const fuentesConNombre = (cuerpo.match(/(comisionado|director|jefe|vocero|alcalde|ministro|doctor|fiscal|agente|oficial)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+(indicó|señaló|afirmó|declaró|confirmó|dijo)/gi)||[]).length;
+        if (citasSinFuente>0 && fuentesConNombre===0) problemas.push(`${citasSinFuente} cita(s) sin fuente atribuida con nombre y cargo`);
+        if (fuentesGenericas>2) problemas.push(`${fuentesGenericas} referencias genéricas`);
+        if (estadisticasExactas>0 && fuentesConNombre===0) problemas.push(`${estadisticasExactas} estadística(s) exacta(s) sin fuente`);
+        const parrafos = cuerpo.split(/\n+/).filter(p=>p.trim().length>50);
+        const unicos = new Set(parrafos.map(p=>p.trim().substring(0,100)));
+        if (parrafos.length>5 && unicos.size<parrafos.length*0.7) problemas.push('Posible repetición de párrafos (copy-paste)');
+        if (problemas.length>0) return { ok:false, filtro:'Veracidad', mensaje:`${problemas.length} problema(s) detectado(s)`, detalle:problemas.join(' | '), advertencia:true };
+        return { ok:true, filtro:'Veracidad', mensaje:'Sin alertas ✅' };
+      },
+
+      filtroEstructura(noticia) {
+        const cuerpo = noticia.contenido || '';
+        const problemas = [];
+        const tieneH2 = /<h2>/i.test(cuerpo);
+        const tieneH3 = /<h3>/i.test(cuerpo);
+        if (!tieneH2 && !tieneH3) problemas.push('Sin subtítulos (<h2> o <h3>)');
+        const parrafos = cuerpo.split(/\n+/).filter(p=>p.trim().length>20);
+        const parrafosLargos = parrafos.filter(p=>p.length>800);
+        if (parrafosLargos.length>2) problemas.push(`${parrafosLargos.length} párrafo(s) de más de 800 caracteres`);
+        const inicio = this.limpiarHTML(cuerpo).substring(0,100).toLowerCase();
+        if (['además','por otro lado','sin embargo','finalmente','en conclusión'].some(t=>inicio.startsWith(t))) problemas.push('El cuerpo no debe iniciar con una transición');
+        if (problemas.length>0) return { ok:false, filtro:'Estructura', mensaje:`${problemas.length} problema(s)`, detalle:problemas.join(' | ') };
+        return { ok:true, filtro:'Estructura', mensaje:'Bien estructurada ✅' };
+      },
+
+      validar(noticia) {
+        const filtros = [this.filtroExtension(noticia), this.filtroLead(noticia), this.filtroRelleno(noticia), this.filtroTransiciones(noticia), this.filtroVeracidad(noticia), this.filtroEstructura(noticia)];
+        const fallidos = filtros.filter(f=>!f.ok);
+        const advertencias = filtros.filter(f=>f.advertencia);
+        const aprobados = filtros.filter(f=>f.ok && !f.advertencia);
+        const nivel = fallidos.length===0 ? (advertencias.length>0?'🟡 BRONCE':'🟠 ORO') : (fallidos.some(f=>f.filtro==='Extensión'||f.filtro==='Relleno emocional')?'🔴 PELIGRO':'🟡 BRONCE');
+        const score = nivel==='🟠 ORO'?95 : nivel==='🟡 BRONCE'?55 : 40;
+        return { id:noticia.id, titulo:noticia.titulo, nivel, score, aprobado:fallidos.length===0, filtros, resumen:{ total:filtros.length, aprobados:aprobados.length, advertencias:advertencias.length, fallidos:fallidos.length } };
+      },
+
+      generarReporteHTML(resultado) {
+        const colorNivel = { '🟠 ORO':'#f59e0b', '🟡 BRONCE':'#eab308', '🔴 PELIGRO':'#ef4444' };
+        let html = `<div style="font-family:system-ui,sans-serif;max-width:600px;margin:16px 0;padding:16px;border-radius:12px;background:#0f172a;color:#e2e8f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><strong style="font-size:18px;">Validación: ${(resultado.titulo||'').substring(0,40)}...</strong><span style="background:${colorNivel[resultado.nivel]};color:#000;padding:4px 12px;border-radius:6px;font-weight:700;font-size:14px;">${resultado.nivel}</span></div><div style="display:grid;gap:8px;">`;
+        resultado.filtros.forEach(f => {
+          const icono = f.ok?'✅':(f.advertencia?'⚠️':'❌');
+          const color = f.ok?'#22c55e':(f.advertencia?'#eab308':'#ef4444');
+          html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px;background:#1e293b;border-radius:8px;"><div><span style="color:${color};font-weight:600;">${icono} ${f.filtro}</span><div style="font-size:13px;color:#94a3b8;margin-top:4px;">${f.mensaje}</div>${f.detalle?`<div style="font-size:12px;color:#64748b;margin-top:4px;">${f.detalle}</div>`:''}</div></div>`;
+        });
+        html += `</div><div style="margin-top:12px;padding-top:12px;border-top:1px solid #334155;font-size:13px;color:#94a3b8;">${resultado.resumen.aprobados}/${resultado.resumen.total} filtros aprobados${resultado.resumen.advertencias>0?` • ${resultado.resumen.advertencias} advertencia(s)`:''}${resultado.resumen.fallidos>0?` • ${resultado.resumen.fallidos} fallo(s)`:''}</div></div>`;
+        return html;
+      }
+    };
+
+    window.ejecutarValidacionOro = function() {
+      const noticia = {
+        titulo: document.getElementById('titulo').value.trim(),
+        resumen: document.getElementById('resumen').value.trim(),
+        contenido: document.getElementById('contenido').value.trim()
+      };
+      const resultado = VALIDADOR.validar(noticia);
+      document.getElementById('resultadoValidacionOro').innerHTML = VALIDADOR.generarReporteHTML(resultado);
+      document.getElementById('panelValidacionOro').style.display = 'block';
+      window._validacionOroOK = resultado.aprobado;
+      if (!resultado.aprobado) {
+        showToast('La noticia tiene errores críticos. Revisá el evaluador.', 'error');
+      } else if (resultado.nivel === '🟡 BRONCE') {
+        showToast('🟡 Validada con advertencias — Revisá antes de publicar', 'warning');
+      } else {
+        showToast('✅ Noticia validada — Nivel ORO alcanzado', 'success');
+      }
+    };
+
     async function postToApi(endpoint, payload) {
       const config = {
         telegram: { token: localStorage.getItem('admin_tg_token') || '', chatId: localStorage.getItem('admin_tg_chat') || '' },
@@ -2332,6 +2503,13 @@ ${hashtags}`;
       const publicado = document.getElementById('publicado').checked;
 
       if (!titulo || !categoria || !contenido || !imagenUrl) { showToast('Completa todos los campos obligatorios', 'error'); return; }
+
+      // VALIDACIÓN ORO OBLIGATORIA antes de guardar
+      ejecutarValidacionOro();
+      if (window._validacionOroOK === false) {
+        showToast('La noticia tiene errores críticos. Corregilos antes de guardar.', 'error');
+        return;
+      }
 
       // Si la imagen es un data URI (fallback), intentar subir a GitHub
       if (imagenUrl.startsWith('data:')) {

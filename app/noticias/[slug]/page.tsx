@@ -10,9 +10,9 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'auto';
 export const dynamicParams = true;
-export const revalidate = 0; // Sin caché - datos frescos de Firebase en cada visita
+export const revalidate = 3600; // ISR: revalidar cada 1 hora
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -151,6 +151,13 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     );
   } catch (error) {
     console.error('Error cargando noticia:', error);
-    return notFound();
+    // Error transitorio de Firebase — NO devolver 404/noindex
+    return (
+      <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 12 }}>Error de conexión</h1>
+        <p style={{ color: '#6b7280', marginBottom: 24 }}>No pudimos cargar esta noticia en este momento. Por favor, intenta de nuevo en unos segundos.</p>
+        <a href={`/noticias/${slug}`} style={{ color: '#991b1b', textDecoration: 'underline', fontWeight: 600 }}>Recargar página</a>
+      </div>
+    );
   }
 }

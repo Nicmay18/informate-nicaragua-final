@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 
-const data = JSON.parse(readFileSync('e:\\PROYECTO\\informate-nicaragua-final\\auditoria-noticias.json', 'utf8'));
+const data = JSON.parse(readFileSync('g:\\RESPALDO\\informate-nicaragua-final\\auditoria-noticias.json', 'utf8'));
 const peligrosas = data.filter(n => n.nivel.includes('PELIGRO')).sort((a, b) => a.score - b.score);
 
 const PROMPT_MAESTRO = `Eres un periodista senior de Nicaragua con 20 años de experiencia. Tu misión es REESCRIBIR la siguiente noticia para que cumpla con los estándares de Google AdSense, EEAT (Experience, Expertise, Authoritativeness, Trustworthiness) y periodismo de precisión.
@@ -171,7 +171,7 @@ function copyText(btn) {
 </body>
 </html>`;
 
-writeFileSync('e:\\PROYECTO\\informate-nicaragua-final\\prompts-reescritura.html', html, 'utf8');
+writeFileSync('g:\\RESPALDO\\informate-nicaragua-final\\prompts-reescritura.html', html, 'utf8');
 console.log(`✅ Generados ${peligrosas.length} prompts individuales`);
 console.log(`✅ Generados ${lotes.length} lotes de 5 noticias`);
 console.log(`📄 Archivo guardado: prompts-reescritura.html`);

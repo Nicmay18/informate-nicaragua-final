@@ -1,27 +1,19 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
 
-# Admin y auth
+# Admin y auth (no indexar)
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /login/
 
-# API
+# API routes
 Disallow: /api/
 
-# Búsqueda interna (no indexar)
+# Búsqueda interna (evita indexación de resultados de búsqueda)
 Disallow: /buscar
 
-# URLs tóxicas eliminadas
+# URLs tóxicas eliminadas (410 Gone en middleware)
 Disallow: /noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente
 Disallow: /noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en
-
-# Categorías que no existen en el sitio (evita rastreo innecesario)
-Disallow: /categoria/economia
-Disallow: /categoria/cultura
-Disallow: /categoria/politica
-
-# URL antigua del sistema anterior
-Disallow: /noticia.html
 
 Sitemap: https://nicaraguainformate.com/sitemap.xml

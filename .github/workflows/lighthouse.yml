@@ -1,0 +1,77 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GSC_VERIFICATION: ${{ secrets.NEXT_PUBLIC_GSC_VERIFICATION }}
+
+      - name: Start server
+        run: npm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run Lighthouse CI (Desktop)
+        run: |
+          npm install -g @lhci/cli@0.14.x
+          lhci autorun --config=lighthouserc.js
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_URL: http://localhost:3000
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: ./lighthouse-results/
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && always()
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const manifestPath = path.join(process.cwd(), 'lighthouse-results', 'manifest.json');
+            if (!fs.existsSync(manifestPath)) return;
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+            const results = manifest.map(r => ({
+              url: r.url,
+              performance: Math.round(r.summary.performance * 100),
+              accessibility: Math.round(r.summary.accessibility * 100),
+              'best-practices': Math.round(r.summary['best-practices'] * 100),
+              seo: Math.round(r.summary.seo * 100),
+            }));
+            const body = `## Lighthouse CI Results\n\n| URL | Performance | Accessibility | Best Practices | SEO |\n|-----|-------------|---------------|----------------|-----|\n${results.map(r => `| ${r.url} | ${r.performance} | ${r.accessibility} | ${r['best-practices']} | ${r.seo} |`).join('\n')}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });

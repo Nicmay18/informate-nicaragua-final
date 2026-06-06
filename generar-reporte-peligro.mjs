@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 
 try {
-  const data = JSON.parse(readFileSync('e:\\PROYECTO\\informate-nicaragua-final\\auditoria-noticias.json', 'utf8'));
+  const data = JSON.parse(readFileSync('g:\\RESPALDO\\informate-nicaragua-final\\auditoria-noticias.json', 'utf8'));
   const peligrosas = data.filter(n => n.nivel.includes('PELIGRO'));
 
   console.log(`Filtrando ${peligrosas.length} noticias en PELIGRO...`);
@@ -30,7 +30,7 @@ Total de noticias en peligro: ${peligrosas.length}
     output += `\n--------------------------------------------------------------------------------\n`;
   });
 
-  writeFileSync('e:\\PROYECTO\\informate-nicaragua-final\\reporte-noticias-peligro.txt', output, 'utf8');
+  writeFileSync('g:\\RESPALDO\\informate-nicaragua-final\\reporte-noticias-peligro.txt', output, 'utf8');
   console.log('Reporte generado con éxito!');
 } catch (e) {
   console.error('Error generando el reporte:', e.message);

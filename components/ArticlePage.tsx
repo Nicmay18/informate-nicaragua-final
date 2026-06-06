@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import OptimizedImage from './OptimizedImage';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -452,14 +451,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Imagen destacada — ALTURA FIJA 480px */}
         {noticia.imagen && (
           <figure style={imgContainerStyle} itemScope itemType="https://schema.org/ImageObject">
-            <Image
+            <OptimizedImage
               src={noticia.imagen}
               alt={noticia.titulo}
+              variant="hero"
               fill
-              style={{ objectFit: 'cover' }}
-              sizes="(max-width: 768px) 100vw, 800px"
               priority
-              crossOrigin="anonymous"
             />
           </figure>
         )}
@@ -574,7 +571,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
                   {item.imagen && (
                     <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
-                      <Image src={getResponsiveImageUrl(item.imagen, 400)} alt={item.titulo} fill style={{ objectFit: 'cover' }} sizes="300px" loading="lazy" />
+                      <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
                     </div>
                   )}
                   <div style={{ padding: 16 }}>
