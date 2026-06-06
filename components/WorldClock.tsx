@@ -3,14 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 
 const CITIES = [
-  { country: 'Managua', flag: '🇳🇮', tz: 'America/Managua' },
-  { country: 'Ciudad de México', flag: '🇲🇽', tz: 'America/Mexico_City' },
-  { country: 'Miami', flag: '🇺🇸', tz: 'America/New_York' },
-  { country: 'Madrid', flag: '🇪🇸', tz: 'Europe/Madrid' },
-  { country: 'Moscú', flag: '🇷🇺', tz: 'Europe/Moscow' },
-  { country: 'Beijing', flag: '🇨🇳', tz: 'Asia/Shanghai' },
-  { country: 'Buenos Aires', flag: '🇦🇷', tz: 'America/Argentina/Buenos_Aires' },
-  { country: 'Bogotá', flag: '🇨🇴', tz: 'America/Bogota' },
+  { country: 'Managua', code: 'NI', flag: '🇳🇮', tz: 'America/Managua' },
+  { country: 'Ciudad de México', code: 'MX', flag: '🇲🇽', tz: 'America/Mexico_City' },
+  { country: 'Miami', code: 'US', flag: '🇺🇸', tz: 'America/New_York' },
+  { country: 'Madrid', code: 'ES', flag: '🇪🇸', tz: 'Europe/Madrid' },
+  { country: 'Moscú', code: 'RU', flag: '🇷🇺', tz: 'Europe/Moscow' },
+  { country: 'Beijing', code: 'CN', flag: '🇨🇳', tz: 'Asia/Shanghai' },
+  { country: 'Buenos Aires', code: 'AR', flag: '🇦🇷', tz: 'America/Argentina/Buenos_Aires' },
+  { country: 'Bogotá', code: 'CO', flag: '🇨🇴', tz: 'America/Bogota' },
 ];
 
 function getTime(tz: string) {
@@ -138,7 +138,7 @@ export default function WorldClock() {
                 aria-pressed={i === active}
               >
                 <span aria-hidden="true">{c.flag}</span>
-                <span className="clock-widget__item-name">{c.country.split(' ')[0]}</span>
+                <span className="clock-widget__item-name">{c.code}</span>
               </button>
             ))}
           </div>

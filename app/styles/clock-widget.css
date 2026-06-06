@@ -94,9 +94,10 @@
 
 /* ─── LISTA DE CIUDADES ─── */
 .clock-widget__list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  overflow-x: auto;
 }
 
 .clock-widget__item {

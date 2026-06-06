@@ -1017,8 +1017,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .clock-widget__featured-time{font-size:1.3rem;font-weight:900;color:var(--ni-white);font-variant-numeric:tabular-nums;font-family:'JetBrains Mono','Courier New',monospace;letter-spacing:0.02em}
 .ni-sidebar .clock-widget__featured-time{font-size:clamp(1rem,3.5vw,1.3rem);white-space:normal;overflow-wrap:anywhere}
 .clock-widget__list{display:flex;gap:4px;flex-wrap:wrap}
-.ni-sidebar .clock-widget__list{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.clock-widget__item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border:1px solid var(--ni-border);border-radius:6px;background:var(--ni-white);cursor:pointer;transition:all 0.2s;font-size:0.65rem;color:var(--ni-text-light);flex:1;min-width:0}
+.ni-sidebar .clock-widget__list{display:flex;flex-wrap:nowrap;gap:4px;overflow-x:auto}
+.clock-widget__item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;border:1px solid var(--ni-border);border-radius:6px;background:var(--ni-white);cursor:pointer;transition:all 0.2s;font-size:0.6rem;color:var(--ni-text-light);min-width:36px;flex-shrink:0}
 .clock-widget__item.is-active{border-color:var(--ni-gold);background:rgba(212,163,115,0.08)}
 .clock-widget__item span:first-child{font-size:1rem}
 .clock-widget__item-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
