@@ -1,6 +1,5 @@
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getMasLeidas } from '@/lib/data';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 
@@ -53,25 +52,5 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  // Mirror HomePagePro hero logic: destacadas first, then resto — so the preload matches what's actually rendered
-  const heroFirst = noticias.find(n => n.destacada) ?? noticias[0];
-  const heroImage = heroFirst?.imagen;
-
-  return (
-    <>
-      {heroImage && (
-        <link
-          rel="preload"
-          as="image"
-          href={getResponsiveImageUrl(heroImage, 1200)}
-          type="image/webp"
-          imageSrcSet={`${getResponsiveImageUrl(heroImage, 640)} 640w, ${getResponsiveImageUrl(heroImage, 1200)} 1200w`}
-          imageSizes="(max-width: 768px) 100vw, 65vw"
-          fetchPriority="high"
-          crossOrigin="anonymous"
-        />
-      )}
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
-    </>
-  );
+  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
 }

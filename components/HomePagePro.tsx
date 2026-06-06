@@ -177,7 +177,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
           <article key={item.id} className={`ni-hero__slide${i === idx ? ' is-active' : ''}`}>
             <div className="ni-hero__media">
               {item.imagen ? (
-                <Image src={getResponsiveImageUrl(item.imagen, 1200)} alt={item.titulo} fill sizes="(max-width:768px) 100vw, 65vw" style={{ objectFit: 'cover', objectPosition: 'center center' }} priority={i === 0} fetchPriority={i === 0 ? 'high' : 'auto'} crossOrigin="anonymous" unoptimized={false} />
+                <Image src={item.imagen} alt={item.titulo} fill sizes="(max-width:768px) 100vw, 65vw" style={{ objectFit: 'cover', objectPosition: 'center center' }} priority={i === 0} fetchPriority="high" crossOrigin="anonymous" unoptimized={i === 0} />
               ) : null}
             </div>
           </article>
