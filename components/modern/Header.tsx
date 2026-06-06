@@ -41,7 +41,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="header-logo">
             <Image
-              src="/logo.webp"
+              src="/logo.svg"
               alt="Nicaragua Informate"
               width={40}
               height={40}

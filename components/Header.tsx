@@ -41,7 +41,7 @@ export default function Header() {
         <div className="ni-header__top">
           <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
             <Image
-              src="/logo.webp"
+              src="/logo.svg"
               alt="Nicaragua Informate"
               width={42}
               height={42}

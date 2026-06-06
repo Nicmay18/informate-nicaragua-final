@@ -3,6 +3,7 @@ import { getNews, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 
 // ===================================================================
 // CACHE DE FIRESTORE — Esto es lo que falta
@@ -77,11 +78,11 @@ export default async function HomePage() {
 
   return (
     <>
-      {heroImage && !heroImage.startsWith('/') && (
+      {heroImage && (
         <link
           rel="preload"
           as="image"
-          href={`https://images.weserv.nl/?url=${encodeURIComponent(heroImage)}&output=webp&w=640&q=75`}
+          href={getResponsiveImageUrl(heroImage, 640)}
           type="image/webp"
           fetchPriority="high"
           crossOrigin="anonymous"
