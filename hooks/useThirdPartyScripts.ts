@@ -117,10 +117,9 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         true,
         false
       ).then(() => {
-        // Inicializar adsbygoogle
+        // Inicializar adsbygoogle array vacio; los componentes AdSlot/AdUnit hacen push individual
         const win = window as unknown as Record<string, unknown>;
         win.adsbygoogle = (win.adsbygoogle as Array<Record<string, unknown>>) || [];
-        (win.adsbygoogle as Array<Record<string, unknown>>).push({});
       });
     };
 
