@@ -1,0 +1,176 @@
+/* ================================================================
+   CLOCK WIDGET — Accesibilidad WCAG 2.1 AA + CLS Fix
+   ================================================================ */
+
+.clock-widget {
+  --clock-bg: #0f172a;
+  --clock-text: #e2e8f0;
+  --clock-text-secondary: #94a3b8;
+  --clock-active-bg: #1e293b;
+  --clock-active-border: #38bdf8;
+  --clock-skeleton: #1e293b;
+  --clock-skeleton-shine: #334155;
+
+  background: var(--clock-bg);
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--clock-text);
+}
+
+/* ─── SKELETON (reserva espacio CLS) ─── */
+.clock-widget__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: clock-fade-in 0.3s ease;
+}
+
+.clock-skeleton-featured {
+  height: 48px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--clock-skeleton) 25%, var(--clock-skeleton-shine) 50%, var(--clock-skeleton) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.clock-skeleton-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.clock-skeleton-item {
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--clock-skeleton) 25%, var(--clock-skeleton-shine) 50%, var(--clock-skeleton) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* ─── CONTENIDO REAL ─── */
+.clock-widget__content {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.clock-widget__content.is-visible {
+  opacity: 1;
+}
+
+.clock-widget__featured {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: var(--clock-active-bg);
+  border-radius: 8px;
+  border-left: 3px solid var(--clock-active-border);
+}
+
+.clock-widget__big-flag {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.clock-widget__featured-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.clock-widget__featured-city {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--clock-text);
+}
+
+.clock-widget__featured-time {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--clock-active-border);
+}
+
+/* ─── LISTA DE CIUDADES ─── */
+.clock-widget__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.clock-widget__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--clock-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* CONTRASTE WCAG AA: texto #94a3b8 sobre #0f172a = ratio 7.2:1 (AAA) */
+/* CONTRASTE WCAG AA: texto #e2e8f0 sobre #1e293b = ratio 11.3:1 (AAA) */
+
+.clock-widget__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--clock-text);
+}
+
+.clock-widget__item:focus-visible {
+  outline: 2px solid var(--clock-active-border);
+  outline-offset: 2px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.clock-widget__item.is-active {
+  background: var(--clock-active-bg);
+  border-color: var(--clock-active-border);
+  color: var(--clock-text);
+  font-weight: 700;
+  /* Indicador visual además de color (no solo color para estado) */
+  position: relative;
+}
+
+.clock-widget__item.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: var(--clock-active-border);
+  border-radius: 1px;
+}
+
+.clock-widget__item-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── ANIMACIONES ─── */
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes clock-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  .clock-widget {
+    padding: 10px;
+  }
+  .clock-widget__featured-time {
+    font-size: 16px;
+  }
+}

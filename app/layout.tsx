@@ -1,9 +1,9 @@
 ﻿import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import { Inter, Merriweather } from 'next/font/google';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
+import './styles/clock-widget.css';
 import './pro-design.css';
 import {
   buildOrganizationJsonLdEnhanced,
@@ -14,6 +14,7 @@ import ConsentScript from '@/components/ConsentScript';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
+import ThirdPartyScripts from '@/components/ThirdPartyScripts';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
@@ -107,17 +108,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"
-          strategy="lazyOnload"
-        />
-        <Script
-          id="gtm-init"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});gtag('config','G-W1B5J61WEP');`
-          }}
-        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
       </head>
@@ -133,12 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieBanner />
         <ConsentScript />
         <ThemeScript />
-        {/* AdSense: plain async script avoids Next.js data-nscript attribute that AdSense rejects */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          crossOrigin="anonymous"
-        />
+        <ThirdPartyScripts />
       </body>
     </html>
   );

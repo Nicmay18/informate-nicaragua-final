@@ -327,3 +327,20 @@ img {
     padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
 }
+
+/* ===== SKELETON ANIMATION (OptimizedImage) ===== */
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.optimized-image-wrapper {
+  border-radius: 8px;
+  background-color: #e2e8f0;
+}
+
+.optimized-image-skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}

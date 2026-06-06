@@ -3,8 +3,10 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-// import { Mail, Heart } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import type { Noticia } from '@/lib/types';
+
+const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
 interface SidebarProps {
   trendingNews?: Noticia[];
@@ -122,6 +124,11 @@ export default function Sidebar({
           </div>
         </div>
       )}
+
+      {/* Reloj Mundial */}
+      <div className="sidebar-section" style={{ padding: 0, background: 'transparent' }}>
+        <WorldClock />
+      </div>
 
       {/* Información */}
       <div className="sidebar-section" style={{ background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%)' }}>

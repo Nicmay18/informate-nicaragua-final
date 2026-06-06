@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from './OptimizedImage';
 import { Clock } from 'lucide-react';
 import { useState } from 'react';
 import { Noticia, CATEGORY_COLORS } from '@/lib/types';
@@ -67,16 +67,12 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
               {article.categoria}
             </span>
             {hasImage ? (
-              <Image
+              <OptimizedImage
                 src={article.imagen}
                 alt={article.titulo}
-                width={800}
-                height={450}
+                variant="hero"
+                fill
                 priority={index === 0}
-                loading={index === 0 ? undefined : 'lazy'}
-                quality={index === 0 ? 90 : 75}
-                sizes="(max-width: 1024px) 100vw, 55vw"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={() => setImgError(true)}
               />
             ) : (
@@ -114,16 +110,12 @@ export default function ArticleCard({ article, hero = false, index = 0 }: Articl
             {article.categoria}
           </span>
           {hasImage ? (
-            <Image
+            <OptimizedImage
               src={article.imagen}
               alt={article.titulo}
-              width={640}
-              height={400}
+              variant="card"
+              fill
               priority={index < 6}
-              loading={index < 6 ? undefined : 'lazy'}
-              quality={index < 6 ? 85 : 75}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={() => setImgError(true)}
             />
           ) : (

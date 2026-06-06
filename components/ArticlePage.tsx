@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import OptimizedImage from './OptimizedImage';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -452,14 +451,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Imagen destacada — ALTURA FIJA 480px */}
         {noticia.imagen && (
           <figure style={imgContainerStyle} itemScope itemType="https://schema.org/ImageObject">
-            <Image
+            <OptimizedImage
               src={noticia.imagen}
               alt={noticia.titulo}
+              variant="hero"
               fill
-              style={{ objectFit: 'cover' }}
-              sizes="(max-width: 768px) 100vw, 800px"
               priority
-              crossOrigin="anonymous"
             />
           </figure>
         )}
