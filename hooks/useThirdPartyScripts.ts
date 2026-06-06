@@ -107,7 +107,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       setTimeout(loadGTM, 2000);
     }
 
-    // ─── 2. Google Ads: 2s después de load O scroll ───
+    // ─── 2. Google Ads: SOLO al scroll (nunca automático) ───
     const loadAds = () => {
       if (!adsClient || adsLoaded.current) return;
       adsLoaded.current = true;
@@ -115,7 +115,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsClient}`,
         'adsense-script',
         true,
-        false
+        true  // defer=true para no bloquear parseo
       ).then(() => {
         // Inicializar adsbygoogle array vacio; los componentes AdSlot/AdUnit hacen push individual
         const win = window as unknown as Record<string, unknown>;
@@ -123,24 +123,14 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       });
     };
 
-    let adsTimer: ReturnType<typeof setTimeout> | null = null;
-    const onWindowLoad = () => {
-      adsTimer = setTimeout(loadAds, 2000);
-    };
     const onScroll = () => {
-      if (adsTimer) clearTimeout(adsTimer);
       loadAds();
       window.removeEventListener('scroll', onScroll);
     };
 
-    if (document.readyState === 'complete') {
-      onWindowLoad();
-    } else {
-      window.addEventListener('load', onWindowLoad, { once: true });
-    }
     window.addEventListener('scroll', onScroll, { once: true, passive: true });
 
-    // ─── 3. FundingChoices: EU/EEA detection o delay 3s ───
+    // ─── 3. FundingChoices: SOLO al scroll o click (nunca automático) ───
     const loadFC = () => {
       if (fcLoaded.current) return;
       fcLoaded.current = true;
@@ -149,30 +139,28 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         'https://fundingchoicesmessages.google.com/i/24988088146?ers=1',
         'funding-choices',
         true,
-        false
+        true  // defer=true
       ).catch(() => {
         // Silenciar errores si no está disponible
       });
     };
 
-    // Detección simple de EU/EEA por timezone
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const euTimezones = [
-      'Europe/', 'Atlantic/Azores', 'Atlantic/Madeira', 'Atlantic/Canary'
-    ];
-    const isEU = euTimezones.some(prefix => tz.startsWith(prefix));
+    const onUserInteraction = () => {
+      if (fcLoaded.current) return;
+      loadFC();
+      window.removeEventListener('scroll', onUserInteraction);
+      window.removeEventListener('click', onUserInteraction);
+    };
 
-    if (isEU && fundingChoices) {
-      // En EU cargar rápido (consent requerido)
-      setTimeout(loadFC, 1000);
-    } else if (fundingChoices) {
-      // Fuera de EU delay mayor
-      setTimeout(loadFC, 3000);
+    if (fundingChoices) {
+      window.addEventListener('scroll', onUserInteraction, { once: true, passive: true });
+      window.addEventListener('click', onUserInteraction, { once: true });
     }
 
     return () => {
-      if (adsTimer) clearTimeout(adsTimer);
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', onUserInteraction);
+      window.removeEventListener('click', onUserInteraction);
     };
   }, [config.gtmId, config.adsClient, config.fundingChoices]);
 }
