@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 interface HeroLcpImageProps {
   src: string;
   alt: string;
@@ -35,14 +33,14 @@ export default function HeroLcpImage({
         ...style,
       }}
     >
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={imgSrc}
         alt={alt}
-        fill
-        sizes="(max-width: 768px) 100vw, 665px"
-        style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
-        priority={priority}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
+        fetchPriority={priority ? 'high' : 'auto'}
         loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
       />
     </div>
   );
