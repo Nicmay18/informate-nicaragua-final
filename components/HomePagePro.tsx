@@ -178,16 +178,16 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
             <div className="ni-hero__media">
               {item.imagen ? (
                 i === 0 ? (
-                  <Image
-                    src={getResponsiveImageUrl(item.imagen, 640)}
+                  // Primer slide = LCP: carga directo desde jsDelivr sin weserv.nl
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={getResponsiveImageUrl(item.imagen)}
                     alt={item.titulo}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                    priority={true}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
                     fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
                     crossOrigin="anonymous"
-                    unoptimized={false}
                   />
                 ) : (
                   <Image
