@@ -70,13 +70,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       siteName: 'Nicaragua Informate',
       title: meta.titulo,
       description: meta.description,
-      images: [{ url: `${SITE_URL}/logo.webp`, width: 1200, height: 630, alt: 'Nicaragua Informate' }],
+      images: [{ url: `${SITE_URL}/logo.svg`, width: 1200, height: 630, alt: 'Nicaragua Informate' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: meta.titulo,
       description: meta.description,
-      images: [`${SITE_URL}/logo.webp`],
+      images: [`${SITE_URL}/logo.svg`],
     },
   };
 }

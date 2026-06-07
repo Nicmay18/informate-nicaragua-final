@@ -53,7 +53,7 @@ export default async function BuscarPage({ searchParams }: { searchParams: Promi
           results.map((item) => (
             <article key={item.id} className="ni-search-card">
               <Link href={`/noticias/${item.slug}`} className="ni-search-card__image" aria-label={item.titulo}>
-                <Image src={item.imagen || '/logo.webp'} alt={item.titulo} fill sizes="(max-width: 768px) 100vw, 360px" style={{ objectFit: 'cover' }} />
+                <Image src={item.imagen || '/logo.svg'} alt={item.titulo} fill sizes="(max-width: 768px) 100vw, 360px" style={{ objectFit: 'cover' }} />
               </Link>
               <div className="ni-search-card__body">
                 <Link href={`/categoria/${normalize(item.categoria).replace(/[^a-z0-9]/g, '')}`} className="ni-search-card__cat">

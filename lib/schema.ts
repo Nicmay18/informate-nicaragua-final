@@ -8,7 +8,7 @@
     url: 'https://nicaraguainformate.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.webp',
+      url: 'https://nicaraguainformate.com/logo.svg',
       width: 512,
       height: 512,
     },
@@ -72,7 +72,7 @@ export function buildNewsArticleJsonLd(article: Noticia, url: string, readingTim
       name: 'Nicaragua Informate',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.webp',
+        url: 'https://nicaraguainformate.com/logo.svg',
       },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
