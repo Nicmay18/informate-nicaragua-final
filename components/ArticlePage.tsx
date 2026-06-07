@@ -6,6 +6,7 @@ import OptimizedImage from './OptimizedImage';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
+import { injectTocIds } from '@/lib/toc';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -285,6 +286,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     ? noticia.pieFoto
     : 'Foto: Nicaragua Informate / Archivo';
 
+  // Procesar TOC para artículos largos
+  const { html: processedHtml, items: tocItems } = injectTocIds(noticia.contenido || '');
+  const showToc = tocItems.length >= 3;
+
   // Container principal
   const containerStyle: React.CSSProperties = {
     maxWidth: 896,
@@ -462,8 +467,24 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* 3 Puntos Clave */}
         <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
 
+        {/* Tabla de contenidos (artículos largos) */}
+        {showToc && (
+          <nav aria-label="Tabla de contenidos" style={{ margin: '24px 0', padding: '16px 20px', backgroundColor: '#f9fafb', borderRadius: 8, border: '1px solid #e5e5e5' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 12px' }}>En este artículo</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {tocItems.map((item) => (
+                <li key={item.id} style={{ margin: '6px 0', paddingLeft: item.level === 3 ? 16 : 0 }}>
+                  <a href={`#${item.id}`} style={{ fontSize: 14, color: '#374151', textDecoration: 'none', fontWeight: item.level === 2 ? 600 : 400 }}>
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         {/* Contenido */}
-        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: processedHtml || noticia.resumen || '' }} />
 
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />

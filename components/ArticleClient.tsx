@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { CalendarDays, Clock, Eye, Check, Link2, Play, Pause, Square, Zap, ArrowLeft, ArrowRight } from 'lucide-react';
 import BrandIcon from '@/components/BrandIcon';
 import { formatearNoticia, limpiarHtml, tiempoLectura, formatDateES } from '@/lib/formateo';
+import { injectTocIds } from '@/lib/toc';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import LutoImage from '@/components/LutoImage';
 
@@ -529,6 +530,10 @@ export default function ArticleClient({
   const encodedShareCopy = encodeURIComponent(`${noticia.titulo} — ${url}`);
   const isUpdated = false; // Desactivado temporalmente para ocultar fecha de corrección en lote de noticias históricas
 
+  // Procesar TOC para artículos largos
+  const { html: processedHtml, items: tocItems } = injectTocIds(noticia.contenido || '');
+  const showToc = tocItems.length >= 3;
+
   return (
     <div suppressHydrationWarning>
       <ReadingProgress />
@@ -626,11 +631,27 @@ export default function ArticleClient({
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
           <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
+          {/* Tabla de contenidos (artículos largos) */}
+          {showToc && (
+            <nav aria-label="Tabla de contenidos" style={{ margin: '24px 0', padding: '16px 20px', backgroundColor: '#f9fafb', borderRadius: 8, border: '1px solid #e5e5e5' }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 12px' }}>En este artículo</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {tocItems.map((item) => (
+                  <li key={item.id} style={{ margin: '6px 0', paddingLeft: item.level === 3 ? 16 : 0 }}>
+                    <a href={`#${item.id}`} style={{ fontSize: 14, color: '#374151', textDecoration: 'none', fontWeight: item.level === 2 ? 600 : 400 }}>
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
           <div
             className="article-body"
             style={{ fontSize: `${fontSize}em` }}
             itemProp="articleBody"
-            dangerouslySetInnerHTML={{ __html: cleanHtml(noticia.contenido || '') }}
+            dangerouslySetInnerHTML={{ __html: cleanHtml(processedHtml) }}
           />
 
           <PullQuote contenido={noticia.contenido || ''} />
