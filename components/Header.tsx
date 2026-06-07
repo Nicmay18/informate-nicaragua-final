@@ -50,7 +50,7 @@ export default function Header() {
             />
             <div className="ni-logo__text">
               <strong>Nicaragua Informate</strong>
-              <span className="ni-logo__tagline">Infórmate al Instante</span>
+              <span className="ni-logo__tagline">INFORMATE AL INSTANTE</span>
             </div>
           </Link>
 

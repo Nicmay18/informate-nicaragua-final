@@ -81,7 +81,7 @@ export default function Footer() {
           <div className="footer-brand">
             <Link href="/" className="footer-logo">
               <Image
-                src="/logo.webp"
+                src="/logo.svg"
                 alt="Nicaragua Informate"
                 width={48}
                 height={48}
@@ -89,7 +89,7 @@ export default function Footer() {
               />
               <div className="footer-logo-text">
                 <span className="footer-logo-title">Nicaragua Informate</span>
-                <span className="footer-logo-tagline">Periodismo de Precisión</span>
+                <span className="footer-logo-tagline">INFORMATE AL INSTANTE</span>
               </div>
             </Link>
 

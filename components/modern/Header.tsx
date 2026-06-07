@@ -98,7 +98,7 @@ export default function Header() {
             <div className="mobile-menu-header">
               <Link href="/" className="mobile-logo" onClick={toggleMenu}>
                 <Image
-                  src="/logo.webp"
+                  src="/logo.svg"
                   alt="Nicaragua Informate"
                   width={32}
                   height={32}

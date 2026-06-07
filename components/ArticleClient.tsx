@@ -580,7 +580,7 @@ export default function ArticleClient({
           <figure className="article-hero" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             {isLuto ? (
               <LutoImage
-                src={noticia.imagen || '/logo.webp'}
+                src={noticia.imagen || '/logo.svg'}
                 alt={noticia.titulo}
                 nombre={noticia.titulo.split(':')[0] || noticia.titulo.split('–')[0]}
                 className="featured-image-wrapper"

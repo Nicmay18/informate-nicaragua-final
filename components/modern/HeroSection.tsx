@@ -63,7 +63,7 @@ export default function HeroSection({ noticias }: HeroSectionProps) {
         <div className="hero-main">
           <div className="hero-image-container">
             <Image
-              src={currentNoticia.imagen || '/logo.webp'}
+              src={currentNoticia.imagen || '/logo.svg'}
               alt={currentNoticia.titulo}
               fill
               className="hero-image"
@@ -175,7 +175,7 @@ export default function HeroSection({ noticias }: HeroSectionProps) {
                 >
                   <div className="side-story-image">
                     <Image
-                      src={noticia.imagen || '/logo.webp'}
+                      src={noticia.imagen || '/logo.svg'}
                       alt={noticia.titulo}
                       width={80}
                       height={60}

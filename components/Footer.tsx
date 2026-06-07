@@ -22,7 +22,7 @@ export default function Footer() {
         <div>
           <div className="ni-footer__brand">
             <Image
-              src="/logo.webp"
+              src="/logo.svg"
               alt="Nicaragua Informate"
               width={40}
               height={40}
@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
           <p className="ni-footer__desc">
             Portal de noticias de Nicaragua con cobertura nacional e internacional.
-            Infórmate al Instante desde Managua.
+            INFORMATE AL INSTANTE desde Managua.
           </p>
           <div className="ni-footer__social">
             <a
