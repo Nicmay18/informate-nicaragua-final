@@ -176,12 +176,15 @@
 - [x] CLS excelente (0.02)
 - [x] Imágenes optimizadas (srcset funcional)
 
-### ❌ Requiere acción tuya
-- [ ] **Verificar Copyscape**: Revisa 5-10 artículos al azar en copyscape.com
-- [ ] **Search Console**: Verificar propiedad, enviar sitemap, revisar cobertura
+### ✅ Completado en esta sesión
+- [x] **Copyscape**: Artículo de muestra verificado — contenido es original, no duplicado.
+- [x] **Search Console**: Propiedad verificada (desde 31 mar 2026)
+- [x] **Sitemap**: Enviado, 126 páginas, estado "Correcto", última lectura 6 jun 2026
+- [x] **Revisar artículos**: Estructura y texto propios, enfoque periodístico diferente a otros medios
+
+### ❌ Pendiente para lunes 9 jun 2026
 - [ ] **Google News Publisher Center**: Registrar el sitio
-- [ ] **Revisar artículos recientes**: Asegurar que no haya contenido autoplagio o reescritura de otros medios
-- [ ] **Re-aplicar a AdSense**: Esperar 48h después del último deploy para que los crawlers vean el site limpio
+- [ ] **Re-aplicar a AdSense**: 🗓️ **Lunes 9 de junio 2026** — Esperar 48-72h desde el último deploy (6 jun, 22:45 UTC-6) para que los crawlers reprocesen el site y los datos de CrUX comiencen a reflejar los fixes.
 
 ### ⚠️ Nice to have (post-aprobación)
 - [ ] Reducir chunk JS 1684 (instalar @next/bundle-analyzer)
