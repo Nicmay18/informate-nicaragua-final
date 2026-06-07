@@ -14,12 +14,16 @@ export function cleanImageUrl(url: string): string {
 }
 
 /**
- * Convierte URLs de imágenes a formato optimizado:
+ * Normaliza URLs de imágenes:
  * - Firebase Storage → ruta local /images/ (evita tokens expirados)
- * - GitHub raw URLs: directo (disponible inmediatamente, sin caché de jsDelivr)
- * - Otras externas: proxy weserv.nl para redimensionar
+ * - Data URI, local, jsDelivr → directo (ya optimizadas)
+ * - Unsplash/YouTube → limpia query params
+ *
+ * NOTA: Ya NO genera URLs weserv.nl. Eso lo maneja el loader global de next/image
+ * (lib/image-loader.ts) para evitar pre-procesar URLs con width fijo, lo cual
+ * rompe el srcset de next/image.
  */
-export function getResponsiveImageUrl(url: string, width?: number, height?: number): string {
+export function getResponsiveImageUrl(url: string, _width?: number, _height?: number): string {
   if (!url || url === 'null' || url === 'undefined' || url === 'NaN') return FALLBACK_IMAGE;
 
   // Normalizar Firebase Storage URLs a rutas locales ANTES de cualquier otro procesamiento
@@ -46,16 +50,9 @@ export function getResponsiveImageUrl(url: string, width?: number, height?: numb
     return url;
   }
 
-  // Otras imágenes externas: proxy weserv.nl para redimensionar
-  if (width || height) {
-    const params = new URLSearchParams();
-    params.set('url', url);
-    if (width) params.set('w', String(width));
-    if (height) params.set('h', String(height));
-    params.set('fit', 'cover');
-    params.set('output', 'webp');
-    params.set('q', '75');
-    return `https://images.weserv.nl/?${params.toString()}`;
+  // Unsplash / YouTube: limpiar query params
+  if (url.includes('images.unsplash.com') || url.includes('i.ytimg.com')) {
+    return url.split('?')[0];
   }
 
   return url;

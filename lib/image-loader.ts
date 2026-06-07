@@ -22,8 +22,10 @@ export default function weservLoader({ src, width, quality = 75 }: ImageLoaderPr
   }
 
   // URLs ya optimizadas o de servicios de optimización — no re-procesar
+  // jsDelivr ya sirve .webp optimizadas; pasar por weserv.nl solo ralentiza LCP
   if (
     src.includes('images.weserv.nl') ||
+    src.includes('cdn.jsdelivr.net') ||
     src.includes('cloudinary') ||
     src.includes('imgix')
   ) {
