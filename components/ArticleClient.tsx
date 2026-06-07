@@ -70,7 +70,6 @@ interface ArticleClientProps {
   noticia: NoticiaProps;
   related: NoticiaProps[];
   isLuto?: boolean;
-  adSlot?: React.ReactNode;
   serverNow?: number;
 }
 
@@ -87,23 +86,6 @@ const CAT_COLORS: Record<string, string> = {
 };
 
 const slugifyCategory = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
-
-function AdPlaceholder({ id, label, size, variant = 'inline' }: { id: string; label: string; size: string; variant?: 'inline' | 'leaderboard' | 'sidebar' }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
-  if (!mounted) return (
-    <div className={`ad-slot ad-slot--${variant}`} aria-label={label} role="complementary" style={{ minHeight: 90 }}>
-      <span>{label}</span>
-      <small>{size}</small>
-    </div>
-  );
-  return (
-    <div className={`ad-slot ad-slot--${variant}`} id={id} aria-label={label} role="complementary">
-      <span>{label}</span>
-      <small>{size}</small>
-    </div>
-  );
-}
 
 /* ================================================================
    AUDIO BUTTON (reproductor con ondas animadas)
@@ -514,7 +496,6 @@ export default function ArticleClient({
   noticia,
   related = [],
   isLuto = false,
-  adSlot,
   serverNow,
 }: ArticleClientProps) {
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
@@ -645,8 +626,6 @@ export default function ArticleClient({
           <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} articleId={noticia.id} />
           <NewsIn3Points resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
-          <AdPlaceholder id="div-gpt-ad-inarticle-top" label="Publicidad" size="In-article 1" variant="inline" />
-
           <div
             className="article-body"
             style={{ fontSize: `${fontSize}em` }}
@@ -655,14 +634,6 @@ export default function ArticleClient({
           />
 
           <PullQuote contenido={noticia.contenido || ''} />
-
-          <AdPlaceholder id="div-gpt-ad-inarticle-mid" label="Publicidad" size="In-article 2" variant="inline" />
-
-          {adSlot && (
-            <div style={{ margin: '36px 0', maxWidth: 680 }}>
-              {adSlot}
-            </div>
-          )}
 
           <div className="article-tags">
             {tags.map(tag => (
@@ -774,13 +745,10 @@ export default function ArticleClient({
               </div>
             </section>
           )}
-
-          <AdPlaceholder id="div-gpt-ad-article-bottom" label="Publicidad" size="728x90" variant="leaderboard" />
           </div>
         </div>
 
         <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: '340px', width: '340px' }}>
-          <AdPlaceholder id="div-gpt-ad-sidebar-1" label="Publicidad" size="300x600" variant="sidebar" />
           {readAlso.length > 0 && (
             <div className="sidebar-widget">
               <h3 className="widget-title">Artículos Relacionados</h3>
@@ -798,7 +766,6 @@ export default function ArticleClient({
               </div>
             </div>
           )}
-          <AdPlaceholder id="div-gpt-ad-sidebar-2" label="Publicidad" size="300x250" variant="sidebar" />
         </aside>
       </main></div>
     </div>

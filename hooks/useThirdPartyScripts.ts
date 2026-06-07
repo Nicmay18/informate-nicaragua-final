@@ -117,7 +117,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         true,
         true  // defer=true para no bloquear parseo
       ).then(() => {
-        // Inicializar adsbygoogle array vacio; los componentes AdSlot/AdUnit hacen push individual
+        // Inicializar adsbygoogle array vacio para futuros slots (post-aprobacion AdSense)
         const win = window as unknown as Record<string, unknown>;
         win.adsbygoogle = (win.adsbygoogle as Array<Record<string, unknown>>) || [];
       });

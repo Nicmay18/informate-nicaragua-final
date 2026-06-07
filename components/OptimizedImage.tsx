@@ -18,7 +18,7 @@ interface OptimizedImageProps {
 }
 
 const VARIANT_SIZES = {
-  hero:     { width: 768,  height: 432, sizes: '(max-width: 640px) 100vw, (max-width: 1200px) 80vw, 768px' },
+  hero:     { width: 1200, height: 675, sizes: '(max-width: 640px) 100vw, (max-width: 1200px) 80vw, 1200px' },
   card:     { width: 580,  height: 326, sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
   sidebar:  { width: 220,  height: 124, sizes: '220px' },
   thumbnail:{ width: 120,  height: 68,  sizes: '120px' },

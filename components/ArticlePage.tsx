@@ -252,18 +252,6 @@ function PullQuote({ contenido }: { contenido: string }) {
 }
 
 /* ================================================================
-   AD PLACEHOLDER
-   ================================================================ */
-function AdPlaceholder({ label, size }: { label: string; size: string }) {
-  return (
-    <div style={{ margin: '32px 0', padding: '32px 16px', backgroundColor: '#f9fafb', border: '1px solid #e5e5e5', borderRadius: 8, textAlign: 'center' }} role="complementary" aria-label={label}>
-      <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1, color: '#9ca3af' }}>{label}</span>
-      <p style={{ fontSize: 14, color: '#6b7280', margin: '4px 0 0' }}>{size}</p>
-    </div>
-  );
-}
-
-/* ================================================================
    ARTICLE PAGE — ESTILOS INLINE COMPLETOS (sin Tailwind)
    ================================================================ */
 interface ArticlePageProps {
@@ -474,17 +462,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* 3 Puntos Clave */}
         <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
 
-        {/* Ad Top */}
-        <AdPlaceholder label="Publicidad" size="In-article Top" />
-
         {/* Contenido */}
         <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: noticia.contenido || noticia.resumen || '' }} />
 
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />
-
-        {/* Ad Mid */}
-        <AdPlaceholder label="Publicidad" size="In-article Mid" />
 
         {/* Tags */}
         {tags.length > 0 && (
@@ -596,8 +578,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </button>
         </section>
 
-        {/* Ad Bottom */}
-        <AdPlaceholder label="Publicidad" size="728x90" />
       </article>
     </div>
   );
