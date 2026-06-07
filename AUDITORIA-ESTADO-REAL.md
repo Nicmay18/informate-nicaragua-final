@@ -1,6 +1,6 @@
 # INFORME DE AUDITORÍA — NICARAGUA INFORMATE
 ## Estado Real del Proyecto (sin métricas inventadas)
-**Fecha:** 6 de junio 2026 | **Commits de esta sesión:** `c8a178c` → `673921a`
+**Fecha:** 6 de junio 2026 | **Commits de esta sesión:** `c8a178c` → `98be22f`
 
 ---
 
@@ -28,6 +28,14 @@
 - **Eliminadas meta keywords obsoletas**: Google no las usa desde 2009. **Status: Resuelto.**
 - **Preconnect a weserv.nl**: Agregado en `layout.tsx`. **Status: Resuelto.**
 
+### Rendimiento (PageSpeed Insights — datos reales)
+- **LCP campo (CrUX): 2.9s** — No supera CWV (umbral 2.5s). Medido en usuarios reales últimos 28 días.
+- **LCP laboratorio (Lighthouse): 4.8s** — Moto G Power emulado, 4G lento.
+- **Root cause LCP**: `OptimizedImage.tsx` pre-procesaba URLs con `buildWeservUrl`, generando URLs weserv fijas con `w=1200`. Cuando `next/image` generaba el srcset, el loader global detectaba que ya era una URL weserv y la devolvía sin modificar. Resultado: **todos los breakpoints del srcset apuntaban a la imagen de 1200px**, descargando tamaños exagerados en móvil.
+- **Fix aplicado**: Eliminado `buildWeservUrl` de `OptimizedImage.tsx`. Ahora pasa `src` original y deja que `next/image` + `weservLoader` global generen srcsets correctos con widths apropiados por breakpoint. Agregados `fit=cover` y `n=-1` al loader global para mantener comportamiento.
+- **CLS: 0.02** — Pasa CWV (umbral 0.1). ✅
+- **JavaScript no usado: 85 KiB** — Chunk `1684` con 74% de código muerto. No identificado exactamente; posiblemente código compartido entre rutas que Lighthouse marca como "no usado" en la home page pero que se usa en otras páginas.
+
 ### UX / Accesibilidad
 - **Tabla de Contenidos (TOC)**: Implementada para artículos con 3+ encabezados H2/H3. Extrae IDs automáticamente y genera navegación interna. **Status: Resuelto.**
 
@@ -43,9 +51,29 @@
 
 ## ⚠️ LO QUE NO SE PUEDE CORREGIR DESDE CÓDIGO (requiere acciones tuyas)
 
-### 1. Métricas de rendimiento reales
-**Problema:** No tengo acceso a PageSpeed Insights API ni a datos de campo (CrUX). Mi afirmación anterior de "LCP 2.9s" era estimada, no medida.
-**Acción requerida:** Ejecutar PageSpeed Insights en producción: https://pagespeed.web.dev/?url=https%3A%2F%2Fnicaraguainformate.com
+### 1. Métricas de rendimiento reales — DATOS RECIBIDOS
+**Estado:** Datos de campo (CrUX) y laboratorio (Lighthouse) recibidos.
+
+**Datos de campo (CrUX, últimos 28 días):**
+| Métrica | Valor | CWV | Estado |
+|---------|-------|-----|--------|
+| LCP | 2.9s | ≤2.5s | ❌ No pasa |
+| INP | N/A | ≤200ms | Sin datos |
+| CLS | 0.02 | ≤0.1 | ✅ Pasa |
+
+**Datos de laboratorio (Lighthouse, Moto G Power, 4G lento):**
+| Métrica | Valor | Óptimo | Estado |
+|---------|-------|--------|--------|
+| Rendimiento | 82/100 | ≥90 | ⚠️ Mejorable |
+| LCP | 4.8s | ≤2.5s | ❌ Alto |
+| FCP | 1.2s | ≤1.8s | ✅ Pasa |
+| TBT | 10ms | ≤200ms | ✅ Pasa |
+| CLS | 0 | ≤0.1 | ✅ Pasa |
+| Speed Index | 3.2s | ≤3.4s | ✅ Pasa |
+
+**Fix aplicado desde código:**
+- Root cause del LCP alto: srcset de imágenes generaba URLs de 1200px para todos los breakpoints. Fix aplicado en `OptimizedImage.tsx` + `lib/image-loader.ts`.
+- **Acción requerida:** Re-ejecutar PSI después del deploy para verificar mejora del LCP.
 **Prioridad:** Alta
 
 ### 2. Verificación de contenido original (Copyscape)
@@ -107,7 +135,10 @@
 | Headers de seguridad | ✅ Completos | CSP, HSTS, X-Frame, etc. |
 | Código muerto | ✅ Eliminado | 305 líneas menos |
 | Service Worker | ⚠️ Eliminado | Era adware; PWA requiere SW legítimo |
-| LCP real | ❓ Desconocido | Necesita medir con PSI |
+| LCP real (CrUX) | ❌ 2.9s | Umbral CWV: ≤2.5s. Fix de srcset aplicado. Requiere re-medir. |
+| LCP laboratorio | ❌ 4.8s | Lighthouse Moto G Power. Fix aplicado, requiere re-medir. |
+| CLS real | ✅ 0.02 | Pasa CWV (umbral ≤0.1) |
+| Rendimiento LH | ⚠️ 82/100 | Mejorable. Principal oportunidad: imágenes. |
 | Artículos indexados | ❓ Desconocido | Necesita Search Console |
 | Copyscape | ❓ No verificado | Necesita acción manual |
 | Google News | ❓ No registrado | Necesita Publisher Center |
