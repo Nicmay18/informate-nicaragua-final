@@ -25,19 +25,6 @@ const VARIANT_SIZES = {
   og:       { width: 1200, height: 630, sizes: '1200px' },
 } as const;
 
-function buildWeservUrl(src: string, w: number, q = 75): string {
-  if (src.includes('images.weserv.nl') || src.includes('cloudinary') || src.includes('imgix')) {
-    return src;
-  }
-  const params = new URLSearchParams();
-  params.set('url', src);
-  params.set('w', w.toString());
-  params.set('q', q.toString());
-  params.set('output', 'webp');
-  params.set('fit', 'cover');
-  params.set('n', '-1');
-  return `https://images.weserv.nl/?${params.toString()}`;
-}
 
 export default function OptimizedImage({
   src,
@@ -60,9 +47,6 @@ export default function OptimizedImage({
   const sizes = config.sizes;
 
   const isLocal = src.startsWith('/');
-  const isExternalOptimized = src.includes('images.weserv.nl') || src.includes('cloudinary');
-  const needsProxy = !isLocal && !isExternalOptimized && !unoptimized;
-  const imageSrc = needsProxy ? buildWeservUrl(src, finalWidth) : src;
 
   const containerStyle: React.CSSProperties = fill
     ? { position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }
@@ -89,7 +73,7 @@ export default function OptimizedImage({
       )}
 
       <Image
-        src={imageSrc}
+        src={src}
         alt={alt}
         fill={fill}
         width={fill ? undefined : finalWidth}

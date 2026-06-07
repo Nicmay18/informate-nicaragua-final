@@ -36,6 +36,8 @@ export default function weservLoader({ src, width, quality = 75 }: ImageLoaderPr
   params.set('url', src);
   params.set('w', width.toString());
   params.set('q', quality.toString());
+  params.set('fit', 'cover');
+  params.set('n', '-1');
 
   // Forzar WebP (el navegador puede pedir AVIF si está soportado)
   params.set('output', 'webp');
