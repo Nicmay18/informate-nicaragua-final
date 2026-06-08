@@ -93,13 +93,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         tags: keywords.split(', ').slice(0, 5),
         images: noticia.imagen
           ? [{ url: noticia.imagen, width: 1200, height: 630, alt: imageAlt }]
-          : [{ url: 'https://nicaraguainformate.com/logo.svg', width: 1200, height: 630, alt: 'Nicaragua Informate' }],
+          : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
       },
       twitter: {
         card: 'summary_large_image',
         title: finalTitle,
         description,
-        images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.svg'],
+        images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.webp'],
       },
       robots: {
         index: true,

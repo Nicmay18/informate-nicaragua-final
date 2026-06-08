@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: 'Nicaragua Informate',
     title: 'Categorías | Nicaragua Informate',
     description: 'Explora todas las secciones de Nicaragua Informate.',
-    images: [{ url: `${SITE_URL}/logo.svg`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
+    images: [{ url: `${SITE_URL}/logo.webp`, width: 512, height: 512, alt: 'Nicaragua Informate' }],
   },
 };
 

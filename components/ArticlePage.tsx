@@ -268,11 +268,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
-  const [views, setViews] = useState(() => noticia.vistas || 0);
+  // Optimistic +1: muestra inmediatamente la vista del usuario actual
+  const [views, setViews] = useState(() => (noticia.vistas || 0) + 1);
 
   useEffect(() => {
-    setViews(noticia.vistas || 0);
-  }, [noticia.vistas, noticia.slug]);
+    setViews((noticia.vistas || 0) + 1);
+  }, [noticia.slug]);
 
   useEffect(() => {
     if (!noticia.slug) return;

@@ -22,7 +22,7 @@ export default function Footer() {
         <div>
           <div className="ni-footer__brand">
             <Image
-              src="/logo.svg"
+              src="/logo.webp"
               alt="Nicaragua Informate"
               width={40}
               height={40}

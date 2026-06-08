@@ -52,10 +52,16 @@ export async function ensureUniqueSlug(
 }
 
 /**
- * Fallback temporal: compara un slug de params contra el slug
- * generado dinámicamente desde el título de una noticia.
- * Útil mientras se migra la base de datos.
+ * Compara un slug de params contra el slug generado desde el título.
  */
 export function slugMatches(title: string, slugParam: string): boolean {
   return generateSlug(title) === slugParam;
+}
+
+/**
+ * Valida si un slug tiene formato correcto.
+ */
+export function isValidSlug(slug: string): boolean {
+  if (!slug || typeof slug !== 'string') return false;
+  return /^[a-z0-9-]+$/.test(slug) && slug.length <= 100 && slug.length > 0;
 }

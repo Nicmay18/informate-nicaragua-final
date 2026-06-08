@@ -9,6 +9,7 @@ import nextDynamic from 'next/dynamic';
 const TipTapEditor = nextDynamic(() => import('@/components/admin/TipTapEditor'), { ssr: false });
 
 import { categoryToSlug } from '@/lib/types';
+import { generateSlug } from '@/lib/slug';
 
 // Firebase imports (dynamic to avoid SSR issues)
 import { initializeApp, getApps } from 'firebase/app';
@@ -34,14 +35,6 @@ const CAT_COLORS: Record<string, string> = {
   Tecnología: '#2563eb',
 };
 
-function generarSlug(titulo: string): string {
-  return titulo
-    .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
 export default function AdminNuevaPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,6 +58,7 @@ export default function AdminNuevaPage() {
   const [destacada, setDestacada] = useState(false);
   const [publicado, setPublicado] = useState(true);
   const [existingSlug, setExistingSlug] = useState('');
+  const [autorNombre, setAutorNombre] = useState('Keyling Elieth Rivera Muñoz');
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -135,7 +129,7 @@ export default function AdminNuevaPage() {
   const handleImageUpload = async (file: File) => {
     if (!file || !storage) return;
     // Upload to Firebase Storage
-    const filename = `${generarSlug(titulo).substring(0, 30) || 'noticia'}-${Date.now()}.${file.name.split('.').pop()}`;
+    const filename = `${generateSlug(titulo).substring(0, 30)}-${Date.now()}.${file.name.split('.').pop()}`;
     const storageRef = ref(storage, `noticias/${filename}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
@@ -171,10 +165,10 @@ export default function AdminNuevaPage() {
         fecha: serverTimestamp(),
         fechaActualizacion: serverTimestamp(),
         vistas: 0,
-        autor: 'Directora Editorial',
+        autor: autorNombre,
         destacada,
         publicado,
-        slug: editId ? undefined : generarSlug(titulo),
+        slug: editId ? undefined : generateSlug(titulo),
         palabras,
       };
 
@@ -196,7 +190,7 @@ export default function AdminNuevaPage() {
       // Revalidar página principal, categoría y artículo individual para que aparezca inmediatamente
       try {
         const catSlug = categoryToSlug(categoria);
-        const articleSlug = editId ? existingSlug : generarSlug(titulo);
+        const articleSlug = editId ? existingSlug : generateSlug(titulo);
         await fetch('/api/revalidate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -248,7 +242,17 @@ export default function AdminNuevaPage() {
 
       <main style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px 64px' }}>
         <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8, color: '#1e293b' }}>{editId ? 'Editar Noticia' : 'Nueva Noticia'}</h1>
-        <p style={{ color: '#64748b', marginBottom: 32, fontSize: 14 }}>Usa el editor profesional abajo. Cada Enter crea un párrafo nuevo. Usa H2 para subtítulos y la lista para viñetas.</p>
+        <p style={{ color: '#64748b', marginBottom: 16, fontSize: 14 }}>Usa el editor profesional abajo. Cada Enter crea un párrafo nuevo. Usa H2 para subtítulos y la lista para viñetas.</p>
+
+        {/* Selector de autor */}
+        <div style={{ marginBottom: 24, padding: '12px 16px', background: '#f0f9ff', borderRadius: 10, border: '1px solid #bae6fd', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <label style={{ fontSize: 13, fontWeight: 600, color: '#0369a1', whiteSpace: 'nowrap' }}>Redactor/a:</label>
+          <select value={autorNombre} onChange={e => setAutorNombre(e.target.value)} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #bae6fd', fontSize: 14, background: '#fff', color: '#0c4a6e' }}>
+            <option value="Keyling Elieth Rivera Muñoz">Keyling Elieth Rivera Muñoz</option>
+            <option value="Maycol Josué Nicaragua Rivas">Maycol Josué Nicaragua Rivas</option>
+            <option value="Redacción Nicaragua Informate">Redacción Nicaragua Informate</option>
+          </select>
+        </div>
 
         {msg && (
           <div style={{ padding: 14, background: msg.includes('Error') ? '#fee2e2' : '#d1fae5', color: msg.includes('Error') ? '#dc2626' : '#059669', borderRadius: 10, marginBottom: 24, fontSize: 14, fontWeight: 500 }}>

@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'profile',
       images: author.photo
         ? [{ url: `https://nicaraguainformate.com${author.photo}`, width: 400, height: 400, alt: author.name }]
-        : [{ url: 'https://nicaraguainformate.com/logo.svg', width: 1200, height: 630, alt: 'Nicaragua Informate' }],
+        : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
     },
   };
 }

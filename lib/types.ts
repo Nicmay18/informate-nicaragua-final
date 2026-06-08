@@ -90,7 +90,7 @@ export const CAT_ICONS: Record<string, string> = CATEGORIES.reduce(
 /**
  * Imagen por defecto para noticias sin imagen
  */
-export const FALLBACK_IMAGE = '/logo.svg';
+export const FALLBACK_IMAGE = '/logo.webp';
 
 /**
  * Valida si una categoría es válida

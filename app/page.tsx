@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/logo.svg',
-        width: 1200,
-        height: 630,
+        url: 'https://nicaraguainformate.com/logo.webp',
+        width: 512,
+        height: 512,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
       },
     ],
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
     description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
-    images: ['https://nicaraguainformate.com/logo.svg'],
+    images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
     canonical: 'https://nicaraguainformate.com',
