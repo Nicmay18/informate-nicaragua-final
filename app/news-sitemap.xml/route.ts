@@ -1,4 +1,5 @@
 ﻿import { adminDb } from '@/lib/firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -6,26 +7,38 @@ const SITE_URL = 'https://nicaraguainformate.com';
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245
 export const revalidate = 3600; // Regenerar cada hora
 
+function escapeXml(str: string): string {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 export async function GET() {
-  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
+  const cutoff = Timestamp.fromDate(new Date(Date.now() - 48 * 60 * 60 * 1000));
 
   try {
     const snapshot = await adminDb
       .collection('noticias')
-      .where('fecha', '>=', fortyEightHoursAgo)
+      .where('fecha', '>=', cutoff)
       .orderBy('fecha', 'desc')
       .limit(1000)
       .get();
 
-    const articles = snapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        slug: data.slug,
-        titulo: data.titulo,
-        fecha: data.fecha,
-        categoria: data.categoria,
-      };
-    });
+    const articles = snapshot.docs
+      .filter((doc) => {
+        try { return doc.data().publicado !== false; } catch { return true; }
+      })
+      .map((doc) => {
+        const data = doc.data();
+        return {
+          slug: data.slug,
+          titulo: data.titulo,
+          fecha: data.fecha,
+          categoria: data.categoria,
+        };
+      });
 
     // Google News Sitemap XML format
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -44,8 +57,8 @@ ${articles.map((article) => {
         <news:language>${publicationLanguage}</news:language>
       </news:publication>
       <news:publication_date>${publicationDate}</news:publication_date>
-      <news:title>${article.titulo}</news:title>
-      <news:keywords>${article.categoria}</news:keywords>
+      <news:title>${escapeXml(article.titulo)}</news:title>
+      <news:keywords>${escapeXml(article.categoria)}</news:keywords>
     </news:news>
   </url>`;
 }).join('\n')}

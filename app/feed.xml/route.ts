@@ -2,6 +2,15 @@
 
 export const revalidate = 3600;
 
+function escapeXml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 export async function GET() {
   const baseUrl = 'https://nicaraguainformate.com';
 
@@ -13,42 +22,57 @@ export async function GET() {
       .limit(50)
       .get();
 
-    articles = snapshot.docs.map((doc) => {
-      const d = doc.data();
-      let fecha = '';
-      try {
-        fecha = d.fecha?.toDate ? d.fecha.toDate().toUTCString() : new Date(d.fecha).toUTCString();
-      } catch { fecha = new Date().toUTCString(); }
-      return {
-        title: d.titulo as string,
-        slug: d.slug as string,
-        description: (d.resumen || d.titulo) as string,
-        contenido: (d.contenido || '') as string,
-        pubDate: fecha,
-        category: (d.categoria || 'General') as string,
-        imagen: (d.imagen || '') as string,
-        autor: (d.autor || 'Redacción Nicaragua Informate') as string,
-      };
-    });
+    articles = snapshot.docs
+      .filter((doc) => {
+        try { return doc.data().publicado !== false; } catch { return true; }
+      })
+      .map((doc) => {
+        const d = doc.data();
+        let fecha = '';
+        try {
+          fecha = d.fecha?.toDate ? d.fecha.toDate().toUTCString() : new Date(d.fecha).toUTCString();
+        } catch { fecha = new Date().toUTCString(); }
+        const imgRaw = (d.imagen || '') as string;
+        const imgUrl = imgRaw.startsWith('http') ? imgRaw : imgRaw ? `${baseUrl}${imgRaw}` : '';
+        return {
+          title: d.titulo as string,
+          slug: d.slug as string,
+          description: (d.resumen || d.titulo) as string,
+          contenido: (d.contenido || '') as string,
+          pubDate: fecha,
+          category: (d.categoria || 'General') as string,
+          imagen: imgUrl,
+          autor: (d.autor || 'Redacción Nicaragua Informate') as string,
+        };
+      });
   } catch {
     /* Returns empty feed if Firebase is unavailable */
   }
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/feed.xsl"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>Nicaragua Informate</title>
     <link>${baseUrl}</link>
     <description>Periodismo de Precisión. Noticias de Nicaragua en tiempo real.</description>
-    <language>es</language>
+    <language>es-ni</language>
+    <copyright>Copyright ${new Date().getFullYear()} Nicaragua Informate</copyright>
+    <managingEditor>contacto@nicaraguainformate.com (Redacción Nicaragua Informate)</managingEditor>
+    <webMaster>contacto@nicaraguainformate.com (Redacción Nicaragua Informate)</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <ttl>60</ttl>
     <image>
-      <url>${baseUrl}/logo.svg</url>
+      <url>${baseUrl}/icon-192x192.webp</url>
       <title>Nicaragua Informate</title>
       <link>${baseUrl}</link>
-      <width>42</width>
-      <height>42</height>
+      <width>144</width>
+      <height>144</height>
+      <description>Nicaragua Informate — Noticias de Nicaragua en tiempo real</description>
     </image>
     <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml"/>
     ${articles.map((a) => `
@@ -57,11 +81,12 @@ export async function GET() {
       <link>${baseUrl}/noticias/${a.slug}</link>
       <guid isPermaLink="true">${baseUrl}/noticias/${a.slug}</guid>
       <pubDate>${a.pubDate}</pubDate>
-      <category>${a.category}</category>
+      <category><![CDATA[${a.category}]]></category>
+      <dc:creator><![CDATA[${a.autor}]]></dc:creator>
       <description><![CDATA[${a.description}]]></description>
       <content:encoded><![CDATA[${a.contenido}]]></content:encoded>
-      <author>${a.autor}</author>
-      ${a.imagen ? `<enclosure url="${a.imagen.startsWith('http') ? a.imagen : baseUrl + a.imagen}" type="image/jpeg" />` : ''}
+      ${a.imagen ? `<enclosure url="${escapeXml(a.imagen)}" type="image/webp" length="0"/>
+      <media:content url="${escapeXml(a.imagen)}" medium="image"/>` : ''}
     </item>`).join('')}
   </channel>
 </rss>`;

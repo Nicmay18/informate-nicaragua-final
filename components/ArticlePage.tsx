@@ -11,6 +11,8 @@ import { enhanceArticleHtml } from '@/lib/html';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
+import AdsenseUnit from './AdsenseUnit';
+import NewsletterSignup from './NewsletterSignup';
 import type { Noticia } from '@/lib/types';
 
 /* ================================================================
@@ -521,6 +523,14 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Contenido */}
         <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: enhancedHtml || noticia.resumen || '' }} />
 
+        {/* In-article Ad — carga tras leer el cuerpo */}
+        <AdsenseUnit
+          slot="2957454965"
+          format="fluid"
+          layout="in-article"
+          style={{ margin: '32px 0' }}
+        />
+
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />
 
@@ -548,6 +558,13 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             publishedDate={noticia.fecha}
             updatedDate={(noticia as any).fechaActualizacion}
           />
+        </div>
+
+        {/* Newsletter */}
+        <div style={{ marginTop: 32, padding: '24px 20px', background: 'var(--bg-secondary, #f9fafb)', borderRadius: 12, border: '1px solid var(--border, #e5e7eb)' }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>📰 Recibe noticias en tu correo</p>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 12px' }}>Resumen diario de las noticias más importantes de Nicaragua.</p>
+          <NewsletterSignup />
         </div>
 
         {/* Navegación */}
@@ -598,6 +615,13 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             Volver al inicio
           </Link>
         </div>
+
+        {/* Multiplex Ad — antes de relacionadas */}
+        <AdsenseUnit
+          slot="7942423751"
+          format="autorelaxed"
+          style={{ margin: '40px 0 0' }}
+        />
 
         {/* Related News */}
         {related.length > 3 && (

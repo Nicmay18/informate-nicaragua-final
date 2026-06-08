@@ -15,7 +15,7 @@ const ORG_SCHEMA = {
   },
   description:
     'Medio digital nicaragüense creado para mantener informada a la comunidad dentro y fuera del país. Noticias verificadas sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',
-  foundingDate: '2026',
+  foundingDate: '2024',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Managua',

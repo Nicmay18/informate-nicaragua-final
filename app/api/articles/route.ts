@@ -52,8 +52,16 @@ export async function POST(request: NextRequest) {
       fecha: now,
       fechaActualizacion: now,
       vistas: 0,
+      publicado: true,
       premium: premium === true,
     });
+
+    // Ping IndexNow en background (no bloquea la respuesta)
+    fetch(`${request.nextUrl.origin}/api/indexnow`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: finalSlug }),
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,
