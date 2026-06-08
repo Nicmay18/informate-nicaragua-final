@@ -9,9 +9,9 @@ const ORG_SCHEMA = {
   url: 'https://nicaraguainformate.com',
   logo: {
     '@type': 'ImageObject',
-    url: 'https://nicaraguainformate.com/logo.png',
-    width: 600,
-    height: 60,
+    url: 'https://nicaraguainformate.com/logo.webp',
+    width: 512,
+    height: 512,
   },
   description:
     'Medio digital nicaragüense creado para mantener informada a la comunidad dentro y fuera del país. Noticias verificadas sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes.',

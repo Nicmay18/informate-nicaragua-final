@@ -828,7 +828,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-header__top{background:var(--ni-white);border-bottom:1px solid var(--ni-border);max-width:1200px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between}
 .ni-header__date{font-size:0.75rem;color:var(--ni-text-light);font-family:'Inter',sans-serif;text-transform:capitalize}
 .ni-logo{display:flex;align-items:center;gap:10px;font-family:'Merriweather',serif;font-weight:900;color:var(--ni-navy)}
-.ni-logo__img{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--ni-border);transition:transform 0.3s ease}
+.ni-logo__img{width:42px;height:42px;border-radius:6px;object-fit:contain;flex-shrink:0;transition:transform 0.3s ease}
 .ni-logo:hover .ni-logo__img{transform:scale(1.05)}
 .ni-logo__text{display:flex;flex-direction:column;line-height:1.2}
 .ni-logo__text strong{font-size:1.1rem;letter-spacing:-0.01em;color:var(--ni-navy)}
@@ -850,7 +850,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-hamburger{display:flex}
   .ni-header__date{display:none}
   .ni-header__top{height:52px;padding:0 12px}
-  .ni-logo__img{width:34px;height:34px}
+  .ni-logo__img{width:34px;height:34px;border-radius:4px}
   .ni-logo__text strong{font-size:0.9rem}
   .ni-logo__tagline{font-size:0.5rem}
 }

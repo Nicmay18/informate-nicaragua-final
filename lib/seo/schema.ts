@@ -30,14 +30,14 @@ export function buildNewsArticleJsonLdEnhanced(
     image: [
       {
         '@type': 'ImageObject',
-        url: article.imagen || 'https://nicaraguainformate.com/logo.svg',
+        url: article.imagen || 'https://nicaraguainformate.com/logo.webp',
         width: 1200,
         height: 630,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
       },
       {
         '@type': 'ImageObject',
-        url: article.imagen ? article.imagen.replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/logo.svg',
+        url: article.imagen ? article.imagen.replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
         caption: `Logo: ${article.titulo} — Nicaragua Informate`,
@@ -78,7 +78,7 @@ export function buildNewsArticleJsonLdEnhanced(
       name: 'Nicaragua Informate',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.svg',
+        url: 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
       },
@@ -115,15 +115,15 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
     url: 'https://nicaraguainformate.com',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.svg',
+      url: 'https://nicaraguainformate.com/logo.webp',
       width: 512,
       height: 512,
     },
     image: {
       '@type': 'ImageObject',
-      url: 'https://nicaraguainformate.com/logo.svg',
-      width: 1200,
-      height: 630,
+      url: 'https://nicaraguainformate.com/logo.webp',
+      width: 512,
+      height: 512,
     },
     foundingDate: '2024',
     foundingLocation: {

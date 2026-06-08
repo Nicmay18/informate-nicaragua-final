@@ -64,9 +64,9 @@ export const metadata: Metadata = {
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
     images: [
       {
-        url: 'https://nicaraguainformate.com/logo.svg',
-        width: 1200,
-        height: 630,
+        url: 'https://nicaraguainformate.com/logo.webp',
+        width: 512,
+        height: 512,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
       },
     ],
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua',
     description: 'Noticias de Nicaragua con cobertura nacional e internacional. Nacionales, sucesos, espectáculos, tecnología y deportes desde Managua.',
-    images: ['https://nicaraguainformate.com/logo.svg'],
+    images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
     languages: {
