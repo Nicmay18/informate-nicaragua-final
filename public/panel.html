@@ -2475,14 +2475,53 @@ ${hashtags}`;
         const filtros = [this.filtroExtension(noticia), this.filtroLead(noticia), this.filtroRelleno(noticia), this.filtroTransiciones(noticia), this.filtroVeracidad(noticia), this.filtroEstructura(noticia)];
         const fallidos = filtros.filter(f=>!f.ok);
         const advertencias = filtros.filter(f=>f.advertencia);
+        
+        // Calcular score granular 0-100 (sincronizado con API /admin/auditor)
+        let score = 0;
+        const cuerpo = noticia.contenido || '';
+        const palabras = this.contarPalabras(cuerpo);
+        
+        // Extensión (20 puntos)
+        if (palabras >= 500) score += 20;
+        else if (palabras >= 350) score += 10;
+        else if (palabras >= 300) score += 5;
+        
+        // Relleno emocional (15 puntos)
+        const relleno = this.filtroRelleno(noticia);
+        if (relleno.ok) score += 15;
+        else if (!relleno.palabras || relleno.palabras.length <= 2) score += 5;
+        
+        // Transiciones IA (15 puntos)
+        const trans = this.filtroTransiciones(noticia);
+        if (trans.ok && !trans.detalle?.includes('0')) score += 15;
+        else if (trans.ok) score += 5;
+        
+        // Lead/Resumen (10 puntos)
+        const lead = this.filtroLead(noticia);
+        if (lead.ok) score += 10;
+        
+        // Veracidad/Fuentes (15 puntos)
+        const veracidad = this.filtroVeracidad(noticia);
+        if (veracidad.ok && !veracidad.advertencia) score += 15;
+        else if (veracidad.ok) score += 8;
+        
+        // Estructura (15 puntos)
+        const estructura = this.filtroEstructura(noticia);
+        if (estructura.ok) score += 15;
+        else score += 5;
+        
+        // Determinar nivel basado en score (sincronizado con API)
+        let nivel;
+        if (score >= 80) nivel = '🟢 ORO';
+        else if (score >= 60) nivel = '🟡 BRONCE';
+        else nivel = '🔴 PELIGRO';
+        
         const aprobados = filtros.filter(f=>f.ok && !f.advertencia);
-        const nivel = fallidos.length===0 ? (advertencias.length>0?'🟡 BRONCE':'🟠 ORO') : (fallidos.some(f=>f.filtro==='Extensión'||f.filtro==='Relleno emocional')?'🔴 PELIGRO':'🟡 BRONCE');
-        const score = nivel==='🟠 ORO'?95 : nivel==='🟡 BRONCE'?55 : 40;
-        return { id:noticia.id, titulo:noticia.titulo, nivel, score, aprobado:fallidos.length===0, filtros, resumen:{ total:filtros.length, aprobados:aprobados.length, advertencias:advertencias.length, fallidos:fallidos.length } };
+        return { id:noticia.id, titulo:noticia.titulo, nivel, score, palabras, aprobado:fallidos.length===0, filtros, resumen:{ total:filtros.length, aprobados:aprobados.length, advertencias:advertencias.length, fallidos:fallidos.length } };
       },
 
       generarReporteHTML(resultado) {
-        const colorNivel = { '🟠 ORO':'#f59e0b', '🟡 BRONCE':'#eab308', '🔴 PELIGRO':'#ef4444' };
+        const colorNivel = { '🟢 ORO':'#16a34a', '🟡 BRONCE':'#eab308', '🔴 PELIGRO':'#ef4444' };
         let html = `<div style="font-family:system-ui,sans-serif;max-width:600px;margin:16px 0;padding:16px;border-radius:12px;background:#0f172a;color:#e2e8f0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><strong style="font-size:18px;">Validación: ${(resultado.titulo||'').substring(0,40)}...</strong><span style="background:${colorNivel[resultado.nivel]};color:#000;padding:4px 12px;border-radius:6px;font-weight:700;font-size:14px;">${resultado.nivel}</span></div><div style="display:grid;gap:8px;">`;
         resultado.filtros.forEach(f => {
           const icono = f.ok?'✅':(f.advertencia?'⚠️':'❌');
@@ -2504,12 +2543,16 @@ ${hashtags}`;
       document.getElementById('resultadoValidacionOro').innerHTML = VALIDADOR.generarReporteHTML(resultado);
       document.getElementById('panelValidacionOro').style.display = 'block';
       window._validacionOroOK = resultado.aprobado;
+      
+      // Score en el mensaje para consistencia con dashboard
+      const scoreMsg = `Score: ${resultado.score}/100`;
+      
       if (!resultado.aprobado) {
-        showToast('La noticia tiene errores críticos. Revisá el evaluador.', 'error');
+        showToast(`🔴 ${scoreMsg} — Revisá errores críticos antes de publicar`, 'error');
       } else if (resultado.nivel === '🟡 BRONCE') {
-        showToast('🟡 Validada con advertencias — Revisá antes de publicar', 'warning');
+        showToast(`🟡 ${scoreMsg} — Validada con advertencias`, 'warning');
       } else {
-        showToast('✅ Noticia validada — Nivel ORO alcanzado', 'success');
+        showToast(`🟢 ${scoreMsg} — Nivel ORO alcanzado`, 'success');
       }
     };
 
