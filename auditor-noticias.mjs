@@ -1,6 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 
 // ═══════════════════════════════════════════════════════════════
 // CONFIGURACIÓN — LISTAS DE DETECCIÓN
@@ -57,22 +57,15 @@ const LUGARES_NICARAGUA = [
 
 function getAdminApp() {
   if (getApps().length > 0) return getApp();
-  const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (b64 && b64.trim().length > 10) {
-    const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+  
+  // Usar archivo JSON de credenciales local
+  try {
+    const sa = JSON.parse(readFileSync('G:/RESPALDO/informate-instant-nicaragua-firebase-adminsdk-fbsvc-2da99059f4.json', 'utf8'));
     return initializeApp({ credential: cert(sa) });
+  } catch (e) {
+    console.error('Error cargando credenciales:', e.message);
+    throw new Error('No se pudo cargar el archivo de credenciales de Firebase');
   }
-
-  if (!projectId || !clientEmail || !privateKeyRaw) {
-    throw new Error('Faltan variables de entorno de Firebase');
-  }
-
-  const privateKey = privateKeyRaw.trim().replace(/^["']|["']$/g, '').replace(/\\n/g, '\n');
-  return initializeApp({ credential: cert({ projectId, privateKey, clientEmail }) });
 }
 
 const db = getFirestore(getAdminApp());
