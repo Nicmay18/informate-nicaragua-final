@@ -3,7 +3,6 @@
 export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 // Firebase imports
@@ -181,7 +180,6 @@ function calcularScore(noticia: any): { score: number; nivel: 'ORO' | 'BRONCE' |
 // COMPONENTE PRINCIPAL
 // ═══════════════════════════════════════════════════════════════
 export default function AuditorPage() {
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [noticias, setNoticias] = useState<any[]>([]);
