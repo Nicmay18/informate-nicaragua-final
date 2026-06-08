@@ -682,6 +682,7 @@
                   <button type="button" class="btn btn-ghost btn-sm" onclick="insertarTag('em')" title="Cursiva"><i class="fas fa-italic"></i></button>
                   <div style="width: 1px; height: 20px; background: var(--gray-300); margin: 0 4px;"></div>
                   <button type="button" class="btn btn-primary btn-sm" onclick="cargarPlantillaPeriodistica()" title="Insertar estructura periodística"><i class="fas fa-file-alt"></i> Plantilla</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="formatearContenidoLegible()" title="Ordenar párrafos y subtítulos para leerlos fácil"><i class="fas fa-align-left"></i> Ordenar texto</button>
                 </div>
                 <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
@@ -1908,6 +1909,40 @@ ${hashtags}`;
       el.className = 'count ' + (len > 70 ? 'bad' : len > 50 ? 'ok' : 'warn');
     };
 
+    function embellecerHtmlParaTextarea(html) {
+      if (!html) return '';
+      let formatted = html
+        .replace(/\r?\n|\r/g, '')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/>\s+</g, '><')
+        .trim();
+
+      const blockTags = ['p', 'h2', 'blockquote', 'ul', 'ol', 'li'];
+      blockTags.forEach(tag => {
+        const open = new RegExp(`<${tag}(\\b[^>]*)?>`, 'gi');
+        const close = new RegExp(`</${tag}>`, 'gi');
+        formatted = formatted.replace(open, match => `\n${match}`);
+        formatted = formatted.replace(close, match => `${match}\n`);
+      });
+
+      formatted = formatted
+        .replace(/\n\s*(<li\b)/gi, '\n  $1')
+        .replace(/\n\s*(<\/li>)/gi, '\n  $1')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+      return formatted;
+    }
+
+    window.formatearContenidoLegible = function() {
+      const textarea = document.getElementById('contenido');
+      if (!textarea) return;
+      textarea.value = embellecerHtmlParaTextarea(textarea.value);
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+      actualizarContadorPalabras();
+      showToast('Texto organizado por párrafos y subtítulos', 'success');
+    };
+
     window.formatearTextoPegado = function(e) {
       e.preventDefault();
       const cd = e.clipboardData || window.clipboardData;
@@ -1937,6 +1972,7 @@ ${hashtags}`;
       const end = textarea.selectionEnd;
       const val = textarea.value;
       textarea.value = val.substring(0, start) + resultado + val.substring(end);
+      textarea.value = embellecerHtmlParaTextarea(textarea.value);
       textarea.selectionStart = textarea.selectionEnd = start + resultado.length;
       actualizarContadorPalabras();
       showToast('Texto formateado automáticamente (' + (html ? 'con formato' : 'texto plano') + ')', 'success');
@@ -2804,7 +2840,8 @@ ${hashtags}`;
         document.getElementById('departamento').value = data.departamento || 'Managua';
         document.getElementById('dateline').value = data.dateline || 'MANAGUA / NICARAGUA';
         document.getElementById('resumen').value = data.resumen || '';
-        document.getElementById('contenido').value = data.contenido || '';
+        const campoContenido = document.getElementById('contenido');
+        campoContenido.value = embellecerHtmlParaTextarea(data.contenido || '');
         document.getElementById('imagenUrl').value = data.imagen || '';
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
@@ -3684,10 +3721,11 @@ ${hashtags}`;
 <p>Cierra con una reflexión o llamado a la acción. No repitas información ya dada.</p>`;
       const textarea = document.getElementById('contenido');
       if (!textarea.value.trim()) {
-        textarea.value = plantilla;
+        textarea.value = embellecerHtmlParaTextarea(plantilla);
       } else {
         const cursorPos = textarea.selectionStart;
-        textarea.value = textarea.value.substring(0, cursorPos) + '\n\n' + plantilla + '\n\n' + textarea.value.substring(cursorPos);
+        const nuevoValor = textarea.value.substring(0, cursorPos) + '\n\n' + plantilla + '\n\n' + textarea.value.substring(cursorPos);
+        textarea.value = embellecerHtmlParaTextarea(nuevoValor);
       }
       actualizarContadorPalabras();
       showToast('Plantilla periodística cargada', 'success');
@@ -3709,7 +3747,8 @@ ${hashtags}`;
           
           // Transferir al formulario principal
           document.getElementById('titulo').value = plantilla.titulo || '';
-          document.getElementById('contenido').value = plantilla.contenido || '';
+          const campoContenido = document.getElementById('contenido');
+          campoContenido.value = embellecerHtmlParaTextarea(plantilla.contenido || '');
           document.getElementById('resumen').value = plantilla.resumen || '';
           document.getElementById('categoria').value = plantilla.categoria || 'Sucesos';
           document.getElementById('departamento').value = plantilla.departamento || 'Managua';
