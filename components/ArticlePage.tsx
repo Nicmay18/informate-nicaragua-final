@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
 import { injectTocIds } from '@/lib/toc';
+import { enhanceArticleHtml } from '@/lib/html';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -265,6 +266,39 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const FONT_STEPS = [0.9, 1, 1.1, 1.2];
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
+  const [views, setViews] = useState(() => noticia.vistas || 0);
+
+  useEffect(() => {
+    setViews(noticia.vistas || 0);
+  }, [noticia.vistas, noticia.slug]);
+
+  useEffect(() => {
+    if (!noticia.slug) return;
+    let cancelled = false;
+    fetch('/api/view', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: noticia.slug }),
+    })
+      .then(async (res) => {
+        if (!res.ok) return null;
+        try {
+          return await res.json();
+        } catch {
+          return null;
+        }
+      })
+      .then((json) => {
+        if (!cancelled && json && typeof json.vistas === 'number') {
+          setViews(json.vistas);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [noticia.slug]);
 
   if (!noticia) {
     return (
@@ -278,7 +312,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const category = getCategory(noticia.categoria);
   const url = `${SITE_CONFIG.url}/noticias/${noticia.slug}`;
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
-  const vistas = fmtViews(noticia.vistas);
+  const vistas = fmtViews(views);
   const tags = [noticia.categoria, ...extractPoints(noticia.titulo, 3)];
   const readAlso = related.slice(0, 3);
 
@@ -286,8 +320,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     ? noticia.pieFoto
     : 'Foto: Nicaragua Informate / Archivo';
 
-  // Procesar TOC para artículos largos
+  // Procesar TOC para artículos largos y mejorar HTML (enlaces/imágenes)
   const { html: processedHtml, items: tocItems } = injectTocIds(noticia.contenido || '');
+  const enhancedHtml = enhanceArticleHtml(processedHtml, SITE_CONFIG.url);
   const showToc = tocItems.length >= 3;
 
   // Container principal
@@ -484,7 +519,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         )}
 
         {/* Contenido */}
-        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: processedHtml || noticia.resumen || '' }} />
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: enhancedHtml || noticia.resumen || '' }} />
 
         {/* Pull Quote */}
         <PullQuote contenido={noticia.contenido || ''} />

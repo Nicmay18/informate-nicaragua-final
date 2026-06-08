@@ -1,5 +1,4 @@
 import ArticlePage from '@/components/ArticlePage';
-import ViewTracker from '@/components/ViewTracker';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -145,7 +144,6 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        <ViewTracker slug={noticia.slug} />
         <ArticlePage noticia={noticia} related={related} />
       </>
     );

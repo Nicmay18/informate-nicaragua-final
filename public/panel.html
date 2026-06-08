@@ -2642,6 +2642,9 @@ ${hashtags}`;
         limpiarFormulario();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
+        if (window.recargarSelectEvaluador) {
+          await window.recargarSelectEvaluador(false);
+        }
         
         // Revalidar en Vercel para que los cambios se vean al instante
         const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
@@ -2891,6 +2894,47 @@ ${hashtags}`;
     // EVALUADOR / CORRECTOR IA
     window._evalNoticiasCache = [];
 
+    window.resetEvaluadorPanel = function(options = {}) {
+      const { preserveSearch = false, preserveSelection = false } = options;
+      const select = document.getElementById('evalSelectNoticia');
+      if (select && !preserveSelection) select.value = '';
+      const resultado = document.getElementById('evaluacionResultado');
+      if (resultado) resultado.style.display = 'none';
+      const searchInput = document.getElementById('evalBuscarNoticia');
+      if (searchInput && !preserveSearch) searchInput.value = '';
+      const buscarPalabra = document.getElementById('evalBuscarPalabra');
+      if (buscarPalabra) buscarPalabra.value = '';
+      const resultadoBusqueda = document.getElementById('evalResultadoBusqueda');
+      if (resultadoBusqueda) resultadoBusqueda.innerHTML = '';
+      const vistaDiv = document.getElementById('evalVistaPreviaContenido');
+      if (vistaDiv) vistaDiv.style.display = 'none';
+      const contenidoDiv = document.getElementById('evalContenidoTexto');
+      if (contenidoDiv) contenidoDiv.innerHTML = '';
+      const scoreValor = document.getElementById('scoreValor');
+      if (scoreValor) scoreValor.textContent = '0';
+      const scoreLabel = document.getElementById('scoreLabel');
+      if (scoreLabel) scoreLabel.textContent = '—';
+      const scoreDesc = document.getElementById('scoreDesc');
+      if (scoreDesc) scoreDesc.textContent = '—';
+      const scoreBar = document.getElementById('scoreBar');
+      if (scoreBar) scoreBar.style.width = '0%';
+      const circle = document.getElementById('scoreCircle');
+      if (circle) {
+        circle.style.strokeDashoffset = 339.292;
+        circle.style.stroke = 'var(--primary-500)';
+      }
+      const table = document.getElementById('evalTableBody');
+      if (table) table.innerHTML = '';
+      const recs = document.getElementById('evalRecomendaciones');
+      if (recs) recs.innerHTML = '';
+      const cpm = document.getElementById('evalCpm');
+      if (cpm) cpm.textContent = '$1.10';
+      const revenue = document.getElementById('evalRevenue');
+      if (revenue) revenue.textContent = '$0.00';
+      const loading = document.getElementById('evalLoading');
+      if (loading) loading.style.display = 'none';
+    };
+
     window.cargarSelectEvaluador = async function() {
       const select = document.getElementById('evalSelectNoticia');
       const loading = document.getElementById('evalLoading');
@@ -2951,10 +2995,11 @@ ${hashtags}`;
       }
     };
 
-    window.recargarSelectEvaluador = async function() {
+    window.recargarSelectEvaluador = async function(preserveSearch = true) {
+      window.resetEvaluadorPanel({ preserveSearch, preserveSelection: false });
       window._evalNoticiasCache = [];
-      document.getElementById('evalSelectNoticia').innerHTML = '<option value="">Selecciona una noticia...</option>';
-      document.getElementById('evaluacionResultado').style.display = 'none';
+      const select = document.getElementById('evalSelectNoticia');
+      if (select) select.innerHTML = '<option value="">Selecciona una noticia...</option>';
       await cargarSelectEvaluador();
     };
 
@@ -3239,6 +3284,9 @@ ${hashtags}`;
       document.getElementById('btnCancelarEdicion').style.display = 'none';
       document.getElementById('enviarTelegram').checked = !!(localStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
+      if (window.resetEvaluadorPanel) {
+        window.resetEvaluadorPanel();
+      }
     };
 
     window.actualizarTextoBotonGuardar = function() {
