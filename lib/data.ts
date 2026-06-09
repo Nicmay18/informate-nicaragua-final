@@ -8,44 +8,6 @@ const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
 
-// ═══════════════════════════════════════════════════════════════
-// MODO ADSENSE REVIEW — Filtra contenido sensible durante revisión
-// Activar en Vercel: ADSENSE_REVIEW_MODE=true
-// ═══════════════════════════════════════════════════════════════
-const ADSENSE_REVIEW_MODE = process.env.ADSENSE_REVIEW_MODE === 'true';
-
-// Categorías que AdSense tolera (NO tienen muertes/violencia habitualmente)
-const CATEGORIAS_ADSENSE_SEGURAS = new Set([
-  'Deportes', 'Tecnología', 'Espectáculos', 'Turismo', 'Economía', 'Cultura', 'Educación', 'Salud'
-]);
-
-// Palabras en título que hacen que AdSense rechace aunque la categoría sea "segura"
-const PALABRAS_TITULO_SENSIBLE = [
-  'muere','murió','fallece','falleció','muerto','muerta','asesinato','asesinado','homicidio',
-  'accidente','atropello','vuelco','colisión','cocaína','droga','narcotráfico','detenido',
-  'capturado','preso','recluso','cárcel','violencia','agresión','ahogado','incendio',
-  'suicidio','desaparecido','secuestro','intoxicado','arma','bala','disparo',
-];
-
-function esNoticiaSeguraAdSense(noticia: Noticia): boolean {
-  if (!ADSENSE_REVIEW_MODE) return true; // Modo normal: mostrar todo
-  
-  // 1. Descartar categoría Sucesos directamente
-  const cat = (noticia.categoria || '').trim();
-  if (cat === 'Sucesos') return false;
-  
-  // 2. Si la categoría está en la lista blanca explícita, OK
-  if (CATEGORIAS_ADSENSE_SEGURAS.has(cat)) return true;
-  
-  // 3. Para Nacionales/Internacionales: revisar título por palabras sensibles
-  const titulo = (noticia.titulo || '').toLowerCase();
-  const tienePalabraSensible = PALABRAS_TITULO_SENSIBLE.some(p => titulo.includes(p));
-  if (tienePalabraSensible) return false;
-  
-  // 4. Si pasa todos los filtros, mostrar
-  return true;
-}
-
 // =============================================================================
 // NORMALIZAR IMÁGENES: Firebase Storage URL → ruta local /images/
 // Las imágenes WebP se suben a public/images/ vía GitHub API
@@ -278,12 +240,11 @@ const MOCK_NOTICIAS: Noticia[] = [
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  const firebaseNews = await tryFirebaseAdmin(validatedCount * 3); // Traer más para filtrar
+  const firebaseNews = await tryFirebaseAdmin(validatedCount);
   if (firebaseNews && firebaseNews.length > 0) {
-    const filtradas = firebaseNews.filter(esNoticiaSeguraAdSense);
-    if (filtradas.length > 0) return filtradas.slice(0, validatedCount);
+    return firebaseNews;
   }
-  return MOCK_NOTICIAS.filter(esNoticiaSeguraAdSense).slice(0, validatedCount);
+  return MOCK_NOTICIAS.slice(0, validatedCount);
 }
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -351,10 +312,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
         .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
 
       if (withViews.length >= validatedCount) {
-        const seguras = withViews.filter(esNoticiaSeguraAdSense);
-    if (seguras.length >= validatedCount) {
-      return seguras.slice(0, validatedCount);
-    }
+        return withViews.slice(0, validatedCount);
       }
     }
 
@@ -371,8 +329,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .filter((d: QueryDocumentSnapshot<DocumentData>) => {
         try { return d.data().publicado !== false; } catch { return true; }
       })
-      .map(mapNoticia)
-      .filter(esNoticiaSeguraAdSense);
+      .map(mapNoticia);
 
     // 3. Fallback final: noticias más recientes que haya
     const snapAll = await adminDb
@@ -385,8 +342,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .filter((d: QueryDocumentSnapshot<DocumentData>) => {
         try { return d.data().publicado !== false; } catch { return true; }
       })
-      .map(mapNoticia)
-      .filter(esNoticiaSeguraAdSense);
+      .map(mapNoticia);
 
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
