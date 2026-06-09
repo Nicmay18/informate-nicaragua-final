@@ -125,6 +125,39 @@ export default function Footer() {
             Ir a Radio en vivo
           </Link>
         </div>
+
+        {/* Columna 5: Apoyar el periodismo */}
+        <div>
+          <h4 className="ni-footer__col-title">Apoyar el periodismo</h4>
+          <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.7)', marginBottom: 12 }}>
+            Tu aporte nos ayuda a mantener la cobertura informativa independiente de Nicaragua.
+          </p>
+          <a
+            href="https://paypal.me/NicaraguaInformate"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 14,
+              fontWeight: 600,
+              color: '#fff',
+              textDecoration: 'none',
+              padding: '8px 16px',
+              backgroundColor: '#0070ba',
+              borderRadius: 8,
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#005ea6'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#0070ba'; }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.63l-1.496 9.478h2.79c.457 0 .85-.334.922-.788l.04-.19.73-4.627.047-.255a.933.933 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.025-.13.048-.26.066-.39a5.65 5.65 0 0 0-.04-1.722c-.01-.065-.02-.13-.032-.194a3.506 3.506 0 0 0-.108-.313z"/>
+            </svg>
+            Donar vía PayPal
+          </a>
+        </div>
       </div>
 
       {/* Barra inferior */}
