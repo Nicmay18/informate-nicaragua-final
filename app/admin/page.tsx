@@ -107,6 +107,7 @@ export default function AdminPage() {
         <div style={{ fontSize: 18, fontWeight: 700, color: '#1e293b' }}>Nicaragua Informate — Admin</div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Link href="/admin/nueva" style={{ padding: '8px 18px', background: '#4f46e5', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>+ Nueva Noticia</Link>
+          <Link href="/admin/correcciones-masivas" style={{ padding: '8px 18px', background: '#dc2626', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>✨ Correcciones Masivas</Link>
           <span style={{ fontSize: 13, color: '#64748b' }}>{user.email}</span>
           <button onClick={() => auth && signOut(auth)} style={{ padding: '6px 14px', borderRadius: 6, border: '1px solid #e2e8f0', background: '#fff', color: '#475569', fontSize: 13, cursor: 'pointer' }}>Salir</button>
         </div>
