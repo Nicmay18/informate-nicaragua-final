@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor AdSense - Nicaragua Informate</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+  .container { max-width:1400px; margin:0 auto; padding:20px; }
+  header { background:#1e293b; padding:16px 24px; border-bottom:1px solid #334155; display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; border-radius:12px; }
+  h1 { font-size:20px; color:#f8fafc; }
+  .subtitle { color:#94a3b8; font-size:13px; }
+
+  .grid { display:grid; grid-template-columns:1fr 380px; gap:20px; }
+  @media (max-width:1024px) { .grid { grid-template-columns:1fr; } }
+
+  .panel { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px; }
+  .panel h2 { font-size:15px; color:#94a3b8; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em; }
+
+  textarea { width:100%; min-height:400px; background:#0f172a; border:1px solid #334155; border-radius:8px; padding:16px; color:#e2e8f0; font-size:14px; line-height:1.7; resize:vertical; font-family:inherit; }
+  textarea:focus { outline:none; border-color:#4f46e5; }
+
+  .btn { padding:10px 20px; border-radius:8px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-primary { background:#4f46e5; color:#fff; }
+  .btn-primary:hover { background:#4338ca; }
+  .btn-success { background:#059669; color:#fff; }
+  .btn-success:hover { background:#047857; }
+  .btn-warning { background:#d97706; color:#fff; }
+  .btn-danger { background:#dc2626; color:#fff; }
+
+  .score-box { text-align:center; padding:24px; background:#0f172a; border-radius:12px; margin-bottom:16px; }
+  .score-number { font-size:56px; font-weight:800; line-height:1; }
+  .score-label { font-size:14px; margin-top:8px; font-weight:600; }
+  .score-oro { color:#22c55e; }
+  .score-bronce { color:#eab308; }
+  .score-peligro { color:#ef4444; }
+
+  .check-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border-radius:8px; margin-bottom:6px; font-size:13px; }
+  .check-pass { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); }
+  .check-warn { background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.2); }
+  .check-fail { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); }
+  .check-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .check-text { flex:1; }
+  .check-value { color:#94a3b8; font-size:11px; margin-top:2px; }
+
+  .problems { margin-top:16px; }
+  .problem-item { padding:10px 12px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; margin-bottom:6px; font-size:12px; color:#fca5a5; }
+  .problem-item strong { color:#ef4444; }
+
+  .actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+
+  .diff-box { background:#0f172a; border:1px solid #334155; border-radius:8px; padding:16px; margin-top:16px; max-height:300px; overflow:auto; font-size:12px; line-height:1.6; }
+  .diff-removed { background:rgba(239,68,68,0.15); color:#fca5a5; text-decoration:line-through; padding:1px 4px; border-radius:3px; }
+  .diff-added { background:rgba(34,197,94,0.15); color:#86efac; padding:1px 4px; border-radius:3px; }
+
+  .highlight-transicion { background:rgba(234,179,8,0.3); padding:1px 3px; border-radius:3px; }
+  .highlight-relleno { background:rgba(239,68,68,0.3); padding:1px 3px; border-radius:3px; }
+
+  .word-count { text-align:right; color:#64748b; font-size:12px; margin-top:4px; }
+
+  .section-title { font-size:13px; color:#64748b; margin:16px 0 8px; font-weight:600; }
+
+  .copy-btn { position:absolute; top:8px; right:8px; padding:4px 10px; font-size:11px; border-radius:4px; background:#334155; color:#cbd5e1; border:none; cursor:pointer; }
+  .copy-btn:hover { background:#475569; }
+  .textarea-wrap { position:relative; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>Editor AdSense</h1>
+      <div class="subtitle">Validador de calidad — Limpia contenido de ChatGPT</div>
+    </div>
+    <a href="/panel.html" style="color:#94a3b8; text-decoration:none; font-size:13px;">← Volver al Panel</a>
+  </header>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <h2>Contenido a validar (pegá acá el texto de ChatGPT)</h2>
+        <div class="textarea-wrap">
+          <textarea id="input" placeholder="Pegá el contenido generado por IA acá... El sistema detectará transiciones de IA, relleno emocional, falta de datos, etc."></textarea>
+          <button class="copy-btn" onclick="pegarTexto()">📋 Pegar</button>
+        </div>
+        <div class="word-count" id="wordCount">0 palabras</div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="auditar()">📊 Auditar</button>
+          <button class="btn btn-warning" onclick="limpiarIA()">🧹 Limpiar IA</button>
+          <button class="btn btn-success" onclick="copiarLimpio()">📋 Copiar Limpio</button>
+          <button class="btn btn-danger" onclick="document.getElementById('input').value=''; auditar();">🗑️ Limpiar Todo</button>
+        </div>
+      </div>
+
+      <div class="panel" id="resultadoPanel" style="margin-top:20px; display:none;">
+        <h2>Texto Limpio (copiar al panel)</h2>
+        <div class="textarea-wrap">
+          <textarea id="output" readonly style="min-height:300px;"></textarea>
+          <button class="copy-btn" onclick="copiarOutput()">📋 Copiar</button>
+        </div>
+        <div class="word-count" id="wordCountOut">0 palabras</div>
+        <div class="diff-box" id="diffBox"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="score-box">
+          <div class="score-number score-peligro" id="scoreNum">—</div>
+          <div class="score-label" id="scoreLabel">Sin auditar</div>
+        </div>
+
+        <div id="checks"></div>
+
+        <div class="section-title">Problemas detectados</div>
+        <div class="problems" id="problems"></div>
+
+        <div class="section-title">Resumen</div>
+        <div id="resumen" style="font-size:12px; color:#94a3b8; line-height:1.6;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// PATRONES DE DETECCIÓN (100% local, sin APIs)
+// ═══════════════════════════════════════════════════════════════
+const PATRONES = {
+  transicionesIA: /\b(además|asimismo|sin embargo|no obstante|para finalizar|finalmente|por otro lado|es importante destacar|vale la pena mencionar|en conclusión|en resumen|por ende|por lo tanto|en consecuencia|de esta manera|a su vez|en tanto que|dicho esto|habiendo dicho esto|como se mencionó anteriormente|como se indicó|es relevante señalar|conviene destacar|resulta importante|no cabe duda|es innegable|resulta evidente|en primer lugar|en segundo lugar|en tercer lugar|de igual manera|de la misma forma|por su parte|del mismo modo|al respecto|en este sentido|es crucial|es vital|es fundamental|resulta claro|se hace evidente|como era de esperarse|como cabe esperar|de manera similar|de forma similar|de modo similar|en comparación|en contraste|por el contrario|a diferencia de|en lugar de|en vez de|más bien|mejor dicho|o sea|es decir|en otras palabras|dicho de otro modo|para ser más precisos|en términos más claros|en resumen|en síntesis|en conclusión|para concluir|para finalizar|como conclusión|en definitiva|en última instancia|en último término|al final|al fin y al cabo|después de todo|considerando todo lo anterior|teniendo en cuenta lo anterior|a la luz de lo expuesto|ante lo expuesto|frente a lo expuesto|ante esta situación|ante este panorama|ante este contexto|frente a este escenario|en este contexto|en este marco|en este escenario|bajo este contexto|dentro de este marco|en este sentido|en esta línea|siguiendo esta línea|a lo largo de este análisis|a lo largo de esta información|a través de esta información|mediante esta información|con base en lo anterior|con base en esta información|con base en estos datos|de acuerdo con lo anterior|según lo anterior|como se ha visto|como se ha mencionado|como se ha indicado|como se ha señalado|como se ha destacado|como se ha señalado previamente|como se ha mencionado con anterioridad|como se ha dicho|tal como se mencionó|tal como se indicó|tal como se señaló|tal y como se mencionó|tal y como se indicó|del mismo modo|de manera análoga|de forma análoga|de modo análogo|así mismo|igualmente|de igual forma|de la misma manera|de la misma forma|también|asimismo|igual que|igual a|similar a|parecido a|análogo a|en comparación con|en contraste con|frente a|respecto a|en cuanto a|en lo que respecta a|con respecto a|en relación a|por lo que respecta a|por lo que concierne a|en lo concerniente a|en lo relativo a|acerca de|sobre el tema de|sobre la cuestión de|en el tema de|en la cuestión de|tocante a|referente a|en referencia a|con referencia a)\b/gi,
+
+  rellenoEmocional: /\b(amado|querido|desafortunadamente|lamentablemente|tristemente|desgraciadamente|por desgracia|lamentable|triste|desolador|desgarrador|conmovedor|emotivo|desconsolado|desolado|apenado|consternado|dolido|afligido|pesaroso|apenado|consternación|profundo dolor|profunda tristeza|vida truncada|jóven promesa|joven promesa|último adiós|perdió la batalla|fatal desenlace|ambiente de dolor|familiares lamentan|lamentan la pérdida|comunidad consternada|hecho conmocionó|conmocionó a|salir del asombro|brindan apoyo|organizaciones brindan|darán el último|recibirá cristiana|honras fúnebres|cristiana sepultura|perdió la vida|enlutó|enluta)\b/gi,
+
+  datosNumericos: /\b\d{1,3}\s*años?\b/gi,
+  horas: /\b\d{1,2}:\d{2}\b/g,
+  citas: /"[^"]{15,300}"/g,
+  fuentes: /\b(señaló|indicó|confirmó|reportó|afirmó|manifestó|precisó|agregó|explicó|detalló|aseveró|aclaró|subrayó|enfatizó|recalcó|puntualizó|destacó|mencionó|informó|comunicó|declaró|anunció|advirtió)\s+/gi,
+  subtitulos: /#{2,3}\s+|##\s+/g,
+  negritas: /\*\*[^*]+\*\*/g,
+  lugaresNI: /\b(?:Managua|León|Granada|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Jinotepe|Boaco|Chontales|Madriz|Nueva\s+Segovia|San\s+Carlos|Bluefields|Puerto\s+Cabezas|El\s+Rama|Siuna|Wiwilí|Ocotal|Jalapa|Tipitapa|Nagarote|Nindirí|Mateare|Telica|San\s+Juan\s+del\s+Sur|La\s+Ceiba|Somotillo|Corinto|Somoto|Juigalpa|Camoapa|Muy\s+Muy|Mulukukú|Rosita|Waslala|Kukra\s+Hill|Bilwi)\b/gi,
+};
+
+// ═══════════════════════════════════════════════════════════════
+// FUNCIÓN AUDITAR
+// ═══════════════════════════════════════════════════════════════
+function auditar() {
+  const texto = document.getElementById('input').value;
+  const palabras = texto.split(/\s+/).filter(w => w.length > 0).length;
+  document.getElementById('wordCount').textContent = palabras + ' palabras';
+
+  if (!texto.trim()) {
+    document.getElementById('scoreNum').textContent = '—';
+    document.getElementById('scoreLabel').textContent = 'Sin auditar';
+    document.getElementById('checks').innerHTML = '';
+    document.getElementById('problems').innerHTML = '';
+    document.getElementById('resumen').innerHTML = '';
+    return;
+  }
+
+  // Conteos
+  const transiciones = (texto.match(PATRONES.transicionesIA) || []).length;
+  const relleno = (texto.match(PATRONES.rellenoEmocional) || []).length;
+  const datos = (texto.match(PATRONES.datosNumericos) || []).length;
+  const horas = (texto.match(PATRONES.horas) || []).length;
+  const citas = (texto.match(PATRONES.citas) || []).length;
+  const fuentes = (texto.match(PATRONES.fuentes) || []).length;
+  const tieneSubtitulos = PATRONES.subtitulos.test(texto);
+  const tieneNegritas = PATRONES.negritas.test(texto);
+  const lugares = (texto.match(PATRONES.lugaresNI) || []).length;
+
+  // Scoring
+  let score = 0;
+  let problemas = [];
+  let checks = [];
+
+  // 1. Longitud
+  if (palabras >= 500) { score += 20; checks.push({ok:true, text:'Extensión', val:palabras+' palabras'}); }
+  else if (palabras >= 350) { score += 10; checks.push({ok:'warn', text:'Extensión', val:palabras+' palabras (meta: 500+)'}); problemas.push('Extender a 500+ palabras (faltan '+(500-palabras)+')'); }
+  else { checks.push({ok:false, text:'Extensión', val:palabras+' palabras (mínimo: 350)'}); problemas.push('Muy corto: solo '+palabras+' palabras. Mínimo 350, ideal 500+.'); }
+
+  // 2. Transiciones IA
+  if (transiciones === 0) { score += 15; checks.push({ok:true, text:'Transiciones IA', val:'0 detectadas'}); }
+  else { score -= transiciones * 5; checks.push({ok:false, text:'Transiciones IA', val:transiciones+' detectadas'}); problemas.push(transiciones+' transiciones tipo IA: "'+[...new Set(texto.match(PATRONES.transicionesIA))].slice(0,3).join('", "')+'"'); }
+
+  // 3. Relleno emocional
+  if (relleno === 0) { score += 15; checks.push({ok:true, text:'Relleno emocional', val:'Ninguno'}); }
+  else { score -= relleno * 5; checks.push({ok:false, text:'Relleno emocional', val:relleno+' detectadas'}); problemas.push(relleno+' frases de relleno emocional'); }
+
+  // 4. Fuentes
+  if (fuentes >= 2) { score += 15; checks.push({ok:true, text:'Fuentes atribuidas', val:fuentes+' encontradas'}); }
+  else if (fuentes === 1) { score += 8; checks.push({ok:'warn', text:'Fuentes atribuidas', val:'1 (meta: 2+)'}); problemas.push('Solo 1 fuente atribuida. Agregar otra: "indicó el Sargento..."'); }
+  else { checks.push({ok:false, text:'Fuentes atribuidas', val:'0 (meta: 2+)'}); problemas.push('Sin fuentes atribuidas. Agregar: "afirmó el Comisionado García"'); }
+
+  // 5. Citas
+  if (citas >= 1) { score += 10; checks.push({ok:true, text:'Citas textuales', val:citas+' encontradas'}); }
+  else { checks.push({ok:false, text:'Citas textuales', val:'0 (meta: 1+)'}); problemas.push('Sin citas textuales. Agregar: "Las autoridades confirmaron..."'); }
+
+  // 6. Datos concretos
+  const totalDatos = datos + horas + lugares;
+  if (totalDatos >= 3) { score += 15; checks.push({ok:true, text:'Datos concretos', val:totalDatos+' encontrados'}); }
+  else if (totalDatos >= 1) { score += 8; checks.push({ok:'warn', text:'Datos concretos', val:totalDatos+' (meta: 3+)'}); problemas.push('Pocos datos concretos ('+totalDatos+'). Agregar: edades, horas, cantidades, lugares exactos.'); }
+  else { checks.push({ok:false, text:'Datos concretos', val:'0 (meta: 3+)'}); problemas.push('Sin datos concretos. Agregar: "28 años", "14:30 horas", "500 kilogramos", "barrio La Fuente".'); }
+
+  // 7. Estructura
+  const estructuraOK = tieneSubtitulos && tieneNegritas;
+  if (estructuraOK) { score += 10; checks.push({ok:true, text:'Estructura', val:'Subtítulos + negritas'}); }
+  else if (tieneSubtitulos || tieneNegritas) { score += 5; checks.push({ok:'warn', text:'Estructura', val:(tieneSubtitulos?'Subtítulos':'Negritas')+' solamente'}); problemas.push(tieneSubtitulos?'Faltan negritas en datos clave':'Faltan subtítulos H2 cada 2-3 párrafos'); }
+  else { checks.push({ok:false, text:'Estructura', val:'Sin subtítulos ni negritas'}); problemas.push('Agregar ## Subtítulos y **negritas** para estructurar'); }
+
+  // Nivel
+  score = Math.max(0, score);
+  const nivel = score >= 80 ? 'ORO' : score >= 60 ? 'BRONCE' : 'PELIGRO';
+  const colorClass = score >= 80 ? 'score-oro' : score >= 60 ? 'score-bronce' : 'score-peligro';
+
+  // Render
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreNum').className = 'score-number ' + colorClass;
+  document.getElementById('scoreLabel').textContent = nivel + (score >= 80 ? ' — Listo para AdSense' : score >= 60 ? ' — Aceptable' : ' — Requiere corrección');
+  document.getElementById('scoreLabel').className = 'score-label ' + colorClass;
+
+  document.getElementById('checks').innerHTML = checks.map(c => {
+    const cls = c.ok === true ? 'check-pass' : c.ok === 'warn' ? 'check-warn' : 'check-fail';
+    const icon = c.ok === true ? '✅' : c.ok === 'warn' ? '⚠️' : '❌';
+    return `<div class="check-item ${cls}"><span class="check-icon">${icon}</span><div class="check-text">${c.text}<div class="check-value">${c.val}</div></div></div>`;
+  }).join('');
+
+  document.getElementById('problems').innerHTML = problemas.length === 0
+    ? '<div class="problem-item" style="background:rgba(34,197,94,0.1);color:#86efac;border-color:rgba(34,197,94,0.3)"><strong>✅ Sin problemas críticos</strong></div>'
+    : problemas.map(p => `<div class="problem-item"><strong>⚠️</strong> ${p}</div>`).join('');
+
+  document.getElementById('resumen').innerHTML = `
+    <strong>Score:</strong> ${score}/100 (${nivel})<br>
+    <strong>Palabras:</strong> ${palabras} (meta: 500+)<br>
+    <strong>Transiciones IA:</strong> ${transiciones}<br>
+    <strong>Relleno emocional:</strong> ${relleno}<br>
+    <strong>Fuentes:</strong> ${fuentes} | <strong>Citas:</strong> ${citas} | <strong>Datos:</strong> ${totalDatos}<br>
+    <strong>Lugares NI:</strong> ${lugares}
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FUNCIÓN LIMPIAR IA
+// ═══════════════════════════════════════════════════════════════
+function limpiarIA() {
+  let texto = document.getElementById('input').value;
+  if (!texto.trim()) return;
+
+  const original = texto;
+
+  // Eliminar transiciones IA (reemplazar por punto+espacio o nada)
+  texto = texto.replace(PATRONES.transicionesIA, function(match, offset, string) {
+    const antes = string.substring(Math.max(0, offset - 2), offset);
+    if (antes.match(/[.!?]\s*$/)) return '';
+    return '. ';
+  });
+
+  // Eliminar relleno emocional
+  texto = texto.replace(PATRONES.rellenoEmocional, '');
+
+  // Limpiar espacios dobles y párrafos vacíos
+  texto = texto.replace(/\n{3,}/g, '\n\n');
+  texto = texto.replace(/\s{2,}/g, ' ').trim();
+  texto = texto.replace(/\.\s*\./g, '.');
+
+  document.getElementById('output').value = texto;
+  document.getElementById('wordCountOut').textContent = texto.split(/\s+/).filter(w => w.length > 0).length + ' palabras';
+
+  // Mostrar diff
+  const diff = generarDiff(original, texto);
+  document.getElementById('diffBox').innerHTML = diff;
+  document.getElementById('resultadoPanel').style.display = 'block';
+
+  auditar();
+}
+
+function generarDiff(original, limpio) {
+  const transiciones = [...new Set(original.match(PATRONES.transicionesIA) || [])];
+  const rellenos = [...new Set(original.match(PATRONES.rellenoEmocional) || [])];
+
+  let html = '<strong>Cambios aplicados:</strong><br><br>';
+
+  if (transiciones.length) {
+    html += '<div style="margin-bottom:8px;"><span style="color:#fca5a5;">❌ Eliminadas transiciones IA:</span><br>';
+    transiciones.forEach(t => { html += `<span class="diff-removed">${t}</span> `; });
+    html += '</div>';
+  }
+
+  if (rellenos.length) {
+    html += '<div style="margin-bottom:8px;"><span style="color:#fca5a5;">❌ Eliminado relleno emocional:</span><br>';
+    rellenos.forEach(r => { html += `<span class="diff-removed">${r}</span> `; });
+    html += '</div>';
+  }
+
+  if (!transiciones.length && !rellenos.length) {
+    html += '<span style="color:#86efac;">✅ No se detectaron problemas de IA ni relleno emocional</span>';
+  }
+
+  return html;
+}
+
+function copiarLimpio() {
+  const out = document.getElementById('output');
+  if (!out.value) { limpiarIA(); }
+  out.select();
+  document.execCommand('copy');
+  alert('✅ Texto limpio copiado al portapapeles. Pegalo en el panel de noticias.');
+}
+
+function copiarOutput() {
+  const out = document.getElementById('output');
+  out.select();
+  document.execCommand('copy');
+  alert('✅ Copiado');
+}
+
+function pegarTexto() {
+  navigator.clipboard.readText().then(text => {
+    document.getElementById('input').value = text;
+    auditar();
+  }).catch(() => {
+    alert('Usá Ctrl+V para pegar el texto');
+  });
+}
+
+// Auto-auditar al escribir
+let timeout;
+document.getElementById('input').addEventListener('input', function() {
+  clearTimeout(timeout);
+  timeout = setTimeout(auditar, 500);
+});
+</script>
+</body>
+</html>
