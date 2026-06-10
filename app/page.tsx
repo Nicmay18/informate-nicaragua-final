@@ -12,13 +12,13 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 
 const getCachedNews = unstable_cache(
   async () => getNews(30),
-  ['homepage-news'],
+  ['homepage-news-v2'],
   { revalidate: 60, tags: ['news'] }
 );
 
 const getCachedMasLeidas = unstable_cache(
   async () => getMasLeidas(),
-  ['homepage-masleidas'],
+  ['homepage-masleidas-v2'],
   { revalidate: 60, tags: ['news'] }
 );
 
