@@ -19,9 +19,7 @@ export async function POST(request: Request) {
     const { ids, categoria = 'Sucesos' } = await request.json();
 
     if (!Array.isArray(ids) || ids.length === 0) {
-      return NextResponse.json({ error: 'Se requiere array de ids' }, { status: 400 }, {
-        headers: { 'Access-Control-Allow-Origin': '*' }
-      });
+      return NextResponse.json({ error: 'Se requiere array de ids' }, { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } });
     }
 
     const actualizadas: { id: string; titulo: string; categoriaAnterior?: string }[] = [];
