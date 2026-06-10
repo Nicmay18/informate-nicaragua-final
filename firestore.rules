@@ -22,8 +22,15 @@ service cloud.firestore {
           && request.resource.data.contenido.size() <= 50000
           && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'];
 
-      // UPDATE / DELETE: bloqueado para clientes. Solo backend vía adminDb.
-      allow update, delete: if false;
+      // UPDATE: permitido desde el panel admin. Valida solo los campos que se envíen.
+      // Permite actualizaciones parciales como {publicado: true} o {destacada: true}.
+      allow update: if
+          (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
+          && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000))
+          && (!('categoria' in request.resource.data) || request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología']);
+
+      // DELETE: bloqueado para clientes. Solo backend vía adminDb.
+      allow delete: if false;
     }
 
     // ========== NEWSLETTER SUBSCRIBERS ==========
