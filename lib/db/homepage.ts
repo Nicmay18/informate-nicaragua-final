@@ -110,29 +110,29 @@ function esCategoriaSegura(categoria: string): boolean {
 
 /**
  * Obtiene las noticias más recientes para la portada (Carrusel y listados).
- * Ordena estrictamente por fecha descendente.
  * EXCLUYE 'Sucesos' para cumplir con políticas de AdSense.
  *
- * Estrategia: traemos limit*5 documentos y filtramos en servidor.
- * Esto evita índices compuestos complejos en Firestore.
+ * NOTA: El índice 'fecha DESC' de Firestore está corrupto y devuelve
+ * documentos en orden incorrecto. Por eso traemos sin orderBy y
+ * ordenamos server-side con JavaScript.
  */
 export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]> {
   try {
     const db = getAdminDb();
-    const fetchLimit = Math.min(limitCount * 10, 300);
 
+    // Traemos las últimas 200 noticias SIN orderBy (el índice está roto)
     const snap = await db
       .collection('noticias')
-      .orderBy('fecha', 'desc')
-      .limit(fetchLimit)
+      .limit(200)
       .get();
 
     const noticias = snap.docs
       .map(mapNoticia)
       .filter(n => esCategoriaSegura(n.categoria || ''))
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, limitCount);
 
-    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} safe news returned`);
+    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} safe news returned (server-side sort)`);
     return noticias;
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
@@ -143,47 +143,45 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 /**
  * Obtiene las noticias más leídas de los últimos 7 días.
  * Ordena por vistas descendente, excluye 'Sucesos', fallback a recientes limpias.
+ *
+ * NOTA: El índice 'fecha DESC' de Firestore está corrupto. Usamos
+ * server-side sorting para evitar documentos desordenados.
  */
 export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
   try {
     const db = getAdminDb();
     const { Timestamp } = await import('firebase-admin/firestore');
 
-    // Últimos 7 días — traemos más para filtrar Sucesos
+    // Traemos las últimas 200 noticias y filtramos server-side
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-    const snap7 = await db
+    const snap = await db
       .collection('noticias')
-      .where('fecha', '>=', cutoff7)
-      .orderBy('fecha', 'desc')
-      .limit(60)
+      .limit(200)
       .get();
 
-    if (!snap7.empty) {
-      const withViews = snap7.docs
-        .map(mapNoticia)
-        .filter(n => esCategoriaSegura(n.categoria || '') && (n.vistas ?? 0) >= 1)
-        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+    const noticias = snap.docs.map(mapNoticia);
 
-      if (withViews.length >= limitCount) {
-        return withViews.slice(0, limitCount);
-      }
+    // Ordenar por fecha descendente server-side
+    const sortedByDate = noticias
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+
+    // Filtrar últimos 7 días + seguras + con vistas
+    const cutoffMs = cutoff7.toDate().getTime();
+    const recentWithViews = sortedByDate
+      .filter(n => {
+        const fechaMs = new Date(n.fecha).getTime();
+        return fechaMs >= cutoffMs && esCategoriaSegura(n.categoria || '') && (n.vistas ?? 0) >= 1;
+      })
+      .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+
+    if (recentWithViews.length >= limitCount) {
+      return recentWithViews.slice(0, limitCount);
     }
 
     // Fallback: noticias más recientes limpias
-    const snapAll = await db
-      .collection('noticias')
-      .orderBy('fecha', 'desc')
-      .limit(limitCount * 10)
-      .get();
-
-    if (!snapAll.empty) {
-      return snapAll.docs
-        .map(mapNoticia)
-        .filter(n => esCategoriaSegura(n.categoria || ''))
-        .slice(0, limitCount);
-    }
-
-    return [];
+    return sortedByDate
+      .filter(n => esCategoriaSegura(n.categoria || ''))
+      .slice(0, limitCount);
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
     return [];
