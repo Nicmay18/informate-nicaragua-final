@@ -57,7 +57,9 @@ async function rewriteWithGemini(raw: ExternalArticle): Promise<ExternalArticle>
     throw new Error('GEMINI_API_KEY no configurada');
   }
 
-  const { GoogleGenAI } = await import('@google/genai');
+  // webpackIgnore evita que Next.js bundlee este módulo en build time
+  // Se resuelve en runtime del servidor cuando la dependencia esté instalada
+  const { GoogleGenAI } = await import(/* webpackIgnore: true */ '@google/genai');
   const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
   const prompt = `

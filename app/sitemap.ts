@@ -14,9 +14,26 @@ const cachedGetNews = unstable_cache(
 );
 
 // Sanitiza fechas para evitar RangeError: Invalid time value en build
-function safeDate(value: string | Date | undefined): Date {
+// Maneja strings, Date nativos, Firestore Timestamp objects y raw {_seconds,_nanoseconds}
+function safeDate(value: unknown): Date {
   if (!value) return new Date();
-  const d = typeof value === 'string' ? new Date(value) : value;
+  // Firestore Timestamp instance (admin SDK) — tiene toDate()
+  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
+    try {
+      const d = (value as any).toDate();
+      return d instanceof Date && !isNaN(d.getTime()) ? d : new Date();
+    } catch { return new Date(); }
+  }
+  // Raw Firestore Timestamp object {_seconds, _nanoseconds}
+  if (typeof value === 'object' && value !== null && '_seconds' in value) {
+    try {
+      const sec = Number((value as any)._seconds);
+      const ns = Number((value as any)._nanoseconds || 0);
+      const d = new Date(sec * 1000 + ns / 1_000_000);
+      return !isNaN(d.getTime()) ? d : new Date();
+    } catch { return new Date(); }
+  }
+  const d = typeof value === 'string' ? new Date(value) : value instanceof Date ? value : new Date();
   return isNaN(d.getTime()) ? new Date() : d;
 }
 

@@ -15,11 +15,14 @@ const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading
 const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
 const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
-function timeAgo(dateStr: string) {
+function timeAgo(dateInput: unknown): string {
+  const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
-    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: es });
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    return formatDistanceToNow(d, { addSuffix: true, locale: es });
   } catch {
-    return dateStr;
+    return '';
   }
 }
 
