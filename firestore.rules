@@ -12,9 +12,18 @@ service cloud.firestore {
       // Lectura pública (todo el mundo puede leer noticias)
       allow get, list: if true;
 
-      // CREATE / UPDATE / DELETE: bloqueado al 100% para clientes.
-      // Solo el backend vía adminDb puede escribir.
-      allow create, update, delete: if false;
+      // CREATE: permitido desde el panel admin (Client SDK) con validación estricta.
+      // Se exige que vengan los campos mínimos para evitar documentos vacíos.
+      allow create: if request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
+          && request.resource.data.titulo is string
+          && request.resource.data.titulo.size() > 0
+          && request.resource.data.titulo.size() <= 200
+          && request.resource.data.contenido is string
+          && request.resource.data.contenido.size() <= 50000
+          && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'];
+
+      // UPDATE / DELETE: bloqueado para clientes. Solo backend vía adminDb.
+      allow update, delete: if false;
     }
 
     // ========== NEWSLETTER SUBSCRIBERS ==========

@@ -130,10 +130,6 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
       .get();
 
     return snap.docs
-      // Excluir explícitamente documentos marcados como no publicados
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
       .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {
