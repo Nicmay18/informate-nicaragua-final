@@ -3,6 +3,7 @@ import { getLatestNews, getTrendingNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+import { revalidatePath } from 'next/cache';
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
@@ -57,6 +58,9 @@ export default async function HomePage() {
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
+
+  // Purga caché residual para evitar servir copias antiguas con sucesos
+  revalidatePath('/');
 
   const heroImage = noticias[0]?.imagen || null;
 

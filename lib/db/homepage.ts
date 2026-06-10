@@ -97,23 +97,43 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
   };
 }
 
+// ============================================================================
+// CATEGORÍAS SEGURAS PARA ADSENSE (excluye Sucesos por cumplimiento)
+// ============================================================================
+const CATEGORIAS_ADSENSE_SEGURAS = new Set([
+  'Nacionales', 'Internacionales', 'Tecnología', 'Economía', 'Deportes', 'Espectáculos'
+]);
+
+function esCategoriaSegura(categoria: string): boolean {
+  return CATEGORIAS_ADSENSE_SEGURAS.has(categoria);
+}
+
 /**
  * Obtiene las noticias más recientes para la portada (Carrusel y listados).
- * Ordena estrictamente por fecha descendente y filtra publicado=true.
- * Usa adminDb directamente — sin cache estático que congele el carrusel.
+ * Ordena estrictamente por fecha descendente.
+ * EXCLUYE 'Sucesos' para cumplir con políticas de AdSense.
+ *
+ * Estrategia: traemos limit*5 documentos y filtramos en servidor.
+ * Esto evita índices compuestos complejos en Firestore.
  */
 export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]> {
   try {
     const db = getAdminDb();
+    const fetchLimit = Math.min(limitCount * 5, 200);
 
     const snap = await db
       .collection('noticias')
-      .where('publicado', '==', true)
       .orderBy('fecha', 'desc')
-      .limit(Math.min(limitCount, 100))
+      .limit(fetchLimit)
       .get();
 
-    return snap.docs.map(mapNoticia);
+    const noticias = snap.docs
+      .map(mapNoticia)
+      .filter(n => esCategoriaSegura(n.categoria || ''))
+      .slice(0, limitCount);
+
+    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} safe news returned`);
+    return noticias;
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
     return [];
@@ -122,27 +142,26 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 
 /**
  * Obtiene las noticias más leídas de los últimos 7 días.
- * Ordena por vistas descendente, fallback a recientes si no hay suficientes.
+ * Ordena por vistas descendente, excluye 'Sucesos', fallback a recientes limpias.
  */
 export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
   try {
     const db = getAdminDb();
     const { Timestamp } = await import('firebase-admin/firestore');
 
-    // Últimos 7 días con vistas
+    // Últimos 7 días — traemos más para filtrar Sucesos
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
     const snap7 = await db
       .collection('noticias')
-      .where('publicado', '==', true)
       .where('fecha', '>=', cutoff7)
       .orderBy('fecha', 'desc')
-      .limit(30)
+      .limit(60)
       .get();
 
     if (!snap7.empty) {
       const withViews = snap7.docs
         .map(mapNoticia)
-        .filter(n => (n.vistas ?? 0) >= 1)
+        .filter(n => esCategoriaSegura(n.categoria || '') && (n.vistas ?? 0) >= 1)
         .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
 
       if (withViews.length >= limitCount) {
@@ -150,15 +169,19 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
       }
     }
 
-    // Fallback: noticias más recientes publicadas
+    // Fallback: noticias más recientes limpias
     const snapAll = await db
       .collection('noticias')
-      .where('publicado', '==', true)
       .orderBy('fecha', 'desc')
-      .limit(limitCount)
+      .limit(limitCount * 5)
       .get();
 
-    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
+    if (!snapAll.empty) {
+      return snapAll.docs
+        .map(mapNoticia)
+        .filter(n => esCategoriaSegura(n.categoria || ''))
+        .slice(0, limitCount);
+    }
 
     return [];
   } catch (err) {
