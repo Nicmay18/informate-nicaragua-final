@@ -86,6 +86,30 @@ function normalizeImage(imagen: string): string {
 // El sistema ahora solo funciona con noticias reales de Firebase
 // Si Firebase falla, el sitio mostrará estado vacío con logs de error
 
+// Sanitiza cualquier representación de fecha de Firestore (Timestamp, raw object, string) a ISO string
+function safeDateString(value: unknown): string {
+  if (!value) return '';
+  // Firestore Timestamp con toDate()
+  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
+    try {
+      const d = (value as any).toDate();
+      return d instanceof Date && !isNaN(d.getTime()) ? d.toISOString() : '';
+    } catch { return ''; }
+  }
+  // Raw Firestore Timestamp object {_seconds, _nanoseconds}
+  if (typeof value === 'object' && value !== null && '_seconds' in value) {
+    try {
+      const sec = Number((value as any)._seconds);
+      const ns = Number((value as any)._nanoseconds || 0);
+      const d = new Date(sec * 1000 + ns / 1_000_000);
+      return !isNaN(d.getTime()) ? d.toISOString() : '';
+    } catch { return ''; }
+  }
+  if (typeof value === 'string') return value;
+  if (value instanceof Date) return isNaN(value.getTime()) ? '' : value.toISOString();
+  return '';
+}
+
 function validateCount(count: number, defaultCount: number): number {
   if (typeof count !== 'number' || isNaN(count)) return defaultCount;
   if (count < 0) return defaultCount;
@@ -120,8 +144,8 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+          fecha: safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.fechaActualizacion),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
@@ -278,7 +302,7 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
     contenido: data.contenido,
     categoria: data.categoria || 'Actualidad',
     imagen: normalizeImage(data.imagen || ''),
-    fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+    fecha: safeDateString(data.fecha),
     autor: data.autor,
     autorFoto: data.autorFoto,
     destacada: data.destacada,
@@ -383,8 +407,8 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         contenido: data.contenido || '',
         categoria: data.categoria || 'Actualidad',
         imagen: normalizeImage(data.imagen || ''),
-        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-        fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+        fecha: safeDateString(data.fecha),
+        fechaActualizacion: safeDateString(data.fechaActualizacion),
         autor: data.autor,
         autorFoto: data.autorFoto,
         destacada: data.destacada,
@@ -448,7 +472,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          fecha: safeDateString(data.fecha),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
