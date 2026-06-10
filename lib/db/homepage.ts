@@ -119,7 +119,7 @@ function esCategoriaSegura(categoria: string): boolean {
 export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]> {
   try {
     const db = getAdminDb();
-    const fetchLimit = Math.min(limitCount * 5, 200);
+    const fetchLimit = Math.min(limitCount * 10, 300);
 
     const snap = await db
       .collection('noticias')
@@ -173,7 +173,7 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
     const snapAll = await db
       .collection('noticias')
       .orderBy('fecha', 'desc')
-      .limit(limitCount * 5)
+      .limit(limitCount * 10)
       .get();
 
     if (!snapAll.empty) {

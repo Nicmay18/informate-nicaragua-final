@@ -285,8 +285,8 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
-  // Carrusel: las 5 noticias más recientes (noticias ya viene ordenado por fecha desc)
-  const heroNoticias = noticias.slice(0, 5);
+  // Carrusel: las 7 noticias más recientes (noticias ya viene ordenado por fecha desc)
+  const heroNoticias = noticias.slice(0, 7);
 
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
@@ -297,8 +297,8 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
     [noticias, heroIds]
   );
 
-  // "Últimas noticias" = los 6 más recientes tras el hero (siempre noticias del día)
-  const ultimas = useMemo(() => resto.slice(0, 6), [resto]);
+  // "Últimas noticias" = los 8 más recientes tras el hero
+  const ultimas = useMemo(() => resto.slice(0, 8), [resto]);
 
   // Categorías usan TODAS las noticias (incluyendo hero y ultimas) para no quedar vacías
   const porCategoria = useMemo(() => {
