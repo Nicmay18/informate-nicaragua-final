@@ -8,7 +8,7 @@ import Link from 'next/link';
 // Firebase imports
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
-import { getFirestore, collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -182,6 +182,7 @@ function calcularScore(noticia: any): { score: number; nivel: 'ORO' | 'BRONCE' |
 export default function AuditorPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [noticias, setNoticias] = useState<any[]>([]);
   const [filtrarPeligro, setFiltrarPeligro] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -196,13 +197,24 @@ export default function AuditorPage() {
     const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       setLoading(false);
-      
+
       if (u) {
-        // Cargar noticias
-        const q = query(collection(db, 'noticias'), orderBy('fecha', 'desc'));
-        const snap = await getDocs(q);
-        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setNoticias(data);
+        try {
+          const snap = await getDocs(collection(db, 'noticias'));
+          const data: any[] = snap.docs
+            .map(d => ({ id: d.id, ...d.data() }))
+            .sort((a: any, b: any) => {
+              const da = a.fecha?.seconds ? a.fecha.seconds : new Date(a.fecha || 0).getTime();
+              const dbf = b.fecha?.seconds ? b.fecha.seconds : new Date(b.fecha || 0).getTime();
+              return dbf - da;
+            });
+          setNoticias(data);
+          setError('');
+        } catch (err: any) {
+          console.error('[Auditor] Error cargando noticias:', err);
+          setError(err?.message || 'No se pudieron cargar las noticias');
+          setNoticias([]);
+        }
       }
     });
 
@@ -227,7 +239,25 @@ export default function AuditorPage() {
     peligro: noticiasAuditoria.filter(n => n.auditoria.nivel === 'PELIGRO').length,
   };
 
+  const pct = (value: number) => stats.total > 0 ? Math.round((value / stats.total) * 100) : 0;
+
   if (loading) return <div style={{ padding: 40, textAlign: 'center' }}>Cargando...</div>;
+
+  if (error) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: 24 }}>
+        <div style={{ background: '#fff', padding: 32, borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', maxWidth: 720, width: '100%' }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12, color: '#991b1b' }}>No se pudo cargar el auditor</h1>
+          <p style={{ color: '#475569', marginBottom: 16 }}>La página encontró un error al cargar Firestore, pero ya no debería romperse la app completa.</p>
+          <pre style={{ whiteSpace: 'pre-wrap', background: '#f8fafc', border: '1px solid #e2e8f0', padding: 16, borderRadius: 12, color: '#334155', fontSize: 13, lineHeight: 1.5 }}>{error}</pre>
+          <div style={{ marginTop: 16, display: 'flex', gap: 12 }}>
+            <button onClick={() => window.location.reload()} style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: '#4f46e5', color: '#fff', fontWeight: 600, cursor: 'pointer' }}>Reintentar</button>
+            <Link href="/admin" style={{ padding: '10px 16px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', color: '#334155', fontWeight: 600, textDecoration: 'none' }}>Volver al admin</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -278,19 +308,19 @@ export default function AuditorPage() {
           <div style={{ background: '#dcfce7', padding: 20, borderRadius: 12, border: '1px solid #86efac' }}>
             <div style={{ fontSize: 13, color: '#166534', marginBottom: 8 }}>🟢 ORO (80+)</div>
             <div style={{ fontSize: 32, fontWeight: 700, color: '#166534' }}>{stats.oro}</div>
-            <div style={{ fontSize: 13, color: '#22c55e' }}>{Math.round(stats.oro/stats.total*100)}%</div>
+            <div style={{ fontSize: 13, color: '#22c55e' }}>{pct(stats.oro)}%</div>
           </div>
           <div style={{ background: '#fef9c3', padding: 20, borderRadius: 12, border: '1px solid #fde047' }}>
             <div style={{ fontSize: 13, color: '#854d0e', marginBottom: 8 }}>🟡 BRONCE (60-79)</div>
             <div style={{ fontSize: 32, fontWeight: 700, color: '#854d0e' }}>{stats.bronce}</div>
-            <div style={{ fontSize: 13, color: '#eab308' }}>{Math.round(stats.bronce/stats.total*100)}%</div>
+            <div style={{ fontSize: 13, color: '#eab308' }}>{pct(stats.bronce)}%</div>
           </div>
           <div style={{ background: stats.peligro > 0 ? '#fee2e2' : '#dcfce7', padding: 20, borderRadius: 12, border: stats.peligro > 0 ? '1px solid #fca5a5' : '1px solid #86efac' }}>
             <div style={{ fontSize: 13, color: stats.peligro > 0 ? '#991b1b' : '#166534', marginBottom: 8 }}>
               {stats.peligro > 0 ? '🔴 PELIGRO (<60)' : '✅ SIN PELIGRO'}
             </div>
             <div style={{ fontSize: 32, fontWeight: 700, color: stats.peligro > 0 ? '#991b1b' : '#166534' }}>{stats.peligro}</div>
-            <div style={{ fontSize: 13, color: stats.peligro > 0 ? '#ef4444' : '#22c55e' }}>{Math.round(stats.peligro/stats.total*100)}%</div>
+            <div style={{ fontSize: 13, color: stats.peligro > 0 ? '#ef4444' : '#22c55e' }}>{pct(stats.peligro)}%</div>
           </div>
         </div>
 

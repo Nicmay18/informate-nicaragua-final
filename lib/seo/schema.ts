@@ -5,6 +5,20 @@
 
 import type { Noticia } from '../types';
 
+/** Ensure image URLs are absolute for Google Rich Snippets */
+function toAbsoluteUrl(url?: string): string {
+  if (!url) return 'https://nicaraguainformate.com/logo.webp';
+  if (url.startsWith('http')) return url;
+  return `https://nicaraguainformate.com${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+/** Prevent Invalid Date in JSON-LD */
+function safeIsoDate(value?: string | Date): string {
+  if (!value) return new Date().toISOString();
+  const d = typeof value === 'string' ? new Date(value) : value;
+  return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+}
+
 export function buildNewsArticleJsonLdEnhanced(
   article: Noticia,
   url: string,
@@ -30,21 +44,21 @@ export function buildNewsArticleJsonLdEnhanced(
     image: [
       {
         '@type': 'ImageObject',
-        url: article.imagen || 'https://nicaraguainformate.com/logo.webp',
+        url: toAbsoluteUrl(article.imagen),
         width: 1200,
         height: 630,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
       },
       {
         '@type': 'ImageObject',
-        url: article.imagen ? article.imagen.replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/logo.webp',
+        url: article.imagen ? toAbsoluteUrl(article.imagen).replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
         caption: `Logo: ${article.titulo} — Nicaragua Informate`,
       },
     ],
-    datePublished: article.fecha,
-    dateModified: article.fechaActualizacion || article.fecha,
+    datePublished: safeIsoDate(article.fecha),
+    dateModified: safeIsoDate(article.fechaActualizacion || article.fecha),
     author: {
       '@type': 'Person',
       name: authorName,

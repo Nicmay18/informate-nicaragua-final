@@ -1,4 +1,6 @@
-# 🔴 PLAN DE CORRECCIÓN — 14 Noticias en Peligro
+# 🔴 PLAN DE CORRECCIÓN — Noticias en Peligro (GUÍA PROVISIONAL)
+
+> **Importante:** esta guía es provisional. Antes de editar cualquier noticia, confírmala en el auditor en vivo. Si una noticia ya aparece como **🟢 ORO** en el evaluador/editor, **no se debe reescribir** con este documento.
 
 ## Proceso de Corrección (Usar /admin/auditor + Panel)
 
@@ -8,7 +10,7 @@ https://nicaraguainformate.com/admin/auditor
 ```
 
 ### Paso 2: Identificar noticias en rojo
-El dashboard ya muestra las 14 noticias en 🔴 PELIGRO. Para cada una:
+El dashboard puede mostrar noticias antiguas o versiones no sincronizadas. Para cada una:
 
 1. Haz clic en **"Editar URGENTE"** (abre el editor)
 2. Lee el contenido actual
@@ -19,7 +21,7 @@ El dashboard ya muestra las 14 noticias en 🔴 PELIGRO. Para cada una:
 
 ---
 
-## NOTICIA 1: Score 40 → Meta 65+
+## NOTICIA 1: Score 40 → Meta 65+ (solo si sigue en PELIGRO)
 ### "Perros robóticos reforzarán seguridad en centro FIFA"
 
 **Problemas detectados:**
@@ -38,9 +40,7 @@ El dashboard ya muestra las 14 noticias en 🔴 PELIGRO. Para cada una:
 
 2. **Agregar fuente atribuida (obligatorio):**
    ```
-   "La implementación de esta tecnología representa un salto cualitativo 
-   en la seguridad de eventos masivos", afirmó el Director de Operaciones 
-   de la FIFA, John Smith, durante la conferencia de prensa.
+   "[Cita textual real y verificable]", afirmó [nombre real], [cargo real], durante [evento / rueda de prensa].
    ```
 
 3. **Agregar datos concretos:**
@@ -73,9 +73,7 @@ El dashboard ya muestra las 14 noticias en 🔴 PELIGRO. Para cada una:
 
 2. **Agregar cita textual:**
    ```
-   "Este oro es el resultado de años de sacrificio. Llevábamos entrenando 
-   específicamente para esta prueba desde enero", declaró María José López, 
-   de 24 años, tras cruzar la meta.
+   "[Cita textual real del atleta/entrenador]", declaró [nombre real], [edad real], tras la competencia.
    ```
 
 3. **Contexto histórico:**
@@ -170,15 +168,13 @@ indicó el oficial José Ramírez, de la Dirección de Tránsito.
 ### 1. Agregar 2 fuentes atribuidas:
 Ejemplo para "Depresión tropical":
 ```
-El meteorólogo Carlos Mendoza, del INETER, señaló que... 
-Por su parte, la coordinadora de Protección Civil de Bluefields, 
-Ana Patricia Ruiz, indicó que...
+[Nombre real], del INETER, señaló que...
+Por su parte, [nombre real], [cargo real], indicó que...
 ```
 
 ### 2. Agregar 1 cita textual:
 ```
-"La tormenta podría intensificarse en las próximas 48 horas, por lo 
-que llamamos a la población a estar alerta", advirtió Mendoza.
+"[Cita textual real y verificable]", advirtió [nombre real].
 ```
 
 ### 3. Agregar datos específicos:
@@ -218,8 +214,8 @@ Para cada noticia corregida, verificar:
 
 ## META FINAL
 
-**Antes:** 43 ORO (22%) | 139 BRONCE (71%) | 14 PELIGRO (7%)
+**Objetivo real:** que el auditor y el evaluador coincidan en el estado de cada noticia.
 
-**Después:** 43+ ORO (22%+) | 153+ BRONCE/ARO (78%+) | **0 PELIGRO (0%)** ✅
+**Antes de editar:** verificar si la noticia sigue en 🔴 PELIGRO.
 
-Con 0% en peligro, el sitio cumple el estándar mínimo para solicitar AdSense.
+**Después de editar solo las que realmente lo necesiten:** reducir el número de noticias en peligro sin tocar artículos que ya estén aprobados.

@@ -109,6 +109,13 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
 
     // ─── 2. Google Ads: SOLO al scroll (nunca automático) ───
     const loadAds = () => {
+      // Exclusión centralizada vía adsense-guard
+      const { isAdsenseSafePath } = require('@/lib/adsense-guard');
+      const path = window.location.pathname.toLowerCase();
+      if (!isAdsenseSafePath(path)) {
+        console.log('[AdSense] Bloqueado en:', path);
+        return;
+      }
       if (!adsClient || adsLoaded.current) return;
       adsLoaded.current = true;
       loadScript(

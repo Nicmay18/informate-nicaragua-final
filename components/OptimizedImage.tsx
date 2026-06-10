@@ -25,6 +25,11 @@ const VARIANT_SIZES = {
   og:       { width: 1200, height: 630, sizes: '1200px' },
 } as const;
 
+/** Compute aspect-ratio to prevent CLS (Cumulative Layout Shift) */
+function getAspectRatio(width: number, height: number): string {
+  return `${width} / ${height}`;
+}
+
 
 export default function OptimizedImage({
   src,
@@ -50,7 +55,7 @@ export default function OptimizedImage({
 
   const containerStyle: React.CSSProperties = fill
     ? { position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }
-    : { position: 'relative', width: finalWidth, height: finalHeight, overflow: 'hidden' };
+    : { position: 'relative', width: '100%', maxWidth: finalWidth, aspectRatio: getAspectRatio(finalWidth, finalHeight), overflow: 'hidden' };
 
   return (
     <div

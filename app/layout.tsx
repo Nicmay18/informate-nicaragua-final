@@ -15,6 +15,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
 import ThirdPartyScripts from '@/components/ThirdPartyScripts';
+import AdSenseLoader from '@/components/AdSenseLoader';
 import { criticalCss } from '@/lib/critical-css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -112,12 +113,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         {/* Preconnect a Google Fonts eliminado — no se usan fuentes externas, Next.js/font las auto-hospeda */}
-        {/* AdSense verification script: requerido por Google para verificar propiedad y elegibilidad */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          crossOrigin="anonymous"
-        />
+        {/* Conditional AdSense injection via component */}
+        <AdSenseLoader />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />

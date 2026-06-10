@@ -128,9 +128,9 @@ export default function AuthorCard({
   };
 
   return (
-    <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`}>
+    <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`} itemScope itemType="https://schema.org/Person">
       {hasPhoto ? (
-        <div style={avatarImgStyle}>
+        <div style={avatarImgStyle} itemProp="image">
           <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="64px" />
         </div>
       ) : (
@@ -142,29 +142,29 @@ export default function AuthorCard({
       <div style={infoStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           {hasSlug ? (
-            <Link href={`/autor/${finalSlug}`} style={nameStyle} rel="author">
+            <Link href={`/autor/${finalSlug}`} style={nameStyle} rel="author" itemProp="name url">
               {displayName}
             </Link>
           ) : (
-            <span style={nameStyle}>{displayName}</span>
+            <span style={nameStyle} itemProp="name">{displayName}</span>
           )}
         </div>
 
-        <p style={roleStyle}>{displayRole}</p>
-        <p style={displayBio ? { ...bioStyle } : bioStyle}>{displayBio}</p>
+        <p style={roleStyle} itemProp="jobTitle">{displayRole}</p>
+        <p style={displayBio ? { ...bioStyle } : bioStyle} itemProp="description">{displayBio}</p>
 
         {(publishedDate || updatedDate) && (
           <div style={dateStyle}>
             {publishedDate && (
               <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-                <time dateTime={publishedDate}>Publicado: {formatDateTime(publishedDate)}</time>
+                <time dateTime={publishedDate} itemProp="datePublished">Publicado: {formatDateTime(publishedDate)}</time>
               </span>
             )}
             {isUpdated && (
               <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
-                <time dateTime={updatedDate}>Actualizado: {formatDateTime(updatedDate)}</time>
+                <time dateTime={updatedDate} itemProp="dateModified">Actualizado: {formatDateTime(updatedDate)}</time>
               </span>
             )}
           </div>
