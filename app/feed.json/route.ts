@@ -35,11 +35,7 @@ export async function GET() {
       .limit(50)
       .get();
 
-    items = snapshot.docs
-      .filter((doc) => {
-        try { return doc.data().publicado !== false; } catch { return true; }
-      })
-      .map((doc) => {
+    items = snapshot.docs.map((doc) => {
         const d = doc.data();
         let dateIso = '';
         try {

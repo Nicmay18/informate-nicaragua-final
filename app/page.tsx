@@ -11,7 +11,7 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 // ===================================================================
 
 const getCachedNews = unstable_cache(
-  async () => getNews(12),
+  async () => getNews(30),
   ['homepage-news'],
   { revalidate: 60, tags: ['news'] }
 );

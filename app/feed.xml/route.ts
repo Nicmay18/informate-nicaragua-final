@@ -33,11 +33,7 @@ export async function GET() {
       .limit(50)
       .get();
 
-    articles = snapshot.docs
-      .filter((doc) => {
-        try { return doc.data().publicado !== false; } catch { return true; }
-      })
-      .map((doc) => {
+    articles = snapshot.docs.map((doc) => {
         const d = doc.data();
         let fecha = '';
         try {

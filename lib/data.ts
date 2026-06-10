@@ -328,9 +328,6 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
 
     if (!snap7.empty) {
       const withViews = snap7.docs
-        .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-          try { return d.data().publicado !== false; } catch { return true; }
-        })
         .map(mapNoticia)
         .filter(n => (n.vistas ?? 0) >= 1)
         .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
@@ -349,11 +346,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .limit(validatedCount)
       .get();
 
-    if (!snap3.empty) return snap3.docs
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
-      .map(mapNoticia);
+    if (!snap3.empty) return snap3.docs.map(mapNoticia);
 
     // 3. Fallback final: noticias más recientes que haya
     const snapAll = await adminDb
@@ -362,11 +355,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .limit(validatedCount)
       .get();
 
-    if (!snapAll.empty) return snapAll.docs
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
-      .map(mapNoticia);
+    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
 
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));

@@ -293,9 +293,9 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
 
-  // Resto excluye hero explícitamente
+  // Resto = todas las noticias menos las que ya están en el hero
   const resto = useMemo(
-    () => noticias.slice(5).filter(n => !heroIds.has(n.id)),
+    () => noticias.filter(n => !heroIds.has(n.id)),
     [noticias, heroIds]
   );
 
