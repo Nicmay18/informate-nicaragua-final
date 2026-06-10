@@ -46,15 +46,13 @@ export default function JsonLdSchema({ article, url, readingTime: _readingTime =
     keywords.push(...article.tags.slice(0, 5));
   }
 
-  // Word-count real desde contenido HTML
-  const wordCount = article.contenido
-    ? article.contenido
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .split(' ')
-        .filter((w) => w.length > 0).length
-    : 0;
+  // Word-count real y tiempo de lectura (220 ppm = promedio lectura web español)
+  function calculateReadingAndWordCount(text: string = '') {
+    const words = text.replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.ceil(words / 220));
+    return { wordCount: words, readingTime: `PT${minutes}M` };
+  }
+  const { wordCount, readingTime } = calculateReadingAndWordCount(article.contenido);
 
   const authorName = article.autor || 'Redacción Nicaragua Informate';
   const isKeyling = authorName === 'Keyling Elieth Rivera Muñoz';
@@ -115,7 +113,7 @@ export default function JsonLdSchema({ article, url, readingTime: _readingTime =
     articleSection: article.categoria,
     inLanguage: 'es-NI',
     wordCount,
-    readingTime: `PT${Math.max(1, Math.ceil(wordCount / 200))}M`,
+    readingTime,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['.article-headline', '.article-body'],
@@ -171,40 +169,40 @@ export default function JsonLdSchema({ article, url, readingTime: _readingTime =
     sameAs: [
       'https://www.facebook.com/profile.php?id=61578261125687',
     ],
-    // Políticas editoriales como señal de autoridad y confiabilidad
+    // Políticas editoriales como señal de autoridad y confiabilidad (EEAT)
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Políticas Editoriales',
+      name: 'Políticas Transparentes',
       itemListElement: [
         {
-          '@type': 'ListItem',
-          item: {
+          '@type': 'Offer',
+          itemOffered: {
             '@type': 'WebPage',
             name: 'Política Editorial',
             url: `${BASE}/politica-editorial`,
           },
         },
         {
-          '@type': 'ListItem',
-          item: {
+          '@type': 'Offer',
+          itemOffered: {
             '@type': 'WebPage',
             name: 'Correcciones',
             url: `${BASE}/correcciones`,
           },
         },
         {
-          '@type': 'ListItem',
-          item: {
+          '@type': 'Offer',
+          itemOffered: {
             '@type': 'WebPage',
             name: 'Privacidad',
             url: `${BASE}/privacidad`,
           },
         },
         {
-          '@type': 'ListItem',
-          item: {
+          '@type': 'Offer',
+          itemOffered: {
             '@type': 'WebPage',
-            name: 'Términos de Uso',
+            name: 'Términos de Servicio',
             url: `${BASE}/terminos`,
           },
         },

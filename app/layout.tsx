@@ -1,5 +1,6 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
+// import localFont from 'next/font/local'; // Descomenta cuando agregues los archivos .woff2
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
@@ -20,6 +21,38 @@ import { criticalCss } from '@/lib/critical-css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
+
+/* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───
+ * 1. Descarga Inter y Merriweather como .woff2
+ * 2. Colócalos en public/fonts/:
+ *      public/fonts/Inter-Regular.woff2
+ *      public/fonts/Inter-Bold.woff2
+ *      public/fonts/Merriweather-Regular.woff2
+ *      public/fonts/Merriweather-Bold.woff2
+ * 3. Descomenta las líneas siguientes y elimina los imports de next/font/google arriba.
+ *
+ * const interLocal = localFont({
+ *   src: [
+ *     { path: '../public/fonts/Inter-Regular.woff2', weight: '400', style: 'normal' },
+ *     { path: '../public/fonts/Inter-Bold.woff2', weight: '700', style: 'normal' },
+ *   ],
+ *   variable: '--font-inter',
+ *   display: 'swap',
+ *   preload: true,
+ * });
+ *
+ * const merriweatherLocal = localFont({
+ *   src: [
+ *     { path: '../public/fonts/Merriweather-Regular.woff2', weight: '400', style: 'normal' },
+ *     { path: '../public/fonts/Merriweather-Bold.woff2', weight: '700', style: 'normal' },
+ *   ],
+ *   variable: '--font-merri',
+ *   display: 'swap',
+ *   preload: true,
+ * });
+ *
+ * Luego reemplaza en <html className={`${interLocal.variable} ${merriweatherLocal.variable}`}>
+ */
 
 export const viewport: Viewport = {
   width: 'device-width',
