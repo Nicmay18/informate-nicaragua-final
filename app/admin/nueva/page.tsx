@@ -59,6 +59,8 @@ export default function AdminNuevaPage() {
   const [publicado, setPublicado] = useState(true);
   const [existingSlug, setExistingSlug] = useState('');
   const [autorNombre, setAutorNombre] = useState('Keyling Elieth Rivera Muñoz');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [keywords, setKeywords] = useState('');
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -111,6 +113,8 @@ export default function AdminNuevaPage() {
         setExistingSlug(d.slug || '');
         setDestacada(!!d.destacada);
         setPublicado(d.publicado !== false);
+        setMetaDescription(d.metaDescription || d.metaDescripcion || '');
+        setKeywords(d.keywords || d.tags?.join(', ') || '');
       }
     })();
   }, [editId, user, db]);
@@ -137,13 +141,25 @@ export default function AdminNuevaPage() {
     setPreviewUrl(url);
   };
 
+  // Sanitiza el contenido para eliminar metadata técnica que pudo haberse pegado/embebido
+  function sanitizeContenido(raw: string): string {
+    if (!raw) return '';
+    return raw
+      .replace(/Slug sugerido:\s*[^\n]*\n?/gi, '')
+      .replace(/Meta descripci[oó]n:\s*[^\n]*\n?/gi, '')
+      .replace(/Keywords?:\s*[^\n]*\n?/gi, '')
+      .replace(/<p>\s*<\/p>/gi, '')
+      .trim();
+  }
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!titulo || !categoria || !contenido || !imagenUrl) {
       setMsg('Completa todos los campos obligatorios');
       return;
     }
-    const palabras = contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const contenidoLimpio = sanitizeContenido(contenido);
+    const palabras = contenidoLimpio.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
     if (palabras < 350) {
       setMsg(`Contenido muy corto (${palabras} palabras). AdSense requiere mínimo 350.`);
       return;
@@ -153,13 +169,14 @@ export default function AdminNuevaPage() {
     setSaving(true);
     setMsg('');
     try {
+      const slugFinal = editId ? existingSlug : generateSlug(titulo);
       const noticiaData = {
         titulo,
         categoria,
         departamento,
         dateline,
-        resumen: resumen || contenido,
-        contenido,
+        resumen: resumen || contenidoLimpio,
+        contenido: contenidoLimpio,
         imagen: imagenUrl,
         pieFoto,
         fecha: serverTimestamp(),
@@ -168,8 +185,11 @@ export default function AdminNuevaPage() {
         autor: autorNombre,
         destacada,
         publicado,
-        slug: editId ? undefined : generateSlug(titulo),
+        slug: slugFinal,
         palabras,
+        // Campos atómicos separados — NUNCA dentro del body
+        metaDescription: metaDescription.trim() || resumen?.slice(0, 160) || contenidoLimpio.replace(/<[^>]*>/g, ' ').slice(0, 160),
+        keywords: keywords.trim() || '',
       };
 
       if (editId) {
@@ -184,7 +204,7 @@ export default function AdminNuevaPage() {
         setMsg('Noticia publicada');
         // Reset form
         setTitulo(''); setResumen(''); setContenido(''); setImagenUrl(''); setPieFoto('');
-        setDestacada(false); setPublicado(true);
+        setDestacada(false); setPublicado(true); setMetaDescription(''); setKeywords('');
       }
 
       // Revalidar página principal, categoría y artículo individual para que aparezca inmediatamente
@@ -293,6 +313,20 @@ export default function AdminNuevaPage() {
           <div style={{ marginBottom: 20 }}>
             <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#475569' }}>Resumen</label>
             <textarea value={resumen} onChange={e => setResumen(e.target.value)} placeholder="Resumen breve (opcional)" rows={3} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, resize: 'vertical' }} />
+          </div>
+
+          {/* Campos atómicos SEO — separados del body */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#475569' }}>Meta descripción (SEO)</label>
+              <textarea value={metaDescription} onChange={e => setMetaDescription(e.target.value)} placeholder="150-160 caracteres para Google" rows={2} maxLength={170} style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, resize: 'vertical' }} />
+              <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>{metaDescription.length}/160</p>
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#475569' }}>Keywords (SEO)</label>
+              <input type="text" value={keywords} onChange={e => setKeywords(e.target.value)} placeholder="palabra1, palabra2, palabra3" style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14 }} />
+              <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Separadas por coma</p>
+            </div>
           </div>
 
           {/* TipTap Editor */}

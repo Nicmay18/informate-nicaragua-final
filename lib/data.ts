@@ -1,7 +1,7 @@
 import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore';
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
-import { generateSlug } from './slug';
+// generateSlug ya no se usa en data.ts (eliminado fallback de scan completo)
 import { capitalizeFirst } from './formateo';
 
 const DEFAULT_NEWS_COUNT = 30;
@@ -129,6 +129,8 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           palabras: data.palabras,
           tags: data.tags,
           pieFoto: data.pieFoto,
+          metaDescription: data.metaDescription || data.metaDescripcion || '',
+          keywords: data.keywords || '',
         };
       });
   } catch (err) {
@@ -283,6 +285,8 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
     vistas: data.vistas || 0,
     palabras: data.palabras,
     pieFoto: data.pieFoto,
+    metaDescription: data.metaDescription || data.metaDescripcion || '',
+    keywords: data.keywords || '',
   };
 }
 
@@ -357,7 +361,11 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
 
-    // 1) Intentar búsqueda exacta por campo slug
+    // Búsqueda determinística EXACTA por campo slug.
+    // NO se usan fallbacks de scan completo para evitar:
+    //   - Race conditions en serverless concurrente
+    //   - Contaminación de datos entre slugs durante ISR/build
+    //   - Carga innecesaria de 200 documentos por request
     const snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
@@ -378,77 +386,20 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
         fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
         autor: data.autor,
-          autorFoto: data.autorFoto,
+        autorFoto: data.autorFoto,
         destacada: data.destacada,
         vistas: data.vistas,
         palabras: data.palabras,
         tags: data.tags,
         pieFoto: data.pieFoto,
+        metaDescription: data.metaDescription || data.metaDescripcion || '',
+        keywords: data.keywords || '',
       };
-    }
-
-    // 2) FALLBACK: slug viejo con hash al final (ej: -pyq5j8t)
-    // Detectar patrón "-[a-z0-9]{6,}$" y buscar el slug base sin el hash
-    const hashMatch = slug.match(/^(.*)-[a-z0-9]{6,}$/i);
-    if (hashMatch) {
-      const baseSlug = hashMatch[1];
-      const baseSnap = await adminDb
-        .collection('noticias')
-        .where('slug', '==', baseSlug)
-        .limit(1)
-        .get();
-      if (!baseSnap.empty) {
-        const doc = baseSnap.docs[0];
-        const data = doc.data();
-        return {
-          id: doc.id,
-          slug: data.slug || baseSlug,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido || '',
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-        };
-      }
-    }
-
-    // 3) FALLBACK TEMPORAL: noticias sin campo slug → comparar generado desde título
-    const allSnap = await adminDb.collection('noticias').limit(200).get();
-    for (const doc of allSnap.docs) {
-      const data = doc.data();
-      if (generateSlug(data.titulo || '') === slug) {
-        return {
-          id: doc.id,
-          slug: data.slug || slug,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido || '',
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-        };
-      }
     }
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
   }
+  // Fallback a mock data solo en desarrollo (no en producción)
   const mockNoticia = MOCK_NOTICIAS.find(n => n.slug === slug);
   if (mockNoticia) {
     return mockNoticia;
