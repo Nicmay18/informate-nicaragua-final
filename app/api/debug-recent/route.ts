@@ -9,7 +9,7 @@ export async function GET() {
     const noticias = snap.docs.map(d => {
       const data = d.data();
       let fechaStr = 'N/A';
-      let fechaType = typeof data.fecha;
+      let fechaType: string = 'missing';
 
       if (data.fecha?.toDate) {
         fechaStr = data.fecha.toDate().toISOString();
