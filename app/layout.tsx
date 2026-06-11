@@ -10,6 +10,7 @@ import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
+import { escapeJsonLd } from '@/lib/sanitize';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import Header from '@/components/Header';
@@ -149,8 +150,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Conditional AdSense injection via component */}
         <AdSenseLoader />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLdEnhanced()) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLdEnhanced()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildOrganizationJsonLdEnhanced()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>

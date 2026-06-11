@@ -9,10 +9,11 @@ import {
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
+import { escapeJsonLd } from '@/lib/sanitize';
 
-export const dynamic = 'force-dynamic'; // Desactiva ISR/SSG para evitar caché cruzada hasta estabilizar
-export const dynamicParams = true;
-// export const revalidate = 3600; // ISR temporalmente desactivado — ver nota técnica abajo
+export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
+export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
+export const revalidate = 3600; // ISR: revalida cada 1h, reduce drásticamente lecturas Firestore
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -69,8 +70,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const titleValidation = validateTitle(seoTitleResult);
     const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
 
-    // Meta description: prioridad al campo atómico separado (guardado por el admin)
-    const description = (noticia.metaDescription?.trim() || generateMetaDescription(noticia)).slice(0, 160);
+    // Meta description: truncado inteligente respetando palabras completas (140-160 chars óptimo para SERPs)
+    const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
+    let description = rawDescription;
+    if (description.length > 160) {
+      const cutAt = description.lastIndexOf(' ', 157);
+      description = cutAt > 0 ? description.slice(0, cutAt) + '…' : description.slice(0, 157) + '…';
+    }
     const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
@@ -145,13 +151,12 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
     return (
       <>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
         {faqSchema && (
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
         )}
-        {/* key={noticia.id} fuerza desmontaje/remontaje completo del Client Component al navegar entre artículos. Evita fugas de estado DOM y React reconciliation con dangerouslySetInnerHTML. */}
-        <ArticlePage key={noticia.id} noticia={noticia} related={related} />
+        <ArticlePage noticia={noticia} related={related} />
       </>
     );
   } catch (error) {

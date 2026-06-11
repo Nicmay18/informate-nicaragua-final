@@ -3,14 +3,47 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { adminDb } from '@/lib/firebase-admin';
 import { categoryToSlug } from '@/lib/types';
 import { incrementView } from '@/lib/view-counter';
+import { RateLimiter } from '@/lib/rate-limit';
+import { getClientIp, isValidSlug } from '@/lib/ip';
+
+/** Rate limiter: máximo 10 vistas por IP por minuto */
+const viewLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 10 });
+
+/** Control de métodos HTTP: solo POST permitido */
+export async function GET() {
+  return NextResponse.json({ error: 'Método no permitido' }, { status: 405 });
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { slug } = await request.json();
+    // 1. Rate limiting por IP
+    const ip = getClientIp(request);
+    const rateCheck = viewLimiter.check(ip);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: 'Demasiadas peticiones. Intenta más tarde.' },
+        { status: 429, headers: { 'Retry-After': '60' } }
+      );
+    }
+
+    // 2. Parseo seguro del body
+    let body: Record<string, unknown>;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Body JSON inválido' }, { status: 400 });
+    }
+
+    // 3. Validación estricta de slug
+    const slug = body.slug;
     if (!slug || typeof slug !== 'string') {
       return NextResponse.json({ error: 'slug requerido' }, { status: 400 });
     }
+    if (!isValidSlug(slug)) {
+      return NextResponse.json({ error: 'slug inválido' }, { status: 400 });
+    }
 
+    // 4. Consulta a Firestore
     const snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
@@ -25,9 +58,10 @@ export async function POST(request: NextRequest) {
     const data = snap.docs[0].data();
     const currentVistas = data.vistas || 0;
 
-    // Acumular en batch en vez de escribir directamente (ahorro ~90% en costos Firestore)
+    // 5. Acumular en batch (ahorro ~90% en costos Firestore)
     incrementView(docRef.id, docRef);
 
+    // 6. Revalidación de caché (fire-and-forget, no bloquea respuesta)
     try {
       revalidateTag('news');
       revalidatePath('/');
@@ -41,10 +75,16 @@ export async function POST(request: NextRequest) {
       console.warn('[api/view] Falló la revalidación después de actualizar vistas:', err);
     }
 
-    // Retornamos la vista estimada (actual + 1); el batch se flushará en 30s
-    return NextResponse.json({ ok: true, vistas: currentVistas + 1, batched: true });
+    // 7. Respuesta exitosa
+    return NextResponse.json({
+      ok: true,
+      vistas: currentVistas + 1,
+      batched: true,
+      remaining: rateCheck.remaining,
+    });
   } catch (e) {
     console.error('[api/view] Error:', e);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }
 }
+
