@@ -81,9 +81,9 @@ function segmentarParrafosDensos(htmlContenido: string): string {
 // =============================================================================
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
-  const validToken = process.env.ADMIN_CLEAN_TOKEN;
+  const validToken = process.env.ADMIN_API_KEY;
   if (!validToken) {
-    console.warn('[clean-backlog] ADMIN_CLEAN_TOKEN no configurado. Endpoint bloqueado.');
+    console.warn('[clean-backlog] ADMIN_API_KEY no configurado. Endpoint bloqueado.');
     return false;
   }
   return token === validToken;
