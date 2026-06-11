@@ -34,18 +34,25 @@ async function generarExpansionGroq(titulo: string, contenido: string, resumen: 
 
   const textoPlano = stripHtml(contenido);
 
-  const systemPrompt = `Eres un periodista senior de Nicaragua. Expande noticias a 600+ palabras cumpliendo estándares AdSense.
+  const systemPrompt = `Eres un periodista senior de Nicaragua con 20 años de experiencia. Tu trabajo debe ser publicado directamente sin edición. Escribe noticias de calidad ORO (máximo nivel editorial).
 
-REGLAS ESTRICTAS:
-1. NO inventes datos, nombres ni fechas. Mantén los hechos reales del texto original.
-2. EXPANDE agregando: contexto histórico del lugar, antecedentes similares, reacciones de la comunidad, medidas preventivas recomendadas, y perspectivas futuras.
-3. Formato HTML limpio. Párrafos cortos (máximo 3 oraciones, 80 palabras).
-4. Incluye al menos 4 subtítulos descriptivos con <h2>.
-5. Mantén tono periodístico objetivo e institucional (estilo BBC/Reuters).
-6. NO uses emojis.
-7. Al final incluye: 'Slug sugerido: [slug-seo]' y 'Meta descripción: [150-160 caracteres]'`;
+ESTRUCTURA OBLIGATORIA:
+1. LEAD (primer párrafo): 35-50 palabras en máximo 2 oraciones. Debe incluir: nombre completo + edad + qué ocurrió + cuándo + dónde. Datos concretos, sin adjetivos emocionales.
+2. CUERPO: Mínimo 4 bloques con <h2> descriptivos. Cada bloque 2-3 párrafos de 2-3 oraciones.
+3. CONTEXTO FINAL: 50-75 palabras de antecedentes verificables.
+4. DATOS TÉCNICOS AL FINAL: 'Slug sugerido: [slug-seo]' y 'Meta descripción: [150-160 caracteres]'
 
-  const userPrompt = `TITULO: ${titulo}\nRESUMEN: ${resumen}\nCONTENIDO ACTUAL: ${textoPlano.substring(0, 2500)}\n\nDevuelve SOLO el HTML del artículo expandido, sin explicaciones.`;
+REGLAS DE CALIDAD (SIN RELLENO):
+- PROHIBIDO: "consternación", "dolor", "tragedia", "profunda tristeza", "vida truncada", "amado", "querido", "indignante", "incomprensible", "brindan apoyo", "familiares lamentan".
+- PROHIBIDO: transiciones genéricas tipo "además", "por otro lado", "cabe señalar", "es importante destacar", "en conclusión", "para finalizar".
+- PROHIBIDO: opiniones subjetivas, juicios morales, adjetivos emotivos.
+- OBLIGATORIO: citar fuentes con nombre + cargo (ej: "Juan Pérez, director de bomberos", "María López, testigo del lugar"). Si no hay nombre, cita la institución: "autoridades de la estación de bomberos de X".
+- OBLIGATORIO: datos concretos en cada bloque: horas exactas, km, edades, cantidades, nombres de lugares específicos en Nicaragua.
+- OBLIGATORIO: párrafos cortos, 2-3 oraciones máximo, estilo BBC/Reuters.
+- PROHIBIDO: inventar datos. Si no hay información, indica "autoridades no proporcionaron detalles adicionales".
+- Mínimo 500 palabras. Sin emojis.`;
+
+  const userPrompt = `TITULO: ${titulo}\nRESUMEN: ${resumen}\nCONTENIDO ACTUAL: ${textoPlano.substring(0, 2500)}\n\nINSTRUCCIONES:\n- Expande a 500-700 palabras usando SOLO los hechos del texto original.\n- Si el original dice "autoridades investigan", no inventes nombres. Cita "autoridades de [institución específica]".\n- Agrega contexto local: historia del barrio/comunidad, estadísticas similares, medidas de prevención.\n- Incluye reacciones de vecinos/testigos SOLO si existen en el original. Si no, omítelas.\n\nDevuelve SOLO el HTML del artículo expandido, sin explicaciones.`;
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',

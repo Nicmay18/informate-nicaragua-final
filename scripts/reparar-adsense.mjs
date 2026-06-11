@@ -6,6 +6,7 @@
  *   node scripts/reparar-adsense.mjs --dry-run --limit=10
  *   node scripts/reparar-adsense.mjs --slug=mi-slug
  *   node scripts/reparar-adsense.mjs --live --limit=5
+ *   node scripts/reparar-adsense.mjs --live --one-by-one --limit=10
  *
  * Requiere ADMIN_API_KEY y GROQ_API_KEY en variables de entorno.
  */
