@@ -140,16 +140,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-        <link rel="dns-prefetch" href="https://images.weserv.nl" />
-        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        {/* Preconnect a Google Fonts eliminado — no se usan fuentes externas, Next.js/font las auto-hospeda */}
-        {/* Conditional AdSense injection via component */}
+        {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
+        <style>{criticalCss}</style>
         <AdSenseLoader />
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
+        {/* JSON-LD escapado para prevenir cierre prematuro de script */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       </head>

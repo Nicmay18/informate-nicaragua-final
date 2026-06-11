@@ -51,22 +51,18 @@ export function buildNewsArticleJsonLdEnhanced(
         height: 675,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
       },
-      // Variante cuadrada (1:1) procesada por el endpoint /api/transform
+      // Variante cuadrada (1:1) — usa imagen nativa para evitar latencia de /api/transform
       {
         '@type': 'ImageObject',
-        url: article.imagen
-          ? `https://nicaraguainformate.com/api/transform?ratio=1x1&url=${encodeURIComponent(absoluteImageUrl)}`
-          : 'https://nicaraguainformate.com/logo.webp',
+        url: absoluteImageUrl,
         width: 512,
         height: 512,
         caption: `Imagen cuadrada: ${article.titulo} — Nicaragua Informate`,
       },
-      // Variante estándar (4:3) procesada por el endpoint /api/transform
+      // Variante estándar (4:3) — usa imagen nativa
       {
         '@type': 'ImageObject',
-        url: article.imagen
-          ? `https://nicaraguainformate.com/api/transform?ratio=4x3&url=${encodeURIComponent(absoluteImageUrl)}`
-          : 'https://nicaraguainformate.com/logo.webp',
+        url: absoluteImageUrl,
         width: 800,
         height: 600,
         caption: `Imagen 4:3: ${article.titulo} — Nicaragua Informate`,

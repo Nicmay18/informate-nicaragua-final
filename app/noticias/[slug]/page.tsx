@@ -8,7 +8,7 @@ import {
   generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
-import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
+import { generateMetaDescription, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
 
 export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
@@ -44,6 +44,14 @@ export async function generateStaticParams() {
   return [];
 }
 
+/** Trunca descripción a rango estricto 140-160 chars para evitar penalización SERP */
+function strictMetaDescription(raw: string): string {
+  if (!raw) return '';
+  if (raw.length <= 160) return raw;
+  const cutAt = raw.lastIndexOf(' ', 157);
+  return cutAt > 0 ? raw.slice(0, cutAt) + '…' : raw.slice(0, 157) + '…';
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
@@ -59,7 +67,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const category = noticia.categoria || 'General';
     const seoTipo = toNoticiaTipo(category);
 
-    // SEO Title optimization
+    // SEO Title optimization (máx 60 chars para evitar truncamiento en SERPs)
     const seoTitleResult = generateOptimizedTitle({
       tipo: seoTipo,
       tituloOriginal: noticia.titulo,
@@ -70,21 +78,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const titleValidation = validateTitle(seoTitleResult);
     const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
 
-    // Meta description: truncado inteligente respetando palabras completas (140-160 chars óptimo para SERPs)
+    // Meta description: estrictamente 140-160 chars (sin excepciones)
     const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
-    let description = rawDescription;
-    if (description.length > 160) {
-      const cutAt = description.lastIndexOf(' ', 157);
-      description = cutAt > 0 ? description.slice(0, cutAt) + '…' : description.slice(0, 157) + '…';
-    }
-    const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
+    const description = strictMetaDescription(rawDescription);
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     return {
       title: finalTitle,
       description,
-      keywords,
       authors: [{ name: authorName }],
       alternates: { canonical: url },
       openGraph: {
@@ -97,7 +99,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
-        tags: keywords.split(', ').slice(0, 5),
         images: noticia.imagen
           ? [{ url: noticia.imagen, width: 1200, height: 630, alt: imageAlt }]
           : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
