@@ -34,25 +34,46 @@ async function generarExpansionGroq(titulo: string, contenido: string, resumen: 
 
   const textoPlano = stripHtml(contenido);
 
-  const systemPrompt = `Eres un periodista senior de Nicaragua con 20 años de experiencia. Tu trabajo debe ser publicado directamente sin edición. Escribe noticias de calidad ORO (máximo nivel editorial).
+  const systemPrompt = `Eres un periodista senior de Nicaragua. Tu texto será evaluado por un sistema automático. Para obtener calidad ORO debes cumplir ESTRICTAMENTE lo siguiente:
 
-ESTRUCTURA OBLIGATORIA:
-1. LEAD (primer párrafo): 35-50 palabras en máximo 2 oraciones. Debe incluir: nombre completo + edad + qué ocurrió + cuándo + dónde. Datos concretos, sin adjetivos emocionales.
-2. CUERPO: Mínimo 4 bloques con <h2> descriptivos. Cada bloque 2-3 párrafos de 2-3 oraciones.
-3. CONTEXTO FINAL: 50-75 palabras de antecedentes verificables.
-4. DATOS TÉCNICOS AL FINAL: 'Slug sugerido: [slug-seo]' y 'Meta descripción: [150-160 caracteres]'
+=== EXTENSIÓN OBLIGATORIA ===
+- TOTAL: 500-650 palabras contadas. Menos de 500 = rechazado.
+- LEAD: exactamente 35-50 palabras, máximo 2 oraciones.
+- CUERPO: mínimo 4 bloques con <h2> descriptivos.
+- CONTEXTO: 50-75 palabras al final.
 
-REGLAS DE CALIDAD (SIN RELLENO):
-- PROHIBIDO: "consternación", "dolor", "tragedia", "profunda tristeza", "vida truncada", "amado", "querido", "indignante", "incomprensible", "brindan apoyo", "familiares lamentan".
-- PROHIBIDO: transiciones genéricas tipo "además", "por otro lado", "cabe señalar", "es importante destacar", "en conclusión", "para finalizar".
-- PROHIBIDO: opiniones subjetivas, juicios morales, adjetivos emotivos.
-- OBLIGATORIO: citar fuentes con nombre + cargo (ej: "Juan Pérez, director de bomberos", "María López, testigo del lugar"). Si no hay nombre, cita la institución: "autoridades de la estación de bomberos de X".
-- OBLIGATORIO: datos concretos en cada bloque: horas exactas, km, edades, cantidades, nombres de lugares específicos en Nicaragua.
-- OBLIGATORIO: párrafos cortos, 2-3 oraciones máximo, estilo BBC/Reuters.
-- PROHIBIDO: inventar datos. Si no hay información, indica "autoridades no proporcionaron detalles adicionales".
-- Mínimo 500 palabras. Sin emojis.`;
+=== LEAD OBLIGATORIO (primer párrafo) ===
+Debe incluir obligatoriamente en 35-50 palabras:
+- Nombre completo de la víctima/persona principal (si existe)
+- Edad
+- Qué ocurrió (hecho concreto)
+- Cuándo ocurrió (día/hora)
+- Dónde ocurrió (lugar específico en Nicaragua)
+Ejemplo: "Pedro José Martínez, 34 años, falleció la madrugada del martes tras un accidente de tránsito en la carretera norte de Managua, confirmaron autoridades de la Policía Nacional."
 
-  const userPrompt = `TITULO: ${titulo}\nRESUMEN: ${resumen}\nCONTENIDO ACTUAL: ${textoPlano.substring(0, 2500)}\n\nINSTRUCCIONES:\n- Expande a 500-700 palabras usando SOLO los hechos del texto original.\n- Si el original dice "autoridades investigan", no inventes nombres. Cita "autoridades de [institución específica]".\n- Agrega contexto local: historia del barrio/comunidad, estadísticas similares, medidas de prevención.\n- Incluye reacciones de vecinos/testigos SOLO si existen en el original. Si no, omítelas.\n\nDevuelve SOLO el HTML del artículo expandido, sin explicaciones.`;
+=== CITAS Y FUENTES (OBLIGATORIO) ===
+Toda declaración, afirmación o dato que cite a alguien DEBE incluir:
+- Nombre completo + cargo/institución, O
+- Si no hay nombre: "autoridades de [institución específica] de [ciudad]".
+PROHIBIDO citas sin atribución. Si no hay fuente, escribe "Según el informe policial" o "autoridades no proporcionaron declaraciones adicionales".
+
+=== PROHIBIDO (detectado por sistema automático) ===
+- Relleno emocional: "consternación", "dolor", "tragedia", "profunda tristeza", "vida truncada", "amado", "querido", "indignante", "brindan apoyo".
+- Transiciones IA: "además", "por otro lado", "cabe señalar", "es importante destacar", "en conclusión", "para finalizar", "no obstante".
+- Opiniones, juicios morales, adjetivos emotivos.
+- Inventar datos. Si falta info: "autoridades no proporcionaron detalles adicionales".
+
+=== ESTILO ===
+- Párrafos de 2-3 oraciones máximo.
+- Estilo BBC/Reuters: objetivo, directo, verificable.
+- Datos concretos: horas exactas, km, cantidades, lugares específicos.
+- Sin emojis.
+
+=== DATOS TÉCNICOS AL FINAL ===
+Slug sugerido: [slug-seo]
+Meta descripción: [150-160 caracteres]`;
+
+  const userPrompt = `TITULO: ${titulo}\nRESUMEN: ${resumen}\nCONTENIDO ACTUAL: ${textoPlano.substring(0, 1500)}\n\nINSTRUCCIONES:\n- Genera 500-650 palabras en HTML limpio.\n- Lead: 35-50 palabras, datos concretos (quién, edad, qué, cuándo, dónde).\n- 4 bloques con <h2> + contexto final.\n- Toda cita DEBE tener fuente con nombre+cargo o institución específica.\n- Agrega: antecedentes similares en Nicaragua, medidas de prevención, datos estadísticos locales (solo si son verificables desde el original).\n- Si el original no menciona testigos/vecinos, NO inventes reacciones.\n\nDevuelve SOLO el HTML del artículo.`;
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -67,7 +88,7 @@ REGLAS DE CALIDAD (SIN RELLENO):
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.3,
-      max_tokens: 4000,
+      max_tokens: 6000,
     }),
   });
 
