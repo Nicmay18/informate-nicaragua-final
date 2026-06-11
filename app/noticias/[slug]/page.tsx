@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
+  generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
@@ -140,10 +141,15 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       : 0;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+    const faqSchema = generarFaqSchema(noticia.contenido || '', noticia.resumen);
+
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
+        {faqSchema && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        )}
         {/* key={noticia.id} fuerza desmontaje/remontaje completo del Client Component al navegar entre artículos. Evita fugas de estado DOM y React reconciliation con dangerouslySetInnerHTML. */}
         <ArticlePage key={noticia.id} noticia={noticia} related={related} />
       </>
