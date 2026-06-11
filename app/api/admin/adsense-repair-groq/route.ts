@@ -54,13 +54,13 @@ REGLAS ESTRICTAS:
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.3,
-      max_tokens: 2048,
+      max_tokens: 4000,
     }),
   });
 
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
 
       const palabrasDespues = nuevoContenido ? contarPalabras(stripHtml(nuevoContenido)) : 0;
 
-      if (!dryRun && palabrasDespues < palabrasAntes + 50) {
+      if (!dryRun && palabrasDespues < 350) {
         resultados.push({
           id: doc.id,
           slug: data.slug || '',
@@ -185,6 +185,11 @@ export async function POST(request: NextRequest) {
           ultimaActualizacionAutomatica: new Date(),
         });
         batchIds.push(doc.id);
+      }
+
+      // Pausa para evitar rate limit de Groq (30s entre artículos)
+      if (!dryRun && !slugTarget && procesadas > 0) {
+        await new Promise(r => setTimeout(r, 30000));
       }
 
       procesadas++;
