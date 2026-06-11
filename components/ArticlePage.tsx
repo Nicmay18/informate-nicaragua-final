@@ -29,7 +29,6 @@ interface ArticlePageProps {
 }
 
 export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
-  const router = useRouter();
   const FONT_STEPS = useMemo(() => [0.9, 1, 1.1, 1.2], []);
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
