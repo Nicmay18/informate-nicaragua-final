@@ -13,14 +13,14 @@ export function calcularScoreEditorial(noticia: Pick<Noticia, 'titulo' | 'resume
 
   if (!noticia) return 0;
 
-  // 1. Longitud del Artículo (Meta mínima: 350+ palabras)
+  // 1. Longitud del Artículo (Meta mínima: 500+ palabras)
   const textoPlano = (noticia.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const palabras = textoPlano.split(/\s+/).filter(Boolean).length;
 
-  if (palabras >= 350) {
+  if (palabras >= 500) {
     score += 30;
-  } else if (palabras >= 180) {
-    score += 15; // Puntuación parcial para notas cortas de actualización rápida
+  } else if (palabras >= 250) {
+    score += 15; // Puntuación parcial para notas de actualización rápida
   }
 
   // 2. Calidad del Titular SEO (Rango ideal: 30 a 70 caracteres)
