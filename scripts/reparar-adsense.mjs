@@ -7,11 +7,11 @@
  *   node scripts/reparar-adsense.mjs --slug=mi-slug
  *   node scripts/reparar-adsense.mjs --live --limit=5
  *
- * Requiere ADMIN_API_KEY en variables de entorno.
+ * Requiere ADMIN_API_KEY y GROQ_API_KEY en variables de entorno.
  */
 
 const SITE_URL = 'https://nicaraguainformate.com';
-const ENDPOINT = '/api/admin/adsense-repair-deepseek'; // usa DeepSeek (barato, $5 gratis al registrarte)
+const ENDPOINT = '/api/admin/adsense-repair-groq'; // usa Groq (100% gratis, no pide tarjeta)
 
 function showHelp() {
   console.log(`
