@@ -1,26 +1,8 @@
 import HomePagePro from '@/components/HomePagePro';
-import { getNews, getMasLeidas } from '@/lib/data';
+import { getLatestNews, getTrendingNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
-import { unstable_cache } from 'next/cache';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
-
-// ===================================================================
-// CACHE DE FIRESTORE — Esto es lo que falta
-// unstable_cache envuelve las llamadas directas a Firestore y las cachea
-// ===================================================================
-
-const getCachedNews = unstable_cache(
-  async () => getNews(12),
-  ['homepage-news'],
-  { revalidate: 60, tags: ['news'] }
-);
-
-const getCachedMasLeidas = unstable_cache(
-  async () => getMasLeidas(),
-  ['homepage-masleidas'],
-  { revalidate: 60, tags: ['news'] }
-);
 
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
@@ -58,8 +40,10 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-static';
-export const revalidate = 60;
+// ============================================================================
+// ROMPER CACHÉ ESTÁTICO: el carrusel y listados siempre traen datos frescos
+// ============================================================================
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -67,8 +51,8 @@ export default async function HomePage() {
 
   try {
     [noticias, masLeidas] = await Promise.all([
-      getCachedNews(),    // ← Usar la versión cacheada
-      getCachedMasLeidas() // ← Usar la versión cacheada
+      getLatestNews(30),   // ← Carrusel + listados: siempre frescas
+      getTrendingNews(5),  // ← Más leídas / Tendencias
     ]);
   } catch (error) {
     console.error('[HomePage] Error:', error);

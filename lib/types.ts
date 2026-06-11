@@ -24,6 +24,8 @@ export interface Noticia {
   estado?: 'publicado' | 'borrador' | 'archivado';
   pieFoto?: string;
   puntosClave?: string[];
+  metaDescription?: string;
+  keywords?: string;
 }
 
 /**

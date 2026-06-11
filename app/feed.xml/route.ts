@@ -11,6 +11,17 @@ function escapeXml(str: string): string {
     .replace(/'/g, '&apos;');
 }
 
+/** Strip script/style tags and sanitize for RSS CDATA */
+function sanitizeForRss(html: string): string {
+  if (!html) return '';
+  return html
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function GET() {
   const baseUrl = 'https://nicaraguainformate.com';
 
@@ -22,11 +33,7 @@ export async function GET() {
       .limit(50)
       .get();
 
-    articles = snapshot.docs
-      .filter((doc) => {
-        try { return doc.data().publicado !== false; } catch { return true; }
-      })
-      .map((doc) => {
+    articles = snapshot.docs.map((doc) => {
         const d = doc.data();
         let fecha = '';
         try {
@@ -84,7 +91,7 @@ export async function GET() {
       <category><![CDATA[${a.category}]]></category>
       <dc:creator><![CDATA[${a.autor}]]></dc:creator>
       <description><![CDATA[${a.description}]]></description>
-      <content:encoded><![CDATA[${a.contenido}]]></content:encoded>
+      <content:encoded><![CDATA[${sanitizeForRss(a.contenido)}]]></content:encoded>
       ${a.imagen ? `<enclosure url="${escapeXml(a.imagen)}" type="image/webp" length="0"/>
       <media:content url="${escapeXml(a.imagen)}" medium="image"/>` : ''}
     </item>`).join('')}

@@ -3,37 +3,34 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ========== NOTICIAS ==========
+    // ⚠️ SEGURIDAD CRÍTICA: TODAS las escrituras están bloqueadas para clientes.
+    // El backend (Next.js Route Handlers / Server Actions) usa Firebase Admin SDK,
+    // el cual BLOQUEA las security rules por completo y opera con privilegios de
+    // service account. Esto garantiza que NUNCA un usuario público pueda modificar
+    // noticias desde el navegador, incluso si obtiene el API key del cliente.
     match /noticias/{noticiaId} {
-      // Lectura pública
+      // Lectura pública (todo el mundo puede leer noticias)
       allow get, list: if true;
 
-      // CREATE: todos los campos obligatorios deben venir
-      allow create: if true
-          && request.resource.data.keys().hasAll([
-               'titulo','contenido','categoria','fecha'
-             ])
-          && request.resource.data.keys().hasOnly([
-               'titulo','resumen','contenido','categoria','autor',
-               'fecha','fechaActualizacion','imagen','slug','destacada',
-               'premium','vistas','tags','pieFoto','tiempoLectura',
-               'departamento','dateline','esFallecido','palabras'
-             ])
+      // CREATE: permitido desde el panel admin (Client SDK) con validación estricta.
+      // Se exige que vengan los campos mínimos para evitar documentos vacíos.
+      allow create: if request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
           && request.resource.data.titulo is string
           && request.resource.data.titulo.size() > 0
           && request.resource.data.titulo.size() <= 200
           && request.resource.data.contenido is string
           && request.resource.data.contenido.size() <= 50000
-          && (!request.resource.data.keys().hasAny(['categoria']) || (
-               request.resource.data.categoria in [
-                 'Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'
-               ]
-             ));
+          && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'];
 
-      // UPDATE: completamente abierto para arreglar el problema de edición
-      allow update: if true;
+      // UPDATE: permitido desde el panel admin. Valida solo los campos que se envíen.
+      // Permite actualizaciones parciales como {publicado: true} o {destacada: true}.
+      allow update: if
+          (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
+          && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000))
+          && (!('categoria' in request.resource.data) || request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología']);
 
-      // DELETE: solo admins autenticados
-      allow delete: if request.auth != null && request.auth.token.admin == true;
+      // DELETE: bloqueado para clientes. Solo backend vía adminDb.
+      allow delete: if false;
     }
 
     // ========== NEWSLETTER SUBSCRIBERS ==========

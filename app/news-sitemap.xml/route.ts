@@ -26,11 +26,7 @@ export async function GET() {
       .limit(1000)
       .get();
 
-    const articles = snapshot.docs
-      .filter((doc) => {
-        try { return doc.data().publicado !== false; } catch { return true; }
-      })
-      .map((doc) => {
+    const articles = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
           slug: data.slug,

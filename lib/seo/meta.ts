@@ -61,7 +61,29 @@ export function generateMetaDescription(noticia: Noticia): string {
 }
 
 /**
- * Genera keywords/tags para una noticia
+ * Extract entities from content for automated keyword generation
+ */
+function extractEntities(titulo: string, contenido?: string): string[] {
+  const text = `${titulo} ${contenido || ''}`.toLowerCase();
+  const entities: string[] = [];
+
+  // Locations
+  const locations = ['managua', 'leon', 'granada', 'esteli', 'matagalpa', 'jinotega', 'chinandega', 'masaya', 'rivas', 'boaco', 'chontales', 'carazo', 'madriz', 'nueva segovia', 'rio san juan', 'raan', 'raas', 'nicaragua', 'centroamérica'];
+  locations.forEach(loc => { if (text.includes(loc)) entities.push(loc); });
+
+  // High-value commercial categories for interlinking
+  const commercial = ['tecnología', 'deportes', 'espectáculos', 'turismo', 'economía', 'inversión', 'fútbol', 'béisbol', 'cinema', 'música', 'celulares', 'internet'];
+  commercial.forEach(c => { if (text.includes(c)) entities.push(c); });
+
+  // Named entity extraction (capitalized words in title)
+  const capitalized = titulo.match(/[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*/g) || [];
+  capitalized.forEach(e => { if (e.length > 3) entities.push(e); });
+
+  return [...new Set(entities)].slice(0, 8);
+}
+
+/**
+ * Genera keywords/tags para una noticia (automática + semántica)
  */
 export function generateKeywords(noticia: Noticia): string {
   const base = [
@@ -76,12 +98,16 @@ export function generateKeywords(noticia: Noticia): string {
     base.push(...noticia.tags.slice(0, 5));
   }
 
-  // Extraer posibles palabras clave del título
+  // Entidades extraídas del contenido completo (EEAT: demuestra relevancia semántica)
+  const entities = extractEntities(noticia.titulo, noticia.contenido);
+  base.push(...entities);
+
+  // Palabras clave del título (excluyendo stopwords)
   const titleWords = noticia.titulo
     .toLowerCase()
     .replace(/[^a-záéíóúñ\s]/g, '')
     .split(/\s+/)
-    .filter((w) => w.length > 3 && !['para', 'con', 'por', 'que', 'una', 'los', 'las', 'del', 'como'].includes(w))
+    .filter((w) => w.length > 3 && !['para', 'con', 'por', 'que', 'una', 'los', 'las', 'del', 'como', 'ante', 'bajo', 'desde', 'entre', 'hacia', 'hasta', 'sobre', 'tras'].includes(w))
     .slice(0, 3);
 
   base.push(...titleWords);

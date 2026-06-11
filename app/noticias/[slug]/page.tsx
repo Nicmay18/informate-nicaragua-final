@@ -9,9 +9,9 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 
-export const dynamic = 'auto';
+export const dynamic = 'force-dynamic'; // Desactiva ISR/SSG para evitar caché cruzada hasta estabilizar
 export const dynamicParams = true;
-export const revalidate = 3600; // ISR: revalidar cada 1 hora
+// export const revalidate = 3600; // ISR temporalmente desactivado — ver nota técnica abajo
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -68,9 +68,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const titleValidation = validateTitle(seoTitleResult);
     const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
 
-    // Meta description
-    const description = generateMetaDescription(noticia);
-    const keywords = generateKeywords(noticia);
+    // Meta description: prioridad al campo atómico separado (guardado por el admin)
+    const description = (noticia.metaDescription?.trim() || generateMetaDescription(noticia)).slice(0, 160);
+    const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
@@ -144,7 +144,8 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        <ArticlePage noticia={noticia} related={related} />
+        {/* key={noticia.id} fuerza desmontaje/remontaje completo del Client Component al navegar entre artículos. Evita fugas de estado DOM y React reconciliation con dangerouslySetInnerHTML. */}
+        <ArticlePage key={noticia.id} noticia={noticia} related={related} />
       </>
     );
   } catch (error) {

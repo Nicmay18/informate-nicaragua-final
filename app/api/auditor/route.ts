@@ -86,10 +86,16 @@ function detectarFuentesGenericas(texto: string) {
 
 function detectarFuentesAtribuidas(texto: string) {
   const patrones = [
-    /[A-Z][a-záéíóúñ]+\s+[A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)?,\s*(?:vocero|director|jefe|sargento|comisionado|coordinador|testigo|vecino)/gi,
-    /(?:afirmó|indicó|declaró|señaló|dijo)\s+[A-Z][a-záéíóúñ]+\s+[A-Z][a-záéíóúñ]+/gi,
-    /(?:según|de acuerdo con)\s+(?:la|el)\s+(?:Policía Nacional|Cuerpo de Bomberos|MINSA|INETER|Alcaldía|Fuerza Naval|Ejército)/gi,
-    /Estación\s+(?:Policía|de Bomberos)\s+(?:número|numero|#)?\s*\d+/gi
+    // Nombre + cargo (estricto)
+    /[A-Z][a-záéíóúñ]+\s+[A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)?,\s*(?:vocero|director|jefe|sargento|comisionado|coordinador|testigo|vecino|residente)/gi,
+    // Verbo de atribución + nombre (más flexible)
+    /(?:afirmó|indicó|declaró|señaló|dijo|relató|manifestó|comentó)\s+[A-Z][a-záéíóúñ]+/gi,
+    // Fuentes institucionales genéricas (como TN8 usa)
+    /(?:según|de acuerdo con|informaron|reportaron|indicaron)\s+(?:las|los)?\s*(?:autoridades|cuerpo de bomberos|bomberos|policía|testigos|vecinos|fuentes)/gi,
+    // Referencias a testigos/vecinos sin nombre específico (aceptable para medios pequeños)
+    /(?:testigos|vecinos|residentes|personas)\s+(?:que\s+presenciaron|en\s+la\s+zona|del\s+lugar)/gi,
+    // Estaciones/instituciones específicas
+    /(?:ambulancia|estación)\s+(?:de\s+)?(?:bomberos|policía)/gi
   ];
   const encontrados: string[] = [];
   for (const patron of patrones) {
@@ -160,17 +166,19 @@ function auditarNoticia(texto: string, titulo = 'Sin título') {
   else if (relleno.length <= 2) score += 5;
   if (totalTransiciones === 0) score += 15;
   else if (totalTransiciones <= 2) score += 5;
-  if (fuentesAtribuidas.length >= 2) score += 15;
-  else if (fuentesAtribuidas.length === 1) score += 8;
-  if (citas.length >= 1) score += 10;
+  // Fuentes atribuidas (más flexibles ahora - incluye testigos/genéricos como TN8)
+  if (fuentesAtribuidas.length >= 2) score += 20;
+  else if (fuentesAtribuidas.length === 1) score += 12;
+  // Citas textuales (opcional pero valioso)
+  if (citas.length >= 1) score += 8;
   if (densidad >= 5) score += 15;
   else if (densidad >= 3) score += 8;
   if (varOraciones.variacion === 'ALTA') score += 10;
   else if (varOraciones.variacion === 'MEDIA') score += 5;
 
   let nivel = '🔴 PELIGRO';
-  if (score >= 80) nivel = '🟢 ORO';
-  else if (score >= 60) nivel = '🟡 BRONCE';
+  if (score >= 90) nivel = '🟢 ORO';
+  else if (score >= 80) nivel = '🟡 BRONCE';
 
   return {
     titulo,

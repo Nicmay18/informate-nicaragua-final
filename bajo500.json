@@ -1,0 +1,416 @@
+[
+  {
+    "id": "yXELqcLI6Xh3Mcfe4cSp",
+    "titulo": "Fiscalía investiga hallazgo de cuerpo sin vida en Telica, León",
+    "palabras": 101,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "Bo0hQ4L0astO6INh9QZS",
+    "titulo": "Joven de 28 años muere ahogado en playa Matilde, San Juan del Sur",
+    "palabras": 121,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "gXTkMry6uueR9BxXcTdF",
+    "titulo": "Dos fallecidos tras naufragio de panga en Krukira",
+    "palabras": 132,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "6W5tgAUCaM1w9lsSjA6Z",
+    "titulo": "Kener Velásquez, trabajador del MINSA, murió en accidente en km 46 Carretera Norte",
+    "palabras": 133,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "gkAeVBYY9AQBzAYCmjWk",
+    "titulo": "Activistas climáticos bloquean Wall Street en protesta en Nueva York",
+    "palabras": 136,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ksmI7JomnHgJB6NKcA71",
+    "titulo": "Yadel reúne a más de 30 mil personas en Managua",
+    "palabras": 141,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "9YSrsEdWBiO9Uu1CV8u6",
+    "titulo": "Australia: el 70% de los menores evade restricciones en redes sociales",
+    "palabras": 144,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "NF9Q4ORwPOcsXKKRHuMa",
+    "titulo": "Canadá confirma caso de hantavirus ligado a crucero MV Hondius",
+    "palabras": 147,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "Zt9NtuqCLNMhBhmH6IEN",
+    "titulo": "Tres detenidos por muerte de joven tras cirugía estética en Managua",
+    "palabras": 151,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "7AszCzTNxJWBnt1daHag",
+    "titulo": "Canal de Panamá eleva peajes y buques pagan hasta $4 millones por cruzar",
+    "palabras": 156,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "e7FFhasFNh3pd7o4xBMo",
+    "titulo": "Dos motociclistas mueren en accidentes en Granada y Chontales",
+    "palabras": 163,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "AD5DzaeJbwyygIQVqd3C",
+    "titulo": "INETER pronostica lluvias fuertes y tormentas eléctricas en Nicaragua",
+    "palabras": 164,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "H8jrdHS4iXfFEAE2R0D9",
+    "titulo": "Dos hombres mueren en hechos violentos en Chontales y Managua",
+    "palabras": 165,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "p3IKfmbWdUPIrSbbOynM",
+    "titulo": "Sequía extrema en Latinoamérica afecta 150 millones de hectáreas",
+    "palabras": 165,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "IYS7dABZahKOHwdnjfJr",
+    "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+    "palabras": 168,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "36WzKkoqnN6ITtamp2BY",
+    "titulo": "¿Cómo anular el récord policial en Nicaragua? Requisitos y costos 2026",
+    "palabras": 175,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "DuaMg4XI8aPmAHw8otN1",
+    "titulo": "Joven de 20 años muere en accidente de moto en Puente Muco, Boaco",
+    "palabras": 177,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "IGFA2pNSEnX452WlJalV",
+    "titulo": "Siete capturados y 131 libras de marihuana ocupadas en Jinotega",
+    "palabras": 177,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ect24qCFMfiygezE3j9D",
+    "titulo": "Investigan homicidio de joven en Santo Domingo, Chontales",
+    "palabras": 180,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "PvmeAqNv4cyfztLFhqMO",
+    "titulo": "Microsoft y Meta actualizan plataformas para usuarios en Nicaragua",
+    "palabras": 183,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "YMhZnFxcC1LINNtptLYL",
+    "titulo": "Dos mueren por presuntos problemas de salud en Managua y León",
+    "palabras": 186,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "uroqqoNRVgTvzUH1Gh4W",
+    "titulo": "Dos muertos y una niña herida en accidentes de moto",
+    "palabras": 186,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "2EQFdVtgjMWe3SN4A9yM",
+    "titulo": "Windows 11 acelera su instalación en computadoras en Nicaragua",
+    "palabras": 189,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "eLJeY8NEp62lCIx7Tf5n",
+    "titulo": "Hombre de 57 años muere dentro de establecimiento en carretera nueva a León",
+    "palabras": 189,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "sH5OCUULzSvZFhRcHXzb",
+    "titulo": "Seis policías mueren en operativo antidrogas en Honduras",
+    "palabras": 189,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "BU0PX0EqHO5ewLCH7Coo",
+    "titulo": "Un muerto y un herido en accidentes laborales en Managua y Estelí",
+    "palabras": 190,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "wVCz0rhXOzMXEHmw9Jgw",
+    "titulo": "Microsoft corrige vulnerabilidad en navegador Edge para usuarios en Nicaragua",
+    "palabras": 191,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "KXMHQ85cLbSZpXMx3eQm",
+    "titulo": "Nicaragua recibe 278 mil turistas en primer trimestre de 2026; crecimiento del 11%",
+    "palabras": 193,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "aFK0buUKVMKOICj3gVvA",
+    "titulo": "30 años de cárcel para feminicida que estranguló a mujer en Telica",
+    "palabras": 195,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "vvWJAwyV8adECw3IGqdy",
+    "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+    "palabras": 198,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "F4UddilPobcIjIkZ1e55",
+    "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo de 13 mil córdobas y 2,980 dólares",
+    "palabras": 199,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "SM2fzy975dM5oxuoPgQx",
+    "titulo": "Fallece esposa de Marvin Benard en accidente de tránsito en California",
+    "palabras": 203,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "y251TlGDTa5BVIM18QGE",
+    "titulo": "Turistas extranjeros comparten experiencias de viaje en Nicaragua",
+    "palabras": 204,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "TDgfYWff5VvlOgEkUuWu",
+    "titulo": "Esposa y madre de capitán mueren en naufragio en Caribe Norte",
+    "palabras": 205,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "kpr5LCeGtA5X9kRXvWSN",
+    "titulo": "Torre Eiffel se ilumina con colores del PSG antes de la final europea",
+    "palabras": 206,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "Vd53UqkuV45BIcRs4Miu",
+    "titulo": "Incautan 502 kilos de cocaína en operativo en Wiwilí, Jinotega",
+    "palabras": 207,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "XTONg1lOfMlV1gNfMSm7",
+    "titulo": "Ocho capturados y decomiso de drogas y armas en operativo en Peñas Blancas, Costa Rica",
+    "palabras": 208,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "MpaX1DrqNQaUdP8P1e7l",
+    "titulo": "Dos nicaragüenses fallecen en el extranjero: Costa Rica y EE.UU.",
+    "palabras": 210,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "jG3mvtcfZCxzecd62Lgd",
+    "titulo": "Dos muertos y tres heridos en hechos en León, Ocotal y Managua",
+    "palabras": 211,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "kJZTSfqmUGHJKA8SFaE8",
+    "titulo": "Julieta Venegas interpretará canción cultural para el Mundial 2026",
+    "palabras": 212,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "FCDK20FxyiuMz1kHDjqb",
+    "titulo": "47 intoxicados en evento comunitario en El Rama; dos menores siguen en observación",
+    "palabras": 213,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "HQrOHqjbqOXB4ZTs22vl",
+    "titulo": "Incendio en vivienda de Masaya deja daños materiales",
+    "palabras": 214,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "lJv8InQKCuFu1Iu0oNRJ",
+    "titulo": "Joven desaparece mientras nadaba en la laguna de Xiloá",
+    "palabras": 214,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "Bd0FR40BQL9MYKXutpSr",
+    "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en dispositivos en Nicaragua",
+    "palabras": 221,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "BN739xoxA2gVCf5KUWTV",
+    "titulo": "Samsung presenta baterías de silicio-carbono para futuros teléfonos.",
+    "palabras": 222,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "hMOJHKhFSSOUp4LrBDmo",
+    "titulo": "Autoridades de Texas identifican a nicaragüense desaparecido.",
+    "palabras": 222,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ZTVWiR99Nppa5L2P4wT1",
+    "titulo": "Incendio destruye puesto de ropa en el Mercado Oriental de Managua",
+    "palabras": 224,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "dgjsES2KHZ3AFaGHIoLt",
+    "titulo": "Investigan hallazgo de cuerpo sin vida en Muy Muy, Matagalpa",
+    "palabras": 235,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "sPHkzFFWQL3A8PetLIWO",
+    "titulo": "Capturan a motociclista que atropelló a dos niños en Jalapa",
+    "palabras": 238,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "NPLJwHZ5rPg3bp79XVTO",
+    "titulo": "Conductor huye tras atropellar y matar a hombre en La Ceiba, León",
+    "palabras": 240,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "f19jnrsNZWCdyHfMbiT9",
+    "titulo": "Capturan a tres sospechosos por homicidio de vigilante en Masaya",
+    "palabras": 245,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "HkJY4CFD6FMDxksE4Zxf",
+    "titulo": "Entregan en Nicaragua cuerpo de migrante fallecido en Estados Unidos",
+    "palabras": 248,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "cRPiJzDN3D0YvgmUjvRk",
+    "titulo": "Cohete New Glenn de Blue Origin explota en prueba en Cabo Cañaveral",
+    "palabras": 248,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "rKNxcfeotxszuclpLCyI",
+    "titulo": "Tres motociclistas mueren en accidentes en Managua y Matagalpa",
+    "palabras": 255,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "yCN8IBbWL1xxPvNhJqTx",
+    "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
+    "palabras": 255,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "2QXi7MqebN30PXzQoe2E",
+    "titulo": "Nicaragüense de Ciudad Antigua muere en accidente en Miami.",
+    "palabras": 271,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "CaxNVIKzrIl5rBpKs0vy",
+    "titulo": "Médico y dos personas detenidos por muerte de joven tras cirugía.",
+    "palabras": 279,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "OWppqYU03AfZQHIoqEL7",
+    "titulo": "Disputa por chicha bruja termina en muerte en Asang; buscan al autor",
+    "palabras": 294,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "3Dlu4tCQZedztrompEgV",
+    "titulo": "Melquin Esedec Masis Rodríguez murió en accidente de moto en Matiguás",
+    "palabras": 298,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ZPJlw7kAwozc29ZakeiD",
+    "titulo": "Adolescente de 14 años muere al caer de camión en la Panamericana Sur",
+    "palabras": 322,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ZbyMKAULev61O1TnfxSU",
+    "titulo": "Nicaragüense muere baleado en Costa Rica tras discusión por choque",
+    "palabras": 324,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "4I2mdwQEGYN7N7M0KTkA",
+    "titulo": "Motociclista fallece en accidente de tránsito en Jinotepe",
+    "palabras": 350,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "ctq3W0kZtNipZL2X9KTN",
+    "titulo": "Conductor de caponera fallece mientras desayunaba en Managua",
+    "palabras": 353,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "LJTrq7D8iDUGWvO9kxaE",
+    "titulo": "Hallan a agricultor muerto a balazos en El Jícaro; descartan accidente",
+    "palabras": 372,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "E4kgajtNNXP3wrT2wI0B",
+    "titulo": "Bebé de 15 meses muere ahogado tras caer en una cubeta en Mateare",
+    "palabras": 387,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "OHzJfumT84hFTV5SQD6i",
+    "titulo": "Dos hermanitos se queman con agua hirviendo en Villa El Carmen; uno grave",
+    "palabras": 401,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "yMsw7cfcGLlMbK2CD61L",
+    "titulo": "Rastra cargada de bloques se vuelca en cuesta Los Jabalíes; un muerto",
+    "palabras": 426,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "3FIrDPnlHKLQ9gqnCxKJ",
+    "titulo": "Autoridades alertan por tormentas eléctricas en Nicaragua",
+    "palabras": 454,
+    "tituloCorrupto": false
+  },
+  {
+    "id": "22ZHhDUSpI6CrpwIYkZ9",
+    "titulo": "Samsung revela qué Galaxy recibirán Android 17",
+    "palabras": 463,
+    "tituloCorrupto": false
+  }
+]

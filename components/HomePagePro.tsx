@@ -15,11 +15,14 @@ const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading
 const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
 const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
-function timeAgo(dateStr: string) {
+function timeAgo(dateInput: unknown): string {
+  const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
-    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: es });
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    return formatDistanceToNow(d, { addSuffix: true, locale: es });
   } catch {
-    return dateStr;
+    return '';
   }
 }
 
@@ -282,22 +285,20 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
-  // Carrusel: primero noticias destacadas, luego las más recientes para completar
-  const destacadas = noticias.filter(n => n.destacada).slice(0, 5);
-  const restoParaHero = noticias.filter(n => !n.destacada).slice(0, 5 - destacadas.length);
-  const heroNoticias = destacadas.length > 0 ? [...destacadas, ...restoParaHero] : noticias.slice(0, 5);
+  // Carrusel: las 7 noticias más recientes (noticias ya viene ordenado por fecha desc)
+  const heroNoticias = noticias.slice(0, 7);
 
   // IDs del carousel: ninguna otra sección puede mostrar estas noticias
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
 
-  // Resto excluye hero explícitamente
+  // Resto = todas las noticias menos las que ya están en el hero
   const resto = useMemo(
-    () => noticias.slice(5).filter(n => !heroIds.has(n.id)),
+    () => noticias.filter(n => !heroIds.has(n.id)),
     [noticias, heroIds]
   );
 
-  // "Últimas noticias" = los 6 más recientes tras el hero (siempre noticias del día)
-  const ultimas = useMemo(() => resto.slice(0, 6), [resto]);
+  // "Últimas noticias" = los 8 más recientes tras el hero
+  const ultimas = useMemo(() => resto.slice(0, 8), [resto]);
 
   // Categorías usan TODAS las noticias (incluyendo hero y ultimas) para no quedar vacías
   const porCategoria = useMemo(() => {

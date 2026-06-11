@@ -1,7 +1,7 @@
 import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore';
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
-import { generateSlug } from './slug';
+// generateSlug ya no se usa en data.ts (eliminado fallback de scan completo)
 import { capitalizeFirst } from './formateo';
 
 const DEFAULT_NEWS_COUNT = 30;
@@ -86,6 +86,30 @@ function normalizeImage(imagen: string): string {
 // El sistema ahora solo funciona con noticias reales de Firebase
 // Si Firebase falla, el sitio mostrará estado vacío con logs de error
 
+// Sanitiza cualquier representación de fecha de Firestore (Timestamp, raw object, string) a ISO string
+function safeDateString(value: unknown): string {
+  if (!value) return '';
+  // Firestore Timestamp con toDate()
+  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
+    try {
+      const d = (value as any).toDate();
+      return d instanceof Date && !isNaN(d.getTime()) ? d.toISOString() : '';
+    } catch { return ''; }
+  }
+  // Raw Firestore Timestamp object {_seconds, _nanoseconds}
+  if (typeof value === 'object' && value !== null && '_seconds' in value) {
+    try {
+      const sec = Number((value as any)._seconds);
+      const ns = Number((value as any)._nanoseconds || 0);
+      const d = new Date(sec * 1000 + ns / 1_000_000);
+      return !isNaN(d.getTime()) ? d.toISOString() : '';
+    } catch { return ''; }
+  }
+  if (typeof value === 'string') return value;
+  if (value instanceof Date) return isNaN(value.getTime()) ? '' : value.toISOString();
+  return '';
+}
+
 function validateCount(count: number, defaultCount: number): number {
   if (typeof count !== 'number' || isNaN(count)) return defaultCount;
   if (count < 0) return defaultCount;
@@ -106,10 +130,6 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
       .get();
 
     return snap.docs
-      // Excluir explícitamente documentos marcados como no publicados
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
       .map((d: QueryDocumentSnapshot<DocumentData>) => {
         const data = d.data();
         return {
@@ -120,8 +140,8 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+          fecha: safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.fechaActualizacion),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
@@ -129,6 +149,8 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
           palabras: data.palabras,
           tags: data.tags,
           pieFoto: data.pieFoto,
+          metaDescription: data.metaDescription || data.metaDescripcion || '',
+          keywords: data.keywords || '',
         };
       });
   } catch (err) {
@@ -276,13 +298,15 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
     contenido: data.contenido,
     categoria: data.categoria || 'Actualidad',
     imagen: normalizeImage(data.imagen || ''),
-    fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+    fecha: safeDateString(data.fecha),
     autor: data.autor,
     autorFoto: data.autorFoto,
     destacada: data.destacada,
     vistas: data.vistas || 0,
     palabras: data.palabras,
     pieFoto: data.pieFoto,
+    metaDescription: data.metaDescription || data.metaDescripcion || '',
+    keywords: data.keywords || '',
   };
 }
 
@@ -304,9 +328,6 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
 
     if (!snap7.empty) {
       const withViews = snap7.docs
-        .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-          try { return d.data().publicado !== false; } catch { return true; }
-        })
         .map(mapNoticia)
         .filter(n => (n.vistas ?? 0) >= 1)
         .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
@@ -325,11 +346,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .limit(validatedCount)
       .get();
 
-    if (!snap3.empty) return snap3.docs
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
-      .map(mapNoticia);
+    if (!snap3.empty) return snap3.docs.map(mapNoticia);
 
     // 3. Fallback final: noticias más recientes que haya
     const snapAll = await adminDb
@@ -338,11 +355,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
       .limit(validatedCount)
       .get();
 
-    if (!snapAll.empty) return snapAll.docs
-      .filter((d: QueryDocumentSnapshot<DocumentData>) => {
-        try { return d.data().publicado !== false; } catch { return true; }
-      })
-      .map(mapNoticia);
+    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
 
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
@@ -357,7 +370,11 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
 
-    // 1) Intentar búsqueda exacta por campo slug
+    // Búsqueda determinística EXACTA por campo slug.
+    // NO se usan fallbacks de scan completo para evitar:
+    //   - Race conditions en serverless concurrente
+    //   - Contaminación de datos entre slugs durante ISR/build
+    //   - Carga innecesaria de 200 documentos por request
     const snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
@@ -375,80 +392,23 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         contenido: data.contenido || '',
         categoria: data.categoria || 'Actualidad',
         imagen: normalizeImage(data.imagen || ''),
-        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-        fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
+        fecha: safeDateString(data.fecha),
+        fechaActualizacion: safeDateString(data.fechaActualizacion),
         autor: data.autor,
-          autorFoto: data.autorFoto,
+        autorFoto: data.autorFoto,
         destacada: data.destacada,
         vistas: data.vistas,
         palabras: data.palabras,
         tags: data.tags,
         pieFoto: data.pieFoto,
+        metaDescription: data.metaDescription || data.metaDescripcion || '',
+        keywords: data.keywords || '',
       };
-    }
-
-    // 2) FALLBACK: slug viejo con hash al final (ej: -pyq5j8t)
-    // Detectar patrón "-[a-z0-9]{6,}$" y buscar el slug base sin el hash
-    const hashMatch = slug.match(/^(.*)-[a-z0-9]{6,}$/i);
-    if (hashMatch) {
-      const baseSlug = hashMatch[1];
-      const baseSnap = await adminDb
-        .collection('noticias')
-        .where('slug', '==', baseSlug)
-        .limit(1)
-        .get();
-      if (!baseSnap.empty) {
-        const doc = baseSnap.docs[0];
-        const data = doc.data();
-        return {
-          id: doc.id,
-          slug: data.slug || baseSlug,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido || '',
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-        };
-      }
-    }
-
-    // 3) FALLBACK TEMPORAL: noticias sin campo slug → comparar generado desde título
-    const allSnap = await adminDb.collection('noticias').limit(200).get();
-    for (const doc of allSnap.docs) {
-      const data = doc.data();
-      if (generateSlug(data.titulo || '') === slug) {
-        return {
-          id: doc.id,
-          slug: data.slug || slug,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido || '',
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
-          fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion,
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-        };
-      }
     }
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
   }
+  // Fallback a mock data solo en desarrollo (no en producción)
   const mockNoticia = MOCK_NOTICIAS.find(n => n.slug === slug);
   if (mockNoticia) {
     return mockNoticia;
@@ -497,7 +457,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           contenido: data.contenido,
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || '',
+          fecha: safeDateString(data.fecha),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,

@@ -9,11 +9,19 @@ interface NewsCardProps {
   noticia: Noticia;
 }
 
+function safeTimeAgo(dateInput: unknown): string {
+  const dateStr = typeof dateInput === 'string' ? dateInput : '';
+  try {
+    const d = new Date(dateStr || Date.now());
+    if (isNaN(d.getTime())) return '';
+    return formatDistanceToNow(d, { addSuffix: true, locale: es });
+  } catch {
+    return '';
+  }
+}
+
 export default function NewsCard({ noticia }: NewsCardProps) {
-  const timeAgo = formatDistanceToNow(new Date(noticia.fecha || Date.now()), {
-    addSuffix: true,
-    locale: es,
-  });
+  const timeAgo = safeTimeAgo(noticia.fecha);
 
   return (
     <Link href={`/noticias/${noticia.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>

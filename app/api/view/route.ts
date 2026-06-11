@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { adminDb } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
 import { categoryToSlug } from '@/lib/types';
+import { incrementView } from '@/lib/view-counter';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +25,8 @@ export async function POST(request: NextRequest) {
     const data = snap.docs[0].data();
     const currentVistas = data.vistas || 0;
 
-    await docRef.update({ vistas: FieldValue.increment(1) });
+    // Acumular en batch en vez de escribir directamente (ahorro ~90% en costos Firestore)
+    incrementView(docRef.id, docRef);
 
     try {
       revalidateTag('news');
@@ -40,7 +41,8 @@ export async function POST(request: NextRequest) {
       console.warn('[api/view] Falló la revalidación después de actualizar vistas:', err);
     }
 
-    return NextResponse.json({ ok: true, vistas: currentVistas + 1 });
+    // Retornamos la vista estimada (actual + 1); el batch se flushará en 30s
+    return NextResponse.json({ ok: true, vistas: currentVistas + 1, batched: true });
   } catch (e) {
     console.error('[api/view] Error:', e);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });

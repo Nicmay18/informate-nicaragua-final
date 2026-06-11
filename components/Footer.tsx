@@ -16,7 +16,9 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="ni-footer" role="contentinfo" aria-label="Pie de página de Nicaragua Informate">
+    <footer className="ni-footer" role="contentinfo" aria-label="Pie de página de Nicaragua Informate" itemScope itemType="https://schema.org/Organization">
+      <meta itemProp="name" content="Nicaragua Informate" />
+      <meta itemProp="url" content="https://nicaraguainformate.com" />
       <div className="ni-footer__inner">
         {/* Columna 1: Brand + descripción + redes */}
         <div>
@@ -27,10 +29,11 @@ export default function Footer() {
               width={40}
               height={40}
               className="ni-footer__logo"
+              itemProp="logo"
             />
-            <span>Nicaragua Informate</span>
+            <span itemProp="name">Nicaragua Informate</span>
           </div>
-          <p className="ni-footer__desc">
+          <p className="ni-footer__desc" itemProp="description">
             Portal de noticias de Nicaragua con cobertura nacional e internacional.
             INFORMATE AL INSTANTE desde Managua.
           </p>
@@ -126,6 +129,21 @@ export default function Footer() {
           </Link>
         </div>
 
+      </div>
+
+      {/* Políticas editoriales visibles — señal EEAT crítica para Google */}
+      <div className="ni-footer__policies" style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', justifyContent: 'center', fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
+        <Link href="/politica-editorial" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Política Editorial</Link>
+        <span>•</span>
+        <Link href="/correcciones" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Correcciones</Link>
+        <span>•</span>
+        <Link href="/privacidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacidad</Link>
+        <span>•</span>
+        <Link href="/terminos" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Términos</Link>
+        <span>•</span>
+        <Link href="/cookies" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Cookies</Link>
+        <span>•</span>
+        <Link href="/publicidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Publicidad</Link>
       </div>
 
       {/* Barra inferior */}

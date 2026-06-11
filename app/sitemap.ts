@@ -13,6 +13,30 @@ const cachedGetNews = unstable_cache(
   { revalidate: 3600 }
 );
 
+// Sanitiza fechas para evitar RangeError: Invalid time value en build
+// Maneja strings, Date nativos, Firestore Timestamp objects y raw {_seconds,_nanoseconds}
+function safeDate(value: unknown): Date {
+  if (!value) return new Date();
+  // Firestore Timestamp instance (admin SDK) — tiene toDate()
+  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
+    try {
+      const d = (value as any).toDate();
+      return d instanceof Date && !isNaN(d.getTime()) ? d : new Date();
+    } catch { return new Date(); }
+  }
+  // Raw Firestore Timestamp object {_seconds, _nanoseconds}
+  if (typeof value === 'object' && value !== null && '_seconds' in value) {
+    try {
+      const sec = Number((value as any)._seconds);
+      const ns = Number((value as any)._nanoseconds || 0);
+      const d = new Date(sec * 1000 + ns / 1_000_000);
+      return !isNaN(d.getTime()) ? d : new Date();
+    } catch { return new Date(); }
+  }
+  const d = typeof value === 'string' ? new Date(value) : value instanceof Date ? value : new Date();
+  return isNaN(d.getTime()) ? new Date() : d;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // URLs estáticas del sitio
   const staticUrls: MetadataRoute.Sitemap = [
@@ -144,7 +168,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const evergreen = getAllEvergreen();
   const evergreenUrls: MetadataRoute.Sitemap = evergreen.map((article) => ({
     url: `${baseUrl}/guia/${article.slug}`,
-    lastModified: new Date(article.updatedDate),
+    lastModified: safeDate(article.updatedDate),
     changeFrequency: 'monthly',
     priority: 0.6,
   }));
@@ -157,7 +181,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const cleanArticles = articles.filter(article => !isToxicSlug(article.slug));
 
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
-      const publishedAt = article.fecha ? new Date(article.fecha) : new Date();
+      const publishedAt = safeDate(article.fecha);
       const now = new Date();
       const daysSincePublished = Math.floor(
         (now.getTime() - publishedAt.getTime()) / (1000 * 60 * 60 * 24)

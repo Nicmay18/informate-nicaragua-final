@@ -6,11 +6,14 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Noticia } from '@/lib/types';
 
-function timeAgo(dateStr: string) {
+function timeAgo(dateInput: unknown): string {
+  const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
-    return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: es });
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    return formatDistanceToNow(d, { addSuffix: true, locale: es });
   } catch {
-    return dateStr;
+    return '';
   }
 }
 

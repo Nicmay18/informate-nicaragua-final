@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import OptimizedImage from './OptimizedImage';
 import { useRouter } from 'next/navigation';
@@ -59,13 +59,34 @@ function ReadingProgress() {
 /* ================================================================
    AUDIO BUTTON
    ================================================================ */
-function AudioButton({ titulo, resumen, contenido }: { titulo: string; resumen: string; contenido: string }) {
+function AudioButton({ titulo, resumen, contenido, articleId }: { titulo: string; resumen: string; contenido: string; articleId: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Cleanup completo al cambiar de artículo (SPA navigation)
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setIsPlaying(false);
+      setIsLoading(false);
+      setProgress(0);
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [articleId]);
 
   const fullText = `${titulo}. ${resumen ? resumen + '. ' : ''}${stripHtml(contenido)}`.slice(0, 4500);
 
@@ -149,6 +170,11 @@ function AudioButton({ titulo, resumen, contenido }: { titulo: string; resumen: 
   };
 
   useEffect(() => () => stop(), [stop]);
+
+  // Forzar detención cuando cambia el artículo
+  useEffect(() => {
+    stop();
+  }, [articleId, stop]);
 
   const btnBase: React.CSSProperties = {
     width: 48,
@@ -265,22 +291,29 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
   const router = useRouter();
-  const FONT_STEPS = [0.9, 1, 1.1, 1.2];
+  const FONT_STEPS = useMemo(() => [0.9, 1, 1.1, 1.2], []);
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
+
+  // Reset completo de estados locales cuando cambia el artículo (navegación SPA)
+  useEffect(() => {
+    setFontIndex(1);
+  }, [noticia.id]);
+
   // Optimistic +1: muestra inmediatamente la vista del usuario actual
   const [views, setViews] = useState(() => (noticia.vistas || 0) + 1);
 
   useEffect(() => {
     setViews((noticia.vistas || 0) + 1);
-  }, [noticia.slug]);
+  }, [noticia.id, noticia.vistas]);
 
   useEffect(() => {
     if (!noticia.slug) return;
-    let cancelled = false;
+    const controller = new AbortController();
     fetch('/api/view', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
       body: JSON.stringify({ slug: noticia.slug }),
     })
       .then(async (res) => {
@@ -292,16 +325,16 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         }
       })
       .then((json) => {
-        if (!cancelled && json && typeof json.vistas === 'number') {
+        if (!controller.signal.aborted && json && typeof json.vistas === 'number') {
           setViews(json.vistas);
         }
       })
       .catch(() => {});
 
     return () => {
-      cancelled = true;
+      controller.abort();
     };
-  }, [noticia.slug]);
+  }, [noticia.id, noticia.slug]);
 
   if (!noticia) {
     return (
@@ -500,7 +533,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         )}
 
         {/* Audio */}
-        <AudioButton titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+        <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
 
         {/* 3 Puntos Clave */}
         <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
