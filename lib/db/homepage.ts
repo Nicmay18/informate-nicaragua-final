@@ -98,19 +98,13 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
 }
 
 // ============================================================================
-// CATEGORÍAS SEGURAS PARA ADSENSE (excluye Sucesos por cumplimiento)
+// HOME: NOTICIAS RECIENTES (todas las categorías visibles)
 // ============================================================================
-const CATEGORIAS_ADSENSE_SEGURAS = new Set([
-  'Nacionales', 'Internacionales', 'Tecnología', 'Economía', 'Deportes', 'Espectáculos'
-]);
-
-function esCategoriaSegura(categoria: string): boolean {
-  return CATEGORIAS_ADSENSE_SEGURAS.has(categoria);
-}
 
 /**
  * Obtiene las noticias más recientes para la portada (Carrusel y listados).
- * EXCLUYE 'Sucesos' para cumplir con políticas de AdSense.
+ * Incluye TODAS las categorías: Nacionales, Sucesos, Internacionales,
+ * Tecnología, Deportes, Espectáculos, etc.
  *
  * NOTA: El índice 'fecha DESC' de Firestore está corrupto y devuelve
  * documentos en orden incorrecto. Por eso traemos sin orderBy y
@@ -128,11 +122,10 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 
     const noticias = snap.docs
       .map(mapNoticia)
-      .filter(n => esCategoriaSegura(n.categoria || ''))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, limitCount);
 
-    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} safe news returned (server-side sort)`);
+    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} news returned (server-side sort)`);
     return noticias;
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
@@ -142,7 +135,7 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 
 /**
  * Obtiene las noticias más leídas de los últimos 7 días.
- * Ordena por vistas descendente, excluye 'Sucesos', fallback a recientes limpias.
+ * Ordena por vistas descendente. Fallback a recientes si no hay vistas.
  *
  * NOTA: El índice 'fecha DESC' de Firestore está corrupto. Usamos
  * server-side sorting para evitar documentos desordenados.
@@ -165,12 +158,12 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
     const sortedByDate = noticias
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
-    // Filtrar últimos 7 días + seguras + con vistas
+    // Filtrar últimos 7 días + con vistas
     const cutoffMs = cutoff7.toDate().getTime();
     const recentWithViews = sortedByDate
       .filter(n => {
         const fechaMs = new Date(n.fecha).getTime();
-        return fechaMs >= cutoffMs && esCategoriaSegura(n.categoria || '') && (n.vistas ?? 0) >= 1;
+        return fechaMs >= cutoffMs && (n.vistas ?? 0) >= 1;
       })
       .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
 
@@ -178,10 +171,8 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
       return recentWithViews.slice(0, limitCount);
     }
 
-    // Fallback: noticias más recientes limpias
-    return sortedByDate
-      .filter(n => esCategoriaSegura(n.categoria || ''))
-      .slice(0, limitCount);
+    // Fallback: noticias más recientes
+    return sortedByDate.slice(0, limitCount);
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
     return [];
