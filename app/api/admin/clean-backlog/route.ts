@@ -17,13 +17,18 @@ const DICCIONARIO_SEGURO: Record<string, string> = {
   'muere': 'fallece',
   'muerto': 'persona fallecida',
   'muerta': 'persona fallecida',
+  'muertos': 'personas fallecidas',
+  'muertas': 'personas fallecidas',
+  'muerte': 'fallecimiento',
+  'murió': 'falleció',
+  'murieron': 'fallecieron',
   'víctima mortal': 'deceso confirmado',
   'victima mortal': 'deceso confirmado',
   'asesinado': 'víctima de homicidio',
   'asesinada': 'víctima de homicidio',
   'crimen': 'delito',
   'criminal': 'delincuente',
-  'homicidio': 'muerte violenta',
+  'homicidio': 'delito grave',
   'suicidio': 'muerte autoinfligida',
   'masacre': 'ataque múltiple',
   'tragedia': 'incidente grave',
@@ -134,8 +139,8 @@ export async function POST(request: NextRequest) {
       const tituloSanitizado = sanitizarTexto(data.titulo || '');
       const resumenSanitizado = sanitizarTexto(data.resumen || '');
 
-      // [Paso 2] Slicing de parrafos
-      const contenidoOptimizado = segmentarParrafosDensos(data.contenido || '');
+      // [Paso 2] Sanitizar contenido + slicing de parrafos
+      const contenidoOptimizado = segmentarParrafosDensos(sanitizarTexto(data.contenido || ''));
 
       // [Paso 3] Recalcular score
       const nuevoScore = calcularScoreEditorial({

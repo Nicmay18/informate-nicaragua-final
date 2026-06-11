@@ -1,8 +1,5 @@
 /**
- * Script local: LIMPIEZA REAL de noticias en Firestore
- * Ejecuta sanitizacion + slicing + recalculo de score
- * 
- * Uso: node limpieza-real.mjs
+ * LIMPIEZA COMPLETA: Procesa TODAS las noticias con el diccionario completo
  */
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
@@ -13,7 +10,6 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ─── Firebase init ───
 function initFirebase() {
   if (getApps().length > 0) return getFirestore(getApps()[0]);
   const keyPath = join(__dirname, 'scripts', 'firebase-admin-key.json');
@@ -22,7 +18,6 @@ function initFirebase() {
   return getFirestore(app);
 }
 
-// ─── Scoring inline ───
 function calcularScoreEditorial(noticia) {
   let score = 0;
   if (!noticia) return 0;
@@ -44,7 +39,6 @@ function calcularScoreEditorial(noticia) {
   return Math.max(0, Math.min(100, score));
 }
 
-// ─── Diccionario y helpers ───
 const DICCIONARIO_SEGURO = {
   'trágico accidente': 'incidente vial fatal',
   'tragico accidente': 'incidente vial fatal',
@@ -68,7 +62,7 @@ const DICCIONARIO_SEGURO = {
   'asesinada': 'víctima de homicidio',
   'crimen': 'delito',
   'criminal': 'delincuente',
-  'homicidio': 'muerte violenta',
+  'homicidio': 'delito grave',
   'suicidio': 'muerte autoinfligida',
   'masacre': 'ataque múltiple',
   'tragedia': 'incidente grave',
@@ -112,16 +106,16 @@ function segmentarParrafosDensos(html) {
   return procesado;
 }
 
-// ─── MAIN ───
 async function main() {
-  console.log('⚠️  LIMPIEZA REAL DE NOTICIAS EN FIRESTORE');
-  console.log('⚠️  Este script MODIFICARA datos. Asegurate de tener backup.\n');
-  console.log('Presiona Ctrl+C para cancelar. Esperando 5 segundos...\n');
-
+  console.log('⚠️  LIMPIEZA COMPLETA DE TODAS LAS NOTICIAS');
+  console.log('⚠️  Esperando 5 segundos...\n');
   await new Promise(r => setTimeout(r, 5000));
 
   const db = initFirebase();
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
+  
+  // Obtener TODAS las noticias (sin limit)
+  const snap = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  console.log(`Total noticias encontradas: ${snap.docs.length}\n`);
 
   let modificadas = 0;
   let batchOps = 0;
@@ -136,7 +130,7 @@ async function main() {
 
     const tituloDespues = sanitizarTexto(tituloAntes);
     const resumenDespues = sanitizarTexto(resumenAntes);
-    const contenidoDespues = segmentarParrafosDensos(contenidoAntes);
+    const contenidoDespues = segmentarParrafosDensos(sanitizarTexto(contenidoAntes));
     const scoreDespues = calcularScoreEditorial({
       titulo: tituloDespues,
       resumen: resumenDespues,
@@ -172,7 +166,6 @@ async function main() {
   }
 
   console.log(`\n✅ COMPLETADO: ${modificadas} noticias modificadas de ${snap.docs.length}`);
-  console.log('Todos los cambios fueron guardados en Firestore.');
 }
 
 main().catch(err => {

@@ -89,7 +89,7 @@ function calcularScoreEditorial(noticia) {
 
 // ─── Análisis AdSense (palabras sensibles) ───
 const PALABRAS_SENSIBLES = [
-  'muere', 'fallece', 'falleció', 'muerto', 'muerta', 'asesinad', 'homicidio',
+  'muere', 'muerto', 'muerta', 'asesinad', 'homicidio',
   'accidente fatal', 'trágico', 'tragedia', 'masacre', 'violación', 'secuestro',
   'suicidio', 'asesinato', 'crimen', 'criminal', 'muert', 'víctima mortal',
   'descanse en paz', 'luto', 'sepelio', 'funeral', 'd.e.p', 'dep.',
