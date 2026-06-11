@@ -41,7 +41,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Texto inválido (5-4500 caracteres)' }, { status: 400 });
     }
 
-    if (!articleId || typeof articleId !== 'string' || articleId.length > 100) {
+    // Sanitizar texto: quitar cualquier HTML/script que venga del CMS
+    const sanitizedText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+    if (!articleId || typeof articleId !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(articleId) || articleId.length > 100) {
       return NextResponse.json({ error: 'articleId inválido' }, { status: 400 });
     }
 
@@ -65,7 +68,7 @@ export async function POST(req: NextRequest) {
           'xi-api-key': ELEVENLABS_API_KEY,
         },
         body: JSON.stringify({
-          text: text.slice(0, 4500),
+          text: sanitizedText.slice(0, 4500),
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
             stability: 0.45,
@@ -93,20 +96,20 @@ export async function POST(req: NextRequest) {
       }
 
       return NextResponse.json(
-        { error: userError, detail: errText, status: response.status, provider: 'elevenlabs' },
-        { status: 502 } // Bad Gateway: error upstream
+        { error: userError, status: response.status, provider: 'elevenlabs' },
+        { status: 502 }
       );
     }
 
+    // Devolver audio como stream binario directo (33% más eficiente que base64 JSON)
     const audioBuffer = await response.arrayBuffer();
-    const base64 = Buffer.from(audioBuffer).toString('base64');
-
-    console.log('[Audio API] Audio generado exitosamente, size:', audioBuffer.byteLength);
-
-    return NextResponse.json({
-      success: true,
-      audioBase64: `data:audio/mpeg;base64,${base64}`,
-      articleId,
+    return new Response(audioBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': String(audioBuffer.byteLength),
+        'X-Article-Id': articleId,
+      },
     });
   } catch (error) {
     console.error('[Audio API] Error interno:', error);
