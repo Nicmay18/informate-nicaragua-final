@@ -11,6 +11,7 @@
  */
 
 const SITE_URL = 'https://nicaraguainformate.com';
+const ENDPOINT = '/api/admin/adsense-repair-deepseek'; // usa DeepSeek (barato, $5 gratis al registrarte)
 
 function showHelp() {
   console.log(`
@@ -67,7 +68,7 @@ async function callEndpoint(opts) {
     process.exit(1);
   }
 
-  const url = new URL(`${SITE_URL}/api/admin/adsense-repair`);
+  const url = new URL(`${SITE_URL}${ENDPOINT}`);
   if (opts.dryRun) url.searchParams.set('dryRun', 'true');
   url.searchParams.set('limit', String(opts.limit));
 
