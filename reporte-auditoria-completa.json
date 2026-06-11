@@ -1,7 +1,7 @@
 {
-  "fechaAuditoria": "2026-06-11T04:07:37.587Z",
+  "fechaAuditoria": "2026-06-11T04:26:08.703Z",
   "totalNoticias": 200,
-  "promedioScore": 84,
+  "promedioScore": 85,
   "resumen": {
     "aprobados": 40,
     "pulido": 160,
@@ -451,15 +451,15 @@
   ],
   "bottom10": [
     {
-      "id": "eLJeY8NEp62lCIx7Tf5n",
-      "slug": "investigan-fallecimiento-de-hombre-en-local-de-managua",
-      "titulo": "Hombre de 57 años fallece dentro de establecimiento en carretera nueva a León",
-      "categoria": "Sucesos",
+      "id": "7AszCzTNxJWBnt1daHag",
+      "slug": "canal-de-panama-buques-pagan-4-millones-por-crisis-en-ormuz",
+      "titulo": "Canal de Panamá eleva peajes y buques pagan hasta $4 millones por cruzar",
+      "categoria": "Internacionales",
       "fecha": {
-        "_seconds": 1778870463,
-        "_nanoseconds": 895000000
+        "_seconds": 1777234454,
+        "_nanoseconds": 746000000
       },
-      "scoreCalidad": 50,
+      "scoreCalidad": 55,
       "veredicto": {
         "estado": "REQUIERE PULIDO",
         "emoji": "🟡",
@@ -471,21 +471,21 @@
         "nivelRiesgo": "bajo"
       },
       "seo": {
-        "tituloLength": 77,
+        "tituloLength": 72,
         "tituloOptimo": false,
         "resumenLength": 158,
         "resumenOptimo": true,
-        "palabras": 189,
-        "h2Count": 2,
+        "palabras": 231,
+        "h2Count": 3,
         "h3Count": 0,
-        "strongCount": 0,
-        "parrafos": 1,
+        "strongCount": 1,
+        "parrafos": 3,
         "estructuraOK": true
       },
       "movil": {
-        "parrafosTotales": 5,
+        "parrafosTotales": 8,
         "parrafosLargos": 1,
-        "palabrasPorParrafo": 38,
+        "palabrasPorParrafo": 29,
         "legibleEnMovil": true
       },
       "faq": {
@@ -495,15 +495,15 @@
       }
     },
     {
-      "id": "ect24qCFMfiygezE3j9D",
-      "slug": "investigan-homicidio-de-ciudadano-conocido-como-la-reina-menguena-mpo8rr3t",
-      "titulo": "Investigan fallecimiento violenta de joven en Santo Domingo, Chontales",
-      "categoria": "Sucesos",
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "slug": "turismo-en-nicaragua-crece-11-en-primer-trimestre-de-2026-segun-intur",
+      "titulo": "Nicaragua recibe 278 mil turistas en primer trimestre de 2026; crecimiento del 11%",
+      "categoria": "Nacionales",
       "fecha": {
-        "_seconds": 1779897096,
-        "_nanoseconds": 586000000
+        "_seconds": 1778949729,
+        "_nanoseconds": 691000000
       },
-      "scoreCalidad": 50,
+      "scoreCalidad": 55,
       "veredicto": {
         "estado": "REQUIERE PULIDO",
         "emoji": "🟡",
@@ -515,21 +515,21 @@
         "nivelRiesgo": "bajo"
       },
       "seo": {
-        "tituloLength": 70,
-        "tituloOptimo": true,
-        "resumenLength": 171,
-        "resumenOptimo": false,
-        "palabras": 236,
+        "tituloLength": 82,
+        "tituloOptimo": false,
+        "resumenLength": 158,
+        "resumenOptimo": true,
+        "palabras": 248,
         "h2Count": 3,
         "h3Count": 0,
-        "strongCount": 0,
+        "strongCount": 1,
         "parrafos": 2,
         "estructuraOK": true
       },
       "movil": {
         "parrafosTotales": 7,
         "parrafosLargos": 1,
-        "palabrasPorParrafo": 34,
+        "palabrasPorParrafo": 35,
         "legibleEnMovil": true
       },
       "faq": {
@@ -6479,6 +6479,50 @@
       }
     },
     {
+      "id": "eLJeY8NEp62lCIx7Tf5n",
+      "slug": "investigan-fallecimiento-de-hombre-en-local-de-managua",
+      "titulo": "Hombre de 57 años fallece en establecimiento de carretera a León",
+      "categoria": "Sucesos",
+      "fecha": {
+        "_seconds": 1778870463,
+        "_nanoseconds": 895000000
+      },
+      "scoreCalidad": 80,
+      "veredicto": {
+        "estado": "REQUIERE PULIDO",
+        "emoji": "🟡",
+        "razon": "Cumple parcialmente, necesita ajustes menores"
+      },
+      "adSense": {
+        "esSegura": true,
+        "hallazgos": [],
+        "nivelRiesgo": "bajo"
+      },
+      "seo": {
+        "tituloLength": 64,
+        "tituloOptimo": true,
+        "resumenLength": 191,
+        "resumenOptimo": false,
+        "palabras": 555,
+        "h2Count": 4,
+        "h3Count": 0,
+        "strongCount": 0,
+        "parrafos": 19,
+        "estructuraOK": true
+      },
+      "movil": {
+        "parrafosTotales": 23,
+        "parrafosLargos": 0,
+        "palabrasPorParrafo": 24,
+        "legibleEnMovil": true
+      },
+      "faq": {
+        "tienePreguntas": false,
+        "cantidadPreguntas": 0,
+        "preguntas": []
+      }
+    },
+    {
       "id": "1EMwcTEbV1ugQWmqVUAt",
       "slug": "accidente-de-transito-en-larreynaga-deja-heridos",
       "titulo": "Pareja fallece en accidente en semáforos de Larreynaga, Managua; bebé de dos meses queda bajo custodia de familiares",
@@ -6602,6 +6646,50 @@
         "parrafosTotales": 7,
         "parrafosLargos": 1,
         "palabrasPorParrafo": 37,
+        "legibleEnMovil": true
+      },
+      "faq": {
+        "tienePreguntas": false,
+        "cantidadPreguntas": 0,
+        "preguntas": []
+      }
+    },
+    {
+      "id": "ect24qCFMfiygezE3j9D",
+      "slug": "investigan-homicidio-de-ciudadano-conocido-como-la-reina-menguena-mpo8rr3t",
+      "titulo": "Investigan fallecimiento violenta de joven en Santo Domingo, Chontales",
+      "categoria": "Sucesos",
+      "fecha": {
+        "_seconds": 1779897096,
+        "_nanoseconds": 586000000
+      },
+      "scoreCalidad": 80,
+      "veredicto": {
+        "estado": "REQUIERE PULIDO",
+        "emoji": "🟡",
+        "razon": "Cumple parcialmente, necesita ajustes menores"
+      },
+      "adSense": {
+        "esSegura": true,
+        "hallazgos": [],
+        "nivelRiesgo": "bajo"
+      },
+      "seo": {
+        "tituloLength": 70,
+        "tituloOptimo": true,
+        "resumenLength": 171,
+        "resumenOptimo": false,
+        "palabras": 566,
+        "h2Count": 4,
+        "h3Count": 0,
+        "strongCount": 0,
+        "parrafos": 22,
+        "estructuraOK": true
+      },
+      "movil": {
+        "parrafosTotales": 26,
+        "parrafosLargos": 0,
+        "palabrasPorParrafo": 22,
         "legibleEnMovil": true
       },
       "faq": {
@@ -9242,94 +9330,6 @@
         "parrafosTotales": 7,
         "parrafosLargos": 1,
         "palabrasPorParrafo": 35,
-        "legibleEnMovil": true
-      },
-      "faq": {
-        "tienePreguntas": false,
-        "cantidadPreguntas": 0,
-        "preguntas": []
-      }
-    },
-    {
-      "id": "eLJeY8NEp62lCIx7Tf5n",
-      "slug": "investigan-fallecimiento-de-hombre-en-local-de-managua",
-      "titulo": "Hombre de 57 años fallece dentro de establecimiento en carretera nueva a León",
-      "categoria": "Sucesos",
-      "fecha": {
-        "_seconds": 1778870463,
-        "_nanoseconds": 895000000
-      },
-      "scoreCalidad": 50,
-      "veredicto": {
-        "estado": "REQUIERE PULIDO",
-        "emoji": "🟡",
-        "razon": "Score bajo, necesita mejoras significativas"
-      },
-      "adSense": {
-        "esSegura": true,
-        "hallazgos": [],
-        "nivelRiesgo": "bajo"
-      },
-      "seo": {
-        "tituloLength": 77,
-        "tituloOptimo": false,
-        "resumenLength": 158,
-        "resumenOptimo": true,
-        "palabras": 189,
-        "h2Count": 2,
-        "h3Count": 0,
-        "strongCount": 0,
-        "parrafos": 1,
-        "estructuraOK": true
-      },
-      "movil": {
-        "parrafosTotales": 5,
-        "parrafosLargos": 1,
-        "palabrasPorParrafo": 38,
-        "legibleEnMovil": true
-      },
-      "faq": {
-        "tienePreguntas": false,
-        "cantidadPreguntas": 0,
-        "preguntas": []
-      }
-    },
-    {
-      "id": "ect24qCFMfiygezE3j9D",
-      "slug": "investigan-homicidio-de-ciudadano-conocido-como-la-reina-menguena-mpo8rr3t",
-      "titulo": "Investigan fallecimiento violenta de joven en Santo Domingo, Chontales",
-      "categoria": "Sucesos",
-      "fecha": {
-        "_seconds": 1779897096,
-        "_nanoseconds": 586000000
-      },
-      "scoreCalidad": 50,
-      "veredicto": {
-        "estado": "REQUIERE PULIDO",
-        "emoji": "🟡",
-        "razon": "Score bajo, necesita mejoras significativas"
-      },
-      "adSense": {
-        "esSegura": true,
-        "hallazgos": [],
-        "nivelRiesgo": "bajo"
-      },
-      "seo": {
-        "tituloLength": 70,
-        "tituloOptimo": true,
-        "resumenLength": 171,
-        "resumenOptimo": false,
-        "palabras": 236,
-        "h2Count": 3,
-        "h3Count": 0,
-        "strongCount": 0,
-        "parrafos": 2,
-        "estructuraOK": true
-      },
-      "movil": {
-        "parrafosTotales": 7,
-        "parrafosLargos": 1,
-        "palabrasPorParrafo": 34,
         "legibleEnMovil": true
       },
       "faq": {
