@@ -15,6 +15,46 @@ const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading
 const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
 const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
+// ============================================================================
+// UTILIDADES DE RENDIMIENTO Y ACCESIBILIDAD
+// ============================================================================
+
+/** Detecta prefers-reduced-motion para respetar a11y */
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReduced(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+  return reduced;
+}
+
+/** Timer basado en requestAnimationFrame. Más eficiente que setInterval
+ *  y respeta automáticamente tabs inactivas. */
+function useRafInterval(callback: () => void, delayMs: number, enabled: boolean) {
+  const savedCb = useRef(callback);
+  useEffect(() => { savedCb.current = callback; }, [callback]);
+
+  useEffect(() => {
+    if (!enabled || delayMs <= 0) return;
+    let rafId: number;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      if (now - last >= delayMs) {
+        savedCb.current();
+        last = now;
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [delayMs, enabled]);
+}
+
 function timeAgo(dateInput: unknown): string {
   const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
@@ -122,66 +162,48 @@ function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noti
 function Hero({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
   const [progress, setProgress] = useState(0);
-  const items = noticias.slice(0, 5);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const elapsedRef = useRef(0);
-  const isPausedRef = useRef(false);
-
-  const resetTimer = useCallback(() => {
-    elapsedRef.current = 0;
-    setProgress(0);
-  }, []);
+  const [isPaused, setIsPaused] = useState(false);
+  const items = useMemo(() => noticias.slice(0, 5), [noticias]);
+  const reduced = usePrefersReducedMotion();
 
   const goToSlide = useCallback((i: number) => {
     setIdx(i);
-    resetTimer();
-  }, [resetTimer]);
+    setProgress(0);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setIdx(p => (p + 1) % items.length);
-    resetTimer();
-  }, [items.length, resetTimer]);
+    setProgress(0);
+  }, [items.length]);
 
-  useEffect(() => {
-    if (items.length <= 1) return;
-
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-
-    resetTimer();
-
-    const duration = 6000;
-    const tick = 50;
-
-    timerRef.current = setInterval(() => {
-      if (isPausedRef.current) return;
-      elapsedRef.current += tick;
-      setProgress((elapsedRef.current / duration) * 100);
-      if (elapsedRef.current >= duration) {
+  // RAF timer: ~60 fps progress bar, auto-advance cada 6s
+  useRafInterval(() => {
+    if (isPaused || reduced) return;
+    setProgress(prev => {
+      const step = 100 / (6000 / 16); // 6s duration @ 60fps
+      const next = prev + step;
+      if (next >= 100) {
         setIdx(p => (p + 1) % items.length);
-        resetTimer();
+        return 0;
       }
-    }, tick);
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [items.length, idx]);
+      return next;
+    });
+  }, 16, items.length > 1 && !reduced);
 
   return (
-    <section className="ni-hero" aria-label="Noticias destacadas">
+    <section
+      className="ni-hero"
+      aria-label="Noticias destacadas"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="ni-hero__track">
         {items.map((item, i) => (
           <article key={item.id} className={`ni-hero__slide${i === idx ? ' is-active' : ''}`}>
             <div className="ni-hero__media">
               {item.imagen ? (
                 i === 0 ? (
-                  // Primer slide = LCP: carga directo desde jsDelivr sin weserv.nl
+                  // Primer slide = LCP: carga directo sin intermediarios
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={getResponsiveImageUrl(item.imagen)}

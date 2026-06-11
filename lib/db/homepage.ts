@@ -1,7 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import type { Noticia } from '@/lib/types';
 import { FALLBACK_IMAGE } from '@/lib/types';
-import { QueryDocumentSnapshot, DocumentData, FieldValue } from 'firebase-admin/firestore';
+import { FieldValue } from 'firebase-admin/firestore';
 import { capitalizeFirst } from '@/lib/formateo';
 
 // ============================================================================
@@ -73,7 +73,7 @@ function safeDateString(value: unknown): string {
 /**
  * Mapea un documento Firestore a la interfaz Noticia
  */
-function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
+function mapNoticia(d: any): Noticia {
   const data = d.data();
   return {
     id: d.id,
@@ -98,6 +98,29 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
 }
 
 // ============================================================================
+// CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
+// TTL = 15 segundos — suficiente para que ISR de 60s no dispare múltiples queries
+// ============================================================================
+interface CacheEntry {
+  data: Noticia[];
+  expiresAt: number;
+}
+
+let _fetchCache: CacheEntry | null = null;
+
+async function fetchAllNoticias(): Promise<Noticia[]> {
+  const now = Date.now();
+  if (_fetchCache && _fetchCache.expiresAt > now) {
+    return _fetchCache.data;
+  }
+  const db = getAdminDb();
+  const snap = await db.collection('noticias').limit(250).get();
+  const noticias = snap.docs.map(mapNoticia);
+  _fetchCache = { data: noticias, expiresAt: now + 15_000 };
+  return noticias;
+}
+
+// ============================================================================
 // HOME: NOTICIAS RECIENTES (todas las categorías visibles)
 // ============================================================================
 
@@ -106,27 +129,17 @@ function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
  * Incluye TODAS las categorías: Nacionales, Sucesos, Internacionales,
  * Tecnología, Deportes, Espectáculos, etc.
  *
- * NOTA: El índice 'fecha DESC' de Firestore está corrupto y devuelve
- * documentos en orden incorrecto. Por eso traemos sin orderBy y
- * ordenamos server-side con JavaScript.
+ * NOTA: Usa cache compartido de 15s para evitar lecturas duplicadas
+ * cuando ISR + cliente solicitan datos simultáneamente.
  */
 export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]> {
   try {
-    const db = getAdminDb();
-
-    // Traemos las últimas 200 noticias SIN orderBy (el índice está roto)
-    const snap = await db
-      .collection('noticias')
-      .limit(200)
-      .get();
-
-    const noticias = snap.docs
-      .map(mapNoticia)
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    const noticias = await fetchAllNoticias();
+    const sorted = noticias
+      .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, limitCount);
-
-    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} news returned (server-side sort)`);
-    return noticias;
+    console.log(`[homepage.ts] getLatestNews: ${noticias.length} cached docs, ${sorted.length} returned`);
+    return sorted;
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
     return [];
@@ -137,41 +150,31 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
  * Obtiene las noticias más leídas de los últimos 7 días.
  * Ordena por vistas descendente. Fallback a recientes si no hay vistas.
  *
- * NOTA: El índice 'fecha DESC' de Firestore está corrupto. Usamos
- * server-side sorting para evitar documentos desordenados.
+ * NOTA: Reutiliza el cache compartido de fetchAllNoticias para evitar
+ * duplicar lecturas de Firestore cuando se invoca junto a getLatestNews.
  */
 export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
   try {
-    const db = getAdminDb();
     const { Timestamp } = await import('firebase-admin/firestore');
-
-    // Traemos las últimas 200 noticias y filtramos server-side
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-    const snap = await db
-      .collection('noticias')
-      .limit(200)
-      .get();
-
-    const noticias = snap.docs.map(mapNoticia);
-
-    // Ordenar por fecha descendente server-side
-    const sortedByDate = noticias
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-
-    // Filtrar últimos 7 días + con vistas
     const cutoffMs = cutoff7.toDate().getTime();
+
+    const noticias = await fetchAllNoticias();
+
+    const sortedByDate = noticias
+      .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+
     const recentWithViews = sortedByDate
-      .filter(n => {
+      .filter((n: Noticia) => {
         const fechaMs = new Date(n.fecha).getTime();
         return fechaMs >= cutoffMs && (n.vistas ?? 0) >= 1;
       })
-      .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0));
 
     if (recentWithViews.length >= limitCount) {
       return recentWithViews.slice(0, limitCount);
     }
 
-    // Fallback: noticias más recientes
     return sortedByDate.slice(0, limitCount);
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
@@ -179,11 +182,26 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
   }
 }
 
+// Validación de slug compartida entre API y DB layer
+const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
+const SLUG_MAX_LEN = 200;
+
+function isValidSlug(slug: string): boolean {
+  return typeof slug === 'string' && slug.length <= SLUG_MAX_LEN && SLUG_RE.test(slug);
+}
+
 /**
  * Incrementa vistas de una noticia de forma atómica por slug.
  * Usado por el route handler /api/views/[slug]
+ *
+ * Protección: rechaza slugs malformados antes de tocar Firestore.
  */
 export async function incrementViewsBySlug(slug: string): Promise<number | null> {
+  if (!isValidSlug(slug)) {
+    console.warn('[homepage.ts] Slug rechazado por validación:', slug);
+    return null;
+  }
+
   try {
     const db = getAdminDb();
 
