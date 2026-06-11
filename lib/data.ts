@@ -1,7 +1,5 @@
-import type { QueryDocumentSnapshot, DocumentData } from 'firebase-admin/firestore';
 import type { Noticia } from './types';
 import { FALLBACK_IMAGE } from './types';
-// generateSlug ya no se usa en data.ts (eliminado fallback de scan completo)
 import { capitalizeFirst } from './formateo';
 
 const DEFAULT_NEWS_COUNT = 30;
@@ -117,42 +115,70 @@ function validateCount(count: number, defaultCount: number): number {
   return count || defaultCount;
 }
 
+// ============================================================================
+// CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
+// TTL = 15 segundos — suficiente para que ISR de 1h no dispare múltiples queries
+// ============================================================================
+interface CacheEntry {
+  data: Noticia[];
+  expiresAt: number;
+}
+
+let _fetchCache: CacheEntry | null = null;
+
+function mapDocToNoticia(d: any): Noticia {
+  const data = d.data();
+  return {
+    id: d.id,
+    slug: data.slug || d.id,
+    titulo: capitalizeFirst(data.titulo || ''),
+    resumen: data.resumen || '',
+    contenido: data.contenido,
+    categoria: data.categoria || 'Actualidad',
+    imagen: normalizeImage(data.imagen || ''),
+    fecha: safeDateString(data.fecha),
+    fechaActualizacion: safeDateString(data.fechaActualizacion),
+    autor: data.autor,
+    autorFoto: data.autorFoto,
+    destacada: data.destacada,
+    vistas: data.vistas,
+    palabras: data.palabras,
+    tags: data.tags,
+    pieFoto: data.pieFoto,
+    metaDescription: data.metaDescription || data.metaDescripcion || '',
+    keywords: data.keywords || '',
+  };
+}
+
+/** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto).
+ *  Usa cache compartido de 15s para evitar lecturas duplicadas. */
+async function fetchAllNoticias(): Promise<Noticia[]> {
+  const now = Date.now();
+  if (_fetchCache && _fetchCache.expiresAt > now) {
+    return _fetchCache.data;
+  }
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb.collection('noticias').limit(250).get();
+    const noticias = snap.docs.map(mapDocToNoticia);
+    _fetchCache = { data: noticias, expiresAt: now + 15_000 };
+    return noticias;
+  } catch (err) {
+    console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
+    return [];
+  }
+}
+
 // =============================================================================
 // Firebase Admin SDK - OBLIGATORIO para noticias reales
 // =============================================================================
 async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
   try {
-    const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb
-      .collection('noticias')
-      .orderBy('fecha', 'desc')
-      .limit(Math.min(count, 200))
-      .get();
-
-    return snap.docs
-      .map((d: QueryDocumentSnapshot<DocumentData>) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: safeDateString(data.fecha),
-          fechaActualizacion: safeDateString(data.fechaActualizacion),
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-          metaDescription: data.metaDescription || data.metaDescripcion || '',
-          keywords: data.keywords || '',
-        };
-      });
+    const noticias = await fetchAllNoticias();
+    if (noticias.length === 0) return null;
+    return noticias
+      .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(0, Math.min(count, 200));
   } catch (err) {
     console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
     console.error('[data.ts] VERIFICAR: Variables de entorno FIREBASE_* en Vercel');
@@ -288,83 +314,51 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   return filtered.slice(0, validatedCount);
 }
 
-function mapNoticia(d: QueryDocumentSnapshot<DocumentData>): Noticia {
-  const data = d.data();
-  return {
-    id: d.id,
-    slug: data.slug || d.id,
-    titulo: capitalizeFirst(data.titulo || ''),
-    resumen: data.resumen || '',
-    contenido: data.contenido,
-    categoria: data.categoria || 'Actualidad',
-    imagen: normalizeImage(data.imagen || ''),
-    fecha: safeDateString(data.fecha),
-    autor: data.autor,
-    autorFoto: data.autorFoto,
-    destacada: data.destacada,
-    vistas: data.vistas || 0,
-    palabras: data.palabras,
-    pieFoto: data.pieFoto,
-    metaDescription: data.metaDescription || data.metaDescripcion || '',
-    keywords: data.keywords || '',
-  };
-}
-
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
   try {
-    const { adminDb } = await import('./firebase-admin');
     const { Timestamp } = await import('firebase-admin/firestore');
+    const noticias = await fetchAllNoticias();
+    if (noticias.length === 0) return [];
 
-    // 1. ÚLTIMOS 7 DÍAS: solo noticias recientes con vistas
-    //    Evita que noticias viejas con vistas acumuladas históricas dominen el ranking
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-    const snap7 = await adminDb
-      .collection('noticias')
-      .where('fecha', '>=', cutoff7)
-      .orderBy('fecha', 'desc')
-      .limit(15)
-      .get();
+    const cutoffMs7 = cutoff7.toDate().getTime();
 
-    if (!snap7.empty) {
-      const withViews = snap7.docs
-        .map(mapNoticia)
-        .filter(n => (n.vistas ?? 0) >= 1)
-        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+    const sortedByDate = noticias.sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 
-      if (withViews.length >= validatedCount) {
-        return withViews.slice(0, validatedCount);
-      }
+    const withViews = sortedByDate
+      .filter((n: Noticia) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
+      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0));
+
+    if (withViews.length >= validatedCount) {
+      return withViews.slice(0, validatedCount);
     }
 
-    // 2. Fallback: últimos 3 días sin importar vistas (contenido fresco)
+    // Fallback: contenido fresco de últimos 3 días
     const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
-    const snap3 = await adminDb
-      .collection('noticias')
-      .where('fecha', '>=', cutoff3)
-      .orderBy('fecha', 'desc')
-      .limit(validatedCount)
-      .get();
+    const cutoffMs3 = cutoff3.toDate().getTime();
+    const recent3 = sortedByDate.filter((n: Noticia) => new Date(n.fecha).getTime() >= cutoffMs3);
+    if (recent3.length >= validatedCount) return recent3.slice(0, validatedCount);
 
-    if (!snap3.empty) return snap3.docs.map(mapNoticia);
-
-    // 3. Fallback final: noticias más recientes que haya
-    const snapAll = await adminDb
-      .collection('noticias')
-      .orderBy('fecha', 'desc')
-      .limit(validatedCount)
-      .get();
-
-    if (!snapAll.empty) return snapAll.docs.map(mapNoticia);
+    // Fallback final: más recientes que haya
+    return sortedByDate.slice(0, validatedCount);
 
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
   }
-  return MOCK_NOTICIAS.slice(0, validatedCount);
+  return [];
+}
+
+const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
+const SLUG_MAX_LEN = 200;
+
+function isValidSlug(slug: string): boolean {
+  return typeof slug === 'string' && slug.length <= SLUG_MAX_LEN && SLUG_RE.test(slug);
 }
 
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
-  if (!slug || typeof slug !== 'string') {
+  if (!isValidSlug(slug)) {
+    console.warn('[data.ts] Slug rechazado por validación:', slug);
     return null;
   }
   try {
@@ -408,11 +402,6 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
   }
-  // Fallback a mock data solo en desarrollo (no en producción)
-  const mockNoticia = MOCK_NOTICIAS.find(n => n.slug === slug);
-  if (mockNoticia) {
-    return mockNoticia;
-  }
   return null;
 }
 
@@ -426,7 +415,7 @@ export async function getAllSlugs(): Promise<string[]> {
       .get();
     
     return snap.docs
-      .map((d: QueryDocumentSnapshot<DocumentData>) => d.data().slug)
+      .map((d: any) => d.data().slug)
       .filter(Boolean);
   } catch (err) {
     console.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
@@ -447,7 +436,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .get();
 
     const related = snap.docs
-      .map((d: QueryDocumentSnapshot<DocumentData>) => {
+      .map((d: any) => {
         const data = d.data();
         return {
           id: d.id,
@@ -471,17 +460,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
     return related;
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    // Firestore composite index missing → log helpful message, don't crash
-    if (msg.includes('index') || msg.includes('requires an index')) {
-      console.warn('[data.ts] Se requiere índice compuesto en Firestore para noticias relacionadas. Crear índice en consola Firebase.');
-    } else {
-      console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', msg);
-    }
+    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', err instanceof Error ? err.message : String(err));
   }
-
-  // Fallback a noticias de ejemplo
-  return MOCK_NOTICIAS
-    .filter(n => n.categoria === categoria && n.slug !== excludeSlug)
-    .slice(0, validatedCount);
+  return [];
 }
