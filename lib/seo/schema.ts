@@ -35,6 +35,7 @@ export function buildNewsArticleJsonLdEnhanced(
 
   const authorName = article.autor || 'Redacción Nicaragua Informate';
   const isKeyling = authorName === 'Keyling Elieth Rivera Muñoz';
+  const absoluteImageUrl = toAbsoluteUrl(article.imagen);
 
   return {
     '@context': 'https://schema.org',
@@ -45,23 +46,27 @@ export function buildNewsArticleJsonLdEnhanced(
       // Variante nativa / landscape (16:9 aprox)
       {
         '@type': 'ImageObject',
-        url: toAbsoluteUrl(article.imagen),
+        url: absoluteImageUrl,
         width: 1200,
         height: 675,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
       },
-      // Variante cuadrada (1:1) para Google Discover y feeds móviles
+      // Variante cuadrada (1:1) procesada por el endpoint /api/transform
       {
         '@type': 'ImageObject',
-        url: article.imagen ? `${toAbsoluteUrl(article.imagen)}?aspect_ratio=1x1` : 'https://nicaraguainformate.com/logo.webp',
+        url: article.imagen
+          ? `https://nicaraguainformate.com/api/transform?ratio=1x1&url=${encodeURIComponent(absoluteImageUrl)}`
+          : 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
         caption: `Imagen cuadrada: ${article.titulo} — Nicaragua Informate`,
       },
-      // Variante estándar (4:3) para resultados enriquecidos de Google
+      // Variante estándar (4:3) procesada por el endpoint /api/transform
       {
         '@type': 'ImageObject',
-        url: article.imagen ? `${toAbsoluteUrl(article.imagen)}?aspect_ratio=4x3` : 'https://nicaraguainformate.com/logo.webp',
+        url: article.imagen
+          ? `https://nicaraguainformate.com/api/transform?ratio=4x3&url=${encodeURIComponent(absoluteImageUrl)}`
+          : 'https://nicaraguainformate.com/logo.webp',
         width: 800,
         height: 600,
         caption: `Imagen 4:3: ${article.titulo} — Nicaragua Informate`,
