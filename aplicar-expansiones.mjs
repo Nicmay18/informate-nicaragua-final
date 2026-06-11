@@ -111,7 +111,77 @@ const EXPANSIONES = {
 <p>Las zonas costeras del departamento de Rivas, de gran afluencia turística nacional e internacional, demandan un monitoreo constante debido al comportamiento de las corrientes de resaca y las variaciones en las mareas. Los equipos de rescate recomiendan a los visitantes informarse sobre las condiciones del mar antes de ingresar al agua y evitar zonas aisladas que carezcan de vigilancia activa.</p>
 
 <h2>Coordinación de primeros auxilios y respuesta comunitaria</h2>
-<p>La respuesta inmediata de las brigadas de socorro comunitarias y las instituciones de primera respuesta resulta vital para incrementar las posibilidades de supervivencia en emergencias acuáticas. El fortalecimiento de las capacitaciones en reanimación cardiopulmonar (RCP) para el personal de hoteles y negocios locales forma parte de las estrategias implementadas para resguardar la vida de los veraneantes.</p>`
+<p>La respuesta inmediata de las brigadas de socorro comunitarias y las instituciones de primera respuesta resulta vital para incrementar las posibilidades de supervivencia en emergencias acuáticas. El fortalecimiento de las capacitaciones en reanimación cardiopulmonar (RCP) para el personal de hoteles y negocios locales forma parte de las estrategias implementadas para resguardar la vida de los veraneantes.</p>`,
+
+  'CaxNVIKzrIl5rBpKs0vy': `
+<h2>Regulación sanitaria y protocolos en procedimientos médicos</h2>
+<p>La fiscalización de los centros de atención médica y clínicas estéticas constituye un pilar fundamental para garantizar la seguridad de los pacientes en el país. El Ministerio de Salud mantiene normativas estrictas respecto a las licencias de operación, la certificación académica del personal y las condiciones higiénico-sanitarias que deben cumplir los quirófanos antes de realizar cualquier intervención de carácter quirúrgico.</p>
+
+<h2>Aspectos legales en la determinación de responsabilidad médica</h2>
+<p>Los procesos de investigación judicial en casos de presunta mala práctica médica requieren auditorías clínicas detalladas y dictámenes del Instituto de Medicina Legal. Estas evaluaciones científicas determinan si se cumplieron los protocolos establecidos para el procedimiento o si existió alguna omisión técnica, garantizando así un proceso justo y transparente para las partes bajo las leyes nacionales.</p>`,
+
+  'DuaMg4XI8aPmAHw8otN1': `
+<h2>Infraestructura vial y puntos críticos en el departamento de Boaco</h2>
+<p>El diseño de las carreteras intermunicipales en zonas de alta pendiente y curvas sucesivas, como las que caracterizan a la geografía de Boaco, demanda una atención especial por parte de los conductores. Puentes y pasos estrechos representan puntos críticos donde la reducción de la velocidad y el respeto absoluto a las señales de tránsito son indispensables para prevenir colisiones e incidentes fatales.</p>
+
+<h2>Fortalecimiento de la cultura de prevención vial en jóvenes</h2>
+<p>Los planes de educación vial dirigidos a los conductores de motocicletas, especialmente en los rangos de edad más jóvenes, buscan concienciar sobre los riesgos del manejo temerario. El uso correcto del casco protector y el mantenimiento preventivo del vehículo, enfocado en el estado de las llantas y el sistema de iluminación, son factores determinantes para reducir la incidencia de pérdidas de vida en las rutas del país.</p>`,
+
+  'IGFA2pNSEnX452WlJalV': `
+<h2>Planes operativos contra el microtráfico en el norte del país</h2>
+<p>Las operaciones de contención contra el tráfico de sustancias ilícitas en los departamentos del norte de Nicaragua forman parte de las estrategias de seguridad nacional en el campo y la ciudad. El despliegue de patrullajes, retenes en vías principales y el trabajo de inteligencia policial en zonas rurales de Jinotega permiten la desarticulación de redes locales de distribución, debilitando las estructuras delictivas de menor escala.</p>
+
+<h2>Impacto socioeconómico y medidas preventivas comunitarias</h2>
+<p>La neutralización del comercio de estupefacientes a nivel comunitario tiene un impacto directo en la preservación de la seguridad y la tranquilidad de las familias locales. Instituciones educativas y organizaciones vecinales complementan estas acciones policiales mediante programas de prevención del consumo, orientados a brindar alternativas de desarrollo recreativo y deportivo para los jóvenes de la región.</p>`,
+
+  'IYS7dABZahKOHwdnjfJr': `
+<h2>Desarrollo urbano y acceso a la vivienda social en la capital</h2>
+<p>La expansión de proyectos habitacionales planificados en Managua responde a la creciente demanda de soluciones habitacionales seguras y accesibles para las familias trabajadoras. Estos desarrollos urbanísticos no solo facilitan el acceso al crédito de vivienda, sino que aseguran la integración de servicios básicos esenciales como agua potable, energía eléctrica, alumbrado público y sistemas de drenaje pluvial eficientes.</p>
+
+<h2>Dinamización del sector construcción y beneficios colaterales</h2>
+<p>La ejecución de obras de infraestructura residencial de esta escala genera un impacto económico directo mediante la creación de empleos estables en el sector de la construcción. Asimismo, el establecimiento de nuevos núcleos familiares impulsa la actividad comercial local, promoviendo la apertura de pequeños negocios y mejorando de manera integral la calidad de vida y el entorno socioeconómico de la zona.</p>`,
+
+  'NPLJwHZ5rPg3bp79XVTO': `
+<h2>Implicaciones legales de la omisión de auxilio en accidentes</h2>
+<p>La legislación penal vigente en el país sanciona severamente a los conductores que, tras participar en un incidente vial, abandonan el lugar de los hechos sin prestar la asistencia debida a los afectados. La omisión de auxilio se considera un agravante en el proceso judicial, elevando las responsabilidades legales y penales al tipificarse como una conducta que atenta directamente contra la preservación de la vida humana.</p>
+
+<h2>El rol del monitoreo ciudadano y cámaras de seguridad</h2>
+<p>El uso de tecnologías de vigilancia privada y el apoyo de testimonios de transeúntes se han convertido en herramientas clave para las autoridades en la identificación y localización de conductores que huyen de la escena de un accidente. La colaboración ciudadana fortalece las investigaciones policiales y aumenta las posibilidades de esclarecer los hechos.</p>`,
+
+  'OHzJfumT84hFTV5SQD6i': `
+<h2>Prevención de incidentes domésticos y cuidado infantil</h2>
+<p>Los entornos del hogar, particularmente el área de la cocina, exigen medidas de supervisión rigurosas para mitigar el riesgo de lesiones físicas accidentales en menores de edad. Organismos de salud especializados insisten en mantener recipientes con líquidos a altas temperaturas fuera del alcance de los niños, así como asegurar las áreas de preparación de alimentos para evitar eventos fortuitos que comprometan la integridad de los infantes.</p>
+
+<h2>Protocolos de atención médica especializada en quemaduras</h2>
+<p>La estabilización y el tratamiento oportuno de pacientes pediátricos con lesiones por quemaduras térmicas críticas se gestionan a través de unidades de salud especializadas en el país. El manejo integral de estos casos no solo abarca la respuesta de emergencia para prevenir la deshidratación y las infecciones, sino que requiere un seguimiento prolongado mediante fisioterapia y atención reconstructiva continua.</p>`,
+
+  'OWppqYU03AfZQHIoqEL7': `
+<h2>Mecanismos de convivencia comunitaria y prevención de la violencia</h2>
+<p>El fortalecimiento de la seguridad ciudadana en las regiones y comunidades rurales implica la promoción de métodos alternativos para la resolución de conflictos interpersonales. Instituciones locales y líderes comunitarios trabajan de manera conjunta en talleres de sensibilización, orientados a reducir el consumo de bebidas alcohólicas artesanales no reguladas que suelen detonar altercados sociales.</p>
+
+<h2>Procedimientos judiciales en delitos contra la vida</h2>
+<p>Las acciones investigativas para dar con el paradero de personas vinculadas a hechos delictivos graves se ejecutan bajo la estricta supervisión del Ministerio Público y las autoridades policiales correspondientes. El ordenamiento jurídico nicaragüense contempla sanciones severas para los delitos contra la vida, garantizando que los presuntos responsables enfrenten el debido proceso en los juzgados penales competentes.</p>`,
+
+  'PvmeAqNv4cyfztLFhqMO': `
+<h2>Optimización de recursos y rendimiento en redes locales</h2>
+<p>El despliegue de parches de software y actualizaciones por parte de las principales corporaciones tecnológicas internacionales busca mejorar la experiencia de usuario en mercados emergentes. Estas revisiones técnicas están diseñadas para optimizar el consumo de datos móviles en redes de operadores locales, garantizando una carga más rápida de las interfaces y una menor latencia en las telecomunicaciones cotidianas.</p>
+
+<h2>Ciberseguridad y protección de datos personales</h2>
+<p>Más allá de las mejoras estéticas o de rendimiento, las actualizaciones periódicas de estos servicios digitales integran protocolos avanzados para contrarrestar amenazas de seguridad informática. La corrección de vulnerabilidades del sistema y el fortalecimiento del cifrado de extremo a extremo protegen de manera directa las credenciales y la privacidad de los consumidores frente a posibles filtraciones en la red.</p>`,
+
+  'SM2fzy975dM5oxuoPgQx': `
+<h2>Solidaridad y repercusión en el ámbito deportivo nacional</h2>
+<p>Los sucesos fatales que afectan a figuras destacadas de la historia del deporte local generan muestras de pesar y apoyo solidario por parte de la comunidad de aficionados e instituciones deportivas. La trayectoria de los profesionales del béisbol nacional en las Grandes Ligas mantiene un vínculo estrecho con la identidad cultural del país, por lo que este tipo de pérdidas familiares impacta en el ámbito social.</p>
+
+<h2>Seguridad en autopistas de alta velocidad internacionales</h2>
+<p>Las colisiones en vías de tránsito internacionales de alto flujo vehicular son objeto de rigurosos peritajes técnicos por parte de los departamentos de vialidad correspondientes. El análisis de factores como las condiciones mecánicas del vehículo, el clima de la autopista y los tiempos de respuesta de los servicios de emergencia médica resultan fundamentales para el cierre de los informes forenses legales.</p>`,
+
+  'XHsdnSKHniKyMI1AWBXL': `
+<h2>Cooperación judicial internacional y localización de personas</h2>
+<p>Los procesos de investigación forense desarrollados por el Organismo de Investigación Judicial (OIJ) en el vecino país requieren, en múltiples ocasiones, el apoyo de la difusión informativa transfronteriza. La colaboración ciudadana y de los medios de comunicación facilita la identificación legal de ciudadanos extranjeros, permitiendo que las autoridades establezcan contacto directo con sus núcleos familiares en Nicaragua.</p>
+
+<h2>Gestiones administrativas para el reconocimiento legal</h2>
+<p>El esclarecimiento de decesos en territorio extranjero involucra trámites de carácter civil que demandan la presentación de documentación de identidad oficial ante las instancias judiciales del país donde ocurrió el hecho. Estas gestiones permiten a los familiares directos recibir los informes periciales oficiales y coordinar las acciones legales posteriores de acuerdo con las normativas migratorias y sanitarias vigentes.</p>`
 };
 
 async function main() {
