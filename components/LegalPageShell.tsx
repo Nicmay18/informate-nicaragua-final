@@ -58,8 +58,15 @@ export default function LegalPageShell({ children, title }: { children: React.Re
         </div>
       </header>
 
+      {/* Breadcrumb */}
+      <nav aria-label="Miga de pan" style={{ maxWidth: 800, margin: '0 auto', padding: '16px 20px 0', fontSize: 13, color: '#94a3b8' }}>
+        <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>Inicio</Link>
+        <span style={{ margin: '0 8px', color: '#475569' }}>/</span>
+        <span style={{ color: '#cbd5e1' }}>{title}</span>
+      </nav>
+
       {/* Main */}
-      <main style={{ padding: '3rem 0 2rem' }}>
+      <main style={{ padding: '2rem 0 2rem' }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{ fontSize: 'clamp(2rem,5vw,3rem)', fontWeight: 700, marginBottom: 12, background: 'linear-gradient(90deg,#60a5fa,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{title}</h1>
           <div style={{ width: 60, height: 4, background: '#8c1d18', borderRadius: 2, marginBottom: 32 }} />

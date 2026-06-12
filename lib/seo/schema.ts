@@ -35,6 +35,7 @@ export function buildNewsArticleJsonLdEnhanced(
 
   const authorName = article.autor || 'Redacción Nicaragua Informate';
   const isKeyling = authorName === 'Keyling Elieth Rivera Muñoz';
+  const absoluteImageUrl = toAbsoluteUrl(article.imagen);
 
   return {
     '@context': 'https://schema.org',
@@ -42,19 +43,33 @@ export function buildNewsArticleJsonLdEnhanced(
     headline: article.titulo,
     description: article.resumen,
     image: [
+      // Variante nativa / landscape (16:9 aprox)
       {
         '@type': 'ImageObject',
-        url: toAbsoluteUrl(article.imagen),
+        url: absoluteImageUrl,
         width: 1200,
-        height: 630,
+        height: 675,
         caption: `Imagen de ${article.categoria}: ${article.titulo} — Nicaragua Informate`,
       },
+      // Variante cuadrada (1:1) procesada por el endpoint /api/transform
       {
         '@type': 'ImageObject',
-        url: article.imagen ? toAbsoluteUrl(article.imagen).replace(/\.[a-z]+$/, '-square.webp') : 'https://nicaraguainformate.com/logo.webp',
+        url: article.imagen
+          ? `https://nicaraguainformate.com/api/transform?ratio=1x1&url=${encodeURIComponent(absoluteImageUrl)}`
+          : 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
-        caption: `Logo: ${article.titulo} — Nicaragua Informate`,
+        caption: `Imagen cuadrada: ${article.titulo} — Nicaragua Informate`,
+      },
+      // Variante estándar (4:3) procesada por el endpoint /api/transform
+      {
+        '@type': 'ImageObject',
+        url: article.imagen
+          ? `https://nicaraguainformate.com/api/transform?ratio=4x3&url=${encodeURIComponent(absoluteImageUrl)}`
+          : 'https://nicaraguainformate.com/logo.webp',
+        width: 800,
+        height: 600,
+        caption: `Imagen 4:3: ${article.titulo} — Nicaragua Informate`,
       },
     ],
     datePublished: safeIsoDate(article.fecha),
@@ -271,5 +286,46 @@ export function buildBreadcrumbJsonLdEnhanced(
       name: item.name,
       item: item.item,
     })),
+  };
+}
+
+/**
+ * Genera un esquema FAQPage dinámico extrayendo preguntas reales del contenido HTML.
+ * Si no encuentra preguntas, devuelve null de forma segura (sin inyección de schema vacío).
+ *
+ * @param contenidoHtml - HTML del artículo
+ * @param resumenText - Texto del resumen/meta descripción como respuesta de respaldo
+ * @returns Objeto FAQPage o null
+ */
+export function generarFaqSchema(
+  contenidoHtml: string,
+  resumenText: string
+): Record<string, unknown> | null {
+  if (!contenidoHtml) return null;
+
+  // Regex para capturar patrones ¿...? dentro del texto plano extraído del HTML
+  const textoPlano = contenidoHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const preguntasEncontradas = textoPlano.match(/¿[^?]+\?/g);
+
+  if (!preguntasEncontradas || preguntasEncontradas.length === 0) {
+    return null;
+  }
+
+  // Máximo 3 preguntas para evitar penalizaciones por abuso de rich snippets
+  const mainEntity = preguntasEncontradas.slice(0, 3).map((pregunta) => ({
+    '@type': 'Question',
+    name: pregunta.trim(),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text:
+        resumenText?.trim() ||
+        'Haz clic en el artículo para leer la respuesta completa en Nicaragua Infórmate.',
+    },
+  }));
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity,
   };
 }

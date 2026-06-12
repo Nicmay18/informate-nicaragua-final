@@ -4,44 +4,20 @@ import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 
-// ============================================================================
-// ISR: La home se regenera cada 60 segundos con datos frescos de Firestore.
-// Esto reduce drásticamente lecturas en Firestore vs force-dynamic,
-// manteniendo la home actualizada sin cachear indefinidamente.
-// ============================================================================
-export const revalidate = 60;
-export const dynamicParams = true;
-
-const SITE_URL = 'https://nicaraguainformate.com';
-const OG_IMAGE = `${SITE_URL}/logo.webp`;
-
-/** Trunca descripción respetando límites de palabras para SERPs (max ~160 chars) */
-function smartTruncate(str: string, maxLen = 155): string {
-  if (str.length <= maxLen) return str;
-  const trimmed = str.slice(0, maxLen);
-  const lastSpace = trimmed.lastIndexOf(' ');
-  return lastSpace > 0 ? trimmed.slice(0, lastSpace) + '…' : trimmed + '…';
-}
-
-const META_DESC_BASE =
-  'Noticias de Nicaragua en tiempo real. Cobertura de sucesos, nacionales, deportes, tecnología, espectáculos e internacionales desde Managua.';
-
-const OG_DESC_BASE =
-  'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.';
-
 export const metadata: Metadata = {
   title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
-  description: smartTruncate(META_DESC_BASE),
+  description:
+    'Noticias de Nicaragua en tiempo real. Cobertura de sucesos, nacionales, deportes, tecnología, espectáculos e internacionales desde Managua.',
   openGraph: {
     type: 'website',
     locale: 'es_NI',
-    url: SITE_URL,
+    url: 'https://nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
-    description: smartTruncate(OG_DESC_BASE),
+    description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
     images: [
       {
-        url: OG_IMAGE,
+        url: 'https://nicaraguainformate.com/logo.webp',
         width: 512,
         height: 512,
         alt: 'Nicaragua Informate — Portal de noticias de Nicaragua',
@@ -53,16 +29,21 @@ export const metadata: Metadata = {
     site: '@NicInformate',
     creator: '@NicInformate',
     title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
-    description: smartTruncate(OG_DESC_BASE),
-    images: [OG_IMAGE],
+    description: 'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.',
+    images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
-    canonical: SITE_URL,
+    canonical: 'https://nicaraguainformate.com',
     languages: {
-      'x-default': SITE_URL,
+      'x-default': 'https://nicaraguainformate.com',
     },
   },
 };
+
+// ============================================================================
+// ROMPER CACHÉ ESTÁTICO: el carrusel y listados siempre traen datos frescos
+// ============================================================================
+export const revalidate = 60;
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
@@ -70,23 +51,22 @@ export default async function HomePage() {
 
   try {
     [noticias, masLeidas] = await Promise.all([
-      getLatestNews(30),   // Carrusel + listados
-      getTrendingNews(5),  // Más leídas / Tendencias
+      getLatestNews(30),   // ← Carrusel + listados: siempre frescas
+      getTrendingNews(5),  // ← Más leídas / Tendencias
     ]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
   }
 
   const heroImage = noticias[0]?.imagen || null;
-  const heroSrc = heroImage ? getResponsiveImageUrl(heroImage, 640) : null;
 
   return (
     <>
-      {heroSrc && (
+      {heroImage && (
         <link
           rel="preload"
           as="image"
-          href={heroSrc}
+          href={getResponsiveImageUrl(heroImage, 640)}
           type="image/webp"
           fetchPriority="high"
           crossOrigin="anonymous"

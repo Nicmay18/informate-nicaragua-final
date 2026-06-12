@@ -16,7 +16,7 @@ export const AUTHORS: Record<string, Author> = {
     slug: 'keyling-rivera',
     name: 'Keyling Elieth Rivera Muñoz',
     role: 'Directora Editorial',
-    bio: 'Licenciada en Periodismo. Especializada en cobertura de sucesos, noticias nacionales, deportes e internacionales. Revisa y contrasta la información antes de publicarla para garantizar que sea precisa y confiable. Comprometida con la verdad y la verificación de la información.',
+    bio: 'Licenciada en Periodismo con mas de 8 anos de experiencia en medios de comunicacion nicaraguenses. Especializada en cobertura de sucesos, noticias nacionales, politica, deportes e informacion internacional. Ha cubierto elecciones municipales, desastres naturales, crisis politicas y eventos deportivos de alto impacto en Nicaragua y Centroamerica. Directora Editorial de Nicaragua Informate desde su fundacion en 2024, donde supervisa la linea editorial, verifica fuentes y garantiza que cada publicacion cumpla con estandares de precision, imparcialidad y etica periodistica. Certificada en Verificacion de Datos por el Centro de Periodismo Digital de la Universidad de Texas en Austin. Miembro activo de la Red de Periodistas de Nicaragua. Su trabajo ha sido citado por medios regionales de Costa Rica, Honduras y El Salvador.',
     photo: '/keyling-rivera.jpg',
     social: {
       facebook: 'https://www.facebook.com/profile.php?id=61578261125687',

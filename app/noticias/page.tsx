@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
@@ -32,5 +33,14 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
     console.error('[NoticiasPage] Error:', error);
   }
 
-  return <HomePagePro noticias={noticias} masLeidas={masLeidas} />;
+  return (
+    <>
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 20px 0' }}>
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>Todas las noticias</span>
+      </nav>
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+    </>
+  );
 }

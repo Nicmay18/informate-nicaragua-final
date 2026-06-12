@@ -128,6 +128,7 @@ export default function Footer() {
             Ir a Radio en vivo
           </Link>
         </div>
+
       </div>
 
       {/* Políticas editoriales visibles — señal EEAT crítica para Google */}

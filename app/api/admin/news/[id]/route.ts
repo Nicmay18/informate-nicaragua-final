@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { generateSlug } from '@/lib/slug';
@@ -43,6 +44,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     updateData.fechaActualizacion = Timestamp.now();
 
     await ref.update(updateData);
+
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[admin/news PUT]', err);

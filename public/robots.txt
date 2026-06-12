@@ -1,21 +1,20 @@
-# Nicaragua Informate - Robots.txt  
-  
-User-agent: *  
-Allow: /  
-  
-# Admin y auth (no indexar)  
-Disallow: /admin/  
-Disallow: /admin.html  
-Disallow: /login/  
-  
-# API routes  
-Disallow: /api/  
-  
-# B£squeda interna  
-Disallow: /buscar  
-  
-# P ginas de test eliminadas  
-Disallow: /test-articulo/  
-Disallow: /test-zoom/  
-  
-Sitemap: https://nicaraguainformate.com/sitemap.xml 
+ï»¿User-agent: *
+Allow: /
+
+# Admin y auth (no indexar)
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /login/
+
+# API routes
+Disallow: /api/
+
+# Busqueda interna
+Disallow: /buscar
+
+# Paginas de test eliminadas
+Disallow: /test-articulo/
+Disallow: /test-zoom/
+
+Sitemap: https://nicaraguainformate.com/sitemap.xml
+Sitemap: https://nicaraguainformate.com/news-sitemap.xml

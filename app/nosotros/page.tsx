@@ -61,6 +61,13 @@ export default function NosotrosPage() {
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }} />
+      {/* Breadcrumb */}
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 20px 0' }}>
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>Sobre Nicaragua Informate</span>
+      </nav>
+
       {/* Hero */}
       <section className="article-hero" style={{ height: 'auto', minHeight: 220 }}>
         <div style={{ background: 'var(--primary)', position: 'absolute', inset: 0 }} />

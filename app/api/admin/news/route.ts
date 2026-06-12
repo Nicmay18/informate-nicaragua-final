@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
@@ -100,6 +101,9 @@ export async function POST(request: NextRequest) {
     if (notificarTelegram !== false && publicado !== false) {
       await notifyTelegram(titulo, resumen, slug, categoria, imagen || '', body.telegramToken, body.telegramChat);
     }
+
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
 
     return NextResponse.json({ success: true, id: docRef.id, slug });
   } catch (err) {

@@ -1,285 +1,25 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import OptimizedImage from './OptimizedImage';
 import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
-import { tiempoLectura, fmtViews, formatDateES, stripHtml, extractPoints } from '@/lib/formateo';
+import { tiempoLectura, fmtViews, formatDateES, extractPoints } from '@/lib/formateo';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
-import AdsenseUnit from './AdsenseUnit';
 import NewsletterSignup from './NewsletterSignup';
+import ReadingProgress from './ReadingProgress';
 import type { Noticia } from '@/lib/types';
 
-/* ================================================================
-   READING PROGRESS BAR
-   ================================================================ */
-function ReadingProgress() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = document.documentElement;
-      const scrolled = el.scrollTop || document.body.scrollTop;
-      const total = el.scrollHeight - el.clientHeight;
-      setProgress(total > 0 ? (scrolled / total) * 100 : 0);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const barStyle: React.CSSProperties = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 3,
-    zIndex: 9999,
-    backgroundColor: '#e5e5e5',
-  };
-
-  const fillStyle: React.CSSProperties = {
-    height: '100%',
-    backgroundColor: '#991b1b',
-    transition: 'width 0.15s ease-out',
-    width: `${progress}%`,
-  };
-
-  return (
-    <div style={barStyle} role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
-      <div style={fillStyle} />
-    </div>
-  );
-}
-
-/* ================================================================
-   AUDIO BUTTON
-   ================================================================ */
-function AudioButton({ titulo, resumen, contenido, articleId }: { titulo: string; resumen: string; contenido: string; articleId: string }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [errorMsg, setErrorMsg] = useState('');
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Cleanup completo al cambiar de artículo (SPA navigation)
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-        audioRef.current = null;
-      }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      setIsPlaying(false);
-      setIsLoading(false);
-      setProgress(0);
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, [articleId]);
-
-  const fullText = `${titulo}. ${resumen ? resumen + '. ' : ''}${stripHtml(contenido)}`.slice(0, 4500);
-
-  const stop = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    setIsPlaying(false);
-    setProgress(0);
-  }, []);
-
-  const playNativeTTS = () => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return false;
-    const utterance = new SpeechSynthesisUtterance(fullText);
-    utterance.lang = 'es-NI';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    const voices = window.speechSynthesis.getVoices();
-    const esVoice = voices.find(v => v.lang.startsWith('es'));
-    if (esVoice) utterance.voice = esVoice;
-
-    utterance.onstart = () => { setIsPlaying(true); setIsLoading(false); };
-    utterance.onend = () => { setIsPlaying(false); setProgress(0); };
-    utterance.onerror = () => { setIsPlaying(false); setIsLoading(false); };
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-    return true;
-  };
-
-  const play = async () => {
-    if (isLoading) return;
-    if (audioRef.current && audioRef.current.src) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/audio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: fullText }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success || !data.audioBase64) throw new Error(data.error || 'Error del servidor');
-
-      const audio = new Audio(data.audioBase64);
-      audioRef.current = audio;
-      audio.onended = () => { setIsPlaying(false); setProgress(0); };
-      audio.onerror = () => { setIsPlaying(false); setIsLoading(false); };
-      await audio.play();
-      setIsPlaying(true);
-      setIsLoading(false);
-
-      intervalRef.current = setInterval(() => {
-        if (audioRef.current) {
-          const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-          setProgress(Number.isFinite(pct) ? pct : 0);
-        }
-      }, 500);
-    } catch {
-      setIsLoading(false);
-      if (!playNativeTTS()) {
-        setErrorMsg('No se pudo generar el audio. Intenta de nuevo.');
-        setTimeout(() => setErrorMsg(''), 6000);
-      }
-    }
-  };
-
-  const togglePlay = () => {
-    if (isPlaying) {
-      audioRef.current?.pause();
-      setIsPlaying(false);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    } else {
-      play();
-    }
-  };
-
-  useEffect(() => () => stop(), [stop]);
-
-  // Forzar detención cuando cambia el artículo
-  useEffect(() => {
-    stop();
-  }, [articleId, stop]);
-
-  const btnBase: React.CSSProperties = {
-    width: 48,
-    height: 48,
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: 'none',
-    cursor: 'pointer',
-    flexShrink: 0,
-  };
-
-  const wrapStyle: React.CSSProperties = {
-    margin: '24px 0',
-    padding: 20,
-    backgroundColor: '#fef3c7',
-    border: '1px solid #fde68a',
-    borderRadius: 12,
-  };
-
-  return (
-    <div style={wrapStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <button
-          onClick={togglePlay}
-          disabled={isLoading}
-          style={{
-            ...btnBase,
-            backgroundColor: isLoading ? '#9ca3af' : '#991b1b',
-            color: '#fff',
-            cursor: isLoading ? 'wait' : 'pointer',
-          }}
-          aria-label={isPlaying ? 'Pausar' : isLoading ? 'Cargando' : 'Reproducir audio'}
-        >
-          {isLoading ? (
-            <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-          ) : isPlaying ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21" /></svg>
-          )}
-        </button>
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#111827' }}>
-            {isLoading ? 'Generando audio profesional...' : isPlaying ? 'Reproduciendo noticia' : 'Escuchar noticia en voz profesional'}
-          </p>
-          <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
-            {isLoading ? 'Esto puede tomar unos segundos' : 'Voz generada con inteligencia artificial'}
-          </p>
-        </div>
-
-        {isPlaying && (
-          <button
-            onClick={stop}
-            style={{
-              padding: '6px 12px',
-              fontSize: 12,
-              fontWeight: 600,
-              color: '#4b5563',
-              backgroundColor: '#fff',
-              border: '1px solid #e5e5e5',
-              borderRadius: 8,
-              cursor: 'pointer',
-            }}
-            aria-label="Detener reproducción"
-          >
-            Detener
-          </button>
-        )}
-      </div>
-
-      {isPlaying && (
-        <div style={{ marginTop: 12, height: 4, backgroundColor: '#e5e5e5', borderRadius: 2, overflow: 'hidden' }}>
-          <div style={{ height: '100%', backgroundColor: '#991b1b', borderRadius: 2, transition: 'width 0.3s ease', width: `${progress}%` }} />
-        </div>
-      )}
-
-      {errorMsg && (
-        <p style={{ margin: '12px 0 0', fontSize: 12, color: '#b91c1c', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '8px 12px' }}>
-          {errorMsg}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* ================================================================
-   PULL QUOTE
-   ================================================================ */
-function PullQuote({ contenido }: { contenido: string }) {
-  const plain = stripHtml(contenido);
-  const sentences = plain.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 80 && s.length < 210);
-  const quote = sentences[Math.floor(sentences.length / 2)] || sentences[1] || '';
-  if (!quote) return null;
-
-  return (
-    <aside style={{ margin: '32px 0', paddingLeft: 24, borderLeft: '4px solid #991b1b', paddingTop: 8, paddingBottom: 8 }}>
-      <p style={{ fontSize: 20, fontFamily: 'Georgia, serif', fontStyle: 'italic', color: '#1f2937', lineHeight: 1.6, margin: 0 }}>
-        &ldquo;{quote}.&rdquo;
-      </p>
-    </aside>
-  );
-}
+/* Lazy-load componentes pesados que no están en el viewport inicial */
+const AudioButton = lazy(() => import('./AudioButton'));
+const PullQuote = lazy(() => import('./PullQuote'));
+const AdsenseUnit = lazy(() => import('./AdsenseUnit'));
 
 /* ================================================================
    ARTICLE PAGE — ESTILOS INLINE COMPLETOS (sin Tailwind)
@@ -496,6 +236,14 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
             <time dateTime={noticia.fecha} itemProp="datePublished">{formatDateES(noticia.fecha)}</time>
+            {noticia.fechaActualizacion && noticia.fechaActualizacion !== noticia.fecha && (
+              <>
+                <span style={{ color: '#9ca3af' }}>·</span>
+                <time dateTime={noticia.fechaActualizacion} itemProp="dateModified" style={{ color: '#991b1b', fontWeight: 500 }}>
+                  Actualizado {formatDateES(noticia.fechaActualizacion)}
+                </time>
+              </>
+            )}
           </span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
@@ -532,8 +280,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
-        {/* Audio */}
-        <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+        {/* Audio — lazy-loaded, no bloquea LCP */}
+        <Suspense fallback={null}>
+          <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+        </Suspense>
 
         {/* 3 Puntos Clave */}
         <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
@@ -554,19 +304,23 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </nav>
         )}
 
-        {/* Contenido */}
-        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: enhancedHtml || noticia.resumen || '' }} />
+        {/* Contenido — sanitizado antes de inyección para prevenir XSS */}
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(enhancedHtml || noticia.resumen || '') }} />
 
-        {/* In-article Ad — carga tras leer el cuerpo */}
-        <AdsenseUnit
-          slot="2957454965"
-          format="fluid"
-          layout="in-article"
-          style={{ margin: '32px 0' }}
-        />
+        {/* In-article Ad — lazy-loaded para no afectar LCP */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="2957454965"
+            format="fluid"
+            layout="in-article"
+            style={{ margin: '32px 0' }}
+          />
+        </Suspense>
 
-        {/* Pull Quote */}
-        <PullQuote contenido={noticia.contenido || ''} />
+        {/* Pull Quote — lazy-loaded */}
+        <Suspense fallback={null}>
+          <PullQuote contenido={noticia.contenido || ''} />
+        </Suspense>
 
         {/* Tags */}
         {tags.length > 0 && (
@@ -578,6 +332,34 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             ))}
           </div>
         )}
+
+        {/* Donacion PayPal */}
+        <div style={{ marginTop: 32, padding: '24px 20px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 12, textAlign: 'center' }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#1e40af', margin: '0 0 4px' }}>Apoyá nuestro periodismo</p>
+          <p style={{ fontSize: 13, color: '#3b82f6', margin: '0 0 16px' }}>Tu aporte nos ayuda a mantener la cobertura informativa de Nicaragua.</p>
+          <a
+            href="https://paypal.me/NicaraguaInformate"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              color: '#fff',
+              backgroundColor: '#0070ba',
+              padding: '12px 24px',
+              borderRadius: 8,
+              fontWeight: 700,
+              textDecoration: 'none',
+              fontSize: 15,
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.63l-1.496 9.478h2.79c.457 0 .85-.334.922-.788l.04-.19.73-4.627.047-.255a.933.933 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.025-.13.048-.26.066-.39a5.65 5.65 0 0 0-.04-1.722c-.01-.065-.02-.13-.032-.194a3.506 3.506 0 0 0-.108-.313z"/>
+            </svg>
+            Donar vía PayPal
+          </a>
+        </div>
 
         {/* Share */}
         <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #e5e5e5' }}>

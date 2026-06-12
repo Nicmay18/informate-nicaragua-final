@@ -68,6 +68,11 @@ export default function RadioPage() {
   return (
     <>
       <main className="radio-page-main" style={{ minHeight: '80vh', padding: '48px 16px', maxWidth: '1200px', margin: '0 auto' }}>
+        <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ marginBottom: 24, fontSize: 14, color: '#6b7280' }}>
+          <Link href="/">Inicio</Link>
+          <span style={{ margin: '0 8px', color: '#d1d5db' }}>/</span>
+          <span>Radio en vivo</span>
+        </nav>
         <header style={{ textAlign: 'center', marginBottom: 48 }}>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', marginBottom: 12 }}>
             <Radio size={32} style={{ verticalAlign: 'middle', marginRight: 12 }} />

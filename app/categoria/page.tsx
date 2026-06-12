@@ -24,6 +24,11 @@ export const revalidate = 3600;
 export default function CategoriasPage() {
   return (
     <main id="main-content" className="ni-body" style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px' }}>
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ marginBottom: 24 }}>
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>Categorías</span>
+      </nav>
       <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, marginBottom: 12, fontFamily: 'var(--font-merri)', letterSpacing: '-0.02em' }}>
         Categorías
       </h1>

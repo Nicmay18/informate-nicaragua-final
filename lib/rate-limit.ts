@@ -1,7 +1,6 @@
 /**
- * Rate Limiter basado en LRU in-memory.
- * Usa Map nativo para evitar dependencias externas.
- * Diseñado para Next.js Edge/Node runtime (sin estado compartido entre workers).
+ * Rate Limiter nativo usando Map + timestamps.
+ * Alternativa ligera a lru-cache. Limpia entradas expiradas cada 100 requests.
  */
 
 interface RateLimitEntry {
@@ -9,79 +8,60 @@ interface RateLimitEntry {
   resetAt: number;
 }
 
-interface RateLimitResult {
-  success: boolean;
-  limit: number;
-  remaining: number;
-  reset: number;
+export interface RateLimitOptions {
+  intervalMs?: number;    // ventana de tiempo (default: 60s)
+  maxRequests?: number;     // máximo de requests por ventana (default: 10)
+  cleanupThreshold?: number; // limpiar entradas viejas cada N requests (default: 100)
 }
 
-const WINDOW_MS = 60_000; // 1 minuto
-const MAX_REQUESTS = 30;  // 30 req/min por IP
+export class RateLimiter {
+  private store = new Map<string, RateLimitEntry>();
+  private totalChecks = 0;
+  private readonly intervalMs: number;
+  private readonly maxRequests: number;
+  private readonly cleanupThreshold: number;
 
-const cache = new Map<string, RateLimitEntry>();
-
-function getClientIP(req: Request): string {
-  const forwarded = req.headers.get('x-forwarded-for');
-  if (forwarded) {
-    const first = forwarded.split(',')[0]?.trim();
-    if (first) return first;
+  constructor(options: RateLimitOptions = {}) {
+    this.intervalMs = options.intervalMs ?? 60_000;
+    this.maxRequests = options.maxRequests ?? 10;
+    this.cleanupThreshold = options.cleanupThreshold ?? 100;
   }
-  const realIP = req.headers.get('x-real-ip');
-  if (realIP) return realIP;
-  // Fallback para desarrollo local / testing
-  return 'unknown';
-}
 
-function isValidIP(ip: string): boolean {
-  if (ip === 'unknown') return true;
-  // IPv4 o IPv6 básica
-  return /^[\d.:a-fA-F]+$/.test(ip) || ip.includes(':');
-}
+  check(token: string): { allowed: boolean; remaining: number; resetAt: number } {
+    const now = Date.now();
+    this.totalChecks++;
 
-export function rateLimit(req: Request, maxRequests = MAX_REQUESTS, windowMs = WINDOW_MS): RateLimitResult {
-  const ip = getClientIP(req);
-  const now = Date.now();
-  const key = `${ip}`;
-
-  const existing = cache.get(key);
-  if (existing && existing.resetAt > now) {
-    if (existing.count >= maxRequests) {
-      return {
-        success: false,
-        limit: maxRequests,
-        remaining: 0,
-        reset: existing.resetAt,
-      };
+    // Cleanup periódico para evitar memory leak
+    if (this.totalChecks >= this.cleanupThreshold) {
+      this.cleanup(now);
+      this.totalChecks = 0;
     }
-    existing.count += 1;
-    return {
-      success: true,
-      limit: maxRequests,
-      remaining: maxRequests - existing.count,
-      reset: existing.resetAt,
-    };
+
+    const entry = this.store.get(token);
+
+    if (!entry || now > entry.resetAt) {
+      // Nueva ventana o ventana expirada
+      const newEntry: RateLimitEntry = { count: 1, resetAt: now + this.intervalMs };
+      this.store.set(token, newEntry);
+      return { allowed: true, remaining: this.maxRequests - 1, resetAt: newEntry.resetAt };
+    }
+
+    if (entry.count >= this.maxRequests) {
+      return { allowed: false, remaining: 0, resetAt: entry.resetAt };
+    }
+
+    entry.count++;
+    return { allowed: true, remaining: this.maxRequests - entry.count, resetAt: entry.resetAt };
   }
 
-  const resetAt = now + windowMs;
-  cache.set(key, { count: 1, resetAt });
-
-  return {
-    success: true,
-    limit: maxRequests,
-    remaining: maxRequests - 1,
-    reset: resetAt,
-  };
-}
-
-/** Limpieza periódica de entradas expiradas (anti-fuga de memoria) */
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of cache.entries()) {
-    if (entry.resetAt <= now) {
-      cache.delete(key);
+  private cleanup(now: number): void {
+    for (const [key, entry] of this.store) {
+      if (now > entry.resetAt) {
+        this.store.delete(key);
+      }
     }
   }
-}, 60_000);
+}
 
-export { getClientIP, isValidIP };
+/** Singleton global para uso en API Routes */
+export const defaultRateLimiter = new RateLimiter();

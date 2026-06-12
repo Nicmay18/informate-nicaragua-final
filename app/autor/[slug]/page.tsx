@@ -77,6 +77,15 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
       {/* Schema.org Person */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(author)) }} />
 
+      {/* Breadcrumb */}
+      <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 20px 0' }}>
+        <Link href="/">Inicio</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <Link href="/nosotros">Quienes somos</Link>
+        <span className="ni-breadcrumbs__sep">/</span>
+        <span>{author.name}</span>
+      </nav>
+
       {/* Header */}
       <section className="article-hero" style={{ height: 'auto', minHeight: 280 }}>
         <div style={{ background: 'var(--primary)', position: 'absolute', inset: 0 }} />
