@@ -9,12 +9,7 @@ import {
   generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
-<<<<<<< HEAD
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
-import { escapeJsonLd } from '@/lib/sanitize';
-
-=======
-import { generateMetaDescription, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
 
 const cachedGetNewsBySlug = unstable_cache(
@@ -28,8 +23,6 @@ const cachedGetRelatedNews = unstable_cache(
   ['related-news'],
   { revalidate: 600 }
 );
-
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
 export const revalidate = 3600; // ISR: revalida cada 1h, reduce drásticamente lecturas Firestore
@@ -61,14 +54,6 @@ export async function generateStaticParams() {
     // Firebase falló, generaremos dinámicamente
   }
   return [];
-}
-
-/** Trunca descripción a rango estricto 140-160 chars para evitar penalización SERP */
-function strictMetaDescription(raw: string): string {
-  if (!raw) return '';
-  if (raw.length <= 160) return raw;
-  const cutAt = raw.lastIndexOf(' ', 157);
-  return cutAt > 0 ? raw.slice(0, cutAt) + '…' : raw.slice(0, 157) + '…';
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -155,6 +140,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         'article:section': category,
         'article:published_time': noticia.fecha,
         'article:modified_time': noticia.fechaActualizacion || noticia.fecha,
+        keywords: keywords.split(',').map((k: string) => k.trim()).filter(Boolean),
       },
     };
   } catch {
