@@ -134,7 +134,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const imgContainerStyle: React.CSSProperties = {
     position: 'relative',
     width: '100%',
-    height: 480,
+    aspectRatio: '16 / 9',
     maxHeight: 480,
     borderRadius: 12,
     overflow: 'hidden',
@@ -240,7 +240,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </div>
         </div>
 
-        {/* Imagen destacada — ALTURA FIJA 480px */}
+        {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
           <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             <meta itemProp="url" content={noticia.imagen} />
@@ -250,6 +250,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               variant="hero"
               fill
               priority
+              fetchPriority="high"
             />
             <figcaption style={captionStyle}>
               <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>

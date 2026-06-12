@@ -1,7 +1,8 @@
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -10,6 +11,18 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
+
+const cachedGetNewsBySlug = unstable_cache(
+  async (slug: string) => getNewsBySlug(slug),
+  ['news-by-slug'],
+  { revalidate: 300 }
+);
+
+const cachedGetRelatedNews = unstable_cache(
+  async (category: string, slug: string, limit: number) => getRelatedNews(category, slug, limit),
+  ['related-news'],
+  { revalidate: 600 }
+);
 
 export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
@@ -55,7 +68,7 @@ function strictMetaDescription(raw: string): string {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const noticia = await getNewsBySlug(slug);
+    const noticia = await cachedGetNewsBySlug(slug);
     if (!noticia) {
       return {
         title: 'Noticia no encontrada',
@@ -63,7 +76,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       };
     }
 
-    const url = `https://nicaraguainformate.com/noticias/${slug}`;
+    // Slug obsoleto: redirigir al canonical en lugar de servir metadatos duplicados
+    if (noticia.slug && noticia.slug !== slug) {
+      redirect(`/noticias/${noticia.slug}`);
+    }
+
+    const normalizedSlug = noticia.slug || slug;
+    const url = `https://nicaraguainformate.com/noticias/${normalizedSlug}`;
     const category = noticia.categoria || 'General';
     const seoTipo = toNoticiaTipo(category);
 
@@ -136,10 +155,15 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
 
   try {
-    const noticia = await getNewsBySlug(slug);
+    const noticia = await cachedGetNewsBySlug(slug);
     if (!noticia) return notFound();
 
-    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
+    // Si el slug en Firestore es diferente de la URL, redirigir 301 al canonical
+    if (noticia.slug && noticia.slug !== slug) {
+      redirect(`/noticias/${noticia.slug}`);
+    }
+
+    const related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
