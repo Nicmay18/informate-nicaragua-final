@@ -5,7 +5,6 @@ import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
 // ISR: regenera cada 1h, permite generación bajo demanda de nuevos params
-export const dynamic = 'force-static';
 export const dynamicParams = true;
 export const revalidate = 3600;
 

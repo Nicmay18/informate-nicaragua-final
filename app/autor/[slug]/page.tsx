@@ -6,6 +6,9 @@ import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { getNews } from '@/lib/data';
 import type { Author } from '@/lib/authors';
 
+export const dynamicParams = true;
+export const revalidate = 86400; // 24h
+
 export async function generateStaticParams() {
   const authors = getAllAuthors();
   return authors.map((author) => ({ slug: author.slug }));

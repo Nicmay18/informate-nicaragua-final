@@ -462,7 +462,18 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
     return related;
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas:', err instanceof Error ? err.message : String(err));
+    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice. Fallback JS:', err instanceof Error ? err.message : String(err));
+    // Fallback: filtrar en memoria desde el cache compartido (sin índice compuesto)
+    try {
+      const all = await fetchAllNoticias();
+      const related = all
+        .filter((n: Noticia) => n.categoria === categoria && n.slug !== excludeSlug)
+        .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .slice(0, validatedCount);
+      return related;
+    } catch (fallbackErr) {
+      console.error('[data.ts] Fallback también falló:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
+    }
   }
   return [];
 }

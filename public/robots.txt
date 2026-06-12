@@ -1,20 +1,24 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
 
-# Admin y auth (no indexar)
+# Admin, auth y paneles (no indexar)
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /login/
+Disallow: /panel/
 
 # API routes
 Disallow: /api/
 
-# Busqueda interna
+# Busqueda interna (evita contenido duplicado)
 Disallow: /buscar
 
 # Paginas de test eliminadas
 Disallow: /test-articulo/
 Disallow: /test-zoom/
+
+# Rastreo responsable para bots no-Google
+Crawl-delay: 1
 
 Sitemap: https://nicaraguainformate.com/sitemap.xml
 Sitemap: https://nicaraguainformate.com/news-sitemap.xml

@@ -1,5 +1,6 @@
 ﻿import { adminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
+import { unstable_cache } from 'next/cache';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -15,26 +16,35 @@ function escapeXml(str: string): string {
     .replace(/"/g, '&quot;');
 }
 
-export async function GET() {
+async function fetchNewsSitemapRaw() {
   const cutoff = Timestamp.fromDate(new Date(Date.now() - 48 * 60 * 60 * 1000));
+  const snapshot = await adminDb
+    .collection('noticias')
+    .where('estado', '==', 'publicado')
+    .where('fecha', '>=', cutoff)
+    .orderBy('fecha', 'desc')
+    .limit(1000)
+    .get();
 
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      slug: data.slug,
+      titulo: data.titulo,
+      fecha: data.fecha,
+      categoria: data.categoria,
+    };
+  });
+}
+
+const cachedFetchNewsSitemap = unstable_cache(fetchNewsSitemapRaw, ['news-sitemap'], {
+  revalidate: 3600,
+  tags: ['news-sitemap'],
+});
+
+export async function GET() {
   try {
-    const snapshot = await adminDb
-      .collection('noticias')
-      .where('fecha', '>=', cutoff)
-      .orderBy('fecha', 'desc')
-      .limit(1000)
-      .get();
-
-    const articles = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          slug: data.slug,
-          titulo: data.titulo,
-          fecha: data.fecha,
-          categoria: data.categoria,
-        };
-      });
+    const articles = await cachedFetchNewsSitemap();
 
     // Google News Sitemap XML format
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
