@@ -101,13 +101,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const shouldNoindex = noticia.noindex === true;
 
+    // Para redes sociales usamos el título ORIGINAL (más legible para humanos)
+    // El SEO title (finalTitle) solo va en <title> para Google SERPs
+    const socialTitle = noticia.titulo || finalTitle;
+
     return {
       title: finalTitle,
       description,
       authors: [{ name: authorName }],
       alternates: { canonical: url },
       openGraph: {
-        title: finalTitle,
+        title: socialTitle,
         description,
         url,
         siteName: 'Nicaragua Informate',
@@ -122,7 +126,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       },
       twitter: {
         card: 'summary_large_image',
-        title: finalTitle,
+        title: socialTitle,
         description,
         images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.webp'],
       },
