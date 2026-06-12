@@ -103,7 +103,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const titleValidation = validateTitle(seoTitleResult);
     const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
 
-<<<<<<< HEAD
     // Meta description: truncado inteligente respetando palabras completas (140-160 chars óptimo para SERPs)
     const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
     let description = rawDescription;
@@ -112,11 +111,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description = cutAt > 0 ? description.slice(0, cutAt) + '…' : description.slice(0, 157) + '…';
     }
     const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
-=======
-    // Meta description: estrictamente 140-160 chars (sin excepciones)
-    const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
-    const description = strictMetaDescription(rawDescription);
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
