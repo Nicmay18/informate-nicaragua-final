@@ -23,9 +23,8 @@ const cachedGetRelatedNews = unstable_cache(
   ['related-news'],
   { revalidate: 600 }
 );
-export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
-export const revalidate = 3600; // ISR: revalida cada 1h, reduce drásticamente lecturas Firestore
+export const revalidate = 60; // ISR: revalida cada 60s para frescura Google News
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',

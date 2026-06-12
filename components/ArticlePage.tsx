@@ -269,6 +269,15 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
+        {/* Banner de calidad si el artículo está marcado para revisión editorial */}
+        {(noticia as any).necesitaRevision === true && (
+          <div style={{ margin: '16px 0', padding: '12px 16px', backgroundColor: '#fef3c7', borderLeft: '4px solid #f59e0b', borderRadius: '0 8px 8px 0' }}>
+            <p style={{ margin: 0, fontSize: 13, color: '#92400e', fontWeight: 500 }}>
+              Este artículo está siendo revisado por nuestro equipo editorial para garantizar la calidad de la información.
+            </p>
+          </div>
+        )}
+
         {/* Audio — lazy-loaded, no bloquea LCP */}
         <Suspense fallback={null}>
           <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />

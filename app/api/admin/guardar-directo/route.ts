@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 function verificarAuth(request: NextRequest): boolean {
@@ -48,6 +49,16 @@ export async function POST(request: NextRequest) {
 
     // Actualizar directamente con Admin SDK (ignora security rules)
     await db.collection('noticias').doc(id).update(updateData);
+
+    // Invalidar cachés afectadas
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
+    revalidateTag('news-sitemap');
+    revalidateTag('sitemap-news');
+    revalidatePath('/');
+    revalidatePath('/noticias');
+    revalidatePath('/sitemap.xml');
+    revalidatePath('/news-sitemap.xml');
 
     return NextResponse.json({
       success: true,

@@ -42,7 +42,7 @@ export default function AdsenseUnit({
   return (
     <div
       className={className}
-      style={{ display: 'block', textAlign: 'center', overflow: 'hidden', minHeight: 280, ...style }}
+      style={{ display: 'block', textAlign: 'center', overflow: 'hidden', minHeight: 280, backgroundColor: '#f9fafb', borderRadius: 8, ...style }}
       aria-label="Publicidad"
     >
       <ins
