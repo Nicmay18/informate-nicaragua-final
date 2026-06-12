@@ -21,8 +21,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!author) {
     return {
       title: 'Autor no encontrado',
+      robots: { index: false },
     };
   }
+
+  // Verificar si el autor tiene artículos para decidir indexación
+  const allNews = await getNews(100);
+  const hasArticles = allNews.some((n) => n.autor === author.name);
 
   return {
     title: `Artículos de ${author.name} | Nicaragua Informate`,
@@ -30,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     alternates: {
       canonical: `https://nicaraguainformate.com/autor/${slug}`,
     },
-    robots: { index: true, follow: true },
+    robots: hasArticles ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       title: `${author.name} — Nicaragua Informate`,
       description: author.bio,
