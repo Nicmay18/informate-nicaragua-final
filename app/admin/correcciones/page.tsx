@@ -8,6 +8,7 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getFirestore, collection, doc, getDocs, limit, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { categoryToSlug } from '@/lib/types';
+import AnalizadorPanel from '@/components/admin/AnalizadorPanel';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -339,6 +340,25 @@ export default function CorreccionesPage() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Analizador Forense */}
+        <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #334155', padding: 20, marginBottom: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 18, color: '#e2e8f0', marginBottom: 16 }}>
+            🔬 Analizador Forense — 6 Niveles
+          </h2>
+          {auditorData.length > 0 && (
+            <AnalizadorPanel
+              noticia={{
+                titulo: auditorData[0]?.titulo || '',
+                contenido: '',
+                resumen: '',
+                categoria: 'General',
+                autor: '',
+                slug: auditorData[0]?.slug || '',
+              }}
+            />
+          )}
         </div>
 
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', padding: 16 }}>
