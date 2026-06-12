@@ -41,14 +41,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Texto inválido (5-4500 caracteres)' }, { status: 400 });
     }
 
-<<<<<<< HEAD
-    if (!articleId || typeof articleId !== 'string' || articleId.length > 100) {
-=======
     // Sanitizar texto: quitar cualquier HTML/script que venga del CMS
     const sanitizedText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
     if (!articleId || typeof articleId !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(articleId) || articleId.length > 100) {
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
       return NextResponse.json({ error: 'articleId inválido' }, { status: 400 });
     }
 
@@ -100,13 +96,8 @@ export async function POST(req: NextRequest) {
       }
 
       return NextResponse.json(
-<<<<<<< HEAD
         { error: userError, detail: errText, status: response.status, provider: 'elevenlabs' },
         { status: 502 } // Bad Gateway: error upstream
-=======
-        { error: userError, status: response.status, provider: 'elevenlabs' },
-        { status: 502 }
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
       );
     }
 

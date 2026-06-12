@@ -9,8 +9,6 @@ import { getClientIp, isValidSlug } from '@/lib/ip';
 /** Rate limiter: máximo 10 vistas por IP por minuto */
 const viewLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 10 });
 
-<<<<<<< HEAD
-=======
 /** Cooldown de revalidación para evitar DoS por revalidatePath spam (máx 1 por minuto global) */
 let lastRevalidate = 0;
 const REVALIDATE_COOLDOWN_MS = 60_000;
@@ -30,7 +28,6 @@ function maybeRevalidate(slug: string, categoriaSlug: string | null) {
   }
 }
 
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 /** Control de métodos HTTP: solo POST permitido */
 export async function GET() {
   return NextResponse.json({ error: 'Método no permitido' }, { status: 405 });
@@ -83,25 +80,9 @@ export async function POST(request: NextRequest) {
     // 5. Acumular en batch (ahorro ~90% en costos Firestore)
     incrementView(docRef.id, docRef);
 
-<<<<<<< HEAD
-    // 6. Revalidación de caché (fire-and-forget, no bloquea respuesta)
-    try {
-      revalidateTag('news');
-      revalidatePath('/');
-      revalidatePath('/noticias');
-      revalidatePath(`/noticias/${slug}`);
-      const categoriaSlug = data.categoria ? categoryToSlug(data.categoria) : null;
-      if (categoriaSlug) {
-        revalidatePath(`/categoria/${categoriaSlug}`);
-      }
-    } catch (err) {
-      console.warn('[api/view] Falló la revalidación después de actualizar vistas:', err);
-    }
-=======
     // 6. Revalidación de caché con cooldown global (evita DoS por revalidatePath spam)
     const categoriaSlug = data.categoria ? categoryToSlug(data.categoria) : null;
     maybeRevalidate(slug, categoriaSlug);
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 
     // 7. Respuesta exitosa
     return NextResponse.json({

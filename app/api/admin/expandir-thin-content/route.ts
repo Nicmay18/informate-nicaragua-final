@@ -9,15 +9,9 @@ import { calcularScoreEditorial } from '@/utils/scoring';
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
-<<<<<<< HEAD
-  const validToken = process.env.ADMIN_API_KEY;
-  if (!validToken) {
-    console.warn('[expandir] ADMIN_API_KEY no configurado');
-=======
   const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
   if (!validToken) {
     console.warn('[expandir] Ni ADMIN_API_KEY ni TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR configurados');
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
     return false;
   }
   return token === validToken;
