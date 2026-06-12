@@ -1,0 +1,347 @@
+{
+  "fechaAuditoria": "2026-06-12T23:13:05.727Z",
+  "totalNoticias": 206,
+  "docsAfectados": 12,
+  "totalHallazgos": 13,
+  "porSeveridad": {
+    "CRÍTICO": 8,
+    "ALTO": 2,
+    "MEDIO": 3
+  },
+  "hallazgos": [
+    {
+      "docId": "CeqPObdhNdy5rBPPYcH5",
+      "slug": "apagon-afecta-a-miles-en-leon-y-poneloya-por-falla-electrica",
+      "titulo": "Trabajador fallece electrocutado durante labores en León",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": "Una tragedia laboral ha enlutado"
+    },
+    {
+      "docId": "XMFnv7gCDZtpNNP7wB69",
+      "slug": "minsa-reporta-tercer-caso-por-picaduras-de-insectos-en-chontales",
+      "titulo": "Minsa reporta tercer caso por picaduras de insectos en Chontales",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": " transformado en la tragedia familiar más doloro"
+    },
+    {
+      "docId": "UQfMofCdPniSsNvGFf7J",
+      "slug": "policia-investiga-incidente-en-carretera-costanera-rivas",
+      "titulo": "Policía investiga incidente en carretera Costanera, Rivas",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": "inó en una profunda tragedia para dos familias n"
+    },
+    {
+      "docId": "XKRkS7QqHf13v0urZg9C",
+      "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+      "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": "Una profunda tragedia ha dejado bajo luto"
+    },
+    {
+      "docId": "XKRkS7QqHf13v0urZg9C",
+      "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+      "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "campo": "metaDescription",
+      "palabra": "impactante",
+      "severidad": "CRÍTICO",
+      "razon": "Detectado como clickbait por Core Algorithm",
+      "contexto": " Matagalpa, tras el impactante hallazgo del cuerpo"
+    },
+    {
+      "docId": "4rdCg3m1oNikSJP4nZjH",
+      "slug": "managua-ciudadano-hondureno-fallece-tras-vuelco-de-camioneta",
+      "titulo": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": "ense suma una nueva tragedia vial a sus estadíst"
+    },
+    {
+      "docId": "8ePAwlFzkvYLwHi08zCi",
+      "slug": "autoridades-investigan-incidente-laboral-en-pozo-de-madriz",
+      "titulo": "Autoridades investigan incidente laboral en pozo de Madriz",
+      "campo": "metaDescription",
+      "palabra": "tragedia",
+      "severidad": "CRÍTICO",
+      "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+      "contexto": "grícolas terminó en tragedia la mañana de este s"
+    },
+    {
+      "docId": "nBDHAoiCgbp81dSmIYqT",
+      "slug": "policia-investiga-caso-en-sebaco-detienen-a-sospechoso",
+      "titulo": "Investigan delito grave de joven de 19 años en comunidad Molino Sur",
+      "campo": "metaDescription",
+      "palabra": "horror",
+      "severidad": "CRÍTICO",
+      "razon": "Google News penaliza por sensacionalismo excesivo",
+      "contexto": "Una mañana de horror vivió la comunidad "
+    },
+    {
+      "docId": "1PRR0VQRF8oXLfzFDhm5",
+      "slug": "oklahoma-evalua-impacto-de-fenomenos-climaticos",
+      "titulo": "Tornado deja 10 heridos y viviendas destruidas en Enid, Oklahoma",
+      "campo": "metaDescription",
+      "palabra": "alerta",
+      "severidad": "ALTO",
+      "razon": "Falso sentido de peligro — abusado por spam",
+      "contexto": "situación de máxima alerta tras el paso de una"
+    },
+    {
+      "docId": "o0Hd8UJZe7IhZN2zwj2g",
+      "slug": "ebola-avanza-en-congo-mientras-violencia-frena-respuesta-medica-mph0q8yw",
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "campo": "metaDescription",
+      "palabra": "alerta",
+      "severidad": "ALTO",
+      "razon": "Falso sentido de peligro — abusado por spam",
+      "contexto": "OMS alerta por expansión del é"
+    },
+    {
+      "docId": "LJTrq7D8iDUGWvO9kxaE",
+      "slug": "policia-investiga-hallazgo-en-carretera-de-el-jicaro",
+      "titulo": "Hallan a agricultor persona fallecida a balazos en El Jícaro;...",
+      "campo": "titulo",
+      "palabra": "...",
+      "severidad": "MEDIO",
+      "razon": "Puntos suspensivos en título — truncado o incompleto",
+      "contexto": "s en El Jícaro;..."
+    },
+    {
+      "docId": "RCjqgw3ea2K6cZHXmbRV",
+      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua-mpu1rbf9",
+      "titulo": "Tres personas fallecen en accidentes de motocicleta en Rivas y...",
+      "campo": "titulo",
+      "palabra": "...",
+      "severidad": "MEDIO",
+      "razon": "Puntos suspensivos en título — truncado o incompleto",
+      "contexto": "leta en Rivas y..."
+    },
+    {
+      "docId": "Bd0FR40BQL9MYKXutpSr",
+      "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
+      "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en...",
+      "campo": "titulo",
+      "palabra": "...",
+      "severidad": "MEDIO",
+      "razon": "Puntos suspensivos en título — truncado o incompleto",
+      "contexto": "grar ChatGPT en..."
+    }
+  ],
+  "resumenPorDoc": {
+    "CeqPObdhNdy5rBPPYcH5": {
+      "titulo": "Trabajador fallece electrocutado durante labores en León",
+      "slug": "apagon-afecta-a-miles-en-leon-y-poneloya-por-falla-electrica",
+      "hallazgos": [
+        {
+          "docId": "CeqPObdhNdy5rBPPYcH5",
+          "slug": "apagon-afecta-a-miles-en-leon-y-poneloya-por-falla-electrica",
+          "titulo": "Trabajador fallece electrocutado durante labores en León",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": "Una tragedia laboral ha enlutado"
+        }
+      ]
+    },
+    "XMFnv7gCDZtpNNP7wB69": {
+      "titulo": "Minsa reporta tercer caso por picaduras de insectos en Chontales",
+      "slug": "minsa-reporta-tercer-caso-por-picaduras-de-insectos-en-chontales",
+      "hallazgos": [
+        {
+          "docId": "XMFnv7gCDZtpNNP7wB69",
+          "slug": "minsa-reporta-tercer-caso-por-picaduras-de-insectos-en-chontales",
+          "titulo": "Minsa reporta tercer caso por picaduras de insectos en Chontales",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": " transformado en la tragedia familiar más doloro"
+        }
+      ]
+    },
+    "UQfMofCdPniSsNvGFf7J": {
+      "titulo": "Policía investiga incidente en carretera Costanera, Rivas",
+      "slug": "policia-investiga-incidente-en-carretera-costanera-rivas",
+      "hallazgos": [
+        {
+          "docId": "UQfMofCdPniSsNvGFf7J",
+          "slug": "policia-investiga-incidente-en-carretera-costanera-rivas",
+          "titulo": "Policía investiga incidente en carretera Costanera, Rivas",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": "inó en una profunda tragedia para dos familias n"
+        }
+      ]
+    },
+    "XKRkS7QqHf13v0urZg9C": {
+      "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+      "hallazgos": [
+        {
+          "docId": "XKRkS7QqHf13v0urZg9C",
+          "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+          "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": "Una profunda tragedia ha dejado bajo luto"
+        },
+        {
+          "docId": "XKRkS7QqHf13v0urZg9C",
+          "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+          "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+          "campo": "metaDescription",
+          "palabra": "impactante",
+          "severidad": "CRÍTICO",
+          "razon": "Detectado como clickbait por Core Algorithm",
+          "contexto": " Matagalpa, tras el impactante hallazgo del cuerpo"
+        }
+      ]
+    },
+    "4rdCg3m1oNikSJP4nZjH": {
+      "titulo": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+      "slug": "managua-ciudadano-hondureno-fallece-tras-vuelco-de-camioneta",
+      "hallazgos": [
+        {
+          "docId": "4rdCg3m1oNikSJP4nZjH",
+          "slug": "managua-ciudadano-hondureno-fallece-tras-vuelco-de-camioneta",
+          "titulo": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": "ense suma una nueva tragedia vial a sus estadíst"
+        }
+      ]
+    },
+    "8ePAwlFzkvYLwHi08zCi": {
+      "titulo": "Autoridades investigan incidente laboral en pozo de Madriz",
+      "slug": "autoridades-investigan-incidente-laboral-en-pozo-de-madriz",
+      "hallazgos": [
+        {
+          "docId": "8ePAwlFzkvYLwHi08zCi",
+          "slug": "autoridades-investigan-incidente-laboral-en-pozo-de-madriz",
+          "titulo": "Autoridades investigan incidente laboral en pozo de Madriz",
+          "campo": "metaDescription",
+          "palabra": "tragedia",
+          "severidad": "CRÍTICO",
+          "razon": "Sensacionalismo emocional — Google News marca como clickbait",
+          "contexto": "grícolas terminó en tragedia la mañana de este s"
+        }
+      ]
+    },
+    "nBDHAoiCgbp81dSmIYqT": {
+      "titulo": "Investigan delito grave de joven de 19 años en comunidad Molino Sur",
+      "slug": "policia-investiga-caso-en-sebaco-detienen-a-sospechoso",
+      "hallazgos": [
+        {
+          "docId": "nBDHAoiCgbp81dSmIYqT",
+          "slug": "policia-investiga-caso-en-sebaco-detienen-a-sospechoso",
+          "titulo": "Investigan delito grave de joven de 19 años en comunidad Molino Sur",
+          "campo": "metaDescription",
+          "palabra": "horror",
+          "severidad": "CRÍTICO",
+          "razon": "Google News penaliza por sensacionalismo excesivo",
+          "contexto": "Una mañana de horror vivió la comunidad "
+        }
+      ]
+    },
+    "1PRR0VQRF8oXLfzFDhm5": {
+      "titulo": "Tornado deja 10 heridos y viviendas destruidas en Enid, Oklahoma",
+      "slug": "oklahoma-evalua-impacto-de-fenomenos-climaticos",
+      "hallazgos": [
+        {
+          "docId": "1PRR0VQRF8oXLfzFDhm5",
+          "slug": "oklahoma-evalua-impacto-de-fenomenos-climaticos",
+          "titulo": "Tornado deja 10 heridos y viviendas destruidas en Enid, Oklahoma",
+          "campo": "metaDescription",
+          "palabra": "alerta",
+          "severidad": "ALTO",
+          "razon": "Falso sentido de peligro — abusado por spam",
+          "contexto": "situación de máxima alerta tras el paso de una"
+        }
+      ]
+    },
+    "o0Hd8UJZe7IhZN2zwj2g": {
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "slug": "ebola-avanza-en-congo-mientras-violencia-frena-respuesta-medica-mph0q8yw",
+      "hallazgos": [
+        {
+          "docId": "o0Hd8UJZe7IhZN2zwj2g",
+          "slug": "ebola-avanza-en-congo-mientras-violencia-frena-respuesta-medica-mph0q8yw",
+          "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+          "campo": "metaDescription",
+          "palabra": "alerta",
+          "severidad": "ALTO",
+          "razon": "Falso sentido de peligro — abusado por spam",
+          "contexto": "OMS alerta por expansión del é"
+        }
+      ]
+    },
+    "LJTrq7D8iDUGWvO9kxaE": {
+      "titulo": "Hallan a agricultor persona fallecida a balazos en El Jícaro;...",
+      "slug": "policia-investiga-hallazgo-en-carretera-de-el-jicaro",
+      "hallazgos": [
+        {
+          "docId": "LJTrq7D8iDUGWvO9kxaE",
+          "slug": "policia-investiga-hallazgo-en-carretera-de-el-jicaro",
+          "titulo": "Hallan a agricultor persona fallecida a balazos en El Jícaro;...",
+          "campo": "titulo",
+          "palabra": "...",
+          "severidad": "MEDIO",
+          "razon": "Puntos suspensivos en título — truncado o incompleto",
+          "contexto": "s en El Jícaro;..."
+        }
+      ]
+    },
+    "RCjqgw3ea2K6cZHXmbRV": {
+      "titulo": "Tres personas fallecen en accidentes de motocicleta en Rivas y...",
+      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua-mpu1rbf9",
+      "hallazgos": [
+        {
+          "docId": "RCjqgw3ea2K6cZHXmbRV",
+          "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua-mpu1rbf9",
+          "titulo": "Tres personas fallecen en accidentes de motocicleta en Rivas y...",
+          "campo": "titulo",
+          "palabra": "...",
+          "severidad": "MEDIO",
+          "razon": "Puntos suspensivos en título — truncado o incompleto",
+          "contexto": "leta en Rivas y..."
+        }
+      ]
+    },
+    "Bd0FR40BQL9MYKXutpSr": {
+      "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en...",
+      "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
+      "hallazgos": [
+        {
+          "docId": "Bd0FR40BQL9MYKXutpSr",
+          "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
+          "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en...",
+          "campo": "titulo",
+          "palabra": "...",
+          "severidad": "MEDIO",
+          "razon": "Puntos suspensivos en título — truncado o incompleto",
+          "contexto": "grar ChatGPT en..."
+        }
+      ]
+    }
+  }
+}
