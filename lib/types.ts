@@ -27,6 +27,7 @@ export interface Noticia {
   metaDescription?: string;
   keywords?: string;
   scoreCalidad?: number;
+  noindex?: boolean;
 }
 
 /**

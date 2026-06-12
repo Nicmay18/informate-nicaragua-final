@@ -48,10 +48,11 @@ export async function generateStaticParams() {
   try {
     const slugs = await getAllSlugs();
     if (slugs.length > 0) {
-      return slugs.map((slug) => ({ slug }));
+      // Limitar a 100 para evitar timeout en build de Vercel
+      return slugs.slice(0, 100).map((slug) => ({ slug }));
     }
   } catch {
-    // Firebase falló, generaremos dinámicamente
+    // Firebase falló, ISR fallback generará dinámicamente
   }
   return [];
 }
@@ -99,6 +100,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
+    const shouldNoindex = noticia.noindex === true;
+
     return {
       title: finalTitle,
       description,
@@ -124,17 +127,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         description,
         images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.webp'],
       },
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-          'max-snippet': -1,
-          'max-image-preview': 'large',
-          'max-video-preview': -1,
-        },
-      },
+      robots: shouldNoindex
+        ? { index: false, follow: false }
+        : {
+            index: true,
+            follow: true,
+            googleBot: {
+              index: true,
+              follow: true,
+              'max-snippet': -1,
+              'max-image-preview': 'large',
+              'max-video-preview': -1,
+            },
+          },
       other: {
         'article:author': authorName,
         'article:section': category,

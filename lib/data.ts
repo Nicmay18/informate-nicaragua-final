@@ -147,6 +147,7 @@ function mapDocToNoticia(d: any): Noticia {
     pieFoto: data.pieFoto,
     metaDescription: data.metaDescription || data.metaDescripcion || '',
     keywords: data.keywords || '',
+    noindex: !!data.noindex,
   };
 }
 
@@ -397,6 +398,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         pieFoto: data.pieFoto,
         metaDescription: data.metaDescription || data.metaDescripcion || '',
         keywords: data.keywords || '',
+        noindex: !!data.noindex,
       };
     }
   } catch (err) {
