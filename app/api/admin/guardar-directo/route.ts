@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
@@ -23,6 +24,35 @@ export async function POST(request: NextRequest) {
 
     if (!id || !titulo || !contenido) {
       return NextResponse.json({ error: 'Faltan campos obligatorios: id, titulo, contenido' }, { status: 400 });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ANALIZADOR FORENSE — BLOQUEO DE PUBLICACION
+    // ═══════════════════════════════════════════════════════════════
+    const noticiaInput: NoticiaInput = {
+      titulo: titulo.trim(),
+      contenido: contenido.trim(),
+      resumen: resumen?.trim() || '',
+      categoria: categoria || 'General',
+      autor: body.autor || '',
+      fecha: body.fecha || new Date().toISOString(),
+      fechaActualizacion: body.fechaActualizacion,
+      imagenDestacada: imagen || body.imagenDestacada,
+      slug: body.slug || '',
+      palabrasClave: body.palabrasClave || [],
+    };
+
+    const analisis = await analizarNoticia(noticiaInput);
+
+    if (!analisis.aprobado) {
+      return NextResponse.json({
+        error: 'La noticia no cumple los estandares de calidad',
+        nivel: analisis.nivel,
+        puntuacion: analisis.puntuacion,
+        acciones: analisis.accionesRequeridas,
+        filtros: analisis.filtros,
+        metadataSugerida: analisis.metadataSugerida,
+      }, { status: 400 });
     }
 
     const db = getAdminDb();
