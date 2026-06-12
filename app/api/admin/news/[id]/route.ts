@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { generateSlug } from '@/lib/slug';
@@ -47,6 +47,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     revalidateTag('latest-news');
     revalidateTag('trending-news');
+
+    // Revalidar pagina del articulo individual (ISR cache)
+    const slug = snap.data()?.slug || id;
+    revalidatePath('/');
+    revalidatePath('/noticias');
+    revalidatePath(`/noticias/${slug}`);
 
     return NextResponse.json({ success: true });
   } catch (err) {

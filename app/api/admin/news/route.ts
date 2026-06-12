@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
@@ -104,6 +104,11 @@ export async function POST(request: NextRequest) {
 
     revalidateTag('latest-news');
     revalidateTag('trending-news');
+
+    // Revalidar paginas afectadas
+    revalidatePath('/');
+    revalidatePath('/noticias');
+    revalidatePath(`/noticias/${slug}`);
 
     return NextResponse.json({ success: true, id: docRef.id, slug });
   } catch (err) {
