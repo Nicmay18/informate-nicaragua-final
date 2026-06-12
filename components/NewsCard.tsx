@@ -66,6 +66,11 @@ export default function NewsCard({ noticia }: NewsCardProps) {
               <span aria-hidden="true">📅</span>
               {timeAgo}
             </time>
+            {noticia.fechaActualizacion && (
+              <time className="news-card-updated" dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ fontSize:12, color:'#991b1b', fontWeight: 500, whiteSpace:'nowrap' }}>
+                Actualizado {safeTimeAgo(noticia.fechaActualizacion)}
+              </time>
+            )}
             {noticia.autor && (
               <span className="news-card-author" style={{ fontSize:12, color:'var(--text-secondary,#6b7280)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:'100%' }}>{noticia.autor}</span>
             )}

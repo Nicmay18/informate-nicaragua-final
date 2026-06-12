@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { isAdsenseSafePath } from '@/lib/adsense-guard';
 
 interface ThirdPartyConfig {
   gtmId?: string;
@@ -109,8 +110,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
 
     // ─── 2. Google Ads: SOLO al scroll (nunca automático) ───
     const loadAds = () => {
-      // Exclusión centralizada vía adsense-guard
-      const { isAdsenseSafePath } = require('@/lib/adsense-guard');
+      // Exclusión centralizada vía adsense-guard (import estático al tope del archivo)
       const path = window.location.pathname.toLowerCase();
       if (!isAdsenseSafePath(path)) {
         console.log('[AdSense] Bloqueado en:', path);

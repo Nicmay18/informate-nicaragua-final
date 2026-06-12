@@ -280,6 +280,11 @@ function Card({ noticia }: { noticia: Noticia }) {
         <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta">
           <time className="ni-card__time" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+          {noticia.fechaActualizacion && (
+            <time className="ni-card__updated" dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ color: '#991b1b', fontWeight: 500, fontSize: 12 }}>
+              Actualizado {timeAgo(noticia.fechaActualizacion)}
+            </time>
+          )}
           <span className="ni-card__author">{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
       </div>
