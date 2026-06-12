@@ -139,15 +139,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-        <link rel="dns-prefetch" href="https://images.weserv.nl" />
-        <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+<<<<<<< HEAD
         {/* Preconnect a Google Fonts eliminado — no se usan fuentes externas, Next.js/font las auto-hospeda */}
         {/* AdSense cargado vía ThirdPartyScripts (lazy al scroll) */}
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
+=======
+        {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
+        <style>{criticalCss}</style>
+        <AdSenseLoader />
+        <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
+        {/* JSON-LD escapado para prevenir cierre prematuro de script */}
+>>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildOrganizationJsonLdEnhanced()) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       </head>

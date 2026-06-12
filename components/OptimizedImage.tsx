@@ -9,6 +9,7 @@ interface OptimizedImageProps {
   variant?: 'hero' | 'card' | 'sidebar' | 'thumbnail' | 'og';
   className?: string;
   priority?: boolean;
+  fetchPriority?: 'high' | 'low' | 'auto';
   fill?: boolean;
   width?: number;
   height?: number;
@@ -37,6 +38,7 @@ export default function OptimizedImage({
   variant = 'card',
   className = '',
   priority = false,
+  fetchPriority,
   fill = false,
   width,
   height,
@@ -50,8 +52,6 @@ export default function OptimizedImage({
   const finalWidth = width ?? config.width;
   const finalHeight = height ?? config.height;
   const sizes = config.sizes;
-
-  const isLocal = src.startsWith('/');
 
   const containerStyle: React.CSSProperties = fill
     ? { position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }
@@ -85,6 +85,7 @@ export default function OptimizedImage({
         height={fill ? undefined : finalHeight}
         sizes={sizes}
         priority={priority}
+        fetchPriority={fetchPriority}
         quality={75}
         onLoad={() => setLoaded(true)}
         onError={() => { setLoaded(true); onError?.(); }}
@@ -93,7 +94,7 @@ export default function OptimizedImage({
           opacity: loaded ? 1 : 0,
           transition: 'opacity 0.3s ease',
         }}
-        unoptimized={unoptimized || isLocal}
+        unoptimized={unoptimized}
       />
     </div>
   );

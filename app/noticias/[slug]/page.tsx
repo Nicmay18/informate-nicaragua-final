@@ -1,16 +1,35 @@
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
   generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
+<<<<<<< HEAD
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
 
+=======
+import { generateMetaDescription, generateImageAlt } from '@/lib/seo/meta';
+import { escapeJsonLd } from '@/lib/sanitize';
+
+const cachedGetNewsBySlug = unstable_cache(
+  async (slug: string) => getNewsBySlug(slug),
+  ['news-by-slug'],
+  { revalidate: 300 }
+);
+
+const cachedGetRelatedNews = unstable_cache(
+  async (category: string, slug: string, limit: number) => getRelatedNews(category, slug, limit),
+  ['related-news'],
+  { revalidate: 600 }
+);
+
+>>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 export const dynamic = 'error'; // Fuerza SSG; si slug no está en generateStaticParams, 404
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
 export const revalidate = 3600; // ISR: revalida cada 1h, reduce drásticamente lecturas Firestore
@@ -44,10 +63,18 @@ export async function generateStaticParams() {
   return [];
 }
 
+/** Trunca descripción a rango estricto 140-160 chars para evitar penalización SERP */
+function strictMetaDescription(raw: string): string {
+  if (!raw) return '';
+  if (raw.length <= 160) return raw;
+  const cutAt = raw.lastIndexOf(' ', 157);
+  return cutAt > 0 ? raw.slice(0, cutAt) + '…' : raw.slice(0, 157) + '…';
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const noticia = await getNewsBySlug(slug);
+    const noticia = await cachedGetNewsBySlug(slug);
     if (!noticia) {
       return {
         title: 'Noticia no encontrada',
@@ -55,11 +82,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       };
     }
 
-    const url = `https://nicaraguainformate.com/noticias/${slug}`;
+    // Slug obsoleto: redirigir al canonical en lugar de servir metadatos duplicados
+    if (noticia.slug && noticia.slug !== slug) {
+      redirect(`/noticias/${noticia.slug}`);
+    }
+
+    const normalizedSlug = noticia.slug || slug;
+    const url = `https://nicaraguainformate.com/noticias/${normalizedSlug}`;
     const category = noticia.categoria || 'General';
     const seoTipo = toNoticiaTipo(category);
 
-    // SEO Title optimization
+    // SEO Title optimization (máx 60 chars para evitar truncamiento en SERPs)
     const seoTitleResult = generateOptimizedTitle({
       tipo: seoTipo,
       tituloOriginal: noticia.titulo,
@@ -70,6 +103,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const titleValidation = validateTitle(seoTitleResult);
     const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
 
+<<<<<<< HEAD
     // Meta description: truncado inteligente respetando palabras completas (140-160 chars óptimo para SERPs)
     const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
     let description = rawDescription;
@@ -78,13 +112,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description = cutAt > 0 ? description.slice(0, cutAt) + '…' : description.slice(0, 157) + '…';
     }
     const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
+=======
+    // Meta description: estrictamente 140-160 chars (sin excepciones)
+    const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
+    const description = strictMetaDescription(rawDescription);
+>>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     return {
       title: finalTitle,
       description,
-      keywords,
       authors: [{ name: authorName }],
       alternates: { canonical: url },
       openGraph: {
@@ -97,7 +135,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
-        tags: keywords.split(', ').slice(0, 5),
         images: noticia.imagen
           ? [{ url: noticia.imagen, width: 1200, height: 630, alt: imageAlt }]
           : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
@@ -135,10 +172,15 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
 
   try {
-    const noticia = await getNewsBySlug(slug);
+    const noticia = await cachedGetNewsBySlug(slug);
     if (!noticia) return notFound();
 
-    const related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
+    // Si el slug en Firestore es diferente de la URL, redirigir 301 al canonical
+    if (noticia.slug && noticia.slug !== slug) {
+      redirect(`/noticias/${noticia.slug}`);
+    }
+
+    const related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 

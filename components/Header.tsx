@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const CATEGORIES = [
@@ -14,10 +15,12 @@ const CATEGORIES = [
 ];
 
 export default function Header() {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerDateIso, setHeaderDateIso] = useState('');
   const [headerDateHuman, setHeaderDateHuman] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
     const now = new Date();
@@ -30,7 +33,7 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/buscar?q=${encodeURIComponent(searchQuery.trim())}`;
+      router.push(`/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -71,7 +74,7 @@ export default function Header() {
                 placeholder="Buscar..."
                 aria-label="Buscar noticias"
                 style={{
-                  width: 140,
+                  width: searchFocused ? 200 : 140,
                   height: 36,
                   padding: '0 12px',
                   border: '1px solid #e5e5e5',
@@ -79,9 +82,10 @@ export default function Header() {
                   fontSize: 13,
                   outline: 'none',
                   transition: 'width 0.2s, box-shadow 0.2s',
+                  boxShadow: searchFocused ? '0 0 0 2px rgba(0,0,0,0.05)' : 'none',
                 }}
-                onFocus={(e) => { e.currentTarget.style.width = '200px'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.05)'; }}
-                onBlur={(e) => { if (!searchQuery) { e.currentTarget.style.width = '140px'; e.currentTarget.style.boxShadow = 'none'; } }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
               />
               <button
                 type="submit"

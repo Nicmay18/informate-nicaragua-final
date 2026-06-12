@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import OptimizedImage from './OptimizedImage';
-import { useRouter } from 'next/navigation';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, extractPoints } from '@/lib/formateo';
 import { injectTocIds } from '@/lib/toc';
@@ -30,7 +29,6 @@ interface ArticlePageProps {
 }
 
 export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
-  const router = useRouter();
   const FONT_STEPS = useMemo(() => [0.9, 1, 1.1, 1.2], []);
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
@@ -50,11 +48,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   useEffect(() => {
     if (!noticia.slug) return;
     const controller = new AbortController();
-    fetch('/api/view', {
+    // CORREGIDO: usa el endpoint correcto /api/views/[slug] (no /api/view)
+    fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,
-      body: JSON.stringify({ slug: noticia.slug }),
     })
       .then(async (res) => {
         if (!res.ok) return null;
@@ -76,20 +73,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     };
   }, [noticia.id, noticia.slug]);
 
-  if (!noticia) {
-    return (
-      <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
-        <p style={{ color: '#6b7280' }}>Noticia no encontrada</p>
-        <button onClick={() => router.back()} style={{ marginTop: 16, color: '#991b1b', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>← Volver</button>
-      </div>
-    );
-  }
-
   const category = getCategory(noticia.categoria);
   const url = `${SITE_CONFIG.url}/noticias/${noticia.slug}`;
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
   const vistas = fmtViews(views);
-  const tags = [noticia.categoria, ...extractPoints(noticia.titulo, 3)];
+  const tags = useMemo(() => [noticia.categoria, ...extractPoints(noticia.titulo, 3)], [noticia.categoria, noticia.titulo]);
   const readAlso = related.slice(0, 3);
 
   const pieDeFoto = noticia.pieFoto?.trim()
@@ -146,7 +134,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const imgContainerStyle: React.CSSProperties = {
     position: 'relative',
     width: '100%',
-    height: 480,
+    aspectRatio: '16 / 9',
     maxHeight: 480,
     borderRadius: 12,
     overflow: 'hidden',
@@ -260,7 +248,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </div>
         </div>
 
-        {/* Imagen destacada — ALTURA FIJA 480px */}
+        {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
           <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             <meta itemProp="url" content={noticia.imagen} />
@@ -270,6 +258,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               variant="hero"
               fill
               priority
+              fetchPriority="high"
             />
             <figcaption style={captionStyle}>
               <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
@@ -286,7 +275,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </Suspense>
 
         {/* 3 Puntos Clave */}
-        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
+        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} />
 
         {/* Tabla de contenidos (artículos largos) */}
         {showToc && (
@@ -387,21 +376,25 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {readAlso.length > 0 && (
           <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
             {readAlso[0] && (
-              <Link href={`/noticias/${readAlso[0].slug}`} style={navCardStyle}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
-                  Anterior
-                </span>
-                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[0].titulo}</p>
+              <Link href={`/noticias/${readAlso[0].slug}`} style={navCardStyle} legacyBehavior>
+                <a style={navCardStyle}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
+                    Anterior
+                  </span>
+                  <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[0].titulo}</p>
+                </a>
               </Link>
             )}
             {readAlso[1] && (
-              <Link href={`/noticias/${readAlso[1].slug}`} style={{ ...navCardStyle, textAlign: 'right' }}>
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
-                  Siguiente
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6" /></svg>
-                </span>
-                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[1].titulo}</p>
+              <Link href={`/noticias/${readAlso[1].slug}`} style={{ ...navCardStyle, textAlign: 'right' }} legacyBehavior>
+                <a style={{ ...navCardStyle, textAlign: 'right' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+                    Siguiente
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6" /></svg>
+                  </span>
+                  <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[1].titulo}</p>
+                </a>
               </Link>
             )}
           </nav>
@@ -409,7 +402,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Volver al inicio */}
         <div style={{ marginTop: 24, textAlign: 'center' }}>
-          <Link
+          <a
             href="/"
             style={{
               display: 'inline-flex',
@@ -429,15 +422,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
             Volver al inicio
-          </Link>
+          </a>
         </div>
 
-        {/* Multiplex Ad — antes de relacionadas */}
-        <AdsenseUnit
-          slot="7942423751"
-          format="autorelaxed"
-          style={{ margin: '40px 0 0' }}
-        />
+        {/* Multiplex Ad — lazy-loaded para no bloquear LCP */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="7942423751"
+            format="autorelaxed"
+            style={{ margin: '40px 0 0' }}
+          />
+        </Suspense>
 
         {/* Related News */}
         {related.length > 3 && (
@@ -462,16 +457,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </section>
         )}
 
-        {/* Comments */}
+        {/* Comments — placeholder sin funcionalidad para evitar confusión */}
         <section style={{ marginTop: 48 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Comentarios (0)</h2>
-          <textarea
-            style={{ width: '100%', padding: 16, border: '1px solid #e5e5e5', borderRadius: 12, resize: 'none', fontFamily: 'inherit', fontSize: 15, minHeight: 100 }}
-            placeholder="¿Qué opinas sobre esta noticia? Comparte tu perspectiva..."
-          />
-          <button style={{ marginTop: 8, padding: '10px 24px', backgroundColor: '#991b1b', color: '#fff', fontWeight: 600, borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 15 }}>
-            Publicar comentario
-          </button>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Comentarios</h2>
+          <p style={{ color: '#6b7280', fontSize: 14 }}>Los comentarios estarán disponibles próximamente.</p>
         </section>
 
       </article>
