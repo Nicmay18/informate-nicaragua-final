@@ -144,7 +144,8 @@ async function auditar() {
     const h2Count = detectarH2(contenido);
 
     const criterios = {
-      titulo65: titulo.length >= 55 && titulo.length <= 65,
+      tituloMax65: titulo.length <= 65,
+      tituloMin30: titulo.length >= 30,
       extension500: palabras >= 500,
       lead20: leadPalabras >= 20,
       ceroSensacionalistas: sensacionalistas.length === 0,
@@ -171,7 +172,7 @@ async function auditar() {
       fecha: d.fecha?.toDate ? d.fecha.toDate().toISOString().slice(0, 10) : 'unknown',
     };
 
-    if (!criterios.titulo65 && !aprobada) {
+    if (!criterios.tituloMax65 && !aprobada) {
       item.opcionesTitulo = generarOpcionesTitulo(titulo, d.categoria);
     }
 
@@ -186,7 +187,8 @@ async function auditar() {
 
   // Resumen por categoría de fallo
   const fallos = {
-    titulo65: resultados.filter(r => !r.criterios.titulo65).length,
+    tituloMax65: resultados.filter(r => !r.criterios.tituloMax65).length,
+    tituloMin30: resultados.filter(r => !r.criterios.tituloMin30).length,
     extension500: resultados.filter(r => !r.criterios.extension500).length,
     lead20: resultados.filter(r => !r.criterios.lead20).length,
     sensacionalistas: resultados.filter(r => !r.criterios.ceroSensacionalistas).length,
@@ -197,7 +199,8 @@ async function auditar() {
   console.log('═'.repeat(70));
   console.log('📋 RESUMEN DE CRITERIOS FALLIDOS:');
   console.log('═'.repeat(70));
-  console.log(`  Título fuera de 55-65   : ${fallos.titulo65} noticias`);
+  console.log(`  Título >65 chars        : ${fallos.tituloMax65} noticias`);
+  console.log(`  Título <30 chars        : ${fallos.tituloMin30} noticias`);
   console.log(`  Extensión <500 palabras : ${fallos.extension500} noticias`);
   console.log(`  Lead <20 palabras      : ${fallos.lead20} noticias`);
   console.log(`  Adjetivos sensacionalistas: ${fallos.sensacionalistas} noticias`);
@@ -211,7 +214,7 @@ async function auditar() {
     console.log('─'.repeat(70));
     rechazadas.slice(0, 20).forEach((r, i) => {
       const fallosList = [];
-      if (!r.criterios.titulo65) fallosList.push(`titulo(${r.tituloLength})`);
+      if (!r.criterios.tituloMax65) fallosList.push(`titulo(${r.tituloLength})`);
       if (!r.criterios.extension500) fallosList.push(`ext(${r.palabras})`);
       if (!r.criterios.lead20) fallosList.push(`lead(${r.leadPalabras})`);
       if (!r.criterios.ceroSensacionalistas) fallosList.push(`sensacionalista(${r.sensacionalistas.join(', ')})`);
