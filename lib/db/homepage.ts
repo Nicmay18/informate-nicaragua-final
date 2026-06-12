@@ -99,10 +99,6 @@ function mapNoticia(d: any): Noticia {
 }
 
 // ============================================================================
-<<<<<<< HEAD
-// HOME: NOTICIAS RECIENTES (todas las categorías visibles)
-// ============================================================================
-=======
 // CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
 // TTL = 15 segundos — suficiente para que ISR de 60s no dispare múltiples queries
 // ============================================================================
@@ -110,7 +106,6 @@ interface CacheEntry {
   data: Noticia[];
   expiresAt: number;
 }
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 
 let _fetchCache: CacheEntry | null = null;
 
@@ -140,30 +135,12 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
  */
 async function _getLatestNewsRaw(limitCount: number = 30): Promise<Noticia[]> {
   try {
-<<<<<<< HEAD
-    const db = getAdminDb();
-
-    // Traemos las últimas 200 noticias SIN orderBy (el índice está roto)
-    const snap = await db
-      .collection('noticias')
-      .limit(200)
-      .get();
-
-    const noticias = snap.docs
-      .map(mapNoticia)
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(0, limitCount);
-
-    console.log(`[homepage.ts] getLatestNews: ${snap.docs.length} docs fetched, ${noticias.length} news returned (server-side sort)`);
-    return noticias;
-=======
     const noticias = await fetchAllNoticias();
     const sorted = noticias
       .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, limitCount);
     console.log(`[homepage.ts] getLatestNews: ${noticias.length} cached docs, ${sorted.length} returned`);
     return sorted;
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
     return [];
@@ -181,21 +158,6 @@ async function _getTrendingNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
   try {
     const { Timestamp } = await import('firebase-admin/firestore');
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-<<<<<<< HEAD
-    const snap = await db
-      .collection('noticias')
-      .limit(200)
-      .get();
-
-    const noticias = snap.docs.map(mapNoticia);
-
-    // Ordenar por fecha descendente server-side
-    const sortedByDate = noticias
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-
-    // Filtrar últimos 7 días + con vistas
-=======
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
     const cutoffMs = cutoff7.toDate().getTime();
 
     const noticias = await fetchAllNoticias();
@@ -214,10 +176,7 @@ async function _getTrendingNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
       return recentWithViews.slice(0, limitCount);
     }
 
-<<<<<<< HEAD
     // Fallback: noticias más recientes
-=======
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
     return sortedByDate.slice(0, limitCount);
   } catch (err) {
     console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));

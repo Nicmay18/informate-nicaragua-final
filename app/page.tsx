@@ -54,14 +54,6 @@ export const metadata: Metadata = {
   },
 };
 
-<<<<<<< HEAD
-// ============================================================================
-// ROMPER CACHÉ ESTÁTICO: el carrusel y listados siempre traen datos frescos
-// ============================================================================
-export const revalidate = 60;
-
-=======
->>>>>>> be8cfa629ad08a4ed74a06dc98735479b61e6361
 export default async function HomePage() {
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];

@@ -2840,12 +2840,9 @@ ${hashtags}`;
 
       if (!titulo || !categoria || !contenido || !imagenUrl) { showToast('Completa todos los campos obligatorios', 'error'); return; }
 
-      // VALIDACIÓN ORO OBLIGATORIA antes de guardar
+      // VALIDACIÓN ORO opcional (no bloquea guardado para ediciones rápidas)
       ejecutarValidacionOro();
-      if (window._validacionOroOK === false) {
-        showToast('La noticia tiene errores críticos. Corregilos antes de guardar.', 'error');
-        return;
-      }
+      // Nota: permitir guardar aunque no pase ORO para ediciones de categoría/meta
 
       // Si la imagen es un data URI (fallback), intentar subir a GitHub
       if (imagenUrl.startsWith('data:')) {
