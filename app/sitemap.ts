@@ -177,8 +177,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const articles = await cachedGetNews(); // Cacheado: revalida cada 1h
 
-    // Excluir artículos con slugs tóxicos del sitemap (AdSense remediation)
-    const cleanArticles = articles.filter(article => !isToxicSlug(article.slug));
+    // Excluir artículos con slugs tóxicos o noindex del sitemap
+    const cleanArticles = articles.filter(article => !isToxicSlug(article.slug) && article.noindex !== true);
 
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = safeDate(article.fecha);

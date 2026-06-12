@@ -47,12 +47,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     revalidateTag('latest-news');
     revalidateTag('trending-news');
+    revalidateTag('news-sitemap');
+    revalidateTag('sitemap-news');
 
     // Revalidar pagina del articulo individual (ISR cache)
     const slug = snap.data()?.slug || id;
     revalidatePath('/');
     revalidatePath('/noticias');
     revalidatePath(`/noticias/${slug}`);
+    revalidatePath('/news-sitemap.xml');
+    revalidatePath('/sitemap.xml');
 
     return NextResponse.json({ success: true });
   } catch (err) {

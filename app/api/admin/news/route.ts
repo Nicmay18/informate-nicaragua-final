@@ -104,11 +104,15 @@ export async function POST(request: NextRequest) {
 
     revalidateTag('latest-news');
     revalidateTag('trending-news');
+    revalidateTag('news-sitemap');
+    revalidateTag('sitemap-news');
 
     // Revalidar paginas afectadas
     revalidatePath('/');
     revalidatePath('/noticias');
     revalidatePath(`/noticias/${slug}`);
+    revalidatePath('/news-sitemap.xml');
+    revalidatePath('/sitemap.xml');
 
     return NextResponse.json({ success: true, id: docRef.id, slug });
   } catch (err) {
