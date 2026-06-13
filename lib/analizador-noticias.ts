@@ -214,13 +214,18 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: '<=2',
   });
 
-  // 5. Veracidad (fuentes atribuidas)
-  const tieneFuentes = /informo|confirmo|declaro|preciso|senalo|indico|dijo|explico|manifesto/.test(contenidoLower);
+  // 5. Veracitud (fuentes atribuidas) — muy permisivo, detecta cualquier indicio
+  const palabrasAtribucion = /informo|confirmo|declaro|preciso|senalo|indico|dijo|explico|manifesto|afirmo|agrego|aseguro|destaco|menciono|aclaro|comento|expreso|anuncio|revelo|preciso|indico|agrego|indico/.test(contenidoLower);
   const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
+  // Detectar citas con comillas (rectas o tipograficas) + palabra de atribucion
+  const tieneCitasAtribuidas = /["\u201c][^"\u201d]{8,}["\u201d][\s,]*[^.]*(?:inform|confirm|declar|precis|senal|indic|dij|explic|manifest|afirm|agreg|asegur|destac|mencion|aclar|coment|expres|anunc|revel)/i.test(n.contenido);
+  // Detectar "segun X" o "de acuerdo con X"
+  const tieneSegun = /\bsegun\s+[A-Z]|\bde\s+acuerdo\s+con\s+[A-Z]|\bsegun\s+informes|\bsegun\s+la\s+Policia|\bsegun\s+el\s+Ministerio/i.test(contenidoLower);
+  const passFuentes = palabrasAtribucion || blockquotes >= 1 || tieneCitasAtribuidas || tieneSegun;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: tieneFuentes ? 'PASS' : 'WARN',
-    mensaje: tieneFuentes
+    estado: passFuentes ? 'PASS' : 'WARN',
+    mensaje: passFuentes
       ? `${blockquotes} blockquotes. Fuentes atribuidas detectadas.`
       : 'Sin atribucion clara de fuentes.',
     valorActual: blockquotes,
