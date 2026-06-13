@@ -350,7 +350,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
   return [];
 }
 
-const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
+const SLUG_RE = /^[a-zA-Z0-9_\-\u00C0-\u017F]+$/;
 const SLUG_MAX_LEN = 200;
 
 function isValidSlug(slug: string): boolean {
