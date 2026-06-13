@@ -238,7 +238,7 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   const fails = checks.filter(c => c.estado === 'FAIL').length;
   return {
-    aprobado: puntuacion >= 80 && fails <= 1,
+    aprobado: puntuacion >= 70 && fails === 0,
     puntuacion: Math.round(puntuacion),
     checks,
   };
