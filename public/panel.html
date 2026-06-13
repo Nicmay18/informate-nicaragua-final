@@ -624,7 +624,7 @@
                 <div class="form-group" style="flex: 2;">
                   <label class="form-label">Titular <span class="required">*</span></label>
                   <input type="text" class="form-input" id="titulo" placeholder="Ej: Avances en infraestructura vial del Pacífico nicaragüense" required oninput="actualizarSeoPreview(); actualizarContadorTitulo(); actualizarPreviewHomepage();">
-                  <div class="word-counter"><span>Caracteres: <span class="count" id="contadorTitulo">0</span>/70</span><span style="color: var(--gray-400);">Óptimo para SEO</span></div>
+                  <div class="word-counter"><span>Caracteres: <span class="count" id="contadorTitulo">0</span>/65</span><span style="color: var(--gray-400);">Óptimo para Google</span></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Categoría <span class="required">*</span></label>
@@ -1972,7 +1972,7 @@ ${hashtags}`;
       const len = document.getElementById('titulo').value.length;
       const el = document.getElementById('contadorTitulo');
       el.textContent = len;
-      el.className = 'count ' + (len > 70 ? 'bad' : len > 50 ? 'ok' : 'warn');
+      el.className = 'count ' + (len > 65 ? 'bad' : len > 50 ? 'ok' : 'warn');
     };
 
     function embellecerHtmlParaTextarea(html) {
