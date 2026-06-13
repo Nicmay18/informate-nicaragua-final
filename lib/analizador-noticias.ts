@@ -366,13 +366,13 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
 function analizarFiltroDiscover(n: NoticiaInput): FiltroResultado {
   const checks: CheckItem[] = [];
 
-  // 1. Imagen destacada
+  // 1. Imagen destacada (WARN en vez de FAIL para no bloquear)
   checks.push({
     nombre: 'Imagen destacada',
-    estado: n.imagenDestacada ? 'PASS' : 'FAIL',
+    estado: n.imagenDestacada ? 'PASS' : 'WARN',
     mensaje: n.imagenDestacada
       ? 'Imagen presente. Verificar manualmente >=1200px de ancho.'
-      : 'SIN IMAGEN. Discover requiere imagen obligatoria.',
+      : 'Sin imagen detectada. Se recomienda agregar una imagen >=1200px.',
   });
 
   // 2. Titulo descriptivo
@@ -488,10 +488,10 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
   const keywordsSugeridas = extraerKeywordsLSI(n);
   checks.push({
     nombre: 'Keywords LSI',
-    estado: keywordsSugeridas.length >= 2 ? 'PASS' : 'WARN',
+    estado: keywordsSugeridas.length >= 1 ? 'PASS' : 'WARN',
     mensaje: `Sugeridas: ${keywordsSugeridas.slice(0, 5).join(', ')}`,
     valorActual: keywordsSugeridas.length,
-    valorEsperado: '>=2',
+    valorEsperado: '>=1',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
@@ -518,14 +518,15 @@ function analizarFiltroEEAT(n: NoticiaInput): FiltroResultado {
       : 'Sin autor visible. E-E-A-T requiere autor identificable.',
   });
 
-  // 2. Fuentes verificables
+  // 2. Fuentes verificables (PASS si tiene atribuciones, no requiere URLs obligatorias)
+  const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(n.contenido);
   const tieneURLs = /https?:\/\//.test(n.contenido);
   checks.push({
     nombre: 'Fuentes verificables',
-    estado: tieneURLs ? 'PASS' : 'WARN',
-    mensaje: tieneURLs
-      ? 'Fuentes con URLs detectadas.'
-      : 'Sin URLs de fuentes. Agregar links verificables cuando sea posible.',
+    estado: tieneAtribuciones || tieneURLs ? 'PASS' : 'WARN',
+    mensaje: tieneAtribuciones || tieneURLs
+      ? 'Fuentes atribuidas detectadas en el contenido.'
+      : 'Sin atribuciones claras. Agregar fuentes cuando sea posible.',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
