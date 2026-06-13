@@ -2016,28 +2016,271 @@ ${hashtags}`;
       const contenido = textarea.value.trim();
       if (!contenido) { showToast('No hay contenido para formatear', 'warning'); return; }
       
-      // Detectar si ya tiene HTML
+      // Si ya tiene HTML, solo ordenar
       const tieneHtml = /<(p|h2|blockquote|strong|ul|li)\b/.test(contenido);
       if (tieneHtml) {
-        showToast('El texto ya tiene formato HTML. Usa "Ordenar texto" si necesitas reorganizar.', 'info');
-        return;
+        showToast('El texto ya tiene formato HTML. Usando modo reordenar...', 'info');
       }
       
-      // Aplicar formateo de texto plano a HTML
-      const formateado = formatearTextoPlano(contenido);
-      textarea.value = formateado;
+      const resultado = procesarTextoIA(contenido);
+      
+      // Llenar todos los campos del formulario
+      if (resultado.titulo) document.getElementById('titulo').value = resultado.titulo;
+      if (resultado.resumen) document.getElementById('resumen').value = resultado.resumen;
+      if (resultado.dateline) document.getElementById('dateline').value = resultado.dateline;
+      if (resultado.pieFoto) document.getElementById('pieFoto').value = resultado.pieFoto;
+      if (resultado.departamento) document.getElementById('departamento').value = resultado.departamento;
+      if (resultado.categoria) {
+        const catSelect = document.getElementById('categoria');
+        const opciones = Array.from(catSelect.options).map(o => o.value.toLowerCase());
+        const idx = opciones.indexOf(resultado.categoria.toLowerCase());
+        if (idx >= 0) catSelect.selectedIndex = idx;
+      }
+      
+      textarea.value = resultado.contenidoHTML;
       actualizarContadorPalabras();
+      actualizarContadorTitulo();
+      actualizarSeoPreview();
       
-      // Contar elementos formateados
-      const h2s = (formateado.match(/<h2>/gi) || []).length;
-      const bqs = (formateado.match(/<blockquote>/gi) || []).length;
-      const strongs = (formateado.match(/<strong>/gi) || []).length;
+      showToast(`✅ Procesado: ${resultado.palabraCount} palabras, ${resultado.h2Count} h2, ${resultado.blockquoteCount} citas, ${resultado.strongCount} negritas`, 'success');
       
-      showToast(`Auto-formateo completo: ${h2s} subtítulos, ${bqs} citas, ${strongs} negritas`, 'success');
+      if (resultado.advertencias.length > 0) {
+        setTimeout(() => showToast('⚠️ ' + resultado.advertencias.join(' | '), 'warning'), 2000);
+      }
       
       // Ejecutar validación inmediatamente
       ejecutarAnalisisForense();
     };
+
+    // ─── PROCESADOR INTELIGENTE DE TEXTO DE IA ───
+    function procesarTextoIA(textoPlano) {
+      const advertencias = [];
+      
+      // 1. Limpiar entrada
+      let limpio = textoPlano
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .trim();
+
+      // 2. Extraer metadatos
+      const titulo = extraerTitulo(limpio);
+      const categoria = extraerCategoria(limpio);
+      const departamento = extraerDepartamento(limpio);
+      const dateline = extraerDateline(limpio);
+      const pieFoto = extraerPieFoto(limpio);
+      
+      // Quitar metadatos del cuerpo
+      let cuerpo = limpio
+        .replace(/Titular[:\s]*.+?(\n|$)/i, '')
+        .replace(/Categor[ií]a[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Resumen[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Meta description[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Slug[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Pie de Foto[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Departamento[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Dateline[:\s]*.+?(\n|$)/gi, '')
+        .replace(/Cuerpo de la Noticia[:\s]*/gi, '')
+        .trim();
+
+      // 3. Eliminar adjetivos emocionales
+      const adjetivosProhibidos = [
+        'tragico','terrible','impactante','conmociono','devastador','horrible',
+        'alarmante','desgarrador','lamentable','dramatico','escalofriante',
+        'espeluznante','increible','inimaginable','indignante','escandaloso',
+        'vergonzoso','aterrador','mortifero','sangriento','brutal','salvaje',
+        'violento','agresivo','desastroso','funesto','siniestro','macabro',
+        'espantoso','atroz','tragica','terrible','impactantes','critico','critica'
+      ];
+      const adjetivosEliminados = [];
+      adjetivosProhibidos.forEach(adj => {
+        const regex = new RegExp('\\b' + adj + '[a-z]*\\b', 'gi');
+        if (regex.test(cuerpo)) {
+          adjetivosEliminados.push(adj);
+          cuerpo = cuerpo.replace(regex, '');
+        }
+      });
+      cuerpo = cuerpo.replace(/\s+/g, ' ').trim();
+
+      // 4. Eliminar transiciones IA
+      const transicionesIA = [
+        'en conclusion','en resumen','es importante destacar','vale la pena mencionar',
+        'no hay que olvidar','en el contexto de','desde esta perspectiva',
+        'en ultima instancia','a fin de cuentas','en el marco de',
+        'resulta fundamental','resulta evidente','no cabe duda','es indiscutible',
+        'resulta innegable','cabe senalar','es relevante destacar','por su parte',
+        'por otro lado','en ese sentido','de igual manera','asimismo',
+        'de la misma forma','para finalizar','en definitiva','en sintesis'
+      ];
+      const transicionesEliminadas = [];
+      transicionesIA.forEach(trans => {
+        const regex = new RegExp('\\b' + trans.replace(/\s/g, '\\s') + '[.,]?\\s*', 'gi');
+        if (regex.test(cuerpo)) {
+          transicionesEliminadas.push(trans);
+          cuerpo = cuerpo.replace(regex, '');
+        }
+      });
+      cuerpo = cuerpo.replace(/\s+/g, ' ').trim();
+
+      // 5. Estructurar en HTML
+      const contenidoHTML = estructurarHTMLCompleto(cuerpo);
+
+      // 6. Generar resumen
+      const resumen = generarResumen(contenidoHTML);
+      
+      // 7. Contar elementos
+      const palabraCount = contarPalabrasHTML(contenidoHTML);
+      const h2Count = (contenidoHTML.match(/<h2>/g) || []).length;
+      const blockquoteCount = (contenidoHTML.match(/<blockquote>/g) || []).length;
+      const strongCount = (contenidoHTML.match(/<strong>/g) || []).length;
+
+      if (palabraCount < 500) advertencias.push(`Solo ${palabraCount} palabras. Minimo 500.`);
+      if (h2Count < 2) advertencias.push(`Solo ${h2Count} subtitulos.`);
+      if (blockquoteCount < 1) advertencias.push(`Sin citas atribuidas.`);
+      if (adjetivosEliminados.length > 0) advertencias.push(`${adjetivosEliminados.length} adjetivos eliminados.`);
+
+      return {
+        titulo,
+        categoria,
+        departamento,
+        dateline,
+        pieFoto,
+        resumen,
+        contenidoHTML,
+        palabraCount,
+        h2Count,
+        blockquoteCount,
+        strongCount,
+        advertencias,
+        adjetivosEliminados,
+        transicionesEliminadas
+      };
+    }
+
+    function extraerTitulo(texto) {
+      const match = texto.match(/Titular[:\s]+(.+?)(?:\n|$)/i);
+      if (match) return match[1].trim().slice(0, 60);
+      const primeraLinea = texto.split('\n')[0].trim();
+      if (primeraLinea.length > 10 && primeraLinea.length < 100 && !primeraLinea.includes(':')) return primeraLinea;
+      return '';
+    }
+
+    function extraerCategoria(texto) {
+      const match = texto.match(/Categor[ií]a[:\s]+(.+?)(?:\n|$)/i);
+      if (match) return match[1].trim();
+      if (/suceso|accidente|fallec|muert|homicid|robo|hurto|delito/i.test(texto)) return 'Sucesos';
+      if (/deporte|futbol|beisbol|olimp|juego/i.test(texto)) return 'Deportes';
+      if (/econom|precio|dolar|cordob|inflacion|mercado/i.test(texto)) return 'Economia';
+      if (/politic|gobierno|asamblea|ley|decreto/i.test(texto)) return 'Politica';
+      if (/salud|hospital|medico|enfermedad|minsa/i.test(texto)) return 'Salud';
+      if (/cultura|arte|musica|teatro|cine|libro/i.test(texto)) return 'Cultura';
+      return 'Nacionales';
+    }
+
+    function extraerDepartamento(texto) {
+      const depts = ['Managua','Leon','Granada','Masaya','Esteli','Chinandega','Matagalpa','Jinotega','Rivas','Carazo','Madriz','Nueva Segovia','Boaco','Rio San Juan','Chontales','RAAN','RAAS','Costa Caribe Norte','Costa Caribe Sur'];
+      for (const dep of depts) {
+        if (new RegExp('\\b' + dep + '\\b', 'i').test(texto)) return dep;
+      }
+      return 'Managua';
+    }
+
+    function extraerDateline(texto) {
+      const match = texto.match(/Dateline[:\s]+(.+?)(?:\n|$)/i);
+      if (match) return match[1].trim();
+      return 'MANAGUA / NICARAGUA';
+    }
+
+    function extraerPieFoto(texto) {
+      const match = texto.match(/Pie de Foto[:\s]+(.+?)(?:\n|$)/i);
+      if (match) return match[1].trim();
+      return '';
+    }
+
+    function estructurarHTMLCompleto(texto) {
+      const lineas = texto.split('\n').map(l => l.trim()).filter(Boolean);
+      const resultado = [];
+      let bufferParrafo = [];
+      let h2sGenerados = 0;
+      const h2sNombres = ['Hechos principales', 'Declaraciones de fuentes', 'Desarrollo', 'Antecedentes o contexto'];
+
+      function flushParrafo() {
+        if (bufferParrafo.length === 0) return;
+        let p = bufferParrafo.join(' ');
+        p = p.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        p = p.replace(/"([^"]+)"/g, '<strong>"$1"</strong>');
+        p = p.replace(/\u201c([^\u201d]+)\u201d/g, '<strong>\u201c$1\u201d</strong>');
+        resultado.push(`<p>${p}</p>`);
+        bufferParrafo = [];
+      }
+
+      for (let i = 0; i < lineas.length; i++) {
+        let l = lineas[i];
+        if (!l) continue;
+
+        // Limpiar markdown
+        l = l.replace(/^#{1,6}\s*/, '').replace(/^\*\*?\s*/, '').replace(/^-\s*/, '').trim();
+        if (!l) continue;
+
+        // Detectar subtitulo de seccion
+        const secciones = /^(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales)/i;
+        if (secciones.test(l)) {
+          flushParrafo();
+          resultado.push(`<h2>${l}</h2>`);
+          h2sGenerados++;
+          continue;
+        }
+
+        // Detectar cita con atribucion
+        const tieneCita = (l.includes('"') || l.includes('\u201c')) && l.length > 25;
+        const tieneAtribucion = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(l);
+        if (tieneCita && tieneAtribucion && l.length > 30) {
+          flushParrafo();
+          resultado.push(`<blockquote><p>${l}</p></blockquote>`);
+          continue;
+        }
+
+        // Párrafo normal
+        bufferParrafo.push(l);
+        if (bufferParrafo.join(' ').length > 320) flushParrafo();
+      }
+      flushParrafo();
+
+      // Si no hay h2, insertarlos automaticamente
+      if (h2sGenerados === 0) {
+        const parrafos = resultado.filter(r => r.startsWith('<p>'));
+        const totalParrafos = parrafos.length;
+        if (totalParrafos >= 4) {
+          const cortes = [0, Math.floor(totalParrafos * 0.3), Math.floor(totalParrafos * 0.6), Math.floor(totalParrafos * 0.85)];
+          let parrafoIdx = 0;
+          const nuevoResultado = [];
+          for (let i = 0; i < resultado.length; i++) {
+            if (resultado[i].startsWith('<p>') && cortes.includes(parrafoIdx) && h2sGenerados < 4) {
+              nuevoResultado.push(`<h2>${h2sNombres[h2sGenerados]}</h2>`);
+              h2sGenerados++;
+            }
+            if (resultado[i].startsWith('<p>')) parrafoIdx++;
+            nuevoResultado.push(resultado[i]);
+          }
+          return nuevoResultado.join('\n\n');
+        }
+      }
+
+      return resultado.join('\n\n');
+    }
+
+    function generarResumen(html) {
+      const primerP = html.match(/<p>(.*?)<\/p>/)?.[1] || '';
+      const limpio = primerP.replace(/<[^>]*>/g, '').trim();
+      if (limpio.length <= 160) return limpio;
+      const truncado = limpio.slice(0, 157);
+      const ultimoEspacio = truncado.lastIndexOf(' ');
+      return truncado.slice(0, ultimoEspacio) + '...';
+    }
+
+    function contarPalabrasHTML(html) {
+      const texto = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      return texto.split(' ').filter(p => p.length > 0).length;
+    }
 
     window.formatearTextoPegado = function(e) {
       e.preventDefault();
