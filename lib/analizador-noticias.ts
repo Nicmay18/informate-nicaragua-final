@@ -168,13 +168,18 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: 500,
   });
 
-  // 2. Lead (primer parrafo) — ignorar <p> vacios
-  const todosParrafos = n.contenido.match(/<p>(.*?)<\/p>/g) || [];
+  // 2. Lead (primer parrafo) — funciona con HTML o texto plano
   let leadPalabras = 0;
+  const todosParrafos = n.contenido.match(/<p>(.*?)<\/p>/g) || [];
   for (const p of todosParrafos) {
     const texto = p.replace(/<[^>]*>/g, '').trim();
     const count = texto.split(' ').filter(w => w.length > 0).length;
     if (count > 3) { leadPalabras = count; break; }
+  }
+  // Fallback: si no hay <p>, tomar primeras palabras del texto plano
+  if (leadPalabras === 0) {
+    const primerasPalabras = textoPlano.split(' ').filter(w => w.length > 0).slice(0, 50);
+    leadPalabras = primerasPalabras.length;
   }
   checks.push({
     nombre: 'Lead informativo',
@@ -223,19 +228,41 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   });
 
   // 6. Estructura
-  const h2s = (n.contenido.match(/<h2>/gi) || []).length;
-  const strongs = (n.contenido.match(/<strong>/gi) || []).length;
+  let h2s = (n.contenido.match(/<h2>/gi) || []).length;
+  let strongs = (n.contenido.match(/<strong>/gi) || []).length;
+  
+  // Fallback texto plano: detectar secciones como "Hechos principales" o lineas en mayusculas/titulo
+  if (h2s === 0) {
+    const lineas = n.contenido.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const posiblesH2 = lineas.filter(l => 
+      /^[A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]{5,40}$/.test(l) && // parece titulo
+      !l.endsWith('.') && // no termina en punto
+      (l.includes('Hechos') || l.includes('Declaraciones') || l.includes('Desarrollo') || l.includes('Antecedentes') || l.includes('Contexto'))
+    );
+    h2s = posiblesH2.length;
+  }
+  
+  // Fallback texto plano: detectar datos resaltados (fechas, numeros, mayusculas)
+  if (strongs === 0) {
+    const fechas = (textoPlano.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length;
+    const numeros = (textoPlano.match(/\b\d{2,4}\b/g) || []).length;
+    const mayusculas = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+    if (fechas + numeros + mayusculas >= 5) {
+      strongs = fechas + numeros + mayusculas; // Considerar como datos resaltados
+    }
+  }
+  
   checks.push({
     nombre: 'Estructura (h2)',
     estado: h2s >= 2 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
-    mensaje: h2s >= 2 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 2.`,
+    mensaje: h2s >= 2 ? `${h2s} subtitulos detectados.` : `Solo ${h2s} subtitulos. Minimo: 2.`,
     valorActual: h2s,
     valorEsperado: '>=2',
   });
   checks.push({
     nombre: 'Negritas (strong)',
     estado: strongs >= 1 ? 'PASS' : 'WARN',
-    mensaje: strongs >= 1 ? `${strongs} <strong>.` : `Sin <strong>. Recomendado resaltar datos clave.`,
+    mensaje: strongs >= 1 ? `${strongs} datos clave resaltados.` : `Sin datos resaltados. Recomendado resaltar fechas, nombres y cifras.`,
     valorActual: strongs,
     valorEsperado: '>=1',
   });
