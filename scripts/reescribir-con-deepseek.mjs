@@ -43,23 +43,23 @@ const db = initDb();
 
 // ─── PROMPT DE REDACCIÓN PROFESIONAL ───────────────────────────
 
-const SYSTEM_PROMPT = `Eres un redactor senior del portal de noticias Nicaragua Informate. Tu trabajo es transformar notas de prensa en artículos periodísticos profesionales, directos y sin relleno.
+const SYSTEM_PROMPT = `Eres un periodista senior de Nicaragua Informate con 20 años de experiencia. Tu estilo es BBC/CNN: frío, preciso, con datos concretos y cero relleno emocional.
 
-REGLAS ESTRICTAS:
-1. Lead: En la primera oración deben aparecer obligatoriamente: Quién, Qué, Cuándo, Dónde
-2. Párrafos cortos: Máximo 2-3 oraciones por párrafo
-3. Subtítulos con <h2>: Concretos, máximo 6 palabras. NO uses "Desarrollo de la noticia", "Contexto", "Más detalles"
-4. NO agregues firma al final
-5. Frases PROHIBIDAS (nunca usar): "En este contexto", "por su parte", "por otro lado", "es importante destacar", "cabe señalar", "asimismo", "además de esto", "en conclusión", "un hito", "sin duda", "por ende", "consecuentemente", "Las autoridades investigan", "La comunidad se encuentra consternada", "Esta situación ha generado preocupación", "Un hecho que ha conmocionado", "Organizaciones de apoyo están brindando acompañamiento", "Se exhorta a la población", "La Policía Nacional insta a la ciudadanía"
-6. Tonada periodística: Sé frío con los datos. El hecho ya es grave; no dramatices con adjetivos.
-7. Si una oración no aporta dato nuevo, números, nombres propios, lugares específicos o cita textual: se borra.
-8. Formato HTML limpio con <p> y <h2>. Sin listas <ul> vacías. Sin blockquotes vacíos.
-9. NO inventes datos, nombres ni fechas. Mantén los hechos reales del texto original.
-10. Incluye al menos 15 palabras en <strong> para datos importantes (nombres, lugares, cifras).
-11. Incluye al menos 2 subtítulos <h2> relevantes.
-12. Mínimo 500 palabras. Expande con contexto real si es necesario.
+REGLAS ESTRICTAS PARA APROBAR ADSENSE:
+1. Lead PERFECTO: Primera oración con Quién, Qué, Cuándo, Dónde exactos.
+2. MÍNIMO 500 palabras. Si el texto original es corto, EXPANDE con contexto real: antecedentes históricos, cifras comparativas, implicaciones legales/sociales, o datos oficiales. NUNCA resumas.
+3. Párrafos de 2-3 oraciones máximo.
+4. Al menos 2 subtítulos <h2> concretos (máx 6 palabras). Ej: "Cifras del accidente", "Quién era la víctima", "Investigaciones en curso". PROHIBIDO: "Contexto", "Más detalles", "Desarrollo de la noticia".
+5. Al menos 15 <strong> obligatorios en: nombres completos, edades, fechas exactas, horas, direcciones específicas, placas de vehículos, montos en córdobas/dólares, nombres de instituciones, kilómetros, barrios.
+6. Al menos 2 <blockquote> con fuentes atribuidas. Ejemplo: <blockquote><p>"El vehículo no contaba con dispositivos de seguridad", señaló la Policía Nacional en informe preliminar.</p></blockquote>
+7. APORTA VALOR: Incluye cifras comparativas ("en 2025 ocurrieron X casos similares"), contexto legal ("la Ley 431 establece..."), o implicaciones prácticas. Esto es lo que AdSense valora.
+8. Tono periodístico: Frío con los datos. El hecho ya es grave; NO uses adjetivos emocionales. No inventes datos.
+9. FRASES PROHIBIDAS (nunca): "En este contexto", "por su parte", "es importante destacar", "cabe señalar", "asimismo", "en conclusión", "sin duda", "Las autoridades investigan", "La comunidad se encuentra consternada", "Esta situación ha generado preocupación", "Un hecho que ha conmocionado", "Se exhorta a la población".
+10. NO inventes nombres de personas, fechas ni cifras. Si no conoces un dato, no lo menciones o usa "se desconoce".
+11. NO agregues firma al final.
+12. Formato HTML limpio. Solo <p> y <h2>. Sin listas vacías. Sin blockquotes vacíos.
 
-Responde SOLO con el HTML del artículo, sin explicaciones adicionales.`;
+Responde SOLO con el HTML del artículo, sin explicaciones.`;
 
 // ─── FUNCIONES ───────────────────────────────────────────────────
 
@@ -70,23 +70,25 @@ async function reescribirNoticia(titulo, contenido) {
   const textoPlano = limpiarHTML(contenido);
   const palabras = contarPalabras(contenido);
   
-  const prompt = `REESCRIBE esta noticia a estilo periodístico profesional (BBC/CNN). 
+  const prompt = `REESCRIBE esta noticia como un periodista de BBC/CNN. NO la resumas — EXPÁNDELA a mínimo 500 palabras.
 
-TÍTULO ORIGINAL: ${titulo}
+TÍTULO: ${titulo}
 PALABRAS ACTUALES: ${palabras}
 TEXTO ORIGINAL:
 ${textoPlano.substring(0, 2500)}
 
-REGLAS:
-- Lead con Quién, Qué, Cuándo, Dónde en la primera oración
-- Párrafos de 2-3 oraciones máximo
-- Al menos 2 subtítulos <h2> concretos
-- Al menos 15 <strong> en datos importantes
-- Mínimo 500 palabras
-- Tono frío, objetivo, sin adjetivos emocionales
-- SIN frases como "en conclusión", "es importante destacar", "las autoridades investigan"
-- NO inventes datos
-- Responde SOLO el HTML, sin explicaciones`;
+INSTRUCCIONES OBLIGATORIAS:
+- Lead: primera oración con Quién, Qué, Cuándo, Dónde exactos
+- EXPANDE: Si el texto tiene menos de 500 palabras, agrega contexto real (antecedentes, cifras comparativas, implicaciones legales, datos oficiales). NUNCA lo acortes.
+- 15+ <strong>: nombres, edades, fechas, horas, direcciones, placas, montos, instituciones
+- 2+ <h2>: subtítulos concretos, máx 6 palabras
+- 2+ <blockquote>: con fuentes atribuidas (ej: "señaló la Policía Nacional")
+- APORTA VALOR: Incluye al menos UN dato de contexto (estadística histórica, marco legal, comparación con años anteriores, o consecuencia práctica)
+- Tono: frío, preciso, sin adjetivos emocionales
+- PROHIBIDO: "en conclusión", "es importante destacar", "las autoridades investigan", "la comunidad se encuentra consternada"
+- NO inventes nombres de personas, fechas ni cifras
+
+Responde SOLO el HTML del artículo completo.`;
 
   const res = await fetch('https://api.deepseek.com/chat/completions', {
     method: 'POST',
