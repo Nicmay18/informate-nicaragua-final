@@ -2838,6 +2838,44 @@ ${hashtags}`;
       return data;
     }
 
+    window.ejecutarValidacionOro = function() {
+      const contenido = document.getElementById('contenido').value.trim();
+      if (!contenido) return;
+
+      const textoSinHtml = contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      const palabras = textoSinHtml.split(/\s+/).filter(w => w.length > 0).length;
+      const h2s = (contenido.match(/<h2>/gi) || []).length;
+      const strongs = (contenido.match(/<strong>/gi) || []).length;
+      const blockquotes = (contenido.match(/<blockquote>/gi) || []).length;
+
+      // Lead (primer párrafo con contenido real)
+      const parrafos = contenido.match(/<p>(.*?)<\/p>/g) || [];
+      let leadPalabras = 0;
+      for (const p of parrafos) {
+        const pTexto = p.replace(/<[^>]*>/g, '').trim();
+        const count = pTexto.split(/\s+/).filter(w => w.length > 0).length;
+        if (count > 3) { leadPalabras = count; break; }
+      }
+
+      const checks = [
+        { nombre: 'Extensión', estado: palabras >= 500 ? '✅' : palabras >= 350 ? '⚠️' : '❌', valor: palabras, req: '>=500' },
+        { nombre: 'Lead (primer párrafo)', estado: leadPalabras >= 35 ? '✅' : leadPalabras >= 20 ? '⚠️' : '❌', valor: leadPalabras, req: '>=35 palabras' },
+        { nombre: 'Subtítulos (h2)', estado: h2s >= 1 ? '✅' : '❌', valor: h2s, req: '>=1' },
+        { nombre: 'Negritas (strong)', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '>=1' },
+        { nombre: 'Citas (blockquote)', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '>=1' },
+      ];
+
+      const passCount = checks.filter(c => c.estado === '✅').length;
+      const nivel = passCount === checks.length ? 'ORO' : passCount >= 4 ? 'PLATA' : 'BRONCE';
+
+      const mensaje = checks.map(c => `${c.estado} ${c.nombre}: ${c.valor} (${c.req})`).join('\n');
+      const nivelEmoji = nivel === 'ORO' ? '🥇' : nivel === 'PLATA' ? '🥈' : '🥉';
+
+      showToast(`Validación ${nivelEmoji} ${nivel}\n${mensaje}`, nivel === 'ORO' ? 'success' : 'warning');
+      console.log('Validación ORO:', { nivel, checks });
+      return { nivel, checks };
+    };
+
     window.guardarNoticia = async function(e) {
       e.preventDefault();
       const noticiaId = document.getElementById('noticiaId').value;
