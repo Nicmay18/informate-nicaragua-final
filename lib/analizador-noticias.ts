@@ -413,31 +413,28 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
 
   // 2. Meta description
   checks.push({
-    nombre: 'Meta description 150-160 chars',
-    estado: n.resumen.length >= 150 && n.resumen.length <= 160 ? 'PASS' : n.resumen.length >= 120 ? 'WARN' : 'FAIL',
-    mensaje: `${n.resumen.length} caracteres. Ideal: 150-160.`,
+    nombre: 'Meta description 150-170 chars',
+    estado: n.resumen.length >= 150 && n.resumen.length <= 170 ? 'PASS' : n.resumen.length >= 120 ? 'WARN' : 'FAIL',
+    mensaje: `${n.resumen.length} caracteres. Ideal: 150-170.`,
     valorActual: n.resumen.length,
-    valorEsperado: '150-160',
+    valorEsperado: '150-170',
   });
 
-  // 3. Slug optimizado
-  const slugValido = /^[a-z0-9-]+$/.test(n.slug) && !/[aeiouAEIOU]/.test(n.slug) || /^[a-z0-9-]+$/.test(n.slug.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+  // 3. Slug (generado automaticamente por el sistema)
   checks.push({
     nombre: 'Slug SEO',
-    estado: slugValido ? 'PASS' : 'FAIL',
-    mensaje: slugValido
-      ? `Slug valido: ${n.slug}`
-      : `Slug invalido: ${n.slug}. Usar solo minusculas, numeros y guiones.`,
+    estado: 'PASS',
+    mensaje: `Slug generado automaticamente: ${n.slug || 'pendiente'}.`,
   });
 
   // 4. Keywords en contenido
   const keywordsSugeridas = extraerKeywordsLSI(n);
   checks.push({
     nombre: 'Keywords LSI',
-    estado: keywordsSugeridas.length >= 3 ? 'PASS' : 'WARN',
+    estado: keywordsSugeridas.length >= 2 ? 'PASS' : 'WARN',
     mensaje: `Sugeridas: ${keywordsSugeridas.slice(0, 5).join(', ')}`,
     valorActual: keywordsSugeridas.length,
-    valorEsperado: '>=3',
+    valorEsperado: '>=2',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
