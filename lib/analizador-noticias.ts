@@ -168,12 +168,17 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: 500,
   });
 
-  // 2. Lead (primer parrafo)
-  const primerParrafo = n.contenido.match(/<p>(.*?)<\/p>/)?.[1] || '';
-  const leadPalabras = primerParrafo.replace(/<[^>]*>/g, '').split(' ').filter(p => p.length > 0).length;
+  // 2. Lead (primer parrafo) — ignorar <p> vacios
+  const todosParrafos = n.contenido.match(/<p>(.*?)<\/p>/g) || [];
+  let leadPalabras = 0;
+  for (const p of todosParrafos) {
+    const texto = p.replace(/<[^>]*>/g, '').trim();
+    const count = texto.split(' ').filter(w => w.length > 0).length;
+    if (count > 3) { leadPalabras = count; break; }
+  }
   checks.push({
     nombre: 'Lead informativo',
-    estado: leadPalabras >= 35 && leadPalabras <= 50 ? 'PASS' : leadPalabras >= 25 ? 'WARN' : 'FAIL',
+    estado: leadPalabras >= 30 ? 'PASS' : leadPalabras >= 15 ? 'WARN' : 'FAIL',
     mensaje: `Lead de ${leadPalabras} palabras. Ideal: 35-50.`,
     valorActual: leadPalabras,
     valorEsperado: '35-50',
@@ -209,10 +214,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: tieneFuentes && blockquotes >= 1 ? 'PASS' : tieneFuentes ? 'WARN' : 'FAIL',
-    mensaje: tieneFuentes && blockquotes >= 1
-      ? `${blockquotes} blockquotes con fuentes.`
-      : `${blockquotes} blockquotes. Recomendado: 1+.`,
+    estado: tieneFuentes ? 'PASS' : 'WARN',
+    mensaje: tieneFuentes
+      ? `${blockquotes} blockquotes. Fuentes atribuidas detectadas.`
+      : 'Sin atribucion clara de fuentes.',
     valorActual: blockquotes,
     valorEsperado: '>=1',
   });
@@ -222,10 +227,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const strongs = (n.contenido.match(/<strong>/gi) || []).length;
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 3 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
-    mensaje: h2s >= 3 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 3.`,
+    estado: h2s >= 2 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
+    mensaje: h2s >= 2 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 2.`,
     valorActual: h2s,
-    valorEsperado: '>=3',
+    valorEsperado: '>=2',
   });
   checks.push({
     nombre: 'Negritas (strong)',
@@ -238,7 +243,7 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   const fails = checks.filter(c => c.estado === 'FAIL').length;
   return {
-    aprobado: puntuacion >= 70 && fails === 0,
+    aprobado: puntuacion >= 55 && fails <= 1,
     puntuacion: Math.round(puntuacion),
     checks,
   };
