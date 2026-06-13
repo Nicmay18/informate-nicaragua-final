@@ -234,14 +234,23 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   // Fallback texto plano: detectar cualquier linea que parezca subtitulo de seccion
   if (h2s === 0) {
     const lineas = n.contenido.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const seccionesComunes = /^(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales|declaraciones institucionales|declaraciones oficiales)/i;
+    
     const posiblesH2 = lineas.filter(l => {
+      // Quitar markdown: ## ** * - etc.
+      const limpio = l.replace(/^#{1,6}\s*/, '').replace(/^\*\*?\s*/, '').replace(/^\*\*?\s*/, '').replace(/^-\s*/, '').replace(/^\*\*?\s*/, '').trim();
+      if (!limpio) return false;
+      
+      // Coincide con palabras de seccion conocidas
+      if (seccionesComunes.test(limpio)) return true;
+      
       // Corta (5-50 chars), sin punto/coma al final, empieza con mayuscula, no es cita
-      const largoOk = l.length >= 5 && l.length <= 50;
-      const sinPunto = !l.endsWith('.') && !l.endsWith(',') && !l.endsWith(';');
-      const empiezaMayus = /^[A-ZÁÉÍÓÚÑ]/.test(l);
-      const noEsCita = !l.startsWith('"') && !l.startsWith('“') && !l.startsWith("'");
-      // Que tenga formato de titulo: palabras en mayuscula o palabras comunes de seccion
-      const palabras = l.split(' ');
+      const largoOk = limpio.length >= 5 && limpio.length <= 50;
+      const sinPunto = !limpio.endsWith('.') && !limpio.endsWith(',') && !limpio.endsWith(';');
+      const empiezaMayus = /^[A-ZÁÉÍÓÚÑ]/.test(limpio);
+      const noEsCita = !limpio.startsWith('"') && !limpio.startsWith('"') && !limpio.startsWith("'");
+      // Que tenga formato de titulo: palabras en mayuscula
+      const palabras = limpio.split(' ');
       const variasMayus = palabras.filter(w => w.length > 2 && /^[A-ZÁÉÍÓÚÑ]/.test(w)).length >= 1;
       return largoOk && sinPunto && empiezaMayus && noEsCita && variasMayus;
     });
@@ -260,10 +269,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 2 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
-    mensaje: h2s >= 2 ? `${h2s} subtitulos detectados.` : `Solo ${h2s} subtitulos. Minimo: 2.`,
+    estado: h2s >= 1 ? 'PASS' : 'FAIL',
+    mensaje: h2s >= 1 ? `${h2s} subtitulos detectados.` : `Sin subtitulos. Minimo: 1.`,
     valorActual: h2s,
-    valorEsperado: '>=2',
+    valorEsperado: '>=1',
   });
   checks.push({
     nombre: 'Negritas (strong)',

@@ -2244,8 +2244,12 @@ ${hashtags}`;
       }
 
       for (const linea of lineas) {
-        const l = linea.trim();
+        let l = linea.trim();
         if (!l) continue;
+
+        // Quitar markdown de la linea antes de analizar
+        const lOriginal = l;
+        l = l.replace(/^#{1,6}\s*/, '').replace(/^\*\*?\s*/, '').replace(/^\*\*?\s*/, '').replace(/^-\s*/, '').replace(/^\*\*?\s*/, '').trim();
 
         const palabras = l.split(/\s+/).length;
         const sinPuntoFinal = !/[.!?;:]$/.test(l);
