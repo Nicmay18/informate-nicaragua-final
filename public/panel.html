@@ -525,6 +525,7 @@
             <li class="nav-item"><a class="nav-link" onclick="showTab('noticias-tab', this)"><i class="fas fa-newspaper"></i><span>Noticias</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('redaccion-tab', this)"><i class="fas fa-robot"></i><span>Redacción IA</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('evaluador-tab', this)"><i class="fas fa-microscope"></i><span>Evaluador</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('calidad-tab', this)"><i class="fas fa-chart-bar"></i><span>Calidad Dominio</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('correcciones-tab', this)"><i class="fas fa-tools" style="color: var(--danger);"></i><span>Correcciones</span><span class="nav-badge" style="background: var(--danger); color: white;">PELIGRO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('guias-tab', this)"><i class="fas fa-book"></i><span>Guías Editoriales</span></a></li>
           </ul>
@@ -722,6 +723,15 @@
                   </div>
                   <div id="estadoImagen" style="margin-top: 6px; font-size: 12px; display: none;"></div>
                   <div id="unsplashResults" style="display: none; margin-top: 12px;"></div>
+
+                  <!-- ANALIZADOR DE IMAGEN -->
+                  <div id="panelAnalizadorImagen" style="margin-top: 12px; padding: 12px; background: var(--gray-100); border-radius: var(--radius); border: 1px solid var(--gray-200); display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--gray-700);">Analisis de imagen</span>
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="analizarImagenActual()"><i class="fas fa-image"></i> Analizar</button>
+                    </div>
+                    <div id="resultadoAnalizadorImagen"></div>
+                  </div>
                 </div>
                 <div style="margin-top: 12px;">
                   <label class="form-label" style="font-size: 12px;">Pie de Foto (Caption):</label>
@@ -850,6 +860,20 @@
                 </label>
                 <div id="panelValidacionOro" style="display: none; margin-top: 10px; border-radius: var(--radius-md); overflow: hidden;">
                   <div id="resultadoValidacionOro"></div>
+                </div>
+              </div>
+
+              <!-- ANALIZADOR FORENSE 6 NIVELES -->
+              <div class="form-group" style="margin-top: 24px;">
+                <label class="form-label" style="display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-flask" style="color: var(--info);"></i>
+                  Analizador Forense — 6 Niveles (AdSense, Discover, News, SEO, E-E-A-T)
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarAnalisisForense()" style="margin-left: auto;">
+                    <i class="fas fa-play"></i> Analizar Completo
+                  </button>
+                </label>
+                <div id="panelAnalisisForense" style="display: none; margin-top: 10px; border-radius: var(--radius-md); overflow: hidden;">
+                  <div id="resultadoAnalisisForense"></div>
                 </div>
               </div>
 
@@ -1092,6 +1116,23 @@ ESTRUCTURA OBLIGATORIA:
                 <div id="resultado6080" style="display: none;"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALIDAD DOMINIO -->
+      <div id="calidad-tab" class="tab-content">
+        <div class="page-header">
+          <div class="page-title"><h1>Calidad del Dominio</h1><p>Métricas agregadas del sitio para AdSense, Google News y Discover.</p></div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" onclick="cargarDashboardCalidad()"><i class="fas fa-sync"></i><span>Actualizar</span></button>
+          </div>
+        </div>
+
+        <div id="panelDashboardCalidad" style="padding: 20px; background: var(--gray-50); border-radius: var(--radius-lg);">
+          <div style="text-align: center; padding: 40px; color: var(--gray-400);">
+            <div class="spinner" style="width: 32px; height: 32px; margin: 0 auto 16px; border-width: 3px;"></div>
+            <p>Cargando métricas del dominio...</p>
           </div>
         </div>
       </div>
@@ -4701,6 +4742,235 @@ ANTES DE ENTREGAR CADA NOTICIA, VERIFICAR:
       log.appendChild(entry);
       log.scrollTop = log.scrollHeight;
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ANALIZADOR FORENSE — 6 NIVELES
+    // ═══════════════════════════════════════════════════════════════
+    window.ejecutarAnalisisForense = async function() {
+      const titulo = document.getElementById('titulo').value.trim();
+      const contenido = document.getElementById('contenido').value.trim();
+      const resumen = document.getElementById('resumen').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      const imagenUrl = document.getElementById('imagenUrl').value.trim();
+
+      if (!titulo || !contenido) {
+        showToast('Completa al menos titulo y contenido', 'warning');
+        return;
+      }
+
+      const panel = document.getElementById('panelAnalisisForense');
+      const resultado = document.getElementById('resultadoAnalisisForense');
+      panel.style.display = 'block';
+      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 6 niveles...</div>';
+
+      try {
+        const resp = await fetch('/api/admin/analizar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titulo, contenido, resumen, categoria, imagenDestacada: imagenUrl, slug: '', autor: 'Keyling Elieth Rivera Muñoz' })
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Error en analisis');
+        resultado.innerHTML = renderAnalisisForense(data);
+      } catch (err) {
+        resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
+      }
+    };
+
+    function renderAnalisisForense(data) {
+      const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
+      const bgNivel = { 'ORO': '#d1fae5', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
+      const iconoNivel = { 'ORO': '🏆', 'PLATA': '⚡', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
+
+      let html = '<div style="background:' + bgNivel[data.nivel] + ';border:1px solid ' + colorNivel[data.nivel] + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+      html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[data.nivel] + ';">' + iconoNivel[data.nivel] + ' NIVEL ' + data.nivel + '</h3>';
+      html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + data.puntuacion + '/100</p></div>';
+      html += '<div style="text-align:right;"><span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[data.nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
+      html += '</div></div>';
+
+      if (data.accionesRequeridas && data.accionesRequeridas.length > 0) {
+        html += '<div style="background:#fee2e2;border:1px solid #dc2626;border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<h4 style="margin:0 0 8px;font-size:13px;color:#dc2626;">Acciones requeridas:</h4><ul style="margin:0;padding-left:16px;font-size:12px;color:#991b1b;">';
+        data.accionesRequeridas.forEach(a => { html += '<li>' + a + '</li>'; });
+        html += '</ul></div>';
+      }
+
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">';
+      if (data.filtros) {
+        Object.entries(data.filtros).forEach(([nombre, filtro]) => {
+          html += '<div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:12px;">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+          html += '<h5 style="margin:0;font-size:13px;text-transform:capitalize;color:var(--gray-800);">' + nombre + '</h5>';
+          html += '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:' + (filtro.aprobado ? '#16a34a' : '#dc2626') + ';color:white;">' + filtro.puntuacion + '%</span></div>';
+          html += '<div style="font-size:11px;color:var(--gray-600);">';
+          filtro.checks.forEach((c) => {
+            const icono = c.estado === 'PASS' ? '✅' : c.estado === 'WARN' ? '⚠️' : '❌';
+            const color = c.estado === 'PASS' ? '#16a34a' : c.estado === 'WARN' ? '#d97706' : '#dc2626';
+            html += '<div style="display:flex;gap:6px;margin-bottom:4px;"><span style="color:' + color + ';">' + icono + '</span><span>' + c.nombre + (c.valorActual ? ' <span style="color:var(--gray-400);">(' + c.valorActual + ')</span>' : '') + '</span></div>';
+          });
+          html += '</div></div>';
+        });
+      }
+      html += '</div>';
+
+      if (data.metadataSugerida) {
+        html += '<div style="background:#dbeafe;border:1px solid #2563eb;border-radius:8px;padding:12px;margin-top:16px;">';
+        html += '<h4 style="margin:0 0 8px;font-size:13px;color:#1e40af;">Sugerencias SEO:</h4>';
+        if (data.metadataSugerida.tituloOptimizado) html += '<p style="margin:0 0 4px;font-size:12px;color:#1e3a8a;"><strong>Titulo:</strong> ' + data.metadataSugerida.tituloOptimizado + '</p>';
+        if (data.metadataSugerida.metaDescription) html += '<p style="margin:0 0 4px;font-size:12px;color:#1e3a8a;"><strong>Meta:</strong> ' + data.metadataSugerida.metaDescription + '</p>';
+        if (data.metadataSugerida.keywordsLSI && data.metadataSugerida.keywordsLSI.length) html += '<p style="margin:0;font-size:12px;color:#1e3a8a;"><strong>Keywords LSI:</strong> ' + data.metadataSugerida.keywordsLSI.join(', ') + '</p>';
+        html += '</div>';
+      }
+
+      return html;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // DASHBOARD CALIDAD DEL DOMINIO
+    // ═══════════════════════════════════════════════════════════════
+    window.cargarDashboardCalidad = async function() {
+      const panel = document.getElementById('panelDashboardCalidad');
+      panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas...</p></div>';
+
+      try {
+        const resp = await fetch('/api/admin/dashboard-calidad');
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Error');
+        panel.innerHTML = renderDashboardCalidad(data);
+      } catch (err) {
+        panel.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
+      }
+    };
+
+    function renderDashboardCalidad(data) {
+      const colorScore = data.scoreDominio >= 85 ? '#16a34a' : data.scoreDominio >= 70 ? '#d97706' : '#dc2626';
+      const bgScore = data.scoreDominio >= 85 ? '#d1fae5' : data.scoreDominio >= 70 ? '#fef3c7' : '#fee2e2';
+
+      let html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px;">';
+      html += '<div style="background:' + bgScore + ';border:2px solid ' + colorScore + ';border-radius:12px;padding:20px;text-align:center;">';
+      html += '<p style="margin:0 0 8px;font-size:12px;color:var(--gray-600);text-transform:uppercase;font-weight:600;">Score de Dominio</p>';
+      html += '<p style="margin:0;font-size:48px;font-weight:800;color:' + colorScore + ';">' + data.scoreDominio + '<span style="font-size:20px;color:var(--gray-500);">/100</span></p>';
+      html += '<p style="margin:8px 0 0;font-size:13px;color:var(--gray-600);">' + data.totalNoticias + ' noticias</p></div>';
+
+      const metricas = [
+        { t: 'Promedio Palabras', v: data.promedioPalabras, m: 'Meta: 500+' },
+        { t: 'Thin Content', v: data.thinContent.count + ' (' + data.thinContent.porcentaje + '%)', m: '<350 palabras', a: data.thinContent.count > 0 },
+        { t: 'Sin Imagen', v: data.sinImagen, a: data.sinImagen > 5 },
+        { t: 'Sin Autor', v: data.sinAutor, a: data.sinAutor > 0 },
+        { t: 'Sin Fecha Act.', v: data.sinFechaActualizacion, a: data.sinFechaActualizacion > 10 },
+        { t: 'Con Noindex', v: data.conNoindex },
+        { t: 'Avg Strong', v: data.promedioStrong, m: 'Meta: 15+', a: data.promedioStrong < 10 },
+        { t: 'Avg Blockquotes', v: data.promedioBlockquotes, m: 'Meta: 2+', a: data.promedioBlockquotes < 2 },
+      ];
+
+      metricas.forEach(m => {
+        const border = m.a ? '#dc2626' : 'var(--gray-200)';
+        const bg = m.a ? '#fef2f2' : 'white';
+        const color = m.a ? '#dc2626' : 'var(--gray-800)';
+        html += '<div style="background:' + bg + ';border:1px solid ' + border + ';border-radius:8px;padding:16px;">';
+        html += '<p style="margin:0 0 4px;font-size:11px;color:var(--gray-500);text-transform:uppercase;">' + m.t + '</p>';
+        html += '<p style="margin:0;font-size:24px;font-weight:700;color:' + color + ';">' + m.v + '</p>';
+        if (m.m) html += '<p style="margin:4px 0 0;font-size:11px;color:var(--gray-400);">' + m.m + '</p>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      if (data.alertas && data.alertas.length > 0) {
+        html += '<div style="margin-bottom:20px;">';
+        data.alertas.forEach(a => {
+          const isRed = a.includes('bloquea') || a.includes('No solicites');
+          const bg = isRed ? '#fee2e2' : '#fef3c7';
+          const border = isRed ? '#dc2626' : '#d97706';
+          const color = isRed ? '#991b1b' : '#92400e';
+          html += '<div style="background:' + bg + ';border:1px solid ' + border + ';border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px;color:' + color + ';">' + a + '</div>';
+        });
+        html += '</div>';
+      }
+
+      if (data.distribucionCategorias) {
+        html += '<div style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:16px;">';
+        html += '<h4 style="margin:0 0 12px;font-size:14px;color:var(--gray-800);">Distribucion por Categoria</h4>';
+        Object.entries(data.distribucionCategorias).forEach(([cat, count]) => {
+          const pct = (count / data.totalNoticias) * 100;
+          html += '<div style="display:flex;align-items:center;margin-bottom:8px;">';
+          html += '<span style="width:120px;font-size:12px;color:var(--gray-600);">' + cat + '</span>';
+          html += '<div style="flex:1;height:8px;background:var(--gray-100);border-radius:4px;overflow:hidden;">';
+          html += '<div style="width:' + pct + '%;height:100%;background:var(--primary-500);border-radius:4px;"></div></div>';
+          html += '<span style="width:32px;text-align:right;font-size:12px;color:var(--gray-500);">' + count + '</span></div>';
+        });
+        html += '</div>';
+      }
+
+      return html;
+    }
+
+    // Auto-cargar dashboard al abrir pestana
+    const calidadLink = document.querySelector('a[onclick*="calidad-tab"]');
+    if (calidadLink) {
+      calidadLink.addEventListener('click', () => { setTimeout(cargarDashboardCalidad, 100); });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ANALIZADOR DE IMAGEN (Canvas)
+    // ═══════════════════════════════════════════════════════════════
+    window.analizarImagenActual = function() {
+      const url = document.getElementById('imagenUrl').value.trim();
+      const panel = document.getElementById('panelAnalizadorImagen');
+      const resultado = document.getElementById('resultadoAnalizadorImagen');
+      if (!url) { showToast('Primero carga una imagen', 'warning'); return; }
+      panel.style.display = 'block';
+      resultado.innerHTML = '<div style="padding:12px;text-align:center;color:var(--gray-500);font-size:12px;">Analizando...</div>';
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const ratio = w / h;
+        const is16x9 = Math.abs(ratio - 1.777) < 0.1;
+        const is4x3 = Math.abs(ratio - 1.333) < 0.1;
+        const discoverOk = w >= 1200 && (is16x9 || is4x3);
+        const warnings = [];
+        if (w < 1200) warnings.push('Ancho ' + w + 'px. Discover requiere >=1200px');
+        if (h < 675) warnings.push('Alto ' + h + 'px. Minimo 675px recomendado');
+        if (!is16x9 && !is4x3) warnings.push('Ratio ' + ratio.toFixed(2) + ':1. Usar 16:9 o 4:3');
+
+        let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+        html += '<span style="font-size:13px;font-weight:600;color:var(--gray-800);">' + w + ' x ' + h + 'px</span>';
+        html += '<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:' + (discoverOk ? '#16a34a' : '#dc2626') + ';color:white;">' + (discoverOk ? 'Discover OK' : 'No valida') + '</span></div>';
+        html += '<p style="margin:0;font-size:12px;color:var(--gray-600);">Ratio: ' + ratio.toFixed(2) + ':1</p>';
+        if (warnings.length) {
+          html += '<ul style="margin:6px 0 0;padding-left:14px;font-size:11px;color:#d97706;">';
+          warnings.forEach(w => html += '<li>' + w + '</li>');
+          html += '</ul>';
+        } else {
+          html += '<p style="margin:6px 0 0;font-size:11px;color:#16a34a;">Imagen optima para Discover y News</p>';
+        }
+        resultado.innerHTML = html;
+      };
+      img.onerror = function() { resultado.innerHTML = '<p style="color:#dc2626;font-size:12px;">No se pudo cargar la imagen para analizar</p>'; };
+      img.src = url;
+    };
+
+    // Mostrar panel de imagen cuando hay URL
+    window.actualizarEstadoImagen = function() {
+      const url = document.getElementById('imagenUrl').value.trim();
+      const el = document.getElementById('estadoImagen');
+      const panelImg = document.getElementById('panelAnalizadorImagen');
+      if (!url) {
+        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-exclamation-circle"></i> Sin imagen</span>';
+        el.style.display = 'block';
+        panelImg.style.display = 'none';
+        return;
+      }
+      if (url.startsWith('data:')) {
+        el.innerHTML = '<span style="color:#d97706;"><i class="fas fa-clock"></i> Imagen temporal — sube a GitHub antes de publicar</span>';
+      } else {
+        el.innerHTML = '<span style="color:#059669;"><i class="fas fa-check-circle"></i> Imagen lista</span>';
+      }
+      el.style.display = 'block';
+      panelImg.style.display = 'block';
+    };
 
     // Auto-cargar cuando se abre el tab
     document.addEventListener('DOMContentLoaded', () => {
