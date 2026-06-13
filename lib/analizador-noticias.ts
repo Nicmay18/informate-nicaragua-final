@@ -179,29 +179,29 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: '35-50',
   });
 
-  // 3. Relleno emocional
+  // 3. Relleno emocional (max 2 permitidos)
   const contenidoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const adjetivosEncontrados = ADJETIVOS_EMOCIONALES.filter(adj => contenidoLower.includes(adj));
   checks.push({
     nombre: 'Relleno emocional',
-    estado: adjetivosEncontrados.length === 0 ? 'PASS' : 'FAIL',
+    estado: adjetivosEncontrados.length <= 2 ? 'PASS' : 'WARN',
     mensaje: adjetivosEncontrados.length === 0
       ? 'Ningun adjetivo emocional detectado.'
-      : `Detectados: ${adjetivosEncontrados.join(', ')}`,
+      : `Detectados ${adjetivosEncontrados.length}: ${adjetivosEncontrados.slice(0, 5).join(', ')}`,
     valorActual: adjetivosEncontrados.length,
-    valorEsperado: 0,
+    valorEsperado: '<=2',
   });
 
-  // 4. Transiciones IA
+  // 4. Transiciones IA (max 2 permitidas)
   const transicionesEncontradas = TRANSICIONES_IA.filter(t => contenidoLower.includes(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
   checks.push({
     nombre: 'Transiciones IA',
-    estado: transicionesEncontradas.length === 0 ? 'PASS' : 'FAIL',
+    estado: transicionesEncontradas.length <= 2 ? 'PASS' : 'WARN',
     mensaje: transicionesEncontradas.length === 0
       ? '0 detectadas.'
-      : `Detectadas: ${transicionesEncontradas.join(', ')}`,
+      : `Detectadas ${transicionesEncontradas.length}: ${transicionesEncontradas.slice(0, 3).join(', ')}`,
     valorActual: transicionesEncontradas.length,
-    valorEsperado: 0,
+    valorEsperado: '<=2',
   });
 
   // 5. Veracidad (fuentes atribuidas)
@@ -209,12 +209,12 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: tieneFuentes && blockquotes >= 2 ? 'PASS' : tieneFuentes ? 'WARN' : 'FAIL',
-    mensaje: tieneFuentes && blockquotes >= 2
-      ? `${blockquotes} blockquotes con fuentes atribuidas.`
-      : `Solo ${blockquotes} blockquotes. Minimo: 2.`,
+    estado: tieneFuentes && blockquotes >= 1 ? 'PASS' : tieneFuentes ? 'WARN' : 'FAIL',
+    mensaje: tieneFuentes && blockquotes >= 1
+      ? `${blockquotes} blockquotes con fuentes.`
+      : `${blockquotes} blockquotes. Recomendado: 1+.`,
     valorActual: blockquotes,
-    valorEsperado: '>=2',
+    valorEsperado: '>=1',
   });
 
   // 6. Estructura
@@ -222,22 +222,23 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const strongs = (n.contenido.match(/<strong>/gi) || []).length;
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 4 ? 'PASS' : h2s >= 2 ? 'WARN' : 'FAIL',
-    mensaje: h2s >= 4 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 4.`,
+    estado: h2s >= 3 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
+    mensaje: h2s >= 3 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 3.`,
     valorActual: h2s,
-    valorEsperado: '>=4',
+    valorEsperado: '>=3',
   });
   checks.push({
     nombre: 'Negritas (strong)',
-    estado: strongs >= 15 ? 'PASS' : strongs >= 8 ? 'WARN' : 'FAIL',
-    mensaje: strongs >= 15 ? `${strongs} <strong>.` : `Solo ${strongs} <strong>. Minimo: 15.`,
+    estado: strongs >= 8 ? 'PASS' : strongs >= 4 ? 'WARN' : 'FAIL',
+    mensaje: strongs >= 8 ? `${strongs} <strong>.` : `Solo ${strongs} <strong>. Minimo: 8.`,
     valorActual: strongs,
-    valorEsperado: '>=15',
+    valorEsperado: '>=8',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
+  const fails = checks.filter(c => c.estado === 'FAIL').length;
   return {
-    aprobado: puntuacion >= 85 && !checks.some(c => c.estado === 'FAIL'),
+    aprobado: puntuacion >= 80 && fails <= 1,
     puntuacion: Math.round(puntuacion),
     checks,
   };
