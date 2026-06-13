@@ -229,10 +229,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   });
   checks.push({
     nombre: 'Negritas (strong)',
-    estado: strongs >= 8 ? 'PASS' : strongs >= 4 ? 'WARN' : 'FAIL',
-    mensaje: strongs >= 8 ? `${strongs} <strong>.` : `Solo ${strongs} <strong>. Minimo: 8.`,
+    estado: strongs >= 1 ? 'PASS' : 'WARN',
+    mensaje: strongs >= 1 ? `${strongs} <strong>.` : `Sin <strong>. Recomendado resaltar datos clave.`,
     valorActual: strongs,
-    valorEsperado: '>=8',
+    valorEsperado: '>=1',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
