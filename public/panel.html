@@ -688,6 +688,7 @@
                   <button type="button" class="btn btn-primary btn-sm" onclick="cargarPlantillaPeriodistica()" title="Insertar estructura periodística"><i class="fas fa-file-alt"></i> Plantilla</button>
                   <button type="button" class="btn btn-secondary btn-sm" onclick="formatearContenidoLegible()" title="Ordenar párrafos y subtítulos para leerlos fácil"><i class="fas fa-align-left"></i> Ordenar texto</button>
                   <button type="button" class="btn btn-success btn-sm" onclick="pularConIA()" title="Detectar y corregir errores automáticamente"><i class="fas fa-magic"></i> Pular con IA</button>
+                  <button type="button" class="btn btn-info btn-sm" onclick="autoFormatearNota()" title="Convertir texto plano a HTML con H2, blockquotes y strong"><i class="fas fa-code"></i> Auto-formatear</button>
                   <button type="button" class="btn btn-warning btn-sm" onclick="ejecutarAnalisisForense()" title="Analizar noticia con 6 niveles de calidad"><i class="fas fa-flask"></i> Analizar Completo</button>
                 </div>
                 <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
@@ -2009,6 +2010,35 @@ ${hashtags}`;
       showToast('Texto organizado por párrafos y subtítulos', 'success');
     };
 
+    window.autoFormatearNota = function() {
+      const textarea = document.getElementById('contenido');
+      if (!textarea) return;
+      const contenido = textarea.value.trim();
+      if (!contenido) { showToast('No hay contenido para formatear', 'warning'); return; }
+      
+      // Detectar si ya tiene HTML
+      const tieneHtml = /<(p|h2|blockquote|strong|ul|li)\b/.test(contenido);
+      if (tieneHtml) {
+        showToast('El texto ya tiene formato HTML. Usa "Ordenar texto" si necesitas reorganizar.', 'info');
+        return;
+      }
+      
+      // Aplicar formateo de texto plano a HTML
+      const formateado = formatearTextoPlano(contenido);
+      textarea.value = formateado;
+      actualizarContadorPalabras();
+      
+      // Contar elementos formateados
+      const h2s = (formateado.match(/<h2>/gi) || []).length;
+      const bqs = (formateado.match(/<blockquote>/gi) || []).length;
+      const strongs = (formateado.match(/<strong>/gi) || []).length;
+      
+      showToast(`Auto-formateo completo: ${h2s} subtítulos, ${bqs} citas, ${strongs} negritas`, 'success');
+      
+      // Ejecutar validación inmediatamente
+      ejecutarAnalisisForense();
+    };
+
     window.formatearTextoPegado = function(e) {
       e.preventDefault();
       const cd = e.clipboardData || window.clipboardData;
@@ -2228,7 +2258,10 @@ ${hashtags}`;
 
         // Detectar subtítulo (múltiples reglas combinadas)
         let esSub = false;
-        if (esMayusculas) esSub = true;
+        // Palabras comunes de seccion que la IA usa
+        const palabrasSeccion = /^(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigación|estadísticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales)/i;
+        if (palabrasSeccion.test(l)) esSub = true;
+        else if (esMayusculas) esSub = true;
         else if (esCorto && sinPuntoFinal && empiezaMayus && !tieneComillas && (palabras <= 10 || patronSubtitulo.test(l))) esSub = true;
         else if (palabras <= 6 && sinPuntoFinal && empiezaMayus && !tieneComillas) esSub = true;
 
@@ -2238,10 +2271,18 @@ ${hashtags}`;
           continue;
         }
 
-        // Detectar cita
-        if (l.startsWith('"') && l.includes('"', 1) && l.length > 20) {
+        // Detectar cita con atribucion (ej: "...", informó la Policía)
+        const tieneCita = (l.includes('"') || l.includes('\u201c')) && l.length > 25;
+        const tieneAtribucion = /informó|confirmó|declaró|precisó|señaló|indicó|dijo|explicó|manifestó|agregó|aseguró|destacó|mencionó/.test(l);
+        if (tieneCita && tieneAtribucion && l.length > 30) {
           flushParrafo();
-          resultado.push(`<blockquote>${l}</blockquote>`);
+          resultado.push(`<blockquote><p>${l}</p></blockquote>`);
+          continue;
+        }
+        // Cita simple sin atribucion
+        else if (l.startsWith('"') && l.includes('"', 1) && l.length > 20) {
+          flushParrafo();
+          resultado.push(`<blockquote><p>${l}</p></blockquote>`);
           continue;
         }
 
