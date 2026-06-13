@@ -231,15 +231,21 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   let h2s = (n.contenido.match(/<h2>/gi) || []).length;
   let strongs = (n.contenido.match(/<strong>/gi) || []).length;
   
-  // Fallback texto plano: detectar secciones como "Hechos principales" o lineas en mayusculas/titulo
+  // Fallback texto plano: detectar cualquier linea que parezca subtitulo de seccion
   if (h2s === 0) {
     const lineas = n.contenido.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-    const posiblesH2 = lineas.filter(l => 
-      /^[A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]{5,40}$/.test(l) && // parece titulo
-      !l.endsWith('.') && // no termina en punto
-      (l.includes('Hechos') || l.includes('Declaraciones') || l.includes('Desarrollo') || l.includes('Antecedentes') || l.includes('Contexto'))
-    );
-    h2s = posiblesH2.length;
+    const posiblesH2 = lineas.filter(l => {
+      // Corta (5-50 chars), sin punto/coma al final, empieza con mayuscula, no es cita
+      const largoOk = l.length >= 5 && l.length <= 50;
+      const sinPunto = !l.endsWith('.') && !l.endsWith(',') && !l.endsWith(';');
+      const empiezaMayus = /^[A-ZÁÉÍÓÚÑ]/.test(l);
+      const noEsCita = !l.startsWith('"') && !l.startsWith('“') && !l.startsWith("'");
+      // Que tenga formato de titulo: palabras en mayuscula o palabras comunes de seccion
+      const palabras = l.split(' ');
+      const variasMayus = palabras.filter(w => w.length > 2 && /^[A-ZÁÉÍÓÚÑ]/.test(w)).length >= 1;
+      return largoOk && sinPunto && empiezaMayus && noEsCita && variasMayus;
+    });
+    h2s = Math.min(posiblesH2.length, 8); // max 8 para no inflar
   }
   
   // Fallback texto plano: detectar datos resaltados (fechas, numeros, mayusculas)
