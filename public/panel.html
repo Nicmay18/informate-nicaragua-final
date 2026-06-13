@@ -3138,7 +3138,7 @@ ${hashtags}`;
           { nombre: 'Titular SEO', puntos: tituloLen >= 30 && tituloLen <= 70 ? 15 : 8, max: 15, obs: tituloLen >= 30 && tituloLen <= 70 ? `${tituloLen} chars — Ideal` : `${tituloLen} chars — Ajustar a 30-70` },
           { nombre: 'Meta descripción', puntos: resumenLen >= 120 && resumenLen <= 160 ? 15 : resumenLen > 0 ? 8 : 0, max: 15, obs: resumenLen >= 120 && resumenLen <= 160 ? `${resumenLen} chars — Perfecta` : resumenLen > 0 ? `${resumenLen} chars — Mejorable` : 'Falta resumen' },
           { nombre: 'Imagen destacada', puntos: n.imagen ? 15 : 0, max: 15, obs: n.imagen ? 'Presente' : 'No incluida' },
-          { nombre: 'Estructura / Subtítulos', puntos: contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') ? 15 : 8, max: 15, obs: contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') ? 'Bien estructurado' : 'Faltan subtítulos' },
+          { nombre: 'Estructura / Subtítulos', puntos: (contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido)) ? 15 : 8, max: 15, obs: (contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido)) ? 'Bien estructurado' : 'Faltan subtítulos' },
           { nombre: 'Categoría y ubicación', puntos: n.categoria && n.departamento ? 10 : 5, max: 10, obs: n.categoria && n.departamento ? `${n.categoria}, ${n.departamento}` : 'Incompleto' },
           { nombre: 'Densidad de datos', puntos: datosPor100 >= 5 ? 10 : datosPor100 >= 2 ? 6 : 3, max: 10, obs: `${datosPor100} datos/100pal — ${datosPor100 >= 5 ? 'Buena' : 'Baja'}` }
         ];
@@ -3175,7 +3175,8 @@ ${hashtags}`;
         if (!n.resumen || resumenLen < 120) recs.push(`<strong>META FALTANTE:</strong> El resumen tiene ${resumenLen || 0} caracteres. Escribí uno de 120-160 chars para SEO.`);
         else if (resumenLen > 160) recs.push(`<strong>META LARGA:</strong> ${resumenLen} caracteres. Acortala a 160 máximo.`);
         if (!n.imagen) recs.push('<strong>SIN IMAGEN:</strong> Incluí una imagen destacada. Las noticias con imagen tienen 3x más clicks.');
-        if (!contenido.includes('**') && !contenido.includes('##') && !contenido.includes('<h2>')) recs.push('<strong>SIN ESTRUCTURA:</strong> Agregá subtítulos en negrita (**Subtítulo**) para dividir el texto.');
+        const tieneEstructura = contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido);
+        if (!tieneEstructura) recs.push('<strong>SIN ESTRUCTURA:</strong> Agregá subtítulos en negrita (**Subtítulo**) para dividir el texto.');
         if (tituloLen < 30) recs.push(`<strong>TÍTULO CORTO:</strong> ${tituloLen} caracteres. Ampliá a 30-70 para mejor SEO.`);
         if (tituloLen > 70) recs.push(`<strong>TÍTULO LARGO:</strong> ${tituloLen} caracteres. Google corta después de 60. Resumí.`);
         if (frasesEncontradas.length > 0) recs.push(`<strong>RELLENO EMOCIONAL:</strong> Detectadas palabras sensacionalistas: "${frasesEncontradas.join(', ')}". Reemplazá por datos concretos.`);
@@ -3233,7 +3234,7 @@ ${hashtags}`;
           const ptsTitular = tituloLen >= 30 && tituloLen <= 70 ? 15 : 8;
           const ptsMeta = resumenLen >= 120 && resumenLen <= 160 ? 15 : resumenLen > 0 ? 8 : 0;
           const ptsImagen = n.imagen ? 15 : 0;
-          const ptsEstructura = contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') ? 15 : 8;
+          const ptsEstructura = (contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido)) ? 15 : 8;
           const ptsCategoria = n.categoria && n.departamento ? 10 : 5;
           const ptsDatos = datosPor100 >= 5 ? 10 : datosPor100 >= 2 ? 6 : 3;
 
@@ -3245,7 +3246,8 @@ ${hashtags}`;
             const cambios = [];
             const puntosGanar = {};
             if (!n.imagen) { puntosGanar.imagen = 15; cambios.push({ accion: 'Agregar imagen destacada', pts: 15, prioridad: 1 }); }
-            if (!contenido.includes('**') && !contenido.includes('##') && !contenido.includes('<h2>')) { puntosGanar.estructura = 7; cambios.push({ accion: 'Agregar subtítulos en negrita (**Subtítulo**)', pts: 7, prioridad: 2 }); }
+            const tieneEstructura2 = contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido);
+            if (!tieneEstructura2) { puntosGanar.estructura = 7; cambios.push({ accion: 'Agregar subtítulos en negrita (**Subtítulo**)', pts: 7, prioridad: 2 }); }
             if (resumenLen === 0) { puntosGanar.meta = 15; cambios.push({ accion: 'Escribir meta descripción (120-160 chars)', pts: 15, prioridad: 1 }); }
             else if (resumenLen < 120 || resumenLen > 160) { puntosGanar.meta = 7; cambios.push({ accion: 'Ajustar meta a 120-160 caracteres', pts: 7, prioridad: 2 }); }
             if (tituloLen < 30 || tituloLen > 70) { puntosGanar.titulo = 7; cambios.push({ accion: 'Ajustar título a 30-70 caracteres', pts: 7, prioridad: 2 }); }
