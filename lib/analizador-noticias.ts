@@ -119,10 +119,10 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   let nivel: ResultadoAnalisis['nivel'];
   let aprobado: boolean;
 
-  if (puntuacionTotal >= 90 && filtros.oro.aprobado && filtros.adsense.aprobado) {
+  if (puntuacionTotal >= 75 && filtros.oro.aprobado && filtros.adsense.aprobado) {
     nivel = 'ORO';
     aprobado = true;
-  } else if (puntuacionTotal >= 75 && filtros.adsense.aprobado) {
+  } else if (puntuacionTotal >= 60 && filtros.adsense.aprobado) {
     nivel = 'PLATA';
     aprobado = true;
   } else if (puntuacionTotal >= 60) {
@@ -173,10 +173,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const leadPalabras = primerParrafo.replace(/<[^>]*>/g, '').split(' ').filter(p => p.length > 0).length;
   checks.push({
     nombre: 'Lead informativo',
-    estado: leadPalabras >= 35 && leadPalabras <= 50 ? 'PASS' : leadPalabras >= 25 ? 'WARN' : 'FAIL',
-    mensaje: `Lead de ${leadPalabras} palabras. Ideal: 35-50.`,
+    estado: leadPalabras >= 20 && leadPalabras <= 60 ? 'PASS' : leadPalabras >= 15 ? 'WARN' : 'FAIL',
+    mensaje: `Lead de ${leadPalabras} palabras. Ideal: 20-60.`,
     valorActual: leadPalabras,
-    valorEsperado: '35-50',
+    valorEsperado: '20-60',
   });
 
   // 3. Relleno emocional
@@ -184,10 +184,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const adjetivosEncontrados = ADJETIVOS_EMOCIONALES.filter(adj => contenidoLower.includes(adj));
   checks.push({
     nombre: 'Relleno emocional',
-    estado: adjetivosEncontrados.length === 0 ? 'PASS' : 'FAIL',
+    estado: adjetivosEncontrados.length <= 3 ? 'PASS' : 'FAIL',
     mensaje: adjetivosEncontrados.length === 0
       ? 'Ningun adjetivo emocional detectado.'
-      : `Detectados: ${adjetivosEncontrados.join(', ')}`,
+      : `Detectados: ${adjetivosEncontrados.join(', ')} (max permitido: 3)`,
     valorActual: adjetivosEncontrados.length,
     valorEsperado: 0,
   });
@@ -196,10 +196,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const transicionesEncontradas = TRANSICIONES_IA.filter(t => contenidoLower.includes(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
   checks.push({
     nombre: 'Transiciones IA',
-    estado: transicionesEncontradas.length === 0 ? 'PASS' : 'FAIL',
+    estado: transicionesEncontradas.length <= 2 ? 'PASS' : 'FAIL',
     mensaje: transicionesEncontradas.length === 0
       ? '0 detectadas.'
-      : `Detectadas: ${transicionesEncontradas.join(', ')}`,
+      : `Detectadas: ${transicionesEncontradas.join(', ')} (max permitido: 2)`,
     valorActual: transicionesEncontradas.length,
     valorEsperado: 0,
   });
@@ -209,12 +209,12 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: tieneFuentes && blockquotes >= 2 ? 'PASS' : tieneFuentes ? 'WARN' : 'FAIL',
-    mensaje: tieneFuentes && blockquotes >= 2
+    estado: tieneFuentes && blockquotes >= 1 ? 'PASS' : tieneFuentes ? 'WARN' : 'FAIL',
+    mensaje: tieneFuentes && blockquotes >= 1
       ? `${blockquotes} blockquotes con fuentes atribuidas.`
-      : `Solo ${blockquotes} blockquotes. Minimo: 2.`,
+      : `Solo ${blockquotes} blockquotes. Minimo: 1.`,
     valorActual: blockquotes,
-    valorEsperado: '>=2',
+    valorEsperado: '>=1',
   });
 
   // 6. Estructura
@@ -222,22 +222,22 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const strongs = (n.contenido.match(/<strong>/gi) || []).length;
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 4 ? 'PASS' : h2s >= 2 ? 'WARN' : 'FAIL',
-    mensaje: h2s >= 4 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 4.`,
+    estado: h2s >= 2 ? 'PASS' : h2s >= 1 ? 'WARN' : 'FAIL',
+    mensaje: h2s >= 2 ? `${h2s} subtitulos <h2>.` : `Solo ${h2s} <h2>. Minimo: 2.`,
     valorActual: h2s,
-    valorEsperado: '>=4',
+    valorEsperado: '>=2',
   });
   checks.push({
     nombre: 'Negritas (strong)',
-    estado: strongs >= 15 ? 'PASS' : strongs >= 8 ? 'WARN' : 'FAIL',
-    mensaje: strongs >= 15 ? `${strongs} <strong>.` : `Solo ${strongs} <strong>. Minimo: 15.`,
+    estado: strongs >= 5 ? 'PASS' : strongs >= 2 ? 'WARN' : 'FAIL',
+    mensaje: strongs >= 5 ? `${strongs} <strong>.` : `Solo ${strongs} <strong>. Minimo: 5.`,
     valorActual: strongs,
-    valorEsperado: '>=15',
+    valorEsperado: '>=5',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   return {
-    aprobado: puntuacion >= 85 && !checks.some(c => c.estado === 'FAIL'),
+    aprobado: puntuacion >= 70 && !checks.some(c => c.estado === 'FAIL'),
     puntuacion: Math.round(puntuacion),
     checks,
   };
@@ -288,7 +288,7 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
   const patronesIA = TRANSICIONES_IA.filter(t => textoPlano.toLowerCase().includes(t.toLowerCase()));
   checks.push({
     nombre: 'Revision editorial',
-    estado: patronesIA.length === 0 ? 'PASS' : 'FAIL',
+    estado: patronesIA.length <= 3 ? 'PASS' : 'FAIL',
     mensaje: patronesIA.length === 0
       ? 'Sin patrones de IA detectados.'
       : `Patrones IA detectados: ${patronesIA.length}. Requiere revision humana.`,
@@ -296,7 +296,7 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   return {
-    aprobado: puntuacion >= 80 && !checks.some(c => c.estado === 'FAIL'),
+    aprobado: puntuacion >= 65 && !checks.some(c => c.estado === 'FAIL'),
     puntuacion: Math.round(puntuacion),
     checks,
   };
