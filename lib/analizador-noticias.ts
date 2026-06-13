@@ -236,6 +236,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   let h2s = (n.contenido.match(/<h2>/gi) || []).length;
   let strongs = (n.contenido.match(/<strong>/gi) || []).length;
   
+  // Detectar <p> con subtitulos de seccion como si fueran h2
+  const pConSubtitulo = (n.contenido.match(/<p>\s*(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales|declaraciones institucionales|declaraciones oficiales)\s*<\/p>/gi) || []).length;
+  h2s += pConSubtitulo;
+  
   // Fallback texto plano: detectar cualquier linea que parezca subtitulo de seccion
   if (h2s === 0) {
     const lineas = n.contenido.split('\n').map(l => l.trim()).filter(l => l.length > 0);

@@ -2197,7 +2197,11 @@ ${hashtags}`;
     }
 
     function estructurarHTMLCompleto(texto) {
-      const lineas = texto.split('\n').map(l => l.trim()).filter(Boolean);
+      // Si ya tiene HTML, primero quitar <p> de subtitulos
+      const secciones = /^(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales)/i;
+      let limpio = texto.replace(/<p>\s*(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales)\s*<\/p>/gi, '<h2>$1</h2>');
+      
+      const lineas = limpio.split('\n').map(l => l.trim()).filter(Boolean);
       const resultado = [];
       let bufferParrafo = [];
       let h2sGenerados = 0;
