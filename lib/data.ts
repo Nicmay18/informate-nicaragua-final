@@ -1,5 +1,4 @@
-import type { Noticia } from './types';
-import { FALLBACK_IMAGE } from './types';
+import { type Noticia, FALLBACK_IMAGE } from './types';
 import { capitalizeFirst } from './formateo';
 
 const DEFAULT_NEWS_COUNT = 30;

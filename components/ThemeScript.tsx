@@ -7,7 +7,7 @@ export default function ThemeScript() {
       const saved = localStorage.getItem('ni_theme');
       const theme = (saved === 'light' || saved === 'dark') ? saved : 'light';
       document.documentElement.setAttribute('data-theme', theme);
-    } catch (e) {
+    } catch (_e) {
       // ignore
     }
   }, []);

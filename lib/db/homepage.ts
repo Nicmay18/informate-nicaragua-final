@@ -1,7 +1,6 @@
 import { unstable_cache } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
-import type { Noticia } from '@/lib/types';
-import { FALLBACK_IMAGE } from '@/lib/types';
+import { type Noticia, FALLBACK_IMAGE } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
 import { capitalizeFirst } from '@/lib/formateo';
 

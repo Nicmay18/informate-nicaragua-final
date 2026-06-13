@@ -58,7 +58,7 @@ export default function TipTapEditor({ content = '', onChange, placeholder = 'Es
         
         if (hasHtmlTags && editorRef.current) {
           // Normalizar encabezados (convertir h1, h3, h4, h5, h6 a h2 que es el admitido)
-          let normalized = text
+          const normalized = text
             .replace(/<h[13456]\b([^>]*)>/gi, '<h2$1>')
             .replace(/<\/h[13456]>/gi, '</h2>');
             

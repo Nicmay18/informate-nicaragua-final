@@ -14,7 +14,7 @@ interface RatesData {
 const REFRESH_INTERVAL_MS = 30 * 60 * 1000; // 30 minutos
 
 function fmt(n?: number) {
-  if (n == null) return '—';
+  if (n === null || n === undefined) return '—';
   return n.toLocaleString('es-NI', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 }
 

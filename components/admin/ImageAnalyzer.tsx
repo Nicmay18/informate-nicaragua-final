@@ -60,7 +60,7 @@ export default function ImageAnalyzer({ onValidation, currentImageUrl }: Props) 
               const variance = totalVariance / (frame.length / 4);
               if (variance < 5) warnings.push('Imagen posiblemente vacia o monocromatica');
             }
-          } catch (e) {
+          } catch (_e) {
             // Canvas tainted, ignorar
           }
         }
