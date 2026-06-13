@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   trailingSlash: false,
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // ✅ Activar ESLint en build
   },
   typescript: {
     ignoreBuildErrors: false,

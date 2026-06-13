@@ -1,5 +1,6 @@
 import { initializeApp, getApps, cert, getApp, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { validateEnv, requireEnv } from './env';
 
 /**
  * Inicializa la aplicación de Firebase Admin SDK
@@ -11,19 +12,24 @@ function getAdminApp(): App {
     return getApp();
   }
 
+  // ✅ Validar todas las env vars en startup
+  const validation = validateEnv();
+  if (!validation.success) {
+    throw new Error(validation.error);
+  }
+
   const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
+  const projectId = requireEnv('FIREBASE_PROJECT_ID');
+  const clientEmail = requireEnv('FIREBASE_CLIENT_EMAIL');
+  const privateKeyRaw = requireEnv('FIREBASE_PRIVATE_KEY');
 
   // Diagnostic log (safe — no secrets revealed)
   console.log('[firebase-admin] env check:', {
     hasBase64: !!b64,
     base64Length: b64?.length || 0,
-    hasProjectId: !!projectId,
-    hasClientEmail: !!clientEmail,
-    hasPrivateKey: !!privateKeyRaw,
-    privateKeyLength: privateKeyRaw?.length || 0,
+    projectIdLength: projectId.length,
+    clientEmailPattern: clientEmail.split('@')[0] + '@***',
+    privateKeyLength: privateKeyRaw.length,
   });
 
   if (b64 && b64.trim().length > 10) {

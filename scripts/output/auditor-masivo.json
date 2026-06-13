@@ -1,0 +1,2443 @@
+{
+  "fecha": "2026-06-13T02:50:44.489Z",
+  "total": 206,
+  "niveles": {
+    "oro": 0,
+    "plata": 90,
+    "bronce": 116,
+    "rechazado": 0
+  },
+  "todas": [
+    {
+      "id": "erUOMi1fsv5GmP1bfFwu",
+      "slug": "accidente-de-moto-en-jinotega-deja-un-herido-grave",
+      "titulo": "Motociclista fallece tras colisión en carretera Jinotega.",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 579,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "IGFA2pNSEnX452WlJalV",
+      "slug": "policia-incauta-marihuana-y-captura-a-siete-personas-en-jinotega-mplsr5r3",
+      "titulo": "Policía incauta 131 libras de marihuana en operativo en Jinotega",
+      "nivel": "BRONCE",
+      "puntuacion": 68,
+      "palabras": 661,
+      "fallos": [
+        "Transiciones IA",
+        "Fuentes atribuidas",
+        "Revision editorial"
+      ]
+    },
+    {
+      "id": "5IlK17MUvaqPrJRTfUuR",
+      "slug": "la-costanera-nuevo-motor-de-inversion-inmobiliaria-en-nicaragua",
+      "titulo": "La Costanera: nuevo motor de inversión inmobiliaria en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 666,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "cBUKld5uQPl1KuHX1JpJ",
+      "slug": "incendio-destruye-negocio-y-deja-perdidas-por-c-200-mil-en-nindiri-mpz1vb5e",
+      "titulo": "Incendio destruye negocio en Nindirí con pérdidas de C$200 mil",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 542,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "BN739xoxA2gVCf5KUWTV",
+      "slug": "samsung-prepara-baterias-silicio-carbono-para-galaxy-s27",
+      "titulo": "Samsung lanza baterías silicio-carbono para Galaxy",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 549,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "slug": "toy-story-5-llegara-a-nicaragua-con-woody-y-buzz-en-la-era-digital-mpo9q5wr",
+      "titulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en junio",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 551,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "XFnwUlvyLVKUbFVdrTUL",
+      "slug": "guerra-en-iran-por-que-subiran-precio-de-condones-en-el-mundo",
+      "titulo": "Guerra en Irán: por qué subirán precio de condones en el mundo",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 730,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "AD5DzaeJbwyygIQVqd3C",
+      "slug": "ineter-pronostican-lluvias-y-tormentas-electricas-en-nicaragua",
+      "titulo": "Ineter pronostica lluvias y tormentas eléctricas en Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 594,
+      "fallos": []
+    },
+    {
+      "id": "yMsw7cfcGLlMbK2CD61L",
+      "slug": "policia-atiende-incidente-de-transito-en-quilali",
+      "titulo": "Rastra se vuelca en Los Jabalíes y deja una persona fallecida",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 560,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "slug": "julieta-venegas-presenta-tierra-de-esperanza-rumbo-al-mundial-2026-mprsawld",
+      "titulo": "Julieta Venegas interpretará canción para el Mundial 2026",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 531,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "Vd53UqkuV45BIcRs4Miu",
+      "slug": "incautan-502-kilos-de-cocaina-en-operativo-en-wiwili",
+      "titulo": "Policía y Ejército incautan 502 kilos de cocaína en Wiwilí",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 551,
+      "fallos": []
+    },
+    {
+      "id": "XHsdnSKHniKyMI1AWBXL",
+      "slug": "costa-rica-investigan-muerte-de-nicaraguense-y-buscan-a-sus-familiare",
+      "titulo": "Costa Rica investiga fallecimiento de nicaragüense en Heredia",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 706,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "slug": "nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica-mpivm3qs",
+      "titulo": "Nicaragüenses fallecen en hechos violentos en Costa Rica",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 593,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "M9vj4XiOdmMrLwreHlff",
+      "slug": "depresion-tropical-three-e-se-forma-frente-a-nicaragua-mq5i9fqi",
+      "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 541,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "y8gWejnBZDoLhgYaRWlP",
+      "slug": "perros-roboticos-reforzaran-seguridad-en-centro-fifa-mq2k6vi7",
+      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA de México",
+      "nivel": "BRONCE",
+      "puntuacion": 68,
+      "palabras": 594,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "slug": "como-sacar-y-apostillar-record-policial-de-nicaragua",
+      "titulo": "Cómo sacar y apostillar récord policial en Nicaragua paso a paso",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 656,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "slug": "beisbol-sigue-siendo-el-deporte-favorito-de-los-nicaraguenses-en-2026",
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 805,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "slug": "fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita-mpr4o7i9",
+      "titulo": "luvias provocan inundaciones y suspenden tráfico en Rosita",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 712,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "slug": "dos-hombres-mueren-por-descargas-electricas-en-managua-mpw3nf9i",
+      "titulo": "Dos hombres fallecen por descargas eléctricas en Managua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 560,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "eLJeY8NEp62lCIx7Tf5n",
+      "slug": "investigan-fallecimiento-de-hombre-en-local-de-managua",
+      "titulo": "Hombre de 57 años fallece en establecimiento de carretera a León",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 556,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "zwqEVVwFeeMooUBQpBR7",
+      "slug": "investigan-muerte-de-mujer-en-bus-de-la-ruta-jalapa-ocotal",
+      "titulo": "Fallece mujer en bus de la ruta Jalapa-Ocotal; investigan el caso",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 806,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+      "titulo": "Programa Nuevas Victorias entregará 85 viviendas en Nagarote",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 719,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ta1dOmtT9uQpxvmhYtEu",
+      "slug": "autoridades-reportan-incidentes-viales-en-granada-y-matagalpa",
+      "titulo": "Dos fallecen por rayos en tormentas de Granada y Matagalpa",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 558,
+      "fallos": []
+    },
+    {
+      "id": "IbgiPTV1eCWCfR7lfDOc",
+      "slug": "iran-exige-garantias-a-fifa-por-falta-de-visados-para-mundial",
+      "titulo": "Irán exige garantías a FIFA por falta de visados para Mundial",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 685,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "lJv8InQKCuFu1Iu0oNRJ",
+      "slug": "familia-busca-a-joven-desaparecido-en-laguna-de-xiloa-managua",
+      "titulo": "Joven desaparece en laguna de Xiloá mientras nadaba con amigos",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 589,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "CeqPObdhNdy5rBPPYcH5",
+      "slug": "apagon-afecta-a-miles-en-leon-y-poneloya-por-falla-electrica",
+      "titulo": "Trabajador fallece electrocutado durante labores en León",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 875,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "1PRR0VQRF8oXLfzFDhm5",
+      "slug": "oklahoma-evalua-impacto-de-fenomenos-climaticos",
+      "titulo": "Tornado deja 10 heridos y viviendas destruidas en Enid, Oklahoma",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 715,
+      "fallos": []
+    },
+    {
+      "id": "Rgbpy7e3fBdG8oDgfVEZ",
+      "slug": "avanza-construccion-hospital-pediatrico-las-segovias-esteli",
+      "titulo": "Avanza construcción Hospital Pediátrico Las Segovias, Estelí",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 935,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "slug": "joao-fonseca-remonta-dos-sets-y-elimina-a-djokovic-en-roland-garros-mprxw6qx",
+      "titulo": "Joven desaparece en laguna de Xiloá mientras nadaba con amigos",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 568,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "slug": "modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones-mpil7va3",
+      "titulo": "Bluefields estrena aeropuerto modernizado con US$10 millones",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 482,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "n43KpIJvXSWRlC9rR0mh",
+      "slug": "amgen-alertas-por-tavneos-tras-investigacion-de-seguridad",
+      "titulo": "Amgen: alertas por Tavneos tras investigación de seguridad",
+      "nivel": "BRONCE",
+      "puntuacion": 68,
+      "palabras": 841,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)",
+        "Clickbait",
+        "Titulo Discover-friendly"
+      ]
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "slug": "medio-millon-participa-en-vigilia-del-papa-en-madrid-mq343svj",
+      "titulo": "Medio millón participa en vigilia del Papa Francisco en Madrid",
+      "nivel": "BRONCE",
+      "puntuacion": 67,
+      "palabras": 441,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "T0RH7caMTB8Ydm3AgVPJ",
+      "slug": "clima-extremo-en-nicaragua-tornado-en-somotillo-y-granizo-en-jinotepe",
+      "titulo": "Tornado en Somotillo y granizo en Jinotepe por clima extremo",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 614,
+      "fallos": []
+    },
+    {
+      "id": "PCNXb9Gqsio9AzUetMQJ",
+      "slug": "consulado-gestiona-caso-de-connacional-en-puntarenas",
+      "titulo": "Nicaragüense fallece en riña en cárcel de Puntarenas, Costa Rica",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 517,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "Oejz1UtxGZb7LTATa6WP",
+      "slug": "jannik-sinner-tras-baja-de-alcaraz-el-tenis-necesita-a-carlos",
+      "titulo": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 923,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "NF9Q4ORwPOcsXKKRHuMa",
+      "slug": "canada-reporta-virus-por-roedores-en-columbia-britanica",
+      "titulo": "Canadá confirma caso de hantavirus vinculado al crucero MV Hondius",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 567,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "c95BYHepil5Vdf9bOUGZ",
+      "slug": "carlos-vives-y-maluma-lideran-premiacion-en-gala-de-musica-latina",
+      "titulo": "Carlos Vives y Maluma lideran premiación en gala de música latina",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 793,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "wVCz0rhXOzMXEHmw9Jgw",
+      "slug": "microsoft-corrige-fallo-de-seguridad-en-navegador-edge",
+      "titulo": "\"Microsoft corrige vulnerabilidad en Edge para usuarios Windows",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 519,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ctq3W0kZtNipZL2X9KTN",
+      "slug": "autoridades-investigan-incidente-con-unidad-de-transporte",
+      "titulo": "Conductor de caponera de 70 años fallece en barrio Cuba, Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 849,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "f19jnrsNZWCdyHfMbiT9",
+      "slug": "cae-banda-senalada-de-asesinar-a-guarda-de-seguridad-en-masaya",
+      "titulo": "Policía de Masaya captura a 3 implicados por asesinato de guarda",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 597,
+      "fallos": []
+    },
+    {
+      "id": "hqG7Wlt0ce9IebupbCvy",
+      "slug": "policia-guatemalteca-reporta-detencion-nicaraguense",
+      "titulo": "Policía guatemalteca reporta detención nicaragüense",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 649,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "2QXi7MqebN30PXzQoe2E",
+      "slug": "consulado-asiste-a-familia-nicaraguense-tras-emergencia-en-miami",
+      "titulo": "Migrante de Nueva Segovia fallece en Miami; familia pide ayuda",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 544,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "sRiMFXA51EbxWNAd2GPl",
+      "slug": "shakira-lanza-dai-dai-himno-oficial-del-mundial-2026",
+      "titulo": "Shakira lanza Dai Dai, himno oficial del Mundial 2026",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 713,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "si1jE03Tu4WiIAEygA1I",
+      "slug": "siuna-aplicara-multas-por-arrojar-basura-desde-transporte-publico",
+      "titulo": "Siuna aplicará multas por arrojar basura desde transporte público",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 670,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HQrOHqjbqOXB4ZTs22vl",
+      "slug": "bomberos-controlan-incendio-en-masaya-evaluan-danos-materiales",
+      "titulo": "Incendio en Masaya deja una víctima mortal y daños totales",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 552,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "7AszCzTNxJWBnt1daHag",
+      "slug": "canal-de-panama-buques-pagan-4-millones-por-crisis-en-ormuz",
+      "titulo": "Buques pagan hasta 4 millones para cruzar el Canal de Panamá",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 638,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "1EMwcTEbV1ugQWmqVUAt",
+      "slug": "accidente-de-transito-en-larreynaga-deja-heridos",
+      "titulo": "Pareja fallece en accidente en semáforos de Larreynaga, Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 535,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "d9DsarvHBnNcRzfXiwAy",
+      "slug": "berman-espinoza-rompe-record-historico-de-1450-ponches",
+      "titulo": "Berman Espinoza rompe récord histórico de 1,450 ponches",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 877,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "D1ga76tETxisZGZGAlst",
+      "slug": "luca-zidane-recibe-atencion-medica-club-evalua-recuperacion",
+      "titulo": "Luca Zidane recibe atención médica; club evalúa recuperación",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 741,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ZPJlw7kAwozc29ZakeiD",
+      "slug": "autoridades-investigan-incidente-de-transito-en-jinotepe",
+      "titulo": "Menor de 14 años fallece tras caer de camión en la Panamericana",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 556,
+      "fallos": []
+    },
+    {
+      "id": "XMFnv7gCDZtpNNP7wB69",
+      "slug": "minsa-reporta-tercer-caso-por-picaduras-de-insectos-en-chontales",
+      "titulo": "Minsa reporta tercer caso por picaduras de insectos en Chontales",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 650,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "oBetC1qDrdPvR7QifSDP",
+      "slug": "netflix-anuncia-precuela-the-crown-sobre-familia-real-britanica",
+      "titulo": "Netflix anuncia precuela The Crown sobre familia real británica",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 650,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "slug": "mirador-san-francisco-de-asis-dinamiza-turismo-en-carretera-norte",
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 1237,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HehIB8G9HyMbqvYBUpZ5",
+      "slug": "capturan-a-dos-adolescentes-por-homicidio-de-joven-en-ocotal-mpnjwh7q",
+      "titulo": "Policía de Ocotal captura a 2 adolescentes por homicidio de joven",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 530,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "slug": "naufragio-en-caribe-norte-deja-mujer-muerta-y-dos-ninos-desaparecidos-mpr758k2",
+      "titulo": "Dos mujeres fallecen tras volcamiento de embarcación en Caribe Norte",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 807,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "slug": "brigada-medica-realiza-cirugia-cardiacas-gratuitas-en-hospital-de-leon-mppynpzs",
+      "titulo": "Brigada médica realiza cirugías cardíacas gratuitas en León",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 729,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "FUGUwwlbFkWK9WBVGiaB",
+      "slug": "dos-jovenes-mueren-asfixiados-en-pozo-en-kukra-hill-mq316nbh",
+      "titulo": "Dos jóvenes fallecen asfixiados en pozo en Kukra Hill",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 562,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "M5Ivl0fqvyOivSZMuNLY",
+      "slug": "nicaragua-tendra-dos-arbitros-en-el-mundial-2026-mq7740y0",
+      "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 549,
+      "fallos": [
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "slug": "turismo-en-nicaragua-crece-11-en-primer-trimestre-de-2026-segun-intur",
+      "titulo": "Nicaragua recibe 278.937 turistas internacionales en primer trimestre",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 719,
+      "fallos": []
+    },
+    {
+      "id": "TVgb0tVY15haE16LYOy3",
+      "slug": "masiva-asistencia-en-cierre-de-la-feria-nacional-de-la-vivienda",
+      "titulo": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 847,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "3S9dCTg2dafS0kMGMJ1V",
+      "slug": "temporada-de-huracanes-del-pacifico-2026-inicia-con-calma",
+      "titulo": "Temporada de huracanes del Pacífico 2026 inicia con calma",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 1083,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "UQfMofCdPniSsNvGFf7J",
+      "slug": "policia-investiga-incidente-en-carretera-costanera-rivas",
+      "titulo": "Policía investiga incidente en carretera Costanera, Rivas",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 875,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "7wyj46FM3IdwNXpgj6x3",
+      "slug": "juzgado-dicta-sentencia-por-accidente-en-nueva-segovia",
+      "titulo": "Juzgado dicta sentencia por accidente en Nueva Segovia",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 698,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "LJTrq7D8iDUGWvO9kxaE",
+      "slug": "policia-investiga-hallazgo-en-carretera-de-el-jicaro",
+      "titulo": "Hallan a agricultor fallecido a balazos en El Jícaro, Nueva Segovia",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 455,
+      "fallos": []
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "slug": "nicaragua-vivira-un-2026-historico-en-beisbol-con-mundial-sub-23-y-jjcc-mpoed7q6",
+      "titulo": "Nicaragua se alista para retos en béisbol internacional 2026",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 621,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "l2YJzk64Os0EVyIRVttN",
+      "slug": "autoridades-investigan-incidente-vial-entre-tipitapa-y-boaco",
+      "titulo": "Autoridades investigan incidente vial entre Tipitapa y Boaco",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 733,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "XTONg1lOfMlV1gNfMSm7",
+      "slug": "policia-decomisa-mercaderia-en-operativo-de-penas-blancas",
+      "titulo": "Desarticulan red de narcotráfico en frontera de Peñas Blancas",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 558,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HkJY4CFD6FMDxksE4Zxf",
+      "slug": "consulado-entrega-cuerpo-de-nicaraguense-fallecido-en-eeuu",
+      "titulo": "Repatrían cuerpo de nicaragüense fallecido en Miami.",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 591,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "slug": "sandboarding-en-cerro-negro-conquista-redes-y-atrae-turistas-a-leon-mpj7aari",
+      "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 748,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "SlbddUkqFREvSt9QddmR",
+      "slug": "policia-investiga-incidente-vial-en-carretera-jalapa",
+      "titulo": "Policía investiga incidente vial en carretera Jalapa",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 846,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel-mpq106ub",
+      "titulo": "Un fallecido y un herido en accidentes laborales en Managua y Estelí",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 899,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "PvmeAqNv4cyfztLFhqMO",
+      "slug": "microsoft-y-meta-ajustan-plantillas-para-acelerar-la-ia",
+      "titulo": "Microsoft y Meta implementan nuevas actualizaciones en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 68,
+      "palabras": 703,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "sPHkzFFWQL3A8PetLIWO",
+      "slug": "motociclista-que-atropello-a-dos-menores-es-capturado-en-jalapa",
+      "titulo": "Capturan a conductor que atropelló a dos menores en Jalapa",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 646,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "kpr5LCeGtA5X9kRXvWSN",
+      "slug": "torre-eiffel-se-ilumina-con-los-colores-del-psg-antes-de-la-final-mpsjfa4h",
+      "titulo": "Torre Eiffel se ilumina con colores del PSG previo a final europea",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 662,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "DlEsvr8msov0zXZiUSfP",
+      "slug": "florinda-meza-revela-secreto-a-angela-aguilar-para-un-amor-eterno",
+      "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 674,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "MHJfaX05ygumyujBuPa5",
+      "slug": "hospital-pediatrico-de-esteli-avanza-y-estara-listo-en-2026",
+      "titulo": "Hospital pediátrico de Estelí avanza y estará listo en 2026",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 936,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ect24qCFMfiygezE3j9D",
+      "slug": "investigan-homicidio-de-ciudadano-conocido-como-la-reina-menguena-mpo8rr3t",
+      "titulo": "Investigan fallecimiento de joven en Santo Domingo, Chontales",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 661,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "slug": "samsung-revela-que-galaxy-recibiran-android-17-mph1hp43",
+      "titulo": "Samsung revela qué Galaxy recibirán Android 17",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 539,
+      "fallos": [
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "XEBUgVpam4o7ucpmpqgD",
+      "slug": "descubren-dinosaurio-gigante-en-asia-pesaba-9-elefantes",
+      "titulo": "Descubren dinosaurio gigante en Asia: pesaba 9 elefantes",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 632,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "E4kgajtNNXP3wrT2wI0B",
+      "slug": "bebe-de-15-meses-muere-ahogado-tras-caer-en-una-cubeta-en-mateare-mpk7361w",
+      "titulo": "Bebé de 15 meses fallece ahogado tras caer en cubeta en Mateare",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 444,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "cRPiJzDN3D0YvgmUjvRk",
+      "slug": "explosion-de-cohete-new-glenn-de-blue-origin-sacude-cabo-canaveral-usa-mpr8a9cs",
+      "titulo": "Destrucción de vehículo New Glenn en prueba técnica en Florida",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 583,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "8zQOUMwXyazg3NIkJHxg",
+      "slug": "miles-participan-en-vigilia-cristiana-con-alex-zurdo-en-managua",
+      "titulo": "Miles participan en vigilia cristiana con Alex Zurdo en Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 666,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "TDgfYWff5VvlOgEkUuWu",
+      "slug": "nino-de-3-anos-sobrevive-a-naufragio-en-krukira-dos-mujeres-mueren-mprqtjrj",
+      "titulo": "Esposa y madre de capitán fallecen en naufragio en Caribe Norte",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 809,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "OrxV5HoQWEZ3pjEHwSb8",
+      "slug": "hallazgo-en-carretera-norte-activa-investigacion-policial",
+      "titulo": "Hallazgo en Carretera Norte activa investigación policial",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 821,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "hMOJHKhFSSOUp4LrBDmo",
+      "slug": "familia-recibe-respuesta-tras-busqueda-en-rio-bravo",
+      "titulo": "Identifican restos de nicaragüense desaparecido en el río Bravo",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 559,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "slug": "las-enfermedades-mas-comunes-en-nicaragua-y-como-prevenirlas-mprz1kg8",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 904,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "D5bci9JLyako7ccewIGc",
+      "slug": "policia-costarricense-investiga-caso-de-violencia",
+      "titulo": "Policía costarricense investiga caso de violencia",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 729,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "slug": "nicaragua-gana-oro-en-relevos-mixtos-4x100-en-managua-mq35pa5y",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 566,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "FCDK20FxyiuMz1kHDjqb",
+      "slug": "minsa-evalua-situacion-de-salud-en-evento-en-el-rama",
+      "titulo": "Atienden a 47 personas por intoxicación en comarca La Danta",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 661,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "R2zQFsmjsu0NvFRU7tDa",
+      "slug": "tres-leches-nicaraguense-gana-reconocimiento-internacional-mq37q2kd",
+      "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 573,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "N1bCYcRzuYvqApYNfHwg",
+      "slug": "fiscalia-pide-hasta-25-mil-anos-para-lider-de-ms-13-mq2gayaj",
+      "titulo": "Fiscalía pide hasta 25 mil años para líder de MS-13",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 560,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ssxa0uOpOPCg9RqLqwpY",
+      "slug": "menor-de-edad-es-retenido-tras-incidente-en-villa-libertad",
+      "titulo": "Menor de edad es retenido tras incidente en Villa Libertad",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 616,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "3FIrDPnlHKLQ9gqnCxKJ",
+      "slug": "autoridades-alertan-por-tormentas-electricas-en-nicaragua",
+      "titulo": "Autoridades alertan por tormentas eléctricas en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 76,
+      "palabras": 632,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Clickbait",
+        "Titulo Discover-friendly"
+      ]
+    },
+    {
+      "id": "yXELqcLI6Xh3Mcfe4cSp",
+      "slug": "fiscalia-investiga-hallazgo-en-telica-leon",
+      "titulo": "Policía Nacional investiga hallazgo de cuerpo sin vida en Telica",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 641,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "slug": "dos-nicaraguenses-fallecen-en-accidentes-ocurridos-en-honduras-y-miami-mpz2e7yq",
+      "titulo": "Dos nicaragüenses fallecen en accidentes en Honduras y Miami",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 577,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "rKNxcfeotxszuclpLCyI",
+      "slug": "tres-colisiones-dejan-heridos-en-managua-y-matagalpa",
+      "titulo": "Tres motociclistas fallecen en accidentes en Managua y Matagalpa",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 685,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "jCR0TauTK8jQc2HJ3xhM",
+      "slug": "aumentan-casos-de-electrocucion-en-accidentes-laborales-mq32zdep",
+      "titulo": "Aumentan casos de electrocución en accidentes laborales",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 583,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "slug": "megahospitales-transformaran-la-atencion-medica-en-nicaragua-mpodcph9",
+      "titulo": "Megahospitales transformarán la atención médica en Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 741,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua-mprx2mdt",
+      "titulo": "Dos obreros fallecen y otros dos resultan heridos en accidentes",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 785,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "yCN8IBbWL1xxPvNhJqTx",
+      "slug": "justicia-en-siuna-cae-sujeto-que-mato-a-joven-con-una-piocha",
+      "titulo": "Detienen a sospechoso de homicidio con herramienta en Siuna",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 622,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ZbyMKAULev61O1TnfxSU",
+      "slug": "consulado-asiste-a-nicaraguense-tras-accidente-en-cartago",
+      "titulo": "Nicaragüense fallece tras disputa vial en Cartago, Costa Rica",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 588,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "uroqqoNRVgTvzUH1Gh4W",
+      "slug": "investigan-accidentes-de-moto-ocurridos-este-domingo",
+      "titulo": "Dos persona fallecidas y una niña herida en accidentes de moto",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 624,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "VAQWaSecbeFlCuK8KCgG",
+      "slug": "bus-de-jalapa-colisiona-con-cisterna-en-tipitapa-mq2jh8zn",
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 521,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "fyw1t5isNXwzDEjoT266",
+      "slug": "policia-busca-a-conductor-involucrado-en-incidente-en-rosita",
+      "titulo": "Policía busca a conductor involucrado en incidente en Rosita",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 679,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "OHzJfumT84hFTV5SQD6i",
+      "slug": "minsa-atiende-a-tres-menores-tras-accidente-domestico",
+      "titulo": "Dos hermanitos se queman con agua hirviendo en Villa El Carmen",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 547,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "slug": "yadel-y-camerata-bach-fusionan-regueton-y-cultura-en-managua-mprplsub",
+      "titulo": "Más de 30 mil personas asisten al concierto de Yadel en Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 613,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "OKGf076aUjmSNv1k1ret",
+      "slug": "pena-maxima-para-asesino-adolescente-en-santo-domingo-chontales",
+      "titulo": "Pena máxima para asesino adolescente en Santo Domingo, Chontales",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 793,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "IalAiQKrqinKuD5U0TdE",
+      "slug": "autoridades-investigan-incidente-acuatico-en-laguna-de-xiloa",
+      "titulo": "Juan Carlos López fallece por sumersión en Laguna de Xiloá",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 763,
+      "fallos": [
+        "Lead informativo",
+        "Transiciones IA",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Revision editorial"
+      ]
+    },
+    {
+      "id": "nTkEi14v12nHn18SHdQI",
+      "slug": "organizacion-migrante-reporta-13-decesos-nicaraguenses-en-eeuu",
+      "titulo": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 705,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "JgF9ievsdzhnOwtqh70S",
+      "slug": "taylor-swift-busca-registrar-su-voz-como-marca-ante-auge-de-la-ia",
+      "titulo": "Taylor Swift busca registrar su voz como marca ante auge de la IA",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 703,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "slug": "streaming-en-nicaragua-jovenes-dominan-plataformas-digitales-mpnm7p94",
+      "titulo": "Netflix, Max y Disney+ lideran streaming en Nicaragua juvenil",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 685,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "tXBIl2x9SQj6C4v4s4i8",
+      "slug": "autoridades-investigan-accidente-en-rancho-grande",
+      "titulo": "Autoridades investigan accidente en Rancho Grande",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 618,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "uERNXPtxMFmHU1rqAC0N",
+      "slug": "sony-music-compra-catalogo-de-shakira-y-beyonce",
+      "titulo": "Sony Music compra catálogo de Shakira y Beyoncé",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 743,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "XKRkS7QqHf13v0urZg9C",
+      "slug": "policia-investiga-hallazgo-en-vivienda-de-ciudad-dario",
+      "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 726,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "slug": "turistas-extranjeros-viralizan-a-nicaragua-por-sus-paisajes-y-costos-mpstijag",
+      "titulo": "Turistas extranjeros comparten experiencias favorables sobre Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 610,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "SM2fzy975dM5oxuoPgQx",
+      "slug": "muere-esposa-de-marvin-benard-en-accidente-vial-en-california-mpiggi3q",
+      "titulo": "Esposa de Marvin Benard fallece en accidente en California",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 613,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "Bo0hQ4L0astO6INh9QZS",
+      "slug": "hombre-de-leon-muere-ahogado-en-playa-de-san-juan-del-sur-mpsxpc94",
+      "titulo": "Fallece joven por sumersión en playa Matilde, San Juan del Sur",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 615,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "G9pgH30FxK9kUZ9Dqnai",
+      "slug": "accidente-de-transito-en-san-ramon-deja-dos-heridos",
+      "titulo": "Accidente de tránsito en San Ramón deja dos heridos",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 637,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HASie7C63k5BAKuwsdQU",
+      "slug": "familiares-localizan-a-adulto-mayor-tras-busqueda-en-las-jaguitas",
+      "titulo": "Familiares localizan a adulto mayor tras búsqueda en Las Jagüitas",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 806,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "L23qf1SLBkKo49Z2OPIP",
+      "slug": "historico-sebastian-sawe-rompe-barrera-de-2-horas-en-maraton",
+      "titulo": "¡Histórico! Sebastián Sawe rompe barrera de 2 horas en maratón",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 759,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "PNJr8KWo2Gy1TCjuF9jq",
+      "slug": "oleaje-dana-embarcaciones-y-afecta-turismo-en-rivas-mq750qpt",
+      "titulo": "Oleaje daña embarcaciones y afecta turismo en Rivas",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 517,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "Bfl8jRGnLPIQDS1qXqGq",
+      "slug": "minsa-reporta-tercer-caso-medico-por-insectos-en-chontales",
+      "titulo": "fallece adulta mayor y suman tres fallecidos por ataque de abejas",
+      "nivel": "BRONCE",
+      "puntuacion": 67,
+      "palabras": 739,
+      "fallos": [
+        "Lead informativo",
+        "Transiciones IA",
+        "Negritas (strong)",
+        "Revision editorial"
+      ]
+    },
+    {
+      "id": "aFK0buUKVMKOICj3gVvA",
+      "slug": "francisco-rios-duarte-recibe-30-anos-por-feminicidio-en-telica-mppzdgih",
+      "titulo": "Condenan a 30 años de prisión por feminicidio en Telica",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 695,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "E3R3ObpLUkSgWcAPblh0",
+      "slug": "investigan-muerte-de-motociclista-en-el-jicaro-mq2i4nsn",
+      "titulo": "Investigan fallecimiento de motociclista en El Jícaro",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 519,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "slug": "taskslinger-la-alternativa-rapida-al-administrador-de-tareas-mpk33vda",
+      "titulo": "Nueva alternativa al Administrador de tareas en Windows",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 646,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "4rdCg3m1oNikSJP4nZjH",
+      "slug": "managua-ciudadano-hondureno-fallece-tras-vuelco-de-camioneta",
+      "titulo": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 685,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "ZTVWiR99Nppa5L2P4wT1",
+      "slug": "incendio-en-puesto-del-mercado-oriental-controlado-por-bomberos",
+      "titulo": "Siniestro estructural afecta Mercado Oriental de Managua",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 698,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua-mpu1rbf9",
+      "titulo": "Tres personas fallecen en accidentes de motocicleta en Rivas y Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 534,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "Bd0FR40BQL9MYKXutpSr",
+      "slug": "openai-amenaza-con-demandar-a-apple-por-crisis-de-chatgpt",
+      "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en iOS",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 620,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "erLH7I7s1YQDVJqKKnRm",
+      "slug": "nacen-trillizos-en-mulukuku-y-llenan-de-alegria-a-comunidad",
+      "titulo": "Nacen trillizos en Mulukukú y llenan de alegría a comunidad",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 670,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "lsUzLddRdDCzSo3R9VkT",
+      "slug": "fiscalia-de-california-investiga-fraude-de-entradas-fifa",
+      "titulo": "Fiscalía de California investiga fraude de entradas FIFA",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 752,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "Zt9NtuqCLNMhBhmH6IEN",
+      "slug": "jennyfer-reyes-muere-tras-complicaciones-de-liposuccion-en-managua-mppy156p",
+      "titulo": "Detienen a médico en Managua por muerte tras liposucción",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 564,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "MpaX1DrqNQaUdP8P1e7l",
+      "slug": "dos-nicaraguenses-fallecen-en-el-extranjero-costa-rica-y-ee-uu-mpqh0vxl",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero: Costa Rica y EE.UU.",
+      "nivel": "PLATA",
+      "puntuacion": 77,
+      "palabras": 535,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "YlSYUQ3nTXWziLYkld74",
+      "slug": "policia-investiga-incidente-vial-en-jalapa-nueva-segovia",
+      "titulo": "Policía investiga incidente vial en Jalapa, Nueva Segovia",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 635,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "OWppqYU03AfZQHIoqEL7",
+      "slug": "buscan-a-sospechoso-de-muerte-de-ciudadano-en-asang-waspam",
+      "titulo": "Disputa por chicha bruja termina en fallecimiento en Asang",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 568,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "3Dlu4tCQZedztrompEgV",
+      "slug": "autoridades-investigan-incidente-de-transito-en-matiguas",
+      "titulo": "Melquin Esedec Masis falleció en accidente de moto en Matiguás",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 583,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "YMhZnFxcC1LINNtptLYL",
+      "slug": "dos-personas-fallecen-por-presuntos-problemas-cardiacos-en-managua-y-leon-mpj0949s",
+      "titulo": "Autoridades analizan fallecimientos repentinos en Managua y León",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 669,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "slug": "kfc-apuesta-por-carretera-a-masaya-para-expandirse-en-nicaragua-mpoahvtf",
+      "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 701,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "NPLJwHZ5rPg3bp79XVTO",
+      "slug": "conductor-huye-tras-atropello-mortal-en-la-ceiba-leon",
+      "titulo": "Conductor huye tras atropello mortal en carretera de León",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 619,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "4I2mdwQEGYN7N7M0KTkA",
+      "slug": "colision-en-jinotepe-deja-danos-materiales-y-heridos-leves",
+      "titulo": "Joven fallece tras accidente de motocicleta en Jinotepe",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 636,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "slug": "inauguraran-hospital-pediatrico-las-segovias-en-esteli-este-18-de-mayo",
+      "titulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí el 18 de mayo",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 691,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "2EQFdVtgjMWe3SN4A9yM",
+      "slug": "windows-11-se-instala-mas-rapido-tras-cambio-de-microsoft",
+      "titulo": "Microsoft optimiza el tiempo de instalación en Windows 11",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 543,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ji2rLsYoOn3VKOsKwQRI",
+      "slug": "michael-rompe-records-como-estreno-biografico-mas-exitoso",
+      "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 702,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "8ePAwlFzkvYLwHi08zCi",
+      "slug": "autoridades-investigan-incidente-laboral-en-pozo-de-madriz",
+      "titulo": "Autoridades investigan incidente laboral en pozo de Madriz",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 627,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "mk3B51skMrff3bMTEbP9",
+      "slug": "tres-muertos-y-un-lesionado-en-accidentes-de-transito-mq3ebgm6",
+      "titulo": "Tres persona fallecidas y un lesionado en accidentes de tránsito",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 524,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "slug": "comercios-esperan-alta-actividad-por-dia-de-las-madres-en-nicaragua-mpk4s499",
+      "titulo": "Comercios esperan alta actividad por Día de las Madres",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 767,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "slug": "seis-policias-mueren-en-operativo-antidrogas-en-honduras",
+      "titulo": "Operativo antidrogas en Honduras deja múltiples bajas policiales",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 655,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "gkAeVBYY9AQBzAYCmjWk",
+      "slug": "activistas-intentan-bloquear-wall-street-en-protesta-climatica",
+      "titulo": "Activistas protestan en distrito financiero de Nueva York",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 628,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "6W5tgAUCaM1w9lsSjA6Z",
+      "slug": "minsa-reporta-incidente-vial-de-funcionario-en-carretera-norte",
+      "titulo": "Fallece funcionario del Minsa tras colisión en Carretera Norte",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 644,
+      "fallos": []
+    },
+    {
+      "id": "6mFFoc06RfC8trFeBuNI",
+      "slug": "hallan-sin-vida-a-adolescente-desaparecido-en-laguna-de-apoyo-mq1ru986",
+      "titulo": "Hallan sin vida a adolescente desaparecido en Laguna de Apoyo",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 578,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "p3IKfmbWdUPIrSbbOynM",
+      "slug": "sequia-extrema-afecta-150-millones-de-hectareas-en-latinoamerica",
+      "titulo": "Crisis hídrica impacta productividad agrícola en Corredor Seco",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 532,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "dE7i2Dv4MhE3AVFioLG2",
+      "slug": "familia-nicaraguense-gestiona-repatriacion-desde-san-francisco",
+      "titulo": "Familia nicaragüense gestiona repatriación desde San Francisco",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 656,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "slug": "metal-sonic-se-integra-oficialmente-a-la-pelicula-sonic-4",
+      "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 1222,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "SeoMG4MIHxsP87RjT5FI",
+      "slug": "china-clona-cabras-lecheras-de-alto-rendimiento",
+      "titulo": "China clona cabras lecheras de alto rendimiento",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 683,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "slug": "cuatro-nicaraguenses-mueren-en-el-exterior-en-menos-de-una-semana",
+      "titulo": "Cuatro nicaragüenses fallecen en Costa Rica, El Salvador y EE.UU.",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 730,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "DSupNkyxXjdYohRW1EHS",
+      "slug": "operativo-contra-caponeras-deja-multas-y-unidades-retenida-en-catarina",
+      "titulo": "Operativo contra caponeras deja multas en Catarina",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 666,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "slug": "disminucion-de-lluvias-afecta-cultivos-y-reservas-de-agua-en-nicaragua-mpo83lm6",
+      "titulo": "Disminución de lluvias afecta cultivos y reservas en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 642,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "slug": "bluefields-celebra-el-palo-de-mayo-con-musica-y-tradicion-caribena-mpk3j2fs",
+      "titulo": "Bluefields celebra el Palo de Mayo con música caribeña",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 703,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "9YSrsEdWBiO9Uu1CV8u6",
+      "slug": "australia-7-de-cada-10-menores-burlan-prohibicion-de-redes",
+      "titulo": "Australia: Menores evaden ley que prohíbe acceso a redes sociales",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 708,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "spER21JvxCJDsMfv63cX",
+      "slug": "policia-reporta-incidentes-viales-con-funcionarios",
+      "titulo": "Policía reporta incidentes viales con funcionarios",
+      "nivel": "PLATA",
+      "puntuacion": 85,
+      "palabras": 596,
+      "fallos": []
+    },
+    {
+      "id": "pnxe5tdSosT15kgUKG0N",
+      "slug": "nicaraguense-muere-en-accidente-de-transito-en-costa-rica",
+      "titulo": "Nicaragüense fallece en accidente de tránsito en Costa Rica",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 545,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "slug": "espana-francia-y-argentina-llegan-como-favoritas-al-mundial-2026-mq75v2dd",
+      "titulo": "España, Francia y Argentina llegan como favoritas al Mundial 2026",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 513,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "slug": "tiktok-bajo-la-lupa-por-efectos-en-jovenes-nicaraguenses-mpnl6m92",
+      "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 742,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "NTa3Gb797l9FINZ2E7RU",
+      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales-mq5g5h8x",
+      "titulo": "Fin de semana deja ocho fallecidos en accidentes viales",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 517,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "qAGYHKq4PG7PnXhkUvWa",
+      "slug": "costa-rica-invita-a-nicaragua-a-toma-posesion-de-laura-fernandez",
+      "titulo": "Costa Rica invita a Nicaragua a toma posesión de Laura Fernández",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 652,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "I5Ctqa8wJi0TYgi4lW3r",
+      "slug": "fiscalia-investiga-deceso-de-recluso-en-matagalpa",
+      "titulo": "Fiscalía investiga deceso de recluso en Matagalpa",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 714,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "jG3mvtcfZCxzecd62Lgd",
+      "slug": "fin-de-semana-violento-deja-muertos-y-herido-en-leon-ocotal-y-managua-mpk2rqjn",
+      "titulo": "Dos fallecidos y tres heridos en hechos en León, Ocotal y Managua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 649,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "CaxNVIKzrIl5rBpKs0vy",
+      "slug": "tres-detenidos-por-muerte-de-joven-tras-cirugia-estetica-mpr68huo",
+      "titulo": "Médico y dos personas detenidos por fallecimiento tras cirugía",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 574,
+      "fallos": []
+    },
+    {
+      "id": "H8jrdHS4iXfFEAE2R0D9",
+      "slug": "investigan-dos-homicidios-ocurridos-en-chontales-y-managua-mplu3ubd",
+      "titulo": "Investigan fallecimientos violentos en Chontales y Managua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 650,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "slug": "nicaraguenses-acumulan-c-291-mil-millones-en-depositos-mq7alqnp",
+      "titulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "nivel": "BRONCE",
+      "puntuacion": 79,
+      "palabras": 531,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "slug": "juez-deja-libre-a-nicaraguense-investigada-por-muerte-de-su-hermana-mq1t5hpw",
+      "titulo": "Juez deja libre a nicaragüense investigada por fallecimiento",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 516,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "HHo7xV5BjPkOVWpafcvB",
+      "slug": "policia-investiga-incidente-en-ciudad-sandino",
+      "titulo": "Policía investiga incidente en Ciudad Sandino",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 638,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Titulo 55-60 chars"
+      ]
+    },
+    {
+      "id": "cW59E7JhZd9PT6Epx2aJ",
+      "slug": "shakira-reune-a-dos-millones-de-fans-en-concierto-de-brasil",
+      "titulo": "Shakira reúne a dos millones de fans en concierto de Brasil",
+      "nivel": "BRONCE",
+      "puntuacion": 67,
+      "palabras": 628,
+      "fallos": [
+        "Lead informativo",
+        "Transiciones IA",
+        "Fuentes atribuidas",
+        "Negritas (strong)",
+        "Revision editorial"
+      ]
+    },
+    {
+      "id": "e7FFhasFNh3pd7o4xBMo",
+      "slug": "dos-motociclistas-fallecen-en-granada-y-chontales-este-sabado-mpikhaml",
+      "titulo": "Tres accidentes de moto dejan dos fallecidos y una menor lesionada",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 674,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "POzMmYcjC7Vy2JHS1KmW",
+      "slug": "reportan-accidente-laboral-de-repartidor-nicaraguense",
+      "titulo": "Reportan accidente laboral de repartidor nicaragüense",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 657,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "ICRNpizAeFDiL5d1HJvH",
+      "slug": "expertos-analizan-rol-de-ia-en-ciberseguridad-global",
+      "titulo": "Expertos analizan rol de IA en ciberseguridad global",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 823,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "LtSsDQVXjtAAzNH0tUAH",
+      "slug": "policia-investiga-incidente-vial-entre-boaco-y-camoapa",
+      "titulo": "Investigan atropello con deceso en carretera Boaco–Camoapa",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 940,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "sOZp2AGCVvYQ2I5oK0Dj",
+      "slug": "cae-guatemalteco-con-23-kilos-de-cocaina-en-frontera-el-guasaule",
+      "titulo": "Cae guatemalteco con 23 kilos de cocaína en frontera El Guasaule",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 717,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "slug": "hospital-bertha-calderon-ejecuta-con-exito-cirugia-fetal",
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 978,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "9r2T2MekDALgdPNQ2Byy",
+      "slug": "bomberos-rescatan-trabajador-tras-caida-en-esteli",
+      "titulo": "Jerónimo Sobalvarro, 73 años, fallece tras caer con motocicleta",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 654,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "Bad5bgJKE5uYOdW3NeRf",
+      "slug": "luka-modric-recibe-tratamiento-medico-club-evalua-recuperacion",
+      "titulo": "Luka Modrić recibe tratamiento médico; club evalúa recuperación",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 906,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "9nnYjOtCUS1HnZteGuf3",
+      "slug": "abril-registra-70-accidentes-de-transito-en-nicaragua",
+      "titulo": "Abril registra 70 accidentes de tránsito en Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 80,
+      "palabras": 639,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "DuaMg4XI8aPmAHw8otN1",
+      "slug": "accidente-de-moto-en-puente-muco-deja-investigacion-abierta",
+      "titulo": "Accidente en Puente Muco deja un fallecido y un herido en Boaco",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 650,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "8TzGIMouh9sFySZbjBPx",
+      "slug": "fenomeno-viral-de-frutinovelas-genera-debate-sobre-ia-en-redes",
+      "titulo": "Fenómeno viral de frutinovelas genera debate sobre IA en redes",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 688,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "slug": "como-anular-el-record-policial-en-nicaragua-en-2026",
+      "titulo": "Guía para el trámite de anulación de récord policial en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 736,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres-mpiluv8a",
+      "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 618,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "slug": "kfc-nicaragua-2026-apertura-en-managua-menu-confirmado",
+      "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 581,
+      "fallos": [
+        "Lead informativo"
+      ]
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "slug": "ebola-avanza-en-congo-mientras-violencia-frena-respuesta-medica-mph0q8yw",
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 749,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "gnnUjlF9z4wdg9jykpJm",
+      "slug": "neymar-jr-se-prepara-para-el-mundial-2026-tras-recuperacion",
+      "titulo": "Neymar Jr. se prepara para el Mundial 2026 tras recuperación",
+      "nivel": "PLATA",
+      "puntuacion": 78,
+      "palabras": 1188,
+      "fallos": [
+        "Lead informativo",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "aNWsSWkbLlE6FiLkVqmF",
+      "slug": "miel-san-marcos-realiza-concierto-en-centro-de-rehabilitacion",
+      "titulo": "Miel San Marcos realiza concierto en centro de rehabilitación",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 578,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "jMCRlTyJPKxF2MSiOW3Z",
+      "slug": "academia-de-hollywood-limita-uso-de-ia-en-peliculas-para-oscar",
+      "titulo": "Academia de Hollywood limita uso de IA en películas para Óscar",
+      "nivel": "BRONCE",
+      "puntuacion": 70,
+      "palabras": 631,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "slug": "primeros-bebes-del-dia-de-las-madres-nacen-en-managua-y-rivas-mpsl8sij",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de Managua",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 696,
+      "fallos": []
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "slug": "escolta-de-ultraval-enfrenta-juicio-por-robo-en-managua",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo de 13 mil córdobas",
+      "nivel": "PLATA",
+      "puntuacion": 81,
+      "palabras": 550,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "dgjsES2KHZ3AFaGHIoLt",
+      "slug": "hallazgo-de-cuerpo-en-muy-muy-activa-investigacion-fiscal",
+      "titulo": "Investigan hallazgo de cuerpo sin vida en Muy Muy, Matagalpa",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 610,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte-mplrwih2",
+      "titulo": "Cinco fallecimientos en 24 horas por accidentes de tránsito",
+      "nivel": "PLATA",
+      "puntuacion": 83,
+      "palabras": 761,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "nBDHAoiCgbp81dSmIYqT",
+      "slug": "policia-investiga-caso-en-sebaco-detienen-a-sospechoso",
+      "titulo": "Investigan delito grave de joven de 19 años en comunidad Molino Sur",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 676,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "tauy4uXG1uwf1g44zcZ3",
+      "slug": "semaforos-solares-modernos-entran-en-funcionamiento-en-managua",
+      "titulo": "Semáforos solares modernos entran en funcionamiento en Managua",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 740,
+      "fallos": [
+        "Lead informativo",
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "y3wh5fh7uBD2Rhc5EjBO",
+      "slug": "dos-personas-mueren-ahogadas-en-tipitapa-y-rivas-este-fin-de-semana-mpu2iuqu",
+      "titulo": "Dos personas fallecen ahogadas en Managua y Rivas durante el fin de semana",
+      "nivel": "PLATA",
+      "puntuacion": 79,
+      "palabras": 575,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "slug": "residencial-las-madres-inaugura-575-viviendas-para-familias-en-managua-mpsx64oj",
+      "titulo": "Inauguran Residencial Las Madres en Managua para 575 familias",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 563,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "4cSRo7UUcLkhqHa4m0gx",
+      "slug": "tres-accidentes-transito-managua-boaco-lesionados",
+      "titulo": "Tres accidentes de tránsito dejan lesionados en Managua y Boaco",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 546,
+      "fallos": []
+    },
+    {
+      "id": "vDqwQW7VvkSeu8xbi5O3",
+      "slug": "jinotegana-fallece-tras-accidente-laboral-en-rancho-de-wisconsin-mqbjf0in",
+      "titulo": "Jinotegana fallece tras accidente laboral en rancho de Wisconsin",
+      "nivel": "BRONCE",
+      "puntuacion": 66,
+      "palabras": 578,
+      "fallos": [
+        "Transiciones IA",
+        "Negritas (strong)",
+        "Revision editorial"
+      ]
+    },
+    {
+      "id": "56CAzAZp09D9cXiCCHIS",
+      "slug": "bonanza-policia-captura-a-implicados-en-asalto-a-motorizado-mqbi0271",
+      "titulo": "Bonanza: Policía captura a implicados en asalto a motorizado",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 538,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "bGhSEqg0V8gZi8HdfNx5",
+      "slug": "kartuk-tukan-la-memoria-ancestral-del-pueblo-rama-mqbgzrqr",
+      "titulo": "Kartuk Tukan: La memoria ancestral del pueblo Rama",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 595,
+      "fallos": [
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "8Qoi3y95EDy9fkzJVBus",
+      "slug": "dictan-prision-preventiva-a-acusado-de-feminicidio-en-masaya-mqbgdjo4",
+      "titulo": "Dictan prisión preventiva a acusado de feminicidio en Masaya",
+      "nivel": "BRONCE",
+      "puntuacion": 74,
+      "palabras": 584,
+      "fallos": [
+        "Fuentes atribuidas"
+      ]
+    },
+    {
+      "id": "lby5opNDyq1O5TbAn9wx",
+      "slug": "tatiana-guzman-primera-nicaraguense-en-arbitraje-de-mundial-fifa-mqbfsvf9",
+      "titulo": "Tatiana Guzmán: Primera nicaragüense en arbitraje de Mundial FIFA",
+      "nivel": "BRONCE",
+      "puntuacion": 72,
+      "palabras": 594,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "slug": "de-arjona-a-aventura-conciertos-anunciados-para-nicaragua-mq8oagpz",
+      "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "nivel": "PLATA",
+      "puntuacion": 76,
+      "palabras": 633,
+      "fallos": [
+        "Fuentes atribuidas",
+        "Negritas (strong)"
+      ]
+    }
+  ]
+}
