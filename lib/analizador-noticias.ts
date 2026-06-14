@@ -89,15 +89,21 @@ const CLICKBAIT_PATTERNS = [
   /sorprendente/i,
 ];
 
+// Transiciones exclusivamente IA (detectadas en textos generados por LLM)
+// EXCLUIDAS: ademas, sin embargo, por su parte, asimismo, en cuanto a, no obstante
+// porque son uso legitimo del periodismo en espanol.
 const TRANSICIONES_IA = [
   'en conclusion', 'en resumen', 'es importante destacar',
   'vale la pena mencionar', 'no hay que olvidar', 'en el contexto de',
   'desde esta perspectiva', 'en ultima instancia', 'a fin de cuentas',
   'en el marco de', 'resulta fundamental', 'resulta evidente',
   'no cabe duda', 'es indiscutible', 'resulta innegable',
-  'en conclusion', 'en resumen', 'en definitiva', 'para concluir',
+  'en definitiva', 'para concluir',
   'como se menciono anteriormente', 'es relevante senalar',
   'no se puede ignorar', 'es crucial', 'es vital',
+  'finalmente', 'por otro lado', 'por ende', 'de igual manera',
+  'en ese sentido', 'al respecto', 'por lo tanto', 'en consecuencia',
+  'cabe señalar', 'vale la pena recordar', 'en este contexto', 'a su vez',
 ];
 
 // ───────────────────────────────────────────────
