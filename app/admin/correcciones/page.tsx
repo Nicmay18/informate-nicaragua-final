@@ -68,7 +68,7 @@ export default function CorreccionesPage() {
     if (typeof window === 'undefined') return;
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const authInstance = getAuth(app);
-    const firestore = getFirestore(app);
+    const firestore = getFirestore(app, 'n0311');
     setDb(firestore);
     setAuth(authInstance);
     const unsub = onAuthStateChanged(authInstance, (u) => {
