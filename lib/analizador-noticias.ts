@@ -435,11 +435,13 @@ function analizarFiltroNews(n: NoticiaInput): FiltroResultado {
   });
 
   // 4. Categoria valida
-  const categoriasValidas = ['Nacionales', 'Sucesos', 'Politica', 'Economia', 'Deportes', 'Cultura', 'Salud', 'Tecnologia', 'Internacionales', 'Espectaculos', 'Infraestructura', 'Judicial', 'General'];
+  const CATEGORIAS_SITIO = ['Sucesos', 'Nacionales', 'Deportes', 'Internacionales', 'Espectáculos', 'Tecnología', 'Economía', 'Cultura', 'Salud', 'Política', 'Infraestructura', 'Judicial', 'General'];
+  const categoriaNormalizada = n.categoria?.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() || '';
+  const valida = CATEGORIAS_SITIO.some(c => c.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() === categoriaNormalizada);
   checks.push({
     nombre: 'Categoria News',
-    estado: categoriasValidas.includes(n.categoria) ? 'PASS' : 'WARN',
-    mensaje: categoriasValidas.includes(n.categoria)
+    estado: valida ? 'PASS' : 'WARN',
+    mensaje: valida
       ? `Categoria: ${n.categoria}`
       : `Categoria "${n.categoria}" no estandar para Google News.`,
   });
@@ -575,9 +577,11 @@ function generarMetadataSugerida(n: NoticiaInput, _filtros: ResultadoAnalisis['f
     tituloOptimizado: n.titulo.length > 60
       ? n.titulo.slice(0, 57) + '...'
       : n.titulo,
-    metaDescription: n.resumen.length < 150
-      ? n.resumen + ' ' + n.categoria + ' Nicaragua.'
-      : n.resumen.slice(0, 157) + '...',
+    metaDescription: n.resumen.length >= 150 && n.resumen.length <= 170
+      ? n.resumen
+      : n.resumen.length < 150
+        ? n.resumen + ' ' + n.categoria + ' Nicaragua.'
+        : n.resumen.slice(0, 167) + '...',
     keywordsLSI,
     h2Sugeridos: sugerirH2(n),
   };
@@ -587,32 +591,37 @@ function extraerKeywordsLSI(n: NoticiaInput): string[] {
   const texto = (n.titulo + ' ' + n.contenido).toLowerCase();
 
   const mapa: Record<string, string[]> = {
-    'Sucesos': ['accidente', 'managua', 'policia nacional', 'transito', 'heridos'],
-    'Politica': ['gobierno', 'nicaragua', 'asamblea nacional', 'ley', 'ministerio'],
-    'Economia': ['precio', 'mercado', 'exportacion', 'cordoba', 'dolar'],
-    'Salud': ['minsa', 'hospital', 'vacuna', 'salud', 'epidemia'],
-    'Deportes': ['beisbol', 'futbol', 'nicaragua', 'mundial', 'juegos'],
-    'Tecnologia': ['internet', 'redes sociales', 'celular', 'aplicacion', 'digital'],
-    'Internacionales': ['eeuu', 'mexico', 'centroamerica', 'mundo', 'crisis'],
-    'Nacionales': ['nicaragua', 'managua', 'gobierno', 'pais', 'nacional'],
+    'sucesos': ['accidente', 'managua', 'policia nacional', 'transito', 'heridos'],
+    'deportes': ['beisbol', 'futbol', 'nicaragua', 'mundial', 'juegos'],
+    'tecnologia': ['internet', 'redes sociales', 'celular', 'aplicacion', 'digital'],
+    'internacionales': ['eeuu', 'mexico', 'centroamerica', 'mundo', 'crisis'],
+    'nacionales': ['nicaragua', 'managua', 'gobierno', 'pais', 'nacional'],
+    'espectaculos': ['concierto', 'managua', 'artista', 'musica', 'evento'],
+    'general': ['nicaragua', 'noticias', 'informacion', 'actualidad', 'pais'],
   };
 
-  const sugeridas = mapa[n.categoria] || ['nicaragua', 'noticias', n.categoria.toLowerCase()];
+  // Normalizar categoría para buscar en el mapa (quitar acentos)
+  const catNormalizada = (n.categoria || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const sugeridas = mapa[catNormalizada] || ['nicaragua', 'noticias', catNormalizada];
   return sugeridas.filter(k => texto.includes(k));
 }
 
 function sugerirH2(n: NoticiaInput): string[] {
   const h2s: string[] = [];
-  const categoria = n.categoria.toLowerCase();
+  const categoria = (n.categoria || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
   if (categoria === 'sucesos') {
     h2s.push('Hechos principales', 'Declaraciones de fuentes', 'Desarrollo', 'Antecedentes');
-  } else if (categoria === 'politica') {
-    h2s.push('Anuncio oficial', 'Reacciones', 'Analisis', 'Contexto politico');
   } else if (categoria === 'deportes') {
     h2s.push('Resultados', 'Reacciones', 'Proximos encuentros', 'Contexto');
-  } else if (categoria === 'economia') {
-    h2s.push('Datos clave', 'Impacto', 'Reacciones del mercado', 'Contexto');
+  } else if (categoria === 'espectaculos') {
+    h2s.push('Detalles del evento', 'Repertorio', 'Reacciones del publico', 'Contexto');
+  } else if (categoria === 'tecnologia') {
+    h2s.push('Caracteristicas principales', 'Impacto en Nicaragua', 'Desarrollo', 'Contexto');
+  } else if (categoria === 'internacionales') {
+    h2s.push('Informacion principal', 'Reacciones internacionales', 'Desarrollo', 'Contexto');
+  } else if (categoria === 'nacionales') {
+    h2s.push('Informacion principal', 'Declaraciones oficiales', 'Desarrollo', 'Impacto nacional');
   } else {
     h2s.push('Informacion principal', 'Declaraciones', 'Desarrollo', 'Contexto');
   }

@@ -1907,6 +1907,13 @@ ${hashtags}`;
       const resumen = document.getElementById('resumen').value || 'La descripción de la noticia aparecerá aquí. Optimiza el resumen para mejorar el CTR en resultados de búsqueda.';
       const slug = generarSlug(titulo).substring(0, 40);
       
+      // Actualizar contador de caracteres del resumen
+      const contadorResumen = document.getElementById('contadorResumen');
+      if (contadorResumen) {
+        contadorResumen.textContent = resumen.length;
+        contadorResumen.className = 'count ' + (resumen.length >= 150 && resumen.length <= 170 ? 'ok' : resumen.length > 0 ? 'warning' : '');
+      }
+
       // Actualizar SEO Preview
       document.getElementById('seoTitle').textContent = titulo.length > 60 ? titulo.substring(0, 57) + '...' : titulo;
       document.getElementById('seoDesc').textContent = resumen.length > 160 ? resumen.substring(0, 157) + '...' : resumen;
