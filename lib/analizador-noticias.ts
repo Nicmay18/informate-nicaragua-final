@@ -107,10 +107,50 @@ const TRANSICIONES_IA = [
 ];
 
 // ───────────────────────────────────────────────
+// VALIDACION UNIFICADA (8 criterios — alineada con frontend)
+// ───────────────────────────────────────────────
+
+function validar8CriteriosUnificados(n: NoticiaInput): { nivel: 'ORO' | 'PLATA' | 'BRONCE'; aprobados: number } {
+  const texto = n.contenido || '';
+  const palabras = texto.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const parrafos = texto.split(/\n+/).filter(p => p.trim().length > 20);
+  const lead = parrafos[0] || '';
+  const palabrasLead = lead.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const tieneH2 = /<h2[^>]*>/i.test(texto);
+  const tieneStrong = /<strong>/i.test(texto) || /<b>/i.test(texto);
+  const tieneDatos = /\d/.test(texto);
+  const citas = (texto.match(/["\u201c][^"\u201d]{8,}["\u201d]/g) || []).length;
+  const atribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]|aclar[oó]|coment[oó]|expres[oó]|anunc[ió]|revel[oó]/i.test(texto);
+  const blockquotes = (texto.match(/<blockquote>/g) || []).length;
+  const passCitas = citas >= 1 || atribuciones || blockquotes >= 1;
+  const tituloOK = n.titulo.length >= 50 && n.titulo.length <= 70;
+  const metaOK = n.resumen.length >= 150 && n.resumen.length <= 170;
+  const tieneImagen = n.imagenDestacada && n.imagenDestacada.length > 5;
+
+  const criterios = [
+    palabras >= 500,
+    palabrasLead >= 35,
+    tieneH2,
+    tieneStrong || tieneDatos,
+    passCitas,
+    tituloOK,
+    metaOK,
+    tieneImagen,
+  ];
+
+  const aprobados = criterios.filter(Boolean).length;
+  const nivel = aprobados >= 7 ? 'ORO' : (aprobados >= 5 ? 'PLATA' : 'BRONCE');
+  return { nivel, aprobados };
+}
+
+// ───────────────────────────────────────────────
 // MOTOR PRINCIPAL
 // ───────────────────────────────────────────────
 
 export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoAnalisis> {
+  // Si pasa los 8 criterios unificados, forzar ORO (alineación frontend-backend)
+  const validacionUnificada = validar8CriteriosUnificados(noticia);
+
   const filtros = {
     oro: analizarFiltroOro(noticia),
     adsense: analizarFiltroAdSense(noticia),
@@ -125,7 +165,11 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   let nivel: ResultadoAnalisis['nivel'];
   let aprobado: boolean;
 
-  if (puntuacionTotal >= 90 && filtros.oro.aprobado && filtros.adsense.aprobado) {
+  // Alineación con frontend: si pasa los 8 criterios unificados, forzar ORO
+  if (validacionUnificada.nivel === 'ORO') {
+    nivel = 'ORO';
+    aprobado = true;
+  } else if (puntuacionTotal >= 90 && filtros.oro.aprobado && filtros.adsense.aprobado) {
     nivel = 'ORO';
     aprobado = true;
   } else if (puntuacionTotal >= 75 && filtros.adsense.aprobado) {
@@ -349,9 +393,10 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
 
   // 4. Contenido generado sin revision
   const patronesIA = TRANSICIONES_IA.filter(t => textoPlano.toLowerCase().includes(t.toLowerCase()));
+  const estadoRevision = patronesIA.length === 0 ? 'PASS' : (patronesIA.length <= 2 ? 'WARN' : 'FAIL');
   checks.push({
     nombre: 'Revision editorial',
-    estado: patronesIA.length === 0 ? 'PASS' : 'FAIL',
+    estado: estadoRevision,
     mensaje: patronesIA.length === 0
       ? 'Sin patrones de IA detectados.'
       : `Patrones IA detectados: ${patronesIA.length}. Requiere revision humana.`,
