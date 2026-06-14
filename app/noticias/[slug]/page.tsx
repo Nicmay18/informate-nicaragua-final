@@ -159,39 +159,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
+  let noticia: Awaited<ReturnType<typeof cachedGetNewsBySlug>> = null;
+  let related: Awaited<ReturnType<typeof cachedGetRelatedNews>> = [];
+
+  // 1. Cargar noticia (errores de Firebase = "Error de conexión")
   try {
-    const noticia = await cachedGetNewsBySlug(slug);
-    if (!noticia) return notFound();
-
-    // Si el slug en Firestore es diferente de la URL, redirigir 301 al canonical
-    if (noticia.slug && noticia.slug !== slug) {
-      redirect(`/noticias/${noticia.slug}`);
-    }
-
-    const related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
-
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-
-    const wordCount = noticia.contenido
-      ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length
-      : 0;
-    const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-    const faqSchema = generarFaqSchema(noticia.contenido || '', noticia.resumen);
-
-    return (
-      <>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-        {faqSchema && (
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
-        )}
-        <ArticlePage noticia={noticia} related={related} />
-      </>
-    );
+    noticia = await cachedGetNewsBySlug(slug);
   } catch (error) {
     console.error('Error cargando noticia:', error);
-    // Error transitorio de Firebase — NO devolver 404/noindex
     return (
       <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
         <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 12 }}>Error de conexión</h1>
@@ -200,4 +175,40 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       </div>
     );
   }
+
+  // 2. Noticia no encontrada → 404 de Next.js (FUERA del try/catch)
+  if (!noticia) return notFound();
+
+  // 3. Slug obsoleto → redirigir 301
+  if (noticia.slug && noticia.slug !== slug) {
+    redirect(`/noticias/${noticia.slug}`);
+  }
+
+  // 4. Cargar relacionadas (si falla, array vacío, no rompe la página)
+  try {
+    related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
+  } catch (error) {
+    console.error('Error cargando relacionadas:', error);
+    related = [];
+  }
+
+  const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+
+  const wordCount = noticia.contenido
+    ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length
+    : 0;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+  const faqSchema = generarFaqSchema(noticia.contenido || '', noticia.resumen);
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
+      )}
+      <ArticlePage noticia={noticia} related={related} />
+    </>
+  );
 }
