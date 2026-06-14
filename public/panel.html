@@ -2845,29 +2845,16 @@ ${hashtags}`;
       return data;
     }
 
-    window.ejecutarValidacionOro = function() {
-      const contenido = document.getElementById('contenido').value.trim();
-      if (!contenido) return;
-
-      const textoSinHtml = contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    // ═══════════════════════════════════════════════════════════════
+    // VALIDADOR UNIFICADO — Única fuente de verdad (8 criterios)
+    // Usado por: popup al guardar, evaluador detallado y reporte.
+    // ═══════════════════════════════════════════════════════════════
+    window.validarNoticiaUnificada = function(contenido, titulo = '', resumen = '', imagen = '') {
+      const textoSinHtml = (contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       const palabras = textoSinHtml.split(/\s+/).filter(w => w.length > 0).length;
-      const h2s = (contenido.match(/<h2>/gi) || []).length;
-      
-      // Negritas: tags HTML + markdown **texto** + nombres/fechas/numeros en mayuscula
-      const strongsHtml = (contenido.match(/<strong>/gi) || []).length;
-      const strongsMarkdown = (contenido.match(/\*\*.+?\*\*/g) || []).length;
-      const nombresPropios = (textoSinHtml.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
-      const fechas = (textoSinHtml.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length;
-      const numeros = (textoSinHtml.match(/\b\d{2,4}\b/g) || []).length;
-      const strongs = strongsHtml + strongsMarkdown + (nombresPropios >= 3 ? 1 : 0) + (fechas >= 1 ? 1 : 0) + (numeros >= 3 ? 1 : 0);
+      const h2s = (contenido.match(/<h2[\s>]/gi) || []).length;
 
-      // Citas: blockquote HTML + comillas tipograficas + comillas rectas con atribucion
-      const blockquotesHtml = (contenido.match(/<blockquote>/gi) || []).length;
-      const citasTipograficas = (contenido.match(/[\"«][^\"»]{10,}[\"»]/g) || []).length;
-      const citasConAtribucion = (contenido.match(/[\"«][^\"»]{10,}[\"»][\s,]*[^.]*(?:explic|dij|manifest|afirm|precis|senal|indic|confirm|declar|agreg|asegur|destac|mencion|aclar|coment|expres|anunc|revel)/gi) || []).length;
-      const blockquotes = blockquotesHtml + citasTipograficas + citasConAtribucion;
-
-      // Lead (primer párrafo con contenido real)
+      // Lead: primer párrafo con contenido real
       const parrafos = contenido.match(/<p>(.*?)<\/p>/g) || [];
       let leadPalabras = 0;
       for (const p of parrafos) {
@@ -2875,28 +2862,60 @@ ${hashtags}`;
         const count = pTexto.split(/\s+/).filter(w => w.length > 0).length;
         if (count > 3) { leadPalabras = count; break; }
       }
-      // Fallback: si no hay <p>, primer párrafo por lineas vacías
       if (leadPalabras === 0) {
         const primerParrafo = textoSinHtml.split(/\n\s*\n/)[0] || textoSinHtml;
         leadPalabras = primerParrafo.split(/\s+/).filter(w => w.length > 0).length;
       }
 
+      // Negritas / datos clave
+      const strongsHtml = (contenido.match(/<strong>/gi) || []).length;
+      const strongsMarkdown = (contenido.match(/\*\*.+?\*\*/g) || []).length;
+      const nombresPropios = (textoSinHtml.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+      const fechas = (textoSinHtml.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length;
+      const numeros = (textoSinHtml.match(/\b\d{2,4}\b/g) || []).length;
+      const strongs = strongsHtml + strongsMarkdown + (nombresPropios >= 3 ? 1 : 0) + (fechas >= 1 ? 1 : 0) + (numeros >= 3 ? 1 : 0);
+
+      // Citas / atribución: blockquote + comillas curvas/rectas + verbos de atribución
+      const blockquotesHtml = (contenido.match(/<blockquote>/gi) || []).length;
+      const citasCurvas = (contenido.match(/[\"«][^\"»]{10,}[\"»]/g) || []).length;
+      const citasRectas = (contenido.match(/["'][^"']{10,}?["']/g) || []).length;
+      const atribucion = /(?:explic|dij|manifest|afirm|precis|señal|senal|indic|confirm|declar|agreg|asegur|destac|mencion|aclar|coment|expres|anunc|revel|según|segun)/i.test(contenido) ? 1 : 0;
+      const blockquotes = blockquotesHtml + citasCurvas + citasRectas + atribucion;
+
+      const tituloLen = (titulo || '').length;
+      const resumenLen = (resumen || '').length;
+
       const checks = [
-        { nombre: 'Extensión', estado: palabras >= 500 ? '✅' : palabras >= 350 ? '⚠️' : '❌', valor: palabras, req: '>=500' },
-        { nombre: 'Lead (primer párrafo)', estado: leadPalabras >= 35 ? '✅' : leadPalabras >= 20 ? '⚠️' : '❌', valor: leadPalabras, req: '>=35 palabras' },
-        { nombre: 'Subtítulos (h2)', estado: h2s >= 1 ? '✅' : '❌', valor: h2s, req: '>=1' },
-        { nombre: 'Negritas/datos clave', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '>=1' },
-        { nombre: 'Citas/atribuciones', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '>=1' },
+        { nombre: 'Extensión ≥500 palabras', estado: palabras >= 500 ? '✅' : palabras >= 350 ? '⚠️' : '❌', valor: palabras + ' pal', req: '≥500', pasa: palabras >= 500 },
+        { nombre: 'Lead ≥35 palabras', estado: leadPalabras >= 35 ? '✅' : leadPalabras >= 20 ? '⚠️' : '❌', valor: leadPalabras + ' pal', req: '≥35', pasa: leadPalabras >= 35 },
+        { nombre: 'Subtítulos (h2) ≥1', estado: h2s >= 1 ? '✅' : '❌', valor: h2s, req: '≥1', pasa: h2s >= 1 },
+        { nombre: 'Negritas / datos clave', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '≥1', pasa: strongs >= 1 },
+        { nombre: 'Citas o atribución', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '≥1', pasa: blockquotes >= 1 },
+        { nombre: 'Título SEO 50-70 chars', estado: (tituloLen >= 50 && tituloLen <= 70) ? '✅' : (tituloLen >= 30 && tituloLen <= 75) ? '⚠️' : '❌', valor: tituloLen + ' ch', req: '50-70', pasa: tituloLen >= 50 && tituloLen <= 70 },
+        { nombre: 'Meta 150-170 chars', estado: (resumenLen >= 150 && resumenLen <= 170) ? '✅' : (resumenLen >= 120 && resumenLen <= 180) ? '⚠️' : '❌', valor: resumenLen + ' ch', req: '150-170', pasa: resumenLen >= 150 && resumenLen <= 170 },
+        { nombre: 'Imagen destacada', estado: (imagen && imagen.length > 0) ? '✅' : '❌', valor: (imagen && imagen.length > 0) ? 'Sí' : 'No', req: 'Presente', pasa: !!(imagen && imagen.length > 0) },
       ];
 
-      const passCount = checks.filter(c => c.estado === '✅').length;
-      const nivel = passCount === checks.length ? 'ORO' : passCount >= 4 ? 'PLATA' : 'BRONCE';
+      const passCount = checks.filter(c => c.pasa).length;
+      const nivel = passCount === 8 ? 'ORO' : passCount >= 6 ? 'PLATA' : 'BRONCE';
+      const porcentaje = Math.round((passCount / 8) * 100);
+      return { nivel, checks, passCount, porcentaje };
+    };
+
+    window.ejecutarValidacionOro = function() {
+      const contenido = document.getElementById('contenido').value.trim();
+      if (!contenido) return;
+      const titulo = (document.getElementById('titulo').value || '').trim();
+      const resumen = (document.getElementById('resumen').value || '').trim();
+      const imagen = (document.getElementById('imagenUrl').value || '').trim();
+
+      const { nivel, checks, passCount } = window.validarNoticiaUnificada(contenido, titulo, resumen, imagen);
 
       const mensaje = checks.map(c => `${c.estado} ${c.nombre}: ${c.valor} (${c.req})`).join('\n');
       const nivelEmoji = nivel === 'ORO' ? '🥇' : nivel === 'PLATA' ? '🥈' : '🥉';
 
-      showToast(`Validación ${nivelEmoji} ${nivel}\n${mensaje}`, nivel === 'ORO' ? 'success' : 'warning');
-      console.log('Validación ORO:', { nivel, checks });
+      showToast(`Validación ${nivelEmoji} ${nivel} (${passCount}/8)\n${mensaje}`, nivel === 'ORO' ? 'success' : 'warning');
+      console.log('Validación unificada:', { nivel, checks });
       return { nivel, checks };
     };
 
@@ -3422,39 +3441,12 @@ ${hashtags}`;
         if (!snap.exists()) return;
         const n = snap.data();
         const contenido = n.contenido || '';
-        const palabras = contenido.trim().split(/\s+/).length;
-        const tituloLen = (n.titulo || '').length;
-        const resumenLen = (n.resumen || '').length;
+        const titulo = n.titulo || '';
+        const resumen = n.resumen || '';
+        const imagen = n.imagen || '';
 
-        // Detectar problemas de estilo
-        const frasesRelleno = ['increíble', 'impactante', 'sorprendente', 'dramático', 'terrible', 'horrible', 'inimaginable', 'insólito', 'escandaloso', 'escalofriante'];
-        const frasesEncontradas = [];
-        const contenidoLower = contenido.toLowerCase();
-        frasesRelleno.forEach(f => {
-          if (contenidoLower.includes(f)) frasesEncontradas.push(f);
-        });
-
-        // Detectar falta de atribución
-        const tieneAtribucion = /dijo|declaró|según|afirmó|señaló|manifestó|aseguró/i.test(contenido);
-        const tieneCitas = /".*?"|'.*?'/s.test(contenido) || contenido.includes('«') || contenido.includes('»');
-
-        // Detectar densidad de datos (números, fechas, datos concretos)
-        const numeros = contenido.match(/\d+/g) || [];
-        const datosPor100 = palabras > 0 ? ((numeros.length / palabras) * 100).toFixed(1) : 0;
-
-        const criterios = [
-          { nombre: 'Longitud del contenido', puntos: palabras > 600 ? 20 : palabras > 350 ? 15 : palabras > 200 ? 10 : 5, max: 20, obs: palabras > 600 ? `Óptimo (${palabras} pal.)` : palabras > 350 ? `Bueno (${palabras} pal.)` : `Corto (${palabras} pal.)` },
-          { nombre: 'Titular SEO', puntos: tituloLen >= 30 && tituloLen <= 70 ? 15 : 8, max: 15, obs: tituloLen >= 30 && tituloLen <= 70 ? `${tituloLen} chars — Ideal` : `${tituloLen} chars — Ajustar a 30-70` },
-          { nombre: 'Meta descripción', puntos: resumenLen >= 120 && resumenLen <= 160 ? 15 : resumenLen > 0 ? 8 : 0, max: 15, obs: resumenLen >= 120 && resumenLen <= 160 ? `${resumenLen} chars — Perfecta` : resumenLen > 0 ? `${resumenLen} chars — Mejorable` : 'Falta resumen' },
-          { nombre: 'Imagen destacada', puntos: n.imagen ? 15 : 0, max: 15, obs: n.imagen ? 'Presente' : 'No incluida' },
-          { nombre: 'Estructura / Subtítulos', puntos: (contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido)) ? 15 : 8, max: 15, obs: (contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido)) ? 'Bien estructurado' : 'Faltan subtítulos' },
-          { nombre: 'Categoría y ubicación', puntos: n.categoria && n.departamento ? 10 : 5, max: 10, obs: n.categoria && n.departamento ? `${n.categoria}, ${n.departamento}` : 'Incompleto' },
-          { nombre: 'Densidad de datos', puntos: datosPor100 >= 5 ? 10 : datosPor100 >= 2 ? 6 : 3, max: 10, obs: `${datosPor100} datos/100pal — ${datosPor100 >= 5 ? 'Buena' : 'Baja'}` }
-        ];
-
-        const total = criterios.reduce((a, b) => a + b.puntos, 0);
-        const maxTotal = criterios.reduce((a, b) => a + b.max, 0);
-        const porcentaje = Math.round((total / maxTotal) * 100);
+        // VALIDADOR UNIFICADO — misma fuente de verdad que el popup
+        const { nivel, checks, passCount, porcentaje } = window.validarNoticiaUnificada(contenido, titulo, resumen, imagen);
 
         document.getElementById('scoreValor').textContent = porcentaje;
         const circle = document.getElementById('scoreCircle');
@@ -3462,37 +3454,35 @@ ${hashtags}`;
         circle.style.strokeDashoffset = offset;
         circle.style.stroke = porcentaje >= 80 ? 'var(--success)' : porcentaje >= 60 ? 'var(--warning)' : 'var(--danger)';
 
-        let label = '', desc = '';
-        if (porcentaje >= 90) { label = 'Excelente'; desc = 'Cumple estándares óptimos para indexación y monetización.'; }
-        else if (porcentaje >= 75) { label = 'Bueno'; desc = 'Cumple la mayoría de criterios. Pequeños ajustes mejorarán el rendimiento.'; }
-        else if (porcentaje >= 50) { label = 'Regular'; desc = 'Necesita mejoras en estructura y SEO para destacar.'; }
-        else { label = 'Bajo'; desc = 'Requiere trabajo significativo en contenido y formato.'; }
-        document.getElementById('scoreLabel').textContent = label;
-        document.getElementById('scoreDesc').textContent = desc;
+        const labelMap = { 'ORO': 'ORO — Excelente', 'PLATA': 'PLATA — Bueno', 'BRONCE': 'BRONCE — Mejorable' };
+        const descMap = {
+          'ORO': 'Cumple los 8 criterios. Lista para indexación y monetización.',
+          'PLATA': 'Cumple la mayoría. Revisá los criterios marcados con ❌ para subir a ORO.',
+          'BRONCE': 'Necesita mejoras en estructura, citas o SEO para destacar.'
+        };
+        document.getElementById('scoreLabel').textContent = labelMap[nivel];
+        document.getElementById('scoreDesc').textContent = descMap[nivel];
         document.getElementById('scoreBar').style.width = porcentaje + '%';
 
-        document.getElementById('evalTableBody').innerHTML = criterios.map(c => {
-          const pct = Math.round((c.puntos / c.max) * 100);
-          const cls = pct >= 80 ? 'score-excelente' : pct >= 60 ? 'score-bueno' : pct >= 40 ? 'score-medio' : 'score-bajo';
-          return `<tr><td style="font-size:13px;">${c.nombre}</td><td style="font-size:13px;font-weight:600;">${c.puntos}/${c.max}</td><td><span class="eval-score ${cls}">${pct}%</span></td><td style="font-size:12px;color:var(--gray-500);">${c.obs}</td></tr>`;
+        document.getElementById('evalTableBody').innerHTML = checks.map(c => {
+          const cls = c.estado === '✅' ? 'score-excelente' : c.estado === '⚠️' ? 'score-bueno' : 'score-bajo';
+          return `<tr><td style="font-size:13px;">${c.estado} ${c.nombre}</td><td style="font-size:13px;font-weight:600;">${c.valor}</td><td><span class="eval-score ${cls}">${c.pasa ? 'PASA' : 'FALTA'}</span></td><td style="font-size:12px;color:var(--gray-500);">req: ${c.req}</td></tr>`;
         }).join('');
 
-        // DIAGNÓSTICO IA - Recomendaciones inteligentes
+        // DIAGNÓSTICO — recomendaciones basadas en los criterios que NO pasan
         const recs = [];
-        if (palabras < 350) recs.push(`<strong>CONTENIDO CORTO:</strong> Tenés ${palabras} palabras. AdSense requiere 350+. Agregá contexto, citas o datos.`);
-        else if (palabras < 500) recs.push(`<strong>CONTENIDO ACEPTABLE:</strong> ${palabras} palabras. Para mejor monetización, llegá a 600+.`);
-        if (!n.resumen || resumenLen < 120) recs.push(`<strong>META FALTANTE:</strong> El resumen tiene ${resumenLen || 0} caracteres. Escribí uno de 120-160 chars para SEO.`);
-        else if (resumenLen > 160) recs.push(`<strong>META LARGA:</strong> ${resumenLen} caracteres. Acortala a 160 máximo.`);
-        if (!n.imagen) recs.push('<strong>SIN IMAGEN:</strong> Incluí una imagen destacada. Las noticias con imagen tienen 3x más clicks.');
-        const tieneEstructura = contenido.includes('**') || contenido.includes('##') || contenido.includes('<h2>') || /^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s]{4,40}$/m.test(contenido);
-        if (!tieneEstructura) recs.push('<strong>SIN ESTRUCTURA:</strong> Agregá subtítulos en negrita (**Subtítulo**) para dividir el texto.');
-        if (tituloLen < 30) recs.push(`<strong>TÍTULO CORTO:</strong> ${tituloLen} caracteres. Ampliá a 30-70 para mejor SEO.`);
-        if (tituloLen > 70) recs.push(`<strong>TÍTULO LARGO:</strong> ${tituloLen} caracteres. Google corta después de 60. Resumí.`);
-        if (frasesEncontradas.length > 0) recs.push(`<strong>RELLENO EMOCIONAL:</strong> Detectadas palabras sensacionalistas: "${frasesEncontradas.join(', ')}". Reemplazá por datos concretos.`);
-        if (!tieneAtribucion) recs.push('<strong>SIN ATRIBUCIÓN:</strong> No hay fuentes citadas. Incluí "según...", "dijo..." o "afirmó...".');
-        if (!tieneCitas) recs.push('<strong>SIN CITAS TEXTUALES:</strong> Agregá comillas con declaraciones de testigos o autoridades.');
-        if (datosPor100 < 2) recs.push(`<strong>POCOS DATOS:</strong> ${datosPor100} números cada 100 palabras. Agregá fechas, montos, cantidades.`);
-        if (recs.length === 0) recs.push('<strong>¡EXCELENTE!</strong> La noticia cumple todos los criterios. Lista para publicar.');
+        checks.forEach(c => {
+          if (c.pasa) return;
+          if (c.nombre.includes('Extensión')) recs.push(`<strong>EXTENSIÓN:</strong> Tenés ${c.valor}. Necesitás ≥500 palabras. Agregá contexto, datos o citas.`);
+          else if (c.nombre.includes('Lead')) recs.push(`<strong>LEAD:</strong> El primer párrafo tiene ${c.valor}. Debe tener ≥35 palabras respondiendo qué/quién/dónde/cuándo.`);
+          else if (c.nombre.includes('Subtítulos')) recs.push('<strong>SIN SUBTÍTULOS:</strong> Agregá al menos un &lt;h2&gt; para dividir el texto.');
+          else if (c.nombre.includes('Negritas')) recs.push('<strong>SIN DATOS DESTACADOS:</strong> Resaltá nombres, fechas o cifras con negritas.');
+          else if (c.nombre.includes('Citas')) recs.push('<strong>SIN CITAS NI ATRIBUCIÓN:</strong> Incluí "según...", "dijo...", comillas o blockquote.');
+          else if (c.nombre.includes('Título')) recs.push(`<strong>TÍTULO:</strong> ${c.valor}. Ajustá a 50-70 caracteres para SEO óptimo.`);
+          else if (c.nombre.includes('Meta')) recs.push(`<strong>META DESCRIPCIÓN:</strong> ${c.valor}. Debe medir 150-170 caracteres.`);
+          else if (c.nombre.includes('Imagen')) recs.push('<strong>SIN IMAGEN:</strong> Incluí una imagen destacada. Mejora clicks y Discover.');
+        });
+        if (recs.length === 0) recs.push('<strong>¡EXCELENTE!</strong> La noticia cumple los 8 criterios. Lista para publicar.');
 
         document.getElementById('evalRecomendaciones').innerHTML = recs.map((r, i) => {
           const isError = r.includes('SIN') || r.includes('CORTO') || r.includes('FALTANTE') || r.includes('POCOS');
@@ -4803,6 +4793,22 @@ ANTES DE ENTREGAR CADA NOTICIA, VERIFICAR:
       resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 6 niveles...</div>';
 
       try {
+        // Validación unificada local (misma fuente de verdad que popup y evaluador)
+        const unificado = window.validarNoticiaUnificada(contenido, titulo, resumen, imagenUrl);
+        const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706' };
+        const bgNivel  = { 'ORO': '#dcfce7', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7' };
+        let html = '<div style="background:' + bgNivel[unificado.nivel] + ';border:2px solid ' + colorNivel[unificado.nivel] + ';border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
+        html += '<span style="font-size:20px;">' + (unificado.nivel === 'ORO' ? '🥇' : unificado.nivel === 'PLATA' ? '🥈' : '🥉') + '</span>';
+        html += '<div><h4 style="margin:0;font-size:14px;color:' + colorNivel[unificado.nivel] + ';">Validación Unificada: ' + unificado.nivel + ' (' + unificado.passCount + '/8)</h4>';
+        html += '<p style="margin:2px 0 0;font-size:11px;color:var(--gray-600);">Mismo criterio que popup al guardar y evaluador de calidad.</p></div></div>';
+        html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+        unificado.checks.forEach(c => {
+          const col = c.estado === '✅' ? '#16a34a' : c.estado === '⚠️' ? '#d97706' : '#dc2626';
+          html += '<span style="background:#fff;border:1px solid ' + col + ';color:' + col + ';border-radius:4px;padding:2px 6px;font-size:10px;">' + c.estado + ' ' + c.nombre + ': ' + c.valor + '</span>';
+        });
+        html += '</div></div>';
+
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -4810,7 +4816,7 @@ ANTES DE ENTREGAR CADA NOTICIA, VERIFICAR:
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error en analisis');
-        resultado.innerHTML = renderAnalisisForense(data);
+        resultado.innerHTML = html + renderAnalisisForense(data);
       } catch (err) {
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }
