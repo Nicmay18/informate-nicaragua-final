@@ -76,7 +76,7 @@ let _db: Firestore | null = null;
  */
 export function getAdminDb(): Firestore {
   if (!_db) {
-    _db = getFirestore(getAdminApp(), 'n0311');
+    _db = getFirestore(getAdminApp());
   }
   return _db;
 }

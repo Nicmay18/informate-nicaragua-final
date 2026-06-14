@@ -1495,7 +1495,7 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app, 'n0311');
+    const db = getFirestore(app);
     const auth = getAuth(app);
     window.db = db;
     window.categoriaActiva = 'todas';
