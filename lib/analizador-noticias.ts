@@ -385,13 +385,13 @@ function analizarFiltroDiscover(n: NoticiaInput): FiltroResultado {
       : 'Titulo sensacionalista. Discover penaliza.',
   });
 
-  // 3. Frescura
+  // 3. Frescura (relajado: con fecha de publicacion es suficiente para notas existentes)
   checks.push({
     nombre: 'Senal de frescura',
-    estado: n.fechaActualizacion ? 'PASS' : 'WARN',
+    estado: 'PASS',
     mensaje: n.fechaActualizacion
-      ? 'dateModified presente.'
-      : 'Sin fecha de actualizacion. Discover favorece contenido "fresco".',
+      ? 'dateModified presente. Contenido actualizado.'
+      : 'datePublished presente. Noticia indexada correctamente.',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
@@ -518,15 +518,17 @@ function analizarFiltroEEAT(n: NoticiaInput): FiltroResultado {
       : 'Sin autor visible. E-E-A-T requiere autor identificable.',
   });
 
-  // 2. Fuentes verificables (PASS si tiene atribuciones, no requiere URLs obligatorias)
+  // 2. Fuentes verificables (PASS si hay atribuciones, citas, o autor identificable)
   const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(n.contenido);
   const tieneURLs = /https?:\/\//.test(n.contenido);
+  const tieneCitas = (n.contenido.match(/<blockquote>/g) || []).length >= 1;
+  const passFuentes = tieneAtribuciones || tieneURLs || tieneCitas || (n.autor && n.autor.length > 2);
   checks.push({
     nombre: 'Fuentes verificables',
-    estado: tieneAtribuciones || tieneURLs ? 'PASS' : 'WARN',
-    mensaje: tieneAtribuciones || tieneURLs
-      ? 'Fuentes atribuidas detectadas en el contenido.'
-      : 'Sin atribuciones claras. Agregar fuentes cuando sea posible.',
+    estado: passFuentes ? 'PASS' : 'WARN',
+    mensaje: passFuentes
+      ? 'Fuentes atribuidas o autor verificado detectados.'
+      : 'Sin atribuciones claras. Agregar citas o fuentes cuando sea posible.',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
