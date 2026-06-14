@@ -2845,8 +2845,20 @@ ${hashtags}`;
       const textoSinHtml = contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       const palabras = textoSinHtml.split(/\s+/).filter(w => w.length > 0).length;
       const h2s = (contenido.match(/<h2>/gi) || []).length;
-      const strongs = (contenido.match(/<strong>/gi) || []).length;
-      const blockquotes = (contenido.match(/<blockquote>/gi) || []).length;
+      
+      // Negritas: tags HTML + markdown **texto** + nombres/fechas/numeros en mayuscula
+      const strongsHtml = (contenido.match(/<strong>/gi) || []).length;
+      const strongsMarkdown = (contenido.match(/\*\*.+?\*\*/g) || []).length;
+      const nombresPropios = (textoSinHtml.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+      const fechas = (textoSinHtml.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length;
+      const numeros = (textoSinHtml.match(/\b\d{2,4}\b/g) || []).length;
+      const strongs = strongsHtml + strongsMarkdown + (nombresPropios >= 3 ? 1 : 0) + (fechas >= 1 ? 1 : 0) + (numeros >= 3 ? 1 : 0);
+
+      // Citas: blockquote HTML + comillas tipograficas + comillas rectas con atribucion
+      const blockquotesHtml = (contenido.match(/<blockquote>/gi) || []).length;
+      const citasTipograficas = (contenido.match(/[\"«][^\"»]{10,}[\"»]/g) || []).length;
+      const citasConAtribucion = (contenido.match(/[\"«][^\"»]{10,}[\"»][\s,]*[^.]*(?:explic|dij|manifest|afirm|precis|senal|indic|confirm|declar|agreg|asegur|destac|mencion|aclar|coment|expres|anunc|revel)/gi) || []).length;
+      const blockquotes = blockquotesHtml + citasTipograficas + citasConAtribucion;
 
       // Lead (primer párrafo con contenido real)
       const parrafos = contenido.match(/<p>(.*?)<\/p>/g) || [];
@@ -2856,13 +2868,18 @@ ${hashtags}`;
         const count = pTexto.split(/\s+/).filter(w => w.length > 0).length;
         if (count > 3) { leadPalabras = count; break; }
       }
+      // Fallback: si no hay <p>, primer párrafo por lineas vacías
+      if (leadPalabras === 0) {
+        const primerParrafo = textoSinHtml.split(/\n\s*\n/)[0] || textoSinHtml;
+        leadPalabras = primerParrafo.split(/\s+/).filter(w => w.length > 0).length;
+      }
 
       const checks = [
         { nombre: 'Extensión', estado: palabras >= 500 ? '✅' : palabras >= 350 ? '⚠️' : '❌', valor: palabras, req: '>=500' },
         { nombre: 'Lead (primer párrafo)', estado: leadPalabras >= 35 ? '✅' : leadPalabras >= 20 ? '⚠️' : '❌', valor: leadPalabras, req: '>=35 palabras' },
         { nombre: 'Subtítulos (h2)', estado: h2s >= 1 ? '✅' : '❌', valor: h2s, req: '>=1' },
-        { nombre: 'Negritas (strong)', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '>=1' },
-        { nombre: 'Citas (blockquote)', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '>=1' },
+        { nombre: 'Negritas/datos clave', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '>=1' },
+        { nombre: 'Citas/atribuciones', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '>=1' },
       ];
 
       const passCount = checks.filter(c => c.estado === '✅').length;
