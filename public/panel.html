@@ -880,36 +880,50 @@
                 <div class="progress-bar"><div class="progress-fill" id="progressBar" style="width: 0%"></div></div>
               </div>
 
-              <div id="panelCompartirManual" style="display: none; margin-top: 20px; padding: 18px; background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;">
+            </form>
+
+            <!-- PANEL REDES SOCIALES: fuera del form para que form.reset() no borre los textos -->
+            <div id="panelCompartirManual" style="display:none; margin-top:20px; padding:18px; background:#fff; border:2px solid #16a34a; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span id="shareEmoji" style="font-size:26px; line-height:1;"></span>
                   <div>
-                    <h3 style="font-size: 16px; margin: 0 0 4px; color: var(--gray-900);">Publicación lista para redes</h3>
-                    <p style="font-size: 12px; margin: 0; color: var(--gray-500);">Copia el texto o abre el enlace para publicar manualmente.</p>
+                    <h3 style="margin:0; font-size:15px; font-weight:700; color:#16a34a;">✅ Publicada — Lista para redes sociales</h3>
+                    <p id="shareTituloHeader" style="margin:2px 0 0; font-size:12px; color:#6b7280; max-width:420px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></p>
                   </div>
-                  <button type="button" class="btn btn-ghost" onclick="document.getElementById('panelCompartirManual').style.display='none'"><i class="fas fa-times"></i></button>
                 </div>
-                <div style="display: grid; gap: 12px;">
-                  <div>
-                    <label class="form-label" style="font-size: 12px;">Titular profesional</label>
-                    <div id="shareTitulo" style="padding: 10px 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); font-weight: 700; color: var(--gray-900);"></div>
-                  </div>
-                  <div>
-                    <label class="form-label" style="font-size: 12px;">Descripción para redes</label>
-                    <div id="shareDescripcion" style="padding: 10px 12px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); color: var(--gray-700); line-height: 1.5;"></div>
-                  </div>
-                  <div>
-                    <label class="form-label" style="font-size: 12px;">Texto completo para copiar</label>
-                    <textarea id="shareTextoCompleto" class="form-textarea" readonly style="min-height: 120px; font-size: 13px;"></textarea>
-                  </div>
-                  <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                    <button type="button" class="btn btn-primary" onclick="copiarTextoRed('shareTextoCompleto')"><i class="fas fa-copy"></i><span>Copiar texto</span></button>
-                    <a id="shareWhatsappLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i><span>Abrir WhatsApp</span></a>
-                    <a id="shareFacebookLink" class="btn btn-secondary" href="#" target="_blank" rel="noopener"><i class="fab fa-facebook"></i><span>Abrir Facebook</span></a>
-                    <a id="shareNoticiaLink" class="btn btn-ghost" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i><span>Ver noticia</span></a>
-                  </div>
+                <button type="button" onclick="document.getElementById('panelCompartirManual').style.display='none'" style="background:none; border:1px solid #e5e7eb; border-radius:6px; padding:6px 12px; cursor:pointer; color:#6b7280; font-size:13px;">✕ Cerrar</button>
+              </div>
+              <div style="display:flex; gap:6px; margin-bottom:14px;">
+                <button type="button" id="tabBtnTelegram" onclick="cambiarTabRedes('telegram')" style="padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-size:12px; font-weight:700; background:#1d4ed8; color:#fff;">📱 Telegram</button>
+                <button type="button" id="tabBtnFacebook" onclick="cambiarTabRedes('facebook')" style="padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-size:12px; font-weight:700; background:#f3f4f6; color:#374151;">📘 Facebook</button>
+                <button type="button" id="tabBtnWhatsapp" onclick="cambiarTabRedes('whatsapp')" style="padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-size:12px; font-weight:700; background:#f3f4f6; color:#374151;">📗 WhatsApp</button>
+              </div>
+              <div id="tabRedes_telegram">
+                <p style="font-size:11px; color:#6b7280; margin:0 0 6px;">Copia y pega directo en tu canal de Telegram.</p>
+                <textarea id="shareTextoTelegram" readonly style="width:100%; min-height:155px; font-size:13px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical; font-family:inherit; background:#f9fafb; color:#111827; line-height:1.65; box-sizing:border-box;"></textarea>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                  <button type="button" onclick="copiarTextoRedesId('shareTextoTelegram','Telegram')" style="padding:8px 18px; background:#1d4ed8; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fas fa-copy"></i> Copiar para Telegram</button>
+                  <a id="shareNoticiaLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#f3f4f6; color:#374151; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fas fa-external-link-alt"></i> Ver noticia</a>
                 </div>
               </div>
-            </form>
+              <div id="tabRedes_facebook" style="display:none;">
+                <p style="font-size:11px; color:#6b7280; margin:0 0 6px;">Invita a comentar para más alcance orgánico en Facebook.</p>
+                <textarea id="shareTextoFacebook" readonly style="width:100%; min-height:155px; font-size:13px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical; font-family:inherit; background:#f9fafb; color:#111827; line-height:1.65; box-sizing:border-box;"></textarea>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                  <button type="button" onclick="copiarTextoRedesId('shareTextoFacebook','Facebook')" style="padding:8px 18px; background:#1877f2; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fab fa-facebook"></i> Copiar para Facebook</button>
+                  <a id="shareFacebookLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#e7f3ff; color:#1877f2; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fab fa-facebook"></i> Abrir Facebook</a>
+                </div>
+              </div>
+              <div id="tabRedes_whatsapp" style="display:none;">
+                <p style="font-size:11px; color:#6b7280; margin:0 0 6px;">El texto en *asteriscos* aparece en negrita en WhatsApp.</p>
+                <textarea id="shareTextoCompleto" readonly style="width:100%; min-height:155px; font-size:13px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical; font-family:inherit; background:#f9fafb; color:#111827; line-height:1.65; box-sizing:border-box;"></textarea>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                  <button type="button" onclick="copiarTextoRedesId('shareTextoCompleto','WhatsApp')" style="padding:8px 18px; background:#25d366; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fab fa-whatsapp"></i> Copiar para WhatsApp</button>
+                  <a id="shareWhatsappLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#dcfce7; color:#16a34a; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fab fa-whatsapp"></i> Abrir WhatsApp</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1559,37 +1573,72 @@ sin texto ni marcas de agua, composición periodística"
 
     function crearDescripcionRedes(resumen, contenido) {
       const texto = (resumen || contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (!texto) return 'Lee la noticia completa en Nicaragua Informate.';
-      return texto.length > 180 ? texto.substring(0, 177).trim() + '...' : texto;
+      if (!texto) return 'Lee la noticia completa en NicaraguaInformate.com';
+      // Intentar tomar 2 oraciones si caben en 220 chars
+      const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
+      if (oraciones.length >= 2) {
+        const dos = (oraciones[0].trim() + ' ' + oraciones[1].trim());
+        if (dos.length <= 230) return dos;
+      }
+      return texto.length > 210 ? texto.substring(0, 207).trim() + '...' : texto;
     }
+
+    window.cambiarTabRedes = function(tab) {
+      ['telegram','facebook','whatsapp'].forEach(t => {
+        const content = document.getElementById('tabRedes_' + t);
+        const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (!content || !btn) return;
+        const isActive = t === tab;
+        content.style.display = isActive ? 'block' : 'none';
+        const colors = { telegram: ['#1d4ed8','#fff'], facebook: ['#1877f2','#fff'], whatsapp: ['#25d366','#fff'] };
+        btn.style.background = isActive ? colors[t][0] : '#f3f4f6';
+        btn.style.color = isActive ? colors[t][1] : '#374151';
+      });
+    };
+
+    window.copiarTextoRedesId = async function(id, red) {
+      const el = document.getElementById(id);
+      const texto = el ? (el.value || '') : '';
+      if (!texto) return;
+      try {
+        await navigator.clipboard.writeText(texto);
+        showToast('✅ Texto de ' + red + ' copiado', 'success');
+      } catch {
+        if (el) { el.select(); document.execCommand('copy'); }
+        showToast('✅ Texto de ' + red + ' copiado', 'success');
+      }
+    };
 
     function mostrarPanelCompartir(noticia) {
       const panel = document.getElementById('panelCompartirManual');
+      if (!panel) return;
       const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-      const titulo = noticia.titulo;
+      const titulo = noticia.titulo || '';
       const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
       const categoria = noticia.categoria || 'Noticias';
 
-      // Formato con emojis para WhatsApp/Facebook
-      const hashtags = `#${categoria.replace(/\s+/g, '')} #Nicaragua`;
-      const textoRedes = `📌 ${titulo}
+      const emojiCat = { 'Sucesos':'🚨','Nacionales':'🇳🇮','Deportes':'⚽','Internacionales':'🌍','Espectáculos':'🎬','Tecnología':'💻','Salud':'🏥','Economía':'💰' };
+      const emoji = emojiCat[categoria] || '📰';
 
-${descripcion}
+      const hashBase = `#${categoria.replace(/\s+/g,'')} #Nicaragua #NoticiasNicaragua`;
+      const hashExtra = { 'Sucesos':' #Crimen #Seguridad','Deportes':' #Fútbol','Internacionales':' #Mundo','Espectáculos':' #Entretenimiento','Tecnología':' #Tech','Salud':' #Salud','Economía':' #Economía' };
+      const hashtags = hashBase + (hashExtra[categoria] || '');
 
-🚨 Lea la nota completa aquí:
+      const textoTelegram = `${emoji} ${titulo}\n\n${descripcion}\n\n🔗 ${url}\n\n${hashtags}`;
+      const textoFacebook = `${emoji} ${titulo}\n\n${descripcion}\n\n💬 ¿Qué opinas? Déjanos tu comentario 👇\n👉 ${url}\n\n${hashtags}`;
+      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcion}\n\n👉 Lee la nota completa:\n${url}\n\n${hashtags}`;
 
-🔗 ${url}
-
-${hashtags}`;
-
-      document.getElementById('shareTitulo').textContent = titulo;
-      document.getElementById('shareDescripcion').textContent = descripcion;
-      document.getElementById('shareTextoCompleto').value = textoRedes;
-      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoRedes)}`;
-      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(textoRedes)}`;
+      document.getElementById('shareEmoji').textContent = emoji;
+      document.getElementById('shareTituloHeader').textContent = titulo;
+      document.getElementById('shareTextoTelegram').value = textoTelegram;
+      document.getElementById('shareTextoFacebook').value = textoFacebook;
+      document.getElementById('shareTextoCompleto').value = textoWhatsapp;
+      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoWhatsapp)}`;
+      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
       document.getElementById('shareNoticiaLink').href = url;
+      cambiarTabRedes('telegram');
       panel.style.display = 'block';
-      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     window.copiarTextoRed = async function(id) {
