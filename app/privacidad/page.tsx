@@ -15,7 +15,7 @@ export default function PrivacidadPage() {
         <img src="/logo-ni.png" alt="Nicaragua Informate Logo" style={{ width: 120, height: 'auto' }} />
       </div>
       <div style={{ background: 'rgba(251,191,36,0.12)', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#e2e8f0', fontSize: '0.85rem' }}>
-        <strong>Última actualización:</strong> 27 de mayo de 2026
+        <strong>Última actualización:</strong> 15 de junio de 2026
       </div>
 
       <p style={{ color: '#e2e8f0', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.95rem' }}>

@@ -12,7 +12,7 @@ export default function TerminosPage() {
   return (
     <LegalPageShell title="Términos y Condiciones de Uso">
       <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
-        <strong>Última actualización:</strong> 20 de mayo de 2026
+        <strong>Última actualización:</strong> 15 de junio de 2026
       </div>
 
       <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.25rem', marginBottom: '2rem' }}>

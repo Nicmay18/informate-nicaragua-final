@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const noticia = await cachedGetNewsBySlug(slug);
     if (!noticia) {
       return {
-        title: 'Noticia no encontrada',
+        title: 'Página no encontrada',
         robots: { index: false },
       };
     }
