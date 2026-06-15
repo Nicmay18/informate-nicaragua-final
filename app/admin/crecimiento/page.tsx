@@ -144,8 +144,8 @@ export default function CrecimientoPage() {
                   <span style={{ fontSize: 13, fontWeight: 600, color: '#f8fafc' }}>#{i + 1} {g.oportunidad}</span>
                   <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: impactoColor(g.impacto), color: '#0f172a', fontWeight: 700 }}>{g.impacto}</span>
                 </div>
-                <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 4 }}>❌ {g.problema}</div>
-                <div style={{ fontSize: 12, color: '#34d399' }}>✅ {g.accion}</div>
+                <div style={{ fontSize: 12, color: '#fbbf24', marginBottom: 4 }}><span style={{ fontWeight: 700, marginRight: 4 }}>⚠️ Situación:</span>{g.problema}</div>
+                <div style={{ fontSize: 12, color: '#34d399' }}><span style={{ fontWeight: 700, marginRight: 4 }}>💡 Acción:</span>{g.accion}</div>
               </div>
             ))}
           </div>
