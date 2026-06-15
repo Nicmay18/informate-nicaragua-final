@@ -255,6 +255,12 @@ const nextConfig: NextConfig = {
         destination: '/noticias/juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal-mqdaoany',
         permanent: true,
       },
+      {
+        // Masaya feminicidio: URL vieja de Facebook → nueva URL
+        source: '/noticias/dictan-prision-preventiva-a-acusado-de-feminicidio-en-masaya-mqbgdjo4',
+        destination: '/noticias/juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal-mqdaoany',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
