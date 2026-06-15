@@ -51,12 +51,15 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${articles.map((article) => {
-  const publicationDate = new Date(article.fecha).toISOString();
+  const rawDate = article.fecha && typeof (article.fecha as any).toDate === 'function'
+    ? (article.fecha as any).toDate()
+    : new Date(article.fecha as any);
+  const publicationDate = !isNaN(rawDate.getTime()) ? rawDate.toISOString() : new Date().toISOString();
   const publicationName = 'Nicaragua Informate';
   const publicationLanguage = 'es';
   
   return `  <url>
-    <loc>${SITE_URL}/noticias/${article.slug}</loc>
+    <loc>${SITE_URL}/noticias/${encodeURI(article.slug)}</loc>
     <news:news>
       <news:publication>
         <news:name>${publicationName}</news:name>
