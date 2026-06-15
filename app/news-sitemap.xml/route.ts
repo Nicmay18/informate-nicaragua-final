@@ -16,7 +16,7 @@ function escapeXml(str: string): string {
 }
 
 async function fetchNewsSitemapRaw() {
-  const cutoffMs = Date.now() - 48 * 60 * 60 * 1000;
+  const cutoffMs = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 días — Google News procesa <2 días, pero incluir más evita vacíos
   const articles = await getNews(100);
   return articles
     .filter((a) => {
@@ -52,6 +52,7 @@ ${articles.map((article) => {
   
   return `  <url>
     <loc>${SITE_URL}/noticias/${encodeURI(article.slug)}</loc>
+    <lastmod>${publicationDate}</lastmod>
     <news:news>
       <news:publication>
         <news:name>${publicationName}</news:name>
