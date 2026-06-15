@@ -165,6 +165,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   const [isPaused, setIsPaused] = useState(false);
   const items = useMemo(() => noticias.slice(0, 5), [noticias]);
   const reduced = usePrefersReducedMotion();
+  const touchStartX = useRef<number | null>(null);
 
   const goToSlide = useCallback((i: number) => {
     setIdx(i);
@@ -196,6 +197,18 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
       aria-label="Noticias destacadas"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={(e) => { touchStartX.current = e.changedTouches[0].screenX; }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return;
+        const diff = touchStartX.current - e.changedTouches[0].screenX;
+        const threshold = 50;
+        if (diff > threshold) {
+          nextSlide();
+        } else if (diff < -threshold) {
+          goToSlide((idx - 1 + items.length) % items.length);
+        }
+        touchStartX.current = null;
+      }}
     >
       <div className="ni-hero__track">
         {items.map((item, i) => (
