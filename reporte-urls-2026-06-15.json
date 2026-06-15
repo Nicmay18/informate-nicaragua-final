@@ -1,0 +1,11 @@
+{
+  "fecha": "2026-06-15T14:43:30.304Z",
+  "total_firestore": 208,
+  "problemas": [
+    {
+      "tipo": "backup_desactualizado",
+      "cantidad": 7
+    }
+  ],
+  "ok": 0
+}

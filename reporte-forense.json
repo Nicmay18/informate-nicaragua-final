@@ -1,0 +1,54 @@
+{
+  "fecha": "2026-06-15T15:54:12.714Z",
+  "dominio": "nicaraguainformate.com",
+  "score": {
+    "actual": 21,
+    "maximo": 29,
+    "porcentaje": 72
+  },
+  "secciones": {
+    "paginasEstaticas": {
+      "ok": 5,
+      "total": 6
+    },
+    "homepage": {
+      "ok": 8,
+      "total": 7,
+      "checks": {
+        "status": true,
+        "title": true,
+        "metaDesc": true,
+        "ogImage": true,
+        "ogTitle": true,
+        "canonical": true,
+        "schema": true,
+        "viewport": true
+      },
+      "schemaTypes": [
+        "NewsMediaOrganization",
+        "WebSite"
+      ]
+    },
+    "noticia": {
+      "ok": 3,
+      "total": 11,
+      "url": "https://nicaraguainformate.com/noticias/nicaraguenses-acumulan-c-291-mil-millones-en-depositos",
+      "schema": null
+    },
+    "robots": {
+      "ok": 3,
+      "total": 3,
+      "existe": true,
+      "permiteNoticias": true,
+      "tieneSitemap": true
+    },
+    "seguridad": {
+      "ok": 2,
+      "total": 2,
+      "hsts": true,
+      "xframe": true,
+      "xtype": true,
+      "server": "cloudflare"
+    }
+  }
+}

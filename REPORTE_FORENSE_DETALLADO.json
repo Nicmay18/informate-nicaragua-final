@@ -1,0 +1,19 @@
+{
+  "resumen": {
+    "total_documentos": 208,
+    "promedio_palabras": 587,
+    "noticias_perfectas_8_8": 137,
+    "noticias_con_fallos": 71,
+    "duplicados_detectados": 1
+  },
+  "fallos_criticos": [],
+  "duplicados": [
+    [
+      "capturan a tres sospechosos por homicidio de vigilante en masaya",
+      [
+        "cae-banda-senalada-de-asesinar-a-guarda-de-seguridad-en-masaya",
+        "capturan-a-tres-sospechosos-por-homicidio-de-vigilante-en-masaya"
+      ]
+    ]
+  ]
+}

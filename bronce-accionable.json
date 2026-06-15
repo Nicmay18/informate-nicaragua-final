@@ -1,0 +1,444 @@
+{
+  "bajoCont": [
+    {
+      "id": "Y64ycnoNiScKCoajm7kn",
+      "titulo": "Guarda de seguridad fallece en complejo fabril de Managua",
+      "categoria": "Sucesos",
+      "fecha": "2026-06-14",
+      "palabras": 397,
+      "score": 82,
+      "nivel": "BRONCE",
+      "densidad": 4.3,
+      "relleno": [
+        "enluta",
+        "consternación"
+      ],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [
+        "dijo lo",
+        "dijo que"
+      ],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "masaya"
+      ],
+      "esLocal": true,
+      "contextoCount": 2,
+      "slug": "guarda-de-seguridad-fallece-en-complejo-fabril-de-managua-mqdd1tos"
+    },
+    {
+      "id": "uroqqoNRVgTvzUH1Gh4W",
+      "titulo": "Dos muertos y una niña herida en accidentes de moto",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-18",
+      "palabras": 401,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 3,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "estelí"
+      ],
+      "esLocal": true,
+      "contextoCount": 2,
+      "slug": "investigan-accidentes-de-moto-ocurridos-este-domingo"
+    },
+    {
+      "id": "Zt9NtuqCLNMhBhmH6IEN",
+      "titulo": "Tres detenidos por muerte de joven tras cirugía estética en Managua",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-28",
+      "palabras": 408,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 3.4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [
+        "fuentes oficiales"
+      ],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "matagalpa"
+      ],
+      "esLocal": true,
+      "contextoCount": 2,
+      "slug": "jennyfer-reyes-muere-tras-complicaciones-de-liposuccion-en-managua-mppy156p"
+    },
+    {
+      "id": "yCN8IBbWL1xxPvNhJqTx",
+      "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
+      "categoria": "Sucesos",
+      "fecha": "2026-04-30",
+      "palabras": 409,
+      "score": 84,
+      "nivel": "BRONCE",
+      "densidad": 2.9,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [
+        "indicó un"
+      ],
+      "citas": 3,
+      "varOr": "ALTA",
+      "lugares": [],
+      "esLocal": true,
+      "contextoCount": 0,
+      "slug": "justicia-en-siuna-cae-sujeto-que-mato-a-joven-con-una-piocha"
+    },
+    {
+      "id": "SM2fzy975dM5oxuoPgQx",
+      "titulo": "Fallece esposa de Marvin Benard en accidente de tránsito en California",
+      "categoria": "Internacionales",
+      "fecha": "2026-05-23",
+      "palabras": 410,
+      "score": 79,
+      "nivel": "BRONCE",
+      "densidad": 3.4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [],
+      "esLocal": false,
+      "contextoCount": 0,
+      "slug": "muere-esposa-de-marvin-benard-en-accidente-vial-en-california-mpiggi3q"
+    },
+    {
+      "id": "gkAeVBYY9AQBzAYCmjWk",
+      "titulo": "Activistas climáticos bloquean Wall Street en protesta en Nueva York",
+      "categoria": "Internacionales",
+      "fecha": "2026-05-01",
+      "palabras": 423,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 3.8,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua"
+      ],
+      "esLocal": false,
+      "contextoCount": 1,
+      "slug": "activistas-intentan-bloquear-wall-street-en-protesta-climatica"
+    },
+    {
+      "id": "OWppqYU03AfZQHIoqEL7",
+      "titulo": "Disputa por chicha bruja termina en muerte en Asang; buscan al autor",
+      "categoria": "Sucesos",
+      "fecha": "2026-04-26",
+      "palabras": 428,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 7.2,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua"
+      ],
+      "esLocal": true,
+      "contextoCount": 1,
+      "slug": "buscan-a-sospechoso-de-muerte-de-ciudadano-en-asang-waspam"
+    },
+    {
+      "id": "e7FFhasFNh3pd7o4xBMo",
+      "titulo": "Dos motociclistas mueren en accidentes en Granada y Chontales",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-23",
+      "palabras": 428,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 4.2,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "granada",
+        "masaya",
+        "chontales"
+      ],
+      "esLocal": true,
+      "contextoCount": 4,
+      "slug": "dos-motociclistas-fallecen-en-granada-y-chontales-este-sabado-mpikhaml"
+    },
+    {
+      "id": "dgjsES2KHZ3AFaGHIoLt",
+      "titulo": "Investigan hallazgo de cuerpo sin vida en Muy Muy, Matagalpa",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-12",
+      "palabras": 428,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [
+        "fuentes oficiales"
+      ],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "león",
+        "granada",
+        "estelí",
+        "matagalpa",
+        "tipitapa"
+      ],
+      "esLocal": true,
+      "contextoCount": 5,
+      "slug": "hallazgo-de-cuerpo-en-muy-muy-activa-investigacion-fiscal"
+    },
+    {
+      "id": "eLJeY8NEp62lCIx7Tf5n",
+      "titulo": "Hombre de 57 años muere dentro de establecimiento en carretera nueva a León",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-15",
+      "palabras": 429,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 4.4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "león"
+      ],
+      "esLocal": true,
+      "contextoCount": 2,
+      "slug": "investigan-fallecimiento-de-hombre-en-local-de-managua"
+    },
+    {
+      "id": "6W5tgAUCaM1w9lsSjA6Z",
+      "titulo": "Kener Velásquez, trabajador del MINSA, murió en accidente en km 46 Carretera Norte",
+      "categoria": "Sucesos",
+      "fecha": "2026-04-28",
+      "palabras": 429,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 4.2,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "tipitapa"
+      ],
+      "esLocal": true,
+      "contextoCount": 2,
+      "slug": "minsa-reporta-incidente-vial-de-funcionario-en-carretera-norte"
+    },
+    {
+      "id": "3Dlu4tCQZedztrompEgV",
+      "titulo": "Melquin Esedec Masis Rodríguez murió en accidente de moto en Matiguás",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-01",
+      "palabras": 430,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 6,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua"
+      ],
+      "esLocal": true,
+      "contextoCount": 1,
+      "slug": "autoridades-investigan-incidente-de-transito-en-matiguas"
+    },
+    {
+      "id": "YMhZnFxcC1LINNtptLYL",
+      "titulo": "Dos mueren por presuntos problemas de salud en Managua y León",
+      "categoria": "Sucesos",
+      "fecha": "2026-05-23",
+      "palabras": 431,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 6.7,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "león",
+        "granada",
+        "masaya",
+        "estelí",
+        "chinandega",
+        "matagalpa",
+        "jinotega",
+        "rivas",
+        "madriz",
+        "nueva segovia",
+        "boaco",
+        "chontales",
+        "carazo"
+      ],
+      "esLocal": true,
+      "contextoCount": 14,
+      "slug": "dos-personas-fallecen-por-presuntos-problemas-cardiacos-en-managua-y-leon-mpj0949s"
+    },
+    {
+      "id": "p3IKfmbWdUPIrSbbOynM",
+      "titulo": "Sequía extrema en Latinoamérica afecta 150 millones de hectáreas",
+      "categoria": "Internacionales",
+      "fecha": "2026-05-12",
+      "palabras": 444,
+      "score": 89,
+      "nivel": "BRONCE",
+      "densidad": 3.4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 0,
+      "varOr": "ALTA",
+      "lugares": [
+        "managua",
+        "estelí",
+        "chinandega",
+        "madriz",
+        "nueva segovia"
+      ],
+      "esLocal": false,
+      "contextoCount": 5,
+      "slug": "sequia-extrema-afecta-150-millones-de-hectareas-en-latinoamerica"
+    }
+  ],
+  "reparables": [
+    {
+      "id": "oBetC1qDrdPvR7QifSDP",
+      "titulo": "Netflix anuncia precuela The Crown sobre familia real británica",
+      "categoria": "Espectáculos",
+      "fecha": "2026-05-01",
+      "palabras": 650,
+      "score": 86,
+      "nivel": "BRONCE",
+      "densidad": 1.4,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [
+        "se espera que"
+      ],
+      "fAtrib": [
+        "según fuentes"
+      ],
+      "citas": 3,
+      "varOr": "ALTA",
+      "lugares": [],
+      "esLocal": false,
+      "contextoCount": 0,
+      "slug": "netflix-anuncia-precuela-the-crown-sobre-familia-real-britanica"
+    },
+    {
+      "id": "ji2rLsYoOn3VKOsKwQRI",
+      "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+      "categoria": "Espectáculos",
+      "fecha": "2026-04-29",
+      "palabras": 713,
+      "score": 86,
+      "nivel": "BRONCE",
+      "densidad": 1.5,
+      "relleno": [],
+      "transiciones": {
+        "tot": 0,
+        "f": []
+      },
+      "fGen": [],
+      "fAtrib": [],
+      "citas": 8,
+      "varOr": "ALTA",
+      "lugares": [],
+      "esLocal": false,
+      "contextoCount": 0,
+      "slug": "michael-rompe-records-como-estreno-biografico-mas-exitoso"
+    }
+  ],
+  "generado": "2026-06-15T18:22:02.270Z"
+}

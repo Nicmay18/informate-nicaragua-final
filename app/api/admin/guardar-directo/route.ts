@@ -94,6 +94,10 @@ export async function POST(request: NextRequest) {
       palabras,
     };
 
+    // CRÍTICO: Establecer fecha de publicación si no existe
+    // Usar fecha del body si se proporciona, o fechaActualizacion
+    updateData.fecha = body.fecha || new Date();
+
     if (resumen !== undefined) updateData.resumen = resumen.trim();
     if (categoria !== undefined) updateData.categoria = categoria;
     if (departamento !== undefined) updateData.departamento = departamento;

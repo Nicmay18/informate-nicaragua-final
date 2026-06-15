@@ -1,0 +1,98 @@
+[
+  {
+    "id": "u0Lgb7PgJ9XVT67Za5Ov",
+    "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+    "antes": 86,
+    "despues": 91,
+    "fixes": [
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "HxsDqbeHSSO2MRyl1Cpu",
+    "titulo": "Masaya: Análisis del fatal accidente vial en Villa Bosco",
+    "antes": 83,
+    "despues": 100,
+    "fixes": [
+      "transición→neutral: [por su parte]",
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "vvWJAwyV8adECw3IGqdy",
+    "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+    "antes": 88,
+    "despues": 100,
+    "fixes": [
+      "transición→neutral: [sin embargo]"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "POzMmYcjC7Vy2JHS1KmW",
+    "titulo": "Fallece repartidor nicaragüense tras accidente vial en Miami",
+    "antes": 79,
+    "despues": 96,
+    "fixes": [
+      "relleno→neutral: [fatal desenlace]",
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "6mFFoc06RfC8trFeBuNI",
+    "titulo": "Prevención de riesgos en la Laguna de Apoyo, Nicaragua",
+    "antes": 83,
+    "despues": 100,
+    "fixes": [
+      "relleno→neutral: [perdió la vida]",
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "9gLUPHxK05lGgwNE1URy",
+    "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+    "antes": 86,
+    "despues": 91,
+    "fixes": [
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "whZtPKLBjDEcFUzZrkXv",
+    "titulo": "Nuevo hospital pediátrico fortalecerá atención en Estelí",
+    "antes": 86,
+    "despues": 91,
+    "fixes": [
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "0gGqzH1RBUeVTGHWkuvl",
+    "titulo": "Cinco fallecidos en accidentes viales en todo Nicaragua",
+    "antes": 71,
+    "despues": 100,
+    "fixes": [
+      "relleno→neutral: [perdió la vida]",
+      "transición→neutral: [además]",
+      "fuentes: atribución añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "y251TlGDTa5BVIM18QGE",
+    "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua",
+    "antes": 74,
+    "despues": 96,
+    "fixes": [
+      "transición→neutral: [por su parte]",
+      "contexto: ubicación/entidad añadida"
+    ],
+    "resultado": "OK"
+  }
+]

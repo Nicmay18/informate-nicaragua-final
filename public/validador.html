@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validador Forense | NicaraguaInformate</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
+    .stats { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat { background: #1e293b; border-radius: 10px; padding: 15px 25px; text-align: center; min-width: 120px; }
+    .stat .num { font-size: 2rem; font-weight: 700; }
+    .stat .label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; }
+    .stat.oro .num { color: #fbbf24; }
+    .stat.plata .num { color: #94a3b8; }
+    .stat.bronce .num { color: #f97316; }
+    .stat.peligro .num { color: #ef4444; }
+    .stat.ia .num { color: #a855f7; }
+    
+    .filters { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center; }
+    .filters button { background: #334155; border: none; color: #e2e8f0; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .filters button:hover, .filters button.active { background: #6366f1; }
+    
+    .loading { text-align: center; padding: 60px; font-size: 1.2rem; color: #94a3b8; }
+    .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid #334155; border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 10px; overflow: hidden; }
+    th { background: #334155; padding: 12px 10px; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; position: sticky; top: 0; }
+    td { padding: 10px; border-bottom: 1px solid #2d3748; font-size: 0.85rem; vertical-align: middle; }
+    tr:hover { background: #2d3748; }
+    
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+    .badge-oro { background: #fbbf24; color: #000; }
+    .badge-plata { background: #64748b; color: #fff; }
+    .badge-bronce { background: #f97316; color: #fff; }
+    .badge-peligro { background: #ef4444; color: #fff; }
+    
+    .check { color: #10b981; font-weight: 700; }
+    .fail { color: #ef4444; font-weight: 700; }
+    .warn { color: #f59e0b; font-weight: 700; }
+    
+    .cat { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .cat-Sucesos { background: #dc2626; color: #fff; }
+    .cat-Nacionales { background: #ea580c; color: #fff; }
+    .cat-Deportes { background: #059669; color: #fff; }
+    .cat-Internacionales { background: #0891b2; color: #fff; }
+    .cat-Espectáculos { background: #db2777; color: #fff; }
+    .cat-Tecnología { background: #2563eb; color: #fff; }
+    
+    .ia-tag { background: #7c3aed; color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 0.65rem; margin-left: 5px; }
+    .titulo-cell { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .criterios { display: flex; gap: 4px; flex-wrap: wrap; }
+    .criterios span { font-size: 0.75rem; }
+    
+    .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .tabs button { background: #1e293b; border: 2px solid #334155; color: #e2e8f0; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; }
+    .tabs button.active { background: #6366f1; border-color: #6366f1; }
+    .detalle-row { background: #0f172a; font-size: 0.75rem; color: #94a3b8; }
+    .detalle-row td { padding: 8px 15px; }
+    .mini { font-size: 0.7rem; padding: 1px 5px; border-radius: 3px; margin: 1px; display: inline-block; }
+    .mini-bad { background: #7f1d1d; color: #fca5a5; }
+    .mini-good { background: #064e3b; color: #6ee7b7; }
+    .summary-bar { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 20px; }
+    .progress-bar { height: 20px; background: #334155; border-radius: 10px; overflow: hidden; display: flex; }
+    .progress-bar .seg { height: 100%; transition: width 0.5s; }
+    .seg-oro { background: #fbbf24; }
+    .seg-plata { background: #64748b; }
+    .seg-bronce { background: #f97316; }
+    .seg-peligro { background: #ef4444; }
+    .progress-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.7rem; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <h1>🔬 Validador Forense de Noticias</h1>
+  <p style="text-align:center;color:#94a3b8;margin-bottom:20px;">AdSense · Discover · Google News · SEO · E-E-A-T</p>
+
+  <div class="tabs">
+    <button id="tabEstructura" class="active">📐 Validación Estructural</button>
+    <button id="tabAuditor">🕵️ Auditor de Calidad</button>
+  </div>
+  
+  <div id="contenido">
+    <div class="loading">
+      <div class="spinner"></div><br>
+      Cargando noticias desde Firebase...
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const app = initializeApp({
+      apiKey: "AIzaSyDVsqRGr7dtdi5ecO14THIdbnEzZKOJxcA",
+      authDomain: "informate-instant-nicaragua.firebaseapp.com",
+      projectId: "informate-instant-nicaragua",
+      storageBucket: "informate-instant-nicaragua.firebasestorage.app",
+      messagingSenderId: "24988088146",
+      appId: "1:24988088146:web:d26a207508da055668ec8b"
+    });
+    const db = getFirestore(app);
+
+    function contarPalabras(html) {
+      const t = (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      return t.split(/\s+/).filter(w => w.length > 0).length;
+    }
+
+    function tieneH2(html) { return (html.match(/<h2>/gi) || []).length; }
+    function tieneStrong(html) { return (html.match(/<strong>/gi) || []).length; }
+    function tieneBlockquote(html) { return (html.match(/<blockquote/gi) || []).length; }
+
+    const PATRONES_IA = ['en conclusión', 'en resumen', 'es importante destacar', 'vale la pena mencionar', 'no hay que olvidar', 'desde esta perspectiva', 'en última instancia', 'a fin de cuentas', 'resulta fundamental', 'resulta evidente', 'no cabe duda', 'es indiscutible', 'resulta innegable', 'para concluir', 'como se mencionó anteriormente', 'es relevante señalar', 'no se puede ignorar', 'es crucial que', 'es vital que', 'en definitiva', 'es imperativo', 'cabe resaltar', 'es menester', 'resulta pertinente', 'es de vital importancia', 'no es un secreto', 'es bien sabido'];
+
+    function detectarIA(html) {
+      const lower = (html || '').toLowerCase();
+      return PATRONES_IA.filter(p => lower.includes(p));
+    }
+
+    function calcularNivel(n) {
+      const palabras = n.palabras;
+      const h2 = n.h2 >= 1;
+      const strong = n.strong >= 1;
+      const bq = n.blockquote >= 1;
+      const sinIA = n.patronesIA.length === 0;
+      const tieneResumen = (n.resumen || '').length >= 120;
+      const tieneTitulo = (n.titulo || '').length >= 30 && (n.titulo || '').length <= 80;
+      const tieneImagen = !!n.imagen;
+
+      const checks = [
+        { nombre: 'Extensión 500+', ok: palabras >= 500, warn: palabras >= 350 },
+        { nombre: 'H2', ok: h2 },
+        { nombre: 'Strong', ok: strong },
+        { nombre: 'Blockquote', ok: bq },
+        { nombre: 'Sin IA', ok: sinIA },
+        { nombre: 'Meta 120+', ok: tieneResumen },
+        { nombre: 'Título SEO', ok: tieneTitulo },
+        { nombre: 'Imagen', ok: tieneImagen },
+      ];
+
+      const pass = checks.filter(c => c.ok).length;
+      let nivel;
+      if (pass === 8) nivel = 'ORO';
+      else if (pass >= 6) nivel = 'PLATA';
+      else if (pass >= 4) nivel = 'BRONCE';
+      else nivel = 'PELIGRO';
+
+      return { nivel, checks, pass };
+    }
+
+    // ========== AUDITOR DE CALIDAD PERIODÍSTICA ==========
+    const RELLENO_EMOCIONAL = ["consternada","consternado","conmoción","conmocionó","dolor","tragedia","trágico","tragico","último adiós","ultimo adios","perdió la batalla","perdio la batalla","fatal desenlace","cristiana sepultura","honras fúnebres","honras funebres","enlutó","enluta","consternación","consternacion","ambiente de dolor","salir del asombro","asombro","familiares lamentan","lamentan la pérdida","lamentan la perdida","comunidad consternada","hecho conmocionó","conmocionó a","profundo dolor","profunda tristeza","vida truncada","jóven promesa","joven promesa","incomprensible","indignante","irresponsable","brindan apoyo","organizaciones brindan","darán el último","recibirá cristiana","perdió la vida"];
+    const TRANSICIONES_IA = ["además","por otro lado","en cuanto a","en relación a","por su parte","asimismo","del mismo modo","en consecuencia","en conclusión","finalmente","para finalizar","es importante destacar","cabe señalar","cabe senalar","en este sentido","al respecto","por lo tanto","de igual manera","de la misma forma","en tanto que","no obstante","sin embargo","por el contrario","en primer lugar","en segundo lugar","en tercer lugar"];
+    const FUENTES_GENERICAS = ["autoridades confirmaron","autoridades investigan","fuentes policiales","fuentes oficiales","testigos indicaron","testigos señalaron","se presume que","se supone que","hasta el cierre","hasta el momento","se espera que","se estima que"];
+    const LUGARES_NIC = ["managua","león","leon","granada","masaya","estelí","esteli","chinandega","matagalpa","jinotega","rivas","madriz","nueva segovia","boaco","chontales","raan","raccs","carazo","san juan del sur","jinotepe","diriamba","tipitapa","ciudad sandino","el sauce","la paz centro","nagarote","wiwilí","wiwili","ocotal","somoto","sébaco","sebaco","juigalpa","camoapa"];
+
+    function txtPlano(html) { return (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+    function contarPal(texto) { const p = texto.match(/\b[a-záéíóúñA-ZÁÉÍÓÚÑ]+\b/g); return p ? p.length : 0; }
+
+    function detRelleno(t) { const l = t.toLowerCase(); return RELLENO_EMOCIONAL.filter(f => l.includes(f)); }
+    function detTransiciones(t) { const l = t.toLowerCase(); let total = 0; const found = []; for (const tr of TRANSICIONES_IA) { const c = l.split(tr).length - 1; if (c > 0) { total += c; found.push(tr); } } return { total, found }; }
+    function detFuentesGen(t) { const l = t.toLowerCase(); return FUENTES_GENERICAS.filter(f => l.includes(f)); }
+    function detFuentesAtrib(t) {
+      const patrones = [
+        /[A-Z][a-záéíóúñ]+\s+[A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)?,\s*(?:vocero|director|jefe|sargento|comisionado|coordinador|testigo|vecino|residente)/gi,
+        /(?:afirmó|indicó|declaró|señaló|dijo|relató|manifestó|comentó)\s+[A-Z][a-záéíóúñ]+/gi,
+        /(?:según|de acuerdo con|informaron|reportaron|indicaron)\s+(?:las|los)?\s*(?:autoridades|cuerpo de bomberos|bomberos|policía|testigos|vecinos|fuentes)/gi,
+        /(?:testigos|vecinos|residentes|personas)\s+(?:que\s+presenciaron|en\s+la\s+zona|del\s+lugar)/gi,
+        /(?:ambulancia|estación)\s+(?:de\s+)?(?:bomberos|policía)/gi
+      ];
+      const found = [];
+      for (const p of patrones) { const m = t.match(p); if (m) found.push(...m); }
+      return [...new Set(found)];
+    }
+    function detCitas(t) { const c = t.match(/["'\u201c\u201d]([^"'\u201c\u201d]{10,})["'\u201c\u201d]/g); return c ? c.filter(x => x.length > 12) : []; }
+    function detDatos(t) {
+      return {
+        edades: (t.match(/\b\d{1,2}\s+años\b/g) || []).length,
+        horas: (t.match(/\b\d{1,2}:\d{2}\s*(?:horas|a\.m\.|p\.m\.|am|pm)?\b/g) || []).length,
+        fechas: (t.match(/\b(?:lunes|martes|miércoles|miercoles|jueves|viernes|sábado|sabado|domingo)\b/gi) || []).length,
+        km: (t.match(/\b\d+(?:\.\d+)?\s*(?:km|kilómetros|kilometros)\b/gi) || []).length,
+        cantidades: (t.match(/\b\d+(?:\.\d+)?\s*(?:metros|cúbicos|toneladas|personas|heridos|muertos)\b/gi) || []).length,
+        lugares: (t.match(/\b(?:kilómetro|km|carretera|puente|río|rio|comunidad|barrio|municipio)\b/gi) || []).length,
+        nombres: (t.match(/[A-Z][a-záéíóúñ]+\s+[A-Z][a-záéíóúñ]+(?:\s+[A-Z][a-záéíóúñ]+)?/g) || []).length,
+      };
+    }
+    function detContexto(t) { const l = t.toLowerCase(); return [...new Set(LUGARES_NIC.filter(x => l.includes(x)))]; }
+    function densidad(t, datos) { const p = contarPal(t); if (!p) return 0; const tot = Object.values(datos).reduce((a,b)=>a+b,0); return Math.round((tot/p)*1000)/10; }
+    function variacion(t) {
+      const or = t.split(/[.!?]+/).map(o=>o.trim()).filter(o=>o.length>5);
+      if (or.length < 3) return 'BAJA';
+      const len = or.map(o => o.split(/\s+/).length);
+      const desv = Math.max(...len) - Math.min(...len);
+      if (desv < 5) return 'BAJA';
+      if (desv < 10) return 'MEDIA';
+      return 'ALTA';
+    }
+
+    function auditarNoticia(html, titulo) {
+      const t = txtPlano(html);
+      const palabras = contarPal(t);
+      const relleno = detRelleno(t);
+      const tr = detTransiciones(t);
+      const fGen = detFuentesGen(t);
+      const fAtrib = detFuentesAtrib(t);
+      const citas = detCitas(t);
+      const datos = detDatos(t);
+      const dens = densidad(t, datos);
+      const varOr = variacion(t);
+      const lugares = detContexto(t);
+
+      let score = 0;
+      if (palabras >= 500) score += 20; else if (palabras >= 350) score += 10;
+      if (!relleno.length) score += 15; else if (relleno.length <= 2) score += 5;
+      if (tr.total === 0) score += 15; else if (tr.total <= 2) score += 5;
+      if (fAtrib.length >= 2) score += 20; else if (fAtrib.length === 1) score += 12;
+      if (citas.length >= 1) score += 8;
+      if (dens >= 5) score += 15; else if (dens >= 3) score += 8;
+      if (varOr === 'ALTA') score += 10; else if (varOr === 'MEDIA') score += 5;
+
+      let nivel = 'PELIGRO';
+      if (score >= 90) nivel = 'ORO'; else if (score >= 80) nivel = 'BRONCE';
+
+      return { palabras, score, nivel, densidad: dens, relleno: relleno.length, rellenoLista: relleno, transiciones: tr.total, transicionesLista: tr.found, fuentesGen: fGen, fuentesAtrib: fAtrib.length, citas: citas.length, variacion: varOr, contextoLocal: lugares.length, datos };
+    }
+
+    // Cargar datos
+    const snap = await getDocs(query(collection(db, 'noticias'), orderBy('fecha', 'desc')));
+    const noticias = [];
+    snap.forEach(d => {
+      const data = d.data();
+      const contenido = data.contenido || '';
+      noticias.push({
+        id: d.id,
+        titulo: data.titulo || '',
+        categoria: data.categoria || '',
+        fecha: (data.fecha || '').split('T')[0],
+        resumen: data.resumen || '',
+        imagen: data.imagen || '',
+        palabras: contarPalabras(contenido),
+        h2: tieneH2(contenido),
+        strong: tieneStrong(contenido),
+        blockquote: tieneBlockquote(contenido),
+        patronesIA: detectarIA(contenido),
+        contenido: contenido,
+      });
+    });
+
+    // Calcular niveles estructurales
+    noticias.forEach(n => {
+      const r = calcularNivel(n);
+      n.nivel = r.nivel;
+      n.checks = r.checks;
+      n.pass = r.pass;
+      n.auditor = auditarNoticia(n.contenido, n.titulo);
+    });
+
+    // Estadísticas
+    const total = noticias.length;
+    const oro = noticias.filter(n => n.nivel === 'ORO').length;
+    const plata = noticias.filter(n => n.nivel === 'PLATA').length;
+    const bronce = noticias.filter(n => n.nivel === 'BRONCE').length;
+    const peligro = noticias.filter(n => n.nivel === 'PELIGRO').length;
+    const conIA = noticias.filter(n => n.patronesIA.length > 0).length;
+
+    // Estadísticas del auditor
+    const audOro = noticias.filter(n => n.auditor.nivel === 'ORO').length;
+    const audBronce = noticias.filter(n => n.auditor.nivel === 'BRONCE').length;
+    const audPeligro = noticias.filter(n => n.auditor.nivel === 'PELIGRO').length;
+    const conRelleno = noticias.filter(n => n.auditor.relleno > 0).length;
+    const conTransIA = noticias.filter(n => n.auditor.transiciones > 0).length;
+    const sinFuentes = noticias.filter(n => n.auditor.fuentesAtrib === 0).length;
+
+    let filtroActual = 'todos';
+    let vistaActual = 'estructura';
+
+    function renderizar() {
+      if (vistaActual === 'auditor') return renderAuditor();
+      const filtradas = filtroActual === 'todos' ? noticias 
+        : filtroActual === 'ia' ? noticias.filter(n => n.patronesIA.length > 0)
+        : noticias.filter(n => n.nivel === filtroActual.toUpperCase());
+
+      document.getElementById('contenido').innerHTML = `
+        <div class="stats">
+          <div class="stat"><div class="num">${total}</div><div class="label">Total</div></div>
+          <div class="stat oro"><div class="num">${oro}</div><div class="label">ORO ✅</div></div>
+          <div class="stat plata"><div class="num">${plata}</div><div class="label">PLATA ⚠️</div></div>
+          <div class="stat bronce"><div class="num">${bronce}</div><div class="label">BRONCE ❌</div></div>
+          <div class="stat peligro"><div class="num">${peligro}</div><div class="label">PELIGRO 🚨</div></div>
+          <div class="stat ia"><div class="num">${conIA}</div><div class="label">Con IA 🤖</div></div>
+        </div>
+
+        <div class="summary-bar">
+          <div class="progress-bar">
+            <div class="seg seg-oro" style="width:${(oro/total*100).toFixed(1)}%"></div>
+            <div class="seg seg-plata" style="width:${(plata/total*100).toFixed(1)}%"></div>
+            <div class="seg seg-bronce" style="width:${(bronce/total*100).toFixed(1)}%"></div>
+            <div class="seg seg-peligro" style="width:${(peligro/total*100).toFixed(1)}%"></div>
+          </div>
+          <div class="progress-labels">
+            <span>ORO ${(oro/total*100).toFixed(0)}%</span>
+            <span>PLATA ${(plata/total*100).toFixed(0)}%</span>
+            <span>BRONCE ${(bronce/total*100).toFixed(0)}%</span>
+            <span>PELIGRO ${(peligro/total*100).toFixed(0)}%</span>
+          </div>
+        </div>
+
+        <div class="filters" id="filtros">
+          <button class="${filtroActual==='todos'?'active':''}" data-f="todos">Todos (${total})</button>
+          <button class="${filtroActual==='oro'?'active':''}" data-f="oro">🥇 ORO (${oro})</button>
+          <button class="${filtroActual==='plata'?'active':''}" data-f="plata">🥈 PLATA (${plata})</button>
+          <button class="${filtroActual==='bronce'?'active':''}" data-f="bronce">🥉 BRONCE (${bronce})</button>
+          <button class="${filtroActual==='peligro'?'active':''}" data-f="peligro">🚨 PELIGRO (${peligro})</button>
+          <button class="${filtroActual==='ia'?'active':''}" data-f="ia">🤖 Con IA (${conIA})</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nivel</th>
+              <th>Categoría</th>
+              <th>Título</th>
+              <th>Palabras</th>
+              <th>H2</th>
+              <th>Strong</th>
+              <th>BQ</th>
+              <th>Meta</th>
+              <th>Img</th>
+              <th>IA</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtradas.map((n, i) => `
+              <tr>
+                <td>${i+1}</td>
+                <td><span class="badge badge-${n.nivel.toLowerCase()}">${n.nivel}</span></td>
+                <td><span class="cat cat-${n.categoria}">${n.categoria}</span></td>
+                <td class="titulo-cell" title="${n.titulo}">${n.titulo.substring(0,50)}${n.titulo.length>50?'...':''}</td>
+                <td>${n.palabras >= 500 ? '<span class="check">'+n.palabras+'</span>' : n.palabras >= 350 ? '<span class="warn">'+n.palabras+'</span>' : '<span class="fail">'+n.palabras+'</span>'}</td>
+                <td>${n.h2 >= 1 ? '<span class="check">'+n.h2+'</span>' : '<span class="fail">0</span>'}</td>
+                <td>${n.strong >= 1 ? '<span class="check">'+n.strong+'</span>' : '<span class="fail">0</span>'}</td>
+                <td>${n.blockquote >= 1 ? '<span class="check">'+n.blockquote+'</span>' : '<span class="fail">0</span>'}</td>
+                <td>${n.resumen.length >= 120 ? '<span class="check">'+n.resumen.length+'</span>' : '<span class="fail">'+n.resumen.length+'</span>'}</td>
+                <td>${n.imagen ? '<span class="check">✓</span>' : '<span class="fail">✗</span>'}</td>
+                <td>${n.patronesIA.length === 0 ? '<span class="check">OK</span>' : '<span class="fail">'+n.patronesIA.length+'</span>'}</td>
+                <td><strong>${n.pass}/8</strong></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+
+      // Bind filtros
+      document.querySelectorAll('#filtros button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filtroActual = btn.dataset.f;
+          renderizar();
+        });
+      });
+    }
+
+    let filtroAud = 'todos';
+
+    function renderAuditor() {
+      const filtradas = filtroAud === 'todos' ? noticias
+        : filtroAud === 'relleno' ? noticias.filter(n => n.auditor.relleno > 0)
+        : filtroAud === 'transia' ? noticias.filter(n => n.auditor.transiciones > 0)
+        : filtroAud === 'sinfuentes' ? noticias.filter(n => n.auditor.fuentesAtrib === 0)
+        : noticias.filter(n => n.auditor.nivel === filtroAud.toUpperCase());
+
+      const ordenadas = [...filtradas].sort((a, b) => a.auditor.score - b.auditor.score);
+
+      document.getElementById('contenido').innerHTML = `
+        <div class="stats">
+          <div class="stat"><div class="num">${total}</div><div class="label">Total</div></div>
+          <div class="stat oro"><div class="num">${audOro}</div><div class="label">ORO 90+</div></div>
+          <div class="stat bronce"><div class="num">${audBronce}</div><div class="label">BRONCE 80-89</div></div>
+          <div class="stat peligro"><div class="num">${audPeligro}</div><div class="label">PELIGRO &lt;80</div></div>
+          <div class="stat ia"><div class="num">${conRelleno}</div><div class="label">Relleno 🎭</div></div>
+          <div class="stat ia"><div class="num">${conTransIA}</div><div class="label">Trans. IA 🤖</div></div>
+        </div>
+
+        <div class="summary-bar">
+          <div class="progress-bar">
+            <div class="seg seg-oro" style="width:${(audOro/total*100).toFixed(1)}%"></div>
+            <div class="seg seg-bronce" style="width:${(audBronce/total*100).toFixed(1)}%"></div>
+            <div class="seg seg-peligro" style="width:${(audPeligro/total*100).toFixed(1)}%"></div>
+          </div>
+          <div class="progress-labels">
+            <span>ORO ${(audOro/total*100).toFixed(0)}%</span>
+            <span>BRONCE ${(audBronce/total*100).toFixed(0)}%</span>
+            <span>PELIGRO ${(audPeligro/total*100).toFixed(0)}%</span>
+          </div>
+        </div>
+
+        <div class="filters" id="filtrosAud">
+          <button class="${filtroAud==='todos'?'active':''}" data-f="todos">Todos (${total})</button>
+          <button class="${filtroAud==='oro'?'active':''}" data-f="oro">🟢 ORO (${audOro})</button>
+          <button class="${filtroAud==='bronce'?'active':''}" data-f="bronce">🟡 BRONCE (${audBronce})</button>
+          <button class="${filtroAud==='peligro'?'active':''}" data-f="peligro">🔴 PELIGRO (${audPeligro})</button>
+          <button class="${filtroAud==='relleno'?'active':''}" data-f="relleno">🎭 Relleno (${conRelleno})</button>
+          <button class="${filtroAud==='transia'?'active':''}" data-f="transia">🤖 Transiciones IA (${conTransIA})</button>
+          <button class="${filtroAud==='sinfuentes'?'active':''}" data-f="sinfuentes">📵 Sin fuentes (${sinFuentes})</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nivel</th>
+              <th>Score</th>
+              <th>Categoría</th>
+              <th>Título</th>
+              <th>Pal.</th>
+              <th title="Relleno emocional">🎭</th>
+              <th title="Transiciones IA">🤖</th>
+              <th title="Fuentes atribuidas">📰</th>
+              <th title="Citas textuales">💬</th>
+              <th title="Densidad de datos">📊</th>
+              <th title="Variación de oraciones">📏</th>
+              <th title="Contexto local">📍</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ordenadas.map((n, i) => {
+              const a = n.auditor;
+              const nivelClass = a.nivel.toLowerCase();
+              const tieneProblemas = a.relleno > 0 || a.transicionesLista.length > 0 || a.fuentesAtrib === 0;
+              return `
+              <tr>
+                <td>${i+1}</td>
+                <td><span class="badge badge-${nivelClass}">${a.nivel}</span></td>
+                <td><strong style="color:${a.score>=90?'#10b981':a.score>=80?'#f59e0b':'#ef4444'}">${a.score}</strong></td>
+                <td><span class="cat cat-${n.categoria}">${n.categoria}</span></td>
+                <td class="titulo-cell" title="${n.titulo}">${n.titulo.substring(0,45)}${n.titulo.length>45?'...':''}</td>
+                <td>${a.palabras>=500?'<span class="check">'+a.palabras+'</span>':a.palabras>=350?'<span class="warn">'+a.palabras+'</span>':'<span class="fail">'+a.palabras+'</span>'}</td>
+                <td>${a.relleno===0?'<span class="check">0</span>':'<span class="fail">'+a.relleno+'</span>'}</td>
+                <td>${a.transiciones===0?'<span class="check">0</span>':'<span class="fail">'+a.transiciones+'</span>'}</td>
+                <td>${a.fuentesAtrib>=2?'<span class="check">'+a.fuentesAtrib+'</span>':a.fuentesAtrib===1?'<span class="warn">1</span>':'<span class="fail">0</span>'}</td>
+                <td>${a.citas>=1?'<span class="check">'+a.citas+'</span>':'<span class="fail">0</span>'}</td>
+                <td>${a.densidad>=5?'<span class="check">'+a.densidad+'</span>':a.densidad>=3?'<span class="warn">'+a.densidad+'</span>':'<span class="fail">'+a.densidad+'</span>'}</td>
+                <td>${a.variacion==='ALTA'?'<span class="check">A</span>':a.variacion==='MEDIA'?'<span class="warn">M</span>':'<span class="fail">B</span>'}</td>
+                <td>${a.contextoLocal>=1?'<span class="check">'+a.contextoLocal+'</span>':'<span class="fail">0</span>'}</td>
+              </tr>
+              ${tieneProblemas ? `<tr class="detalle-row"><td colspan="13">
+                ${a.rellenoLista.length ? '🎭 <strong>Relleno:</strong> ' + a.rellenoLista.map(r=>'<span class="mini mini-bad">'+r+'</span>').join('') : ''}
+                ${a.transicionesLista.length ? ' 🤖 <strong>Transiciones IA:</strong> ' + a.transicionesLista.map(r=>'<span class="mini mini-bad">'+r+'</span>').join('') : ''}
+                ${a.fuentesAtrib===0 ? ' 📵 <span class="mini mini-bad">Sin fuentes atribuidas (nombres+cargos)</span>' : ''}
+              </td></tr>` : ''}
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+
+      document.querySelectorAll('#filtrosAud button').forEach(btn => {
+        btn.addEventListener('click', () => { filtroAud = btn.dataset.f; renderizar(); });
+      });
+    }
+
+    // Bind pestañas
+    document.getElementById('tabEstructura').addEventListener('click', () => {
+      vistaActual = 'estructura';
+      document.getElementById('tabEstructura').classList.add('active');
+      document.getElementById('tabAuditor').classList.remove('active');
+      renderizar();
+    });
+    document.getElementById('tabAuditor').addEventListener('click', () => {
+      vistaActual = 'auditor';
+      document.getElementById('tabAuditor').classList.add('active');
+      document.getElementById('tabEstructura').classList.remove('active');
+      renderizar();
+    });
+
+    renderizar();
+  </script>
+</body>
+</html>

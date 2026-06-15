@@ -239,32 +239,32 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: '35-50',
   });
 
-  // 3. Relleno emocional (max 2 permitidos)
+  // 3. Relleno emocional (0 = PASS, >0 = WARN)
   const contenidoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const adjetivosEncontrados = ADJETIVOS_EMOCIONALES.filter(adj => contenidoLower.includes(adj));
   checks.push({
     nombre: 'Relleno emocional',
-    estado: adjetivosEncontrados.length <= 2 ? 'PASS' : 'WARN',
+    estado: adjetivosEncontrados.length === 0 ? 'PASS' : 'WARN',
     mensaje: adjetivosEncontrados.length === 0
       ? 'Ningun adjetivo emocional detectado.'
       : `Detectados ${adjetivosEncontrados.length}: ${adjetivosEncontrados.slice(0, 5).join(', ')}`,
     valorActual: adjetivosEncontrados.length,
-    valorEsperado: '<=2',
+    valorEsperado: 0,
   });
 
-  // 4. Transiciones IA (max 2 permitidas)
+  // 4. Transiciones IA (0 = PASS, >0 = WARN)
   const transicionesEncontradas = TRANSICIONES_IA.filter(t => contenidoLower.includes(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
   checks.push({
     nombre: 'Transiciones IA',
-    estado: transicionesEncontradas.length <= 2 ? 'PASS' : 'WARN',
+    estado: transicionesEncontradas.length === 0 ? 'PASS' : 'WARN',
     mensaje: transicionesEncontradas.length === 0
       ? '0 detectadas.'
       : `Detectadas ${transicionesEncontradas.length}: ${transicionesEncontradas.slice(0, 3).join(', ')}`,
     valorActual: transicionesEncontradas.length,
-    valorEsperado: '<=2',
+    valorEsperado: 0,
   });
 
-  // 5. Veracitud (fuentes atribuidas) — muy permisivo, detecta cualquier indicio
+  // 5. Veracitud (fuentes atribuidas) — Mas estricto
   const palabrasAtribucion = /informo|confirmo|declaro|preciso|senalo|indico|dijo|explico|manifesto|afirmo|agrego|aseguro|destaco|menciono|aclaro|comento|expreso|anuncio|revelo|preciso|indico|agrego|indico/.test(contenidoLower);
   const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
   // Detectar citas con comillas (rectas o tipograficas) + palabra de atribucion
@@ -274,10 +274,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const passFuentes = palabrasAtribucion || blockquotes >= 1 || tieneCitasAtribuidas || tieneSegun;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: passFuentes ? 'PASS' : 'WARN',
+    estado: passFuentes ? 'PASS' : 'FAIL',
     mensaje: passFuentes
       ? `${blockquotes} blockquotes. Fuentes atribuidas detectadas.`
-      : 'Sin atribucion clara de fuentes.',
+      : 'CRITICO: Sin atribucion de fuentes (testigos, policia, autoridades).',
     valorActual: blockquotes,
     valorEsperado: '>=1',
   });

@@ -1,0 +1,5402 @@
+[
+  {
+    "id": "SM2fzy975dM5oxuoPgQx",
+    "titulo": "Fallece esposa de Marvin Benard en accidente de tránsito en California",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-23",
+    "palabras": 410,
+    "score": 79,
+    "nivel": "BRONCE",
+    "densidad": 3.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "Y64ycnoNiScKCoajm7kn",
+    "titulo": "Guarda de seguridad fallece en complejo fabril de Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-14",
+    "palabras": 397,
+    "score": 82,
+    "nivel": "BRONCE",
+    "densidad": 4.3,
+    "relleno": [
+      "enluta",
+      "consternación"
+    ],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "dijo lo",
+      "dijo que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "yCN8IBbWL1xxPvNhJqTx",
+    "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-30",
+    "palabras": 409,
+    "score": 84,
+    "nivel": "BRONCE",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 0
+  },
+  {
+    "id": "eLJeY8NEp62lCIx7Tf5n",
+    "titulo": "Hombre de 57 años muere dentro de establecimiento en carretera nueva a León",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-15",
+    "palabras": 429,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 4.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "uroqqoNRVgTvzUH1Gh4W",
+    "titulo": "Dos muertos y una niña herida en accidentes de moto",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-18",
+    "palabras": 401,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "Zt9NtuqCLNMhBhmH6IEN",
+    "titulo": "Tres detenidos por muerte de joven tras cirugía estética en Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-28",
+    "palabras": 408,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 3.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "OWppqYU03AfZQHIoqEL7",
+    "titulo": "Disputa por chicha bruja termina en muerte en Asang; buscan al autor",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-26",
+    "palabras": 428,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 7.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "3Dlu4tCQZedztrompEgV",
+    "titulo": "Melquin Esedec Masis Rodríguez murió en accidente de moto en Matiguás",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-01",
+    "palabras": 430,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "YMhZnFxcC1LINNtptLYL",
+    "titulo": "Dos mueren por presuntos problemas de salud en Managua y León",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-23",
+    "palabras": 431,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 6.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "estelí",
+      "chinandega",
+      "matagalpa",
+      "jinotega",
+      "rivas",
+      "madriz",
+      "nueva segovia",
+      "boaco",
+      "chontales",
+      "carazo"
+    ],
+    "esLocal": true,
+    "contextoCount": 14
+  },
+  {
+    "id": "gkAeVBYY9AQBzAYCmjWk",
+    "titulo": "Activistas climáticos bloquean Wall Street en protesta en Nueva York",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-01",
+    "palabras": 423,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 3.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "6W5tgAUCaM1w9lsSjA6Z",
+    "titulo": "Kener Velásquez, trabajador del MINSA, murió en accidente en km 46 Carretera Norte",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 429,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 4.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "p3IKfmbWdUPIrSbbOynM",
+    "titulo": "Sequía extrema en Latinoamérica afecta 150 millones de hectáreas",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-12",
+    "palabras": 444,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 3.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "chinandega",
+      "madriz",
+      "nueva segovia"
+    ],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "e7FFhasFNh3pd7o4xBMo",
+    "titulo": "Dos motociclistas mueren en accidentes en Granada y Chontales",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-23",
+    "palabras": 428,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 4.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "granada",
+      "masaya",
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "dgjsES2KHZ3AFaGHIoLt",
+    "titulo": "Investigan hallazgo de cuerpo sin vida en Muy Muy, Matagalpa",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-12",
+    "palabras": 428,
+    "score": 89,
+    "nivel": "BRONCE",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "granada",
+      "estelí",
+      "matagalpa",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 5
+  },
+  {
+    "id": "HBaAK77yqswYn3uCf7al",
+    "titulo": "Toy Story 5 llegará a Nicaragua con Woody y Buzz en la era digital",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-27",
+    "palabras": 894,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "XHsdnSKHniKyMI1AWBXL",
+    "titulo": "Costa Rica investiga muerte de nicaragüense en Heredia y busca familiares",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-15",
+    "palabras": 580,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan",
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "indicó el"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "fIgt55qqhg6ysMQHEsl4",
+    "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland Garros",
+    "categoria": "Deportes",
+    "fecha": "2026-05-30",
+    "palabras": 700,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "NF9Q4ORwPOcsXKKRHuMa",
+    "titulo": "Canadá confirma caso de hantavirus ligado a crucero MV Hondius",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-16",
+    "palabras": 487,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "gXTkMry6uueR9BxXcTdF",
+    "titulo": "Dos fallecidos tras naufragio de panga en Krukira",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-29",
+    "palabras": 589,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 3.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 0
+  },
+  {
+    "id": "hMOJHKhFSSOUp4LrBDmo",
+    "titulo": "Autoridades de Texas identifican a nicaragüense desaparecido.",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-15",
+    "palabras": 495,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "R2zQFsmjsu0NvFRU7tDa",
+    "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
+    "categoria": "Nacionales",
+    "fecha": "2026-06-07",
+    "palabras": 601,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 0
+  },
+  {
+    "id": "fyw1t5isNXwzDEjoT266",
+    "titulo": "Policía busca a conductor involucrado en incidente en Rosita",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 700,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 0
+  },
+  {
+    "id": "erLH7I7s1YQDVJqKKnRm",
+    "titulo": "Nacen trillizos en Mulukukú y llenan de alegría a comunidad",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-15",
+    "palabras": 673,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "emoción entre familiares, vecino"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 0
+  },
+  {
+    "id": "pnxe5tdSosT15kgUKG0N",
+    "titulo": "Nicaragüense muere en accidente de tránsito en Costa Rica",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-19",
+    "palabras": 542,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 3.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "aNWsSWkbLlE6FiLkVqmF",
+    "titulo": "Miel San Marcos realiza concierto en centro de rehabilitación",
+    "categoria": "Espectáculos",
+    "fecha": "2026-04-25",
+    "palabras": 606,
+    "score": 90,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 0
+  },
+  {
+    "id": "XFnwUlvyLVKUbFVdrTUL",
+    "titulo": "Guerra en Irán: por qué subirán precio de condones en el mundo",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-24",
+    "palabras": 749,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 4
+  },
+  {
+    "id": "M9vj4XiOdmMrLwreHlff",
+    "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-06-08",
+    "palabras": 638,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "y8gWejnBZDoLhgYaRWlP",
+    "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
+    "categoria": "Tecnología",
+    "fecha": "2026-06-06",
+    "palabras": 598,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 4
+  },
+  {
+    "id": "Rgbpy7e3fBdG8oDgfVEZ",
+    "titulo": "Avanza construcción Hospital Pediátrico Las Segovias, Estelí",
+    "categoria": "Nacionales",
+    "fecha": "2026-04-25",
+    "palabras": 959,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "madriz",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "Oejz1UtxGZb7LTATa6WP",
+    "titulo": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
+    "categoria": "Deportes",
+    "fecha": "2026-04-25",
+    "palabras": 938,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "afirmó Sinner"
+    ],
+    "citas": 5,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "TVgb0tVY15haE16LYOy3",
+    "titulo": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+    "categoria": "Nacionales",
+    "fecha": "2026-04-25",
+    "palabras": 900,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "MHJfaX05ygumyujBuPa5",
+    "titulo": "Hospital pediátrico de Estelí avanza y estará listo en 2026",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-02",
+    "palabras": 960,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "madriz",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "XEBUgVpam4o7ucpmpqgD",
+    "titulo": "Descubren dinosaurio gigante en Asia: pesaba 9 elefantes",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-15",
+    "palabras": 653,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "leon"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "mpU9oJImLDYi8lWhziII",
+    "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-30",
+    "palabras": 938,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "kR3waCnxVDfMfVCV8sAH",
+    "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+    "categoria": "Deportes",
+    "fecha": "2026-06-07",
+    "palabras": 588,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "jCR0TauTK8jQc2HJ3xhM",
+    "titulo": "Aumentan casos de electrocución en accidentes laborales",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-07",
+    "palabras": 624,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "yAxGbreJ4sa3sd2iT6XI",
+    "titulo": "Megahospitales transformarán la atención médica en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-27",
+    "palabras": 713,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "estelí"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "VAQWaSecbeFlCuK8KCgG",
+    "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-06",
+    "palabras": 573,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "nueva segovia",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "PNJr8KWo2Gy1TCjuF9jq",
+    "titulo": "Oleaje daña embarcaciones y afecta turismo en Rivas",
+    "categoria": "Nacionales",
+    "fecha": "2026-06-09",
+    "palabras": 556,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "rivas",
+      "san juan del sur"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "8eSX6XxOPVJbh9ILZ5ZS",
+    "titulo": "Arquitectura C++ y Direct3D para diagnóstico de sistemas PC",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-24",
+    "palabras": 592,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "u0Lgb7PgJ9XVT67Za5Ov",
+    "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-27",
+    "palabras": 519,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "whZtPKLBjDEcFUzZrkXv",
+    "titulo": "Nuevo hospital pediátrico fortalecerá atención en Estelí",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-16",
+    "palabras": 666,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "madriz",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "2EQFdVtgjMWe3SN4A9yM",
+    "titulo": "Windows 11 acelera su instalación en computadoras en Nicaragua",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-15",
+    "palabras": 456,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya"
+    ],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "SeoMG4MIHxsP87RjT5FI",
+    "titulo": "China clona seis cabras lecheras de alto rendimiento",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-16",
+    "palabras": 557,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "jIPhozTQrWC0dkqVykK4",
+    "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-27",
+    "palabras": 585,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "estelí",
+      "chinandega",
+      "matagalpa",
+      "madriz",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 7
+  },
+  {
+    "id": "U3K2REamwdCUoxFRermC",
+    "titulo": "Bluefields celebra el Palo de Mayo con música y tradición caribeña",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-24",
+    "palabras": 691,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "9YSrsEdWBiO9Uu1CV8u6",
+    "titulo": "Australia: el 70% de menores evade control en redes sociales",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-29",
+    "palabras": 573,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "VW3uBFbDCb6RR3KCiJ18",
+    "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+    "categoria": "Deportes",
+    "fecha": "2026-06-09",
+    "palabras": 701,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "ofPopYZtZAK0eb0L5rPB",
+    "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-27",
+    "palabras": 601,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "NTa3Gb797l9FINZ2E7RU",
+    "titulo": "Fin de semana deja ocho fallecidos en accidentes viales",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-08",
+    "palabras": 571,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "estelí",
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "qAGYHKq4PG7PnXhkUvWa",
+    "titulo": "Costa Rica busca normalizar la diplomacia con Nicaragua",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-28",
+    "palabras": 768,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "ICRNpizAeFDiL5d1HJvH",
+    "titulo": "Expertos analizan rol de IA en ciberseguridad global",
+    "categoria": "Tecnología",
+    "fecha": "2026-04-29",
+    "palabras": 639,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "LtSsDQVXjtAAzNH0tUAH",
+    "titulo": "Investigación policial tras fatal siniestro vial en Boaco",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 599,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "boaco",
+      "camoapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "Urfp4nwfKtnSM5Nxe3ZD",
+    "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-15",
+    "palabras": 969,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "qhlHd01R4IC9TDdMx0re",
+    "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-23",
+    "palabras": 614,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "declaró el"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "9gLUPHxK05lGgwNE1URy",
+    "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-16",
+    "palabras": 665,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "gnnUjlF9z4wdg9jykpJm",
+    "titulo": "Neymar Jr. se prepara para el Mundial 2026 tras recuperación",
+    "categoria": "Deportes",
+    "fecha": "2026-05-15",
+    "palabras": 1177,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "chinandega"
+    ],
+    "esLocal": false,
+    "contextoCount": 4
+  },
+  {
+    "id": "F4UddilPobcIjIkZ1e55",
+    "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo de 13 mil córdobas y 2,980 dólares",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-19",
+    "palabras": 530,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "tauy4uXG1uwf1g44zcZ3",
+    "titulo": "Semáforos solares modernos entran en funcionamiento en Managua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-12",
+    "palabras": 739,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 0.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "28a2yKj9NN9k4au0xJ6q",
+    "titulo": "Nicaraguense fallece en accidente laboral en Wisconsin",
+    "categoria": "Internacionales",
+    "fecha": "2026-06-14",
+    "palabras": 670,
+    "score": 91,
+    "nivel": "ORO",
+    "densidad": 1.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "jinotega"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "IGFA2pNSEnX452WlJalV",
+    "titulo": "Siete capturados y 131 libras de marihuana ocupadas en Jinotega",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-25",
+    "palabras": 392,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "jinotega",
+      "wiwilí"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "AD5DzaeJbwyygIQVqd3C",
+    "titulo": "INETER pronostica lluvias fuertes y tormentas eléctricas en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-16",
+    "palabras": 397,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "kJZTSfqmUGHJKA8SFaE8",
+    "titulo": "Julieta Venegas interpretará canción cultural para el Mundial 2026",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-30",
+    "palabras": 432,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 5,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "lJv8InQKCuFu1Iu0oNRJ",
+    "titulo": "Joven desaparece mientras nadaba en la laguna de Xiloá",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-03",
+    "palabras": 415,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "Dijo que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "ciudad sandino"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "wVCz0rhXOzMXEHmw9Jgw",
+    "titulo": "Microsoft corrige vulnerabilidad en navegador Edge para usuarios en Nicaragua",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-15",
+    "palabras": 429,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "ctq3W0kZtNipZL2X9KTN",
+    "titulo": "Conductor de caponera fallece mientras desayunaba en Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 422,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "dijo que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "2QXi7MqebN30PXzQoe2E",
+    "titulo": "Nicaragüense de Ciudad Antigua muere en accidente en Miami.",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-12",
+    "palabras": 430,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "KXMHQ85cLbSZpXMx3eQm",
+    "titulo": "Nicaragua recibe 278 mil turistas en primer trimestre de 2026; crecimiento del 11%",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-16",
+    "palabras": 388,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "Dijo que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "granada"
+    ],
+    "esLocal": true,
+    "contextoCount": 13
+  },
+  {
+    "id": "XTONg1lOfMlV1gNfMSm7",
+    "titulo": "Ocho capturados y decomiso de drogas y armas en operativo en Peñas Blancas, Costa Rica",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-16",
+    "palabras": 416,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 4,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "HkJY4CFD6FMDxksE4Zxf",
+    "titulo": "Entregan en Nicaragua cuerpo de migrante fallecido en Estados Unidos",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-03",
+    "palabras": 398,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "BU0PX0EqHO5ewLCH7Coo",
+    "titulo": "Un muerto y un herido en accidentes laborales en Managua y Estelí",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-28",
+    "palabras": 391,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "dijo un"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "PvmeAqNv4cyfztLFhqMO",
+    "titulo": "Microsoft y Meta actualizan plataformas para usuarios en Nicaragua",
+    "categoria": "Tecnología",
+    "fecha": "2026-04-24",
+    "palabras": 418,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 2.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 7
+  },
+  {
+    "id": "kpr5LCeGtA5X9kRXvWSN",
+    "titulo": "Torre Eiffel se ilumina con colores del PSG antes de la final europea",
+    "categoria": "Deportes",
+    "fecha": "2026-05-30",
+    "palabras": 430,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "TDgfYWff5VvlOgEkUuWu",
+    "titulo": "Esposa y madre de capitán mueren en naufragio en Caribe Norte",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-30",
+    "palabras": 424,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 5.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "yXELqcLI6Xh3Mcfe4cSp",
+    "titulo": "Fiscalía investiga hallazgo de cuerpo sin vida en Telica, León",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-25",
+    "palabras": 447,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "granada",
+      "estelí",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "rKNxcfeotxszuclpLCyI",
+    "titulo": "Tres motociclistas mueren en accidentes en Managua y Matagalpa",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-14",
+    "palabras": 402,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 6.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "aFK0buUKVMKOICj3gVvA",
+    "titulo": "30 años de cárcel para feminicida que estranguló a mujer en Telica",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-28",
+    "palabras": 408,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 6.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "granada",
+      "estelí",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "ZTVWiR99Nppa5L2P4wT1",
+    "titulo": "Incendio destruye puesto de ropa en el Mercado Oriental de Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-03",
+    "palabras": 447,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "declaró en",
+      "dijo mientras"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "4I2mdwQEGYN7N7M0KTkA",
+    "titulo": "Motociclista fallece en accidente de tránsito en Jinotepe",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-11",
+    "palabras": 403,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 4.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "Dijo que",
+      "dijo que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "jinotepe"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "CaxNVIKzrIl5rBpKs0vy",
+    "titulo": "Médico y dos personas detenidos por muerte de joven tras cirugía.",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-29",
+    "palabras": 419,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "dijo quiénes",
+      "Dijo que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "IYS7dABZahKOHwdnjfJr",
+    "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-30",
+    "palabras": 404,
+    "score": 94,
+    "nivel": "ORO",
+    "densidad": 2.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "22ZHhDUSpI6CrpwIYkZ9",
+    "titulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-22",
+    "palabras": 587,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "D5bci9JLyako7ccewIGc",
+    "titulo": "Esparza: Análisis del ataque armado con fusiles de guerra",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-24",
+    "palabras": 529,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "3FIrDPnlHKLQ9gqnCxKJ",
+    "titulo": "Prevención de riesgos ante descargas eléctricas en Nicaragua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-18",
+    "palabras": 645,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "granada",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "OHzJfumT84hFTV5SQD6i",
+    "titulo": "Villa El Carmen: Reporte técnico de accidente doméstico",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-13",
+    "palabras": 556,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "tXBIl2x9SQj6C4v4s4i8",
+    "titulo": "Autoridades investigan accidente en Rancho Grande",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-16",
+    "palabras": 615,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "XKRkS7QqHf13v0urZg9C",
+    "titulo": "Policía investiga hallazgo en vivienda de Ciudad Darío",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-30",
+    "palabras": 721,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "Bo0hQ4L0astO6INh9QZS",
+    "titulo": "Joven de 28 años muere ahogado en playa Matilde, San Juan del Sur",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-30",
+    "palabras": 477,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 4.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "rivas",
+      "san juan del sur"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "HASie7C63k5BAKuwsdQU",
+    "titulo": "Familiares localizan a adulto mayor tras búsqueda en Las Jagüitas",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 803,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "Bfl8jRGnLPIQDS1qXqGq",
+    "titulo": "Muere adulta mayor y suman tres fallecidos por ataque de abejas",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-26",
+    "palabras": 728,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "E3R3ObpLUkSgWcAPblh0",
+    "titulo": "Investigan muerte de motociclista en El Jícaro",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-06",
+    "palabras": 553,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 4.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan",
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "4rdCg3m1oNikSJP4nZjH",
+    "titulo": "Managua: Ciudadano hondureño fallece tras vuelco de camioneta",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-24",
+    "palabras": 675,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "leon"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "RCjqgw3ea2K6cZHXmbRV",
+    "titulo": "Tres personas mueren en accidentes de motocicleta en Rivas y Caribe Sur",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-31",
+    "palabras": 569,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "rivas"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "Bd0FR40BQL9MYKXutpSr",
+    "titulo": "OpenAI mantiene alianza con Apple para integrar ChatGPT en dispositivos en Nicaragua",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-15",
+    "palabras": 488,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 9
+  },
+  {
+    "id": "8ePAwlFzkvYLwHi08zCi",
+    "titulo": "Prevención de riesgos en pozos y espacios confinados",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-25",
+    "palabras": 558,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "madriz"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "dE7i2Dv4MhE3AVFioLG2",
+    "titulo": "Familia nicaragüense gestiona repatriación desde San Francisco",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-13",
+    "palabras": 659,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "estelí"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "0tmiH8fXJTVXNmiM0W5U",
+    "titulo": "Cuatro nicaragüenses fallecen en Costa Rica, El Salvador y Estados Unidos en menos de una semana",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-21",
+    "palabras": 567,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 8.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "matagalpa",
+      "nueva segovia",
+      "ocotal"
+    ],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "I5Ctqa8wJi0TYgi4lW3r",
+    "titulo": "Fiscalía investiga deceso de recluso en Matagalpa",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-29",
+    "palabras": 702,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se presume que"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa",
+      "sébaco"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "jG3mvtcfZCxzecd62Lgd",
+    "titulo": "Dos muertos y tres heridos en hechos en León, Ocotal y Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-24",
+    "palabras": 612,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 6.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan",
+      "hasta el cierre",
+      "hasta el momento"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "nueva segovia",
+      "ocotal"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "YL1gXYMW4zHEo42cJzbY",
+    "titulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+    "categoria": "Nacionales",
+    "fecha": "2026-06-09",
+    "palabras": 570,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 10
+  },
+  {
+    "id": "HHo7xV5BjPkOVWpafcvB",
+    "titulo": "Policía investiga incidente en Ciudad Sandino",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-29",
+    "palabras": 624,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "ciudad sandino"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "sOZp2AGCVvYQ2I5oK0Dj",
+    "titulo": "Cae guatemalteco con 23 kilos de cocaína en frontera El Guasaule",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 706,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "chinandega"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "9nnYjOtCUS1HnZteGuf3",
+    "titulo": "Abril cierra con 70 fallecidos por accidentes de tránsito",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-01",
+    "palabras": 680,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "estelí",
+      "matagalpa",
+      "jinotega",
+      "rivas",
+      "madriz",
+      "nueva segovia",
+      "boaco",
+      "chontales",
+      "carazo"
+    ],
+    "esLocal": true,
+    "contextoCount": 13
+  },
+  {
+    "id": "DuaMg4XI8aPmAHw8otN1",
+    "titulo": "Boaco: Informe técnico sobre accidente vial en Puente Muco",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-14",
+    "palabras": 584,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 4.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "boaco"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "nBDHAoiCgbp81dSmIYqT",
+    "titulo": "Investigan asesinato de joven de 19 años en comunidad Molino Sur.",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 662,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa",
+      "sébaco"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "y3wh5fh7uBD2Rhc5EjBO",
+    "titulo": "Dos personas mueren ahogadas en Managua y Rivas durante el fin de semana",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-31",
+    "palabras": 603,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "rivas",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "phUuAtrQ4H3qV4heuZlH",
+    "titulo": "Dos fallecidos en accidentes de motocicleta en Nicaragua",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-14",
+    "palabras": 729,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "chinandega",
+      "jinotega",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 5
+  },
+  {
+    "id": "JtTY1tfzHmkOVNJjCZJX",
+    "titulo": "Comerciante fallece tras altercado en terminal de Rosita",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-14",
+    "palabras": 673,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes policiales"
+    ],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "vDDkaxmQZVTtxhFi2Cy9",
+    "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-14",
+    "palabras": 625,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "AoP9lWscit6xRvpPwJ6N",
+    "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-06-10",
+    "palabras": 642,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 5.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "cBUKld5uQPl1KuHX1JpJ",
+    "titulo": "Incendio destruye negocio y deja pérdidas por C$200 mil en Nindirí",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-04",
+    "palabras": 587,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan",
+      "hasta el momento"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "pMXu8KvKsz9gJzg0U9bf",
+    "titulo": "Béisbol sigue siendo el deporte favorito de los nicaragüenses en 2026",
+    "categoria": "Deportes",
+    "fecha": "2026-05-21",
+    "palabras": 813,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "chinandega"
+    ],
+    "esLocal": false,
+    "contextoCount": 9
+  },
+  {
+    "id": "FpUdWXERRhgbU6ZD7bKI",
+    "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en Rosita",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-29",
+    "palabras": 728,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "comentó un"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "raan"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "q3QgspnxFL9buTcqe9Pm",
+    "titulo": "Programa Nuevas Victorias entregará 85 viviendas en Nagarote",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-19",
+    "palabras": 733,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "nagarote"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "ta1dOmtT9uQpxvmhYtEu",
+    "titulo": "Dos personas mueren tras ser alcanzadas por rayos durante tormentas en Granada y Matagalpa",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 942,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "granada",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "gaCpaA49whA70rqyWBow",
+    "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10 millones",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-23",
+    "palabras": 721,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "n43KpIJvXSWRlC9rR0mh",
+    "titulo": "Amgen: alertas por Tavneos tras investigación de seguridad",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-16",
+    "palabras": 860,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "9c0bOgvhw4oxPOgy3gvl",
+    "titulo": "Madrid gestiona logística masiva durante encuentro religioso",
+    "categoria": "Internacionales",
+    "fecha": "2026-06-07",
+    "palabras": 615,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "león"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "T0RH7caMTB8Ydm3AgVPJ",
+    "titulo": "Clima extremo en Nicaragua: Tornado en Somotillo y granizo en Jinotepe",
+    "categoria": "Nacionales",
+    "fecha": "2026-04-27",
+    "palabras": 1085,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "chinandega",
+      "carazo",
+      "jinotepe"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "PCNXb9Gqsio9AzUetMQJ",
+    "titulo": "Nicaragüense muere en riña dentro de cárcel de Puntarenas, Costa Rica",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-26",
+    "palabras": 777,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "hqG7Wlt0ce9IebupbCvy",
+    "titulo": "Policía guatemalteca reporta detención nicaragüense",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-28",
+    "palabras": 671,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "si1jE03Tu4WiIAEygA1I",
+    "titulo": "Siuna aplicará multas por arrojar basura desde transporte público",
+    "categoria": "Nacionales",
+    "fecha": "2026-04-29",
+    "palabras": 689,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "D1ga76tETxisZGZGAlst",
+    "titulo": "Luca Zidane recibe atención médica; club evalúa recuperación",
+    "categoria": "Deportes",
+    "fecha": "2026-04-28",
+    "palabras": 760,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "granada"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "oBetC1qDrdPvR7QifSDP",
+    "titulo": "Netflix anuncia precuela The Crown sobre familia real británica",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-01",
+    "palabras": 676,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [
+      "según fuentes"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "alp8j7Y2UGGLK10hA47o",
+    "titulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospital de León",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-28",
+    "palabras": 724,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "comentó la"
+    ],
+    "citas": 4,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "masaya",
+      "estelí",
+      "chinandega",
+      "jinotega"
+    ],
+    "esLocal": true,
+    "contextoCount": 6
+  },
+  {
+    "id": "3S9dCTg2dafS0kMGMJ1V",
+    "titulo": "Temporada de huracanes del Pacífico 2026 inicia con calma",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-15",
+    "palabras": 1095,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el cierre"
+    ],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "chinandega",
+      "rivas",
+      "carazo"
+    ],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "ASk1oDEiDQXOAlP3JYAT",
+    "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas a León",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-24",
+    "palabras": 747,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "león"
+    ],
+    "esLocal": true,
+    "contextoCount": 5
+  },
+  {
+    "id": "DlEsvr8msov0zXZiUSfP",
+    "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+    "categoria": "Espectáculos",
+    "fecha": "2026-04-25",
+    "palabras": 710,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 4,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "N1bCYcRzuYvqApYNfHwg",
+    "titulo": "Fiscalía pide hasta 25 mil años para líder de MS-13",
+    "categoria": "Internacionales",
+    "fecha": "2026-06-06",
+    "palabras": 597,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "ssxa0uOpOPCg9RqLqwpY",
+    "titulo": "Menor de edad es retenido tras incidente en Villa Libertad",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-12",
+    "palabras": 609,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "testigos indicaron",
+      "se espera que"
+    ],
+    "fAtrib": [
+      "manifestó su",
+      "comentó Gómez",
+      "Según testigos"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "nTkEi14v12nHn18SHdQI",
+    "titulo": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-30",
+    "palabras": 703,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "JgF9ievsdzhnOwtqh70S",
+    "titulo": "Taylor Swift busca registrar su voz como marca ante la IA",
+    "categoria": "Espectáculos",
+    "fecha": "2026-04-28",
+    "palabras": 599,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "vvWJAwyV8adECw3IGqdy",
+    "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-27",
+    "palabras": 593,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "uERNXPtxMFmHU1rqAC0N",
+    "titulo": "Sony Music compra catálogo de Shakira y Beyoncé",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-12",
+    "palabras": 728,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "Qasim Abbas, director",
+      "señaló que",
+      "indicó que"
+    ],
+    "citas": 5,
+    "varOr": "ALTA",
+    "lugares": [
+      "leon"
+    ],
+    "esLocal": false,
+    "contextoCount": 5
+  },
+  {
+    "id": "y251TlGDTa5BVIM18QGE",
+    "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-30",
+    "palabras": 638,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "granada"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "L23qf1SLBkKo49Z2OPIP",
+    "titulo": "¡Histórico! Sebastián Sawe rompe barrera de 2 horas en maratón",
+    "categoria": "Deportes",
+    "fecha": "2026-04-26",
+    "palabras": 757,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "lsUzLddRdDCzSo3R9VkT",
+    "titulo": "Fiscalía de California investiga fraude de entradas FIFA",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-13",
+    "palabras": 737,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 4,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 6
+  },
+  {
+    "id": "ji2rLsYoOn3VKOsKwQRI",
+    "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+    "categoria": "Espectáculos",
+    "fecha": "2026-04-29",
+    "palabras": 739,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 8,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "mk3B51skMrff3bMTEbP9",
+    "titulo": "Tres muertos y un lesionado en accidentes de tránsito",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-07",
+    "palabras": 590,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "IFvH1F0YUbgz55E853jj",
+    "titulo": "Comercios esperan alta actividad por Día de las Madres en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-24",
+    "palabras": 757,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "comentó una"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "granada"
+    ],
+    "esLocal": true,
+    "contextoCount": 9
+  },
+  {
+    "id": "AsS8nr5I1Sn8F0H27O2n",
+    "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-15",
+    "palabras": 1216,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "chinandega"
+    ],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "TwKzSdGWnzIYeAW801nD",
+    "titulo": "Juez deja libre a nicaragüense investigada por muerte de su hermana",
+    "categoria": "Internacionales",
+    "fecha": "2026-06-06",
+    "palabras": 587,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "cW59E7JhZd9PT6Epx2aJ",
+    "titulo": "Shakira reúne a dos millones de fans en concierto de Brasil",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-03",
+    "palabras": 628,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "POzMmYcjC7Vy2JHS1KmW",
+    "titulo": "Fallece repartidor nicaragüense tras accidente vial en Miami",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-14",
+    "palabras": 619,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "Bad5bgJKE5uYOdW3NeRf",
+    "titulo": "Luka Modrić recibe tratamiento y club evalúa recuperación",
+    "categoria": "Deportes",
+    "fecha": "2026-04-27",
+    "palabras": 602,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "manifestó de"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "8TzGIMouh9sFySZbjBPx",
+    "titulo": "Fenómeno viral de frutinovelas genera debate sobre IA en redes",
+    "categoria": "Tecnología",
+    "fecha": "2026-05-01",
+    "palabras": 679,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 8,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "o0Hd8UJZe7IhZN2zwj2g",
+    "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-22",
+    "palabras": 740,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "Sylvie Briand, director",
+      "señaló que",
+      "indicó que",
+      "Según las autoridades"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 11
+  },
+  {
+    "id": "jMCRlTyJPKxF2MSiOW3Z",
+    "titulo": "Academia regula la IA y reforma reglas para los Óscar",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-01",
+    "palabras": 623,
+    "score": 96,
+    "nivel": "ORO",
+    "densidad": 1.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "De acuerdo con fuentes"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "erUOMi1fsv5GmP1bfFwu",
+    "titulo": "Motociclista muere en choque con camión en Jinotega carretera",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-03",
+    "palabras": 603,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "Según testigos",
+      "Según fuentes"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "jinotega"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "5IlK17MUvaqPrJRTfUuR",
+    "titulo": "La Costanera: nuevo motor de inversión inmobiliaria en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-04-30",
+    "palabras": 683,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "rivas",
+      "san juan del sur"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "BN739xoxA2gVCf5KUWTV",
+    "titulo": "Samsung presenta baterías de silicio-carbono para futuros teléfonos.",
+    "categoria": "Tecnología",
+    "fecha": "2026-04-26",
+    "palabras": 498,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "masaya"
+    ],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "yMsw7cfcGLlMbK2CD61L",
+    "titulo": "Rastra cargada de bloques se vuelca en cuesta Los Jabalíes; un muerto",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-30",
+    "palabras": 508,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "estelí",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "Vd53UqkuV45BIcRs4Miu",
+    "titulo": "Incautan 502 kilos de cocaína en operativo en Wiwilí, Jinotega",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-21",
+    "palabras": 476,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "jinotega",
+      "wiwilí"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "v0gwsceiaZQeNSLPHmee",
+    "titulo": "Nicaragüenses mueren en hechos violentos registrados en Costa Rica",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-23",
+    "palabras": 582,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 7.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "señaló que",
+      "indicó que",
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa",
+      "nueva segovia"
+    ],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "iowQzBgiwSPPXCC4EsJD",
+    "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-15",
+    "palabras": 756,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 7
+  },
+  {
+    "id": "9xCHaZO7JEwhyRpdHHJY",
+    "titulo": "Dos hombres mueren por descargas eléctricas en Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-02",
+    "palabras": 583,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "autoridades investigan"
+    ],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "zwqEVVwFeeMooUBQpBR7",
+    "titulo": "Fallece mujer en bus de la ruta Jalapa-Ocotal; investigan el caso",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 825,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "madriz",
+      "nueva segovia",
+      "ocotal"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "IbgiPTV1eCWCfR7lfDOc",
+    "titulo": "Irán exige garantías a FIFA por falta de visados para Mundial",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-14",
+    "palabras": 681,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "manifestó el"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 8
+  },
+  {
+    "id": "CeqPObdhNdy5rBPPYcH5",
+    "titulo": "Trabajador muere electrocutado durante labores en León",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-11",
+    "palabras": 880,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se estima que"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "león"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "1PRR0VQRF8oXLfzFDhm5",
+    "titulo": "Tornado deja 10 heridos y decenas de viviendas destruidas en Enid, Oklahoma",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-24",
+    "palabras": 558,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se estima que"
+    ],
+    "fAtrib": [
+      "indicó que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "c95BYHepil5Vdf9bOUGZ",
+    "titulo": "Carlos Vives y Maluma lideran premiación en gala de música latina",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-03",
+    "palabras": 808,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 8,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "f19jnrsNZWCdyHfMbiT9",
+    "titulo": "Capturan a tres sospechosos por homicidio de vigilante en Masaya",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-29",
+    "palabras": 502,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "sRiMFXA51EbxWNAd2GPl",
+    "titulo": "Shakira lanza Dai Dai, himno oficial del Mundial 2026",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-12",
+    "palabras": 725,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 8,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 3
+  },
+  {
+    "id": "HQrOHqjbqOXB4ZTs22vl",
+    "titulo": "Incendio en vivienda de Masaya deja daños materiales",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-26",
+    "palabras": 461,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "leon",
+      "granada",
+      "masaya",
+      "chinandega",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 7
+  },
+  {
+    "id": "7AszCzTNxJWBnt1daHag",
+    "titulo": "Canal de Panamá eleva peajes y buques pagan hasta $4 millones por cruzar",
+    "categoria": "Internacionales",
+    "fecha": "2026-04-26",
+    "palabras": 494,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "1EMwcTEbV1ugQWmqVUAt",
+    "titulo": "Pareja muere en accidente en semáforos de Larreynaga, Managua; bebé de dos meses queda bajo custodia de familiares",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-24",
+    "palabras": 528,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "testigos señalaron"
+    ],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "d9DsarvHBnNcRzfXiwAy",
+    "titulo": "Berman Espinoza rompe récord histórico de 1,450 ponches",
+    "categoria": "Deportes",
+    "fecha": "2026-05-03",
+    "palabras": 892,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "león",
+      "matagalpa"
+    ],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "ZPJlw7kAwozc29ZakeiD",
+    "titulo": "Adolescente de 14 años muere al caer de camión en la Panamericana Sur",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 450,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "dijo que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "rivas",
+      "jinotepe"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "XMFnv7gCDZtpNNP7wB69",
+    "titulo": "MINSA reporta tercer caso por picaduras de insectos en Chontales",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-01",
+    "palabras": 654,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "chontales",
+      "juigalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "ku8tzMdLM3030JgD5B8K",
+    "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-15",
+    "palabras": 1252,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "HehIB8G9HyMbqvYBUpZ5",
+    "titulo": "<p>Policía captura a dos adolescentes por homicidio en Ocotal</p>",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-27",
+    "palabras": 706,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 5.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "indicó que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia",
+      "ocotal"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "FUGUwwlbFkWK9WBVGiaB",
+    "titulo": "Dos jóvenes mueren asfixiados en pozo en Kukra Hill",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-07",
+    "palabras": 587,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "raccs"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "M5Ivl0fqvyOivSZMuNLY",
+    "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+    "categoria": "Deportes",
+    "fecha": "2026-06-09",
+    "palabras": 580,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "UQfMofCdPniSsNvGFf7J",
+    "titulo": "Policía investiga incidente en carretera Costanera, Rivas",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-26",
+    "palabras": 887,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "rivas",
+      "san juan del sur"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "7wyj46FM3IdwNXpgj6x3",
+    "titulo": "Juzgado dicta sentencia por accidente en Nueva Segovia",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-16",
+    "palabras": 683,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó en"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "LJTrq7D8iDUGWvO9kxaE",
+    "titulo": "Hallan a agricultor muerto a balazos en El Jícaro; descartan accidente",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-30",
+    "palabras": 471,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "V1GsdHFZ0SdE2KAimfzx",
+    "titulo": "Nicaragua se alista para un 2026 con retos en béisbol internacional",
+    "categoria": "Deportes",
+    "fecha": "2026-05-27",
+    "palabras": 625,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "masaya"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "l2YJzk64Os0EVyIRVttN",
+    "titulo": "Autoridades investigan incidente vial entre Tipitapa y Boaco",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-30",
+    "palabras": 742,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "boaco",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "SlbddUkqFREvSt9QddmR",
+    "titulo": "Policía investiga incidente vial en carretera Jalapa",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-24",
+    "palabras": 855,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia",
+      "ocotal"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "sPHkzFFWQL3A8PetLIWO",
+    "titulo": "Capturan a motociclista que atropelló a dos niños en Jalapa",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-12",
+    "palabras": 482,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "Dijo que"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "ect24qCFMfiygezE3j9D",
+    "titulo": "Investigan homicidio de joven en Santo Domingo, Chontales",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-27",
+    "palabras": 476,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 6.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "estelí",
+      "chinandega",
+      "matagalpa",
+      "jinotega",
+      "rivas",
+      "madriz",
+      "nueva segovia",
+      "boaco",
+      "chontales",
+      "carazo",
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 15
+  },
+  {
+    "id": "E4kgajtNNXP3wrT2wI0B",
+    "titulo": "Bebé de 15 meses muere ahogado tras caer en una cubeta en Mateare",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-24",
+    "palabras": 452,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "causado entre familiares, vecino"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "cRPiJzDN3D0YvgmUjvRk",
+    "titulo": "Cohete New Glenn de Blue Origin explota en prueba en Cabo Cañaveral",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-29",
+    "palabras": 501,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "indicó un"
+    ],
+    "citas": 5,
+    "varOr": "ALTA",
+    "lugares": [],
+    "esLocal": false,
+    "contextoCount": 2
+  },
+  {
+    "id": "8zQOUMwXyazg3NIkJHxg",
+    "titulo": "Miles participan en vigilia cristiana con Alex Zurdo en Managua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-02",
+    "palabras": 678,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.4,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "chinandega",
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "OrxV5HoQWEZ3pjEHwSb8",
+    "titulo": "Hallazgo en Carretera Norte activa investigación policial",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-11",
+    "palabras": 821,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "Testigos en la zona",
+      "Personas que presenciaron"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "tipitapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "FCDK20FxyiuMz1kHDjqb",
+    "titulo": "47 intoxicados en evento comunitario en El Rama; dos menores siguen en observación",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-27",
+    "palabras": 483,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "81UQk1YkWPpF7BzIdaDo",
+    "titulo": "Dos nicaragüenses fallecen en accidentes ocurridos en Honduras y Miami",
+    "categoria": "Internacionales",
+    "fecha": "2026-06-04",
+    "palabras": 600,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "chinandega"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "C1UJ83ospxOXOtNGLwgr",
+    "titulo": "Dos obreros mueren y otros dos resultan heridos en accidentes laboral",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-30",
+    "palabras": 791,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el cierre"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí",
+      "matagalpa",
+      "tipitapa",
+      "ciudad sandino",
+      "sébaco"
+    ],
+    "esLocal": true,
+    "contextoCount": 6
+  },
+  {
+    "id": "ZbyMKAULev61O1TnfxSU",
+    "titulo": "Nicaragüense muere baleado en Costa Rica tras discusión por choque",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-14",
+    "palabras": 472,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 6.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "dijo que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "estelí",
+      "chinandega",
+      "matagalpa",
+      "jinotega",
+      "rivas",
+      "madriz",
+      "nueva segovia",
+      "boaco",
+      "chontales",
+      "carazo"
+    ],
+    "esLocal": true,
+    "contextoCount": 14
+  },
+  {
+    "id": "ksmI7JomnHgJB6NKcA71",
+    "titulo": "Yadel reúne a más de 30 mil personas en Managua",
+    "categoria": "Espectáculos",
+    "fecha": "2026-05-30",
+    "palabras": 451,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya"
+    ],
+    "esLocal": false,
+    "contextoCount": 4
+  },
+  {
+    "id": "OKGf076aUjmSNv1k1ret",
+    "titulo": "Pena máxima para asesino adolescente en Santo Domingo, Chontales",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-28",
+    "palabras": 767,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "relató los"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "chontales",
+      "juigalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "IalAiQKrqinKuD5U0TdE",
+    "titulo": "Juan Carlos López Munguía murió por sumersión en Laguna de Xiloá",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-01",
+    "palabras": 750,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "relató uno",
+      "Según los testigos"
+    ],
+    "citas": 2,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "G9pgH30FxK9kUZ9Dqnai",
+    "titulo": "Accidente de tránsito en San Ramón deja dos heridos",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-13",
+    "palabras": 626,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "MpaX1DrqNQaUdP8P1e7l",
+    "titulo": "Dos nicaragüenses fallecen en el extranjero: Costa Rica y EE.UU.",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-29",
+    "palabras": 520,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 6.9,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "proporcionada por familiares, vecino"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "matagalpa",
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "YlSYUQ3nTXWziLYkld74",
+    "titulo": "Policía investiga incidente vial en Jalapa, Nueva Segovia",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-25",
+    "palabras": 625,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "se espera que"
+    ],
+    "fAtrib": [
+      "testigos en la zona"
+    ],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "nueva segovia"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "NPLJwHZ5rPg3bp79XVTO",
+    "titulo": "Conductor huye tras atropellar y matar a hombre en La Ceiba, León",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-12",
+    "palabras": 503,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "fuentes oficiales"
+    ],
+    "fAtrib": [
+      "dijo que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "león"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "sH5OCUULzSvZFhRcHXzb",
+    "titulo": "Cinco agentes élite son ejecutados tras operativo ilegal",
+    "categoria": "Internacionales",
+    "fecha": "2026-05-21",
+    "palabras": 569,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "leon"
+    ],
+    "esLocal": false,
+    "contextoCount": 1
+  },
+  {
+    "id": "6mFFoc06RfC8trFeBuNI",
+    "titulo": "Prevención de riesgos en la Laguna de Apoyo, Nicaragua",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-06",
+    "palabras": 624,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 3.7,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "granada",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "DSupNkyxXjdYohRW1EHS",
+    "titulo": "Operativo contra caponeras deja multas y unidades retenida en Catarina",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-15",
+    "palabras": 660,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
+    "id": "spER21JvxCJDsMfv63cX",
+    "titulo": "Policía reporta incidentes viales con funcionarios",
+    "categoria": "Sucesos",
+    "fecha": "2026-04-24",
+    "palabras": 583,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "H8jrdHS4iXfFEAE2R0D9",
+    "titulo": "Dos hombres mueren en hechos violentos en Chontales y Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-25",
+    "palabras": 455,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 8.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "masaya",
+      "estelí",
+      "chinandega",
+      "matagalpa",
+      "jinotega",
+      "rivas",
+      "madriz",
+      "nueva segovia",
+      "boaco",
+      "chontales",
+      "carazo"
+    ],
+    "esLocal": true,
+    "contextoCount": 14
+  },
+  {
+    "id": "9r2T2MekDALgdPNQ2Byy",
+    "titulo": "Jerónimo Sobalvarro Toruño, 73 años, muere tras caer con motociclet",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-13",
+    "palabras": 645,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "estelí",
+      "esteli"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "36WzKkoqnN6ITtamp2BY",
+    "titulo": "Cómo tramitar y gestionar el récord policial en Nicaragua",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-21",
+    "palabras": 584,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 1,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "1HmobwfngxeXoUofqosD",
+    "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de Managua y Rivas",
+    "categoria": "Nacionales",
+    "fecha": "2026-05-30",
+    "palabras": 517,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.8,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "manifestó su",
+      "según autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "rivas"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "0gGqzH1RBUeVTGHWkuvl",
+    "titulo": "Cinco fallecidos en accidentes viales en todo Nicaragua",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-25",
+    "palabras": 584,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 5,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "madriz",
+      "chontales"
+    ],
+    "esLocal": true,
+    "contextoCount": 4
+  },
+  {
+    "id": "4cSRo7UUcLkhqHa4m0gx",
+    "titulo": "Tres accidentes de tránsito dejan lesionados en Managua y Boaco",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-06",
+    "palabras": 579,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [
+      "hasta el momento"
+    ],
+    "fAtrib": [
+      "indicó que"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "boaco",
+      "camoapa"
+    ],
+    "esLocal": true,
+    "contextoCount": 3
+  },
+  {
+    "id": "HxsDqbeHSSO2MRyl1Cpu",
+    "titulo": "Masaya: Análisis del fatal accidente vial en Villa Bosco",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-15",
+    "palabras": 567,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 4.6,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [
+      "informaron las autoridades"
+    ],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "granada",
+      "masaya"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
+    "id": "aII0C6kduAshiZAk16Wc",
+    "titulo": "Amanda Miguel ofrece concierto internacional en Managua",
+    "categoria": "Espectáculos",
+    "fecha": "2026-06-14",
+    "palabras": 568,
+    "score": 100,
+    "nivel": "ORO",
+    "densidad": 2.3,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 3,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "león",
+      "granada",
+      "matagalpa"
+    ],
+    "esLocal": false,
+    "contextoCount": 4
+  }
+]

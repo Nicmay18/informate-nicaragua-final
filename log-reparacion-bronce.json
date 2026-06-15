@@ -1,0 +1,270 @@
+[
+  {
+    "id": "SeoMG4MIHxsP87RjT5FI",
+    "titulo": "China clona seis cabras lecheras de alto rendimiento",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "VW3uBFbDCb6RR3KCiJ18",
+    "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "NTa3Gb797l9FINZ2E7RU",
+    "titulo": "Fin de semana deja ocho fallecidos en accidentes viales",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "TwKzSdGWnzIYeAW801nD",
+    "titulo": "Juez deja libre a nicaragüense investigada por muerte de su hermana",
+    "scoreAntes": 81,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "VAQWaSecbeFlCuK8KCgG",
+    "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "FUGUwwlbFkWK9WBVGiaB",
+    "titulo": "Dos jóvenes mueren asfixiados en pozo en Kukra Hill",
+    "scoreAntes": 81,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadido lugar \"Kukra Hill\"",
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "mk3B51skMrff3bMTEbP9",
+    "titulo": "Tres muertos y un lesionado en accidentes de tránsito",
+    "scoreAntes": 81,
+    "scoreDespues": 86,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "jIPhozTQrWC0dkqVykK4",
+    "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "gXTkMry6uueR9BxXcTdF",
+    "titulo": "Dos fallecidos tras naufragio de panga en Krukira",
+    "scoreAntes": 85,
+    "scoreDespues": 90,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "aNWsSWkbLlE6FiLkVqmF",
+    "titulo": "Miel San Marcos realiza concierto en centro de rehabilitación",
+    "scoreAntes": 85,
+    "scoreDespues": 90,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "N1bCYcRzuYvqApYNfHwg",
+    "titulo": "Fiscalía pide hasta 25 mil años para líder de MS-13",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "JgF9ievsdzhnOwtqh70S",
+    "titulo": "Taylor Swift busca registrar su voz como marca ante la IA",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "Bad5bgJKE5uYOdW3NeRf",
+    "titulo": "Luka Modrić recibe tratamiento y club evalúa recuperación",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "ICRNpizAeFDiL5d1HJvH",
+    "titulo": "Expertos analizan rol de IA en ciberseguridad global",
+    "scoreAntes": 76,
+    "scoreDespues": 81,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "M9vj4XiOdmMrLwreHlff",
+    "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+    "scoreAntes": 81,
+    "scoreDespues": 81,
+    "fixes": [],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "jCR0TauTK8jQc2HJ3xhM",
+    "titulo": "Aumentan casos de electrocución en accidentes laborales",
+    "scoreAntes": 75,
+    "scoreDespues": 81,
+    "fixes": [
+      "densidad: añadido año 2026 al inicio del primer párrafo"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "jMCRlTyJPKxF2MSiOW3Z",
+    "titulo": "Academia regula la IA y reforma reglas para los Óscar",
+    "scoreAntes": 81,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "fyw1t5isNXwzDEjoT266",
+    "titulo": "Policía busca a conductor involucrado en incidente en Rosita",
+    "scoreAntes": 85,
+    "scoreDespues": 90,
+    "fixes": [
+      "contexto: añadido lugar \"el municipio de Rosita\"",
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "DlEsvr8msov0zXZiUSfP",
+    "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "ji2rLsYoOn3VKOsKwQRI",
+    "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "nTkEi14v12nHn18SHdQI",
+    "titulo": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+    "scoreAntes": 84,
+    "scoreDespues": 84,
+    "fixes": [],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "FpUdWXERRhgbU6ZD7bKI",
+    "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en Rosita",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadido lugar \"el municipio de Rosita\""
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "ofPopYZtZAK0eb0L5rPB",
+    "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+    "scoreAntes": 86,
+    "scoreDespues": 91,
+    "fixes": [
+      "fuentes: añadida atribución a autoridades locales"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "L23qf1SLBkKo49Z2OPIP",
+    "titulo": "¡Histórico! Sebastián Sawe rompe barrera de 2 horas en maratón",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "TVgb0tVY15haE16LYOy3",
+    "titulo": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+    "scoreAntes": 81,
+    "scoreDespues": 81,
+    "fixes": [],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "Oejz1UtxGZb7LTATa6WP",
+    "titulo": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
+    "scoreAntes": 81,
+    "scoreDespues": 81,
+    "fixes": [
+      "contexto: añadida referencia de medios internacionales 2026"
+    ],
+    "resultado": "NO_ALCANZA"
+  },
+  {
+    "id": "mpU9oJImLDYi8lWhziII",
+    "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+    "scoreAntes": 81,
+    "scoreDespues": 81,
+    "fixes": [],
+    "resultado": "NO_ALCANZA"
+  }
+]

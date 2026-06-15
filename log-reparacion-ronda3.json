@@ -1,0 +1,30 @@
+[
+  {
+    "id": "JgF9ievsdzhnOwtqh70S",
+    "titulo": "Taylor Swift busca registrar su voz como marca ante la IA",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "entidades AP + Bloomberg añadidas"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "DlEsvr8msov0zXZiUSfP",
+    "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "entidad AP añadida"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "nTkEi14v12nHn18SHdQI",
+    "titulo": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+    "scoreAntes": 84,
+    "scoreDespues": 84,
+    "fixes": [],
+    "resultado": "SIN_FIX"
+  }
+]

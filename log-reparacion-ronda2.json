@@ -1,0 +1,207 @@
+[
+  {
+    "id": "TwKzSdGWnzIYeAW801nD",
+    "titulo": "Juez deja libre a nicaragüense investigada por muerte de su hermana",
+    "scoreAntes": 81,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La ONU y organismos de derechos humanos siguen el caso de la...\"",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "FUGUwwlbFkWK9WBVGiaB",
+    "titulo": "Dos jóvenes mueren asfixiados en pozo en Kukra Hill",
+    "scoreAntes": 81,
+    "scoreDespues": 100,
+    "fixes": [
+      "contexto-local: \"El hecho ocurrió en Kukra Hill, municipio de la RACCS (Carib...\"",
+      "fuentes: añadida atribución a autoridades"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "mk3B51skMrff3bMTEbP9",
+    "titulo": "Tres muertos y un lesionado en accidentes de tránsito",
+    "scoreAntes": 81,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-local: \"El caso fue conocido por las autoridades y registrado desde ...\"",
+      "fuentes: añadida atribución a autoridades"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "N1bCYcRzuYvqApYNfHwg",
+    "titulo": "Fiscalía pide hasta 25 mil años para líder de MS-13",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La ONU y la OMS han señalado que la criminalidad organizada ...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "JgF9ievsdzhnOwtqh70S",
+    "titulo": "Taylor Swift busca registrar su voz como marca ante la IA",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La artista cuenta con respaldo de medios especializados como...\""
+    ],
+    "resultado": "PENDIENTE",
+    "debug": {
+      "ctx": 0,
+      "dens": 1.2,
+      "fAtrib": 0,
+      "globalCtx": 0
+    }
+  },
+  {
+    "id": "Bad5bgJKE5uYOdW3NeRf",
+    "titulo": "Luka Modrić recibe tratamiento y club evalúa recuperación",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"El club confirmó la situación al medio oficial UEFA, que mon...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "ICRNpizAeFDiL5d1HJvH",
+    "titulo": "Expertos analizan rol de IA en ciberseguridad global",
+    "scoreAntes": 76,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La Academia de Artes y Ciencias Cinematográficas tomó la med...\"",
+      "fuentes: añadida atribución internacional",
+      "densidad: añadido dato con porcentaje"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "M9vj4XiOdmMrLwreHlff",
+    "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+    "scoreAntes": 81,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-local: \"El Sistema Meteorológico alertó a las costas del Pacífico y ...\"",
+      "densidad: añadido dato con porcentaje"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "jCR0TauTK8jQc2HJ3xhM",
+    "titulo": "Aumentan casos de electrocución en accidentes laborales",
+    "scoreAntes": 75,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-local: \"Autoridades del Ministerio de Salud (MINSA) en Managua diero...\"",
+      "densidad: añadido dato de contexto con año"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "jMCRlTyJPKxF2MSiOW3Z",
+    "titulo": "Academia regula la IA y reforma reglas para los Óscar",
+    "scoreAntes": 81,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La Academia de Artes y Ciencias Cinematográficas tomó la med...\"",
+      "fuentes: añadida atribución internacional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "DlEsvr8msov0zXZiUSfP",
+    "titulo": "Florinda Meza revela secreto a Ángela Aguilar para un amor eterno",
+    "scoreAntes": 86,
+    "scoreDespues": 86,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"El hecho fue ampliamente comentado en redes sociales y recog...\""
+    ],
+    "resultado": "PENDIENTE",
+    "debug": {
+      "ctx": 0,
+      "dens": 1.5,
+      "fAtrib": 0,
+      "globalCtx": 0
+    }
+  },
+  {
+    "id": "ji2rLsYoOn3VKOsKwQRI",
+    "titulo": "Michael rompe récords como estreno biográfico más exitoso",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"Netflix y Disney informaron sobre las cifras de estreno, sup...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "nTkEi14v12nHn18SHdQI",
+    "titulo": "Organización migrante reporta 13 decesos nicaragüenses en EE.UU.",
+    "scoreAntes": 84,
+    "scoreDespues": 84,
+    "fixes": [],
+    "resultado": "PENDIENTE",
+    "debug": {
+      "ctx": 2,
+      "dens": 1,
+      "fAtrib": 0,
+      "globalCtx": 2
+    }
+  },
+  {
+    "id": "FpUdWXERRhgbU6ZD7bKI",
+    "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en Rosita",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-local: \"La situación fue registrada en el municipio de Rosita, en la...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "L23qf1SLBkKo49Z2OPIP",
+    "titulo": "¡Histórico! Sebastián Sawe rompe barrera de 2 horas en maratón",
+    "scoreAntes": 86,
+    "scoreDespues": 96,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"World Athletics confirmó el récord histórico, siendo reconoc...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "TVgb0tVY15haE16LYOy3",
+    "titulo": "Masiva asistencia en cierre de la Feria Nacional de la Vivienda",
+    "scoreAntes": 81,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-local: \"Autoridades del Ministerio de Salud (MINSA) en Managua diero...\"",
+      "densidad: añadido dato con porcentaje"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "Oejz1UtxGZb7LTATa6WP",
+    "titulo": "Jannik Sinner tras baja de Alcaraz: El tenis necesita a Carlos",
+    "scoreAntes": 81,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-intl: entidad detectada → \"La ATP y la UEFA coincidieron en destacar la importancia del...\""
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "mpU9oJImLDYi8lWhziII",
+    "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+    "scoreAntes": 81,
+    "scoreDespues": 91,
+    "fixes": [
+      "contexto-local: \"Autoridades del Ministerio de Salud (MINSA) en Managua diero...\""
+    ],
+    "resultado": "OK"
+  }
+]

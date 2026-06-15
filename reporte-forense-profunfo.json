@@ -1,0 +1,184 @@
+{
+  "fecha": "2026-06-15T16:42:24.559Z",
+  "dominio": "nicaraguainformate.com",
+  "score": {
+    "actual": 16,
+    "maximo": 16,
+    "porcentaje": 100
+  },
+  "sitemaps": [
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "latency": 415,
+      "size": 28015,
+      "urls": 126,
+      "hasNews": true,
+      "lastmod": "2026-06-15T16:12:27.269Z",
+      "error": null
+    },
+    {
+      "path": "/news-sitemap.xml",
+      "status": 200,
+      "latency": 90,
+      "size": 7640,
+      "urls": 13,
+      "hasNews": true,
+      "lastmod": "2026-06-14T06:51:37.040Z",
+      "error": null
+    },
+    {
+      "path": "/sitemap-index.xml",
+      "status": 404,
+      "latency": 160,
+      "size": 47908,
+      "urls": 0,
+      "hasNews": false,
+      "lastmod": null,
+      "error": null
+    },
+    {
+      "path": "/sitemap-0.xml",
+      "status": 404,
+      "latency": 82,
+      "size": 47908,
+      "urls": 0,
+      "hasNews": false,
+      "lastmod": null,
+      "error": null
+    },
+    {
+      "path": "/sitemap-static.xml",
+      "status": 404,
+      "latency": 104,
+      "size": 47908,
+      "urls": 0,
+      "hasNews": false,
+      "lastmod": null,
+      "error": null
+    },
+    {
+      "path": "/api/sitemap",
+      "status": 404,
+      "latency": 179,
+      "size": 47908,
+      "urls": 0,
+      "hasNews": false,
+      "lastmod": null,
+      "error": null
+    }
+  ],
+  "noticia": {
+    "url": "https://nicaraguainformate.com/noticias/amanda-miguel-ofrece-concierto-internacional-en-managua-mqdfetnj",
+    "fuente": "news-sitemap.xml",
+    "status": 200,
+    "latency": 865,
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "Amanda Miguel ofrece concierto internacional en Managua",
+      "description": "La cantante Amanda Miguel ofrece en vivo su concierto en el Polideportivo Alexis Argüello de Managua ante miles de asistentes en un gran show musical.",
+      "image": [
+        {
+          "@type": "ImageObject",
+          "url": "https://cdn.jsdelivr.net/gh/Nicmay18/informate-images@main/images/noticia-mqdextd3-1781419103463.webp",
+          "width": 1200,
+          "height": 675,
+          "caption": "Imagen de Espectáculos: Amanda Miguel ofrece concierto internacional en Managua — Nicaragua Informate"
+        },
+        {
+          "@type": "ImageObject",
+          "url": "https://cdn.jsdelivr.net/gh/Nicmay18/informate-images@main/images/noticia-mqdextd3-1781419103463.webp",
+          "width": 512,
+          "height": 512,
+          "caption": "Imagen cuadrada: Amanda Miguel ofrece concierto internacional en Managua — Nicaragua Informate"
+        },
+        {
+          "@type": "ImageObject",
+          "url": "https://cdn.jsdelivr.net/gh/Nicmay18/informate-images@main/images/noticia-mqdextd3-1781419103463.webp",
+          "width": 800,
+          "height": 600,
+          "caption": "Imagen 4:3: Amanda Miguel ofrece concierto internacional en Managua — Nicaragua Informate"
+        }
+      ],
+      "datePublished": "2026-06-14T06:51:37.040Z",
+      "dateModified": "2026-06-15T15:25:47.943Z",
+      "author": {
+        "@type": "Person",
+        "name": "Keyling Elieth Rivera Muñoz",
+        "jobTitle": "Directora Editorial y Cofundadora",
+        "url": "https://nicaraguainformate.com/autor/keyling-rivera",
+        "worksFor": {
+          "@id": "https://nicaraguainformate.com/#organization"
+        }
+      },
+      "editor": {
+        "@type": "Person",
+        "name": "Keyling Elieth Rivera Muñoz",
+        "jobTitle": "Directora Editorial"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          ".article-headline",
+          ".article-body"
+        ]
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://nicaraguainformate.com/#website",
+        "name": "Nicaragua Informate",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://nicaraguainformate.com/#organization"
+        }
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://nicaraguainformate.com/#organization",
+        "name": "Nicaragua Informate",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://nicaraguainformate.com/logo.webp",
+          "width": 512,
+          "height": 512
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://nicaraguainformate.com/noticias/amanda-miguel-ofrece-concierto-internacional-en-managua-mqdfetnj"
+      },
+      "inLanguage": "es-NI",
+      "articleSection": "Espectáculos",
+      "keywords": "Espectáculos, Nicaragua, noticias, actualidad",
+      "articleBody": "Intérprete Amanda Miguel se presenta en directo en la capital La cantante de origen argentino Amanda Miguel ofrece en vivo su concierto en el Polideportivo Alexis Argüello de Managua ante miles de asistentes, lo que representa una cobertura especial para la sección de espectáculos en Nicaragua durante el período correspondiente al año 2026. Según los reportes obtenidos en tiempo real por el equipo de prensa, la presentación en directo marca la apertura oficial de la temporada de eventos artísticos internacionales programados en la capital. El evento musical inició con una masiva asistencia de espectadores que abarrotaron las graderías del complejo deportivo. Los equipos de producción local confirmaron que los sistemas de amplificación sonora de última generación y los dispositivos de iluminación robótica se encuentran operando a su máxima capacidad, garantizando una ecualización nítida que resuena en todo el recinto de Managua de conformidad con las normativas de espectáculos públicos. Con una trayectoria profesional que supera las cuatro décadas en la industria de la musica hispana, la artista de 70 años de edad ejecuta en el escenario un repertorio que compila sus principales producciones discográficas editadas desde la década de 1980, interpretando ante el público asistente piezas de alta rotación radial como \"Así no te amará jamás\", \"Castillos\", \"Mi buen corazón\" y \"Hagamos un trato\". Desarrollo del espectáculo y localidades en el Polideportivo El bloque de entretenimiento arrancó con una enérgica respuesta de la audiencia ante la participación de las agrupaciones nicaragüenses Los Mokuanes y la banda Histeria. Ambas agrupaciones locales ejecutaron los sets iniciales de musica popular con arreglos tropicales y de rock que encendieron los ánimos de la jornada, preparando el ambiente festivo antes de que la artista principal tomara el escenario del complejo deportivo capitalino, donde es ovacionada en estos momentos por los fanáticos que asistieron al concierto . Para la gestión del público, el personal de control operativo habilitó los accesos desde tempranas horas de la tarde, distribuyendo a los asistentes en las cuatro localidades oficiales establecidas para el aforo: Grada General, Silla Platinum, Mesa Flor de Caña y Mesa Premium. Los usuarios ingresaron portando sus boletos verificados mediante lectores ópticos en los portones principales del coloso capitalino. Los equipos de logística de la productora, junto a los inspectores de la municipalidad y la Dirección de Seguridad Pública de la Policía Nacional , mantienen activos los controles de ordenamiento en los accesos perimetrales para agilizar el flujo vehicular en las avenidas aledañas de Managua y resguardar la seguridad interna durante el desarrollo del evento cultural. Logística técnica del concierto y verificación de accesos La renombrada artista , quien arribó al territorio nicaragüense a través del Aeropuerto Internacional Augusto C. Sandino , subió al escenario acompañada por su orquesta completa, compuesta por destacados instrumentistas internacionales que ejecutan los acordes en vivo. Los coros del público nicaragüense acompañan cada una de las interpretaciones, consolidando el espectáculo como el suceso cultural más relevante del fin de semana. Los organizadores confirmaron en sus reportes de control de accesos que las puertas del recinto recibieron de forma ordenada a miles de fanáticos de departamentos como León, Granada y Matagalpa, quienes se desplazaron hacia Managua para presenciar este importante concierto que lidera la agenda de entretenimiento de este fin de semana en el país. El texto final del despacho fue constatado mediante el monitoreo directo en la cabina de prensa, tratando el flujo informativo bajo los estándares de verificación y neutralidad de la agencia.",
+      "wordCount": 571,
+      "timeRequired": "PT3M",
+      "isAccessibleForFree": true,
+      "copyrightYear": 2026,
+      "copyrightHolder": {
+        "@type": "Organization",
+        "name": "Nicaragua Informate"
+      }
+    },
+    "esSoft404": false
+  },
+  "checks": {
+    "sitemapPrincipal": true,
+    "sitemapTieneNoticias": true,
+    "newsSitemapExiste": true,
+    "newsSitemapTieneUrls": true,
+    "noticiaRealEncontrada": true,
+    "noticiaStatus200": true,
+    "noticiaNoEsSoft404": true,
+    "noticiaTieneH1": true,
+    "noticiaTieneCanonical": true,
+    "noticiaTieneSchema": true,
+    "schemaTieneHeadline": true,
+    "schemaTieneImage": true,
+    "schemaTieneFechas": true,
+    "schemaTieneAuthor": true,
+    "schemaTienePublisher": true,
+    "robotsTieneSitemap": true
+  }
+}
