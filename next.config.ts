@@ -257,6 +257,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      // OneSignal service worker: sirve via API route ya que public/ no lo expone en App Router
+      {
+        source: '/OneSignalSDKWorker.js',
+        destination: '/api/onesignal-sw',
+      },
+    ];
+  },
   async headers() {
     return [
       {
