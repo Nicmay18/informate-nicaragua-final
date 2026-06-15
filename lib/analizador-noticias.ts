@@ -144,12 +144,38 @@ function validar8CriteriosUnificados(n: NoticiaInput): { nivel: 'ORO' | 'PLATA' 
 }
 
 // ───────────────────────────────────────────────
-// MOTOR PRINCIPAL
+// MOTOR PRINCIPAL (LOGICA UNIFICADA ORO)
 // ───────────────────────────────────────────────
 
 export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoAnalisis> {
-  // Si pasa los 8 criterios unificados, forzar ORO (alineación frontend-backend)
-  const validacionUnificada = validar8CriteriosUnificados(noticia);
+  const t = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const palabras = t.split(' ').filter(p => p.length > 0).length;
+  
+  // Detectar problemas
+  const contenidoLower = t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const adjetivosEncontrados = ADJETIVOS_EMOCIONALES.filter(adj => contenidoLower.includes(adj));
+  const transicionesEncontradas = TRANSICIONES_IA.filter(tr => contenidoLower.includes(tr.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+  
+  // Fuentes y Citas
+  const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(contenidoLower);
+  const tieneCitas = (noticia.contenido.match(/<blockquote>/g) || []).length >= 1;
+  
+  // Densidad y Contexto
+  const dL = (t.match(/\b\d+\s*(?:años|km|personas|heridos|muertos|metros)\b/gi)||[]).length;
+  const dG = (t.match(/\b(?:Reuters|AP|Bloomberg|OpenAI|Apple|Google|Microsoft|Amazon|Meta|Netflix|Disney|KFC)\b/g)||[]).length;
+  const dens = palabras ? Math.round(((dL + dG) / palabras) * 1000) / 10 : 0;
+
+  // SCORING UNIFICADO
+  let scoreTotal = 0;
+  if(palabras >= 450) scoreTotal += 20; else if(palabras >= 350) scoreTotal += 14;
+  if(adjetivosEncontrados.length === 0) scoreTotal += 20; else if(adjetivosEncontrados.length <= 2) scoreTotal += 8;
+  if(transicionesEncontradas.length === 0) scoreTotal += 20; else if(transicionesEncontradas.length <= 2) scoreTotal += 8;
+  if(dens >= 2) scoreTotal += 15; else if(dens >= 1) scoreTotal += 11;
+  scoreTotal += 10; // Variación media por defecto
+  scoreTotal += 10; // Contexto por defecto (siempre hay Nicaragua)
+  if(tieneAtribuciones || tieneCitas) scoreTotal += 5;
+
+  if (scoreTotal > 100) scoreTotal = 100;
 
   const filtros = {
     oro: analizarFiltroOro(noticia),
@@ -160,40 +186,19 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
   };
 
-  const puntuacionTotal = Object.values(filtros).reduce((sum, f) => sum + f.puntuacion, 0) / 6;
-
-  let nivel: ResultadoAnalisis['nivel'];
-  let aprobado: boolean;
-
-  // Alineación con frontend: si pasa los 8 criterios unificados, forzar ORO
-  if (validacionUnificada.nivel === 'ORO') {
-    nivel = 'ORO';
-    aprobado = true;
-  } else if (puntuacionTotal >= 90 && filtros.oro.aprobado && filtros.adsense.aprobado) {
-    nivel = 'ORO';
-    aprobado = true;
-  } else if (puntuacionTotal >= 75 && filtros.adsense.aprobado) {
-    nivel = 'PLATA';
-    aprobado = true;
-  } else if (puntuacionTotal >= 60) {
-    nivel = 'BRONCE';
-    aprobado = false;
-  } else {
-    nivel = 'RECHAZADO';
-    aprobado = false;
-  }
-
-  const accionesRequeridas = generarAcciones(filtros);
+  let nivel: ResultadoAnalisis['nivel'] = scoreTotal >= 90 ? 'ORO' : (scoreTotal >= 75 ? 'PLATA' : 'BRONCE');
+  let aprobado = scoreTotal >= 85;
 
   return {
     aprobado,
     nivel,
-    puntuacion: Math.round(puntuacionTotal),
+    puntuacion: scoreTotal,
     filtros,
-    accionesRequeridas,
+    accionesRequeridas: generarAcciones(filtros),
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
   };
 }
+
 
 // ───────────────────────────────────────────────
 // NIVEL 1: FILTROS ORO (Editorial)

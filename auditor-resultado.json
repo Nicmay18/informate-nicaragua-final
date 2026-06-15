@@ -22,55 +22,22 @@
     "contextoCount": 0
   },
   {
-    "id": "Y64ycnoNiScKCoajm7kn",
-    "titulo": "Guarda de seguridad fallece en complejo fabril de Managua",
-    "categoria": "Sucesos",
-    "fecha": "2026-06-14",
-    "palabras": 397,
-    "score": 82,
-    "nivel": "BRONCE",
-    "densidad": 4.3,
-    "relleno": [
-      "enluta",
-      "consternación"
-    ],
-    "transiciones": {
-      "tot": 0,
-      "f": []
-    },
-    "fGen": [],
-    "fAtrib": [
-      "dijo lo",
-      "dijo que"
-    ],
-    "citas": 0,
-    "varOr": "ALTA",
-    "lugares": [
-      "managua",
-      "masaya"
-    ],
-    "esLocal": true,
-    "contextoCount": 2
-  },
-  {
     "id": "yCN8IBbWL1xxPvNhJqTx",
     "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
     "categoria": "Sucesos",
     "fecha": "2026-04-30",
-    "palabras": 409,
-    "score": 84,
+    "palabras": 616,
+    "score": 85,
     "nivel": "BRONCE",
-    "densidad": 2.9,
+    "densidad": 3.1,
     "relleno": [],
     "transiciones": {
       "tot": 0,
       "f": []
     },
     "fGen": [],
-    "fAtrib": [
-      "indicó un"
-    ],
-    "citas": 3,
+    "fAtrib": [],
+    "citas": 0,
     "varOr": "ALTA",
     "lugares": [],
     "esLocal": true,
@@ -97,31 +64,6 @@
     "lugares": [
       "managua",
       "león"
-    ],
-    "esLocal": true,
-    "contextoCount": 2
-  },
-  {
-    "id": "uroqqoNRVgTvzUH1Gh4W",
-    "titulo": "Dos muertos y una niña herida en accidentes de moto",
-    "categoria": "Sucesos",
-    "fecha": "2026-05-18",
-    "palabras": 401,
-    "score": 89,
-    "nivel": "BRONCE",
-    "densidad": 3,
-    "relleno": [],
-    "transiciones": {
-      "tot": 0,
-      "f": []
-    },
-    "fGen": [],
-    "fAtrib": [],
-    "citas": 0,
-    "varOr": "ALTA",
-    "lugares": [
-      "managua",
-      "estelí"
     ],
     "esLocal": true,
     "contextoCount": 2
@@ -1518,7 +1460,7 @@
     "id": "28a2yKj9NN9k4au0xJ6q",
     "titulo": "Nicaraguense fallece en accidente laboral en Wisconsin",
     "categoria": "Internacionales",
-    "fecha": "2026-06-14",
+    "fecha": "2026-06-13",
     "palabras": 670,
     "score": 91,
     "nivel": "ORO",
@@ -2169,6 +2111,31 @@
     "contextoCount": 3
   },
   {
+    "id": "uroqqoNRVgTvzUH1Gh4W",
+    "titulo": "Dos muertos y una niña herida en accidentes de moto",
+    "categoria": "Sucesos",
+    "fecha": "2026-05-18",
+    "palabras": 552,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 5.1,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua",
+      "estelí"
+    ],
+    "esLocal": true,
+    "contextoCount": 2
+  },
+  {
     "id": "OHzJfumT84hFTV5SQD6i",
     "titulo": "Villa El Carmen: Reporte técnico de accidente doméstico",
     "categoria": "Sucesos",
@@ -2739,10 +2706,34 @@
     "contextoCount": 3
   },
   {
+    "id": "Y64ycnoNiScKCoajm7kn",
+    "titulo": "Guarda de seguridad fallece en complejo fabril de Managua",
+    "categoria": "Sucesos",
+    "fecha": "2026-06-13",
+    "palabras": 528,
+    "score": 95,
+    "nivel": "ORO",
+    "densidad": 4.2,
+    "relleno": [],
+    "transiciones": {
+      "tot": 0,
+      "f": []
+    },
+    "fGen": [],
+    "fAtrib": [],
+    "citas": 0,
+    "varOr": "ALTA",
+    "lugares": [
+      "managua"
+    ],
+    "esLocal": true,
+    "contextoCount": 1
+  },
+  {
     "id": "phUuAtrQ4H3qV4heuZlH",
     "titulo": "Dos fallecidos en accidentes de motocicleta en Nicaragua",
     "categoria": "Sucesos",
-    "fecha": "2026-06-14",
+    "fecha": "2026-06-13",
     "palabras": 729,
     "score": 95,
     "nivel": "ORO",
@@ -2770,7 +2761,7 @@
     "id": "JtTY1tfzHmkOVNJjCZJX",
     "titulo": "Comerciante fallece tras altercado en terminal de Rosita",
     "categoria": "Sucesos",
-    "fecha": "2026-06-14",
+    "fecha": "2026-06-13",
     "palabras": 673,
     "score": 95,
     "nivel": "ORO",
@@ -2796,7 +2787,7 @@
     "id": "vDDkaxmQZVTtxhFi2Cy9",
     "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
     "categoria": "Sucesos",
-    "fecha": "2026-06-14",
+    "fecha": "2026-06-13",
     "palabras": 625,
     "score": 95,
     "nivel": "ORO",
