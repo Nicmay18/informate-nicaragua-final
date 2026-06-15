@@ -89,7 +89,7 @@ export default function CategoryPagePro({ noticias, categoryName, categorySlug }
                 </h2>
                 <p className="ni-cat-card__excerpt">{n.resumen || n.titulo}</p>
                 <div className="ni-cat-card__meta">
-                  <time dateTime={n.fecha}>{timeAgo(n.fecha)}</time>
+                  <time dateTime={n.fecha} suppressHydrationWarning>{timeAgo(n.fecha)}</time>
                   <span>• {n.autor || 'Nicaragua Informate'}</span>
                 </div>
               </div>

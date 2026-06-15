@@ -41,7 +41,9 @@ export function formatTime(date: string | Date | undefined): string {
   if (!date) return '';
   try {
     const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleTimeString('es-NI', { hour: '2-digit', minute: '2-digit' });
+    const h = String(d.getUTCHours()).padStart(2, '0');
+    const m = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
   } catch {
     return '';
   }
