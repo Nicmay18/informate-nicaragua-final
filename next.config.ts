@@ -216,6 +216,45 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
+      // ─── REDIRECTS 301: Slugs viejos → slugs nuevos tras restauración de BD ───
+      // Estos slugs fueron indexados por Google / compartidos en redes sociales.
+      // Sin este redirect, los usuarios y Google ven 404.
+      {
+        // Wisconsin: slug viejo compartido en Facebook con fbclid
+        source: '/noticias/jinotegana-fallece-tras-accidente-laboral-en-rancho-de-wisconsin-mqbjf0in',
+        destination: '/noticias/nicaraguense-fallece-en-accidente-laboral-en-wisconsin-mqdbghna',
+        permanent: true,
+      },
+      {
+        // Guarda de seguridad: slug previo a la restauración
+        source: '/noticias/guarda-de-seguridad-fallece-en-complejo-fabril-de-managua',
+        destination: '/noticias/guarda-de-seguridad-fallece-en-complejo-fabril-de-managua-mqdd1tos',
+        permanent: true,
+      },
+      {
+        // Comerciante Rosita: slug sin sufijo de ID
+        source: '/noticias/comerciante-fallece-tras-altercado-en-terminal-de-rosita',
+        destination: '/noticias/comerciante-fallece-tras-altercado-en-terminal-de-rosita-mqdbpn0u',
+        permanent: true,
+      },
+      {
+        // Amanda Miguel: slug sin sufijo de ID
+        source: '/noticias/amanda-miguel-ofrece-concierto-internacional-en-managua',
+        destination: '/noticias/amanda-miguel-ofrece-concierto-internacional-en-managua-mqdfetnj',
+        permanent: true,
+      },
+      {
+        // Dos fallecidos motocicleta: slug sin sufijo de ID
+        source: '/noticias/dos-fallecidos-en-accidentes-de-motocicleta-en-nicaragua',
+        destination: '/noticias/dos-fallecidos-en-accidentes-de-motocicleta-en-nicaragua-mqdch1dv',
+        permanent: true,
+      },
+      {
+        // Juzgado Masaya: slug sin sufijo de ID
+        source: '/noticias/juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal',
+        destination: '/noticias/juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal-mqdaoany',
+        permanent: true,
+      },
     ];
   },
   async headers() {
