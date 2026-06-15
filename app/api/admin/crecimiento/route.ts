@@ -57,7 +57,6 @@ function detectarGaps(noticias: NoticiaDoc[]) {
     porCategoria[cat] = (porCategoria[cat] || 0) + 1;
   });
 
-  const tieneEvergreen = total > 50; // heurística: si tiene +50, asumimos algo evergreen
   const gaps = [
     {
       oportunidad: 'Noticias con titulares optimizados para Discover',
