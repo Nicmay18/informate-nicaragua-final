@@ -149,8 +149,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
   };
 
-  let nivel: ResultadoAnalisis['nivel'] = scoreTotal >= 90 ? 'ORO' : (scoreTotal >= 75 ? 'PLATA' : 'BRONCE');
-  let aprobado = scoreTotal >= 85;
+  const todosFiltrosAprobados = Object.values(filtros).every(f => f.aprobado);
+  let nivel: ResultadoAnalisis['nivel'] = (todosFiltrosAprobados || scoreTotal >= 90) ? 'ORO' : (scoreTotal >= 75 ? 'PLATA' : 'BRONCE');
+  let aprobado = nivel === 'ORO' || scoreTotal >= 85;
 
   return {
     aprobado,
