@@ -115,6 +115,9 @@ export function buildNewsArticleJsonLdEnhanced(
     inLanguage: 'es-NI',
     articleSection: article.categoria,
     keywords: keywords.join(', '),
+    articleBody: article.contenido
+      ? article.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 5000)
+      : undefined,
     wordCount,
     timeRequired: `PT${readingTime}M`,
     isAccessibleForFree: true,

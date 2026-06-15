@@ -1,5 +1,4 @@
-﻿import { adminDb } from '@/lib/firebase-admin';
-import { Timestamp } from 'firebase-admin/firestore';
+﻿import { getNews } from '@/lib/data';
 import { unstable_cache } from 'next/cache';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -17,24 +16,19 @@ function escapeXml(str: string): string {
 }
 
 async function fetchNewsSitemapRaw() {
-  const cutoff = Timestamp.fromDate(new Date(Date.now() - 48 * 60 * 60 * 1000));
-  const snapshot = await adminDb
-    .collection('noticias')
-    .where('estado', '==', 'publicado')
-    .where('fecha', '>=', cutoff)
-    .orderBy('fecha', 'desc')
-    .limit(1000)
-    .get();
-
-  return snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      slug: data.slug,
-      titulo: data.titulo,
-      fecha: data.fecha,
-      categoria: data.categoria,
-    };
-  });
+  const cutoffMs = Date.now() - 48 * 60 * 60 * 1000;
+  const articles = await getNews(100);
+  return articles
+    .filter((a) => {
+      const d = new Date(a.fecha);
+      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs;
+    })
+    .map((a) => ({
+      slug: a.slug,
+      titulo: a.titulo,
+      fecha: a.fecha,
+      categoria: a.categoria,
+    }));
 }
 
 const cachedFetchNewsSitemap = unstable_cache(fetchNewsSitemapRaw, ['news-sitemap'], {
@@ -51,10 +45,8 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${articles.map((article) => {
-  const rawDate = article.fecha && typeof (article.fecha as any).toDate === 'function'
-    ? (article.fecha as any).toDate()
-    : new Date(article.fecha as any);
-  const publicationDate = !isNaN(rawDate.getTime()) ? rawDate.toISOString() : new Date().toISOString();
+  const d = new Date(article.fecha as string);
+  const publicationDate = !isNaN(d.getTime()) ? d.toISOString() : new Date().toISOString();
   const publicationName = 'Nicaragua Informate';
   const publicationLanguage = 'es';
   
