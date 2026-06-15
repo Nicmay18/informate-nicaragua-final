@@ -566,7 +566,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .article-body{font-size:0.95rem;line-height:1.7}
   .article-body h2{font-size:1.2rem;margin:24px 0 12px}
   .article-body h3{font-size:1rem;margin:18px 0 10px}
-  .article-body > p:first-of-type::first-letter{font-size:2.8em;padding-right:6px}
+  .article-body > p:first-of-type::first-letter{font-size:2.4em;padding-right:8px;margin-right:6px;line-height:0.9}
 
   /* Publicidad */
   .ad-banner{padding:20px;margin-bottom:20px}
@@ -585,6 +585,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* Widgets sidebar ocultos en mobile */
   .sidebar{display:none}
   .ad-sidebar{display:none}
+
+  /* Drop-cap móvil ni-article__body */
+  .ni-article__body > p:first-of-type::first-letter{font-size:2.4em;padding-right:8px;margin-right:6px;line-height:0.9}
 }
 
 /* ===== TYPOGRAPHY UTILITIES ===== */

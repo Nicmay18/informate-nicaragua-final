@@ -27,6 +27,9 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
   useEffect(() => {
     return () => {
       if (audioRef.current) {
+        if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(audioRef.current.src);
+        }
         audioRef.current.pause();
         audioRef.current.src = '';
         audioRef.current = null;
@@ -48,6 +51,10 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+      if (audioRef.current.src && audioRef.current.src.startsWith('blob:')) {
+        URL.revokeObjectURL(audioRef.current.src);
+        audioRef.current.src = '';
+      }
     }
     if (intervalRef.current) clearInterval(intervalRef.current);
     setIsPlaying(false);
@@ -83,19 +90,35 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
     }
 
     setIsLoading(true);
+    setErrorMsg('');
     try {
       const res = await fetch('/api/audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: fullText, articleId }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success || !data.audioBase64) throw new Error(data.error || 'Error del servidor');
 
-      const audio = new Audio(data.audioBase64);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Error desconocido del servidor' }));
+        throw new Error(data.error || `Error ${res.status}`);
+      }
+
+      // El backend devuelve audio/mpeg binario directo (más eficiente que base64)
+      const blob = await res.blob();
+      const audioUrl = URL.createObjectURL(blob);
+
+      const audio = new Audio(audioUrl);
       audioRef.current = audio;
-      audio.onended = () => { setIsPlaying(false); setProgress(0); };
-      audio.onerror = () => { setIsPlaying(false); setIsLoading(false); };
+      audio.onended = () => {
+        setIsPlaying(false);
+        setProgress(0);
+        URL.revokeObjectURL(audioUrl);
+      };
+      audio.onerror = () => {
+        setIsPlaying(false);
+        setIsLoading(false);
+        URL.revokeObjectURL(audioUrl);
+      };
       await audio.play();
       setIsPlaying(true);
       setIsLoading(false);
@@ -106,11 +129,13 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
           setProgress(Number.isFinite(pct) ? pct : 0);
         }
       }, 500);
-    } catch {
+    } catch (err: any) {
       setIsLoading(false);
+      setErrorMsg(err.message || 'No se pudo generar el audio. Intenta de nuevo.');
+      setTimeout(() => setErrorMsg(''), 6000);
+      // Fallback a TTS nativo del navegador
       if (!playNativeTTS()) {
-        setErrorMsg('No se pudo generar el audio. Intenta de nuevo.');
-        setTimeout(() => setErrorMsg(''), 6000);
+        // El mensaje de error ya se muestra arriba
       }
     }
   };

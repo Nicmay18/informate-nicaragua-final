@@ -3,7 +3,7 @@ import { RateLimiter } from '@/lib/rate-limit';
 import { getClientIp } from '@/lib/ip';
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || '';
-const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM';
+const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'XB0fDUnXU5powFXDhCwa'; // Charlotte: voz latina/neutra para español
 
 /** Rate limiter: máximo 5 generaciones de audio por IP por minuto */
 const audioLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 5 });
