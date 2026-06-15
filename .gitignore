@@ -185,6 +185,9 @@ lista-*.txt
 analisis-*.txt
 auditoria-*.txt
 *.txt
+# EXCEPCIONES CRÍTICAS para AdSense y SEO
+!ads.txt
+!robots.txt
 scripts/*.js
 scripts/*.ts
 procesar-salvable.js
