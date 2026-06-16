@@ -117,6 +117,7 @@ export default function Sidebar({
                 key={tag}
                 href={`/noticias?tag=${encodeURIComponent(tag)}`}
                 className="tag"
+                rel="nofollow"
               >
                 {tag}
               </Link>

@@ -324,7 +324,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {tags.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
             {tags.map((tag, i) => (
-              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} style={tagStyle}>
+              <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} style={tagStyle} rel="nofollow">
                 #{tag}
               </Link>
             ))}

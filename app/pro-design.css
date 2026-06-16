@@ -1977,6 +1977,19 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    NUEVOS COMPONENTES ESTILO PERIODÍSTICO PREMIUM (PRENSA CINCO)
    ================================================================ */
 
+/* 0. Título Principal Visible (SEO) */
+.ni-page-title {
+  max-width: 1200px;
+  margin: 16px auto 8px;
+  padding: 0 20px;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ni-navy);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
 /* 1. Barra de Etiquetas Principales */
 .ni-top-tags {
   max-width: 1200px;
@@ -2068,7 +2081,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   align-items: center;
   gap: 40px;
   white-space: nowrap;
-  animation: scroll-marquee 40s linear infinite;
+  animation: scroll-marquee 25s ease-in-out infinite alternate;
 }
 .ni-marquee-bar__scroll:hover {
   animation-play-state: paused;
@@ -2093,7 +2106,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 @keyframes scroll-marquee {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-70%); }
 }
 
 /* 3. Sidebar Tabbed Widget */

@@ -66,12 +66,6 @@ function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
               <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
             </Link>
           ))}
-          {/* Duplicado para loop continuo fluido */}
-          {list.map((n) => (
-            <Link key={`${n.id}-dup`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
-              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
-            </Link>
-          ))}
         </div>
       </div>
     </div>
@@ -284,7 +278,7 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
     <section className="ni-section">
       <div className="ni-section__header">
         <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
-        <Link href={`/categoria/${slug}`} className="ni-section__more">Más {slug} →</Link>
+        <Link href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</Link>
       </div>
       {noticias.length <= 2 ? (
         noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
@@ -329,16 +323,16 @@ export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = fals
   return (
     <div>
       {isNoticiasPage ? (
-        <h1 className="sr-only">Todas las Noticias — Nicaragua Informate</h1>
+        <h1 className="ni-page-title">Todas las Noticias — Nicaragua Informate</h1>
       ) : (
-        <h1 className="sr-only">Nicaragua Informate — Noticias de Nicaragua en tiempo real</h1>
+        <h1 className="ni-page-title">Nicaragua Informate — Noticias de Nicaragua en tiempo real</h1>
       )}
       {/* ETIQUETAS PRINCIPALES */}
       <div className="ni-top-tags">
         <span className="ni-top-tags__label"># Etiquetas principales</span>
         <div className="ni-top-tags__list">
           {TRENDS.map(t => (
-            <Link key={t.label} href={t.href} className="ni-top-tag">{t.label}</Link>
+            <Link key={t.label} href={t.href} className="ni-top-tag" rel="nofollow">{t.label}</Link>
           ))}
         </div>
       </div>
