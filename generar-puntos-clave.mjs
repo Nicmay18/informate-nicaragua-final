@@ -9,7 +9,7 @@
  *   node generar-puntos-clave.mjs --limit=5  # Procesa máximo 5 noticias
  */
 
-import { initializeApp, cert } from 'firebase-admin/app';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { readFileSync } from 'fs';
 import { createRequire } from 'module';
@@ -17,31 +17,47 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 // ─── CONFIGURACIÓN FIREBASE ───
-function initApp() {
+async function initApp() {
+  if (getApps().length > 0) return getFirestore(getApps()[0]);
+
+  // 1. scripts/firebase-admin-key.json (patrón usado por otros scripts del proyecto)
   try {
-    const serviceAccount = JSON.parse(readFileSync('./serviceAccount.json', 'utf8'));
-    initializeApp({ credential: cert(serviceAccount) });
-  } catch {
-    try {
-      const envPath = './.env.local';
-      const env = readFileSync(envPath, 'utf8');
-      const privateKey = env.match(/FIREBASE_PRIVATE_KEY="(.+?)"/s)?.[1]?.replace(/\\n/g, '\n');
-      const clientEmail = env.match(/FIREBASE_CLIENT_EMAIL=(.+)/)?.[1]?.trim();
-      const projectId = env.match(/FIREBASE_PROJECT_ID=(.+)/)?.[1]?.trim();
-      if (!privateKey || !clientEmail || !projectId) throw new Error('Faltan credenciales en .env.local');
-      initializeApp({
-        credential: cert({ projectId, clientEmail, privateKey }),
-      });
-    } catch (e2) {
-      console.error('ERROR: No se encontró serviceAccount.json ni .env.local con credenciales de Firebase');
-      console.error('Crea serviceAccount.json desde Firebase Console → Project Settings → Service Accounts');
-      process.exit(1);
-    }
+    const sa = JSON.parse(readFileSync('./scripts/firebase-admin-key.json', 'utf8'));
+    const app = initializeApp({ credential: cert(sa) });
+    return getFirestore(app);
+  } catch {}
+
+  // 2. serviceAccount.json en raíz
+  try {
+    const sa = JSON.parse(readFileSync('./serviceAccount.json', 'utf8'));
+    const app = initializeApp({ credential: cert(sa) });
+    return getFirestore(app);
+  } catch {}
+
+  // 3. Variable de entorno BASE64
+  const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+  if (b64 && b64.length > 10) {
+    const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+    const app = initializeApp({ credential: cert(sa) });
+    return getFirestore(app);
   }
+
+  // 4. Variables de entorno individuales
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
+  if (projectId && clientEmail && privateKeyRaw) {
+    const privateKey = privateKeyRaw.trim().replace(/^["']|["']$/g, '').replace(/\\n/g, '\n');
+    const app = initializeApp({ credential: cert({ projectId, clientEmail, privateKey }) });
+    return getFirestore(app);
+  }
+
+  console.error('ERROR: No se encontraron credenciales de Firebase.');
+  console.error('Buscados: scripts/firebase-admin-key.json, serviceAccount.json, .env.local, env vars');
+  process.exit(1);
 }
 
-initApp();
-const db = getFirestore();
+const db = await initApp();
 const noticiasRef = db.collection('noticias');
 
 // ─── ARGUMENTOS CLI ───
