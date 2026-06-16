@@ -4,9 +4,9 @@ import HomePagePro from '@/components/HomePagePro';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 
-// ISR: regenera cada 60s para frescura inmediata de noticias nuevas
+// ISR: regenera cada 5 min para frescura inmediata de noticias nuevas
 export const dynamicParams = true;
-export const revalidate = 60;
+export const revalidate = 300;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 

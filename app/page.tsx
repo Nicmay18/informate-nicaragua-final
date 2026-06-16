@@ -5,10 +5,10 @@ import type { Metadata } from 'next';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 
 // ============================================================================
-// ISR: Home regenerada cada 60s. Reduce lecturas Firestore vs force-dynamic
+// ISR: Home regenerada cada 5 min. Reduce lecturas Firestore vs force-dynamic
 // y mantiene TTFB < 100ms en cache HIT.
 // ============================================================================
-export const revalidate = 60;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 const SITE_URL = 'https://nicaraguainformate.com';
