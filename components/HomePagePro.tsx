@@ -19,19 +19,6 @@ const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: 
 // UTILIDADES DE RENDIMIENTO Y ACCESIBILIDAD
 // ============================================================================
 
-/** Detecta prefers-reduced-motion para respetar a11y */
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduced(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
-  }, []);
-  return reduced;
-}
-
 function timeAgo(dateInput: unknown): string {
   const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
