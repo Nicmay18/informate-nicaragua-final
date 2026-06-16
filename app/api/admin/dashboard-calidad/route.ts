@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 interface MetricasCalidad {
   totalNoticias: number;
@@ -112,7 +112,7 @@ export async function GET() {
 
     return NextResponse.json(metricas, {
       headers: {
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'no-store, must-revalidate',
       },
     });
   } catch (error) {
