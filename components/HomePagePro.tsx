@@ -32,29 +32,6 @@ function usePrefersReducedMotion(): boolean {
   return reduced;
 }
 
-/** Timer basado en requestAnimationFrame. Más eficiente que setInterval
- *  y respeta automáticamente tabs inactivas. */
-function useRafInterval(callback: () => void, delayMs: number, enabled: boolean) {
-  const savedCb = useRef(callback);
-  useEffect(() => { savedCb.current = callback; }, [callback]);
-
-  useEffect(() => {
-    if (!enabled || delayMs <= 0) return;
-    let rafId: number;
-    let last = performance.now();
-
-    const tick = (now: number) => {
-      if (now - last >= delayMs) {
-        savedCb.current();
-        last = now;
-      }
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [delayMs, enabled]);
-}
-
 function timeAgo(dateInput: unknown): string {
   const dateStr = typeof dateInput === 'string' ? dateInput : '';
   try {
@@ -159,37 +136,35 @@ function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noti
   );
 }
 
+const SLIDE_DURATION = 5000; // 5 segundos por slide
+
 function Hero({ noticias }: { noticias: Noticia[] }) {
   const [idx, setIdx] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const items = useMemo(() => noticias.slice(0, 5), [noticias]);
-  const reduced = usePrefersReducedMotion();
   const touchStartX = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const goToSlide = useCallback((i: number) => {
     setIdx(i);
-    setProgress(0);
   }, []);
 
   const nextSlide = useCallback(() => {
     setIdx(p => (p + 1) % items.length);
-    setProgress(0);
   }, [items.length]);
 
-  // RAF timer: ~60 fps progress bar, auto-advance cada 6s
-  useRafInterval(() => {
-    if (isPaused || reduced) return;
-    setProgress(prev => {
-      const step = 100 / (6000 / 16); // 6s duration @ 60fps
-      const next = prev + step;
-      if (next >= 100) {
+  // Auto-advance simple y confiable con setInterval
+  useEffect(() => {
+    if (items.length <= 1) return;
+    timerRef.current = setInterval(() => {
+      if (!isPaused) {
         setIdx(p => (p + 1) % items.length);
-        return 0;
       }
-      return next;
-    });
-  }, 16, items.length > 1 && !reduced);
+    }, SLIDE_DURATION);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [items.length, isPaused]);
 
   return (
     <section
@@ -266,7 +241,11 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
             {items.map((item, i) => (
               <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => goToSlide(i)} aria-label={`Noticia ${i + 1}`}>
                 <span className="ni-hero__ind-label">{item.categoria}</span>
-                {i === idx && <span className="ni-hero__ind-bar" style={{ width: `${progress}%` }} />}
+                {i === idx && (
+                  <span className="ni-hero__ind-bar">
+                    <span className="ni-hero__ind-bar__fill" />
+                  </span>
+                )}
               </button>
             ))}
           </div>

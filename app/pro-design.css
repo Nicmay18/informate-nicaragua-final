@@ -899,7 +899,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-hero__ind.is-active{background:rgba(255,255,255,0.05)}
 .ni-hero__ind-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:rgba(255,255,255,0.5);display:block;position:relative;z-index:1}
 .ni-hero__ind.is-active .ni-hero__ind-label{color:#ffffff;text-shadow:0 0 4px rgba(0,0,0,0.6);font-weight:700}
-.ni-hero__ind-bar{position:absolute;bottom:0;left:0;height:3px;background:#ffd88f;transition:width 0.05s linear}
+.ni-hero__ind-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);overflow:hidden}
+.ni-hero__ind-bar__fill{position:absolute;top:0;left:0;height:100%;width:0;background:#ffd88f;animation:ni-progress 5s linear forwards}
+@keyframes ni-progress{from{width:0}to{width:100%}}
 
 @media(max-width:1024px){
   .ni-hero{grid-template-columns:1fr 1.2fr}
