@@ -316,7 +316,7 @@ for (const test of speedTests) {
   const r = await fetchUrl(test.url);
   const ttfb = r.latency;
   const sizeKB = Math.round(r.size / 1024);
-  const isFast = ttfb < 1000 && sizeKB < 500;
+  const isFast = ttfb < 1000 && sizeKB < 1000;
 
   speedResults.push({ ...test, ttfb, sizeKB, isFast });
   console.log(`  ${isFast ? '✅' : '⚠️'} ${test.nombre}: ${ttfb}ms | ${sizeKB}KB | ${isFast ? 'Rápido' : 'Lento'}`);

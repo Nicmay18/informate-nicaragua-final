@@ -49,6 +49,7 @@ function isValidSlug(slug) {
 // Cargar backup local si existe
 function cargarBackupLocal() {
   const archivos = [
+    'backup-noticias-2026-06-16.json',
     'backup-noticias-2026-06-14.json',
   ];
   for (const archivo of archivos) {
