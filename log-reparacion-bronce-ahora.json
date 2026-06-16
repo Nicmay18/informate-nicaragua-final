@@ -1,0 +1,124 @@
+[
+  {
+    "id": "yCN8IBbWL1xxPvNhJqTx",
+    "titulo": "Capturan a hombre que mató a joven con una piocha en Siuna",
+    "antes": 85,
+    "despues": 90,
+    "fixes": [
+      "contexto: ubicación/entidad",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "eLJeY8NEp62lCIx7Tf5n",
+    "titulo": "Hombre de 57 años muere dentro de establecimiento en carretera nueva a León",
+    "antes": 89,
+    "despues": 100,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "Zt9NtuqCLNMhBhmH6IEN",
+    "titulo": "Tres detenidos por muerte de joven tras cirugía estética en Managua",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "OWppqYU03AfZQHIoqEL7",
+    "titulo": "Disputa por chicha bruja termina en muerte en Asang; buscan al autor",
+    "antes": 89,
+    "despues": 100,
+    "fixes": [
+      "contexto: ubicación/entidad",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "3Dlu4tCQZedztrompEgV",
+    "titulo": "Melquin Esedec Masis Rodríguez murió en accidente de moto en Matiguás",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "contexto: ubicación/entidad",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "YMhZnFxcC1LINNtptLYL",
+    "titulo": "Dos mueren por presuntos problemas de salud en Managua y León",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "gkAeVBYY9AQBzAYCmjWk",
+    "titulo": "Activistas climáticos bloquean Wall Street en protesta en Nueva York",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "contexto: ubicación/entidad",
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "6W5tgAUCaM1w9lsSjA6Z",
+    "titulo": "Kener Velásquez, trabajador del MINSA, murió en accidente en km 46 Carretera Norte",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "p3IKfmbWdUPIrSbbOynM",
+    "titulo": "Sequía extrema en Latinoamérica afecta 150 millones de hectáreas",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "e7FFhasFNh3pd7o4xBMo",
+    "titulo": "Dos motociclistas mueren en accidentes en Granada y Chontales",
+    "antes": 89,
+    "despues": 95,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  },
+  {
+    "id": "dgjsES2KHZ3AFaGHIoLt",
+    "titulo": "Investigan hallazgo de cuerpo sin vida en Muy Muy, Matagalpa",
+    "antes": 89,
+    "despues": 100,
+    "fixes": [
+      "protocolo: procedimiento institucional",
+      "fuentes: atribución institucional"
+    ],
+    "resultado": "OK"
+  }
+]
