@@ -276,13 +276,20 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   );
 }
 
-function Card({ noticia }: { noticia: Noticia }) {
+function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
   const cat = catClass(noticia.categoria);
   return (
-    <article className="ni-card">
+    <article className="ni-card" style={{ animationDelay: `${index * 60}ms` }} data-animate="fadeInUp">
       <div className="ni-card__thumb">
         {noticia.imagen ? (
-          <Image src={getResponsiveImageUrl(noticia.imagen, 400)} alt={noticia.titulo} fill sizes="(max-width:900px) 100px, 220px" style={{ objectFit: 'cover' }} />
+          <Image
+            src={getResponsiveImageUrl(noticia.imagen, 400)}
+            alt={noticia.titulo}
+            fill
+            sizes="(max-width: 768px) 120px, 220px"
+            style={{ objectFit: 'cover' }}
+            loading={index < 4 ? 'eager' : 'lazy'}
+          />
         ) : null}
       </div>
       <div className="ni-card__content">
@@ -314,10 +321,10 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
         <Link href={`/categoria/${slug}`} className="ni-section__more">Más {slug} →</Link>
       </div>
       {noticias.length <= 2 ? (
-        noticias.map(n => <Card key={n.id} noticia={n} />)
+        noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
       ) : (
         <div className="ni-grid-2">
-          {noticias.map(n => <Card key={n.id} noticia={n} />)}
+          {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
         </div>
       )}
     </section>
@@ -386,7 +393,7 @@ export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = fals
                 <h2 className="ni-section__title ni-section__title--sucesos">Últimas noticias</h2>
                 <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
               </div>
-              {ultimas.map(n => <Card key={n.id} noticia={n} />)}
+              {ultimas.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
             </section>
           )}
 

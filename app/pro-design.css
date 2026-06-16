@@ -2234,3 +2234,61 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     font-size: 0.78rem;
   }
 }
+
+/* ═══ ANIMACIONES DE ENTRADA (Performance: sólo transform/opacity) ═══ */
+@keyframes ni-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Las tarjetas con data-animate="fadeInUp" animan al entrar en el viewport */
+.ni-card[data-animate="fadeInUp"] {
+  opacity: 0;
+  animation: ni-fadeInUp 0.5s ease-out forwards;
+  /* La animación se retrasa vía inline style: animationDelay */
+}
+
+/* Reducir animación para usuarios que lo prefieran */
+@media (prefers-reduced-motion: reduce) {
+  .ni-card[data-animate="fadeInUp"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══ OPTIMIZACIONES CLS (Cumulative Layout Shift) ═══ */
+/* Hero: evitar salto al cargar imagen con aspect-ratio fijo */
+.ni-hero__track {
+  aspect-ratio: 16 / 10;
+}
+@media (max-width: 768px) {
+  .ni-hero__track {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* Tarjetas: evitar CLS en la imagen */
+.ni-card__thumb {
+  aspect-ratio: 16 / 10;
+}
+@media (max-width: 768px) {
+  .ni-card__thumb {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ═══ OPTIMIZACIÓN DE CARGA DE IMÁGENES ═══ */
+/* Las imágenes dentro de tarjetas ya tienen fill + sizes optimizado */
+/* Este contenedor reserva espacio para evitar CLS */
+.ni-card__thumb > span {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
