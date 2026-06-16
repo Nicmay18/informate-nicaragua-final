@@ -593,8 +593,7 @@
                 <button class="btn btn-secondary" onclick="showTab('redaccion-tab', document.querySelectorAll('.nav-link')[3])"><i class="fas fa-robot"></i><span>Redactar con IA</span></button>
                 <button class="btn btn-secondary" onclick="showTab('guias-tab', document.querySelectorAll('.nav-link')[4])"><i class="fas fa-book"></i><span>Guías SEO</span></button>
                 <button class="btn btn-secondary" onclick="verSitio()"><i class="fas fa-external-link-alt"></i><span>Ver Sitio Web</span></button>
-                <button class="btn btn-danger" style="grid-column: 1 / -1;" onclick="batchRestore()"><i class="fas fa-undo"></i><span>Restaurar 10 noticias (batch actual)</span></button>
-                <button class="btn btn-danger" style="grid-column: 1 / -1; margin-top: 8px;" onclick="autoRestore()"><i class="fas fa-magic"></i><span>Restauración Automática (Gemini - 5 noticias)</span></button>
+                <!-- Botones de restauración eliminados - ya no se usan -->
               </div>
             </div>
           </div>
@@ -2864,7 +2863,7 @@ sin texto ni marcas de agua, composición periodística"
 
     async function cargarUltimasNoticias() {
       try {
-        const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+        const q = query(collection(db, "noticias"), where("estado", "==", "publicado"), orderBy("fecha", "desc"));
         const snapshot = await getDocs(q);
         const noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
         const container = document.getElementById('ultimasNoticiasDashboard');
@@ -2876,7 +2875,7 @@ sin texto ni marcas de agua, composición periodística"
               <div class="news-title">${n.titulo || '(Sin título)'}</div>
               <div class="news-meta">
                 <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
-                <span class="news-badge" style="background:${n.publicado ? 'var(--success)' : 'var(--gray-400)'};color:#fff;font-size:10px;">${n.publicado ? 'PUBLICADO' : 'BORRADOR'}</span>
+                <span class="news-badge" style="background:var(--success);color:#fff;font-size:10px;">PUBLICADO</span>
                 <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
               </div>
             </div>
@@ -3041,7 +3040,7 @@ sin texto ni marcas de agua, composición periodística"
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
-          autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, publicado
+          autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador'
         };
         let esNueva = !noticiaId;
 
@@ -3309,11 +3308,11 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('imagenUrl').value = data.imagen || '';
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
-        document.getElementById('publicado').checked = !!data.publicado;
+        document.getElementById('publicado').checked = data.estado === 'publicado';
         actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
         document.getElementById('tituloFormulario').textContent = 'Editar Noticia';
         document.getElementById('subtituloFormulario').textContent = 'Modifica los detalles de la publicación';
-        const estaPublicado = !!data.publicado;
+        const estaPublicado = data.estado === 'publicado';
         document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-save"></i><span id="btnGuardarTexto">' + (estaPublicado ? 'Guardar Cambios' : 'Guardar Borrador') + '</span>';
         document.getElementById('btnCancelarEdicion').style.display = 'inline-flex';
         document.getElementById('enviarTelegram').checked = false;
@@ -3900,11 +3899,11 @@ window.batchRestore = async function() {
       try {
         const snapshot = await getDocs(collection(db, 'noticias'));
         const borradores = [];
-        snapshot.forEach(d => { const data = d.data(); if (data.publicado !== true) borradores.push(d.id); });
+        snapshot.forEach(d => { const data = d.data(); if (data.estado !== 'publicado') borradores.push(d.id); });
         if (borradores.length === 0) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> No hay noticias en borrador. Todas ya están publicadas.</span>'; btn.disabled = false; return; }
         statusDiv.innerHTML = `⚙️ Publicando ${borradores.length} noticias... <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="publicarProgress" style="width:0%"></div></div>`;
         for (let i = 0; i < borradores.length; i++) {
-          await updateDoc(doc(db, 'noticias', borradores[i]), { publicado: true, fechaActualizacion: serverTimestamp() });
+          await updateDoc(doc(db, 'noticias', borradores[i]), { estado: 'publicado', fechaActualizacion: serverTimestamp() });
           document.getElementById('publicarProgress').style.width = ((i + 1) / borradores.length * 100) + '%';
         }
         statusDiv.innerHTML = `<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ ${borradores.length} noticias publicadas exitosamente.</span>`;
@@ -4505,7 +4504,7 @@ ANTES DE ENTREGAR CADA NOTICIA, VERIFICAR:
         let activas = 0;
         snap.forEach(d => {
           const data = d.data();
-          if (data.publicado !== false) activas++;
+          if (data.estado === 'publicado') activas++;
           const v = data.vistas || 0;
           totalVistas += v;
           noticias.push({ titulo: data.titulo || '(sin título)', categoria: data.categoria || 'General', vistas: v, fecha: data.fecha, slug: data.slug });
