@@ -945,7 +945,17 @@
           <button class="filter-btn" onclick="filtrarNoticias('Internacionales', this)">🌍 Internacionales</button>
           <button class="filter-btn" onclick="filtrarNoticias('Espectáculos', this)">🎬 Espectáculos</button>
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
-          <input type="text" id="searchNoticias" placeholder="Buscar noticias..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="margin-left: auto; padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 200px;">
+          <div style="display: flex; gap: 4px; margin-left: auto; align-items: center;">
+            <select id="filtroNivel" onchange="aplicarFiltroNivel(this.value)" style="padding: 7px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 12px; background: white; color: var(--gray-700); cursor: pointer;">
+              <option value="">🏆 Nivel</option>
+              <option value="ORO">🥇 ORO</option>
+              <option value="PLATA">🥈 PLATA</option>
+              <option value="BRONCE">🥉 BRONCE</option>
+              <option value="PELIGRO">⚠️ PELIGRO</option>
+              <option value="SIN NIVEL">❓ Sin nivel</option>
+            </select>
+            <input type="text" id="searchNoticias" placeholder="Buscar título, ID, autor..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 220px;">
+          </div>
         </div>
         <div style="padding: 8px 16px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; gap: 8px; align-items: center; font-size: 12px;">
           <span style="color: var(--gray-500); font-weight: 600;">ELIMINAR POR ID:</span>
@@ -3147,6 +3157,9 @@ sin texto ni marcas de agua, composición periodística"
             const item = document.createElement('div');
             item.className = 'news-item';
             item.setAttribute('data-id', n.id);
+            item.setAttribute('data-nivel', n.nivel || 'SIN NIVEL');
+            item.setAttribute('data-autor', (n.autor || '').toLowerCase());
+            item.setAttribute('data-contenido', ((n.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase()).slice(0, 300));
             item.style.cssText = 'display: flex !important; flex-direction: row !important; width: 100% !important; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; box-sizing: border-box;';
             // Imagen
             const img = document.createElement('img');
@@ -3238,23 +3251,25 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     window.buscarNoticias = function(query) {
-      console.log('[BUSCADOR] Buscando:', query);
       const container = document.getElementById('listaNoticiasCompleta');
-      if (!container) { console.error('[BUSCADOR] No se encontró contenedor'); return; }
+      if (!container) return;
       const items = container.querySelectorAll('.news-item');
-      console.log('[BUSCADOR] Total items:', items.length);
       const q = query.toLowerCase().trim();
+      const nivelFiltro = (document.getElementById('filtroNivel')?.value || '').toUpperCase();
       let visibleCount = 0;
       items.forEach(item => {
         const titulo = item.querySelector('.news-title')?.textContent.toLowerCase() || '';
         const categoria = item.querySelector('.news-badge')?.textContent.toLowerCase() || '';
-        const match = titulo.includes(q) || categoria.includes(q);
-        // Usar setProperty con !important para sobreescribir CSS
+        const id = (item.getAttribute('data-id') || '').toLowerCase();
+        const autor = item.getAttribute('data-autor') || '';
+        const contenido = item.getAttribute('data-contenido') || '';
+        const nivel = (item.getAttribute('data-nivel') || 'SIN NIVEL').toUpperCase();
+        const matchQuery = !q || titulo.includes(q) || categoria.includes(q) || id.includes(q) || autor.includes(q) || contenido.includes(q);
+        const matchNivel = !nivelFiltro || nivel === nivelFiltro;
+        const match = matchQuery && matchNivel;
         item.style.setProperty('display', match ? 'flex' : 'none', 'important');
         if (match) visibleCount++;
       });
-      console.log('[BUSCADOR] Items visibles:', visibleCount);
-      // Mostrar contador de resultados
       let counter = document.getElementById('searchCounter');
       if (!counter) {
         counter = document.createElement('div');
@@ -3262,8 +3277,18 @@ sin texto ni marcas de agua, composición periodística"
         counter.style.cssText = 'padding: 8px 16px; font-size: 12px; color: var(--gray-500); border-bottom: 1px solid var(--gray-100);';
         container.parentElement.insertBefore(counter, container);
       }
-      counter.textContent = q ? `Mostrando ${visibleCount} de ${items.length} noticias` : `${items.length} noticias`;
+      const filtrosActivos = [];
+      if (q) filtrosActivos.push(`"${q}"`);
+      if (nivelFiltro) filtrosActivos.push(nivelFiltro);
+      counter.textContent = filtrosActivos.length > 0
+        ? `Filtros: ${filtrosActivos.join(' + ')} — ${visibleCount} resultado${visibleCount !== 1 ? 's' : ''}`
+        : `${visibleCount} noticias`;
       counter.style.display = 'block';
+    };
+
+    window.aplicarFiltroNivel = function(nivel) {
+      const searchInput = document.getElementById('searchNoticias');
+      window.buscarNoticias(searchInput ? searchInput.value : '');
     };
 
     window.cargarNoticiaParaEditar = async function(id) {
