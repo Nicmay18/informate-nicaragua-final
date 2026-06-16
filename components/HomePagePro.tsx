@@ -267,6 +267,11 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
           )}
           <span className="ni-card__author">{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
+        <div className="ni-card__share" style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" style={{ fontSize: 11, color: '#1877f2', textDecoration: 'none' }}>Facebook</a>
+          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" style={{ fontSize: 11, color: '#000', textDecoration: 'none' }}>X</a>
+          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#25d366', textDecoration: 'none' }}>WhatsApp</a>
+        </div>
       </div>
     </article>
   );
@@ -323,9 +328,9 @@ export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = fals
   return (
     <div>
       {isNoticiasPage ? (
-        <h1 className="ni-page-title">Todas las Noticias — Nicaragua Informate</h1>
+        <h1 className="ni-page-title">Todas las Noticias de Nicaragua</h1>
       ) : (
-        <h1 className="ni-page-title">Nicaragua Informate — Noticias de Nicaragua en tiempo real</h1>
+        <h1 className="ni-page-title">Noticias de Nicaragua — Sucesos Nacionales y Actualidad</h1>
       )}
       {/* ETIQUETAS PRINCIPALES */}
       <div className="ni-top-tags">
