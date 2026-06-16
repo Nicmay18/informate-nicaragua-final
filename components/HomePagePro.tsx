@@ -324,7 +324,7 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
   );
 }
 
-export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia[]; masLeidas: Noticia[] }) {
+export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; isNoticiasPage?: boolean }) {
   // Carrusel: las 7 noticias más recientes (noticias ya viene ordenado por fecha desc)
   const heroNoticias = noticias.slice(0, 7);
 
@@ -355,6 +355,11 @@ export default function HomePagePro({ noticias, masLeidas }: { noticias: Noticia
 
   return (
     <div>
+      {isNoticiasPage ? (
+        <h1 className="sr-only">Todas las Noticias — Nicaragua Informate</h1>
+      ) : (
+        <h1 className="sr-only">Nicaragua Informate — Noticias de Nicaragua en tiempo real</h1>
+      )}
       {/* ETIQUETAS PRINCIPALES */}
       <div className="ni-top-tags">
         <span className="ni-top-tags__label"># Etiquetas principales</span>

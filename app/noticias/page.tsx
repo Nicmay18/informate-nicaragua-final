@@ -75,7 +75,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         <span className="ni-breadcrumbs__sep">/</span>
         <span>Todas las noticias</span>
       </nav>
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} isNoticiasPage={true} />
     </>
   );
 }
