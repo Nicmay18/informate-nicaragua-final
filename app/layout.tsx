@@ -123,7 +123,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION && { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }),
+    google: 'T7lLAvE_TV9sflSwVqW9lqgOQN99uve_o4RkuQswsBQ',
     ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
   },
   other: {
