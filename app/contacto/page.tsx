@@ -36,6 +36,11 @@ export default function ContactoPage() {
       </p>
 
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ background: 'rgba(140,29,24,0.1)', border: '1px solid rgba(140,29,24,0.2)', borderRadius: 8, padding: '12px 16px', marginBottom: '1rem' }}>
+          <p style={{ margin: 0, color: '#fca5a5', fontSize: '0.85rem', lineHeight: 1.5 }}>
+            <strong>Nota importante:</strong> Nicaragua Informate es un medio de comunicación independiente. No somos una entidad gubernamental ni institución pública. No emitimos documentos oficiales ni certificaciones.
+          </p>
+        </div>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: '1rem' }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#8c1d18,#c41e3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <MapPin size={20} color="#fff" />

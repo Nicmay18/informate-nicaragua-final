@@ -74,7 +74,22 @@ export default function PoliticaEditorialPage() {
         <li>Consultamos expertos cuando el tema lo requiere</li>
       </ul>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Correcciones</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Fuentes en el contexto nicaragüense</h2>
+      <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
+        En Nicaragua, las instituciones gubernamentales no brindan declaraciones formales a medios independientes. Por ello, nuestra cobertura se basa en:
+      </p>
+      <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
+        <li><strong>Testimonios de testigos</strong> en el lugar de los hechos</li>
+        <li><strong>Videos y fotografías</strong> compartidos por lectores y ciudadanos</li>
+        <li><strong>Comunicados oficiales</strong> cuando son publicados en canales institucionales</li>
+        <li><strong>Cobertura directa</strong> de nuestros periodistas en el terreno</li>
+        <li><strong>Información de familiares</strong> de las víctimas o involucrados, cuando acceden a declarar</li>
+      </ul>
+      <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
+        No exigimos nombres de funcionarios que no dieron entrevista, ni citamos "fuentes policiales" cuando estas no existen para medios independientes. Cada noticia indica claramente el origen de la información.
+      </p>
+
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Correcciones</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Cuando nos equivocamos, corregimos. Las correcciones importantes se indican claramente en la noticia con la fecha de modificación.
       </p>
@@ -82,7 +97,7 @@ export default function PoliticaEditorialPage() {
         Si ves un error, reportalo por el <Link href="/contacto" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>formulario de contacto</Link> del sitio. Lo revisamos y corregimos en un plazo razonable.
       </p>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Fuentes y derechos de autor</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>6. Fuentes y derechos de autor</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Usamos fuentes documentales, testimoniales e institucionales de forma responsable. Contrastamos antes de publicar y citamos las fuentes cuando corresponde.
       </p>
@@ -93,7 +108,7 @@ export default function PoliticaEditorialPage() {
         No usamos material con derechos de autor sin autorización o sin las excepciones legales permitidas (como el derecho de cita).
       </p>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>6. Publicidad y contenido comercial</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>7. Publicidad y contenido comercial</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         La publicidad no determina qué noticias cubrimos ni cómo las tratamos.
       </p>
@@ -104,7 +119,7 @@ export default function PoliticaEditorialPage() {
         Las opiniones en columnas o artículos de opinión son de sus autores y no necesariamente reflejan la posición del medio.
       </p>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>7. Canales oficiales</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>8. Canales oficiales</h2>
       <p style={{ color: '#64748b', marginBottom: '0.75rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Estos son nuestros únicos canales oficiales:
       </p>
@@ -118,7 +133,7 @@ export default function PoliticaEditorialPage() {
         No nos hacemos responsables de información publicada en cuentas no oficiales.
       </p>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>8. Equipo editorial</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>9. Equipo editorial</h2>
       <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           <img src="/keyling-rivera.jpg" alt="Keyling Elieth Rivera Muñoz" style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid #dc2626' }} />
@@ -132,7 +147,7 @@ export default function PoliticaEditorialPage() {
         </div>
       </div>
 
-      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>9. Contacto editorial</h2>
+      <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>10. Contacto editorial</h2>
       <p style={{ color: '#64748b', marginBottom: '2rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
         Para aclaraciones, consultas, correcciones o reportes sobre nuestro contenido, usá el <Link href="/contacto" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>formulario de contacto</Link> del sitio, o escribinos a <a href="mailto:redaccion@nicaraguainformate.com" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>redaccion@nicaraguainformate.com</a> y <a href="mailto:contacto@nicaraguainformate.com" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>contacto@nicaraguainformate.com</a>.
       </p>
