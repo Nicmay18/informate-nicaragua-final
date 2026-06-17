@@ -133,18 +133,18 @@ async function fusionar() {
   console.log(`Slug: ${nuevaNoticia.slug}`);
   console.log(`Palabras: ${contenidoFusion.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length}`);
 
-  // 4. Guardar (DESCOMENTAR PARA EJECUTAR)
-  // const docRef = await db.collection('noticias').add(nuevaNoticia);
-  // console.log(`\n✅ Noticia fusionada creada: ${docRef.id}`);
+  // 4. Guardar
+  const docRef = await db.collection('noticias').add(nuevaNoticia);
+  console.log(`\n✅ Noticia fusionada creada: ${docRef.id}`);
 
-  // 5. Poner noindex en originales (DESCOMENTAR PARA EJECUTAR)
-  // for (const n of noticias) {
-  //   await db.collection('noticias').doc(n.id).update({ noindex: true });
-  //   console.log(`🚫 noindex=true: ${n.slug}`);
-  // }
+  // 5. Poner noindex en originales
+  for (const n of noticias) {
+    await db.collection('noticias').doc(n.id).update({ noindex: true });
+    console.log(`🚫 noindex=true: ${n.slug}`);
+  }
 
-  console.log('\n=== PREVIEW MODE (no se guardó nada) ===');
-  console.log('Para ejecutar: descomenta las líneas marcadas con (DESCOMENTAR PARA EJECUTAR)');
+  console.log('\n=== COMPLETADO ===');
+  console.log('Noticia fusionada creada y originales marcados con noindex=true');
 }
 
 fusionar().catch(e => console.error(e));
