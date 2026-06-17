@@ -108,9 +108,8 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       setTimeout(loadGTM, 2000);
     }
 
-    // ─── 2. Google Ads: SOLO al scroll (nunca automático) ───
+    // ─── 2. Google Ads: carga a los 3s tras load para maximizar viewability ───
     const loadAds = () => {
-      // Exclusión centralizada vía adsense-guard (import estático al tope del archivo)
       const path = window.location.pathname.toLowerCase();
       if (!isAdsenseSafePath(path)) {
         console.log('[AdSense] Bloqueado en:', path);
@@ -122,34 +121,33 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
         `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsClient}`,
         'adsense-script',
         true,
-        true  // defer=true para no bloquear parseo
+        true
       ).then(() => {
-        // Inicializar adsbygoogle array vacio para futuros slots (post-aprobacion AdSense)
         const win = window as unknown as Record<string, unknown>;
         win.adsbygoogle = (win.adsbygoogle as Array<Record<string, unknown>>) || [];
       });
     };
 
-    const onScroll = () => {
-      loadAds();
-      window.removeEventListener('scroll', onScroll);
+    // Cargar AdSense 3 segundos después de que la página esté lista
+    const adsTimer = setTimeout(loadAds, 3000);
+
+    // ─── 3. FundingChoices: SOLO para usuarios EU/EEA ───
+    const isEULocale = () => {
+      if (typeof navigator === 'undefined') return false;
+      const lang = navigator.language || '';
+      const euLangs = ['de', 'fr', 'es', 'it', 'nl', 'pl', 'pt', 'sv', 'da', 'fi', 'el', 'cs', 'hu', 'ro', 'bg', 'hr', 'sk', 'sl', 'et', 'lv', 'lt', 'mt', 'ga'];
+      return euLangs.some(l => lang.startsWith(l));
     };
 
-    window.addEventListener('scroll', onScroll, { once: true, passive: true });
-
-    // ─── 3. FundingChoices: SOLO al scroll o click (nunca automático) ───
     const loadFC = () => {
       if (fcLoaded.current) return;
       fcLoaded.current = true;
-      // Google Funding Choices (Consent Management)
       loadScript(
         'https://fundingchoicesmessages.google.com/i/24988088146?ers=1',
         'funding-choices',
         true,
-        true  // defer=true
-      ).catch(() => {
-        // Silenciar errores si no está disponible
-      });
+        true
+      ).catch(() => {});
     };
 
     const onUserInteraction = () => {
@@ -159,13 +157,13 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       window.removeEventListener('click', onUserInteraction);
     };
 
-    if (fundingChoices) {
+    if (fundingChoices && isEULocale()) {
       window.addEventListener('scroll', onUserInteraction, { once: true, passive: true });
       window.addEventListener('click', onUserInteraction, { once: true });
     }
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      clearTimeout(adsTimer);
       window.removeEventListener('scroll', onUserInteraction);
       window.removeEventListener('click', onUserInteraction);
     };
