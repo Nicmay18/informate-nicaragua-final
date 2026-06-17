@@ -139,7 +139,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     maxHeight: 480,
     borderRadius: 12,
     overflow: 'hidden',
-    marginBottom: 8,
     backgroundColor: '#f3f4f6',
   };
 
@@ -251,16 +250,18 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
-          <figure style={imgContainerStyle} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
-            <meta itemProp="url" content={noticia.imagen} />
-            <OptimizedImage
-              src={noticia.imagen}
-              alt={noticia.titulo}
-              variant="hero"
-              fill
-              priority
-              fetchPriority="high"
-            />
+          <figure style={{ margin: 0, marginBottom: 8 }} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+            <div style={imgContainerStyle}>
+              <meta itemProp="url" content={noticia.imagen} />
+              <OptimizedImage
+                src={noticia.imagen}
+                alt={noticia.titulo}
+                variant="hero"
+                fill
+                priority
+                fetchPriority="high"
+              />
+            </div>
             <figcaption style={captionStyle}>
               <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
               {noticia.pieFoto?.trim() && (
