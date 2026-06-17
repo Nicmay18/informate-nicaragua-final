@@ -1437,6 +1437,12 @@ sin texto ni marcas de agua, composición periodística"
                   <div id="statusGithub" style="margin-bottom: 10px; font-size: 12px; font-weight: 600;">—</div>
                   <button type="button" class="btn btn-secondary btn-sm" onclick="verificarGithub()" style="font-size: 12px;"><i class="fas fa-plug"></i> Verificar conexión</button>
                 </div>
+                <div style="margin-bottom: 16px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid #dc2626;">
+                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fas fa-shield-alt" style="color: #dc2626;"></i><h4 style="font-size: 13px; font-weight: 700;">Admin API Key (Eliminar Noticias)</h4></div>
+                  <div class="form-group" style="margin-bottom: 10px;"><label class="form-label" style="font-size: 12px;">API Key</label><input type="password" class="form-input" id="configAdminApiKey" placeholder="admin-xxxxxxxxxxxx" style="font-family: monospace; font-size: 12px;"></div>
+                  <div id="statusAdminApiKey" style="margin-bottom: 10px; font-size: 12px; font-weight: 600;">—</div>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="verificarAdminApiKey()" style="font-size: 12px;"><i class="fas fa-plug"></i> Verificar</button>
+                </div>
                 <div style="margin-bottom: 16px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid var(--primary-500);">
                   <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fab fa-telegram" style="color: var(--primary-600);"></i><h4 style="font-size: 13px; font-weight: 700;">Telegram Bot</h4></div>
                   <div class="form-group" style="margin-bottom: 10px;"><label class="form-label" style="font-size: 12px;">Bot Token</label><input type="text" class="form-input" id="configTgToken" placeholder="1234567890:ABC..." style="font-family: monospace; font-size: 12px;"></div>
@@ -3348,8 +3354,36 @@ sin texto ni marcas de agua, composición periodística"
 
     window.eliminarNoticia = async function(id) {
       if (!confirm('¿Eliminar permanentemente?')) return;
+      const apiKey = localStorage.getItem('admin_api_key');
+      if (!apiKey) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
       showLoading(true, 'Eliminando...');
-      try { await deleteDoc(doc(db, "noticias", id)); showToast('Eliminada', 'success'); await cargarNoticias(window.categoriaActiva); await cargarUltimasNoticias(); await cargarEstadisticas(); } catch (error) { showToast('Error: ' + error.message, 'error'); } finally { showLoading(false); }
+      try {
+        const resp = await fetch('/api/admin/news/' + id, {
+          method: 'DELETE',
+          headers: { 'x-admin-key': apiKey }
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Error ' + resp.status);
+        showToast('Eliminada', 'success');
+        await cargarNoticias(window.categoriaActiva);
+        await cargarUltimasNoticias();
+        await cargarEstadisticas();
+      } catch (error) { showToast('Error: ' + error.message, 'error'); }
+      finally { showLoading(false); }
+    }
+
+    window.verificarAdminApiKey = async function() {
+      const el = document.getElementById('statusAdminApiKey');
+      const key = document.getElementById('configAdminApiKey').value.trim();
+      if (!key) { el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Ingresá la key</span>'; return; }
+      try {
+        const resp = await fetch('/api/admin/config', { method: 'GET' });
+        // No hay endpoint de ping, guardamos directo
+        localStorage.setItem('admin_api_key', key);
+        el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Guardada</span>';
+      } catch (e) {
+        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Error</span>';
+      }
     };
     window.filtrarNoticias = function(categoria, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); window.categoriaActiva = categoria; cargarNoticias(categoria); };
     window.filtrarPorCategoria = function(categoria) { showTab('noticias-tab', document.querySelectorAll('.nav-link')[2]); setTimeout(() => { document.querySelectorAll('.filter-btn').forEach(btn => { if (btn.textContent.includes(categoria)) btn.click(); }); }, 100); };
@@ -3963,8 +3997,10 @@ window.batchRestore = async function() {
         const tgToken = vercelConfig?.telegram?.token || data.telegram?.token || localStorage.getItem('admin_tg_token') || '';
         const tgChat = vercelConfig?.telegram?.chatId || data.telegram?.chatId || localStorage.getItem('admin_tg_chat') || '';
         const revalidateToken = vercelConfig?.revalidate?.secret || data.revalidate?.secret || localStorage.getItem('admin_revalidate_token') || '';
+        const adminApiKey = localStorage.getItem('admin_api_key') || '';
         
         // Guardar en localStorage para que las funciones existentes funcionen
+        localStorage.setItem('admin_api_key', adminApiKey);
         localStorage.setItem('admin_github_token', githubToken);
         localStorage.setItem('admin_github_owner', githubOwner);
         localStorage.setItem('admin_github_repo', githubRepo);
@@ -3979,6 +4015,7 @@ window.batchRestore = async function() {
         const fbPage2Id = localStorage.getItem('admin_fb_page2_id') || '';
         const fbPage2Token = localStorage.getItem('admin_fb_page2_token') || '';
         
+        const adminApiKeyInput = document.getElementById('configAdminApiKey');
         const githubTokenInput = document.getElementById('configGithubToken');
         const githubOwnerInput = document.getElementById('configGithubOwner');
         const githubRepoInput = document.getElementById('configGithubRepo');
@@ -3991,6 +4028,7 @@ window.batchRestore = async function() {
         const page2TokenInput = document.getElementById('configFbPage2Token');
         const revalidateInput = document.getElementById('configRevalidateToken');
         
+        if (adminApiKeyInput) adminApiKeyInput.value = adminApiKey;
         if (githubTokenInput) githubTokenInput.value = githubToken;
         if (revalidateInput) revalidateInput.value = revalidateToken;
         if (githubOwnerInput) githubOwnerInput.value = githubOwner;
@@ -4045,6 +4083,11 @@ window.batchRestore = async function() {
       const fbPage2Id = document.getElementById('configFbPage2Id').value.trim();
       const fbPage2Token = document.getElementById('configFbPage2Token').value.trim();
       
+      let adminApiKey = document.getElementById('configAdminApiKey').value.trim();
+      if (adminApiKey === '••••••••••••' || adminApiKey.includes('•••')) {
+        adminApiKey = localStorage.getItem('admin_api_key') || '';
+      }
+      
       try {
         // Guardar directamente en Firestore (Client SDK) para persistencia total en la nube
         const docRef = doc(db, 'config', 'admin');
@@ -4070,6 +4113,7 @@ window.batchRestore = async function() {
           revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
         }
         localStorage.setItem('admin_revalidate_token', revalidateToken);
+        localStorage.setItem('admin_api_key', adminApiKey);
         
         showToast('Configuración guardada de forma permanente en Firebase Cloud', 'success');
       } catch (err) {
@@ -4427,6 +4471,17 @@ ANTES DE REDACTAR:
     Indicar internamente: "Datos insuficientes para afirmar X"
     y redactar únicamente con los hechos disponibles.
 
+11. NEUTRALIDAD INSTITUCIONAL ABSOLUTA (SIN POLÍTICA)
+    - NUNCA cuestiones, critiques ni sugieras incompetencia de instituciones gubernamentales.
+    - NUNCA uses frases como: "no ha emitido comunicado", "falta de protocolos",
+      "interrogantes sobre supervisión", "la comunidad exige respuestas".
+    - NUNCA generes preguntas retóricas sobre acción o inacción de autoridades.
+    - Si una institución no ha actuado públicamente: NO mencionar su inacción.
+    - Si una institución está investigando: decirlo sin adjetivos ni valoraciones.
+    - Ej BUENO: "El caso es investigado por la Policía Nacional de Nicaragua."
+    - Ej PROHIBIDO: "La Policía aún no ha esclarecido el caso."
+    - NO somos medio opositor. NO somos antigobierno. Somos informativos neutros.
+
 REGLA DE ORO:
 Es preferible una noticia corta y verificable que una noticia extensa con información inferida.
 
@@ -4473,6 +4528,7 @@ ESTRUCTURA DE CADA NOTICIA
 
 5. FUENTES (adaptado a realidad nicaragüense)
    - En Nicaragua, instituciones gubernamentales NO dan declaraciones formales a medios independientes. NO inventes "la Policía informó" o "el MINSA confirmó" si no existe ese comunicado en el material.
+   - NOMBRES OFICIALES CORRECTOS: "Policía Nacional de Nicaragua" (NO "Fuerzas Policiales"). Si aplica, nombrar especialidad: Dirección de Tránsito Nacional, Comisaría de la Mujer, Seguridad Pública. Solo usar si aparece en el material.
    - Fuentes VÁLIDAS: testimonios de testigos, familiares de víctimas, videos/fotos de ciudadanos, comunicados oficiales cuando existan en el material, cobertura directa, información de medios locales nombrados.
    - Formato: "Testigos en el lugar indicaron que...", "Familiares de la víctima confirmaron que...", "Videos compartidos en redes sociales muestran...", "Según comunicado de [organización]..."
    - Prohibido: "se dice que", "se rumora", "fuentes cercanas", "según informes preliminares".
@@ -4504,6 +4560,7 @@ PROHIBICIONES ABSOLUTAS
 ═══════════════════════════════════════
 - Conectores robóticos: "en este contexto", "por su parte", "por otro lado", "es importante destacar", "cabe señalar", "asimismo", "además de esto", "en conclusión", "un hito", "un antes y un después", "sin duda", "por ende", "consecuentemente".
 - Frases template de sucesos: "las autoridades confirmaron", "fuentes policiales indicaron", "según informes preliminares", "la víctima fue identificada como", "se desconocen las causas exactas".
+- FRASES POLÍTICAS/CRÍTICAS A INSTITUCIONES: "no ha emitido comunicado", "falta de protocolos", "interrogantes sobre supervisión", "la comunidad exige respuestas", "¿Qué medidas tomarán las autoridades?", "¿Se está prestando suficiente atención?", "¿Qué pasa con...?", "¿Qué mecanismos de control aplican?".
 - Adjetivos emocionales o dramáticos.
 - Titulares exagerados o sin datos concretos.
 - Información sin fuente identificable.
@@ -4534,6 +4591,8 @@ VERIFICACIÓN FINAL
 ✓ Citas SOLO si existen en el material?
 ✓ 2 preguntas que EL TEXTO YA RESPONDE?
 ✓ NO hay frases template prohibidas?
+✓ NO hay frases políticas ni críticas a instituciones gubernamentales?
+✓ NO hay preguntas retóricas sobre acción/inacción de autoridades?
 ✓ Entidades con <strong> solo si aparecen en el material?
 ✓ NO se forzó identificación de víctimas?
 ✓ HTML limpio SIN bloques de código Markdown?
