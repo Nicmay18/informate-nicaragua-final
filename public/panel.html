@@ -2927,19 +2927,20 @@ sin texto ni marcas de agua, composición periodística"
       const tituloLen = (titulo || '').length;
       const resumenLen = (resumen || '').length;
 
+      // NUEVOS UMBRALES ALINEADOS CON ANALIZADOR FORENSE
       const checks = [
-        { nombre: 'Extensión ≥500 palabras', estado: palabras >= 500 ? '✅' : palabras >= 350 ? '⚠️' : '❌', valor: palabras + ' pal', req: '≥500', pasa: palabras >= 500 },
+        { nombre: 'Extensión ≥350 palabras', estado: palabras >= 350 ? '✅' : palabras >= 200 ? '⚠️' : '❌', valor: palabras + ' pal', req: '≥350', pasa: palabras >= 350 },
         { nombre: 'Lead ≥35 palabras', estado: leadPalabras >= 35 ? '✅' : leadPalabras >= 20 ? '⚠️' : '❌', valor: leadPalabras + ' pal', req: '≥35', pasa: leadPalabras >= 35 },
-        { nombre: 'Subtítulos (h2) ≥1', estado: h2s >= 1 ? '✅' : '❌', valor: h2s, req: '≥1', pasa: h2s >= 1 },
-        { nombre: 'Negritas / datos clave', estado: strongs >= 1 ? '✅' : '❌', valor: strongs, req: '≥1', pasa: strongs >= 1 },
-        { nombre: 'Citas o atribución', estado: blockquotes >= 1 ? '✅' : '❌', valor: blockquotes, req: '≥1', pasa: blockquotes >= 1 },
+        { nombre: 'Subtítulos (h2) ≥1', estado: h2s >= 1 ? '✅' : '⚠️', valor: h2s, req: '≥1', pasa: h2s >= 1 },
+        { nombre: 'Negritas / datos clave', estado: strongs >= 1 ? '✅' : '⚠️', valor: strongs, req: '≥1', pasa: strongs >= 1 },
+        { nombre: 'Citas o atribución', estado: blockquotes >= 1 ? '✅' : '⚠️', valor: blockquotes, req: '≥1', pasa: blockquotes >= 1 },
         { nombre: 'Título SEO 50-70 chars', estado: (tituloLen >= 50 && tituloLen <= 70) ? '✅' : (tituloLen >= 30 && tituloLen <= 75) ? '⚠️' : '❌', valor: tituloLen + ' ch', req: '50-70', pasa: tituloLen >= 50 && tituloLen <= 70 },
-        { nombre: 'Meta 150-170 chars', estado: (resumenLen >= 150 && resumenLen <= 170) ? '✅' : (resumenLen >= 120 && resumenLen <= 180) ? '⚠️' : '❌', valor: resumenLen + ' ch', req: '150-170', pasa: resumenLen >= 150 && resumenLen <= 170 },
+        { nombre: 'Meta 120-170 chars', estado: (resumenLen >= 120 && resumenLen <= 170) ? '✅' : (resumenLen >= 80 && resumenLen <= 180) ? '⚠️' : '❌', valor: resumenLen + ' ch', req: '120-170', pasa: resumenLen >= 120 && resumenLen <= 170 },
         { nombre: 'Imagen destacada', estado: (imagen && imagen.length > 0) ? '✅' : '❌', valor: (imagen && imagen.length > 0) ? 'Sí' : 'No', req: 'Presente', pasa: !!(imagen && imagen.length > 0) },
       ];
 
       const passCount = checks.filter(c => c.pasa).length;
-      const nivel = passCount === 8 ? 'ORO' : passCount >= 6 ? 'PLATA' : 'BRONCE';
+      const nivel = passCount === 8 ? 'ORO' : passCount >= 6 ? 'PLATA' : passCount >= 4 ? 'BRONCE' : 'RECHAZADO';
       const porcentaje = Math.round((passCount / 8) * 100);
       return { nivel, checks, passCount, porcentaje };
     };
@@ -3007,7 +3008,7 @@ sin texto ni marcas de agua, composición periodística"
       }
 
       const palabras = contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
-      if (palabras < 350) { showToast(`Contenido muy corto (${palabras} palabras). AdSense requiere mínimo 350. Amplía la noticia.`, 'error'); return; }
+      if (palabras < 150) { showToast(`Contenido muy corto (${palabras} palabras). Mínimo recomendado: 150.`, 'warning'); }
 
       const fbPatterns = ['facebook.com','fbcdn.net','fbcdn.com','scontent-','instagram.com','cdninstagram'];
       if (fbPatterns.some(p => imagenUrl.toLowerCase().includes(p))) { showToast('No se permiten imágenes de Facebook CDN', 'error'); return; }
@@ -3539,11 +3540,12 @@ sin texto ni marcas de agua, composición periodística"
         circle.style.strokeDashoffset = offset;
         circle.style.stroke = porcentaje >= 80 ? 'var(--success)' : porcentaje >= 60 ? 'var(--warning)' : 'var(--danger)';
 
-        const labelMap = { 'ORO': 'ORO — Excelente', 'PLATA': 'PLATA — Bueno', 'BRONCE': 'BRONCE — Mejorable' };
+        const labelMap = { 'ORO': 'ORO — Excelente', 'PLATA': 'PLATA — Bueno', 'BRONCE': 'BRONCE — Aceptable', 'RECHAZADO': 'RECHAZADO — Incompleta' };
         const descMap = {
           'ORO': 'Cumple los 8 criterios. Lista para indexación y monetización.',
-          'PLATA': 'Cumple la mayoría. Revisá los criterios marcados con ❌ para subir a ORO.',
-          'BRONCE': 'Necesita mejoras en estructura, citas o SEO para destacar.'
+          'PLATA': 'Cumple la mayoría. Revisá los criterios marcados con ⚠️ para subir a ORO.',
+          'BRONCE': 'Noticia verificable con datos concretos. Publicable.',
+          'RECHAZADO': 'Faltan campos obligatorios (título, imagen, contenido mínimo).'
         };
         document.getElementById('scoreLabel').textContent = labelMap[nivel];
         document.getElementById('scoreDesc').textContent = descMap[nivel];
@@ -5056,11 +5058,12 @@ VERIFICACIÓN FINAL
       try {
         // Validación unificada local (misma fuente de verdad que popup y evaluador)
         const unificado = window.validarNoticiaUnificada(contenido, titulo, resumen, imagenUrl);
-        const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706' };
-        const bgNivel  = { 'ORO': '#dcfce7', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7' };
+        const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
+        const bgNivel  = { 'ORO': '#dcfce7', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
         let html = '<div style="background:' + bgNivel[unificado.nivel] + ';border:2px solid ' + colorNivel[unificado.nivel] + ';border-radius:8px;padding:12px;margin-bottom:16px;">';
         html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
-        html += '<span style="font-size:20px;">' + (unificado.nivel === 'ORO' ? '🥇' : unificado.nivel === 'PLATA' ? '🥈' : '🥉') + '</span>';
+        const iconoUni = { 'ORO': '🥇', 'PLATA': '🥈', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
+        html += '<span style="font-size:20px;">' + (iconoUni[unificado.nivel] || '🥉') + '</span>';
         html += '<div><h4 style="margin:0;font-size:14px;color:' + colorNivel[unificado.nivel] + ';">Validación Unificada: ' + unificado.nivel + ' (' + unificado.passCount + '/8)</h4>';
         html += '<p style="margin:2px 0 0;font-size:11px;color:var(--gray-600);">Mismo criterio que popup al guardar y evaluador de calidad.</p></div></div>';
         html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';

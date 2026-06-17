@@ -714,13 +714,22 @@ function extraerKeywordsLSI(n: NoticiaInput): string[] {
 
   // Normalizar categoría para buscar en el mapa (quitar acentos)
   const catNormalizada = (n.categoria || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-  const delMapa = (mapa[catNormalizada] || ['nicaragua', 'noticias', catNormalizada]).filter(k => texto.includes(k));
+  const delMapa = (mapa[catNormalizada] || []).filter(k => texto.includes(k));
 
   // También aceptar keywords explícitas del usuario como válidas
   const delUsuario = keywordsExplicitas.filter(k => k.length >= 3);
 
-  // Unificar sin duplicados
-  const unicas = Array.from(new Set([...delMapa, ...delUsuario]));
+  // Fallback: extraer palabras sustanciales del título (>=5 letras, sin preposiciones)
+  const stopWords = new Set(['de','la','el','en','a','los','las','un','una','por','para','con','sobre','entre','durante','tras','ante','bajo','hasta','desde','hacia','segun','mediante','excepto','salvo','incluso','ademas','tambien','muy','mas','menos','tan','tanto','casi','solo','sola','sino','aun','aunque','como','cuando','donde','que','quien','cuyo','cuya','cuyos','cuyas','este','esta','estos','estas','ese','esa','esos','esas','aquel','aquella','aquellos','aquellas','mi','tu','su','nuestro','vuestro','suyo','mio','tuyo','nosotros','vosotros','ellos','ellas','yo','me','te','se','nos','os','lo','la','le','les','nos','os','me','te','lo','la','les']);
+  const palabrasTitulo = n.titulo
+    .toLowerCase()
+    .replace(/[áéíóúÁÉÍÓÚ]/g, a => ({'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'}[a] || a))
+    .split(/[^a-zñáéíóú]+/)
+    .filter(w => w.length >= 5 && !stopWords.has(w));
+  const delTitulo = [...new Set(palabrasTitulo)];
+
+  // Unificar sin duplicados, priorizando del mapa y del usuario
+  const unicas = Array.from(new Set([...delMapa, ...delUsuario, ...delTitulo]));
   return unicas;
 }
 
