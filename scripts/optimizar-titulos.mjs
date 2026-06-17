@@ -34,17 +34,16 @@ const REGLAS = {
     ],
   },
   Tecnología: {
-    buscar: /IA|inteligencia artificial|hackathon|festival|impulsa/i,
+    buscar: /IA|inteligencia artificial|hackathon|festival|impuls/i,
     mejoras: [
-      { from: /Festival IA.*impulsa/, to: 'El evento de IA que revolucionará Nicaragua' },
-      { from: /impulsa la innovación/, to: 'revoluciona la innovación con' },
+      { from: /Festival IA y Hackathon impulsan la innovación/, to: 'El evento de IA que revolucionará Nicaragua y Hackathon impulsará la innovación' },
+      { from: /impulsan la innovación/, to: 'revolucionarán la innovación en' },
     ],
   },
   Nacionales: {
     buscar: /economía|crece|remesas|récord/i,
     mejoras: [
-      { from: /crece 6%/, to: 'dispara récord: crece 6%' },
-      { from: /alcanza récord/, to: 'histórico:' },
+      { from: /crece 6% y alcanza récord en remesas/, to: 'dispara récord: crece 6% en remesas' },
       { from: /Economía de Nicaragua:/, to: 'Economía nicaragüense en cifras:' },
     ],
   },
