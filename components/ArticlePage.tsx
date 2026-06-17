@@ -204,11 +204,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <span style={{ color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>{noticia.titulo}</span>
         </nav>
 
-        {/* Category Badge */}
+        <header>
+          {/* Category Badge */}
         <span style={badgeStyle} itemProp="articleSection">{category.name}</span>
 
         {/* Title */}
-        <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, margin: '0 0 16px' }} itemProp="headline">
+        <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, margin: '0 0 16px', textWrap: 'balance' }} itemProp="headline">
           {noticia.titulo}
         </h1>
 
@@ -247,6 +248,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
           </div>
         </div>
+        </header>
 
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
@@ -271,6 +273,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
+        <section itemProp="articleBody">
         {/* Banner de calidad si el artículo está marcado para revisión editorial */}
         {(noticia as any).necesitaRevision === true && (
           <div style={{ margin: '16px 0', padding: '12px 16px', backgroundColor: '#fef3c7', borderLeft: '4px solid #f59e0b', borderRadius: '0 8px 8px 0' }}>
@@ -325,15 +328,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* FAQ visible — mejora SEO y AI Search */}
         <ArticleFaq contenidoHtml={noticia.contenido || ''} resumen={noticia.resumen || ''} />
 
+        </section>
+
         {/* Tags */}
         {tags.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
+          <footer style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
             {tags.map((tag, i) => (
               <Link key={i} href={`/buscar?q=${encodeURIComponent(tag)}`} style={tagStyle} rel="nofollow">
                 #{tag}
               </Link>
             ))}
-          </div>
+          </footer>
         )}
 
         {/* Donacion PayPal */}
@@ -370,14 +375,15 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </div>
 
         {/* Author */}
-        <div style={{ marginTop: 32 }}>
+        <aside aria-label="Autor" style={{ marginTop: 32 }} itemScope itemType="https://schema.org/Person">
+          <meta itemProp="name" content={noticia.autor} />
           <AuthorCard
             name={noticia.autor}
             photo={noticia.autorFoto}
             publishedDate={noticia.fecha}
             updatedDate={(noticia as any).fechaActualizacion}
           />
-        </div>
+        </aside>
 
         {/* Newsletter */}
         <div style={{ marginTop: 32, padding: '24px 20px', background: 'var(--bg-secondary, #f9fafb)', borderRadius: 12, border: '1px solid var(--border, #e5e7eb)' }}>
@@ -388,6 +394,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Navegación */}
         {readAlso.length > 0 && (
+          <aside aria-label="Lea además">
           <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
             {readAlso[0] && (
               <Link href={`/noticias/${readAlso[0].slug}`} style={navCardStyle} legacyBehavior>
@@ -412,6 +419,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               </Link>
             )}
           </nav>
+          </aside>
         )}
 
         {/* Volver al inicio */}
@@ -450,7 +458,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Related News */}
         {related.length > 3 && (
-          <section style={{ marginTop: 48 }}>
+          <aside aria-label="Lea también" style={{ marginTop: 48 }}>
             <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Lea también</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
               {related.slice(3, 6).map(item => (
@@ -468,7 +476,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 </Link>
               ))}
             </div>
-          </section>
+          </aside>
         )}
 
         {/* Comments — placeholder sin funcionalidad para evitar confusión */}

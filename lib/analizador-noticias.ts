@@ -1,6 +1,10 @@
 /**
- * Motor forense de analisis de noticias - Nicaragua Informate
- * 6 niveles de validacion: ORO, AdSense, Discover, News, SEO, E-E-A-T
+ * Analizador Forense de Noticias - Nicaragua Informate v2.0
+ * REGLA RECTORA: "Es mejor una noticia de 250 palabras totalmente verificable
+ * que una de 800 palabras con informacion inferida."
+ *
+ * Niveles: FORENSE > ORO > PLATA > BRONCE > RECHAZADO
+ * Prioridad: VERIFICABILIDAD sobre longitud.
  */
 
 export type NoticiaTipo =
@@ -23,7 +27,7 @@ export interface NoticiaInput {
 
 export interface ResultadoAnalisis {
   aprobado: boolean;
-  nivel: 'ORO' | 'PLATA' | 'BRONCE' | 'RECHAZADO';
+  nivel: 'FORENSE' | 'ORO' | 'PLATA' | 'BRONCE' | 'RECHAZADO';
   puntuacion: number;
   filtros: {
     oro: FiltroResultado;
@@ -124,20 +128,66 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(contenidoLower);
   const tieneCitas = (noticia.contenido.match(/<blockquote>/g) || []).length >= 1;
   
-  // Densidad y Contexto
-  const dL = (t.match(/\b\d+\s*(?:años|km|personas|heridos|muertos|metros)\b/gi)||[]).length;
-  const dG = (t.match(/\b(?:Reuters|AP|Bloomberg|OpenAI|Apple|Google|Microsoft|Amazon|Meta|Netflix|Disney|KFC)\b/g)||[]).length;
-  const dens = palabras ? Math.round(((dL + dG) / palabras) * 1000) / 10 : 0;
+  // ───────────────────────────────────────────────
+  // SCORING FORENSE v2.0 — Verificabilidad > Longitud
+  // ───────────────────────────────────────────────
 
-  // SCORING UNIFICADO
+  // 1. Datos concretos locales (lugares, fechas, nombres, cifras nicaragüenses)
+  const datosConcretos = (t.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
+    + (t.match(/\b\d{2,4}\b/g) || []).length
+    + (t.match(/\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Boaco|Chontales|Madriz|Nueva Segovia|Río San Juan|RAAN|RAAS|Bluefields|Puerto Cabezas|Ocotal|Jinotepe|Diriamba|Nandaime|Nagarote)\b/gi) || []).length
+    + (t.match(/\b(?:Policía Nacional|Ministerio de Salud|MINSA|INSS|MEDUCA|MIFIC|Asamblea Nacional|Alcaldía|Hospital|Centro de Salud|Comisaría)\b/gi) || []).length;
+  const densidadDatos = palabras ? Math.round((datosConcretos / palabras) * 1000) / 10 : 0;
+
+  // 2. Lead completo (responde quién/qué/cuándo/dónde)
+  const leadTexto = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(/\n|\./)[0] || '';
+  const leadTieneQuien = /\b(?:murió|falleció|nacido|identificado|de \d+ años|nombre|llamado|conocido)\b/i.test(leadTexto);
+  const leadTieneQue = /\b(?:accidente|incidente|hechos|ocurrió|sucedió|reportó|reportan|dejó|provocó|causó)\b/i.test(leadTexto);
+  const leadTieneDonde = /\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|km \d+|carretera|ruta|barrio|colonia|municipio|departamento)\b/i.test(leadTexto);
+  const leadTieneCuando = /\b(?:este|ayer|hoy|la madrugada|la mañana|la tarde|la noche|el \d+|\d+ de \w+)\b/i.test(leadTexto);
+  const leadCompleto = (leadTieneQuien || leadTieneQue) && leadTieneDonde && leadTieneCuando;
+
+  // 3. Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
+  const atribucionesFalsas = /\bla policia\s+(?:inform[oó]|confirm[oó])\b|\blas\s+autoridades\s+(?:confirmaron|informaron)\b|\bel\s+ministerio\s+de\s+salud\s+(?:precis[oó]|confirm[oó])\b|\bla\s+alcald[ií]a\s+(?:inform[oó]|confirm[oó])\b/i.test(contenidoLower);
+
+  // 4. Citas — verificar que blockquotes tengan atribución
+  const blockquotes = (noticia.contenido.match(/<blockquote>/g) || []).length;
+  const citasConAtribucion = (noticia.contenido.match(/<blockquote>[^]*?—\s*[A-ZÁÉÍÓÚÑ][^]*?<\/blockquote>/gi) || []).length;
+  const citasSospechosas = tieneCitas && citasConAtribucion === 0;
+
+  // ─── CÁLCULO DE PUNTUACIÓN ───
   let scoreTotal = 0;
-  if(palabras >= 450) scoreTotal += 20; else if(palabras >= 350) scoreTotal += 14;
-  if(adjetivosEncontrados.length === 0) scoreTotal += 20; else if(adjetivosEncontrados.length <= 2) scoreTotal += 8;
-  if(transicionesEncontradas.length === 0) scoreTotal += 20; else if(transicionesEncontradas.length <= 2) scoreTotal += 8;
-  if(dens >= 2) scoreTotal += 15; else if(dens >= 1) scoreTotal += 11;
-  scoreTotal += 10; // Variación media por defecto
-  scoreTotal += 10; // Contexto por defecto (siempre hay Nicaragua)
-  if(tieneAtribuciones || tieneCitas) scoreTotal += 5;
+
+  // A. Verificabilidad de datos (0-30 pts)
+  if (densidadDatos >= 4) scoreTotal += 30;
+  else if (densidadDatos >= 2) scoreTotal += 22;
+  else if (densidadDatos >= 1) scoreTotal += 14;
+  else scoreTotal += 5;
+
+  // B. Anti-emocional (0-15 pts)
+  if (adjetivosEncontrados.length === 0) scoreTotal += 15;
+  else if (adjetivosEncontrados.length <= 2) scoreTotal += 8;
+  else scoreTotal += 2;
+
+  // C. Anti-IA detectable (0-15 pts)
+  if (transicionesEncontradas.length === 0) scoreTotal += 15;
+  else if (transicionesEncontradas.length <= 2) scoreTotal += 8;
+  else scoreTotal += 2;
+
+  // D. Lead completo para Discover (0-15 pts)
+  if (leadCompleto) scoreTotal += 15;
+  else if (leadTieneQue && leadTieneDonde) scoreTotal += 10;
+  else scoreTotal += 4;
+
+  // E. Fuentes atribuidas (0-15 pts) — penalizar citas sin atribución
+  if (citasSospechosas) scoreTotal += 2;
+  else if (tieneAtribuciones && citasConAtribucion >= 1) scoreTotal += 15;
+  else if (tieneAtribuciones || blockquotes >= 1) scoreTotal += 10;
+  else scoreTotal += 3;
+
+  // F. EEAT Nicaragua — No atribuciones falsas (0-10 pts)
+  if (!atribucionesFalsas) scoreTotal += 10;
+  else scoreTotal += 0;
 
   if (scoreTotal > 100) scoreTotal = 100;
 
@@ -150,9 +200,30 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
   };
 
-  const todosFiltrosAprobados = Object.values(filtros).every(f => f.aprobado);
-  let nivel: ResultadoAnalisis['nivel'] = (todosFiltrosAprobados || scoreTotal >= 90) ? 'ORO' : (scoreTotal >= 75 ? 'PLATA' : 'BRONCE');
-  let aprobado = nivel === 'ORO' || scoreTotal >= 85;
+  // ─── DETERMINACIÓN DE NIVEL FORENSE v2.0 ───
+  // FORENSE: Todo verificable, cero inferencia, cero atribuciones falsas
+  // ORO: Cumple forense + criterios técnicos (SEO, News, etc.)
+  // PLATA: Mínima inferencia, fuentes mayoritarias
+  // BRONCE: Requiere revisión, inferencias detectadas
+  // RECHAZADO: Hallucinations, citas inventadas, fuentes falsas
+
+  const esForense = scoreTotal >= 85 &&
+    !atribucionesFalsas &&
+    !citasSospechosas &&
+    adjetivosEncontrados.length === 0 &&
+    transicionesEncontradas.length <= 1 &&
+    leadCompleto;
+
+  const esRechazado = atribucionesFalsas || citasSospechosas || scoreTotal < 40;
+
+  let nivel: ResultadoAnalisis['nivel'];
+  if (esRechazado) nivel = 'RECHAZADO';
+  else if (esForense && filtros.oro.aprobado && filtros.seo.aprobado) nivel = 'FORENSE';
+  else if (esForense) nivel = 'ORO';
+  else if (scoreTotal >= 70) nivel = 'PLATA';
+  else nivel = 'BRONCE';
+
+  const aprobado = nivel !== 'RECHAZADO';
 
   return {
     aprobado,
@@ -175,17 +246,17 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const palabras = textoPlano.split(' ').filter(p => p.length > 0);
   const palabraCount = palabras.length;
 
-  // 1. Extension
+  // 1. Extension adecuada (verificabilidad > longitud)
   checks.push({
-    nombre: 'Extension minima',
-    estado: palabraCount >= 500 ? 'PASS' : palabraCount >= 350 ? 'WARN' : 'FAIL',
-    mensaje: palabraCount >= 500
-      ? `${palabraCount} palabras. Cumple meta AdSense.`
-      : palabraCount >= 350
-        ? `${palabraCount} palabras. Aceptable pero debil.`
-        : `Solo ${palabraCount} palabras. Minimo requerido: 500.`,
+    nombre: 'Extension adecuada',
+    estado: palabraCount >= 200 ? 'PASS' : palabraCount >= 150 ? 'WARN' : 'FAIL',
+    mensaje: palabraCount >= 200
+      ? `${palabraCount} palabras. Extension adecuada.`
+      : palabraCount >= 150
+        ? `${palabraCount} palabras. Aceptable para noticias breves.`
+        : `Solo ${palabraCount} palabras. Muy corta para ser informativa.`,
     valorActual: palabraCount,
-    valorEsperado: 500,
+    valorEsperado: '>=200',
   });
 
   // 2. Lead (primer parrafo) — funciona con HTML o texto plano
@@ -234,22 +305,24 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
     valorEsperado: 0,
   });
 
-  // 5. Veracitud (fuentes atribuidas) — Mas estricto
-  const palabrasAtribucion = /informo|confirmo|declaro|preciso|senalo|indico|dijo|explico|manifesto|afirmo|agrego|aseguro|destaco|menciono|aclaro|comento|expreso|anuncio|revelo|preciso|indico|agrego|indico/.test(contenidoLower);
-  const blockquotes = (n.contenido.match(/<blockquote>/g) || []).length;
+  // 5. Veracitud (fuentes atribuidas) — Adaptado a realidad nicaragüense
+  const palabrasAtribucion = /testigo|familiar|vecino|habitante|morador|comerciante|conductor|pasajero|testimonio|declar[oó]|indic[oó]|dijo|mencion[oó]|precis[oó]|señal[oó]|confirm[oó]/.test(contenidoLower);
+  const blockquotesOro = (n.contenido.match(/<blockquote>/g) || []).length;
   // Detectar citas con comillas (rectas o tipograficas) + palabra de atribucion
   const tieneCitasAtribuidas = /["\u201c][^"\u201d]{8,}["\u201d][\s,]*[^.]*(?:inform|confirm|declar|precis|senal|indic|dij|explic|manifest|afirm|agreg|asegur|destac|mencion|aclar|coment|expres|anunc|revel)/i.test(n.contenido);
-  // Detectar "segun X" o "de acuerdo con X"
-  const tieneSegun = /\bsegun\s+[A-Z]|\bde\s+acuerdo\s+con\s+[A-Z]|\bsegun\s+informes|\bsegun\s+la\s+Policia|\bsegun\s+el\s+Ministerio/i.test(contenidoLower);
-  const passFuentes = palabrasAtribucion || blockquotes >= 1 || tieneCitasAtribuidas || tieneSegun;
+  // Detectar "segun X" o "de acuerdo con X" o "versiones indican"
+  const tieneSegun = /\bsegun\s+[A-Z]|\bde\s+acuerdo\s+con\s+[A-Z]|\bversiones\s+indican|\btestigos\s+en\s+el\s+lugar|\bfamiliares\s+de\s+la\s+victima|\bvideos\s+compartidos/i.test(contenidoLower);
+  // Detectar atribuciones a redes sociales o medios
+  const tieneRedesMedios = /\b(?:redes sociales|facebook|tiktok|instagram|youtube|medios? locales?)\b/i.test(contenidoLower);
+  const passFuentes = palabrasAtribucion || blockquotesOro >= 1 || tieneCitasAtribuidas || tieneSegun || tieneRedesMedios;
   checks.push({
     nombre: 'Fuentes atribuidas',
-    estado: passFuentes ? 'PASS' : 'FAIL',
+    estado: passFuentes ? 'PASS' : 'WARN',
     mensaje: passFuentes
-      ? `${blockquotes} blockquotes. Fuentes atribuidas detectadas.`
-      : 'CRITICO: Sin atribucion de fuentes (testigos, policia, autoridades).',
-    valorActual: blockquotes,
-    valorEsperado: '>=1',
+      ? `Fuentes detectadas: testigos, familiares, medios o citas.`
+      : 'SIN FUENTES CLARAS: Agregar atribucion (testigos, familiares, videos, medios).',
+    valorActual: blockquotesOro,
+    valorEsperado: '>=0',
   });
 
   // 6. Estructura
@@ -298,10 +371,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 1 ? 'PASS' : 'FAIL',
-    mensaje: h2s >= 1 ? `${h2s} subtitulos detectados.` : `Sin subtitulos. Minimo: 1.`,
+    estado: h2s >= 1 ? 'PASS' : 'WARN',
+    mensaje: h2s >= 1 ? `${h2s} subtitulos detectados.` : `Sin subtitulos. Opcional si la noticia es breve.`,
     valorActual: h2s,
-    valorEsperado: '>=1',
+    valorEsperado: '>=0',
   });
   checks.push({
     nombre: 'Negritas (strong)',
@@ -314,7 +387,7 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   const fails = checks.filter(c => c.estado === 'FAIL').length;
   return {
-    aprobado: puntuacion >= 55 && fails <= 1,
+    aprobado: puntuacion >= 50 && fails <= 1,
     puntuacion: Math.round(puntuacion),
     checks,
   };
@@ -329,15 +402,21 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const palabraCount = textoPlano.split(' ').filter(p => p.length > 0).length;
 
-  // 1. Thin content
+  // 1. Thin content — Verificabilidad, no longitud
+  const datosConcretosAdsense = (textoPlano.match(/\b\d{1,2}\s+de\s+\w+\b/gi) || []).length
+    + (textoPlano.match(/\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Nicaragua)\b/gi) || []).length
+    + (textoPlano.match(/\b(?:Policía|Ministerio|Hospital|Alcaldía|Comisaría|INSS|municipio|departamento|barrio)\b/gi) || []).length
+    + (textoPlano.match(/\btestigo|familiar|vecino|habitante|comerciante|conductor|pasajero\b/gi) || []).length;
+  const tieneDatosConcretos = datosConcretosAdsense >= 3;
+  const passThinContent = palabraCount >= 200 || (palabraCount >= 150 && tieneDatosConcretos);
   checks.push({
     nombre: 'Thin content',
-    estado: palabraCount >= 350 ? 'PASS' : 'FAIL',
-    mensaje: palabraCount >= 350
-      ? `${palabraCount} palabras. Cumple politica AdSense.`
-      : `CRITICO: ${palabraCount} palabras. Google marca como "pobre calidad".`,
+    estado: passThinContent ? 'PASS' : 'WARN',
+    mensaje: passThinContent
+      ? `${palabraCount} palabras con datos concretos. Contenido sustancial.`
+      : `${palabraCount} palabras. Corta pero puede ser valida si es verificable.`,
     valorActual: palabraCount,
-    valorEsperado: '>=350',
+    valorEsperado: '>=150 con datos',
   });
 
   // 2. Clickbait en titulo
@@ -374,7 +453,7 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   return {
-    aprobado: puntuacion >= 80 && !checks.some(c => c.estado === 'FAIL'),
+    aprobado: puntuacion >= 60 && !checks.some(c => c.estado === 'FAIL'),
     puntuacion: Math.round(puntuacion),
     checks,
   };
@@ -526,37 +605,48 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
 }
 
 // ───────────────────────────────────────────────
-// NIVEL 6: FILTROS E-E-A-T
+// NIVEL 6: FILTROS E-E-A-T — ADAPTADO A NICARAGUA
 // ───────────────────────────────────────────────
 
 function analizarFiltroEEAT(n: NoticiaInput): FiltroResultado {
   const checks: CheckItem[] = [];
+  const contenidoLowerEEAT = n.contenido.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   // 1. Autor visible
   checks.push({
-    nombre: 'Autor con bio',
-    estado: n.autor ? 'PASS' : 'FAIL',
-    mensaje: n.autor
+    nombre: 'Autor identificable',
+    estado: n.autor && n.autor.length > 2 ? 'PASS' : 'WARN',
+    mensaje: n.autor && n.autor.length > 2
       ? `Autor: ${n.autor}`
-      : 'Sin autor visible. E-E-A-T requiere autor identificable.',
+      : 'Sin autor visible. Recomendado para EEAT.',
   });
 
-  // 2. Fuentes verificables (PASS si hay atribuciones, citas, o autor identificable)
-  const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(n.contenido);
-  const tieneURLs = /https?:\/\//.test(n.contenido);
-  const tieneCitas = (n.contenido.match(/<blockquote>/g) || []).length >= 1;
-  const passFuentes = tieneAtribuciones || tieneURLs || tieneCitas || (n.autor && n.autor.length > 2);
+  // 2. Fuentes realistas nicaragüenses
+  const tieneAtribucionesEEAT = /testigo|familiar|vecino|habitante|morador|comerciante|conductor|pasajero|declar[oó]|indic[oó]|dijo|mencion[oó]|precis[oó]|señal[oó]|confirm[oó]|report[oó]|versiones/.test(contenidoLowerEEAT);
+  const tieneCitasEEAT = (n.contenido.match(/<blockquote>/g) || []).length >= 1;
+  const tieneSegunEEAT = /\bsegun\s+[A-Z]|\bde\s+acuerdo\s+con\s+[A-Z]|\bversiones\s+indican|\btestigos\s+en\s+el\s+lugar|\bfamiliares\s+de\s+la\s+victima|\bvideos\s+compartidos|\bsegun\s+medios?\s+locales?|\bredes\s+sociales\b/i.test(n.contenido);
+  const passFuentesEEAT = tieneAtribucionesEEAT || tieneCitasEEAT || tieneSegunEEAT;
   checks.push({
-    nombre: 'Fuentes verificables',
-    estado: passFuentes ? 'PASS' : 'WARN',
-    mensaje: passFuentes
-      ? 'Fuentes atribuidas o autor verificado detectados.'
-      : 'Sin atribuciones claras. Agregar citas o fuentes cuando sea posible.',
+    nombre: 'Fuentes realistas (Nicaragua)',
+    estado: passFuentesEEAT ? 'PASS' : 'WARN',
+    mensaje: passFuentesEEAT
+      ? 'Fuentes detectadas: testigos, familiares, medios o citas.'
+      : 'Sin fuentes claras. Agregar atribucion cuando sea posible.',
+  });
+
+  // 3. Anti-atribuciones falsas a instituciones estatales
+  const atribFalsasEEAT = /\bla\s+policia\s+(?:inform[oó]|confirm[oó])\b|\blas\s+autoridades\s+(?:confirmaron|informaron)\b|\bel\s+ministerio\s+de\s+salud\s+(?:precis[oó]|confirm[oó])\b|\bla\s+alcald[ií]a\s+(?:inform[oó]|confirm[oó])\b/i.test(contenidoLowerEEAT);
+  checks.push({
+    nombre: 'EEAT Nicaragua — Instituciones',
+    estado: !atribFalsasEEAT ? 'PASS' : 'FAIL',
+    mensaje: !atribFalsasEEAT
+      ? 'Sin atribuciones falsas a instituciones estatales.'
+      : 'PROHIBIDO: Atribuir a Policia/MINSA/Alcaldia sin comunicado verificable.',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   return {
-    aprobado: puntuacion >= 75,
+    aprobado: puntuacion >= 50 && !checks.some(c => c.estado === 'FAIL'),
     puntuacion: Math.round(puntuacion),
     checks,
   };
@@ -570,22 +660,22 @@ function generarAcciones(filtros: ResultadoAnalisis['filtros']): string[] {
   const acciones: string[] = [];
 
   if (!filtros.oro.aprobado) {
-    acciones.push('Revisar calidad editorial: extension, fuentes, estructura');
+    acciones.push('Revisar: extension minima 150 palabras, fuentes atribuidas, lead informativo');
   }
   if (!filtros.adsense.aprobado) {
-    acciones.push('CRITICO: No publicar hasta cumplir politicas AdSense');
+    acciones.push('AdSense: Evitar clickbait, asegurar datos concretos y valor anadido');
   }
   if (!filtros.discover.aprobado) {
-    acciones.push('Agregar imagen >=1200px y fecha de actualizacion');
+    acciones.push('Discover: Agregar imagen destacada y titulo descriptivo');
   }
   if (!filtros.news.aprobado) {
-    acciones.push('Verificar schema NewsArticle y autor');
+    acciones.push('News: Verificar schema, autor y categoria valida');
   }
   if (!filtros.seo.aprobado) {
-    acciones.push('Optimizar titulo, meta description y slug');
+    acciones.push('SEO: Ajustar titulo (50-70 chars), meta (150-170 chars), slug');
   }
   if (!filtros.eeat.aprobado) {
-    acciones.push('Enriquecer perfil de autor y fuentes');
+    acciones.push('EEAT: Revisar atribuciones a instituciones (no inventar fuentes estatales)');
   }
 
   return acciones;
@@ -637,21 +727,27 @@ function extraerKeywordsLSI(n: NoticiaInput): string[] {
 function sugerirH2(n: NoticiaInput): string[] {
   const h2s: string[] = [];
   const categoria = (n.categoria || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const palabraCount = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(p => p.length > 0).length;
+
+  // Solo sugerir h2 si hay suficiente contenido verificable para justificarlos
+  if (palabraCount < 250) {
+    return ['(Noticia breve — subtitulos opcionales)'];
+  }
 
   if (categoria === 'sucesos') {
-    h2s.push('Hechos principales', 'Declaraciones de fuentes', 'Desarrollo', 'Antecedentes');
+    h2s.push('Hechos principales');
   } else if (categoria === 'deportes') {
-    h2s.push('Resultados', 'Reacciones', 'Proximos encuentros', 'Contexto');
+    h2s.push('Resultados del encuentro');
   } else if (categoria === 'espectaculos') {
-    h2s.push('Detalles del evento', 'Repertorio', 'Reacciones del publico', 'Contexto');
+    h2s.push('Detalles del evento');
   } else if (categoria === 'tecnologia') {
-    h2s.push('Caracteristicas principales', 'Impacto en Nicaragua', 'Desarrollo', 'Contexto');
+    h2s.push('Caracteristicas principales');
   } else if (categoria === 'internacionales') {
-    h2s.push('Informacion principal', 'Reacciones internacionales', 'Desarrollo', 'Contexto');
+    h2s.push('Informacion principal');
   } else if (categoria === 'nacionales') {
-    h2s.push('Informacion principal', 'Declaraciones oficiales', 'Desarrollo', 'Impacto nacional');
+    h2s.push('Informacion principal');
   } else {
-    h2s.push('Informacion principal', 'Declaraciones', 'Desarrollo', 'Contexto');
+    h2s.push('Informacion principal');
   }
 
   return h2s;
