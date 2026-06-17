@@ -609,21 +609,28 @@ function generarMetadataSugerida(n: NoticiaInput, _filtros: ResultadoAnalisis['f
 
 function extraerKeywordsLSI(n: NoticiaInput): string[] {
   const texto = (n.titulo + ' ' + n.contenido).toLowerCase();
+  const keywordsExplicitas = (n.keywords || '').toLowerCase().split(/[,;]/).map(k => k.trim()).filter(Boolean);
 
   const mapa: Record<string, string[]> = {
-    'sucesos': ['accidente', 'managua', 'policia nacional', 'transito', 'heridos'],
-    'deportes': ['beisbol', 'futbol', 'nicaragua', 'mundial', 'juegos'],
-    'tecnologia': ['internet', 'redes sociales', 'celular', 'aplicacion', 'digital'],
-    'internacionales': ['eeuu', 'mexico', 'centroamerica', 'mundo', 'crisis'],
-    'nacionales': ['nicaragua', 'managua', 'gobierno', 'pais', 'nacional'],
-    'espectaculos': ['concierto', 'managua', 'artista', 'musica', 'evento'],
-    'general': ['nicaragua', 'noticias', 'informacion', 'actualidad', 'pais'],
+    'sucesos': ['accidente', 'managua', 'policia nacional', 'policia', 'transito', 'heridos', 'muerte', 'fallecimiento', 'golpe', 'escuela', 'hospital', 'investigacion', 'menor', 'diriomo', 'granada', 'masaya', 'leon', 'managua', 'nicaragua', 'suceso', 'incidente', 'victima', 'testigo', 'medicina legal'],
+    'deportes': ['beisbol', 'futbol', 'nicaragua', 'mundial', 'juegos', 'deporte', 'equipo', 'torneo', 'campeonato', 'atleta', 'seleccion', 'liga', 'partido', 'gol', 'victoria', 'derrota'],
+    'tecnologia': ['internet', 'redes sociales', 'celular', 'aplicacion', 'digital', 'tecnologia', 'software', 'hardware', 'app', 'web', 'online', 'conexion', 'ciberseguridad', 'innovacion'],
+    'internacionales': ['eeuu', 'mexico', 'centroamerica', 'mundo', 'crisis', 'internacional', 'onu', 'oea', 'frontera', 'migracion', 'dolar', 'europa', 'asia', 'rusia', 'china'],
+    'nacionales': ['nicaragua', 'managua', 'gobierno', 'pais', 'nacional', 'minsa', 'meduca', 'mific', 'asamblea', 'ley', 'economia', 'salud', 'educacion', 'infraestructura'],
+    'espectaculos': ['concierto', 'managua', 'artista', 'musica', 'evento', 'espectaculo', 'festival', 'concierto', 'banda', 'cantante', 'actor', 'cine', 'television', 'show'],
+    'general': ['nicaragua', 'noticias', 'informacion', 'actualidad', 'pais', 'departamento', 'municipio', 'comunidad', 'reporte', 'hechos'],
   };
 
   // Normalizar categoría para buscar en el mapa (quitar acentos)
   const catNormalizada = (n.categoria || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-  const sugeridas = mapa[catNormalizada] || ['nicaragua', 'noticias', catNormalizada];
-  return sugeridas.filter(k => texto.includes(k));
+  const delMapa = (mapa[catNormalizada] || ['nicaragua', 'noticias', catNormalizada]).filter(k => texto.includes(k));
+
+  // También aceptar keywords explícitas del usuario como válidas
+  const delUsuario = keywordsExplicitas.filter(k => k.length >= 3);
+
+  // Unificar sin duplicados
+  const unicas = Array.from(new Set([...delMapa, ...delUsuario]));
+  return unicas;
 }
 
 function sugerirH2(n: NoticiaInput): string[] {
