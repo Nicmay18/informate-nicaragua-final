@@ -87,14 +87,14 @@ const contenidoResult = [];
 for (const url of muestra) {
   const r = await fetchUrl(url);
   const body = r.body || '';
-  const texto = body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const texto = body.replace(/<[^>]+>/g, ' ').replace(/https?:\/\/\S+/g, ' ').replace(/\s+/g, ' ').trim();
   const palabras = texto.split(' ').filter(w => w.length > 0).length;
   const parrafos = [...body.matchAll(/<p[^>]*>/gi)].length;
   const imagenes = [...body.matchAll(/<img[^>]+src=/gi)].length;
   const h2 = [...body.matchAll(/<h2[^>]*>/gi)].length;
   const citas = [...body.matchAll(/(según|informó|confirmó|declaró|dijo|afirmó|indicó|precisó|señaló)/gi)].length;
   const esThin = palabras < 300;
-  const esClickbait = /(shock|impactante|no vas a creer|te sorprenderá|omg|wow|exclusiva|urgente|breaking)/i.test(body);
+  const esClickbait = /\b(shock|impactante|no vas a creer|te sorprenderá|omg|wow|exclusiva|urgente|breaking)\b/i.test(texto);
   
   contenidoResult.push({
     url: url.split('/').pop(),
