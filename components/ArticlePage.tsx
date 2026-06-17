@@ -13,6 +13,7 @@ import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
+import ArticleFaq from './ArticleFaq';
 import type { Noticia } from '@/lib/types';
 
 /* Lazy-load componentes pesados que no están en el viewport inicial */
@@ -319,6 +320,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         <Suspense fallback={null}>
           <PullQuote contenido={noticia.contenido || ''} />
         </Suspense>
+
+        {/* FAQ visible — mejora SEO y AI Search */}
+        <ArticleFaq contenidoHtml={noticia.contenido || ''} resumen={noticia.resumen || ''} />
 
         {/* Tags */}
         {tags.length > 0 && (
