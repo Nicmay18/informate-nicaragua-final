@@ -970,54 +970,26 @@
           <div class="page-title"><h1>Redacción con IA</h1><p>Genera noticias profesionales estilo agencia internacional.</p></div>
         </div>
 
-        <div class="ai-panel">
+        <div class="ai-panel" style="background: linear-gradient(135deg,#fef3c7,#fde68a); border: 2px solid #f59e0b;">
           <h3><i class="fas fa-robot"></i> Asistente Editorial Gemini</h3>
-          <p>Configura los parámetros, pega la información cruda o borrador, y genera una noticia con estructura de pirámide invertida, tono Reuters/AP y optimización AdSense.</p>
-          <div class="ai-controls">
-            <div>
-              <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">TITULAR BASE / TEMA</label>
-              <input type="text" id="iaTitulo" class="ai-select" placeholder="Ej: Protestas en Mercado Oriental" style="width: 100%;">
-            </div>
-            <div>
-              <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">DEPARTAMENTO</label>
-              <select id="iaDepartamento" class="ai-select" style="width: 100%;">
-                <option value="Managua">Managua</option>
-                <option value="León">León</option>
-                <option value="Granada">Granada</option>
-                <option value="Masaya">Masaya</option>
-                <option value="Estelí">Estelí</option>
-                <option value="Chinandega">Chinandega</option>
-                <option value="Matagalpa">Matagalpa</option>
-                <option value="Jinotega">Jinotega</option>
-                <option value="Rivas">Rivas</option>
-                <option value="Carazo">Carazo</option>
-                <option value="RAAN">RAAN</option>
-                <option value="RAAS">RAAS</option>
-              </select>
-            </div>
-            <div>
-              <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">CATEGORÍA</label>
-              <select id="iaCategoria" class="ai-select" style="width: 100%;">
-                <option value="Nacionales">Nacionales</option>
-                <option value="Sucesos">Sucesos</option>
-                <option value="Deportes">Deportes</option>
-                <option value="Internacionales">Internacionales</option>
-                <option value="Espectáculos">Espectáculos</option>
-                <option value="Tecnología">Tecnología</option>
-              </select>
-            </div>
-          </div>
-          
-          <div style="margin-top: 16px;">
-            <label style="display: block; font-size: 12px; color: #a5b4fc; margin-bottom: 6px; font-weight: 600;">INFORMACIÓN CRUDA / BORRADOR / DETALLES DE LA NOTICIA</label>
-            <textarea id="iaContenidoCrudo" class="ai-select" style="width: 100%; min-height: 120px; resize: vertical; font-family: inherit; line-height: 1.6;" placeholder="Pega aquí todo lo que tengas: apuntes policiales, testimonios de testigos, reportes preliminares, detalles sueltos o la nota cruda sin procesar. La IA usará todo esto para construir el artículo impecablemente..."></textarea>
-          </div>
-
+          <p style="color: #92400e; font-weight: 600; font-size: 14px;">
+            <i class="fas fa-exclamation-triangle"></i> API Key de Gemini requerida
+          </p>
+          <p style="font-size: 13px; color: #92400e; line-height: 1.6;">
+            El generador de noticias con IA requiere una API key válida de Google AI Studio.
+            <br><br>
+            <strong>Para activar:</strong>
+            <br>1. Andá a <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #c41e3a; text-decoration: underline;">Google AI Studio</a>
+            <br>2. Creá una API key (gratuita con límite de 1500 req/día)
+            <br>3. Pegala en Configuración → API Key de Gemini
+            <br><br>
+            <strong>Mientras tanto:</strong> Usá el editor manual de abajo para redactar noticias sin IA.
+          </p>
           <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
-            <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857);"><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
-            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()"><i class="fas fa-magic"></i> Redactar Noticia Completa</button>
+            <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857); opacity: 0.6; cursor: not-allowed;" disabled><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
+            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()" style="opacity: 0.5; cursor: not-allowed;" disabled><i class="fas fa-magic"></i> Redactar (requiere API key)</button>
           </div>
-          <div id="iaStatus" style="margin-top: 12px; font-size: 13px; color: #fbbf24; font-weight: 500;"></div>
+          <div id="iaStatus" style="margin-top: 12px; font-size: 13px; color: #92400e; font-weight: 500;"></div>
         </div>
 
         <div class="card">
