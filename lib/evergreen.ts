@@ -169,7 +169,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-04-01',
-    updatedDate: '2026-05-24',
+    updatedDate: '2026-06-18',
     content: `
       <h2>Historia del béisbol en Nicaragua</h2>
       <p>El béisbol llegó a Nicaragua a finales del siglo XIX y rápidamente se convirtió en el deporte nacional. Desde entonces, ha formado parte de la identidad cultural del país, produciendo jugadores de clase mundial que han destacado en las Grandes Ligas de Estados Unidos.</p>
@@ -178,18 +178,81 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       
       <h3>Liga de Béisbol Profesional Nacional (LBPN)</h3>
       <ul>
-        <li><strong>Indios del Boer</strong> - Managua</li>
+        <li><strong>Indios del Bóer</strong> - Managua</li>
         <li><strong>Tigres de Chinandega</strong> - Chinandega</li>
         <li><strong>Leones de León</strong> - León</li>
-        <li><strong>Fiera de San Carlos</strong> - San Carlos</li>
+        <li><strong>Fieras del San Fernando</strong> - Masaya</li>
         <li><strong>Gigantes de Rivas</strong> - Rivas</li>
       </ul>
+
+      <h2>Estadios de Nicaragua</h2>
       
-      <h2>Estadios principales</h2>
+      <h3>Estadios principales (LBPN)</h3>
       <ul>
-        <li><strong>Estadio Denis Martínez</strong> - Managua (capacidad: 15,000)</li>
-        <li><strong>Estadio Yamil Ruge</strong> - Chinandega (capacidad: 8,000)</li>
-        <li><strong>Estadio Héroes y Mártires</strong> - León (capacidad: 6,000)</li>
+        <li><strong>Estadio Nacional Soberanía</strong> - Managua. Sede principal de la selección nacional y de la Liga de Béisbol Profesional Nacional (LBPN).</li>
+        <li><strong>Estadio Rigoberto López Pérez</strong> - León. Nuevo y moderno estadio inaugurado recientemente para albergar al equipo metropolitano.</li>
+        <li><strong>Estadio Roberto Clemente</strong> - Masaya. Moderna infraestructura deportiva inaugurada a finales de 2023.</li>
+      </ul>
+      
+      <h3>Estadios departamentales (Campeonato Pomares — Primera División)</h3>
+      <ul>
+        <li><strong>Estadio Stanley Cayasso</strong> - Managua. Histórico coloso conocido anteriormente como el "Estadio Nacional".</li>
+        <li><strong>Estadio Roque Tadeo Zavala</strong> - Granada. Casa de los Tiburones de Granada.</li>
+        <li><strong>Estadio Yamil Ríos Ugarte</strong> - Rivas</li>
+        <li><strong>Estadio Rufo Marín</strong> - Estelí</li>
+        <li><strong>Estadio Chale Solís</strong> - Matagalpa</li>
+        <li><strong>Estadio Efraín Tijerino Mazariego</strong> - Chinandega</li>
+        <li><strong>Estadio Carlos Guerra Colindres</strong> - Juigalpa, Chontales</li>
+        <li><strong>Estadio Pedro Selva</strong> - Jinotepe, Carazo</li>
+        <li><strong>Estadio Ernesto Incer</strong> - Boaco</li>
+        <li><strong>Estadio Glorias del Béisbol Segoviano</strong> - Ocotal, Nueva Segovia</li>
+      </ul>
+      
+      <h3>Estadios de las Regiones Autónomas (Costa Caribe)</h3>
+      <ul>
+        <li><strong>Estadio Karen Tucker</strong> - Corn Island, RACCS</li>
+        <li><strong>Estadio Ernesto Hooker</strong> - Bluefields, RACCS</li>
+        <li><strong>Estadio Oncelo Martin Jackson</strong> - Puerto Cabezas / Bilwi, RACCN</li>
+        <li><strong>Estadio Duncan Campbell</strong> - Bonanza, RACCN (municipio minero)</li>
+      </ul>
+      
+      <h2>Campeonato Nacional de Béisbol Superior Germán Pomares Ordóñez (GPO)</h2>
+      <p>El torneo nacional de Primera División cuenta con la participación de <strong>20 equipos</strong> que representan a los departamentos y regiones autónomas de Nicaragua.</p>
+      
+      <h3>Pacífico e Interior (Históricos)</h3>
+      <ul>
+        <li><strong>Indios del Bóer</strong> - Managua</li>
+        <li><strong>Dantos de Managua</strong> - El equipo del Ejército de Nicaragua</li>
+        <li><strong>Leones de León</strong> - Escuadra metropolitana del occidente</li>
+        <li><strong>Tigres de Chinandega</strong> - Franquicia del occidente</li>
+        <li><strong>Fieras del San Fernando</strong> - Masaya</li>
+        <li><strong>Tiburones de Granada</strong> - Equipo de la Gran Sultana</li>
+        <li><strong>Frente Sur Rivas</strong> - Tradicional equipo sureño</li>
+        <li><strong>Cafeteros de Carazo</strong> - Zona central-sur</li>
+      </ul>
+      
+      <h3>Zona Norte y Central</h3>
+      <ul>
+        <li><strong>Indígenas de Matagalpa</strong> - Fuertes competidores del norte</li>
+        <li><strong>Brumas de Jinotega</strong> - El equipo de la ciudad de las brumas</li>
+        <li><strong>Estelí</strong> - Representantes del diamante de las Segovias</li>
+        <li><strong>Guerreros de Nueva Segovia</strong> - Basados en Ocotal</li>
+        <li><strong>Cañoneros de Madriz</strong> - Franquicia con sede en Somoto</li>
+      </ul>
+      
+      <h3>Zona Central y Las Minas</h3>
+      <ul>
+        <li><strong>Toros de Chontales</strong> - Tradicional equipo ganadero (Juigalpa)</li>
+        <li><strong>Productores de Boaco</strong> - Representantes del departamento boaqueño</li>
+        <li><strong>Defensores de Río San Juan</strong> - Basados en San Carlos</li>
+        <li><strong>Gigantes de Zelaya Central</strong> - Zona del centro del país</li>
+        <li><strong>Mineros del Caribe</strong> - Zona del Triángulo Minero (Siuna, Bonanza, Rosita)</li>
+      </ul>
+      
+      <h3>Regiones Autónomas de la Costa Caribe</h3>
+      <ul>
+        <li><strong>Pescadores del Caribe Norte</strong> - RACCN, basados en Puerto Cabezas / Bilwi</li>
+        <li><strong>Caribe Sur</strong> - RACCS, jugando principalmente en Bluefields</li>
       </ul>
       
       <h2>Temporada 2026</h2>
@@ -207,7 +270,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       <p>Nicaragua ha producido destacados jugadores como:</p>
       <ul>
         <li>Dennis Martínez (primer nicaragüense en MLB)</li>
-        <li>Víctor Padilla</li>
+        <li>Vicente Padilla</li>
         <li>Marlín Salazar</li>
         <li>Jonathan Loáisiga</li>
       </ul>
