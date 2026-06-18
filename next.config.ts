@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: false,
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
+  },
   images: {
     unoptimized: false,
     loader: 'custom',
