@@ -148,11 +148,13 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const leadCompleto = (leadTieneQuien || leadTieneQue) && leadTieneDonde && leadTieneCuando;
 
   // 3. Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
-  const atribucionesFalsas = /\bla policia\s+(?:inform[oó]|confirm[oó])\b|\blas\s+autoridades\s+(?:confirmaron|informaron)\b|\bel\s+ministerio\s+de\s+salud\s+(?:precis[oó]|confirm[oó])\b|\bla\s+alcald[ií]a\s+(?:inform[oó]|confirm[oó])\b/i.test(contenidoLower);
+  // Solo marcar como sospechosa si se mencionan instituciones nicaraguenses sin nombre concreto
+  const atribucionesFalsas = /\bpolicia\s+nacional\s+de\s+nicaragua\b|\bpnc\b|\bministerio\s+de\s+salud\s+de\s+nicaragua\b|\bmina\b|\bsilais\b.*\bnicaragua\b|\balcald[ií]a\s+de\s+managua\b|\bsupremo\s+poder\b.*\bnicaragua\b/i.test(contenidoLower) &&
+    !/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/.test(contenidoLower);
 
-  // 4. Citas — verificar que blockquotes tengan atribución
+  // 4. Citas — verificar que blockquotes tengan atribución (guion largo, verbo de atribucion, o nombre propio)
   const blockquotes = (noticia.contenido.match(/<blockquote>/g) || []).length;
-  const citasConAtribucion = (noticia.contenido.match(/<blockquote>[^]*?—\s*[A-ZÁÉÍÓÚÑ][^]*?<\/blockquote>/gi) || []).length;
+  const citasConAtribucion = (noticia.contenido.match(/<blockquote>[^]*?(?:—\s*[A-ZÁÉÍÓÚÑ]|inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó])[^]*?<\/blockquote>/gi) || []).length;
   const citasSospechosas = tieneCitas && citasConAtribucion === 0;
 
   // ─── CÁLCULO DE PUNTUACIÓN ───
@@ -214,7 +216,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     transicionesEncontradas.length <= 1 &&
     leadCompleto;
 
-  const esRechazado = atribucionesFalsas || citasSospechosas || scoreTotal < 40;
+  const esRechazado = atribucionesFalsas || scoreTotal < 40;
 
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
