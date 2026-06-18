@@ -5246,31 +5246,50 @@ VERIFICACIÓN FINAL
       }
 
       // ═══════════════════════════════════════════════════════════════
-      // PROBLEMAS DE ADVERTENCIA
+      // PANEL DE ADVERTENCIAS — HABLA SOLA (accionable y visual)
       // ═══════════════════════════════════════════════════════════════
       if (data.problemasAdvertencia && data.problemasAdvertencia.length > 0) {
-        html += '<div style="margin-bottom:20px;">';
-        html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-exclamation-triangle" style="margin-right:6px;"></i>Problemas de Advertencia — Mejorar</h3>';
-        data.problemasAdvertencia.forEach(p => {
-          html += '<div style="background:#fef3c7;border:1px solid #d97706;border-radius:10px;padding:14px 16px;margin-bottom:8px;font-size:13px;color:#78350f;display:flex;align-items:flex-start;gap:10px;">';
-          html += '<i class="fas fa-exclamation-triangle" style="color:#d97706;margin-top:2px;flex-shrink:0;"></i>';
-          html += '<span>' + p + '</span></div>';
+        const score = data.scoreMaestro || data.scoreDominio || 0;
+        const falta = Math.max(0, 85 - score);
+        html += '<div style="margin-bottom:24px;">';
+
+        // Barra de progreso hacia SALUDABLE (85)
+        html += '<div style="background:white;border:1px solid var(--gray-200);border-radius:12px;padding:20px;margin-bottom:16px;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+        html += '<span style="font-size:13px;font-weight:700;color:var(--gray-700);"><i class="fas fa-bullseye" style="margin-right:6px;color:var(--primary-500);"></i>Camino a SALUDABLE (meta: 85)</span>';
+        html += '<span style="font-size:12px;font-weight:600;color:' + (falta <= 5 ? '#16a34a' : '#d97706') + ';">' + (falta === 0 ? '¡Llegaste!' : 'Faltan ~' + falta + ' puntos') + '</span></div>';
+        html += '<div style="height:14px;background:var(--gray-100);border-radius:7px;overflow:hidden;">';
+        html += '<div style="width:' + Math.min(100, (score/85)*100) + '%;height:100%;background:linear-gradient(90deg,' + st.color + ',#16a34a);border-radius:7px;transition:width 0.8s ease;"></div></div>';
+        html += '<div style="display:flex;justify-content:space-between;margin-top:6px;">';
+        html += '<span style="font-size:11px;color:var(--gray-400);">0</span>';
+        html += '<span style="font-size:11px;color:var(--gray-500);font-weight:600;">Actual: ' + score + '</span>';
+        html += '<span style="font-size:11px;color:var(--gray-400);">Meta: 85</span></div></div>';
+
+        // Tarjetas de acción priorizadas
+        html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-tools" style="margin-right:6px;"></i>Acciones Prioritarias</h3>';
+
+        const acciones = [
+          { keyword: 'links internos', accion: 'Agrega 1-2 links a noticias relacionadas dentro del contenido de cada artículo.', impacto: '+~10 pts', icono: 'fa-link', color: '#d97706' },
+          { keyword: 'E-E-A-T', accion: 'Crea página "Quiénes Somos" con biografías reales de autores (foto + credenciales).', impacto: '+~10 pts', icono: 'fa-user-shield', color: '#d97706' },
+          { keyword: 'frecuencia', accion: 'Publica al menos 3 noticias esta semana. Google premia el contenido fresco.', impacto: '+~8 pts', icono: 'fa-clock', color: '#d97706' },
+          { keyword: 'meta description', accion: 'Escribe meta descriptions atractivas de 150-160 caracteres en cada noticia.', impacto: '+~5 pts', icono: 'fa-tags', color: '#d97706' },
+          { keyword: 'títulos', accion: 'Ajusta títulos largos o cortos al rango óptimo: 50-60 caracteres.', impacto: '+~5 pts', icono: 'fa-heading', color: '#d97706' },
+          { keyword: 'categorías', accion: 'Expande a más categorías: Economía, Turismo, Salud, Ambiente.', impacto: '+~5 pts', icono: 'fa-folder-open', color: '#d97706' },
+          { keyword: 'Score maestro', accion: 'Aplica las acciones de arriba para subir el score global del sitio.', impacto: 'Variable', icono: 'fa-chart-line', color: '#d97706' },
+        ];
+
+        data.problemasAdvertencia.forEach((p, idx) => {
+          const match = acciones.find(a => p.toLowerCase().includes(a.keyword)) || { accion: data.recomendaciones?.[idx] || 'Revisa esta métrica y aplica mejoras.', impacto: '+~3 pts', icono: 'fa-wrench', color: '#d97706' };
+          html += '<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;">';
+          html += '<div style="width:32px;height:32px;border-radius:50%;background:' + match.color + ';color:white;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;"><i class="fas ' + match.icono + '"></i></div>';
+          html += '<div style="flex:1;">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">';
+          html += '<p style="margin:0;font-size:13px;font-weight:600;color:#78350f;line-height:1.4;">' + p + '</p>';
+          html += '<span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;">' + match.impacto + '</span></div>';
+          html += '<p style="margin:8px 0 0;font-size:12px;color:#92400e;line-height:1.5;"><i class="fas fa-arrow-right" style="margin-right:6px;color:#d97706;"></i><strong>Acción:</strong> ' + match.accion + '</p>';
+          html += '</div></div>';
         });
         html += '</div>';
-      }
-
-      // ═══════════════════════════════════════════════════════════════
-      // RECOMENDACIONES
-      // ═══════════════════════════════════════════════════════════════
-      if (data.recomendaciones && data.recomendaciones.length > 0) {
-        html += '<div style="margin-bottom:24px;">';
-        html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:var(--primary-700);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-lightbulb" style="margin-right:6px;"></i>Recomendaciones de Acción</h3>';
-        html += '<div style="background:var(--primary-50);border:1px solid var(--primary-200);border-radius:10px;padding:16px;">';
-        html += '<ul style="margin:0;padding-left:20px;font-size:13px;color:var(--gray-700);line-height:1.8;">';
-        data.recomendaciones.forEach(r => {
-          html += '<li>' + r + '</li>';
-        });
-        html += '</ul></div></div>';
       }
 
       // ═══════════════════════════════════════════════════════════════
