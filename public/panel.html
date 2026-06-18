@@ -3057,6 +3057,23 @@ sin texto ni marcas de agua, composición periodística"
           }
         }
 
+        // ─── AGREGAR NEGRITAS AUTOMÁTICAS (<strong>) ───
+        if (esNueva && publicado && noticiaId) {
+          try {
+            const strongRes = await fetch('/api/admin/enrich-strong', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ noticiaId, modo: 'noticia' })
+            });
+            const strongData = await strongRes.json().catch(() => ({}));
+            if (strongData.success && !strongData.skipped) {
+              showToast('✅ ' + strongData.message + ' de palabras clave', 'success');
+            }
+          } catch (e) {
+            console.error('Enrich strong error:', e);
+          }
+        }
+
         // ─── AGENTE DE INDEXACIÓN: ejecutar INMEDIATAMENTE después de guardar ───
         // Bloque independiente: si falla, no afecta la publicación ni las redes
         if (esNueva && publicado) {
@@ -5229,6 +5246,34 @@ VERIFICACIÓN FINAL
     };
 
     // ═══════════════════════════════════════════════════════════════
+    // ENRICH STRONG MASIVO (negritas automáticas)
+    // ═══════════════════════════════════════════════════════════════
+    window.ejecutarEnrichStrongMasivo = async function() {
+      const btn = document.getElementById('btnEnrichStrong');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'; }
+      showToast('Agregando negritas automáticas a palabras clave en 223 noticias...', 'info', 'Corrección Automática');
+
+      try {
+        const res = await fetch('/api/admin/enrich-strong', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ modo: 'masivo' })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data.success) {
+          showToast('✅ ' + data.message, 'success', 'Corrección Automática');
+          setTimeout(() => cargarDashboardCalidad(), 1500);
+        } else {
+          showToast('⚠️ ' + (data.error || 'Error desconocido'), 'warning', 'Corrección Automática');
+        }
+      } catch (e) {
+        showToast('⚠️ Error de red al procesar. Intentá de nuevo.', 'warning', 'Corrección Automática');
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-bold"></i> Agregar negritas a TODO'; }
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
     // DASHBOARD CALIDAD DEL DOMINIO
     // ═══════════════════════════════════════════════════════════════
     window.cargarDashboardCalidad = async function() {
@@ -5316,9 +5361,20 @@ VERIFICACIÓN FINAL
         if (tieneLinksIssue) {
           html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
           html += '<div style="flex:1;min-width:200px;">';
-          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática</p>';
-          html += '<p style="margin:0;font-size:12px;color:#92400e;">Agrega automáticamente links a noticias relacionadas en TODO el archivo. Impacto: +~10 pts.</p></div>';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática — Links</p>';
+          html += '<p style="margin:0;font-size:12px;color:#92400e;">Agrega links a noticias relacionadas en TODO el archivo. Impacto: +~10 pts.</p></div>';
           html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '</div>';
+        }
+
+        // Botón de acción masiva para negritas <strong>
+        const tieneStrongIssue = data.problemasAdvertencia.some(p => p.toLowerCase().includes('strong')) || (data.promedioStrong !== undefined && data.promedioStrong < 15);
+        if (tieneStrongIssue) {
+          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática — Negritas</p>';
+          html += '<p style="margin:0;font-size:12px;color:#92400e;">Resalta palabras clave con <strong> en TODO el archivo. Promedio actual: ' + (data.promedioStrong || 0) + '/15.</p></div>';
+          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
           html += '</div>';
         }
 
