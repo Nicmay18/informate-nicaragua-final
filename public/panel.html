@@ -1489,7 +1489,7 @@ sin texto ni marcas de agua, composición periodística"
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp, limit, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    console.log('[Panel] v5.0.2 — Admin API Key requerido para eliminar');
+    // Panel admin v5.0.3 — inicializado
 
     const firebaseConfig = {
       apiKey: "AIzaSyDVsqRGr7dtdi5ecO14THIdbnEzZKOJxcA",
@@ -1938,7 +1938,7 @@ sin texto ni marcas de agua, composición periodística"
       }
 
       const data = await res.json().catch(() => ({}));
-      console.log('[GitHub Upload] OK:', data.content?.html_url || url);
+      // GitHub upload exitoso
       // Devolver URL raw de GitHub — disponible inmediatamente tras el push (sin caché de jsDelivr)
       return `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}${filename}`;
     }
@@ -2773,7 +2773,7 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     window.logout = async function() {
-      try { await signOut(auth); } catch(e) {}
+      try { await signOut(auth); } catch(e) { /* ignore */ }
       localStorage.removeItem('adminUser');
       showToast('Sesión cerrada', 'success');
       document.getElementById('dashboard').classList.remove('active');
@@ -2814,8 +2814,7 @@ sin texto ni marcas de agua, composición periodística"
       const searchInput = document.getElementById('searchNoticias');
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-          console.log('[BUSCADOR] input:', e.target.value);
-          buscarNoticias(e.target.value);
+              buscarNoticias(e.target.value);
         });
       }
     }
@@ -2958,7 +2957,7 @@ sin texto ni marcas de agua, composición periodística"
       const nivelEmoji = nivel === 'ORO' ? '🥇' : nivel === 'PLATA' ? '🥈' : '🥉';
 
       showToast(`Validación ${nivelEmoji} ${nivel} (${passCount}/8)\n${mensaje}`, nivel === 'ORO' ? 'success' : 'warning');
-      console.log('Validación unificada:', { nivel, checks });
+      // Validación completada
       return { nivel, checks };
     };
 
@@ -3191,12 +3190,7 @@ sin texto ni marcas de agua, composición periodística"
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
         const snapshot = await getDocs(collection(db, "noticias"));
-        console.log('[DEBUG] Firestore docs traídos:', snapshot.size);
         let noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        console.log('[DEBUG] Noticias en array:', noticias.length);
-        // DEBUG: buscar noticia especifica
-        const caponera = noticias.find(n => n.id === 'DSupNkyxXjdYohRW1EHS');
-        console.log('[DEBUG] Caponera en array?', !!caponera, caponera ? caponera.titulo : 'NO');
         // Ordenar en cliente para incluir noticias sin campo fecha
         noticias.sort((a, b) => {
           const fa = a.fecha?.toMillis ? a.fecha.toMillis() : (a.fecha ? new Date(a.fecha).getTime() : 0);
@@ -3212,7 +3206,7 @@ sin texto ni marcas de agua, composición periodística"
         } else if (filtro !== 'todas') {
           noticias = noticias.filter(n => n.categoria === filtro);
         }
-        console.log('[DEBUG] Noticias después de filtro:', noticias.length, 'filtro:', filtro);
+        // Filtro aplicado
         const titleEl = document.getElementById('noticiasCountTitle');
         if (titleEl) titleEl.textContent = `Gestión de Noticias (${noticias.length})`;
         if (noticias.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>Sin noticias</h3><p>${filtro === 'todas' ? 'Crea tu primera noticia' : 'No hay noticias en esta categoría'}</p></div>`; return; }
