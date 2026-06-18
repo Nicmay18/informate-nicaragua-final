@@ -2844,29 +2844,58 @@ sin texto ni marcas de agua, composición periodística"
     }
 
     async function cargarUltimasNoticias() {
+      const container = document.getElementById('ultimasNoticiasDashboard');
+      let noticias = [];
       try {
+        // Intento 1: con filtro de estado (requiere índice compuesto en Firestore)
         const q = query(collection(db, "noticias"), where("estado", "==", "publicado"), orderBy("fecha", "desc"));
         const snapshot = await getDocs(q);
-        const noticias = []; snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        const container = document.getElementById('ultimasNoticiasDashboard');
-        if (noticias.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>No hay noticias</h3><p>Crea tu primera noticia</p></div>'; return; }
-        container.innerHTML = noticias.slice(0, 5).map(n => `
-          <div class="news-item" style="padding: 10px 0;">
-            <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
-            <div class="news-content">
-              <div class="news-title">${n.titulo || '(Sin título)'}</div>
-              <div class="news-meta">
-                <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
-                <span class="news-badge" style="background:var(--success);color:#fff;font-size:10px;">PUBLICADO</span>
-                <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
-              </div>
-            </div>
-            <div class="news-actions" style="opacity:1;">
-              <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${(n.titulo || '').replace(/'/g, "\\'")}', '${(n.resumen || '').replace(/'/g, "\\'")}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
+        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+      } catch (err1) {
+        try {
+          // Intento 2: sin filtro de estado, solo ordenar por fecha (no requiere índice)
+          const q2 = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+          const snapshot2 = await getDocs(q2);
+          snapshot2.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+        } catch (err2) {
+          // Intento 3: sin ordenamiento (fallback máximo)
+          try {
+            const snapshot3 = await getDocs(collection(db, "noticias"));
+            snapshot3.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+          } catch (err3) {
+            container.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;font-size:13px;"><i class="fas fa-exclamation-circle"></i> Error cargando noticias. Revisa la consola (F12) o contactá soporte.</div>';
+            return;
+          }
+        }
+      }
+
+      if (noticias.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-inbox"></i></div><h3>No hay noticias</h3><p>Crea tu primera noticia</p></div>';
+        return;
+      }
+
+      // Si usamos fallback sin where, filtrar publicados en cliente
+      const publicadas = noticias.filter(n => n.estado === 'publicado' || !n.estado).slice(0, 5);
+      const aMostrar = publicadas.length > 0 ? publicadas : noticias.slice(0, 5);
+
+      container.innerHTML = aMostrar.map(n => {
+        const tituloEsc = (n.titulo || '(Sin título)').replace(/'/g, '&#39;');
+        const resumenEsc = (n.resumen || '').replace(/'/g, '&#39;');
+        return `<div class="news-item" style="padding: 10px 0;">
+          <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
+          <div class="news-content">
+            <div class="news-title">${n.titulo || '(Sin título)'}</div>
+            <div class="news-meta">
+              <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
+              <span class="news-badge" style="background:var(--success);color:#fff;font-size:10px;">PUBLICADO</span>
+              <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
             </div>
           </div>
-        `).join('');
-      } catch (error) { console.error("Error últimas noticias:", error); }
+          <div class="news-actions" style="opacity:1;">
+            <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${tituloEsc}', '${resumenEsc}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     async function postToApi(endpoint, payload) {
