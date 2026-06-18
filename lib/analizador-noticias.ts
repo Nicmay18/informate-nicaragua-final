@@ -202,27 +202,30 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
   };
 
-  // ─── DETERMINACIÓN DE NIVEL FORENSE v2.0 ───
+  // ─── DETERMINACIÓN DE NIVEL FORENSE v2.1 ───
   // FORENSE: Todo verificable, cero inferencia, cero atribuciones falsas
-  // ORO: Cumple forense + criterios técnicos (SEO, News, etc.)
-  // PLATA: Mínima inferencia, fuentes mayoritarias
-  // BRONCE: Requiere revisión, inferencias detectadas
+  // ORO: Noticia verificable con filtros OK
+  // PLATA: Mínima inferencia, fuentes mayoritarias, filtros OK
+  // BRONCE: Requiere revisión, algunos filtros fallan
   // RECHAZADO: Hallucinations, citas inventadas, fuentes falsas
 
-  const esForense = scoreTotal >= 85 &&
+  const esForense = scoreTotal >= 75 &&
     !atribucionesFalsas &&
     !citasSospechosas &&
     adjetivosEncontrados.length === 0 &&
     transicionesEncontradas.length <= 1 &&
     leadCompleto;
 
-  const esRechazado = atribucionesFalsas || scoreTotal < 40;
+  const esRechazado = atribucionesFalsas || scoreTotal < 30;
+
+  const todosFiltrosOK = filtros.oro.aprobado && filtros.adsense.aprobado && filtros.discover.aprobado && filtros.news.aprobado && filtros.seo.aprobado && filtros.eeat.aprobado;
 
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense && filtros.oro.aprobado && filtros.seo.aprobado) nivel = 'FORENSE';
   else if (esForense) nivel = 'ORO';
-  else if (scoreTotal >= 70) nivel = 'PLATA';
+  else if (scoreTotal >= 60 || (todosFiltrosOK && scoreTotal >= 50)) nivel = 'ORO';
+  else if (scoreTotal >= 40 || todosFiltrosOK) nivel = 'PLATA';
   else nivel = 'BRONCE';
 
   const aprobado = nivel !== 'RECHAZADO';
