@@ -2,7 +2,7 @@ import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
+import { getHeroImageUrl } from '@/lib/image-utils';
 
 // ============================================================================
 // ISR: Home regenerada cada 5 min. Reduce lecturas Firestore vs force-dynamic
@@ -69,7 +69,7 @@ export default async function HomePage() {
     console.error('[HomePage] Error:', error);
   }
 
-  const heroSrc = noticias[0]?.imagen ? getResponsiveImageUrl(noticias[0].imagen, 640) : null;
+  const heroSrc = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen) : null;
 
   return (
     <>

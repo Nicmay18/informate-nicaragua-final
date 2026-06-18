@@ -14,6 +14,36 @@ export function cleanImageUrl(url: string): string {
 }
 
 /**
+ * Genera URL optimizada para el hero/LCP (imagen principal).
+ * Usa weserv.nl para redimensionar imágenes jsDelivr a 800px,
+ * reduciendo ~60% el peso vs la imagen original a resolución completa.
+ * Esto mejora directamente el LCP en PageSpeed.
+ */
+export function getHeroImageUrl(url: string): string {
+  if (!url || url === 'null' || url === 'undefined' || url === 'NaN') return FALLBACK_IMAGE;
+
+  const responsiveUrl = getResponsiveImageUrl(url);
+  if (responsiveUrl.includes('images.weserv.nl') || responsiveUrl.startsWith('data:')) {
+    return responsiveUrl;
+  }
+
+  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 800px (cubre desktop + mobile)
+  const absoluteUrl = responsiveUrl.startsWith('/')
+    ? `https://nicaraguainformate.com${responsiveUrl}`
+    : responsiveUrl;
+
+  const params = new URLSearchParams();
+  params.set('url', absoluteUrl);
+  params.set('w', '800');
+  params.set('q', '75');
+  params.set('fit', 'cover');
+  params.set('n', '-1');
+  params.set('output', 'webp');
+
+  return `https://images.weserv.nl/?${params.toString()}`;
+}
+
+/**
  * Normaliza URLs de imágenes:
  * - Firebase Storage → ruta local /images/ (evita tokens expirados)
  * - Data URI, local, jsDelivr → directo (ya optimizadas)

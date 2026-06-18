@@ -7,7 +7,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp, BookOpen } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
+import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { getAllEvergreen } from '@/lib/evergreen';
 import dynamic from 'next/dynamic';
 
@@ -176,7 +176,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
                   // Primer slide = LCP: carga directo sin intermediarios
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
-                    src={getResponsiveImageUrl(item.imagen)}
+                    src={getHeroImageUrl(item.imagen)}
                     alt={item.titulo}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
                     fetchPriority="high"

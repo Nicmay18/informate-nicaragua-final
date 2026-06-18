@@ -15,7 +15,7 @@ interface ImageLoaderProps {
   quality?: number;
 }
 
-export default function weservLoader({ src, width, quality = 75 }: ImageLoaderProps): string {
+export default function weservLoader({ src, width, quality = 70 }: ImageLoaderProps): string {
   // URLs ya optimizadas o de servicios de optimización — no re-procesar
   if (
     src.includes('images.weserv.nl') ||

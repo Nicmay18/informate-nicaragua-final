@@ -46,8 +46,9 @@ export default function Header() {
             <Image
               src="/logo.webp"
               alt="Nicaragua Informate"
-              width={512}
-              height={512}
+              width={128}
+              height={128}
+              sizes="128px"
               className="ni-logo__img"
               priority
             />
