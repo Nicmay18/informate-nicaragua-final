@@ -188,6 +188,8 @@ auditoria-*.txt
 # EXCEPCIONES CRÍTICAS para AdSense y SEO
 !ads.txt
 !robots.txt
+!app/indexnow-key.txt/route.ts
+!public/indexnow-key.txt
 scripts/*.js
 scripts/*.ts
 procesar-salvable.js

@@ -3091,6 +3091,30 @@ sin texto ni marcas de agua, composición periodística"
             else { showToast('No se pudo revalidar la caché. Verificá el token en Configuración.', 'warning'); }
           } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
         }
+
+        // ─── AGENTE DE INDEXACIÓN (IndexNow + Google Indexing API) ───
+        if (esNueva && noticiaId && publicado) {
+          const permalink = 'https://nicaraguainformate.com/noticias/' + slugReal;
+          try {
+            const indexRes = await fetch('/api/admin/index', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: permalink, slug: slugReal, title: titulo })
+            });
+            const indexData = await indexRes.json().catch(() => ({}));
+            if (indexData.success) {
+              const parts = [];
+              if (indexData.results?.indexNow?.success) parts.push('Bing/Yahoo ✅');
+              if (indexData.results?.google?.success) parts.push('Google ✅');
+              showToast('Indexado en buscadores: ' + (parts.join(', ') || 'OK'), 'success');
+            } else {
+              showToast('Indexación: ' + (indexData.results?.indexNow?.message || 'Verificar configuración'), 'warning');
+            }
+          } catch (e) {
+            console.error('Indexing error:', e);
+            showToast('Error de red al indexar. La noticia se publicó pero los buscadores pueden tardar en encontrarla.', 'warning');
+          }
+        }
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
       } finally {
