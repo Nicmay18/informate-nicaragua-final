@@ -1516,7 +1516,7 @@ sin texto ni marcas de agua, composición periodística"
       { id: 'Tecnología', key: 'Tecnologia', emoji: '💻', color: 'tecnologia', icon: 'fa-microchip' }
     ];
 
-    function showToast(message, type = 'success', title = '') {
+    function showToast(message, type = 'success', title = '', duration = 5000) {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
@@ -1527,7 +1527,7 @@ sin texto ni marcas de agua, composición periodística"
         <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
       `;
       container.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)'; setTimeout(() => toast.remove(), 300); }, 5000);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)'; setTimeout(() => toast.remove(), 300); }, duration);
     }
 
     function showLoading(show, text = 'Procesando...') {
@@ -3028,21 +3028,22 @@ sin texto ni marcas de agua, composición periodística"
         };
         let esNueva = !noticiaId;
 
+        const resumen = [];
+
         if (noticiaId) {
           noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
-          showToast(publicado ? 'Noticia publicada' : 'Borrador guardado', 'success');
+          resumen.push('✅ Noticia actualizada');
         } else {
           const docRef = await addDoc(collection(db, "noticias"), noticiaData);
           noticiaData.id = docRef.id;
           noticiaId = docRef.id;
-          showToast(publicado ? 'Noticia publicada en el sitio' : 'Borrador guardado (no visible en el sitio)', 'success');
+          resumen.push('✅ Noticia publicada');
         }
 
-        // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS (antes de indexar) ───
+        // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS ───
         if (esNueva && publicado && noticiaId) {
           try {
-            showToast('Agregando links internos automáticos...', 'info');
             const enrichRes = await fetch('/api/admin/enrich-links', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -3050,14 +3051,17 @@ sin texto ni marcas de agua, composición periodística"
             });
             const enrichData = await enrichRes.json().catch(() => ({}));
             if (enrichData.success && !enrichData.skipped) {
-              showToast('✅ Links internos agregados (' + enrichData.agregados + ' relacionadas)', 'success');
+              resumen.push('🔗 Links internos: ' + enrichData.agregados + ' relacionadas');
+            } else if (enrichData.skipped) {
+              resumen.push('⏭ Links internos: ya tenía');
             }
           } catch (e) {
+            resumen.push('⚠️ Links internos: error de red');
             console.error('Enrich links error:', e);
           }
         }
 
-        // ─── AGREGAR NEGRITAS AUTOMÁTICAS (<strong>) ───
+        // ─── AGREGAR NEGRITAS AUTOMÁTICAS ───
         if (esNueva && publicado && noticiaId) {
           try {
             const strongRes = await fetch('/api/admin/enrich-strong', {
@@ -3067,57 +3071,58 @@ sin texto ni marcas de agua, composición periodística"
             });
             const strongData = await strongRes.json().catch(() => ({}));
             if (strongData.success && !strongData.skipped) {
-              showToast('✅ ' + strongData.message + ' de palabras clave', 'success');
+              resumen.push('B ' + strongData.message + ' agregadas');
+            } else if (strongData.skipped) {
+              resumen.push('⏭ Negritas: ya tenía suficientes');
             }
           } catch (e) {
+            resumen.push('⚠️ Negritas: error de red');
             console.error('Enrich strong error:', e);
           }
         }
 
-        // ─── AGENTE DE INDEXACIÓN: ejecutar INMEDIATAMENTE después de guardar ───
-        // Bloque independiente: si falla, no afecta la publicación ni las redes
+        // ─── AGENTE DE INDEXACIÓN ───
+        let indexOk = [];
+        let indexFail = [];
         if (esNueva && publicado) {
           const slugIdx = document.getElementById('noticiaSlug').value || slug || noticiaId;
           const permalink = 'https://nicaraguainformate.com/noticias/' + slugIdx;
           try {
-            showToast('Enviando a buscadores (Google, Bing, Yahoo)...', 'info');
             const indexRes = await fetch('/api/admin/index', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ url: permalink, slug: slugIdx, title: titulo })
             });
             const indexData = await indexRes.json().catch(() => ({}));
-            const okParts = [];
-            const failParts = [];
-            if (indexData.results?.indexNow?.success) okParts.push('Bing/Yahoo ✅');
-            else if (indexData.results?.indexNow) failParts.push('Bing/Yahoo: ' + (indexData.results.indexNow.message || 'Error'));
-            if (indexData.results?.google?.success) okParts.push('Google ✅');
-            else if (indexData.results?.google) failParts.push('Google: ' + (indexData.results.google.message || 'Error'));
+            if (indexData.results?.indexNow?.success) indexOk.push('Bing/Yahoo');
+            else if (indexData.results?.indexNow) indexFail.push('Bing/Yahoo: ' + (indexData.results.indexNow.message || 'Error'));
+            if (indexData.results?.google?.success) indexOk.push('Google');
+            else if (indexData.results?.google) indexFail.push('Google: ' + (indexData.results.google.message || 'Error'));
 
+            // Guardar en log local
             const logEntry = {
               fecha: new Date().toLocaleString('es-NI'),
               titulo: titulo.substring(0, 60),
               url: permalink,
-              ok: okParts,
-              fail: failParts,
+              ok: indexOk.map(s => s + ' ✅'),
+              fail: indexFail,
               raw: indexData
             };
             const logs = JSON.parse(localStorage.getItem('ni_impulso_log') || '[]');
             logs.unshift(logEntry);
             if (logs.length > 20) logs.pop();
             localStorage.setItem('ni_impulso_log', JSON.stringify(logs));
-
-            if (okParts.length > 0) {
-              showToast('✅ Impulsado en: ' + okParts.join(' | '), 'success', 'Agente de Impulso');
-            }
-            if (failParts.length > 0) {
-              showToast('⚠️ No se pudo indexar: ' + failParts.join(' | '), 'warning', 'Agente de Impulso');
-            }
           } catch (e) {
             console.error('Indexing error:', e);
-            showToast('⚠️ Error de red al indexar. La noticia se publicó pero los buscadores pueden tardar en encontrarla.', 'warning', 'Agente de Impulso');
+            indexFail.push('Red: error de conexión');
           }
         }
+        if (indexOk.length) resumen.push('🚀 Indexado en: ' + indexOk.join(', '));
+        if (indexFail.length) resumen.push('⚠️ Indexación falló: ' + indexFail.join(', '));
+        if (!esNueva || !publicado) resumen.push('📝 Sin indexar (edición o borrador)');
+
+        // ─── RESUMEN FINAL ───
+        showToast(resumen.join('<br>'), indexFail.length ? 'warning' : 'success', 'Resumen de publicación', 10000);
 
         if (esNueva) {
           let progress = 30; progressBar.style.width = progress + '%';
