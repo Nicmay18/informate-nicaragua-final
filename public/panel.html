@@ -3035,7 +3035,53 @@ sin texto ni marcas de agua, composición periodística"
         } else {
           const docRef = await addDoc(collection(db, "noticias"), noticiaData);
           noticiaData.id = docRef.id;
+          noticiaId = docRef.id;
           showToast(publicado ? 'Noticia publicada en el sitio' : 'Borrador guardado (no visible en el sitio)', 'success');
+        }
+
+        // ─── AGENTE DE INDEXACIÓN: ejecutar INMEDIATAMENTE después de guardar ───
+        // Bloque independiente: si falla, no afecta la publicación ni las redes
+        if (esNueva && publicado) {
+          const slugIdx = document.getElementById('noticiaSlug').value || slug || noticiaId;
+          const permalink = 'https://nicaraguainformate.com/noticias/' + slugIdx;
+          try {
+            showToast('Enviando a buscadores (Google, Bing, Yahoo)...', 'info');
+            const indexRes = await fetch('/api/admin/index', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: permalink, slug: slugIdx, title: titulo })
+            });
+            const indexData = await indexRes.json().catch(() => ({}));
+            const okParts = [];
+            const failParts = [];
+            if (indexData.results?.indexNow?.success) okParts.push('Bing/Yahoo ✅');
+            else if (indexData.results?.indexNow) failParts.push('Bing/Yahoo: ' + (indexData.results.indexNow.message || 'Error'));
+            if (indexData.results?.google?.success) okParts.push('Google ✅');
+            else if (indexData.results?.google) failParts.push('Google: ' + (indexData.results.google.message || 'Error'));
+
+            const logEntry = {
+              fecha: new Date().toLocaleString('es-NI'),
+              titulo: titulo.substring(0, 60),
+              url: permalink,
+              ok: okParts,
+              fail: failParts,
+              raw: indexData
+            };
+            const logs = JSON.parse(localStorage.getItem('ni_impulso_log') || '[]');
+            logs.unshift(logEntry);
+            if (logs.length > 20) logs.pop();
+            localStorage.setItem('ni_impulso_log', JSON.stringify(logs));
+
+            if (okParts.length > 0) {
+              showToast('✅ Impulsado en: ' + okParts.join(' | '), 'success', 'Agente de Impulso');
+            }
+            if (failParts.length > 0) {
+              showToast('⚠️ No se pudo indexar: ' + failParts.join(' | '), 'warning', 'Agente de Impulso');
+            }
+          } catch (e) {
+            console.error('Indexing error:', e);
+            showToast('⚠️ Error de red al indexar. La noticia se publicó pero los buscadores pueden tardar en encontrarla.', 'warning', 'Agente de Impulso');
+          }
         }
 
         if (esNueva) {
@@ -3092,29 +3138,6 @@ sin texto ni marcas de agua, composición periodística"
           } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
         }
 
-        // ─── AGENTE DE INDEXACIÓN (IndexNow + Google Indexing API) ───
-        if (esNueva && noticiaId && publicado) {
-          const permalink = 'https://nicaraguainformate.com/noticias/' + slugReal;
-          try {
-            const indexRes = await fetch('/api/admin/index', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ url: permalink, slug: slugReal, title: titulo })
-            });
-            const indexData = await indexRes.json().catch(() => ({}));
-            if (indexData.success) {
-              const parts = [];
-              if (indexData.results?.indexNow?.success) parts.push('Bing/Yahoo ✅');
-              if (indexData.results?.google?.success) parts.push('Google ✅');
-              showToast('Indexado en buscadores: ' + (parts.join(', ') || 'OK'), 'success');
-            } else {
-              showToast('Indexación: ' + (indexData.results?.indexNow?.message || 'Verificar configuración'), 'warning');
-            }
-          } catch (e) {
-            console.error('Indexing error:', e);
-            showToast('Error de red al indexar. La noticia se publicó pero los buscadores pueden tardar en encontrarla.', 'warning');
-          }
-        }
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
       } finally {
@@ -5323,6 +5346,35 @@ VERIFICACIÓN FINAL
         html += '</div></div>';
       }
 
+      // Log de Impulso (indexación reciente)
+      html += renderLogImpulso();
+
+      return html;
+    }
+
+    function renderLogImpulso() {
+      const logs = JSON.parse(localStorage.getItem('ni_impulso_log') || '[]');
+      if (logs.length === 0) return '';
+
+      let html = '<div style="background:white;border:1px solid var(--gray-200);border-radius:12px;padding:20px;margin-bottom:20px;">';
+      html += '<h3 style="margin:0 0 16px;font-size:14px;font-weight:700;color:var(--gray-800);"><i class="fas fa-rocket" style="margin-right:8px;color:var(--success);"></i>Log de Impulso — Últimas indexaciones</h3>';
+      html += '<div style="display:flex;flex-direction:column;gap:10px;">';
+
+      logs.slice(0, 10).forEach((log) => {
+        const ok = (log.ok || []).join(' ');
+        const fail = (log.fail || []).join(' ');
+        const borderColor = fail ? '#d97706' : '#16a34a';
+        const bgColor = fail ? '#fef3c7' : '#d1fae5';
+        html += '<div style="padding:12px;border-radius:8px;border-left:4px solid ' + borderColor + ';background:' + bgColor + ';">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
+        html += '<span style="font-size:12px;font-weight:600;color:var(--gray-700);">' + (log.titulo || 'Sin título') + '</span>';
+        html += '<span style="font-size:11px;color:var(--gray-500);">' + (log.fecha || '') + '</span></div>';
+        if (ok) html += '<div style="font-size:12px;color:#166534;"><i class="fas fa-check" style="margin-right:4px;"></i>' + ok + '</div>';
+        if (fail) html += '<div style="font-size:12px;color:#92400e;"><i class="fas fa-exclamation-triangle" style="margin-right:4px;"></i>' + fail + '</div>';
+        html += '</div>';
+      });
+
+      html += '</div></div>';
       return html;
     }
 
