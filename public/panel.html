@@ -1058,6 +1058,12 @@ ESTRUCTURA OBLIGATORIA:
                     <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 12px;"><i class="fas fa-robot" style="color: var(--primary-500);"></i> Diagnóstico IA</h4>
                     <ul id="evalRecomendaciones" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;"></ul>
                   </div>
+                  <div id="evalAccionesAutomaticas" style="margin-top: 16px; padding: 16px; background: #fffbeb; border: 2px solid #fcd34d; border-radius: var(--radius-md); display: none;">
+                    <h4 style="font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 8px;"><i class="fas fa-magic" style="margin-right: 6px;"></i>Corrección Automática</h4>
+                    <p style="font-size: 12px; color: #78350f; margin-bottom: 12px;">Esta noticia está en <strong id="evalNivelActual">PLATA</strong>. Podemos corregir automáticamente lo posible y te indicamos qué editar manualmente.</p>
+                    <button class="btn btn-primary" id="btnCorregirAuto" onclick="corregirNoticiaEvaluador()" style="font-size: 13px;"><i class="fas fa-wand-magic-sparkles"></i> Corregir automáticamente</button>
+                    <div id="evalCorreccionResultado" style="margin-top: 12px; font-size: 12px; color: var(--gray-700);"></div>
+                  </div>
                   <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; font-size: 13px; color: var(--gray-500);">
                     <div>CPM estimado: <strong id="evalCpm" style="color: var(--gray-900);">$1.10</strong></div>
                     <div>Ingreso estimado: <strong id="evalRevenue" style="color: var(--gray-900);">$0.00</strong></div>
@@ -3661,6 +3667,19 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('scoreDesc').textContent = descMap[nivel];
         document.getElementById('scoreBar').style.width = porcentaje + '%';
 
+        // Mostrar/ocultar panel de corrección automática
+        const panelAuto = document.getElementById('evalAccionesAutomaticas');
+        if ((nivel === 'PLATA' || nivel === 'BRONCE') && porcentaje >= 60 && porcentaje < 80) {
+          panelAuto.style.display = 'block';
+          document.getElementById('evalNivelActual').textContent = nivel;
+          document.getElementById('evalCorreccionResultado').innerHTML = '';
+          // Guardar datos para la corrección
+          window._evalNoticiaActual = { id, contenido, titulo, resumen, imagen, checks, nivel, porcentaje };
+        } else {
+          panelAuto.style.display = 'none';
+          window._evalNoticiaActual = null;
+        }
+
         document.getElementById('evalTableBody').innerHTML = checks.map(c => {
           const cls = c.estado === '✅' ? 'score-excelente' : c.estado === '⚠️' ? 'score-bueno' : 'score-bajo';
           return `<tr><td style="font-size:13px;">${c.estado} ${c.nombre}</td><td style="font-size:13px;font-weight:600;">${c.valor}</td><td><span class="eval-score ${cls}">${c.pasa ? 'PASA' : 'FALTA'}</span></td><td style="font-size:12px;color:var(--gray-500);">req: ${c.req}</td></tr>`;
@@ -3701,6 +3720,126 @@ sin texto ni marcas de agua, composición periodística"
       } catch (e) {
         console.error('Error evaluando:', e);
       }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // CORREGIR NOTICIA AUTOMÁTICAMENTE (desde el evaluador)
+    // ═══════════════════════════════════════════════════════════════
+    window.corregirNoticiaEvaluador = async function() {
+      const datos = window._evalNoticiaActual;
+      if (!datos) { showToast('Seleccioná una noticia primero', 'warning'); return; }
+
+      const btn = document.getElementById('btnCorregirAuto');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Corrigiendo...'; }
+      const resultadoDiv = document.getElementById('evalCorreccionResultado');
+      resultadoDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analizando y corrigiendo...';
+
+      const cambios = [];
+      let nuevoContenido = datos.contenido;
+      let nuevoTitulo = datos.titulo;
+      let nuevoResumen = datos.resumen;
+
+      // 1. Agregar subtítulos <h2> si no los tiene
+      const tieneH2 = /<h2[\s>]/i.test(nuevoContenido);
+      if (!tieneH2) {
+        const parrafos = nuevoContenido.split(/\n{2,}|\n/).filter(p => p.trim().length > 20);
+        if (parrafos.length >= 3) {
+          // Insertar h2 cada ~3 párrafos
+          let conH2 = [];
+          let contador = 0;
+          const palabrasClave = ['Contexto', 'Detalles', 'Reacciones', 'Antecedentes', 'Consecuencias'];
+          for (let i = 0; i < parrafos.length; i++) {
+            if (i > 0 && i % 3 === 0 && contador < palabrasClave.length) {
+              conH2.push('<h2>' + palabrasClave[contador] + '</h2>');
+              contador++;
+            }
+            conH2.push(parrafos[i]);
+          }
+          nuevoContenido = conH2.join('\n\n');
+          cambios.push('✅ Subtítulos &lt;h2&gt; agregados automáticamente');
+        }
+      }
+
+      // 2. Enriquecer con <strong> si faltan negritas
+      const strongs = (nuevoContenido.match(/<strong>/gi) || []).length;
+      if (strongs < 5) {
+        try {
+          const res = await fetch('/api/admin/enrich-strong', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ noticiaId: datos.id, modo: 'noticia' })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (data.success && !data.skipped) {
+            // Recargar contenido desde Firestore porque la API lo modificó
+            const snap = await getDoc(doc(db, 'noticias', datos.id));
+            if (snap.exists()) {
+              nuevoContenido = snap.data().contenido || nuevoContenido;
+              cambios.push('✅ ' + data.message + ' de palabras clave resaltadas');
+            }
+          } else if (data.skipped) {
+            cambios.push('⏭ Negritas: ya tenía suficientes');
+          }
+        } catch (e) {
+          cambios.push('⚠️ Negritas: error al enriquecer');
+        }
+      }
+
+      // 3. Si el lead es corto, intentar extender (no perfecto, pero mejora)
+      const checks = datos.checks;
+      const checkLead = checks.find(c => c.nombre.includes('Lead'));
+      if (checkLead && !checkLead.pasa) {
+        const partes = nuevoContenido.split(/\n{2,}|\n/);
+        if (partes.length > 0) {
+          const primerParrafo = partes[0];
+          const palabrasLead = primerParrafo.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+          if (palabrasLead < 35 && partes.length > 1) {
+            // Fusionar primer y segundo párrafo para extender lead
+            const nuevoLead = primerParrafo + ' ' + partes[1];
+            const resto = partes.slice(2).join('\n\n');
+            nuevoContenido = nuevoLead + '\n\n' + resto;
+            cambios.push('✅ Lead extendido (fusión de párrafos iniciales)');
+          } else {
+            cambios.push('⚠️ Lead corto: requiere edición manual para agregar contexto');
+          }
+        }
+      }
+
+      // 4. Si falta meta descripción
+      const checkMeta = checks.find(c => c.nombre.includes('Meta'));
+      if (checkMeta && !checkMeta.pasa) {
+        if (!nuevoResumen || nuevoResumen.length < 120) {
+          // Generar meta desde los primeros 150 chars del contenido
+          const textoPlano = nuevoContenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+          const metaGenerada = textoPlano.substring(0, 157).trim();
+          if (metaGenerada.length >= 120) {
+            nuevoResumen = metaGenerada;
+            cambios.push('✅ Meta descripción generada automáticamente (' + metaGenerada.length + ' chars)');
+          } else {
+            cambios.push('⚠️ Meta descripción: requiere edición manual (muy corto)');
+          }
+        }
+      }
+
+      // Guardar cambios en Firestore
+      try {
+        const updateData = { contenido: nuevoContenido, fechaActualizacion: new Date() };
+        if (nuevoResumen && nuevoResumen !== datos.resumen) updateData.resumen = nuevoResumen;
+        await updateDoc(doc(db, 'noticias', datos.id), updateData);
+        cambios.push('✅ Noticia guardada en base de datos');
+      } catch (e) {
+        cambios.push('❌ Error guardando: ' + e.message);
+      }
+
+      // Mostrar resultado
+      resultadoDiv.innerHTML = cambios.map(c => '<div style="margin-bottom:4px;">' + c + '</div>').join('');
+      resultadoDiv.innerHTML += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid #fcd34d;"><strong style="color:#78350f;">Próximo paso:</strong> Hacé clic en "Editar" para revisar y publicar.</div>';
+
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Corregir automáticamente'; }
+      showToast('Corrección automática completada. Revisá los cambios.', 'success');
+
+      // Recargar evaluación
+      await cargarEvaluacion();
     };
 
     window.analizarNoticias6080 = async function() {
