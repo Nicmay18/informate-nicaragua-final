@@ -29,7 +29,7 @@ export default function OneSignalProvider() {
     <Script
       id="onesignal-sdk"
       src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-      strategy="afterInteractive"
+      strategy="lazyOnload"
     />
   );
 }

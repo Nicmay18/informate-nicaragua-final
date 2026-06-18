@@ -128,8 +128,8 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       });
     };
 
-    // Cargar AdSense 3 segundos después de que la página esté lista
-    const adsTimer = setTimeout(loadAds, 3000);
+    // Cargar AdSense 5 segundos después de que la página esté lista (más lazy)
+    const adsTimer = setTimeout(loadAds, 5000);
 
     // ─── 3. FundingChoices: SOLO para usuarios EU/EEA ───
     const isEULocale = () => {
