@@ -5328,6 +5328,39 @@ VERIFICACIÓN FINAL
       html += '</div></div>';
 
       // ═══════════════════════════════════════════════════════════════
+      // CORRECCIONES AUTOMÁTICAS (siempre visibles si aplica, incluso en SALUDABLE)
+      // ═══════════════════════════════════════════════════════════════
+      const tieneLinksBajo = data.linksInternos !== undefined ? data.linksInternos < 100 : false;
+      const tieneStrongBajo = data.promedioStrong !== undefined && data.promedioStrong < 15;
+      const tieneThinContent = data.thinContent && data.thinContent.count > 0;
+
+      if (tieneLinksBajo || tieneStrongBajo || tieneThinContent) {
+        html += '<div style="margin-bottom:24px;">';
+        html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:var(--gray-800);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-magic" style="margin-right:6px;color:var(--primary-500);"></i>Correcciones Automáticas</h3>';
+        html += '<p style="margin:0 0 12px;font-size:12px;color:var(--gray-500);">Herramientas para mejorar métricas específicas de una sola vez.</p>';
+
+        if (tieneLinksBajo) {
+          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-link" style="margin-right:6px;color:#d97706;"></i>Links Internos</p>';
+          html += '<p style="margin:0;font-size:12px;color:#92400e;">' + (data.linksInternos || 0) + '% con links. Meta: 100%.</p></div>';
+          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '</div>';
+        }
+
+        if (tieneStrongBajo) {
+          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-bold" style="margin-right:6px;color:#d97706;"></i>Negritas (Strong)</p>';
+          html += '<p style="margin:0;font-size:12px;color:#92400e;">Promedio: ' + (data.promedioStrong || 0) + '/15. Meta: 15+ por noticia.</p></div>';
+          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '</div>';
+        }
+
+        html += '</div>';
+      }
+
+      // ═══════════════════════════════════════════════════════════════
       // PROBLEMAS CRÍTICOS
       // ═══════════════════════════════════════════════════════════════
       if (data.problemasCriticos && data.problemasCriticos.length > 0) {
@@ -5360,28 +5393,6 @@ VERIFICACIÓN FINAL
         html += '<span style="font-size:11px;color:var(--gray-400);">0</span>';
         html += '<span style="font-size:11px;color:var(--gray-500);font-weight:600;">Actual: ' + score + '</span>';
         html += '<span style="font-size:11px;color:var(--gray-400);">Meta: 85</span></div></div>';
-
-        // Botón de acción masiva para links internos (solo si aplica)
-        const tieneLinksIssue = data.problemasAdvertencia.some(p => p.toLowerCase().includes('links internos'));
-        if (tieneLinksIssue) {
-          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
-          html += '<div style="flex:1;min-width:200px;">';
-          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática — Links</p>';
-          html += '<p style="margin:0;font-size:12px;color:#92400e;">Agrega links a noticias relacionadas en TODO el archivo. Impacto: +~10 pts.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
-          html += '</div>';
-        }
-
-        // Botón de acción masiva para negritas <strong>
-        const tieneStrongIssue = data.problemasAdvertencia.some(p => p.toLowerCase().includes('strong')) || (data.promedioStrong !== undefined && data.promedioStrong < 15);
-        if (tieneStrongIssue) {
-          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
-          html += '<div style="flex:1;min-width:200px;">';
-          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática — Negritas</p>';
-          html += '<p style="margin:0;font-size:12px;color:#92400e;">Resalta palabras clave con <strong> en TODO el archivo. Promedio actual: ' + (data.promedioStrong || 0) + '/15.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
-          html += '</div>';
-        }
 
         // Tarjetas de acción priorizadas
         html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-tools" style="margin-right:6px;"></i>Acciones Prioritarias</h3>';
