@@ -694,7 +694,7 @@
                 <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
                   <span>Palabras: <span class="count ok" id="contadorPalabras">0</span></span>
-                  <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Meta ORO: 500+ palabras</span>
+                  <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Meta ORO: 350+ palabras</span>
                 </div>
               </div>
 
@@ -2625,14 +2625,14 @@ sin texto ni marcas de agua, composición periodística"
       el.textContent = palabrasReales;
       
       const adsenseStatus = document.getElementById('adsenseStatus');
-      if (palabrasReales >= 500) {
-        adsenseStatus.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Meta ORO cumplida (500+)';
+      if (palabrasReales >= 350) {
+        adsenseStatus.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Meta ORO cumplida (350+)';
         adsenseStatus.style.color = 'var(--success)';
-      } else if (palabrasReales >= 350) {
-        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> BRONCE: Necesita 500+ para ORO';
+      } else if (palabrasReales >= 200) {
+        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> PLATA/BRONCE: 350+ para ORO';
         adsenseStatus.style.color = 'var(--warning)';
       } else {
-        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> PELIGRO: Mínimo 350 palabras';
+        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Muy corta: 200+ recomendado';
         adsenseStatus.style.color = 'var(--danger)';
       }
     };
@@ -5163,7 +5163,7 @@ VERIFICACIÓN FINAL
       html += '<p style="margin:8px 0 0;font-size:13px;color:var(--gray-600);">' + data.totalNoticias + ' noticias</p></div>';
 
       const metricas = [
-        { t: 'Promedio Palabras', v: data.promedioPalabras, m: 'Meta: 500+' },
+        { t: 'Promedio Palabras', v: data.promedioPalabras, m: 'Meta: 350+' },
         { t: 'Thin Content', v: data.thinContent.count + ' (' + data.thinContent.porcentaje + '%)', m: '<350 palabras', a: data.thinContent.count > 0 },
         { t: 'Sin Imagen', v: data.sinImagen, a: data.sinImagen > 5 },
         { t: 'Sin Autor', v: data.sinAutor, a: data.sinAutor > 0 },

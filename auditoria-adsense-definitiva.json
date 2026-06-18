@@ -1,0 +1,279 @@
+{
+  "fecha": "2026-06-17T00:26:14.381Z",
+  "dominio": "nicaraguainformate.com",
+  "score": {
+    "actual": 20,
+    "maximo": 20,
+    "porcentaje": 100,
+    "bloqueantes": 0
+  },
+  "legales": [
+    {
+      "path": "/terminos",
+      "nombre": "Términos y Condiciones",
+      "requerido": true,
+      "keywords": [
+        "términos",
+        "condiciones",
+        "uso"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/privacidad",
+      "nombre": "Política de Privacidad",
+      "requerido": true,
+      "keywords": [
+        "privacidad",
+        "datos",
+        "personales",
+        "cookies"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/cookies",
+      "nombre": "Política de Cookies",
+      "requerido": true,
+      "keywords": [
+        "cookies",
+        "rastreo",
+        "terceros"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/sobre-nosotros",
+      "nombre": "Quiénes Somos",
+      "requerido": true,
+      "keywords": [
+        "nosotros",
+        "equipo",
+        "misión"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/contacto",
+      "nombre": "Contacto",
+      "requerido": true,
+      "keywords": [
+        "contacto",
+        "email",
+        "correo"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/correcciones",
+      "nombre": "Política de Correcciones",
+      "requerido": false,
+      "keywords": [
+        "corrección",
+        "error"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    },
+    {
+      "path": "/politica-editorial",
+      "nombre": "Política Editorial",
+      "requerido": false,
+      "keywords": [
+        "editorial",
+        "principios"
+      ],
+      "ok": true,
+      "status": 200,
+      "hasContent": true,
+      "hasKeywords": true
+    }
+  ],
+  "contenido": {
+    "muestra": [
+      {
+        "url": "reportan-tres-fallecidos-en-accidentes-viales-en-nicaragua-mqh6qjna",
+        "palabras": 6829,
+        "parrafos": 50,
+        "imagenes": 7,
+        "h2": 7,
+        "citas": 17,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "nicaragua-festival-ia-y-hackathon-impulsan-la-innovacion-mqh3l7hw",
+        "palabras": 7387,
+        "parrafos": 52,
+        "imagenes": 7,
+        "h2": 10,
+        "citas": 12,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "nicaragua-domina-el-ihf-trophy-de-balonmano-en-centroamerica-mqh1ja5p",
+        "palabras": 8553,
+        "parrafos": 53,
+        "imagenes": 7,
+        "h2": 10,
+        "citas": 16,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "policia-nacional-investiga-tres-sucesos-violentos-en-el-pais-mqg0ano3",
+        "palabras": 6708,
+        "parrafos": 52,
+        "imagenes": 7,
+        "h2": 9,
+        "citas": 21,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "economia-de-nicaragua-crece-6-y-alcanza-record-en-remesas-mqfw23nk",
+        "palabras": 7607,
+        "parrafos": 49,
+        "imagenes": 7,
+        "h2": 8,
+        "citas": 15,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "resumen-mundial-2026-sorpresas-en-atlanta-y-goleada-alemana-mqfsxhyc",
+        "palabras": 8327,
+        "parrafos": 51,
+        "imagenes": 7,
+        "h2": 9,
+        "citas": 12,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "pronostico-semanal-temperaturas-y-lluvias-en-nicaragua-mqfqbepz",
+        "palabras": 7681,
+        "parrafos": 53,
+        "imagenes": 7,
+        "h2": 9,
+        "citas": 15,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      },
+      {
+        "url": "masaya-analisis-del-fatal-accidente-vial-en-villa-bosco-mqfhd6n2",
+        "palabras": 6971,
+        "parrafos": 56,
+        "imagenes": 7,
+        "h2": 10,
+        "citas": 25,
+        "esThin": false,
+        "esClickbait": false,
+        "ok": true
+      }
+    ],
+    "thinCount": 0,
+    "clickbaitCount": 0,
+    "totalNoticias": 100
+  },
+  "originalidad": {
+    "tieneAutor": true,
+    "tieneFecha": true
+  },
+  "velocidad": [
+    {
+      "url": "https://nicaraguainformate.com",
+      "nombre": "Homepage",
+      "ttfb": 123,
+      "sizeKB": 484,
+      "isFast": true,
+      "hasViewport": true
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/reportan-tres-fallecidos-en-accidentes-viales-en-nicaragua-mqh6qjna",
+      "nombre": "Noticia",
+      "ttfb": 119,
+      "sizeKB": 147,
+      "isFast": true,
+      "hasViewport": true
+    }
+  ],
+  "checklist": [
+    {
+      "item": "Dominio propio",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Páginas legales completas",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Contenido original (sin thin)",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Sin clickbait",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Autor visible",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Fechas visibles",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "HTTPS activo",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Responsive",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Sin contenido prohibido",
+      "ok": true,
+      "critico": true
+    },
+    {
+      "item": "Mínimo 20 artículos",
+      "ok": true,
+      "critico": true
+    }
+  ],
+  "listoParaAdSense": true
+}

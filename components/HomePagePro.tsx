@@ -296,7 +296,7 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
   );
 }
 
-export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; isNoticiasPage?: boolean }) {
+export default function HomePagePro({ noticias, masLeidas, populares = [], isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; populares?: Noticia[]; isNoticiasPage?: boolean }) {
   // Carrusel: las 7 noticias más recientes (noticias ya viene ordenado por fecha desc)
   const heroNoticias = noticias.slice(0, 7);
 
@@ -369,8 +369,8 @@ export default function HomePagePro({ noticias, masLeidas, isNoticiasPage = fals
 
         {/* SIDEBAR */}
         <aside className="ni-sidebar">
-          {/* TABBED WIDGET (Últimas, Populares, Tendencias) */}
-          <TabbedSidebarWidget ultimas={masLeidas} populares={resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
+          {/* TABBED WIDGET (Más leídas all-time, Populares 7d, Tendencias recientes) */}
+          <TabbedSidebarWidget ultimas={masLeidas} populares={populares.length > 0 ? populares : resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
 
           {/* Radio en vivo */}
           <div className="ni-sidebar__widget ni-widget-compact">

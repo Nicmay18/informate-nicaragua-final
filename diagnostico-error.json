@@ -1,0 +1,5 @@
+{
+  "error": "Faltan credenciales Firebase. Verifica variables de entorno.",
+  "stack": "Error: Faltan credenciales Firebase. Verifica variables de entorno.\n    at initFirebase (file:///e:/PROYECTO/informate-nicaragua-final/diagnostico-adsense-forense.mjs:36:11)\n    at main (file:///e:/PROYECTO/informate-nicaragua-final/diagnostico-adsense-forense.mjs:130:14)\n    at file:///e:/PROYECTO/informate-nicaragua-final/diagnostico-adsense-forense.mjs:260:1\n    at ModuleJob.run (node:internal/modules/esm/module_job:377:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:671:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+  "time": "2026-06-17T15:45:15.954Z"
+}

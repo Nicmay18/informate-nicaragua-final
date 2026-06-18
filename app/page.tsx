@@ -1,5 +1,5 @@
 import HomePagePro from '@/components/HomePagePro';
-import { getLatestNews, getTrendingNews } from '@/lib/db/homepage';
+import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
@@ -57,11 +57,13 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];
+  let populares: Noticia[] = [];
 
   try {
-    [noticias, masLeidas] = await Promise.all([
+    [noticias, masLeidas, populares] = await Promise.all([
       getLatestNews(30),
       getTrendingNews(5),
+      getPopularNews(5),
     ]);
   } catch (error) {
     console.error('[HomePage] Error:', error);
@@ -81,7 +83,7 @@ export default async function HomePage() {
           crossOrigin="anonymous"
         />
       )}
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
     </>
   );
 }

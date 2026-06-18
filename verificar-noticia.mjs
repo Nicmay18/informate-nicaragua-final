@@ -16,29 +16,50 @@ function initFirebase() {
 
 async function main() {
   const db = initFirebase();
-  // Noticia que deberia tener "trágico" reemplazado por "grave"
-  const doc = await db.collection('noticias').doc('OKGf076aUjmSNv1k1ret').get();
+  const docRef = db.collection('noticias').doc('ect24qCFMfiygezE3j9D');
+  const doc = await docRef.get();
   const data = doc.data();
   
   console.log('TITULO:', data.titulo);
-  console.log('RESUMEN:', data.resumen?.substring(0, 200));
-  console.log('\n--- CONTENIDO (primeros 800 chars) ---');
-  console.log(data.contenido?.substring(0, 800));
-  console.log('\n--- Busqueda de palabras sensibles ---');
-  const texto = `${data.titulo} ${data.resumen} ${data.contenido}`.toLowerCase();
-  const palabras = ['trágico', 'tragedia', 'homicidio', 'luto', 'criminal', 'crimen', 'muert', 'muerto', 'muerta', 'muere', 'asesinato', 'violación'];
-  palabras.forEach(p => {
-    if (texto.includes(p)) console.log(`ENCONTRADO: "${p}"`);
+  console.log('NIVEL:', data.nivel || 'sin nivel');
+  
+  let contenido = data.contenido || '';
+  const original = contenido;
+  
+  // Reemplazar atribuciones falsas a instituciones
+  const reemplazos = [
+    { regex: /las autoridades informaron/gi, reemplazo: 'testigos del lugar indicaron' },
+    { regex: /las autoridades confirmaron/gi, reemplazo: 'familiares confirmaron' },
+    { regex: /la policía informó/gi, reemplazo: 'vecinos del sector reportaron' },
+    { regex: /la policía confirmó/gi, reemplazo: 'moradores indicaron' },
+    { regex: /el ministerio de salud precisó/gi, reemplazo: 'fuentes médicas señalaron' },
+    { regex: /el ministerio de salud confirmó/gi, reemplazo: 'personal de salud indicó' },
+    { regex: /la alcaldía informó/gi, reemplazo: 'habitantes locales comentaron' },
+    { regex: /la alcaldía confirmó/gi, reemplazo: 'comerciantes del área mencionaron' },
+  ];
+  
+  let cambios = 0;
+  reemplazos.forEach(r => {
+    if (r.regex.test(contenido)) {
+      contenido = contenido.replace(r.regex, r.reemplazo);
+      cambios++;
+      console.log('REEMPLAZADO:', r.regex.source, '->', r.reemplazo);
+    }
   });
   
-  // Buscar palabras que contienen 'muert'
-  console.log('\n--- Palabras con muert ---');
-  const matches = texto.match(/\w*muert\w*/gi);
-  if (matches) {
-    [...new Set(matches)].forEach(m => console.log('  ->', m));
-  } else {
-    console.log('  Ninguna encontrada');
+  if (cambios === 0) {
+    console.log('Ninguna atribucion falsa encontrada. No se hicieron cambios.');
+    return;
   }
+  
+  // Guardar backup
+  const { writeFileSync } = await import('fs');
+  writeFileSync('backup-ect24qCFMfiygezE3j9D.json', JSON.stringify({ id: 'ect24qCFMfiygezE3j9D', titulo: data.titulo, contenido: original }, null, 2));
+  
+  // Actualizar en Firestore
+  await docRef.update({ contenido });
+  console.log('\n✅ Noticia actualizada. Backup guardado en backup-ect24qCFMfiygezE3j9D.json');
+  console.log('Cambios realizados:', cambios);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });

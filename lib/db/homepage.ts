@@ -147,13 +147,31 @@ async function _getLatestNewsRaw(limitCount: number = 30): Promise<Noticia[]> {
 }
 
 /**
- * Obtiene las noticias más leídas de los últimos 7 días.
- * Ordena por vistas descendente. Fallback a recientes si no hay vistas.
+ * Obtiene las noticias MÁS LEÍDAS de todos los tiempos (all-time).
+ * Ordena por vistas descendente. Igual que el panel de Analytics.
  *
- * NOTA: Reutiliza el cache compartido de fetchAllNoticias para evitar
- * duplicar lecturas de Firestore cuando se invoca junto a getLatestNews.
+ * NOTA: Reutiliza el cache compartido de fetchAllNoticias.
  */
 async function _getTrendingNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
+  try {
+    const noticias = await fetchAllNoticias();
+    // All-time most viewed, igual que el panel Analytics
+    const top = noticias
+      .filter((n: Noticia) => (n.vistas ?? 0) >= 1)
+      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0))
+      .slice(0, limitCount);
+    return top;
+  } catch (err) {
+    console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
+    return [];
+  }
+}
+
+/**
+ * Obtiene las noticias POPULARES de los últimos 7 días.
+ * Ordena por vistas descendente dentro del último week.
+ */
+async function _getPopularNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
   try {
     const { Timestamp } = await import('firebase-admin/firestore');
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
@@ -161,24 +179,17 @@ async function _getTrendingNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
 
     const noticias = await fetchAllNoticias();
 
-    const sortedByDate = noticias
-      .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-
-    const recentWithViews = sortedByDate
+    const recentWithViews = noticias
       .filter((n: Noticia) => {
         const fechaMs = new Date(n.fecha).getTime();
         return fechaMs >= cutoffMs && (n.vistas ?? 0) >= 1;
       })
-      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0));
+      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0))
+      .slice(0, limitCount);
 
-    if (recentWithViews.length >= limitCount) {
-      return recentWithViews.slice(0, limitCount);
-    }
-
-    // Fallback: noticias más recientes
-    return sortedByDate.slice(0, limitCount);
+    return recentWithViews;
   } catch (err) {
-    console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
+    console.error('[homepage.ts] ERROR: Fallo al obtener populares:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -241,5 +252,11 @@ export const getLatestNews = unstable_cache(
 export const getTrendingNews = unstable_cache(
   async (limitCount: number) => _getTrendingNewsRaw(limitCount),
   ['homepage-trending'],
-  { revalidate: 300, tags: ['trending-news'] }
+  { revalidate: 60, tags: ['trending-news'] }
+);
+
+export const getPopularNews = unstable_cache(
+  async (limitCount: number) => _getPopularNewsRaw(limitCount),
+  ['homepage-popular'],
+  { revalidate: 300, tags: ['popular-news'] }
 );
