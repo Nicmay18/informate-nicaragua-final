@@ -132,19 +132,19 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   // SCORING FORENSE v2.0 — Verificabilidad > Longitud
   // ───────────────────────────────────────────────
 
-  // 1. Datos concretos locales (lugares, fechas, nombres, cifras nicaragüenses)
+  // 1. Datos concretos — GENÉRICO para cualquier país (fechas, números, lugares, instituciones)
   const datosConcretos = (t.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
     + (t.match(/\b\d{2,4}\b/g) || []).length
-    + (t.match(/\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Boaco|Chontales|Madriz|Nueva Segovia|Río San Juan|RAAN|RAAS|Bluefields|Puerto Cabezas|Ocotal|Jinotepe|Diriamba|Nandaime|Nagarote)\b/gi) || []).length
-    + (t.match(/\b(?:Policía Nacional|Ministerio de Salud|MINSA|INSS|MEDUCA|MIFIC|Asamblea Nacional|Alcaldía|Hospital|Centro de Salud|Comisaría)\b/gi) || []).length;
+    + (t.match(/\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Boaco|Chontales|Madriz|Nueva Segovia|Río San Juan|RAAN|RAAS|Bluefields|Puerto Cabezas|Ocotal|Jinotepe|Diriamba|Nandaime|Nagarote|Panamá|Guatemala|Honduras|Costa Rica|El Salvador|Tegucigalpa|San José|San Salvador|Cabo Verde|Praia|Madrid|Barcelona|Lisboa|Porto|Sevilla|Valencia|Bilbao|Málaga|Lisboa|Portugal|España|Poptún|Petén|Ciudad de Panamá|Aeropuerto|Marcos|Gelabert)\b/gi) || []).length
+    + (t.match(/\b(?:Policía Nacional|Ministerio de Salud|MINSA|INSS|MEDUCA|MIFIC|Asamblea Nacional|Alcaldía|Hospital|Centro de Salud|Comisaría|Servicio Nacional de Migración|SNM|Ministerio Público|Corte Suprema|Congreso|Presidencia|Ministerio de|Gobierno de)\b/gi) || []).length;
   const densidadDatos = palabras ? Math.round((datosConcretos / palabras) * 1000) / 10 : 0;
 
-  // 2. Lead completo (responde quién/qué/cuándo/dónde)
+  // 2. Lead completo (responde quién/qué/cuándo/dónde) — GENÉRICO para cualquier país
   const leadTexto = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(/\n|\./)[0] || '';
-  const leadTieneQuien = /\b(?:murió|falleció|nacido|identificado|de \d+ años|nombre|llamado|conocido)\b/i.test(leadTexto);
-  const leadTieneQue = /\b(?:accidente|incidente|hechos|ocurrió|sucedió|reportó|reportan|dejó|provocó|causó)\b/i.test(leadTexto);
-  const leadTieneDonde = /\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|km \d+|carretera|ruta|barrio|colonia|municipio|departamento)\b/i.test(leadTexto);
-  const leadTieneCuando = /\b(?:este|ayer|hoy|la madrugada|la mañana|la tarde|la noche|el \d+|\d+ de \w+)\b/i.test(leadTexto);
+  const leadTieneQuien = /\b(?:murió|falleció|nacido|identificado|de \d+ años|nombre|llamado|conocido|ciudadano|persona|víctima|herido|detenido|arrestado|fue|se reportó)\b/i.test(leadTexto);
+  const leadTieneQue = /\b(?:accidente|incidente|hechos|ocurrió|sucedió|reportó|reportan|dejó|provocó|causó|ataque|robo|expulsión|deportación|retorno|operativo|medida|decisión|anunció|confirmó)\b/i.test(leadTexto);
+  const leadTieneDonde = /\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|km \d+|carretera|ruta|barrio|colonia|municipio|departamento|Panamá|Guatemala|Honduras|Costa Rica|El Salvador|Ciudad de|Madrid|Barcelona|Lisboa|Portugal|España|Cabo Verde|Poptún|Petén|departamento de|provincia de|región de|aeropuerto)\b/i.test(leadTexto);
+  const leadTieneCuando = /\b(?:este|ayer|hoy|la madrugada|la mañana|la tarde|la noche|el \d+|\d+ de \w+|\d{4}|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|enero|febrero|marzo|abril|mayo)\b/i.test(leadTexto);
   const leadCompleto = (leadTieneQuien || leadTieneQue) && leadTieneDonde && leadTieneCuando;
 
   // 3. Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
@@ -202,30 +202,32 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
   };
 
-  // ─── DETERMINACIÓN DE NIVEL FORENSE v2.1 ───
-  // FORENSE: Todo verificable, cero inferencia, cero atribuciones falsas
-  // ORO: Noticia verificable con filtros OK
-  // PLATA: Mínima inferencia, fuentes mayoritarias, filtros OK
-  // BRONCE: Requiere revisión, algunos filtros fallan
-  // RECHAZADO: Hallucinations, citas inventadas, fuentes falsas
+  // ─── DETERMINACIÓN DE NIVEL v3.0 — CONSOLIDADO con Validador Unificado ───
+  // REGLA MAESTRA (aplica a los 3 validadores: Panel, Forense, Popup):
+  //   RECHAZADO: atribuciones falsas a instituciones NIC sin nombre propio
+  //   FORENSE:  6/6 filtros OK + score ≥ 70 + 0 adjetivos + ≤1 transición
+  //   ORO:       6/6 filtros OK (equivale a Validación Unificada 8/8)
+  //   PLATA:     4-5 filtros OK
+  //   BRONCE:    <4 filtros OK
+  //
+  // El score (0-100) es INFORMATIVO. El NIVEL depende de los filtros.
 
-  const esForense = scoreTotal >= 75 &&
+  const filtrosOK = [filtros.oro, filtros.adsense, filtros.discover, filtros.news, filtros.seo, filtros.eeat]
+    .filter(f => f.aprobado).length;
+
+  const esForense = filtrosOK === 6 &&
+    scoreTotal >= 70 &&
     !atribucionesFalsas &&
-    !citasSospechosas &&
     adjetivosEncontrados.length === 0 &&
-    transicionesEncontradas.length <= 1 &&
-    leadCompleto;
+    transicionesEncontradas.length <= 1;
 
-  const esRechazado = atribucionesFalsas || scoreTotal < 30;
-
-  const todosFiltrosOK = filtros.oro.aprobado && filtros.adsense.aprobado && filtros.discover.aprobado && filtros.news.aprobado && filtros.seo.aprobado && filtros.eeat.aprobado;
+  const esRechazado = atribucionesFalsas;
 
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
-  else if (esForense && filtros.oro.aprobado && filtros.seo.aprobado) nivel = 'FORENSE';
-  else if (esForense) nivel = 'ORO';
-  else if (scoreTotal >= 60 || (todosFiltrosOK && scoreTotal >= 50)) nivel = 'ORO';
-  else if (scoreTotal >= 40 || todosFiltrosOK) nivel = 'PLATA';
+  else if (esForense) nivel = 'FORENSE';
+  else if (filtrosOK === 6) nivel = 'ORO';
+  else if (filtrosOK >= 4) nivel = 'PLATA';
   else nivel = 'BRONCE';
 
   const aprobado = nivel !== 'RECHAZADO';
