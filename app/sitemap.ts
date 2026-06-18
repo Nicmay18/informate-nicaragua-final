@@ -8,7 +8,7 @@ import { unstable_cache } from 'next/cache';
 const baseUrl = 'https://nicaraguainformate.com';
 
 const cachedGetNews = unstable_cache(
-  async () => getNews(100),
+  async () => getNews(500),
   ['sitemap-news'],
   { revalidate: 3600 }
 );
@@ -177,8 +177,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const articles = await cachedGetNews(); // Cacheado: revalida cada 1h
 
-    // Excluir artículos con slugs tóxicos o noindex del sitemap
-    const cleanArticles = articles.filter(article => !isToxicSlug(article.slug) && article.noindex !== true);
+    // Excluir artículos con slugs tóxicos, noindex, o thin content (<150 palabras)
+    const cleanArticles = articles.filter(article => {
+      if (isToxicSlug(article.slug)) return false;
+      if (article.noindex === true) return false;
+      // Thin content: contar palabras del contenido si no tiene campo palabras
+      const wordCount = article.palabras ?? (article.contenido ? article.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length : 0);
+      if (wordCount < 150) return false; // No indexar thin content
+      return true;
+    });
 
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = safeDate(article.fecha);

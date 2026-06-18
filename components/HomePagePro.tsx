@@ -5,9 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp } from 'lucide-react';
+import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp, BookOpen } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+import { getAllEvergreen } from '@/lib/evergreen';
 import dynamic from 'next/dynamic';
 
 const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
@@ -347,6 +348,37 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
 
       {/* HERO */}
       <Hero noticias={heroNoticias} />
+
+      {/* GUÍAS Y RECURSOS EVERGREEN */}
+      {!isNoticiasPage && (
+        <section className="ni-section" style={{ marginTop: 24 }}>
+          <div className="ni-section__header">
+            <h2 className="ni-section__title" style={{ color: '#7c3aed' }}><BookOpen size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Guías útiles</h2>
+            <Link href="/guia" className="ni-section__more">Ver todas →</Link>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+            {getAllEvergreen().slice(0, 4).map((guia) => (
+              <Link
+                key={guia.slug}
+                href={`/guia/${guia.slug}`}
+                style={{
+                  display: 'block',
+                  padding: '16px',
+                  background: 'var(--card-bg, #fff)',
+                  borderRadius: 10,
+                  border: '1px solid var(--border, #e5e7eb)',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase' }}>{guia.category}</span>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '6px 0 4px', lineHeight: 1.4 }}>{guia.title}</h3>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{guia.description.slice(0, 90)}…</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* MAIN */}
       <div className="ni-main">
