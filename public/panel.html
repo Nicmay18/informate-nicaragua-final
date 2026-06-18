@@ -2964,7 +2964,7 @@ sin texto ni marcas de agua, composición periodística"
 
     window.guardarNoticia = async function(e) {
       e.preventDefault();
-      const noticiaId = document.getElementById('noticiaId').value;
+      let noticiaId = document.getElementById('noticiaId').value;
       const titulo = document.getElementById('titulo').value.trim();
       const categoria = document.getElementById('categoria').value;
       const departamento = document.getElementById('departamento').value;
