@@ -3039,6 +3039,24 @@ sin texto ni marcas de agua, composición periodística"
           showToast(publicado ? 'Noticia publicada en el sitio' : 'Borrador guardado (no visible en el sitio)', 'success');
         }
 
+        // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS (antes de indexar) ───
+        if (esNueva && publicado && noticiaId) {
+          try {
+            showToast('Agregando links internos automáticos...', 'info');
+            const enrichRes = await fetch('/api/admin/enrich-links', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ noticiaId, categoria, modo: 'noticia' })
+            });
+            const enrichData = await enrichRes.json().catch(() => ({}));
+            if (enrichData.success && !enrichData.skipped) {
+              showToast('✅ Links internos agregados (' + enrichData.agregados + ' relacionadas)', 'success');
+            }
+          } catch (e) {
+            console.error('Enrich links error:', e);
+          }
+        }
+
         // ─── AGENTE DE INDEXACIÓN: ejecutar INMEDIATAMENTE después de guardar ───
         // Bloque independiente: si falla, no afecta la publicación ni las redes
         if (esNueva && publicado) {
@@ -5183,6 +5201,34 @@ VERIFICACIÓN FINAL
     }
 
     // ═══════════════════════════════════════════════════════════════
+    // ENRICH LINKS MASIVO (corrección automática de links internos)
+    // ═══════════════════════════════════════════════════════════════
+    window.ejecutarEnrichLinksMasivo = async function() {
+      const btn = document.getElementById('btnEnrichLinks');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'; }
+      showToast('Iniciando corrección masiva de links internos en 223 noticias...', 'info', 'Corrección Automática');
+
+      try {
+        const res = await fetch('/api/admin/enrich-links', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ modo: 'masivo' })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data.success) {
+          showToast('✅ ' + data.message, 'success', 'Corrección Automática');
+          setTimeout(() => cargarDashboardCalidad(), 1500);
+        } else {
+          showToast('⚠️ ' + (data.error || 'Error desconocido'), 'warning', 'Corrección Automática');
+        }
+      } catch (e) {
+        showToast('⚠️ Error de red al procesar. Intentá de nuevo.', 'warning', 'Corrección Automática');
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-bolt"></i> Agregar links a TODO'; }
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
     // DASHBOARD CALIDAD DEL DOMINIO
     // ═══════════════════════════════════════════════════════════════
     window.cargarDashboardCalidad = async function() {
@@ -5264,6 +5310,17 @@ VERIFICACIÓN FINAL
         html += '<span style="font-size:11px;color:var(--gray-400);">0</span>';
         html += '<span style="font-size:11px;color:var(--gray-500);font-weight:600;">Actual: ' + score + '</span>';
         html += '<span style="font-size:11px;color:var(--gray-400);">Meta: 85</span></div></div>';
+
+        // Botón de acción masiva para links internos (solo si aplica)
+        const tieneLinksIssue = data.problemasAdvertencia.some(p => p.toLowerCase().includes('links internos'));
+        if (tieneLinksIssue) {
+          html += '<div style="background:#fffbeb;border:2px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-magic" style="margin-right:6px;color:#d97706;"></i>Corrección automática</p>';
+          html += '<p style="margin:0;font-size:12px;color:#92400e;">Agrega automáticamente links a noticias relacionadas en TODO el archivo. Impacto: +~10 pts.</p></div>';
+          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '</div>';
+        }
 
         // Tarjetas de acción priorizadas
         html += '<h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-tools" style="margin-right:6px;"></i>Acciones Prioritarias</h3>';
