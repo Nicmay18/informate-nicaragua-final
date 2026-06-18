@@ -5087,9 +5087,9 @@ VERIFICACIÓN FINAL
     };
 
     function renderAnalisisForense(data) {
-      const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
-      const bgNivel = { 'ORO': '#d1fae5', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
-      const iconoNivel = { 'ORO': '🏆', 'PLATA': '⚡', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
+      const colorNivel = { 'FORENSE': '#7c3aed', 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
+      const bgNivel = { 'FORENSE': '#ede9fe', 'ORO': '#d1fae5', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
+      const iconoNivel = { 'FORENSE': '🧬', 'ORO': '🏆', 'PLATA': '⚡', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
 
       let html = '<div style="background:' + bgNivel[data.nivel] + ';border:1px solid ' + colorNivel[data.nivel] + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
