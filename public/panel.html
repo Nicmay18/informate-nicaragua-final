@@ -3028,17 +3028,17 @@ sin texto ni marcas de agua, composición periodística"
         };
         let esNueva = !noticiaId;
 
-        const resumen = [];
+        const acciones = [];
 
         if (noticiaId) {
           noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
-          resumen.push('✅ Noticia actualizada');
+          acciones.push('✅ Noticia actualizada');
         } else {
           const docRef = await addDoc(collection(db, "noticias"), noticiaData);
           noticiaData.id = docRef.id;
           noticiaId = docRef.id;
-          resumen.push('✅ Noticia publicada');
+          acciones.push('✅ Noticia publicada');
         }
 
         // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS ───
@@ -3051,12 +3051,12 @@ sin texto ni marcas de agua, composición periodística"
             });
             const enrichData = await enrichRes.json().catch(() => ({}));
             if (enrichData.success && !enrichData.skipped) {
-              resumen.push('🔗 Links internos: ' + enrichData.agregados + ' relacionadas');
+              acciones.push('🔗 Links internos: ' + enrichData.agregados + ' relacionadas');
             } else if (enrichData.skipped) {
-              resumen.push('⏭ Links internos: ya tenía');
+              acciones.push('⏭ Links internos: ya tenía');
             }
           } catch (e) {
-            resumen.push('⚠️ Links internos: error de red');
+            acciones.push('⚠️ Links internos: error de red');
             console.error('Enrich links error:', e);
           }
         }
@@ -3071,12 +3071,12 @@ sin texto ni marcas de agua, composición periodística"
             });
             const strongData = await strongRes.json().catch(() => ({}));
             if (strongData.success && !strongData.skipped) {
-              resumen.push('B ' + strongData.message + ' agregadas');
+              acciones.push('B ' + strongData.message + ' agregadas');
             } else if (strongData.skipped) {
-              resumen.push('⏭ Negritas: ya tenía suficientes');
+              acciones.push('⏭ Negritas: ya tenía suficientes');
             }
           } catch (e) {
-            resumen.push('⚠️ Negritas: error de red');
+            acciones.push('⚠️ Negritas: error de red');
             console.error('Enrich strong error:', e);
           }
         }
@@ -3117,12 +3117,12 @@ sin texto ni marcas de agua, composición periodística"
             indexFail.push('Red: error de conexión');
           }
         }
-        if (indexOk.length) resumen.push('🚀 Indexado en: ' + indexOk.join(', '));
-        if (indexFail.length) resumen.push('⚠️ Indexación falló: ' + indexFail.join(', '));
-        if (!esNueva || !publicado) resumen.push('📝 Sin indexar (edición o borrador)');
+        if (indexOk.length) acciones.push('🚀 Indexado en: ' + indexOk.join(', '));
+        if (indexFail.length) acciones.push('⚠️ Indexación falló: ' + indexFail.join(', '));
+        if (!esNueva || !publicado) acciones.push('📝 Sin indexar (edición o borrador)');
 
         // ─── RESUMEN FINAL ───
-        showToast(resumen.join('<br>'), indexFail.length ? 'warning' : 'success', 'Resumen de publicación', 10000);
+        showToast(acciones.join('<br>'), indexFail.length ? 'warning' : 'success', 'Resumen de publicación', 10000);
 
         if (esNueva) {
           let progress = 30; progressBar.style.width = progress + '%';
