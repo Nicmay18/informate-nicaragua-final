@@ -1,11 +1,15 @@
-﻿import { TrendingUp, Fuel, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+﻿'use client';
 
-const EXCHANGE = [
-  { label: 'Dólar BCN', value: '36.62', unit: 'C$', trend: '→', change: '0.00%' },
-  { label: 'Euro', value: '43.11', unit: 'C$', trend: '↑', change: '1.25%' },
-];
+import { useState, useEffect } from 'react';
+import { TrendingUp, Fuel, ArrowUp, ArrowDown, Minus, Loader2 } from 'lucide-react';
 
-const GAS_PRICES = [
+interface RatesData {
+  rates: Record<string, { buy?: number; sell?: number; mid?: number; label: string }>;
+  updatedAt: string;
+  source: string;
+}
+
+const GAS_PRICES: { label: string; price: string; unit: string; trend: string; change: string }[] = [
   { label: 'Gasolina Regular', price: '47.80', unit: 'C$', trend: '→', change: '0.00%' },
   { label: 'Gasolina Súper', price: '49.00', unit: 'C$', trend: '→', change: '0.00%' },
   { label: 'Diésel', price: '43.21', unit: 'C$', trend: '↑', change: '0.44%' },
@@ -24,7 +28,45 @@ function TrendPill({ trend, change }: { trend: string; change: string }) {
   );
 }
 
+function formatRate(n: number | undefined) {
+  if (n === undefined) return '—';
+  return n.toFixed(2);
+}
+
 export default function IndicadoresWidget() {
+  const [rates, setRates] = useState<RatesData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchRates = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch('/api/exchange-rates', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Error al cargar tasas');
+      const data: RatesData = await res.json();
+      setRates(data);
+    } catch {
+      setError('No se pudo actualizar');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRates();
+    const refresh = setInterval(fetchRates, 300000); // 5 min
+    return () => clearInterval(refresh);
+  }, []);
+
+  const usd = rates?.rates?.['NIO-USD'];
+  const eur = rates?.rates?.['NIO-EUR'];
+  const eurUsd = rates?.rates?.['EUR-USD'];
+
+  const updatedText = rates
+    ? `Fuente: ${rates.source} • Actualizado ${new Date(rates.updatedAt).toLocaleTimeString('es-NI', { hour: '2-digit', minute: '2-digit' })}`
+    : 'Fuente: BCN / ECB • Actualizando...';
+
   return (
     <div className="econ-widget">
       <h3 className="econ-widget-title">
@@ -32,18 +74,47 @@ export default function IndicadoresWidget() {
         Indicadores Económicos
       </h3>
 
-      {/* Divisas - Grid 2 columnas */}
+      {loading && !rates && (
+        <div style={{ padding: 16, textAlign: 'center', color: '#94a3b8', fontSize: 13 }}>
+          <Loader2 size={16} style={{ animation: 'spin 1s linear infinite', display: 'inline-block', marginRight: 6 }} />
+          Cargando tasas...
+        </div>
+      )}
+
+      {/* Divisas */}
       <div className="econ-grid">
-        {EXCHANGE.map((row, i) => (
-          <div key={i} className="econ-box">
-            <div className="econ-box-label">{row.label}</div>
-            <div className="econ-box-value">{row.unit} {row.value}</div>
-            <TrendPill trend={row.trend} change={row.change} />
+        {/* USD → NIO */}
+        <div className="econ-box">
+          <div className="econ-box-label">USD → NIO</div>
+          <div className="econ-box-value">
+            C$ {formatRate(usd?.sell)}
           </div>
-        ))}
+          <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+            Compra {formatRate(usd?.buy)} / Venta {formatRate(usd?.sell)}
+          </div>
+          <TrendPill trend="→" change="0.00%" />
+        </div>
+
+        {/* EUR → NIO */}
+        <div className="econ-box">
+          <div className="econ-box-label">EUR → NIO</div>
+          <div className="econ-box-value">
+            C$ {formatRate(eur?.sell)}
+          </div>
+          <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+            Compra {formatRate(eur?.buy)} / Venta {formatRate(eur?.sell)}
+          </div>
+          <TrendPill trend="→" change="0.00%" />
+        </div>
       </div>
 
-      {/* Combustibles - Full width */}
+      {/* EUR/USD */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0', marginBottom: 8 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>EUR / USD</span>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{formatRate(eurUsd?.mid)}</span>
+      </div>
+
+      {/* Combustibles */}
       <div className="econ-fuels-title">
         <Fuel size={14} />
         Combustibles (C$/galón)
@@ -60,7 +131,13 @@ export default function IndicadoresWidget() {
         </div>
       ))}
 
-      <div className="econ-source">Fuente: BCN / INE • Actualizado 21 may 2026</div>
+      {error && (
+        <div style={{ fontSize: 11, color: '#ef4444', textAlign: 'center', paddingTop: 4 }}>
+          {error}
+        </div>
+      )}
+
+      <div className="econ-source">{updatedText}</div>
     </div>
   );
 }

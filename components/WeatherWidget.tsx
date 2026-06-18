@@ -79,7 +79,7 @@ export default function WeatherWidget() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch all cities on mount
+  // Fetch all cities on mount + refresh every 10 min
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -103,7 +103,8 @@ export default function WeatherWidget() {
       }
     }
     load();
-    return () => { cancelled = true; };
+    const refresh = setInterval(load, 600000); // 10 min
+    return () => { cancelled = true; clearInterval(refresh); };
   }, []);
 
   // Auto-rotate every 4 seconds
