@@ -1062,11 +1062,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-section{margin-bottom:34px}
   /* Tarjetas: layout horizontal compacto (tablet + movil) */
   .ni-card,
-  .ni-grid-2 .ni-card{grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
+  .ni-grid-2 .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
   .ni-card:first-child{padding-top:0}
   .ni-card:last-child{border-bottom:none}
   .ni-card__thumb,
-  .ni-grid-2 .ni-card__thumb{width:120px;height:90px;border-radius:8px;margin-bottom:0;overflow:hidden;background:var(--ni-border);position:relative}
+  .ni-grid-2 .ni-card__thumb{width:100px;height:70px;border-radius:8px;margin-bottom:0;overflow:hidden;background:var(--ni-border);position:relative}
   .ni-card__thumb > img, .ni-card__thumb > span > img {width:100%;height:100%;object-fit:cover;object-position:center;display:block}
   .ni-card__content{width:100%;padding:0;min-width:0}
   .ni-card__pill{font-size:0.6rem;margin-bottom:2px;color:var(--ni-navy);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
@@ -1084,12 +1084,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-trending__text{font-size:0.82rem}
   .ni-footer__inner{grid-template-columns:1fr;gap:24px}
   .ni-footer__bottom{flex-direction:column;gap:8px;text-align:center}
-  /* Mobile: tarjetas verticales para que la imagen no tape el texto */
-  .ni-card,
-  .ni-grid-2 .ni-card{grid-template-columns:1fr;gap:10px;padding:14px 0}
-  .ni-card__thumb,
-  .ni-grid-2 .ni-card__thumb{width:100%;height:160px;border-radius:10px}
-  .ni-card__title{font-size:1rem;line-height:1.3}
 }
 @media(prefers-reduced-motion:reduce){
   .ni-card,.ni-card__thumb img,.ni-hero__cta,.ni-hero__arrow{transition:none !important}
