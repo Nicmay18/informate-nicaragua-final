@@ -43,6 +43,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   webpack: (config, { isServer }) => {
     // Next.js maneja splitChunks automáticamente; no sobreescribir
+    // Fix: Windows casing issues causing duplicate React modules
+    config.resolve.symlinks = false;
     return config;
   },
   async redirects() {
