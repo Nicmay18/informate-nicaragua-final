@@ -276,9 +276,9 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
             src={getResponsiveImageUrl(noticia.imagen, 400)}
             alt={noticia.titulo}
             fill
-            sizes="100px"
+            sizes="(max-width: 768px) 100px, (max-width: 1024px) 220px, 33vw"
             style={{ objectFit: 'cover' }}
-            loading={index < 4 ? 'eager' : 'lazy'}
+            loading={index === 0 ? 'eager' : 'lazy'}
           />
         ) : null}
       </div>
@@ -300,7 +300,7 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
         <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>
           <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" style={{ fontSize: 11, color: '#1877f2', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Facebook</a>
           <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" style={{ fontSize: 11, color: '#000', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>X</a>
-          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#25d366', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>WhatsApp</a>
+          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#128C7E', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>WhatsApp</a>
         </div>
       </div>
     </article>

@@ -80,7 +80,6 @@ export default async function HomePage() {
           as="image"
           href={heroSrc}
           type="image/webp"
-          fetchPriority="high"
           crossOrigin="anonymous"
         />
       )}

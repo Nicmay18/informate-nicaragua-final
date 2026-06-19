@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
+    optimizeCss: true, // inlinea CSS crítico automáticamente (critters)
   },
   images: {
     unoptimized: false,
