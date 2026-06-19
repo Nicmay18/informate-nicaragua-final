@@ -135,7 +135,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
     const isEULocale = () => {
       if (typeof navigator === 'undefined') return false;
       const lang = navigator.language || '';
-      const euLangs = ['de', 'fr', 'es', 'it', 'nl', 'pl', 'pt', 'sv', 'da', 'fi', 'el', 'cs', 'hu', 'ro', 'bg', 'hr', 'sk', 'sl', 'et', 'lv', 'lt', 'mt', 'ga'];
+      const euLangs = ['de', 'fr', 'it', 'nl', 'pl', 'sv', 'da', 'fi', 'el', 'cs', 'hu', 'ro', 'bg', 'hr', 'sk', 'sl', 'et', 'lv', 'lt', 'mt', 'ga'];
       return euLangs.some(l => lang.startsWith(l));
     };
 
