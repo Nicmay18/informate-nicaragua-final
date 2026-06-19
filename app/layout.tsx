@@ -144,7 +144,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
         {/* AdSense cargado vía ThirdPartyScripts (lazy al scroll) */}

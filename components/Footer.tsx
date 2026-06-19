@@ -76,7 +76,7 @@ export default function Footer() {
 
         {/* Columna 2: Secciones */}
         <div>
-          <h4 className="ni-footer__col-title">Secciones</h4>
+          <h3 className="ni-footer__col-title">Secciones</h3>
           <ul className="ni-footer__links">
             {CATEGORIES.map((cat) => (
               <li key={cat.slug}>
@@ -89,7 +89,7 @@ export default function Footer() {
 
         {/* Columna 3: Nosotros */}
         <div>
-          <h4 className="ni-footer__col-title">Nosotros</h4>
+          <h3 className="ni-footer__col-title">Nosotros</h3>
           <ul className="ni-footer__links">
             <li><Link href="/nosotros">Quiénes somos</Link></li>
             <li><Link href="/contacto">Contacto</Link></li>
@@ -100,7 +100,7 @@ export default function Footer() {
 
         {/* Columna 4: Radio Nicaragua */}
         <div>
-          <h4 className="ni-footer__col-title">Radio Nicaragua</h4>
+          <h3 className="ni-footer__col-title">Radio Nicaragua</h3>
           <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.7)', marginBottom: 12 }}>
             Escucha las radios más populares del país.
           </p>

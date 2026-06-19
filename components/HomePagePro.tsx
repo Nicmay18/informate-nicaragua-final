@@ -168,38 +168,46 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
       }}
     >
       <div className="ni-hero__track">
-        {items.map((item, i) => (
-          <article key={item.id} className={`ni-hero__slide${i === idx ? ' is-active' : ''}`}>
-            <div className="ni-hero__media">
-              {item.imagen ? (
-                i === 0 ? (
-                  // Primer slide = LCP: carga directo sin intermediarios
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={getHeroImageUrl(item.imagen)}
-                    alt={item.titulo}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
-                    fetchPriority="high"
-                    loading="eager"
-                    decoding="async"
-                    crossOrigin="anonymous"
-                  />
-                ) : (
-                  <Image
-                    src={getResponsiveImageUrl(item.imagen, 400)}
-                    alt={item.titulo}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                    loading="lazy"
-                    crossOrigin="anonymous"
-                    unoptimized={false}
-                  />
-                )
-              ) : null}
-            </div>
-          </article>
-        ))}
+        {items.map((item, i) => {
+          const isActive = i === idx;
+          const isNext = i === (idx + 1) % items.length;
+          const isPrev = i === (idx - 1 + items.length) % items.length;
+          const shouldRender = isActive || isNext || isPrev;
+          return (
+            <article key={item.id} className={`ni-hero__slide${isActive ? ' is-active' : ''}`}>
+              <div className="ni-hero__media">
+                {item.imagen ? (
+                  i === 0 ? (
+                    // Primer slide = LCP: carga directo sin intermediarios
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={getHeroImageUrl(item.imagen)}
+                      alt={item.titulo}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
+                      fetchPriority="high"
+                      loading="eager"
+                      decoding="async"
+                      crossOrigin="anonymous"
+                    />
+                  ) : shouldRender ? (
+                    <Image
+                      src={getResponsiveImageUrl(item.imagen, 400)}
+                      alt={item.titulo}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 580px"
+                      style={{ objectFit: 'cover', objectPosition: 'center center' }}
+                      loading="lazy"
+                      crossOrigin="anonymous"
+                      unoptimized={false}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} aria-hidden="true" />
+                  )
+                ) : null}
+              </div>
+            </article>
+          );
+        })}
       </div>
 
       <div className="ni-hero__info">
@@ -268,10 +276,10 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
           )}
           <span className="ni-card__author">{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
-        <div className="ni-card__share" style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" style={{ fontSize: 11, color: '#1877f2', textDecoration: 'none' }}>Facebook</a>
-          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" style={{ fontSize: 11, color: '#000', textDecoration: 'none' }}>X</a>
-          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#25d366', textDecoration: 'none' }}>WhatsApp</a>
+        <div className="ni-card__share" style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" style={{ fontSize: 11, color: '#1877f2', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Facebook</a>
+          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" style={{ fontSize: 11, color: '#000', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>X</a>
+          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#25d366', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>WhatsApp</a>
         </div>
       </div>
     </article>
