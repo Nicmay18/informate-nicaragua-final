@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
-    optimizeCss: true, // inlinea CSS crítico automáticamente (critters)
+    // NOTA: optimizeCss descartado — critters falla en build de Vercel (/404).
+    // Critical CSS ya se inyecta manualmente en layout.tsx via lib/critical-css.ts
   },
   images: {
     unoptimized: false,
