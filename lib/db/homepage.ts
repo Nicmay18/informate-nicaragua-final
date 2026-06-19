@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { type Noticia, FALLBACK_IMAGE } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
 import { capitalizeFirst } from '@/lib/formateo';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // NORMALIZAR IMÁGENES (autocontenido para evitar dependencias circulares)
@@ -150,10 +151,10 @@ async function _getLatestNewsRaw(limitCount: number = 30): Promise<Noticia[]> {
     const sorted = noticias
       .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, limitCount);
-    console.log(`[homepage.ts] getLatestNews: ${noticias.length} cached docs, ${sorted.length} returned`);
+    logger.info(`[homepage.ts] getLatestNews: ${noticias.length} cached docs, ${sorted.length} returned`);
     return sorted;
   } catch (err) {
-    console.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
+    logger.error('[homepage.ts] ERROR: Fallo al obtener noticias recientes:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -174,7 +175,7 @@ async function _getTrendingNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
       .slice(0, limitCount);
     return top;
   } catch (err) {
-    console.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
+    logger.error('[homepage.ts] ERROR: Fallo al obtener trending:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -201,7 +202,7 @@ async function _getPopularNewsRaw(limitCount: number = 5): Promise<Noticia[]> {
 
     return recentWithViews;
   } catch (err) {
-    console.error('[homepage.ts] ERROR: Fallo al obtener populares:', err instanceof Error ? err.message : String(err));
+    logger.error('[homepage.ts] ERROR: Fallo al obtener populares:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -222,7 +223,7 @@ function isValidSlug(slug: string): boolean {
  */
 export async function incrementViewsBySlug(slug: string): Promise<number | null> {
   if (!isValidSlug(slug)) {
-    console.warn('[homepage.ts] Slug rechazado por validación:', slug);
+    logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
     return null;
   }
 
@@ -246,7 +247,7 @@ export async function incrementViewsBySlug(slug: string): Promise<number | null>
 
     return currentViews + 1;
   } catch (err) {
-    console.error('[homepage.ts] ERROR: Fallo al incrementar vistas:', err instanceof Error ? err.message : String(err));
+    logger.error('[homepage.ts] ERROR: Fallo al incrementar vistas:', err instanceof Error ? err.message : String(err));
     return null;
   }
 }

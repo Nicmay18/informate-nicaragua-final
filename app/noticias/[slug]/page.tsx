@@ -11,6 +11,7 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
+import { logger } from '@/lib/logger';
 
 const cachedGetNewsBySlug = unstable_cache(
   async (slug: string) => getNewsBySlug(slug),
@@ -166,7 +167,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   try {
     noticia = await cachedGetNewsBySlug(slug);
   } catch (error) {
-    console.error('Error cargando noticia:', error);
+    logger.error('Error cargando noticia:', error);
     return (
       <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
         <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 12 }}>Error de conexión</h1>
@@ -188,7 +189,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   try {
     related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
   } catch (error) {
-    console.error('Error cargando relacionadas:', error);
+    logger.error('Error cargando relacionadas:', error);
     related = [];
   }
 

@@ -4,6 +4,7 @@ import { isToxicSlug } from '@/lib/seo-toxic';
 import { getAllAuthors } from '@/lib/authors';
 import { getAllEvergreen } from '@/lib/evergreen';
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 const baseUrl = 'https://nicaraguainformate.com';
 
@@ -213,7 +214,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticUrls, ...authorUrls, ...evergreenUrls, ...articleUrls];
   } catch (error) {
-    console.error('[Sitemap] Error fetching articles:', error);
+    logger.error('[Sitemap] Error fetching articles:', error);
     // Fallback: URLs estáticas + autores + evergreen si Firebase falla
     return [...staticUrls, ...authorUrls, ...evergreenUrls];
   }

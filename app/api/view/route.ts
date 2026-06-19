@@ -5,6 +5,7 @@ import { categoryToSlug } from '@/lib/types';
 import { incrementView } from '@/lib/view-counter';
 import { RateLimiter } from '@/lib/rate-limit';
 import { getClientIp, isValidSlug } from '@/lib/ip';
+import { logger } from '@/lib/logger';
 
 /** Rate limiter: máximo 10 vistas por IP por minuto */
 const viewLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 10 });
@@ -24,7 +25,7 @@ function maybeRevalidate(slug: string, categoriaSlug: string | null) {
     revalidatePath(`/noticias/${slug}`);
     if (categoriaSlug) revalidatePath(`/categoria/${categoriaSlug}`);
   } catch (err) {
-    console.warn('[api/view] Falló la revalidación:', err);
+    logger.warn('[api/view] Falló la revalidación:', err);
   }
 }
 
@@ -92,7 +93,7 @@ export async function POST(request: NextRequest) {
       remaining: rateCheck.remaining,
     });
   } catch (e) {
-    console.error('[api/view] Error:', e);
+    logger.error('[api/view] Error:', e);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { type Noticia, FALLBACK_IMAGE } from './types';
 import { capitalizeFirst } from './formateo';
+import { logger } from './logger';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -164,7 +165,7 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
     _fetchCache = { data: noticias, expiresAt: now + 300_000 }; // 5 minutos para reducir lecturas Firestore
     return noticias;
   } catch (err) {
-    console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -180,8 +181,8 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
       .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, Math.min(count, 200));
   } catch (err) {
-    console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
-    console.error('[data.ts] VERIFICAR: Variables de entorno FIREBASE_* en Vercel');
+    logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] VERIFICAR: Variables de entorno FIREBASE_* en Vercel');
     return null;
   }
 }
@@ -307,7 +308,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
     );
     return filtered.slice(0, validatedCount);
   } catch (err) {
-    console.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
+    logger.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
   }
   const normalizeCat = (s: string) => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
   const filtered = MOCK_NOTICIAS.filter(n => normalizeCat(n.categoria) === normalizeCat(categoria));
@@ -344,7 +345,7 @@ export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Pr
     return sortedByDate.slice(0, validatedCount);
 
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
   }
   return [];
 }
@@ -358,7 +359,7 @@ function isValidSlug(slug: string): boolean {
 
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   if (!isValidSlug(slug)) {
-    console.warn('[data.ts] Slug rechazado por validación:', slug);
+    logger.warn('[data.ts] Slug rechazado por validación:', slug);
     return null;
   }
   try {
@@ -401,7 +402,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       };
     }
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
   }
   return null;
 }
@@ -419,7 +420,7 @@ export async function getAllSlugs(): Promise<string[]> {
       .map((d: any) => d.data().slug)
       .filter(Boolean);
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
@@ -461,7 +462,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
     return related;
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice:', err instanceof Error ? err.message : String(err));
     // Fallback: usar getNews del cache existente (evita lectura masiva de Firestore)
     try {
       const all = await getNews(30);
@@ -471,7 +472,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
         .slice(0, validatedCount);
       return related;
     } catch (fallbackErr) {
-      console.error('[data.ts] Fallback también falló:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
+      logger.error('[data.ts] Fallback también falló:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
     }
   }
   return [];

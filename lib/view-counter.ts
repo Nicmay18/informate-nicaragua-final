@@ -10,6 +10,7 @@
 
 import { adminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
+import { logger } from '@/lib/logger';
 
 // ─── Configuración ───
 const FLUSH_INTERVAL_MS = 30_000;   // Flush cada 30 segundos
@@ -70,11 +71,9 @@ export async function flush(): Promise<void> {
 
     await batch.commit();
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[view-counter] Flush OK: ${snapshot.size} docs, total increments`);
-    }
+    logger.debug(`[view-counter] Flush OK: ${snapshot.size} docs, total increments`);
   } catch (error) {
-    console.error('[view-counter] Error en batch flush:', error);
+    logger.error('[view-counter] Error en batch flush:', error);
     // Reintentar en el próximo ciclo (los datos ya se perdieron del buffer,
     // pero es preferible a sobrecargar Firestore con reintentos)
   } finally {

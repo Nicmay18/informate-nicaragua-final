@@ -3,6 +3,7 @@ import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepag
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { getHeroImageUrl } from '@/lib/image-utils';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // ISR: Home regenerada cada 1 hora. Reduce lecturas Firestore drásticamente.
@@ -66,7 +67,7 @@ export default async function HomePage() {
       getPopularNews(5),
     ]);
   } catch (error) {
-    console.error('[HomePage] Error:', error);
+    logger.error('[HomePage] Error:', error);
   }
 
   const heroSrc = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen) : null;
