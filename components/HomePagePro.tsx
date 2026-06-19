@@ -5,16 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Flame, Radio, BarChart3, CloudSun, Globe, FolderOpen, Mail, TrendingUp, BookOpen } from 'lucide-react';
+import { Flame, Radio, Mail, TrendingUp, BookOpen } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { getAllEvergreen } from '@/lib/evergreen';
 import dynamic from 'next/dynamic';
 
 const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
-const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading: () => <div style={{ height: 60, background: '#f1f5f9', borderRadius: 8 }} /> });
-const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
-const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#0f172a', borderRadius: 12 }} /> });
 
 // ============================================================================
 // UTILIDADES DE RENDIMIENTO Y ACCESIBILIDAD
@@ -318,8 +315,8 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
     [noticias, heroIds]
   );
 
-  // "Últimas noticias" = los 8 más recientes tras el hero
-  const ultimas = useMemo(() => resto.slice(0, 8), [resto]);
+  // "Últimas noticias" = los 12 más recientes tras el hero (más contenido = más engagement)
+  const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
 
   // Categorías usan TODAS las noticias (incluyendo hero y ultimas) para no quedar vacías
   const porCategoria = useMemo(() => {
@@ -329,7 +326,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
       const slug = n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
       if (slug && map[slug]) map[slug].push(n);
     });
-    CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 4); });
+    CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 6); });
     return map;
   }, [noticias]);
 
@@ -402,7 +399,37 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             </section>
           )}
 
-          {CATEGORIES.map(c => (
+          {/* MÁS LEÍDAS — sección prominente en el contenido principal */}
+          {masLeidas.length > 0 && (
+            <section className="ni-section">
+              <div className="ni-section__header">
+                <h2 className="ni-section__title ni-section__title--sucesos"><TrendingUp size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Más leídos</h2>
+                <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
+              </div>
+              <div className="ni-grid-2">
+                {masLeidas.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+              </div>
+            </section>
+          )}
+
+          {CATEGORIES.slice(0, 3).map(c => (
+            <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
+          ))}
+
+          {/* DESTACADOS — rompe monotonía entre categorías */}
+          {populares.length > 0 && (
+            <section className="ni-section">
+              <div className="ni-section__header">
+                <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
+                <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
+              </div>
+              <div className="ni-grid-2">
+                {populares.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+              </div>
+            </section>
+          )}
+
+          {CATEGORIES.slice(3).map(c => (
             <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
           ))}
         </div>
@@ -418,47 +445,13 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <RadioPlayer />
           </div>
 
-          {/* Indicadores económicos */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><BarChart3 size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Indicadores</h3>
-            <EconomicBar />
-          </div>
-
-          {/* Clima */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><CloudSun size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Clima Nicaragua</h3>
-            <WeatherWidget />
-          </div>
-
-          {/* Reloj mundial */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><Globe size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Reloj Mundial</h3>
-            <WorldClock />
-          </div>
-
-          {/* Categorías */}
-          <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title"><FolderOpen size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Categorías</h3>
-            <ul className="ni-cat-list">
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
+          {/* Newsletter — solo elemento clave en sidebar */}
           <div className="ni-sidebar__widget ni-newsletter">
             <h3 className="ni-sidebar__title"><Mail size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Newsletter</h3>
             <p>Recibe las noticias más importantes de Nicaragua cada mañana.</p>
             <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
             <input id="newsletter-email" type="email" placeholder="tucorreo@gmail.com" aria-label="Tu correo electrónico para el newsletter" />
             <button type="submit" aria-label="Suscribirse al newsletter">Suscribirme gratis</button>
-          </div>
-
-          {/* Publicidad */}
-          <div className="ni-sidebar__widget ni-ad">
-            <span className="ni-ad__label">Publicidad</span>
-            <div>Espacio disponible para tu marca</div>
           </div>
         </aside>
       </div>
