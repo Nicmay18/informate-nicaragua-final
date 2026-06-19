@@ -151,7 +151,7 @@ function mapDocToNoticia(d: any): Noticia {
 }
 
 /** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto).
- *  Usa cache compartido de 15s para evitar lecturas duplicadas. */
+ *  Usa cache compartido de 5 min para reducir lecturas Firestore al mínimo. */
 async function fetchAllNoticias(): Promise<Noticia[]> {
   const now = Date.now();
   if (_fetchCache && _fetchCache.expiresAt > now) {
@@ -161,7 +161,7 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb.collection('noticias').limit(500).get();
     const noticias = snap.docs.map(mapDocToNoticia);
-    _fetchCache = { data: noticias, expiresAt: now + 15_000 };
+    _fetchCache = { data: noticias, expiresAt: now + 300_000 }; // 5 minutos para reducir lecturas Firestore
     return noticias;
   } catch (err) {
     console.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
