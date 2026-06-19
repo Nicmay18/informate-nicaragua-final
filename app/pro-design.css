@@ -1062,7 +1062,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-section{margin-bottom:34px}
   /* Tarjetas: layout horizontal compacto (tablet + movil) */
   .ni-card,
-  .ni-grid-2 .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
+  .ni-grid-2 .ni-card{grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--ni-border);align-items:start;overflow:hidden}
   .ni-card:first-child{padding-top:0}
   .ni-card:last-child{border-bottom:none}
   .ni-card__thumb,
