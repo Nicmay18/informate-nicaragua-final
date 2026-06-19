@@ -1,6 +1,7 @@
 import { initializeApp, getApps, cert, getApp, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 import { validateEnv, requireEnv } from './env';
+import { logger } from './logger';
 
 /**
  * Inicializa la aplicación de Firebase Admin SDK
@@ -24,7 +25,7 @@ function getAdminApp(): App {
   const privateKeyRaw = requireEnv('FIREBASE_PRIVATE_KEY');
 
   // Diagnostic log (safe — no secrets revealed)
-  console.log('[firebase-admin] env check:', {
+  logger.debug('[firebase-admin] env check:', {
     hasBase64: !!b64,
     base64Length: b64?.length || 0,
     projectIdLength: projectId.length,
@@ -40,7 +41,7 @@ function getAdminApp(): App {
         throw new Error('Service account missing project_id');
       }
       
-      console.log('[firebase-admin] initialized with base64 credentials');
+      logger.debug('[firebase-admin] initialized with base64 credentials');
       return initializeApp({ credential: cert(sa) });
     } catch (error) {
       throw new Error(`Failed to parse base64 service account: ${error instanceof Error ? error.message : String(error)}`);
@@ -60,7 +61,7 @@ function getAdminApp(): App {
     throw new Error('[firebase-admin] Private key appears to be invalid (too short)');
   }
 
-  console.log('[firebase-admin] initialized with environment credentials');
+  logger.debug('[firebase-admin] initialized with environment credentials');
   return initializeApp({ credential: cert({ projectId, privateKey, clientEmail }) });
 }
 

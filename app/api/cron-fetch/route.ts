@@ -18,6 +18,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 import { extractEntities } from '@/utils/meta';
 import type { Noticia } from '@/lib/types';
 
@@ -202,7 +203,7 @@ export async function POST(request: NextRequest) {
         const processed = usarGemini && GEMINI_API_KEY ? await rewriteWithGemini(raw) : raw;
         processedArticles.push(processed);
       } catch (geminiError) {
-        console.warn('[cron-fetch] Falló reescritura Gemini, usando original:', geminiError);
+        logger.warn('[cron-fetch] Falló reescritura Gemini, usando original:', geminiError);
         processedArticles.push(raw);
       }
     }
@@ -221,7 +222,7 @@ export async function POST(request: NextRequest) {
         revalidatePath('/');
         revalidatePath('/noticias');
       } catch (revErr) {
-        console.warn('[cron-fetch] No se pudo revalidar caché:', revErr);
+        logger.warn('[cron-fetch] No se pudo revalidar caché:', revErr);
       }
     }
 
@@ -231,7 +232,7 @@ export async function POST(request: NextRequest) {
       created,
     });
   } catch (error) {
-    console.error('[cron-fetch] Error crítico:', error);
+    logger.error('[cron-fetch] Error crítico:', error);
     return NextResponse.json(
       { error: 'Error interno del servidor', detail: error instanceof Error ? error.message : String(error) },
       { status: 500 }

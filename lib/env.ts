@@ -5,6 +5,7 @@
  */
 
 import { z } from 'zod';
+import { logger } from './logger';
 
 // ─── SCHEMAS DE VALIDACIÓN ──────────────────────────────────────
 
@@ -70,7 +71,7 @@ export function validateEnv(): { success: boolean; error?: string } {
   try {
     const result = FullSchema.parse(process.env);
     _validated = result;
-    console.log('[env] ✅ All environment variables validated');
+    logger.debug('[env] All environment variables validated');
     return { success: true };
   } catch (err) {
     if (err instanceof z.ZodError) {
@@ -81,7 +82,7 @@ export function validateEnv(): { success: boolean; error?: string } {
     } else {
       _validationError = `Unknown validation error: ${String(err)}`;
     }
-    console.error(`[env] ❌ ${_validationError}`);
+    logger.error(`[env] ${_validationError}`);
     return { success: false, error: _validationError };
   }
 }
