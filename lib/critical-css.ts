@@ -56,13 +56,14 @@ export const criticalCss = `
   .ni-main{grid-template-columns:1fr;padding:12px 12px 32px;gap:20px}
   .ni-section{margin-bottom:34px}
   .ni-section__header{margin-bottom:12px;padding-bottom:8px}
-  .ni-card,.ni-grid-2 .ni-card{grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid #e2e8f0;align-items:start;overflow:hidden}
+  /* Mobile: tarjetas verticales para evitar superposicion imagen-texto */
+  .ni-card,.ni-grid-2 .ni-card{grid-template-columns:1fr;gap:10px;padding:14px 0;border-bottom:1px solid #e2e8f0;align-items:start;overflow:hidden}
   .ni-card:first-child{padding-top:0}
   .ni-card:last-child{border-bottom:none}
-  .ni-card__thumb,.ni-grid-2 .ni-card__thumb{width:120px;height:90px;border-radius:8px;margin-bottom:0}
+  .ni-card__thumb,.ni-grid-2 .ni-card__thumb{width:100%;height:160px;border-radius:10px;margin-bottom:0}
   .ni-card__content{width:100%;padding:0;min-width:0}
   .ni-card__pill{font-size:0.6rem;margin-bottom:2px}
-  .ni-card__title{font-size:0.95rem;line-height:1.25;margin-bottom:3px}
+  .ni-card__title{font-size:1rem;line-height:1.3;margin-bottom:3px}
   .ni-card__excerpt{font-size:0.8rem;line-height:1.4;margin-bottom:4px}
   .ni-card__meta{font-size:0.68rem;gap:4px 8px;margin-top:0}
   .ni-grid-2{grid-template-columns:1fr;gap:0}
