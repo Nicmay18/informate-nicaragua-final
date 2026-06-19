@@ -1078,8 +1078,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @media(max-width:768px){
   .ni-main{grid-template-columns:1fr;padding:12px 12px 32px;gap:20px}
   .ni-sidebar{grid-template-columns:1fr}
-  .ni-section__title{font-size:1rem}
-  .ni-section__header{margin-bottom:12px;padding-bottom:8px}
+  .ni-section__header{flex-wrap:wrap;gap:4px 8px;margin-bottom:12px;padding-bottom:8px;border-bottom-width:1px}
+  .ni-section__title{font-size:0.82rem;padding:6px 20px 6px 10px}
+  .ni-section__more{font-size:0.72rem;margin-bottom:4px;white-space:nowrap}
   .ni-trending__text{font-size:0.82rem}
   .ni-footer__inner{grid-template-columns:1fr;gap:24px}
   .ni-footer__bottom{flex-direction:column;gap:8px;text-align:center}
