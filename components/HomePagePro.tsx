@@ -333,6 +333,50 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
 
   return (
     <div>
+      {/* Forzar estilos mobile inline para evitar conflictos de CSS externo */}
+      <style>{`
+        @media (max-width: 900px) {
+          .ni-card, .ni-grid-2 .ni-card {
+            display: grid !important;
+            grid-template-columns: 100px 1fr !important;
+            gap: 12px !important;
+            padding: 12px 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            align-items: start !important;
+            overflow: hidden !important;
+          }
+          .ni-card:first-child { padding-top: 0 !important; }
+          .ni-card:last-child { border-bottom: none !important; }
+          .ni-card__thumb, .ni-grid-2 .ni-card__thumb {
+            width: 100px !important;
+            height: 70px !important;
+            border-radius: 8px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            margin-bottom: 0 !important;
+          }
+          .ni-card__content {
+            width: 100% !important;
+            padding: 0 !important;
+            min-width: 0 !important;
+          }
+          .ni-card__title {
+            font-size: 0.95rem !important;
+            line-height: 1.25 !important;
+            margin-bottom: 3px !important;
+          }
+          .ni-card__excerpt {
+            font-size: 0.8rem !important;
+            line-height: 1.4 !important;
+            margin-bottom: 4px !important;
+          }
+          .ni-grid-2 {
+            grid-template-columns: 1fr !important;
+            gap: 0 !important;
+          }
+        }
+      `}</style>
       {isNoticiasPage ? (
         <h1 className="ni-page-title">Todas las Noticias de Nicaragua</h1>
       ) : (
