@@ -245,35 +245,59 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
 function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
   const cat = catClass(noticia.categoria);
   return (
-    <article className="ni-card" style={{ animationDelay: `${index * 60}ms` }} data-animate="fadeInUp">
-      <div className="ni-card__thumb">
+    <article
+      className="ni-card"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '100px 1fr',
+        gap: 12,
+        padding: '12px 0',
+        borderBottom: '1px solid #e2e8f0',
+        alignItems: 'start',
+        overflow: 'hidden',
+        animationDelay: `${index * 60}ms`,
+      }}
+      data-animate="fadeInUp"
+    >
+      <div
+        className="ni-card__thumb"
+        style={{
+          position: 'relative',
+          width: 100,
+          height: 70,
+          borderRadius: 8,
+          overflow: 'hidden',
+          flexShrink: 0,
+          background: '#e2e8f0',
+        }}
+      >
         {noticia.imagen ? (
           <Image
             src={getResponsiveImageUrl(noticia.imagen, 400)}
             alt={noticia.titulo}
             fill
-            sizes="(max-width: 768px) 120px, 220px"
+            sizes="100px"
             style={{ objectFit: 'cover' }}
             loading={index < 4 ? 'eager' : 'lazy'}
           />
         ) : null}
       </div>
-      <div className="ni-card__content">
-        <span className={`ni-card__pill ni-card__pill--${cat}`}>{noticia.categoria || 'Noticia'}</span>
-        <span className="ni-card__title">
-          <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
+      <div className="ni-card__content" style={{ width: '100%', padding: 0, minWidth: 0, overflow: 'hidden' }}>
+        <span className={`ni-card__pill ni-card__pill--${cat}`} style={{ fontSize: '0.6rem', marginBottom: 2, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0f172a' }}>{noticia.categoria || 'Noticia'}</span>
+        <span className="ni-card__title" style={{ fontFamily: "'Merriweather', serif", fontSize: '0.95rem', fontWeight: 700, lineHeight: 1.25, color: '#0f172a', marginBottom: 3, display: 'block' }}>
+          <Link href={`/noticias/${noticia.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{noticia.titulo}</Link>
         </span>
-        <p className="ni-card__excerpt">{noticia.resumen || noticia.titulo}</p>
-        <div className="ni-card__meta">
-          <time className="ni-card__time" dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
+        <p className="ni-card__excerpt" style={{ fontSize: '0.8rem', lineHeight: 1.4, marginBottom: 4, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{noticia.resumen || noticia.titulo}</p>
+        <div className="ni-card__meta" style={{ fontSize: '0.68rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 8px', marginTop: 0 }}>
+          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
           {noticia.fechaActualizacion && (
-            <time className="ni-card__updated" dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ color: '#991b1b', fontWeight: 500, fontSize: 12 }}>
+            <time dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ color: '#991b1b', fontWeight: 500, fontSize: 12 }}>
               Actualizado {timeAgo(noticia.fechaActualizacion)}
             </time>
           )}
-          <span className="ni-card__author">{noticia.autor || 'Nicaragua Informate'}</span>
+          <span>{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
-        <div className="ni-card__share" style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+        <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>
           <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" style={{ fontSize: 11, color: '#1877f2', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Facebook</a>
           <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" style={{ fontSize: 11, color: '#000', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>X</a>
           <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" style={{ fontSize: 11, color: '#25d366', textDecoration: 'none', padding: '6px 12px', minWidth: 44, minHeight: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>WhatsApp</a>
@@ -333,50 +357,6 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
 
   return (
     <div>
-      {/* Forzar estilos mobile inline para evitar conflictos de CSS externo */}
-      <style>{`
-        @media (max-width: 900px) {
-          .ni-card, .ni-grid-2 .ni-card {
-            display: grid !important;
-            grid-template-columns: 100px 1fr !important;
-            gap: 12px !important;
-            padding: 12px 0 !important;
-            border-bottom: 1px solid #e2e8f0 !important;
-            align-items: start !important;
-            overflow: hidden !important;
-          }
-          .ni-card:first-child { padding-top: 0 !important; }
-          .ni-card:last-child { border-bottom: none !important; }
-          .ni-card__thumb, .ni-grid-2 .ni-card__thumb {
-            width: 100px !important;
-            height: 70px !important;
-            border-radius: 8px !important;
-            position: relative !important;
-            overflow: hidden !important;
-            flex-shrink: 0 !important;
-            margin-bottom: 0 !important;
-          }
-          .ni-card__content {
-            width: 100% !important;
-            padding: 0 !important;
-            min-width: 0 !important;
-          }
-          .ni-card__title {
-            font-size: 0.95rem !important;
-            line-height: 1.25 !important;
-            margin-bottom: 3px !important;
-          }
-          .ni-card__excerpt {
-            font-size: 0.8rem !important;
-            line-height: 1.4 !important;
-            margin-bottom: 4px !important;
-          }
-          .ni-grid-2 {
-            grid-template-columns: 1fr !important;
-            gap: 0 !important;
-          }
-        }
-      `}</style>
       {isNoticiasPage ? (
         <h1 className="ni-page-title">Todas las Noticias de Nicaragua</h1>
       ) : (
