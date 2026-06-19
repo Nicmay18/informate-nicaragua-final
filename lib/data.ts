@@ -159,7 +159,7 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
   }
   try {
     const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb.collection('noticias').limit(250).get();
+    const snap = await adminDb.collection('noticias').limit(500).get();
     const noticias = snap.docs.map(mapDocToNoticia);
     _fetchCache = { data: noticias, expiresAt: now + 15_000 };
     return noticias;
