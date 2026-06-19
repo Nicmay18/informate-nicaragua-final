@@ -1612,19 +1612,43 @@ sin texto ni marcas de agua, composición periodística"
       if (!panel) return;
       const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
       const titulo = noticia.titulo || '';
-      const descripcion = crearDescripcionRedes(noticia.resumen, noticia.contenido);
       const categoria = noticia.categoria || 'Noticias';
 
+      // Emojis por categoría
       const emojiCat = { 'Sucesos':'🚨','Nacionales':'🇳🇮','Deportes':'⚽','Internacionales':'🌍','Espectáculos':'🎬','Tecnología':'💻','Salud':'🏥','Economía':'💰' };
       const emoji = emojiCat[categoria] || '📰';
 
-      const hashBase = `#${categoria.replace(/\s+/g,'')} #Nicaragua #NoticiasNicaragua`;
-      const hashExtra = { 'Sucesos':' #Crimen #Seguridad','Deportes':' #Fútbol','Internacionales':' #Mundo','Espectáculos':' #Entretenimiento','Tecnología':' #Tech','Salud':' #Salud','Economía':' #Economía' };
-      const hashtags = hashBase + (hashExtra[categoria] || '');
+      // Hashtag principal (solo 1 para no saturar)
+      const hashtagPrincipal = `#${categoria.replace(/\s+/g,'')} #Nicaragua`;
 
-      const textoTelegram = `${emoji} ${titulo}\n\n${descripcion}\n\n🔗 ${url}\n\n${hashtags}`;
-      const textoFacebook = `${emoji} ${titulo}\n\n${descripcion}\n\n💬 ¿Qué opinas? Déjanos tu comentario 👇\n👉 ${url}\n\n${hashtags}`;
-      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcion}\n\n👉 Lee la nota completa:\n${url}\n\n${hashtags}`;
+      // Descripción ultra-corta: máximo 1-2 líneas (120 chars max)
+      // Tomamos solo la primera oración del resumen o contenido
+      let descripcionCorta = '';
+      const textoLimpio = (noticia.resumen || noticia.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (textoLimpio) {
+        const primeraOracion = textoLimpio.match(/^[^.!?]+[.!?]+/);
+        if (primeraOracion) {
+          descripcionCorta = primeraOracion[0].trim();
+          if (descripcionCorta.length > 100) {
+            descripcionCorta = descripcionCorta.substring(0, 97).trim() + '...';
+          }
+        } else {
+          descripcionCorta = textoLimpio.length > 100 ? textoLimpio.substring(0, 97).trim() + '...' : textoLimpio;
+        }
+      }
+      if (!descripcionCorta) descripcionCorta = 'Más detalles en el link:';
+
+      // ─── FORMATO TELEGRAM ───
+      // Ideal: Emoji + título en 1 línea, descripción corta, link visible
+      const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
+
+      // ─── FORMATO FACEBOOK ───
+      // CRÍTICO: Máximo 2 líneas de texto + link visible
+      // Facebook penaliza posts con mucho texto + link externo
+      const textoFacebook = `${emoji} ${titulo}\n\n${descripcionCorta}\n\n📰 ${url}\n\n${hashtagPrincipal}`;
+
+      // ─── FORMATO WHATSAPP ───
+      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcionCorta}\n\n👉 ${url}\n\n${hashtagPrincipal}`;
 
       document.getElementById('shareEmoji').textContent = emoji;
       document.getElementById('shareTituloHeader').textContent = titulo;
@@ -3427,19 +3451,35 @@ sin texto ni marcas de agua, composición periodística"
 
     window.copiarParaRedes = async function(id, slug, titulo, resumen) {
       const link = slug ? `https://nicaraguainformate.com/noticias/${slug}` : 'https://nicaraguainformate.com';
-      const texto = `${titulo}\n\n${resumen || ''}\n\n${link}`;
+      
+      // Formato optimizado para Facebook/WhatsApp
+      // Máximo 2 líneas de texto + link visible
+      let descripcionCorta = '';
+      if (resumen) {
+        const primeraOracion = resumen.match(/^[^.!?]+[.!?]+/);
+        if (primeraOracion) {
+          descripcionCorta = primeraOracion[0].trim();
+          if (descripcionCorta.length > 100) {
+            descripcionCorta = descripcionCorta.substring(0, 97).trim() + '...';
+          }
+        } else {
+          descripcionCorta = resumen.length > 100 ? resumen.substring(0, 97).trim() + '...' : resumen;
+        }
+      }
+      if (!descripcionCorta) descripcionCorta = 'Más detalles en el link:';
+      
+      const texto = `📰 ${titulo}\n\n${descripcionCorta}\n\n👉 ${link}`;
       try {
         await navigator.clipboard.writeText(texto);
-        showToast('Copiado para WhatsApp/Facebook', 'success');
+        showToast('✅ Copiado para Facebook/WhatsApp', 'success');
       } catch (err) {
-        // Fallback para navegadores antiguos
         const ta = document.createElement('textarea');
         ta.value = texto;
         document.body.appendChild(ta);
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
-        showToast('Copiado para WhatsApp/Facebook', 'success');
+        showToast('✅ Copiado para Facebook/WhatsApp', 'success');
       }
     };
 
