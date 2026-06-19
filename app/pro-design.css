@@ -1084,9 +1084,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-trending__text{font-size:0.82rem}
   .ni-footer__inner{grid-template-columns:1fr;gap:24px}
   .ni-footer__bottom{flex-direction:column;gap:8px;text-align:center}
-}
-/* Mobile estrecho: tarjetas verticales para que el texto no se aplaste */
-@media(max-width:480px){
+  /* Mobile: tarjetas verticales para que la imagen no tape el texto */
   .ni-card,
   .ni-grid-2 .ni-card{grid-template-columns:1fr;gap:10px;padding:14px 0}
   .ni-card__thumb,
