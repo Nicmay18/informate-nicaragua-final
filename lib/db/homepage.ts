@@ -99,7 +99,7 @@ function mapNoticia(d: any): Noticia {
 
 // ============================================================================
 // CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
-// TTL = 15 segundos — suficiente para que ISR de 60s no dispare múltiples queries
+// TTL = 5 minutos — evita lecturas masivas en cada ISR
 // ============================================================================
 interface CacheEntry {
   data: Noticia[];
@@ -107,17 +107,29 @@ interface CacheEntry {
 }
 
 let _fetchCache: CacheEntry | null = null;
+let _fetchPromise: Promise<Noticia[]> | null = null;
 
 async function fetchAllNoticias(): Promise<Noticia[]> {
   const now = Date.now();
   if (_fetchCache && _fetchCache.expiresAt > now) {
     return _fetchCache.data;
   }
-  const db = getAdminDb();
-  const snap = await db.collection('noticias').limit(250).get();
-  const noticias = snap.docs.map(mapNoticia);
-  _fetchCache = { data: noticias, expiresAt: now + 15_000 };
-  return noticias;
+  // Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de disparar otro
+  if (_fetchPromise) {
+    return _fetchPromise;
+  }
+  _fetchPromise = (async () => {
+    try {
+      const db = getAdminDb();
+      const snap = await db.collection('noticias').limit(500).get();
+      const noticias = snap.docs.map(mapNoticia);
+      _fetchCache = { data: noticias, expiresAt: Date.now() + 300_000 };
+      return noticias;
+    } finally {
+      _fetchPromise = null;
+    }
+  })();
+  return _fetchPromise;
 }
 
 // ============================================================================

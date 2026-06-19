@@ -9,9 +9,9 @@ import { getClientIp, isValidSlug } from '@/lib/ip';
 /** Rate limiter: máximo 10 vistas por IP por minuto */
 const viewLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 10 });
 
-/** Cooldown de revalidación para evitar DoS por revalidatePath spam (máx 1 por minuto global) */
+/** Cooldown de revalidación: 1 HORA para evitar regenerar la homepage con cada visita */
 let lastRevalidate = 0;
-const REVALIDATE_COOLDOWN_MS = 60_000;
+const REVALIDATE_COOLDOWN_MS = 3_600_000;
 
 function maybeRevalidate(slug: string, categoriaSlug: string | null) {
   const now = Date.now();

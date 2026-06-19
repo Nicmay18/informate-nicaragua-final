@@ -5,10 +5,10 @@ import type { Metadata } from 'next';
 import { getHeroImageUrl } from '@/lib/image-utils';
 
 // ============================================================================
-// ISR: Home regenerada cada 5 min. Reduce lecturas Firestore vs force-dynamic
-// y mantiene TTFB < 100ms en cache HIT.
+// ISR: Home regenerada cada 1 hora. Reduce lecturas Firestore drásticamente.
+// Las noticias se revalidan vía revalidateTag desde el panel/admin.
 // ============================================================================
-export const revalidate = 300;
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 const SITE_URL = 'https://nicaraguainformate.com';

@@ -461,10 +461,10 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
     return related;
   } catch (err) {
-    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice. Fallback JS:', err instanceof Error ? err.message : String(err));
-    // Fallback: filtrar en memoria desde el cache compartido (sin índice compuesto)
+    console.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice:', err instanceof Error ? err.message : String(err));
+    // Fallback: usar getNews del cache existente (evita lectura masiva de Firestore)
     try {
-      const all = await fetchAllNoticias();
+      const all = await getNews(30);
       const related = all
         .filter((n: Noticia) => n.categoria === categoria && n.slug !== excludeSlug)
         .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
