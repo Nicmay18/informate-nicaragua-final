@@ -1,27 +1,73 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Flame, Radio, Mail, TrendingUp, BookOpen } from 'lucide-react';
-import type { Noticia } from '@/lib/types';
-import { getResponsiveImageUrl } from '@/lib/image-utils';
-import type { ComponentProps } from 'react';
-import {
-  TRENDS,
-  CATEGORIES,
-  CAT_LOOKUP,
-  catClass,
-  timeAgo,
-  EVERGREEN_GUIDES,
-} from '@/lib/homepage-utils';
-import HeroCarousel from './HeroCarousel';
-import TabbedSidebarWidget from './TabbedSidebar';
-import RadioPlayer from './RadioPlayer';
+'use client';
 
-const NoPrefetchLink = (props: ComponentProps<typeof Link>) => (
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import Link from 'next/link';
+
+// Componente Link con prefetch desactivado para no competir con LCP
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
   <Link {...props} prefetch={false} />
 );
+import Image from 'next/image';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Flame, Radio, Mail, TrendingUp, BookOpen } from 'lucide-react';
+import type { Noticia } from '@/lib/types';
+import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
+import { getAllEvergreen } from '@/lib/evergreen';
+import dynamic from 'next/dynamic';
+
+const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
+
+// ============================================================================
+// UTILIDADES DE RENDIMIENTO Y ACCESIBILIDAD
+// ============================================================================
+
+function timeAgo(dateInput: unknown): string {
+  const dateStr = typeof dateInput === 'string' ? dateInput : '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    return formatDistanceToNow(d, { addSuffix: true, locale: es });
+  } catch {
+    return '';
+  }
+}
+
+const TRENDS = [
+  { label: 'Elecciones 2026', href: '/buscar?q=elecciones' },
+  { label: 'Dólar / Córdoba', href: '/buscar?q=dolar' },
+  { label: 'Liga Primera', href: '/buscar?q=liga+primera' },
+  { label: 'Bluefields', href: '/buscar?q=bluefields' },
+  { label: 'Costa Caribe', href: '/buscar?q=costa+caribe' },
+];
+
+const CATEGORIES = [
+  { name: 'Sucesos', slug: 'sucesos', color: 'sucesos' },
+  { name: 'Nacionales', slug: 'nacionales', color: 'nacionales' },
+  { name: 'Espectáculos', slug: 'espectaculos', color: 'espectaculos' },
+  { name: 'Deportes', slug: 'deportes', color: 'deportes' },
+  { name: 'Tecnología', slug: 'tecnologia', color: 'tecnologia' },
+  { name: 'Internacionales', slug: 'internacionales', color: 'internacionales' },
+];
+
+// Precalcular lookup de categoría → slug (evita normalize en cada render)
+const CAT_LOOKUP: Record<string, string> = {};
+CATEGORIES.forEach(c => {
+  CAT_LOOKUP[c.slug] = c.slug;
+  CAT_LOOKUP[c.name.toLowerCase()] = c.slug;
+  CAT_LOOKUP[c.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')] = c.slug;
+});
+
+function catClass(cat?: string) {
+  const key = cat?.toLowerCase() || '';
+  return CAT_LOOKUP[key] || CAT_LOOKUP[key.normalize('NFD').replace(/[\u0300-\u036f]/g, '')] || 'nacionales';
+}
+
+// Precalcular evergreen (array estático, no cambia en runtime)
+const EVERGREEN_GUIDES = getAllEvergreen().slice(0, 4);
 
 function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
-  const list = noticias.slice(0, 6);
+  const list = useMemo(() => noticias.slice(0, 6), [noticias]);
   if (list.length === 0) return null;
   return (
     <div className="ni-marquee-bar">
@@ -36,6 +82,180 @@ function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noticia[]; populares: Noticia[]; tendencias: Noticia[] }) {
+  const [activeTab, setActiveTab] = useState<'ultimas' | 'populares' | 'tendencias'>('ultimas');
+
+  const list = useMemo(() => {
+    if (activeTab === 'ultimas') return ultimas.slice(0, 5);
+    if (activeTab === 'populares') return populares.slice(0, 5);
+    return tendencias.slice(0, 5);
+  }, [activeTab, ultimas, populares, tendencias]);
+
+  return (
+    <div className="ni-sidebar__widget ni-tab-widget">
+      <div className="ni-tab-widget__header">
+        <button className={`ni-tab-widget__btn ${activeTab === 'ultimas' ? 'is-active' : ''}`} onClick={() => setActiveTab('ultimas')}>
+          <TrendingUp size={12} style={{ marginRight: 4 }} /> Más leídas
+        </button>
+        <button className={`ni-tab-widget__btn ${activeTab === 'populares' ? 'is-active' : ''}`} onClick={() => setActiveTab('populares')}>
+          <Flame size={12} style={{ marginRight: 4 }} /> Populares
+        </button>
+        <button className={`ni-tab-widget__btn ${activeTab === 'tendencias' ? 'is-active' : ''}`} onClick={() => setActiveTab('tendencias')}>
+          <TrendingUp size={12} style={{ marginRight: 4 }} /> Tendencias
+        </button>
+      </div>
+      <div className="ni-tab-widget__body">
+        <ul className="ni-tab-list">
+          {list.map((n) => (
+            <li key={n.id} className="ni-tab-item">
+              <div className="ni-tab-item__img">
+                {n.imagen ? (
+                  <Image src={getResponsiveImageUrl(n.imagen, 100)} alt={n.titulo} width={64} height={64} style={{ objectFit: 'cover' }} unoptimized={n.imagen.endsWith('.gif')} />
+                ) : (
+                  <div className="ni-tab-item__fallback">🇳🇮</div>
+                )}
+              </div>
+              <div className="ni-tab-item__content">
+                <span className={`ni-tab-item__pill ni-tab-item__pill--${catClass(n.categoria)}`}>{n.categoria}</span>
+                <NoPrefetchLink href={`/noticias/${n.slug}`} className="ni-tab-item__title">{n.titulo}</NoPrefetchLink>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+const SLIDE_DURATION = 5000; // 5 segundos por slide
+
+function Hero({ noticias }: { noticias: Noticia[] }) {
+  const [idx, setIdx] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const items = useMemo(() => noticias.slice(0, 5), [noticias]);
+  const touchStartX = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const goToSlide = useCallback((i: number) => {
+    setIdx(i);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    setIdx(p => (p + 1) % items.length);
+  }, [items.length]);
+
+  // Auto-advance simple y confiable con setInterval
+  useEffect(() => {
+    if (items.length <= 1) return;
+    timerRef.current = setInterval(() => {
+      if (!isPaused) {
+        setIdx(p => (p + 1) % items.length);
+      }
+    }, SLIDE_DURATION);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [items.length, isPaused]);
+
+  return (
+    <section
+      className="ni-hero"
+      aria-label="Noticias destacadas"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={(e) => { touchStartX.current = e.changedTouches[0].screenX; }}
+      onTouchEnd={(e) => {
+        if (touchStartX.current === null) return;
+        const diff = touchStartX.current - e.changedTouches[0].screenX;
+        const threshold = 50;
+        if (diff > threshold) {
+          nextSlide();
+        } else if (diff < -threshold) {
+          goToSlide((idx - 1 + items.length) % items.length);
+        }
+        touchStartX.current = null;
+      }}
+    >
+      <div className="ni-hero__track">
+        {items.map((item, i) => {
+          const isActive = i === idx;
+          const isNext = i === (idx + 1) % items.length;
+          const isPrev = i === (idx - 1 + items.length) % items.length;
+          const shouldRender = isActive || isNext || isPrev;
+          return (
+            <article key={item.id} className={`ni-hero__slide${isActive ? ' is-active' : ''}`}>
+              <div className="ni-hero__media">
+                {item.imagen ? (
+                  i === 0 ? (
+                    // Primer slide = LCP: carga directo sin intermediarios
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={getHeroImageUrl(item.imagen)}
+                      srcSet={`${getHeroImageUrl(item.imagen, 400)} 400w, ${getHeroImageUrl(item.imagen, 800)} 800w`}
+                      sizes="(max-width: 768px) 100vw, 580px"
+                      alt={item.titulo}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
+                      fetchPriority="high"
+                      loading="eager"
+                      decoding="async"
+                      crossOrigin="anonymous"
+                    />
+                  ) : shouldRender ? (
+                    <Image
+                      src={getResponsiveImageUrl(item.imagen, 400)}
+                      alt={item.titulo}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 580px"
+                      style={{ objectFit: 'cover', objectPosition: 'center center' }}
+                      loading="lazy"
+                      crossOrigin="anonymous"
+                      unoptimized={false}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} aria-hidden="true" />
+                  )
+                ) : null}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="ni-hero__info">
+        <span className={`ni-hero__badge ni-hero__badge--${catClass(items[idx]?.categoria)}`}>{items[idx]?.categoria || 'Noticia'}</span>
+        <span className="ni-hero__title">
+          <NoPrefetchLink href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</NoPrefetchLink>
+        </span>
+        <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
+        <div className="ni-hero__meta">
+          <time dateTime={items[idx]?.fecha} suppressHydrationWarning>{timeAgo(items[idx]?.fecha || '')}</time>
+          <span>•</span>
+          <span>{items[idx]?.autor || 'Nicaragua Informate'}</span>
+        </div>
+      </div>
+
+      {items.length > 1 && (
+        <>
+          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => goToSlide((idx - 1 + items.length) % items.length)} aria-label="Anterior">‹</button>
+          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => nextSlide()} aria-label="Siguiente">›</button>
+          <div className="ni-hero__indicators">
+            {items.map((item, i) => (
+              <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => goToSlide(i)} aria-label={`Noticia ${i + 1}`}>
+                <span className="ni-hero__ind-label">{item.categoria}</span>
+                {i === idx && (
+                  <span className="ni-hero__ind-bar">
+                    <span className="ni-hero__ind-bar__fill" />
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </section>
   );
 }
 
@@ -124,18 +344,32 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas, populares = [], isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; populares?: Noticia[]; isNoticiasPage?: boolean }) {
-  const heroNoticias = noticias.slice(0, 7);
-  const heroIds = new Set(heroNoticias.map(n => n.id));
-  const resto = noticias.filter(n => !heroIds.has(n.id));
-  const ultimas = resto.slice(0, 12);
+  // Carrusel: las 7 noticias más recientes
+  const heroNoticias = useMemo(() => noticias.slice(0, 7), [noticias]);
 
-  const porCategoria: Record<string, Noticia[]> = {};
-  CATEGORIES.forEach(c => { porCategoria[c.slug] = []; });
-  for (const n of noticias) {
-    const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
-    if (slug && porCategoria[slug]) porCategoria[slug].push(n);
-  }
-  CATEGORIES.forEach(c => { porCategoria[c.slug] = porCategoria[c.slug].slice(0, 6); });
+  // IDs del carousel
+  const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
+
+  // Resto = todas las noticias menos las del hero
+  const resto = useMemo(
+    () => noticias.filter(n => !heroIds.has(n.id)),
+    [noticias, heroIds]
+  );
+
+  // Últimas 12 noticias
+  const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
+
+  // Categorías — lookup O(1) sin normalize en cada noticia
+  const porCategoria = useMemo(() => {
+    const map: Record<string, Noticia[]> = {};
+    CATEGORIES.forEach(c => { map[c.slug] = []; });
+    for (const n of noticias) {
+      const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
+      if (slug && map[slug]) map[slug].push(n);
+    }
+    CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 6); });
+    return map;
+  }, [noticias]);
 
 
   return (
@@ -159,7 +393,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
       <BreakingMarquee noticias={noticias} />
 
       {/* HERO */}
-      <HeroCarousel noticias={heroNoticias} />
+      <Hero noticias={heroNoticias} />
 
       {/* GUÍAS Y RECURSOS EVERGREEN */}
       {!isNoticiasPage && (
