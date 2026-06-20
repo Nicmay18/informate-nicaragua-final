@@ -50,11 +50,21 @@ const CATEGORIES = [
   { name: 'Internacionales', slug: 'internacionales', color: 'internacionales' },
 ];
 
+// Precalcular lookup de categoría → slug (evita normalize en cada render)
+const CAT_LOOKUP: Record<string, string> = {};
+CATEGORIES.forEach(c => {
+  CAT_LOOKUP[c.slug] = c.slug;
+  CAT_LOOKUP[c.name.toLowerCase()] = c.slug;
+  CAT_LOOKUP[c.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')] = c.slug;
+});
+
 function catClass(cat?: string) {
-  const slug = cat?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
-  const map: Record<string, string> = { sucesos: 'sucesos', nacionales: 'nacionales', espectaculos: 'espectaculos', deportes: 'deportes', tecnologia: 'tecnologia', tecnologa: 'tecnologia', internacionales: 'internacionales' };
-  return map[slug || ''] || 'nacionales';
+  const key = cat?.toLowerCase() || '';
+  return CAT_LOOKUP[key] || CAT_LOOKUP[key.normalize('NFD').replace(/[\u0300-\u036f]/g, '')] || 'nacionales';
 }
+
+// Precalcular evergreen (array estático, no cambia en runtime)
+const EVERGREEN_GUIDES = getAllEvergreen().slice(0, 4);
 
 function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
   const list = useMemo(() => noticias.slice(0, 6), [noticias]);
@@ -334,29 +344,29 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
 }
 
 export default function HomePagePro({ noticias, masLeidas, populares = [], isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; populares?: Noticia[]; isNoticiasPage?: boolean }) {
-  // Carrusel: las 7 noticias más recientes (noticias ya viene ordenado por fecha desc)
-  const heroNoticias = noticias.slice(0, 7);
+  // Carrusel: las 7 noticias más recientes
+  const heroNoticias = useMemo(() => noticias.slice(0, 7), [noticias]);
 
-  // IDs del carousel: ninguna otra sección puede mostrar estas noticias
+  // IDs del carousel
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
 
-  // Resto = todas las noticias menos las que ya están en el hero
+  // Resto = todas las noticias menos las del hero
   const resto = useMemo(
     () => noticias.filter(n => !heroIds.has(n.id)),
     [noticias, heroIds]
   );
 
-  // "Últimas noticias" = los 12 más recientes tras el hero (más contenido = más engagement)
+  // Últimas 12 noticias
   const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
 
-  // Categorías usan TODAS las noticias (incluyendo hero y ultimas) para no quedar vacías
+  // Categorías — lookup O(1) sin normalize en cada noticia
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
     CATEGORIES.forEach(c => { map[c.slug] = []; });
-    noticias.forEach(n => {
-      const slug = n.categoria?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+    for (const n of noticias) {
+      const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
       if (slug && map[slug]) map[slug].push(n);
-    });
+    }
     CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 6); });
     return map;
   }, [noticias]);
@@ -393,7 +403,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <NoPrefetchLink href="/guia" className="ni-section__more">Ver todas →</NoPrefetchLink>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-            {getAllEvergreen().slice(0, 4).map((guia) => (
+            {EVERGREEN_GUIDES.map((guia) => (
               <NoPrefetchLink
                 key={guia.slug}
                 href={`/guia/${guia.slug}`}
