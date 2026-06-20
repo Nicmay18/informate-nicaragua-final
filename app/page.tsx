@@ -80,7 +80,6 @@ export default async function HomePage() {
         <link
           rel="preload"
           as="image"
-          href={heroSrc}
           imageSrcSet={`${heroSrc400} 400w, ${heroSrc} 800w`}
           imageSizes="(max-width: 768px) 100vw, 580px"
           type="image/webp"
