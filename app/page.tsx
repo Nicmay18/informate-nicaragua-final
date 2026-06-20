@@ -71,14 +71,17 @@ export default async function HomePage() {
   }
 
   const heroSrc = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen) : null;
+  const heroSrc400 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 400) : null;
 
   return (
     <>
-      {heroSrc && (
+      {heroSrc && heroSrc400 && (
         <link
           rel="preload"
           as="image"
           href={heroSrc}
+          imageSrcSet={`${heroSrc400} 400w, ${heroSrc} 800w`}
+          imageSizes="(max-width: 768px) 100vw, 580px"
           type="image/webp"
           crossOrigin="anonymous"
         />

@@ -50,7 +50,6 @@ export default function Header() {
               height={128}
               sizes="128px"
               className="ni-logo__img"
-              priority
             />
             <div className="ni-logo__text">
               <strong>Nicaragua Informate</strong>

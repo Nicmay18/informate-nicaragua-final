@@ -19,7 +19,7 @@ export function cleanImageUrl(url: string): string {
  * reduciendo ~60% el peso vs la imagen original a resolución completa.
  * Esto mejora directamente el LCP en PageSpeed.
  */
-export function getHeroImageUrl(url: string): string {
+export function getHeroImageUrl(url: string, width = 800): string {
   if (!url || url === 'null' || url === 'undefined' || url === 'NaN') return FALLBACK_IMAGE;
 
   const responsiveUrl = getResponsiveImageUrl(url);
@@ -34,7 +34,7 @@ export function getHeroImageUrl(url: string): string {
 
   const params = new URLSearchParams();
   params.set('url', absoluteUrl);
-  params.set('w', '800');
+  params.set('w', width.toString());
   params.set('q', '80');
   params.set('fit', 'cover');
   params.set('n', '-1');
