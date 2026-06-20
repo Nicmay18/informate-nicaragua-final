@@ -35,7 +35,7 @@ export function getHeroImageUrl(url: string, width = 800): string {
   const params = new URLSearchParams();
   params.set('url', absoluteUrl);
   params.set('w', width.toString());
-  params.set('q', '80');
+  params.set('q', '45');
   params.set('fit', 'cover');
   params.set('n', '-1');
   params.set('output', 'webp');
