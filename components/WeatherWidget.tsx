@@ -87,15 +87,20 @@ export default function WeatherWidget() {
       setError(null);
       try {
         const results: Record<string, WeatherData> = {};
-        for (const city of CITIES) {
-          if (cancelled) return;
+        // Fetch paralelo: todas las ciudades al mismo tiempo
+        const promises = CITIES.map(async (city) => {
           try {
-            results[city.name] = await fetchWeather(city.lat, city.lon);
+            return { name: city.name, data: await fetchWeather(city.lat, city.lon) };
           } catch {
-            results[city.name] = { temp: 0, humidity: 0, wind: 0, code: -1 };
+            return { name: city.name, data: { temp: 0, humidity: 0, wind: 0, code: -1 } as WeatherData };
           }
+        });
+        const settled = await Promise.all(promises);
+        if (cancelled) return;
+        for (const { name, data } of settled) {
+          results[name] = data;
         }
-        if (!cancelled) setWeather(results);
+        setWeather(results);
       } catch {
         if (!cancelled) setError('No se pudo cargar el clima');
       } finally {

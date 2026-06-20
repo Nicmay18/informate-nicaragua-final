@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback, memo } from 'react';
 import Link from 'next/link';
 
 // Componente Link con prefetch desactivado para no competir con LCP
@@ -262,7 +262,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
   );
 }
 
-function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
+const Card = memo(function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
   const cat = catClass(noticia.categoria);
   return (
     <article
@@ -324,6 +324,60 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
         </div>
       </div>
     </article>
+  );
+});
+
+function useInView(ref: React.RefObject<HTMLElement | null>, options?: IntersectionObserverInit) {
+  const [isInView, setIsInView] = useState(false);
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    const el = ref.current;
+    if (el && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      }, { rootMargin: '200px', threshold: 0, ...options });
+      observer.observe(el);
+      cleanup = () => observer.disconnect();
+    } else {
+      setIsInView(true);
+    }
+    return cleanup;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.current, options?.rootMargin, options?.threshold]);
+  return isInView;
+}
+
+function LazySection({ title, slug, color, noticias }: { title: string; slug: string; color: string; noticias: Noticia[] }) {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref);
+  if (noticias.length === 0) return null;
+  if (!isInView) {
+    return (
+      <section ref={ref} className="ni-section" style={{ minHeight: 200 }} aria-hidden="true">
+        <div className="ni-section__header">
+          <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
+        </div>
+        <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} />
+      </section>
+    );
+  }
+  return (
+    <section ref={ref} className="ni-section">
+      <div className="ni-section__header">
+        <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
+        <NoPrefetchLink href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</NoPrefetchLink>
+      </div>
+      {noticias.length <= 2 ? (
+        noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
+      ) : (
+        <div className="ni-grid-2">
+          {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -474,7 +528,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
           )}
 
           {CATEGORIES.slice(3).map(c => (
-            <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
+            <LazySection key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
           ))}
         </div>
 
