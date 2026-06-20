@@ -2147,7 +2147,17 @@ sin texto ni marcas de agua, composición periodística"
       const departamento = extraerDepartamento(limpio);
       const dateline = extraerDateline(limpio);
       const pieFoto = extraerPieFoto(limpio);
-      
+
+      // Extraer resumen/meta description ANTES de borrarlo del cuerpo
+      let resumenExtraido = '';
+      const matchResumen = limpio.match(/Resumen[:\s]*(.+?)(?:\n|$)/i);
+      const matchMeta = limpio.match(/Meta description[:\s]*(.+?)(?:\n|$)/i);
+      if (matchResumen && matchResumen[1].trim().length >= 30) {
+        resumenExtraido = matchResumen[1].trim();
+      } else if (matchMeta && matchMeta[1].trim().length >= 30) {
+        resumenExtraido = matchMeta[1].trim();
+      }
+
       // Quitar metadatos del cuerpo
       let cuerpo = limpio
         .replace(/Titular[:\s]*.+?(\n|$)/i, '')
@@ -2203,8 +2213,11 @@ sin texto ni marcas de agua, composición periodística"
       // 5. Estructurar en HTML
       const contenidoHTML = estructurarHTMLCompleto(cuerpo);
 
-      // 6. Generar resumen
-      const resumen = generarResumen(contenidoHTML);
+      // 6. Usar resumen de la IA si existe, si no generar del primer párrafo
+      let resumen = resumenExtraido;
+      if (!resumen || resumen.length < 30) {
+        resumen = generarResumen(contenidoHTML);
+      }
       
       // 7. Contar elementos
       const palabraCount = contarPalabrasHTML(contenidoHTML);
