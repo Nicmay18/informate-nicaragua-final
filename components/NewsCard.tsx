@@ -1,5 +1,9 @@
 // File: components/NewsCard.tsx
 import Link from 'next/link';
+
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
+  <Link {...props} prefetch={false} />
+);
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -24,7 +28,7 @@ export default function NewsCard({ noticia }: NewsCardProps) {
   const timeAgo = safeTimeAgo(noticia.fecha);
 
   return (
-    <Link href={`/noticias/${noticia.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <NoPrefetchLink href={`/noticias/${noticia.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <article className="news-card">
         <div className="news-card-image">
           {noticia.imagen ? (
@@ -77,6 +81,6 @@ export default function NewsCard({ noticia }: NewsCardProps) {
           </div>
         </div>
       </article>
-    </Link>
+    </NoPrefetchLink>
   );
 }

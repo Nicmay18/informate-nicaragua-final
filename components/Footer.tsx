@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
+  <Link {...props} prefetch={false} />
+);
 import Image from 'next/image';
 
 const CATEGORIES = [
@@ -80,10 +84,10 @@ export default function Footer() {
           <ul className="ni-footer__links">
             {CATEGORIES.map((cat) => (
               <li key={cat.slug}>
-                <Link href={`/categoria/${cat.slug}`}>{cat.label}</Link>
+                <NoPrefetchLink href={`/categoria/${cat.slug}`}>{cat.label}</NoPrefetchLink>
               </li>
             ))}
-            <li><Link href="/noticias">Todas las noticias</Link></li>
+            <li><NoPrefetchLink href="/noticias">Todas las noticias</NoPrefetchLink></li>
           </ul>
         </div>
 
@@ -91,10 +95,10 @@ export default function Footer() {
         <div>
           <h3 className="ni-footer__col-title">Nosotros</h3>
           <ul className="ni-footer__links">
-            <li><Link href="/nosotros">Quiénes somos</Link></li>
-            <li><Link href="/contacto">Contacto</Link></li>
-            <li><Link href="/politica-editorial">Política Editorial</Link></li>
-            <li><Link href="/publicidad">Publicidad</Link></li>
+            <li><NoPrefetchLink href="/nosotros">Quiénes somos</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/contacto">Contacto</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/politica-editorial">Política Editorial</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/publicidad">Publicidad</NoPrefetchLink></li>
           </ul>
         </div>
 
@@ -104,7 +108,7 @@ export default function Footer() {
           <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.7)', marginBottom: 12 }}>
             Escucha las radios más populares del país.
           </p>
-          <Link
+          <NoPrefetchLink
             href="/radio"
             style={{
               display: 'inline-flex',
@@ -126,24 +130,24 @@ export default function Footer() {
               <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /><path d="M7.8 16.2c-2.4-2.4-2.4-6.4 0-8.8" /><circle cx="12" cy="12" r="2" /><path d="M16.2 7.8c2.4 2.4 2.4 6.4 0 8.8" /><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" />
             </svg>
             Ir a Radio en vivo
-          </Link>
+          </NoPrefetchLink>
         </div>
 
       </div>
 
       {/* Políticas editoriales visibles — señal EEAT crítica para Google */}
       <div className="ni-footer__policies" style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', justifyContent: 'center', fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
-        <Link href="/politica-editorial" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Política Editorial</Link>
+        <NoPrefetchLink href="/politica-editorial" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Política Editorial</NoPrefetchLink>
         <span>•</span>
-        <Link href="/correcciones" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Correcciones</Link>
+        <NoPrefetchLink href="/correcciones" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Correcciones</NoPrefetchLink>
         <span>•</span>
-        <Link href="/privacidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacidad</Link>
+        <NoPrefetchLink href="/privacidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacidad</NoPrefetchLink>
         <span>•</span>
-        <Link href="/terminos" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Términos</Link>
+        <NoPrefetchLink href="/terminos" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Términos</NoPrefetchLink>
         <span>•</span>
-        <Link href="/cookies" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Cookies</Link>
+        <NoPrefetchLink href="/cookies" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Cookies</NoPrefetchLink>
         <span>•</span>
-        <Link href="/publicidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Publicidad</Link>
+        <NoPrefetchLink href="/publicidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Publicidad</NoPrefetchLink>
       </div>
 
       {/* Barra inferior */}

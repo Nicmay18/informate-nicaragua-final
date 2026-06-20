@@ -2,6 +2,10 @@
 'use client';
 
 import Link from 'next/link';
+
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
+  <Link {...props} prefetch={false} />
+);
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { Noticia } from '@/lib/types';
@@ -47,7 +51,7 @@ export default function Sidebar({
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
             {trendingNews.slice(0, 5).map((noticia, idx) => (
-              <Link
+              <NoPrefetchLink
                 key={noticia.id}
                 href={`/noticias/${noticia.slug}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}
@@ -59,7 +63,7 @@ export default function Sidebar({
                     <div className="trending-meta">{noticia.categoria}</div>
                   </div>
                 </div>
-              </Link>
+              </NoPrefetchLink>
             ))}
           </div>
         </div>
@@ -113,14 +117,14 @@ export default function Sidebar({
           </h3>
           <div className="tags-container">
             {tags.map((tag) => (
-              <Link
+              <NoPrefetchLink
                 key={tag}
                 href={`/noticias?tag=${encodeURIComponent(tag)}`}
                 className="tag"
                 rel="nofollow"
               >
                 {tag}
-              </Link>
+              </NoPrefetchLink>
             ))}
           </div>
         </div>
@@ -140,7 +144,7 @@ export default function Sidebar({
           <p style={{ fontSize: '12px', lineHeight: 1.6, color: 'var(--primary)' }}>
             Nicaragua Informate es tu fuente confiable de noticias verificadas de Nicaragua, Centroamérica y el mundo.
           </p>
-          <Link
+          <NoPrefetchLink
             href="/nosotros"
             style={{
               display: 'inline-flex',
@@ -155,7 +159,7 @@ export default function Sidebar({
           >
             Conoce más
             <span>→</span>
-          </Link>
+          </NoPrefetchLink>
         </div>
       </div>
     </aside>

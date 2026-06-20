@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
+  <Link {...props} prefetch={false} />
+);
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -42,7 +46,7 @@ export default function Header() {
       <header className="ni-header">
         {/* Top bar: logo + fecha + acciones */}
         <div className="ni-header__top">
-          <Link href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
+          <NoPrefetchLink href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
             <Image
               src="/logo.webp"
               alt="Nicaragua Informate"
@@ -55,7 +59,7 @@ export default function Header() {
               <strong>Nicaragua Informate</strong>
               <span className="ni-logo__tagline">INFORMATE AL INSTANTE</span>
             </div>
-          </Link>
+          </NoPrefetchLink>
 
           <time className="ni-header__date" dateTime={headerDateIso} suppressHydrationWarning>
             {headerDateHuman}
@@ -113,10 +117,10 @@ export default function Header() {
         {/* Barra de navegación */}
         <nav className="ni-header__nav" aria-label="Navegación principal">
           <ul className="ni-nav">
-            <li><Link href="/">Inicio</Link></li>
+            <li><NoPrefetchLink href="/">Inicio</NoPrefetchLink></li>
             {CATEGORIES.map((cat) => (
               <li key={cat.slug}>
-                <Link href={`/categoria/${cat.slug}`}>{cat.label}</Link>
+                <NoPrefetchLink href={`/categoria/${cat.slug}`}>{cat.label}</NoPrefetchLink>
               </li>
             ))}
           </ul>
@@ -136,12 +140,12 @@ export default function Header() {
               ✕
             </button>
             <ul className="ni-mobile-menu__nav">
-              <li><Link href="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+              <li><NoPrefetchLink href="/" onClick={() => setMenuOpen(false)}>Inicio</NoPrefetchLink></li>
               {CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
-                  <Link href={`/categoria/${cat.slug}`} onClick={() => setMenuOpen(false)}>
+                  <NoPrefetchLink href={`/categoria/${cat.slug}`} onClick={() => setMenuOpen(false)}>
                     {cat.label}
-                  </Link>
+                  </NoPrefetchLink>
                 </li>
               ))}
             </ul>
