@@ -2,6 +2,11 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Link from 'next/link';
+
+// Componente Link con prefetch desactivado para no competir con LCP
+const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
+  <Link {...props} prefetch={false} />
+);
 import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -60,9 +65,9 @@ function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
       <div className="ni-marquee-bar__content">
         <div className="ni-marquee-bar__scroll">
           {list.map((n) => (
-            <Link key={n.id} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
+            <NoPrefetchLink key={n.id} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
               <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
-            </Link>
+            </NoPrefetchLink>
           ))}
         </div>
       </div>
@@ -105,7 +110,7 @@ function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noti
               </div>
               <div className="ni-tab-item__content">
                 <span className={`ni-tab-item__pill ni-tab-item__pill--${catClass(n.categoria)}`}>{n.categoria}</span>
-                <Link href={`/noticias/${n.slug}`} className="ni-tab-item__title">{n.titulo}</Link>
+                <NoPrefetchLink href={`/noticias/${n.slug}`} className="ni-tab-item__title">{n.titulo}</NoPrefetchLink>
               </div>
             </li>
           ))}
@@ -212,7 +217,7 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
       <div className="ni-hero__info">
         <span className={`ni-hero__badge ni-hero__badge--${catClass(items[idx]?.categoria)}`}>{items[idx]?.categoria || 'Noticia'}</span>
         <span className="ni-hero__title">
-          <Link href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</Link>
+          <NoPrefetchLink href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</NoPrefetchLink>
         </span>
         <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
         <div className="ni-hero__meta">
@@ -287,7 +292,7 @@ function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
       <div className="ni-card__content" style={{ width: '100%', padding: 0, minWidth: 0, overflow: 'hidden' }}>
         <span className={`ni-card__pill ni-card__pill--${cat}`} style={{ fontSize: '0.6rem', marginBottom: 2, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0f172a' }}>{noticia.categoria || 'Noticia'}</span>
         <span className="ni-card__title" style={{ fontFamily: "'Merriweather', serif", fontSize: '0.95rem', fontWeight: 700, lineHeight: 1.25, color: '#0f172a', marginBottom: 3, display: 'block' }}>
-          <Link href={`/noticias/${noticia.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{noticia.titulo}</Link>
+          <NoPrefetchLink href={`/noticias/${noticia.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{noticia.titulo}</NoPrefetchLink>
         </span>
         <p className="ni-card__excerpt" style={{ fontSize: '0.8rem', lineHeight: 1.4, marginBottom: 4, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{noticia.resumen || noticia.titulo}</p>
         <div className="ni-card__meta" style={{ fontSize: '0.68rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 8px', marginTop: 0 }}>
@@ -315,7 +320,7 @@ function Section({ title, slug, color, noticias }: { title: string; slug: string
     <section className="ni-section">
       <div className="ni-section__header">
         <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
-        <Link href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</Link>
+        <NoPrefetchLink href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</NoPrefetchLink>
       </div>
       {noticias.length <= 2 ? (
         noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
@@ -369,7 +374,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
         <span className="ni-top-tags__label"># Etiquetas principales</span>
         <div className="ni-top-tags__list">
           {TRENDS.map(t => (
-            <Link key={t.label} href={t.href} className="ni-top-tag" rel="nofollow">{t.label}</Link>
+            <NoPrefetchLink key={t.label} href={t.href} className="ni-top-tag" rel="nofollow">{t.label}</NoPrefetchLink>
           ))}
         </div>
       </div>
@@ -385,11 +390,11 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
         <section className="ni-section" style={{ marginTop: 24 }}>
           <div className="ni-section__header">
             <h2 className="ni-section__title" style={{ color: '#7c3aed' }}><BookOpen size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Guías útiles</h2>
-            <Link href="/guia" className="ni-section__more">Ver todas →</Link>
+            <NoPrefetchLink href="/guia" className="ni-section__more">Ver todas →</NoPrefetchLink>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
             {getAllEvergreen().slice(0, 4).map((guia) => (
-              <Link
+              <NoPrefetchLink
                 key={guia.slug}
                 href={`/guia/${guia.slug}`}
                 style={{
@@ -405,7 +410,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase' }}>{guia.category}</span>
                 <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '6px 0 4px', lineHeight: 1.4 }}>{guia.title}</h3>
                 <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{guia.description.slice(0, 90)}…</p>
-              </Link>
+              </NoPrefetchLink>
             ))}
           </div>
         </section>
@@ -419,7 +424,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <section className="ni-section">
               <div className="ni-section__header">
                 <h2 className="ni-section__title ni-section__title--sucesos">Últimas noticias</h2>
-                <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
+                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
               </div>
               {ultimas.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
             </section>
@@ -430,7 +435,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <section className="ni-section">
               <div className="ni-section__header">
                 <h2 className="ni-section__title ni-section__title--sucesos"><TrendingUp size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Más leídos</h2>
-                <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
+                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
               </div>
               <div className="ni-grid-2">
                 {masLeidas.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
@@ -447,7 +452,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <section className="ni-section">
               <div className="ni-section__header">
                 <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
-                <Link href="/noticias" className="ni-section__more">Ver todas →</Link>
+                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
               </div>
               <div className="ni-grid-2">
                 {populares.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
