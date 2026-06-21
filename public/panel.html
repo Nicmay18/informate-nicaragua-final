@@ -3455,26 +3455,24 @@ sin texto ni marcas de agua, composición periodística"
           await window.recargarSelectEvaluador(false);
         }
         
-        // Revalidar en Vercel para que los cambios se vean al instante
+        // Revalidar en Vercel para que los cambios se vean al instante (noticia nueva Y editada)
         const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
         const slugReal = document.getElementById('noticiaSlug').value || slug || noticiaId;
-        if (noticiaId) {
-          try {
-            const headers = { 'Content-Type': 'application/json' };
-            if (revalidateToken) headers['x-revalidate-secret'] = revalidateToken;
-            const revalidateRes = await fetch('/api/revalidate', {
-              method: 'POST',
-              headers,
-              body: JSON.stringify({ type: 'noticia', slug: slugReal, category: categoria })
-            });
-            const revalidateData = await revalidateRes.json().catch(() => ({}));
-            if (revalidateRes.ok && revalidateData.revalidated) {
-              showToast('Cambios aplicados: noticia, portada y categoría actualizadas', 'success');
-            } else {
-              showToast('No se pudo revalidar la caché. Los cambios se verán en unos minutos.', 'warning');
-            }
-          } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
-        }
+        try {
+          const headers = { 'Content-Type': 'application/json' };
+          if (revalidateToken) headers['x-revalidate-secret'] = revalidateToken;
+          const revalidateRes = await fetch('/api/revalidate', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ type: 'noticia', slug: slugReal, category: categoria })
+          });
+          const revalidateData = await revalidateRes.json().catch(() => ({}));
+          if (revalidateRes.ok && revalidateData.revalidated) {
+            showToast('Cambios aplicados: noticia, portada y categoría actualizadas', 'success');
+          } else {
+            showToast('No se pudo revalidar la caché. Los cambios se verán en unos minutos.', 'warning');
+          }
+        } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
 
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
