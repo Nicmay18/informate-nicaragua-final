@@ -101,12 +101,13 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '8px 16px',
-    fontSize: 14,
-    color: '#6b7280',
-    paddingBottom: 16,
-    marginBottom: 24,
-    borderBottom: '1px solid #e5e5e5',
+    gap: '10px 18px',
+    fontSize: 13.5,
+    color: '#64748b',
+    padding: '14px 0',
+    marginBottom: 28,
+    borderTop: '1px solid #eef0f3',
+    borderBottom: '1px solid #eef0f3',
   };
 
   const badgeStyle: React.CSSProperties = {
@@ -136,10 +137,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     position: 'relative',
     width: '100%',
     aspectRatio: '16 / 9',
-    maxHeight: 480,
-    borderRadius: 12,
+    maxHeight: 500,
+    borderRadius: 14,
     overflow: 'hidden',
     backgroundColor: '#f3f4f6',
+    boxShadow: '0 10px 30px -12px rgba(15,23,42,0.25)',
   };
 
   const captionStyle: React.CSSProperties = {
@@ -186,7 +188,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     border: '1px solid #e5e5e5',
     overflow: 'hidden',
     textDecoration: 'none',
-    transition: 'box-shadow 0.2s',
+    transition: 'box-shadow 0.25s ease, transform 0.25s ease',
   };
 
   return (
@@ -213,9 +215,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           {noticia.titulo}
         </h1>
 
-        {/* Resumen */}
+        {/* Resumen / Lead con acento editorial */}
         {noticia.resumen && (
-          <p style={{ fontSize: 18, color: '#4b5563', lineHeight: 1.6, marginBottom: 24 }} itemProp="description">
+          <p style={{ fontSize: 19, color: '#334155', lineHeight: 1.65, marginBottom: 24, paddingLeft: 18, borderLeft: `4px solid ${category.color}`, fontWeight: 500 }} itemProp="description">
             {noticia.resumen}
           </p>
         )}
@@ -340,10 +342,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </footer>
         )}
 
-        {/* Donacion PayPal */}
-        <div style={{ marginTop: 32, padding: '24px 20px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 12, textAlign: 'center' }}>
-          <p style={{ fontSize: 15, fontWeight: 700, color: '#1e40af', margin: '0 0 4px' }}>Apoyá nuestro periodismo</p>
-          <p style={{ fontSize: 13, color: '#3b82f6', margin: '0 0 16px' }}>Tu aporte nos ayuda a mantener la cobertura informativa de Nicaragua.</p>
+        {/* Donacion PayPal — barra discreta que no interrumpe la lectura */}
+        <div style={{ marginTop: 32, padding: '14px 18px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 14, color: '#475569', flex: 1, minWidth: 200 }}>
+            <strong style={{ color: '#1e293b' }}>Apoyá nuestro periodismo.</strong> Tu aporte mantiene viva la cobertura de Nicaragua.
+          </span>
           <a
             href="https://paypal.me/NicaraguaInformate"
             target="_blank"
@@ -354,17 +357,18 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               gap: 8,
               color: '#fff',
               backgroundColor: '#0070ba',
-              padding: '12px 24px',
+              padding: '9px 18px',
               borderRadius: 8,
-              fontWeight: 700,
+              fontWeight: 600,
               textDecoration: 'none',
-              fontSize: 15,
+              fontSize: 14,
+              whiteSpace: 'nowrap',
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.63l-1.496 9.478h2.79c.457 0 .85-.334.922-.788l.04-.19.73-4.627.047-.255a.933.933 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.025-.13.048-.26.066-.39a5.65 5.65 0 0 0-.04-1.722c-.01-.065-.02-.13-.032-.194a3.506 3.506 0 0 0-.108-.313z"/>
             </svg>
-            Donar vía PayPal
+            Donar
           </a>
         </div>
 
@@ -445,22 +449,34 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Related News */}
         {related.length > 0 && (
           <aside aria-label="Lea también" style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Lea también</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-              {related.slice(0, 3).map(item => (
-                <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
-                  {item.imagen && (
-                    <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
-                      <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#111827', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ width: 5, height: 24, background: category.color, borderRadius: 3, display: 'inline-block' }} />
+              Lea también
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20 }}>
+              {related.slice(0, 3).map(item => {
+                const itemCat = getCategory(item.categoria);
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${item.slug}`}
+                    style={relatedCardStyle}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 28px -10px rgba(15,23,42,0.28)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                  >
+                    {item.imagen && (
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', backgroundColor: '#f3f4f6' }}>
+                        <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
+                        <span style={{ position: 'absolute', top: 10, left: 10, fontSize: 11, fontWeight: 700, color: '#fff', background: itemCat.color, padding: '3px 10px', borderRadius: 9999, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{itemCat.name}</span>
+                      </div>
+                    )}
+                    <div style={{ padding: 16 }}>
+                      <h3 style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: 15.5, lineHeight: 1.4 }}>{item.titulo}</h3>
+                      <time style={{ fontSize: 12, color: '#9ca3af', marginTop: 10, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
                     </div>
-                  )}
-                  <div style={{ padding: 16 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: '#991b1b' }}>{item.categoria}</span>
-                    <h3 style={{ margin: '4px 0 0', fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{item.titulo}</h3>
-                    <time style={{ fontSize: 12, color: '#9ca3af', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </aside>
         )}
