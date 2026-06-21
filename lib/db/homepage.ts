@@ -114,8 +114,8 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       const snap = await db.collection('noticias').limit(500).get();
       let noticias = snap.docs.map(mapNoticia);
 
-      // 1. Filtrar SOLO publicadas (campo 'estado' en Firestore)
-      noticias = noticias.filter(n => (n as any).estado === 'publicado');
+      // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)
+      noticias = noticias.filter(n => (n as any).estado === 'publicado' || !(n as any).estado);
 
       // 2. Deduplicar por slug: quedarse con la más reciente
       const unique = new Map<string, Noticia>();
