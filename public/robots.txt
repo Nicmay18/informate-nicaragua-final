@@ -1,6 +1,14 @@
 User-agent: *
 Allow: /
 
+# Recursos estaticos (permitir explicitamente)
+Allow: /js/
+Allow: /css/
+Allow: /fonts/
+Allow: /images/
+Allow: /manifest.json
+Allow: /favicon.ico
+
 # Admin, auth y paneles (no indexar)
 Disallow: /admin/
 Disallow: /admin.html
