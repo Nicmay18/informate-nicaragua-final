@@ -1683,15 +1683,44 @@ sin texto ni marcas de agua, composición periodística"
       return new Date(fecha).toLocaleString("es-NI", { day: 'numeric', month: 'short' });
     }
 
-    // Helper robusto: extrae timestamp en ms desde Timestamp de Firestore,
-    // objeto serializado {seconds,nanoseconds}, string o numero
+    // Helper robusto: extrae timestamp en ms desde cualquier formato de fecha
+    // Soporta: Firestore Timestamp, {seconds,nanoseconds}, string ISO, numero,
+    // y strings en espanol tipo "21 jun, 08:53 a. m." o "15 jun, 03:32 p. m."
+    const MESES_ES = { ene:0, feb:1, mar:2, abr:3, may:4, jun:5, jul:6, ago:7, sep:8, oct:9, nov:10, dic:11 };
     function getFechaMs(fecha) {
       if (!fecha) return 0;
       if (typeof fecha.toMillis === 'function') return fecha.toMillis();
       if (typeof fecha === 'number') return fecha;
       if (fecha.seconds !== undefined) return fecha.seconds * 1000 + Math.floor((fecha.nanoseconds || 0) / 1e6);
-      const d = new Date(fecha);
-      return isNaN(d.getTime()) ? 0 : d.getTime();
+      if (typeof fecha === 'string') {
+        // Intentar parsear formato nicaraguense: "21 jun, 08:53 a. m."
+        const m = fecha.match(/(\d{1,2})\s+([a-z]{3})[,\s]+(\d{1,2}):(\d{2})(?:\s+([ap])\.?\s*m\.?)?/i);
+        if (m) {
+          const dia = parseInt(m[1], 10);
+          const mes = MESES_ES[m[2].toLowerCase()];
+          const hora = parseInt(m[3], 10);
+          const min = parseInt(m[4], 10);
+          const ampm = m[5] ? m[5].toLowerCase() : null;
+          let h = hora;
+          if (ampm === 'p' && h < 12) h += 12;
+          if (ampm === 'a' && h === 12) h = 0;
+          const ahora = new Date();
+          const d = new Date(ahora.getFullYear(), mes !== undefined ? mes : ahora.getMonth(), dia, h, min);
+          return d.getTime();
+        }
+        // Fallback: ISO o Date.parse
+        const d = new Date(fecha);
+        if (!isNaN(d.getTime())) return d.getTime();
+      }
+      return 0;
+    }
+
+    // Formateador robusto para cualquier tipo de fecha
+    function formatearFechaRobusta(fecha) {
+      if (!fecha) return "—";
+      const ms = getFechaMs(fecha);
+      if (ms === 0) return "—";
+      return new Date(ms).toLocaleString("es-NI", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     }
 
     // Drag & Drop
@@ -2901,21 +2930,13 @@ sin texto ni marcas de agua, composición periodística"
       const container = document.getElementById('ultimasNoticiasDashboard');
       let noticias = [];
       try {
-        // Intento 1: ordenar por fecha desc directo desde Firestore
-        const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
-        const snapshot = await getDocs(q);
+        // Traer todas y ordenar en cliente (Firestore orderBy falla con tipos mixtos)
+        const snapshot = await getDocs(collection(db, "noticias"));
         snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-      } catch (err1) {
-        console.warn('[Panel] cargarUltimasNoticias orderBy fallo:', err1.message);
-        // Intento 2: sin ordenamiento, ordenar en cliente robustamente
-        try {
-          const snapshot2 = await getDocs(collection(db, "noticias"));
-          snapshot2.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-          noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
-        } catch (err2) {
-          container.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;font-size:13px;"><i class="fas fa-exclamation-circle"></i> Error cargando noticias. Revisa la consola (F12).</div>';
-          return;
-        }
+        noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
+      } catch (err) {
+        container.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;font-size:13px;"><i class="fas fa-exclamation-circle"></i> Error cargando noticias. Revisa la consola (F12).</div>';
+        return;
       }
 
       if (noticias.length === 0) {
@@ -2937,7 +2958,7 @@ sin texto ni marcas de agua, composición periodística"
             <div class="news-meta">
               <span class="news-badge badge-${slugCategoria(n.categoria)}">${n.categoria || '—'}</span>
               <span class="news-badge" style="background:var(--success);color:#fff;font-size:10px;">PUBLICADO</span>
-              <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFecha(n.fecha)}</span>
+              <span><i class="fas fa-clock" style="margin-right:4px;"></i>${formatearFechaRobusta(n.fecha)}</span>
             </div>
           </div>
           <div class="news-actions" style="opacity:1;">
@@ -3273,19 +3294,11 @@ sin texto ni marcas de agua, composición periodística"
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
+        // Traer todas y ordenar en cliente (Firestore orderBy falla con tipos mixtos de fecha)
+        const snapshot = await getDocs(collection(db, "noticias"));
         let noticias = [];
-        try {
-          // Intento 1: Firestore ordena por fecha desc (mas confiable)
-          const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
-          const snapshot = await getDocs(q);
-          snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        } catch (err1) {
-          console.warn('[Panel] orderBy fecha fallo, usando fallback:', err1.message);
-          // Intento 2: sin ordenamiento, ordenar en cliente con helper robusto
-          const snapshot = await getDocs(collection(db, "noticias"));
-          snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-          noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
-        }
+        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+        noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
         const hace7Dias = Date.now() - (7 * 24 * 60 * 60 * 1000);
         if (filtro === 'recientes') {
           noticias = noticias.filter(n => getFechaMs(n.fecha) > hace7Dias);
@@ -3343,7 +3356,7 @@ sin texto ni marcas de agua, composición periodística"
             metaDiv.appendChild(wordsSpan);
             // Fecha
             const fechaSpan = document.createElement('span');
-            fechaSpan.innerHTML = '<i class="fas fa-clock" style="margin-right:4px;"></i>' + formatearFecha(n.fecha);
+            fechaSpan.innerHTML = '<i class="fas fa-clock" style="margin-right:4px;"></i>' + formatearFechaRobusta(n.fecha);
             metaDiv.appendChild(fechaSpan);
             // Destacada
             if (n.destacada) {
@@ -5055,7 +5068,7 @@ VERIFICACIÓN FINAL
         const recEl = document.getElementById('actividad-reciente-body');
         const recientes = noticias.filter(n => n.fecha).sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha)).slice(0, 8);
         recEl.innerHTML = recientes.map(n => {
-          const f = formatearFecha(n.fecha);
+          const f = formatearFechaRobusta(n.fecha);
           return `
             <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
               <div style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;"></div>
