@@ -79,6 +79,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const seoTipo = toNoticiaTipo(category);
 
     // SEO Title optimization (máx 60 chars para evitar truncamiento en SERPs)
+    // Preferir titulo original si ya es SEO-friendly; solo reescribir si es muy malo
+    const originalValidation = validateTitle(noticia.titulo);
     const seoTitleResult = generateOptimizedTitle({
       tipo: seoTipo,
       tituloOriginal: noticia.titulo,
@@ -87,10 +89,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       contexto: noticia.resumen?.substring(0, 40),
     });
     const titleValidation = validateTitle(seoTitleResult);
-    const finalTitle = titleValidation.score >= 70 ? seoTitleResult : noticia.titulo;
+    // Usar original si ya es bueno (score >= 70) y no es mucho peor que el SEO rewrite
+    const finalTitle = originalValidation.score >= 70
+      ? noticia.titulo
+      : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
 
-    // Meta description: truncado inteligente respetando palabras completas (140-160 chars óptimo para SERPs)
-    const rawDescription = noticia.metaDescription?.trim() || generateMetaDescription(noticia);
+    // Meta description: priorizar resumen editorial > metaDescription > generada
+    // El resumen escrito por el periodista es mas atractivo que las plantillas genericas
+    const rawDescription = noticia.resumen?.trim()
+      || noticia.metaDescription?.trim()
+      || generateMetaDescription(noticia);
     let description = rawDescription;
     if (description.length > 160) {
       const cutAt = description.lastIndexOf(' ', 157);
