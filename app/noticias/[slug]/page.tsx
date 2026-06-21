@@ -16,13 +16,13 @@ import { logger } from '@/lib/logger';
 const cachedGetNewsBySlug = unstable_cache(
   async (slug: string) => getNewsBySlug(slug),
   ['news-by-slug'],
-  { revalidate: 300 }
+  { revalidate: 300, tags: ['news-by-slug'] }
 );
 
 const cachedGetRelatedNews = unstable_cache(
   async (category: string, slug: string, limit: number) => getRelatedNews(category, slug, limit),
   ['related-news'],
-  { revalidate: 600 }
+  { revalidate: 600, tags: ['related-news'] }
 );
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
 export const revalidate = 3600; // ISR: revalida cada 1h (artículos raramente cambian)

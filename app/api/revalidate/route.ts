@@ -1,27 +1,76 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
+
+// Mapea nombre de categoria (display) a su slug de URL
+const CATEGORIA_SLUG: Record<string, string> = {
+  'Sucesos': 'sucesos',
+  'Nacionales': 'nacionales',
+  'Economía': 'economia',
+  'Cultura': 'cultura',
+  'Espectáculos': 'espectaculos',
+  'Deportes': 'deportes',
+  'Tecnología': 'tecnologia',
+  'Internacionales': 'internacionales',
+  'Salud': 'salud',
+};
+
+function slugificarCategoria(cat?: string): string | null {
+  if (!cat) return null;
+  if (CATEGORIA_SLUG[cat]) return CATEGORIA_SLUG[cat];
+  // Fallback: normalizar acentos y espacios
+  return cat
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { path, categorySlug, articleSlug } = await request.json();
+    const body = await request.json();
+    // Aceptar tanto los nombres nuevos (panel) como los antiguos (compat)
+    const articleSlug: string | undefined = body.slug || body.articleSlug;
+    const categoryRaw: string | undefined = body.category || body.categorySlug;
+    const path: string | undefined = body.path;
 
-    // Revalidar la página principal
+    const revalidados: string[] = [];
+
+    // Pagina principal
     revalidatePath('/');
+    revalidados.push('/');
 
-    // Revalidar la categoría si se proporciona
-    if (categorySlug) {
-      revalidatePath(`/categoria/${categorySlug}`);
-    }
+    // Listados de noticias
+    revalidatePath('/noticias');
+    revalidados.push('/noticias');
 
-    // Revalidar página del artículo individual
+    // Pagina individual de la noticia (CRITICO: lo que faltaba)
     if (articleSlug) {
       revalidatePath(`/noticias/${articleSlug}`);
+      revalidados.push(`/noticias/${articleSlug}`);
     }
 
-    // Revalidar páginas de listados
-    revalidatePath('/noticias');
+    // Categoria
+    const catSlug = slugificarCategoria(categoryRaw);
+    if (catSlug) {
+      revalidatePath(`/categoria/${catSlug}`);
+      revalidados.push(`/categoria/${catSlug}`);
+    }
 
-    return NextResponse.json({ revalidated: true, path: path || '/' });
+    // Path arbitrario opcional
+    if (path && path !== '/') {
+      revalidatePath(path);
+      revalidados.push(path);
+    }
+
+    // Invalidar caches por tag (homepage usa estos tags)
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
+    revalidateTag('popular-news');
+    revalidateTag('news-by-slug');
+    revalidateTag('related-news');
+
+    return NextResponse.json({ revalidated: true, paths: revalidados });
   } catch (error) {
     console.error('[Revalidate] Error:', error);
     return NextResponse.json({ revalidated: false, error: String(error) }, { status: 500 });

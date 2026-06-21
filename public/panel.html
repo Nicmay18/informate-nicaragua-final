@@ -3268,17 +3268,21 @@ sin texto ni marcas de agua, composición periodística"
         // Revalidar en Vercel para que los cambios se vean al instante
         const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
         const slugReal = document.getElementById('noticiaSlug').value || slug || noticiaId;
-        if (!revalidateToken) {
-          showToast('Falta token de revalidación. Configuralo en Configuración > Revalidación Vercel para ver los cambios al instante.', 'warning');
-        } else if (noticiaId) {
+        if (noticiaId) {
           try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (revalidateToken) headers['x-revalidate-secret'] = revalidateToken;
             const revalidateRes = await fetch('/api/revalidate', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': revalidateToken },
+              headers,
               body: JSON.stringify({ type: 'noticia', slug: slugReal, category: categoria })
             });
-            if (revalidateRes.ok) { showToast('Noticia y página principal actualizadas', 'success'); }
-            else { showToast('No se pudo revalidar la caché. Verificá el token en Configuración.', 'warning'); }
+            const revalidateData = await revalidateRes.json().catch(() => ({}));
+            if (revalidateRes.ok && revalidateData.revalidated) {
+              showToast('Cambios aplicados: noticia, portada y categoría actualizadas', 'success');
+            } else {
+              showToast('No se pudo revalidar la caché. Los cambios se verán en unos minutos.', 'warning');
+            }
           } catch (e) { console.error('Revalidate error:', e); showToast('Error de red al revalidar. Los cambios se verán en unos minutos.', 'warning'); }
         }
 
