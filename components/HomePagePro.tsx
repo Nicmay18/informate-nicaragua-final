@@ -462,11 +462,11 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
         </div>
       </div>
 
-      {/* MARQUEE / TICKER */}
-      <BreakingMarquee noticias={noticias} />
+      {/* MARQUEE / TICKER — solo en homepage */}
+      {!isNoticiasPage && <BreakingMarquee noticias={noticias} />}
 
-      {/* HERO */}
-      <Hero noticias={heroNoticias} />
+      {/* HERO — solo en homepage */}
+      {!isNoticiasPage && <Hero noticias={heroNoticias} />}
 
       {/* GUÍAS Y RECURSOS EVERGREEN */}
       {!isNoticiasPage && (
@@ -502,50 +502,64 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
       {/* MAIN */}
       <div className="ni-main">
         <div className="ni-content">
-          {/* Últimas */}
-          {ultimas.length > 0 && (
-            <section className="ni-section">
-              <div className="ni-section__header">
-                <h2 className="ni-section__title ni-section__title--sucesos">Últimas noticias</h2>
-                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
+          {/* Página /noticias: listado completo limpio */}
+          {isNoticiasPage ? (
+            <section className="ni-section" style={{ marginTop: 0 }}>
+              <div className="ni-section__header" style={{ marginBottom: 8 }}>
+                <h2 className="ni-section__title ni-section__title--sucesos">{noticias.length} noticias publicadas</h2>
               </div>
-              {ultimas.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-            </section>
-          )}
-
-          {/* MÁS LEÍDAS — sección prominente en el contenido principal */}
-          {masLeidas.length > 0 && (
-            <section className="ni-section">
-              <div className="ni-section__header">
-                <h2 className="ni-section__title ni-section__title--sucesos"><TrendingUp size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Más leídos</h2>
-                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
-              </div>
-              <div className="ni-grid-2">
-                {masLeidas.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
               </div>
             </section>
+          ) : (
+            <>
+              {/* Últimas */}
+              {ultimas.length > 0 && (
+                <section className="ni-section">
+                  <div className="ni-section__header">
+                    <h2 className="ni-section__title ni-section__title--sucesos">Últimas noticias</h2>
+                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
+                  </div>
+                  {ultimas.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+                </section>
+              )}
+
+              {/* MÁS LEÍDAS */}
+              {masLeidas.length > 0 && (
+                <section className="ni-section">
+                  <div className="ni-section__header">
+                    <h2 className="ni-section__title ni-section__title--sucesos"><TrendingUp size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Más leídos</h2>
+                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
+                  </div>
+                  <div className="ni-grid-2">
+                    {masLeidas.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+                  </div>
+                </section>
+              )}
+
+              {CATEGORIES.slice(0, 3).map(c => (
+                <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
+              ))}
+
+              {/* DESTACADOS */}
+              {popularesFiltrados.length > 0 && (
+                <section className="ni-section">
+                  <div className="ni-section__header">
+                    <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
+                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
+                  </div>
+                  <div className="ni-grid-2">
+                    {popularesFiltrados.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+                  </div>
+                </section>
+              )}
+
+              {CATEGORIES.slice(3).map(c => (
+                <LazySection key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
+              ))}
+            </>
           )}
-
-          {CATEGORIES.slice(0, 3).map(c => (
-            <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
-          ))}
-
-          {/* DESTACADOS — rompe monotonía entre categorías */}
-          {popularesFiltrados.length > 0 && (
-            <section className="ni-section">
-              <div className="ni-section__header">
-                <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
-                <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
-              </div>
-              <div className="ni-grid-2">
-                {popularesFiltrados.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-              </div>
-            </section>
-          )}
-
-          {CATEGORIES.slice(3).map(c => (
-            <LazySection key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
-          ))}
         </div>
 
         {/* SIDEBAR */}
