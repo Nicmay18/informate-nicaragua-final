@@ -242,7 +242,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
             {vistas} vistas
           </span>
-          <span style={{ color: '#991b1b', fontWeight: 600 }}>{formatDateES(noticia.fecha)}</span>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
             <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
             <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
@@ -273,7 +272,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
-        <section itemProp="articleBody">
+        <section>
         {/* Banner de calidad si el artículo está marcado para revisión editorial */}
         {(noticia as any).necesitaRevision === true && (
           <div style={{ margin: '16px 0', padding: '12px 16px', backgroundColor: '#fef3c7', borderLeft: '4px solid #f59e0b', borderRadius: '0 8px 8px 0' }}>
@@ -392,32 +391,19 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <NewsletterSignup />
         </div>
 
-        {/* Navegación */}
+        {/* Navegación — noticias relacionadas */}
         {readAlso.length > 0 && (
           <aside aria-label="Lea además">
           <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-            {readAlso[0] && (
-              <Link href={`/noticias/${readAlso[0].slug}`} style={navCardStyle} legacyBehavior>
-                <a style={navCardStyle}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
-                    Anterior
-                  </span>
-                  <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[0].titulo}</p>
-                </a>
+            {readAlso.map((item, idx) => (
+              <Link key={item.slug} href={`/noticias/${item.slug}`} style={navCardStyle}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
+                  Relacionada {idx + 1}
+                </span>
+                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{item.titulo}</p>
               </Link>
-            )}
-            {readAlso[1] && (
-              <Link href={`/noticias/${readAlso[1].slug}`} style={{ ...navCardStyle, textAlign: 'right' }} legacyBehavior>
-                <a style={{ ...navCardStyle, textAlign: 'right' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
-                    Siguiente
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9,18 15,12 9,6" /></svg>
-                  </span>
-                  <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{readAlso[1].titulo}</p>
-                </a>
-              </Link>
-            )}
+            ))}
           </nav>
           </aside>
         )}
@@ -457,11 +443,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </Suspense>
 
         {/* Related News */}
-        {related.length > 3 && (
+        {related.length > 0 && (
           <aside aria-label="Lea también" style={{ marginTop: 48 }}>
             <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Lea también</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-              {related.slice(3, 6).map(item => (
+              {related.slice(0, 3).map(item => (
                 <Link key={item.slug} href={`/noticias/${item.slug}`} style={relatedCardStyle}>
                   {item.imagen && (
                     <div style={{ position: 'relative', width: '100%', height: 180, backgroundColor: '#f3f4f6' }}>
@@ -478,12 +464,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             </div>
           </aside>
         )}
-
-        {/* Comments — placeholder sin funcionalidad para evitar confusión */}
-        <section style={{ marginTop: 48 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 16 }}>Comentarios</h2>
-          <p style={{ color: '#6b7280', fontSize: 14 }}>Los comentarios estarán disponibles próximamente.</p>
-        </section>
 
       </article>
     </div>

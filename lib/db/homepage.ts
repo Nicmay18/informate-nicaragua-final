@@ -123,8 +123,23 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
     try {
       const db = getAdminDb();
       const snap = await db.collection('noticias').limit(500).get();
-      const noticias = snap.docs.map(mapNoticia);
-      _fetchCache = { data: noticias, expiresAt: Date.now() + 300_000 };
+      let noticias = snap.docs.map(mapNoticia);
+
+      // 1. Filtrar solo publicadas (si existe campo publicado)
+      noticias = noticias.filter(n => (n as any).publicado !== false);
+
+      // 2. Deduplicar por slug: quedarse con la más reciente
+      const unique = new Map<string, Noticia>();
+      for (const n of noticias) {
+        const existing = unique.get(n.slug);
+        if (!existing || new Date(n.fecha).getTime() > new Date(existing.fecha).getTime()) {
+          unique.set(n.slug, n);
+        }
+      }
+      noticias = Array.from(unique.values());
+
+      // 3. TTL reducido a 30s para frescura (antes 5 min)
+      _fetchCache = { data: noticias, expiresAt: Date.now() + 30_000 };
       return noticias;
     } finally {
       _fetchPromise = null;

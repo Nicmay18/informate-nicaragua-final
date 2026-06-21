@@ -407,26 +407,35 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
   // IDs del carousel
   const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
 
+  // IDs de masLeidas para evitar duplicación con populares
+  const masLeidasIds = useMemo(() => new Set(masLeidas.map(n => n.id)), [masLeidas]);
+
   // Resto = todas las noticias menos las del hero
   const resto = useMemo(
     () => noticias.filter(n => !heroIds.has(n.id)),
     [noticias, heroIds]
   );
 
+  // Populares filtrados: excluir noticias que ya están en Más leídos
+  const popularesFiltrados = useMemo(
+    () => populares.filter(n => !masLeidasIds.has(n.id)),
+    [populares, masLeidasIds]
+  );
+
   // Últimas 12 noticias
   const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
 
-  // Categorías — lookup O(1) sin normalize en cada noticia
+  // Categorías — usar RESTO (noticias fuera del carrusel) para evitar duplicación
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
     CATEGORIES.forEach(c => { map[c.slug] = []; });
-    for (const n of noticias) {
+    for (const n of resto) {
       const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
       if (slug && map[slug]) map[slug].push(n);
     }
     CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 6); });
     return map;
-  }, [noticias]);
+  }, [resto]);
 
 
   return (
@@ -515,14 +524,14 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
           ))}
 
           {/* DESTACADOS — rompe monotonía entre categorías */}
-          {populares.length > 0 && (
+          {popularesFiltrados.length > 0 && (
             <section className="ni-section">
               <div className="ni-section__header">
                 <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
                 <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
               </div>
               <div className="ni-grid-2">
-                {populares.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
+                {popularesFiltrados.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
               </div>
             </section>
           )}
@@ -535,7 +544,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
         {/* SIDEBAR */}
         <aside className="ni-sidebar">
           {/* TABBED WIDGET (Más leídas all-time, Populares 7d, Tendencias recientes) */}
-          <TabbedSidebarWidget ultimas={masLeidas} populares={populares.length > 0 ? populares : resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
+          <TabbedSidebarWidget ultimas={masLeidas} populares={popularesFiltrados.length > 0 ? popularesFiltrados : resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
 
           {/* Radio en vivo */}
           <div className="ni-sidebar__widget ni-widget-compact">

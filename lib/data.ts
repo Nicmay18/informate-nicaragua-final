@@ -152,7 +152,7 @@ function mapDocToNoticia(d: any): Noticia {
 }
 
 /** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto).
- *  Usa cache compartido de 5 min para reducir lecturas Firestore al mínimo. */
+ *  Usa cache compartido de 30s para reducir lecturas Firestore al mínimo. */
 async function fetchAllNoticias(): Promise<Noticia[]> {
   const now = Date.now();
   if (_fetchCache && _fetchCache.expiresAt > now) {
@@ -161,8 +161,23 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb.collection('noticias').limit(500).get();
-    const noticias = snap.docs.map(mapDocToNoticia);
-    _fetchCache = { data: noticias, expiresAt: now + 300_000 }; // 5 minutos para reducir lecturas Firestore
+    let noticias = snap.docs.map(mapDocToNoticia);
+
+    // 1. Filtrar solo publicadas
+    noticias = noticias.filter(n => (n as any).publicado !== false);
+
+    // 2. Deduplicar por slug: quedarse con la más reciente
+    const unique = new Map<string, Noticia>();
+    for (const n of noticias) {
+      const existing = unique.get(n.slug);
+      if (!existing || new Date(n.fecha).getTime() > new Date(existing.fecha).getTime()) {
+        unique.set(n.slug, n);
+      }
+    }
+    noticias = Array.from(unique.values());
+
+    // 3. TTL reducido a 30s para frescura
+    _fetchCache = { data: noticias, expiresAt: now + 30_000 };
     return noticias;
   } catch (err) {
     logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));

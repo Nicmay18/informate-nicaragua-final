@@ -110,10 +110,12 @@ export async function POST(request: NextRequest) {
     // Invalidar cachés afectadas
     revalidateTag('latest-news');
     revalidateTag('trending-news');
+    revalidateTag('popular-news');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
     revalidatePath('/');
     revalidatePath('/noticias');
+    revalidatePath('/feed.xml');
     revalidatePath('/sitemap.xml');
     revalidatePath('/news-sitemap.xml');
 
