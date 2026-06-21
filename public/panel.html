@@ -3112,7 +3112,9 @@ sin texto ni marcas de agua, composición periodística"
           acciones.push('✅ Noticia publicada');
         }
 
-        // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS ───
+        // ─── AGREGAR LINKS INTERNOS AUTOMÁTICOS (DESHABILITADO) ───
+        // El editor decide manualmente si incluir links internos en el contenido.
+        /*
         if (esNueva && publicado && noticiaId) {
           try {
             const enrichRes = await fetch('/api/admin/enrich-links', {
@@ -3131,8 +3133,11 @@ sin texto ni marcas de agua, composición periodística"
             console.error('Enrich links error:', e);
           }
         }
+        */
 
-        // ─── AGREGAR NEGRITAS AUTOMÁTICAS ───
+        // ─── AGREGAR NEGRITAS AUTOMÁTICAS (DESHABILITADO) ───
+        // El editor decide manualmente qué palabras resaltar.
+        /*
         if (esNueva && publicado && noticiaId) {
           try {
             const strongRes = await fetch('/api/admin/enrich-strong', {
@@ -3151,6 +3156,7 @@ sin texto ni marcas de agua, composición periodística"
             console.error('Enrich strong error:', e);
           }
         }
+        */
 
         // ─── AGENTE DE INDEXACIÓN ───
         let indexOk = [];
@@ -5441,56 +5447,14 @@ VERIFICACIÓN FINAL
     // ENRICH LINKS MASIVO (corrección automática de links internos)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichLinksMasivo = async function() {
-      const btn = document.getElementById('btnEnrichLinks');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'; }
-      showToast('Iniciando corrección masiva de links internos en 223 noticias...', 'info', 'Corrección Automática');
-
-      try {
-        const res = await fetch('/api/admin/enrich-links', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ modo: 'masivo' })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (data.success) {
-          showToast('✅ ' + data.message, 'success', 'Corrección Automática');
-          setTimeout(() => cargarDashboardCalidad(), 1500);
-        } else {
-          showToast('⚠️ ' + (data.error || 'Error desconocido'), 'warning', 'Corrección Automática');
-        }
-      } catch (e) {
-        showToast('⚠️ Error de red al procesar. Intentá de nuevo.', 'warning', 'Corrección Automática');
-      } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-bolt"></i> Agregar links a TODO'; }
-      }
+      showToast('❌ Función deshabilitada. El editor agrega links manualmente.', 'warning', 'Corrección Automática');
     };
 
     // ═══════════════════════════════════════════════════════════════
     // ENRICH STRONG MASIVO (negritas automáticas)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichStrongMasivo = async function() {
-      const btn = document.getElementById('btnEnrichStrong');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...'; }
-      showToast('Agregando negritas automáticas a palabras clave en 223 noticias...', 'info', 'Corrección Automática');
-
-      try {
-        const res = await fetch('/api/admin/enrich-strong', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ modo: 'masivo' })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (data.success) {
-          showToast('✅ ' + data.message, 'success', 'Corrección Automática');
-          setTimeout(() => cargarDashboardCalidad(), 1500);
-        } else {
-          showToast('⚠️ ' + (data.error || 'Error desconocido'), 'warning', 'Corrección Automática');
-        }
-      } catch (e) {
-        showToast('⚠️ Error de red al procesar. Intentá de nuevo.', 'warning', 'Corrección Automática');
-      } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-bold"></i> Agregar negritas a TODO'; }
-      }
+      showToast('❌ Función deshabilitada. El editor resalta palabras manualmente.', 'warning', 'Corrección Automática');
     };
 
     // ═══════════════════════════════════════════════════════════════
@@ -5559,7 +5523,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-link" style="margin-right:6px;color:#d97706;"></i>Links Internos</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">' + (data.linksInternos || 0) + '% con links. Meta: 100%.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichLinks" disabled style="white-space:nowrap;flex-shrink:0;opacity:0.5;cursor:not-allowed;" title="Deshabilitado: el editor decide manualmente"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
           html += '</div>';
         }
 
@@ -5568,7 +5532,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-bold" style="margin-right:6px;color:#d97706;"></i>Negritas (Strong)</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">Promedio: ' + (data.promedioStrong || 0) + '/15. Meta: 15+ por noticia.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichStrong" disabled style="white-space:nowrap;flex-shrink:0;opacity:0.5;cursor:not-allowed;" title="Deshabilitado: el editor decide manualmente"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
           html += '</div>';
         }
 
