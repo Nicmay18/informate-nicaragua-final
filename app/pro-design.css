@@ -963,6 +963,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-card__time{white-space:nowrap;font-size:inherit;color:inherit}
 .ni-card__author{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;font-size:inherit;color:inherit}
 
+/* Botones de compartir compactos */
+.ni-share-btn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#f1f5f9;color:#64748b;text-decoration:none;transition:background .18s ease,color .18s ease,transform .18s ease}
+.ni-share-btn:hover{background:var(--sh,#0f172a);color:#fff;transform:translateY(-2px)}
+
 /* Grid 2 cols */
 .ni-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
 .ni-grid-2 .ni-card{grid-template-columns:1fr;gap:12px;padding:0 0 16px 0;border-bottom:1px solid var(--ni-border)}
