@@ -978,6 +978,7 @@
               <option value="PELIGRO">⚠️ PELIGRO</option>
               <option value="SIN NIVEL">❓ Sin nivel</option>
             </select>
+            <button class="btn btn-secondary btn-sm" onclick="asignarNivelesFaltantes()" title="Analiza y guarda el nivel de calidad de las notas que aún no lo tienen"><i class="fas fa-wand-magic-sparkles"></i> Asignar niveles</button>
             <input type="text" id="searchNoticias" placeholder="Buscar título, ID, autor..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 220px;">
           </div>
         </div>
@@ -3164,6 +3165,64 @@ sin texto ni marcas de agua, composición periodística"
       return { nivel, checks, passCount, porcentaje };
     };
 
+    // ═══════════════════════════════════════════════════════════════
+    // CALCULAR NIVEL (fuente de verdad: analizador forense del servidor)
+    // Devuelve { nivel, score }. Usa cache del último análisis si coincide,
+    // si no llama al servidor, y si falla cae al validador local.
+    // ═══════════════════════════════════════════════════════════════
+    async function calcularNivelForense({ titulo, contenido, resumen, categoria, imagen }) {
+      // 1) Reutilizar el último análisis forense si es exactamente esta nota
+      if (window._ultimoForense && window._ultimoForense.titulo === titulo && window._ultimoForense.contenido === contenido) {
+        return { nivel: window._ultimoForense.nivel, score: window._ultimoForense.puntuacion || 0 };
+      }
+      // 2) Analizador del servidor (mismo criterio que "Analizar Completo")
+      try {
+        const resp = await fetch('/api/admin/analizar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titulo, contenido, resumen, categoria, imagenDestacada: imagen, slug: '', autor: 'Keyling Elieth Rivera Muñoz' })
+        });
+        if (resp.ok) {
+          const d = await resp.json();
+          if (d && d.nivel) return { nivel: d.nivel, score: d.puntuacion || 0 };
+        }
+      } catch (e) { console.warn('[nivel] servidor falló, uso validador local', e); }
+      // 3) Fallback local
+      try {
+        const u = window.validarNoticiaUnificada(contenido, titulo, resumen, imagen);
+        return { nivel: u.nivel, score: u.porcentaje };
+      } catch { return { nivel: 'SIN NIVEL', score: 0 }; }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BACKFILL: asignar nivel a todas las notas que no lo tienen
+    // ═══════════════════════════════════════════════════════════════
+    window.asignarNivelesFaltantes = async function() {
+      if (!confirm('Se analizará y guardará el nivel de calidad de todas las notas que aún no tienen uno. Puede tardar un poco. ¿Continuar?')) return;
+      showLoading(true, 'Asignando niveles...');
+      try {
+        const snap = await getDocs(collection(db, 'noticias'));
+        const pendientes = [];
+        snap.forEach(d => { const data = d.data(); if (!data.nivel) pendientes.push({ id: d.id, ...data }); });
+        if (pendientes.length === 0) { showLoading(false); showToast('Todas las notas ya tienen nivel asignado.', 'success'); return; }
+        let hechas = 0;
+        for (const n of pendientes) {
+          try {
+            const info = await calcularNivelForense({ titulo: n.titulo || '', contenido: n.contenido || '', resumen: n.resumen || '', categoria: n.categoria || '', imagen: n.imagen || '' });
+            await updateDoc(doc(db, 'noticias', n.id), { nivel: info.nivel, nivelScore: info.score, nivelFecha: new Date().toISOString() });
+            hechas++;
+            if (hechas % 3 === 0) showLoading(true, `Asignando niveles... ${hechas}/${pendientes.length}`);
+          } catch (e) { console.warn('[backfill] falló nota', n.id, e); }
+        }
+        showLoading(false);
+        showToast(`Niveles asignados: ${hechas} de ${pendientes.length}`, 'success', 'Backfill completado');
+        cargarNoticias(window.categoriaActiva);
+      } catch (e) {
+        showLoading(false);
+        showToast('Error asignando niveles: ' + e.message, 'error');
+      }
+    };
+
     window.ejecutarValidacionOro = function() {
       const contenido = document.getElementById('contenido').value.trim();
       if (!contenido) return;
@@ -3239,20 +3298,30 @@ sin texto ni marcas de agua, composición periodística"
 
       try {
         const slug = noticiaId ? undefined : generarSlug(titulo);
+
+        // Calcular nivel de calidad (forense) para persistirlo y mostrarlo en la lista
+        let nivelInfo = { nivel: 'SIN NIVEL', score: 0 };
+        try {
+          nivelInfo = await calcularNivelForense({ titulo, contenido, resumen, categoria, imagen: imagenUrl });
+        } catch (e) { console.warn('No se pudo calcular nivel:', e); }
+
         // Usar resumen manual si existe, si no usar el contenido completo para mostrar todo
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
-          autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador'
+          autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador',
+          nivel: nivelInfo.nivel, nivelScore: nivelInfo.score, nivelFecha: new Date().toISOString()
         };
         let esNueva = !noticiaId;
 
         const acciones = [];
 
         if (noticiaId) {
-          noticiaData.fechaActualizacion = serverTimestamp(); delete noticiaData.fecha; delete noticiaData.slug;
+          // En edición: NO tocar fecha original, slug ni vistas (evita resetear vistas a 0)
+          noticiaData.fechaActualizacion = serverTimestamp();
+          delete noticiaData.fecha; delete noticiaData.slug; delete noticiaData.vistas;
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
-          acciones.push('✅ Noticia actualizada');
+          acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
         } else {
           const docRef = await addDoc(collection(db, "noticias"), noticiaData);
           noticiaData.id = docRef.id;
@@ -3470,6 +3539,14 @@ sin texto ni marcas de agua, composición periodística"
             const metaDiv = document.createElement('div');
             metaDiv.className = 'news-meta';
             metaDiv.style.cssText = 'display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-500);';
+            // Medalla de nivel de calidad
+            const nivelNota = (n.nivel || 'SIN NIVEL').toUpperCase();
+            const medallas = { 'FORENSE': '🧬', 'ORO': '🥇', 'PLATA': '🥈', 'BRONCE': '🥉', 'RECHAZADO': '🚫', 'SIN NIVEL': '❓' };
+            const nivelSpan = document.createElement('span');
+            nivelSpan.title = 'Nivel de calidad: ' + nivelNota + (n.nivelScore ? ' (' + n.nivelScore + '/100)' : '');
+            nivelSpan.textContent = medallas[nivelNota] || '❓';
+            nivelSpan.style.cssText = 'font-size: 14px; flex-shrink: 0;';
+            metaDiv.appendChild(nivelSpan);
             // Badge
             const badge = document.createElement('span');
             badge.className = 'news-badge badge-' + slugCategoria(n.categoria);
@@ -5526,6 +5603,8 @@ VERIFICACIÓN FINAL
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error en analisis');
+        // Guardar el resultado para reutilizarlo al guardar la nota (persistir nivel)
+        window._ultimoForense = { titulo, contenido, nivel: data.nivel, puntuacion: data.puntuacion };
         resultado.innerHTML = html + renderAnalisisForense(data);
       } catch (err) {
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
