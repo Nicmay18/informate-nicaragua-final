@@ -791,10 +791,13 @@
 }
 
 .ni-cat-page__title {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 800;
   color: var(--primary);
   margin-bottom: var(--spacing-sm);
+  padding-left: 16px;
+  border-left: 5px solid var(--accent);
+  line-height: 1.1;
 }
 
 .ni-cat-page__desc {
@@ -821,13 +824,20 @@
 .ni-cat-card {
   background: var(--surface);
   border-radius: 12px;
-  overflow: hidden;
   border: 1px solid var(--border);
-  transition: box-shadow var(--transition-fast);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
-
 .ni-cat-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 16px 36px -14px rgba(15,23,42,0.3);
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+.ni-cat-card__thumb img {
+  transition: transform 0.5s ease;
+}
+.ni-cat-card:hover .ni-cat-card__thumb img {
+  transform: scale(1.06);
 }
 
 .ni-cat-card--featured {

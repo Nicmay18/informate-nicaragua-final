@@ -182,7 +182,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     border: '1px solid #e5e5e5',
     borderRadius: 12,
     textDecoration: 'none',
-    transition: 'border-color 0.2s',
+    transition: 'border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
   };
 
   const relatedCardStyle: React.CSSProperties = {
@@ -423,8 +423,14 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <aside aria-label="Lea además">
           <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
             {readAlso.map((item, idx) => (
-              <Link key={item.slug} href={`/noticias/${item.slug}`} style={navCardStyle}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: 4 }}>
+              <Link
+                key={item.slug}
+                href={`/noticias/${item.slug}`}
+                style={navCardStyle}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = category.color; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 20px -10px rgba(15,23,42,0.22)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#e5e5e5'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: category.color, marginBottom: 4 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
                   Relacionada {idx + 1}
                 </span>
