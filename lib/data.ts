@@ -115,17 +115,6 @@ function validateCount(count: number, defaultCount: number): number {
   return count || defaultCount;
 }
 
-// ============================================================================
-// CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
-// TTL = 15 segundos — suficiente para que ISR de 1h no dispare múltiples queries
-// ============================================================================
-interface CacheEntry {
-  data: Noticia[];
-  expiresAt: number;
-}
-
-let _fetchCache: CacheEntry | null = null;
-
 function mapDocToNoticia(d: any): Noticia {
   const data = d.data();
   return {
@@ -151,20 +140,15 @@ function mapDocToNoticia(d: any): Noticia {
   };
 }
 
-/** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto).
- *  Usa cache compartido de 30s para reducir lecturas Firestore al mínimo. */
+/** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto). */
 async function fetchAllNoticias(): Promise<Noticia[]> {
-  const now = Date.now();
-  if (_fetchCache && _fetchCache.expiresAt > now) {
-    return _fetchCache.data;
-  }
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb.collection('noticias').limit(500).get();
     let noticias = snap.docs.map(mapDocToNoticia);
 
-    // 1. Filtrar solo publicadas
-    noticias = noticias.filter(n => (n as any).publicado !== false);
+    // 1. Filtrar SOLO publicadas (campo 'estado' en Firestore)
+    noticias = noticias.filter(n => (n as any).estado === 'publicado');
 
     // 2. Deduplicar por slug: quedarse con la más reciente
     const unique = new Map<string, Noticia>();
@@ -175,9 +159,6 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       }
     }
     noticias = Array.from(unique.values());
-
-    // 3. TTL reducido a 30s para frescura
-    _fetchCache = { data: noticias, expiresAt: now + 30_000 };
     return noticias;
   } catch (err) {
     logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));

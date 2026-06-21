@@ -99,23 +99,12 @@ function mapNoticia(d: any): Noticia {
 }
 
 // ============================================================================
-// CACHE COMPARTIDO EN CALIENTE (reduce lecturas duplicadas en el mismo worker)
-// TTL = 5 minutos — evita lecturas masivas en cada ISR
+// FETCH SIN CACHE EN MEMORIA (unstable_cache ya maneja el caching global)
+// Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de disparar otro
 // ============================================================================
-interface CacheEntry {
-  data: Noticia[];
-  expiresAt: number;
-}
-
-let _fetchCache: CacheEntry | null = null;
 let _fetchPromise: Promise<Noticia[]> | null = null;
 
 async function fetchAllNoticias(): Promise<Noticia[]> {
-  const now = Date.now();
-  if (_fetchCache && _fetchCache.expiresAt > now) {
-    return _fetchCache.data;
-  }
-  // Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de disparar otro
   if (_fetchPromise) {
     return _fetchPromise;
   }
@@ -125,8 +114,8 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       const snap = await db.collection('noticias').limit(500).get();
       let noticias = snap.docs.map(mapNoticia);
 
-      // 1. Filtrar solo publicadas (si existe campo publicado)
-      noticias = noticias.filter(n => (n as any).publicado !== false);
+      // 1. Filtrar SOLO publicadas (campo 'estado' en Firestore)
+      noticias = noticias.filter(n => (n as any).estado === 'publicado');
 
       // 2. Deduplicar por slug: quedarse con la más reciente
       const unique = new Map<string, Noticia>();
@@ -137,9 +126,6 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
         }
       }
       noticias = Array.from(unique.values());
-
-      // 3. TTL reducido a 30s para frescura (antes 5 min)
-      _fetchCache = { data: noticias, expiresAt: Date.now() + 30_000 };
       return noticias;
     } finally {
       _fetchPromise = null;
