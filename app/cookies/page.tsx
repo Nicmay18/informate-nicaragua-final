@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
@@ -38,7 +38,7 @@ const COOKIE_TYPES = [
 export default function CookiesPage() {
   return (
     <LegalPageShell title="Política de Cookies">
-      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
+      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#854d0e', fontSize: '0.85rem' }}>
         <strong>Última actualización:</strong> 5 de mayo de 2026
       </div>
 

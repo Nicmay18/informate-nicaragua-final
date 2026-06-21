@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { Home, Newspaper, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, FileText, Shield, Mail, Info } from 'lucide-react';
@@ -48,7 +48,7 @@ const SECTIONS = [
 export default function SitemapPage() {
   return (
     <LegalPageShell title="Mapa del Sitio">
-      <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
+      <p style={{ color: '#475569', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         Encuentra rápidamente todas las secciones y páginas disponibles en Nicaragua Informate.
       </p>
 
@@ -57,13 +57,13 @@ export default function SitemapPage() {
           <div
             key={section.title}
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
               borderRadius: 14,
               padding: '1.25rem',
             }}
           >
-            <h2 style={{ fontSize: '1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+            <h2 style={{ fontSize: '1rem', color: '#0f172a', fontWeight: 700, marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid #e2e8f0' }}>
               {section.title}
             </h2>
             <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -75,7 +75,7 @@ export default function SitemapPage() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 10,
-                      color: '#94a3b8',
+                      color: '#64748b',
                       textDecoration: 'none',
                       fontSize: '0.9rem',
                       padding: '6px 8px',
@@ -95,7 +95,7 @@ export default function SitemapPage() {
       </div>
 
       <style>{`
-        .sitemap-link:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
+        .sitemap-link:hover { background: #f1f5f9; color: #0f172a; }
       `}</style>
     </LegalPageShell>
   );

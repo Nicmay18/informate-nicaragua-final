@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PoliticaEditorialPage() {
   return (
     <LegalPageShell title="Política Editorial">
-      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
+      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#854d0e', fontSize: '0.85rem' }}>
         <strong>Última actualización:</strong> 20 de mayo de 2026
       </div>
 
@@ -36,7 +36,7 @@ export default function PoliticaEditorialPage() {
       <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', border: '1px solid #e2e8f0', borderRadius: 12, overflow: 'hidden' }}>
           <thead>
-            <tr style={{ background: '#0f172a', color: '#fff' }}>
+            <tr style={{ background: '#0f172a', color: '#0f172a' }}>
               <th style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 700 }}>Principio</th>
               <th style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 700 }}>Qué significa</th>
             </tr>

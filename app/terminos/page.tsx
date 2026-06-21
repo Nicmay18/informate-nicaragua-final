@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function TerminosPage() {
   return (
     <LegalPageShell title="Términos y Condiciones de Uso">
-      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#94a3b8', fontSize: '0.85rem' }}>
+      <div style={{ background: '#fefce8', borderLeft: '4px solid #fbbf24', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#854d0e', fontSize: '0.85rem' }}>
         <strong>Última actualización:</strong> 15 de junio de 2026
       </div>
 

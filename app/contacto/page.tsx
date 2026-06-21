@@ -27,17 +27,17 @@ const SOCIAL_CHANNELS = [
 export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
-      <p style={{ color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
+      <p style={{ color: '#475569', marginBottom: '1.25rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         ¿Tienes una noticia, sugerencia, denuncia ciudadana o consulta? Estamos aquí para escucharte.
-        En <strong style={{ color: '#fff' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
+        En <strong style={{ color: '#0f172a' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
       </p>
-      <p style={{ color: '#cbd5e1', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
-        Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#fff' }}>Policía Nacional 118</strong>, <strong style={{ color: '#fff' }}>Bomberos 911/115</strong>, <strong style={{ color: '#fff' }}>Cruz Roja 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
+      <p style={{ color: '#475569', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
+        Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#0f172a' }}>Policía Nacional 118</strong>, <strong style={{ color: '#0f172a' }}>Bomberos 911/115</strong>, <strong style={{ color: '#0f172a' }}>Cruz Roja 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
       </p>
 
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
+      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ background: 'rgba(140,29,24,0.1)', border: '1px solid rgba(140,29,24,0.2)', borderRadius: 8, padding: '12px 16px', marginBottom: '1rem' }}>
-          <p style={{ margin: 0, color: '#fca5a5', fontSize: '0.85rem', lineHeight: 1.5 }}>
+          <p style={{ margin: 0, color: '#8c1d18', fontSize: '0.85rem', lineHeight: 1.5 }}>
             <strong>Nota importante:</strong> Nicaragua Informate es un medio de comunicación independiente. No somos una entidad gubernamental ni institución pública. No emitimos documentos oficiales ni certificaciones.
           </p>
         </div>
@@ -46,10 +46,10 @@ export default function ContactoPage() {
             <MapPin size={20} color="#fff" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-            <h3 style={{ margin: 0, color: '#fff', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
+            <h3 style={{ margin: 0, color: '#0f172a', fontSize: '1.05rem', fontWeight: 600 }}>Dirección de Redacción</h3>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
               Managua, Nicaragua<br />
-              <span style={{ color: '#cbd5e1' }}>Centroamérica</span>
+              <span style={{ color: '#475569' }}>Centroamérica</span>
             </p>
           </div>
         </div>
@@ -58,38 +58,38 @@ export default function ContactoPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Clock size={14} color="#fbbf24" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
-              <strong style={{ color: '#fff' }}>Lun - Vie:</strong> 8:00 - 18:00
+              <strong style={{ color: '#0f172a' }}>Lun - Vie:</strong> 8:00 - 18:00
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Clock size={14} color="#22c55e" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
-              <strong style={{ color: '#fff' }}>Sábado:</strong> 9:00 - 14:00
+              <strong style={{ color: '#0f172a' }}>Sábado:</strong> 9:00 - 14:00
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Clock size={14} color="#64748b" />
             <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
-              <strong style={{ color: '#fff' }}>Domingo:</strong> Cerrado
+              <strong style={{ color: '#0f172a' }}>Domingo:</strong> Cerrado
             </span>
           </div>
         </div>
       </div>
 
-      <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <h2 style={{ fontSize: '1.1rem', color: '#0f172a', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
         <Mail size={16} color="#8c1d18" />
         Correos Electrónicos
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '0.75rem', margin: '0 0 2rem' }}>
         {CONTACT_CHANNELS.map(c => (
           <a key={c.label} href={c.href}
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '1rem', textDecoration: 'none', transition: 'all 0.2s' }}
+            style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem', textDecoration: 'none', transition: 'all 0.2s' }}
             className="contact-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
               <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(140,29,24,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {c.icon}
               </div>
-              <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>{c.label}</div>
+              <div style={{ color: '#0f172a', fontWeight: 700, fontSize: 13 }}>{c.label}</div>
             </div>
             <div style={{ color: '#60a5fa', fontSize: 12, wordBreak: 'break-all', marginBottom: 4 }}>{c.val}</div>
             <div style={{ color: '#64748b', fontSize: 11 }}>{c.desc}</div>
@@ -97,43 +97,43 @@ export default function ContactoPage() {
         ))}
       </div>
 
-      <h2 style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <h2 style={{ fontSize: '1.1rem', color: '#0f172a', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
         <Share2 size={16} color="#8c1d18" />
         Redes Sociales
       </h2>
       <div style={{ display: 'flex', gap: 10, marginBottom: '2rem', flexWrap: 'wrap' }}>
         {SOCIAL_CHANNELS.map(s => (
           <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
             className="social-contact-btn">
             <BrandIcon name={s.icon} size={18} />
-            <span style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{s.label}</span>
+            <span style={{ color: '#0f172a', fontWeight: 600, fontSize: 13 }}>{s.label}</span>
           </a>
         ))}
       </div>
 
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '1.5rem' }}>
-        <h3 style={{ color: '#fff', margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 700 }}>Formulario de contacto</h3>
-        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
+      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '1.5rem' }}>
+        <h3 style={{ color: '#0f172a', margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 700 }}>Formulario de contacto</h3>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
           Completa el formulario y te responderemos dentro de las próximas 24-48 horas hábiles.
         </p>
         <form action="https://formspree.io/f/mzzeepgv" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 16 }}>
             <div>
-              <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Nombre completo *</label>
+              <label style={{ display: 'block', color: '#64748b', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Nombre completo *</label>
               <input type="text" name="name" required placeholder="Tu nombre"
-                style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: 14 }} />
+                style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: '#fff', color: '#0f172a', fontSize: 14 }} />
             </div>
             <div>
-              <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Correo electrónico *</label>
+              <label style={{ display: 'block', color: '#64748b', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Correo electrónico *</label>
               <input type="email" name="email" required placeholder="tu@email.com"
-                style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: 14 }} />
+                style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: '#fff', color: '#0f172a', fontSize: 14 }} />
             </div>
           </div>
           <div>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Asunto *</label>
+            <label style={{ display: 'block', color: '#64748b', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Asunto *</label>
             <select name="subject" required
-              style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: 14 }}>
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: '#fff', color: '#0f172a', fontSize: 14 }}>
               <option value="" style={{ color: '#18181b' }}>Selecciona un asunto</option>
               <option value="sugerencia" style={{ color: '#18181b' }}>Sugerencia</option>
               <option value="reporte" style={{ color: '#18181b' }}>Reportar una noticia</option>
@@ -144,9 +144,9 @@ export default function ContactoPage() {
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Mensaje *</label>
+            <label style={{ display: 'block', color: '#64748b', fontSize: 12, fontWeight: 600, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Mensaje *</label>
             <textarea name="message" rows={5} required placeholder="Describe tu mensaje en detalle..."
-              style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: 14, resize: 'vertical' }} />
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #e2e8f0', background: '#fff', color: '#0f172a', fontSize: 14, resize: 'vertical' }} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#64748b' }}>
             <Info size={14} />
@@ -161,8 +161,8 @@ export default function ContactoPage() {
       </div>
 
       <style>{`
-        .contact-card:hover { border-color: rgba(140,29,24,0.4) !important; transform: translateY(-2px); }
-        .social-contact-btn:hover { border-color: rgba(255,255,255,0.2) !important; background: rgba(255,255,255,0.08) !important; }
+        .contact-card:hover { border-color: #b07d3a !important; background: #fff !important; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .social-contact-btn:hover { border-color: #e2e8f0 !important; background: #fff !important; }
       `}</style>
     </LegalPageShell>
   );
