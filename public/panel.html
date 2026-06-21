@@ -576,11 +576,36 @@
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-header"><div><div class="stat-value" id="statNoticias">0</div><div class="stat-label">Noticias Publicadas</div></div><div class="stat-icon green"><i class="fas fa-newspaper"></i></div></div>
-            <div class="stat-change"><i class="fas fa-database"></i><span>Total en base de datos</span></div>
+            <div class="stat-change" id="statNoticiasChange"><i class="fas fa-database"></i><span>Total en base de datos</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div><div class="stat-value" id="statVistas">0</div><div class="stat-label">Vistas Totales</div></div><div class="stat-icon blue"><i class="fas fa-eye"></i></div></div>
+            <div class="stat-change" id="statVistasChange"><i class="fas fa-chart-line"></i><span id="statVistasProm">0 vistas/nota</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header"><div><div class="stat-value" id="statSemana">0</div><div class="stat-label">Publicadas esta semana</div></div><div class="stat-icon orange"><i class="fas fa-calendar-week"></i></div></div>
+            <div class="stat-change" id="statSemanaChange"><i class="fas fa-clock"></i><span>Ritmo de publicación</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-header"><div><div class="stat-value" id="statPromedio">0</div><div class="stat-label">Palabras Promedio</div></div><div class="stat-icon red"><i class="fas fa-font"></i></div></div>
             <div class="stat-change" id="statPromedioChange"><i class="fas fa-check"></i><span>Meta AdSense: 350+</span></div>
+          </div>
+        </div>
+
+        <!-- VEREDICTO PROFESIONAL: ¿Vale la pena continuar? -->
+        <div class="card" id="veredicto-card" style="margin-bottom: 32px; border-left: 4px solid var(--gray-300);">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-award" style="color: var(--primary-600);"></i>Veredicto del proyecto</h3><span id="veredicto-badge" style="font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--gray-100);color:var(--gray-600);">Calculando…</span></div>
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+              <div style="text-align:center;min-width:120px;">
+                <div id="veredicto-score" style="font-size:48px;font-weight:800;line-height:1;color:var(--gray-900);">—</div>
+                <div style="font-size:12px;color:var(--gray-500);font-weight:600;margin-top:4px;">PUNTAJE / 100</div>
+              </div>
+              <div style="flex:1;min-width:240px;">
+                <p id="veredicto-mensaje" style="font-size:14px;color:var(--gray-700);line-height:1.6;margin:0 0 12px;">Analizando el estado de tu medio…</p>
+                <div id="veredicto-checklist" style="display:grid;gap:6px;font-size:13px;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2910,12 +2935,35 @@ sin texto ni marcas de agua, composición periodística"
 
         const conteo = {}; categorias.forEach(c => conteo[c.id] = 0);
         let totalPalabras = 0;
+        let totalVistas = 0;
+        let publicadasSemana = 0;
+        let conImagen = 0;
+        let calidadOk = 0; // notas con 350+ palabras
+        const hace7Dias = Date.now() - (7 * 24 * 60 * 60 * 1000);
+
         noticiasSnap.forEach(d => {
           const data = d.data();
           if (data.categoria && conteo[data.categoria] !== undefined) conteo[data.categoria]++;
-          if (data.contenido) totalPalabras += data.contenido.split(/\s+/).length;
+          const palabrasNota = data.palabras || (data.contenido ? data.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length : 0);
+          totalPalabras += palabrasNota;
+          if (palabrasNota >= 350) calidadOk++;
+          totalVistas += (data.vistas || 0);
+          if (data.imagen) conImagen++;
+          if (getFechaMs(data.fecha) > hace7Dias) publicadasSemana++;
         });
+
         const promedio = totalNoticias ? Math.round(totalPalabras / totalNoticias) : 0;
+        const promVistas = totalNoticias ? Math.round(totalVistas / totalNoticias) : 0;
+
+        // KPIs
+        document.getElementById('statVistas').textContent = totalVistas.toLocaleString();
+        document.getElementById('statVistasProm').textContent = promVistas.toLocaleString() + ' vistas/nota';
+        document.getElementById('statSemana').textContent = publicadasSemana.toLocaleString();
+        const semEl = document.getElementById('statSemanaChange');
+        if (publicadasSemana >= 7) { semEl.innerHTML = '<i class="fas fa-fire"></i><span>Ritmo excelente (1+/día)</span>'; semEl.className = 'stat-change'; }
+        else if (publicadasSemana >= 3) { semEl.innerHTML = '<i class="fas fa-clock"></i><span>Ritmo aceptable</span>'; semEl.className = 'stat-change'; }
+        else { semEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Ritmo bajo esta semana</span>'; semEl.className = 'stat-change negative'; }
+
         document.getElementById('statPromedio').textContent = promedio;
         const promEl = document.getElementById('statPromedioChange');
         if (promedio >= 350) { promEl.innerHTML = '<i class="fas fa-check"></i><span>Cumple estándar AdSense</span>'; promEl.className = 'stat-change'; }
@@ -2923,7 +2971,80 @@ sin texto ni marcas de agua, composición periodística"
 
         categorias.forEach(c => { const el = document.getElementById(`count${c.key}`); if (el) el.textContent = `${conteo[c.id] || 0} noticias`; });
 
+        // ─── VEREDICTO DEL PROYECTO ───
+        calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen });
+
       } catch (error) { console.error("Error estadísticas:", error); }
+    }
+
+    function calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen }) {
+      const checks = [];
+      let score = 0;
+
+      // 1. Volumen de contenido (20 pts)
+      const volumenOk = totalNoticias >= 50;
+      checks.push({ ok: volumenOk, label: `Volumen de contenido: ${totalNoticias} notas`, hint: volumenOk ? 'Buena base' : 'Meta: 50+ notas para autoridad' });
+      score += totalNoticias >= 100 ? 20 : totalNoticias >= 50 ? 14 : totalNoticias >= 20 ? 8 : 4;
+
+      // 2. Calidad (25 pts) - % con 350+ palabras
+      const pctCalidad = totalNoticias ? Math.round((calidadOk / totalNoticias) * 100) : 0;
+      const calidadAlta = pctCalidad >= 80;
+      checks.push({ ok: calidadAlta, label: `Calidad editorial: ${pctCalidad}% con 350+ palabras`, hint: calidadAlta ? 'Apto AdSense' : 'Meta: 80%+ para monetizar' });
+      score += pctCalidad >= 90 ? 25 : pctCalidad >= 80 ? 20 : pctCalidad >= 60 ? 12 : 5;
+
+      // 3. Consistencia de publicación (25 pts)
+      const ritmoOk = publicadasSemana >= 5;
+      checks.push({ ok: ritmoOk, label: `Consistencia: ${publicadasSemana} notas esta semana`, hint: ritmoOk ? 'Google premia frescura' : 'Meta: 5+/semana' });
+      score += publicadasSemana >= 10 ? 25 : publicadasSemana >= 5 ? 18 : publicadasSemana >= 2 ? 10 : 3;
+
+      // 4. Audiencia (20 pts)
+      const audienciaOk = promVistas >= 50;
+      checks.push({ ok: audienciaOk, label: `Audiencia: ${promVistas} vistas promedio por nota`, hint: audienciaOk ? 'Buen engagement' : 'Crece con SEO y redes' });
+      score += promVistas >= 200 ? 20 : promVistas >= 50 ? 14 : promVistas >= 10 ? 8 : 3;
+
+      // 5. Cobertura visual (10 pts)
+      const pctImagen = totalNoticias ? Math.round((conImagen / totalNoticias) * 100) : 0;
+      const imagenOk = pctImagen >= 95;
+      checks.push({ ok: imagenOk, label: `Cobertura visual: ${pctImagen}% con imagen`, hint: imagenOk ? 'Excelente' : 'Meta: toda nota con imagen' });
+      score += pctImagen >= 95 ? 10 : pctImagen >= 80 ? 6 : 3;
+
+      score = Math.min(100, score);
+
+      // Veredicto textual
+      let nivel, color, mensaje;
+      if (score >= 80) {
+        nivel = 'EXCELENTE'; color = 'var(--success)';
+        mensaje = 'Tu medio está sólido y profesional. Vale totalmente la pena continuar: tenés volumen, calidad y consistencia. Enfocate en crecer la audiencia con SEO y redes sociales.';
+      } else if (score >= 60) {
+        nivel = 'BUENO'; color = 'var(--primary-600)';
+        mensaje = 'Vas por buen camino. La base es buena pero hay margen de mejora. Mantené la consistencia de publicación y subí la calidad de las notas más cortas para despegar.';
+      } else if (score >= 40) {
+        nivel = 'EN CONSTRUCCIÓN'; color = 'var(--warning)';
+        mensaje = 'El proyecto tiene potencial pero necesita más trabajo. Priorizá publicar consistentemente y asegurá que cada nota tenga 350+ palabras e imagen. La constancia es clave.';
+      } else {
+        nivel = 'INICIAL'; color = 'var(--danger)';
+        mensaje = 'Estás empezando. No te desanimes: todo medio grande arrancó así. Enfocate en publicar a diario con calidad. En 2-3 meses de constancia verás resultados.';
+      }
+
+      const scoreEl = document.getElementById('veredicto-score');
+      const badgeEl = document.getElementById('veredicto-badge');
+      const msgEl = document.getElementById('veredicto-mensaje');
+      const cardEl = document.getElementById('veredicto-card');
+      const listEl = document.getElementById('veredicto-checklist');
+
+      if (scoreEl) { scoreEl.textContent = score; scoreEl.style.color = color; }
+      if (badgeEl) { badgeEl.textContent = nivel; badgeEl.style.background = color; badgeEl.style.color = '#fff'; }
+      if (msgEl) msgEl.textContent = mensaje;
+      if (cardEl) cardEl.style.borderLeftColor = color;
+      if (listEl) {
+        listEl.innerHTML = checks.map(c => `
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-${c.ok ? 'check-circle' : 'circle-exclamation'}" style="color:${c.ok ? 'var(--success)' : 'var(--warning)'};width:16px;"></i>
+            <span style="color:var(--gray-800);font-weight:500;">${c.label}</span>
+            <span style="color:var(--gray-400);font-size:12px;margin-left:auto;">${c.hint}</span>
+          </div>
+        `).join('');
+      }
     }
 
     async function cargarUltimasNoticias() {

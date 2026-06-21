@@ -74,7 +74,7 @@ function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
   if (list.length === 0) return null;
   return (
     <div className="ni-marquee-bar">
-      <div className="ni-marquee-bar__badge">Última entrada</div>
+      <div className="ni-marquee-bar__badge">Última hora</div>
       <div className="ni-marquee-bar__content">
         <div className="ni-marquee-bar__scroll">
           {list.map((n) => (
