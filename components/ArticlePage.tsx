@@ -122,15 +122,19 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   };
 
   const fontBtnStyle: React.CSSProperties = {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
-    border: '1px solid #e5e5e5',
+    width: 30,
+    height: 30,
+    borderRadius: 7,
+    border: 'none',
     backgroundColor: '#fff',
     fontSize: 14,
     fontWeight: 700,
     cursor: 'pointer',
-    color: '#374151',
+    color: '#475569',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'background-color 0.15s, color 0.15s',
   };
 
   const imgContainerStyle: React.CSSProperties = {
@@ -260,9 +264,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
             {vistas} vistas
           </span>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
-            <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir texto">A−</button>
-            <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={fontBtnStyle} aria-label="Aumentar texto">A+</button>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Texto</span>
+            <div style={{ display: 'flex', gap: 2, padding: 3, background: '#f1f5f9', borderRadius: 9 }}>
+              <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir tamaño del texto" disabled={fontIndex === 0}>A−</button>
+              <button onClick={() => setFontIndex(i => Math.min(FONT_STEPS.length - 1, i + 1))} style={{ ...fontBtnStyle, fontSize: 17 }} aria-label="Aumentar tamaño del texto" disabled={fontIndex === FONT_STEPS.length - 1}>A+</button>
+            </div>
           </div>
         </div>
         </header>

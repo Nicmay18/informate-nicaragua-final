@@ -904,6 +904,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-hero__ind-bar__fill{position:absolute;top:0;left:0;height:100%;width:100%;background:#ffd88f;transform:scaleX(0);transform-origin:left;animation:ni-progress 5s linear forwards}
 @keyframes ni-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
+/* Degradado premium sobre la imagen del hero (profundidad) */
+.ni-hero__track::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,rgba(15,23,42,0) 55%,rgba(15,23,42,0.35) 100%),linear-gradient(90deg,rgba(15,23,42,0.18) 0%,rgba(15,23,42,0) 30%)}
+/* Zoom sutil (ken burns) en el slide activo */
+.ni-hero__slide.is-active .ni-hero__media img{animation:ni-kenburns 7s ease-out both}
+@keyframes ni-kenburns{from{transform:scale(1.001)}to{transform:scale(1.07)}}
+@media(prefers-reduced-motion:reduce){
+  .ni-hero__slide.is-active .ni-hero__media img{animation:none}
+}
+
 @media(max-width:1024px){
   .ni-hero{grid-template-columns:1fr 1.2fr}
   .ni-hero__title{font-size:1.6rem}
@@ -942,6 +951,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-section__header:has(.ni-section__title--deportes){border-bottom-color:var(--cat-deportes)}
 .ni-section__header:has(.ni-section__title--tecnologia){border-bottom-color:var(--cat-tecnologia)}
 .ni-section__header:has(.ni-section__title--internacionales){border-bottom-color:var(--cat-internacionales)}
+
+/* Titulo de seccion con el color de su categoria */
+.ni-section__title--sucesos{background:var(--cat-sucesos) !important}
+.ni-section__title--nacionales{background:var(--cat-nacionales) !important}
+.ni-section__title--espectaculos{background:var(--cat-espectaculos) !important}
+.ni-section__title--deportes{background:var(--cat-deportes) !important}
+.ni-section__title--tecnologia{background:var(--cat-tecnologia) !important}
+.ni-section__title--internacionales{background:var(--cat-internacionales) !important}
 
 .ni-section__title{font-family:'Merriweather',serif;font-size:1.15rem;font-weight:800;color:white !important;background:var(--ni-navy);padding:8px 32px 8px 16px;margin:0;text-transform:uppercase;letter-spacing:0.05em;display:inline-block;clip-path:polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);position:relative;line-height:1}
 .ni-section__title::before{display:none !important}
