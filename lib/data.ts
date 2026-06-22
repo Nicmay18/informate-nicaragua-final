@@ -140,11 +140,15 @@ function mapDocToNoticia(d: any): Noticia {
   };
 }
 
-/** Trae todas las noticias de Firestore SIN orderBy (índice fecha DESC está roto). */
+/** Trae todas las noticias de Firestore con orderBy fecha desc. */
 async function fetchAllNoticias(): Promise<Noticia[]> {
   try {
     const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb.collection('noticias').limit(500).get();
+    const snap = await adminDb
+      .collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(500)
+      .get();
     let noticias = snap.docs.map(mapDocToNoticia);
 
     // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)

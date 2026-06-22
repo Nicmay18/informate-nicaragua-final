@@ -6,15 +6,13 @@ import { getHeroImageUrl } from '@/lib/image-utils';
 import { logger } from '@/lib/logger';
 
 // ============================================================================
-// ISR: Home regenerada cada 60s. Balance entre frescura y performance.
-// Las noticias se revalidan vía revalidatePath('/') + revalidateTag desde el
-// panel/admin, apareciendo al instante en el carrusel tras publicar.
-// NOTA: NO usar `dynamic = 'force-static'` aquí. Rompe la revalidación
-// on-demand del carrusel (la home queda congelada hasta que expira el ISR).
-// Con solo `revalidate` la home sigue siendo HTML estático cacheado (TTFB bajo)
-// pero responde al instante a revalidatePath, igual que /noticias/[slug].
+// SSR DINAMICO: Home siempre lee Firestore fresco.
+// Cada request ejecuta fetchAllNoticias con datos actualizados.
+// La noticia publicada aparece INMEDIATAMENTE sin necesidad de revalidar cache.
+// Costo: ~1 lectura de 500 docs por visita. Con ~100 visitas/dia = gratis en
+// el free tier de Firestore (50,000 lecturas/dia).
 // ============================================================================
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
