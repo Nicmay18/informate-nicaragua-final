@@ -1,4 +1,3 @@
-import { unstable_cache } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { type Noticia, FALLBACK_IMAGE } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
@@ -100,11 +99,18 @@ function mapNoticia(d: any): Noticia {
 
 // ============================================================================
 // FETCH DE FIRESTORE — lectura cruda de la colección 'noticias'
-// Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de disparar otro
+// Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de
+// disparar otro. Esto previene lecturas duplicadas cuando ISR regenera la
+// página y múltiples componentes solicitan datos simultáneamente.
+//
+// NOTA: No usamos unstable_cache aquí porque revalidateTag no invalida
+// correctamente múltiples capas de cache anidadas. El ISR de la página
+// (revalidate: 60 en page.tsx) ya cachea el HTML completo, así que cada
+// 60s se hace UNA lectura de Firestore que todas las funciones reusan.
 // ============================================================================
 let _fetchPromise: Promise<Noticia[]> | null = null;
 
-async function fetchAllNoticiasRaw(): Promise<Noticia[]> {
+async function fetchAllNoticias(): Promise<Noticia[]> {
   if (_fetchPromise) {
     return _fetchPromise;
   }
@@ -133,19 +139,6 @@ async function fetchAllNoticiasRaw(): Promise<Noticia[]> {
   })();
   return _fetchPromise;
 }
-
-// ============================================================================
-// CACHE COMPARTIDO DE LECTURA (CRÍTICO PARA COSTO DE FIRESTORE)
-// Las 3 funciones de portada (latest/trending/popular) reusan ESTA misma
-// lectura cacheada en lugar de leer 500 docs cada una por separado.
-// revalidate: 300s (5 min) + invalidación on-demand vía tag 'all-noticias'
-// desde /api/revalidate al publicar. Reduce lecturas de Firestore ~95%.
-// ============================================================================
-const fetchAllNoticias = unstable_cache(
-  fetchAllNoticiasRaw,
-  ['all-noticias'],
-  { revalidate: 300, tags: ['all-noticias'] }
-);
 
 // ============================================================================
 // HOME: NOTICIAS RECIENTES (todas las categorías visibles)
@@ -267,23 +260,20 @@ export async function incrementViewsBySlug(slug: string): Promise<number | null>
 }
 
 // ============================================================================
-// ISR CACHE WRAPPERS (invalidadas vía revalidateTag desde API routes)
+// EXPORTADOS: funciones que usa page.tsx (sin unstable_cache)
+// El ISR de la página (revalidate: 60) ya cachea el HTML completo.
+// Cuando revalidatePath('/') se dispara desde /api/revalidate, la página
+// se regenera y estas funciones leen Firestore fresco directamente.
 // ============================================================================
 
-export const getLatestNews = unstable_cache(
-  async (limitCount: number) => _getLatestNewsRaw(limitCount),
-  ['homepage-latest'],
-  { revalidate: 60, tags: ['latest-news', 'all-noticias'] }
-);
+export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]> {
+  return _getLatestNewsRaw(limitCount);
+}
 
-export const getTrendingNews = unstable_cache(
-  async (limitCount: number) => _getTrendingNewsRaw(limitCount),
-  ['homepage-trending'],
-  { revalidate: 300, tags: ['trending-news', 'all-noticias'] }
-);
+export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
+  return _getTrendingNewsRaw(limitCount);
+}
 
-export const getPopularNews = unstable_cache(
-  async (limitCount: number) => _getPopularNewsRaw(limitCount),
-  ['homepage-popular'],
-  { revalidate: 300, tags: ['popular-news', 'all-noticias'] }
-);
+export async function getPopularNews(limitCount: number = 5): Promise<Noticia[]> {
+  return _getPopularNewsRaw(limitCount);
+}
