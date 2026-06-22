@@ -1,6 +1,6 @@
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import {
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     // Slug obsoleto: redirigir al canonical en lugar de servir metadatos duplicados
     if (noticia.slug && noticia.slug !== slug) {
-      redirect(`/noticias/${noticia.slug}`);
+      permanentRedirect(`/noticias/${noticia.slug}`);
     }
 
     const normalizedSlug = noticia.slug || slug;
@@ -190,7 +190,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
   // 3. Slug obsoleto → redirigir 301
   if (noticia.slug && noticia.slug !== slug) {
-    redirect(`/noticias/${noticia.slug}`);
+    permanentRedirect(`/noticias/${noticia.slug}`);
   }
 
   // 4. Cargar relacionadas (si falla, array vacío, no rompe la página)

@@ -282,13 +282,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/js/:path*',
-        headers: [
-          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-        ],
-      },
-      {
         source: '/manifest.json',
         headers: [
           { key: 'Content-Type', value: 'application/manifest+json; charset=utf-8' },
@@ -390,12 +383,6 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/css/(.*)',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
-        ],
-      },
-      {
-        source: '/js/(.*)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
         ],

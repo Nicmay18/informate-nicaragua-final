@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export const dynamicParams = true;
-export const revalidate = 86400; // 24h
+export const revalidate = 3600; // 1h para sitio de noticias
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

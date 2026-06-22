@@ -9,7 +9,6 @@ export const revalidate = 600;
 export const metadata: Metadata = {
   title: 'Buscar noticias',
   description: 'Busca noticias publicadas por Nicaragua Informate sobre sucesos, nacionales, deportes, tecnología, espectáculos e internacionales.',
-  alternates: { canonical: 'https://nicaraguainformate.com/buscar' },
   robots: {
     index: false,
     follow: false,
