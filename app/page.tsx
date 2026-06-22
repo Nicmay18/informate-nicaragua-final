@@ -7,10 +7,13 @@ import { logger } from '@/lib/logger';
 
 // ============================================================================
 // ISR: Home regenerada cada 60s. Balance entre frescura y performance.
-// Las noticias se revalidan vía revalidateTag desde el panel/admin.
-// force-static: nunca SSR. Siempre HTML estático cacheado (TTFB < 200ms).
+// Las noticias se revalidan vía revalidatePath('/') + revalidateTag desde el
+// panel/admin, apareciendo al instante en el carrusel tras publicar.
+// NOTA: NO usar `dynamic = 'force-static'` aquí. Rompe la revalidación
+// on-demand del carrusel (la home queda congelada hasta que expira el ISR).
+// Con solo `revalidate` la home sigue siendo HTML estático cacheado (TTFB bajo)
+// pero responde al instante a revalidatePath, igual que /noticias/[slug].
 // ============================================================================
-export const dynamic = 'force-static';
 export const revalidate = 60;
 
 const SITE_URL = 'https://nicaraguainformate.com';
