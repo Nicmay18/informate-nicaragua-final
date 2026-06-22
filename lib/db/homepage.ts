@@ -266,11 +266,11 @@ export const getLatestNews = unstable_cache(
 export const getTrendingNews = unstable_cache(
   async (limitCount: number) => _getTrendingNewsRaw(limitCount),
   ['homepage-trending'],
-  { revalidate: 60, tags: ['trending-news'] }
+  { revalidate: 10, tags: ['trending-news'] }
 );
 
 export const getPopularNews = unstable_cache(
   async (limitCount: number) => _getPopularNewsRaw(limitCount),
   ['homepage-popular'],
-  { revalidate: 300, tags: ['popular-news'] }
+  { revalidate: 10, tags: ['popular-news'] }
 );
