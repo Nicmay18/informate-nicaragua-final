@@ -936,6 +936,7 @@
                 <textarea id="shareTextoFacebook" readonly style="width:100%; min-height:155px; font-size:13px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical; font-family:inherit; background:#f9fafb; color:#111827; line-height:1.65; box-sizing:border-box;"></textarea>
                 <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
                   <button type="button" onclick="copiarTextoRedesId('shareTextoFacebook','Facebook')" style="padding:8px 18px; background:#1877f2; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fab fa-facebook"></i> Copiar para Facebook</button>
+                  <button type="button" id="btnRegenerarCopyFb" onclick="regenerarCopyFacebook()" style="padding:8px 14px; background:#7c3aed; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fas fa-wand-magic-sparkles"></i> Regenerar con IA</button>
                   <a id="shareFacebookLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#e7f3ff; color:#1877f2; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fab fa-facebook"></i> Abrir Facebook</a>
                 </div>
               </div>
@@ -1633,9 +1634,11 @@ sin texto ni marcas de agua, composición periodística"
       }
     };
 
+    let _noticiaCompartirActual = null;
     function mostrarPanelCompartir(noticia) {
       const panel = document.getElementById('panelCompartirManual');
       if (!panel) return;
+      _noticiaCompartirActual = noticia;
       const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
       const titulo = noticia.titulo || '';
       const categoria = noticia.categoria || 'Noticias';
@@ -1668,10 +1671,9 @@ sin texto ni marcas de agua, composición periodística"
       // Ideal: Emoji + título en 1 línea, descripción corta, link visible
       const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
 
-      // ─── FORMATO FACEBOOK ───
-      // CRÍTICO: Máximo 2 líneas de texto + link visible
-      // Facebook penaliza posts con mucho texto + link externo
-      const textoFacebook = `${emoji} ${titulo}\n\n${descripcionCorta}\n\n📰 ${url}\n\n${hashtagPrincipal}`;
+      // ─── FORMATO FACEBOOK (plantilla base, se mejora con IA abajo) ───
+      // CRÍTICO: titular + gancho + link visible para maximizar clics al sitio
+      const textoFacebook = `${emoji} ${titulo.toUpperCase()}\n\n${descripcionCorta}\n\n👉 Más información aquí:\n${url}\n\n${hashtagPrincipal}`;
 
       // ─── FORMATO WHATSAPP ───
       const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcionCorta}\n\n👉 ${url}\n\n${hashtagPrincipal}`;
@@ -1687,7 +1689,59 @@ sin texto ni marcas de agua, composición periodística"
       cambiarTabRedes('telegram');
       panel.style.display = 'block';
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // ─── COPY FACEBOOK CON IA (reemplaza el flujo manual de ChatGPT) ───
+      generarCopyFacebookIA(noticia, url, categoria, textoFacebook);
     }
+
+    // Genera el copy de Facebook usando IA (Groq) y lo coloca en el textarea.
+    // Si falla, conserva la plantilla base. No bloquea el flujo de publicación.
+    async function generarCopyFacebookIA(noticia, url, categoria, fallbackTexto) {
+      const fbTextarea = document.getElementById('shareTextoFacebook');
+      const fbBtn = document.querySelector('#tabRedes_facebook button');
+      const prevPlaceholder = fbTextarea ? fbTextarea.value : '';
+      try {
+        if (fbTextarea) fbTextarea.value = '✨ Generando copy con IA...';
+        const resp = await fetch('/api/admin/copy-social', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            titulo: noticia.titulo || '',
+            resumen: noticia.resumen || '',
+            contenido: noticia.contenido || '',
+            categoria: categoria || 'Noticias',
+            url: url,
+          }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (data.success && data.copy && fbTextarea) {
+          fbTextarea.value = data.copy;
+          if (data.source === 'ia' && fbBtn) {
+            showToast('Copy de Facebook generado con IA ✨', 'success');
+          }
+        } else if (fbTextarea) {
+          fbTextarea.value = fallbackTexto || prevPlaceholder;
+        }
+      } catch (e) {
+        console.error('Copy IA error:', e);
+        if (fbTextarea) fbTextarea.value = fallbackTexto || prevPlaceholder;
+      }
+    }
+
+    window.regenerarCopyFacebook = async function() {
+      if (!_noticiaCompartirActual) {
+        showToast('No hay noticia activa para generar copy', 'warning');
+        return;
+      }
+      const btn = document.getElementById('btnRegenerarCopyFb');
+      const noticia = _noticiaCompartirActual;
+      const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+      const categoria = noticia.categoria || 'Noticias';
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...'; }
+      cambiarTabRedes('facebook');
+      await generarCopyFacebookIA(noticia, url, categoria, document.getElementById('shareTextoFacebook').value);
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Regenerar con IA'; }
+    };
 
     window.copiarTextoRed = async function(id) {
       const el = document.getElementById(id);
