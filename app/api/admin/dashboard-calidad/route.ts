@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { unstable_cache } from 'next/cache';
 
 export const revalidate = 0;
 
@@ -36,12 +37,11 @@ interface MetricasCalidad {
   recomendaciones: string[];
 }
 
-export async function GET() {
-  try {
-    const db = getAdminDb();
-    const snapshot = await db.collection('noticias').get();
+async function computeDashboardMetrics() {
+  const db = getAdminDb();
+  const snapshot = await db.collection('noticias').get();
 
-    let totalPalabras = 0;
+  let totalPalabras = 0;
     let totalStrong = 0;
     let totalBlockquotes = 0;
     let thinCount = 0;
@@ -236,6 +236,17 @@ export async function GET() {
       recomendaciones: [...new Set(recomendaciones)],
     };
 
+    return metricas;
+}
+
+const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-calidad'], {
+  revalidate: 3600,
+  tags: ['dashboard-calidad'],
+});
+
+export async function GET() {
+  try {
+    const metricas = await cachedDashboard();
     return NextResponse.json(metricas, {
       headers: { 'Cache-Control': 'no-store, must-revalidate' },
     });

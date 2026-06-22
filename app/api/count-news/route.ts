@@ -1,30 +1,35 @@
 import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
+
+const fetchCounts = async () => {
+  const { getAdminDb } = await import('@/lib/firebase-admin');
+  const db = getAdminDb();
+
+  // count() NO lee documentos — solo cuenta, ~20x más barato que .get()
+  const [allAgg, pubAgg] = await Promise.all([
+    db.collection('noticias').count().get(),
+    db.collection('noticias').where('publicado', '!=', false).count().get(),
+  ]);
+
+  const total = allAgg.data().count;
+  const publicadas = pubAgg.data().count;
+
+  return { total, publicadas };
+};
+
+const cachedCounts = unstable_cache(fetchCounts, ['news-counts'], {
+  revalidate: 3600,
+  tags: ['news-counts'],
+});
 
 export async function GET() {
   try {
-    const { getAdminDb } = await import('@/lib/firebase-admin');
-    const db = getAdminDb();
-    
-    // Contar todas las noticias
-    const allSnap = await db.collection('noticias').get();
-    const total = allSnap.size;
-    
-    // Contar publicadas
-    const pubSnap = await db.collection('noticias').where('publicado', '!=', false).get();
-    const publicadas = pubSnap.size;
-    
-    // Verificar si hay campo publicado
-    const sample = allSnap.docs.slice(0, 3).map(d => ({
-      id: d.id,
-      titulo: d.data().titulo,
-      publicado: d.data().publicado,
-      fecha: d.data().fecha?.toDate ? d.data().fecha.toDate().toISOString() : null,
-    }));
-    
-    return NextResponse.json({ total, publicadas, sample });
+    const { total, publicadas } = await cachedCounts();
+    return NextResponse.json({ total, publicadas });
   } catch (err) {
-    return NextResponse.json({
-      error: err instanceof Error ? err.message : String(err),
-    }, { status: 500 });
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { defaultRateLimiter } from '@/lib/rate-limit';
 
 function cleanContent(content: string): string {
   let cleaned = content;
@@ -23,10 +24,23 @@ function cleanContent(content: string): string {
   return cleaned;
 }
 
-export async function POST() {
+function getClientIP(req: Request): string {
+  const xf = req.headers.get('x-forwarded-for');
+  if (xf) return xf.split(',')[0]?.trim() || 'unknown';
+  return req.headers.get('x-real-ip') || 'unknown';
+}
+
+export async function POST(request: Request) {
+  const ip = getClientIP(request);
+  const rate = defaultRateLimiter.check(ip);
+  if (!rate.allowed) {
+    return NextResponse.json({ error: 'Demasiadas peticiones. Espere 1 minuto.' }, { status: 429 });
+  }
+
   try {
     const db = getAdminDb();
-    const snap = await db.collection('noticias').get();
+    // limit(200) evita escanear colecciones enormes accidentalmente
+    const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
     let count = 0;
     const cleaned: string[] = [];
 

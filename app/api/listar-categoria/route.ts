@@ -1,28 +1,39 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { unstable_cache } from 'next/cache';
+
+async function fetchCategoriaRaw(categoria: string) {
+  const db = getAdminDb();
+  const snapshot = await db
+    .collection('noticias')
+    .where('categoria', '==', categoria)
+    .orderBy('fecha', 'desc')
+    .limit(100)
+    .get();
+
+  return snapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      titulo: data.titulo || '(sin titulo)',
+      fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : null,
+      publicado: data.publicado ?? false,
+    };
+  });
+}
+
+const cachedCategoria = (categoria: string) =>
+  unstable_cache(() => fetchCategoriaRaw(categoria), [`categoria-${categoria}`], {
+    revalidate: 3600,
+    tags: ['listar-categoria'],
+  });
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const categoria = searchParams.get('categoria') || 'Nacionales';
 
-    const db = getAdminDb();
-    const snapshot = await db
-      .collection('noticias')
-      .where('categoria', '==', categoria)
-      .orderBy('fecha', 'desc')
-      .get();
-
-    const noticias = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        titulo: data.titulo || '(sin titulo)',
-        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : null,
-        publicado: data.publicado ?? false,
-      };
-    });
-
+    const noticias = await cachedCategoria(categoria)();
     return NextResponse.json({ ok: true, categoria, total: noticias.length, noticias });
   } catch (error) {
     console.error('[listar-categoria] Error:', error);
