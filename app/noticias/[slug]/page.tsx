@@ -25,7 +25,7 @@ const cachedGetRelatedNews = unstable_cache(
   { revalidate: 600, tags: ['related-news'] }
 );
 export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
-export const revalidate = 3600; // ISR: revalida cada 1h (artículos raramente cambian)
+export const revalidate = 60; // ISR: revalida cada 60s para frescura inmediata
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',

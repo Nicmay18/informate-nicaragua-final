@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || '';
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
 const DOMAIN = 'nicaraguainformate.com';
 const INDEXNOW_URL = 'https://api.indexnow.org/IndexNow';
 const INDEXNOW_KEY_LOCATION = `https://${DOMAIN}/indexnow-key.txt`;

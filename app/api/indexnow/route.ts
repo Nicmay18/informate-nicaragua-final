@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const SITE_URL = 'https://nicaraguainformate.com';
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'nicaraguainformate';
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
 
 export async function POST(request: NextRequest) {
   try {

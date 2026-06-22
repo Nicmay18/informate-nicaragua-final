@@ -194,7 +194,8 @@ export function buildOrganizationJsonLdEnhanced(): Record<string, unknown> {
       availableLanguage: 'Spanish',
     },
     sameAs: [
-      'https://facebook.com/profile.php?id=61578261125687',
+      'https://www.facebook.com/profile.php?id=61578261125687',
+      'https://www.facebook.com/InformateAlInstanteNicaragua',
       'https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17',
       'https://t.me/+fHHjncJqMQM3NjZh',
     ],
