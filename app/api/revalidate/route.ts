@@ -70,6 +70,13 @@ export async function POST(request: NextRequest) {
     revalidateTag('news-by-slug');
     revalidateTag('related-news');
 
+    // CRITICO para indexacion rapida: invalidar sitemaps al instante
+    // para que Google News vea la noticia nueva sin esperar 1h de revalidate.
+    revalidateTag('news-sitemap');
+    revalidatePath('/news-sitemap.xml');
+    revalidatePath('/sitemap.xml');
+    revalidados.push('/news-sitemap.xml', '/sitemap.xml');
+
     return NextResponse.json({ revalidated: true, paths: revalidados });
   } catch (error) {
     console.error('[Revalidate] Error:', error);
