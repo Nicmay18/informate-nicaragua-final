@@ -99,12 +99,12 @@ function mapNoticia(d: any): Noticia {
 }
 
 // ============================================================================
-// FETCH SIN CACHE EN MEMORIA (unstable_cache ya maneja el caching global)
+// FETCH DE FIRESTORE — lectura cruda de la colección 'noticias'
 // Race-condition fix: si ya hay un fetch en curso, esperar ese en lugar de disparar otro
 // ============================================================================
 let _fetchPromise: Promise<Noticia[]> | null = null;
 
-async function fetchAllNoticias(): Promise<Noticia[]> {
+async function fetchAllNoticiasRaw(): Promise<Noticia[]> {
   if (_fetchPromise) {
     return _fetchPromise;
   }
@@ -133,6 +133,19 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
   })();
   return _fetchPromise;
 }
+
+// ============================================================================
+// CACHE COMPARTIDO DE LECTURA (CRÍTICO PARA COSTO DE FIRESTORE)
+// Las 3 funciones de portada (latest/trending/popular) reusan ESTA misma
+// lectura cacheada en lugar de leer 500 docs cada una por separado.
+// revalidate: 300s (5 min) + invalidación on-demand vía tag 'all-noticias'
+// desde /api/revalidate al publicar. Reduce lecturas de Firestore ~95%.
+// ============================================================================
+const fetchAllNoticias = unstable_cache(
+  fetchAllNoticiasRaw,
+  ['all-noticias'],
+  { revalidate: 300, tags: ['all-noticias'] }
+);
 
 // ============================================================================
 // HOME: NOTICIAS RECIENTES (todas las categorías visibles)
@@ -260,17 +273,17 @@ export async function incrementViewsBySlug(slug: string): Promise<number | null>
 export const getLatestNews = unstable_cache(
   async (limitCount: number) => _getLatestNewsRaw(limitCount),
   ['homepage-latest'],
-  { revalidate: 60, tags: ['latest-news'] }
+  { revalidate: 60, tags: ['latest-news', 'all-noticias'] }
 );
 
 export const getTrendingNews = unstable_cache(
   async (limitCount: number) => _getTrendingNewsRaw(limitCount),
   ['homepage-trending'],
-  { revalidate: 10, tags: ['trending-news'] }
+  { revalidate: 300, tags: ['trending-news', 'all-noticias'] }
 );
 
 export const getPopularNews = unstable_cache(
   async (limitCount: number) => _getPopularNewsRaw(limitCount),
   ['homepage-popular'],
-  { revalidate: 10, tags: ['popular-news'] }
+  { revalidate: 300, tags: ['popular-news', 'all-noticias'] }
 );

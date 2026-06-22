@@ -64,6 +64,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Invalidar caches por tag (homepage usa estos tags)
+    // 'all-noticias' es el cache compartido de lectura de Firestore: invalidarlo
+    // fuerza UNA relectura fresca que las 3 funciones de portada reusan.
+    revalidateTag('all-noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
     revalidateTag('popular-news');
