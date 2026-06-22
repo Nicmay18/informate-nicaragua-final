@@ -1519,7 +1519,7 @@ sin texto ni marcas de agua, composición periodística"
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp, limit, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp, limit, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // Panel admin v5.0.3 — inicializado
@@ -1772,6 +1772,7 @@ sin texto ni marcas de agua, composición periodística"
       if (typeof fecha.toMillis === 'function') return fecha.toMillis();
       if (typeof fecha === 'number') return fecha;
       if (fecha.seconds !== undefined) return fecha.seconds * 1000 + Math.floor((fecha.nanoseconds || 0) / 1e6);
+      if (fecha._seconds !== undefined) return fecha._seconds * 1000 + Math.floor((fecha._nanoseconds || 0) / 1e6);
       if (typeof fecha === 'string') {
         // Intentar parsear formato nicaraguense: "21 jun, 08:53 a. m."
         const m = fecha.match(/(\d{1,2})\s+([a-z]{3})[,\s]+(\d{1,2}):(\d{2})(?:\s+([ap])\.?\s*m\.?)?/i);
@@ -2982,10 +2983,26 @@ sin texto ni marcas de agua, composición periodística"
       }
     }
 
+    let _panelCache = null;
+    let _panelCacheTime = 0;
+    const _PANEL_CACHE_TTL = 30000; // 30 segundos
+
+    async function getNoticiasCache() {
+      if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
+      const snap = await getDocs(query(collection(db, "noticias"), orderBy('fecha', 'desc'), limit(300)));
+      const arr = [];
+      snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+      _panelCache = arr;
+      _panelCacheTime = Date.now();
+      return arr;
+    }
+
+    function invalidatePanelCache() { _panelCache = null; _panelCacheTime = 0; }
+
     async function cargarEstadisticas() {
       try {
-        const noticiasSnap = await getDocs(collection(db, "noticias"));
-        const totalNoticias = noticiasSnap.size;
+        const noticias = await getNoticiasCache();
+        const totalNoticias = noticias.length;
         document.getElementById('statNoticias').textContent = totalNoticias.toLocaleString();
 
         const conteo = {}; categorias.forEach(c => conteo[c.id] = 0);
@@ -2993,11 +3010,10 @@ sin texto ni marcas de agua, composición periodística"
         let totalVistas = 0;
         let publicadasSemana = 0;
         let conImagen = 0;
-        let calidadOk = 0; // notas con 350+ palabras
+        let calidadOk = 0;
         const hace7Dias = Date.now() - (7 * 24 * 60 * 60 * 1000);
 
-        noticiasSnap.forEach(d => {
-          const data = d.data();
+        noticias.forEach(data => {
           if (data.categoria && conteo[data.categoria] !== undefined) conteo[data.categoria]++;
           const palabrasNota = data.palabras || (data.contenido ? data.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length : 0);
           totalPalabras += palabrasNota;
@@ -3106,10 +3122,7 @@ sin texto ni marcas de agua, composición periodística"
       const container = document.getElementById('ultimasNoticiasDashboard');
       let noticias = [];
       try {
-        // Traer todas y ordenar en cliente (Firestore orderBy falla con tipos mixtos)
-        const snapshot = await getDocs(collection(db, "noticias"));
-        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
+        noticias = await getNoticiasCache();
       } catch (err) {
         container.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;font-size:13px;"><i class="fas fa-exclamation-circle"></i> Error cargando noticias. Revisa la consola (F12).</div>';
         return;
@@ -3255,9 +3268,8 @@ sin texto ni marcas de agua, composición periodística"
       if (!confirm('Se analizará y guardará el nivel de calidad de todas las notas que aún no tienen uno. Puede tardar un poco. ¿Continuar?')) return;
       showLoading(true, 'Asignando niveles...');
       try {
-        const snap = await getDocs(collection(db, 'noticias'));
-        const pendientes = [];
-        snap.forEach(d => { const data = d.data(); if (!data.nivel) pendientes.push({ id: d.id, ...data }); });
+        const todas = await getNoticiasCache();
+        const pendientes = todas.filter(n => !n.nivel);
         if (pendientes.length === 0) { showLoading(false); showToast('Todas las notas ya tienen nivel asignado.', 'success'); return; }
         let hechas = 0;
         for (const n of pendientes) {
@@ -3268,6 +3280,7 @@ sin texto ni marcas de agua, composición periodística"
             if (hechas % 3 === 0) showLoading(true, `Asignando niveles... ${hechas}/${pendientes.length}`);
           } catch (e) { console.warn('[backfill] falló nota', n.id, e); }
         }
+        invalidatePanelCache();
         showLoading(false);
         showToast(`Niveles asignados: ${hechas} de ${pendientes.length}`, 'success', 'Backfill completado');
         cargarNoticias(window.categoriaActiva);
@@ -3503,6 +3516,7 @@ sin texto ni marcas de agua, composición periodística"
           progressBar.style.width = '100%';
         }
         limpiarFormulario();
+        invalidatePanelCache();
         await cargarUltimasNoticias();
         await cargarEstadisticas();
         if (window.recargarSelectEvaluador) {
@@ -3540,11 +3554,7 @@ sin texto ni marcas de agua, composición periodística"
       const container = document.getElementById('listaNoticiasCompleta');
       container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-spinner fa-spin"></i></div><h3>Cargando...</h3></div>';
       try {
-        // Traer todas y ordenar en cliente (Firestore orderBy falla con tipos mixtos de fecha)
-        const snapshot = await getDocs(collection(db, "noticias"));
-        let noticias = [];
-        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
+        let noticias = await getNoticiasCache();
         const hace7Dias = Date.now() - (7 * 24 * 60 * 60 * 1000);
         if (filtro === 'recientes') {
           noticias = noticias.filter(n => getFechaMs(n.fecha) > hace7Dias);
@@ -3790,6 +3800,7 @@ sin texto ni marcas de agua, composición periodística"
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error ' + resp.status);
         showToast('Eliminada', 'success');
+        invalidatePanelCache();
         await cargarNoticias(window.categoriaActiva);
         await cargarUltimasNoticias();
         await cargarEstadisticas();
@@ -3864,10 +3875,7 @@ sin texto ni marcas de agua, composición periodística"
       select.innerHTML = '<option value="">Selecciona una noticia...</option>';
       loading.style.display = 'block';
       try {
-        const snapshot = await getDocs(collection(db, 'noticias'));
-        const noticias = [];
-        snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
-        noticias.sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha));
+        const noticias = await getNoticiasCache();
         window._evalNoticiasCache = noticias;
         noticias.forEach(n => {
           const opt = document.createElement('option');
@@ -4180,9 +4188,7 @@ sin texto ni marcas de agua, composición periodística"
       try {
         let noticias = window._evalNoticiasCache;
         if (!noticias || noticias.length === 0) {
-          const snapshot = await getDocs(collection(db, 'noticias'));
-          noticias = [];
-          snapshot.forEach(d => noticias.push({ id: d.id, ...d.data() }));
+          noticias = await getNoticiasCache();
           window._evalNoticiasCache = noticias;
         }
 
@@ -4284,12 +4290,13 @@ sin texto ni marcas de agua, composición periodística"
 
     async function cargarResumenCategorias() {
       try {
-        const snapshot = await getDocs(collection(db, "noticias"));
-        const conteo = {}; categorias.forEach(c => conteo[c.id] = 0); snapshot.forEach(d => { const cat = d.data().categoria; if (conteo[cat] !== undefined) conteo[cat]++; });
+        const noticias = await getNoticiasCache();
+        const totalNoticias = noticias.length;
+        const conteo = {}; categorias.forEach(c => conteo[c.id] = 0); noticias.forEach(data => { const cat = data.categoria; if (conteo[cat] !== undefined) conteo[cat]++; });
         document.getElementById('resumenCategorias').innerHTML = categorias.map(c => `
           <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--gray-100);">
             <div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:var(--radius);background:var(--gray-50);display:flex;align-items:center;justify-content:center;font-size:16px;">${c.emoji}</div><div><div style="font-weight:600;font-size:13px;">${c.id}</div><div style="font-size:12px;color:var(--gray-400);">${conteo[c.id]} publicaciones</div></div></div>
-            <div style="font-weight:700;color:var(--primary-600);font-size:16px;">${Math.round((conteo[c.id]/(snapshot.size||1))*100)}%</div>
+            <div style="font-weight:700;color:var(--primary-600);font-size:16px;">${Math.round((conteo[c.id]/(totalNoticias||1))*100)}%</div>
           </div>
         `).join('');
         document.getElementById('listaCategoriasConfig').innerHTML = categorias.map(c => `
@@ -4454,12 +4461,15 @@ window.batchRestore = async function() {
       const btn = document.getElementById('btnMigrar'); const statusDiv = document.getElementById('migrarStatus');
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analizando...';
       try {
-        const snapshot = await getDocs(collection(db, 'noticias')); const afectadas = [];
+        const todas = await getNoticiasCache(); const afectadas = [];
         const fbPatterns = ['facebook.com','fbcdn.net','fbcdn.com','scontent-','instagram.com','cdninstagram'];
-        snapshot.forEach((d, idx) => { const data = d.data(); if (fbPatterns.some(p => (data.imagen||'').toLowerCase().includes(p))) afectadas.push({ id: d.id, categoria: data.categoria, idx }); });
+        todas.forEach((data, idx) => { if (fbPatterns.some(p => (data.imagen||'').toLowerCase().includes(p))) afectadas.push({ id: data.id, categoria: data.categoria, idx }); });
         if (afectadas.length === 0) { statusDiv.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success);"></i> No se encontraron imágenes de Facebook.'; btn.disabled = false; return; }
         statusDiv.innerHTML = `⚙️ Actualizando ${afectadas.length} noticias... <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="migrarProgress" style="width:0%"></div></div>`;
-        for (let i = 0; i < afectadas.length; i++) { const n = afectadas[i]; const seeds = IMAGENES_RESPALDO[n.categoria] || IMAGENES_RESPALDO['default']; const nuevaImg = `https://picsum.photos/seed/${seeds[i%seeds.length]}/800/500`; await updateDoc(doc(db, 'noticias', n.id), { imagen: nuevaImg }); document.getElementById('migrarProgress').style.width = ((i+1)/afectadas.length*100)+'%'; }
+        const batch = writeBatch(db);
+        for (let i = 0; i < afectadas.length; i++) { const n = afectadas[i]; const seeds = IMAGENES_RESPALDO[n.categoria] || IMAGENES_RESPALDO['default']; const nuevaImg = `https://picsum.photos/seed/${seeds[i%seeds.length]}/800/500`; batch.update(doc(db, 'noticias', n.id), { imagen: nuevaImg }); document.getElementById('migrarProgress').style.width = ((i+1)/afectadas.length*100)+'%'; }
+        await batch.commit();
+        invalidatePanelCache();
         statusDiv.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> ✓ ${afectadas.length} imágenes reparadas.`; showToast(`${afectadas.length} imágenes migradas`, 'success'); await cargarUltimasNoticias();
       } catch (err) { statusDiv.innerHTML = `<i class="fas fa-exclamation-circle" style="color:var(--danger);"></i> Error: ${err.message}`; showToast('Error migración: ' + err.message, 'error'); }
       finally { btn.disabled = false; }
@@ -4489,15 +4499,19 @@ window.batchRestore = async function() {
       if (!confirm('¿Estás seguro que querés publicar TODAS las noticias en borrador?')) return;
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando noticias en borrador...';
       try {
-        const snapshot = await getDocs(collection(db, 'noticias'));
-        const borradores = [];
-        snapshot.forEach(d => { const data = d.data(); if (data.estado !== 'publicado') borradores.push(d.id); });
+        const todas = await getNoticiasCache();
+        const borradores = todas.filter(n => n.estado !== 'publicado');
         if (borradores.length === 0) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> No hay noticias en borrador. Todas ya están publicadas.</span>'; btn.disabled = false; return; }
         statusDiv.innerHTML = `⚙️ Publicando ${borradores.length} noticias... <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="publicarProgress" style="width:0%"></div></div>`;
+        const batch = writeBatch(db);
         for (let i = 0; i < borradores.length; i++) {
-          await updateDoc(doc(db, 'noticias', borradores[i]), { estado: 'publicado', fechaActualizacion: serverTimestamp() });
+          const updateData = { estado: 'publicado', fechaActualizacion: serverTimestamp() };
+          if (!borradores[i].fecha) updateData.fecha = serverTimestamp();
+          batch.update(doc(db, 'noticias', borradores[i].id), updateData);
           document.getElementById('publicarProgress').style.width = ((i + 1) / borradores.length * 100) + '%';
         }
+        await batch.commit();
+        invalidatePanelCache();
         statusDiv.innerHTML = `<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ ${borradores.length} noticias publicadas exitosamente.</span>`;
         showToast(`${borradores.length} noticias publicadas`, 'success');
         await cargarUltimasNoticias(); await cargarEstadisticas(); await cargarNoticias();
@@ -5265,13 +5279,12 @@ VERIFICACIÓN FINAL
 
     window.cargarMetricas = async function() {
       try {
-        const snap = await getDocs(collection(db, 'noticias'));
+        const noticiasRaw = await getNoticiasCache();
         const noticias = [];
         const vistasPorCategoria = {};
         let totalVistas = 0;
         let activas = 0;
-        snap.forEach(d => {
-          const data = d.data();
+        noticiasRaw.forEach(data => {
           if (data.estado === 'publicado') activas++;
           const v = data.vistas || 0;
           totalVistas += v;
