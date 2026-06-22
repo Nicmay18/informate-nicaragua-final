@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/sitemap.xml');
     revalidados.push('/news-sitemap.xml', '/sitemap.xml');
 
+    console.log('[Revalidate] OK paths:', revalidados.join(', '));
     return NextResponse.json({ revalidated: true, paths: revalidados });
   } catch (error) {
     console.error('[Revalidate] Error:', error);

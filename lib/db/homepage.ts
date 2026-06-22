@@ -117,7 +117,11 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
   _fetchPromise = (async () => {
     try {
       const db = getAdminDb();
-      const snap = await db.collection('noticias').limit(500).get();
+      const snap = await db
+        .collection('noticias')
+        .orderBy('fecha', 'desc')
+        .limit(500)
+        .get();
       let noticias = snap.docs.map(mapNoticia);
 
       // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)
