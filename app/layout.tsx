@@ -20,8 +20,8 @@ import ThirdPartyScripts from '@/components/ThirdPartyScripts';
 import OneSignalProvider from '@/components/OneSignalProvider';
 import { criticalCss } from '@/lib/critical-css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false });
+const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap', preload: false });
 
 /* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───
  * 1. Descarga Inter y Merriweather como .woff2
