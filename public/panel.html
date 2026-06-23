@@ -3375,7 +3375,7 @@ sin texto ni marcas de agua, composición periodística"
         // Usar resumen manual si existe, si no usar el contenido completo para mostrar todo
         const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
-          contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), vistas: 0,
+          contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), fechaActualizacion: serverTimestamp(), vistas: 0,
           autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador',
           nivel: nivelInfo.nivel, nivelScore: nivelInfo.score, nivelFecha: new Date().toISOString()
         };
