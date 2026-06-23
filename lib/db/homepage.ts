@@ -94,6 +94,7 @@ function mapNoticia(d: any): Noticia {
     pieFoto: data.pieFoto || '',
     metaDescription: data.metaDescription || data.metaDescripcion || '',
     keywords: data.keywords || '',
+    estado: data.estado || '',
   };
 }
 
@@ -104,9 +105,9 @@ function mapNoticia(d: any): Noticia {
 // página y múltiples componentes solicitan datos simultáneamente.
 //
 // NOTA: No usamos unstable_cache aquí porque revalidateTag no invalida
-// correctamente múltiples capas de cache anidadas. El ISR de la página
-// (revalidate: 60 en page.tsx) ya cachea el HTML completo, así que cada
-// 60s se hace UNA lectura de Firestore que todas las funciones reusan.
+// correctamente múltiples capas de cache anidadas. La página usa
+// export const dynamic = 'force-dynamic' (SSR dinámico), así que cada
+// request lee Firestore fresco directamente.
 // ============================================================================
 let _fetchPromise: Promise<Noticia[]> | null = null;
 
@@ -125,7 +126,7 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       let noticias = snap.docs.map(mapNoticia);
 
       // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)
-      noticias = noticias.filter(n => (n as any).estado === 'publicado' || !(n as any).estado);
+      noticias = noticias.filter(n => n.estado === 'publicado' || !n.estado);
 
       // 2. Deduplicar por slug: quedarse con la más reciente
       const unique = new Map<string, Noticia>();

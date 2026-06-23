@@ -19,6 +19,14 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
+  // Forzar no-cache en homepage para que noticias nuevas aparezcan inmediatamente
+  if (pathname === '/') {
+    const response = NextResponse.next();
+    response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
+    response.headers.set('Pragma', 'no-cache');
+    return response;
+  }
+
   // Solo interceptar rutas de noticias
   if (pathname.startsWith('/noticias/')) {
     const slug = pathname.replace('/noticias/', '');
@@ -57,5 +65,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/noticias/:slug*', '/panel.html'],
+  matcher: ['/', '/noticias/:slug*', '/panel.html'],
 };
