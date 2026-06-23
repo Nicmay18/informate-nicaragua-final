@@ -2,7 +2,6 @@ import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
-import { unstable_cache } from 'next/cache';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -13,19 +12,8 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
-const cachedGetNewsBySlug = unstable_cache(
-  async (slug: string) => getNewsBySlug(slug),
-  ['news-by-slug'],
-  { revalidate: 300, tags: ['news-by-slug'] }
-);
-
-const cachedGetRelatedNews = unstable_cache(
-  async (category: string, slug: string, limit: number) => getRelatedNews(category, slug, limit),
-  ['related-news'],
-  { revalidate: 600, tags: ['related-news'] }
-);
-export const dynamicParams = true; // Permite generar nuevos slugs bajo demanda
-export const revalidate = 60; // ISR: revalida cada 60s para frescura inmediata
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -60,7 +48,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const noticia = await cachedGetNewsBySlug(slug);
+    const noticia = await getNewsBySlug(slug);
     if (!noticia) {
       return {
         title: 'Página no encontrada',
@@ -195,7 +183,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
   // 4. Cargar relacionadas (si falla, array vacío, no rompe la página)
   try {
-    related = await cachedGetRelatedNews(noticia.categoria, noticia.slug, 6);
+    related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
   } catch (error) {
     logger.error('Error cargando relacionadas:', error);
     related = [];
