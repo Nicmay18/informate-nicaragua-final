@@ -29,6 +29,9 @@ export interface ResultadoAnalisis {
   aprobado: boolean;
   nivel: 'FORENSE' | 'ORO' | 'PLATA' | 'BRONCE' | 'RECHAZADO';
   puntuacion: number;
+  aiRiskScore?: number;
+  aiRiskLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
+  aiRiskIssues?: string[];
   filtros: {
     oro: FiltroResultado;
     adsense: FiltroResultado;
@@ -36,6 +39,7 @@ export interface ResultadoAnalisis {
     news: FiltroResultado;
     seo: FiltroResultado;
     eeat: FiltroResultado;
+    aiRisk: FiltroResultado;
   };
   accionesRequeridas: string[];
   metadataSugerida: {
@@ -200,33 +204,41 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     news: analizarFiltroNews(noticia),
     seo: analizarFiltroSEO(noticia),
     eeat: analizarFiltroEEAT(noticia),
+    aiRisk: analizarFiltroAIRisk(noticia),
   };
 
-  // ─── DETERMINACIÓN DE NIVEL v3.0 — CONSOLIDADO con Validador Unificado ───
+  // ─── DETERMINACIÓN DE NIVEL v4.0 — CONSOLIDADO con Validador Unificado + AI Risk ───
   // REGLA MAESTRA (aplica a los 3 validadores: Panel, Forense, Popup):
   //   RECHAZADO: atribuciones falsas a instituciones NIC sin nombre propio
-  //   FORENSE:  6/6 filtros OK + score ≥ 70 + 0 adjetivos + ≤1 transición
-  //   ORO:       6/6 filtros OK (equivale a Validación Unificada 8/8)
+  //   FORENSE:  7/7 filtros OK + score ≥ 70 + 0 adjetivos + ≤1 transición + AI risk LOW
+  //   ORO:       6-7 filtros OK (equivale a Validación Unificada 8/8)
   //   PLATA:     4-5 filtros OK
   //   BRONCE:    <4 filtros OK
   //
   // El score (0-100) es INFORMATIVO. El NIVEL depende de los filtros.
 
-  const filtrosOK = [filtros.oro, filtros.adsense, filtros.discover, filtros.news, filtros.seo, filtros.eeat]
+  const filtrosOK = [filtros.oro, filtros.adsense, filtros.discover, filtros.news, filtros.seo, filtros.eeat, filtros.aiRisk]
     .filter(f => f.aprobado).length;
 
-  const esForense = filtrosOK === 6 &&
+  const aiRiskScore = filtros.aiRisk.puntuacion;
+  const aiRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' = aiRiskScore >= 80 ? 'LOW' : aiRiskScore >= 50 ? 'MEDIUM' : 'HIGH';
+  const aiRiskIssues = filtros.aiRisk.checks
+    .filter(c => c.estado === 'FAIL' || c.estado === 'WARN')
+    .map(c => c.mensaje);
+
+  const esForense = filtrosOK === 7 &&
     scoreTotal >= 70 &&
     !atribucionesFalsas &&
     adjetivosEncontrados.length === 0 &&
-    transicionesEncontradas.length <= 1;
+    transicionesEncontradas.length <= 1 &&
+    aiRiskLevel === 'LOW';
 
   const esRechazado = atribucionesFalsas;
 
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense) nivel = 'FORENSE';
-  else if (filtrosOK === 6) nivel = 'ORO';
+  else if (filtrosOK >= 6) nivel = 'ORO';
   else if (filtrosOK >= 4) nivel = 'PLATA';
   else nivel = 'BRONCE';
 
@@ -236,6 +248,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     aprobado,
     nivel,
     puntuacion: scoreTotal,
+    aiRiskScore,
+    aiRiskLevel,
+    aiRiskIssues,
     filtros,
     accionesRequeridas: generarAcciones(filtros),
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
@@ -660,6 +675,164 @@ function analizarFiltroEEAT(n: NoticiaInput): FiltroResultado {
 }
 
 // ───────────────────────────────────────────────
+// NIVEL 7: DETECTOR DE RIESGO IA (AI Pattern Detection)
+// Detecta patrones estructurales típicos de texto generado por LLM:
+// - Verbos operativos repetidos entre secciones
+// - Simetría de longitud de párrafos (todos miden lo mismo)
+// - Uniformidad de longitud de frases (misma cadencia)
+// - Estructura de H2 simétrica (misma estructura por sección)
+// - Exceso de patrón enumerativo ("además... también... asimismo...")
+// ───────────────────────────────────────────────
+
+function analizarFiltroAIRisk(n: NoticiaInput): FiltroResultado {
+  const checks: CheckItem[] = [];
+  const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  // 1. REPETICIÓN DE VERBOS OPERATIVOS entre secciones
+  // Detecta patrones como "Las autoridades X... Las autoridades Y... Las autoridades Z..."
+  const verbosOperativos = ['realizaron', 'ejecutaron', 'reportaron', 'confirmaron', 'informaron',
+    'destacaron', 'indicaron', 'señalaron', 'manifestaron', 'declararon',
+    'explicaron', 'mencionaron', 'precisaron', 'aseguraron', 'agregaron',
+    'anunciaron', 'revelaron', 'detallaron', 'expresaron', 'comentaron'];
+  const contenidoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Contar cuántas veces aparece cada verbo
+  const verbosRepetidos = verbosOperativos.filter(v => {
+    const matches = contenidoLower.match(new RegExp(`\\b${v}\\b`, 'g'));
+    return matches && matches.length >= 2;
+  });
+  const sujetoRepetido = /las autoridades|los funcionarios|el ministerio|la policia|la institucion/gi;
+  const sujetoMatches = textoPlano.match(sujetoRepetido) || [];
+  const sujetoCount = sujetoMatches.length;
+  const verbRisk = verbosRepetidos.length >= 3 || (verbosRepetidos.length >= 2 && sujetoCount >= 3);
+  checks.push({
+    nombre: 'Repetición de verbos operativos',
+    estado: verbRisk ? 'FAIL' : verbosRepetidos.length >= 1 ? 'WARN' : 'PASS',
+    mensaje: verbRisk
+      ? `ALTO RIESGO IA: ${verbosRepetidos.length} verbos repetidos (${verbosRepetidos.slice(0, 3).join(', ')}). Sujeto repetido ${sujetoCount}x. Variar verbos y sujetos.`
+      : verbosRepetidos.length >= 1
+        ? `Verbo repetido: ${verbosRepetidos.join(', ')}. Considerar variar.`
+        : 'Sin repetición problemática de verbos operativos.',
+    valorActual: verbosRepetidos.length,
+    valorEsperado: 0,
+  });
+
+  // 2. SIMETRÍA DE PÁRRAFOS (uniformidad de longitud)
+  const parrafosHtml = n.contenido.match(/<p>([\s\S]*?)<\/p>/gi) || [];
+  const parrafosTexto = parrafosHtml.length > 0
+    ? parrafosHtml.map(p => p.replace(/<[^>]*>/g, '').trim()).filter(p => p.length > 10)
+    : textoPlano.split(/\n\s*\n/).filter(p => p.trim().length > 10);
+  if (parrafosTexto.length >= 3) {
+    const longitudes = parrafosTexto.map(p => p.split(/\s+/).filter(w => w.length > 0).length);
+    const media = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+    const desviacion = Math.sqrt(longitudes.reduce((sum, l) => sum + Math.pow(l - media, 2), 0) / longitudes.length);
+    const cv = media > 0 ? desviacion / media : 0; // Coeficiente de variación
+    // CV < 0.15 = párrafos casi idénticos en longitud = patrón IA
+    const paragraphSymmetry = cv < 0.15;
+    checks.push({
+      nombre: 'Simetría de párrafos',
+      estado: paragraphSymmetry ? 'FAIL' : cv < 0.25 ? 'WARN' : 'PASS',
+      mensaje: paragraphSymmetry
+        ? `ALTO RIESGO IA: Párrafos de longitud casi idéntica (CV=${(cv * 100).toFixed(0)}%). Romper simetría: alternar párrafos cortos y largos.`
+        : cv < 0.25
+          ? `Párrafos algo uniformes (CV=${(cv * 100).toFixed(0)}%). Considerar variar más.`
+          : `Variación natural de longitud entre párrafos (CV=${(cv * 100).toFixed(0)}%).`,
+      valorActual: `${(cv * 100).toFixed(0)}%`,
+      valorEsperado: '>25%',
+    });
+  } else {
+    checks.push({
+      nombre: 'Simetría de párrafos',
+      estado: 'PASS',
+      mensaje: 'Menos de 3 párrafos — no aplica análisis de simetría.',
+    });
+  }
+
+  // 3. UNIFORMIDAD DE LONGITUD DE FRASES
+  const frases = textoPlano.split(/[.!?]+/).map(f => f.trim()).filter(f => f.split(/\s+/).length >= 3);
+  if (frases.length >= 5) {
+    const longitudesFrase = frases.map(f => f.split(/\s+/).filter(w => w.length > 0).length);
+    const mediaFrase = longitudesFrase.reduce((a, b) => a + b, 0) / longitudesFrase.length;
+    const desvFrase = Math.sqrt(longitudesFrase.reduce((sum, l) => sum + Math.pow(l - mediaFrase, 2), 0) / longitudesFrase.length);
+    const cvFrase = mediaFrase > 0 ? desvFrase / mediaFrase : 0;
+    const sentenceUniformity = cvFrase < 0.20;
+    checks.push({
+      nombre: 'Uniformidad de cadencia de frases',
+      estado: sentenceUniformity ? 'FAIL' : cvFrase < 0.30 ? 'WARN' : 'PASS',
+      mensaje: sentenceUniformity
+        ? `ALTO RIESGO IA: Frases de longitud uniforme (CV=${(cvFrase * 100).toFixed(0)}%). La IA escribe frases de longitud similar. Alternar frases cortas (5-10 palabras) con largas (20+).`
+        : cvFrase < 0.30
+          ? `Frases algo uniformes (CV=${(cvFrase * 100).toFixed(0)}%). Variar más.`
+          : `Ritmo natural de frases (CV=${(cvFrase * 100).toFixed(0)}%).`,
+      valorActual: `${(cvFrase * 100).toFixed(0)}%`,
+      valorEsperado: '>30%',
+    });
+  } else {
+    checks.push({
+      nombre: 'Uniformidad de cadencia de frases',
+      estado: 'PASS',
+      mensaje: 'Menos de 5 frases — no aplica análisis de cadencia.',
+    });
+  }
+
+  // 4. ESTRUCTURA H2 SIMÉTRICA (mismos tipos de contenido por sección)
+  const h2Matches = n.contenido.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
+  if (h2Matches.length >= 3) {
+    const h2Textos = h2Matches.map(h => h.replace(/<[^>]*>/g, '').trim().toLowerCase());
+    // Detectar si todos los H2 siguen el mismo patrón (ej: todos empiezan con mismo tipo de palabra)
+    const primerosTokens = h2Textos.map(h => h.split(/\s+/)[0] || '');
+    const tokensUnicos = new Set(primerosTokens);
+    const tokenRepetido = primerosTokens.length - tokensUnicos.size >= 2; // 2+ H2 empiezan igual
+    // Detectar si todos los H2 tienen longitud similar
+    const h2Longitudes = h2Textos.map(h => h.length);
+    const h2Media = h2Longitudes.reduce((a, b) => a + b, 0) / h2Longitudes.length;
+    const h2Cv = h2Media > 0 ? Math.sqrt(h2Longitudes.reduce((s, l) => s + Math.pow(l - h2Media, 2), 0) / h2Longitudes.length) / h2Media : 0;
+    const h2Symmetry = tokenRepetido || h2Cv < 0.15;
+    checks.push({
+      nombre: 'Simetría de estructura H2',
+      estado: h2Symmetry ? 'WARN' : 'PASS',
+      mensaje: h2Symmetry
+        ? `RIESGO IA: Subtítulos con estructura simétrica${tokenRepetido ? ` (inician igual: "${[...tokensUnicos].filter(t => primerosTokens.filter(p => p === t).length >= 2).join('", "')}")` : ''}. Variar estilo: unos narrativos, otros técnicos, otros analíticos.`
+        : `Variación natural en estructura de subtítulos.`,
+      valorActual: h2Cv < 0.15 ? 'simétrico' : 'variado',
+      valorEsperado: 'variado',
+    });
+  } else {
+    checks.push({
+      nombre: 'Simetría de estructura H2',
+      estado: 'PASS',
+      mensaje: 'Menos de 3 subtítulos — no aplica análisis de simetría H2.',
+    });
+  }
+
+  // 5. EXCESO DE PATRÓN ENUMERATIVO
+  const marcadoresEnumerativos = ['ademas', 'tambien', 'asimismo', 'igualmente', 'de igual manera',
+    'por otro lado', 'por su parte', 'en cuanto a', 'no obstante', 'sin embargo',
+    'de igual forma', 'del mismo modo', 'a su vez', 'por ende', 'en consecuencia',
+    'por lo tanto', 'cabe señalar', 'vale la pena'];
+  const marcadoresEncontrados = marcadoresEnumerativos.filter(m => contenidoLower.includes(m));
+  const enumerativeExcess = marcadoresEncontrados.length >= 5;
+  checks.push({
+    nombre: 'Exceso de patrón enumerativo',
+    estado: enumerativeExcess ? 'FAIL' : marcadoresEncontrados.length >= 3 ? 'WARN' : 'PASS',
+    mensaje: enumerativeExcess
+      ? `ALTO RIESGO IA: ${marcadoresEncontrados.length} marcadores enumerativos (${marcadoresEncontrados.slice(0, 4).join(', ')}). La IA encadena ideas con conectores. Reducir a máximo 2.`
+      : marcadoresEncontrados.length >= 3
+        ? `${marcadoresEncontrados.length} marcadores enumerativos. Considerar reducir.`
+        : `Uso moderado de conectores (${marcadoresEncontrados.length}).`,
+    valorActual: marcadoresEncontrados.length,
+    valorEsperado: '<=2',
+  });
+
+  const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
+  const fails = checks.filter(c => c.estado === 'FAIL').length;
+  return {
+    aprobado: puntuacion >= 60 && fails === 0,
+    puntuacion: Math.round(puntuacion),
+    checks,
+  };
+}
+
+// ───────────────────────────────────────────────
 // UTILIDADES
 // ───────────────────────────────────────────────
 
@@ -683,6 +856,9 @@ function generarAcciones(filtros: ResultadoAnalisis['filtros']): string[] {
   }
   if (!filtros.eeat.aprobado) {
     acciones.push('EEAT: Revisar atribuciones a instituciones (no inventar fuentes estatales)');
+  }
+  if (!filtros.aiRisk.aprobado) {
+    acciones.push('Riesgo IA: Variar verbos, romper simetría de párrafos, alternar longitud de frases, reducir conectores enumerativos');
   }
 
   return acciones;

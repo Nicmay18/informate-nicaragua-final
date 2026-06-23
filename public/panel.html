@@ -5624,7 +5624,7 @@ VERIFICACIÓN FINAL
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // ANALIZADOR FORENSE — 6 NIVELES
+    // ANALIZADOR FORENSE — 7 NIVELES (incluye detector de riesgo IA)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarAnalisisForense = async function() {
       const titulo = document.getElementById('titulo').value.trim();
@@ -5641,7 +5641,7 @@ VERIFICACIÓN FINAL
       const panel = document.getElementById('panelAnalisisForense');
       const resultado = document.getElementById('resultadoAnalisisForense');
       panel.style.display = 'block';
-      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 6 niveles...</div>';
+      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 7 niveles (incluye detector IA)...</div>';
 
       try {
         // Validación unificada local (misma fuente de verdad que popup y evaluador)
@@ -5685,7 +5685,12 @@ VERIFICACIÓN FINAL
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[data.nivel] + ';">' + iconoNivel[data.nivel] + ' NIVEL ' + data.nivel + '</h3>';
       html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + data.puntuacion + '/100</p></div>';
-      html += '<div style="text-align:right;"><span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[data.nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
+      const aiColors = { 'LOW': '#16a34a', 'MEDIUM': '#d97706', 'HIGH': '#dc2626' };
+      const aiBg = { 'LOW': '#dcfce7', 'MEDIUM': '#fef3c7', 'HIGH': '#fee2e2' };
+      const aiLabels = { 'LOW': '🟢 Riesgo IA: BAJO', 'MEDIUM': '🟡 Riesgo IA: MEDIO', 'HIGH': '🔴 Riesgo IA: ALTO' };
+      const aiL = data.aiRiskLevel || 'LOW';
+      html += '<div style="text-align:right;"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:' + aiBg[aiL] + ';color:' + aiColors[aiL] + ';margin-bottom:4px;display:inline-block;">' + aiLabels[aiL] + '</span><br>';
+      html += '<span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[data.nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
       html += '</div></div>';
 
       if (data.accionesRequeridas && data.accionesRequeridas.length > 0) {
