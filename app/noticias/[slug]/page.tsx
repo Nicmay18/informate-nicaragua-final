@@ -102,6 +102,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     // El SEO title (finalTitle) solo va en <title> para Google SERPs
     const socialTitle = noticia.titulo || finalTitle;
 
+    // Normalizar imagen a URL absoluta para Open Graph / Telegram / Discord
+    const absoluteImage = noticia.imagen
+      ? (noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`)
+      : 'https://nicaraguainformate.com/logo.webp';
+
     return {
       title: finalTitle,
       description,
@@ -117,15 +122,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
-        images: noticia.imagen
-          ? [{ url: noticia.imagen, width: 1200, height: 630, alt: imageAlt }]
-          : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+        images: [
+          { url: absoluteImage, width: 1200, height: 630, alt: imageAlt },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title: socialTitle,
         description,
-        images: noticia.imagen ? [noticia.imagen] : ['https://nicaraguainformate.com/logo.webp'],
+        images: [absoluteImage],
       },
       robots: shouldNoindex
         ? { index: false, follow: false }
