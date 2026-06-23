@@ -452,17 +452,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .article-body li{margin-bottom:8px}
 .article-body blockquote{border-left:4px solid var(--accent);padding:16px 20px;margin:20px 0;background:var(--surface-2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-style:italic}
 
-/* Letra capitular (drop cap) en el primer párrafo */
-.article-body > p:first-of-type::first-letter{
-  font-family:'Merriweather',serif;
-  font-size:3.6em;
-  font-weight:700;
-  line-height:0.85;
-  float:left;
-  padding-right:10px;
-  padding-top:4px;
-  color:var(--primary);
-}
+/* Letra capitular (drop cap) — deshabilitado para noticias */
+/* .article-body > p:first-of-type::first-letter { ... } */
 
 .article-tags{margin-bottom:36px}
 .article-tags h3{font-size:0.85rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;color:var(--text-secondary)}
@@ -567,7 +558,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .article-body{font-size:0.95rem;line-height:1.7}
   .article-body h2{font-size:1.2rem;margin:24px 0 12px}
   .article-body h3{font-size:1rem;margin:18px 0 10px}
-  .article-body > p:first-of-type::first-letter{font-size:2.4em;padding-right:8px;margin-right:6px;line-height:0.9}
 
   /* Publicidad */
   .ad-banner{padding:20px;margin-bottom:20px}
@@ -587,8 +577,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .sidebar{display:none}
   .ad-sidebar{display:none}
 
-  /* Drop-cap móvil ni-article__body */
-  .ni-article__body > p:first-of-type::first-letter{font-size:2.4em;padding-right:8px;margin-right:6px;line-height:0.9}
+  /* Drop-cap móvil — deshabilitado para mejor lectura */
 }
 
 /* ===== TYPOGRAPHY UTILITIES ===== */
@@ -1321,21 +1310,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
    DISEÑO EDITORIAL INMERSIVO — ESTILO BBC / NEW YORK TIMES
    ========================================================================== */
 
-/* Drop-cap Capitular Clásica (NYT Style) */
-.ni-article__body > p:first-of-type::first-letter {
-  font-family: 'Merriweather', serif;
-  float: left;
-  font-size: 4.8rem;
-  line-height: 0.85;
-  padding-top: 4px;
-  padding-right: 12px;
-  padding-left: 3px;
-  font-weight: 900;
-  color: var(--ni-navy);
-}
-[data-theme="dark"] .ni-article__body > p:first-of-type::first-letter {
-  color: var(--ni-gold);
-}
+/* Drop-cap Capitular Clásica — deshabilitado para noticias (mejor lectura en mobile) */
+/* .ni-article__body > p:first-of-type::first-letter { ... } */
 
 
 /* ================================================================
