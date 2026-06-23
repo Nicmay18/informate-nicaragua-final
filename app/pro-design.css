@@ -2099,7 +2099,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   align-items: center;
   gap: 40px;
   white-space: nowrap;
-  animation: scroll-marquee 25s ease-in-out infinite alternate;
+  animation: scroll-marquee 30s linear infinite;
+  width: max-content;
 }
 .ni-marquee-bar__scroll:hover {
   animation-play-state: paused;
@@ -2124,7 +2125,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 @keyframes scroll-marquee {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-70%); }
+  100% { transform: translateX(-50%); }
 }
 
 /* 3. Sidebar Tabbed Widget */

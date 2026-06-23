@@ -78,7 +78,12 @@ function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
       <div className="ni-marquee-bar__content">
         <div className="ni-marquee-bar__scroll">
           {list.map((n) => (
-            <NoPrefetchLink key={n.id} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
+            <NoPrefetchLink key={`${n.id}-a`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
+              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
+            </NoPrefetchLink>
+          ))}
+          {list.map((n) => (
+            <NoPrefetchLink key={`${n.id}-b`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
               <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
             </NoPrefetchLink>
           ))}
