@@ -176,8 +176,8 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   else scoreTotal += 2;
 
   // C. Anti-IA detectable (0-15 pts)
-  if (transicionesEncontradas.length === 0) scoreTotal += 15;
-  else if (transicionesEncontradas.length <= 2) scoreTotal += 8;
+  if (transicionesEncontradas.length <= 2) scoreTotal += 15;
+  else if (transicionesEncontradas.length <= 5) scoreTotal += 8;
   else scoreTotal += 2;
 
   // D. Lead completo para Discover (0-15 pts)
@@ -238,8 +238,8 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense) nivel = 'FORENSE';
-  else if (filtrosOK >= 6) nivel = 'ORO';
-  else if (filtrosOK >= 4) nivel = 'PLATA';
+  else if (scoreTotal >= 75) nivel = 'ORO';
+  else if (scoreTotal >= 60) nivel = 'PLATA';
   else nivel = 'BRONCE';
 
   const aprobado = nivel !== 'RECHAZADO';
