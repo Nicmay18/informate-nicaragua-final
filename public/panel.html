@@ -1335,11 +1335,59 @@ sin texto ni marcas de agua, composición periodística"
       <!-- ANALYTICS -->
       <div id="analytics-tab" class="tab-content">
         <div class="page-header">
-          <div class="page-title"><h1>Analytics</h1><p>Métricas reales de Firebase — Vistas, tráfico y audiencia.</p></div>
+          <div class="page-title"><h1>Analytics & Tráfico Real</h1><p>Métricas en tiempo real — De dónde vienen tus lectores y qué están leyendo ahora.</p></div>
           <div class="header-actions">
-            <button class="btn btn-secondary" onclick="cargarMetricas()"><i class="fas fa-sync-alt"></i><span>Actualizar</span></button>
+            <button class="btn btn-primary" onclick="cargarTraficoRealTime()" style="background: var(--danger);"><i class="fas fa-satellite-dish"></i><span>Ver Tráfico Vivo</span></button>
+            <button class="btn btn-secondary" onclick="cargarMetricas()"><i class="fas fa-sync-alt"></i><span>Histórico</span></button>
           </div>
         </div>
+
+        <!-- Dashboard Tiempo Real -->
+        <div id="real-time-dashboard" style="margin-bottom: 24px;">
+          <div class="stats-grid">
+            <div class="stat-card" style="border-bottom: 3px solid #1877f2;">
+              <div class="stat-header">
+                <div><div class="stat-value" id="rt-facebook">0</div><div class="stat-label">Facebook</div></div>
+                <div class="stat-icon" style="background: #1877f220; color: #1877f2;"><i class="fab fa-facebook-f"></i></div>
+              </div>
+            </div>
+            <div class="stat-card" style="border-bottom: 3px solid #229ED9;">
+              <div class="stat-header">
+                <div><div class="stat-value" id="rt-telegram">0</div><div class="stat-label">Telegram</div></div>
+                <div class="stat-icon" style="background: #229ed920; color: #229ed9;"><i class="fab fa-telegram-plane"></i></div>
+              </div>
+            </div>
+            <div class="stat-card" style="border-bottom: 3px solid #34a853;">
+              <div class="stat-header">
+                <div><div class="stat-value" id="rt-google">0</div><div class="stat-label">Google / Discover</div></div>
+                <div class="stat-icon" style="background: #34a85320; color: #34a853;"><i class="fab fa-google"></i></div>
+              </div>
+            </div>
+            <div class="stat-card" style="border-bottom: 3px solid #25D366;">
+              <div class="stat-header">
+                <div><div class="stat-value" id="rt-whatsapp">0</div><div class="stat-label">WhatsApp</div></div>
+                <div class="stat-icon" style="background: #25d36620; color: #25d366;"><i class="fab fa-whatsapp"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-grid" style="margin-top: 20px;">
+            <div class="card">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-bolt" style="color: var(--danger);"></i>Top 10 en las últimas 24h</h3></div>
+              <div class="card-body" id="rt-top-paginas">
+                <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Esperando datos de tráfico...</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3 class="card-title"><i class="fas fa-users" style="color: var(--primary-600);"></i>Últimos Visitantes</h3></div>
+              <div class="card-body" id="rt-ultimos-eventos" style="max-height: 400px; overflow-y: auto;">
+                <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Buscando actividad reciente...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-label" style="margin: 32px 0 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Métricas Acumuladas (Todo el tiempo)</div>
         <div class="stats-grid" id="metricas-stats">
           <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-total-vistas">0</div><div class="stat-label">Vistas Totales</div></div><div class="stat-icon blue"><i class="fas fa-eye"></i></div></div><div class="stat-change"><i class="fas fa-database"></i><span>Desde Firestore</span></div></div>
           <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-promedio-vistas">0</div><div class="stat-label">Vistas Promedio</div></div><div class="stat-icon green"><i class="fas fa-chart-bar"></i></div></div><div class="stat-change"><i class="fas fa-newspaper"></i><span>Por noticia</span></div></div>
@@ -2961,9 +3009,15 @@ sin texto ni marcas de agua, composición periodística"
       if (tabId === 'noticias-tab') cargarNoticias(window.categoriaActiva);
       if (tabId === 'dashboard-tab') cargarEstadisticas();
       if (tabId === 'categorias-tab') cargarResumenCategorias();
-      if (tabId === 'analytics-tab') cargarMetricas();
+      if (tabId === 'analytics-tab') {
+        cargarMetricas();
+        cargarTraficoRealTime();
+      }
       if (tabId === 'config-tab') cargarConfiguracion();
       if (tabId === 'evaluador-tab') cargarSelectEvaluador();
+      if (tabId === 'calidad-tab') {
+        if (typeof renderDashboardCalidad === 'function') renderDashboardCalidad();
+      }
     };
 
     window.showGuide = function(panelId, tabElement) {
@@ -5274,6 +5328,68 @@ VERIFICACIÓN FINAL
         status.textContent = 'Error al generar: ' + err.message;
         status.style.color = '#f87171';
         showToast('Error Gemini: ' + err.message, 'error');
+      }
+    };
+
+    window.cargarTraficoRealTime = async function() {
+      const topEl = document.getElementById('rt-top-paginas');
+      const ultimosEl = document.getElementById('rt-ultimos-eventos');
+      
+      try {
+        const resp = await fetch('/api/admin/traffic', { cache: 'no-store' });
+        const data = await resp.json();
+        
+        if (!data.ok) throw new Error(data.error || 'Error desconocido');
+        
+        const stats = data.stats;
+        
+        // 1. Actualizar contadores por fuente
+        document.getElementById('rt-facebook').textContent = (stats.fuentes.facebook || 0).toLocaleString();
+        document.getElementById('rt-telegram').textContent = (stats.fuentes.telegram || 0).toLocaleString();
+        document.getElementById('rt-google').textContent = (stats.fuentes.google || 0).toLocaleString();
+        document.getElementById('rt-whatsapp').textContent = (stats.fuentes.whatsapp || 0).toLocaleString();
+        
+        // 2. Renderizar Top Páginas (24h)
+        topEl.innerHTML = stats.topPaginas.map((n, i) => `
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
+            <div style="font-size:16px;font-weight:800;color:var(--gray-300);width:20px;">${i+1}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
+              <div style="font-size:11px;color:var(--gray-500);">${n.vistas} lectores hoy</div>
+            </div>
+            <div style="padding:4px 8px;background:var(--primary-50);color:var(--primary-700);border-radius:6px;font-size:11px;font-weight:700;">+${n.vistas}</div>
+          </div>
+        `).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Sin visitas en las últimas 24h.</p>';
+        
+        // 3. Renderizar Feed de Actividad
+        ultimosEl.innerHTML = stats.ultimosEventos.map(ev => {
+          const time = new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const icon = ev.source === 'facebook' ? 'fab fa-facebook' : 
+                       ev.source === 'telegram' ? 'fab fa-telegram' :
+                       ev.source === 'google' ? 'fab fa-google' :
+                       ev.source === 'whatsapp' ? 'fab fa-whatsapp' : 'fas fa-globe';
+          const color = ev.source === 'facebook' ? '#1877f2' : 
+                        ev.source === 'telegram' ? '#229ed9' :
+                        ev.source === 'google' ? '#34a853' :
+                        ev.source === 'whatsapp' ? '#25d366' : 'var(--gray-400)';
+          
+          return `
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-50);">
+              <div style="width:32px;height:32px;border-radius:8px;background:${color}15;color:${color};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">
+                <i class="${icon}"></i>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:600;color:var(--gray-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ev.titulo || ev.slug}</div>
+                <div style="font-size:10px;color:var(--gray-500);">Desde ${ev.source.toUpperCase()} · ${time}</div>
+              </div>
+            </div>
+          `;
+        }).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Esperando visitas...</p>';
+        
+        showToast('Tráfico actualizado en tiempo real', 'success');
+      } catch (e) {
+        console.error('Error cargando tráfico:', e);
+        showToast('No hay datos de tráfico aún', 'info');
       }
     };
 

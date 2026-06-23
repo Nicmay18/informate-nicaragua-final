@@ -230,10 +230,13 @@ function isValidSlug(slug: string): boolean {
 /**
  * Incrementa vistas de una noticia de forma atómica por slug.
  * Usado por el route handler /api/views/[slug]
- *
- * Protección: rechaza slugs malformados antes de tocar Firestore.
+ * 
+ * Ahora también registra el evento de tráfico para analítica en tiempo real.
  */
-export async function incrementViewsBySlug(slug: string): Promise<number | null> {
+export async function incrementViewsBySlug(
+  slug: string, 
+  meta?: { referrer?: string; ua?: string; ip?: string }
+): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
     return null;
@@ -250,12 +253,39 @@ export async function incrementViewsBySlug(slug: string): Promise<number | null>
 
     if (snap.empty) return null;
 
-    const docRef = snap.docs[0].ref;
-    const currentViews = snap.docs[0].data().vistas || 0;
+    const doc = snap.docs[0];
+    const docRef = doc.ref;
+    const data = doc.data();
+    const currentViews = data.vistas || 0;
 
+    // 1. Incremento atómico en el documento de la noticia
     await docRef.update({
       vistas: FieldValue.increment(1),
     });
+
+    // 2. Registrar evento de tráfico en colección dedicada (para el Panel de Control)
+    try {
+      const refRaw = meta?.referrer || '';
+      let source = 'directo';
+      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me')) source = 'facebook';
+      else if (refRaw.includes('t.me') || refRaw.includes('telegram')) source = 'telegram';
+      else if (refRaw.includes('google.com')) source = 'google';
+      else if (refRaw.includes('twitter.com') || refRaw.includes('x.com')) source = 'twitter';
+      else if (refRaw.includes('whatsapp.com')) source = 'whatsapp';
+      else if (refRaw && !refRaw.includes('nicaraguainformate.com')) source = 'otro';
+
+      await db.collection('analytics_traffic').add({
+        slug,
+        titulo: data.titulo || '',
+        categoria: data.categoria || 'Actualidad',
+        source,
+        referrer: refRaw,
+        ua: meta?.ua || '',
+        timestamp: FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      logger.error('[homepage.ts] Error registrando evento analytics:', e);
+    }
 
     return currentViews + 1;
   } catch (err) {

@@ -52,6 +52,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     // CORREGIDO: usa el endpoint correcto /api/views/[slug] (no /api/view)
     fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ referrer: document.referrer }),
       signal: controller.signal,
     })
       .then(async (res) => {

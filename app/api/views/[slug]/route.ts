@@ -55,7 +55,16 @@ export async function POST(
       return NextResponse.json({ error: v.reason }, { status: 400 });
     }
 
-    const newViews = await incrementViewsBySlug(slug);
+    // Extraer referrer y otros datos del body si existen
+    let referrer = '';
+    try {
+      const body = await request.json();
+      referrer = body.referrer || '';
+    } catch { /* ignore if no body */ }
+
+    const ua = request.headers.get('user-agent') || 'unknown';
+
+    const newViews = await incrementViewsBySlug(slug, { referrer, ua, ip });
     if (newViews === null) {
       return NextResponse.json({ error: 'Noticia no encontrada' }, { status: 404 });
     }
