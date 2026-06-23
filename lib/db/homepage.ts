@@ -266,12 +266,13 @@ export async function incrementViewsBySlug(
     // 2. Registrar evento de tráfico en colección dedicada (para el Panel de Control)
     try {
       const refRaw = meta?.referrer || '';
+      const uaRaw = (meta?.ua || '').toLowerCase();
       let source = 'directo';
-      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me')) source = 'facebook';
-      else if (refRaw.includes('t.me') || refRaw.includes('telegram')) source = 'telegram';
+      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net')) source = 'facebook';
+      else if (refRaw.includes('t.me') || refRaw.includes('telegram') || uaRaw.includes('telegram')) source = 'telegram';
       else if (refRaw.includes('google.com')) source = 'google';
       else if (refRaw.includes('twitter.com') || refRaw.includes('x.com')) source = 'twitter';
-      else if (refRaw.includes('whatsapp.com')) source = 'whatsapp';
+      else if (refRaw.includes('whatsapp.com') || uaRaw.includes('whatsapp') || uaRaw.includes('wa')) source = 'whatsapp';
       else if (refRaw && !refRaw.includes('nicaraguainformate.com')) source = 'otro';
 
       await db.collection('analytics_traffic').add({
