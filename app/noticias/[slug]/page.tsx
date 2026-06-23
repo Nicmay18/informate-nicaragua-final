@@ -156,12 +156,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function NewsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  let noticia: Awaited<ReturnType<typeof cachedGetNewsBySlug>> = null;
-  let related: Awaited<ReturnType<typeof cachedGetRelatedNews>> = [];
+  let noticia: Awaited<ReturnType<typeof getNewsBySlug>> = null;
+  let related: Awaited<ReturnType<typeof getRelatedNews>> = [];
 
   // 1. Cargar noticia (errores de Firebase = "Error de conexión")
   try {
-    noticia = await cachedGetNewsBySlug(slug);
+    noticia = await getNewsBySlug(slug);
   } catch (error) {
     logger.error('Error cargando noticia:', error);
     return (
