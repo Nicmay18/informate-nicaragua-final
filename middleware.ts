@@ -15,14 +15,16 @@ export function middleware(request: NextRequest) {
   if (pathname === '/panel.html') {
     const response = NextResponse.next();
     response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
+    response.headers.set('CDN-Cache-Control', 'no-store');
     response.headers.set('Pragma', 'no-cache');
     return response;
   }
 
-  // Forzar no-cache en homepage para que noticias nuevas aparezcan inmediatamente
-  if (pathname === '/') {
+  // Forzar no-cache en homepage y noticias para evitar Edge Cache de Vercel
+  if (pathname === '/' || pathname.startsWith('/noticias/')) {
     const response = NextResponse.next();
     response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
+    response.headers.set('CDN-Cache-Control', 'no-store');
     response.headers.set('Pragma', 'no-cache');
     return response;
   }
