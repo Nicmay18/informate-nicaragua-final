@@ -31,8 +31,8 @@ function auditarNoticia(html: string, titulo: string) {
 
   let score = 0;
   if(p>=450)score+=20;else if(p>=350)score+=14;else if(p>=250)score+=7;
-  if(!r.length)score+=20;else if(r.length<=2)score+=8;
-  if(tr===0)score+=20;else if(tr<=2)score+=8;
+  if(r.length<=1)score+=20;else if(r.length<=3)score+=10;
+  if(tr<=2)score+=20;else if(tr<=5)score+=10;
   if(dens>=2)score+=15;else if(dens>=1)score+=11;else if(dens>0)score+=6;
   score+=10; // Variación media por defecto
   if(ctx>=1)score+=10;
@@ -43,7 +43,7 @@ function auditarNoticia(html: string, titulo: string) {
     titulo,
     palabras: p,
     score,
-    nivel: score >= 90 ? '🟢 ORO' : (score >= 80 ? '🟡 BRONCE' : '🔴 PELIGRO'),
+    nivel: score >= 90 ? '🟢 ORO' : (score >= 75 ? '🟡 BRONCE' : '🔴 PELIGRO'),
     densidad: dens,
     relleno: r.length,
     transiciones_ia: tr,
