@@ -5,6 +5,7 @@ import Link from 'next/link';
 import OptimizedImage from './OptimizedImage';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
 import { tiempoLectura, fmtViews, formatDateES, extractPoints } from '@/lib/formateo';
+import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
@@ -285,7 +286,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <div style={imgContainerStyle}>
               <meta itemProp="url" content={noticia.imagen} />
               <OptimizedImage
-                src={noticia.imagen}
+                src={getResponsiveImageUrl(noticia.imagen)}
                 alt={noticia.titulo}
                 variant="hero"
                 fill
