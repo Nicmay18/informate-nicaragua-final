@@ -1,7 +1,20 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 
+/** Escape para Telegram HTML parse_mode: solo < > & " ' */
+function escTelegram(texto: string): string {
+  return String(texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/** Quitar acentos para hashtags y slugs */
+function sinAcentos(str: string): string {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 export async function POST(request: NextRequest) {
-  // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -15,19 +28,13 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { noticia, config } = body;
-    
+
     const TG_TOKEN = config?.telegram?.token || process.env.TG_TOKEN || '';
     const TG_CHAT_ID = config?.telegram?.chatId || process.env.TG_CHAT_ID || '';
 
-    if (!TG_TOKEN) {
-      return NextResponse.json({ error: 'Falta token de Telegram' }, { status: 400, headers });
-    }
-    if (!TG_CHAT_ID) {
-      return NextResponse.json({ error: 'Falta chat ID de Telegram' }, { status: 400, headers });
-    }
-    if (!noticia?.titulo) {
-      return NextResponse.json({ error: 'Falta título' }, { status: 400, headers });
-    }
+    if (!TG_TOKEN) return NextResponse.json({ error: 'Falta token de Telegram' }, { status: 400, headers });
+    if (!TG_CHAT_ID) return NextResponse.json({ error: 'Falta chat ID de Telegram' }, { status: 400, headers });
+    if (!noticia?.titulo) return NextResponse.json({ error: 'Falta título' }, { status: 400, headers });
 
     const emoji: Record<string, string> = {
       'Sucesos': '🚨', 'Nacionales': '📌', 'Economía': '💰', 'Cultura': '🎭',
@@ -35,23 +42,59 @@ export async function POST(request: NextRequest) {
     };
 
     const catEmoji = emoji[noticia.categoria] || '📰';
-    const titulo = (noticia.titulo || '').substring(0, 120);
+    const tituloRaw = (noticia.titulo || '').substring(0, 120);
+    const tituloEsc = escTelegram(tituloRaw);
 
-    let resumen = (noticia.resumen || noticia.contenido || '').substring(0, 220).trim();
-    const ultimoPunto = resumen.lastIndexOf('.');
-    if (ultimoPunto > 60) resumen = resumen.substring(0, ultimoPunto + 1);
-    resumen = resumen.replace(/\n+/g, ' ').trim();
+    // ── GANCHO: primera oración del resumen como tensión, no como spoiler ──
+    let resumenCompleto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
+    const primerPunto = resumenCompleto.search(/[.!?]/);
+    let gancho = primerPunto > 20
+      ? resumenCompleto.substring(0, primerPunto + 1)
+      : resumenCompleto.substring(0, 100).trim();
 
-    const slug = noticia.slug || noticia.titulo?.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 60);
-    const url = `https://nicaraguainformate.com/noticias/${slug}`;
+    // Si el gancho es igual al título, usar segunda oración
+    if (gancho.toLowerCase().trim() === tituloRaw.toLowerCase().trim()) {
+      const restoInicial = resumenCompleto.substring(primerPunto + 1).trim();
+      const segundoPunto = restoInicial.search(/[.!?]/);
+      if (segundoPunto > 0) {
+        const resto = restoInicial.substring(segundoPunto + 1).trim();
+        const tercerPunto = resto.search(/[.!?]/);
+        gancho = tercerPunto > 10 ? resto.substring(0, tercerPunto + 1) : resto.substring(0, 120);
+      }
+    }
+    const ganchoEsc = escTelegram(gancho);
 
+    // Línea de cierre según categoría
+    const cierres: Record<string, string> = {
+      'Sucesos': 'Los detalles completos en la nota.',
+      'Deportes': 'Todos los detalles en la nota.',
+      'Nacionales': 'Lee la nota completa.',
+      'Economía': 'Análisis completo en la nota.',
+      'Internacionales': 'Contexto completo en la nota.',
+    };
+    const cierreEsc = escTelegram(cierres[noticia.categoria] || 'Nota completa en el sitio.');
+
+    // Slug seguro
+    let slug = noticia.slug || '';
+    if (!slug) {
+      slug = sinAcentos(tituloRaw.toLowerCase())
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .substring(0, 60);
+    }
+    const url = `https://nicaraguainformate.com/noticias/${encodeURIComponent(slug)}`;
+
+    // Hashtags limpios
     const hashtags: string[] = [];
     if (noticia.categoria && noticia.categoria !== 'Nacionales') {
-      hashtags.push(`#${noticia.categoria.replace(/\s+/g, '')}`);
+      hashtags.push(`#${sinAcentos(noticia.categoria).replace(/\s+/g, '')}`);
     }
     if (hashtags.length === 0) hashtags.push('#Nicaragua');
+    hashtags.push('#NicaraguaInformate');
+    const htEsc = escTelegram(hashtags.join(' '));
 
-    const caption = `<b>${catEmoji} ${titulo}</b>\n\n${resumen}\n\n${hashtags.join(' ')}\n\n→ <a href="${url}">Leer más en nicaraguainformate.com</a>`;
+    // ── CAPTION SEGURO ──
+    const caption = `<b>${catEmoji} ${tituloEsc}</b>\n\n${ganchoEsc}\n\n${cierreEsc}\n\n${htEsc}\n\n→ <a href="${url}">nicaraguainformate.com</a>`;
 
     const imagen = noticia.imagenRedes || noticia.imagen;
     const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
@@ -84,7 +127,7 @@ export async function POST(request: NextRequest) {
 
     let data = await respuesta.json();
 
-    // Retry with text if photo fails
+    // Fallback si la imagen falla
     if (!data.ok && imagenValida && data.description?.includes('wrong type')) {
       respuesta = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
         method: 'POST',
