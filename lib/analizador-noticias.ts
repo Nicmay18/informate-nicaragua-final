@@ -605,11 +605,11 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
 
   // 1. Longitud titulo
   checks.push({
-    nombre: 'Titulo 55-60 chars',
-    estado: n.titulo.length >= 50 && n.titulo.length <= 60 ? 'PASS' : n.titulo.length > 60 ? 'WARN' : 'FAIL',
-    mensaje: `${n.titulo.length} caracteres. Ideal: 55-60.`,
+    nombre: 'Titulo SEO 50-70 chars',
+    estado: n.titulo.length >= 50 && n.titulo.length <= 70 ? 'PASS' : n.titulo.length >= 30 && n.titulo.length <= 75 ? 'WARN' : 'FAIL',
+    mensaje: `${n.titulo.length} caracteres. Ideal: 50-70.`,
     valorActual: n.titulo.length,
-    valorEsperado: '55-60',
+    valorEsperado: '50-70',
   });
 
   // 2. Meta description
