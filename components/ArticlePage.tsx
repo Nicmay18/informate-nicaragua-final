@@ -49,11 +49,14 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   useEffect(() => {
     if (!noticia.slug) return;
     const controller = new AbortController();
+    // Extraer utm_source de la URL para rastrear fuentes sociales (Telegram, WhatsApp)
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get('utm_source') || '';
     // CORREGIDO: usa el endpoint correcto /api/views/[slug] (no /api/view)
     fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ referrer: document.referrer }),
+      body: JSON.stringify({ referrer: document.referrer, utmSource }),
       signal: controller.signal,
     })
       .then(async (res) => {

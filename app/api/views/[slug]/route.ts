@@ -55,18 +55,20 @@ export async function POST(
       return NextResponse.json({ error: v.reason }, { status: 400 });
     }
 
-    // Extraer referrer del body y del header HTTP como fallback
+    // Extraer referrer y utmSource del body, y referer del header como fallback
     let bodyReferrer = '';
+    let utmSource = '';
     try {
       const body = await request.json();
       bodyReferrer = body.referrer || '';
+      utmSource = body.utmSource || '';
     } catch { /* ignore if no body */ }
 
     const headerReferrer = request.headers.get('referer') || '';
     const referrer = bodyReferrer || headerReferrer;
     const ua = request.headers.get('user-agent') || 'unknown';
 
-    const newViews = await incrementViewsBySlug(slug, { referrer, ua, ip });
+    const newViews = await incrementViewsBySlug(slug, { referrer, ua, ip, utmSource });
     if (newViews === null) {
       return NextResponse.json({ error: 'Noticia no encontrada' }, { status: 404 });
     }

@@ -235,7 +235,7 @@ function isValidSlug(slug: string): boolean {
  */
 export async function incrementViewsBySlug(
   slug: string, 
-  meta?: { referrer?: string; ua?: string; ip?: string }
+  meta?: { referrer?: string; ua?: string; ip?: string; utmSource?: string }
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
@@ -265,10 +265,17 @@ export async function incrementViewsBySlug(
 
     // 2. Registrar evento de tráfico en colección dedicada (para el Panel de Control)
     try {
+      const utmRaw = (meta?.utmSource || '').toLowerCase();
       const refRaw = meta?.referrer || '';
       const uaRaw = (meta?.ua || '').toLowerCase();
       let source = 'directo';
-      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net') || refRaw.includes('fbcdn')) source = 'facebook';
+      if (utmRaw === 'telegram' || utmRaw.includes('telegram')) source = 'telegram';
+      else if (utmRaw === 'whatsapp' || utmRaw.includes('whatsapp')) source = 'whatsapp';
+      else if (utmRaw === 'facebook' || utmRaw.includes('facebook')) source = 'facebook';
+      else if (utmRaw === 'twitter' || utmRaw.includes('twitter') || utmRaw === 'x') source = 'twitter';
+      else if (utmRaw === 'google' || utmRaw.includes('google')) source = 'google';
+      else if (utmRaw) source = utmRaw;
+      else if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net') || refRaw.includes('fbcdn')) source = 'facebook';
       else if (refRaw.includes('t.me') || refRaw.includes('telegram') || refRaw.includes('web.telegram.org') || uaRaw.includes('telegram') || uaRaw.includes('tgweb')) source = 'telegram';
       else if (refRaw.includes('google.com') || refRaw.includes('googleusercontent')) source = 'google';
       else if (refRaw.includes('twitter.com') || refRaw.includes('x.com') || refRaw.includes('t.co')) source = 'twitter';
