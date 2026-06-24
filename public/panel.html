@@ -5887,20 +5887,30 @@ VERIFICACIÓN FINAL
     };
 
     function renderAnalisisForense(data) {
+      // Fallback: si el backend no envía nivel, calcularlo por puntuación
+      let nivel = data.nivel;
+      if (!nivel || nivel === 'undefined') {
+        const score = data.puntuacion || 0;
+        if (score >= 75) nivel = 'ORO';
+        else if (score >= 60) nivel = 'PLATA';
+        else if (score >= 40) nivel = 'BRONCE';
+        else nivel = 'RECHAZADO';
+      }
+
       const colorNivel = { 'FORENSE': '#7c3aed', 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
       const bgNivel = { 'FORENSE': '#ede9fe', 'ORO': '#d1fae5', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
       const iconoNivel = { 'FORENSE': '🧬', 'ORO': '🏆', 'PLATA': '⚡', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
 
-      let html = '<div style="background:' + bgNivel[data.nivel] + ';border:1px solid ' + colorNivel[data.nivel] + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
+      let html = '<div style="background:' + bgNivel[nivel] + ';border:1px solid ' + colorNivel[nivel] + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-      html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[data.nivel] + ';">' + iconoNivel[data.nivel] + ' NIVEL ' + data.nivel + '</h3>';
+      html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[nivel] + ';">' + iconoNivel[nivel] + ' NIVEL ' + nivel + '</h3>';
       html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + data.puntuacion + '/100</p></div>';
       const aiColors = { 'LOW': '#16a34a', 'MEDIUM': '#d97706', 'HIGH': '#dc2626' };
       const aiBg = { 'LOW': '#dcfce7', 'MEDIUM': '#fef3c7', 'HIGH': '#fee2e2' };
       const aiLabels = { 'LOW': '🟢 Riesgo IA: BAJO', 'MEDIUM': '🟡 Riesgo IA: MEDIO', 'HIGH': '🔴 Riesgo IA: ALTO' };
       const aiL = data.aiRiskLevel || 'LOW';
       html += '<div style="text-align:right;"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:' + aiBg[aiL] + ';color:' + aiColors[aiL] + ';margin-bottom:4px;display:inline-block;">' + aiLabels[aiL] + '</span><br>';
-      html += '<span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[data.nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
+      html += '<span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
       html += '</div></div>';
 
       if (data.accionesRequeridas && data.accionesRequeridas.length > 0) {
