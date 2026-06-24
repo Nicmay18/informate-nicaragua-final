@@ -1683,13 +1683,12 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     let _noticiaCompartirActual = null;
-    function mostrarPanelCompartir(noticia) {
+    async function mostrarPanelCompartir(noticia) {
       const panel = document.getElementById('panelCompartirManual');
       if (!panel) return;
       _noticiaCompartirActual = noticia;
+
       const baseUrl = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-      const urlTelegram = `${baseUrl}?utm_source=telegram&utm_medium=social`;
-      const urlWhatsapp = `${baseUrl}?utm_source=whatsapp&utm_medium=social`;
       const urlFacebook = `${baseUrl}?utm_source=facebook&utm_medium=social`;
       const url = baseUrl;
       const titulo = noticia.titulo || '';
@@ -1703,7 +1702,6 @@ sin texto ni marcas de agua, composición periodística"
       const hashtagPrincipal = `#${categoria.replace(/\s+/g,'')} #Nicaragua`;
 
       // Descripción ultra-corta: máximo 1-2 líneas (120 chars max)
-      // Tomamos solo la primera oración del resumen o contenido
       let descripcionCorta = '';
       const textoLimpio = (noticia.resumen || noticia.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       if (textoLimpio) {
@@ -1719,12 +1717,28 @@ sin texto ni marcas de agua, composición periodística"
       }
       if (!descripcionCorta) descripcionCorta = 'Más detalles en el link:';
 
+      // ─── LINKS CORTOS FORENSES ───
+      // Generar links cortos para rastreo server-side (imposible de bloquear)
+      // Esto es lo que hacen NYT, BBC, bit.ly, t.co, etc.
+      let urlTelegram = baseUrl + '?utm_source=telegram&utm_medium=social';
+      let urlWhatsapp = baseUrl + '?utm_source=whatsapp&utm_medium=social';
+      try {
+        const [tgResp, waResp] = await Promise.all([
+          fetch('/api/admin/shortlink', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'telegram' }) }),
+          fetch('/api/admin/shortlink', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'whatsapp' }) })
+        ]);
+        const tgData = await tgResp.json().catch(() => ({}));
+        const waData = await waResp.json().catch(() => ({}));
+        if (tgData.shortUrl) urlTelegram = tgData.shortUrl;
+        if (waData.shortUrl) urlWhatsapp = waData.shortUrl;
+      } catch (e) {
+        console.warn('[mostrarPanelCompartir] Error generando links cortos:', e);
+      }
+
       // ─── FORMATO TELEGRAM ───
-      // Ideal: Emoji + título en 1 línea, descripción corta, link visible
       const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${urlTelegram}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
 
       // ─── FORMATO FACEBOOK (plantilla base, se mejora con IA abajo) ───
-      // CRÍTICO: titular + gancho + link visible para maximizar clics al sitio
       const textoFacebook = `${emoji} ${titulo.toUpperCase()}\n\n${descripcionCorta}\n\n👉 Más información aquí:\n${urlFacebook}\n\n${hashtagPrincipal}`;
 
       // ─── FORMATO WHATSAPP ───
