@@ -6278,6 +6278,183 @@ VERIFICACIÓN FINAL
         });
       }
     });
+
+    // ═══════════════════════════════════════════════════════════════
+    // CORRECCIÓN QUIRÚRGICA FORENSE DE TÍTULOS Y SLUGS
+    // ═══════════════════════════════════════════════════════════════
+    window.corregirTitulosMasivoPanel = async function() {
+      const R = [
+        [/\bAutoridades investigan incidente\b/gi, 'Incidente grave'],
+        [/\bPolicía investiga incidente\b/gi, 'Investigan hecho'],
+        [/\bPolicía busca a conductor involucrado\b/gi, 'Buscan conductor fugado'],
+        [/\bFiscalía investiga deceso de recluso\b/gi, 'Recluso fallece'],
+        [/\bMINSA reporta incidente médico\b/gi, 'Emergencia médica'],
+        [/\bMINSA reporta tercer caso por picaduras de insectos\b/gi, 'Tercera víctima por picaduras de abejas'],
+        [/\bDos fallecidos\b/gi, 'Dos muertos'],
+        [/\bDos nicaragüenses fallecen\b/gi, 'Dos nicaragüenses mueren'],
+        [/\bShakira hace historia con megaconcierto\b/gi, 'Shakira reúne a dos millones en concierto histórico'],
+        [/\bJerónimo Sobalvarro Toruño, 73 años, muere\b/gi, 'Jerónimo Sobalvarro muere'],
+        [/\bPeatón de 58 años muere atropellado en el kilómetro 52\b/gi, 'Peatón muere atropellado en km 52'],
+        [/\bJoven de 24 años muere tras descarga de 13 mil voltios\b/gi, 'Joven muere electrocutado con 13 mil voltios'],
+        [/\bNiño de 15 meses muere ahogado\b/gi, 'Bebé muere ahogado'],
+        [/\bEscolta de ULTRAVAL enfrenta juicio por robo de dinero\b/gi, 'Escolta de ULTRAVAL enfrenta juicio por robo'],
+        [/\bConductor se fuga tras causar muerte\b/gi, 'Conductor huye tras atropello mortal'],
+        [/\bCuerpo es hallado\b/gi, 'Hallan cuerpo'],
+        [/\bHallan cuerpo de mujer desaparecida\b/gi, 'Hallan cuerpo de mujer'],
+        [/\bHallan cuerpo de anciano desaparecido\b/gi, 'Hallan cuerpo de anciano desaparecido'],
+        [/\bCapturan a señalado por robo de más de US\$30 mil\b/gi, 'Capturan a sujeto por robo de US$30 mil'],
+        [/\bDos nicaragüenses fallecen en accidentes ocurridos\b/gi, 'Dos nicaragüenses mueren en accidentes'],
+        [/\bMédico y dos personas detenidos\b/gi, 'Médico y dos detenidos'],
+        [/\bPrograma Nuevas Victorias entregará 85 viviendas\b/gi, '85 viviendas de Nuevas Victorias se entregarán'],
+        [/\bNicaragüense de 49 años fallece\b/gi, 'Nicaragüense de 49 años muere'],
+        [/\bBéisbol sigue siendo el deporte favorito de los nicaragüenses\b/gi, 'Béisbol sigue siendo deporte favorito de nicaragüenses'],
+        [/\bAumentan casos de electrocución en accidentes laborales(?!.+Nicaragua)\b/gi, 'Aumentan casos de electrocución en accidentes laborales en Nicaragua'],
+        [/\bClima extremo en Nicaragua: Tornado en Somotillo y granizo en Jinotepe\b/gi, 'Tornado en Somotillo y granizo en Jinotepe: clima extremo'],
+        [/\bNicaragua suma 165 MW renovables\b/gi, 'Nicaragua suma 165 MW de energía renovable'],
+        [/\bCosta Rica invita a Nicaragua a toma de posesión de Laura Fernández\b/gi, 'Costa Rica invita a Nicaragua a toma de posesión presidencial'],
+        [/\bTecnología global: IA agéntica lidera cambios en 2026\b/gi, 'IA agéntica lidera cambios tecnológicos globales en 2026'],
+        [/\bAustralia: 7 de cada 10 menores\b/gi, 'Australia: el 70% de menores'],
+        [/\bDos personas mueren tras ser alcanzadas por rayos\b/gi, 'Dos mueren tras ser alcanzados por rayos'],
+        [/\bConductor de caponera fallece\b/gi, 'Conductor de caponera muere'],
+        [/\bAdolescente de 14 años muere al caer de camión en la Panamericana Sur\b/gi, 'Adolescente muere al caer de camión en carretera Panamericana'],
+        [/\bPolicía investiga incidente en Ciudad Sandino\b/gi, 'Joven de 18 años muere tras trifulca en Ciudad Sandino'],
+        [/\bPolicía busca a conductor involucrado en incidente en Rosita\b/gi, 'Conductor ebrio huye tras matar a pasajero en Rosita'],
+        [/\bFiscalía investiga deceso de recluso en Matagalpa\b/gi, 'Femicida de Sébaco muere tras ingerir sustancia tóxica en reclusión'],
+        [/\bAutoridades investigan incidente laboral en pozo de Madriz\b/gi, 'Obrero muere asfixiado dentro de pozo en Madriz'],
+        [/\bOklahoma evalúa impacto de fenómenos climáticos recientes\b/gi, 'Tornados devastadores dejan heridos y daños en Oklahoma'],
+        [/\bIncendio destruye negocio y deja pérdidas por C\$200 mil\b/gi, 'Incendio destruye negocio con pérdidas de C$200 mil'],
+        [/\bCómo sacar y apostillar el récord policial\b/gi, 'Cómo tramitar el récord policial'],
+        [/\bINETER: pronostican lluvias fuertes\b/gi, 'INETER pronostica lluvias fuertes'],
+        [/\bAbril cierra con 70 fallecidos\b/gi, 'Abril registra 70 muertos'],
+        [/\bAbril registra 70 accidentes de tránsito\b/gi, 'Abril registra 70 muertos por accidentes de tránsito'],
+        [/\bTragedia en barrio Cuba: caponero de 70 años fallece\b/gi, 'Conductor de caponera muere'],
+        [/\bIncendio en puesto del Mercado Oriental es controlado por bomberos\b/gi, 'Incendio destruye puesto de ropa en Mercado Oriental de Managua'],
+        [/\bMicrosoft y Meta aceleran despidos masivos\b/gi, 'Microsoft y Meta ajustan sus plantillas'],
+        [/\bNeymar Jr\. analiza el panorama competitivo\b/gi, 'Neymar Jr. se prepara para el Mundial 2026'],
+        [/\bLuca Zidane recibe atención médica\b/gi, 'Luca Zidane recibe tratamiento médico'],
+        [/\bLuka Modrić recibe atención médica\b/gi, 'Luka Modrić recibe tratamiento'],
+        [/\bCuatro nicaragüenses fallecen en Costa Rica, El Salvador y Estados Unidos\b/gi, 'Cuatro nicaragüenses fallecen en Costa Rica, El Salvador y EE.UU.'],
+        [/\b¡Histórico! Sebastián Sawe rompe la barrera de las 2 horas\b/gi, '¡Histórico! Sebastián Sawe rompe barrera de 2 horas'],
+        [/\bMessi iguala récord histórico de 16 goles en Mundiales\b/gi, 'Messi iguala récord histórico de 16 goles en Mundiales'],
+        [/\bPolicía investiga hallazgo en\b/gi, 'Hallazgo activa investigación'],
+        [/\bPolicía atiende incidente\b/gi, 'Incidente'],
+        [/\bMINSA evalúa situación de salud en evento\b/gi, 'Emergencia sanitaria en evento'],
+        [/\bAutoridades reportan incidentes viales\b/gi, 'Accidentes viales'],
+        [/\bAutoridades investigan incidente laboral\b/gi, 'Accidente laboral'],
+        [/\bPolicía investiga incidente vial\b/gi, 'Accidente vial'],
+        [/\bPolicía reporta incidentes viales con funcionarios\b/gi, 'Policías fallecen en accidentes viales'],
+        [/\bConsulado gestiona caso de connacional\b/gi, 'Nicaragüense asistido por consulado'],
+        [/\bConsulado asiste a nicaragüense\b/gi, 'Consulado asiste a nicaragüense'],
+        [/\bConsulado entrega cuerpo de nicaragüense\b/gi, 'Repatrian cuerpo de nicaragüense'],
+        [/\bFamilia nicaragüense gestiona repatriación\b/gi, 'Familia gestiona repatriación'],
+        [/\bFamilia busca a joven desaparecido\b/gi, 'Joven desaparece'],
+        [/\bFamiliares localizan a adulto mayor\b/gi, 'Adulto mayor localizado'],
+        [/\bCosta Rica investiga muerte de nicaragüense\b/gi, 'Nicaragüense fallece'],
+        [/\bPolicía costarricense investiga caso de violencia\b/gi, 'Sicarios asesinan a padre e hijo en Puntarenas, Costa Rica'],
+        [/\bPolicía guatemalteca reporta detención de nicaragüense\b/gi, 'Capturan a nicaragüense en Guatemala'],
+        [/\bPolicía refuerza seguridad\b/gi, 'Policía refuerza seguridad'],
+        [/\bJuzgado dicta sentencia por accidente\b/gi, 'Juzgado dicta sentencia'],
+        [/\bInvestigan muerte de mujer en bus\b/gi, 'Mujer fallece en bus'],
+        [/\bInvestigan fallecimiento de hombre\b/gi, 'Hombre fallece'],
+        [/\bInvestigan accidentes de moto\b/gi, 'Accidentes de moto'],
+        [/\bInvestigan muerte de motociclista\b/gi, 'Motociclista fallece'],
+        [/\bHallazgo activa investigación policial\b/gi, 'Hallazgo policial'],
+        [/\bHallazgo de cuerpo activa investigación fiscal\b/gi, 'Hallan cuerpo'],
+        [/\bHallazgo de cuerpo sin vida\b/gi, 'Hallan cuerpo'],
+        [/\bCapturan a señalado por\b/gi, 'Capturan a sujeto por'],
+        [/\bDetienen a nicaragüenses con droga\b/gi, 'Nicaragüenses detenidos con droga'],
+        [/\bDos fallecidos tras naufragio de panga\b/gi, 'Dos mueren tras naufragio'],
+        [/\bDos hombres mueren en hechos violentos\b/gi, 'Dos hombres mueren en hechos violentos'],
+        [/\bDos jóvenes mueren asfixiados en pozo\b/gi, 'Dos jóvenes mueren asfixiados en pozo de'],
+        [/\bDos mueren por presuntos problemas de salud\b/gi, 'Dos mueren por problemas de salud'],
+        [/\bDos nicaragüenses fallecen en el extranjero\b/gi, 'Dos nicaragüenses fallecen en el extranjero'],
+        [/\bTres ataques de pitbull dejan tres lesionados\b/gi, 'Tres ataques de pitbull dejan lesionados'],
+        [/\bTres fallecidos y un lesionado grave\b/gi, 'Tres muertos y un herido grave'],
+        [/\bTres muertos y un lesionado en accidentes de tránsito\b/gi, 'Tres muertos y un herido en accidentes de tránsito'],
+        [/\bUn muerto y un herido en accidentes laborales\b/gi, 'Un muerto y un herido en accidente laboral'],
+        [/\bVilla .+: Reporte técnico de accidente doméstico\b/gi, 'Accidente doméstico'],
+        [/\bEsparza: Análisis del ataque armado con fusiles de guerra\b/gi, 'Ataque con fusiles de guerra en Esparza deja heridos'],
+        [/\bBoaco: Informe técnico sobre accidente vial\b/gi, 'Accidente vial en Boaco'],
+        [/\bMatagalpa: Investigan muerte de vigilante\b/gi, 'Vigilante muere en Matagalpa'],
+        [/\bMasaya: Análisis del fatal accidente vial\b/gi, 'Accidente fatal en Masaya'],
+        [/\bFiscalía pide hasta 25 mil años para líder de MS-13\b/gi, 'Fiscalía pide cadena perpetua para líder de MS-13'],
+        [/\bNicaragua se alista para un 2026 con retos en béisbol internacional\b/gi, 'Béisbol internacional: Nicaragua se alista para retos de 2026'],
+        [/\bNicaragua: El evento de IA que revolucionará Nicaragua\b/gi, 'Evento de IA buscan revolucionar innovación en Nicaragua'],
+        [/\bHospital Bertha Calderón ejecuta con éxito una nueva cirugía fetal\b/gi, 'Hospital Bertha Calderón ejecuta con éxito cirugía fetal en Managua'],
+        [/\bSony Music adquiere catálogo de Shakira y Beyoncé por cifra récord\b/gi, 'Sony Music compra catálogo de Shakira y Beyoncé'],
+        [/\bAcademia de Hollywood limita uso de IA en películas para los Óscar\b/gi, 'Academia regula la IA y reforma reglas para los Óscar'],
+        [/\bNetflix prepara precuela de The Crown sobre el origen de los Windsor\b/gi, 'Netflix anuncia precuela de The Crown sobre familia real británica'],
+        [/\bJannik Sinner tras baja de Alcaraz: "El tenis necesita a Carlos"\b/gi, 'Jannik Sinner tras baja de Alcaraz: el tenis necesita a Carlos'],
+        [/\bTaylor Swift busca registrar su voz como marca ante el auge de la IA\b/gi, 'Taylor Swift busca registrar su voz como marca ante la IA'],
+        [/\bToy Story 5 llegará a Nicaragua con Woody y Buzz en la era digital\b/gi, 'Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital'],
+        [/\bWindows 11 ahora se instala más rápido tras cambio de Microsoft\b/gi, 'Windows 11 acelera su instalación en computadoras en Nicaragua'],
+        [/\bMicrosoft corrige fallo de seguridad en navegador Edge\b/gi, 'Microsoft corrige vulnerabilidad en navegador Edge para usuarios en Nicaragua'],
+        [/\bSamsung prepara revolución: Baterías de silicio-carbón para el Galaxy S27\b/gi, 'Samsung presenta baterías de silicio-carbón para el Galaxy S27'],
+        [/\bCanadá reporta caso de virus por roedores en Columbia Británica\b/gi, 'Canadá confirma caso de hantavirus ligado a crucero MV Hondius'],
+        [/\bDescubren dinosaurio gigante en Asia: pesaba como nueve elefantes\b/gi, 'Descubren dinosaurio gigante en Asia: pesaba 9 elefantes'],
+        [/\bCohete New Glenn de Blue Origin explota en prueba en Cabo Cañaveral\b/gi, 'Cohete New Glenn de Blue Origin explota en Cabo Cañaveral'],
+        [/\bTemporada de huracanes del Pacífico 2026 inicia con calma aparente\b/gi, 'Temporada de huracanes del Pacífico 2026 inicia con calma'],
+        [/\bTurismo en Nicaragua crece 11% en primer trimestre de 2026 según INTUR\b/gi, 'Turismo en Nicaragua crece 11% en primer trimestre de 2026'],
+        [/\bKFC Nicaragua 2026: Apertura en Managua, menú y precios confirmados\b/gi, 'KFC abre en Managua: menú, precios y horarios confirmados'],
+        [/\bPolicía y Ejército incautan 502 kilos de cocaína en Wiwilí\b/gi, 'Incautan 502 kilos de cocaína en operativo en Wiwilí'],
+        [/\bOperativo contra caponeras deja multas y unidades retenida en Catarina\b/gi, 'Operativo en Catarina deja multas y caponeras retenidas'],
+        [/\bNicaragua recibe 278 mil turistas en primer trimestre de 2026; crecimiento del 11%\b/gi, 'Nicaragua recibe 278 mil turistas y crece 11% en primer trimestre'],
+        [/\bJoven de 28 años muere ahogado en playa Matilde, San Juan del Sur\b/gi, 'Joven muere ahogado en playa Matilde de San Juan del Sur'],
+        [/\bEscolta de ULTRAVAL enfrenta juicio por robo de dinero\b/gi, 'Escolta de ULTRAVAL enfrenta juicio por robo'],
+        [/\bConductor se fuga tras causar muerte\b/gi, 'Conductor huye tras atropello mortal'],
+        [/\bHallan cuerpo de mujer desaparecida en carretera León-Chinandega\b/gi, 'Hallan cuerpo de mujer en carretera León-Chinandega'],
+        [/\bCosta Rica: investigan muerte de nicaragüense y buscan a sus familiare\b/gi, 'Costa Rica investiga muerte de nicaragüense en Heredia y busca familiares'],
+        [/\bMédico y dos personas detenidos por muerte de joven tras cirugía\./gi, 'Médico y dos detenidos por muerte de joven tras cirugía'],
+        [/\bHospital pediátrico de Estelí avanza y estará listo en 2026\b/gi, 'Hospital pediátrico de Estelí avanza para 2026'],
+        [/\bNuevo hospital pediátrico fortalecerá atención en Estelí\b/gi, 'Hospital pediátrico fortalecerá atención en Estelí'],
+      ];
+      function A(t) {
+        let r = t.trim();
+        for (const [e, s] of R) {
+          if (e.test(r)) { r = r.replace(e, s); break; }
+        }
+        return r.replace(/\s+/g, ' ').replace(/\.$/, '').trim();
+      }
+      console.log('🔬 Analizando noticias...');
+      try {
+        const q = query(collection(db, 'noticias'), orderBy('fecha', 'desc'), limit(300));
+        const snap = await getDocs(q);
+        const cambios = [];
+        snap.forEach(d => {
+          const data = d.data();
+          const t0 = data.titulo || '';
+          const s0 = data.slug || '';
+          const t1 = A(t0);
+          const s1 = s0.replace(/-[a-z0-9]{6,}$/i, '');
+          if (t1 !== t0 || s1 !== s0) {
+            cambios.push({ id: d.id, t: t1 !== t0 ? t1 : null, s: s1 !== s0 ? s1 : null, t0, s0 });
+          }
+        });
+        console.log(`📊 ${cambios.length}/${snap.size} noticias por corregir`);
+        if (!cambios.length) { console.log('✅ Todo OK'); return; }
+        cambios.forEach((c, i) => console.log(`[${i+1}] ${c.t ? '"' + c.t0 + '" → "' + c.t + '"' : 'SIN TÍTULO'} | slug: ${c.s || '-'}`));
+        if (!confirm(`¿Aplicar ${cambios.length} cambios?`)) { console.log('❌ Cancelado'); return; }
+        let ok = 0;
+        for (const c of cambios) {
+          const upd = {};
+          if (c.t) upd.titulo = c.t;
+          if (c.s) upd.slug = c.s;
+          try {
+            await updateDoc(doc(db, 'noticias', c.id), upd);
+            ok++;
+            console.log(`✅ ${c.id}`);
+          } catch (err) {
+            console.error(`❌ ${c.id}:`, err.message);
+          }
+        }
+        console.log(`✅ ${ok}/${cambios.length} corregidas. Recargá la página.`);
+        showToast(`${ok} títulos/slugs corregidos. Recargá para ver cambios.`, 'success');
+      } catch (err) {
+        console.error('❌ Error:', err);
+        showToast('Error: ' + err.message, 'error');
+      }
+    };
+    console.log('🔬 Función corregirTitulosMasivoPanel() cargada. Ejecutá: await corregirTitulosMasivoPanel()');
   </script>
 </body>
 </html>
