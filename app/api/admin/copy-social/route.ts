@@ -20,20 +20,41 @@ const EMOJI_CAT: Record<string, string> = {
   Tecnología: '💻',
   Salud: '🏥',
   Economía: '💰',
+  Cultura: '🎭',
 };
 
 function stripHtml(html: string): string {
   return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+/** Extraer oraciones cortas del texto para formato punchy */
+function extraerOraciones(texto: string, max: number = 4): string[] {
+  const limpio = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const oraciones = limpio
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(s => s.length >= 15 && s.length <= 140)
+    .slice(0, max);
+  return oraciones;
+}
+
 /** Plantilla de respaldo si Groq no está disponible o falla */
 function fallbackCopy(titulo: string, texto: string, categoria: string, url: string): string {
   const emoji = EMOJI_CAT[categoria] || '📰';
-  const primera = texto.match(/^[^.!?]+[.!?]+/);
-  let contexto = primera ? primera[0].trim() : texto.slice(0, 140).trim();
-  if (contexto.length > 160) contexto = contexto.slice(0, 157).trim() + '...';
+  const oraciones = extraerOraciones(texto, 4);
+
+  let cuerpo: string;
+  if (oraciones.length >= 2) {
+    const parrafo1 = oraciones[0] + '.';
+    const parrafo2 = oraciones.slice(1, 3).join('. ') + '.';
+    const parrafo3 = oraciones[3] ? oraciones[3] + '.' : '';
+    cuerpo = [parrafo1, parrafo2, parrafo3].filter(Boolean).join('\n\n');
+  } else {
+    cuerpo = oraciones[0] ? oraciones[0] + '.' : texto.slice(0, 140).trim() + '...';
+  }
+
   const hashtag = `#${categoria.replace(/\s+/g, '')} #Nicaragua`;
-  return `${emoji} ${titulo.toUpperCase()}\n\n${contexto}\n\n👉 Más información aquí:\n${url}\n\n${hashtag}`;
+  return `${emoji} ${titulo}\n\n${cuerpo}\n\n👉 Nota completa:\n${url}\n\n${hashtag}`;
 }
 
 async function generarCopyGroq(
@@ -50,18 +71,21 @@ async function generarCopyGroq(
   const systemPrompt = `Eres community manager de un medio de noticias de Nicaragua. Generas publicaciones para Facebook que maximizan clics hacia el sitio web. Reglas ESTRICTAS:
 
 === FORMATO EXACTO (respétalo línea por línea) ===
-${emoji} TITULAR EN MAYÚSCULAS (reescribe el título para que sea claro y atractivo, máximo 12 palabras)
+${emoji} [Título reescrito en 8-12 palabras, claro y atractivo, SIN comillas]
 
-[Párrafo de contexto: 1-2 oraciones objetivas que dan ganas de leer más, SIN revelar todo. 25-45 palabras]
+[Oración corta 1, máximo 10 palabras]
 
-⚠️ [Una línea corta de gancho sobre la relevancia o impacto del hecho. 8-15 palabras]
+[Oración corta 2, máximo 10 palabras]
+[Oración corta 3, máximo 10 palabras]
 
-👉 Más información aquí:
+[Oración corta 4 con gancho, máximo 12 palabras] 👉 Nota completa:
 ${url}
 
-#${categoria.replace(/\s+/g, '')} #Nicaragua
+#[CategoríaSinEspacios] #[PaísORegiónDelHecho] #[TemaPrincipal]
 
-=== PROHIBIDO ===
+=== REGLAS ===
+- Escribe oraciones CORTAS (5-12 palabras cada una).
+- Separa cada bloque de oraciones con saltos de línea (una línea en blanco entre párrafos).
 - NO reveles el desenlace completo (deja curiosidad para que hagan clic).
 - NO uses relleno emocional ("consternación", "dolor", "tragedia", "vida truncada").
 - NO inventes datos que no estén en el texto original.
