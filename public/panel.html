@@ -3359,7 +3359,7 @@ sin texto ni marcas de agua, composición periodística"
         { nombre: 'Negritas / datos clave', estado: strongs >= 1 ? '✅' : '⚠️', valor: strongs, req: '≥1', pasa: strongs >= 1 },
         { nombre: 'Citas o atribución', estado: blockquotes >= 1 ? '✅' : '⚠️', valor: blockquotes, req: '≥1', pasa: blockquotes >= 1 },
         { nombre: 'Título SEO 50-70 chars', estado: (tituloLen >= 50 && tituloLen <= 70) ? '✅' : (tituloLen >= 30 && tituloLen <= 75) ? '⚠️' : '❌', valor: tituloLen + ' ch', req: '50-70', pasa: tituloLen >= 50 && tituloLen <= 70 },
-        { nombre: 'Meta 120-170 chars', estado: (resumenLen >= 120 && resumenLen <= 170) ? '✅' : (resumenLen >= 80 && resumenLen <= 180) ? '⚠️' : '❌', valor: resumenLen + ' ch', req: '120-170', pasa: resumenLen >= 120 && resumenLen <= 170 },
+        { nombre: 'Meta 120-180 chars', estado: (resumenLen >= 120 && resumenLen <= 180) ? '✅' : (resumenLen >= 80 && resumenLen <= 200) ? '⚠️' : '❌', valor: resumenLen + ' ch', req: '120-180', pasa: resumenLen >= 120 && resumenLen <= 180 },
         { nombre: 'Imagen destacada', estado: (imagen && imagen.length > 0) ? '✅' : '❌', valor: (imagen && imagen.length > 0) ? 'Sí' : 'No', req: 'Presente', pasa: !!(imagen && imagen.length > 0) },
       ];
 
@@ -4187,7 +4187,7 @@ sin texto ni marcas de agua, composición periodística"
           else if (c.nombre.includes('Negritas')) recs.push('<strong>SIN DATOS DESTACADOS:</strong> Resaltá nombres, fechas o cifras con negritas.');
           else if (c.nombre.includes('Citas')) recs.push('<strong>SIN CITAS NI ATRIBUCIÓN:</strong> Incluí "según...", "dijo...", comillas o blockquote.');
           else if (c.nombre.includes('Título')) recs.push(`<strong>TÍTULO:</strong> ${c.valor}. Ajustá a 50-70 caracteres para SEO óptimo.`);
-          else if (c.nombre.includes('Meta')) recs.push(`<strong>META DESCRIPCIÓN:</strong> ${c.valor}. Debe medir 150-170 caracteres.`);
+          else if (c.nombre.includes('Meta')) recs.push(`<strong>META DESCRIPCIÓN:</strong> ${c.valor}. Debe medir 120-180 caracteres.`);
           else if (c.nombre.includes('Imagen')) recs.push('<strong>SIN IMAGEN:</strong> Incluí una imagen destacada. Mejora clicks y Discover.');
         });
         if (recs.length === 0) recs.push('<strong>¡EXCELENTE!</strong> La noticia cumple los 8 criterios. Lista para publicar.');

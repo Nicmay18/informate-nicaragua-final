@@ -594,11 +594,11 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
 
   // 2. Meta description
   checks.push({
-    nombre: 'Meta description 150-170 chars',
-    estado: n.resumen.length >= 150 && n.resumen.length <= 170 ? 'PASS' : n.resumen.length >= 120 ? 'WARN' : 'FAIL',
-    mensaje: `${n.resumen.length} caracteres. Ideal: 150-170.`,
+    nombre: 'Meta description 120-180 chars',
+    estado: n.resumen.length >= 120 && n.resumen.length <= 180 ? 'PASS' : n.resumen.length >= 80 ? 'WARN' : 'FAIL',
+    mensaje: `${n.resumen.length} caracteres. Ideal: 120-180.`,
     valorActual: n.resumen.length,
-    valorEsperado: '150-170',
+    valorEsperado: '120-180',
   });
 
   // 3. Slug (generado automaticamente por el sistema)
@@ -852,7 +852,7 @@ function generarAcciones(filtros: ResultadoAnalisis['filtros']): string[] {
     acciones.push('News: Verificar schema, autor y categoria valida');
   }
   if (!filtros.seo.aprobado) {
-    acciones.push('SEO: Ajustar titulo (50-70 chars), meta (150-170 chars), slug');
+    acciones.push('SEO: Ajustar titulo (50-70 chars), meta (120-180 chars), slug');
   }
   if (!filtros.eeat.aprobado) {
     acciones.push('EEAT: Revisar atribuciones a instituciones (no inventar fuentes estatales)');
@@ -871,11 +871,11 @@ function generarMetadataSugerida(n: NoticiaInput, _filtros: ResultadoAnalisis['f
     tituloOptimizado: n.titulo.length > 60
       ? n.titulo.slice(0, 57) + '...'
       : n.titulo,
-    metaDescription: n.resumen.length >= 150 && n.resumen.length <= 170
+    metaDescription: n.resumen.length >= 120 && n.resumen.length <= 180
       ? n.resumen
-      : n.resumen.length < 150
-        ? n.resumen + ' ' + n.categoria + ' Nicaragua.'
-        : n.resumen.slice(0, 167) + '...',
+      : n.resumen.length < 120
+        ? n.resumen + ' ' + n.categoria + ' Nicaragua Informate.'
+        : n.resumen.slice(0, 177) + '...',
     keywordsLSI,
     h2Sugeridos: sugerirH2(n),
   };
