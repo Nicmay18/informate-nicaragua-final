@@ -365,16 +365,26 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
 
-    // Búsqueda determinística EXACTA por campo slug.
-    // NO se usan fallbacks de scan completo para evitar:
-    //   - Race conditions en serverless concurrente
-    //   - Contaminación de datos entre slugs durante ISR/build
-    //   - Carga innecesaria de 200 documentos por request
-    const snap = await adminDb
+    // 1. Búsqueda determinística EXACTA por campo slug
+    let snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
       .limit(1)
       .get();
+
+    // 2. Fallback: URLs compartidas en redes pueden tener sufijo aleatorio viejo
+    //    Si no encuentra, intentar quitando el sufijo tipo -abc123 del final
+    if (snap.empty) {
+      const slugSinSufijo = slug.replace(/-[a-z0-9]{6,}$/i, '');
+      if (slugSinSufijo !== slug && slugSinSufijo.length >= 3) {
+        logger.info('[data.ts] Fallback slug sin sufijo:', slug, '→', slugSinSufijo);
+        snap = await adminDb
+          .collection('noticias')
+          .where('slug', '==', slugSinSufijo)
+          .limit(1)
+          .get();
+      }
+    }
 
     if (!snap.empty) {
       const doc = snap.docs[0];
