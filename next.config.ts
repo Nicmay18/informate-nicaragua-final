@@ -314,55 +314,6 @@ const nextConfig: NextConfig = {
         source: '/OneSignalSDKWorker.js',
         destination: '/api/onesignal-sw',
       },
-      // ─── REWRITES RSS/FEED (respaldo si App Router con puntos falla) ───
-      {
-        source: '/feed.xml',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/rss',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/feed',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/rss.xml',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/api/rss',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/index.php/feed',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/index.php/feed/:path*',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/feed.php',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/rss.php',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/atom.xml',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/feed/atom',
-        destination: '/api/feed-xml',
-      },
-      {
-        source: '/feed/rss',
-        destination: '/api/feed-xml',
-      },
     ];
   },
   async headers() {
