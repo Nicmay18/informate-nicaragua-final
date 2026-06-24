@@ -3280,7 +3280,7 @@ sin texto ni marcas de agua, composición periodística"
             </div>
           </div>
           <div class="news-actions" style="opacity:1;">
-            <button class="btn-icon share" onclick="copiarParaRedes('${n.id}', '${n.slug || ''}', '${tituloEsc}', '${resumenEsc}')" data-tooltip="Copiar para redes"><i class="fas fa-share-alt"></i></button>
+            <button class="btn-icon share" onclick="mostrarPanelCompartir({slug:'${n.slug||''}', titulo:'${tituloEsc}', categoria:'${n.categoria||'Noticias'}', resumen:'${resumenEsc}', contenido:'${resumenEsc}'})" data-tooltip="Compartir con tracking forense"><i class="fas fa-share-alt"></i></button>
           </div>
         </div>`;
       }).join('');
@@ -3768,8 +3768,8 @@ sin texto ni marcas de agua, composición periodística"
             const btnShare = document.createElement('button');
             btnShare.className = 'btn-icon share';
             btnShare.innerHTML = '<i class="fas fa-share-alt"></i>';
-            btnShare.title = 'Copiar para redes';
-            btnShare.onclick = function() { copiarParaRedes(n.id, n.slug || '', n.titulo || '', n.resumen || ''); };
+            btnShare.title = 'Compartir en redes (con tracking forense)';
+            btnShare.onclick = function() { mostrarPanelCompartir({ slug: n.slug || '', titulo: n.titulo || '', categoria: n.categoria || 'Noticias', resumen: n.resumen || '', contenido: n.contenido || n.resumen || '' }); };
             actions.appendChild(btnShare);
             // Botón editar
             const btnEdit = document.createElement('button');
