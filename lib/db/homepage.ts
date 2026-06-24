@@ -268,11 +268,15 @@ export async function incrementViewsBySlug(
       const refRaw = meta?.referrer || '';
       const uaRaw = (meta?.ua || '').toLowerCase();
       let source = 'directo';
-      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net')) source = 'facebook';
-      else if (refRaw.includes('t.me') || refRaw.includes('telegram') || uaRaw.includes('telegram')) source = 'telegram';
-      else if (refRaw.includes('google.com')) source = 'google';
-      else if (refRaw.includes('twitter.com') || refRaw.includes('x.com')) source = 'twitter';
-      else if (refRaw.includes('whatsapp.com') || uaRaw.includes('whatsapp') || uaRaw.includes('wa')) source = 'whatsapp';
+      if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net') || refRaw.includes('fbcdn')) source = 'facebook';
+      else if (refRaw.includes('t.me') || refRaw.includes('telegram') || refRaw.includes('web.telegram.org') || uaRaw.includes('telegram') || uaRaw.includes('tgweb')) source = 'telegram';
+      else if (refRaw.includes('google.com') || refRaw.includes('googleusercontent')) source = 'google';
+      else if (refRaw.includes('twitter.com') || refRaw.includes('x.com') || refRaw.includes('t.co')) source = 'twitter';
+      else if (refRaw.includes('whatsapp.com') || refRaw.includes('wa.me') || uaRaw.includes('whatsapp') || uaRaw.includes('wa ')) source = 'whatsapp';
+      else if (refRaw.includes('bing.com')) source = 'bing';
+      else if (refRaw.includes('duckduckgo.com')) source = 'duckduckgo';
+      else if (refRaw.includes('yahoo.com')) source = 'yahoo';
+      else if (refRaw.includes('reddit.com')) source = 'reddit';
       else if (refRaw && !refRaw.includes('nicaraguainformate.com')) source = 'otro';
 
       await db.collection('analytics_traffic').add({

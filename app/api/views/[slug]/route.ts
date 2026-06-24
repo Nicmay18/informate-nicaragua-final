@@ -55,13 +55,15 @@ export async function POST(
       return NextResponse.json({ error: v.reason }, { status: 400 });
     }
 
-    // Extraer referrer y otros datos del body si existen
-    let referrer = '';
+    // Extraer referrer del body y del header HTTP como fallback
+    let bodyReferrer = '';
     try {
       const body = await request.json();
-      referrer = body.referrer || '';
+      bodyReferrer = body.referrer || '';
     } catch { /* ignore if no body */ }
 
+    const headerReferrer = request.headers.get('referer') || '';
+    const referrer = bodyReferrer || headerReferrer;
     const ua = request.headers.get('user-agent') || 'unknown';
 
     const newViews = await incrementViewsBySlug(slug, { referrer, ua, ip });
