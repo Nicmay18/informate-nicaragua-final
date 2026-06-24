@@ -20,6 +20,7 @@ export interface NoticiaInput {
   fecha: string;
   fechaActualizacion?: string;
   imagenDestacada?: string;
+  imagen?: string;
   slug: string;
   palabrasClave?: string[];
   keywords?: string;
@@ -197,6 +198,30 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
 
   if (scoreTotal > 100) scoreTotal = 100;
 
+  // ─── CHECKS UNIFICADOS (mismos 8 que el panel) ───
+  const textoPlano = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const palabrasTotales = textoPlano.split(' ').filter(p => p.length > 0).length;
+  const leadTexto2 = textoPlano.split(/\n|\./)[0] || '';
+  const leadPalabras = leadTexto2.split(' ').filter(p => p.length > 0).length;
+  const h2s = (noticia.contenido.match(/<h2/gi) || []).length;
+  const strongs = (noticia.contenido.match(/<strong/gi) || []).length;
+  const blockquotes2 = (noticia.contenido.match(/<blockquote>/gi) || []).length;
+  const tituloLen = (noticia.titulo || '').length;
+  const resumenLen = (noticia.resumen || '').length;
+  const tieneImagen = !!(noticia.imagen && noticia.imagen.length > 0);
+
+  const checks = [
+    { nombre: 'Extension ≥350 palabras', pasa: palabrasTotales >= 350 },
+    { nombre: 'Lead ≥35 palabras', pasa: leadPalabras >= 35 },
+    { nombre: 'Subtitulos (h2) ≥1', pasa: h2s >= 1 },
+    { nombre: 'Negritas / datos clave', pasa: strongs >= 1 },
+    { nombre: 'Citas o atribucion', pasa: blockquotes2 >= 1 },
+    { nombre: 'Titulo SEO 50-70 chars', pasa: tituloLen >= 50 && tituloLen <= 70 },
+    { nombre: 'Meta 120-180 chars', pasa: resumenLen >= 120 && resumenLen <= 180 },
+    { nombre: 'Imagen destacada', pasa: tieneImagen },
+  ];
+  const checksOK = checks.filter(c => c.pasa).length;
+
   const filtros = {
     oro: analizarFiltroOro(noticia),
     adsense: analizarFiltroAdSense(noticia),
@@ -207,40 +232,35 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     aiRisk: analizarFiltroAIRisk(noticia),
   };
 
-  // ─── DETERMINACIÓN DE NIVEL v4.0 — CONSOLIDADO con Validador Unificado + AI Risk ───
-  // REGLA MAESTRA (aplica a los 3 validadores: Panel, Forense, Popup):
-  //   RECHAZADO: atribuciones falsas a instituciones NIC sin nombre propio
-  //   FORENSE:  7/7 filtros OK + score ≥ 70 + 0 adjetivos + ≤1 transición + AI risk LOW
-  //   ORO:       6-7 filtros OK (equivale a Validación Unificada 8/8)
-  //   PLATA:     4-5 filtros OK
-  //   BRONCE:    <4 filtros OK
-  //
-  // El score (0-100) es INFORMATIVO. El NIVEL depende de los filtros.
-
-  const filtrosOK = [filtros.oro, filtros.adsense, filtros.discover, filtros.news, filtros.seo, filtros.eeat, filtros.aiRisk]
-    .filter(f => f.aprobado).length;
-
   const aiRiskScore = filtros.aiRisk.puntuacion;
   const aiRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' = aiRiskScore >= 80 ? 'LOW' : aiRiskScore >= 50 ? 'MEDIUM' : 'HIGH';
   const aiRiskIssues = filtros.aiRisk.checks
     .filter(c => c.estado === 'FAIL' || c.estado === 'WARN')
     .map(c => c.mensaje);
 
-  const esForense = filtrosOK === 7 &&
+  // ─── DETERMINACIÓN DE NIVEL v5.0 — UNIFICADO: fuente de verdad = 8 checks del panel ───
+  // Todos los evaluadores usan los mismos 8 checks:
+  //   FORENSE:  8/8 checks + score ≥ 70 + 0 adjetivos + ≤1 transicion + AI risk LOW
+  //   ORO:      8/8 checks
+  //   PLATA:    6-7/8 checks
+  //   BRONCE:   4-5/8 checks
+  //   RECHAZADO: <4/8 checks O atribuciones falsas
+
+  const esRechazado = atribucionesFalsas || checksOK < 4;
+  const esForense = checksOK === 8 &&
     scoreTotal >= 70 &&
     !atribucionesFalsas &&
     adjetivosEncontrados.length === 0 &&
     transicionesEncontradas.length <= 1 &&
     aiRiskLevel === 'LOW';
 
-  const esRechazado = atribucionesFalsas;
-
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense) nivel = 'FORENSE';
-  else if (scoreTotal >= 75) nivel = 'ORO';
-  else if (scoreTotal >= 60) nivel = 'PLATA';
-  else nivel = 'BRONCE';
+  else if (checksOK === 8) nivel = 'ORO';
+  else if (checksOK >= 6) nivel = 'PLATA';
+  else if (checksOK >= 4) nivel = 'BRONCE';
+  else nivel = 'RECHAZADO';
 
   const aprobado = nivel !== 'RECHAZADO';
 
