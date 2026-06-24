@@ -6417,20 +6417,25 @@ VERIFICACIÓN FINAL
       }
       console.log('🔬 Analizando noticias...');
       try {
-        const q = query(collection(db, 'noticias'), orderBy('fecha', 'desc'), limit(300));
-        const snap = await getDocs(q);
+        // Usar getNoticiasCache() que ya funciona en el panel
+        let noticias;
+        if (typeof getNoticiasCache === 'function') {
+          noticias = await getNoticiasCache();
+        } else {
+          console.error('❌ getNoticiasCache no encontrada');
+          return;
+        }
         const cambios = [];
-        snap.forEach(d => {
-          const data = d.data();
-          const t0 = data.titulo || '';
-          const s0 = data.slug || '';
+        for (const n of noticias) {
+          const t0 = n.titulo || '';
+          const s0 = n.slug || '';
           const t1 = A(t0);
           const s1 = s0.replace(/-[a-z0-9]{6,}$/i, '');
           if (t1 !== t0 || s1 !== s0) {
-            cambios.push({ id: d.id, t: t1 !== t0 ? t1 : null, s: s1 !== s0 ? s1 : null, t0, s0 });
+            cambios.push({ id: n.id, t: t1 !== t0 ? t1 : null, s: s1 !== s0 ? s1 : null, t0, s0 });
           }
-        });
-        console.log(`📊 ${cambios.length}/${snap.size} noticias por corregir`);
+        }
+        console.log(`📊 ${cambios.length}/${noticias.length} noticias por corregir`);
         if (!cambios.length) { console.log('✅ Todo OK'); return; }
         cambios.forEach((c, i) => console.log(`[${i+1}] ${c.t ? '"' + c.t0 + '" → "' + c.t + '"' : 'SIN TÍTULO'} | slug: ${c.s || '-'}`));
         if (!confirm(`¿Aplicar ${cambios.length} cambios?`)) { console.log('❌ Cancelado'); return; }
