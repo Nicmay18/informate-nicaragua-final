@@ -208,7 +208,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const blockquotes2 = (noticia.contenido.match(/<blockquote>/gi) || []).length;
   const tituloLen = (noticia.titulo || '').length;
   const resumenLen = (noticia.resumen || '').length;
-  const tieneImagen = !!(noticia.imagen && noticia.imagen.length > 0);
+  const tieneImagen = !!(noticia.imagen && noticia.imagen.length > 0) || !!(noticia.imagenDestacada && noticia.imagenDestacada.length > 0);
 
   const checks = [
     { nombre: 'Extension ≥350 palabras', pasa: palabrasTotales >= 350 },
