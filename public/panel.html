@@ -1616,6 +1616,9 @@ sin texto ni marcas de agua, composición periodística"
     const db = getFirestore(app);
     const auth = getAuth(app);
     window.db = db;
+    window._collection = collection; window._query = query; window._orderBy = orderBy;
+    window._limit = limit; window._getDocs = getDocs; window._doc = doc; window._getDoc = getDoc;
+    window._updateDoc = updateDoc; window._addDoc = addDoc; window._serverTimestamp = serverTimestamp;
     window.categoriaActiva = 'todas';
 
     const categorias = [
@@ -1671,7 +1674,11 @@ sin texto ni marcas de agua, composición periodística"
     }
 
     function generarSlug(titulo) {
-      return titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
+      return titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').substring(0, 80);
+    }
+    function limpiarSlugExistente(slug) {
+      if (!slug) return slug;
+      return slug.replace(/-[a-z0-9]{6,}$/i, '');
     }
 
     function crearDescripcionRedes(resumen, contenido) {
@@ -3513,9 +3520,18 @@ sin texto ni marcas de agua, composición periodística"
         const acciones = [];
 
         if (noticiaId) {
-          // En edición: NO tocar fecha original, slug ni vistas (evita resetear vistas a 0)
+          // En edición: NO tocar fecha original ni vistas (evita resetear vistas a 0)
           noticiaData.fechaActualizacion = serverTimestamp();
-          delete noticiaData.fecha; delete noticiaData.slug; delete noticiaData.vistas;
+          delete noticiaData.fecha; delete noticiaData.vistas;
+          // Limpiar slug si tiene sufijo aleatorio (ej: -mqr51mit)
+          const slugActual = document.getElementById('noticiaSlug').value;
+          if (slugActual) {
+            const slugLimpio = limpiarSlugExistente(slugActual);
+            if (slugLimpio !== slugActual) {
+              noticiaData.slug = slugLimpio;
+              document.getElementById('noticiaSlug').value = slugLimpio;
+            }
+          }
           await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
           acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
         } else {
@@ -3771,6 +3787,14 @@ sin texto ni marcas de agua, composición periodística"
             btnShare.title = 'Compartir en redes (con tracking forense)';
             btnShare.onclick = function() { mostrarPanelCompartir({ slug: n.slug || '', titulo: n.titulo || '', categoria: n.categoria || 'Noticias', resumen: n.resumen || '', contenido: n.contenido || n.resumen || '' }); };
             actions.appendChild(btnShare);
+            // Botón corregir SEO quirúrgico
+            const btnFix = document.createElement('button');
+            btnFix.className = 'btn-icon';
+            btnFix.style.cssText = 'background: var(--warning-50); color: var(--warning-700); border: 1px solid var(--warning-200); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;';
+            btnFix.innerHTML = '<i class="fas fa-scalpel" style="font-size:12px;"></i>';
+            btnFix.title = 'Corregir título y slug SEO quirúrgicamente';
+            btnFix.onclick = function() { aplicarCorreccionQuirurgica(n.id, n.titulo || '', n.slug || '', n.categoria || 'Noticias'); };
+            actions.appendChild(btnFix);
             // Botón editar
             const btnEdit = document.createElement('button');
             btnEdit.className = 'btn-icon edit';
