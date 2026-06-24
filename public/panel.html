@@ -1687,7 +1687,11 @@ sin texto ni marcas de agua, composición periodística"
       const panel = document.getElementById('panelCompartirManual');
       if (!panel) return;
       _noticiaCompartirActual = noticia;
-      const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+      const baseUrl = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+      const urlTelegram = `${baseUrl}?utm_source=telegram&utm_medium=social`;
+      const urlWhatsapp = `${baseUrl}?utm_source=whatsapp&utm_medium=social`;
+      const urlFacebook = `${baseUrl}?utm_source=facebook&utm_medium=social`;
+      const url = baseUrl;
       const titulo = noticia.titulo || '';
       const categoria = noticia.categoria || 'Noticias';
 
@@ -1717,14 +1721,14 @@ sin texto ni marcas de agua, composición periodística"
 
       // ─── FORMATO TELEGRAM ───
       // Ideal: Emoji + título en 1 línea, descripción corta, link visible
-      const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
+      const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${urlTelegram}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
 
       // ─── FORMATO FACEBOOK (plantilla base, se mejora con IA abajo) ───
       // CRÍTICO: titular + gancho + link visible para maximizar clics al sitio
-      const textoFacebook = `${emoji} ${titulo.toUpperCase()}\n\n${descripcionCorta}\n\n👉 Más información aquí:\n${url}\n\n${hashtagPrincipal}`;
+      const textoFacebook = `${emoji} ${titulo.toUpperCase()}\n\n${descripcionCorta}\n\n👉 Más información aquí:\n${urlFacebook}\n\n${hashtagPrincipal}`;
 
       // ─── FORMATO WHATSAPP ───
-      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcionCorta}\n\n👉 ${url}\n\n${hashtagPrincipal}`;
+      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcionCorta}\n\n👉 ${urlWhatsapp}\n\n${hashtagPrincipal}`;
 
       document.getElementById('shareEmoji').textContent = emoji;
       document.getElementById('shareTituloHeader').textContent = titulo;
@@ -1732,14 +1736,14 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('shareTextoFacebook').value = textoFacebook;
       document.getElementById('shareTextoCompleto').value = textoWhatsapp;
       document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoWhatsapp)}`;
-      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+      document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlFacebook)}`;
       document.getElementById('shareNoticiaLink').href = url;
       cambiarTabRedes('telegram');
       panel.style.display = 'block';
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       // ─── COPY FACEBOOK CON IA (reemplaza el flujo manual de ChatGPT) ───
-      generarCopyFacebookIA(noticia, url, categoria, textoFacebook);
+      generarCopyFacebookIA(noticia, urlFacebook, categoria, textoFacebook);
     }
 
     // Genera el copy de Facebook usando IA (Groq) y lo coloca en el textarea.
