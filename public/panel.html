@@ -6459,7 +6459,81 @@ VERIFICACIÓN FINAL
         showToast('Error: ' + err.message, 'error');
       }
     };
+
+    // ═══════════════════════════════════════════════════════════════
+    // REVERTIR SENSACIONALISMO — fallecidos/muertos
+    // ═══════════════════════════════════════════════════════════════
+    window.revertirSensacionalismo = async function() {
+      console.log('🔍 Analizando posible sensacionalismo en títulos...');
+      try {
+        let noticias;
+        if (typeof getNoticiasCache === 'function') {
+          noticias = await getNoticiasCache();
+        } else {
+          console.error('❌ getNoticiasCache no encontrada'); return;
+        }
+
+        const cambios = [];
+        for (const n of noticias) {
+          const titulo = n.titulo || '';
+          const slug = n.slug || '';
+          let nuevoTitulo = titulo;
+          let hayCambio = false;
+
+          // Si el slug dice "fallecidos/fallece/fallecen" pero el título dice "muertos/muere/mueren", revertir
+          const slugTieneFallecidos = /\bfallecidos?\b/i.test(slug);
+          const slugTieneFallecen = /\bfallecen?\b/i.test(slug);
+          const tituloTieneMuertos = /\bmuertos?\b/i.test(titulo);
+          const tituloTieneMueren = /\bmueren\b/i.test(titulo);
+
+          if (slugTieneFallecidos && tituloTieneMuertos) {
+            nuevoTitulo = nuevoTitulo.replace(/\bmuertos\b/gi, 'fallecidos');
+            hayCambio = true;
+          }
+          if (slugTieneFallecen && tituloTieneMueren) {
+            nuevoTitulo = nuevoTitulo.replace(/\bmueren\b/gi, 'fallecen');
+            hayCambio = true;
+          }
+
+          // Casos específicos detectados en la corrida anterior (basados en slugs conocidos)
+          if (/\bfallecidos?\b/i.test(slug) && /\bmuertos\b/i.test(titulo)) {
+            nuevoTitulo = nuevoTitulo.replace(/\bmuertos\b/gi, 'fallecidos');
+            hayCambio = true;
+          }
+
+          if (hayCambio && nuevoTitulo !== titulo) {
+            cambios.push({ id: n.id, tituloOrig: titulo, tituloNuevo: nuevoTitulo, slug });
+          }
+        }
+
+        console.log(`📊 ${cambios.length} títulos posiblemente sensacionalistas detectados`);
+        if (!cambios.length) { console.log('✅ Nada que revertir'); return; }
+
+        cambios.forEach((c, i) => console.log(`[${i+1}] "${c.tituloOrig}" → "${c.tituloNuevo}"`));
+
+        if (!confirm(`Revertir ${cambios.length} títulos de "muertos" a "fallecidos"?`)) {
+          console.log('❌ Cancelado'); return;
+        }
+
+        let ok = 0;
+        for (const c of cambios) {
+          try {
+            await updateDoc(doc(db, 'noticias', c.id), { titulo: c.tituloNuevo });
+            ok++;
+            console.log(`✅ ${c.id}`);
+          } catch (err) {
+            console.error(`❌ ${c.id}:`, err.message);
+          }
+        }
+        console.log(`✅ ${ok}/${cambios.length} revertidas. Recargá la página.`);
+        showToast(`${ok} títulos revertidos a "fallecidos". Recargá.`, 'success');
+      } catch (err) {
+        console.error('❌ Error:', err);
+      }
+    };
+
     console.log('🔬 Función corregirTitulosMasivoPanel() cargada. Ejecutá: await corregirTitulosMasivoPanel()');
+    console.log('🔍 Función revertirSensacionalismo() cargada. Ejecutá: await revertirSensacionalismo()');
   </script>
 </body>
 </html>
