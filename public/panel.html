@@ -948,6 +948,36 @@
                   <a id="shareWhatsappLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#dcfce7; color:#16a34a; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fab fa-whatsapp"></i> Abrir WhatsApp</a>
                 </div>
               </div>
+
+              <!-- LINKS CORTOS FORENSES — Visible para el usuario -->
+              <div style="margin-top:16px; padding:14px; background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border:1px solid #f59e0b; border-radius:10px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                  <span style="font-size:20px;">🔬</span>
+                  <div>
+                    <h4 style="margin:0; font-size:14px; font-weight:700; color:#92400e;">Links Cortos Forenses</h4>
+                    <p style="margin:2px 0 0; font-size:11px; color:#b45309;">Rastreo server-side imposible de bloquear. Lo que usan NYT, BBC, bit.ly.</p>
+                  </div>
+                </div>
+                <div style="display:grid; gap:8px;">
+                  <div style="display:flex; align-items:center; gap:8px; background:#fff; padding:10px 12px; border-radius:8px; border:1px solid #fbbf24;">
+                    <div style="width:32px; height:32px; background:#0088cc; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0;">T</div>
+                    <div style="flex:1; min-width:0;">
+                      <p style="margin:0; font-size:11px; color:#6b7280;">Telegram</p>
+                      <code id="shortLinkTelegram" style="font-size:12px; color:#111827; word-break:break-all;">Generando...</code>
+                    </div>
+                    <button type="button" onclick="copiarLinkCorto('shortLinkTelegram')" style="padding:6px 12px; background:#0088cc; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; flex-shrink:0;"><i class="fas fa-copy"></i></button>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px; background:#fff; padding:10px 12px; border-radius:8px; border:1px solid #fbbf24;">
+                    <div style="width:32px; height:32px; background:#25d366; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0;">W</div>
+                    <div style="flex:1; min-width:0;">
+                      <p style="margin:0; font-size:11px; color:#6b7280;">WhatsApp</p>
+                      <code id="shortLinkWhatsapp" style="font-size:12px; color:#111827; word-break:break-all;">Generando...</code>
+                    </div>
+                    <button type="button" onclick="copiarLinkCorto('shortLinkWhatsapp')" style="padding:6px 12px; background:#25d366; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; flex-shrink:0;"><i class="fas fa-copy"></i></button>
+                  </div>
+                </div>
+                <p style="margin:8px 0 0; font-size:10px; color:#b45309; text-align:center;">Cada click pasa por nuestro servidor PRIMERO → registra la fuente → redirige. WhatsApp y Telegram no pueden ocultar esto.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1682,6 +1712,26 @@ sin texto ni marcas de agua, composición periodística"
       }
     };
 
+    window.copiarLinkCorto = async function(id) {
+      const el = document.getElementById(id);
+      const url = el ? (el.textContent || '') : '';
+      if (!url || url === 'Generando...') return;
+      try {
+        await navigator.clipboard.writeText(url);
+        const nombre = id.includes('Telegram') ? 'Telegram' : 'WhatsApp';
+        showToast('🔗 Link forense de ' + nombre + ' copiado', 'success');
+      } catch {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        const nombre = id.includes('Telegram') ? 'Telegram' : 'WhatsApp';
+        showToast('🔗 Link forense de ' + nombre + ' copiado', 'success');
+      }
+    };
+
     let _noticiaCompartirActual = null;
     async function mostrarPanelCompartir(noticia) {
       const panel = document.getElementById('panelCompartirManual');
@@ -1731,8 +1781,15 @@ sin texto ni marcas de agua, composición periodística"
         const waData = await waResp.json().catch(() => ({}));
         if (tgData.shortUrl) urlTelegram = tgData.shortUrl;
         if (waData.shortUrl) urlWhatsapp = waData.shortUrl;
+        // Mostrar links cortos en el panel forense
+        const elTg = document.getElementById('shortLinkTelegram');
+        const elWa = document.getElementById('shortLinkWhatsapp');
+        if (elTg) elTg.textContent = tgData.shortUrl || urlTelegram;
+        if (elWa) elWa.textContent = waData.shortUrl || urlWhatsapp;
       } catch (e) {
         console.warn('[mostrarPanelCompartir] Error generando links cortos:', e);
+        document.getElementById('shortLinkTelegram').textContent = urlTelegram;
+        document.getElementById('shortLinkWhatsapp').textContent = urlWhatsapp;
       }
 
       // ─── FORMATO TELEGRAM ───
