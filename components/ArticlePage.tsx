@@ -340,6 +340,59 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Contenido — sanitizado antes de inyección para prevenir XSS */}
         <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(enhancedHtml || noticia.resumen || '') }} />
 
+        {/* ── TAMBIÉN TE PUEDE INTERESAR (in-article related) ── */}
+        {readAlso.length > 0 && (
+          <aside aria-label="También te puede interesar" style={{ margin: '32px 0', padding: '20px', background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', borderRadius: 14, border: '1px solid #e2e8f0' }}>
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 18 }}>🔥</span>
+              También te puede interesar
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+              {readAlso.map(item => {
+                const itemCat = getCategory(item.categoria);
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${item.slug}`}
+                    style={{
+                      display: 'flex',
+                      gap: 10,
+                      alignItems: 'center',
+                      padding: '10px 12px',
+                      background: '#fff',
+                      borderRadius: 10,
+                      textDecoration: 'none',
+                      border: '1px solid #e2e8f0',
+                      transition: 'box-shadow 0.2s, transform 0.2s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                  >
+                    {item.imagen ? (
+                      <img
+                        src={getResponsiveImageUrl(item.imagen, { w: 80, h: 60, fit: 'cover' })}
+                        alt=""
+                        loading="lazy"
+                        style={{ width: 60, height: 45, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
+                      />
+                    ) : (
+                      <div style={{ width: 60, height: 45, borderRadius: 6, background: itemCat.color || '#cbd5e1', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                        {itemCat.emoji || '📰'}
+                      </div>
+                    )}
+                    <div style={{ minWidth: 0 }}>
+                      <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#1e293b', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any }}>
+                        {item.titulo}
+                      </p>
+                      <span style={{ fontSize: 11, color: itemCat.color || '#64748b', fontWeight: 600 }}>{itemCat.name || item.categoria}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </aside>
+        )}
+
         {/* In-article Ad — lazy-loaded para no afectar LCP */}
         <Suspense fallback={null}>
           <AdsenseUnit

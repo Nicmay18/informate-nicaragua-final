@@ -3701,6 +3701,31 @@ sin texto ni marcas de agua, composición periodística"
             const tgStatusEl = document.getElementById('telegramStatus');
             if (tgStatusEl) tgStatusEl.textContent = '⚠️ Sin token de Telegram';
           }
+
+          // ─── DISTRIBUCIÓN AUTOMÁTICA MULTICANAL ───
+          if (esNueva && publicado && slug) {
+            try {
+              const distRes = await fetch('/api/admin/distribuir', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug, canales: ['telegram', 'indexnow', 'push'] })
+              });
+              const distData = await distRes.json().catch(() => ({}));
+              if (distData.success) {
+                const okCanales = Object.entries(distData.resultados || {})
+                  .filter(([, v]) => v.ok)
+                  .map(([k]) => k);
+                const failCanales = Object.entries(distData.resultados || {})
+                  .filter(([, v]) => !v.ok)
+                  .map(([k, v]) => `${k}: ${v.error || 'Error'}`);
+                if (okCanales.length) showToast('🚀 Distribuido a: ' + okCanales.join(', '), 'success');
+                if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
+              }
+            } catch (e) {
+              console.warn('Distribución automática falló:', e);
+            }
+          }
+
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
             document.getElementById('statusRedesTexto').textContent = 'Generando WhatsApp y Facebook...';
