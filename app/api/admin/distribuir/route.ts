@@ -208,6 +208,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Delegar canales adicionales a sus endpoints
+    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+    const extras = [
+      { name: 'twitter', path: '/api/admin/twitter' },
+      { name: 'linkedin', path: '/api/admin/linkedin' },
+      { name: 'medium', path: '/api/admin/medium' },
+      { name: 'whatsapp', path: '/api/admin/whatsapp' },
+    ];
+
+    for (const extra of extras) {
+      if (canales.includes(extra.name)) {
+        promises.push(
+          fetch(`${baseUrl}${extra.path}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ noticia }),
+          })
+            .then(r => r.json().catch(() => ({ success: false })))
+            .then(data => { resultados[extra.name] = { ok: data.success || false, error: data.error }; })
+            .catch(e => { resultados[extra.name] = { ok: false, error: e.message }; })
+        );
+      }
+    }
+
     await Promise.all(promises);
 
     // Guardar registro de distribución
