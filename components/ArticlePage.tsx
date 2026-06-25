@@ -377,7 +377,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                       />
                     ) : (
                       <div style={{ width: 60, height: 45, borderRadius: 6, background: itemCat.color || '#cbd5e1', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
-                        {itemCat.emoji || '📰'}
+                        📰
                       </div>
                     )}
                     <div style={{ minWidth: 0 }}>
