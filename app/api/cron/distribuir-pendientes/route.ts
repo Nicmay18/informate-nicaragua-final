@@ -16,8 +16,7 @@ export async function GET(request: Request) {
   try {
     const db = getAdminDb();
 
-    // Buscar noticias de las últimas 24h que NO estén distribuidas
-    const hace24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // Buscar noticias que NO estén distribuidas
     const snap = await db
       .collection('noticias')
       .where('distribuida', '!=', true)
@@ -26,7 +25,7 @@ export async function GET(request: Request) {
       .limit(10)
       .get();
 
-    const pendientes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const pendientes = snap.docs.map(d => ({ id: d.id, ...d.data() } as any));
     const resultados: any[] = [];
 
     for (const noticia of pendientes) {
