@@ -370,7 +370,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                   >
                     {item.imagen ? (
                       <img
-                        src={getResponsiveImageUrl(item.imagen, { w: 80, h: 60, fit: 'cover' })}
+                        src={getResponsiveImageUrl(item.imagen, 80)}
                         alt=""
                         loading="lazy"
                         style={{ width: 60, height: 45, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
