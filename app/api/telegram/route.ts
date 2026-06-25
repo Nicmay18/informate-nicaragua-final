@@ -45,34 +45,27 @@ export async function POST(request: NextRequest) {
     const tituloRaw = (noticia.titulo || '').substring(0, 120);
     const tituloEsc = escTelegram(tituloRaw);
 
-    // ── GANCHO: primera oración del resumen como tensión, no como spoiler ──
-    let resumenCompleto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
-    const primerPunto = resumenCompleto.search(/[.!?]/);
-    let gancho = primerPunto > 20
-      ? resumenCompleto.substring(0, primerPunto + 1)
-      : resumenCompleto.substring(0, 100).trim();
-
-    // Si el gancho es igual al título, usar segunda oración
-    if (gancho.toLowerCase().trim() === tituloRaw.toLowerCase().trim()) {
-      const restoInicial = resumenCompleto.substring(primerPunto + 1).trim();
-      const segundoPunto = restoInicial.search(/[.!?]/);
-      if (segundoPunto > 0) {
-        const resto = restoInicial.substring(segundoPunto + 1).trim();
-        const tercerPunto = resto.search(/[.!?]/);
-        gancho = tercerPunto > 10 ? resto.substring(0, tercerPunto + 1) : resto.substring(0, 120);
+    // ── CONTEXTO: 1-2 oraciones cortas del resumen, sin spoiler ──
+    function extraerContexto(texto: string, maxChars: number = 160): string {
+      const limpio = texto.replace(/\n+/g, ' ').trim();
+      const oraciones = limpio.match(/[^.!?]+[.!?]+/g) || [];
+      let resultado = '';
+      for (const oracion of oraciones) {
+        const limpia = oracion.trim();
+        if (resultado.length + limpia.length + 1 > maxChars && resultado.length > 0) break;
+        resultado += (resultado ? ' ' : '') + limpia;
+        if (resultado.length >= maxChars) break;
       }
+      if (!resultado) {
+        resultado = limpio.substring(0, maxChars).trim();
+        const ultEspacio = resultado.lastIndexOf(' ');
+        if (ultEspacio > maxChars * 0.6) resultado = resultado.substring(0, ultEspacio);
+      }
+      return resultado;
     }
-    const ganchoEsc = escTelegram(gancho);
 
-    // Línea de cierre según categoría
-    const cierres: Record<string, string> = {
-      'Sucesos': 'Los detalles completos en la nota.',
-      'Deportes': 'Todos los detalles en la nota.',
-      'Nacionales': 'Lee la nota completa.',
-      'Economía': 'Análisis completo en la nota.',
-      'Internacionales': 'Contexto completo en la nota.',
-    };
-    const cierreEsc = escTelegram(cierres[noticia.categoria] || 'Nota completa en el sitio.');
+    const contextoRaw = extraerContexto(noticia.resumen || noticia.contenido || '', 180);
+    const contextoEsc = escTelegram(contextoRaw);
 
     // Slug seguro
     let slug = noticia.slug || '';
@@ -84,17 +77,11 @@ export async function POST(request: NextRequest) {
     }
     const url = `https://nicaraguainformate.com/noticias/${encodeURIComponent(slug)}`;
 
-    // Hashtags limpios
-    const hashtags: string[] = [];
-    if (noticia.categoria && noticia.categoria !== 'Nacionales') {
-      hashtags.push(`#${sinAcentos(noticia.categoria).replace(/\s+/g, '')}`);
-    }
-    if (hashtags.length === 0) hashtags.push('#Nicaragua');
-    hashtags.push('#NicaraguaInformate');
-    const htEsc = escTelegram(hashtags.join(' '));
+    // Hashtags
+    const htEsc = escTelegram('#NicaraguaInformate');
 
-    // ── CAPTION SEGURO ──
-    const caption = `<b>${catEmoji} ${tituloEsc}</b>\n\n${ganchoEsc}\n\n${cierreEsc}\n\n${htEsc}\n\n→ <a href="${url}">nicaraguainformate.com</a>`;
+    // ── CAPTION NUEVO FORMATO PROFESIONAL ──
+    const caption = `<b>${catEmoji} ${tituloEsc}</b>\n\n${contextoEsc}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n${htEsc}`;
 
     const imagen = noticia.imagenRedes || noticia.imagen;
     const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');

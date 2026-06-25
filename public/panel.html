@@ -1800,8 +1800,19 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('shortLinkWhatsapp').textContent = urlWhatsapp;
       }
 
+      // ─── CONTEXTO TELEGRAM: 1-2 oraciones cortas ───
+      let contextoTelegram = '';
+      const oracionesTg = textoLimpio.match(/[^.!?]+[.!?]+/g) || [];
+      for (const oracion of oracionesTg) {
+        const limpia = oracion.trim();
+        if (contextoTelegram.length + limpia.length + 1 > 180 && contextoTelegram.length > 0) break;
+        contextoTelegram += (contextoTelegram ? ' ' : '') + limpia;
+        if (contextoTelegram.length >= 180) break;
+      }
+      if (!contextoTelegram) contextoTelegram = descripcionCorta;
+
       // ─── FORMATO TELEGRAM ───
-      const textoTelegram = `${emoji} <b>${titulo}</b>\n\n${descripcionCorta}\n\n🔗 <a href="${urlTelegram}">Leer noticia completa</a>\n\n${hashtagPrincipal}`;
+      const textoTelegram = `<b>${emoji} ${titulo}</b>\n\n${contextoTelegram}...\n\n🔗 <a href="${urlTelegram}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
 
       // ─── FORMATO FACEBOOK (plantilla base, se mejora con IA abajo) ───
       // Extraer oraciones cortas del texto para formato punchy
@@ -2260,9 +2271,17 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('seoUrl').textContent = `nicaraguainformate.com › noticias › ${slug}`;
       
       // Actualizar Social Media Previews
-      // Telegram
+      // Telegram: 1-2 oraciones del resumen con puntos suspensivos
       document.getElementById('telegramTitle').textContent = titulo.length > 100 ? titulo.substring(0, 97) + '...' : titulo;
-      document.getElementById('telegramDesc').textContent = resumen.length > 200 ? resumen.substring(0, 197) + '...' : resumen;
+      const oracionesPreview = resumen.match(/[^.!?]+[.!?]+/g) || [];
+      let descTelegram = '';
+      for (const oracion of oracionesPreview) {
+        const limpia = oracion.trim();
+        if (descTelegram.length + limpia.length + 1 > 180 && descTelegram.length > 0) break;
+        descTelegram += (descTelegram ? ' ' : '') + limpia;
+        if (descTelegram.length >= 180) break;
+      }
+      document.getElementById('telegramDesc').textContent = (descTelegram || resumen).substring(0, 180) + '...';
       
       // Facebook
       document.getElementById('facebookTitle').textContent = titulo.length > 80 ? titulo.substring(0, 77) + '...' : titulo;
