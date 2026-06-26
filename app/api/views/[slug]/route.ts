@@ -1,15 +1,7 @@
 import { NextResponse } from 'next/server';
-import { incrementViewsBySlug } from '@/lib/db/homepage';
-import { defaultRateLimiter } from '@/lib/rate-limit';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
-
-function getClientIP(req: Request): string {
-  const xf = req.headers.get('x-forwarded-for');
-  if (xf) return xf.split(',')[0]?.trim() || 'unknown';
-  return req.headers.get('x-real-ip') || 'unknown';
-}
 
 function validateSlug(slug: string): { valid: boolean; reason?: string } {
   if (!slug || typeof slug !== 'string') return { valid: false, reason: 'Slug requerido' };
@@ -19,35 +11,16 @@ function validateSlug(slug: string): { valid: boolean; reason?: string } {
 }
 
 /**
- * Route Handler: incrementa vistas de una noticia de forma atómica.
+ * Route Handler: VISTAS DESHABILITADAS temporalmente para reducir consumo.
  * POST /api/views/[slug]
- *
- * Protecciones:
- * - Rate limiting por IP (10 req/min)
- * - Validación estricta de slug (alfanumérico + guiones, max 200)
- * - Rechazo de métodos no POST con HTTP 405
- * - Errores sanitizados (sin stack traces al cliente)
+ * 
+ * NOTA: El tracking de vistas está pausado para conservar recursos de Firestore
+ * y Vercel Functions. Reactivar cuando el tráfico sea estable y rentable.
  */
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const ip = getClientIP(request);
-  const rate = defaultRateLimiter.check(ip);
-  if (!rate.allowed) {
-    return NextResponse.json(
-      { error: 'Demasiadas peticiones. Intente más tarde.' },
-      {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': '10',
-          'X-RateLimit-Remaining': String(rate.remaining),
-          'X-RateLimit-Reset': String(rate.resetAt),
-        },
-      }
-    );
-  }
-
   try {
     const { slug } = await params;
     const v = validateSlug(slug);
@@ -55,27 +28,12 @@ export async function POST(
       return NextResponse.json({ error: v.reason }, { status: 400 });
     }
 
-    // Extraer referrer y utmSource del body, y referer del header como fallback
-    let bodyReferrer = '';
-    let utmSource = '';
-    try {
-      const body = await request.json();
-      bodyReferrer = body.referrer || '';
-      utmSource = body.utmSource || '';
-    } catch { /* ignore if no body */ }
+    // Ignorar body para evitar procesamiento innecesario
+    try { await request.json(); } catch { /* ignore */ }
 
-    const headerReferrer = request.headers.get('referer') || '';
-    const referrer = bodyReferrer || headerReferrer;
-    const ua = request.headers.get('user-agent') || 'unknown';
-
-    const newViews = await incrementViewsBySlug(slug, { referrer, ua, ip, utmSource });
-    if (newViews === null) {
-      return NextResponse.json({ error: 'Noticia no encontrada' }, { status: 404 });
-    }
-
-    return NextResponse.json({ ok: true, slug, vistas: newViews });
+    // Respuesta simulada: no toca Firestore, no consume recursos
+    return NextResponse.json({ ok: true, slug, vistas: 0, disabled: true });
   } catch (error) {
-    console.error('[views/[slug]] Error:', error);
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }

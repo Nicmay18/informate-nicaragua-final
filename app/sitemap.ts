@@ -99,6 +99,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    // Guías evergreen (listado)
+    {
+      url: `${baseUrl}/guia`,
+      lastModified: new Date('2026-06-25'),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
     // Páginas legales y de información
     {
       url: `${baseUrl}/nosotros`,

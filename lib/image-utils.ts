@@ -15,11 +15,11 @@ export function cleanImageUrl(url: string): string {
 
 /**
  * Genera URL optimizada para el hero/LCP (imagen principal).
- * Usa weserv.nl para redimensionar imágenes jsDelivr a 800px,
+ * Usa weserv.nl para redimensionar imágenes a 1200px (mínimo para Google Discover),
  * reduciendo ~60% el peso vs la imagen original a resolución completa.
- * Esto mejora directamente el LCP en PageSpeed.
+ * Esto mejora directamente el LCP y cumple requisitos de Google Discover.
  */
-export function getHeroImageUrl(url: string, width = 800): string {
+export function getHeroImageUrl(url: string, width = 1200): string {
   if (!url || url === 'null' || url === 'undefined' || url === 'NaN') return FALLBACK_IMAGE;
 
   const responsiveUrl = getResponsiveImageUrl(url);
@@ -27,7 +27,7 @@ export function getHeroImageUrl(url: string, width = 800): string {
     return responsiveUrl;
   }
 
-  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 800px (cubre desktop + mobile)
+  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 1200px (cubre desktop + mobile + Google Discover)
   const absoluteUrl = responsiveUrl.startsWith('/')
     ? `https://nicaraguainformate.com${responsiveUrl}`
     : responsiveUrl;

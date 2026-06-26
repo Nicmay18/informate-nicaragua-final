@@ -427,6 +427,189 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       { question: '¿Se puede usar dólares en Nicaragua?', answer: 'Sí, el dólar es ampliamente aceptado en hoteles, restaurantes turísticos y comercios grandes. Sin embargo, en mercados y transporte público solo se aceptan córdobas.' },
     ],
   },
+  {
+    slug: 'gastronomia-nicaragua-platos-tipicos-2026',
+    title: 'Gastronomía de Nicaragua: platos típicos, ingredientes y dónde probarlos',
+    description: 'Descubre la rica gastronomía nicaragüense. Gallo pinto, nacatamales, vigorón, quesillo y más. Guía de platos típicos, ingredientes y mejores lugares para comer.',
+    category: 'Cultura',
+    author: 'Keyling Elieth Rivera Muñoz',
+    authorSlug: 'keyling-rivera',
+    publishedDate: '2026-06-25',
+    updatedDate: '2026-06-25',
+    content: `
+      <h2>La gastronomía de Nicaragua</h2>
+      <p>La cocina nicaragüense es una fusión de tradiciones indígenas, españolas y caribeñas. Sus platos se caracterizan por el uso de maíz, frijoles, plátano, yuca, queso fresco y carnes. Cada región del país aporta sabores únicos que reflejan su historia y su gente. Esta guía recorre los platos más representativos de Nicaragua.</p>
+      <h2>Platos típicos imprescindibles</h2>
+      <h3>1. Gallo pinto</h3>
+      <p>El plato nacional por excelencia. Arroz mezclado con frijoles rojos, cebolla, pimienta y salsa Lizano. Se sirve en desayuno y cena, acompañado de huevo, queso frito, plátano maduro o tortilla. En la Costa Caribe se conoce como <em>rice and beans</em> y se cocina con leche de coco.</p>
+      <h3>2. Nacatamal</h3>
+      <p>El nacatamal es herencia de la gastronomía precolombina. Se prepara con masa de maíz, manteca, sal, papas, arvejas, tomate, cebolla, chiltoma y un trozo de carne de cerdo o pollo. Todo se envuelve en hojas de plátano y se cocina al vapor durante varias horas. Es tradición comerlo los domingos y en Navidad.</p>
+      <h3>3. Vigorón</h3>
+      <p>Plato originario de Granada. Yuca cocida, chicharrón y ensalada de repollo curtido en vinagre. Se sirve en hoja de plátano y es muy popular en festividades y mercados.</p>
+      <h3>4. Quesillo</h3>
+      <p>Tortilla de maíz rellena de queso fresco, cebolla curtida en vinagre y crema. Se vende en carretillas a orillas de carreteras, especialmente entre Managua y León. Es uno de los bocadillos más queridos del país.</p>
+      <h3>5. Indio viejo</h3>
+      <p>Sopa espesa de origen indígena. Se prepara con masa de maíz desgranada, carne deshebrada, achiote, cebolla, ají y hierbabuena. Su textura es similar a la de una polenta suave y se sirve en plato hondo.</p>
+      <h3>6. Sopa de mondongo</h3>
+      <p>Sopa de callos de res cocidos lentamente con verduras, especias y naranja agria. Se considera un remedio para la resaca y se consume especialmente los domingos por la mañana.</p>
+      <h3>7. Tres leches</h3>
+      <p>El postre más famoso de Nicaragua. Bizcocho empapado en tres tipos de leche: evaporada, condensada y crema. Se cubre con merengue y puede llevar canela o ron. Es indispensable en cumpleaños, bodas y fiestas patronales.</p>
+      <h2>Bebidas típicas</h2>
+      <ul>
+        <li><strong>Chicha de maíz:</strong> Bebida fermentada de maíz, tradicional en el Pacífico. Dulce, espesa y refrescante.</li>
+        <li><strong>Cacao:</strong> Bebida de cacao molido con agua o leche, canela y azúcar. Se toma caliente o fría.</li>
+        <li><strong>Pinolillo:</strong> Bebida de maíz tostado molido con cacao y canela. Se disuelve en agua o leche fría y es muy popular en el campo.</li>
+        <li><strong>Macuá:</strong> Cóctel nacional a base de ron flor de caña, jugo de limón, naranja, granadina y azúcar. Refrescante y tropical.</li>
+        <li><strong>Elote:</strong> Bebida de maíz tierno licuado con leche, canela y azúcar. Muy común en fiestas y mercados.</li>
+      </ul>
+      <h2>Ingredientes base de la cocina nicaragüense</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Ingrediente</th><th style="padding:10px;text-align:left;">Uso principal</th></tr></thead><tbody>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Maíz</td><td style="padding:10px;">Tortillas, nacatamales, atol, pinolillo</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Frijoles</td><td style="padding:10px;">Gallo pinto, sopa de frijoles</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Yuca</td><td style="padding:10px;">Vigorón, yuca frita, sopa</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Plátano</td><td style="padding:10px;">Tajadas, maduro frito, plátano en tentación</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Queso fresco</td><td style="padding:10px;">Quesillo, cuajada, ensalada</td></tr>
+      <tr style="background:#f9fafb;"><td style="padding:10px;">Achiote</td><td style="padding:10px;">Colorante natural para arroces y carnes</td></tr>
+      </tbody></table>
+      <h2>Dónde probar la gastronomía típica</h2>
+      <ul>
+        <li><strong>Granada:</strong> Vigorón en el Parque Central, comida tradicional en restaurantes coloniales.</li>
+        <li><strong>Masaya:</strong> Mercado de Artesanías con comida típica, nacatamales los domingos.</li>
+        <li><strong>León:</strong> Sopa de mondongo en mercados, dulces tradicionales en Subtiava.</li>
+        <li><strong>Rivas:</strong> Mariscos frescos en San Juan del Sur, ceviche de pescado.</li>
+        <li><strong>Bluefields y Corn Island:</strong> Rondon, pan de coco, rice and beans con coco.</li>
+      </ul>
+    `,
+    faqs: [
+      { question: '¿Cuál es el plato típico más famoso de Nicaragua?', answer: 'El gallo pinto es considerado el plato nacional. Se consume a diario y consiste en arroz mezclado con frijoles, cebolla y especias.' },
+      { question: '¿Qué es el pinolillo?', answer: 'Es una bebida tradicional hecha con maíz tostado molido, cacao y canela. Se disuelve en agua o leche fría y es muy popular en el campo nicaragüense.' },
+      { question: '¿Cuál es el postre más popular de Nicaragua?', answer: 'El tres leches. Es un bizcocho empapado en tres tipos de leche y cubierto con merengue, indispensable en celebraciones.' },
+    ],
+  },
+  {
+    slug: 'turismo-ecologico-aventura-nicaragua-2026',
+    title: 'Turismo ecológico y de aventura en Nicaragua: guía completa 2026',
+    description: 'Los mejores destinos de turismo ecológico y aventura en Nicaragua. Volcanes, lagunas, canopy, senderismo, surf y observación de naturaleza.',
+    category: 'Turismo',
+    author: 'Keyling Elieth Rivera Muñoz',
+    authorSlug: 'keyling-rivera',
+    publishedDate: '2026-06-25',
+    updatedDate: '2026-06-25',
+    content: `
+      <h2>Turismo ecológico y de aventura en Nicaragua</h2>
+      <p>Nicaragua es un destino ideal para los amantes de la naturaleza y la adrenalina. Su geografía volcánica, lagos enormes, bosques tropicales y dos costas ofrecen experiencias únicas de ecoturismo y deportes de aventura. Esta guía recorre los mejores destinos para explorar el lado salvaje de Nicaragua.</p>
+      <h2>Destinos de aventura imperdibles</h2>
+      <h3>1. Volcán Cerro Negro: sandboarding extremo</h3>
+      <p>El único volcán del mundo donde se practica <strong>sandboarding</strong> (descenso en tabla sobre ceniza volcánica). Ubicado cerca de León, el ascenso dura unos 45 minutos y el descenso en tabla alcanza velocidades emocionantes. Es una experiencia única que atrae a aventureros de todo el mundo.</p>
+      <p><strong>Costo aproximado:</strong> $30-35 USD por persona (incluye tabla, guía y transporte desde León).</p>
+      <h3>2. Isla de Ometepe: ecoturismo en su máxima expresión</h3>
+      <p>Formada por dos volcanes (Concepción y Maderas) en medio del lago Cocibolca, Ometepe es Patrimonio de la Biosfera UNESCO. Ideal para:</p>
+      <ul>
+        <li><strong>Senderismo:</strong> Subida al Volcán Maderas (1,394 msnm) por bosque nuboso.</li>
+        <li><strong>Kayak:</strong> Remar en la ensenada de Charco Verde.</li>
+        <li><strong>Cascadas:</strong> San Ramón, con caída de 50 metros en medio de la selva.</li>
+        <li><strong>Ojo de agua:</strong> Piscina natural de agua cristalina rodeada de vegetación.</li>
+      </ul>
+      <p><strong>Costo promedio:</strong> $25-50 USD por día (hospedaje + comida).</p>
+      <h3>3. Laguna de Apoyo: crater paradisíaco</h3>
+      <p>Una laguna de origen volcánico con aguas cálidas y cristalinas. Perfecta para nadar, hacer kayak, paddleboard y buceo de altura. El cráter está rodeado de bosque seco tropical y ofrece vistas espectaculares.</p>
+      <p><strong>Entrada:</strong> $3-5 USD. Hospedaje en la orilla desde $20 USD/noche.</p>
+      <h3>4. Reserva Indio Maíz: selva tropical virgen</h3>
+      <p>Una de las reservas naturales más grandes de Centroamérica. Ubicada en la Costa Caribe, alberga jaguares, perezosos, monos aulladores y cientos de especies de aves. Solo accesible por río desde El Bluff o San Juan de Nicaragua.</p>
+      <p><strong>Actividades:</strong> Observación de fauna, paseos en bote por ríos, visita a comunidades indígenas rama.</p>
+      <h3>5. San Juan del Sur: surf para todos los niveles</h3>
+      <p>La capital del surf en Nicaragua. Playa con bahía protegida ideal para principiantes, mientras que playas cercanas como Maderas, Hermosa y Remanso ofrecen olas para intermedios y avanzados.</p>
+      <ul>
+        <li><strong>Clases de surf:</strong> $20-30 USD por sesión.</li>
+        <li><strong>Alquiler de tabla:</strong> $10-15 USD por día.</li>
+        <li><strong>Mejor época:</strong> Abril a octubre (olas más grandes).</li>
+      </ul>
+      <h3>6. Volcán Masaya: lava bajo tus pies</h3>
+      <p>Parque nacional con uno de los pocos volcanes activos del mundo donde se puede observar lava en el cráter Santiago. Las visitas nocturnas permiten ver el resplandor de la lava en la oscuridad.</p>
+      <p><strong>Entrada:</strong> $7 USD (extranjeros), $2 USD (nacionales). Visitas nocturnas con guía.</p>
+      <h2>Actividades de aventura y sus costos</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Actividad</th><th style="padding:10px;text-align:left;">Ubicación</th><th style="padding:10px;text-align:right;">Costo aprox.</th></tr></thead><tbody>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Sandboarding</td><td style="padding:10px;">Cerro Negro, León</td><td style="padding:10px;text-align:right;">$30-35 USD</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Canopy / tirolesa</td><td style="padding:10px;">Mombacho, San Juan del Sur</td><td style="padding:10px;text-align:right;">$20-40 USD</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Buceo / snorkel</td><td style="padding:10px;">Corn Island, Laguna Apoyo</td><td style="padding:10px;text-align:right;">$35-60 USD</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Senderismo guiado</td><td style="padding:10px;">Ometepe, Mombacho</td><td style="padding:10px;text-align:right;">$15-30 USD</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Paddleboard</td><td style="padding:10px;">Granada, Laguna Apoyo</td><td style="padding:10px;text-align:right;">$10-20 USD</td></tr>
+      <tr><td style="padding:10px;">Pesca deportiva</td><td style="padding:10px;">San Juan del Sur, Caribbean</td><td style="padding:10px;text-align:right;">$50-150 USD</td></tr>
+      </tbody></table>
+      <h2>Consejos para el ecoturista</h2>
+      <ul>
+        <li>Lleva repelente de insectos y protector solar biodegradable.</li>
+        <li>Respeta la flora y fauna: no alimentes animales silvestres.</li>
+        <li>Contrata guías locales certificados para senderismo en volcanes.</li>
+        <li>Verifica el clima antes de visitar volcanes activos.</li>
+        <li>Lleva agua suficiente y calzado cerrado para caminatas.</li>
+        <li>Prefiere hospedajes ecoamigables que apoyen a comunidades locales.</li>
+      </ul>
+      <h2>Mejor época para visitar</h2>
+      <p>La temporada seca (noviembre a abril) es ideal para actividades al aire libre. La temporada lluviosa (mayo a octubre) ofrece paisajes más verdes y menos turistas, aunque algunas rutas de senderismo pueden estar resbaladizas.</p>
+    `,
+    faqs: [
+      { question: '¿Qué es el sandboarding en Nicaragua?', answer: 'Es el descenso en tabla sobre la ceniza volcánica del Cerro Negro, cerca de León. Es una actividad única en el mundo que atrae a aventureros internacionales.' },
+      { question: '¿Cuándo es la mejor época para hacer surf en San Juan del Sur?', answer: 'La temporada de olas más grandes va de abril a octubre. Para principiantes, la época seca (noviembre-abril) ofrece olas más suaves.' },
+      { question: '¿Es seguro hacer senderismo en volcanes activos?', answer: 'Sí, siempre que se contrate un guía certificado y se sigan las instrucciones de seguridad. Los parques nacionales monitorean la actividad volcánica constantemente.' },
+    ],
+  },
+  {
+    slug: 'economia-nicaragua-2026-guia',
+    title: 'Economía de Nicaragua 2026: guía completa para entender cómo funciona',
+    description: 'Todo sobre la economía nicaragüense en 2026: sectores principales, PIB, empleo, inflación, comercio exterior y oportunidades. Explicado de forma sencilla.',
+    category: 'Economía',
+    author: 'Keyling Elieth Rivera Muñoz',
+    authorSlug: 'keyling-rivera',
+    publishedDate: '2026-06-25',
+    updatedDate: '2026-06-25',
+    content: `
+      <h2>La economía de Nicaragua en 2026</h2>
+      <p>Nicaragua es la economía más grande de Centroamérica en términos de superficie territorial, con una posición geográfica estratégica entre dos océanos y una población joven y emprendedora. En 2026, la economía nicaragüense muestra un sólido crecimiento en sectores clave como el turismo, la agricultura, la construcción y las manufacturas, consolidándose como un destino atractivo para inversiones y emprendimiento.</p>
+      <h2>Principales sectores económicos</h2>
+      <h3>1. Agricultura</h3>
+      <p>El sector agropecuario emplea aproximadamente al 30% de la población económicamente activa. Los principales productos de exportación son:</p>
+      <ul>
+        <li><strong>Café:</strong> Nicaragua es uno de los principales productores de café de América Latina. El café de altura de Matagalpa, Jinotega y Nueva Segovia es especialmente valorado.</li>
+        <li><strong>Azúcar:</strong> Las centrales azucareras en Chinandega y León son pilares del sector.</li>
+        <li><strong>Carne bovina:</strong> Exportación creciente hacia Estados Unidos y Centroamérica.</li>
+        <li><strong>Plátano y cacao:</strong> Productos emergentes con demanda internacional creciente.</li>
+      </ul>
+      <h3>2. Turismo</h3>
+      <p>El turismo se ha convertido en uno de los sectores de más rápido crecimiento. Nicaragua recibe más de un millón de visitantes internacionales al año, atraídos por playas del Pacífico y Caribe, volcanes activos, ciudades coloniales y reservas naturales.</p>
+      <h3>3. Manufactura y maquila</h3>
+      <p>Las zonas francas en Managua, Masaya y León albergan empresas textiles, ensamblaje electrónico y producción de calzado. Este sector genera miles de empleos formales.</p>
+      <h3>4. Construcción</h3>
+      <p>La construcción de infraestructura pública (carreteras, puentes, hospitales) y desarrollo inmobiliario han impulsado este sector.</p>
+      <h2>Indicadores económicos clave 2026</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Indicador</th><th style="padding:10px;text-align:right;">Valor estimado</th></tr></thead><tbody>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">PIB nominal</td><td style="padding:10px;text-align:right;">USD 16,000 - 17,000 millones</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">PIB per cápita</td><td style="padding:10px;text-align:right;">USD 2,400 - 2,600</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Inflación anual</td><td style="padding:10px;text-align:right;">5% - 7%</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Tasa de desempleo</td><td style="padding:10px;text-align:right;">4% - 6%</td></tr>
+      <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Reservas internacionales</td><td style="padding:10px;text-align:right;">USD 3,500 - 4,000 millones</td></tr>
+      <tr style="background:#f9fafb;"><td style="padding:10px;">Deuda pública / PIB</td><td style="padding:10px;text-align:right;">45% - 55%</td></tr>
+      </tbody></table>
+      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: valores estimados basados en proyecciones del BCN y FMI para 2026.</em></p>
+      <h2>Empleo y salarios</h2>
+      <p>El mercado laboral nicaragüense ofrece oportunidades en diversos sectores productivos. Las remesas de nicaragüenses en el exterior representan una fuente importante de ingresos para miles de familias y dinamizan el comercio local. El salario mínimo varía por sector, oscilando entre C$ 7,185 (agropecuario) y C$ 9,173 (construcción) mensuales en 2026, con revisiones periódicas que buscan mejorar el poder adquisitivo de los trabajadores.</p>
+      <h2>Comercio exterior</h2>
+      <p>Nicaragua exporta principalmente hacia Estados Unidos, Centroamérica y la Unión Europea. Los principales productos de exportación son café, carne, azúcar, oro y textiles. Las importaciones principales son combustibles, maquinaria, equipos electrónicos y productos manufacturados.</p>
+      <h2>Oportunidades de crecimiento</h2>
+      <ul>
+        <li>Expansión del turismo sostenible en zonas del Pacífico y Caribe.</li>
+        <li>Desarrollo de energías renovables: geotérmica, eólica y solar.</li>
+        <li>Crecimiento de la agroindustria con productos de alta demanda internacional.</li>
+        <li>Inversión en infraestructura vial y conectividad digital.</li>
+        <li>Fortalecimiento del sector de zonas francas y manufactura ligera.</li>
+      </ul>
+    `,
+    faqs: [
+      { question: '¿Cuál es el PIB de Nicaragua en 2026?', answer: 'El PIB nominal estimado de Nicaragua en 2026 ronda los USD 16,000-17,000 millones, con un PIB per cápita de aproximadamente USD 2,400-2,600.' },
+      { question: '¿Qué sectores generan más empleo en Nicaragua?', answer: 'La agricultura emplea alrededor del 30% de la población activa. El comercio informal, la construcción y el turismo también son importantes generadores de empleo.' },
+      { question: '¿Cuánto representan las remesas en la economía nicaragüense?', answer: 'Las remesas representan más del 15% del PIB de Nicaragua, siendo una de las fuentes de divisas más importantes del país.' },
+    ],
+  },
 ];
 
 export function getEvergreenBySlug(slug: string): EvergreenArticle | undefined {

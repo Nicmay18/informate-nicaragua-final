@@ -6,13 +6,12 @@ import { getHeroImageUrl } from '@/lib/image-utils';
 import { logger } from '@/lib/logger';
 
 // ============================================================================
-// SSR DINAMICO: Home siempre lee Firestore fresco.
-// Cada request ejecuta fetchAllNoticias con datos actualizados.
-// La noticia publicada aparece INMEDIATAMENTE sin necesidad de revalidar cache.
-// Costo: ~1 lectura de 500 docs por visita. Con ~100 visitas/dia = gratis en
-// el free tier de Firestore (50,000 lecturas/dia).
+// ISR: Home regenerado cada 1 hora para reducir lecturas Firestore.
+// Las noticias nuevas aparecen en cache tras max 1h (revalidate).
+// Reduccion de consumo: ~99% menos lecturas vs force-dynamic.
 // ============================================================================
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+export const dynamic = 'force-static';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
@@ -81,7 +80,7 @@ export default async function HomePage() {
         <link
           rel="preload"
           as="image"
-          imageSrcSet={`${heroSrc400} 400w, ${heroSrc} 800w`}
+          imageSrcSet={`${heroSrc400} 400w, ${heroSrc} 1200w`}
           imageSizes="(max-width: 768px) 100vw, 580px"
           type="image/webp"
           crossOrigin="anonymous"
