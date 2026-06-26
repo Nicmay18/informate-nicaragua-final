@@ -126,11 +126,10 @@ export async function GET(request: Request) {
   try {
     const db = getAdminDb();
 
-    // Noticias no distribuidas recientes
+    // Noticias no distribuidas recientes (usa == false en vez de != true para evitar índice compuesto)
     const snap = await db
       .collection('noticias')
-      .where('distribuida', '!=', true)
-      .orderBy('distribuida', 'asc')
+      .where('distribuida', '==', false)
       .orderBy('fecha', 'desc')
       .limit(5)
       .get();
