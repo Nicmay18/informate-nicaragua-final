@@ -1592,7 +1592,7 @@ sin texto ni marcas de agua, composición periodística"
         <div class="page-header">
           <div class="page-title"><h1>🤖 Agente de Crecimiento</h1><p>Distribución automática multicnal. Telegram, Facebook, Twitter/X, WhatsApp, Medium, LinkedIn, IndexNow y Push.</p></div>
           <div class="header-actions">
-            <button class="btn btn-primary" disabled style="opacity:0.5;cursor:not-allowed;" title="Deshabilitado para conservar recursos"><i class="fas fa-ban"></i><span>Deshabilitado</span></button>
+            <button class="btn btn-primary" onclick="ejecutarAgenteManual()"><i class="fas fa-play"></i><span>Ejecutar Ahora</span></button>
             <button class="btn btn-secondary" onclick="cargarMetricasAgente()"><i class="fas fa-sync"></i><span>Actualizar</span></button>
           </div>
         </div>
@@ -1651,8 +1651,7 @@ sin texto ni marcas de agua, composición periodística"
             <div class="card-header"><h3 class="card-title"><i class="fas fa-terminal" style="color: var(--success);"></i>Log del Agente</h3></div>
             <div class="card-body">
               <div id="agenteLog" style="background: #0f172a; color: #e2e8f0; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">
-                <span style="color: #fbbf24;">⚠️ Agente deshabilitado temporalmente para conservar recursos de Vercel/Firestore.</span>
-                <span style="color: #64748b;">> Distribución manual vía panel está pausada. Usar redes sociales directamente.</span>
+                <span style="color: #22c55e;">✅ Agente activo. Índice Firestore compilando (1-3 min). Presione "Ejecutar Ahora" para distribuir noticias.</span>
               </div>
             </div>
           </div>
