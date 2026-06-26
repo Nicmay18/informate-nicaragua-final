@@ -13,12 +13,14 @@ import {
 import { escapeJsonLd } from '@/lib/sanitize';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import Analytics from '@/components/Analytics';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
 import ThirdPartyScripts from '@/components/ThirdPartyScripts';
 import OneSignalProvider from '@/components/OneSignalProvider';
 import { criticalCss } from '@/lib/critical-css';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap', preload: false });
@@ -164,6 +166,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <CookieBanner />
         <ConsentScript />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         <ThemeScript />
         <ThirdPartyScripts />
         <OneSignalProvider />
