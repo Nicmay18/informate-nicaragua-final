@@ -57,6 +57,39 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
     const trackView = async () => {
       try {
+        // Extraer utm_source de la URL para rastrear fuentes sociales (Telegram, WhatsApp)
+        const params = new URLSearchParams(window.location.search);
+        const utmSource = params.get('utm_source') || '';
+        const referrer = document.referrer || '';
+
+        // ============================================================
+        // OPCION 1: API del servidor (captura referrer + utm_source)
+        // ============================================================
+        const controller = new AbortController();
+        const res = await fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ referrer, utmSource }),
+          signal: controller.signal,
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          if (typeof json.vistas === 'number') {
+            setViews(json.vistas);
+          }
+          sessionStorage.setItem(sessionKey, 'true');
+          return; // API funcionó, no necesitamos fallback
+        }
+      } catch (apiErr) {
+        // API falló o está deshabilitada → fallback a Firebase client-side
+        console.warn('[views] API failed, falling back to Firebase:', apiErr);
+      }
+
+      // ============================================================
+      // OPCION 2: Firebase client-side (fallback si API falla)
+      // ============================================================
+      try {
         const db = getClientDb();
         const docRef = doc(db, 'views', noticia.slug);
         const snap = await getDoc(docRef);
@@ -83,9 +116,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             sessionStorage.setItem(sessionKey, 'true');
           }
         }
-      } catch (e) {
-        // Silenciar: no crítico
-        console.warn('Error tracking view:', e);
+      } catch (fbErr) {
+        console.warn('[views] Firebase fallback failed:', fbErr);
       }
     };
 
