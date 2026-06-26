@@ -16,16 +16,17 @@ export async function GET(request: Request) {
   try {
     const db = getAdminDb();
 
-    // Buscar noticias que NO estén distribuidas
+    // Buscar noticias que NO estén distribuidas (sin orderBy en Firestore para evitar índice)
     const snap = await db
       .collection('noticias')
-      .where('distribuida', '!=', true)
-      .orderBy('distribuida', 'asc')
-      .orderBy('fecha', 'desc')
-      .limit(10)
+      .where('distribuida', '==', false)
+      .limit(50)
       .get();
 
-    const pendientes = snap.docs.map(d => ({ id: d.id, ...d.data() } as any));
+    const pendientes = snap.docs
+      .map(d => ({ id: d.id, ...d.data() } as any))
+      .sort((a: any, b: any) => new Date(b.fecha || 0).getTime() - new Date(a.fecha || 0).getTime())
+      .slice(0, 10);
     const resultados: any[] = [];
 
     for (const noticia of pendientes) {

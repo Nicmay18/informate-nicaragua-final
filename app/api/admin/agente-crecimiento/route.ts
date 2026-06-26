@@ -126,15 +126,17 @@ export async function GET(request: Request) {
   try {
     const db = getAdminDb();
 
-    // Noticias no distribuidas recientes (usa == false en vez de != true para evitar índice compuesto)
+    // Noticias no distribuidas recientes (sin orderBy en Firestore para evitar índice compuesto)
     const snap = await db
       .collection('noticias')
       .where('distribuida', '==', false)
-      .orderBy('fecha', 'desc')
-      .limit(5)
+      .limit(50)
       .get();
 
-    const pendientes = snap.docs.map(d => ({ id: d.id, ...d.data() } as unknown as Noticia));
+    const pendientes = snap.docs
+      .map(d => ({ id: d.id, ...d.data() } as unknown as Noticia))
+      .sort((a, b) => new Date(b.fecha || 0).getTime() - new Date(a.fecha || 0).getTime())
+      .slice(0, 5);
     const resultados: any[] = [];
 
     for (const noticia of pendientes) {
