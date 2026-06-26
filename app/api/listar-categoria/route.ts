@@ -24,7 +24,7 @@ async function fetchCategoriaRaw(categoria: string) {
 
 const cachedCategoria = (categoria: string) =>
   unstable_cache(() => fetchCategoriaRaw(categoria), [`categoria-${categoria}`], {
-    revalidate: 3600,
+    revalidate: 86400,
     tags: ['listar-categoria'],
   });
 

@@ -52,7 +52,7 @@ async function fetchFeedArticlesRaw() {
 }
 
 const cachedFetchFeed = unstable_cache(fetchFeedArticlesRaw, ['feed-xml'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['feed-xml'],
 });
 

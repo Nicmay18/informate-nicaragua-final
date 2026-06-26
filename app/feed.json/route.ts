@@ -6,7 +6,7 @@
 
 import { adminDb } from '@/lib/firebase-admin';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 function stripHtml(html: string): string {
   if (!html) return '';

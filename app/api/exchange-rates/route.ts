@@ -8,13 +8,13 @@ const BCN_NIO_USD_SELL = 37.18;
 // Spread bancario adicional para EUR (los bancos nicaragüenses aplican mayor margen en EUR)
 const EUR_BANK_SPREAD = 0.08; // 8% spread para NIO/EUR
 
-export const revalidate = 3600; // Revalidar cada hora en el servidor
+export const revalidate = 86400; // Revalidar cada 24h en el servidor
 
 export async function GET() {
   try {
     // Frankfurter.app = ECB rates, gratuito, sin API key
     const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR', {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
 
     if (!res.ok) throw new Error('Frankfurter API error');

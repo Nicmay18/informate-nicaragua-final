@@ -240,7 +240,7 @@ async function computeDashboardMetrics() {
 }
 
 const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-calidad'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['dashboard-calidad'],
 });
 

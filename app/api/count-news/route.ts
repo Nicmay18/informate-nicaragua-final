@@ -18,7 +18,7 @@ const fetchCounts = async () => {
 };
 
 const cachedCounts = unstable_cache(fetchCounts, ['news-counts'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['news-counts'],
 });
 

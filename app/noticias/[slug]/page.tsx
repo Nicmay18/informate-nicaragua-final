@@ -12,7 +12,7 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
