@@ -1,105 +1,207 @@
-import type { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Prompts y Plantillas para Redacción',
-  robots: { index: false, follow: false },
-};
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-const PROMPT_SISTEMA = `Eres el redactor principal de "Nicaragua Informate", medio digital de información general con estilo de agencia (Reuters / AP / BBC adaptado para web latinoamericana).
-
-Actúa como un corresponsal senior destacado en Nicaragua y redacta una noticia basada en el título y categoría indicados.
-
-PRINCIPIOS ABSOLUTOS:
-- Redactas exclusivamente noticias informativas. Nunca emites opiniones ni juicios de valor.
-- Lenguaje: neutro, claro, directo y verificable. Jamás uses adjetivos emocionales ("trágico", "terrible", "impactante", "conmocionó").
-- Estilo: oraciones cortas. Párrafos de 2 a 3 oraciones. Voz activa. Pensado para móvil.
-- FUENTES REALISTAS: En Nicaragua, instituciones NO dan declaraciones a medios independientes. Usa: testigos, familiares, videos de ciudadanos, comunicados cuando existan, cobertura directa. NUNCA inventes "la Policía informó" o "el MINSA confirmó".
-
-ESTRUCTURA OBLIGATORIA:
-1. TITULAR: Máx 60 caracteres. SIEMPRE incluye dato concreto: número, nombre propio o lugar.
-2. LEAD: 35-50 palabras. Quién, qué, cuándo, dónde. Incluye AL MENOS una entidad real.
-3. CUERPO: Mínimo 5 bloques <h2>. Mínimo 600 palabras. Incluye 1 cita con nombre+cargo y 2 preguntas naturales para FAQ.
-4. ENTIDADES: Nombres completos de personas, organizaciones, lugares específicos. Marca con <strong> en primera mención.
-5. ANTI-TEMPLATE: Prohibido "según informes preliminares", "fuentes policiales indicaron", "las autoridades confirmaron", "la víctima fue identificada como".
-6. METADATOS: slug SEO, meta descripción (150-160 chars), keywords (5-8 palabras clave).
-
-AL FINAL DEL CUERPO agregá:
-'Slug sugerido: [slug-seo]'
-'Meta descripción: [150-160 caracteres]'`;
-
-const PROMPT_IMAGEN = `Fotografía de estilo fotoperiodismo de [escena específica en Nicaragua], 
-luz natural de atardecer, alta resolución, aspecto realista, 
-sin texto ni marcas de agua, composición periodística`;
-
-const CATEGORIAS = [
-  { nombre: 'Sucesos', emoji: '🚨', tip: 'Prioriza: quién, edad, qué pasó, dónde, cuándo. Siempre nombre completo en primera mención.' },
-  { nombre: 'Nacionales', emoji: '📌', tip: 'Contexto político-social breve. Cifras oficiales cuando existan, si no, testimonios ciudadanos.' },
-  { nombre: 'Deportes', emoji: '⚽', tip: 'Marcador, minuto, estadio, nombres completos de jugadores. Estadísticas concretas.' },
-  { nombre: 'Espectáculos', emoji: '🎬', tip: 'Nombre artístico + nombre real, lugar del evento, fecha. Sin chisme ni especulación.' },
-  { nombre: 'Tecnología', emoji: '💻', tip: 'Modelos, precios en córdobas/dólares, disponibilidad en Nicaragua. Fuentes: tiendas locales, usuarios.' },
-  { nombre: 'Internacionales', emoji: '🌍', tip: 'Ángulo nicaragüense si aplica: cómo afecta a Nicaragua, compatriotas en el lugar, reacciones locales.' },
-];
+interface Reporte {
+  fecha: string;
+  fechaLocal: string;
+  diaSemana: string;
+  dominio: string;
+  noticiasExistentes: number;
+  ultimosTitulos: string[];
+  trendingTopics: { tema: string; demanda: string; competencia: string }[];
+  gaps: { oportunidad: string; problema: string; accion: string; impacto: string }[];
+  planSemanal: { dia: string; tarea: string; tiempo: string }[];
+  tareaHoy: { dia: string; tarea: string; tiempo: string } | null;
+  objetivos: { metrica: string; actual: number | string; meta: number | string; como: string }[];
+  promptEditorial: string;
+  temaDelDia: string;
+  distribucionCategorias: Record<string, number>;
+}
 
 export default function CrecimientoPage() {
+  const [data, setData] = useState<Reporte | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/admin/crecimiento', { cache: 'no-store' })
+      .then(r => r.json())
+      .then((d: Reporte) => {
+        setData(d);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setError(String(e));
+        setLoading(false);
+      });
+  }, []);
+
+  const copyPrompt = () => {
+    if (!data?.promptEditorial) return;
+    navigator.clipboard.writeText(data.promptEditorial);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (loading) return (
+    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: 32, marginBottom: 12 }}>🚀</div>
+        <p>Generando reporte forense de crecimiento...</p>
+      </div>
+    </div>
+  );
+
+  if (error || !data) return (
+    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#e2e8f0', padding: 40 }}>
+      <p style={{ color: '#f87171' }}>Error cargando reporte: {error}</p>
+      <Link href="/admin" style={{ color: '#818cf8' }}>← Volver al Admin</Link>
+    </div>
+  );
+
+  const impactoColor = (impacto: string) => {
+    if (impacto === 'Crítico') return '#f87171';
+    if (impacto === 'Muy Alto') return '#fb923c';
+    if (impacto === 'Alto') return '#facc15';
+    return '#94a3b8';
+  };
+
+  const demandaIcon = (d: string) => {
+    if (d === 'Muy Alta') return '🔴';
+    if (d === 'Alta') return '🟠';
+    return '🟡';
+  };
+
   return (
-    <div style={{ maxWidth: 960, margin: '0 auto', padding: '40px 24px', fontFamily: 'system-ui, -apple-system, sans-serif', lineHeight: 1.6, color: '#1f2937' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8, color: '#111827' }}>🛠️ Prompts y Plantillas para Redacción</h1>
-      <p style={{ color: '#6b7280', marginBottom: 32 }}>Copiá y pegá estos prompts en ChatGPT, Claude, Gemini o cualquier agente de IA para redactar noticias con la estructura editorial de Nicaragua Informate.</p>
+    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#e2e8f0' }}>
+      <header style={{ background: '#1e293b', borderBottom: '1px solid #334155', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: 20, color: '#f8fafc' }}>🚀 Prompt Forense de Crecimiento</h1>
+          <p style={{ margin: 0, fontSize: 12, color: '#94a3b8' }}>{data.diaSemana}, {data.fechaLocal} · {data.dominio}</p>
+        </div>
+        <Link href="/admin" style={{ padding: '8px 16px', background: '#4f46e5', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 14 }}>
+          ← Volver al Admin
+        </Link>
+      </header>
 
-      <section style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: '#111827', borderBottom: '2px solid #2563eb', paddingBottom: 8 }}>📋 Prompt Sistema (Principal)</h2>
-        <p style={{ color: '#6b7280', marginBottom: 12, fontSize: 14 }}>Copiá este prompt, completá el título, categoría y departamento, y pegalo junto con cualquier información que tengas del hecho.</p>
-        <pre style={{ background: '#f3f4f6', padding: 20, borderRadius: 12, overflow: 'auto', fontSize: 13, lineHeight: 1.7, border: '1px solid #e5e7eb', whiteSpace: 'pre-wrap' }}>{PROMPT_SISTEMA}</pre>
-      </section>
+      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-      <section style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: '#111827', borderBottom: '2px solid #059669', paddingBottom: 8 }}>🖼️ Prompt para Generar Imagen de Portada</h2>
-        <p style={{ color: '#6b7280', marginBottom: 12, fontSize: 14 }}>Usalo en Gemini Image Generation, DALL-E, Midjourney o similar. Reemplazá [escena específica] con la descripción del hecho.</p>
-        <pre style={{ background: '#f3f4f6', padding: 20, borderRadius: 12, overflow: 'auto', fontSize: 13, lineHeight: 1.7, border: '1px solid #e5e7eb', whiteSpace: 'pre-wrap' }}>{PROMPT_IMAGEN}</pre>
-      </section>
+        {/* TAREA DE HOY */}
+        {data.tareaHoy && (
+          <div style={{ background: 'linear-gradient(135deg, #3730a3 0%, #4f46e5 100%)', borderRadius: 16, padding: 24, border: '1px solid #6366f1' }}>
+            <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, color: '#c7d2fe', marginBottom: 8 }}>Tu tarea hoy ({data.tareaHoy.dia})</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{data.tareaHoy.tarea}</div>
+            <div style={{ fontSize: 13, color: '#c7d2fe' }}>⏱️ Tiempo estimado: {data.tareaHoy.tiempo}</div>
+          </div>
+        )}
 
-      <section style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: '#111827', borderBottom: '2px solid #d97706', paddingBottom: 8 }}>📌 Tips por Categoría</h2>
-        <div style={{ display: 'grid', gap: 12 }}>
-          {CATEGORIAS.map((cat) => (
-            <div key={cat.nombre} style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 6 }}>{cat.emoji} {cat.nombre}</div>
-              <div style={{ fontSize: 14, color: '#4b5563' }}>{cat.tip}</div>
+        {/* INVENTARIO */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 16, color: '#f8fafc', marginBottom: 16 }}>📑 Inventario de Contenido</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ background: '#0f172a', padding: 16, borderRadius: 8 }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#818cf8' }}>{data.noticiasExistentes}</div>
+              <div style={{ fontSize: 12, color: '#94a3b8' }}>Noticias indexadas</div>
             </div>
-          ))}
+            <div style={{ background: '#0f172a', padding: 16, borderRadius: 8 }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#34d399' }}>{Object.keys(data.distribucionCategorias).length}</div>
+              <div style={{ fontSize: 12, color: '#94a3b8' }}>Categorías activas</div>
+            </div>
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 8 }}>Últimas noticias:</div>
+            {data.ultimosTitulos.slice(0, 5).map((t, i) => (
+              <div key={i} style={{ fontSize: 13, color: '#cbd5e1', padding: '4px 0', borderBottom: '1px solid #334155' }}>
+                → {t.length > 70 ? t.substring(0, 70) + '...' : t}
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
 
-      <section style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: '#111827', borderBottom: '2px solid #dc2626', paddingBottom: 8 }}>🚫 Palabras Prohibidas (AdSense / SEO)</h2>
-        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: 20, fontSize: 14, color: '#7f1d1d' }}>
-          <p style={{ margin: 0, fontWeight: 600, marginBottom: 10 }}>NUNCA uses estas palabras en titulares, resúmenes ni leads:</p>
-          <p style={{ margin: 0, lineHeight: 1.8 }}>
-            trágico · terrible · impactante · desgarrador · conmocionó · indignante · horroroso · escalofriante · macabro · sangriento · brutal ejecución · asesinato a sangre fría · descuartizado · calcinado · desmembrado · violación (como titular) · abuso sexual (como titular) · prostitución infantil · pornografía infantil · narcosatanicos · sicario · sicariato (como categoría) · tragedia (como adjetivo)
-          </p>
+        {/* TENDENCIAS */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 16, color: '#f8fafc', marginBottom: 16 }}>🔥 Tendencias de Búsqueda (Nicaragua)</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {data.trendingTopics.map((t, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#0f172a', padding: '10px 14px', borderRadius: 8 }}>
+                <span style={{ fontSize: 13, color: '#e2e8f0' }}>{demandaIcon(t.demanda)} {t.tema}</span>
+                <span style={{ fontSize: 12, color: '#94a3b8' }}>Demanda: <strong style={{ color: t.demanda === 'Muy Alta' ? '#f87171' : '#facc15' }}>{t.demanda}</strong> | Competencia: {t.competencia}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
 
-      <section style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: '#111827', borderBottom: '2px solid #7c3aed', paddingBottom: 8 }}>✅ Checklist antes de Publicar</h2>
-        <ul style={{ fontSize: 14, color: '#374151', lineHeight: 2, paddingLeft: 20 }}>
-          <li>Título: máximo 60 caracteres, con dato concreto</li>
-          <li>Lead: 35-50 palabras, quién/qué/cuándo/dónde</li>
-          <li>Mínimo 5 subtítulos &lt;h2&gt; descriptivos</li>
-          <li>Mínimo 600 palabras en el cuerpo</li>
-          <li>1 cita con nombre completo + cargo/relación</li>
-          <li>2 preguntas naturales para FAQ Schema</li>
-          <li>Nombres completos de personas en &lt;strong&gt; en primera mención</li>
-          <li>Contexto o antecedentes al final (50-75 palabras)</li>
-          <li>Slug SEO y meta descripción al final del cuerpo</li>
-          <li>Sin emojis en el cuerpo de la noticia</li>
-          <li>Sin adjetivos emocionales ni opiniones subjetivas</li>
-        </ul>
-      </section>
+        {/* GAP ANALYSIS */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 16, color: '#f8fafc', marginBottom: 16 }}>🕵️ Gap Analysis — Contenido Faltante</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {data.gaps.map((g, i) => (
+              <div key={i} style={{ background: '#0f172a', padding: 14, borderRadius: 8, borderLeft: `4px solid ${impactoColor(g.impacto)}` }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#f8fafc' }}>#{i + 1} {g.oportunidad}</span>
+                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: impactoColor(g.impacto), color: '#0f172a', fontWeight: 700 }}>{g.impacto}</span>
+                </div>
+                <div style={{ fontSize: 12, color: '#fbbf24', marginBottom: 4 }}><span style={{ fontWeight: 700, marginRight: 4 }}>⚠️ Situación:</span>{g.problema}</div>
+                <div style={{ fontSize: 12, color: '#34d399' }}><span style={{ fontWeight: 700, marginRight: 4 }}>💡 Acción:</span>{g.accion}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <footer style={{ textAlign: 'center', fontSize: 13, color: '#9ca3af', paddingTop: 24, borderTop: '1px solid #e5e7eb' }}>
-        Nicaragua Informate — Estructura Editorial obligatoria desde junio 2026
-      </footer>
+        {/* MÉTRICAS OBJETIVO */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 16, color: '#f8fafc', marginBottom: 16 }}>🎯 Métricas Objetivo (Próximos 30 días)</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+            {data.objetivos.map((o, i) => (
+              <div key={i} style={{ background: '#0f172a', padding: 14, borderRadius: 8 }}>
+                <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 4 }}>{o.metrica}</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: '#f8fafc' }}>
+                  {typeof o.actual === 'number' && typeof o.meta === 'number'
+                    ? `${o.actual} → ${o.meta}`
+                    : `${o.actual} → ${o.meta}`}
+                </div>
+                <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>🛠️ {o.como}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* PROMPT EDITORIAL */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <h2 style={{ margin: 0, fontSize: 16, color: '#f8fafc' }}>✍️ Prompt Editorial del Día</h2>
+            <button onClick={copyPrompt} style={{ padding: '6px 14px', background: copied ? '#059669' : '#4f46e5', color: '#fff', borderRadius: 6, border: 'none', fontSize: 13, cursor: 'pointer' }}>
+              {copied ? '✅ Copiado' : '📋 Copiar'}
+            </button>
+          </div>
+          <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 12 }}>Tema sugerido: <strong style={{ color: '#facc15' }}>{data.temaDelDia}</strong></div>
+          <pre style={{ background: '#0f172a', padding: 16, borderRadius: 8, fontSize: 12, color: '#e2e8f0', whiteSpace: 'pre-wrap', overflowWrap: 'break-word', border: '1px solid #334155', lineHeight: 1.6 }}>
+            {data.promptEditorial}
+          </pre>
+        </div>
+
+        {/* PLAN SEMANAL COMPLETO */}
+        <div style={{ background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 20 }}>
+          <h2 style={{ marginTop: 0, fontSize: 16, color: '#f8fafc', marginBottom: 16 }}>📅 Plan Semanal Completo</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {data.planSemanal.map((p, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#0f172a', padding: '10px 14px', borderRadius: 8, border: data.tareaHoy?.dia === p.dia ? '1px solid #4f46e5' : '1px solid transparent' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: data.tareaHoy?.dia === p.dia ? '#818cf8' : '#64748b', minWidth: 80 }}>{p.dia}</div>
+                <div style={{ flex: 1, fontSize: 13, color: '#e2e8f0' }}>{p.tarea}</div>
+                <div style={{ fontSize: 12, color: '#94a3b8' }}>{p.tiempo}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div style={{ textAlign: 'center', padding: '20px 0', color: '#64748b', fontSize: 12 }}>
+          Reporte generado automáticamente · Se actualiza cada 24 horas
+        </div>
+      </main>
     </div>
   );
 }

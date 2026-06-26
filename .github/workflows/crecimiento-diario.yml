@@ -1,0 +1,29 @@
+name: Reporte de Crecimiento Diario
+
+on:
+  schedule:
+    # Ejecutar todos los días a las 7:00 AM hora Nicaragua (UTC-6)
+    # En UTC eso es 13:00 (1 PM UTC)
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+jobs:
+  generar-reporte:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generar reporte de crecimiento
+        run: |
+          echo "🚀 Solicitando reporte de crecimiento..."
+          HTTP_CODE=$(curl -s -o /tmp/crecimiento.json -w "%{http_code}" \
+            "https://nicaraguainformate.com/api/admin/crecimiento" \
+            -H "Cache-Control: no-cache" \
+            --max-time 60)
+          
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Reporte generado exitosamente"
+            cat /tmp/crecimiento.json | jq '.noticiasExistentes, .diaSemana, .fechaLocal'
+          else
+            echo "❌ Error HTTP $HTTP_CODE al generar reporte"
+            cat /tmp/crecimiento.json || true
+            exit 1
+          fi
