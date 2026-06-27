@@ -1316,6 +1316,7 @@ sin texto ni marcas de agua, composición periodística"
           <div class="header-actions">
             <button class="btn btn-warning" onclick="revertirSensacionalismo()" title="Revertir títulos cambiados de 'fallecidos' a 'muertos' por error"><i class="fas fa-undo-alt"></i><span>Revertir 'muertos'→'fallecidos'</span></button>
             <button class="btn btn-danger" onclick="cargarNoticiasPeligro()"><i class="fas fa-sync-alt"></i><span>Recargar Lista</span></button>
+            <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
           </div>
         </div>
         
@@ -6579,6 +6580,31 @@ VERIFICACIÓN FINAL
       }
       el.style.display = 'block';
       panelImg.style.display = 'block';
+    };
+
+    // ─── ELIMINAR 50 NOTICIAS MÁS VIEJAS ───
+    window.eliminarNoticiasViejas = async function() {
+      if (!confirm('⚠️ ¿Eliminar las 50 noticias más viejas de Firestore? Esta acción NO se puede deshacer.')) return;
+      showLoading(true, 'Eliminando noticias viejas...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/eliminar-viejas?secret=' + encodeURIComponent(secret), { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        showToast(`Se eliminaron ${data.eliminadas} noticias viejas`, 'success');
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl && data.noticias) {
+          logEl.innerHTML += `<div style="color:#f87171;">[${new Date().toLocaleTimeString()}] Eliminadas ${data.eliminadas} noticias:</div>`;
+          data.noticias.forEach(n => {
+            logEl.innerHTML += `<div style="color:#94a3b8; padding-left:12px;">• ${n.titulo} (${n.fecha})</div>`;
+          });
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[eliminarNoticiasViejas]', err);
+      } finally {
+        showLoading(false);
+      }
     };
 
     // Auto-cargar cuando se abre el tab
