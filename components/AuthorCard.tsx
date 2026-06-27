@@ -21,6 +21,25 @@ const DEFAULT_AUTHOR = {
   photo: null,
 };
 
+// Bios profesionales de los 3 autores (E-E-A-T)
+const AUTORES: Record<string, { role: string; bio: string; slug: string }> = {
+  'Keyling Elieth Rivera Muñoz': {
+    role: 'Directora Editorial',
+    bio: 'Periodista nicaragüense con más de 8 años de experiencia. Especialista en sucesos, cobertura comunitaria y periodismo de investigación. Directora editorial y cofundadora de Nicaragua Informate desde 2024. Certificada en periodismo digital y narrativa multimedia.',
+    slug: 'keyling-eliet-rivera-munoz',
+  },
+  'Maycol Josué Nicaragua Rivas': {
+    role: 'Director Técnico y Analista',
+    bio: 'Ingeniero en sistemas computacionales y analista de datos. Director técnico de Nicaragua Informate desde 2024. Encargado de verificación de fuentes digitales, seguridad informática y optimización de plataformas. Especialista en fact-checking y análisis de tendencias informativas.',
+    slug: 'maycol-josue-nicaragua-rivas',
+  },
+  'José Luis López Ramírez': {
+    role: 'Director de Operaciones',
+    bio: 'Ingeniero en redes y especialista en ciberseguridad. Director de operaciones de Nicaragua Informate desde 2024. Gestión de infraestructura tecnológica, protección de datos y continuidad operativa. Experto en optimización de rendimiento web y SEO técnico.',
+    slug: 'jose-luis-lopez-ramirez',
+  },
+};
+
 export default function AuthorCard({
   name,
   photo,
@@ -30,16 +49,16 @@ export default function AuthorCard({
   publishedDate,
   updatedDate,
 }: AuthorCardProps) {
-  const isKeyling = name?.trim() === 'Keyling Elieth Rivera Muñoz';
+  const autorKey = name?.trim() || '';
+  const autorData = AUTORES[autorKey];
+  const isKeyling = autorKey === 'Keyling Elieth Rivera Muñoz';
 
-  const displayName = name?.trim() || DEFAULT_AUTHOR.name;
-  const displayRole = isKeyling ? 'Directora Editorial' : (role?.trim() || DEFAULT_AUTHOR.role);
-  const displayBio = isKeyling 
-    ? 'Directora editorial y cofundadora de Nicaragua Informate. Comprometida con una cobertura responsable, clara y cercana a la audiencia nicaragüense.' 
-    : (bio?.trim() || DEFAULT_AUTHOR.bio);
+  const displayName = autorKey || DEFAULT_AUTHOR.name;
+  const displayRole = autorData?.role || role?.trim() || DEFAULT_AUTHOR.role;
+  const displayBio = autorData?.bio || bio?.trim() || DEFAULT_AUTHOR.bio;
   
   const finalPhoto = isKeyling ? '/keyling-rivera.jpg' : photo;
-  const finalSlug = isKeyling ? 'keyling-eliet-rivera-munoz' : slug;
+  const finalSlug = autorData?.slug || slug;
 
   const hasPhoto = finalPhoto && finalPhoto.trim().length > 0;
   const hasSlug = finalSlug && finalSlug.trim().length > 0;

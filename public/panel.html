@@ -1349,6 +1349,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarSucesos()" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
             <button class="btn btn-primary" style="background: #4f46e5; border-color: #4f46e5;" onclick="limpiarPalabrasSensibles()" title="Revisar todas las noticias y reemplazar palabras sensibles sin tocar estructura"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
             <button class="btn btn-info" style="background: #0891b2; border-color: #0891b2;" onclick="exportarSucesos()" title="Exportar todas las noticias de sucesos para reescritura profesional"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
+            <button class="btn btn-warning" style="background: #d97706; border-color: #d97706;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
           </div>
         </div>
         
@@ -6489,6 +6490,41 @@ VERIFICACIÓN FINAL
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[exportarSucesos]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ─── REDISTRIBUIR AUTORES ───
+    window.redistribuirAutores = async function() {
+      if (!confirm('👥 Esto va a mover 50% de las noticias de Keyling a Maycol y José para balancear la autoría.\n\n¿Continuar?')) return;
+      showLoading(true, 'Redistribuyendo autores...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/redistribuir-autores?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+
+        let msg = data.resumen || ('Redistribuidas: ' + data.redistribuidas);
+        showToast(msg, 'success');
+
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl) {
+          logEl.innerHTML += '<div style="color:#fbbf24;">[' + new Date().toLocaleTimeString() + '] Redistribución de Autores:</div>';
+          logEl.innerHTML += '<div style="color:#fcd34d;padding-left:12px;">' + data.resumen + '</div>';
+          if (data.actualizadas) {
+            data.actualizadas.forEach(function(n) {
+              logEl.innerHTML += '<div style="color:#fde68a;padding-left:24px;">→ ' + n.titulo.substring(0, 50) + '... a ' + n.nuevoAutor + '</div>';
+            });
+          }
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[redistribuirAutores]', err);
       } finally {
         showLoading(false);
       }
