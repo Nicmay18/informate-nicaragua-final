@@ -10,6 +10,7 @@ const PALABRAS_IRREPARABLES = [
   'asesinato','asesinado','asesinada','asesinos','asesinados','asesinadas',
   'homicidio','homicida','homicidios',
   'cuerpo hallado','cuerpo de','hallazgo de cuerpo','restos humanos',
+  'hallan cuerpo','hallaron cuerpo','encontraron cuerpo','cuerpo fue hallado',
   'violacion','violada','violaron','violador','agresion sexual',
   'secuestro','secuestrado','secuestrada','plagiado','plagiada',
   'tortura','torturado','torturada','mutilado','mutilada',
@@ -23,10 +24,14 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
   'muertos': 'afectados',
   'muerta': 'afectada',
   'muertas': 'afectadas',
+  'muere': 'resulta afectado',
+  'mueren': 'resultan afectados',
   'fallecido': 'afectado',
   'fallecidos': 'afectados',
   'fallecida': 'afectada',
   'fallecidas': 'afectadas',
+  'fallece': 'resulta afectado',
+  'fallecen': 'resultan afectados',
   'siniestro': 'incidente',
   'siniestros': 'incidentes',
   'sangriento': 'grave',
@@ -41,6 +46,10 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
   'asesinada': 'víctima fatal',
   'cuerpo': 'persona',
   'cadáver': 'persona fallecida',
+  'fatal': 'grave',
+  'cobre vida': 'afecta',
+  'a tiros': 'con violencia',
+  'tiroteo': 'incidente armado',
 };
 
 const RECURSOS_SUCESOS = `
