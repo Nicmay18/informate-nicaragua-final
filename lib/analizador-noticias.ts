@@ -385,7 +385,6 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const blockquotes2 = (noticia.contenido.match(/<blockquote>/gi) || []).length;
   const tituloLen = (noticia.titulo || '').length;
   const resumenLen = (noticia.resumen || '').length;
-  const tieneImagen = !!(noticia.imagen && noticia.imagen.length > 0) || !!(noticia.imagenDestacada && noticia.imagenDestacada.length > 0);
 
   // Detectar atribuciones en texto plano (no solo blockquotes)
   const textoLower = textoPlano.toLowerCase();
