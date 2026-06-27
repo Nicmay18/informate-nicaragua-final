@@ -44,13 +44,14 @@ const TRENDS = [
   { label: 'Costa Caribe', href: '/buscar?q=costa+caribe' },
 ];
 
+// Orden: guias/nacionales primero, sucesos AL FINAL (< 30% visible)
 const CATEGORIES = [
-  { name: 'Sucesos', slug: 'sucesos', color: 'sucesos' },
   { name: 'Nacionales', slug: 'nacionales', color: 'nacionales' },
-  { name: 'Espectáculos', slug: 'espectaculos', color: 'espectaculos' },
-  { name: 'Deportes', slug: 'deportes', color: 'deportes' },
-  { name: 'Tecnología', slug: 'tecnologia', color: 'tecnologia' },
   { name: 'Internacionales', slug: 'internacionales', color: 'internacionales' },
+  { name: 'Tecnología', slug: 'tecnologia', color: 'tecnologia' },
+  { name: 'Deportes', slug: 'deportes', color: 'deportes' },
+  { name: 'Espectáculos', slug: 'espectaculos', color: 'espectaculos' },
+  { name: 'Sucesos', slug: 'sucesos', color: 'sucesos' },
 ];
 
 // Precalcular lookup de categoría → slug (evita normalize en cada render)
@@ -438,6 +439,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
   const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
 
   // Categorías — usar RESTO (noticias fuera del carrusel) para evitar duplicación
+  // Sucesos limitado a 3 (menos del 30% del contenido visible)
   const porCategoria = useMemo(() => {
     const map: Record<string, Noticia[]> = {};
     CATEGORIES.forEach(c => { map[c.slug] = []; });
@@ -445,7 +447,10 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
       const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
       if (slug && map[slug]) map[slug].push(n);
     }
-    CATEGORIES.forEach(c => { map[c.slug] = map[c.slug].slice(0, 6); });
+    CATEGORIES.forEach(c => {
+      const limit = c.slug === 'sucesos' ? 3 : 6;
+      map[c.slug] = map[c.slug].slice(0, limit);
+    });
     return map;
   }, [resto]);
 
@@ -604,6 +609,27 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
                 <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
               ))}
             </ul>
+          </div>
+
+          {/* RECURSOS ÚTILES — visible para AdSense y E-E-A-T */}
+          <div className="ni-sidebar__widget" style={{ background: '#fef3c7', border: '1px solid #fbbf24', borderRadius: 10, padding: 16 }}>
+            <h3 className="ni-sidebar__title" style={{ color: '#92400e', marginBottom: 12 }}>📞 Recursos Útiles</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 13, lineHeight: 2 }}>
+              <li><strong>118</strong> — Policía Nacional (emergencias)</li>
+              <li><strong>128</strong> — Cruz Roja (ambulancias)</li>
+              <li><strong>115</strong> — Bomberos Unidos</li>
+              <li><strong>133</strong> — INSS (información)</li>
+            </ul>
+            <NoPrefetchLink href="/contacto" style={{ display: 'inline-block', marginTop: 10, fontSize: 12, fontWeight: 600, color: '#92400e' }}>¿Cómo denunciar? →</NoPrefetchLink>
+          </div>
+
+          {/* Sobre nosotros — resumen */}
+          <div className="ni-sidebar__widget" style={{ background: '#f3f4f6', borderRadius: 10, padding: 16 }}>
+            <h3 className="ni-sidebar__title" style={{ marginBottom: 8 }}>Sobre Nicaragua Informate</h3>
+            <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>
+              Medio digital independiente con cobertura nacional. Periodismo verificado, contexto local y recursos útiles para nicaragüenses.
+            </p>
+            <NoPrefetchLink href="/nosotros" style={{ display: 'inline-block', marginTop: 8, fontSize: 12, fontWeight: 600, color: '#991b1b' }}>Conocé más →</NoPrefetchLink>
           </div>
 
           {/* Newsletter */}
