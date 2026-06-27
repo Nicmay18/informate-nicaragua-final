@@ -1348,6 +1348,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
             <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarSucesos()" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
             <button class="btn btn-primary" style="background: #4f46e5; border-color: #4f46e5;" onclick="limpiarPalabrasSensibles()" title="Revisar todas las noticias y reemplazar palabras sensibles sin tocar estructura"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
+            <button class="btn btn-info" style="background: #0891b2; border-color: #0891b2;" onclick="exportarSucesos()" title="Exportar todas las noticias de sucesos para reescritura profesional"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
           </div>
         </div>
         
@@ -6456,6 +6457,38 @@ VERIFICACIÓN FINAL
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[limpiarPalabrasSensibles]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ─── EXPORTAR NOTICIAS DE SUCESOS ───
+    window.exportarSucesos = async function() {
+      showLoading(true, 'Exportando noticias de sucesos...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/exportar-sucesos?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+
+        // Mostrar en un textarea para copiar
+        const win = window.open('', '_blank');
+        win.document.write('<!DOCTYPE html><html><head><title>Exportar Sucesos</title><style>body{font-family:monospace;padding:20px;background:#1e1e1e;color:#d4d4d4}textarea{width:100%;height:90vh;font-family:monospace;font-size:11px;background:#252526;color:#d4d4d4;border:1px solid #3c3c3c;padding:10px}h2{color:#fff}</style></head><body>');
+        win.document.write('<h2>Noticias de Sucesos - Copiar y pegar en el chat de Cascade</h2>');
+        win.document.write('<p>Total: ' + data.total + ' noticias | Copiá todo el texto y pegalo en el chat para que Cascade las reescriba profesionalmente.</p>');
+        win.document.write('<textarea id="export">' + data.textoExportado.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</textarea>');
+        win.document.write('<scr' + 'ipt>document.getElementById("export").select();</scr' + 'ipt>');
+        win.document.write('</body></html>');
+        win.document.close();
+
+        showToast('Exportadas: ' + data.total + ' noticias. Nueva ventana abierta.', 'success');
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[exportarSucesos]', err);
       } finally {
         showLoading(false);
       }
