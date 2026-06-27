@@ -47,6 +47,7 @@ export interface ResultadoAnalisis {
     cadencia_oraciones: number;
     simetria_h2: number;
     exceso_enumerativo: number;
+    h2_repetidos: number;
   };
   filtros: {
     oro: FiltroResultado;
@@ -241,6 +242,15 @@ function detectarMetricasIA(texto: string) {
     simetriaH2 = 1 - Math.min(varH / (meanH + 1), 1);
   }
 
+  // Detectar H2s repetidos exactos (patrón clásico de IA en bucle)
+  const h2Texts = h2s.map(h => {
+    const m = h.match(/<h2[^>]*>(.*?)<\/h2>/i);
+    return m ? m[1].trim().toLowerCase().replace(/\s+/g, ' ') : '';
+  }).filter(t => t.length > 0);
+  const h2Counts = new Map<string, number>();
+  for (const t of h2Texts) h2Counts.set(t, (h2Counts.get(t) || 0) + 1);
+  const h2Repetidos = Array.from(h2Counts.values()).filter(c => c > 1).reduce((a, b) => a + b, 0);
+
   const enumerativos = (texto.match(/(primero|segundo|tercero|cuarto|en primer lugar|en segundo lugar)/gi) || []).length;
 
   return {
@@ -249,6 +259,7 @@ function detectarMetricasIA(texto: string) {
     cadencia_oraciones: cadencia,
     simetria_h2: simetriaH2,
     exceso_enumerativo: Math.min(enumerativos / 3, 1),
+    h2_repetidos: h2Repetidos,
   };
 }
 
@@ -303,11 +314,12 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const cierreGenerico = detectarCierreGenerico(noticia.contenido);
   const aiMetrics = detectarMetricasIA(noticia.contenido);
   const aiIndex = (
-    aiMetrics.repeticion_verbos * 0.2 +
-    (1 - aiMetrics.simetria_parrafos) * 0.3 +
-    (1 - aiMetrics.cadencia_oraciones) * 0.2 +
+    aiMetrics.repeticion_verbos * 0.15 +
+    (1 - aiMetrics.simetria_parrafos) * 0.25 +
+    (1 - aiMetrics.cadencia_oraciones) * 0.15 +
     (1 - aiMetrics.simetria_h2) * 0.1 +
-    aiMetrics.exceso_enumerativo * 0.2
+    aiMetrics.exceso_enumerativo * 0.15 +
+    Math.min(aiMetrics.h2_repetidos / 3, 1.0) * 0.2
   );
   const aiRiskScoreMetrics = Math.max(0, Math.min(100, 100 - (aiIndex * 100)));
 
@@ -352,6 +364,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
 
   // H. Cierre genérico (penalización)
   if (cierreGenerico) scoreTotal -= 10;
+
+  // H2. H2s repetidos — patrón de IA en bucle (penalización severa)
+  if (aiMetrics.h2_repetidos > 0) scoreTotal -= 15;
 
   // I. Métricas IA mejoradas (bonus/penalización)
   if (aiRiskScoreMetrics >= 80) scoreTotal += 5;
@@ -408,7 +423,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   //   BRONCE:   4-5/8 checks
   //   RECHAZADO: <4/8 checks O atribuciones falsas
 
-  const esRechazado = atribucionesFalsas || checksOK < 4;
+  const esRechazado = atribucionesFalsas || checksOK < 4 || aiMetrics.h2_repetidos > 0;
   const esForense = checksOK === 8 &&
     scoreTotal >= 70 &&
     !atribucionesFalsas &&
@@ -959,7 +974,33 @@ function analizarFiltroAIRisk(n: NoticiaInput): FiltroResultado {
     });
   }
 
-  // 4. ESTRUCTURA H2 SIMÉTRICA (mismos tipos de contenido por sección)
+  // 4. H2s REPETIDOS EXACTOS (patrón de IA en bucle)
+  const h2MatchesDup = n.contenido.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
+  const h2TextsDup = h2MatchesDup.map(h => {
+    const m = h.match(/<h2[^>]*>(.*?)<\/h2>/i);
+    return m ? m[1].trim().toLowerCase().replace(/\s+/g, ' ') : '';
+  }).filter(t => t.length > 0);
+  const h2CountsDup = new Map<string, number>();
+  for (const t of h2TextsDup) h2CountsDup.set(t, (h2CountsDup.get(t) || 0) + 1);
+  const dupH2s = Array.from(h2CountsDup.entries()).filter(([, c]) => c > 1);
+  const totalDupH2s = dupH2s.reduce((sum, [, c]) => sum + c, 0);
+  if (dupH2s.length > 0) {
+    checks.push({
+      nombre: 'H2s repetidos exactos',
+      estado: 'FAIL',
+      mensaje: 'RECHAZADO: ' + dupH2s.length + ' subtítulo(s) repetido(s) exactamente (' + totalDupH2s + ' ocurrencias): ' + dupH2s.map(([t, c]) => '"' + t + '" (' + c + 'x)').join(', ') + '. Cada H2 debe ser único.',
+      valorActual: totalDupH2s,
+      valorEsperado: 0,
+    });
+  } else {
+    checks.push({
+      nombre: 'H2s repetidos exactos',
+      estado: 'PASS',
+      mensaje: 'Sin subtítulos repetidos.',
+    });
+  }
+
+  // 5. ESTRUCTURA H2 SIMÉTRICA (mismos tipos de contenido por sección)
   const h2Matches = n.contenido.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
   if (h2Matches.length >= 3) {
     const h2Textos = h2Matches.map(h => h.replace(/<[^>]*>/g, '').trim().toLowerCase());
