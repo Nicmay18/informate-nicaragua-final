@@ -6285,6 +6285,7 @@ VERIFICACIÓN FINAL
         html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Cadencia:</strong> ' + (data.aiMetrics.cadencia_oraciones * 100).toFixed(1) + '%</div>';
         html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Simetría H2:</strong> ' + (data.aiMetrics.simetria_h2 * 100).toFixed(1) + '%</div>';
         html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Enumerativos:</strong> ' + (data.aiMetrics.exceso_enumerativo * 100).toFixed(1) + '%</div>';
+        html += '<div style="background:' + (data.aiMetrics.h2_repetidos > 0 ? '#fee2e2' : '#fff') + ';border-radius:4px;padding:6px;"><strong>H2s repetidos:</strong> ' + (data.aiMetrics.h2_repetidos || 0) + (data.aiMetrics.h2_repetidos > 0 ? ' ❌' : ' ✅') + '</div>';
         html += '</div></div>';
       }
 
