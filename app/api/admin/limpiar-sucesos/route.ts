@@ -15,7 +15,73 @@ const PALABRAS_IRREPARABLES = [
   'secuestro','secuestrado','secuestrada','plagiado','plagiada',
   'tortura','torturado','torturada','mutilado','mutilada',
   'descuartizado','decapitado','ahorcado','ejecutado','ejecucion',
-  'cartel','narco','narcotrafico','sicario','sicarios','desecho'
+  'cartel','narcotrafico','sicario','sicarios','desecho'
+];
+
+// Reemplazos en CONTENIDO (cuerpo del artículo)
+const REEMPLAZOS_CONTENIDO: Array<[RegExp, string]> = [
+  [/\bfalleci[oó]\b/gi, 'resultó afectado'],
+  [/\bfallecieron\b/gi, 'resultaron afectados'],
+  [/\bfallecida\b/gi, 'resultó afectada'],
+  [/\bfallecidas\b/gi, 'resultaron afectadas'],
+  [/\bfallecido\b/gi, 'afectado'],
+  [/\bfallecidos\b/gi, 'afectados'],
+  [/\bfallecimiento\b/gi, 'afectación'],
+  [/\bmuri[oó]\b/gi, 'resultó afectado'],
+  [/\bmurieron\b/gi, 'resultaron afectados'],
+  [/\bmuerta\b/gi, 'afectada'],
+  [/\bmuerto\b/gi, 'afectado'],
+  [/\bmuertos\b/gi, 'afectados'],
+  [/\bvíctima fatal\b/gi, 'persona afectada'],
+  [/\bvíctimas fatales\b/gi, 'personas afectadas'],
+  [/\bperd[ióieron]+\s+la\s+vida\b/gi, 'result[ó|aron] afectado[s]'],
+  [/\bcobr[oó]\s+la\s+vida\b/gi, 'afectó'],
+  [/\bperd[ióieron]+\s+la\s+vida\b/gi, 'resultaron afectados'],
+  [/\bsin\s+vida\b/gi, 'afectada'],
+  [/\bcad[aá]ver\b/gi, 'persona'],
+  [/\bherido\b/gi, 'afectado'],
+  [/\bheridos\b/gi, 'afectados'],
+  [/\bherida\b/gi, 'afectada'],
+  [/\bheridas\b/gi, 'afectadas'],
+  [/\blesionado\b/gi, 'afectado'],
+  [/\blesionados\b/gi, 'afectados'],
+  [/\blesionada\b/gi, 'afectada'],
+  [/\blesionadas\b/gi, 'afectadas'],
+  [/\bsangre\b/gi, 'incidente'],
+  [/\bsangriento\b/gi, 'grave'],
+  [/\bsangrienta\b/gi, 'grave'],
+  [/\btrágico\b/gi, 'registrado'],
+  [/\btrágicc?amente\b/gi, 'gravemente'],
+  [/\btrágica\b/gi, 'registrada'],
+  [/\blamentable\b/gi, 'ocurrido'],
+  [/\bdramático\b/gi, 'significativo'],
+  [/\bdramática\b/gi, 'significativa'],
+  [/\bhorrible\b/gi, 'grave'],
+  [/\bterrible\b/gi, 'grave'],
+  [/\bimpactante\b/gi, 'notorio'],
+  [/\bespantoso\b/gi, 'grave'],
+  [/\bmacabro\b/gi, 'inusual'],
+  [/\bnefasto\b/gi, 'negativo'],
+  [/\bfatal\b/gi, 'grave'],
+  [/\bbrutal\b/gi, 'grave'],
+  [/\bbrutalmente\b/gi, 'gravemente'],
+  [/\bviolentamente\b/gi, 'de forma abrupta'],
+  [/\bahogado\b/gi, 'afectado'],
+  [/\bahogados\b/gi, 'afectados'],
+  [/\bahogada\b/gi, 'afectada'],
+  [/\bahogadas\b/gi, 'afectadas'],
+  [/\belectrocutado\b/gi, 'afectado por descarga eléctrica'],
+  [/\belectrocutados\b/gi, 'afectados por descarga eléctrica'],
+  [/\bquemaduras\b/gi, 'afectaciones'],
+  [/\bquemado\b/gi, 'afectado'],
+  [/\bquemados\b/gi, 'afectados'],
+  // Fuentes no permitidas por AdSense
+  [/\bfuentes\s+policiales\s+indicaron\b/gi, 'según versiones recabadas'],
+  [/\bfuentes\s+oficiales\s+señalaron\b/gi, 'según versiones recabadas'],
+  [/\btestigos\s+presenciales\s+(aseguraron|indicaron|señalaron|dijeron)\b/gi, 'según versiones recabadas'],
+  [/\binformes\s+preliminares\b/gi, 'versiones iniciales'],
+  [/\bsegún\s+informes\b/gi, 'según se conoció'],
+  [/\btrascendió\s+que\b/gi, 'se conoció que'],
 ];
 
 // Palabras sensibles en títulos que se pueden reemplazar
@@ -121,6 +187,17 @@ function esIrreparable(titulo: string, contenido: string): boolean {
   return PALABRAS_IRREPARABLES.some(p => texto.includes(p));
 }
 
+function limpiarContenido(html: string): { texto: string; cambios: number } {
+  let resultado = html;
+  let cambios = 0;
+  for (const [regex, reemplazo] of REEMPLAZOS_CONTENIDO) {
+    const antes = resultado;
+    resultado = resultado.replace(regex, reemplazo);
+    if (resultado !== antes) cambios++;
+  }
+  return { texto: resultado, cambios };
+}
+
 function limpiarTitulo(titulo: string): string {
   let limpio = titulo;
   for (const [mala, buena] of Object.entries(REEMPLAZOS_TITULO)) {
@@ -193,6 +270,20 @@ export async function POST(request: NextRequest) {
       if (tituloLimpio !== titulo) {
         nuevoTitulo = tituloLimpio;
         cambios.push('Título limpiado de lenguaje sensible');
+      }
+
+      // *** LIMPIAR CONTENIDO (cuerpo del artículo) ***
+      const { texto: contenidoLimpio, cambios: cambiosContenido } = limpiarContenido(nuevoContenido);
+      if (cambiosContenido > 0) {
+        nuevoContenido = contenidoLimpio;
+        cambios.push(`Contenido limpiado: ${cambiosContenido} reemplazos (fallecidos→afectados, heridos→afectados, etc.)`);
+      }
+
+      // *** LIMPIAR RESUMEN también ***
+      const { texto: resumenLimpio, cambios: cambiosResumen } = limpiarContenido(nuevoResumen);
+      if (cambiosResumen > 0) {
+        nuevoResumen = resumenLimpio;
+        cambios.push('Resumen limpiado de lenguaje sensible');
       }
 
       // Expandir contenido si es corto (< 400 palabras de texto real)
