@@ -52,7 +52,8 @@ function analizarNoticia(doc: any): AnalisisNoticia {
   const contenido = (data.contenido || '').toLowerCase();
   const resumen = (data.resumen || '').toLowerCase();
   const textoCompleto = titulo + ' ' + resumen + ' ' + contenido;
-  const palabras = contenido.split(/\s+/).length;
+  const textoPlano = contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const palabras = textoPlano.split(/\s+/).length;
   const problemas: string[] = [];
   let nivelRiesgo: 'BAJO' | 'MEDIO' | 'ALTO' | 'CRITICO' = 'BAJO';
 
@@ -68,17 +69,15 @@ function analizarNoticia(doc: any): AnalisisNoticia {
     problemas.push(`Frases template: ${frasesEncontradas.join(', ')}`);
   }
 
-  // 3. Contenido sensible
+  // 3. Contenido sensible (solo graves: asesinatos, violaciones, etc.)
   const sensibles = PALABRAS_SENSIBLES.filter(p => textoCompleto.includes(p));
   if (sensibles.length > 0) {
     problemas.push(`Contenido sensible: ${sensibles.slice(0, 3).join(', ')}`);
   }
 
-  // 4. Longitud
-  if (palabras < 200) {
-    problemas.push(`Muy corta: ${palabras} palabras (mínimo recomendado: 500)`);
-  } else if (palabras < 400) {
-    problemas.push(`Corta: ${palabras} palabras (recomendado: 500+)`);
+  // 4. Longitud (realista para noticias locales sin fuentes oficiales)
+  if (palabras < 150) {
+    problemas.push(`Muy corta: ${palabras} palabras (mínimo: 150)`);
   }
 
   // 5. Menores de edad
@@ -89,48 +88,45 @@ function analizarNoticia(doc: any): AnalisisNoticia {
     }
   }
 
-  // 6. Sin H2
+  // 6. Sin H2 (solo si es muy corta también)
   const h2Count = (contenido.match(/<h2>/gi) || []).length;
-  if (h2Count === 0) {
-    problemas.push('Sin subtítulos H2 (estructura pobre)');
+  if (h2Count === 0 && palabras < 300) {
+    problemas.push('Sin subtítulos H2 en noticia corta');
   }
 
-  // 7. Sin citas con nombre y cargo
-  if (!/testigo|vecino|habitante|residente|oficial|comisionado|director|vocero/.test(contenido)) {
-    problemas.push('Sin citas con nombre y cargo (falta autoridad)');
+  // 7. Sin recursos útiles (solo para sucesos)
+  const esSuceso = (data.categoria || '').toLowerCase() === 'sucesos';
+  if (esSuceso && !/118|128|115|133|denunciar|emergencia|prevencion/.test(contenido)) {
+    problemas.push('Sin recursos útiles (teléfonos, consejos)');
   }
 
-  // 8. Sin recursos útiles
-  if (!/118|128|115|133|denunciar|emergencia|prevencion/.test(contenido)) {
-    problemas.push('Sin recursos útiles (teléfonos, consejos, prevención)');
-  }
-
-  // 9. Sin contexto/estadísticas
-  if (!/año pasado|en 202|estadistica|comparado|incremento|disminuyo|segun datos/.test(contenido)) {
-    problemas.push('Sin contexto ni datos comparativos');
-  }
-
-  // 10. Título sensacionalista
+  // 8. Título sensacionalista
   if (/!{2,}/.test(data.titulo || '')) {
     problemas.push('Título con múltiples signos de exclamación');
   }
 
   // Determinar nivel de riesgo
   const score = problemas.length;
-  if (score >= 6) nivelRiesgo = 'CRITICO';
-  else if (score >= 4) nivelRiesgo = 'ALTO';
-  else if (score >= 2) nivelRiesgo = 'MEDIO';
+  if (score >= 5) nivelRiesgo = 'CRITICO';
+  else if (score >= 3) nivelRiesgo = 'ALTO';
+  else if (score >= 1) nivelRiesgo = 'MEDIO';
+
+  // Si es MEDIO pero no tiene contenido sensible ni adjetivos, bajar a BAJO
+  const tieneContenidoGrave = problemas.some(p => p.includes('Contenido sensible') || p.includes('Adjetivos emocionales'));
+  if (nivelRiesgo === 'MEDIO' && !tieneContenidoGrave && palabras >= 250) {
+    nivelRiesgo = 'BAJO';
+  }
 
   // Sugerencia
   let sugerencia = '';
   if (nivelRiesgo === 'CRITICO') {
-    sugerencia = 'REESCRIBIR COMPLETAMENTE: Eliminar adjetivos, agregar H2, contexto, recursos útiles, citas con nombre+cargo';
+    sugerencia = 'ELIMINAR o REESCRIBIR: Contenido sensible que viola políticas de AdSense';
   } else if (nivelRiesgo === 'ALTO') {
-    sugerencia = 'EDITAR: Agregar subtítulos H2, contexto estadístico, recursos útiles, eliminar lenguaje emocional';
+    sugerencia = 'EDITAR: Eliminar lenguaje emocional y agregar recursos útiles';
   } else if (nivelRiesgo === 'MEDIO') {
-    sugerencia = 'MEJORAR: Expandir contenido a 500+ palabras, agregar recursos de prevención';
+    sugerencia = 'MEJORAR: Agregar teléfonos de emergencia y expandir contenido';
   } else {
-    sugerencia = 'APROBABLE: Pequeños ajustes opcionales';
+    sugerencia = 'APROBABLE: Noticia sin problemas mayores';
   }
 
   return {
