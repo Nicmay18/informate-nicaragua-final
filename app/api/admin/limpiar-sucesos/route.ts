@@ -110,7 +110,7 @@ function esIrreparable(titulo: string, contenido: string): boolean {
 function limpiarTitulo(titulo: string): string {
   let limpio = titulo;
   for (const [mala, buena] of Object.entries(REEMPLAZOS_TITULO)) {
-    const regex = new RegExp('\\\\b' + mala + '\\\\b', 'gi');
+    const regex = new RegExp('\\b' + mala + '\\b', 'gi');
     limpio = limpio.replace(regex, buena);
   }
   // Eliminar signos de exclamación múltiples
