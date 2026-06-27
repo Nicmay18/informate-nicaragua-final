@@ -133,6 +133,83 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
 function limpiarContenido(html: string): { texto: string; cambios: number } {
   let resultado = html;
   let cambios = 0;
+
+  // Reemplazos LITERALES simples (sin regex, garantizado)
+  const LITERALES: Array<[string, string]> = [
+    ['siniestra', 'grave'],
+    ['siniestro', 'incidente'],
+    ['siniestros', 'incidentes'],
+    ['siniestras', 'incidentes'],
+    ['calcina', 'afecta'],
+    ['calcinaron', 'afectaron'],
+    ['calcinado', 'afectado'],
+    ['calcinados', 'afectados'],
+    ['fatal', 'grave'],
+    ['fatales', 'graves'],
+    ['violento', 'grave'],
+    ['violentos', 'graves'],
+    ['violenta', 'grave'],
+    ['violentas', 'graves'],
+    ['sangriento', 'grave'],
+    ['sangrienta', 'grave'],
+    ['herido', 'afectado'],
+    ['heridos', 'afectados'],
+    ['herida', 'afectada'],
+    ['heridas', 'afectadas'],
+    ['lesionado', 'afectado'],
+    ['lesionados', 'afectados'],
+    ['lesionada', 'afectada'],
+    ['lesionadas', 'afectadas'],
+    ['fallecido', 'afectado'],
+    ['fallecidos', 'afectados'],
+    ['fallecida', 'afectada'],
+    ['fallecidas', 'afectadas'],
+    ['fallecimiento', 'afectación'],
+    ['muerto', 'afectado'],
+    ['muertos', 'afectados'],
+    ['muerta', 'afectada'],
+    ['muertas', 'afectadas'],
+    ['trágico', 'registrado'],
+    ['trágica', 'registrada'],
+    ['lamentable', 'ocurrido'],
+    ['dramático', 'significativo'],
+    ['dramática', 'significativa'],
+    ['horrible', 'grave'],
+    ['terrible', 'grave'],
+    ['impactante', 'notorio'],
+    ['espantoso', 'grave'],
+    ['macabro', 'inusual'],
+    ['nefasto', 'negativo'],
+    ['brutal', 'grave'],
+    ['brutalmente', 'gravemente'],
+    ['violentamente', 'de forma abrupta'],
+    ['ahogado', 'afectado'],
+    ['ahogados', 'afectados'],
+    ['ahogada', 'afectada'],
+    ['ahogadas', 'afectadas'],
+    ['quemaduras', 'afectaciones'],
+    ['quemado', 'afectado'],
+    ['quemados', 'afectados'],
+    ['quemada', 'afectada'],
+    ['quemadas', 'afectadas'],
+    ['electrocutado', 'afectado por descarga eléctrica'],
+    ['electrocutados', 'afectados por descarga eléctrica'],
+    ['cadáver', 'persona'],
+    ['occiso', 'persona'],
+    ['occisos', 'personas'],
+    ['víctima', 'persona afectada'],
+    ['víctimas', 'personas afectadas'],
+    ['autoridades investigan', 'Nicaragua Informate intentó obtener versión oficial'],
+  ];
+
+  for (const [mala, buena] of LITERALES) {
+    const antes = resultado;
+    resultado = resultado.split(mala).join(buena);
+    resultado = resultado.split(mala.charAt(0).toUpperCase() + mala.slice(1)).join(buena.charAt(0).toUpperCase() + buena.slice(1));
+    if (resultado !== antes) cambios++;
+  }
+
+  // Regex para frases y variantes con tildes/acentos
   for (const [regex, reemplazo] of REEMPLAZOS) {
     const antes = resultado;
     resultado = resultado.replace(regex, reemplazo);
