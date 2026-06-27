@@ -1347,6 +1347,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-danger" onclick="cargarNoticiasPeligro()"><i class="fas fa-sync-alt"></i><span>Recargar Lista</span></button>
             <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
             <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarSucesos()" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
+            <button class="btn btn-primary" style="background: #4f46e5; border-color: #4f46e5;" onclick="limpiarPalabrasSensibles()" title="Revisar todas las noticias y reemplazar palabras sensibles sin tocar estructura"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
           </div>
         </div>
         
@@ -6421,6 +6422,40 @@ VERIFICACIÓN FINAL
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[limpiarSucesos]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ─── LIMPIAR PALABRAS SENSIBLES EN TODAS LAS NOTICIAS ───
+    window.limpiarPalabrasSensibles = async function() {
+      if (!confirm('🔍 Esto va a revisar TODAS las noticias (incluyendo las ya mejoradas) y reemplazar palabras sensibles en título, contenido y resumen.\n\nNO elimina noticias.\nNO agrega contexto genérico.\nSolo limpia palabras.\n\n¿Continuar?')) return;
+      showLoading(true, 'Revisando palabras sensibles en todas las noticias...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/limpiar-palabras-sensibles?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+
+        let msg = 'Revisadas: ' + (data.totalRevisadas || 0) + ' | Procesadas: ' + (data.procesadas?.cantidad || 0) + ' | Sin cambios: ' + (data.sinCambios?.cantidad || 0);
+        showToast(msg, 'success');
+
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl) {
+          logEl.innerHTML += '<div style="color:#818cf8;">[' + new Date().toLocaleTimeString() + '] Limpieza de Palabras Sensibles:</div>';
+          if (data.procesadas?.noticias) {
+            data.procesadas.noticias.forEach((n) => {
+              logEl.innerHTML += '<div style="color:#a5b4fc;padding-left:12px;">✏️ ' + n.titulo + ' → ' + n.cambios.join(', ') + '</div>';
+            });
+          }
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[limpiarPalabrasSensibles]', err);
       } finally {
         showLoading(false);
       }
