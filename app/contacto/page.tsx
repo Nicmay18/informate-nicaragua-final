@@ -28,7 +28,7 @@ export default function ContactoPage() {
   return (
     <LegalPageShell title="Contacto">
       <p style={{ color: '#475569', marginBottom: '1.25rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
-        ¿Tienes una noticia, sugerencia, denuncia ciudadana o consulta? Estamos aquí para escucharte.
+        ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte.
         En <strong style={{ color: '#0f172a' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
       </p>
       <p style={{ color: '#475569', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
@@ -38,7 +38,7 @@ export default function ContactoPage() {
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>
         <div style={{ background: 'rgba(140,29,24,0.1)', border: '1px solid rgba(140,29,24,0.2)', borderRadius: 8, padding: '12px 16px', marginBottom: '1rem' }}>
           <p style={{ margin: 0, color: '#8c1d18', fontSize: '0.85rem', lineHeight: 1.5 }}>
-            <strong>Nota importante:</strong> Nicaragua Informate es un medio de comunicación independiente. No somos una entidad gubernamental ni institución pública. No emitimos documentos oficiales ni certificaciones.
+            <strong>Nota importante:</strong> Nicaragua Informate es un medio digital de información. Para denuncias y emergencias, contacta directamente a las instituciones competentes. No emitimos documentos oficiales ni certificaciones.
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: '1rem' }}>
