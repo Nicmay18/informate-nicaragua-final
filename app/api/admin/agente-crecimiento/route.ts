@@ -42,13 +42,15 @@ async function yaDistribuido(
   const snap = await db
     .collection('distribuciones')
     .where('slug', '==', slug)
-    .where(`resultados.${canal}.ok`, '==', true)
-    .orderBy('fecha', 'desc')
-    .limit(1)
+    .limit(20)
     .get();
 
-  if (snap.empty) return false;
-  const fecha = snap.docs[0].data().fecha;
+  const docs = snap.docs
+    .filter((d: any) => d.data().resultados?.[canal]?.ok === true)
+    .sort((a: any, b: any) => new Date(b.data().fecha || 0).getTime() - new Date(a.data().fecha || 0).getTime());
+
+  if (docs.length === 0) return false;
+  const fecha = docs[0].data().fecha;
   return fecha && new Date(fecha) > desde;
 }
 
