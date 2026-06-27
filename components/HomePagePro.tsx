@@ -616,7 +616,7 @@ export default function HomePagePro({ noticias, masLeidas, populares = [], isNot
             <h3 className="ni-sidebar__title" style={{ color: '#92400e', marginBottom: 12 }}>📞 Recursos Útiles</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 13, lineHeight: 2 }}>
               <li><strong>118</strong> — Policía Nacional (emergencias)</li>
-              <li><strong>128</strong> — Cruz Roja (ambulancias)</li>
+              <li><strong>128</strong> — Cruz Blanca (ambulancias)</li>
               <li><strong>115</strong> — Bomberos Unidos</li>
               <li><strong>133</strong> — INSS (información)</li>
             </ul>

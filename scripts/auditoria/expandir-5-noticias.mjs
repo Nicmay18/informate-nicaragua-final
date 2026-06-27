@@ -23,7 +23,7 @@ const noticias = [
 
 En el kilómetro 27 de la carretera vieja a León, en Villa El Carmen, Managua, falleció Yorlan Francisco Sáenz Rivera, de 27 años, tras una colisión frontal entre un vehículo liviano y una motocicleta. El impacto ocurrió en horas de la tarde cuando el vehículo invadió el carril contrario.
 
-El conductor de la motocicleta, Juan José Urbina Miranda, de 21 años, sufrió fracturas expuestas en ambas extremidades. Su acompañante, Elena Gabriela Noguera Gómez, de 19 años, presentó lesiones múltiples y fue trasladada de emergencia al Hospital Alemán Nicaragüense por unidades de la Cruz Roja. Ambos fueron evaluados por médicos del servicio de urgencias.
+El conductor de la motocicleta, Juan José Urbina Miranda, de 21 años, sufrió fracturas expuestas en ambas extremidades. Su acompañante, Elena Gabriela Noguera Gómez, de 19 años, presentó lesiones múltiples y fue trasladada de emergencia al Hospital Alemán Nicaragüense por unidades de la Cruz Blanca. Ambos fueron evaluados por médicos del servicio de urgencias.
 
 En la comunidad Guayabo Coperna, en Siuna, Caribe Norte, un vuelco de camioneta dejó como resultado la muerte de Ariel Chavarría. El vehículo salió de la vía en una curva pronunciada del camino rural y cayó a una pendiente de aproximadamente 15 metros. El conductor perdió el control debido al exceso de velocidad y al mal estado de la carretera, según testigos.
 
@@ -103,7 +103,7 @@ Equipos de rescate de los departamentos de bomberos y policía trabajan en la re
 
 El gobernador de Oklahoma, Kevin Stitt, declaró estado de emergencia para facilitar la llegada de recursos federales y el despliegue de la Guardia Nacional en tareas de seguridad y apoyo a las comunidades afectadas. Se habilitaron tres centros de evacuación en Oklahoma City para albergar a familias desplazadas.
 
-Hospitales de la zona reportaron el ingreso de al menos 18 personas con fracturas, lesiones por escombros y crisis nerviosas. Ninguno de los heridos se encuentra en estado crítico, según reportes médicos. Organizaciones de ayuda como la Cruz Roja habilitaron refugios temporales para familias afectadas y distribuyeron agua potable y alimentos.
+Hospitales de la zona reportaron el ingreso de al menos 18 personas con fracturas, lesiones por escombros y crisis nerviosas. Ninguno de los heridos se encuentra en estado crítico, según reportes médicos. Organizaciones de ayuda como la Cruz Blanca habilitaron refugios temporales para familias afectadas y distribuyeron agua potable y alimentos.
 
 El Servicio Meteorológico Nacional advirtió que la inestabilidad atmosférica podría continuar durante las próximas 48 horas, con riesgo de nuevos tornados en Kansas, Texas y el norte de Oklahoma. Se recomienda a la población mantenerse atenta a los comunicados oficiales y seguir los protocolos de seguridad establecidos.`,
     nivel: "🟠 ORO",

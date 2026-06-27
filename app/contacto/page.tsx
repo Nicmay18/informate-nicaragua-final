@@ -32,7 +32,7 @@ export default function ContactoPage() {
         En <strong style={{ color: '#0f172a' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
       </p>
       <p style={{ color: '#475569', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
-        Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#0f172a' }}>Policía Nacional 118</strong>, <strong style={{ color: '#0f172a' }}>Bomberos 911/115</strong>, <strong style={{ color: '#0f172a' }}>Cruz Roja 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
+        Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#0f172a' }}>Policía Nacional 118</strong>, <strong style={{ color: '#0f172a' }}>Bomberos 911/115</strong>, <strong style={{ color: '#0f172a' }}>Cruz Blanca 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
       </p>
 
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '1.5rem', marginBottom: '2rem' }}>

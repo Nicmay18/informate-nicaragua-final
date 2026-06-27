@@ -132,7 +132,7 @@ function agregarStrong(contenido) {
     'Polic[íi]a Nacional', 'Ministerio de Salud', 'Minsa', 'Ineter',
     'Ministerio de Gobernaci[óo]n', 'Ministerio de Transporte', 'Mti',
     'Ej[ée]rcito de Nicaragua', 'Polic[íi]a', 'Bomberos',
-    'Cruz Roja', 'C[ée]sar Salinas', 'CSE', 'Consejo Supremo Electoral',
+    'Cruz Blanca', 'C[ée]sar Salinas', 'CSE', 'Consejo Supremo Electoral',
     'Asamblea Nacional', 'Corte Suprema', 'Ministerio P[úu]blico',
   ];
 

@@ -11,7 +11,7 @@
 - **38 noticias de sucesos mejoradas** automáticamente
 - Títulos limpiados: "fallecidos" → "afectados", "muere" → "resulta afectado", "fatal" → "grave"
 - Agregado contexto de seguridad en cada noticia
-- Agregados recursos útiles: teléfonos de emergencia (118 Policía, 128 Cruz Roja, 115 Bomberos)
+- Agregados recursos útiles: teléfonos de emergencia (118 Policía, 128 Cruz Blanca, 115 Bomberos)
 - Agregados consejos de prevención
 - Expandido contenido a 300+ palabras en noticias cortas
 

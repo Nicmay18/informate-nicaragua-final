@@ -10,9 +10,9 @@ Un vocero del OIJ explicó el trabajo técnico en este tipo de escenas: "El aná
 
 Víctimas y atención de emergencia
 
-El padre murió en el lugar del ataque debido a la gravedad de las heridas por impactos de bala. El hijo fue trasladado por la Cruz Roja Costarricense a un centro médico en San José, donde falleció minutos después de su ingreso.
+El padre murió en el lugar del ataque debido a la gravedad de las heridas por impactos de bala. El hijo fue trasladado por la Cruz Blanca Costarricense a un centro médico en San José, donde falleció minutos después de su ingreso.
 
-La Cruz Roja reportó que la unidad de emergencia llegó al sitio a las 9:18 p.m., activando protocolo de traslado prioritario.
+La Cruz Blanca reportó que la unidad de emergencia llegó al sitio a las 9:18 p.m., activando protocolo de traslado prioritario.
 
 Las autoridades mantienen la identidad oficial en proceso de verificación mientras se notifica a familiares.
 

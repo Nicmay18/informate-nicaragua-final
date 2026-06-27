@@ -40,7 +40,7 @@ REGLAS ESTRICTAS:
 4. MANTENÉ los hechos básicos: quién, qué, cuándo, dónde.
 5. AÑADÍ ANÁLISIS: ¿por qué pasó esto? ¿hay un patrón? ¿qué dice la autoridad?
 6. AÑADÍ CONTEXTO: estadísticas comparativas, datos históricos de la zona.
-7. AÑADÍ RECURSOS ÚTILES: teléfonos de emergencia (Policía 118, Cruz Roja 128, Bomberos 115, INSS 133), cómo denunciar, consejos de prevención.
+7. AÑADÍ RECURSOS ÚTILES: teléfonos de emergencia (Policía 118, Cruz Blanca 128, Bomberos 115, INSS 133), cómo denunciar, consejos de prevención.
 8. AÑADÍ PERSPECTIVA: ¿qué significa esto para el lector común?
 9. Mínimo 600 palabras.
 10. 7 bloques H2 obligatorios:
