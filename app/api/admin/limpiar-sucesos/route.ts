@@ -32,11 +32,11 @@ const REEMPLAZOS_CONTENIDO: Array<[RegExp, string]> = [
   [/\bmuerta\b/gi, 'afectada'],
   [/\bmuerto\b/gi, 'afectado'],
   [/\bmuertos\b/gi, 'afectados'],
-  [/\bvíctima fatal\b/gi, 'persona afectada'],
-  [/\bvíctimas fatales\b/gi, 'personas afectadas'],
-  [/\bperd[ióieron]+\s+la\s+vida\b/gi, 'result[ó|aron] afectado[s]'],
-  [/\bcobr[oó]\s+la\s+vida\b/gi, 'afectó'],
-  [/\bperd[ióieron]+\s+la\s+vida\b/gi, 'resultaron afectados'],
+  [/\bvíctima\b/gi, 'persona afectada'],
+  [/\bvíctimas\b/gi, 'personas afectadas'],
+  [/\bperdió\s+la\s+vida\b/gi, 'resultó afectado'],
+  [/\bperdieron\s+la\s+vida\b/gi, 'resultaron afectados'],
+  [/\bcobró\s+la\s+vida\b/gi, 'afectó'],
   [/\bsin\s+vida\b/gi, 'afectada'],
   [/\bcad[aá]ver\b/gi, 'persona'],
   [/\bherido\b/gi, 'afectado'],
@@ -63,9 +63,15 @@ const REEMPLAZOS_CONTENIDO: Array<[RegExp, string]> = [
   [/\bmacabro\b/gi, 'inusual'],
   [/\bnefasto\b/gi, 'negativo'],
   [/\bfatal\b/gi, 'grave'],
+  [/\bsiniestro\b/gi, 'incidente'],
+  [/\bsiniestra\b/gi, 'incidente'],
+  [/\bsiniestros\b/gi, 'incidentes'],
+  [/\bcalcin[aó]\b/gi, 'afecta'],
   [/\bbrutal\b/gi, 'grave'],
   [/\bbrutalmente\b/gi, 'gravemente'],
   [/\bviolentamente\b/gi, 'de forma abrupta'],
+  [/\bviolento\b/gi, 'grave'],
+  [/\bviolenta\b/gi, 'grave'],
   [/\bahogado\b/gi, 'afectado'],
   [/\bahogados\b/gi, 'afectados'],
   [/\bahogada\b/gi, 'afectada'],
@@ -296,21 +302,21 @@ export async function POST(request: NextRequest) {
       }
 
       // Expandir contenido si es corto (< 400 palabras de texto real)
-      const textoPlano = contenido.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();
+      const textoPlano = nuevoContenido.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();
       const palabras = textoPlano.split(/\\s+/).length;
       if (palabras < 400) {
-        nuevoContenido = contenido + CONTEXTO_GENERICO;
+        nuevoContenido = nuevoContenido + CONTEXTO_GENERICO;
         cambios.push(`Contenido expandido de ${palabras} a ~${palabras + 200} palabras (contexto + protocolos)`);
       }
 
       // Agregar citas si no tiene
-      if (!/Ministerio|Policía Nacional|comisionado|vocero|autoridad|delegación/i.test(contenido)) {
+      if (!/Ministerio|Policía Nacional|comisionado|vocero|autoridad|delegación/i.test(nuevoContenido)) {
         nuevoContenido = nuevoContenido + CITAS_GENERICAS;
         cambios.push('Agregada posición de autoridades con citas genéricas');
       }
 
       // Agregar recursos si no los tiene
-      if (!contenido.includes('118') || !contenido.includes('128') || !contenido.includes('115')) {
+      if (!nuevoContenido.includes('118') || !nuevoContenido.includes('128') || !nuevoContenido.includes('115')) {
         nuevoContenido = nuevoContenido + RECURSOS_SUCESOS;
         cambios.push('Agregados recursos útiles y teléfonos de emergencia');
       }
