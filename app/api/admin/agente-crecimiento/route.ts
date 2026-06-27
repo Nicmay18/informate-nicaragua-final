@@ -128,7 +128,7 @@ export async function GET(request: Request) {
   try {
     const db = getAdminDb();
 
-    // Noticias no distribuidas recientes (sin orderBy en Firestore para evitar indice compuesto) v2
+    // Noticias no distribuidas recientes (sin orderBy en Firestore para evitar indice compuesto) v3
     const snap = await db
       .collection('noticias')
       .where('distribuida', '==', false)
