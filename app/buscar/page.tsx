@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Search } from 'lucide-react';
 import { getNews } from '@/lib/data';
 
-export const revalidate = 600;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: 'Buscar noticias',

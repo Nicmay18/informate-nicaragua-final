@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -11,11 +13,9 @@ function validateSlug(slug: string): { valid: boolean; reason?: string } {
 }
 
 /**
- * Route Handler: VISTAS DESHABILITADAS temporalmente para reducir consumo.
  * POST /api/views/[slug]
- * 
- * NOTA: El tracking de vistas está pausado para conservar recursos de Firestore
- * y Vercel Functions. Reactivar cuando el tráfico sea estable y rentable.
+ * Registra una vista en Firestore. Incluye referrer y utm_source para
+ * análisis de tráfico. Usa Vercel Functions + Firebase Admin SDK.
  */
 export async function POST(
   request: Request,
@@ -28,18 +28,75 @@ export async function POST(
       return NextResponse.json({ error: v.reason }, { status: 400 });
     }
 
-    // Ignorar body para evitar procesamiento innecesario
-    try { await request.json(); } catch { /* ignore */ }
+    // Parsear body (referrer, utm_source)
+    let body: any = {};
+    try { body = await request.json(); } catch { /* ignore */ }
 
-    // Respuesta simulada: no toca Firestore, no consume recursos
-    return NextResponse.json({ ok: true, slug, vistas: 0, disabled: true });
+    const referrer = typeof body.referrer === 'string' ? body.referrer.slice(0, 500) : '';
+    const utmSource = typeof body.utmSource === 'string' ? body.utmSource.slice(0, 100) : '';
+
+    const db = getAdminDb();
+    const docRef = db.collection('views').doc(slug);
+
+    // Incrementar contador de vistas
+    await docRef.set(
+      {
+        count: FieldValue.increment(1),
+        slug,
+        updatedAt: FieldValue.serverTimestamp(),
+        createdAt: FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    // Guardar log de tráfico con referrer/utm (separado para no sobreescribir)
+    const logRef = db.collection('traffic_log').doc();
+    await logRef.set({
+      slug,
+      referrer,
+      utmSource,
+      userAgent: request.headers.get('user-agent') || '',
+      ip: request.headers.get('x-forwarded-for') || '',
+      timestamp: FieldValue.serverTimestamp(),
+    });
+
+    // Leer el contador actualizado
+    const snap = await docRef.get();
+    const count = snap.exists ? (snap.data()?.count as number) || 0 : 0;
+
+    return NextResponse.json({ ok: true, slug, vistas: count });
   } catch (error) {
-    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
+    console.error('[views API] error:', error);
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 }
+    );
   }
 }
 
-export async function GET() {
-  return NextResponse.json({ error: 'Método no permitido. Use POST.' }, { status: 405, headers: { Allow: 'POST' } });
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  try {
+    const { slug } = await params;
+    const v = validateSlug(slug);
+    if (!v.valid) {
+      return NextResponse.json({ error: v.reason }, { status: 400 });
+    }
+
+    const db = getAdminDb();
+    const snap = await db.collection('views').doc(slug).get();
+    const count = snap.exists ? (snap.data()?.count as number) || 0 : 0;
+
+    return NextResponse.json({ ok: true, slug, vistas: count });
+  } catch (error) {
+    console.error('[views API GET] error:', error);
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PUT() {

@@ -5,7 +5,7 @@ const SITE_URL = 'https://nicaraguainformate.com';
 
 // Google News Sitemap: solo noticias de las últimas 48 horas
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245
-export const revalidate = 3600; // Regenerar cada hora
+export const revalidate = 86400; // Regenerar cada 24h
 
 function escapeXml(str: string): string {
   return String(str || '')
@@ -32,7 +32,7 @@ async function fetchNewsSitemapRaw() {
 }
 
 const cachedFetchNewsSitemap = unstable_cache(fetchNewsSitemapRaw, ['news-sitemap'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['news-sitemap'],
 });
 

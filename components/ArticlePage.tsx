@@ -9,6 +9,8 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { getClientDb } from '@/lib/firebase-client';
+import { doc, getDoc, updateDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -49,35 +51,77 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   useEffect(() => {
     if (!noticia.slug) return;
-    const controller = new AbortController();
-    // Extraer utm_source de la URL para rastrear fuentes sociales (Telegram, WhatsApp)
-    const params = new URLSearchParams(window.location.search);
-    const utmSource = params.get('utm_source') || '';
-    // CORREGIDO: usa el endpoint correcto /api/views/[slug] (no /api/view)
-    fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ referrer: document.referrer, utmSource }),
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        if (!res.ok) return null;
-        try {
-          return await res.json();
-        } catch {
-          return null;
-        }
-      })
-      .then((json) => {
-        if (!controller.signal.aborted && json && typeof json.vistas === 'number') {
-          setViews(json.vistas);
-        }
-      })
-      .catch(() => {});
 
-    return () => {
-      controller.abort();
+    const sessionKey = `viewed_${noticia.slug}`;
+    const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
+
+    const trackView = async () => {
+      try {
+        // Extraer utm_source de la URL para rastrear fuentes sociales (Telegram, WhatsApp)
+        const params = new URLSearchParams(window.location.search);
+        const utmSource = params.get('utm_source') || '';
+        const referrer = document.referrer || '';
+
+        // ============================================================
+        // OPCION 1: API del servidor (captura referrer + utm_source)
+        // ============================================================
+        const controller = new AbortController();
+        const res = await fetch(`/api/views/${encodeURIComponent(noticia.slug)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ referrer, utmSource }),
+          signal: controller.signal,
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          if (typeof json.vistas === 'number') {
+            setViews(json.vistas);
+          }
+          sessionStorage.setItem(sessionKey, 'true');
+          return; // API funcionó, no necesitamos fallback
+        }
+      } catch (apiErr) {
+        // API falló o está deshabilitada → fallback a Firebase client-side
+        console.warn('[views] API failed, falling back to Firebase:', apiErr);
+      }
+
+      // ============================================================
+      // OPCION 2: Firebase client-side (fallback si API falla)
+      // ============================================================
+      try {
+        const db = getClientDb();
+        const docRef = doc(db, 'views', noticia.slug);
+        const snap = await getDoc(docRef);
+
+        if (snap.exists()) {
+          const currentViews = (snap.data().count as number) || 0;
+          setViews(currentViews + 1); // Optimistic +1
+
+          if (!alreadyViewed) {
+            await updateDoc(docRef, {
+              count: increment(1),
+              updatedAt: serverTimestamp(),
+            });
+            sessionStorage.setItem(sessionKey, 'true');
+          }
+        } else {
+          setViews(1);
+          if (!alreadyViewed) {
+            await setDoc(docRef, {
+              count: 1,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+            sessionStorage.setItem(sessionKey, 'true');
+          }
+        }
+      } catch (fbErr) {
+        console.warn('[views] Firebase fallback failed:', fbErr);
+      }
     };
+
+    trackView();
   }, [noticia.id, noticia.slug]);
 
   const category = getCategory(noticia.categoria);

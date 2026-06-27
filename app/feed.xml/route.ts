@@ -1,7 +1,7 @@
 ﻿import { adminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 function escapeXml(str: string): string {
   return String(str)
@@ -52,7 +52,7 @@ async function fetchFeedArticlesRaw() {
 }
 
 const cachedFetchFeed = unstable_cache(fetchFeedArticlesRaw, ['feed-xml'], {
-  revalidate: 3600,
+  revalidate: 86400,
   tags: ['feed-xml'],
 });
 

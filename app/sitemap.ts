@@ -11,7 +11,7 @@ const baseUrl = 'https://nicaraguainformate.com';
 const cachedGetNews = unstable_cache(
   async () => getNews(500),
   ['sitemap-news'],
-  { revalidate: 3600 }
+  { revalidate: 86400 }
 );
 
 // Sanitiza fechas para evitar RangeError: Invalid time value en build
