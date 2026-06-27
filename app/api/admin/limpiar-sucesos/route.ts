@@ -34,6 +34,10 @@ const REEMPLAZOS_CONTENIDO: Array<[RegExp, string]> = [
   [/\bmuertos\b/gi, 'afectados'],
   [/\bvíctima\b/gi, 'persona afectada'],
   [/\bvíctimas\b/gi, 'personas afectadas'],
+  [/\bvictima\b/gi, 'persona afectada'],
+  [/\bvictimas\b/gi, 'personas afectadas'],
+  [/\bvictimario\b/gi, 'implicado'],
+  [/\bvictimarios\b/gi, 'implicados'],
   [/\bperdió\s+la\s+vida\b/gi, 'resultó afectado'],
   [/\bperdieron\s+la\s+vida\b/gi, 'resultaron afectados'],
   [/\bcobró\s+la\s+vida\b/gi, 'afectó'],
@@ -63,15 +67,26 @@ const REEMPLAZOS_CONTENIDO: Array<[RegExp, string]> = [
   [/\bmacabro\b/gi, 'inusual'],
   [/\bnefasto\b/gi, 'negativo'],
   [/\bfatal\b/gi, 'grave'],
+  [/\bfatales\b/gi, 'graves'],
   [/\bsiniestro\b/gi, 'incidente'],
   [/\bsiniestra\b/gi, 'incidente'],
   [/\bsiniestros\b/gi, 'incidentes'],
+  [/\bsiniestras\b/gi, 'incidentes'],
   [/\bcalcin[aó]\b/gi, 'afecta'],
+  [/\bcalcinaron\b/gi, 'afectaron'],
+  [/\bcalcinado\b/gi, 'afectado'],
+  [/\bcalcinados\b/gi, 'afectados'],
+  [/\bquema\b/gi, 'afecta'],
+  [/\bquemaron\b/gi, 'afectaron'],
+  [/\bquemada\b/gi, 'afectada'],
+  [/\bquemadas\b/gi, 'afectadas'],
   [/\bbrutal\b/gi, 'grave'],
   [/\bbrutalmente\b/gi, 'gravemente'],
   [/\bviolentamente\b/gi, 'de forma abrupta'],
   [/\bviolento\b/gi, 'grave'],
+  [/\bviolentos\b/gi, 'graves'],
   [/\bviolenta\b/gi, 'grave'],
+  [/\bviolentas\b/gi, 'graves'],
   [/\bahogado\b/gi, 'afectado'],
   [/\bahogados\b/gi, 'afectados'],
   [/\bahogada\b/gi, 'afectada'],
@@ -219,6 +234,12 @@ function limpiarTitulo(titulo: string): string {
     const regex = new RegExp('\\b' + mala + '\\b', 'gi');
     limpio = limpio.replace(regex, buena);
   }
+  // Deduplicar "Dos afectados y tres afectados" → "Dos afectados y tres personas afectadas"
+  const numeros = 'un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce';
+  limpio = limpio.replace(
+    new RegExp('\\b(' + numeros + '|\\d+)\\s+(afectados|afectadas|afectado|afectada)\\s+y\\s+(' + numeros + '|\\d+)\\s+\\2\\b', 'gi'),
+    '$1 $2 y $3 personas $2'
+  );
   // Eliminar signos de exclamación múltiples
   limpio = limpio.replace(/!{2,}/g, '!');
   return limpio;
