@@ -58,11 +58,11 @@ const REEMPLAZOS: Array<[RegExp, string]> = [
   [/\bnefasto\b/gi, 'negativo'],
   [/\bfatal\b/gi, 'grave'],
   [/\bfatales\b/gi, 'graves'],
-  // Siniestro
-  [/\bsiniestro\b/gi, 'incidente'],
-  [/\bsiniestra\b/gi, 'incidente'],
-  [/\bsiniestros\b/gi, 'incidentes'],
-  [/\bsiniestras\b/gi, 'incidentes'],
+  // Siniestro (sin \b para asegurar captura en cualquier contexto)
+  [/siniestro/gi, 'incidente'],
+  [/siniestra/gi, 'incidente'],
+  [/siniestros/gi, 'incidentes'],
+  [/siniestras/gi, 'incidentes'],
   // Incendios
   [/\bcalcin[aó]\b/gi, 'afecta'],
   [/\bcalcinaron\b/gi, 'afectaron'],
