@@ -3,6 +3,12 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
+/**
+ * Rastrea navegación SPA en Next.js.
+ * El page_view inicial se envía por el script en <head> de layout.tsx.
+ * Este componente solo envía eventos cuando el usuario navega
+ * a otra página sin recarga completa.
+ */
 export default function Analytics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -11,17 +17,14 @@ export default function Analytics() {
     if (typeof window === 'undefined') return;
 
     const win = window as any;
-    if (!pathname || typeof win.gtag !== 'function') {
-      return;
-    }
+    if (!pathname || typeof win.gtag !== 'function') return;
 
     const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
 
-    win.gtag('config', 'G-W1B5J61WEP', {
+    win.gtag('event', 'page_view', {
       page_path: url,
       page_location: window.location.href,
       page_title: document.title,
-      send_page_view: true,
     });
   }, [pathname, searchParams]);
 

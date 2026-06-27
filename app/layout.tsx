@@ -142,6 +142,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
+        {/* Google Analytics 4 — cargado directo para máxima confiabilidad */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-W1B5J61WEP', {
+                page_title: document.title,
+                page_location: window.location.href,
+                send_page_view: true
+              });
+            `,
+          }}
+        />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
