@@ -17,7 +17,7 @@ interface AuthorCardProps {
 const DEFAULT_AUTHOR = {
   name: 'Redacción Nicaragua Informate',
   role: 'Periodista',
-  bio: 'Equipo editorial de Nicaragua Informate. Comprometido con el periodismo verificado y la información de calidad para nicaragüenses.',
+  bio: 'Nicaragua Informate es un medio digital nicaragüense creado para mantener informada a la comunidad nicaragüense dentro y fuera del país. Publicamos contenido diario sobre nacionales, sucesos, espectáculos, internacionales, tecnología y deportes, con información verificada y presentada de forma clara. Medio independiente comprometido con el periodismo verificado y la información de calidad para nicaragüenses.',
   photo: null,
 };
 
@@ -35,7 +35,7 @@ const AUTORES: Record<string, { role: string; bio: string; slug: string }> = {
   },
   'José Luis López Ramírez': {
     role: 'Director de Operaciones',
-    bio: 'Ingeniero en redes y especialista en ciberseguridad. Director de operaciones de Nicaragua Informate desde 2024. Gestión de infraestructura tecnológica, protección de datos y continuidad operativa. Experto en optimización de rendimiento web y SEO técnico.',
+    bio: 'Ingeniero en Sistemas. Coordina la operación diaria, la publicación oportuna de contenido y la organización del equipo en Nicaragua Informate. Encargado de la difusión en plataformas oficiales: canal de WhatsApp, Telegram y Facebook. Su trabajo garantiza que toda la información salga a tiempo y con calidad.',
     slug: 'jose-luis-lopez-ramirez',
   },
 };
