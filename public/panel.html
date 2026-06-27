@@ -1336,6 +1336,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-warning" onclick="revertirSensacionalismo()" title="Revertir títulos cambiados de 'fallecidos' a 'muertos' por error"><i class="fas fa-undo-alt"></i><span>Revertir 'muertos'→'fallecidos'</span></button>
             <button class="btn btn-danger" onclick="cargarNoticiasPeligro()"><i class="fas fa-sync-alt"></i><span>Recargar Lista</span></button>
             <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
+            <button class="btn btn-primary" style="background: #0369a1; border-color: #0369a1;" onclick="rescribirSucesosMasivo()" title="Reescribir noticias de Sucesos con estructura AdSense-friendly"><i class="fas fa-magic"></i><span>Reescribir Sucesos (IA)</span></button>
           </div>
         </div>
         
@@ -6599,6 +6600,41 @@ VERIFICACIÓN FINAL
       }
       el.style.display = 'block';
       panelImg.style.display = 'block';
+    };
+
+    // ─── REESCRIBIR NOTICIAS DE SUCESOS CON IA ───
+    window.rescribirSucesosMasivo = async function() {
+      const geminiKey = localStorage.getItem('gemini_api_key') || prompt('Ingresá tu Gemini API Key (de AI Studio):');
+      if (!geminiKey) { showToast('Necesitás una API key de Gemini', 'warning'); return; }
+      if (!confirm('⚠️ ¿Reescribir noticias de SUCESOS con IA? Esto usa tu cuota de Gemini (5 noticias por vez).')) return;
+      showLoading(true, 'Reescribiendo noticias de sucesos con IA...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/rescribir-sucesos?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ geminiApiKey: geminiKey, batchSize: 5 })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        showToast(`Rescritas: ${data.rescritas} | Fallidas: ${data.fallidas}`, data.fallidas > 0 ? 'warning' : 'success');
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl && data.resultados) {
+          logEl.innerHTML += `<div style="color:#60a5fa;">[${new Date().toLocaleTimeString()}] Reescritura de sucesos:</div>`;
+          data.resultados.forEach((r) => {
+            const color = r.estado === 'rescrita' ? '#4ade80' : r.estado === 'error' ? '#f87171' : '#94a3b8';
+            logEl.innerHTML += `<div style="color:${color}; padding-left:12px;">• ${r.tituloOriginal} → ${r.estado}</div>`;
+          });
+          if (data.siguiente) {
+            logEl.innerHTML += `<div style="color:#fbbf24; padding-left:12px;">⚡ ${data.siguiente}</div>`;
+          }
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[rescribirSucesosMasivo]', err);
+      } finally {
+        showLoading(false);
+      }
     };
 
     // ─── ELIMINAR 50 NOTICIAS MÁS VIEJAS ───
