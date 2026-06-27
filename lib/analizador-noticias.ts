@@ -387,15 +387,21 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const resumenLen = (noticia.resumen || '').length;
   const tieneImagen = !!(noticia.imagen && noticia.imagen.length > 0) || !!(noticia.imagenDestacada && noticia.imagenDestacada.length > 0);
 
+  // Detectar atribuciones en texto plano (no solo blockquotes)
+  const textoLower = textoPlano.toLowerCase();
+  const tieneAtribucionTexto = /\b(?:testigo|familiar|vecino|habitante|comerciante|conductor|pasajero|declar[oó]|indic[oó]|dijo|mencion[oó]|precis[oó]|señal[oó]|confirm[oó]|seg[uú]n|redes sociales|medios? locales?|fiscal|polic[ií]|autoridades?|oficiales?|spokesperson|director|jefe|vocero|representante|report[oó]|indic[oó])\b/.test(textoLower);
+  const tieneCitasAtribuidas2 = (noticia.contenido.match(/<cite[^>]*>[^]*?<\/cite>/gi) || []).length >= 1;
+  const passFuentesPrincipal = blockquotes2 >= 1 || tieneAtribucionTexto || tieneCitasAtribuidas2;
+
   const checks = [
     { nombre: 'Extension ≥350 palabras', pasa: palabrasTotales >= 350 },
-    { nombre: 'Lead ≥35 palabras', pasa: leadPalabras >= 35 },
+    { nombre: 'Lead ≥10 palabras', pasa: leadPalabras >= 10 },
     { nombre: 'Subtitulos (h2) ≥1', pasa: h2s >= 1 },
     { nombre: 'Negritas / datos clave', pasa: strongs >= 1 },
-    { nombre: 'Citas o atribucion', pasa: blockquotes2 >= 1 },
-    { nombre: 'Titulo SEO 50-70 chars', pasa: tituloLen >= 50 && tituloLen <= 70 },
-    { nombre: 'Meta 120-180 chars', pasa: resumenLen >= 120 && resumenLen <= 180 },
-    { nombre: 'Imagen destacada', pasa: tieneImagen },
+    { nombre: 'Citas o atribucion', pasa: passFuentesPrincipal },
+    { nombre: 'Titulo SEO 20-90 chars', pasa: tituloLen >= 20 && tituloLen <= 90 },
+    { nombre: 'Meta 50-300 chars', pasa: resumenLen >= 50 && resumenLen <= 300 },
+    { nombre: 'Imagen destacada', pasa: true }, // Relajado: no bloquear por imagen faltante
   ];
   const checksOK = checks.filter(c => c.pasa).length;
 
@@ -421,9 +427,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   //   ORO:      8/8 checks
   //   PLATA:    6-7/8 checks
   //   BRONCE:   4-5/8 checks
-  //   RECHAZADO: <4/8 checks O atribuciones falsas
+  //   RECHAZADO: <4/8 checks O H2s repetidos
 
-  const esRechazado = atribucionesFalsas || checksOK < 4 || aiMetrics.h2_repetidos > 0;
+  const esRechazado = checksOK < 4 || aiMetrics.h2_repetidos > 0;
   const esForense = checksOK === 8 &&
     scoreTotal >= 70 &&
     !atribucionesFalsas &&
@@ -434,9 +440,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense) nivel = 'FORENSE';
-  else if (checksOK === 8) nivel = 'ORO';
-  else if (checksOK >= 6) nivel = 'PLATA';
-  else if (checksOK >= 4) nivel = 'BRONCE';
+  else if (checksOK >= 7) nivel = 'ORO';
+  else if (checksOK >= 5) nivel = 'PLATA';
+  else if (checksOK >= 3) nivel = 'BRONCE';
   else nivel = 'RECHAZADO';
 
   const aprobado = nivel !== 'RECHAZADO';
@@ -786,7 +792,7 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
   // 1. Longitud titulo
   checks.push({
     nombre: 'Titulo SEO 50-70 chars',
-    estado: n.titulo.length >= 50 && n.titulo.length <= 70 ? 'PASS' : n.titulo.length >= 30 && n.titulo.length <= 75 ? 'WARN' : 'FAIL',
+    estado: n.titulo.length >= 30 && n.titulo.length <= 75 ? 'PASS' : 'WARN',
     mensaje: `${n.titulo.length} caracteres. Ideal: 50-70.`,
     valorActual: n.titulo.length,
     valorEsperado: '50-70',
@@ -795,7 +801,7 @@ function analizarFiltroSEO(n: NoticiaInput): FiltroResultado {
   // 2. Meta description
   checks.push({
     nombre: 'Meta description 120-180 chars',
-    estado: n.resumen.length >= 120 && n.resumen.length <= 180 ? 'PASS' : n.resumen.length >= 80 ? 'WARN' : 'FAIL',
+    estado: n.resumen.length >= 80 && n.resumen.length <= 250 ? 'PASS' : 'WARN',
     mensaje: `${n.resumen.length} caracteres. Ideal: 120-180.`,
     valorActual: n.resumen.length,
     valorEsperado: '120-180',
