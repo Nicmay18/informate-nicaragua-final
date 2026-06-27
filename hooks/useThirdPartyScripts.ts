@@ -44,7 +44,7 @@ function loadScript(src: string, id: string, async = true, defer = false): Promi
     script.defer = defer;
     script.onload = () => resolve();
     script.onerror = () => reject(new Error(`Failed to load ${src}`));
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   });
 }
 

@@ -17,7 +17,6 @@ import Analytics from '@/components/Analytics';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
-import ThirdPartyScripts from '@/components/ThirdPartyScripts';
 import OneSignalProvider from '@/components/OneSignalProvider';
 import { criticalCss } from '@/lib/critical-css';
 import { Suspense } from 'react';
@@ -164,7 +163,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
-        {/* AdSense cargado vía ThirdPartyScripts (lazy al scroll) */}
+        {/* Google AdSense — código de verificación en <head> para el bot de revisión */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          crossOrigin="anonymous"
+        ></script>
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         <link rel="alternate" type="application/feed+json" title="JSON Feed Nicaragua Informate" href="https://nicaraguainformate.com/feed.json" />
         {/* JSON-LD escapado para prevenir cierre prematuro de script */}
@@ -186,7 +190,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Analytics />
         </Suspense>
         <ThemeScript />
-        <ThirdPartyScripts />
         <OneSignalProvider />
       </body>
     </html>

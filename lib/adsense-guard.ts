@@ -12,7 +12,7 @@
 import type { Noticia } from './types';
 
 /** Categorías que activan restricción de monetización */
-const BLOCKED_CATEGORIES = ['sucesos', 'crónica roja', 'policiales', 'accidentes', 'crimen'];
+const BLOCKED_CATEGORIES: string[] = [];
 
 /** Palabras clave de luto / sensibles que bloquean ads en una noticia */
 const SENSITIVE_KEYWORDS = [
