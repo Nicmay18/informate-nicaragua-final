@@ -1347,6 +1347,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-danger" onclick="cargarNoticiasPeligro()"><i class="fas fa-sync-alt"></i><span>Recargar Lista</span></button>
             <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
             <button class="btn btn-primary" style="background: #0369a1; border-color: #0369a1;" onclick="rescribirSucesosMasivo()" title="Reescribir noticias de Sucesos con estructura AdSense-friendly"><i class="fas fa-magic"></i><span>Reescribir Sucesos (IA)</span></button>
+            <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarSucesos()" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
           </div>
         </div>
         
@@ -6367,6 +6368,46 @@ VERIFICACIÓN FINAL
       } catch (err) {
         resultado.innerHTML = '<div style="color:#dc2626;background:#fee2e2;padding:16px;border-radius:8px;">Error: ' + err.message + '</div>';
         showToast('Error en auditoría: ' + err.message, 'error');
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ─── LIMPIAR NOTICIAS DE SUCESOS AUTOMÁTICAMENTE ───
+    window.limpiarSucesos = async function() {
+      if (!confirm('⚠️ Esto va a:\n1. ELIMINAR noticias de asesinatos/homicidios/cuerpos (irreparables)\n2. MEJORAR títulos y agregar recursos al resto\n\n¿Continuar?')) return;
+      showLoading(true, 'Limpiando noticias de sucesos...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/limpiar-sucesos?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+
+        let msg = 'Eliminadas: ' + (data.eliminadas?.cantidad || 0) + ' | Mejoradas: ' + (data.mejoradas?.cantidad || 0) + ' | Saltadas: ' + (data.saltadas?.cantidad || 0);
+        showToast(msg, 'success');
+
+        // Log
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl) {
+          logEl.innerHTML += '<div style="color:#4ade80;">[' + new Date().toLocaleTimeString() + '] Limpieza de Sucesos:</div>';
+          if (data.eliminadas?.noticias) {
+            data.eliminadas.noticias.forEach((n) => {
+              logEl.innerHTML += '<div style="color:#f87171;padding-left:12px;">🗑️ ELIMINADA: ' + n.titulo + '</div>';
+            });
+          }
+          if (data.mejoradas?.noticias) {
+            data.mejoradas.noticias.forEach((n) => {
+              logEl.innerHTML += '<div style="color:#60a5fa;padding-left:12px;">✏️ MEJORADA: ' + n.tituloOriginal + ' → ' + n.tituloNuevo + '</div>';
+            });
+          }
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[limpiarSucesos]', err);
       } finally {
         showLoading(false);
       }
