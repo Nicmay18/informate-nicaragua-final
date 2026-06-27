@@ -1,0 +1,186 @@
+{
+  "fecha": "2026-06-27T22:35:49.354Z",
+  "resultados": [
+    {
+      "ok": true,
+      "titulo": "Cinco afectados en accidentes viales en todo Nicaragua",
+      "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+      "palabrasAntes": 2340,
+      "palabrasDespues": 765,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Tres accidentes de tránsito dejan afectados en Managua y Boaco",
+      "slug": "tres-accidentes-transito-managua-boaco",
+      "palabrasAntes": 2306,
+      "palabrasDespues": 731,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en Managua",
+      "slug": "dos-hombres-mueren-por-descargas-electricas-en-managua",
+      "palabrasAntes": 2310,
+      "palabrasDespues": 735,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Un afectado y un personas afectado en accidente laboral en Managua y Estelí",
+      "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+      "palabrasAntes": 2123,
+      "palabrasDespues": 548,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Dos obreros resultan afectados y otros dos resultan afectados en accidentes laboral",
+      "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua",
+      "palabrasAntes": 2535,
+      "palabrasDespues": 960,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Accidente grave en Masaya en Villa Bosco",
+      "slug": "masaya-analisis-del-fatal-accidente-vial-en-villa-bosco",
+      "palabrasAntes": 2303,
+      "palabrasDespues": 728,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Comerciante resulta afectado tras altercado en terminal de Rosita",
+      "slug": "comerciante-fallece-tras-altercado-en-terminal-de-rosita",
+      "palabrasAntes": 982,
+      "palabrasDespues": 832,
+      "reduccion": 150,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
+      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales",
+      "palabrasAntes": 2309,
+      "palabrasDespues": 734,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "slug": "bus-de-jalapa-colisiona-con-cisterna-en-tipitapa",
+      "palabrasAntes": 2297,
+      "palabrasDespues": 722,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Incendio destruye negocio con pérdidas de C$200 mil en Nindirí",
+      "slug": "incendio-destruye-negocio-y-deja-perdidas-por-c-200-mil-en-nindiri",
+      "palabrasAntes": 2319,
+      "palabrasDespues": 744,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Dos afectados tras naufragio de panga en Krukira",
+      "slug": "naufragio-en-caribe-norte-deja-mujer-muerta-y-dos-ninos-desaparecidos",
+      "palabrasAntes": 2321,
+      "palabrasDespues": 746,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Aumentan casos de electrocución en accidentes laborales en Nicaragua",
+      "slug": "aumentan-casos-de-electrocucion-en-accidentes-laborales",
+      "palabrasAntes": 2345,
+      "palabrasDespues": 770,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Dos afectados y tres personas afectados en hechos en León, Ocotal y Managua",
+      "slug": "fin-de-semana-violento-deja-muertos-y-herido-en-leon-ocotal-y-managua",
+      "palabrasAntes": 2372,
+      "palabrasDespues": 797,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "slug": "mirador-san-francisco-de-asis-dinamiza-turismo-en-carretera-norte",
+      "palabrasAntes": 1296,
+      "palabrasDespues": 1296,
+      "reduccion": 0,
+      "problemasRestantes": 3,
+      "problemas": [
+        "Línea repetida 3x: \"programar los dispositivos de navegación gps antes de salir ...\"",
+        "Línea repetida 3x: \"descargar mapas sin conexión (offline) de la zona del kilóme...\"",
+        "Línea repetida 3x: \"preservar las condiciones de sanidad del entorno utilizando ...\""
+      ]
+    },
+    {
+      "ok": true,
+      "titulo": "Dos afectados en accidentes de motocicleta en Nicaragua",
+      "slug": "dos-fallecidos-en-accidentes-de-motocicleta-en-nicaragua",
+      "palabrasAntes": 1031,
+      "palabrasDespues": 881,
+      "reduccion": 150,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
+      "slug": "juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal",
+      "palabrasAntes": 922,
+      "palabrasDespues": 772,
+      "reduccion": 150,
+      "problemasRestantes": 0,
+      "problemas": []
+    },
+    {
+      "ok": true,
+      "titulo": "Mujer y pescador resultan afectados afectados en Managua y Rivas",
+      "slug": "dos-personas-mueren-ahogadas-en-tipitapa-y-rivas-este-fin-de-semana",
+      "palabrasAntes": 2322,
+      "palabrasDespues": 747,
+      "reduccion": 1575,
+      "problemasRestantes": 0,
+      "problemas": []
+    }
+  ],
+  "resumen": {
+    "total": 17,
+    "exitosas": 17,
+    "limpias": 16,
+    "conRestos": 1,
+    "fallidas": 0
+  }
+}
