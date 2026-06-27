@@ -206,7 +206,6 @@ function limpiarContenido(html: string): { texto: string; cambios: number } {
   resultado = resultado.replace(/\bresultan afectadas afectadas\b/gi, 'resultan afectadas');
   return { texto: resultado, cambios };
 }
-}
 
 function limpiarTitulo(titulo: string): string {
   let limpio = titulo;
