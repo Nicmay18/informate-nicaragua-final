@@ -48,8 +48,13 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
   'cadáver': 'persona fallecida',
   'fatal': 'grave',
   'cobre vida': 'afecta',
+  'cobró vida': 'afecta',
+  'cobraron vida': 'afectan',
   'a tiros': 'con violencia',
   'tiroteo': 'incidente armado',
+  'fallecimiento': 'afectación',
+  'quemar': 'agredir',
+  'quemó': 'agredió',
 };
 
 const RECURSOS_SUCESOS = `
