@@ -130,6 +130,10 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
   'lesionados': 'afectados',
   'lesionada': 'afectada',
   'lesionadas': 'afectadas',
+  'herido': 'afectado',
+  'heridos': 'afectados',
+  'herida': 'afectada',
+  'heridas': 'afectadas',
 };
 
 const RECURSOS_SUCESOS = `
@@ -195,7 +199,13 @@ function limpiarContenido(html: string): { texto: string; cambios: number } {
     resultado = resultado.replace(regex, reemplazo);
     if (resultado !== antes) cambios++;
   }
+  // Eliminar duplicados que genera el reemplazo (ej: "afectados afectados")
+  resultado = resultado.replace(/\b(afectado|afectados|afectada|afectadas|afectado)\s+\1\b/gi, '$1');
+  resultado = resultado.replace(/\bresultan afectados afectados\b/gi, 'resultan afectados');
+  resultado = resultado.replace(/\bresulta afectado afectado\b/gi, 'resulta afectado');
+  resultado = resultado.replace(/\bresultan afectadas afectadas\b/gi, 'resultan afectadas');
   return { texto: resultado, cambios };
+}
 }
 
 function limpiarTitulo(titulo: string): string {
