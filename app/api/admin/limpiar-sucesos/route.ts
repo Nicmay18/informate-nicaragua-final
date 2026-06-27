@@ -50,11 +50,20 @@ const REEMPLAZOS_TITULO: Record<string, string> = {
   'cobre vida': 'afecta',
   'cobró vida': 'afecta',
   'cobraron vida': 'afectan',
+  'cobra vida': 'afecta',
   'a tiros': 'con violencia',
   'tiroteo': 'incidente armado',
   'fallecimiento': 'afectación',
   'quemar': 'agredir',
   'quemó': 'agredió',
+  'ahogado': 'afectado',
+  'ahogados': 'afectados',
+  'ahogada': 'afectada',
+  'ahogadas': 'afectadas',
+  'lesionado': 'afectado',
+  'lesionados': 'afectados',
+  'lesionada': 'afectada',
+  'lesionadas': 'afectadas',
 };
 
 const RECURSOS_SUCESOS = `
