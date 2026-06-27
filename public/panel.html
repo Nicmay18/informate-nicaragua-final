@@ -6184,23 +6184,6 @@ VERIFICACIÓN FINAL
       resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 7 niveles (incluye detector IA)...</div>';
 
       try {
-        // Validación unificada local (misma fuente de verdad que popup y evaluador)
-        const unificado = window.validarNoticiaUnificada(contenido, titulo, resumen, imagenUrl);
-        const colorNivel = { 'ORO': '#16a34a', 'PLATA': '#2563eb', 'BRONCE': '#d97706', 'RECHAZADO': '#dc2626' };
-        const bgNivel  = { 'ORO': '#dcfce7', 'PLATA': '#dbeafe', 'BRONCE': '#fef3c7', 'RECHAZADO': '#fee2e2' };
-        let html = '<div style="background:' + bgNivel[unificado.nivel] + ';border:2px solid ' + colorNivel[unificado.nivel] + ';border-radius:8px;padding:12px;margin-bottom:16px;">';
-        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
-        const iconoUni = { 'ORO': '🥇', 'PLATA': '🥈', 'BRONCE': '🥉', 'RECHAZADO': '🚫' };
-        html += '<span style="font-size:20px;">' + (iconoUni[unificado.nivel] || '🥉') + '</span>';
-        html += '<div><h4 style="margin:0;font-size:14px;color:' + colorNivel[unificado.nivel] + ';">Validación Unificada: ' + unificado.nivel + ' (' + unificado.passCount + '/8)</h4>';
-        html += '<p style="margin:2px 0 0;font-size:11px;color:var(--gray-600);">Mismo criterio que popup al guardar y evaluador de calidad.</p></div></div>';
-        html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
-        unificado.checks.forEach(c => {
-          const col = c.estado === '✅' ? '#16a34a' : c.estado === '⚠️' ? '#d97706' : '#dc2626';
-          html += '<span style="background:#fff;border:1px solid ' + col + ';color:' + col + ';border-radius:4px;padding:2px 6px;font-size:10px;">' + c.estado + ' ' + c.nombre + ': ' + c.valor + '</span>';
-        });
-        html += '</div></div>';
-
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -6208,15 +6191,9 @@ VERIFICACIÓN FINAL
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error en analisis');
-        // OVERRIDE: si el panel local valido 8/8 = ORO, forzar ORO en el forense
-        // (el backend tiene un bug conocido con el check de imagen que no afecta la calidad real)
-        if (unificado.nivel === 'ORO' && data.nivel !== 'ORO' && data.nivel !== 'FORENSE') {
-          data.nivel = 'ORO';
-          data.aprobado = true;
-        }
-        // Guardar el resultado para reutilizarlo al guardar la nota (persistir nivel)
+        // Guardar el resultado para reutilizarlo al guardar la nota
         window._ultimoForense = { titulo, contenido, nivel: data.nivel, puntuacion: data.puntuacion };
-        resultado.innerHTML = html + renderAnalisisForense(data);
+        resultado.innerHTML = renderAnalisisForense(data);
       } catch (err) {
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }
@@ -6280,6 +6257,42 @@ VERIFICACIÓN FINAL
         if (data.metadataSugerida.tituloOptimizado) html += '<p style="margin:0 0 4px;font-size:12px;color:#1e3a8a;"><strong>Titulo:</strong> ' + data.metadataSugerida.tituloOptimizado + '</p>';
         if (data.metadataSugerida.metaDescription) html += '<p style="margin:0 0 4px;font-size:12px;color:#1e3a8a;"><strong>Meta:</strong> ' + data.metadataSugerida.metaDescription + '</p>';
         if (data.metadataSugerida.keywordsLSI && data.metadataSugerida.keywordsLSI.length) html += '<p style="margin:0;font-size:12px;color:#1e3a8a;"><strong>Keywords LSI:</strong> ' + data.metadataSugerida.keywordsLSI.join(', ') + '</p>';
+        html += '</div>';
+      }
+
+      // PALABRAS SENSIBLES NICARAGUA
+      if (data.palabrasSensiblesDetectadas && data.palabrasSensiblesDetectadas.length > 0) {
+        html += '<div style="background:#fff7ed;border:1px solid #f97316;border-radius:8px;padding:12px;margin-top:16px;">';
+        html += '<h4 style="margin:0 0 8px;font-size:13px;color:#c2410c;"><i class="fas fa-exclamation-triangle"></i> Palabras sensibles detectadas:</h4>';
+        html += '<div style="display:flex;flex-direction:column;gap:8px;">';
+        data.palabrasSensiblesDetectadas.forEach(p => {
+          html += '<div style="background:#fff;border:1px solid #fed7aa;border-radius:6px;padding:8px;font-size:12px;">';
+          html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
+          html += '<span style="font-weight:700;color:#ea580c;">"' + p.palabra + '"</span>';
+          html += '<span style="background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">→ ' + p.sugerencia + '</span></div>';
+          html += '<div style="color:#9a3412;font-style:italic;font-size:11px;">Contexto: "...' + p.contexto + '..."</div>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      // MÉTRICAS IA DETALLADAS
+      if (data.aiMetrics) {
+        html += '<div style="background:#f3f4f6;border:1px solid #9ca3af;border-radius:8px;padding:12px;margin-top:16px;">';
+        html += '<h4 style="margin:0 0 8px;font-size:13px;color:#374151;"><i class="fas fa-robot"></i> Métricas de detector IA:</h4>';
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">';
+        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Repetición verbos:</strong> ' + (data.aiMetrics.repeticion_verbos * 100).toFixed(1) + '%</div>';
+        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Simetría párrafos:</strong> ' + (data.aiMetrics.simetria_parrafos * 100).toFixed(1) + '%</div>';
+        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Cadencia:</strong> ' + (data.aiMetrics.cadencia_oraciones * 100).toFixed(1) + '%</div>';
+        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Simetría H2:</strong> ' + (data.aiMetrics.simetria_h2 * 100).toFixed(1) + '%</div>';
+        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Enumerativos:</strong> ' + (data.aiMetrics.exceso_enumerativo * 100).toFixed(1) + '%</div>';
+        html += '</div></div>';
+      }
+
+      // CIERRE GENÉRICO
+      if (data.cierreGenerico) {
+        html += '<div style="background:#fef9c3;border:1px solid #ca8a04;border-radius:8px;padding:12px;margin-top:16px;font-size:12px;color:#854d0e;">';
+        html += '<i class="fas fa-info-circle"></i> <strong>Cierre genérico detectado:</strong> El final del artículo contiene frases tipo "autoridades investigan" o "hasta el momento no hay detenidos". Considera reemplazarlas por citas reales de fuentes.';
         html += '</div>';
       }
 

@@ -26,6 +26,12 @@ export interface NoticiaInput {
   keywords?: string;
 }
 
+export interface PalabraSensibleDetectada {
+  palabra: string;
+  sugerencia: string;
+  contexto: string;
+}
+
 export interface ResultadoAnalisis {
   aprobado: boolean;
   nivel: 'FORENSE' | 'ORO' | 'PLATA' | 'BRONCE' | 'RECHAZADO';
@@ -33,6 +39,15 @@ export interface ResultadoAnalisis {
   aiRiskScore?: number;
   aiRiskLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
   aiRiskIssues?: string[];
+  palabrasSensiblesDetectadas?: PalabraSensibleDetectada[];
+  cierreGenerico?: boolean;
+  aiMetrics?: {
+    repeticion_verbos: number;
+    simetria_parrafos: number;
+    cadencia_oraciones: number;
+    simetria_h2: number;
+    exceso_enumerativo: number;
+  };
   filtros: {
     oro: FiltroResultado;
     adsense: FiltroResultado;
@@ -117,6 +132,127 @@ const TRANSICIONES_IA = [
 ];
 
 // ───────────────────────────────────────────────
+// PALABRAS SENSIBLES NICARAGUA (con reemplazos sugeridos)
+// ───────────────────────────────────────────────
+const PALABRAS_SENSIBLES_NICARAGUA: Record<string, string> = {
+  'siniestr': 'grave',
+  'fatal': 'grave con consecuencias serias',
+  'calcin': 'afectado por incendio',
+  'muere': 'resulta gravemente afectado',
+  'murio': 'resultó gravemente afectado',
+  'muertos': 'afectados',
+  'fallecidos': 'gravemente afectados',
+  'asesinato': 'incidente grave',
+  'homicidio': 'incidente grave',
+  'secuestro': 'privación de libertad',
+  'drogas': 'sustancias ilícitas',
+  'narcotrafico': 'tráfico ilegal de sustancias',
+  'narco': 'grupos delictivos',
+  'cartel': 'grupos delictivos',
+  'sicario': 'presunto agresor',
+  'ejecutado': 'privado de la vida',
+  'decapitado': 'gravemente afectado',
+  'descuartizado': 'gravemente afectado',
+  'incinerado': 'afectado por incendio',
+  'ahogado': 'afectado por asfixia',
+  'ahorcado': 'afectado por asfixia',
+  'violent': 'grave con uso de fuerza',
+  'autoridades investigan': 'Nicaragua Informate intentó obtener versión oficial',
+  'se realizan las investigaciones correspondientes': 'la institución no ha emitido comunicado',
+  'hasta el momento no hay detenidos': 'fuentes policiales continúan las pesquisas',
+  'la víctima': 'la persona afectada',
+  'el fallecido': 'la persona',
+  'el occiso': 'la persona',
+};
+
+const FRASES_GENERICAS_CIERRE = [
+  'autoridades investigan',
+  'se realizan las investigaciones',
+  'hasta el momento no hay detenidos',
+  'la víctima',
+  'el fallecido',
+  'el occiso',
+];
+
+const VERBOS_OPERATIVOS_IA = [
+  'realizar', 'llevar', 'efectuar', 'ejecutar', 'desarrollar',
+  'implementar', 'establecer', 'generar', 'crear', 'analizar',
+  'evaluar', 'determinar', 'considerar', 'señalar', 'indicar'
+];
+
+// ───────────────────────────────────────────────
+// FUNCIONES HELPER FORENSE
+// ───────────────────────────────────────────────
+
+function detectarPalabrasSensibles(texto: string): PalabraSensibleDetectada[] {
+  const encontradas: PalabraSensibleDetectada[] = [];
+  for (const [palabra, sugerencia] of Object.entries(PALABRAS_SENSIBLES_NICARAGUA)) {
+    const regex = new RegExp(palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    if (regex.test(texto)) {
+      const idx = texto.toLowerCase().indexOf(palabra.toLowerCase());
+      const inicio = Math.max(0, idx - 50);
+      const fin = Math.min(texto.length, idx + 50 + palabra.length);
+      encontradas.push({
+        palabra,
+        sugerencia,
+        contexto: texto.substring(inicio, fin).replace(/\n/g, ' '),
+      });
+    }
+  }
+  return encontradas;
+}
+
+function detectarCierreGenerico(texto: string): boolean {
+  const final = texto.slice(-300).toLowerCase();
+  return FRASES_GENERICAS_CIERRE.some(frase => final.includes(frase));
+}
+
+function detectarMetricasIA(texto: string) {
+  const sentences = texto.split(/[.!?]+\s*/).filter(s => s.length > 10);
+  const nSent = sentences.length || 1;
+
+  const verbosEncontrados = VERBOS_OPERATIVOS_IA.filter(v => texto.toLowerCase().includes(v));
+  const repeticionVerb = verbosEncontrados.length / nSent;
+
+  const paragraphs = texto.split(/\n\s*\n/).filter(p => p.split(/\s+/).filter(w => w.length > 0).length > 10);
+  let simetriaParafo = 1;
+  if (paragraphs.length > 1) {
+    const lens = paragraphs.map(p => p.split(/\s+/).filter(w => w.length > 0).length);
+    const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
+    const variance = lens.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / lens.length;
+    simetriaParafo = 1 - Math.min(variance / (mean + 1), 1);
+  }
+
+  const sentLens = sentences.filter(s => s.split(/\s+/).filter(w => w.length > 0).length > 5)
+    .map(s => s.split(/\s+/).filter(w => w.length > 0).length);
+  let cadencia = 1;
+  if (sentLens.length > 1) {
+    const meanS = sentLens.reduce((a, b) => a + b, 0) / sentLens.length;
+    const varS = sentLens.reduce((a, b) => a + Math.pow(b - meanS, 2), 0) / sentLens.length;
+    cadencia = 1 - Math.min(varS / (meanS + 1), 1);
+  }
+
+  const h2s = (texto.match(/<h2[^>]*>(.*?)<\/h2>/gi) || []);
+  let simetriaH2 = 1;
+  if (h2s.length > 1) {
+    const h2Lens = h2s.map(h => h.length);
+    const meanH = h2Lens.reduce((a, b) => a + b, 0) / h2Lens.length;
+    const varH = h2Lens.reduce((a, b) => a + Math.pow(b - meanH, 2), 0) / h2Lens.length;
+    simetriaH2 = 1 - Math.min(varH / (meanH + 1), 1);
+  }
+
+  const enumerativos = (texto.match(/(primero|segundo|tercero|cuarto|en primer lugar|en segundo lugar)/gi) || []).length;
+
+  return {
+    repeticion_verbos: repeticionVerb,
+    simetria_parrafos: simetriaParafo,
+    cadencia_oraciones: cadencia,
+    simetria_h2: simetriaH2,
+    exceso_enumerativo: Math.min(enumerativos / 3, 1),
+  };
+}
+
+// ───────────────────────────────────────────────
 // MOTOR PRINCIPAL (LOGICA UNIFICADA ORO)
 // ───────────────────────────────────────────────
 
@@ -162,6 +298,19 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const citasConAtribucion = (noticia.contenido.match(/<blockquote>[^]*?(?:—\s*[A-ZÁÉÍÓÚÑ]|inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó])[^]*?<\/blockquote>/gi) || []).length;
   const citasSospechosas = tieneCitas && citasConAtribucion === 0;
 
+  // ─── NUEVAS DETECCIONES FORENSE NICARAGUA ───
+  const palabrasSensiblesDetectadas = detectarPalabrasSensibles(noticia.contenido + ' ' + noticia.titulo);
+  const cierreGenerico = detectarCierreGenerico(noticia.contenido);
+  const aiMetrics = detectarMetricasIA(noticia.contenido);
+  const aiIndex = (
+    aiMetrics.repeticion_verbos * 0.2 +
+    (1 - aiMetrics.simetria_parrafos) * 0.3 +
+    (1 - aiMetrics.cadencia_oraciones) * 0.2 +
+    (1 - aiMetrics.simetria_h2) * 0.1 +
+    aiMetrics.exceso_enumerativo * 0.2
+  );
+  const aiRiskScoreMetrics = Math.max(0, Math.min(100, 100 - (aiIndex * 100)));
+
   // ─── CÁLCULO DE PUNTUACIÓN ───
   let scoreTotal = 0;
 
@@ -196,7 +345,20 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   if (!atribucionesFalsas) scoreTotal += 10;
   else scoreTotal += 0;
 
+  // G. Palabras sensibles de Nicaragua (penalización)
+  if (palabrasSensiblesDetectadas.length > 0) {
+    scoreTotal -= Math.min(palabrasSensiblesDetectadas.length * 5, 20);
+  }
+
+  // H. Cierre genérico (penalización)
+  if (cierreGenerico) scoreTotal -= 10;
+
+  // I. Métricas IA mejoradas (bonus/penalización)
+  if (aiRiskScoreMetrics >= 80) scoreTotal += 5;
+  else if (aiRiskScoreMetrics < 50) scoreTotal -= 10;
+
   if (scoreTotal > 100) scoreTotal = 100;
+  if (scoreTotal < 0) scoreTotal = 0;
 
   // ─── CHECKS UNIFICADOS (mismos 8 que el panel) ───
   const textoPlano = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -271,8 +433,11 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     aiRiskScore,
     aiRiskLevel,
     aiRiskIssues,
+    palabrasSensiblesDetectadas,
+    cierreGenerico,
+    aiMetrics,
     filtros,
-    accionesRequeridas: generarAcciones(filtros),
+    accionesRequeridas: generarAcciones(filtros, palabrasSensiblesDetectadas, cierreGenerico),
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
   };
 }
@@ -856,7 +1021,11 @@ function analizarFiltroAIRisk(n: NoticiaInput): FiltroResultado {
 // UTILIDADES
 // ───────────────────────────────────────────────
 
-function generarAcciones(filtros: ResultadoAnalisis['filtros']): string[] {
+function generarAcciones(
+  filtros: ResultadoAnalisis['filtros'],
+  palabrasSensibles?: PalabraSensibleDetectada[],
+  cierreGenerico?: boolean
+): string[] {
   const acciones: string[] = [];
 
   if (!filtros.oro.aprobado) {
@@ -879,6 +1048,15 @@ function generarAcciones(filtros: ResultadoAnalisis['filtros']): string[] {
   }
   if (!filtros.aiRisk.aprobado) {
     acciones.push('Riesgo IA: Variar verbos, romper simetría de párrafos, alternar longitud de frases, reducir conectores enumerativos');
+  }
+
+  if (palabrasSensibles && palabrasSensibles.length > 0) {
+    palabrasSensibles.slice(0, 3).forEach(p => {
+      acciones.push(`PALABRA SENSIBLE: Reemplaza "${p.palabra}" por "${p.sugerencia}".`);
+    });
+  }
+  if (cierreGenerico) {
+    acciones.push('CIERRE GENÉRICO: Reemplaza frases tipo "autoridades investigan" por citas reales de fuentes.');
   }
 
   return acciones;
