@@ -31,6 +31,27 @@ async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
   }
 }
 
+/** Verifica si una noticia ya fue enviada a un canal en las ultimas N horas */
+async function yaDistribuido(
+  db: FirebaseFirestore.Firestore,
+  slug: string,
+  canal: string,
+  horas: number = 24
+): Promise<boolean> {
+  const desde = new Date(Date.now() - horas * 60 * 60 * 1000);
+  try {
+    const snap = await db.collection('distribuciones').where('slug', '==', slug).limit(20).get();
+    const docs = snap.docs
+      .filter((d) => (d.data().resultados || {})[canal]?.ok === true)
+      .sort((a, b) => new Date((b.data().fecha || 0)).getTime() - new Date((a.data().fecha || 0)).getTime());
+    if (docs.length === 0) return false;
+    const fecha = docs[0].data().fecha;
+    return fecha && new Date(fecha) > desde;
+  } catch {
+    return false;
+  }
+}
+
 /** Envía a Telegram */
 async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; error?: string }> {
   try {
@@ -199,29 +220,45 @@ export async function POST(request: NextRequest) {
     }
 
     const noticia = snap.docs[0].data() as Noticia;
-    const resultados: Record<string, { ok: boolean; error?: string }> = {};
+    const resultados: Record<string, { ok: boolean; skipped?: boolean; error?: string }> = {};
 
     const promises: Promise<void>[] = [];
 
     if (canales.includes('telegram')) {
-      promises.push(
-        enviarTelegram(noticia, db).then(r => { resultados.telegram = r; })
-      );
+      if (await yaDistribuido(db, slug, 'telegram')) {
+        resultados.telegram = { ok: true, skipped: true };
+      } else {
+        promises.push(
+          enviarTelegram(noticia, db).then(r => { resultados.telegram = r; })
+        );
+      }
     }
     if (canales.includes('facebook')) {
-      promises.push(
-        enviarFacebook(noticia).then(r => { resultados.facebook = r; })
-      );
+      if (await yaDistribuido(db, slug, 'facebook')) {
+        resultados.facebook = { ok: true, skipped: true };
+      } else {
+        promises.push(
+          enviarFacebook(noticia).then(r => { resultados.facebook = r; })
+        );
+      }
     }
     if (canales.includes('indexnow')) {
-      promises.push(
-        enviarIndexNow(noticia).then(r => { resultados.indexnow = r; })
-      );
+      if (await yaDistribuido(db, slug, 'indexnow')) {
+        resultados.indexnow = { ok: true, skipped: true };
+      } else {
+        promises.push(
+          enviarIndexNow(noticia).then(r => { resultados.indexnow = r; })
+        );
+      }
     }
     if (canales.includes('push')) {
-      promises.push(
-        enviarPush(noticia).then(r => { resultados.push = r; })
-      );
+      if (await yaDistribuido(db, slug, 'push')) {
+        resultados.push = { ok: true, skipped: true };
+      } else {
+        promises.push(
+          enviarPush(noticia).then(r => { resultados.push = r; })
+        );
+      }
     }
 
     // Delegar canales adicionales a sus endpoints

@@ -4021,16 +4021,22 @@ sin texto ni marcas de agua, composición periodística"
               });
               const distData = await distRes.json().catch(() => ({}));
               if (distData.success) {
-                const okCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v && v.ok)
+                const enviadosAhora = Object.entries(distData.resultados || {})
+                  .filter(([, v]) => v && v.ok && !v.skipped)
+                  .map(([k]) => k);
+                const yaEnviados = Object.entries(distData.resultados || {})
+                  .filter(([, v]) => v && v.skipped)
                   .map(([k]) => k);
                 const failCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v && !v.ok)
+                  .filter(([, v]) => v && !v.ok && !v.skipped)
                   .map(([k, v]) => `${k}: ${(v && v.error) || 'Error'}`);
-                if (okCanales.length) {
-                  showToast('🚀 Distribuido a: ' + okCanales.join(', '), 'success');
+                if (enviadosAhora.length) {
+                  showToast('🚀 Distribuido a: ' + enviadosAhora.join(', '), 'success');
                   const tgStatusEl = document.getElementById('telegramStatus');
-                  if (tgStatusEl && okCanales.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
+                  if (tgStatusEl && enviadosAhora.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
+                }
+                if (yaEnviados.length) {
+                  showToast('⏭️ Ya estaba distribuido en: ' + yaEnviados.join(', '), 'info');
                 }
                 if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
               }
@@ -5223,8 +5229,16 @@ window.batchRestore = async function() {
         });
         const data = await res.json().catch(() => ({}));
         if (data.success) {
-          appendAgenteLog(`✅ ${data.titulo?.substring(0, 50) || slug} distribuido`, 'success');
-          showToast('Distribuido: ' + (data.titulo || slug), 'success');
+          const enviados = Object.entries(data.resultados || {}).filter(([,v]) => v && v.ok && !v.skipped).map(([k]) => k);
+          const skipped = Object.entries(data.resultados || {}).filter(([,v]) => v && v.skipped).map(([k]) => k);
+          if (enviados.length) {
+            appendAgenteLog(`✅ ${data.titulo?.substring(0, 50) || slug} → ${enviados.join(', ')}`, 'success');
+            showToast('Distribuido: ' + (data.titulo || slug), 'success');
+          }
+          if (skipped.length) {
+            appendAgenteLog(`⏭️ ${data.titulo?.substring(0, 50) || slug} ya estaba en: ${skipped.join(', ')}`, 'info');
+            showToast('Ya estaba distribuido en: ' + skipped.join(', '), 'info');
+          }
           await cargarMetricasAgente();
         } else {
           appendAgenteLog(`❌ ${slug}: ${data.error || 'Error'}`, 'error');
