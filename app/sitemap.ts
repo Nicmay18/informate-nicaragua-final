@@ -6,6 +6,8 @@ import { getAllEvergreen } from '@/lib/evergreen';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
 
+export const revalidate = 3600;
+
 const baseUrl = 'https://nicaraguainformate.com';
 
 const cachedGetNews = unstable_cache(

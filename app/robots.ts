@@ -24,6 +24,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/buscar', '/api/', '/admin/'],
       },
+      {
+        userAgent: 'AdsBot-Google',
+        allow: '/',
+      },
     ],
     sitemap: [
       'https://nicaraguainformate.com/sitemap.xml',

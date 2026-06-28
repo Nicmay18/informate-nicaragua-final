@@ -43,6 +43,7 @@ interface AdsenseUnitProps {
   style?: React.CSSProperties;
   className?: string;
   responsive?: boolean;
+  minHeight?: number;
 }
 
 export default function AdsenseUnit({
@@ -52,6 +53,7 @@ export default function AdsenseUnit({
   style,
   className,
   responsive = true,
+  minHeight = 250,
 }: AdsenseUnitProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const insRef = useRef<HTMLModElement>(null);
@@ -101,7 +103,7 @@ export default function AdsenseUnit({
         display: 'block',
         textAlign: 'center',
         overflow: 'hidden',
-        minHeight: 250,
+        minHeight,
         maxHeight: 600,
         backgroundColor: visible ? 'transparent' : '#f8fafc',
         borderRadius: 8,
