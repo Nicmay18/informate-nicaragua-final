@@ -142,6 +142,24 @@ export async function GET() {
       return marcaOficial || tieneTrafico;
     }).length;
 
+    // Bitácora: noticias con tráfico pero sin marca oficial de distribución
+    const bitacoraDistribucion = noticiasRecientes
+      .filter((n: any) => (n.vistas || 0) > 0)
+      .sort((a: any, b: any) => (b.vistas || 0) - (a.vistas || 0))
+      .slice(0, 20)
+      .map((n: any) => {
+        const marcaOficial = n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
+        const fechaNota = parseFirestoreDate(n.fecha);
+        return {
+          titulo: n.titulo || 'Sin título',
+          slug: n.slug || '',
+          categoria: n.categoria || '—',
+          vistas: n.vistas || 0,
+          detectadoPor: marcaOficial ? 'Agente/Telegram' : 'Tráfico real (manual)',
+          fecha: fechaNota ? fechaNota.toISOString() : null,
+        };
+      });
+
     const totalRecientes = noticiasRecientes.length || 1;
 
     // Score basado en métricas
@@ -257,6 +275,9 @@ export async function GET() {
         pctDistribuidas,
         totalRecientes,
       },
+
+      // Bitácora de distribución detectada
+      bitacoraDistribucion,
     });
   } catch (err: any) {
     console.error('[admin/auditor-dashboard]', err);
