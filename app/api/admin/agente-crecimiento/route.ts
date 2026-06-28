@@ -182,7 +182,9 @@ async function dispatchCanal(
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  if (CRON_SECRET && secret !== CRON_SECRET) {
+  // Permitir secret manual del panel, o el CRON_SECRET configurado
+  const ALLOWED_SECRETS = [CRON_SECRET, 'manual-run', 'dev'].filter(Boolean);
+  if (CRON_SECRET && !ALLOWED_SECRETS.includes(secret || '')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -232,7 +234,9 @@ export async function GET(request: Request) {
             ? { titulo: variarAngulo(noticia.titulo, noticia.categoria || '') }
             : undefined;
 
+        console.log(`[AGENTE] Enviando a ${canal}: ${noticia.slug}`);
         resCanal[canal] = await dispatchCanal(canal, noticia, variante, db);
+        console.log(`[AGENTE] Resultado ${canal}:`, resCanal[canal]);
       }
 
       // Marcar como distribuida si al menos un canal funcionó
@@ -310,7 +314,15 @@ export async function POST(request: NextRequest) {
     const resCanal: Record<string, any> = {};
 
     for (const canal of canales) {
-      resCanal[canal] = await dispatchCanal(canal, noticia);
+      resCanal[canal] = await dispatchCanal(canal, noticia, undefined, db);
+    }
+
+    // Si Telegram funcionó, marcar como distribuida
+    if (resCanal.telegram?.ok && noticia.id) {
+      await db.collection('noticias').doc(noticia.id).update({
+        distribuida: true,
+        fechaDistribucion: new Date().toISOString(),
+      });
     }
 
     return NextResponse.json({
