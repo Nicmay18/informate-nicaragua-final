@@ -756,7 +756,7 @@
                 <div style="margin-top: 12px;">
                   <label class="form-label" style="font-size: 12px;">URL directa o CDN:</label>
                   <div style="display: flex; gap: 8px;">
-                    <input type="url" class="form-input" id="imagenUrl" placeholder="https://..." oninput="actualizarEstadoImagen()" onchange="actualizarPreview()" style="font-size: 13px;">
+                    <input type="url" class="form-input" id="imagenUrl" placeholder="https://..." oninput="actualizarEstadoImagen(); actualizarPieFotoDesdeAutor();" onchange="actualizarPreview(); actualizarPieFotoDesdeAutor();" style="font-size: 13px;">
                     <button type="button" class="btn btn-secondary btn-sm" onclick="buscarImagenUnsplash()" style="white-space: nowrap;"><i class="fas fa-search"></i> Stock</button>
                   </div>
                   <div id="estadoImagen" style="margin-top: 6px; font-size: 12px; display: none;"></div>
@@ -2334,6 +2334,8 @@ sin texto ni marcas de agua, composición periodística"
 
         // 5. Guardar URL raw de GitHub (disponible inmediatamente)
         document.getElementById('imagenUrl').value = cdnUrl;
+        actualizarPreview();
+        actualizarPieFotoDesdeAutor();
         showToast('Imagen subida. Disponible inmediatamente.', 'success');
       } catch (err) {
         console.error('Error procesando imagen:', err);
