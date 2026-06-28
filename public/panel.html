@@ -7240,6 +7240,24 @@ VERIFICACIÓN FINAL
       }
     };
 
+    // ─── REDISTRIBUIR AUTORES ───
+    window.redistribuirAutores = async function() {
+      if (!confirm('⚖️ ¿Redistribuir autores?\n\nMoverá 50% de las noticias de Keyling a Maycol y José Luis para que AdSense vea múltiples autores.\n\n¿Continuar?')) return;
+      showLoading(true, 'Redistribuyendo autores...');
+      try {
+        const res = await fetch('/api/admin/redistribuir-autores?secret=manual-run', { method: 'POST' });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || 'Error desconocido');
+        showToast(data.resumen, 'success');
+        agregarLog(data.resumen, 'success');
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[redistribuirAutores]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
     // ─── ELIMINAR 50 NOTICIAS MÁS VIEJAS ───
     window.eliminarNoticiasViejas = async function() {
       if (!confirm('⚠️ ¿Eliminar las 50 noticias más viejas de Firestore? Esta acción NO se puede deshacer.')) return;

@@ -246,6 +246,15 @@ export async function GET(request: Request) {
           distribuida: true,
           fechaDistribucion: new Date().toISOString(),
         });
+        // Guardar registro en distribuciones para evitar reenvío
+        await db.collection('distribuciones').add({
+          slug: noticia.slug,
+          titulo: noticia.titulo,
+          fecha: new Date().toISOString(),
+          resultados: resCanal,
+          horaNicaragua,
+          modo: 'automatico',
+        });
       }
 
       resultados.push({
@@ -271,6 +280,16 @@ export async function GET(request: Request) {
 
         if (!(await yaDistribuido(db, top.slug, canal, 6))) {
           const r = await dispatchCanal(canal, top, variante, db);
+          if (r.ok && top.slug) {
+            await db.collection('distribuciones').add({
+              slug: top.slug,
+              titulo: top.titulo,
+              fecha: new Date().toISOString(),
+              resultados: { [canal]: r },
+              horaNicaragua,
+              modo: 'republicado_trending',
+            });
+          }
           resultados.push({
             slug: top.slug,
             titulo: top.titulo,
