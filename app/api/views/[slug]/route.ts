@@ -49,6 +49,16 @@ export async function POST(
       { merge: true }
     );
 
+    // También incrementar vistas en la noticia (panel lee de aquí)
+    const noticiaSnap = await db.collection('noticias').where('slug', '==', slug).limit(1).get();
+    if (!noticiaSnap.empty) {
+      const noticiaRef = noticiaSnap.docs[0].ref;
+      await noticiaRef.update({
+        vistas: FieldValue.increment(1),
+        actualizadoEn: FieldValue.serverTimestamp(),
+      });
+    }
+
     // Guardar log de tráfico con referrer/utm (separado para no sobreescribir)
     const logRef = db.collection('traffic_log').doc();
     await logRef.set({
