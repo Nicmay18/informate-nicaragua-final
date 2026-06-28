@@ -189,7 +189,7 @@ export async function GET(request: Request) {
   }
 
   const hora = new Date().getHours();
-  const horaNicaragua = (hora + 6) % 24; // UTC-6
+  const horaNicaragua = (hora - 6 + 24) % 24; // UTC-6 → Nicaragua
 
   // Define qué canales activar según horario Nicaragua
   const agenda: Record<number, string[]> = {
