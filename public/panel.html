@@ -3987,48 +3987,39 @@ sin texto ni marcas de agua, composición periodística"
 
         if (esNueva) {
           let progress = 30; progressBar.style.width = progress + '%';
-          const tgToken = localStorage.getItem('admin_tg_token') || '';
-          if (enviarTelegram && tgToken) {
-            document.getElementById('statusRedesTitulo').textContent = 'Enviando a Telegram...';
-            document.getElementById('statusRedesTexto').textContent = 'Conectando con bot...';
-            progress = 60; progressBar.style.width = progress + '%';
-            try {
-              await postToApi('telegram', { noticia: noticiaData });
-              showToast('Enviado a Telegram', 'success');
-              const tgStatusEl = document.getElementById('telegramStatus');
-              if (tgStatusEl) tgStatusEl.textContent = '✅ Enviado a Telegram';
-            } catch (err) {
-              showToast('Error Telegram: ' + err.message, 'warning');
-              const tgStatusEl = document.getElementById('telegramStatus');
-              if (tgStatusEl) tgStatusEl.textContent = '❌ Error Telegram';
-            }
-          } else if (enviarTelegram && !tgToken) {
-            showToast('Telegram: No hay token configurado. Ve a Configuración > Telegram Bot.', 'warning');
-            const tgStatusEl = document.getElementById('telegramStatus');
-            if (tgStatusEl) tgStatusEl.textContent = '⚠️ Sin token de Telegram';
-          }
 
-          // ─── DISTRIBUCIÓN AUTOMÁTICA MULTICANAL ───
-          if (esNueva && publicado && slug) {
+          // ─── DISTRIBUCIÓN UNIFICADA (un solo envío por canal) ───
+          // Solo distribuir si la noticia está publicada
+          if (publicado && slug) {
+            const canalesDistribuir = [];
+            if (enviarTelegram) canalesDistribuir.push('telegram');
+            canalesDistribuir.push('indexnow', 'push');
             try {
+              document.getElementById('statusRedesTitulo').textContent = 'Distribuyendo...';
+              document.getElementById('statusRedesTexto').textContent = 'Enviando a canales...';
+              progress = 60; progressBar.style.width = progress + '%';
               const distRes = await fetch('/api/admin/distribuir', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug, canales: ['telegram', 'indexnow', 'push'] })
+                body: JSON.stringify({ slug, canales: canalesDistribuir })
               });
               const distData = await distRes.json().catch(() => ({}));
               if (distData.success) {
                 const okCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v.ok)
+                  .filter(([, v]) => (v as any).ok)
                   .map(([k]) => k);
                 const failCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => !v.ok)
-                  .map(([k, v]) => `${k}: ${v.error || 'Error'}`);
-                if (okCanales.length) showToast('🚀 Distribuido a: ' + okCanales.join(', '), 'success');
+                  .filter(([, v]) => !(v as any).ok)
+                  .map(([k, v]) => `${k}: ${(v as any).error || 'Error'}`);
+                if (okCanales.length) {
+                  showToast('🚀 Distribuido a: ' + okCanales.join(', '), 'success');
+                  const tgStatusEl = document.getElementById('telegramStatus');
+                  if (tgStatusEl && okCanales.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
+                }
                 if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
               }
             } catch (e) {
-              console.warn('Distribución automática falló:', e);
+              console.warn('Distribución falló:', e);
             }
           }
 
