@@ -14,11 +14,27 @@ interface Noticia {
   fecha?: any;
 }
 
-/** Envía a Telegram */
-async function enviarTelegram(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+/** Lee config de Telegram desde Firestore (igual que /api/admin/config) */
+async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
   try {
-    const TG_TOKEN = process.env.TG_TOKEN || '';
-    const TG_CHAT_ID = process.env.TG_CHAT_ID || '';
+    const snap = await db.collection('config').doc('admin').get();
+    const data = snap.data() || {};
+    return {
+      token: data.telegram?.token || process.env.TG_TOKEN || '',
+      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || '',
+    };
+  } catch {
+    return {
+      token: process.env.TG_TOKEN || '',
+      chatId: process.env.TG_CHAT_ID || '',
+    };
+  }
+}
+
+/** Envía a Telegram */
+async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
@@ -189,7 +205,7 @@ export async function POST(request: NextRequest) {
 
     if (canales.includes('telegram')) {
       promises.push(
-        enviarTelegram(noticia).then(r => { resultados.telegram = r; })
+        enviarTelegram(noticia, db).then(r => { resultados.telegram = r; })
       );
     }
     if (canales.includes('facebook')) {
