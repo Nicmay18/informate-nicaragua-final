@@ -283,11 +283,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <img src={noticia.autorFoto} alt={noticia.autor} width={42} height={42} style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${category.color}` }} />
           ) : (
             <span style={{ width: 42, height: 42, borderRadius: '50%', background: category.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
-              {(noticia.autor || 'NI').trim().charAt(0).toUpperCase()}
+              {(noticia.autor || 'R').trim().charAt(0).toUpperCase()}
             </span>
           )}
           <div style={{ lineHeight: 1.3 }}>
-            <div style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b' }}>{noticia.autor || 'Nicaragua Informate'}</div>
+            <div style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b' }}>{noticia.autor || 'Redacción Nicaragua Informate'}</div>
             <div style={{ fontSize: 12.5, color: '#94a3b8' }}>Redacción · {category.name}</div>
           </div>
         </div>
