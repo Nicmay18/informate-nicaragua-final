@@ -665,6 +665,16 @@
                     <option value="Tecnología">💻 Tecnología</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label class="form-label">Autor <span class="required">*</span></label>
+                  <select class="form-select" id="autor" required>
+                    <option value="Redacción Nicaragua Informate">Redacción Nicaragua Informate</option>
+                    <option value="Maycol Josué Nicaragua Rivas">Maycol Josué Nicaragua Rivas</option>
+                    <option value="José Luis López Ramírez">José Luis López Ramírez</option>
+                    <option value="Keyling Elieth Rivera Muñoz">Keyling Elieth Rivera Muñoz</option>
+                  </select>
+                  <div class="word-counter"><span style="color: var(--gray-400);">AdSense ve quién escribe</span></div>
+                </div>
               </div>
 
               <div class="form-row">
@@ -3853,10 +3863,11 @@ sin texto ni marcas de agua, composición periodística"
         } catch (e) { console.warn('No se pudo calcular nivel:', e); }
 
         // Usar resumen manual si existe, si no usar el contenido completo para mostrar todo
-        const noticiaData = {
+        const autorSeleccionado = document.getElementById('autor').value;
+      const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), fechaActualizacion: serverTimestamp(), vistas: 0,
-          autor: 'Keyling Elieth Rivera Muñoz', destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador',
+          autor: autorSeleccionado, destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador',
           nivel: nivelInfo.nivel, nivelScore: nivelInfo.score, nivelFecha: new Date().toISOString()
         };
         let esNueva = !noticiaId;
@@ -4259,6 +4270,7 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
         document.getElementById('publicado').checked = data.estado === 'publicado';
+        document.getElementById('autor').value = data.autor || 'Redacción Nicaragua Informate';
         actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
         document.getElementById('tituloFormulario').textContent = 'Editar Noticia';
         document.getElementById('subtituloFormulario').textContent = 'Modifica los detalles de la publicación';

@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       resumen: resumen || '',
       categoria: categoria || 'General',
       imagen: imagen || '',
-      autor: autor || 'Keyling Rivera M.',
+      autor: autor || 'Redacción Nicaragua Informate',
       autorRol: categoria === 'Deportes' ? 'Redacción Deportiva' : 'Nicaragua Informate',
       fecha: now,
       fechaActualizacion: now,

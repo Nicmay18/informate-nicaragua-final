@@ -18,24 +18,28 @@ export async function POST(request: NextRequest) {
 
     const db = getAdminDb();
 
-    // Obtener todas las noticias de Keyling
-    const snap = await db.collection('noticias').where('autor', '==', 'Keyling Elieth Rivera Muñoz').get();
+    // Obtener TODAS las noticias y filtrar las de Keyling (variantes del nombre)
+    const snap = await db.collection('noticias').limit(500).get();
 
-    if (snap.empty) {
+    const noticiasKeyling = snap.docs.filter(doc => {
+      const autor = (doc.data().autor || '').toLowerCase();
+      return autor.includes('keyling') || autor.includes('rivera');
+    }).map(doc => {
+      const d = doc.data();
+      return { id: doc.id, titulo: d.titulo || '', autor: d.autor || '' };
+    });
+
+    if (noticiasKeyling.length === 0) {
       return NextResponse.json({ success: true, message: 'No hay noticias de Keyling para redistribuir', total: 0 });
     }
 
-    const noticias = snap.docs.map(doc => {
-      const d = doc.data();
-      return { id: doc.id, titulo: d.titulo || '' };
-    });
-    const total = noticias.length;
-    
+    const total = noticiasKeyling.length;
+
     // Calcular cuántas mover: 50% de las de Keyling
     const aMover = Math.floor(total * 0.5);
-    
+
     // Seleccionar aleatoriamente las noticias a mover
-    const shuffled = [...noticias].sort(() => Math.random() - 0.5);
+    const shuffled = [...noticiasKeyling].sort(() => Math.random() - 0.5);
     const paraMaycol = shuffled.slice(0, Math.floor(aMover / 2));
     const paraJose = shuffled.slice(Math.floor(aMover / 2), aMover);
 
