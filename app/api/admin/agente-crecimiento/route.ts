@@ -13,9 +13,92 @@ interface Noticia {
   contenido?: string;
   categoria?: string;
   imagen?: string;
+  imagenRedes?: string;
   fecha?: any;
   distribuida?: boolean;
   vistas?: number;
+}
+
+/** Lee config de Telegram desde Firestore (igual que /api/admin/config) */
+async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
+  try {
+    const snap = await db.collection('config').doc('admin').get();
+    const data = snap.data() || {};
+    return {
+      token: data.telegram?.token || process.env.TG_TOKEN || '',
+      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || '',
+    };
+  } catch {
+    return { token: process.env.TG_TOKEN || '', chatId: process.env.TG_CHAT_ID || '' };
+  }
+}
+
+/** Envía a Telegram directamente (sin pasar por HTTP interno) */
+async function enviarTelegramDirecto(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
+    if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
+
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const emoji: Record<string, string> = {
+      Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
+      Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
+    };
+    const catEmoji = emoji[noticia.categoria || ''] || '📰';
+
+    let contexto = '';
+    const texto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
+    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
+    for (const o of oraciones) {
+      const limpia = o.trim();
+      if (contexto.length + limpia.length + 1 > 180 && contexto.length > 0) break;
+      contexto += (contexto ? ' ' : '') + limpia;
+    }
+    if (!contexto) contexto = texto.substring(0, 120);
+
+    const caption = `<b>${catEmoji} ${noticia.titulo}</b>\n\n${contexto}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
+    const imagen = noticia.imagenRedes || noticia.imagen;
+    const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
+
+    const endpoint = imagenValida
+      ? `https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`
+      : `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
+
+    const body = imagenValida
+      ? { chat_id: TG_CHAT_ID, photo: imagen, caption: caption.slice(0, 1024), parse_mode: 'HTML', reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] } }
+      : { chat_id: TG_CHAT_ID, text: caption.slice(0, 4096), parse_mode: 'HTML', reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] } };
+
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    return { ok: data.ok, error: data.ok ? undefined : data.description };
+  } catch (e: any) {
+    return { ok: false, error: e.message };
+  }
+}
+
+/** Notifica a IndexNow directamente */
+async function enviarIndexNowDirecto(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const payload = {
+      host: 'nicaraguainformate.com',
+      key: INDEXNOW_KEY,
+      keyLocation: `https://nicaraguainformate.com/${INDEXNOW_KEY}.txt`,
+      urlList: [url],
+    };
+    const [bing, yandex] = await Promise.allSettled([
+      fetch('https://www.bing.com/indexnow', { method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' }, body: JSON.stringify(payload) }),
+      fetch('https://yandex.com/indexnow', { method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' }, body: JSON.stringify(payload) }),
+    ]);
+    return { ok: true, error: `Bing:${bing.status} Yandex:${yandex.status}` };
+  } catch (e: any) {
+    return { ok: false, error: e.message };
+  }
 }
 
 /** Genera variación de ángulo para republicar sin repetir */
@@ -54,17 +137,27 @@ async function yaDistribuido(
   return fecha && new Date(fecha) > desde;
 }
 
-/** Distribuye a un canal interno */
+/** Distribuye a un canal directamente (sin fetch interno que falle por timeout en Vercel) */
 async function dispatchCanal(
   canal: string,
   noticia: Noticia,
-  variante?: { titulo?: string; resumen?: string }
+  variante?: { titulo?: string; resumen?: string },
+  db?: FirebaseFirestore.Firestore
 ): Promise<{ ok: boolean; error?: string }> {
-  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-  const payload: any = { noticia: { ...noticia, titulo: variante?.titulo || noticia.titulo, resumen: variante?.resumen || noticia.resumen } };
+  const noticiaFinal = { ...noticia, titulo: variante?.titulo || noticia.titulo, resumen: variante?.resumen || noticia.resumen };
 
+  if (canal === 'telegram') {
+    if (!db) return { ok: false, error: 'Falta db para Telegram' };
+    return enviarTelegramDirecto(noticiaFinal, db);
+  }
+
+  if (canal === 'indexnow') {
+    return enviarIndexNowDirecto(noticiaFinal);
+  }
+
+  // Para canales que aún necesitan endpoint externo (Facebook, WhatsApp, Twitter, etc.)
+  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
   const endpoints: Record<string, string> = {
-    telegram: '/api/admin/distribuir',
     twitter: '/api/admin/twitter',
     whatsapp: '/api/admin/whatsapp',
     facebook: '/api/admin/distribuir',
@@ -72,27 +165,11 @@ async function dispatchCanal(
     medium: '/api/admin/medium',
   };
 
-  // Para distribuir solo Telegram/IndexNow/Push desde el endpoint distribuir
-  if (canal === 'telegram') {
-    // Llamar directo a distribuir con solo ese canal
-    try {
-      const res = await fetch(`${baseUrl}${endpoints[canal]}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug: noticia.slug, canales: ['telegram', 'indexnow'] }),
-      });
-      const data = await res.json().catch(() => ({}));
-      return { ok: data.success || false, error: data.error };
-    } catch (e: any) {
-      return { ok: false, error: e.message };
-    }
-  }
-
   try {
     const res = await fetch(`${baseUrl}${endpoints[canal] || '/api/admin/distribuir'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ noticia: noticiaFinal }),
     });
     const data = await res.json().catch(() => ({}));
     return { ok: data.success || data.ok || false, error: data.error };
@@ -155,7 +232,7 @@ export async function GET(request: Request) {
             ? { titulo: variarAngulo(noticia.titulo, noticia.categoria || '') }
             : undefined;
 
-        resCanal[canal] = await dispatchCanal(canal, noticia, variante);
+        resCanal[canal] = await dispatchCanal(canal, noticia, variante, db);
       }
 
       // Marcar como distribuida si al menos un canal funcionó
@@ -189,7 +266,7 @@ export async function GET(request: Request) {
         const canal = canalesActuales.includes('telegram') ? 'telegram' : canalesActuales[0];
 
         if (!(await yaDistribuido(db, top.slug, canal, 6))) {
-          const r = await dispatchCanal(canal, top, variante);
+          const r = await dispatchCanal(canal, top, variante, db);
           resultados.push({
             slug: top.slug,
             titulo: top.titulo,
