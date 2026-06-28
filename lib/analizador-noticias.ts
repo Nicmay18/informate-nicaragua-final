@@ -439,9 +439,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
   else if (esForense) nivel = 'FORENSE';
-  else if (checksOK >= 7) nivel = 'ORO';
-  else if (checksOK >= 5) nivel = 'PLATA';
-  else if (checksOK >= 3) nivel = 'BRONCE';
+  else if (checksOK >= 6) nivel = 'ORO';
+  else if (checksOK >= 4) nivel = 'PLATA';
+  else if (checksOK >= 2) nivel = 'BRONCE';
   else nivel = 'RECHAZADO';
 
   const aprobado = nivel !== 'RECHAZADO';
