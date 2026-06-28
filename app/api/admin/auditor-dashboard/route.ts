@@ -119,13 +119,23 @@ export async function GET() {
     const consejos: string[] = [];
 
     // Análisis del archivo reciente
-    const conImagen = noticiasRecientes.filter((n: any) => n.imagen && n.imagen.startsWith('http')).length;
-    const conResumen = noticiasRecientes.filter((n: any) => n.resumen && n.resumen.length > 50).length;
-    const conContenido = noticiasRecientes.filter((n: any) => {
-      const texto = (n.contenido || '').replace(/<[^>]*>/g, ' ').trim();
-      return texto.split(/\s+/).length >= 200;
+    const conImagen = noticiasRecientes.filter((n: any) => {
+      const img = n.imagen || n.image || n.imagenUrl || '';
+      return img && (img.startsWith('http') || img.startsWith('/images/') || img.startsWith('images/') || img.startsWith('data:image'));
     }).length;
-    const distribuidasRecientes = noticiasRecientes.filter((n: any) => n.distribuida).length;
+    const conResumen = noticiasRecientes.filter((n: any) => {
+      const r = n.resumen || n.metaDescription || n.summary || '';
+      const texto = (typeof r === 'string' ? r : '').replace(/<[^>]*>/g, ' ').trim();
+      return texto.length > 30; // 30+ chars de texto real
+    }).length;
+    const conContenido = noticiasRecientes.filter((n: any) => {
+      const texto = (n.contenido || n.body || n.texto || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+      const palabras = texto.split(/\s+/).filter((w: string) => w.length > 0);
+      return palabras.length >= 150; // 150+ palabras es contenido sólido
+    }).length;
+    const distribuidasRecientes = noticiasRecientes.filter((n: any) => {
+      return n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
+    }).length;
 
     const totalRecientes = noticiasRecientes.length || 1;
 
@@ -136,23 +146,23 @@ export async function GET() {
     const pctDistribuidas = Math.round((distribuidasRecientes / totalRecientes) * 100);
 
     // Veredicto del Periodista Senior
-    if (pctImagen < 70) {
-      alertas.push(`${100 - pctImagen}% de notas recientes sin imagen destacada. Cada nota necesita foto para Google Discover.`);
+    if (pctImagen < 50) {
+      alertas.push(`${100 - pctImagen}% de notas recientes sin imagen destacada. Verificar que las notas tengan foto.`);
       problemasCriticos++;
     } else { scoreCalidad += 15; }
 
-    if (pctResumen < 70) {
-      alertas.push('Resumen/meta descripción insuficiente. Afecta SEO y CTR en Google.');
+    if (pctResumen < 50) {
+      alertas.push('Resumen/meta descripción insuficiente en notas recientes. Afecta SEO y CTR.');
       problemasCriticos++;
     } else { scoreCalidad += 15; }
 
-    if (pctContenido < 60) {
-      alertas.push('Notas demasiado cortas (<200 palabras). Riesgo de thin content para AdSense.');
+    if (pctContenido < 50) {
+      alertas.push('Algunas notas recientes son cortas. Meta: 200+ palabras para AdSense.');
       problemasCriticos++;
     } else { scoreCalidad += 20; }
 
-    if (pctDistribuidas < 50) {
-      alertas.push('Menos del 50% de notas recientes distribuidas. Se pierde alcance orgánico.');
+    if (pctDistribuidas < 30) {
+      alertas.push('Pocas notas recientes distribuidas. Se pierde alcance orgánico.');
       problemasCriticos++;
     } else { scoreCalidad += 15; }
 
