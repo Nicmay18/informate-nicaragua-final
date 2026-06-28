@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   compiler: {
-    removeConsole: false,
+    removeConsole: true,
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
