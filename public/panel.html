@@ -667,7 +667,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Autor <span class="required">*</span></label>
-                  <select class="form-select" id="autor" required>
+                  <select class="form-select" id="autor" required onchange="actualizarPieFotoDesdeAutor()">
                     <option value="Redacción Nicaragua Informate">Redacción Nicaragua Informate</option>
                     <option value="Maycol Josué Nicaragua Rivas">Maycol Josué Nicaragua Rivas</option>
                     <option value="José Luis López Ramírez">José Luis López Ramírez</option>
@@ -2354,7 +2354,7 @@ sin texto ni marcas de agua, composición periodística"
       const url = document.getElementById('imagenUrl').value;
       const preview = document.getElementById('preview');
       const container = document.getElementById('imagePreviewContainer');
-      if (url) { preview.src = url; container.classList.add('active'); document.getElementById('uploadZone').style.display = 'none'; }
+      if (url) { preview.src = url; container.classList.add('active'); document.getElementById('uploadZone').style.display = 'none'; actualizarPieFotoDesdeAutor(); }
       else { container.classList.remove('active'); document.getElementById('uploadZone').style.display = 'block'; }
       actualizarEstadoImagen();
       actualizarPreviewHomepage();
@@ -4272,6 +4272,7 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('publicado').checked = data.estado === 'publicado';
         document.getElementById('autor').value = data.autor || 'Redacción Nicaragua Informate';
         actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
+        if (!data.pieFoto) actualizarPieFotoDesdeAutor();
         document.getElementById('tituloFormulario').textContent = 'Editar Noticia';
         document.getElementById('subtituloFormulario').textContent = 'Modifica los detalles de la publicación';
         const estaPublicado = data.estado === 'publicado';
@@ -7143,6 +7144,32 @@ VERIFICACIÓN FINAL
     if (calidadLink) {
       calidadLink.addEventListener('click', () => { setTimeout(cargarDashboardCalidad, 100); });
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    // AUTO PIE DE FOTO — se actualiza al cambiar autor o imagen
+    // ═══════════════════════════════════════════════════════════════
+    const PIE_FOTO_CREDITOS = {
+      'Redacción Nicaragua Informate': 'Redacción NI',
+      'Maycol Josué Nicaragua Rivas': 'Maycol Nicaragua',
+      'José Luis López Ramírez': 'José L. López',
+      'Keyling Elieth Rivera Muñoz': 'Keyling Rivera',
+    };
+
+    window.actualizarPieFotoDesdeAutor = function() {
+      const pieFotoEl = document.getElementById('pieFoto');
+      const imagenUrl = document.getElementById('imagenUrl').value.trim();
+      if (!imagenUrl) return; // no generar si no hay imagen todavía
+
+      const pie = pieFotoEl.value.trim();
+      // Solo auto-generar si está vacío o era un valor auto-generado anterior
+      const esAutoGenerado = !pie || pie.startsWith('Foto:') || pie.includes('/ Nicaragua Informate');
+      if (!esAutoGenerado) return;
+
+      const autor = document.getElementById('autor').value;
+      const departamento = document.getElementById('departamento').value || 'Nicaragua';
+      const credito = PIE_FOTO_CREDITOS[autor] || 'Redacción NI';
+      pieFotoEl.value = `${departamento}. Foto: ${credito} / Nicaragua Informate`;
+    };
 
     // ═══════════════════════════════════════════════════════════════
     // ANALIZADOR DE IMAGEN (Canvas)
