@@ -103,8 +103,15 @@ export async function GET() {
 
     // ─── 6. CALIDAD DEL ARCHIVO ───
     const noticiasRecientes = noticias
-      .filter((n: any) => n.fecha && new Date(n.fecha) >= hace30d)
-      .sort((a: any, b: any) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+      .filter((n: any) => {
+        const fd = parseFirestoreDate(n.fecha);
+        return fd && fd >= hace30d;
+      })
+      .sort((a: any, b: any) => {
+        const da = parseFirestoreDate(a.fecha);
+        const db = parseFirestoreDate(b.fecha);
+        return (db?.getTime() || 0) - (da?.getTime() || 0);
+      });
 
     let scoreCalidad = 0;
     let problemasCriticos = 0;
@@ -240,6 +247,17 @@ export async function GET() {
     console.error('[admin/auditor-dashboard]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
+}
+
+/** Convierte fecha de Firestore (Timestamp, string ISO, Date, seconds) a Date JS */
+function parseFirestoreDate(val: any): Date | null {
+  if (!val) return null;
+  if (val instanceof Date) return val;
+  if (typeof val.toDate === 'function') return val.toDate(); // Firestore Timestamp
+  if (val._seconds) return new Date(val._seconds * 1000); // Serialized timestamp
+  if (val.seconds && typeof val.seconds === 'number') return new Date(val.seconds * 1000);
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? null : d;
 }
 
 function detectarFuente(referrer?: string, utmSource?: string): string {
