@@ -1,11 +1,39 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window {
     adsbygoogle: unknown[];
+    adsbygoogleLoaded?: boolean;
   }
+}
+
+let globalScriptLoaded = false;
+
+function loadAdsenseScript(): Promise<void> {
+  return new Promise((resolve) => {
+    if (globalScriptLoaded || typeof window === 'undefined') {
+      resolve();
+      return;
+    }
+    if (window.adsbygoogleLoaded) {
+      globalScriptLoaded = true;
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838';
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    script.onload = () => {
+      globalScriptLoaded = true;
+      window.adsbygoogleLoaded = true;
+      resolve();
+    };
+    script.onerror = () => resolve(); // no bloquear si falla
+    document.head.appendChild(script);
+  });
 }
 
 interface AdsenseUnitProps {
@@ -25,27 +53,49 @@ export default function AdsenseUnit({
   className,
   responsive = true,
 }: AdsenseUnitProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const insRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (pushed.current) return;
-    try {
-      if (typeof window !== 'undefined' && Array.isArray(window.adsbygoogle)) {
-        window.adsbygoogle.push({});
-        pushed.current = true;
-      } else if (typeof window !== 'undefined') {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible || pushed.current) return;
+
+    (async () => {
+      await loadAdsenseScript();
+      try {
         window.adsbygoogle = window.adsbygoogle || [];
         window.adsbygoogle.push({});
         pushed.current = true;
+      } catch {
+        // AdSense no cargado aun — silenciar error
       }
-    } catch {
-      // AdSense no cargado aun — silenciar error
-    }
-  }, []);
+    })();
+  }, [visible]);
 
   return (
     <div
+      ref={containerRef}
       className={className}
       style={{
         display: 'block',
@@ -53,7 +103,7 @@ export default function AdsenseUnit({
         overflow: 'hidden',
         minHeight: 250,
         maxHeight: 600,
-        backgroundColor: 'transparent',
+        backgroundColor: visible ? 'transparent' : '#f8fafc',
         borderRadius: 8,
         ...style,
       }}

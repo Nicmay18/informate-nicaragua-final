@@ -324,6 +324,12 @@ const nextConfig: NextConfig = {
       // Cache-Control para / y /noticias manejado por Next.js ISR (force-static + revalidate)
       // No forzar max-age=0 para evitar anular cache de Vercel
       {
+        source: '/',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           {

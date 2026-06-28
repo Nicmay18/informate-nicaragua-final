@@ -333,8 +333,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 src={getResponsiveImageUrl(noticia.imagen)}
                 alt={noticia.titulo}
                 variant="hero"
+                priority={true}
                 fill
-                priority
                 fetchPriority="high"
               />
             </div>
