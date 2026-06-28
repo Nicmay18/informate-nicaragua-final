@@ -3,26 +3,58 @@ import { getAdminDb } from '@/lib/firebase-admin';
 
 export const revalidate = 0;
 
+/** Detecta la fuente de tráfico a partir del referrer o utm_source */
+function detectarFuente(referrer?: string, utmSource?: string): string {
+  const ref = (referrer || '').toLowerCase();
+  const utm = (utmSource || '').toLowerCase();
+
+  // Prioridad: utm_source sobre referrer
+  if (utm.includes('facebook') || utm.includes('fb')) return 'facebook';
+  if (utm.includes('telegram') || utm.includes('tg')) return 'telegram';
+  if (utm.includes('whatsapp') || utm.includes('wa')) return 'whatsapp';
+  if (utm.includes('twitter') || utm.includes('x.com')) return 'twitter';
+  if (utm.includes('google')) return 'google';
+
+  // Analizar referrer
+  if (ref.includes('facebook.com') || ref.includes('fb.me') || ref.includes('fb.com')) return 'facebook';
+  if (ref.includes('t.me') || ref.includes('telegram.org')) return 'telegram';
+  if (ref.includes('whatsapp.com') || ref.includes('wa.me')) return 'whatsapp';
+  if (ref.includes('twitter.com') || ref.includes('x.com') || ref.includes('t.co')) return 'twitter';
+  if (ref.includes('google.com') || ref.includes('google')) return 'google';
+  if (ref.includes('bing.com')) return 'google'; // agrupar buscadores
+  if (ref.includes('yahoo.com')) return 'google';
+
+  // Si hay referrer pero no coincide con ninguno conocido
+  if (ref && ref.startsWith('http')) return 'otro';
+
+  return 'directo';
+}
+
 export async function GET() {
   try {
     const db = getAdminDb();
     
-    // 1. Obtener eventos de tráfico de las últimas 24 horas para "Real-Time"
+    // 1. Obtener eventos de tráfico de las últimas 24 horas desde traffic_log
     const ahora = new Date();
     const hace24h = new Date(ahora.getTime() - 24 * 60 * 60 * 1000);
-    
+
     const trafficSnap = await db
-      .collection('analytics_traffic')
+      .collection('traffic_log')
       .where('timestamp', '>=', hace24h)
       .orderBy('timestamp', 'desc')
       .limit(1000)
       .get();
 
-    const events = trafficSnap.docs.map(d => ({
-      id: d.id,
-      ...d.data(),
-      timestamp: d.data().timestamp?.toDate().toISOString() || new Date().toISOString()
-    }));
+    const events = trafficSnap.docs.map(d => {
+      const data = d.data();
+      return {
+        id: d.id,
+        ...data,
+        // Normalizar referrer/utmSource a source
+        source: data.source || detectarFuente(data.referrer, data.utmSource),
+        timestamp: data.timestamp?.toDate().toISOString() || new Date().toISOString()
+      };
+    });
 
     // 2. Procesar estadísticas
     const stats = {
@@ -41,7 +73,7 @@ export async function GET() {
     };
 
     events.forEach((ev: any) => {
-      // Fuentes
+      // Fuentes - usar source normalizado
       const src = ev.source || 'directo';
       stats.fuentes[src] = (stats.fuentes[src] || 0) + 1;
 
