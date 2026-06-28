@@ -33,7 +33,9 @@ export async function GET() {
       if (v > 0) { noticiasConVistas++; }
       else { noticiasSinVistas++; }
       if (n.estado === 'publicado') noticiasPublicadas++;
-      if (n.distribuida) {
+      const oficialmenteDistribuida = n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
+      const tieneTraficoReal = (n.vistas || 0) > 0;
+      if (oficialmenteDistribuida || tieneTraficoReal) {
         estadoDistribucion.conDistribucion++;
       } else {
         estadoDistribucion.sinDistribucion++;
@@ -134,7 +136,10 @@ export async function GET() {
       return palabras.length >= 150; // 150+ palabras es contenido sólido
     }).length;
     const distribuidasRecientes = noticiasRecientes.filter((n: any) => {
-      return n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
+      // Distribuida oficialmente en BD, o con tráfico real (alguien entró = fue compartida)
+      const marcaOficial = n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
+      const tieneTrafico = (n.vistas || 0) > 0;
+      return marcaOficial || tieneTrafico;
     }).length;
 
     const totalRecientes = noticiasRecientes.length || 1;
@@ -162,7 +167,7 @@ export async function GET() {
     } else { scoreCalidad += 20; }
 
     if (pctDistribuidas < 30) {
-      alertas.push('Pocas notas recientes distribuidas. Se pierde alcance orgánico.');
+      alertas.push('Algunas notas recientes no tienen tráfico confirmado. Revisar que estén compartidas en redes.');
       problemasCriticos++;
     } else { scoreCalidad += 15; }
 
@@ -185,7 +190,7 @@ export async function GET() {
     }
 
     if (noticiasSinDistribuir > 20) {
-      consejos.push(`${noticiasSinDistribuir} notas sin distribuir. Ejecutar Agente para maximizar alcance.`);
+      consejos.push(`${noticiasSinDistribuir} notas sin tráfico detectado. Considerar compartirlas en WhatsApp, Facebook o Telegram para generar alcance.`);
     }
 
     // Impacto de distribuciones
