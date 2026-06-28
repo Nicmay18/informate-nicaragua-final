@@ -1673,6 +1673,20 @@ sin texto ni marcas de agua, composición periodística"
         </div>
 
         <div class="content-grid" style="margin-top: 20px;">
+          <div class="card" style="grid-column: 1 / -1;">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card-title"><i class="fas fa-inbox" style="color: var(--warning);"></i>Noticias Pendientes de Distribuir</h3>
+              <span id="badgePendientes" style="background: var(--warning); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;">0</span>
+            </div>
+            <div class="card-body">
+              <div id="agentePendientesList" style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                <div style="color: var(--gray-400); text-align: center; padding: 16px;">Cargar métricas para ver pendientes...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid" style="margin-top: 20px;">
           <div class="card">
             <div class="card-header"><h3 class="card-title"><i class="fas fa-fire" style="color: var(--danger);"></i>Top Noticias (más vistas)</h3></div>
             <div class="card-body">
@@ -4006,11 +4020,11 @@ sin texto ni marcas de agua, composición periodística"
               const distData = await distRes.json().catch(() => ({}));
               if (distData.success) {
                 const okCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => (v as any).ok)
+                  .filter(([, v]) => v && v.ok)
                   .map(([k]) => k);
                 const failCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => !(v as any).ok)
-                  .map(([k, v]) => `${k}: ${(v as any).error || 'Error'}`);
+                  .filter(([, v]) => v && !v.ok)
+                  .map(([k, v]) => `${k}: ${(v && v.error) || 'Error'}`);
                 if (okCanales.length) {
                   showToast('🚀 Distribuido a: ' + okCanales.join(', '), 'success');
                   const tgStatusEl = document.getElementById('telegramStatus');
@@ -5085,9 +5099,30 @@ window.batchRestore = async function() {
         document.getElementById('agenteVistas').textContent = data.vistasTotales?.toLocaleString() || '—';
         document.getElementById('agenteDistribuciones').textContent = data.distribucionesTotal?.toLocaleString() || '—';
 
-        // Calcular pendientes
-        const pendientes = data.totalNoticias - (data.distribucionesTotal || 0);
+        // Pendientes REALES (query a Firestore, no resta matematica)
+        const pendientes = typeof data.noticiasSinDistribuir === 'number' ? data.noticiasSinDistribuir : (data.totalNoticias - (data.distribucionesTotal || 0));
         document.getElementById('agentePendientes').textContent = pendientes > 0 ? pendientes.toLocaleString() : '0';
+
+        // Lista de noticias pendientes
+        const badgePendientes = document.getElementById('badgePendientes');
+        const pendientesList = document.getElementById('agentePendientesList');
+        if (badgePendientes) badgePendientes.textContent = pendientes.toLocaleString();
+        if (pendientesList) {
+          if (data.listaPendientes && data.listaPendientes.length > 0) {
+            pendientesList.innerHTML = data.listaPendientes.map(n => {
+              const fechaStr = n.fecha ? new Date(n.fecha).toLocaleDateString('es-NI') : '—';
+              return `<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f8fafc; border-radius:8px;">
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
+                  <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${fechaStr}</div>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="distribuirPendiente('${n.slug}')" title="Distribuir ahora"><i class="fas fa-paper-plane"></i></button>
+              </div>`;
+            }).join('');
+          } else {
+            pendientesList.innerHTML = `<div style="color: var(--gray-400); text-align: center; padding: 16px;">✅ No hay noticias publicadas pendientes de distribuir</div>`;
+          }
+        }
 
         // Canales
         const canalesDiv = document.getElementById('agenteCanalesGrid');
@@ -5172,6 +5207,30 @@ window.batchRestore = async function() {
         showToast('Error ejecutando agente: ' + err.message, 'error');
       } finally {
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-play"></i><span>Ejecutar Ahora</span>'; }
+      }
+    };
+
+    window.distribuirPendiente = async function(slug) {
+      if (!slug) return;
+      appendAgenteLog(`Distribuyendo ${slug}...`, 'info');
+      try {
+        const res = await fetch('/api/admin/distribuir', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, canales: ['telegram', 'indexnow', 'push'] })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data.success) {
+          appendAgenteLog(`✅ ${data.titulo?.substring(0, 50) || slug} distribuido`, 'success');
+          showToast('Distribuido: ' + (data.titulo || slug), 'success');
+          await cargarMetricasAgente();
+        } else {
+          appendAgenteLog(`❌ ${slug}: ${data.error || 'Error'}`, 'error');
+          showToast('Error distribuyendo: ' + (data.error || 'Error'), 'error');
+        }
+      } catch (err) {
+        appendAgenteLog('Error: ' + err.message, 'error');
+        showToast('Error: ' + err.message, 'error');
       }
     };
 

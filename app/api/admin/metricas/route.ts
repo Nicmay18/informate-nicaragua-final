@@ -51,7 +51,30 @@ export async function GET() {
       };
     });
 
-    // 4. Vistas totales
+    // 4. Noticias REALMENTE sin distribuir (con query a Firestore, no resta matematica)
+    const pendientesSnap = await db
+      .collection('noticias')
+      .where('distribuida', '==', false)
+      .where('estado', '==', 'publicado')
+      .limit(50)
+      .get();
+
+    const noticiasSinDistribuir = pendientesSnap.size;
+    const listaPendientes = pendientesSnap.docs
+      .map(d => {
+        const data = d.data();
+        return {
+          id: d.id,
+          titulo: data.titulo || 'Sin título',
+          slug: data.slug || '',
+          fecha: data.fecha || null,
+          categoria: data.categoria || '—',
+        };
+      })
+      .sort((a: any, b: any) => new Date(b.fecha || 0).getTime() - new Date(a.fecha || 0).getTime())
+      .slice(0, 10);
+
+    // 5. Vistas totales
     let vistasTotales = 0;
     try {
       const allSnap = await db.collection('noticias').select('vistas').get();
@@ -66,6 +89,8 @@ export async function GET() {
       totalNoticias,
       vistasTotales,
       distribucionesTotal: distribuciones.length,
+      noticiasSinDistribuir,
+      listaPendientes,
       porCanal,
       topNoticias,
       ultimasDistribuciones: distribuciones.slice(0, 10).map((d: any) => ({
