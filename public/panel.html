@@ -529,6 +529,7 @@
             <li class="nav-item"><a class="nav-link" onclick="showTab('correcciones-tab', this)"><i class="fas fa-tools" style="color: var(--danger);"></i><span>Correcciones</span><span class="nav-badge" style="background: var(--danger); color: white;">PELIGRO</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/admin/crecimiento" target="_blank"><i class="fas fa-rocket" style="color: var(--success);"></i><span>Crecimiento</span><span class="nav-badge" style="background: var(--success); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('agente-tab', this)"><i class="fas fa-robot" style="color: var(--warning);"></i><span>Agente IA</span><span class="nav-badge" style="background: var(--warning); color: white;">AUTO</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('auditoria-tab', this)"><i class="fas fa-user-tie" style="color: var(--primary-600);"></i><span>Auditoría</span><span class="nav-badge" style="background: var(--primary-100); color: var(--primary-700);">IA</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('guias-tab', this)"><i class="fas fa-book"></i><span>Guías Editoriales</span></a></li>
           </ul>
         </div>
@@ -1687,6 +1688,145 @@ sin texto ni marcas de agua, composición periodística"
               <div id="agenteLog" style="background: #0f172a; color: #e2e8f0; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">
                 <span style="color: #22c55e;">✅ Agente activo. Índice Firestore compilando (1-3 min). Presione "Ejecutar Ahora" para distribuir noticias.</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUDITORÍA INTELIGENTE — Periodista Senior IA -->
+      <div id="auditoria-tab" class="tab-content">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>🎩 Auditoría Inteligente</h1>
+            <p>El periodista senior de 20 años evalúa tu trabajo, detecta problemas y te dice qué hacer.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="cargarAuditoria()"><i class="fas fa-sync"></i><span>Actualizar Auditoría</span></button>
+            <button class="btn btn-success" onclick="ejecutarAgenteManual()" style="background: var(--success);"><i class="fas fa-play"></i><span>Ejecutar Agente</span></button>
+          </div>
+        </div>
+
+        <!-- VEREDICTO DEL PERIODISTA SENIOR -->
+        <div id="auditoria-veredicto" style="margin-bottom: 24px;">
+          <div class="card" style="border-left: 4px solid #ccc;">
+            <div class="card-body" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+              <div style="position: relative; width: 100px; height: 100px; flex-shrink: 0;">
+                <svg width="100" height="100" viewBox="0 0 100 100" style="transform: rotate(-90deg);">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+                  <circle id="auditoria-score-circle" cx="50" cy="50" r="42" fill="none" stroke="#22c55e" stroke-width="8" stroke-dasharray="263.89" stroke-dashoffset="263.89" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;"/>
+                </svg>
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                  <span id="auditoria-score-valor" style="font-size: 28px; font-weight: 800; color: var(--gray-900);">—</span>
+                  <span style="font-size: 10px; color: var(--gray-400); font-weight: 600;">SCORE</span>
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 250px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                  <span id="auditoria-nivel-badge" style="background: #ccc; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">CARGANDO...</span>
+                  <span style="font-size: 12px; color: var(--gray-400);">Veredicto del Periodista Senior</span>
+                </div>
+                <p id="auditoria-veredicto-texto" style="color: var(--gray-600); font-size: 14px; line-height: 1.6; margin: 0;">Analizando el archivo editorial, tráfico y distribuciones...</p>
+                <div id="auditoria-problemas-badge" style="margin-top: 8px; display: none;">
+                  <span style="background: var(--danger-light); color: var(--danger); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;"><i class="fas fa-exclamation-triangle"></i> <span id="auditoria-problemas-count">0</span> problemas críticos detectados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MÉTRICAS UNIFICADAS -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card" style="border-bottom: 3px solid var(--primary-500);">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-total-noticias">—</div><div class="stat-label">Noticias en BD</div></div>
+              <div class="stat-icon blue"><i class="fas fa-newspaper"></i></div>
+            </div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid var(--success);">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-vistas-totales">—</div><div class="stat-label">Vistas Totales</div></div>
+              <div class="stat-icon green"><i class="fas fa-eye"></i></div>
+            </div>
+            <div class="stat-change" id="aud-tasa-vistas-badge"><i class="fas fa-percentage"></i><span id="aud-tasa-vistas">—% con vistas</span></div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid var(--warning);">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-distribuciones-30d">—</div><div class="stat-label">Distribuciones 30d</div></div>
+              <div class="stat-icon orange"><i class="fas fa-broadcast-tower"></i></div>
+            </div>
+            <div class="stat-change"><i class="fas fa-clock"></i><span id="aud-distribuciones-24h">— hoy</span></div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid var(--danger);">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-sin-distribuir">—</div><div class="stat-label">Sin Distribuir</div></div>
+              <div class="stat-icon red"><i class="fas fa-inbox"></i></div>
+            </div>
+            <div class="stat-change negative"><i class="fas fa-arrow-up"></i><span>pendientes</span></div>
+          </div>
+        </div>
+
+        <!-- TRÁFICO + CANALES EN DOS COLUMNAS -->
+        <div class="content-grid" style="margin-bottom: 24px;">
+          <!-- FUENTES DE TRÁFICO -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-satellite-dish" style="color: var(--danger);"></i>Fuentes de Tráfico (24h)</h3>
+              <span style="font-size: 12px; color: var(--gray-400);"><span id="aud-visitas-24h">0</span> visitas</span>
+            </div>
+            <div class="card-body" id="aud-fuentes-body">
+              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 30px;"></div>
+            </div>
+          </div>
+
+          <!-- CANALES DE DISTRIBUCIÓN -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-broadcast-tower" style="color: var(--primary-600);"></i>Canales de Distribución (30d)</h3>
+              <span style="font-size: 12px; color: var(--gray-400);">Exitosos vs Fallidos</span>
+            </div>
+            <div class="card-body" id="aud-canales-body">
+              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 30px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP NOTICIAS + CALIDAD -->
+        <div class="content-grid" style="margin-bottom: 24px;">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-trophy" style="color: var(--warning);"></i>Top Noticias (más vistas)</h3></div>
+            <div class="card-body" id="aud-top-noticias-body">
+              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 40px;"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-heartbeat" style="color: var(--success);"></i>Salud del Archivo (30d)</h3></div>
+            <div class="card-body" id="aud-salud-body">
+              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="height: 40px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALERTAS Y CONSEJOS -->
+        <div class="content-grid">
+          <div class="card" style="border-left: 3px solid var(--danger);">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>Alertas Críticas</h3></div>
+            <div class="card-body" id="aud-alertas-body">
+              <p style="color: var(--gray-400); text-align: center; padding: 20px;">Analizando...</p>
+            </div>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--success);">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-lightbulb" style="color: var(--success);"></i>Consejos del Senior</h3></div>
+            <div class="card-body" id="aud-consejos-body">
+              <p style="color: var(--gray-400); text-align: center; padding: 20px;">Analizando...</p>
             </div>
           </div>
         </div>
@@ -3275,6 +3415,7 @@ sin texto ni marcas de agua, composición periodística"
       }
       if (tabId === 'config-tab') cargarConfiguracion();
       if (tabId === 'agente-tab') cargarMetricasAgente();
+      if (tabId === 'auditoria-tab') cargarAuditoria();
       if (tabId === 'evaluador-tab') cargarSelectEvaluador();
       if (tabId === 'calidad-tab') {
         if (typeof renderDashboardCalidad === 'function') renderDashboardCalidad();
@@ -5016,6 +5157,182 @@ window.batchRestore = async function() {
         showToast('Error ejecutando agente: ' + err.message, 'error');
       } finally {
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-play"></i><span>Ejecutar Ahora</span>'; }
+      }
+    };
+
+    // ─── AUDITORÍA INTELIGENTE — Periodista Senior ───
+    window.cargarAuditoria = async function() {
+      try {
+        const res = await fetch('/api/admin/auditor-dashboard');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const d = await res.json();
+
+        // 1. Veredicto del Periodista Senior
+        const score = d.scoreCalidad ?? 0;
+        const circle = document.getElementById('auditoria-score-circle');
+        const valor = document.getElementById('auditoria-score-valor');
+        const badge = document.getElementById('auditoria-nivel-badge');
+        const veredictoTexto = document.getElementById('auditoria-veredicto-texto');
+        const problemasBadge = document.getElementById('auditoria-problemas-badge');
+        const problemasCount = document.getElementById('auditoria-problemas-count');
+
+        if (valor) valor.textContent = score;
+        if (circle) {
+          const circ = 2 * Math.PI * 42; // 263.89
+          const offset = circ - (circ * score) / 100;
+          circle.style.strokeDashoffset = offset;
+          circle.style.stroke = d.colorVeredicto || '#22c55e';
+        }
+        if (badge) {
+          badge.textContent = d.nivelVeredicto || '—';
+          badge.style.background = d.colorVeredicto || '#ccc';
+        }
+        if (veredictoTexto) {
+          veredictoTexto.textContent = d.impactoDistribucion || 'Sin análisis reciente.';
+        }
+        if (problemasBadge && problemasCount) {
+          problemasCount.textContent = d.problemasCriticos || 0;
+          problemasBadge.style.display = (d.problemasCriticos || 0) > 0 ? 'block' : 'none';
+        }
+
+        // 2. Métricas unificadas
+        document.getElementById('aud-total-noticias').textContent = (d.totalNoticias ?? 0).toLocaleString();
+        document.getElementById('aud-vistas-totales').textContent = (d.vistasTotales ?? 0).toLocaleString();
+        document.getElementById('aud-tasa-vistas').textContent = (d.tasaVistas ?? 0) + '% con vistas';
+        document.getElementById('aud-distribuciones-30d').textContent = (d.distribuciones30d ?? 0).toLocaleString();
+        document.getElementById('aud-distribuciones-24h').textContent = (d.distribuciones24h ?? 0) + ' hoy';
+        document.getElementById('aud-sin-distribuir').textContent = (d.noticiasSinDistribuir ?? 0).toLocaleString();
+
+        // 3. Fuentes de tráfico
+        document.getElementById('aud-visitas-24h').textContent = (d.visitas24h ?? 0).toLocaleString();
+        const fuentesBody = document.getElementById('aud-fuentes-body');
+        if (fuentesBody) {
+          const fuentes = d.fuentes || [];
+          if (fuentes.length === 0) {
+            fuentesBody.innerHTML = '<p style="color: var(--gray-400); text-align: center; padding: 20px;">Sin visitas en las últimas 24h.</p>';
+          } else {
+            fuentesBody.innerHTML = fuentes.map(f => `
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:28px; height:28px; border-radius:50%; background: var(--primary-100); color: var(--primary-600); display:flex; align-items:center; justify-content:center; font-size:12px; text-transform:uppercase; font-weight:700;">${f.nombre?.charAt(0) || '?'}</div>
+                  <div style="font-weight:600; font-size:13px; text-transform:capitalize;">${f.nombre}</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-weight:700; font-size:13px;">${f.visitas.toLocaleString()}</div>
+                  <div style="font-size:11px; color: var(--gray-400);">${f.articulosUnicos} artículos</div>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 4. Canales de distribución
+        const canalesBody = document.getElementById('aud-canales-body');
+        if (canalesBody) {
+          const canales = d.canalStats || {};
+          const entries = Object.entries(canales);
+          if (entries.length === 0) {
+            canalesBody.innerHTML = '<p style="color: var(--gray-400); text-align: center; padding: 20px;">Sin distribuciones recientes.</p>';
+          } else {
+            canalesBody.innerHTML = entries.map(([nombre, stat]) => {
+              const pct = stat.total > 0 ? Math.round((stat.exitosos / stat.total) * 100) : 0;
+              const color = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#ef4444';
+              return `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+                  <div style="font-weight:600; font-size:13px; text-transform:capitalize;">${nombre}</div>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="font-size:11px; color: var(--gray-400);"><span style="color:#22c55e; font-weight:700;">${stat.exitosos}</span> / <span style="color:#ef4444; font-weight:700;">${stat.fallidos}</span> fallos</div>
+                    <div style="width:50px; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden;">
+                      <div style="width:${pct}%; height:100%; background:${color}; border-radius:3px;"></div>
+                    </div>
+                    <span style="font-size:11px; font-weight:700; color:${color}; width:30px; text-align:right;">${pct}%</span>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+
+        // 5. Top noticias
+        const topBody = document.getElementById('aud-top-noticias-body');
+        if (topBody) {
+          const tops = d.topNoticias || [];
+          if (tops.length === 0) {
+            topBody.innerHTML = '<p style="color: var(--gray-400); text-align: center; padding: 20px;">Sin datos de vistas.</p>';
+          } else {
+            topBody.innerHTML = tops.slice(0, 5).map((n, i) => `
+              <div style="display:flex; align-items:center; gap:10px; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+                <span style="font-weight:800; color: var(--primary); min-width:20px;">${i + 1}</span>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
+                  <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${n.vistas?.toLocaleString() || 0} vistas</div>
+                </div>
+                ${n.distribuida ? '<span style="font-size:11px; color:var(--success); font-weight:600;">✓</span>' : '<span style="font-size:11px; color:var(--warning);">○</span>'}
+              </div>
+            `).join('');
+          }
+        }
+
+        // 6. Salud del archivo
+        const saludBody = document.getElementById('aud-salud-body');
+        if (saludBody && d.calidadDetalle) {
+          const det = d.calidadDetalle;
+          saludBody.innerHTML = `
+            <div style="display:flex; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+              <span style="font-size:13px;">Con imagen destacada</span>
+              <span style="font-weight:700; color: ${det.pctImagen >= 70 ? '#22c55e' : '#ef4444'};">${det.pctImagen}%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+              <span style="font-size:13px;">Con resumen/meta SEO</span>
+              <span style="font-weight:700; color: ${det.pctResumen >= 70 ? '#22c55e' : '#ef4444'};">${det.pctResumen}%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
+              <span style="font-size:13px;">Contenido robusto (200+ palabras)</span>
+              <span style="font-weight:700; color: ${det.pctContenido >= 60 ? '#22c55e' : '#ef4444'};">${det.pctContenido}%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px; background:#f8fafc; border-radius:8px;">
+              <span style="font-size:13px;">Notas distribuidas</span>
+              <span style="font-weight:700; color: ${det.pctDistribuidas >= 50 ? '#22c55e' : '#ef4444'};">${det.pctDistribuidas}%</span>
+            </div>
+          `;
+        }
+
+        // 7. Alertas
+        const alertasBody = document.getElementById('aud-alertas-body');
+        if (alertasBody) {
+          const alertas = d.alertas || [];
+          if (alertas.length === 0) {
+            alertasBody.innerHTML = '<p style="color: var(--success); text-align: center; padding: 20px;"><i class="fas fa-check-circle"></i> Sin alertas críticas. Todo en orden.</p>';
+          } else {
+            alertasBody.innerHTML = alertas.map(a => `
+              <div style="display:flex; align-items:flex-start; gap:10px; padding:10px; background: var(--danger-light); border-radius:8px; margin-bottom:8px; border-left: 3px solid var(--danger);">
+                <i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-top:2px;"></i>
+                <span style="font-size:13px; color: var(--gray-700); line-height:1.5;">${a}</span>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 8. Consejos
+        const consejosBody = document.getElementById('aud-consejos-body');
+        if (consejosBody) {
+          const consejos = d.consejos || [];
+          if (consejos.length === 0) {
+            consejosBody.innerHTML = '<p style="color: var(--gray-400); text-align: center; padding: 20px;">Sin consejos adicionales.</p>';
+          } else {
+            consejosBody.innerHTML = consejos.map(c => `
+              <div style="display:flex; align-items:flex-start; gap:10px; padding:10px; background: var(--success-light); border-radius:8px; margin-bottom:8px; border-left: 3px solid var(--success);">
+                <i class="fas fa-lightbulb" style="color: var(--success); margin-top:2px;"></i>
+                <span style="font-size:13px; color: var(--gray-700); line-height:1.5;">${c}</span>
+              </div>
+            `).join('');
+          }
+        }
+
+        showToast('Auditoría actualizada. Score: ' + score, 'success');
+      } catch (err) {
+        console.error('[Auditoría]', err);
+        showToast('Error cargando auditoría: ' + err.message, 'error');
       }
     };
 
