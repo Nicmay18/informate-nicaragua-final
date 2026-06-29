@@ -145,9 +145,10 @@ export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization') || '';
     const secretFromHeader = authHeader.replace('Bearer ', '').trim();
+    const adminKey = request.headers.get('x-admin-key') || '';
     const { searchParams } = new URL(request.url);
     const secretFromQuery = searchParams.get('secret') || '';
-    const providedSecret = secretFromHeader || secretFromQuery;
+    const providedSecret = secretFromHeader || secretFromQuery || adminKey;
 
     const validSecrets = [CRON_SECRET, ADMIN_API_KEY].filter(Boolean);
     if (!providedSecret || (validSecrets.length > 0 && !validSecrets.includes(providedSecret))) {

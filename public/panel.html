@@ -6784,7 +6784,7 @@ VERIFICACIÓN FINAL
         const secret = localStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/auditoria-completa?secret=' + encodeURIComponent(secret), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': secret },
           body: JSON.stringify({ categoria: 'Sucesos', limite: 100 })
         });
         const data = await res.json();
