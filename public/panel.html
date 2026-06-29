@@ -3864,6 +3864,17 @@ sin texto ni marcas de agua, composición periodística"
       const fbPatterns = ['facebook.com','fbcdn.net','fbcdn.com','scontent-','instagram.com','cdninstagram'];
       if (fbPatterns.some(p => imagenUrl.toLowerCase().includes(p))) { showToast('No se permiten imágenes de Facebook CDN', 'error'); return; }
 
+      // ─── CANDADO ANTI DOBLE-ENVÍO ───
+      // Evita que un doble clic (o Enter + clic) dispare la publicación dos
+      // veces y termine enviando el mensaje a Telegram por duplicado.
+      if (window.__publicando) {
+        showToast('Ya se está publicando, espera un momento...', 'warning');
+        return;
+      }
+      window.__publicando = true;
+      const btnGuardar = document.getElementById('btnGuardar');
+      if (btnGuardar) btnGuardar.disabled = true;
+
       showLoading(true, noticiaId ? 'Actualizando...' : 'Publicando...');
       const statusDiv = document.getElementById('statusRedes');
       const progressBar = document.getElementById('progressBar');
@@ -4083,6 +4094,9 @@ sin texto ni marcas de agua, composición periodística"
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
       } finally {
+        // Liberar candado anti doble-envío y reactivar botón
+        window.__publicando = false;
+        if (btnGuardar) btnGuardar.disabled = false;
         showLoading(false);
         setTimeout(() => { statusDiv.style.display = 'none'; progressBar.style.width = '0%'; }, 2000);
       }
