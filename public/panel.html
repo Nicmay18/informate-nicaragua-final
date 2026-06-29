@@ -5202,31 +5202,28 @@ window.batchRestore = async function() {
     };
 
     window.ejecutarAgenteManual = async function() {
-      appendAgenteLog('Ejecutando agente manualmente...', 'info');
+      appendAgenteLog('Generando resumen diario para Telegram...', 'info');
       const btn = document.querySelector('[onclick="ejecutarAgenteManual()"]');
       if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Procesando...</span>'; }
       try {
-        const res = await fetch('/api/admin/agente-crecimiento?secret=manual-run');
+        // force=1 permite re-enviar el resumen de hoy para probarlo manualmente
+        const res = await fetch('/api/cron/resumen-diario?secret=manual-run&force=1');
         const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'Error desconocido');
+        if (!data.success) throw new Error(data.error || data.details || 'Error desconocido');
 
-        appendAgenteLog(`Agente ejecutado. Hora NI: ${data.horaNicaragua}h. Canales: ${data.canales?.join(', ') || 'ninguno'}`, 'success');
-        appendAgenteLog(`Procesadas: ${data.procesadas} noticias`, data.procesadas > 0 ? 'success' : 'warning');
-
-        if (data.resultados) {
-          for (const r of data.resultados) {
-            const okCanales = Object.entries(r.canales || {}).filter(([,v]) => v.ok).map(([k]) => k);
-            const failCanales = Object.entries(r.canales || {}).filter(([,v]) => !v.ok && !v.skipped).map(([k, v]) => `${k}: ${v.error || 'Error'}`);
-            if (okCanales.length) appendAgenteLog(`✓ ${r.titulo?.substring(0, 40)} → ${okCanales.join(', ')}`, 'success');
-            if (failCanales.length) appendAgenteLog(`✗ ${r.titulo?.substring(0, 40)} → ${failCanales.join('; ')}`, 'error');
-          }
+        if (data.skipped) {
+          appendAgenteLog(`Resumen no enviado: ${data.reason}`, 'warning');
+          showToast('Resumen no enviado: ' + data.reason, 'warning');
+        } else {
+          appendAgenteLog(`Resumen enviado a Telegram (${data.enviadas} titulares · ${data.fecha})`, 'success');
+          (data.titulares || []).forEach((t, i) => appendAgenteLog(`  ${i + 1}. ${String(t).substring(0, 50)}`, 'success'));
+          showToast(`Resumen diario enviado: ${data.enviadas} noticias`, 'success');
         }
 
-        showToast('Agente ejecutado. Revisá el log.', 'success');
         await cargarMetricasAgente();
       } catch (err) {
         appendAgenteLog('Error: ' + err.message, 'error');
-        showToast('Error ejecutando agente: ' + err.message, 'error');
+        showToast('Error generando resumen: ' + err.message, 'error');
       } finally {
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-play"></i><span>Ejecutar Ahora</span>'; }
       }

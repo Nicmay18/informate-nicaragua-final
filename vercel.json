@@ -5,12 +5,8 @@
   "installCommand": "npm install",
   "crons": [
     {
-      "path": "/api/admin/agente-crecimiento?secret=ni-agente-2024-xyz789",
+      "path": "/api/cron/resumen-diario?secret=ni-agente-2024-xyz789",
       "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/admin/agente-crecimiento?secret=ni-agente-2024-xyz789",
-      "schedule": "0 2 * * *"
     }
   ]
 }
