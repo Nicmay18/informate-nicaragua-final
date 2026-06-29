@@ -10,8 +10,7 @@ import { logger } from '@/lib/logger';
 // Las noticias nuevas aparecen en cache tras max 1h (revalidate).
 // Reduccion de consumo: ~99% menos lecturas vs force-dynamic.
 // ============================================================================
-export const revalidate = 86400;
-export const dynamic = 'force-static';
+export const revalidate = 3600;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
