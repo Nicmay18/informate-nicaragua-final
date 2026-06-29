@@ -142,7 +142,6 @@ const PALABRAS_SENSIBLES_NICARAGUA: Record<string, string> = {
   'muere': 'resulta gravemente afectado',
   'murio': 'resultó gravemente afectado',
   'muertos': 'afectados',
-  'fallecidos': 'gravemente afectados',
   'asesinato': 'incidente grave',
   'homicidio': 'incidente grave',
   'secuestro': 'privación de libertad',
