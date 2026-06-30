@@ -268,111 +268,20 @@ function detectarMetricasIA(texto: string) {
 
 export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoAnalisis> {
   const t = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-  const palabras = t.split(' ').filter(p => p.length > 0).length;
-  
+
   // Detectar problemas
   const contenidoLower = t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const adjetivosEncontrados = ADJETIVOS_EMOCIONALES.filter(adj => contenidoLower.includes(adj));
   const transicionesEncontradas = TRANSICIONES_IA.filter(tr => contenidoLower.includes(tr.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
-  
-  // Fuentes y Citas
-  const tieneAtribuciones = /inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó]/.test(contenidoLower);
-  const tieneCitas = (noticia.contenido.match(/<blockquote>/g) || []).length >= 1;
-  
-  // ───────────────────────────────────────────────
-  // SCORING FORENSE v2.0 — Verificabilidad > Longitud
-  // ───────────────────────────────────────────────
 
-  // 1. Datos concretos — GENÉRICO para cualquier país (fechas, números, lugares, instituciones)
-  const datosConcretos = (t.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
-    + (t.match(/\b\d{2,4}\b/g) || []).length
-    + (t.match(/\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Boaco|Chontales|Madriz|Nueva Segovia|Río San Juan|RAAN|RAAS|Bluefields|Puerto Cabezas|Ocotal|Jinotepe|Diriamba|Nandaime|Nagarote|Panamá|Guatemala|Honduras|Costa Rica|El Salvador|Tegucigalpa|San José|San Salvador|Cabo Verde|Praia|Madrid|Barcelona|Lisboa|Porto|Sevilla|Valencia|Bilbao|Málaga|Lisboa|Portugal|España|Poptún|Petén|Ciudad de Panamá|Aeropuerto|Marcos|Gelabert)\b/gi) || []).length
-    + (t.match(/\b(?:Policía Nacional|Ministerio de Salud|MINSA|INSS|MEDUCA|MIFIC|Asamblea Nacional|Alcaldía|Hospital|Centro de Salud|Comisaría|Servicio Nacional de Migración|SNM|Ministerio Público|Corte Suprema|Congreso|Presidencia|Ministerio de|Gobierno de)\b/gi) || []).length;
-  const densidadDatos = palabras ? Math.round((datosConcretos / palabras) * 1000) / 10 : 0;
-
-  // 2. Lead completo (responde quién/qué/cuándo/dónde) — GENÉRICO para cualquier país
-  const leadTexto = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(/\n|\./)[0] || '';
-  const leadTieneQuien = /\b(?:murió|falleció|nacido|identificado|de \d+ años|nombre|llamado|conocido|ciudadano|persona|víctima|herido|detenido|arrestado|fue|se reportó)\b/i.test(leadTexto);
-  const leadTieneQue = /\b(?:accidente|incidente|hechos|ocurrió|sucedió|reportó|reportan|dejó|provocó|causó|ataque|robo|expulsión|deportación|retorno|operativo|medida|decisión|anunció|confirmó)\b/i.test(leadTexto);
-  const leadTieneDonde = /\b(?:Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|km \d+|carretera|ruta|barrio|colonia|municipio|departamento|Panamá|Guatemala|Honduras|Costa Rica|El Salvador|Ciudad de|Madrid|Barcelona|Lisboa|Portugal|España|Cabo Verde|Poptún|Petén|departamento de|provincia de|región de|aeropuerto)\b/i.test(leadTexto);
-  const leadTieneCuando = /\b(?:este|ayer|hoy|la madrugada|la mañana|la tarde|la noche|el \d+|\d+ de \w+|\d{4}|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|enero|febrero|marzo|abril|mayo)\b/i.test(leadTexto);
-  const leadCompleto = (leadTieneQuien || leadTieneQue) && leadTieneDonde && leadTieneCuando;
-
-  // 3. Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
-  // Solo marcar como sospechosa si se mencionan instituciones nicaraguenses sin nombre concreto
+  // Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
   const atribucionesFalsas = /\bpolicia\s+nacional\s+de\s+nicaragua\b|\bpnc\b|\bministerio\s+de\s+salud\s+de\s+nicaragua\b|\bmina\b|\bsilais\b.*\bnicaragua\b|\balcald[ií]a\s+de\s+managua\b|\bsupremo\s+poder\b.*\bnicaragua\b/i.test(contenidoLower) &&
     !/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/.test(contenidoLower);
-
-  // 4. Citas — verificar que blockquotes tengan atribución (guion largo, verbo de atribucion, o nombre propio)
-  const blockquotes = (noticia.contenido.match(/<blockquote>/g) || []).length;
-  const citasConAtribucion = (noticia.contenido.match(/<blockquote>[^]*?(?:—\s*[A-ZÁÉÍÓÚÑ]|inform[oó]|confirm[oó]|declar[oó]|precis[oó]|señal[oó]|indic[oó]|dijo|explic[oó]|manifest[oó]|afirm[oó]|agreg[oó]|asegur[oó]|destac[oó]|mencion[oó])[^]*?<\/blockquote>/gi) || []).length;
-  const citasSospechosas = tieneCitas && citasConAtribucion === 0;
 
   // ─── NUEVAS DETECCIONES FORENSE NICARAGUA ───
   const palabrasSensiblesDetectadas = detectarPalabrasSensibles(noticia.contenido + ' ' + noticia.titulo);
   const cierreGenerico = detectarCierreGenerico(noticia.contenido);
   const aiMetrics = detectarMetricasIA(noticia.contenido);
-  const aiIndex = (
-    aiMetrics.repeticion_verbos * 0.15 +
-    (1 - aiMetrics.simetria_parrafos) * 0.25 +
-    (1 - aiMetrics.cadencia_oraciones) * 0.15 +
-    (1 - aiMetrics.simetria_h2) * 0.1 +
-    aiMetrics.exceso_enumerativo * 0.15 +
-    Math.min(aiMetrics.h2_repetidos / 3, 1.0) * 0.2
-  );
-  const aiRiskScoreMetrics = Math.max(0, Math.min(100, 100 - (aiIndex * 100)));
-
-  // ─── CÁLCULO DE PUNTUACIÓN ───
-  let scoreTotal = 0;
-
-  // A. Verificabilidad de datos (0-30 pts)
-  if (densidadDatos >= 4) scoreTotal += 30;
-  else if (densidadDatos >= 2) scoreTotal += 22;
-  else if (densidadDatos >= 1) scoreTotal += 14;
-  else scoreTotal += 5;
-
-  // B. Anti-emocional (0-15 pts)
-  if (adjetivosEncontrados.length === 0) scoreTotal += 15;
-  else if (adjetivosEncontrados.length <= 2) scoreTotal += 8;
-  else scoreTotal += 2;
-
-  // C. Anti-IA detectable (0-15 pts)
-  if (transicionesEncontradas.length <= 2) scoreTotal += 15;
-  else if (transicionesEncontradas.length <= 5) scoreTotal += 8;
-  else scoreTotal += 2;
-
-  // D. Lead completo para Discover (0-15 pts)
-  if (leadCompleto) scoreTotal += 15;
-  else if (leadTieneQue && leadTieneDonde) scoreTotal += 10;
-  else scoreTotal += 4;
-
-  // E. Fuentes atribuidas (0-15 pts) — penalizar citas sin atribución
-  if (citasSospechosas) scoreTotal += 2;
-  else if (tieneAtribuciones && citasConAtribucion >= 1) scoreTotal += 15;
-  else if (tieneAtribuciones || blockquotes >= 1) scoreTotal += 10;
-  else scoreTotal += 3;
-
-  // F. EEAT Nicaragua — No atribuciones falsas (0-10 pts)
-  if (!atribucionesFalsas) scoreTotal += 10;
-  else scoreTotal += 0;
-
-  // G. Palabras sensibles de Nicaragua (penalización)
-  if (palabrasSensiblesDetectadas.length > 0) {
-    scoreTotal -= Math.min(palabrasSensiblesDetectadas.length * 5, 20);
-  }
-
-  // H. Cierre genérico (penalización)
-  if (cierreGenerico) scoreTotal -= 10;
-
-  // H2. H2s repetidos — patrón de IA en bucle (penalización severa)
-  if (aiMetrics.h2_repetidos > 0) scoreTotal -= 15;
-
-  // I. Métricas IA mejoradas (bonus/penalización)
-  if (aiRiskScoreMetrics >= 80) scoreTotal += 5;
-  else if (aiRiskScoreMetrics < 50) scoreTotal -= 10;
-
-  if (scoreTotal > 100) scoreTotal = 100;
-  if (scoreTotal < 0) scoreTotal = 0;
 
   // ─── CHECKS UNIFICADOS (mismos 8 que el panel) ───
   const textoPlano = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -412,6 +321,20 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     eeat: analizarFiltroEEAT(noticia),
     aiRisk: analizarFiltroAIRisk(noticia),
   };
+
+  // ─── CÁLCULO DE PUNTUACIÓN — Promedio de los 7 filtros unificados ───
+  // Los filtros individuales ya evalúan todo: ORO, AdSense, Discover, News, SEO, E-E-A-T, AI Risk.
+  // El score total refleja el promedio real de esos filtros, no una fórmula paralela desconectada.
+  const filtrosScores = [
+    filtros.oro.puntuacion,
+    filtros.adsense.puntuacion,
+    filtros.discover.puntuacion,
+    filtros.news.puntuacion,
+    filtros.seo.puntuacion,
+    filtros.eeat.puntuacion,
+    filtros.aiRisk.puntuacion,
+  ];
+  const scoreTotal = Math.round(filtrosScores.reduce((a, b) => a + b, 0) / filtrosScores.length);
 
   const aiRiskScore = filtros.aiRisk.puntuacion;
   const aiRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' = aiRiskScore >= 80 ? 'LOW' : aiRiskScore >= 50 ? 'MEDIUM' : 'HIGH';
