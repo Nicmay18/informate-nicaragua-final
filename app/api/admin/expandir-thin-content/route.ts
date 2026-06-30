@@ -9,12 +9,12 @@ import { calcularScoreEditorial } from '@/utils/scoring';
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-  const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
-  if (!validToken) {
-    console.warn('[expandir] Ni ADMIN_API_KEY ni TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR configurados');
+  const validTokens = [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[];
+  if (validTokens.length === 0) {
+    console.warn('[expandir] Ni ADMIN_API_KEY ni CRON_SECRET configurados');
     return false;
   }
-  return token === validToken;
+  return validTokens.includes(token);
 }
 
 function stripHtml(html: string): string {
@@ -99,16 +99,16 @@ export async function POST(request: NextRequest) {
     const dryRun = request.nextUrl.searchParams.get('dryRun') === 'true';
     const adminDb = getAdminDb();
 
-    // ─── Traer noticias thin ───
-    const snapshot = await adminDb
-      .collection('noticias')
-      .where('scoreCalidad', '<', 85)
-      .where('scoreCalidad', '>=', 50)
-      .limit(5)
-      .get();
+    // ─── Traer noticias thin (<350 palabras) ───
+    const snapshot = await adminDb.collection('noticias').limit(200).get();
+    const thinDocs = snapshot.docs.filter(d => {
+      const data = d.data();
+      const palabras = contarPalabras(stripHtml(data.contenido || ''));
+      return palabras < 350;
+    }).slice(0, 5);
 
-    if (snapshot.empty) {
-      return NextResponse.json({ mensaje: 'No hay notas que requieran expansión.' });
+    if (thinDocs.length === 0) {
+      return NextResponse.json({ mensaje: 'No hay notas que requieran expansión.', expandidas: 0, errores: 0 });
     }
 
     const resultados: Array<{
@@ -122,16 +122,17 @@ export async function POST(request: NextRequest) {
     }> = [];
 
     let procesadas = 0;
+    let errores = 0;
     let batch = adminDb.batch();
     const batchIds: string[] = [];
 
-    for (const doc of snapshot.docs) {
+    for (const doc of thinDocs) {
       const data = doc.data();
       const contenidoActual = data.contenido || '';
       const palabrasAntes = contarPalabras(stripHtml(contenidoActual));
 
-      // Saltear si ya tiene 450+ palabras
-      if (palabrasAntes > 450) continue;
+      // Saltear si ya tiene 350+ palabras
+      if (palabrasAntes >= 350) continue;
 
       let nuevoContenido: string | null = null;
 
@@ -140,6 +141,7 @@ export async function POST(request: NextRequest) {
           nuevoContenido = await generarExpansion(data.titulo || '', contenidoActual);
         } catch (err: any) {
           console.error(`[expandir] Error Gemini para ${doc.id}:`, err.message);
+          errores++;
           resultados.push({
             id: doc.id,
             titulo: data.titulo?.substring(0, 50) || '',
@@ -157,9 +159,10 @@ export async function POST(request: NextRequest) {
 
       const palabrasDespues = nuevoContenido ? contarPalabras(stripHtml(nuevoContenido)) : 0;
 
-      // Validar que realmente expandió
+      // Validar que realmente expandió (mínimo +50 palabras)
       if (!dryRun && palabrasDespues < palabrasAntes + 50) {
         console.warn(`[expandir] ${doc.id}: Gemini no expandió suficiente (${palabrasAntes}→${palabrasDespues})`);
+        errores++;
         resultados.push({
           id: doc.id,
           titulo: data.titulo?.substring(0, 50) || '',
@@ -216,7 +219,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       estado: dryRun ? 'DRY-RUN' : 'Éxito',
-      procesadas,
+      expandidas: procesadas,
+      errores,
       resultados,
     });
 

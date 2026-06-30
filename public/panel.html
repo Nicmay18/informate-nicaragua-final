@@ -6760,24 +6760,15 @@ VERIFICACIÓN FINAL
       if (!confirm('Esto agregará links internos a todas las noticias que no los tengan. ¿Continuar?')) return;
       showLoading(true, 'Agregando links internos...');
       try {
-        const noticias = await getNoticiasCache();
-        const sinLinks = noticias.filter(n => {
-          const contenido = n.contenido || '';
-          return !contenido.includes('href="/noticias/') && !contenido.includes("href='/noticias/");
-        }).slice(0, 20);
-        let hechos = 0;
-        for (const n of sinLinks) {
-          try {
-            const res = await fetch('/api/admin/enrich-links', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-              body: JSON.stringify({ noticiaId: n.id, categoria: n.categoria, modo: 'noticia' })
-            });
-            if (res.ok) hechos++;
-          } catch (e) { console.warn('Enrich links falló para', n.id); }
-        }
+        const res = await fetch('/api/admin/enrich-links', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({ modo: 'masivo' })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
         showLoading(false);
-        showToast(`Links internos agregados a ${hechos} noticias`, 'success');
+        showToast(`Links agregados a ${data.procesadas || 0} noticias. Saltadas: ${data.saltadas || 0}. Errores: ${data.errores || 0}`, 'success');
         cargarDashboardCalidad();
       } catch (e) {
         showLoading(false);
@@ -6794,25 +6785,15 @@ VERIFICACIÓN FINAL
       if (!confirm('Esto resaltará palabras clave con <strong> en todas las noticias con pocas negritas. ¿Continuar?')) return;
       showLoading(true, 'Agregando negritas...');
       try {
-        const noticias = await getNoticiasCache();
-        const conPocasStrong = noticias.filter(n => {
-          const contenido = n.contenido || '';
-          const count = (contenido.match(/<strong>/gi) || []).length;
-          return count < 5;
-        }).slice(0, 30);
-        let hechos = 0;
-        for (const n of conPocasStrong) {
-          try {
-            const res = await fetch('/api/admin/enrich-strong', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-              body: JSON.stringify({ noticiaId: n.id, modo: 'noticia' })
-            });
-            if (res.ok) hechos++;
-          } catch (e) { console.warn('Enrich strong falló para', n.id); }
-        }
+        const res = await fetch('/api/admin/enrich-strong', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({ modo: 'masivo' })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
         showLoading(false);
-        showToast(`Negritas agregadas a ${hechos} noticias`, 'success');
+        showToast(`Negritas agregadas a ${data.procesadas || 0} noticias. Saltadas: ${data.saltadas || 0}. Errores: ${data.errores || 0}`, 'success');
         cargarDashboardCalidad();
       } catch (e) {
         showLoading(false);
@@ -6835,7 +6816,7 @@ VERIFICACIÓN FINAL
           body: JSON.stringify({})
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        if (!res.ok) throw new Error(data.error || data.mensaje || 'Error desconocido');
         showLoading(false);
         showToast(`Expandidas ${data.expandidas || 0} noticias. Errores: ${data.errores || 0}`, 'success');
         cargarDashboardCalidad();
