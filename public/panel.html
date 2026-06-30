@@ -5234,9 +5234,10 @@ window.batchRestore = async function() {
       if (!slug) return;
       appendAgenteLog(`Distribuyendo ${slug}...`, 'info');
       try {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/distribuir', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
           body: JSON.stringify({ slug, canales: ['telegram', 'indexnow', 'push'] })
         });
         const data = await res.json().catch(() => ({}));

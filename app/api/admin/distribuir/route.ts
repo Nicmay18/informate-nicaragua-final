@@ -3,6 +3,12 @@ import { getAdminDb } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
 
+function verificarAuth(request: NextRequest): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const validTokens = [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[];
+  return validTokens.length > 0 && validTokens.includes(token);
+}
+
 interface Noticia {
   titulo: string;
   slug: string;
@@ -205,6 +211,9 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
 }
 
 export async function POST(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const { slug, canales = ['telegram', 'indexnow'] } = body;
