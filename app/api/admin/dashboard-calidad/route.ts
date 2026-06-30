@@ -1,8 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 
 export const revalidate = 0;
+
+function verificarAuth(request: NextRequest): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const validToken = process.env.ADMIN_API_KEY || process.env.CRON_SECRET;
+  return !!validToken && token === validToken;
+}
 
 interface MetricasCalidad {
   totalNoticias: number;
@@ -244,7 +250,10 @@ const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-cali
   tags: ['dashboard-calidad'],
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const metricas = await cachedDashboard();
     return NextResponse.json(metricas, {

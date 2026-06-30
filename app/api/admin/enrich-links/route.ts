@@ -1,7 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export const revalidate = 0;
+
+function verificarAuth(request: NextRequest): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const validToken = process.env.ADMIN_API_KEY || process.env.CRON_SECRET;
+  return !!validToken && token === validToken;
+}
 
 interface EnrichRequest {
   noticiaId?: string;
@@ -13,7 +19,10 @@ interface EnrichRequest {
  * Agrega links internos automáticos a noticias relacionadas
  * Busca noticias de la misma categoría y appendea bloque de links
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const body: EnrichRequest = await request.json();
     const { noticiaId, categoria, modo = 'noticia' } = body;

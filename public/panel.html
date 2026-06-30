@@ -3114,7 +3114,7 @@ sin texto ni marcas de agua, composición periodística"
       raw = raw.replace(/<br\s*\/?>/gi, '\n');
       // Eliminar comentarios XML de Word
       raw = raw.replace(/<!--\[if[^\]]*\]>[\s\S]*?<!\[endif\]-->/gi, '');
-      raw = raw.replace(/<!--[\s\S]*?-->/g, '');
+      raw = raw.replace(new RegExp('<!--[\\s\\S]*?-->', 'g'), '');
 
       // Volver a parsear
       tmp.innerHTML = raw;
@@ -5113,7 +5113,8 @@ window.batchRestore = async function() {
     window.cargarMetricasAgente = async function() {
       appendAgenteLog('Cargando métricas...', 'info');
       try {
-        const res = await fetch('/api/admin/metricas');
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/metricas', { headers: { 'x-admin-token': adminToken } });
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
 
@@ -5264,7 +5265,8 @@ window.batchRestore = async function() {
     // ─── AUDITORÍA INTELIGENTE — Periodista Senior ───
     window.cargarAuditoria = async function() {
       try {
-        const res = await fetch('/api/admin/auditor-dashboard');
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/auditor-dashboard', { headers: { 'x-admin-token': adminToken } });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
 
@@ -6207,7 +6209,8 @@ VERIFICACIÓN FINAL
       const ultimosEl = document.getElementById('rt-ultimos-eventos');
       
       try {
-        const resp = await fetch('/api/admin/traffic', { cache: 'no-store' });
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const resp = await fetch('/api/admin/traffic', { cache: 'no-store', headers: { 'x-admin-token': adminToken } });
         const data = await resp.json();
         
         if (!data.ok) throw new Error(data.error || 'Error desconocido');
@@ -6745,14 +6748,94 @@ VERIFICACIÓN FINAL
     // ENRICH LINKS MASIVO (corrección automática de links internos)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichLinksMasivo = async function() {
-      showToast('❌ Función deshabilitada. El editor agrega links manualmente.', 'warning', 'Corrección Automática');
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
+      if (!confirm('Esto agregará links internos a todas las noticias que no los tengan. ¿Continuar?')) return;
+      showLoading(true, 'Agregando links internos...');
+      try {
+        const noticias = await getNoticiasCache();
+        const sinLinks = noticias.filter(n => {
+          const contenido = n.contenido || '';
+          return !contenido.includes('href="/noticias/') && !contenido.includes("href='/noticias/");
+        }).slice(0, 20);
+        let hechos = 0;
+        for (const n of sinLinks) {
+          try {
+            const res = await fetch('/api/admin/enrich-links', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+              body: JSON.stringify({ noticiaId: n.id, categoria: n.categoria, modo: 'noticia' })
+            });
+            if (res.ok) hechos++;
+          } catch (e) { console.warn('Enrich links falló para', n.id); }
+        }
+        showLoading(false);
+        showToast(`Links internos agregados a ${hechos} noticias`, 'success');
+        cargarDashboardCalidad();
+      } catch (e) {
+        showLoading(false);
+        showToast('Error: ' + e.message, 'error');
+      }
     };
 
     // ═══════════════════════════════════════════════════════════════
     // ENRICH STRONG MASIVO (negritas automáticas)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichStrongMasivo = async function() {
-      showToast('❌ Función deshabilitada. El editor resalta palabras manualmente.', 'warning', 'Corrección Automática');
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
+      if (!confirm('Esto resaltará palabras clave con <strong> en todas las noticias con pocas negritas. ¿Continuar?')) return;
+      showLoading(true, 'Agregando negritas...');
+      try {
+        const noticias = await getNoticiasCache();
+        const conPocasStrong = noticias.filter(n => {
+          const contenido = n.contenido || '';
+          const count = (contenido.match(/<strong>/gi) || []).length;
+          return count < 5;
+        }).slice(0, 30);
+        let hechos = 0;
+        for (const n of conPocasStrong) {
+          try {
+            const res = await fetch('/api/admin/enrich-strong', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+              body: JSON.stringify({ noticiaId: n.id, modo: 'noticia' })
+            });
+            if (res.ok) hechos++;
+          } catch (e) { console.warn('Enrich strong falló para', n.id); }
+        }
+        showLoading(false);
+        showToast(`Negritas agregadas a ${hechos} noticias`, 'success');
+        cargarDashboardCalidad();
+      } catch (e) {
+        showLoading(false);
+        showToast('Error: ' + e.message, 'error');
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // EXPANDIR THIN CONTENT MASIVO
+    // ═══════════════════════════════════════════════════════════════
+    window.ejecutarExpandirThinContent = async function() {
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
+      if (!confirm('Esto usará Gemini para expandir artículos con <350 palabras. Puede tardar varios minutos. ¿Continuar?')) return;
+      showLoading(true, 'Expandiendo thin content...');
+      try {
+        const res = await fetch('/api/admin/expandir-thin-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        showLoading(false);
+        showToast(`Expandidas ${data.expandidas || 0} noticias. Errores: ${data.errores || 0}`, 'success');
+        cargarDashboardCalidad();
+      } catch (e) {
+        showLoading(false);
+        showToast('Error: ' + e.message, 'error');
+      }
     };
 
     // ═══════════════════════════════════════════════════════════════
@@ -6763,7 +6846,8 @@ VERIFICACIÓN FINAL
       panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas...</p></div>';
 
       try {
-        const resp = await fetch('/api/admin/dashboard-calidad');
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const resp = await fetch('/api/admin/dashboard-calidad', { headers: { 'x-admin-token': adminToken } });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error');
         panel.innerHTML = renderDashboardCalidad(data);
@@ -6781,10 +6865,11 @@ VERIFICACIÓN FINAL
       resultado.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Analizando noticias de Sucesos...</div>';
 
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/auditoria-completa?secret=' + encodeURIComponent(secret), {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        if (!adminToken) { throw new Error('Token no configurado. Guardá tu Admin API Key en Configuración.'); }
+        const res = await fetch('/api/admin/auditoria-completa', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-key': secret },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
           body: JSON.stringify({ categoria: 'Sucesos', limite: 100 })
         });
         const data = await res.json();
@@ -7034,7 +7119,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-link" style="margin-right:6px;color:#d97706;"></i>Links Internos</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">' + (data.linksInternos || 0) + '% con links. Meta: 100%.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichLinks" disabled style="white-space:nowrap;flex-shrink:0;opacity:0.5;cursor:not-allowed;" title="Deshabilitado: el editor decide manualmente"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
           html += '</div>';
         }
 
@@ -7043,7 +7128,16 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-bold" style="margin-right:6px;color:#d97706;"></i>Negritas (Strong)</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">Promedio: ' + (data.promedioStrong || 0) + '/15. Meta: 15+ por noticia.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichStrong" disabled style="white-space:nowrap;flex-shrink:0;opacity:0.5;cursor:not-allowed;" title="Deshabilitado: el editor decide manualmente"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '</div>';
+        }
+
+        if (tieneThinContent) {
+          html += '<div style="background:#fee2e2;border:2px solid #f87171;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="flex:1;min-width:200px;">';
+          html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#7f1d1d;"><i class="fas fa-file-alt" style="margin-right:6px;color:#dc2626;"></i>Thin Content</p>';
+          html += '<p style="margin:0;font-size:12px;color:#991b1b;">' + (data.thinContent?.count || 0) + ' artículos con &lt;350 palabras. Esto bloquea AdSense y penaliza SEO.</p></div>';
+          html += '<button class="btn btn-primary" id="btnExpandirThin" onclick="ejecutarExpandirThinContent()" style="white-space:nowrap;flex-shrink:0;background:#dc2626;border-color:#dc2626;"><i class="fas fa-expand"></i> Expandir Thin Content</button>';
           html += '</div>';
         }
 

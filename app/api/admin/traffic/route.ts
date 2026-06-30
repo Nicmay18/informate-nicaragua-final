@@ -1,7 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export const revalidate = 0;
+
+function verificarAuth(request: NextRequest): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const validToken = process.env.ADMIN_API_KEY || process.env.CRON_SECRET;
+  return !!validToken && token === validToken;
+}
 
 /** Detecta la fuente de tráfico a partir del referrer o utm_source */
 function detectarFuente(referrer?: string, utmSource?: string): string {
@@ -30,7 +36,10 @@ function detectarFuente(referrer?: string, utmSource?: string): string {
   return 'directo';
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const db = getAdminDb();
     

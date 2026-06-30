@@ -1,9 +1,18 @@
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+function verificarAuth(request: NextRequest): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const validToken = process.env.ADMIN_API_KEY || process.env.CRON_SECRET;
+  return !!validToken && token === validToken;
+}
+
+export async function GET(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const db = getAdminDb();
 

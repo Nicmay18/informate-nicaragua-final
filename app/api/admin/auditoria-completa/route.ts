@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization') || '';
     const secretFromHeader = authHeader.replace('Bearer ', '').trim();
-    const adminKey = request.headers.get('x-admin-key') || '';
+    const adminKey = request.headers.get('x-admin-key') || request.headers.get('x-admin-token') || '';
     const { searchParams } = new URL(request.url);
     const secretFromQuery = searchParams.get('secret') || '';
     const providedSecret = secretFromHeader || secretFromQuery || adminKey;
