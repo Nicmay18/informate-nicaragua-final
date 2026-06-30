@@ -67,8 +67,8 @@ export function tiempoLectura(texto: string): number {
 export function fmtViews(v: number | undefined): string {
   if (!v || v === 0) return '0';
   if (v >= 1000000) return (v / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (v >= 10000) return (v / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-  return v.toLocaleString('es-NI');
+  if (v >= 1000) return (v / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(v);
 }
 
 // ============ SLUGS ============

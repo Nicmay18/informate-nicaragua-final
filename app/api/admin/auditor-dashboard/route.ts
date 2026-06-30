@@ -5,8 +5,8 @@ export const dynamic = 'force-dynamic';
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-  const validToken = process.env.ADMIN_API_KEY || process.env.CRON_SECRET;
-  return !!validToken && token === validToken;
+  const validTokens = [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[];
+  return validTokens.length > 0 && validTokens.includes(token);
 }
 
 /** Auditor Dashboard — El "Periodista Senior" que valora todo el trabajo */
