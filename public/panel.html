@@ -6210,12 +6210,16 @@ VERIFICACIÓN FINAL
       
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const resp = await fetch('/api/admin/traffic', { cache: 'no-store', headers: { 'x-admin-token': adminToken } });
+        const [resp, noticiasCache] = await Promise.all([
+          fetch('/api/admin/traffic', { cache: 'no-store', headers: { 'x-admin-token': adminToken } }),
+          getNoticiasCache().catch(() => [])
+        ]);
         const data = await resp.json();
         
         if (!data.ok) throw new Error(data.error || 'Error desconocido');
         
         const stats = data.stats;
+        const vistasMap = new Map(noticiasCache.map(n => [n.slug, n.vistas || 0]));
         
         // 1. Actualizar contadores por fuente
         document.getElementById('rt-facebook').textContent = (stats.fuentes.facebook || 0).toLocaleString();
@@ -6224,16 +6228,19 @@ VERIFICACIÓN FINAL
         document.getElementById('rt-whatsapp').textContent = (stats.fuentes.whatsapp || 0).toLocaleString();
         
         // 2. Renderizar Top Páginas (24h)
-        topEl.innerHTML = stats.topPaginas.map((n, i) => `
+        topEl.innerHTML = stats.topPaginas.map((n, i) => {
+          const totalVistas = vistasMap.get(n.slug) || 0;
+          return `
           <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
             <div style="font-size:16px;font-weight:800;color:var(--gray-300);width:20px;">${i+1}</div>
             <div style="flex:1;min-width:0;">
               <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
-              <div style="font-size:11px;color:var(--gray-500);">${n.vistas} lectores hoy</div>
+              <div style="font-size:11px;color:var(--gray-500);">${n.vistas.toLocaleString()} vistas en 24h · ${totalVistas.toLocaleString()} totales</div>
             </div>
-            <div style="padding:4px 8px;background:var(--primary-50);color:var(--primary-700);border-radius:6px;font-size:11px;font-weight:700;">+${n.vistas}</div>
+            <div style="padding:4px 8px;background:var(--primary-50);color:var(--primary-700);border-radius:6px;font-size:11px;font-weight:700;">+${n.vistas} hoy</div>
           </div>
-        `).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Sin visitas en las últimas 24h.</p>';
+        `;
+        }).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Sin visitas en las últimas 24h.</p>';
         
         // 3. Renderizar Feed de Actividad
         ultimosEl.innerHTML = stats.ultimosEventos.map(ev => {
