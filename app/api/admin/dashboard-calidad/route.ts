@@ -76,7 +76,8 @@ async function computeDashboardMetrics() {
       const data = doc.data();
       const contenidoRaw = data.contenido || '';
       const contenido = contenidoRaw.replace(/<[^>]*>/g, ' ');
-      const palabras = contenido.split(/\s+/).filter((p: string) => p.length > 0).length;
+      // Usar data.palabras si existe (campo explícito guardado al crear nota), sino contar del contenido
+      const palabras = data.palabras || contenido.split(/\s+/).filter((p: string) => p.length > 0).length;
       const titulo = (data.titulo || '').trim();
       const resumen = (data.resumen || '').trim();
 
