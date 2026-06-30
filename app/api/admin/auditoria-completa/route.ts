@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-const CRON_SECRET = process.env.CRON_SECRET || '';
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 const ADJETIVOS_PROHIBIDOS = [
   'tragico','tragica','terrible','impactante','impactantes','conmociono','conmocionó',
@@ -143,18 +141,6 @@ function analizarNoticia(doc: any): AnalisisNoticia {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization') || '';
-    const secretFromHeader = authHeader.replace('Bearer ', '').trim();
-    const adminKey = request.headers.get('x-admin-key') || request.headers.get('x-admin-token') || '';
-    const { searchParams } = new URL(request.url);
-    const secretFromQuery = searchParams.get('secret') || '';
-    const providedSecret = secretFromHeader || secretFromQuery || adminKey;
-
-    const validSecrets = [CRON_SECRET, ADMIN_API_KEY].filter(Boolean);
-    if (!providedSecret || (validSecrets.length > 0 && !validSecrets.includes(providedSecret))) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
-    }
-
     const db = getAdminDb();
     const body = await request.json().catch(() => ({}));
     const categoriaFiltro = body.categoria || 'Sucesos';
