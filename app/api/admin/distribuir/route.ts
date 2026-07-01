@@ -87,21 +87,42 @@ async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore)
     const imagen = noticia.imagenRedes || noticia.imagen;
     const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
 
-    const endpoint = imagenValida
-      ? `https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`
-      : `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
+    // Intentar con foto primero; si falla, fallback a mensaje de texto
+    if (imagenValida) {
+      const photoRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          photo: imagen,
+          caption: caption.slice(0, 1024),
+          parse_mode: 'HTML',
+          reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] }
+        })
+      });
+      const photoData = await photoRes.json();
+      if (photoData.ok) return { ok: true };
 
-    const body = imagenValida
-      ? { chat_id: TG_CHAT_ID, photo: imagen, caption: caption.slice(0, 1024), parse_mode: 'HTML', reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] } }
-      : { chat_id: TG_CHAT_ID, text: caption.slice(0, 4096), parse_mode: 'HTML', reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] } };
+      // Fallback si la imagen falla por tipo o URL
+      if (photoData.description?.includes('wrong type') || photoData.description?.includes('failed to get HTTP URL content')) {
+        console.log('[Telegram] sendPhoto falló, fallback a sendMessage');
+      } else {
+        return { ok: false, error: photoData.description };
+      }
+    }
 
-    const res = await fetch(endpoint, {
+    const msgRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        chat_id: TG_CHAT_ID,
+        text: caption.slice(0, 4096),
+        parse_mode: 'HTML',
+        reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] }
+      })
     });
-    const data = await res.json();
-    return { ok: data.ok, error: data.ok ? undefined : data.description };
+    const msgData = await msgRes.json();
+    return { ok: msgData.ok, error: msgData.ok ? undefined : msgData.description };
   } catch (e: any) {
     return { ok: false, error: e.message };
   }
@@ -210,13 +231,49 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
   }
 }
 
+/** Notificación Twitter/X vía API v2 (requiere OAuth 2.0) */
+async function enviarTwitter(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const hasOAuth = process.env.TWITTER_ACCESS_TOKEN && process.env.TWITTER_CLIENT_ID;
+    if (!hasOAuth) {
+      return { ok: false, error: 'Twitter requiere OAuth 2.0. Configurar TWITTER_ACCESS_TOKEN y TWITTER_CLIENT_ID, o desactivar este canal.' };
+    }
+    const bearer = process.env.TWITTER_BEARER_TOKEN || '';
+    if (!bearer) return { ok: false, error: 'Falta TWITTER_BEARER_TOKEN' };
+
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const emoji: Record<string, string> = {
+      Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
+      Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
+    };
+    const catEmoji = emoji[noticia.categoria || ''] || '📰';
+    const hashtags = '#Nicaragua #Noticias';
+    const contexto = (noticia.resumen || '').substring(0, 100);
+    const text = `${catEmoji} ${noticia.titulo}\n\n${contexto}...\n\n${url}\n\n${hashtags}`;
+
+    const res = await fetch('https://api.twitter.com/2/tweets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${bearer}`,
+      },
+      body: JSON.stringify({ text: text.slice(0, 280) }),
+    });
+    const data = await res.json();
+    if (data.data?.id) return { ok: true };
+    return { ok: false, error: data.detail || JSON.stringify(data.errors) };
+  } catch (e: any) {
+    return { ok: false, error: e.message };
+  }
+}
+
 export async function POST(request: NextRequest) {
   if (!verificarAuth(request)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
   try {
     const body = await request.json();
-    const { slug, canales = ['telegram', 'indexnow'] } = body;
+    const { slug, canales = ['telegram', 'indexnow', 'push', 'twitter', 'facebook'] } = body;
 
     if (!slug) {
       return NextResponse.json({ error: 'slug requerido' }, { status: 400 });
@@ -270,26 +327,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Delegar canales adicionales a sus endpoints
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-    const extras = [
-      { name: 'twitter', path: '/api/admin/twitter' },
-      { name: 'linkedin', path: '/api/admin/linkedin' },
-      { name: 'medium', path: '/api/admin/medium' },
-      { name: 'whatsapp', path: '/api/admin/whatsapp' },
-    ];
-
-    for (const extra of extras) {
-      if (canales.includes(extra.name)) {
+    if (canales.includes('twitter')) {
+      if (await yaDistribuido(db, slug, 'twitter')) {
+        resultados.twitter = { ok: true, skipped: true };
+      } else {
         promises.push(
-          fetch(`${baseUrl}${extra.path}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ noticia }),
-          })
-            .then(r => r.json().catch(() => ({ success: false })))
-            .then(data => { resultados[extra.name] = { ok: data.success || false, error: data.error }; })
-            .catch(e => { resultados[extra.name] = { ok: false, error: e.message }; })
+          enviarTwitter(noticia).then(r => { resultados.twitter = r; })
         );
       }
     }
@@ -305,6 +348,18 @@ export async function POST(request: NextRequest) {
       fecha: new Date().toISOString(),
     });
 
+    // Cola de reintentos para canales fallidos
+    const fallidos = Object.entries(resultados).filter(([, r]) => !r.ok && !r.skipped);
+    if (fallidos.length > 0) {
+      await db.collection('distribuciones_pendientes').doc(slug).set({
+        slug,
+        canalesFallidos: fallidos.map(([k]) => k),
+        reintentos: 0,
+        proximoIntento: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+        fecha: new Date().toISOString(),
+      });
+    }
+
     // Marcar noticia como distribuida
     await snap.docs[0].ref.update({ distribuida: true, fechaDistribucion: new Date().toISOString() });
 
@@ -313,22 +368,26 @@ export async function POST(request: NextRequest) {
       slug,
       titulo: noticia.titulo,
       resultados,
+      pendientes: fallidos.length,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error('[admin/distribuir]', err);
-    return NextResponse.json({ error: 'Error interno' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }
 
 /** GET: devuelve últimas distribuciones */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!verificarAuth(request)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const db = getAdminDb();
     const snap = await db.collection('distribuciones').orderBy('fecha', 'desc').limit(50).get();
     const registros = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     return NextResponse.json({ success: true, registros });
-  } catch (err) {
+  } catch (err: any) {
     console.error('[admin/distribuir] GET', err);
-    return NextResponse.json({ error: 'Error interno' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }

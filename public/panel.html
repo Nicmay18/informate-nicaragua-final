@@ -1216,7 +1216,8 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
           <div class="page-title"><h1>Auditoría Maestra</h1><p>Diagnóstico completo del sitio: SEO internacional, E-E-A-T, AdSense y Google News en un solo vistazo.</p></div>
           <div class="header-actions">
             <button class="btn btn-primary" style="background: #7c3aed; border-color: #7c3aed;" onclick="ejecutarAuditoriaForense()"><i class="fas fa-microscope"></i><span>Auditoría Forense Noticias</span></button>
-            <button class="btn btn-secondary" onclick="cargarDashboardCalidad()"><i class="fas fa-sync"></i><span>Actualizar Auditoría</span></button>
+            <button class="btn btn-secondary" onclick="cargarDashboardCalidad(true)"><i class="fas fa-sync"></i><span>Actualizar Auditoría</span></button>
+            <span id="lastAuditTime" style="font-size:11px;color:var(--gray-400);margin-left:8px;"></span>
           </div>
         </div>
 
@@ -6875,16 +6876,18 @@ VERIFICACIÓN FINAL
     // ═══════════════════════════════════════════════════════════════
     // DASHBOARD CALIDAD DEL DOMINIO
     // ═══════════════════════════════════════════════════════════════
-    window.cargarDashboardCalidad = async function() {
+    window.cargarDashboardCalidad = async function(force) {
       const panel = document.getElementById('panelDashboardCalidad');
-      panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas...</p></div>';
+      panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas' + (force ? ' (forzado)...' : '...') + '</p></div>';
 
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const resp = await fetch('/api/admin/dashboard-calidad', { headers: { 'x-admin-token': adminToken } });
+        const url = '/api/admin/dashboard-calidad' + (force ? '?force=1' : '');
+        const resp = await fetch(url, { headers: { 'x-admin-token': adminToken } });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error');
         panel.innerHTML = renderDashboardCalidad(data);
+        document.getElementById('lastAuditTime').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-NI');
       } catch (err) {
         panel.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }

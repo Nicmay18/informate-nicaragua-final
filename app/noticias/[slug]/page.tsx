@@ -12,7 +12,7 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
@@ -78,9 +78,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
     const titleValidation = validateTitle(seoTitleResult);
     // Usar original si ya es bueno (score >= 70) y no es mucho peor que el SEO rewrite
-    const finalTitle = originalValidation.score >= 70
+    let finalTitle = originalValidation.score >= 70
       ? noticia.titulo
       : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
+
+    // Truncar a máximo 70 caracteres para Bing/Google (evita 'Título demasiado largo')
+    if (finalTitle.length > 70) {
+      const cutAt = finalTitle.lastIndexOf(' ', 67);
+      finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 67) + '…';
+    }
 
     // Meta description: priorizar resumen editorial > metaDescription > generada
     // El resumen escrito por el periodista es mas atractivo que las plantillas genericas

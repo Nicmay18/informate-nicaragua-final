@@ -106,15 +106,16 @@ async function computeDashboardMetrics() {
       else totalAutoresUnicos.add(data.autor);
       if (!data.fechaActualizacion) sinFechaActualizacion++;
 
-      // Títulos optimizados (30-70 chars ideal)
-      if (titulo.length >= 30 && titulo.length <= 70) titulosOpt++;
+      // Títulos optimizados (30-65 chars ideal, matches editor panel)
+      if (titulo.length >= 30 && titulo.length <= 65) titulosOpt++;
 
       // Meta descriptions optimizadas (120-160 chars)
       if (resumen.length >= 120 && resumen.length <= 160) metaOpt++;
 
-      // Internal links (links a otras noticias del sitio)
-      const linksInternos = (contenidoRaw.match(/href="\/noticias\//gi) || []).length;
-      if (linksInternos >= 1) conLinks++;
+      // Internal links (links en contenido HTML + related_links en Firestore)
+      const linksEnContenido = (contenidoRaw.match(/href="\/noticias\//gi) || []).length;
+      const tieneRelatedLinks = data.related_links && Array.isArray(data.related_links) && data.related_links.length > 0;
+      if (linksEnContenido >= 1 || tieneRelatedLinks) conLinks++;
 
       // Noticias frescas (< 7 días)
       const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date(data.fecha);
@@ -139,9 +140,17 @@ async function computeDashboardMetrics() {
     const scoreMeta = Math.round((metaOpt / total) * 100);
     const scoreLinks = Math.round((conLinks / total) * 100);
     const scoreFrescas = Math.min(100, Math.round((frescas / Math.max(total * 0.1, 1)) * 100));
+    // E-E-A-T: autoría + fuentes/citas + estructura editorial (related_links)
+    const conRelatedLinks = snapshot.docs.filter(d => {
+      const rl = d.data().related_links;
+      return rl && Array.isArray(rl) && rl.length > 0;
+    }).length;
+    const coberturaEeat = ((totalFuentes + conRelatedLinks) / total);
+    // Umbral realista: 85% cobertura = puntaje máximo (no requiere 100% para noticias locales)
+    const puntosFuentes = Math.min(40, Math.round((coberturaEeat / 0.85) * 40));
     const scoreEeat = Math.round(
       (totalAutoresUnicos.size >= 3 ? 30 : totalAutoresUnicos.size * 10) +
-      (totalFuentes / total) * 40 +
+      puntosFuentes +
       (sinAutor === 0 ? 30 : Math.max(0, 30 - (sinAutor / total) * 100))
     );
 
@@ -261,7 +270,7 @@ async function computeDashboardMetrics() {
 }
 
 const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-calidad'], {
-  revalidate: 86400,
+  revalidate: 300, // 5 minutos en vez de 24h
   tags: ['dashboard-calidad'],
 });
 
@@ -270,7 +279,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
   try {
-    const metricas = await cachedDashboard();
+    const force = request.nextUrl.searchParams.get('force') === '1';
+    const metricas = force ? await computeDashboardMetrics() : await cachedDashboard();
     return NextResponse.json(metricas, {
       headers: { 'Cache-Control': 'no-store, must-revalidate' },
     });
