@@ -145,9 +145,12 @@ async function computeDashboardMetrics() {
       const rl = d.data().related_links;
       return rl && Array.isArray(rl) && rl.length > 0;
     }).length;
+    const coberturaEeat = ((totalFuentes + conRelatedLinks) / total);
+    // Umbral realista: 85% cobertura = puntaje máximo (no requiere 100% para noticias locales)
+    const puntosFuentes = Math.min(40, Math.round((coberturaEeat / 0.85) * 40));
     const scoreEeat = Math.round(
       (totalAutoresUnicos.size >= 3 ? 30 : totalAutoresUnicos.size * 10) +
-      Math.min(40, ((totalFuentes + conRelatedLinks) / total) * 40) +
+      puntosFuentes +
       (sinAutor === 0 ? 30 : Math.max(0, 30 - (sinAutor / total) * 100))
     );
 
