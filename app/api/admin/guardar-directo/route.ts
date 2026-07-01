@@ -119,6 +119,12 @@ export async function POST(request: NextRequest) {
     revalidatePath('/sitemap.xml');
     revalidatePath('/news-sitemap.xml');
 
+    // Invalidar cache en memoria de Firestore
+    try {
+      const { invalidateFirestoreCache } = await import('@/lib/data');
+      invalidateFirestoreCache();
+    } catch (e) { /* noop */ }
+
     return NextResponse.json({
       success: true,
       id,

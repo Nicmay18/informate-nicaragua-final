@@ -64,6 +64,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
+    // Invalidar cache en memoria de Firestore
+    try {
+      const { invalidateFirestoreCache } = await import('@/lib/data');
+      invalidateFirestoreCache();
+    } catch (e) { /* noop */ }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[admin/news PUT]', err);
@@ -77,6 +83,13 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const { id } = await params;
     const db = getAdminDb();
     await db.collection('noticias').doc(id).delete();
+
+    // Invalidar cache en memoria de Firestore
+    try {
+      const { invalidateFirestoreCache } = await import('@/lib/data');
+      invalidateFirestoreCache();
+    } catch (e) { /* noop */ }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[admin/news DELETE]', err);

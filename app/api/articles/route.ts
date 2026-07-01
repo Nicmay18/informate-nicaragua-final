@@ -79,6 +79,12 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ slug: finalSlug }),
     }).catch(() => {});
 
+    // Invalidar cache en memoria para que lecturas futuras vean la nueva noticia
+    try {
+      const { invalidateFirestoreCache } = await import('@/lib/data');
+      invalidateFirestoreCache();
+    } catch (e) { /* noop */ }
+
     return NextResponse.json({
       success: true,
       id: articleRef.id,

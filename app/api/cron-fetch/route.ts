@@ -224,6 +224,11 @@ export async function POST(request: NextRequest) {
       } catch (revErr) {
         logger.warn('[cron-fetch] No se pudo revalidar caché:', revErr);
       }
+      // Invalidar cache en memoria de Firestore para que lecturas futuras vean la nueva noticia
+      try {
+        const { invalidateFirestoreCache } = await import('@/lib/data');
+        invalidateFirestoreCache();
+      } catch (e) { /* noop */ }
     }
 
     return NextResponse.json({

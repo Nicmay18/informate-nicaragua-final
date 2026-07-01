@@ -140,8 +140,27 @@ function mapDocToNoticia(d: any): Noticia {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// CACHE EN MEMORIA para reducir reads de Firestore (costo $$$)
+// TTL: 5 minutos (300000 ms). En serverless Vercel el proceso
+// puede morir, pero durante tráfico activo evita cientos de reads.
+// ═══════════════════════════════════════════════════════════════
+let _firestoreCache: Noticia[] | null = null;
+let _firestoreCacheTime = 0;
+const FIRESTORE_CACHE_TTL = 300000; // 5 minutos
+
+/** Invalidar cache cuando se publica/actualiza una noticia */
+export function invalidateFirestoreCache() {
+  _firestoreCache = null;
+  _firestoreCacheTime = 0;
+}
+
 /** Trae todas las noticias de Firestore con orderBy fecha desc. */
 async function fetchAllNoticias(): Promise<Noticia[]> {
+  // Usar cache si es válido
+  if (_firestoreCache && Date.now() - _firestoreCacheTime < FIRESTORE_CACHE_TTL) {
+    return _firestoreCache;
+  }
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -163,10 +182,13 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       }
     }
     noticias = Array.from(unique.values());
+    // Guardar en cache
+    _firestoreCache = noticias;
+    _firestoreCacheTime = Date.now();
     return noticias;
   } catch (err) {
     logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
-    return [];
+    return _firestoreCache || []; // fallback a cache viejo si existe
   }
 }
 
