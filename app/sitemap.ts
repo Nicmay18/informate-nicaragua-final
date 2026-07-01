@@ -198,6 +198,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = safeDate(article.fecha);
       const now = new Date();
+      // Forzar re-rastreo: usar fecha actual como lastmod para que Google
+      // vuelva a rastrear URLs con sufijo aleatorio y descubra los 301
+      const lastMod = article.fechaActualizacion ? safeDate(article.fechaActualizacion) : now;
       const daysSincePublished = Math.floor(
         (now.getTime() - publishedAt.getTime()) / (1000 * 60 * 60 * 24)
       );
@@ -213,7 +216,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       return {
         url: `${baseUrl}/noticias/${article.slug}`,
-        lastModified: publishedAt,
+        lastModified: lastMod,
         changeFrequency,
         priority,
       };
