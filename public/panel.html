@@ -881,7 +881,7 @@
                 </div>
                 <div class="form-group">
                   <label class="checkbox-wrapper" style="width: fit-content;">
-                    <input type="checkbox" id="publicado" onchange="actualizarTextoBotonGuardar()">
+                    <input type="checkbox" id="publicado" checked onchange="actualizarTextoBotonGuardar()">
                     <div class="checkbox-content"><h4>🌐 Publicar en sitio</h4><p>Visible en la página principal</p></div>
                   </label>
                 </div>
@@ -902,7 +902,7 @@
               </div>
 
               <div style="display: flex; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
-                <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span></button>
+                <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Publicar Noticia</span></button>
                 <button type="button" class="btn btn-secondary btn-lg" onclick="vistaPreviaNoticia()"><i class="fas fa-eye"></i><span>Vista previa</span></button>
                 <button type="button" class="btn btn-secondary btn-lg" onclick="limpiarFormulario()"><i class="fas fa-eraser"></i><span>Limpiar</span></button>
                 <button type="button" class="btn btn-ghost btn-lg" id="btnCancelarEdicion" onclick="cancelarEdicion()" style="display: none; margin-left: auto;"><i class="fas fa-times"></i><span>Cancelar</span></button>
@@ -929,6 +929,9 @@
                   </div>
                 </div>
                 <button type="button" onclick="document.getElementById('panelCompartirManual').style.display='none'" style="background:none; border:1px solid #e5e7eb; border-radius:6px; padding:6px 12px; cursor:pointer; color:#6b7280; font-size:13px;">✕ Cerrar</button>
+              </div>
+              <div id="shareImagenPreview" style="display:none; margin-bottom:14px; border-radius:8px; overflow:hidden; border:1px solid #e5e7eb; max-height:200px;">
+                <img id="shareImagenImg" src="" alt="" style="width:100%; height:auto; max-height:200px; object-fit:cover; display:block;">
               </div>
               <div style="display:flex; gap:6px; margin-bottom:14px;">
                 <button type="button" id="tabBtnTelegram" onclick="cambiarTabRedes('telegram')" style="padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-size:12px; font-weight:700; background:#1d4ed8; color:#fff;">📱 Telegram</button>
@@ -1361,9 +1364,28 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-primary" style="background: #4f46e5; border-color: #4f46e5;" onclick="limpiarPalabrasSensibles()" title="Revisar todas las noticias y reemplazar palabras sensibles sin tocar estructura"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
             <button class="btn btn-info" style="background: #0891b2; border-color: #0891b2;" onclick="exportarSucesos()" title="Exportar todas las noticias de sucesos para reescritura profesional"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
             <button class="btn btn-warning" style="background: #d97706; border-color: #d97706;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
+            <button class="btn btn-danger" style="background: #9333ea; border-color: #9333ea;" onclick="detectarDuplicados()" title="Detectar noticias duplicadas que dañan el SEO en Google"><i class="fas fa-clone"></i><span>Detectar Duplicados</span></button>
+            <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarNoindex()" title="Quitar noindex de todas las noticias para que Google las indexe"><i class="fas fa-broom"></i><span>Limpiar Noindex</span></button>
           </div>
         </div>
-        
+
+        <!-- DETECTOR DE DUPLICADOS SEO -->
+        <div class="card" style="margin-bottom: 20px; border: 2px solid #9333ea;">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="card-title"><i class="fas fa-clone" style="color: #9333ea;"></i>Detector de Duplicados (SEO)</h3>
+            <span id="contadorDuplicados" style="background: #9333ea; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Sin escanear</span>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--gray-500); font-size: 13px; margin: 0 0 14px;">Google penaliza el contenido duplicado. Esta herramienta agrupa noticias que apuntan al mismo tema (slugs con sufijos aleatorios o títulos casi idénticos). Recomienda conservar la de más vistas y borrar las demás. <strong>Tú confirmas cada borrado.</strong></p>
+            <div id="listaDuplicados">
+              <div style="text-align: center; padding: 30px; color: var(--gray-400);">
+                <i class="fas fa-search" style="font-size: 22px; margin-bottom: 10px;"></i>
+                <p>Pulsá "Detectar Duplicados" para escanear todas tus noticias.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="card" style="margin-bottom: 20px;">
           <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h3 class="card-title"><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>Noticias en Peligro</h3>
@@ -2126,6 +2148,22 @@ sin texto ni marcas de agua, composición periodística"
 
       document.getElementById('shareEmoji').textContent = emoji;
       document.getElementById('shareTituloHeader').textContent = titulo;
+
+      // Mostrar imagen de la noticia si existe
+      const imgPreview = document.getElementById('shareImagenPreview');
+      const imgEl = document.getElementById('shareImagenImg');
+      if (imgPreview && imgEl) {
+        const imagen = noticia.imagenRedes || noticia.imagen;
+        if (imagen && imagen.startsWith('http')) {
+          imgEl.src = imagen;
+          imgEl.alt = titulo;
+          imgPreview.style.display = 'block';
+        } else {
+          imgPreview.style.display = 'none';
+          imgEl.src = '';
+        }
+      }
+
       document.getElementById('shareTextoTelegram').value = textoTelegram;
       document.getElementById('shareTextoFacebook').value = textoFacebook;
       document.getElementById('shareTextoCompleto').value = textoWhatsapp;
@@ -3898,6 +3936,7 @@ sin texto ni marcas de agua, composición periodística"
           nivel: nivelInfo.nivel, nivelScore: nivelInfo.score, nivelFecha: new Date().toISOString()
         };
         let esNueva = !noticiaId;
+        const pasoAPublicado = !esNueva && window.__estadoAnterior !== 'publicado' && publicado;
 
         const acciones = [];
 
@@ -3972,7 +4011,7 @@ sin texto ni marcas de agua, composición periodística"
         // ─── AGENTE DE INDEXACIÓN ───
         let indexOk = [];
         let indexFail = [];
-        if (esNueva && publicado) {
+        if ((esNueva && publicado) || pasoAPublicado) {
           const slugIdx = document.getElementById('noticiaSlug').value || slug || noticiaId;
           const permalink = 'https://nicaraguainformate.com/noticias/' + slugIdx;
           try {
@@ -4007,55 +4046,15 @@ sin texto ni marcas de agua, composición periodística"
         }
         if (indexOk.length) acciones.push('🚀 Indexado en: ' + indexOk.join(', '));
         if (indexFail.length) acciones.push('⚠️ Indexación falló: ' + indexFail.join(', '));
-        if (!esNueva || !publicado) acciones.push('📝 Sin indexar (edición o borrador)');
+        if (!publicado) acciones.push('📝 Guardado como borrador (sin indexar)');
+        else if (!esNueva) acciones.push('📝 Noticia editada');
 
         // ─── RESUMEN FINAL ───
         showToast(acciones.join('<br>'), indexFail.length ? 'warning' : 'success', 'Resumen de publicación', 10000);
 
         if (esNueva) {
           let progress = 30; progressBar.style.width = progress + '%';
-
-          // ─── DISTRIBUCIÓN UNIFICADA (un solo envío por canal) ───
-          // Solo distribuir si la noticia está publicada
-          if (publicado && slug) {
-            const canalesDistribuir = [];
-            if (enviarTelegram) canalesDistribuir.push('telegram');
-            canalesDistribuir.push('indexnow', 'push');
-            try {
-              document.getElementById('statusRedesTitulo').textContent = 'Distribuyendo...';
-              document.getElementById('statusRedesTexto').textContent = 'Enviando a canales...';
-              progress = 60; progressBar.style.width = progress + '%';
-              const distRes = await fetch('/api/admin/distribuir', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug, canales: canalesDistribuir })
-              });
-              const distData = await distRes.json().catch(() => ({}));
-              if (distData.success) {
-                const enviadosAhora = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v && v.ok && !v.skipped)
-                  .map(([k]) => k);
-                const yaEnviados = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v && v.skipped)
-                  .map(([k]) => k);
-                const failCanales = Object.entries(distData.resultados || {})
-                  .filter(([, v]) => v && !v.ok && !v.skipped)
-                  .map(([k, v]) => `${k}: ${(v && v.error) || 'Error'}`);
-                if (enviadosAhora.length) {
-                  showToast('🚀 Distribuido a: ' + enviadosAhora.join(', '), 'success');
-                  const tgStatusEl = document.getElementById('telegramStatus');
-                  if (tgStatusEl && enviadosAhora.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
-                }
-                if (yaEnviados.length) {
-                  showToast('⏭️ Ya estaba distribuido en: ' + yaEnviados.join(', '), 'info');
-                }
-                if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
-              }
-            } catch (e) {
-              console.warn('Distribución falló:', e);
-            }
-          }
-
+          progressBar.style.width = '60%';
           if (prepararRedes) {
             document.getElementById('statusRedesTitulo').textContent = 'Preparando enlaces para redes...';
             document.getElementById('statusRedesTexto').textContent = 'Generando WhatsApp y Facebook...';
@@ -4063,6 +4062,49 @@ sin texto ni marcas de agua, composición periodística"
             mostrarPanelCompartir(noticiaData);
           }
           progressBar.style.width = '100%';
+        }
+
+        // ─── DISTRIBUCIÓN UNIFICADA (un solo envío por canal) ───
+        // Solo distribuir si la noticia está publicada
+        // En edición: también distribuir si pasó de borrador → publicado
+        if (publicado && slug && (esNueva || pasoAPublicado)) {
+          const canalesDistribuir = [];
+          if (enviarTelegram || pasoAPublicado) canalesDistribuir.push('telegram');
+          canalesDistribuir.push('indexnow', 'push');
+          try {
+            document.getElementById('statusRedesTitulo').textContent = 'Distribuyendo...';
+            document.getElementById('statusRedesTexto').textContent = 'Enviando a canales...';
+            progressBar.style.width = '60%';
+            const adminToken = localStorage.getItem('admin_api_key') || '';
+            const distRes = await fetch('/api/admin/distribuir', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+              body: JSON.stringify({ slug, canales: canalesDistribuir })
+            });
+            const distData = await distRes.json().catch(() => ({}));
+            if (distData.success) {
+              const enviadosAhora = Object.entries(distData.resultados || {})
+                .filter(([, v]) => v && v.ok && !v.skipped)
+                .map(([k]) => k);
+              const yaEnviados = Object.entries(distData.resultados || {})
+                .filter(([, v]) => v && v.skipped)
+                .map(([k]) => k);
+              const failCanales = Object.entries(distData.resultados || {})
+                .filter(([, v]) => v && !v.ok && !v.skipped)
+                .map(([k, v]) => `${k}: ${(v && v.error) || 'Error'}`);
+              if (enviadosAhora.length) {
+                showToast('🚀 Distribuido a: ' + enviadosAhora.join(', '), 'success');
+                const tgStatusEl = document.getElementById('telegramStatus');
+                if (tgStatusEl && enviadosAhora.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
+              }
+              if (yaEnviados.length) {
+                showToast('⏭️ Ya estaba distribuido en: ' + yaEnviados.join(', '), 'info');
+              }
+              if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
+            }
+          } catch (e) {
+            console.warn('Distribución falló:', e);
+          }
         }
         limpiarFormulario();
         invalidatePanelCache();
@@ -4073,7 +4115,7 @@ sin texto ni marcas de agua, composición periodística"
         }
         
         // Revalidar en Vercel para que los cambios se vean al instante (noticia nueva Y editada)
-        const revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
+        const revalidateToken = localStorage.getItem('admin_revalidate_secret') || '';
         const slugReal = document.getElementById('noticiaSlug').value || slug || noticiaId;
         try {
           const headers = { 'Content-Type': 'application/json' };
@@ -4297,6 +4339,7 @@ sin texto ni marcas de agua, composición periodística"
         document.getElementById('pieFoto').value = data.pieFoto || '';
         document.getElementById('destacada').checked = !!data.destacada;
         document.getElementById('publicado').checked = data.estado === 'publicado';
+        window.__estadoAnterior = data.estado || 'borrador';
         document.getElementById('autor').value = data.autor || 'Redacción Nicaragua Informate';
         actualizarPreview(); actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras(); actualizarPreviewHomepage();
         if (!data.pieFoto) actualizarPieFotoDesdeAutor();
@@ -4664,9 +4707,10 @@ sin texto ni marcas de agua, composición periodística"
       const strongs = (nuevoContenido.match(/<strong>/gi) || []).length;
       if (strongs < 5) {
         try {
+          const adminToken = localStorage.getItem('admin_api_key') || '';
           const res = await fetch('/api/admin/enrich-strong', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
             body: JSON.stringify({ noticiaId: datos.id, modo: 'noticia' })
           });
           const data = await res.json().catch(() => ({}));
@@ -4874,9 +4918,10 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('formNoticia').reset(); document.getElementById('noticiaId').value = ''; document.getElementById('noticiaSlug').value = ''; clearImage();
       document.getElementById('tituloFormulario').textContent = 'Nueva Noticia';
       document.getElementById('subtituloFormulario').textContent = 'Redacción profesional optimizada para AdSense y SEO.';
-      document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Guardar Borrador</span>';
+      document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Publicar Noticia</span>';
       document.getElementById('btnCancelarEdicion').style.display = 'none';
-      document.getElementById('enviarTelegram').checked = !!(localStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = false;
+      document.getElementById('enviarTelegram').checked = !!(localStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = true;
+      window.__estadoAnterior = undefined;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
       if (window.resetEvaluadorPanel) {
         window.resetEvaluadorPanel();
@@ -7122,11 +7167,22 @@ VERIFICACIÓN FINAL
         }
 
         if (tieneThinContent) {
-          html += '<div style="background:#fee2e2;border:2px solid #f87171;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">';
+          html += '<div style="background:#fee2e2;border:2px solid #f87171;border-radius:12px;padding:16px 20px;margin-bottom:12px;flex-wrap:wrap;">';
+          html += '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;">';
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#7f1d1d;"><i class="fas fa-file-alt" style="margin-right:6px;color:#dc2626;"></i>Thin Content</p>';
           html += '<p style="margin:0;font-size:12px;color:#991b1b;">' + (data.thinContent?.count || 0) + ' artículos con &lt;350 palabras. Esto bloquea AdSense y penaliza SEO.</p></div>';
           html += '<button class="btn btn-primary" id="btnExpandirThin" onclick="ejecutarExpandirThinContent()" style="white-space:nowrap;flex-shrink:0;background:#dc2626;border-color:#dc2626;"><i class="fas fa-expand"></i> Expandir Thin Content</button>';
+          html += '</div>';
+          if (data.thinContent?.detalles && data.thinContent.detalles.length > 0) {
+            html += '<div style="margin-top:8px;padding:8px 12px;background:#fff;border-radius:8px;font-size:12px;">';
+            html += '<p style="margin:0 0 6px;font-weight:600;color:#7f1d1d;">Artículos detectados:</p>';
+            html += '<ul style="margin:0;padding-left:16px;color:#991b1b;">';
+            data.thinContent.detalles.forEach(function(item) {
+              html += '<li style="margin-bottom:4px;">' + (item.titulo || item.id) + ' — <strong>' + item.palabrasUsadas + ' palabras</strong> (campo:' + item.palabrasCampo + ', conteo:' + item.palabrasConteo + ')</li>';
+            });
+            html += '</ul></div>';
+          }
           html += '</div>';
         }
 
@@ -7465,6 +7521,187 @@ VERIFICACIÓN FINAL
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[eliminarNoticiasViejas]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // DETECTOR DE DUPLICADOS (SEO) — agrupa noticias del mismo tema
+    // ═══════════════════════════════════════════════════════════════
+    function _normalizarTitulo(t) {
+      return String(t || '')
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    // Palabras vacías que no aportan a la similitud
+    const _STOPWORDS = new Set(['de','la','el','en','y','a','los','las','del','un','una','con','por','para','tras','su','se','que','al','lo','le','es','sin','sobre','entre']);
+    function _tokensTitulo(t) {
+      return new Set(_normalizarTitulo(t).split(' ').filter(w => w.length > 2 && !_STOPWORDS.has(w)));
+    }
+    function _jaccard(a, b) {
+      if (a.size === 0 || b.size === 0) return 0;
+      let inter = 0;
+      a.forEach(x => { if (b.has(x)) inter++; });
+      return inter / (a.size + b.size - inter);
+    }
+    // Quita el sufijo aleatorio base36 (ej: -mpoahvtf, -mq1ru986) si lo tiene
+    function _slugBase(slug) {
+      return String(slug || '').replace(/-[a-z0-9]{7,9}$/i, '');
+    }
+    function _tieneSufijoRandom(slug) {
+      return /-[a-z0-9]{7,9}$/i.test(String(slug || ''));
+    }
+
+    window.detectarDuplicados = async function() {
+      const cont = document.getElementById('listaDuplicados');
+      const badge = document.getElementById('contadorDuplicados');
+      cont.innerHTML = '<div style="text-align:center; padding:30px; color:var(--gray-400);"><i class="fas fa-spinner fa-spin" style="font-size:22px;"></i><p>Escaneando todas las noticias...</p></div>';
+      badge.textContent = 'Escaneando...';
+      try {
+        invalidatePanelCache();
+        const noticias = await getNoticiasCache();
+        const items = noticias.map(n => ({
+          id: n.id,
+          titulo: n.titulo || '(sin título)',
+          slug: n.slug || n.id,
+          vistas: n.vistas || 0,
+          fecha: n.fecha,
+          base: _slugBase(n.slug || n.id),
+          tokens: _tokensTitulo(n.titulo),
+          sufijo: _tieneSufijoRandom(n.slug || n.id),
+        }));
+
+        // Union-Find para agrupar duplicados transitivos
+        const parent = items.map((_, i) => i);
+        const find = (x) => { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; };
+        const union = (a, b) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
+
+        for (let i = 0; i < items.length; i++) {
+          for (let j = i + 1; j < items.length; j++) {
+            const A = items[i], B = items[j];
+            let dup = false;
+            // 1. Mismo slug base (tras quitar sufijo aleatorio)
+            if (A.base && A.base === B.base) dup = true;
+            // 2. Un slug es prefijo del otro (ej: ...expandirse-en vs ...expandirse-en-nicaragua-xxxx)
+            else if (A.base.length > 15 && B.base.length > 15 && (A.base.startsWith(B.base) || B.base.startsWith(A.base))) dup = true;
+            // 3. Títulos casi idénticos
+            else if (_jaccard(A.tokens, B.tokens) >= 0.7) dup = true;
+            if (dup) union(i, j);
+          }
+        }
+
+        // Agrupar
+        const grupos = {};
+        items.forEach((it, i) => { const r = find(i); (grupos[r] = grupos[r] || []).push(it); });
+        const duplicados = Object.values(grupos).filter(g => g.length > 1);
+
+        if (duplicados.length === 0) {
+          badge.textContent = '0 duplicados';
+          cont.innerHTML = '<div style="text-align:center; padding:30px; color:var(--success);"><i class="fas fa-check-circle" style="font-size:26px; margin-bottom:10px;"></i><p><strong>¡Sin duplicados!</strong> No se detectaron noticias repetidas.</p></div>';
+          return;
+        }
+
+        const totalSobrantes = duplicados.reduce((s, g) => s + (g.length - 1), 0);
+        badge.textContent = `${duplicados.length} grupos · ${totalSobrantes} a revisar`;
+
+        // Render
+        let html = '';
+        duplicados.forEach((grupo, gi) => {
+          // Conservar: más vistas; desempate: slug sin sufijo aleatorio, luego más corto
+          const ordenado = [...grupo].sort((a, b) => {
+            if (b.vistas !== a.vistas) return b.vistas - a.vistas;
+            if (a.sufijo !== b.sufijo) return a.sufijo ? 1 : -1;
+            return a.slug.length - b.slug.length;
+          });
+          html += `<div style="border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin-bottom:14px; background:#faf5ff;">`;
+          html += `<div style="font-weight:700; font-size:13px; color:#6b21a8; margin-bottom:10px;"><i class="fas fa-layer-group"></i> Grupo ${gi + 1} — ${grupo.length} noticias del mismo tema</div>`;
+          ordenado.forEach((it, idx) => {
+            const esKeep = idx === 0;
+            html += `<div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; margin-bottom:6px; background:${esKeep ? '#dcfce7' : '#fff'}; border:1px solid ${esKeep ? '#86efac' : '#fecaca'};">`;
+            html += `<div style="flex:1; min-width:0;">`;
+            html += `<div style="font-size:13px; font-weight:600; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${it.titulo}</div>`;
+            html += `<div style="font-size:11px; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">/${it.slug}${it.sufijo ? ' <span style="color:#dc2626;">(sufijo aleatorio)</span>' : ''}</div>`;
+            html += `<div style="font-size:11px; color:#9333ea; font-weight:600;">${it.vistas} vistas</div>`;
+            html += `</div>`;
+            if (esKeep) {
+              html += `<span style="background:#16a34a; color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; white-space:nowrap;"><i class="fas fa-check"></i> CONSERVAR</span>`;
+            } else {
+              html += `<button onclick="eliminarDuplicado('${it.id}', this)" style="background:#dc2626; color:#fff; border:none; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; cursor:pointer; white-space:nowrap;"><i class="fas fa-trash"></i> Borrar</button>`;
+            }
+            html += `<a href="https://nicaraguainformate.com/noticias/${it.slug}" target="_blank" rel="noopener" style="color:#6b7280; font-size:13px; padding:0 4px;" title="Ver noticia"><i class="fas fa-external-link-alt"></i></a>`;
+            html += `</div>`;
+          });
+          html += `</div>`;
+        });
+        cont.innerHTML = html;
+      } catch (err) {
+        badge.textContent = 'Error';
+        cont.innerHTML = `<div style="color:#dc2626; padding:20px;">Error al escanear: ${err.message}</div>`;
+        console.error('[detectarDuplicados]', err);
+      }
+    };
+
+    window.eliminarDuplicado = async function(id, btn) {
+      if (!confirm('¿Borrar esta noticia duplicada? Esta acción NO se puede deshacer.\n\nSe recomienda conservar siempre la noticia marcada en verde (más vistas).')) return;
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      if (!adminToken) { showToast('Falta la API Key de admin en Configuración', 'error'); return; }
+      const fila = btn.closest('div[style*="display:flex"]');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      try {
+        const res = await fetch('/api/admin/news/' + encodeURIComponent(id), {
+          method: 'DELETE',
+          headers: { 'x-admin-token': adminToken },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'No autorizado o error');
+        showToast('Duplicado eliminado', 'success');
+        if (fila) { fila.style.opacity = '0.4'; fila.style.textDecoration = 'line-through'; }
+        btn.outerHTML = '<span style="color:#16a34a; font-size:11px; font-weight:700;"><i class="fas fa-check"></i> Borrado</span>';
+        invalidatePanelCache();
+        // Revalidar caché del sitio para que Google no siga viendo la URL
+        const revToken = localStorage.getItem('admin_revalidate_secret') || '';
+        fetch('/api/revalidate', {
+          method: 'POST',
+          headers: revToken ? { 'Content-Type': 'application/json', 'x-revalidate-secret': revToken } : { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: '/' })
+        }).catch(() => {});
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-trash"></i> Borrar';
+      }
+    };
+
+    window.limpiarNoindex = async function() {
+      if (!confirm('¿Quitar el flag "noindex" de TODAS las noticias?\n\nEsto permite que Google indexe todas las URLs. Las noticias que tienen noindex=true actualmente NO aparecen en Google.')) return;
+      showLoading(true, 'Limpiando flags noindex...');
+      try {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        if (!adminToken) { showToast('Falta la API Key de admin en Configuración', 'error'); return; }
+        const res = await fetch('/api/admin/limpiar-noindex', {
+          method: 'POST',
+          headers: { 'x-admin-token': adminToken, 'Content-Type': 'application/json' },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        showToast(data.message, 'success');
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl) {
+          logEl.innerHTML += `<div style="color:#34d399;">[${new Date().toLocaleTimeString()}] ${data.message}</div>`;
+          if (data.afectadas && data.afectadas.length) {
+            data.afectadas.forEach(n => {
+              logEl.innerHTML += `<div style="color:#94a3b8; padding-left:12px;">• ${n.titulo}</div>`;
+            });
+          }
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[limpiarNoindex]', err);
       } finally {
         showLoading(false);
       }

@@ -163,6 +163,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // /noticia.html sin query params → redirige al listado de noticias
+        source: '/noticia.html',
+        destination: '/noticias',
+        permanent: true,
+      },
+      {
         source: '/nosotros.html',
         destination: '/nosotros',
         permanent: true,

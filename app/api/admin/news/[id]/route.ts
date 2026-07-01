@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
-import { generateSlug } from '@/lib/slug';
+import { ensureUniqueSlug } from '@/lib/slug';
 
 function isAuthorized(request: NextRequest): boolean {
   const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
@@ -33,13 +33,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
       }
     }
+    // Helper: verifica si un slug ya existe en OTRA noticia (excluye la actual)
+    const slugExists = async (candidate: string): Promise<boolean> => {
+      const q = await db.collection('noticias').where('slug', '==', candidate).limit(1).get();
+      return !q.empty && q.docs[0].id !== id;
+    };
+
     // Solo regenerar slug si el título cambió explícitamente y no hay slug fijo
     if (body.titulo && body.regenerateSlug === true && !body.slug) {
-      updateData.slug = generateSlug(body.titulo) + '-' + Date.now();
+      updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
     }
     // Si la noticia no tiene slug (migración), generarlo ahora
     if (!snap.data()?.slug && body.titulo) {
-      updateData.slug = generateSlug(body.titulo) + '-' + Date.now();
+      updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
     }
     updateData.fechaActualizacion = Timestamp.now();
 

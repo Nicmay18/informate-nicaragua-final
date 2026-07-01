@@ -17,6 +17,7 @@ interface MetricasCalidad {
     count: number;
     porcentaje: number;
     ids: string[];
+    detalles?: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}>;
   };
   conNoindex: number;
   sinImagen: number;
@@ -63,6 +64,7 @@ async function computeDashboardMetrics() {
     let totalFuentes = 0;
 
     const thinIds: string[] = [];
+    const thinDetails: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}> = [];
     const categorias: Record<string, number> = {};
     const alertas: string[] = [];
     const problemasCriticos: string[] = [];
@@ -76,8 +78,10 @@ async function computeDashboardMetrics() {
       const data = doc.data();
       const contenidoRaw = data.contenido || '';
       const contenido = contenidoRaw.replace(/<[^>]*>/g, ' ');
-      // Usar data.palabras si existe (campo explícito guardado al crear nota), sino contar del contenido
-      const palabras = data.palabras || contenido.split(/\s+/).filter((p: string) => p.length > 0).length;
+      // Usar data.palabras si existe y es numérico válido (>0), sino contar del contenido
+      const palabrasConteo = contenido.split(/\s+/).filter((p: string) => p.length > 0).length;
+      const palabrasCampo = typeof data.palabras === 'number' ? data.palabras : (parseInt(data.palabras, 10) || 0);
+      const palabras = palabrasCampo > 0 ? palabrasCampo : palabrasConteo;
       const titulo = (data.titulo || '').trim();
       const resumen = (data.resumen || '').trim();
 
@@ -85,7 +89,17 @@ async function computeDashboardMetrics() {
       totalStrong += (contenidoRaw.match(/<strong>/gi) || []).length;
       totalBlockquotes += (contenidoRaw.match(/<blockquote>/gi) || []).length;
 
-      if (palabras < 350) { thinCount++; thinIds.push(doc.id); }
+      if (palabras < 350) {
+        thinCount++;
+        thinIds.push(doc.id);
+        thinDetails.push({
+          id: doc.id,
+          titulo: titulo || '(sin título)',
+          palabrasCampo: data.palabras,
+          palabrasConteo,
+          palabrasUsadas: palabras,
+        });
+      }
       if (data.noindex === true) conNoindex++;
       if (!data.imagenDestacada && !data.imagen) sinImagen++;
       if (!data.autor) sinAutor++;
@@ -219,7 +233,7 @@ async function computeDashboardMetrics() {
     const metricas: MetricasCalidad = {
       totalNoticias: total,
       promedioPalabras: Math.round(totalPalabras / total),
-      thinContent: { count: thinCount, porcentaje: Math.round((thinCount / total) * 100), ids: thinIds.slice(0, 20) },
+      thinContent: { count: thinCount, porcentaje: Math.round((thinCount / total) * 100), ids: thinIds.slice(0, 20), detalles: thinDetails.slice(0, 20) },
       conNoindex,
       sinImagen,
       sinAutor,

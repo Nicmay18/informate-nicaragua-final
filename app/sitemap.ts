@@ -187,13 +187,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const articles = await cachedGetNews(); // Cacheado: revalida cada 1h
 
-    // Excluir artículos con slugs tóxicos, noindex, o thin content (<150 palabras)
+    // Incluir TODAS las noticias publicadas (excepto slugs tóxicos bloqueados)
+    // NOTA: quitado filtro noindex y thin-content — el sitemap debe listar
+    // todas las URLs canónicas para que Google las descubra y elija indexar.
     const cleanArticles = articles.filter(article => {
       if (isToxicSlug(article.slug)) return false;
-      if (article.noindex === true) return false;
-      // Thin content: contar palabras del contenido si no tiene campo palabras
-      const wordCount = article.palabras ?? (article.contenido ? article.contenido.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length : 0);
-      if (wordCount < 150) return false; // No indexar thin content
       return true;
     });
 

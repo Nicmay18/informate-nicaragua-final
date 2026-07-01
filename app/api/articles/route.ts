@@ -36,7 +36,23 @@ export async function POST(request: NextRequest) {
       .where('slug', '==', slug)
       .limit(1)
       .get();
-    const finalSlug = existing.empty ? slug : `${slug}-${Date.now().toString(36)}`;
+
+    // ANTI-DUPLICADOS: si ya existe una noticia con este slug, NO crear un
+    // duplicado con sufijo aleatorio (eso canibalizaba el SEO en Google).
+    // Devolvemos la noticia existente para que la automatizacion no duplique.
+    if (!existing.empty) {
+      const doc = existing.docs[0];
+      return NextResponse.json({
+        success: true,
+        duplicate: true,
+        id: doc.id,
+        slug,
+        message: 'Ya existe una noticia con este titulo/slug. No se creo duplicado.',
+        url: `https://nicaraguainformate.com/noticias/${slug}`,
+      });
+    }
+
+    const finalSlug = slug;
 
     const articleRef = adminDb.collection('noticias').doc();
     const now = new Date();

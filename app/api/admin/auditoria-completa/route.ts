@@ -14,7 +14,7 @@ const ADJETIVOS_PROHIBIDOS = [
   'desastroso','desastrosa','funesto','funesta','siniestro','siniestra',
   'macabro','macabra','espantoso','espantosa','atroz','critico','critica',
   'morboso','grotesco','pavoroso','fatal','nefasto','sangre','muerto','muertos',
-  'muerta','muertas','fallecido','fallecidos','fallecida','fallecidas','asesinato',
+  'muerta','muertas','asesinato',
   'asesinado','asesinada','asesinos','secuestro','secuestrado','violacion',
   'violada','violaron','tortura','torturado','descuartizado','decapitado',
   'ahorcado','ahogado','incinerado','calcina','calcino'
