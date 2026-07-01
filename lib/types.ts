@@ -28,6 +28,7 @@ export interface Noticia {
   keywords?: string;
   scoreCalidad?: number;
   noindex?: boolean;
+  related_links?: Array<{ url: string; anchor: string; type: string }>;
 }
 
 /**

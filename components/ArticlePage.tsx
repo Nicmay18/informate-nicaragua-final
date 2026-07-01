@@ -10,6 +10,7 @@ import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { getClientDb } from '@/lib/firebase-client';
+import { injectInternalLinks } from '@/lib/article-links';
 import { doc, getDoc, updateDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
@@ -382,7 +383,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         )}
 
         {/* Contenido — sanitizado antes de inyección para prevenir XSS */}
-        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(enhancedHtml || noticia.resumen || '') }} />
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(injectInternalLinks(enhancedHtml || noticia.resumen || '', noticia.related_links)) }} />
 
         {/* ── TAMBIÉN TE PUEDE INTERESAR (in-article related) ── */}
         {readAlso.length > 0 && (
