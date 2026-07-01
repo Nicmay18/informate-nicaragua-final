@@ -261,7 +261,7 @@ async function computeDashboardMetrics() {
 }
 
 const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-calidad'], {
-  revalidate: 86400,
+  revalidate: 300, // 5 minutos en vez de 24h
   tags: ['dashboard-calidad'],
 });
 
@@ -270,7 +270,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
   try {
-    const metricas = await cachedDashboard();
+    const force = request.nextUrl.searchParams.get('force') === '1';
+    const metricas = force ? await computeDashboardMetrics() : await cachedDashboard();
     return NextResponse.json(metricas, {
       headers: { 'Cache-Control': 'no-store, must-revalidate' },
     });
