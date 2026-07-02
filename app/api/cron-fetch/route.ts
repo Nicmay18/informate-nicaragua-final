@@ -22,6 +22,8 @@ import { logger } from '@/lib/logger';
 import { extractEntities } from '@/utils/meta';
 import type { Noticia } from '@/lib/types';
 
+export const maxDuration = 30;
+
 // ─── Configuración ───
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const CRON_SECRET = process.env.CRON_SECRET_TOKEN || '';

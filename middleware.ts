@@ -58,5 +58,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/noticias/:slug*', '/panel.html'],
+  matcher: ['/noticias/:slug*', '/panel.html'],
 };

@@ -20,7 +20,7 @@ import ThemeScript from '@/components/ThemeScript';
 import { criticalCss } from '@/lib/critical-css';
 import { Suspense } from 'react';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: true });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap', preload: false });
 
 /* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───

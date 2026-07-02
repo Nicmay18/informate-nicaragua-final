@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 30;
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';

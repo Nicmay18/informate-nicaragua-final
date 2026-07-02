@@ -5,6 +5,8 @@ import { logger } from '@/lib/logger';
 
 const API_SECRET = process.env.ADMIN_SECRET_KEY || 'mi-secreto-super-seguro-123';
 
+export const maxDuration = 30;
+
 export async function POST(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

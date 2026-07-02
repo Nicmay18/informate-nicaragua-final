@@ -2,6 +2,8 @@
 import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slug';
 
+export const maxDuration = 15;
+
 function countWords(text: string): number {
   return text.trim().split(/\s+/).filter((w) => w.length > 0).length;
 }

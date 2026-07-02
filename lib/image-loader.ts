@@ -15,7 +15,7 @@ interface ImageLoaderProps {
   quality?: number;
 }
 
-export default function weservLoader({ src, width, quality = 70 }: ImageLoaderProps): string {
+export default function weservLoader({ src, width, quality = 80 }: ImageLoaderProps): string {
   // URLs ya optimizadas o de servicios de optimización — no re-procesar
   if (
     src.includes('images.weserv.nl') ||
@@ -25,20 +25,18 @@ export default function weservLoader({ src, width, quality = 70 }: ImageLoaderPr
     return src;
   }
 
-  // Para imágenes locales (public/*) y externas:
-  // pasarlas por weserv.nl para optimización on-the-fly (WebP, resize, compress)
-  const absoluteUrl = src.startsWith('/')
-    ? `https://nicaraguainformate.com${src}`
-    : src;
+  // Imágenes locales: servir directamente via Next.js image optimization (sin proxy externo)
+  if (src.startsWith('/')) {
+    return src;
+  }
 
+  // Solo proxyear imágenes externas via weserv.nl
   const params = new URLSearchParams();
-  params.set('url', absoluteUrl);
+  params.set('url', src);
   params.set('w', width.toString());
   params.set('q', quality.toString());
   params.set('fit', 'cover');
   params.set('n', '-1');
-
-  // Forzar WebP (el navegador puede pedir AVIF si está soportado)
   params.set('output', 'webp');
 
   return `https://images.weserv.nl/?${params.toString()}`;

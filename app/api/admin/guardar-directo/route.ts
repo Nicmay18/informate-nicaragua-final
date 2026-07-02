@@ -5,6 +5,8 @@ import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { generarMetaDescription, generarTituloSEO } from '@/lib/generador-meta';
 
+export const maxDuration = 30;
+
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
   const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;

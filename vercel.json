@@ -3,6 +3,12 @@
   "buildCommand": "next build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
+  "regions": ["mia1"],
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/resumen-diario?secret=ni-agente-2024-xyz789",
