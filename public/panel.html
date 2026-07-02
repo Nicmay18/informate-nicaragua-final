@@ -1356,18 +1356,35 @@ sin texto ni marcas de agua, composición periodística"
       <!-- CORRECCIONES MASIVAS -->
       <div id="correcciones-tab" class="tab-content">
         <div class="page-header">
-          <div class="page-title"><h1>Correcciones Masivas</h1><p>Corregir automáticamente las noticias en estado PELIGRO.</p></div>
-          <div class="header-actions">
-            <button class="btn btn-warning" onclick="revertirSensacionalismo()" title="Revertir títulos cambiados de 'fallecidos' a 'muertos' por error"><i class="fas fa-undo-alt"></i><span>Revertir 'muertos'→'fallecidos'</span></button>
-            <button class="btn btn-danger" onclick="cargarNoticiasPeligro()"><i class="fas fa-sync-alt"></i><span>Recargar Lista</span></button>
-            <button class="btn btn-danger" style="background: #7f1d1d; border-color: #7f1d1d;" onclick="eliminarNoticiasViejas()" title="Eliminar las 50 noticias más viejas de Firestore"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
-            <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarSucesos()" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
-            <button class="btn btn-primary" style="background: #4f46e5; border-color: #4f46e5;" onclick="limpiarPalabrasSensibles()" title="Revisar todas las noticias y reemplazar palabras sensibles sin tocar estructura"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
-            <button class="btn btn-info" style="background: #0891b2; border-color: #0891b2;" onclick="exportarSucesos()" title="Exportar todas las noticias de sucesos para reescritura profesional"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
-            <button class="btn btn-warning" style="background: #d97706; border-color: #d97706;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
-            <button class="btn btn-danger" style="background: #9333ea; border-color: #9333ea;" onclick="detectarDuplicados()" title="Detectar noticias duplicadas que dañan el SEO en Google"><i class="fas fa-clone"></i><span>Detectar Duplicados</span></button>
-            <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarNoindex()" title="Quitar noindex de todas las noticias para que Google las indexe"><i class="fas fa-broom"></i><span>Limpiar Noindex</span></button>
-            <button class="btn btn-primary" style="background: #2563eb; border-color: #2563eb;" onclick="reindexarGoogle()" title="Enviar todas las noticias a Google Indexing API para que las indexe de inmediato (max 200 por dia)"><i class="fab fa-google"></i><span>Reindexar en Google</span></button>
+          <div class="page-title"><h1>Correcciones Masivas</h1><p>Herramientas de auditoría y mantenimiento del sitio.</p></div>
+        </div>
+
+        <!-- Herramientas activas -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-tools" style="color: var(--primary-600);"></i>Herramientas Activas</h3></div>
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="btn btn-danger" onclick="cargarNoticiasPeligro()" style="justify-content: flex-start; text-align: left;"><i class="fas fa-sync-alt"></i><span>Recargar Lista de Peligro</span></button>
+              <button class="btn btn-primary" style="background: #9333ea; border-color: #9333ea; justify-content: flex-start; text-align: left;" onclick="detectarDuplicados()" title="Detectar noticias duplicadas que dañan el SEO en Google"><i class="fas fa-clone"></i><span>Detectar Duplicados SEO</span></button>
+              <button class="btn btn-warning" style="background: #d97706; border-color: #d97706; justify-content: flex-start; text-align: left;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
+              <button class="btn btn-primary" style="background: #2563eb; border-color: #2563eb; justify-content: flex-start; text-align: left;" onclick="reindexarGoogle()" title="Enviar todas las noticias a Google Indexing API para que las indexe de inmediato (max 200 por dia)"><i class="fab fa-google"></i><span>Reindexar en Google</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Correcciones ya aplicadas ( Score 100/100 ) -->
+        <div class="card" style="margin-bottom: 20px; opacity: 0.7;">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-check-circle" style="color: var(--success);"></i>Correcciones Aplicadas — Score 100/100</h3></div>
+          <div class="card-body">
+            <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Estas herramientas ya cumplieron su función. El sitio está en 100/100. Se mantienen disponibles por si las necesitás de nuevo.</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="btn btn-secondary" onclick="revertirSensacionalismo()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Revertir títulos cambiados de 'fallecidos' a 'muertos' por error"><i class="fas fa-undo-alt"></i><span>Revertir 'muertos'→'fallecidos'</span></button>
+              <button class="btn btn-secondary" onclick="limpiarSucesos()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
+              <button class="btn btn-secondary" onclick="limpiarPalabrasSensibles()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Revisar todas las noticias y reemplazar palabras sensibles"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
+              <button class="btn btn-secondary" onclick="limpiarNoindex()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Quitar noindex de todas las noticias"><i class="fas fa-broom"></i><span>Limpiar Noindex</span></button>
+              <button class="btn btn-secondary" onclick="exportarSucesos()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Exportar noticias de sucesos para reescritura"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
+              <button class="btn btn-secondary" onclick="eliminarNoticiasViejas()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Eliminar las 50 noticias más viejas"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
+            </div>
           </div>
         </div>
 
