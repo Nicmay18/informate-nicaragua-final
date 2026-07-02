@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 
 const MEDIUM_INTEGRATION_TOKEN = process.env.MEDIUM_INTEGRATION_TOKEN || '';
 

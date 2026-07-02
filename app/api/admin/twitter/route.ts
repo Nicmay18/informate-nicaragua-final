@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN || '';
 

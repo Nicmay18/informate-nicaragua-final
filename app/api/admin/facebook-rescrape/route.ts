@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 
 const FB_ACCESS_TOKEN = process.env.FB_PAGE_TOKEN || process.env.FB_ACCESS_TOKEN || '';
 
