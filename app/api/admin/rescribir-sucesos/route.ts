@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 const CRON_SECRET = process.env.CRON_SECRET || '';
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 interface NoticiaData {
   titulo?: string;
@@ -108,7 +109,8 @@ export async function POST(request: NextRequest) {
     const secretFromQuery = searchParams.get('secret') || '';
     const providedSecret = secretFromHeader || secretFromQuery;
 
-    if (!providedSecret || (CRON_SECRET && providedSecret !== CRON_SECRET)) {
+    const validSecrets = [CRON_SECRET, ADMIN_API_KEY].filter(Boolean);
+    if (!providedSecret || (validSecrets.length > 0 && !validSecrets.includes(providedSecret))) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
