@@ -229,6 +229,12 @@ export async function POST(request: NextRequest) {
         const { invalidateFirestoreCache } = await import('@/lib/data');
         invalidateFirestoreCache();
       } catch (e) { /* noop */ }
+
+      // Notificar a Google Indexing API para cada noticia publicada (no bloquea)
+      import('@/lib/google-indexing').then(({ notifyGoogleBulk }) => {
+        const urls = created.map(c => `https://nicaraguainformate.com/noticias/${c.slug}`);
+        notifyGoogleBulk(urls).catch(() => {});
+      }).catch(() => {});
     }
 
     return NextResponse.json({

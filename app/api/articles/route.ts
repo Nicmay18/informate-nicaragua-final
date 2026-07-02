@@ -85,6 +85,12 @@ export async function POST(request: NextRequest) {
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
 
+    // Notificar a Google Indexing API (no bloquea la respuesta)
+    const articleUrl = `https://nicaraguainformate.com/noticias/${finalSlug}`;
+    import('@/lib/google-indexing').then(({ notifyGoogleIndexing }) => {
+      notifyGoogleIndexing(articleUrl).catch(() => {});
+    }).catch(() => {});
+
     return NextResponse.json({
       success: true,
       id: articleRef.id,

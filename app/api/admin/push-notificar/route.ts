@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!ONESIGNAL_REST_KEY) {
-      return NextResponse.json({ error: 'Falta ONESIGNAL_REST_API_KEY en variables de entorno' }, { status: 500 });
+      return NextResponse.json({ ok: true, skipped: true, message: 'Push: ONESIGNAL_REST_API_KEY no configurada (opcional)' });
     }
 
     const payload: any = {

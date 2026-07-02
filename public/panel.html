@@ -1367,6 +1367,7 @@ sin texto ni marcas de agua, composición periodística"
             <button class="btn btn-warning" style="background: #d97706; border-color: #d97706;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
             <button class="btn btn-danger" style="background: #9333ea; border-color: #9333ea;" onclick="detectarDuplicados()" title="Detectar noticias duplicadas que dañan el SEO en Google"><i class="fas fa-clone"></i><span>Detectar Duplicados</span></button>
             <button class="btn btn-success" style="background: #059669; border-color: #059669;" onclick="limpiarNoindex()" title="Quitar noindex de todas las noticias para que Google las indexe"><i class="fas fa-broom"></i><span>Limpiar Noindex</span></button>
+            <button class="btn btn-primary" style="background: #2563eb; border-color: #2563eb;" onclick="reindexarGoogle()" title="Enviar todas las noticias a Google Indexing API para que las indexe de inmediato (max 200 por dia)"><i class="fab fa-google"></i><span>Reindexar en Google</span></button>
           </div>
         </div>
 
@@ -3933,9 +3934,10 @@ sin texto ni marcas de agua, composición periodística"
       const noticiaData = {
           titulo, categoria, departamento, dateline, resumen: resumen || contenido,
           contenido, imagen: imagenUrl, pieFoto, fecha: serverTimestamp(), fechaActualizacion: serverTimestamp(), vistas: 0,
-          autor: autorSeleccionado, destacada, slug, palabras, estado: publicado ? 'publicado' : 'borrador',
+          autor: autorSeleccionado, destacada, palabras, estado: publicado ? 'publicado' : 'borrador',
           nivel: nivelInfo.nivel, nivelScore: nivelInfo.score, nivelFecha: new Date().toISOString()
         };
+        if (!noticiaId && slug) noticiaData.slug = slug; // solo asignar slug en creación
         let esNueva = !noticiaId;
         const pasoAPublicado = !esNueva && window.__estadoAnterior !== 'publicado' && publicado;
 
@@ -7705,6 +7707,30 @@ VERIFICACIÓN FINAL
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[limpiarNoindex]', err);
+      } finally {
+        showLoading(false);
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // REINDEXAR TODAS LAS NOTICIAS EN GOOGLE INDEXING API
+    // ═══════════════════════════════════════════════════════════════
+    window.reindexarGoogle = async function() {
+      if (!confirm('⚠️ Enviar TODAS las noticias a Google para re-indexación?\nGoogle tiene límite de 200 URLs por día.\nLas nuevas noticias ya se envían automáticamente.')) return;
+      showLoading(true, 'Enviando noticias a Google...');
+      try {
+        const secret = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/reindexar-google?secret=' + encodeURIComponent(secret), { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error desconocido');
+        showToast(`Enviadas ${data.enviadas} URLs a Google. Exitosas: ${data.exitosas}, Fallidas: ${data.fallidas}`, 'success');
+        const logEl = document.getElementById('logCorrecciones');
+        if (logEl) {
+          logEl.innerHTML += `<div style="color:#2563eb;">[${new Date().toLocaleTimeString()}] Reindexado Google: ${data.enviadas} enviadas, ${data.exitosas} exitosas</div>`;
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        console.error('[reindexarGoogle]', err);
       } finally {
         showLoading(false);
       }

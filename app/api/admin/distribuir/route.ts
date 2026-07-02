@@ -204,7 +204,7 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
   try {
     const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '608354d3-fd2a-4c97-b055-5c14b57bbe9b';
     const ONESIGNAL_REST_KEY = process.env.ONESIGNAL_REST_API_KEY || '';
-    if (!ONESIGNAL_REST_KEY) return { ok: false, error: 'Falta ONESIGNAL_REST_API_KEY' };
+    if (!ONESIGNAL_REST_KEY) return { ok: true, error: 'Push: ONESIGNAL_REST_API_KEY no configurada (opcional)' };
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
