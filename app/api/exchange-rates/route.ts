@@ -9,6 +9,7 @@ const BCN_NIO_USD_SELL = 37.18;
 const EUR_BANK_SPREAD = 0.08; // 8% spread para NIO/EUR
 
 export const revalidate = 86400; // Revalidar cada 24h en el servidor
+export const maxDuration = 10;
 
 export async function GET() {
   try {

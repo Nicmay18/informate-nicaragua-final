@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 
 export const revalidate = 0;
+export const maxDuration = 30;
 
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';

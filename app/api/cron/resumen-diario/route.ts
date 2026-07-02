@@ -2,6 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 30;
 
 const CRON_SECRET = process.env.CRON_SECRET || '';
 

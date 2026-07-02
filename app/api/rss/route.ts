@@ -2,6 +2,7 @@ import { adminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 15;
 
 function escapeXml(str: string): string {
   return String(str)
