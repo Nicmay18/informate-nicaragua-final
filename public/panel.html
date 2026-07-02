@@ -1911,7 +1911,7 @@ sin texto ni marcas de agua, composición periodística"
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc, setDoc, serverTimestamp, limit, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, getIdToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     // Panel admin v5.0.3 — inicializado
 
@@ -3431,6 +3431,30 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     // Auth - Firebase authentication (required for Firestore writes)
+    async function fetchAdminToken() {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+        // Si ya tenemos API key guardada, no hacemos nada
+        if (localStorage.getItem('admin_api_key')) return;
+        const idToken = await getIdToken(user, true);
+        const res = await fetch('/api/admin/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          localStorage.setItem('admin_api_key', data.token);
+          console.log('[Auth] Admin API Key auto-configurada');
+        } else {
+          console.warn('[Auth] No se pudo obtener API Key:', data.error);
+        }
+      } catch (e) {
+        console.warn('[Auth] Error auto-fetch token:', e.message);
+      }
+    }
+
     function enterDashboard(email) {
       localStorage.setItem('adminUser', email);
       document.getElementById('loginScreen').style.opacity = '0';
@@ -3439,6 +3463,8 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('userAvatar').textContent = email[0].toUpperCase();
       cargarDatosIniciales();
       verificarConexiones();
+      // Auto-fetch admin API key después de login (sin que el usuario tenga que pegarla)
+      fetchAdminToken();
     }
 
     window.handleLogin = async function(e) {

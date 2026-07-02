@@ -1,5 +1,6 @@
 import { initializeApp, getApps, cert, getApp, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { getAuth, type Auth } from 'firebase-admin/auth';
 import { validateEnv, requireEnv } from './env';
 import { logger } from './logger';
 
@@ -80,6 +81,22 @@ export function getAdminDb(): Firestore {
     _db = getFirestore(getAdminApp());
   }
   return _db;
+}
+
+/**
+ * Instancia singleton de Firebase Admin Auth
+ */
+let _auth: Auth | null = null;
+
+/**
+ * Obtiene la instancia de Firebase Admin Auth
+ * @returns Instancia de Auth
+ */
+export function getAdminAuth(): Auth {
+  if (!_auth) {
+    _auth = getAuth(getAdminApp());
+  }
+  return _auth;
 }
 
 /**
