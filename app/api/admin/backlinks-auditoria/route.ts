@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 30;
 
 interface BacklinkCheck {
   urlRota: string;

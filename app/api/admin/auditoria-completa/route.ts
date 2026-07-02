@@ -2,7 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-
+export const maxDuration = 30;
 
 const ADJETIVOS_PROHIBIDOS = [
   'tragico','tragica','terrible','impactante','impactantes','conmociono','conmocionó',
