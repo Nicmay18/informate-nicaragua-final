@@ -554,7 +554,16 @@
     </aside>
 
     <main class="main-content">
-      
+      <!-- Banner de alerta cuando falta autenticación admin -->
+      <div id="adminAuthBanner" style="display:none; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:12px 16px; margin:16px 16px 0; color:#991b1b; font-size:13px; align-items:center; gap:10px;">
+        <i class="fas fa-exclamation-circle" style="font-size:16px; color:#dc2626;"></i>
+        <div style="flex:1;">
+          <strong>Falta autenticación admin</strong> — Las herramientas de correcciones masivas y distribución no funcionarán hasta que se active.
+          Cerrá sesión y volvé a entrar para reconectar. Si el problema persiste, revisá que las variables <code>ADMIN_API_KEY</code> y <code>ADMIN_EMAILS</code> estén configuradas en Vercel.
+        </div>
+        <button onclick="fetchAdminToken()" class="btn btn-sm" style="background:#dc2626; color:#fff; border:none; padding:6px 12px; font-size:12px; cursor:pointer; white-space:nowrap;">Reintentar</button>
+      </div>
+
       <!-- DASHBOARD -->
       <div id="dashboard-tab" class="tab-content active">
         <div class="page-header">
@@ -3450,7 +3459,10 @@ sin texto ni marcas de agua, composición periodística"
     async function fetchAdminToken() {
       try {
         const user = auth.currentUser;
-        if (!user) return;
+        if (!user) {
+          showToast('No hay sesión de Firebase activa. Cerrá sesión y volvé a entrar.', 'error');
+          return;
+        }
         // Si ya tenemos API key guardada, no hacemos nada
         if (localStorage.getItem('admin_api_key')) return;
         const idToken = await getIdToken(user, true);
@@ -3462,13 +3474,27 @@ sin texto ni marcas de agua, composición periodística"
         const data = await res.json();
         if (res.ok && data.token) {
           localStorage.setItem('admin_api_key', data.token);
-          console.log('[Auth] Admin API Key auto-configurada');
+          showToast('Autenticación admin activada automáticamente', 'success');
+        } else if (res.status === 403) {
+          showToast('Tu email (' + user.email + ') no está autorizado. Agregalo en ADMIN_EMAILS en Vercel.', 'error', 'Acceso denegado');
+        } else if (res.status === 500) {
+          showToast('ADMIN_API_KEY no está configurada en Vercel. Revisá las variables de entorno.', 'error', 'Error servidor');
+        } else if (res.status === 401) {
+          showToast('Sesión de Firebase expirada o inválida. Cerrá sesión y volvé a entrar.', 'error');
         } else {
-          console.warn('[Auth] No se pudo obtener API Key:', data.error);
+          showToast('No se pudo obtener API Key: ' + (data.error || 'Desconocido'), 'error');
         }
       } catch (e) {
+        showToast('Error de red al obtener API Key. Revisá tu conexión.', 'error');
         console.warn('[Auth] Error auto-fetch token:', e.message);
       }
+    }
+
+    function checkAdminAuthBanner() {
+      const banner = document.getElementById('adminAuthBanner');
+      if (!banner) return;
+      const hasKey = !!localStorage.getItem('admin_api_key');
+      banner.style.display = hasKey ? 'none' : 'flex';
     }
 
     function enterDashboard(email) {
@@ -3479,8 +3505,9 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('userAvatar').textContent = email[0].toUpperCase();
       cargarDatosIniciales();
       verificarConexiones();
+      checkAdminAuthBanner();
       // Auto-fetch admin API key después de login (sin que el usuario tenga que pegarla)
-      fetchAdminToken();
+      fetchAdminToken().then(() => checkAdminAuthBanner());
     }
 
     window.handleLogin = async function(e) {
