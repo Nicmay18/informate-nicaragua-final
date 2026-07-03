@@ -143,3 +143,18 @@
 | 2 | app/api/views/[slug]/route.ts | GET sin cache → Firestore read en cada request | ✅ FIX — `Cache-Control: max-age=30, stale-while-revalidate=300` |
 | 3 | app/api/views/[slug]/route.ts | Sin `maxDuration` | ✅ FIX — `maxDuration = 10` |
 | 4 | app/api/audio/route.ts | Sin `maxDuration` | ✅ FIX — `maxDuration = 30` |
+
+---
+
+## CORRECCIONES APLICADAS (FASE 12 — Eliminación Total de Fugas P0)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | app/api/audio/route.ts | 100% error rate + quema CPU + llama ElevenLabs (paga errores) | ✅ FIX — Desactivado temporalmente. POST devuelve 503. |
+| 2 | components/ArticlePage.tsx | Llama `/api/views/[slug]` en cada pageview = invocación serverless | ✅ FIX — Tracking migrado 100% a Firestore client-side. API ya no se llama. |
+| 3 | firestore.rules | Reglas no permitían escritura client-side con `createdAt`/`updatedAt` | ✅ FIX — `create` exige count==1 + timestamps. `update` exige count==old+1 + updatedAt timestamp. |
+| 4 | app/buscar/page.tsx | 0% cache, cada búsqueda = Firestore read | ✅ FIX — `unstable_cache` alrededor de `getNews(120)` con revalidate=300s. |
+| 5 | app/feed.json/route.ts | Consulta Firestore directo sin cache | ✅ FIX — `unstable_cache` con revalidate=86400. |
+| 6 | app/noticias/[slug]/page.tsx | `generateStaticParams` limitado a 100 slugs, forzando ISR fallback | ✅ FIX — Removido límite de 100; ahora pre-renderiza TODAS las noticias en build. |
+| 7 | middleware.ts | Sin bloqueo de bots parasitarios (GPTBot, ClaudeBot, etc.) | ✅ FIX — `BLOCKED_BOTS` devuelve 403 + cache agresiva para crawlers legítimos. |
+| 8 | vercel.json | Sitemaps y feeds sin headers de cache | ✅ FIX — Headers `Cache-Control` agregados para `/sitemap.xml`, `/news-sitemap.xml`, `/feed.xml`, `/feed.json`. |

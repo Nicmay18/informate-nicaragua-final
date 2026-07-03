@@ -206,11 +206,10 @@ function Hero({ noticias }: { noticias: Noticia[] }) {
                       srcSet={`${getHeroImageUrl(item.imagen, 400)} 400w, ${getHeroImageUrl(item.imagen, 800)} 800w`}
                       sizes="(max-width: 768px) 100vw, 580px"
                       alt={item.titulo}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
-                      fetchPriority="high"
                       loading="eager"
+                      fetchPriority="high"
                       decoding="async"
-                      crossOrigin="anonymous"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
                     />
                   ) : shouldRender ? (
                     <Image

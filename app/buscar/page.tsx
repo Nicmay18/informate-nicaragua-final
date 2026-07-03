@@ -3,8 +3,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Search } from 'lucide-react';
 import { getNews } from '@/lib/data';
+import { unstable_cache } from 'next/cache';
 
 export const revalidate = 86400;
+
+const cachedGetNews = unstable_cache(
+  async () => getNews(120),
+  ['buscar-news'],
+  { revalidate: 300 }
+);
 
 export const metadata: Metadata = {
   title: 'Buscar noticias',
@@ -25,7 +32,7 @@ function normalize(value: string) {
 export default async function BuscarPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = '' } = await searchParams;
   const query = q.trim();
-  const noticias = await getNews(120);
+  const noticias = await cachedGetNews();
   const needle = normalize(query);
   const results = needle
     ? noticias.filter((n) => normalize(`${n.titulo} ${n.resumen} ${n.categoria} ${(n.tags || []).join(' ')}`).includes(needle))

@@ -36,8 +36,7 @@ export async function generateStaticParams() {
   try {
     const slugs = await getAllSlugs();
     if (slugs.length > 0) {
-      // Limitar a 100 para evitar timeout en build de Vercel
-      return slugs.slice(0, 100).map((slug) => ({ slug }));
+      return slugs.map((slug) => ({ slug }));
     }
   } catch {
     // Firebase falló, ISR fallback generará dinámicamente

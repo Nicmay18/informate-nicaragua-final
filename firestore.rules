@@ -71,6 +71,22 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // ========== VIEWS (CONTADOR DE VISITAS) ==========
+    // Escritura directa desde navegador (client-side) para evitar costo Vercel.
+    // CREATE: solo count=1 con timestamps (documento nuevo).
+    // UPDATE: solo incremento de +1 en count (evita inflado arbitrario).
+    match /views/{slug} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['count','createdAt','updatedAt'])
+          && request.resource.data.count == 1
+          && request.resource.data.createdAt is timestamp
+          && request.resource.data.updatedAt is timestamp;
+      allow update: if request.resource.data.keys().hasOnly(['count','updatedAt'])
+          && request.resource.data.count == resource.data.count + 1
+          && request.resource.data.updatedAt is timestamp;
+      allow delete: if false;
+    }
+
     // ========== CONFIGURACIÓN ==========
     // ⚠️ NUNCA dejes write en true: cualquiera podría destruir tu app
     match /config/{docId} {

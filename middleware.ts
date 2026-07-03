@@ -14,6 +14,20 @@ const TOXIC_PATHS = [
   '/noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en',
 ];
 
+/** Bots parasitarios que queman CPU y cuota sin aportar tráfico real */
+const BLOCKED_BOTS = [
+  'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot',
+  'anthropic-ai', 'Cohere-ai', 'Bytespider', 'ImagesiftBot', 'YouBot',
+  'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'DataForSeoBot',
+  'BLEXBot', 'SeznamBot',
+];
+
+/** Crawlers legítimos que merecen cache agresiva */
+const ALLOWED_CRAWLERS = [
+  'Googlebot', 'Bingbot', 'Slurp',
+  'DuckDuckBot', 'Baiduspider', 'YandexBot',
+];
+
 function goneResponse(): NextResponse {
   return new NextResponse(
     `<!DOCTYPE html>
@@ -45,8 +59,14 @@ function goneResponse(): NextResponse {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const ua = request.headers.get('user-agent') || '';
 
-  // Forzar no-cache en panel.html (archivo estático cacheado por Vercel)
+  // 1. Bloquear bots parasitarios inmediatamente
+  if (BLOCKED_BOTS.some((bot) => ua.includes(bot))) {
+    return new NextResponse('Forbidden', { status: 403 });
+  }
+
+  // 2. Forzar no-cache en panel.html (archivo estático cacheado por Vercel)
   if (pathname === '/panel.html') {
     const response = NextResponse.next();
     response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
@@ -55,12 +75,12 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  // URLs tóxicas hardcodeadas → 410 Gone
+  // 3. URLs tóxicas hardcodeadas → 410 Gone
   if (TOXIC_PATHS.includes(pathname)) {
     return goneResponse();
   }
 
-  // Rutas de noticias con slugs tóxicos
+  // 4. Rutas de noticias con slugs tóxicos
   if (pathname.startsWith('/noticias/')) {
     const slug = pathname.replace('/noticias/', '');
     if (isToxicSlug(slug)) {
@@ -68,9 +88,27 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+
+  // 5. Seguridad básica en todas las respuestas
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.delete('X-Powered-By');
+
+  // 6. Crawlers legítimos: cache agresiva en rutas dinámicas
+  const isCrawler = ALLOWED_CRAWLERS.some((bot) => ua.includes(bot));
+  if (isCrawler && (pathname.startsWith('/noticias/') || pathname.startsWith('/categoria/'))) {
+    response.headers.set(
+      'Cache-Control',
+      'public, s-maxage=3600, stale-while-revalidate=86400'
+    );
+    return response;
+  }
+
+  return response;
 }
 
 export const config = {
-  matcher: ['/noticias/:slug*', '/panel.html'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap).*)'],
 };

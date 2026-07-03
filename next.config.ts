@@ -302,6 +302,22 @@ const nextConfig: NextConfig = {
         destination: '/feed.xml',
         permanent: true,
       },
+      // ─── BLOQUEAR SCANNERS DE WORDPRESS ───
+      {
+        source: '/wp-admin/:path*',
+        destination: '/403',
+        permanent: false,
+      },
+      {
+        source: '/admin.php',
+        destination: '/403',
+        permanent: false,
+      },
+      {
+        source: '/xmlrpc.php',
+        destination: '/403',
+        permanent: false,
+      },
     ];
   },
   async rewrites() {

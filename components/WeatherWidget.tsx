@@ -5,25 +5,23 @@ import { Droplets, Wind, Loader2 } from 'lucide-react';
 interface City {
   name: string;
   region: string;
-  lat: number;
-  lon: number;
 }
 
 const CITIES: City[] = [
-  { name: 'Managua', region: 'Managua', lat: 12.1328, lon: -86.2504 },
-  { name: 'León', region: 'León', lat: 12.4379, lon: -86.8780 },
-  { name: 'Granada', region: 'Granada', lat: 11.9299, lon: -85.9560 },
-  { name: 'Estelí', region: 'Estelí', lat: 13.0850, lon: -86.3630 },
-  { name: 'Matagalpa', region: 'Matagalpa', lat: 12.9250, lon: -85.9170 },
-  { name: 'Jinotega', region: 'Jinotega', lat: 13.0910, lon: -86.0010 },
-  { name: 'Masaya', region: 'Masaya', lat: 11.9734, lon: -86.0730 },
-  { name: 'Carazo', region: 'Carazo', lat: 11.8589, lon: -86.2394 },
-  { name: 'Rivas', region: 'Rivas', lat: 11.4372, lon: -85.8263 },
-  { name: 'Boaco', region: 'Boaco', lat: 12.4722, lon: -85.6596 },
-  { name: 'Bluefields', region: 'RAAS', lat: 12.0067, lon: -83.7651 },
-  { name: 'Siuna', region: 'RACCN', lat: 13.7333, lon: -84.7667 },
-  { name: 'Río San Juan', region: 'Río San Juan', lat: 11.1233, lon: -84.7771 },
-  { name: 'Chontales', region: 'Chontales', lat: 12.1063, lon: -85.3645 },
+  { name: 'Managua', region: 'Managua' },
+  { name: 'León', region: 'León' },
+  { name: 'Granada', region: 'Granada' },
+  { name: 'Estelí', region: 'Estelí' },
+  { name: 'Matagalpa', region: 'Matagalpa' },
+  { name: 'Jinotega', region: 'Jinotega' },
+  { name: 'Masaya', region: 'Masaya' },
+  { name: 'Carazo', region: 'Carazo' },
+  { name: 'Rivas', region: 'Rivas' },
+  { name: 'Boaco', region: 'Boaco' },
+  { name: 'Bluefields', region: 'RAAS' },
+  { name: 'Siuna', region: 'RACCN' },
+  { name: 'Río San Juan', region: 'Río San Juan' },
+  { name: 'Chontales', region: 'Chontales' },
 ];
 
 interface WeatherData {
@@ -32,6 +30,9 @@ interface WeatherData {
   wind: number;
   code: number;
 }
+
+const CACHE_KEY = 'ni_weather_all_v1';
+const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 function wmoToEmoji(code: number): string {
   if (code === 0 || code === 1) return '☀️';
@@ -60,17 +61,30 @@ function wmoToLabel(code: number): string {
   return 'Variable';
 }
 
-async function fetchWeather(lat: number, lon: number): Promise<WeatherData> {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=America%2FManagua`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Open-Meteo error');
-  const data = await res.json();
-  return {
-    temp: Math.round(data.current.temperature_2m),
-    humidity: data.current.relative_humidity_2m,
-    wind: Math.round(data.current.wind_speed_10m),
-    code: data.current.weather_code,
-  };
+async function fetchAllWeather(): Promise<Record<string, WeatherData>> {
+  const res = await fetch('/api/weather/all', { cache: 'no-store' });
+  if (!res.ok) throw new Error('Weather API error');
+  return res.json();
+}
+
+function getCachedWeather(): Record<string, WeatherData> | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { value, ts } = JSON.parse(raw) as { value: Record<string, WeatherData>; ts: number };
+    if (Date.now() - ts > CACHE_TTL) return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedWeather(value: Record<string, WeatherData>) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ value, ts: Date.now() }));
+  } catch {
+    /* ignore */
+  }
 }
 
 export default function WeatherWidget() {
@@ -79,30 +93,27 @@ export default function WeatherWidget() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch all cities on mount + refresh every 10 min
+  // Fetch all cities via single cached API route + localStorage cache
   useEffect(() => {
     let cancelled = false;
     async function load() {
-      setLoading(true);
-      setError(null);
+      const cached = getCachedWeather();
+      if (cached) {
+        setWeather(cached);
+        setLoading(false);
+      }
       try {
-        const results: Record<string, WeatherData> = {};
-        // Fetch paralelo: todas las ciudades al mismo tiempo
-        const promises = CITIES.map(async (city) => {
-          try {
-            return { name: city.name, data: await fetchWeather(city.lat, city.lon) };
-          } catch {
-            return { name: city.name, data: { temp: 0, humidity: 0, wind: 0, code: -1 } as WeatherData };
-          }
-        });
-        const settled = await Promise.all(promises);
-        if (cancelled) return;
-        for (const { name, data } of settled) {
-          results[name] = data;
+        const fresh = await fetchAllWeather();
+        if (!cancelled) {
+          setWeather(fresh);
+          setCachedWeather(fresh);
+          setError(null);
         }
-        setWeather(results);
-      } catch {
-        if (!cancelled) setError('No se pudo cargar el clima');
+      } catch (err) {
+        if (!cancelled) {
+          console.warn('[WeatherWidget] fetch failed, using cache/fallback', err);
+          if (!cached) setError('No se pudo cargar el clima');
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }

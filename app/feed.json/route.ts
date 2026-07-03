@@ -5,6 +5,7 @@
  */
 
 import { adminDb } from '@/lib/firebase-admin';
+import { unstable_cache } from 'next/cache';
 
 export const revalidate = 86400;
 
@@ -24,41 +25,46 @@ function toAbsoluteUrl(url?: string): string {
   return `https://nicaraguainformate.com${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
-export async function GET() {
-  const baseUrl = 'https://nicaraguainformate.com';
-
-  let items: any[] = [];
-  try {
+const cachedFetchFeedJson = unstable_cache(
+  async () => {
     const snapshot = await adminDb
       .collection('noticias')
       .orderBy('fecha', 'desc')
       .limit(50)
       .get();
+    return snapshot.docs.map((doc) => {
+      const d = doc.data();
+      let dateIso = '';
+      try {
+        dateIso = d.fecha?.toDate ? d.fecha.toDate().toISOString() : new Date(d.fecha).toISOString();
+      } catch { dateIso = new Date().toISOString(); }
+      const imgUrl = toAbsoluteUrl(d.imagen as string);
+      return {
+        id: d.slug as string,
+        url: `https://nicaraguainformate.com/noticias/${d.slug}`,
+        title: d.titulo as string,
+        content_text: stripHtml(d.contenido || d.resumen || ''),
+        content_html: d.contenido || '',
+        summary: d.resumen || '',
+        image: imgUrl,
+        date_published: dateIso,
+        date_modified: dateIso,
+        authors: [{ name: d.autor || 'Redacción Nicaragua Informate' }],
+        tags: [d.categoria || 'General'],
+        language: 'es-NI',
+      };
+    });
+  },
+  ['feed-json'],
+  { revalidate: 86400 }
+);
 
-    items = snapshot.docs.map((doc) => {
-        const d = doc.data();
-        let dateIso = '';
-        try {
-          dateIso = d.fecha?.toDate ? d.fecha.toDate().toISOString() : new Date(d.fecha).toISOString();
-        } catch { dateIso = new Date().toISOString(); }
+export async function GET() {
+  const baseUrl = 'https://nicaraguainformate.com';
 
-        const imgUrl = toAbsoluteUrl(d.imagen as string);
-
-        return {
-          id: d.slug as string,
-          url: `${baseUrl}/noticias/${d.slug}`,
-          title: d.titulo as string,
-          content_text: stripHtml(d.contenido || d.resumen || ''),
-          content_html: d.contenido || '',
-          summary: d.resumen || '',
-          image: imgUrl,
-          date_published: dateIso,
-          date_modified: dateIso,
-          authors: [{ name: d.autor || 'Redacción Nicaragua Informate' }],
-          tags: [d.categoria || 'General'],
-          language: 'es-NI',
-        };
-      });
+  let items: any[] = [];
+  try {
+    items = await cachedFetchFeedJson();
   } catch {
     /* empty feed if Firebase unavailable */
   }
