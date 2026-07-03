@@ -120,3 +120,15 @@
 | 2 | robots.ts | `/main` reportado como 404 | ✅ FIX — `Disallow: /main` agregado |
 | 3 | next.config.ts | URLs tóxicas redirigían a `/` (soft 404) | ✅ FIX — Redirecciones eliminadas, ahora middleware devuelve 410 Gone |
 | 4 | middleware.ts | URLs tóxicas hardcodeadas sin 410 Gone | ✅ FIX — `TOXIC_PATHS` array + `goneResponse()` |
+
+---
+
+## CORRECCIONES APLICADAS (FASE 10 — Pulido Final ESLint + Componentes)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | ArticlePage.tsx | `<a href="/">` en vez de `<Link>` | ✅ FIX — Cambiado a Link |
+| 2 | dashboard-calidad/route.ts | `let` en lugar de `const` | ✅ FIX — `let` → `const` |
+| 3 | autor/keyling-eliet-rivera-munoz/page.tsx | Warning de img nativo | ✅ FIX — eslint-disable intencional |
+| 4 | AmazonAffiliate.tsx | Warning de img nativo | ⏸️ Intencional — imagen externa Amazon |
+| 5 | ArticlePage.tsx (l.417) | Warning de img nativo | ⏸️ Intencional — thumbnail pequeño con dims explícitas |
