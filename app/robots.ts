@@ -12,17 +12,19 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/_next/',
           '/js/',
+          '/cdn-cgi/',
+          '/main',
         ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/buscar', '/api/', '/admin/'],
+        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/', '/main'],
       },
       {
         userAgent: 'Googlebot-News',
         allow: '/',
-        disallow: ['/buscar', '/api/', '/admin/'],
+        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/', '/main'],
       },
       {
         userAgent: 'AdsBot-Google',

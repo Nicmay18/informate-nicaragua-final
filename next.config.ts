@@ -220,17 +220,6 @@ const nextConfig: NextConfig = {
         destination: '/api/panel',
         permanent: false,
       },
-      // Redirecciones 301 para URLs tóxicas
-      {
-        source: '/noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/noticias/conductor-se-fuga-tras-causar-muerte-de-joven-en',
-        destination: '/',
-        permanent: true,
-      },
       // ─── REDIRECTS 301: Slugs viejos → slugs nuevos tras restauración de BD ───
       // Estos slugs fueron indexados por Google / compartidos en redes sociales.
       // Sin este redirect, los usuarios y Google ven 404.

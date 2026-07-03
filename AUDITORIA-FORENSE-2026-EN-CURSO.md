@@ -109,3 +109,14 @@
 | Fase 5: Monetización | ✅ COMPLETADA | Ninguno |
 | Fase 7: Zero Cost Leaks | ✅ COMPLETADA | Ninguno |
 | Fase 8: Checklist Final | ✅ COMPLETADA | Ninguno |
+
+---
+
+## CORRECCIONES APLICADAS (FASE 9 — Google Search Console Indexación)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | robots.ts | `/cdn-cgi/l/email-protection` indexado por Google | ✅ FIX — `Disallow: /cdn-cgi/` agregado |
+| 2 | robots.ts | `/main` reportado como 404 | ✅ FIX — `Disallow: /main` agregado |
+| 3 | next.config.ts | URLs tóxicas redirigían a `/` (soft 404) | ✅ FIX — Redirecciones eliminadas, ahora middleware devuelve 410 Gone |
+| 4 | middleware.ts | URLs tóxicas hardcodeadas sin 410 Gone | ✅ FIX — `TOXIC_PATHS` array + `goneResponse()` |
