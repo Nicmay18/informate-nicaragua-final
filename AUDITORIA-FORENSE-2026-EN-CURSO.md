@@ -6,7 +6,7 @@
 ## HALLAZGOS CRÍTICOS (P0 — Arreglar AHORA)
 
 ### 1.1 FUGA DE COSTOS Vercel/Firebase
-- [x] **vercel.json sin `regions`**: ✅ FIX — `regions: ["mia1"]`, `functions.maxDuration: 30`, crons configurados.
+- [x] **vercel.json sin `regions`**: ✅ FIX — `regions: ["iad1"]` (Hobby plan Vercel solo soporta `iad1`), `functions.maxDuration: 30`, crons configurados.
 - [x] **30+ API routes con `dynamic = 'force-dynamic'`**: ✅ FIX — `maxDuration` agregado a 25+ rutas: cron-fetch, cron/resumen-diario, cron/distribuir-pendientes, articles, feed-xml, rss, exchange-rates, weather, admin/distribuir, admin/reindexar-google, admin/guardar-directo, admin/eliminar-viejas, admin/limpiar-sucesos, admin/metricas, admin/exportar-sucesos, admin/dashboard-calidad, admin/push-notificar, admin/facebook-rescrape, admin/linkedin, admin/twitter, admin/medium, admin/whatsapp, admin/auditoria-completa, admin/backlinks-auditoria, admin/enrich-links, admin/enrich-strong, admin/rescribir-sucesos, admin/redistribuir-autores, admin/limpiar-palabras-sensibles.
 - [x] **Sin `maxDuration` ni `memory` en API routes**: ✅ FIX — Cubierto por vercel.json + export const maxDuration en cada ruta crítica.
 - [x] **Firestore reads sin caché en endpoints admin**: ✅ FIX — `homepage.ts` usa `_fetchPromise` para deduplicar lecturas concurrentes dentro de una misma request ISR. ISR revalidate=300s limita regeneraciones.
