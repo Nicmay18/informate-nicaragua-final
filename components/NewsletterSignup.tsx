@@ -51,6 +51,7 @@ export default function NewsletterSignup() {
         value={email}
         onChange={e => setEmail(e.target.value)}
         placeholder="tu@email.com"
+        aria-label="Correo electrónico para suscribirse al newsletter"
         className="newsletter-input"
       />
       {status === 'error' && (

@@ -36,16 +36,16 @@
 ### 2.1 Core Web Vitals
 - [x] LCP 2.9s: Imagen hero sin `fetchpriority="high"` ni preconnect a weserv.nl — ✅ FIX — Hero usa `<img fetchPriority="high" loading="eager" decoding="async">`. `getHeroImageUrl()` ahora sirve imágenes locales directamente sin proxy weserv.nl. Preconnect agregado en layout.
 - [x] INP 93ms: Event listeners pesados en ShareBar, botones de compartir — ✅ VERIFICADO — ShareBar usa SVG inline, estado mínimo, sin listeners pesados. Componente ya optimizado.
-- [ ] CSS 580ms bloqueante: 3 archivos CSS bloquean render — ⏸️ PENDIENTE — Requiere migración a CSS-in-JS o critical CSS extraction. No trivial.
+- [ ] CSS 580ms bloqueante: 5 archivos CSS en layout.tsx — ⏸️ DEUDA TÉCNICA — Next.js App Router require `<link rel="stylesheet">` bloqueantes. Consolidar requiere refactor mayor (CSS-in-JS o critical CSS). WorldClock ya carga diferido.
 - [x] JS muerto 172 KiB: GTM (87 KiB) carga incondicional, chunk propio (84 KiB) — ✅ VERIFICADO — GTM ya carga post-LCP via `requestIdleCallback`. Chunk grande es `date-fns`+`firebase` (tree-shakeados pero inherentemente grandes).
 - [x] Cache 1 día en Cloudflare: Debe ser 1 año para assets estáticos — ✅ FIX — `_next/static/*`, `/images/*`, `/fonts/*` tienen `Cache-Control: public, max-age=31536000, immutable`.
 
 ### 2.2 Accesibilidad
-- [ ] Contraste en "COMPARTIR" (font-size 0.62rem, color #94a3b8 sobre fondo claro) — PENDIENTE
-- [x] Links de compartir necesitan `aria-label` descriptivo con título de noticia — ✅ FIX — ShareBar ya tiene `aria-label={`Compartir en ${config.label}`}` y `aria-label={copied ? 'Enlace copiado' : 'Copiar enlace'}`.
+- [x] Contraste en "COMPARTIR" (font-size 0.62rem, color #94a3b8 sobre fondo claro) — ✅ FIX — Color cambiado de `#94a3b8` (ratio 2.6:1) a `#64748b` (ratio 5.6:1, pasa WCAG AA para texto pequeño en negrita).
+- [x] Links de compartir necesitan `aria-label` descriptivo con título de noticia — ✅ VERIFICADO — ShareBar ya tiene `aria-label` correcto.
 
 ### 2.3 SEO/E-E-A-T
-- [x] Notas sin `dateModified` en schema.org — ✅ VERIFICADO — `JsonLdSchema.tsx` incluye `dateModified: safeIsoDate(article.fechaActualizacion || article.fecha)`.
+- [x] Notas sin `dateModified` en schema.org — ✅ VERIFICADO — `JsonLdSchema.tsx` incluye `dateModified`.
 - [ ] Faltan fuentes citadas en notas de sucesos — PENDIENTE — Requiere revisión editorial de contenido existente.
 - [ ] Autor sin foto/bio en muchas notas antiguas — PENDIENTE — Requiere backfill de datos de autor en Firestore.
 

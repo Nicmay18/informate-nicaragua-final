@@ -34,6 +34,15 @@ export default function Header() {
     );
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setMenuOpen(false); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -130,7 +139,7 @@ export default function Header() {
       {/* Menú móvil */}
       {menuOpen && (
         <div className="ni-mobile-menu" role="dialog" aria-modal="true">
-          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} />
+          <div className="ni-mobile-menu__overlay" onClick={() => setMenuOpen(false)} role="button" aria-label="Cerrar menú" tabIndex={-1} />
           <nav className="ni-mobile-menu__content">
             <button
               className="ni-mobile-menu__close"
