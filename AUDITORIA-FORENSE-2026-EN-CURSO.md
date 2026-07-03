@@ -61,7 +61,7 @@
 | 4 | lib/image-loader.ts | Proxy externo para imágenes locales | ✅ FIX |
 | 5 | lib/image-utils.ts | Hero image proxyeado por weserv.nl | ✅ FIX |
 | 6 | middleware.ts | Matcher excesivamente amplio | ✅ FIX |
-| 7 | API routes (25+) | Sin maxDuration | ✅ FIX |
+| 7 | API routes (32+) | Sin maxDuration | ✅ FIX — 32 rutas con export const maxDuration, resto cubierto por vercel.json |
 | 8 | Código muerto root | 5 archivos one-off | ✅ ELIMINADOS |
 | 9 | scripts/ | test-normalize.js, test-norm.js | ✅ ELIMINADOS |
 | 10 | functions/ | predictChurn.js, index.js, package.json | ✅ ELIMINADO |
@@ -71,7 +71,7 @@
 
 ---
 
-## CORRECCIONES APLICADAS (FASE 2 — Parcial)
+## CORRECCIONES APLICADAS (FASE 2 — COMPLETADA)
 
 | # | Archivo | Problema | Estado |
 |---|---|---|---|
@@ -88,3 +88,24 @@
 | 1 | NewsletterSignup.tsx | Input sin label | ✅ FIX — aria-label agregado |
 | 2 | Header.tsx | Menú móvil sin Escape key | ✅ FIX — useEffect + keydown listener |
 | 3 | Header.tsx | Overlay sin role/aria-label | ✅ FIX — role="button" + aria-label + tabIndex={-1} |
+
+## CORRECCIONES APLICADAS (FASE 5 — Monetización)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | AdsenseUnit.tsx | Lazy load con IntersectionObserver | ✅ VERIFICADO — carga diferida con rootMargin 200px |
+| 2 | lib/adsense-guard.ts | Content guard para contenido sensible | ✅ VERIFICADO — keywords de luto + slugs bloqueados |
+
+---
+
+## ESTADO FINAL DE LA AUDITORÍA
+
+| Fase | Estado | Items pendientes |
+|---|---|---|
+| Fase 1: Arquitectura + Dependencias | ✅ COMPLETADA | `eslint.ignoreDuringBuilds: true` (deuda técnica, ~200 errores) |
+| Fase 2: Rendimiento (CWV) | ✅ COMPLETADA | CSS bloqueante (deuda técnica — requiere refactor a CSS-in-JS) |
+| Fase 3: Accesibilidad WCAG 2.2 | ✅ COMPLETADA | Ninguno |
+| Fase 4: SEO Técnico + E-E-A-T | ✅ COMPLETADA | Faltan fuentes citadas (editorial), backfill foto/bio autores (datos) |
+| Fase 5: Monetización | ✅ COMPLETADA | Ninguno |
+| Fase 7: Zero Cost Leaks | ✅ COMPLETADA | Ninguno |
+| Fase 8: Checklist Final | ✅ COMPLETADA | Ninguno |
