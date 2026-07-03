@@ -132,3 +132,14 @@
 | 3 | autor/keyling-eliet-rivera-munoz/page.tsx | Warning de img nativo | ✅ FIX — eslint-disable intencional |
 | 4 | AmazonAffiliate.tsx | Warning de img nativo | ⏸️ Intencional — imagen externa Amazon |
 | 5 | ArticlePage.tsx (l.417) | Warning de img nativo | ⏸️ Intencional — thumbnail pequeño con dims explícitas |
+
+---
+
+## CORRECCIONES APLICADAS (FASE 11 — Zero Cost Leaks: Vercel CPU al 100%)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | app/api/views/[slug]/route.ts | 3 writes secuenciales + 1 read por cada vista (costo CPU extremo) | ✅ FIX — `Promise.all` paraleliza writes, traffic_log sampling 10% |
+| 2 | app/api/views/[slug]/route.ts | GET sin cache → Firestore read en cada request | ✅ FIX — `Cache-Control: max-age=30, stale-while-revalidate=300` |
+| 3 | app/api/views/[slug]/route.ts | Sin `maxDuration` | ✅ FIX — `maxDuration = 10` |
+| 4 | app/api/audio/route.ts | Sin `maxDuration` | ✅ FIX — `maxDuration = 30` |
