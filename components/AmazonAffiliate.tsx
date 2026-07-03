@@ -68,12 +68,12 @@ export default function AmazonAffiliate({
       }}
     >
       {imageUrl && (
-        <img 
-          src={imageUrl} 
+        <img
+          src={imageUrl}
           alt={title}
-          style={{ 
-            width: 120, 
-            height: 120, 
+          style={{
+            width: 120,
+            height: 120,
             objectFit: 'contain',
             borderRadius: 4,
             flexShrink: 0

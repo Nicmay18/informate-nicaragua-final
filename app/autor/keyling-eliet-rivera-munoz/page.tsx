@@ -52,6 +52,7 @@ export default function AutorKeylingPage() {
 
       <div className="article-content-wrapper">
         <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 32 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/autores/keyling-rivera.jpg"
             alt="Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate"

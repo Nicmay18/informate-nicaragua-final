@@ -1,1 +1,1 @@
-forense-gsc-indexacion: robots bloquea cdn-cgi y main, middleware 410 para URLs toxicas
+forense-lint-pulido: fix <a> to <Link>, let->const, eslint-disable img en author page

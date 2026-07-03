@@ -61,7 +61,7 @@ async function computeDashboardMetrics() {
     let metaOpt = 0;
     let conLinks = 0;
     let frescas = 0;
-    let totalAutoresUnicos = new Set<string>();
+    const totalAutoresUnicos = new Set<string>();
     let totalFuentes = 0;
 
     const thinIds: string[] = [];
