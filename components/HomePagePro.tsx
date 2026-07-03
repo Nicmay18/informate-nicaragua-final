@@ -324,7 +324,7 @@ const Card = memo(function Card({ noticia, index = 0 }: { noticia: Noticia; inde
           <span>{noticia.autor || 'Nicaragua Informate'}</span>
         </div>
         <div style={{ display: 'flex', gap: 6, marginTop: 10, alignItems: 'center' }}>
-          <span style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8', marginRight: 2 }}>Compartir</span>
+          <span style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginRight: 2 }}>Compartir</span>
           <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" className="ni-share-btn" style={{ '--sh': '#1877f2' } as React.CSSProperties}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
           </a>
