@@ -79,3 +79,12 @@
 | 2 | ShareBar.tsx | INP event listeners pesados | ✅ VERIFICADO — ya optimizado |
 | 3 | useThirdPartyScripts.ts | GTM carga incondicional | ✅ VERIFICADO — carga post-LCP |
 | 4 | next.config.ts | Cache headers estáticos | ✅ VERIFICADO — 1 año + immutable |
+| 5 | HomePagePro.tsx | Contraste "COMPARTIR" | ✅ FIX — #94a3b8 → #64748b |
+
+## CORRECCIONES APLICADAS (FASE 3 — Accesibilidad WCAG 2.2 AA)
+
+| # | Archivo | Problema | Estado |
+|---|---|---|---|
+| 1 | NewsletterSignup.tsx | Input sin label | ✅ FIX — aria-label agregado |
+| 2 | Header.tsx | Menú móvil sin Escape key | ✅ FIX — useEffect + keydown listener |
+| 3 | Header.tsx | Overlay sin role/aria-label | ✅ FIX — role="button" + aria-label + tabIndex={-1} |
