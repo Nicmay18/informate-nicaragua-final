@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
+export const maxDuration = 10;
+
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
 
@@ -38,39 +40,51 @@ export async function POST(
     const db = getAdminDb();
     const docRef = db.collection('views').doc(slug);
 
-    // Incrementar contador de vistas
-    await docRef.set(
-      {
-        count: FieldValue.increment(1),
-        slug,
-        updatedAt: FieldValue.serverTimestamp(),
-        createdAt: FieldValue.serverTimestamp(),
-      },
-      { merge: true }
+    // Paralelizar writes principales para reducir CPU time
+    const promises: Promise<unknown>[] = [
+      docRef.set(
+        {
+          count: FieldValue.increment(1),
+          slug,
+          updatedAt: FieldValue.serverTimestamp(),
+          createdAt: FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      ),
+    ];
+
+    // Actualizar vistas en noticia (no bloquea respuesta si falla)
+    promises.push(
+      db.collection('noticias').where('slug', '==', slug).limit(1).get()
+        .then(snap => {
+          if (!snap.empty) {
+            return snap.docs[0].ref.update({
+              vistas: FieldValue.increment(1),
+              actualizadoEn: FieldValue.serverTimestamp(),
+            });
+          }
+          return undefined;
+        })
+        .catch(() => { /* no bloquear */ })
     );
 
-    // También incrementar vistas en la noticia (panel lee de aquí)
-    const noticiaSnap = await db.collection('noticias').where('slug', '==', slug).limit(1).get();
-    if (!noticiaSnap.empty) {
-      const noticiaRef = noticiaSnap.docs[0].ref;
-      await noticiaRef.update({
-        vistas: FieldValue.increment(1),
-        actualizadoEn: FieldValue.serverTimestamp(),
-      });
+    // Traffic log con sampling 10% (reduce writes drásticamente)
+    if (Math.random() < 0.1) {
+      promises.push(
+        db.collection('traffic_log').doc().set({
+          slug,
+          referrer,
+          utmSource,
+          userAgent: request.headers.get('user-agent') || '',
+          ip: request.headers.get('x-forwarded-for') || '',
+          timestamp: FieldValue.serverTimestamp(),
+        }).catch(() => { /* no bloquear */ })
+      );
     }
 
-    // Guardar log de tráfico con referrer/utm (separado para no sobreescribir)
-    const logRef = db.collection('traffic_log').doc();
-    await logRef.set({
-      slug,
-      referrer,
-      utmSource,
-      userAgent: request.headers.get('user-agent') || '',
-      ip: request.headers.get('x-forwarded-for') || '',
-      timestamp: FieldValue.serverTimestamp(),
-    });
+    await Promise.all(promises);
 
-    // Leer el contador actualizado
+    // Leer contador actualizado
     const snap = await docRef.get();
     const count = snap.exists ? (snap.data()?.count as number) || 0 : 0;
 
@@ -99,7 +113,14 @@ export async function GET(
     const snap = await db.collection('views').doc(slug).get();
     const count = snap.exists ? (snap.data()?.count as number) || 0 : 0;
 
-    return NextResponse.json({ ok: true, slug, vistas: count });
+    return NextResponse.json(
+      { ok: true, slug, vistas: count },
+      {
+        headers: {
+          'Cache-Control': 'public, max-age=30, stale-while-revalidate=300',
+        },
+      }
+    );
   } catch (error) {
     console.error('[views API GET] error:', error);
     return NextResponse.json(

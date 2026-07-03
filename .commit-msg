@@ -1,1 +1,1 @@
-forense-lint-pulido: fix <a> to <Link>, let->const, eslint-disable img en author page
+forense-zero-cost-views: parallelize Firestore writes, sample traffic_log 10%, cache GET views, maxDuration audio
