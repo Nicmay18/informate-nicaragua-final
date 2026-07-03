@@ -27,15 +27,16 @@ export function getHeroImageUrl(url: string, width = 1200): string {
     return responsiveUrl;
   }
 
-  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 1200px (cubre desktop + mobile + Google Discover)
-  const absoluteUrl = responsiveUrl.startsWith('/')
-    ? `https://nicaraguainformate.com${responsiveUrl}`
-    : responsiveUrl;
+  // Imágenes locales: servir directamente sin proxy externo (mejor LCP)
+  if (responsiveUrl.startsWith('/')) {
+    return responsiveUrl;
+  }
 
+  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 1200px (cubre desktop + mobile + Google Discover)
   const params = new URLSearchParams();
-  params.set('url', absoluteUrl);
+  params.set('url', responsiveUrl);
   params.set('w', width.toString());
-  params.set('q', '45');
+  params.set('q', '60');
   params.set('fit', 'cover');
   params.set('n', '-1');
   params.set('output', 'webp');
