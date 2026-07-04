@@ -15,6 +15,8 @@ export function getFirebaseApp(): FirebaseApp {
   return getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 }
 
+export const db = getFirestore(getFirebaseApp());
+
 let _db: Firestore | null = null;
 export function getClientDb(): Firestore {
   if (!_db) {

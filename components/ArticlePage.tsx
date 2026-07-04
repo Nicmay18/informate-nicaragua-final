@@ -9,7 +9,7 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { getClientDb } from '@/lib/firebase-client';
+import { db } from '@/lib/firebase-client';
 import { injectInternalLinks } from '@/lib/article-links';
 import { doc, getDoc, updateDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 import KeyPoints from './KeyPoints';
@@ -55,39 +55,33 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
   // ============================================================
   useEffect(() => {
-    if (!noticia.slug) return;
+    if (!noticia.slug || !db) return;
 
     const sessionKey = `viewed_${noticia.slug}`;
     const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
+    if (alreadyViewed) return; // No contar duplicados en la misma sesión
 
     const trackView = async () => {
       try {
-        const db = getClientDb();
         const docRef = doc(db, 'views', noticia.slug);
         const snap = await getDoc(docRef);
 
         if (snap.exists()) {
           const currentViews = (snap.data().count as number) || 0;
           setViews(currentViews + 1); // Optimistic +1
-
-          if (!alreadyViewed) {
-            await updateDoc(docRef, {
-              count: increment(1),
-              updatedAt: serverTimestamp(),
-            });
-            sessionStorage.setItem(sessionKey, 'true');
-          }
+          await updateDoc(docRef, {
+            count: increment(1),
+            updatedAt: serverTimestamp(),
+          });
         } else {
           setViews(1);
-          if (!alreadyViewed) {
-            await setDoc(docRef, {
-              count: 1,
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-            sessionStorage.setItem(sessionKey, 'true');
-          }
+          await setDoc(docRef, {
+            count: 1,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
         }
+        sessionStorage.setItem(sessionKey, 'true');
       } catch (err) {
         console.warn('[views] Firebase tracking failed:', err);
       }
