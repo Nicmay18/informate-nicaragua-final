@@ -53,6 +53,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // ============================================================
   // TRACKING DE VISTAS: Firestore directo desde cliente
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
+  // v2
   // ============================================================
   useEffect(() => {
     if (!noticia.slug || !db) return;
