@@ -9,7 +9,7 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { db } from '@/lib/firebase-client';
+import { getClientDb } from '@/lib/firebase-client';
 import { injectInternalLinks } from '@/lib/article-links';
 import { doc, getDoc, updateDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 import KeyPoints from './KeyPoints';
@@ -55,15 +55,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
   // ============================================================
   useEffect(() => {
-    if (!noticia.slug || !db) return;
+    if (!noticia.slug) return;
 
     const sessionKey = `viewed_${noticia.slug}`;
     const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
-    if (alreadyViewed) return; // No contar duplicados en la misma sesión
+    if (alreadyViewed) return;
 
     const trackView = async () => {
       try {
-        const docRef = doc(db, 'views', noticia.slug);
+        const clientDb = getClientDb();
+        if (!clientDb) return;
+        const docRef = doc(clientDb, 'views', noticia.slug);
         const snap = await getDoc(docRef);
 
         if (snap.exists()) {
@@ -82,6 +84,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           });
         }
         sessionStorage.setItem(sessionKey, 'true');
+        console.log('[views] Tracked:', noticia.slug);
       } catch (err: any) {
         console.error('[views] Firebase tracking failed:', err?.message || err);
       }
