@@ -218,113 +218,13 @@ async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
   }
 }
 
-// Noticias de ejemplo para desarrollo local
-const MOCK_NOTICIAS: Noticia[] = [
-  {
-    id: '1',
-    slug: 'homicidio-jinotega',
-    titulo: 'Colisión en Jinotega deja víctima fatal; Policía investiga',
-    resumen: 'Marvin Antonio Tinoco Rivera falleció en la vía Jinotega–El Guayacán tras impactar contra un camión sin señales.',
-    contenido: '<p>Marvin Antonio Tinoco Rivera perdió la vida en un trágico accidente...</p>',
-    categoria: 'Sucesos',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T00:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 1500,
-  },
-  {
-    id: '2',
-    slug: 'incendio-mercado-oriental',
-    titulo: 'Incendio afecta tramos de ropa en Mercado Oriental',
-    resumen: 'Tres negocios de ropa quedaron reducidos a cenizas en el sector de la Casa de los Encajes.',
-    contenido: '<p>Bomberos y AVEXI investigan las causas del incendio...</p>',
-    categoria: 'Sucesos',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T01:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 2300,
-  },
-  {
-    id: '3',
-    slug: 'vigilia-plaza-la-fe',
-    titulo: 'Multitudinaria vigilia con Alex Zurdo y Grupo Barak en Plaza La Fe',
-    resumen: 'Miles celebran el aniversario de Ríos de Agua Viva con artistas internacionales.',
-    contenido: '<p>Una noche histórica de fe y unidad nacional...</p>',
-    categoria: 'Nacionales',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T02:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 3200,
-  },
-  {
-    id: '4',
-    slug: 'hospital-pediatrico-esteli',
-    titulo: 'Avanza construcción del Hospital Pediátrico Las Segovias en Estelí',
-    resumen: 'El proyecto alcanzará nuevas etapas de construcción para mejorar la atención médica.',
-    contenido: '<p>La obra mejorará la atención médica especializada...</p>',
-    categoria: 'Nacionales',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T03:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 890,
-  },
-  {
-    id: '5',
-    slug: 'shakira-brasil',
-    titulo: 'Shakira convoca a dos millones de fans en Brasil',
-    resumen: 'La estrella colombiana rompe récords en su gira mundial.',
-    contenido: '<p>Shakira demostró una vez más su poder...</p>',
-    categoria: 'Espectáculos',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T03:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 4500,
-  },
-  {
-    id: '6',
-    slug: 'berman-espinoza',
-    titulo: 'Berman Espinoza alcanza récord de 1,450 ponches',
-    resumen: 'El pitcher nica se convierte en el nuevo Rey de los ponches.',
-    contenido: '<p>Un logro histórico para el beisbol nicaragüense...</p>',
-    categoria: 'Deportes',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T03:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 1800,
-  },
-  {
-    id: '7',
-    slug: 'muertes-accidentes-abril',
-    titulo: '70 fallecimientos por accidentes de tránsito en abril',
-    resumen: 'Managua y los motociclistas encabezan las alarmantes estadísticas.',
-    contenido: '<p>Las autoridades hacen un llamado a la precaución...</p>',
-    categoria: 'Nacionales',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T03:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 2100,
-  },
-  {
-    id: '8',
-    slug: 'netflix-crown',
-    titulo: 'Netflix prepara precuela de "The Crown" sobre el origen de los Windsor',
-    resumen: 'La plataforma expande el universo de la exitosa serie.',
-    contenido: '<p>Una nueva mirada a la historia de la realeza...</p>',
-    categoria: 'Espectáculos',
-    imagen: '/logo.svg',
-    fecha: '2026-05-24T03:00:00.000Z',
-    autor: 'Keyling Elieth Rivera Muñoz',
-    vistas: 1200,
-  },
-];
-
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
   const firebaseNews = await tryFirebaseAdmin(validatedCount);
   if (firebaseNews && firebaseNews.length > 0) {
     return firebaseNews;
   }
-  return MOCK_NOTICIAS.slice(0, validatedCount);
+  return [];
 }
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -341,9 +241,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   } catch (err) {
     logger.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
   }
-  const normalizeCat = (s: string) => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
-  const filtered = MOCK_NOTICIAS.filter(n => normalizeCat(n.categoria) === normalizeCat(categoria));
-  return filtered.slice(0, validatedCount);
+  return [];
 }
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
