@@ -57,9 +57,17 @@ function goneResponse(): NextResponse {
   );
 }
 
+/** Rutas API legacy que deben devolver 404 (eliminadas para ahorrar invocaciones) */
+const BLOCKED_API_PATHS = ['/api/audio', '/api/view', '/api/views'];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ua = request.headers.get('user-agent') || '';
+
+  // 0. Bloquear endpoints API legacy eliminados → 404 inmediato, sin invocar Function
+  if (BLOCKED_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    return new NextResponse(null, { status: 404 });
+  }
 
   // 1. Bloquear bots parasitarios inmediatamente
   if (BLOCKED_BOTS.some((bot) => ua.includes(bot))) {
@@ -110,5 +118,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap).*)',
+  ],
 };
