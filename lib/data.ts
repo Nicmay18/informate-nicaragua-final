@@ -147,7 +147,7 @@ function mapDocToNoticia(d: any): Noticia {
 // ═══════════════════════════════════════════════════════════════
 let _firestoreCache: Noticia[] | null = null;
 let _firestoreCacheTime = 0;
-const FIRESTORE_CACHE_TTL = 300000; // 5 minutos
+const FIRESTORE_CACHE_TTL = 30000; // 30 segundos (noticias deben aparecer rápido)
 
 /** Invalidar cache cuando se publica/actualiza una noticia */
 export function invalidateFirestoreCache() {
@@ -170,8 +170,17 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       .get();
     let noticias = snap.docs.map(mapDocToNoticia);
 
-    // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)
-    noticias = noticias.filter(n => (n as any).estado === 'publicado' || !(n as any).estado);
+    // 1. Filtrar SOLO publicadas:
+    //    - estado === 'publicado' (legacy)
+    //    - sin campo estado Y publicado !== false (panel admin)
+    //    - sin estado ni publicado (máxima compatibilidad)
+    noticias = noticias.filter(n => {
+      const data = n as any;
+      if (data.estado === 'publicado') return true;
+      if (data.estado === 'borrador') return false;
+      if (data.publicado === false) return false;
+      return true; // sin estado ni publicado = mostrar por defecto
+    });
 
     // 2. Deduplicar por slug: quedarse con la más reciente
     const unique = new Map<string, Noticia>();

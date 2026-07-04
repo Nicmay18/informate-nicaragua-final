@@ -109,6 +109,12 @@ export async function POST(request: NextRequest) {
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
 
+    // Invalidar cache en memoria de Firestore (CRÍTICO: evita esperar 5 min)
+    try {
+      const { invalidateFirestoreCache } = await import('@/lib/data');
+      invalidateFirestoreCache();
+    } catch (e) { /* noop */ }
+
     // Revalidar paginas afectadas
     revalidatePath('/');
     revalidatePath('/noticias');
