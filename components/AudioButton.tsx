@@ -83,60 +83,16 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
 
   const play = async () => {
     if (isLoading) return;
-    if (audioRef.current && audioRef.current.src) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      return;
-    }
 
     setIsLoading(true);
     setErrorMsg('');
-    try {
-      const res = await fetch('/api/audio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: fullText, articleId }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Error desconocido del servidor' }));
-        throw new Error(data.error || `Error ${res.status}`);
-      }
-
-      // El backend devuelve audio/mpeg binario directo (más eficiente que base64)
-      const blob = await res.blob();
-      const audioUrl = URL.createObjectURL(blob);
-
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      audio.onended = () => {
-        setIsPlaying(false);
-        setProgress(0);
-        URL.revokeObjectURL(audioUrl);
-      };
-      audio.onerror = () => {
-        setIsPlaying(false);
-        setIsLoading(false);
-        URL.revokeObjectURL(audioUrl);
-      };
-      await audio.play();
-      setIsPlaying(true);
-      setIsLoading(false);
-
-      intervalRef.current = setInterval(() => {
-        if (audioRef.current) {
-          const pct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-          setProgress(Number.isFinite(pct) ? pct : 0);
-        }
-      }, 500);
-    } catch (err: any) {
-      setIsLoading(false);
-      setErrorMsg(err.message || 'No se pudo generar el audio. Intenta de nuevo.');
+    // Solo TTS nativo del navegador — nunca llama al backend /api/audio
+    // (el endpoint fue desactivado para ahorrar invocaciones de Vercel Functions)
+    const ok = playNativeTTS();
+    setIsLoading(false);
+    if (!ok) {
+      setErrorMsg('Tu navegador no soporta lectura de voz. Probá con Chrome, Safari o Edge.');
       setTimeout(() => setErrorMsg(''), 6000);
-      // Fallback a TTS nativo del navegador
-      if (!playNativeTTS()) {
-        // El mensaje de error ya se muestra arriba
-      }
     }
   };
 
