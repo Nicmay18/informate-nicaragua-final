@@ -19,6 +19,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:all": "npm run lint && npm run type-check && npm run test && npm run test:e2e",
+    "pre-deploy": "bash scripts/pre-deploy-check.sh",
+    "audit": "node scripts/audit-costs.mjs",
     "scripts:organize": "node scripts/cli.js organize"
   },
   "dependencies": {
