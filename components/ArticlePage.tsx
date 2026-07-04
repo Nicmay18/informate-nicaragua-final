@@ -54,55 +54,36 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // TRACKING DE VISTAS: Firestore directo desde cliente
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
   // ============================================================
-  console.log('[views] COMPONENT MOUNT — slug:', noticia.slug, 'db:', !!db, 'hasWindow:', typeof window !== 'undefined');
-  // eslint-disable-next-line no-debugger
-  debugger;
   useEffect(() => {
-    console.log('[views] Tracking init — slug:', noticia.slug, 'db:', !!db);
-    if (!noticia.slug || !db) {
-      console.warn('[views] ABORT — no slug or db');
-      return;
-    }
+    if (!noticia.slug || !db) return;
 
     const sessionKey = `viewed_${noticia.slug}`;
     const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
-    console.log('[views] alreadyViewed:', alreadyViewed);
-    if (alreadyViewed) {
-      console.log('[views] SKIP — already viewed this session');
-      return;
-    }
+    if (alreadyViewed) return; // No contar duplicados en la misma sesión
 
     const trackView = async () => {
       try {
         const docRef = doc(db, 'views', noticia.slug);
-        console.log('[views] Fetching doc:', noticia.slug);
         const snap = await getDoc(docRef);
-        console.log('[views] Doc exists:', snap.exists());
 
         if (snap.exists()) {
           const currentViews = (snap.data().count as number) || 0;
           setViews(currentViews + 1); // Optimistic +1
-          console.log('[views] Updating count to:', currentViews + 1);
           await updateDoc(docRef, {
             count: increment(1),
             updatedAt: serverTimestamp(),
           });
-          console.log('[views] UPDATE success');
         } else {
           setViews(1);
-          console.log('[views] Creating new doc with count=1');
           await setDoc(docRef, {
             count: 1,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
           });
-          console.log('[views] CREATE success');
         }
         sessionStorage.setItem(sessionKey, 'true');
-        console.log('[views] Session marked');
       } catch (err: any) {
-        console.error('[views] Firebase tracking FAILED:', err?.message || err);
-        console.error('[views] Full error:', err);
+        console.error('[views] Firebase tracking failed:', err?.message || err);
       }
     };
 
