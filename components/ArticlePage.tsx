@@ -45,6 +45,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   // Optimistic +1: muestra inmediatamente la vista del usuario actual
   const [views, setViews] = useState(() => (noticia.vistas || 0) + 1);
+  const [trackStatus, setTrackStatus] = useState<string>('INIT');
 
   useEffect(() => {
     setViews((noticia.vistas || 0) + 1);
@@ -53,15 +54,23 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // ============================================================
   // TRACKING DE VISTAS: Firestore directo desde cliente
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
-  // v2
+  // v3
   // ============================================================
   useEffect(() => {
-    if (!noticia.slug || !db) return;
+    setTrackStatus('EFFECT_RUN');
+    if (!noticia.slug || !db) {
+      setTrackStatus('ABORT: no slug=' + !!noticia.slug + ' db=' + !!db);
+      return;
+    }
 
     const sessionKey = `viewed_${noticia.slug}`;
     const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
-    if (alreadyViewed) return; // No contar duplicados en la misma sesión
+    if (alreadyViewed) {
+      setTrackStatus('SKIP: already viewed');
+      return;
+    }
 
+    setTrackStatus('FETCHING...');
     const trackView = async () => {
       try {
         const docRef = doc(db, 'views', noticia.slug);
@@ -69,11 +78,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         if (snap.exists()) {
           const currentViews = (snap.data().count as number) || 0;
-          setViews(currentViews + 1); // Optimistic +1
+          setViews(currentViews + 1);
           await updateDoc(docRef, {
             count: increment(1),
             updatedAt: serverTimestamp(),
           });
+          setTrackStatus('OK: updated');
         } else {
           setViews(1);
           await setDoc(docRef, {
@@ -81,10 +91,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp(),
           });
+          setTrackStatus('OK: created');
         }
         sessionStorage.setItem(sessionKey, 'true');
       } catch (err: any) {
-        console.error('[views] Firebase tracking failed:', err?.message || err);
+        setTrackStatus('ERROR: ' + (err?.message || err));
       }
     };
 
@@ -580,6 +591,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             </div>
           </aside>
         )}
+
+        {/* DEBUG: Tracking status visible */}
+        <div style={{ position: 'fixed', bottom: 4, right: 4, zIndex: 99999, background: '#000', color: '#0f0', padding: '4px 8px', fontSize: 11, fontFamily: 'monospace', borderRadius: 4 }}>
+          [TRACK] {trackStatus}
+        </div>
 
       </article>
     </div>
