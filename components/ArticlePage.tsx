@@ -54,6 +54,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // TRACKING DE VISTAS: Firestore directo desde cliente
   // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
   // ============================================================
+  console.log('[views] COMPONENT MOUNT — slug:', noticia.slug, 'db:', !!db, 'hasWindow:', typeof window !== 'undefined');
   useEffect(() => {
     console.log('[views] Tracking init — slug:', noticia.slug, 'db:', !!db);
     if (!noticia.slug || !db) {
