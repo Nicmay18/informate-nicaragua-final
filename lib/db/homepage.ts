@@ -234,8 +234,7 @@ function isValidSlug(slug: string): boolean {
  * Ahora también registra el evento de tráfico para analítica en tiempo real.
  */
 export async function incrementViewsBySlug(
-  slug: string, 
-  meta?: { referrer?: string; ua?: string; ip?: string; utmSource?: string }
+  slug: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
@@ -245,59 +244,29 @@ export async function incrementViewsBySlug(
   try {
     const db = getAdminDb();
 
-    const snap = await db
-      .collection('noticias')
-      .where('slug', '==', slug)
-      .limit(1)
-      .get();
+    // ESTRATEGIA HÍBRIDA: intentar slug como ID primero (O(1)), fallback a query
+    let docRef = db.collection('noticias').doc(slug);
+    let docSnap = await docRef.get();
 
-    if (snap.empty) return null;
+    if (!docSnap.exists) {
+      // Fallback: noticias antiguas donde slug es campo, no ID
+      const snap = await db
+        .collection('noticias')
+        .where('slug', '==', slug)
+        .limit(1)
+        .get();
+      if (snap.empty) return null;
+      docRef = snap.docs[0].ref;
+      docSnap = snap.docs[0];
+    }
 
-    const doc = snap.docs[0];
-    const docRef = doc.ref;
-    const data = doc.data();
+    const data = docSnap.data() || {};
     const currentViews = data.vistas || 0;
 
-    // 1. Incremento atómico en el documento de la noticia
+    // 1. Incremento atómico en el documento de la noticia (1 escritura, 0 lecturas extra)
     await docRef.update({
       vistas: FieldValue.increment(1),
     });
-
-    // 2. Registrar evento de tráfico en colección dedicada (para el Panel de Control)
-    try {
-      const utmRaw = (meta?.utmSource || '').toLowerCase();
-      const refRaw = meta?.referrer || '';
-      const uaRaw = (meta?.ua || '').toLowerCase();
-      let source = 'directo';
-      if (utmRaw === 'telegram' || utmRaw.includes('telegram')) source = 'telegram';
-      else if (utmRaw === 'whatsapp' || utmRaw.includes('whatsapp')) source = 'whatsapp';
-      else if (utmRaw === 'facebook' || utmRaw.includes('facebook')) source = 'facebook';
-      else if (utmRaw === 'twitter' || utmRaw.includes('twitter') || utmRaw === 'x') source = 'twitter';
-      else if (utmRaw === 'google' || utmRaw.includes('google')) source = 'google';
-      else if (utmRaw) source = utmRaw;
-      else if (refRaw.includes('facebook.com') || refRaw.includes('fb.me') || refRaw.includes('instagram.com') || refRaw.includes('threads.net') || refRaw.includes('fbcdn')) source = 'facebook';
-      else if (refRaw.includes('t.me') || refRaw.includes('telegram') || refRaw.includes('web.telegram.org') || uaRaw.includes('telegram') || uaRaw.includes('tgweb')) source = 'telegram';
-      else if (refRaw.includes('google.com') || refRaw.includes('googleusercontent')) source = 'google';
-      else if (refRaw.includes('twitter.com') || refRaw.includes('x.com') || refRaw.includes('t.co')) source = 'twitter';
-      else if (refRaw.includes('whatsapp.com') || refRaw.includes('wa.me') || uaRaw.includes('whatsapp') || uaRaw.includes('wa ')) source = 'whatsapp';
-      else if (refRaw.includes('bing.com')) source = 'bing';
-      else if (refRaw.includes('duckduckgo.com')) source = 'duckduckgo';
-      else if (refRaw.includes('yahoo.com')) source = 'yahoo';
-      else if (refRaw.includes('reddit.com')) source = 'reddit';
-      else if (refRaw && !refRaw.includes('nicaraguainformate.com')) source = 'otro';
-
-      await db.collection('analytics_traffic').add({
-        slug,
-        titulo: data.titulo || '',
-        categoria: data.categoria || 'Actualidad',
-        source,
-        referrer: refRaw,
-        ua: meta?.ua || '',
-        timestamp: FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      logger.error('[homepage.ts] Error registrando evento analytics:', e);
-    }
 
     return currentViews + 1;
   } catch (err) {

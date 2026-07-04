@@ -11,6 +11,7 @@ import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { injectInternalLinks } from '@/lib/article-links';
 import { trackViewAction } from '@/app/actions/track-view';
+import ContentWarning from './ContentWarning';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -273,6 +274,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </div>
         </div>
         </header>
+
+        {/* Advertencia de contenido sensible (para AdSense y usuarios) */}
+        <ContentWarning category={noticia.categoria} />
 
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (

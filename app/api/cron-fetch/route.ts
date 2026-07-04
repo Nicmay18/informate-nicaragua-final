@@ -163,9 +163,10 @@ async function saveToFirestore(
     destacada: false,
   };
 
-  const docRef = await adminDb.collection('noticias').add(noticiaData);
+  // Usar slug como ID del documento para lecturas O(1) en vez de query costosa
+  await adminDb.collection('noticias').doc(slug).set(noticiaData);
 
-  return { id: docRef.id, slug };
+  return { id: slug, slug };
 }
 
 // ─── Route Handler Principal ───
