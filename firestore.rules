@@ -75,15 +75,14 @@ service cloud.firestore {
     // Escritura directa desde navegador (client-side) para evitar costo Vercel.
     // CREATE: solo count=1 con timestamps (documento nuevo).
     // UPDATE: solo incremento de +1 en count (evita inflado arbitrario).
+    // Nota: serverTimestamp() no pasa validacion 'is timestamp' en rules,
+    // por eso se relaja la validacion de tipo para createdAt/updatedAt.
     match /views/{slug} {
       allow read: if true;
       allow create: if request.resource.data.keys().hasOnly(['count','createdAt','updatedAt'])
-          && request.resource.data.count == 1
-          && request.resource.data.createdAt is timestamp
-          && request.resource.data.updatedAt is timestamp;
+          && request.resource.data.count == 1;
       allow update: if request.resource.data.keys().hasOnly(['count','updatedAt'])
-          && request.resource.data.count == resource.data.count + 1
-          && request.resource.data.updatedAt is timestamp;
+          && request.resource.data.count == resource.data.count + 1;
       allow delete: if false;
     }
 
