@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
-import { defaultRateLimiter } from '@/lib/rate-limit';
 
 // =============================================================================
 // ENDPOINT: Expansión de Thin Content con Gemini
@@ -95,13 +94,6 @@ export async function POST(request: NextRequest) {
     // ─── Auth ───
     if (!verificarAuth(request)) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
-    }
-
-    // ─── Rate limit (3 req/min por IP) — protege Gemini API
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-    const rl = defaultRateLimiter.check(`expandir:${ip}`);
-    if (!rl.allowed) {
-      return NextResponse.json({ error: 'Rate limit exceeded. Esperá 1 minuto.' }, { status: 429, headers: { 'Retry-After': '60' } });
     }
 
     const dryRun = request.nextUrl.searchParams.get('dryRun') === 'true';

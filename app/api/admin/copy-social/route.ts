@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { RateLimiter } from '@/lib/rate-limit';
-import { getClientIp } from '@/lib/ip';
 
 // =============================================================================
 // ENDPOINT: Generador de copy para redes sociales con IA (Groq - GRATIS)
@@ -8,8 +6,6 @@ import { getClientIp } from '@/lib/ip';
 // emoji + titular en mayusculas + gancho + link + hashtags.
 // Reemplaza el flujo manual de copiar a ChatGPT.
 // =============================================================================
-
-const copyLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 30 });
 
 const EMOJI_CAT: Record<string, string> = {
   Sucesos: '🚨',
@@ -135,15 +131,6 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = getClientIp(request);
-    const rateCheck = copyLimiter.check(ip);
-    if (!rateCheck.allowed) {
-      return NextResponse.json(
-        { error: 'Demasiadas peticiones. Intenta más tarde.' },
-        { status: 429, headers: { 'Retry-After': '60' } }
-      );
-    }
-
     let body: Record<string, unknown>;
     try {
       body = await request.json();

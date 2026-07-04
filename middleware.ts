@@ -1,12 +1,61 @@
 ﻿/**
- * MIDDLEWARE - Eliminación de resultados tóxicos de Google
+ * MIDDLEWARE - Eliminación de resultados tóxicos de Google + Protección Admin API
  * Intercepta URLs con slugs tóxicos y devuelve 410 Gone.
+ * Protege /api/admin/* con auth + rate limit centralizado.
  * Vercel/Next.js App Router compatible.
- * Fecha: 2026-05-16
  */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isToxicSlug } from './lib/seo-toxic';
+
+// ═══════════════════════════════════════════════════════════════
+// RATE LIMITING EN MEMORIA — Panel Admin (bajo tráfico)
+// ═══════════════════════════════════════════════════════════════
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
+}
+
+const rateLimitMap = new Map<string, RateLimitEntry>();
+
+const LIMITS = {
+  heavy: { max: 5, windowMs: 60_000 },   // 5 req/min — IA, generación
+  read: { max: 60, windowMs: 60_000 },   // 60 req/min — listados, consultas
+  default: { max: 30, windowMs: 60_000 }, // 30 req/min — resto
+};
+
+function getClientIP(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
+  return ip === '127.0.0.1' || ip === '::1' ? 'dev-local' : ip;
+}
+
+function checkRateLimit(identifier: string, max: number, windowMs: number): { allowed: boolean; remaining: number; resetTime: number } {
+  const now = Date.now();
+  const entry = rateLimitMap.get(identifier);
+
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + windowMs });
+    return { allowed: true, remaining: max - 1, resetTime: now + windowMs };
+  }
+
+  if (entry.count >= max) {
+    return { allowed: false, remaining: 0, resetTime: entry.resetTime };
+  }
+
+  entry.count++;
+  return { allowed: true, remaining: max - entry.count, resetTime: entry.resetTime };
+}
+
+// Cleanup cada 5 minutos para evitar memory leak
+if (typeof global !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, entry] of rateLimitMap.entries()) {
+      if (now > entry.resetTime) rateLimitMap.delete(key);
+    }
+  }, 300_000);
+}
 
 /** Slugs tóxicos hardcodeados que deben devolver 410 Gone */
 const TOXIC_PATHS = [
@@ -63,6 +112,66 @@ const BLOCKED_API_PATHS = ['/api/audio', '/api/view', '/api/views'];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ua = request.headers.get('user-agent') || '';
+
+  // ═══════════════════════════════════════════════════════════════
+  // ADMIN API PROTECTION — Auth + Rate Limit centralizado
+  // ═══════════════════════════════════════════════════════════════
+  if (pathname.startsWith('/api/admin/')) {
+    // 1. Auth
+    const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+    const cronSecret = request.headers.get('x-cron-secret') || '';
+    const validAdminKey = process.env.ADMIN_API_KEY || '';
+    const validCronSecret = process.env.CRON_SECRET || '';
+
+    const isValidAdmin = validAdminKey && adminToken === validAdminKey;
+    const isValidCron = validCronSecret && cronSecret === validCronSecret;
+
+    if (!isValidAdmin && !isValidCron) {
+      return NextResponse.json(
+        { error: 'Unauthorized', code: 'INVALID_AUTH' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Rate limit por tipo de endpoint
+    let limitConfig = LIMITS.default;
+    const pathLower = pathname.toLowerCase();
+    if (pathLower.includes('generar') || pathLower.includes('expandir') || pathLower.includes('rescribir') || pathLower.includes('gemini') || pathLower.includes('deepseek') || pathLower.includes('groq')) {
+      limitConfig = LIMITS.heavy;
+    } else if (pathLower.includes('listar') || pathLower.includes('stats') || pathLower.includes('dashboard') || pathLower.includes('buscar') || pathLower.includes('metricas')) {
+      limitConfig = LIMITS.read;
+    }
+
+    const ip = getClientIP(request);
+    const identifier = `${ip}:${pathname}`;
+    const { allowed, remaining, resetTime } = checkRateLimit(identifier, limitConfig.max, limitConfig.windowMs);
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          code: 'RATE_LIMITED',
+          retryAfter: Math.ceil((resetTime - Date.now()) / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': limitConfig.max.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': resetTime.toString(),
+            'Retry-After': Math.ceil((resetTime - Date.now()) / 1000).toString(),
+          },
+        }
+      );
+    }
+
+    // Continuar al endpoint con headers de rate limit
+    const response = NextResponse.next();
+    response.headers.set('X-RateLimit-Limit', limitConfig.max.toString());
+    response.headers.set('X-RateLimit-Remaining', remaining.toString());
+    response.headers.set('X-RateLimit-Reset', resetTime.toString());
+    return response;
+  }
 
   // 0. Bloquear endpoints API legacy eliminados → 404 inmediato, sin invocar Function
   if (BLOCKED_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {

@@ -69,19 +69,32 @@ function auditEndpoints() {
 
   let protectedCount = 0;
   let unprotectedCount = 0;
+  let duplicados = 0;
+
+  // Verificar si middleware.ts protege /api/admin/*
+  let hasMiddlewareProtection = false;
+  try {
+    const mw = readFileSync(join(ROOT_DIR, 'middleware.ts'), 'utf-8');
+    hasMiddlewareProtection = mw.includes('/api/admin/') && mw.includes('checkRateLimit');
+  } catch { /* no middleware */ }
 
   for (const route of adminRoutes) {
     const routePath = join(API_DIR, route, 'route.ts');
     try {
       const content = readFileSync(routePath, 'utf-8');
-      const hasRateLimit = content.includes('RateLimiter') || content.includes('defaultRateLimiter');
-      const hasAuth = content.includes('ADMIN_API_KEY') || content.includes('CRON_SECRET') || content.includes('verificarAuth');
+      const hasIndividualRateLimit = content.includes('RateLimiter') || content.includes('defaultRateLimiter');
 
-      if (!hasRateLimit) {
-        console.log(`${RED}  ❌  /api/${route}: sin rate limit${RESET}`);
+      if (hasMiddlewareProtection && !hasIndividualRateLimit) {
+        console.log(`${GREEN}  ✅  /api/${route}: protegido por middleware.ts${RESET}`);
+        protectedCount++;
+      } else if (hasMiddlewareProtection && hasIndividualRateLimit) {
+        console.log(`${YELLOW}  ⚠️  /api/${route}: duplicado (middleware + individual)${RESET}`);
+        duplicados++;
+      } else if (!hasIndividualRateLimit) {
+        console.log(`${RED}  ❌  /api/${route}: sin protección${RESET}`);
         unprotectedCount++;
       } else {
-        console.log(`${GREEN}  ✅  /api/${route}: rate limit OK${RESET}`);
+        console.log(`${GREEN}  ✅  /api/${route}: rate limit individual${RESET}`);
         protectedCount++;
       }
     } catch {
@@ -90,12 +103,13 @@ function auditEndpoints() {
   }
 
   printLine();
-  console.log(`  Protegidos: ${protectedCount}  |  Sin rate limit: ${unprotectedCount}`);
+  if (hasMiddlewareProtection) {
+    console.log(`  Middleware activo: ${GREEN}SÍ${RESET}`);
+  }
+  console.log(`  Protegidos: ${protectedCount}  |  Sin protección: ${unprotectedCount}  |  Duplicados: ${duplicados}`);
 
-  if (unprotectedCount > 0) {
-    console.log(`\n${YELLOW}  → Agregar en endpoints sin protección:${RESET}`);
-    console.log(`     import { defaultRateLimiter } from '@/lib/rate-limit';`);
-    console.log(`     const rl = defaultRateLimiter.check(\`endpoint:\${ip}\`);`);
+  if (duplicados > 0) {
+    console.log(`\n${YELLOW}  → Remover rate limit individual de endpoints duplicados${RESET}`);
   }
 }
 
@@ -155,7 +169,64 @@ function auditBundle() {
   }
 }
 
-// ─── 3. Auditoría de Config ───
+// ─── 3. Auditoría de Middleware ───
+function auditMiddleware() {
+  console.log('\n🛡️  AUDITORÍA MIDDLEWARE\n');
+
+  const middlewarePath = join(ROOT_DIR, 'middleware.ts');
+
+  try {
+    const content = readFileSync(middlewarePath, 'utf-8');
+
+    const hasAdminMatcher = content.includes('/api/admin/');
+    const hasRateLimit = content.includes('checkRateLimit') || content.includes('rateLimitMap');
+    const hasAuthCheck = content.includes('ADMIN_API_KEY') || content.includes('x-admin-token');
+    const hasHeaders = content.includes('X-RateLimit-Limit');
+
+    if (hasAdminMatcher && hasRateLimit && hasAuthCheck && hasHeaders) {
+      logStatus(true, 'middleware.ts: Protección completa');
+      console.log(`${GREEN}     → Auth: x-admin-token / x-cron-secret${RESET}`);
+      console.log(`${GREEN}     → Rate limit: 3 niveles (heavy/read/default)${RESET}`);
+      console.log(`${GREEN}     → Headers: X-RateLimit-* incluidos${RESET}`);
+    } else {
+      logStatus(false, 'middleware.ts: INCOMPLETO');
+      if (!hasAdminMatcher) console.log(`${RED}     → Falta matcher /api/admin/*${RESET}`);
+      if (!hasRateLimit) console.log(`${RED}     → Falta rate limiting${RESET}`);
+      if (!hasAuthCheck) console.log(`${RED}     → Falta verificación de auth${RESET}`);
+    }
+
+    // Verificar que NO haya checkRateLimit en endpoints individuales
+    const adminDir = join(API_DIR, 'admin');
+    let duplicados = 0;
+    try {
+      const routes = readdirSync(adminDir, { withFileTypes: true })
+        .filter(d => d.isDirectory())
+        .map(d => d.name);
+
+      for (const route of routes) {
+        const routePath = join(adminDir, route, 'route.ts');
+        try {
+          const routeContent = readFileSync(routePath, 'utf-8');
+          if (routeContent.includes('defaultRateLimiter') || (routeContent.includes('checkRateLimit') && routeContent.includes('rate-limit'))) {
+            console.log(`${YELLOW}  ⚠️  /api/admin/${route}: Tiene rate limit duplicado (remover)${RESET}`);
+            duplicados++;
+          }
+        } catch { /* no route.ts */ }
+      }
+    } catch {
+      logWarn('No se pudo leer app/api/admin/');
+    }
+
+    if (duplicados === 0) {
+      logStatus(true, 'No hay rate limiting duplicado en endpoints');
+    }
+
+  } catch {
+    logStatus(false, 'middleware.ts NO ENCONTRADO');
+  }
+}
+
+// ─── 4. Auditoría de Config ───
 function auditConfig() {
   console.log('\n⚙️  AUDITORÍA DE CONFIG\n');
 
@@ -181,6 +252,7 @@ function main() {
   console.log('╚════════════════════════════════════════════════════════════╝');
 
   auditEndpoints();
+  auditMiddleware();
   auditBundle();
   auditConfig();
 

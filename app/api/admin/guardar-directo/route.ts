@@ -4,7 +4,6 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { generarMetaDescription, generarTituloSEO } from '@/lib/generador-meta';
-import { defaultRateLimiter } from '@/lib/rate-limit';
 
 export const maxDuration = 30;
 
@@ -21,13 +20,6 @@ function verificarAuth(request: NextRequest): boolean {
 export async function POST(request: NextRequest) {
   if (!verificarAuth(request)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
-  }
-
-  // ─── Rate limit (10 req/min por IP) — protege Firestore + analizador
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  const rl = defaultRateLimiter.check(`guardar-directo:${ip}`);
-  if (!rl.allowed) {
-    return NextResponse.json({ error: 'Rate limit exceeded. Esperá 1 minuto.' }, { status: 429, headers: { 'Retry-After': '60' } });
   }
 
   try {
