@@ -1552,12 +1552,6 @@ sin texto ni marcas de agua, composición periodística"
                   <div class="form-group" style="margin-bottom: 10px;"><label class="form-label" style="font-size: 12px;">Page ID</label><input type="text" class="form-input" id="configFbPage2Id" placeholder="61577962970892" style="font-family: monospace; font-size: 12px;"></div>
                   <div class="form-group" style="margin-bottom: 0;"><label class="form-label" style="font-size: 12px;">Access Token</label><input type="password" class="form-input" id="configFbPage2Token" placeholder="EAAN..." style="font-family: monospace; font-size: 12px;"></div>
                 </div>
-                <div style="margin-bottom: 14px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid #6366f1;">
-                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fas fa-volume-up" style="color: #6366f1;"></i><h4 style="font-size: 13px; font-weight: 700;">ElevenLabs Audio (Voz Profesional)</h4></div>
-                  <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 10px;">Configurado en Vercel. Haz clic para verificar que la API key funciona.</div>
-                  <div id="statusElevenlabs" style="margin-bottom: 10px; font-size: 12px; font-weight: 600;">—</div>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="verificarElevenLabs()" style="font-size: 12px;"><i class="fas fa-plug"></i> Verificar conexión</button>
-                </div>
                 <div style="margin-bottom: 16px; padding: 14px; background: var(--gray-50); border-radius: var(--radius-md); border-left: 3px solid #10b981;">
                   <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;"><i class="fas fa-sync-alt" style="color: #10b981;"></i><h4 style="font-size: 13px; font-weight: 700;">Revalidación Vercel</h4></div>
                   <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 10px;">Token para actualizar la página principal al instante cuando guardás una noticia.</div>
@@ -5154,26 +5148,6 @@ window.batchRestore = async function() {
         }
         localStorage.setItem('admin_revalidate_token', revalidateTokenFallback);
         showToast('Configuración guardada localmente en este navegador (backup)', 'warning');
-      }
-    };
-
-    window.verificarElevenLabs = async function() {
-      const el = document.getElementById('statusElevenlabs');
-      el.textContent = 'Verificando...';
-      el.style.color = '#8a8a9e';
-      try {
-        const res = await fetch('/api/audio');
-        const data = await res.json();
-        if (data.configured) {
-          el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado</span> (Voice ID: ' + data.voiceId + ')';
-          showToast('ElevenLabs configurado correctamente', 'success');
-        } else {
-          el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> No configurado</span> — Agrega ELEVENLABS_API_KEY en Vercel → Settings → Environment Variables';
-          showToast('ElevenLabs no configurado', 'warning');
-        }
-      } catch (err) {
-        el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Error de conexión</span>';
-        showToast('Error verificando ElevenLabs: ' + err.message, 'error');
       }
     };
 
