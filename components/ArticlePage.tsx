@@ -57,40 +57,44 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   useEffect(() => {
     if (!noticia.slug) return;
 
-    const sessionKey = `viewed_${noticia.slug}`;
-    const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
-    if (alreadyViewed) return;
+    const timer = setTimeout(() => {
+      const sessionKey = `viewed_${noticia.slug}`;
+      const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
+      if (alreadyViewed) return;
 
-    const trackView = async () => {
-      try {
-        const clientDb = getClientDb();
-        if (!clientDb) return;
-        const docRef = doc(clientDb, 'views', noticia.slug);
-        const snap = await getDoc(docRef);
+      const trackView = async () => {
+        try {
+          const clientDb = getClientDb();
+          if (!clientDb) return;
+          const docRef = doc(clientDb, 'views', noticia.slug);
+          const snap = await getDoc(docRef);
 
-        if (snap.exists()) {
-          const currentViews = (snap.data().count as number) || 0;
-          setViews(currentViews + 1); // Optimistic +1
-          await updateDoc(docRef, {
-            count: increment(1),
-            updatedAt: serverTimestamp(),
-          });
-        } else {
-          setViews(1);
-          await setDoc(docRef, {
-            count: 1,
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-          });
+          if (snap.exists()) {
+            const currentViews = (snap.data().count as number) || 0;
+            setViews(currentViews + 1); // Optimistic +1
+            await updateDoc(docRef, {
+              count: increment(1),
+              updatedAt: serverTimestamp(),
+            });
+          } else {
+            setViews(1);
+            await setDoc(docRef, {
+              count: 1,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          }
+          sessionStorage.setItem(sessionKey, 'true');
+          console.log('[views] Tracked:', noticia.slug);
+        } catch (err: any) {
+          console.error('[views] Firebase tracking failed:', err?.message || err);
         }
-        sessionStorage.setItem(sessionKey, 'true');
-        console.log('[views] Tracked:', noticia.slug);
-      } catch (err: any) {
-        console.error('[views] Firebase tracking failed:', err?.message || err);
-      }
-    };
+      };
 
-    trackView();
+      trackView();
+    }, 1000); // Esperar 1s para que Firebase se inicialice
+
+    return () => clearTimeout(timer);
   }, [noticia.id, noticia.slug]);
 
   const category = getCategory(noticia.categoria);
