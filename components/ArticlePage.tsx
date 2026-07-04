@@ -9,9 +9,8 @@ import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { getClientDb } from '@/lib/firebase-client';
 import { injectInternalLinks } from '@/lib/article-links';
-import { doc, getDoc, updateDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
+import { trackViewAction } from '@/app/actions/track-view';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -51,50 +50,28 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   }, [noticia.id, noticia.vistas]);
 
   // ============================================================
-  // TRACKING DE VISTAS: Firestore directo desde cliente
-  // Elimina completamente llamadas a /api/views/[slug] (Vercel CPU = 0)
+  // TRACKING DE VISTAS: Server Action (sin Firestore client)
   // ============================================================
   useEffect(() => {
     if (!noticia.slug) return;
 
-    const timer = setTimeout(() => {
-      const sessionKey = `viewed_${noticia.slug}`;
-      const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
-      if (alreadyViewed) return;
+    const sessionKey = `viewed_${noticia.slug}`;
+    const alreadyViewed = typeof window !== 'undefined' ? sessionStorage.getItem(sessionKey) : 'true';
+    if (alreadyViewed) return;
 
-      const trackView = async () => {
-        try {
-          const clientDb = getClientDb();
-          if (!clientDb) return;
-          const docRef = doc(clientDb, 'views', noticia.slug);
-          const snap = await getDoc(docRef);
-
-          if (snap.exists()) {
-            const currentViews = (snap.data().count as number) || 0;
-            setViews(currentViews + 1); // Optimistic +1
-            await updateDoc(docRef, {
-              count: increment(1),
-              updatedAt: serverTimestamp(),
-            });
-          } else {
-            setViews(1);
-            await setDoc(docRef, {
-              count: 1,
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            });
-          }
+    const trackView = async () => {
+      try {
+        const result = await trackViewAction(noticia.slug);
+        if (result.ok && typeof result.views === 'number') {
+          setViews(result.views);
           sessionStorage.setItem(sessionKey, 'true');
-          console.log('[views] Tracked:', noticia.slug);
-        } catch (err: any) {
-          console.error('[views] Firebase tracking failed:', err?.message || err);
         }
-      };
+      } catch (err: any) {
+        console.error('[views] Tracking failed:', err?.message || err);
+      }
+    };
 
-      trackView();
-    }, 1000); // Esperar 1s para que Firebase se inicialice
-
-    return () => clearTimeout(timer);
+    trackView();
   }, [noticia.id, noticia.slug]);
 
   const category = getCategory(noticia.categoria);
