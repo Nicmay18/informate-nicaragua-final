@@ -1,5 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { defaultRateLimiter } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -113,6 +114,13 @@ export async function POST(request: NextRequest) {
     const validSecrets = [CRON_SECRET, ADMIN_API_KEY].filter(Boolean);
     if (!providedSecret || (validSecrets.length > 0 && !validSecrets.includes(providedSecret))) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
+    // ─── Rate limit (3 req/min por IP) — protege Gemini API
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const rl = defaultRateLimiter.check(`rescribir:${ip}`);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Rate limit exceeded. Esperá 1 minuto.' }, { status: 429, headers: { 'Retry-After': '60' } });
     }
 
     // Obtener API key de Gemini

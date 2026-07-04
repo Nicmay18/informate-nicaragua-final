@@ -34,8 +34,6 @@ const ThirdPartySchema = z.object({
 
   // APIs generales
   ADMIN_API_KEY: z.string().optional(),
-  GROQ_API_KEY: z.string().optional(),
-  DEEPSEEK_API_KEY: z.string().optional(),
 
   // Posibles APIs futuras
   STRIPE_SECRET_KEY: z.string().optional(),

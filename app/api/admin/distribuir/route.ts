@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { defaultRateLimiter } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -272,6 +273,14 @@ export async function POST(request: NextRequest) {
   if (!verificarAuth(request)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
+
+  // ─── Rate limit (10 req/min por IP) — protege APIs de redes sociales
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const rl = defaultRateLimiter.check(`distribuir:${ip}`);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: 'Rate limit exceeded. Esperá 1 minuto.' }, { status: 429, headers: { 'Retry-After': '60' } });
+  }
+
   try {
     const body = await request.json();
     const { slug, canales = ['telegram', 'indexnow', 'push', 'twitter', 'facebook'] } = body;
