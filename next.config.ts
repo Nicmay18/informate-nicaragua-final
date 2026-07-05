@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: true,
   },
+  // Build trigger: refresh deployment to fix missing chunks
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
     scrollRestoration: true,
