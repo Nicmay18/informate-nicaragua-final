@@ -82,13 +82,8 @@ DEVOLVÉ ÚNICAMENTE un JSON con este formato exacto (sin markdown, sin backtick
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization') || '';
-    const secretFromHeader = authHeader.replace('Bearer ', '').trim();
-    const { searchParams } = new URL(request.url);
-    const secretFromQuery = searchParams.get('secret') || '';
-    const providedSecret = secretFromHeader || secretFromQuery;
-
-    if (!providedSecret || providedSecret !== ADMIN_API_KEY) {
+    const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+    if (!adminToken || adminToken !== ADMIN_API_KEY) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
