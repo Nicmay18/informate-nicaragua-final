@@ -6,6 +6,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 
+export const dynamic = 'force-dynamic';
+
 function isAuthorized(request: NextRequest): boolean {
   const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
   const expected = process.env.ADMIN_API_KEY;
