@@ -84,7 +84,15 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   try {
     const { id } = await params;
     const db = getAdminDb();
-    await db.collection('noticias').doc(id).delete();
+    const ref = db.collection('noticias').doc(id);
+    const before = await ref.get();
+    const existedBefore = before.exists;
+    const slugBefore = before.data()?.slug || null;
+
+    await ref.delete();
+
+    const after = await ref.get();
+    const existsAfter = after.exists;
 
     // Invalidar cache en memoria de Firestore
     try {
@@ -92,7 +100,21 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
 
-    return NextResponse.json({ success: true });
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
+    revalidateTag('news-sitemap');
+    revalidateTag('sitemap-news');
+    revalidatePath('/');
+    revalidatePath('/noticias');
+    if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
+
+    return NextResponse.json({
+      success: !existsAfter,
+      existedBefore,
+      existsAfter,
+      slug: slugBefore,
+      id,
+    });
   } catch (err) {
     console.error('[admin/news DELETE]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
