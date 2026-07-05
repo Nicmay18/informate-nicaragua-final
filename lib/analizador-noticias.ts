@@ -1,6 +1,6 @@
 /**
  * Analizador Forense de Noticias - Nicaragua Informate v2.0
- * REGLA RECTORA: "Es mejor una noticia de 250 palabras totalmente verificable
+ * REGLA RECTORA: "Es mejor una noticia de 350 palabras totalmente verificable
  * que una de 800 palabras con informacion inferida."
  *
  * Niveles: FORENSE > ORO > PLATA > BRONCE > RECHAZADO
@@ -237,7 +237,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const esNotaVerificable = densidadVerificable >= 3;
 
   const checks = [
-    { nombre: 'Extensión verificable', pasa: palabrasTotales >= 250 || (palabrasTotales >= 150 && esNotaVerificable) },
+    { nombre: 'Extensión verificable', pasa: palabrasTotales >= 350 || (palabrasTotales >= 250 && esNotaVerificable) },
     { nombre: 'Lead ≥10 palabras', pasa: leadPalabras >= 10 },
     { nombre: 'Estructura o densidad', pasa: h2s >= 1 || (palabrasTotales < 350 && esNotaVerificable) },
     { nombre: 'Negritas / datos clave', pasa: strongs >= 1 },
@@ -329,14 +329,14 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
 
   checks.push({
     nombre: 'Extension adecuada',
-    estado: palabraCount >= 200 || (palabraCount >= 150 && esVerificableOro) ? 'PASS' : palabraCount >= 150 ? 'WARN' : 'FAIL',
-    mensaje: palabraCount >= 200 || (palabraCount >= 150 && esVerificableOro)
+    estado: palabraCount >= 300 || (palabraCount >= 250 && esVerificableOro) ? 'PASS' : palabraCount >= 250 ? 'WARN' : 'FAIL',
+    mensaje: palabraCount >= 300 || (palabraCount >= 250 && esVerificableOro)
       ? `${palabraCount} palabras. Extensión adecuada con datos verificables.`
-      : palabraCount >= 150
+      : palabraCount >= 250
         ? `${palabraCount} palabras. Aceptable para noticias breves.`
         : `Solo ${palabraCount} palabras. Muy corta para ser informativa.`,
     valorActual: palabraCount,
-    valorEsperado: '>=150 con datos verificables',
+    valorEsperado: '>=250 con datos verificables',
   });
 
   // 2. Lead (primer parrafo) — funciona con HTML o texto plano
@@ -493,7 +493,7 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
     + (textoPlano.match(/\b(?:Policía|Ministerio|Hospital|Alcaldía|Comisaría|INSS|municipio|departamento|barrio)\b/gi) || []).length
     + (textoPlano.match(/\btestigo|familiar|vecino|habitante|comerciante|conductor|pasajero\b/gi) || []).length;
   const tieneDatosConcretos = datosConcretosAdsense >= 3;
-  const passThinContent = palabraCount >= 200 || (palabraCount >= 150 && tieneDatosConcretos);
+  const passThinContent = palabraCount >= 300 || (palabraCount >= 250 && tieneDatosConcretos);
   checks.push({
     nombre: 'Thin content',
     estado: passThinContent ? 'PASS' : 'WARN',
@@ -501,7 +501,7 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
       ? `${palabraCount} palabras con datos concretos. Contenido sustancial.`
       : `${palabraCount} palabras. Corta pero puede ser valida si es verificable.`,
     valorActual: palabraCount,
-    valorEsperado: '>=150 con datos',
+    valorEsperado: '>=250 con datos',
   });
 
   // 2. Clickbait en titulo
@@ -913,7 +913,7 @@ function sugerirH2(n: NoticiaInput): string[] {
   const palabraCount = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(p => p.length > 0).length;
 
   // Solo sugerir h2 si hay suficiente contenido verificable para justificarlos
-  if (palabraCount < 250) {
+  if (palabraCount < 350) {
     return ['(Noticia breve — subtitulos opcionales)'];
   }
 

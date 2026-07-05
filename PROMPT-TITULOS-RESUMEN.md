@@ -13,7 +13,7 @@ REGLAS:
 1. TÍTULO: Exactamente 58 caracteres máximo (contar letras y espacios). Específico: qué, quién, dónde.
 2. CATEGORÍA: Elegir UNA de estas: Sucesos, Nacionales, Internacionales, Deportes, Economía, Tecnología, Espectáculos, Cultura.
 3. RESUMEN: Máximo 155 caracteres (contar todo). 1 párrafo. Responde: ¿Qué pasó? ¿Dónde? ¿Cuándo? ¿Quién?
-4. CUERPO: Mínimo 350 palabras. Formato HTML con etiquetas <p> para párrafos y <h2> para subtítulos.
+4. CUERPO: 350-500 palabras (según datos verificables). Mínimo 350 si hay ≥3 datos verificables (fecha, nombre, lugar, cifra, institución). NUNCA rellenar para llegar a un número. Formato HTML con <p> para párrafos y <h2> para subtítulos.
 5. PIE DE FOTO: Siempre escribir exactamente: "Foto/Cortesía RRSS / Redacción Keling Rivera M."
 6. NUNCA uses "muertos", "muere", "mueren" — decí "fallecidos", "fallece", "fallecen". Google penaliza sensacionalismo.
 7. Sin relleno emocional: prohibido "tragedia", "consternación", "dolor", "lamentable", "perdió la vida".
@@ -26,7 +26,7 @@ FORMATO DE SALIDA (copiar directo al panel):
 TÍTULO: [título exacto 58 chars max]
 CATEGORÍA: [una de la lista]
 RESUMEN: [resumen exacto 155 chars max]
-CUERPO: [html con <p> y <h2>, mínimo 350 palabras]
+CUERPO: [html con <p> y <h2>, 350-500 palabras según datos verificables]
 PIE_FOTO: Foto/Cortesía RRSS / Redacción Keling Rivera M.
 SLUG: [slug-seo]
 META: [meta descripción 150-160 caracteres]
@@ -48,7 +48,7 @@ REGLAS PARA TODAS:
 1. TÍTULO: Exactamente 58 caracteres máximo (contar letras y espacios).
 2. CATEGORÍA: Elegir UNA: Sucesos, Nacionales, Internacionales, Deportes, Economía, Tecnología, Espectáculos, Cultura.
 3. RESUMEN: Máximo 155 caracteres (contar todo). 1 párrafo.
-4. CUERPO: Mínimo 350 palabras. Formato HTML con <p> para párrafos y <h2> para subtítulos.
+4. CUERPO: 350-500 palabras (según datos verificables). Mínimo 350 si hay ≥3 datos verificables (fecha, nombre, lugar, cifra, institución). NUNCA rellenar para llegar a un número. Formato HTML con <p> para párrafos y <h2> para subtítulos.
 5. PIE DE FOTO: Siempre exactamente: "Foto/Cortesía RRSS / Redacción Keling Rivera M."
 6. NUNCA uses "muertos", "muere", "mueren" — decí "fallecidos", "fallece", "fallecen".
 7. Sin relleno emocional: prohibido "tragedia", "consternación", "dolor", "lamentable".
@@ -61,7 +61,7 @@ FORMATO DE SALIDA POR NOTICIA:
 TÍTULO: [título exacto 58 chars max]
 CATEGORÍA: [una de la lista]
 RESUMEN: [resumen exacto 155 chars max]
-CUERPO: [html con <p> y <h2>, mínimo 350 palabras]
+CUERPO: [html con <p> y <h2>, 350-500 palabras según datos verificables]
 PIE_FOTO: Foto/Cortesía RRSS / Redacción Keling Rivera M.
 SLUG: [slug-seo]
 META: [meta descripción 120-160 caracteres]
@@ -100,7 +100,7 @@ CUERPO: En diferentes operativos realizados en Managua, León y Granada...
 TÍTULO: Policía detiene 80 personas en operativos Managua León Granada
 CATEGORÍA: Sucesos
 RESUMEN: Policía Nacional realizó allanamientos en Managua, León y Granada durante la madrugada del martes. Detuvieron a 80 personas por delitos contra la propiedad.
-CUERPO: <p>La Policía Nacional de Nicaragua llevó a cabo...</p> (350+ palabras, <h2> subtítulos)
+CUERPO: <p>La Policía Nacional de Nicaragua llevó a cabo...</p> (350-500 palabras según datos verificables, <h2> subtítulos)
 PIE_FOTO: Foto/Cortesía RRSS / Redacción Keling Rivera M.
 SLUG: policia-detiene-80-personas-operativos-managua-leon-granada
 META: Policía Nacional detuvo a 80 personas en operativos simultáneos en Managua, León y Granada.
