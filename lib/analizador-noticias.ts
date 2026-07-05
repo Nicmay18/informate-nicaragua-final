@@ -36,19 +36,8 @@ export interface ResultadoAnalisis {
   aprobado: boolean;
   nivel: 'FORENSE' | 'ORO' | 'PLATA' | 'BRONCE' | 'RECHAZADO';
   puntuacion: number;
-  aiRiskScore?: number;
-  aiRiskLevel?: 'LOW' | 'MEDIUM' | 'HIGH';
-  aiRiskIssues?: string[];
   palabrasSensiblesDetectadas?: PalabraSensibleDetectada[];
   cierreGenerico?: boolean;
-  aiMetrics?: {
-    repeticion_verbos: number;
-    simetria_parrafos: number;
-    cadencia_oraciones: number;
-    simetria_h2: number;
-    exceso_enumerativo: number;
-    h2_repetidos: number;
-  };
   filtros: {
     oro: FiltroResultado;
     adsense: FiltroResultado;
@@ -56,7 +45,7 @@ export interface ResultadoAnalisis {
     news: FiltroResultado;
     seo: FiltroResultado;
     eeat: FiltroResultado;
-    aiRisk: FiltroResultado;
+    valorEditorial: FiltroResultado;
   };
   accionesRequeridas: string[];
   metadataSugerida: {
@@ -174,12 +163,6 @@ const FRASES_GENERICAS_CIERRE = [
   'el occiso',
 ];
 
-const VERBOS_OPERATIVOS_IA = [
-  'realizar', 'llevar', 'efectuar', 'ejecutar', 'desarrollar',
-  'implementar', 'establecer', 'generar', 'crear', 'analizar',
-  'evaluar', 'determinar', 'considerar', 'señalar', 'indicar'
-];
-
 // ───────────────────────────────────────────────
 // FUNCIONES HELPER FORENSE
 // ───────────────────────────────────────────────
@@ -207,61 +190,6 @@ function detectarCierreGenerico(texto: string): boolean {
   return FRASES_GENERICAS_CIERRE.some(frase => final.includes(frase));
 }
 
-function detectarMetricasIA(texto: string) {
-  const sentences = texto.split(/[.!?]+\s*/).filter(s => s.length > 10);
-  const nSent = sentences.length || 1;
-
-  const verbosEncontrados = VERBOS_OPERATIVOS_IA.filter(v => texto.toLowerCase().includes(v));
-  const repeticionVerb = verbosEncontrados.length / nSent;
-
-  const paragraphs = texto.split(/\n\s*\n/).filter(p => p.split(/\s+/).filter(w => w.length > 0).length > 10);
-  let simetriaParafo = 1;
-  if (paragraphs.length > 1) {
-    const lens = paragraphs.map(p => p.split(/\s+/).filter(w => w.length > 0).length);
-    const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
-    const variance = lens.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / lens.length;
-    simetriaParafo = 1 - Math.min(variance / (mean + 1), 1);
-  }
-
-  const sentLens = sentences.filter(s => s.split(/\s+/).filter(w => w.length > 0).length > 5)
-    .map(s => s.split(/\s+/).filter(w => w.length > 0).length);
-  let cadencia = 1;
-  if (sentLens.length > 1) {
-    const meanS = sentLens.reduce((a, b) => a + b, 0) / sentLens.length;
-    const varS = sentLens.reduce((a, b) => a + Math.pow(b - meanS, 2), 0) / sentLens.length;
-    cadencia = 1 - Math.min(varS / (meanS + 1), 1);
-  }
-
-  const h2s = (texto.match(/<h2[^>]*>(.*?)<\/h2>/gi) || []);
-  let simetriaH2 = 1;
-  if (h2s.length > 1) {
-    const h2Lens = h2s.map(h => h.length);
-    const meanH = h2Lens.reduce((a, b) => a + b, 0) / h2Lens.length;
-    const varH = h2Lens.reduce((a, b) => a + Math.pow(b - meanH, 2), 0) / h2Lens.length;
-    simetriaH2 = 1 - Math.min(varH / (meanH + 1), 1);
-  }
-
-  // Detectar H2s repetidos exactos (patrón clásico de IA en bucle)
-  const h2Texts = h2s.map(h => {
-    const m = h.match(/<h2[^>]*>(.*?)<\/h2>/i);
-    return m ? m[1].trim().toLowerCase().replace(/\s+/g, ' ') : '';
-  }).filter(t => t.length > 0);
-  const h2Counts = new Map<string, number>();
-  for (const t of h2Texts) h2Counts.set(t, (h2Counts.get(t) || 0) + 1);
-  const h2Repetidos = Array.from(h2Counts.values()).filter(c => c > 1).reduce((a, b) => a + b, 0);
-
-  const enumerativos = (texto.match(/(primero|segundo|tercero|cuarto|en primer lugar|en segundo lugar)/gi) || []).length;
-
-  return {
-    repeticion_verbos: repeticionVerb,
-    simetria_parrafos: simetriaParafo,
-    cadencia_oraciones: cadencia,
-    simetria_h2: simetriaH2,
-    exceso_enumerativo: Math.min(enumerativos / 3, 1),
-    h2_repetidos: h2Repetidos,
-  };
-}
-
 // ───────────────────────────────────────────────
 // MOTOR PRINCIPAL (LOGICA UNIFICADA ORO)
 // ───────────────────────────────────────────────
@@ -281,7 +209,6 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   // ─── NUEVAS DETECCIONES FORENSE NICARAGUA ───
   const palabrasSensiblesDetectadas = detectarPalabrasSensibles(noticia.contenido + ' ' + noticia.titulo);
   const cierreGenerico = detectarCierreGenerico(noticia.contenido);
-  const aiMetrics = detectarMetricasIA(noticia.contenido);
 
   // ─── CHECKS UNIFICADOS (mismos 8 que el panel) ───
   const textoPlano = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -300,15 +227,24 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   const tieneCitasAtribuidas2 = (noticia.contenido.match(/<cite[^>]*>[^]*?<\/cite>/gi) || []).length >= 1;
   const passFuentesPrincipal = blockquotes2 >= 1 || tieneAtribucionTexto || tieneCitasAtribuidas2;
 
+  // ─── DENSIDAD DE DATOS VERIFICABLES (auditoría quirúrgica) ───
+  const nombresPropios = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+  const instituciones = (textoLower.match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal)\b/g) || []).length;
+  const datosConcretos = (textoPlano.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
+    + (textoPlano.match(/\bC?\$\s*\d{1,3}(?:,\d{3})*\b/g) || []).length
+    + (textoPlano.match(/\b\d{2,3}\s+(kilómetros?|km|metros?|m|años?|frascos?|personas?|heridos?|afectados?|fallecidos?)\b/gi) || []).length;
+  const densidadVerificable = nombresPropios + instituciones + datosConcretos;
+  const esNotaVerificable = densidadVerificable >= 3;
+
   const checks = [
-    { nombre: 'Extension ≥350 palabras', pasa: palabrasTotales >= 350 },
+    { nombre: 'Extensión verificable', pasa: palabrasTotales >= 250 || (palabrasTotales >= 150 && esNotaVerificable) },
     { nombre: 'Lead ≥10 palabras', pasa: leadPalabras >= 10 },
-    { nombre: 'Subtitulos (h2) ≥1', pasa: h2s >= 1 },
+    { nombre: 'Estructura o densidad', pasa: h2s >= 1 || (palabrasTotales < 350 && esNotaVerificable) },
     { nombre: 'Negritas / datos clave', pasa: strongs >= 1 },
-    { nombre: 'Citas o atribucion', pasa: passFuentesPrincipal },
-    { nombre: 'Titulo SEO 20-90 chars', pasa: tituloLen >= 20 && tituloLen <= 90 },
+    { nombre: 'Citas o atribución', pasa: passFuentesPrincipal },
+    { nombre: 'Título SEO 20-90 chars', pasa: tituloLen >= 20 && tituloLen <= 90 },
     { nombre: 'Meta 50-300 chars', pasa: resumenLen >= 50 && resumenLen <= 300 },
-    { nombre: 'Imagen destacada', pasa: true }, // Relajado: no bloquear por imagen faltante
+    { nombre: 'Imagen destacada', pasa: true },
   ];
   const checksOK = checks.filter(c => c.pasa).length;
 
@@ -319,12 +255,10 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     news: analizarFiltroNews(noticia),
     seo: analizarFiltroSEO(noticia),
     eeat: analizarFiltroEEAT(noticia),
-    aiRisk: analizarFiltroAIRisk(noticia),
+    valorEditorial: analizarFiltroValorEditorial(noticia),
   };
 
   // ─── CÁLCULO DE PUNTUACIÓN — Promedio de los 7 filtros unificados ───
-  // Los filtros individuales ya evalúan todo: ORO, AdSense, Discover, News, SEO, E-E-A-T, AI Risk.
-  // El score total refleja el promedio real de esos filtros, no una fórmula paralela desconectada.
   const filtrosScores = [
     filtros.oro.puntuacion,
     filtros.adsense.puntuacion,
@@ -332,31 +266,24 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     filtros.news.puntuacion,
     filtros.seo.puntuacion,
     filtros.eeat.puntuacion,
-    filtros.aiRisk.puntuacion,
+    filtros.valorEditorial.puntuacion,
   ];
   const scoreTotal = Math.round(filtrosScores.reduce((a, b) => a + b, 0) / filtrosScores.length);
 
-  const aiRiskScore = filtros.aiRisk.puntuacion;
-  const aiRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' = aiRiskScore >= 80 ? 'LOW' : aiRiskScore >= 50 ? 'MEDIUM' : 'HIGH';
-  const aiRiskIssues = filtros.aiRisk.checks
-    .filter(c => c.estado === 'FAIL' || c.estado === 'WARN')
-    .map(c => c.mensaje);
-
-  // ─── DETERMINACIÓN DE NIVEL v5.0 — UNIFICADO: fuente de verdad = 8 checks del panel ───
-  // Todos los evaluadores usan los mismos 8 checks:
-  //   FORENSE:  8/8 checks + score ≥ 70 + 0 adjetivos + ≤1 transicion + AI risk LOW
+  // ─── DETERMINACIÓN DE NIVEL v6.0 — Auditoría quirúrgica aplicada ───
+  //   FORENSE:  8/8 checks + score ≥ 70 + 0 adjetivos + ≤1 transición + valorEditorial aprobado
   //   ORO:      8/8 checks
   //   PLATA:    6-7/8 checks
   //   BRONCE:   4-5/8 checks
-  //   RECHAZADO: <4/8 checks O H2s repetidos
+  //   RECHAZADO: <4/8 checks
 
-  const esRechazado = checksOK < 4 || aiMetrics.h2_repetidos > 0;
+  const esRechazado = checksOK < 4;
   const esForense = checksOK === 8 &&
     scoreTotal >= 70 &&
     !atribucionesFalsas &&
     adjetivosEncontrados.length === 0 &&
     transicionesEncontradas.length <= 1 &&
-    aiRiskLevel === 'LOW';
+    filtros.valorEditorial.aprobado;
 
   let nivel: ResultadoAnalisis['nivel'];
   if (esRechazado) nivel = 'RECHAZADO';
@@ -372,12 +299,8 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     aprobado,
     nivel,
     puntuacion: scoreTotal,
-    aiRiskScore,
-    aiRiskLevel,
-    aiRiskIssues,
     palabrasSensiblesDetectadas,
     cierreGenerico,
-    aiMetrics,
     filtros,
     accionesRequeridas: generarAcciones(filtros, palabrasSensiblesDetectadas, cierreGenerico),
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
@@ -396,16 +319,24 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   const palabraCount = palabras.length;
 
   // 1. Extension adecuada (verificabilidad > longitud)
+  // Densidad de datos verificables para evaluar extensión
+  const nombresOro = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+  const instOro = (textoPlano.toLowerCase().match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal)\b/g) || []).length;
+  const datosOro = (textoPlano.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
+    + (textoPlano.match(/\bC?\$\s*\d{1,3}(?:,\d{3})*\b/g) || []).length;
+  const densidadOro = nombresOro + instOro + datosOro;
+  const esVerificableOro = densidadOro >= 3;
+
   checks.push({
     nombre: 'Extension adecuada',
-    estado: palabraCount >= 200 ? 'PASS' : palabraCount >= 150 ? 'WARN' : 'FAIL',
-    mensaje: palabraCount >= 200
-      ? `${palabraCount} palabras. Extension adecuada.`
+    estado: palabraCount >= 200 || (palabraCount >= 150 && esVerificableOro) ? 'PASS' : palabraCount >= 150 ? 'WARN' : 'FAIL',
+    mensaje: palabraCount >= 200 || (palabraCount >= 150 && esVerificableOro)
+      ? `${palabraCount} palabras. Extensión adecuada con datos verificables.`
       : palabraCount >= 150
         ? `${palabraCount} palabras. Aceptable para noticias breves.`
         : `Solo ${palabraCount} palabras. Muy corta para ser informativa.`,
     valorActual: palabraCount,
-    valorEsperado: '>=200',
+    valorEsperado: '>=150 con datos verificables',
   });
 
   // 2. Lead (primer parrafo) — funciona con HTML o texto plano
@@ -520,10 +451,12 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   
   checks.push({
     nombre: 'Estructura (h2)',
-    estado: h2s >= 1 ? 'PASS' : 'WARN',
-    mensaje: h2s >= 1 ? `${h2s} subtitulos detectados.` : `Sin subtitulos. Opcional si la noticia es breve.`,
+    estado: h2s >= 1 || (palabraCount < 300 && esVerificableOro) ? 'PASS' : 'WARN',
+    mensaje: h2s >= 1 || (palabraCount < 300 && esVerificableOro)
+      ? `${h2s} subtítulos. Nota breve verificable: subtítulos opcionales.`
+      : `Sin subtítulos. Opcional si la noticia es breve y verificable.`,
     valorActual: h2s,
-    valorEsperado: '>=0',
+    valorEsperado: '>=0 (opcional para notas breves)',
   });
   checks.push({
     nombre: 'Negritas (strong)',
@@ -547,7 +480,10 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
 // ───────────────────────────────────────────────
 
 function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
-  const checks: CheckItem[] = [];
+  // El puntaje de AdSense se basa en Valor Editorial Real + seguridad programática
+  const ve = analizarFiltroValorEditorial(n);
+  const checks: CheckItem[] = [...ve.checks];
+
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const palabraCount = textoPlano.split(' ').filter(p => p.length > 0).length;
 
@@ -587,17 +523,6 @@ function analizarFiltroAdSense(n: NoticiaInput): FiltroResultado {
     mensaje: `Ratio de unicidad: ${(ratioUnicidad * 100).toFixed(1)}%.`,
     valorActual: `${(ratioUnicidad * 100).toFixed(1)}%`,
     valorEsperado: '>=40%',
-  });
-
-  // 4. Contenido generado sin revision
-  const patronesIA = TRANSICIONES_IA.filter(t => textoPlano.toLowerCase().includes(t.toLowerCase()));
-  const estadoRevision = patronesIA.length === 0 ? 'PASS' : (patronesIA.length <= 2 ? 'WARN' : 'FAIL');
-  checks.push({
-    nombre: 'Revision editorial',
-    estado: estadoRevision,
-    mensaje: patronesIA.length === 0
-      ? 'Sin patrones de IA detectados.'
-      : `Patrones IA detectados: ${patronesIA.length}. Requiere revision humana.`,
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
@@ -808,178 +733,78 @@ function analizarFiltroEEAT(n: NoticiaInput): FiltroResultado {
 // - Simetría de longitud de párrafos (todos miden lo mismo)
 // - Uniformidad de longitud de frases (misma cadencia)
 // - Estructura de H2 simétrica (misma estructura por sección)
-// - Exceso de patrón enumerativo ("además... también... asimismo...")
+// ───────────────────────────────────────────────
+// NIVEL 7: VALOR EDITORIAL REAL (Auditoría Quirúrgica)
+// Reemplaza el antiguo "AI Risk" — no mide estilo, mide sustancia.
 // ───────────────────────────────────────────────
 
-function analizarFiltroAIRisk(n: NoticiaInput): FiltroResultado {
+function analizarFiltroValorEditorial(n: NoticiaInput): FiltroResultado {
   const checks: CheckItem[] = [];
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const textoLower = textoPlano.toLowerCase();
 
-  // 1. REPETICIÓN DE VERBOS OPERATIVOS entre secciones
-  // Detecta patrones como "Las autoridades X... Las autoridades Y... Las autoridades Z..."
-  const verbosOperativos = ['realizaron', 'ejecutaron', 'reportaron', 'confirmaron', 'informaron',
-    'destacaron', 'indicaron', 'señalaron', 'manifestaron', 'declararon',
-    'explicaron', 'mencionaron', 'precisaron', 'aseguraron', 'agregaron',
-    'anunciaron', 'revelaron', 'detallaron', 'expresaron', 'comentaron'];
-  const contenidoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  // Contar cuántas veces aparece cada verbo
-  const verbosRepetidos = verbosOperativos.filter(v => {
-    const matches = contenidoLower.match(new RegExp(`\\b${v}\\b`, 'g'));
-    return matches && matches.length >= 2;
-  });
-  const sujetoRepetido = /las autoridades|los funcionarios|el ministerio|la policia|la institucion/gi;
-  const sujetoMatches = textoPlano.match(sujetoRepetido) || [];
-  const sujetoCount = sujetoMatches.length;
-  const verbRisk = verbosRepetidos.length >= 3 || (verbosRepetidos.length >= 2 && sujetoCount >= 3);
+  // 1. ORIGEN — ¿aporta algo propio o es reformulación pura?
+  const tieneFuentePropia = /\bsegún\s+(?:pudo\s+constatar|pudo\s+verificar|pudo\s+confirmar)\s+este\s+medio\b|\bpudo\s+constatar\s+este\s+medio\b|\bfuentes\s+de\s+este\s+medio\b|\bredacción\b|\binformate\b/i.test(textoLower);
+  const tieneCitaEspecifica = /\bsegún\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}\b|\bde\s+acuerdo\s+con\s+[A-ZÁÉÍÓÚÑ]\b|\btestigo|familiar|vecino|habitante|comerciante|conductor|pasajero\b/i.test(textoLower);
+  const tieneAtribucionVaga = /\bsegún\s+medios\s+locales?\b|\bsegún\s+informes\b|\bsegún\s+fuentes\b|\bsegún\s+versiones\b|\bde\s+acuerdo\s+a\s+reportes\b/i.test(textoLower);
   checks.push({
-    nombre: 'Repetición de verbos operativos',
-    estado: verbRisk ? 'FAIL' : verbosRepetidos.length >= 1 ? 'WARN' : 'PASS',
-    mensaje: verbRisk
-      ? `ALTO RIESGO IA: ${verbosRepetidos.length} verbos repetidos (${verbosRepetidos.slice(0, 3).join(', ')}). Sujeto repetido ${sujetoCount}x. Variar verbos y sujetos.`
-      : verbosRepetidos.length >= 1
-        ? `Verbo repetido: ${verbosRepetidos.join(', ')}. Considerar variar.`
-        : 'Sin repetición problemática de verbos operativos.',
-    valorActual: verbosRepetidos.length,
-    valorEsperado: 0,
+    nombre: 'Origen — aporte propio',
+    estado: tieneFuentePropia || tieneCitaEspecifica ? 'PASS' : tieneAtribucionVaga ? 'WARN' : 'FAIL',
+    mensaje: tieneFuentePropia
+      ? 'Reporteo propio declarado o fuentes identificables.'
+      : tieneCitaEspecifica
+        ? 'Atribución a fuente con nombre o cargo.'
+        : tieneAtribucionVaga
+          ? 'Atribución vaga ("según medios locales"). Agregar fuente concreta si es posible.'
+          : 'Sin indicación de origen. ¿Es reformulación de otro medio sin aporte propio?',
   });
 
-  // 2. SIMETRÍA DE PÁRRAFOS (uniformidad de longitud)
-  const parrafosHtml = n.contenido.match(/<p>([\s\S]*?)<\/p>/gi) || [];
-  const parrafosTexto = parrafosHtml.length > 0
-    ? parrafosHtml.map(p => p.replace(/<[^>]*>/g, '').trim()).filter(p => p.length > 10)
-    : textoPlano.split(/\n\s*\n/).filter(p => p.trim().length > 10);
-  if (parrafosTexto.length >= 3) {
-    const longitudes = parrafosTexto.map(p => p.split(/\s+/).filter(w => w.length > 0).length);
-    const media = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-    const desviacion = Math.sqrt(longitudes.reduce((sum, l) => sum + Math.pow(l - media, 2), 0) / longitudes.length);
-    const cv = media > 0 ? desviacion / media : 0; // Coeficiente de variación
-    // CV < 0.15 = párrafos casi idénticos en longitud = patrón IA
-    const paragraphSymmetry = cv < 0.15;
-    checks.push({
-      nombre: 'Simetría de párrafos',
-      estado: paragraphSymmetry ? 'FAIL' : cv < 0.25 ? 'WARN' : 'PASS',
-      mensaje: paragraphSymmetry
-        ? `ALTO RIESGO IA: Párrafos de longitud casi idéntica (CV=${(cv * 100).toFixed(0)}%). Romper simetría: alternar párrafos cortos y largos.`
-        : cv < 0.25
-          ? `Párrafos algo uniformes (CV=${(cv * 100).toFixed(0)}%). Considerar variar más.`
-          : `Variación natural de longitud entre párrafos (CV=${(cv * 100).toFixed(0)}%).`,
-      valorActual: `${(cv * 100).toFixed(0)}%`,
-      valorEsperado: '>25%',
-    });
-  } else {
-    checks.push({
-      nombre: 'Simetría de párrafos',
-      estado: 'PASS',
-      mensaje: 'Menos de 3 párrafos — no aplica análisis de simetría.',
-    });
-  }
-
-  // 3. UNIFORMIDAD DE LONGITUD DE FRASES
-  const frases = textoPlano.split(/[.!?]+/).map(f => f.trim()).filter(f => f.split(/\s+/).length >= 3);
-  if (frases.length >= 5) {
-    const longitudesFrase = frases.map(f => f.split(/\s+/).filter(w => w.length > 0).length);
-    const mediaFrase = longitudesFrase.reduce((a, b) => a + b, 0) / longitudesFrase.length;
-    const desvFrase = Math.sqrt(longitudesFrase.reduce((sum, l) => sum + Math.pow(l - mediaFrase, 2), 0) / longitudesFrase.length);
-    const cvFrase = mediaFrase > 0 ? desvFrase / mediaFrase : 0;
-    const sentenceUniformity = cvFrase < 0.20;
-    checks.push({
-      nombre: 'Uniformidad de cadencia de frases',
-      estado: sentenceUniformity ? 'FAIL' : cvFrase < 0.30 ? 'WARN' : 'PASS',
-      mensaje: sentenceUniformity
-        ? `ALTO RIESGO IA: Frases de longitud uniforme (CV=${(cvFrase * 100).toFixed(0)}%). La IA escribe frases de longitud similar. Alternar frases cortas (5-10 palabras) con largas (20+).`
-        : cvFrase < 0.30
-          ? `Frases algo uniformes (CV=${(cvFrase * 100).toFixed(0)}%). Variar más.`
-          : `Ritmo natural de frases (CV=${(cvFrase * 100).toFixed(0)}%).`,
-      valorActual: `${(cvFrase * 100).toFixed(0)}%`,
-      valorEsperado: '>30%',
-    });
-  } else {
-    checks.push({
-      nombre: 'Uniformidad de cadencia de frases',
-      estado: 'PASS',
-      mensaje: 'Menos de 5 frases — no aplica análisis de cadencia.',
-    });
-  }
-
-  // 4. H2s REPETIDOS EXACTOS (patrón de IA en bucle)
-  const h2MatchesDup = n.contenido.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
-  const h2TextsDup = h2MatchesDup.map(h => {
-    const m = h.match(/<h2[^>]*>(.*?)<\/h2>/i);
-    return m ? m[1].trim().toLowerCase().replace(/\s+/g, ' ') : '';
-  }).filter(t => t.length > 0);
-  const h2CountsDup = new Map<string, number>();
-  for (const t of h2TextsDup) h2CountsDup.set(t, (h2CountsDup.get(t) || 0) + 1);
-  const dupH2s = Array.from(h2CountsDup.entries()).filter(([, c]) => c > 1);
-  const totalDupH2s = dupH2s.reduce((sum, [, c]) => sum + c, 0);
-  if (dupH2s.length > 0) {
-    checks.push({
-      nombre: 'H2s repetidos exactos',
-      estado: 'FAIL',
-      mensaje: 'RECHAZADO: ' + dupH2s.length + ' subtítulo(s) repetido(s) exactamente (' + totalDupH2s + ' ocurrencias): ' + dupH2s.map(([t, c]) => '"' + t + '" (' + c + 'x)').join(', ') + '. Cada H2 debe ser único.',
-      valorActual: totalDupH2s,
-      valorEsperado: 0,
-    });
-  } else {
-    checks.push({
-      nombre: 'H2s repetidos exactos',
-      estado: 'PASS',
-      mensaje: 'Sin subtítulos repetidos.',
-    });
-  }
-
-  // 5. ESTRUCTURA H2 SIMÉTRICA (mismos tipos de contenido por sección)
-  const h2Matches = n.contenido.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
-  if (h2Matches.length >= 3) {
-    const h2Textos = h2Matches.map(h => h.replace(/<[^>]*>/g, '').trim().toLowerCase());
-    // Detectar si todos los H2 siguen el mismo patrón (ej: todos empiezan con mismo tipo de palabra)
-    const primerosTokens = h2Textos.map(h => h.split(/\s+/)[0] || '');
-    const tokensUnicos = new Set(primerosTokens);
-    const tokenRepetido = primerosTokens.length - tokensUnicos.size >= 2; // 2+ H2 empiezan igual
-    // Detectar si todos los H2 tienen longitud similar
-    const h2Longitudes = h2Textos.map(h => h.length);
-    const h2Media = h2Longitudes.reduce((a, b) => a + b, 0) / h2Longitudes.length;
-    const h2Cv = h2Media > 0 ? Math.sqrt(h2Longitudes.reduce((s, l) => s + Math.pow(l - h2Media, 2), 0) / h2Longitudes.length) / h2Media : 0;
-    const h2Symmetry = tokenRepetido || h2Cv < 0.15;
-    checks.push({
-      nombre: 'Simetría de estructura H2',
-      estado: h2Symmetry ? 'WARN' : 'PASS',
-      mensaje: h2Symmetry
-        ? `RIESGO IA: Subtítulos con estructura simétrica${tokenRepetido ? ` (inician igual: "${[...tokensUnicos].filter(t => primerosTokens.filter(p => p === t).length >= 2).join('", "')}")` : ''}. Variar estilo: unos narrativos, otros técnicos, otros analíticos.`
-        : `Variación natural en estructura de subtítulos.`,
-      valorActual: h2Cv < 0.15 ? 'simétrico' : 'variado',
-      valorEsperado: 'variado',
-    });
-  } else {
-    checks.push({
-      nombre: 'Simetría de estructura H2',
-      estado: 'PASS',
-      mensaje: 'Menos de 3 subtítulos — no aplica análisis de simetría H2.',
-    });
-  }
-
-  // 5. EXCESO DE PATRÓN ENUMERATIVO
-  const marcadoresEnumerativos = ['ademas', 'tambien', 'asimismo', 'igualmente', 'de igual manera',
-    'por otro lado', 'por su parte', 'en cuanto a', 'no obstante', 'sin embargo',
-    'de igual forma', 'del mismo modo', 'a su vez', 'por ende', 'en consecuencia',
-    'por lo tanto', 'cabe señalar', 'vale la pena'];
-  const marcadoresEncontrados = marcadoresEnumerativos.filter(m => contenidoLower.includes(m));
-  const enumerativeExcess = marcadoresEncontrados.length >= 5;
+  // 2. FUENTE REAL — nombre/cargo/institución citado
+  const nombresPropios = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+  const instituciones = (textoLower.match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal)\b/g) || []).length;
+  const passFuenteReal = nombresPropios >= 1 || instituciones >= 1 || tieneFuentePropia;
   checks.push({
-    nombre: 'Exceso de patrón enumerativo',
-    estado: enumerativeExcess ? 'FAIL' : marcadoresEncontrados.length >= 3 ? 'WARN' : 'PASS',
-    mensaje: enumerativeExcess
-      ? `ALTO RIESGO IA: ${marcadoresEncontrados.length} marcadores enumerativos (${marcadoresEncontrados.slice(0, 4).join(', ')}). La IA encadena ideas con conectores. Reducir a máximo 2.`
-      : marcadoresEncontrados.length >= 3
-        ? `${marcadoresEncontrados.length} marcadores enumerativos. Considerar reducir.`
-        : `Uso moderado de conectores (${marcadoresEncontrados.length}).`,
-    valorActual: marcadoresEncontrados.length,
-    valorEsperado: '<=2',
+    nombre: 'Fuente real identificable',
+    estado: passFuenteReal ? 'PASS' : 'FAIL',
+    mensaje: passFuenteReal
+      ? `${nombresPropios} nombre(s) propio(s), ${instituciones} institución(es) citada(s).`
+      : 'No se detecta ningún nombre, cargo ni institución citada. Riesgo de contenido no verificable.',
+  });
+
+  // 3. EXTENSIÓN JUSTIFICADA — cada párrafo aporta un dato nuevo
+  const parrafos = n.contenido.match(/<p>([\s\S]*?)<\/p>/gi) || [];
+  const parrafosTexto = parrafos.map(p => p.replace(/<[^>]*>/g, '').trim()).filter(p => p.length > 10);
+  let parrafosSinDato = 0;
+  const datosRegex = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+|\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\bC?\$\s*\d+|\b\d{2,3}\s+(kilómetros?|km|metros?|m|años?|frascos?|personas?|heridos?|afectados?|fallecidos?)\b|\b(Managua|Granada|León|Masaya|Estelí|Chinandega|Matagalpa|Jinotega|Rivas|Carazo|Madriz|Nueva\s+Segovia|Boaco|Chontales|San\s+Juan\s+del\s+Norte|Río\s+San\s+Juan|RAAS|RACCN)\b/gi;
+  for (const p of parrafosTexto) {
+    if (!datosRegex.test(p)) parrafosSinDato++;
+  }
+  const passExtension = parrafosTexto.length === 0 || parrafosSinDato === 0;
+  checks.push({
+    nombre: 'Extensión justificada — dato por párrafo',
+    estado: passExtension ? 'PASS' : parrafosSinDato <= 1 ? 'WARN' : 'FAIL',
+    mensaje: passExtension
+      ? 'Cada párrafo aporta al menos un dato concreto.'
+      : `${parrafosSinDato} párrafo(s) sin dato nuevo identificable. Revisar: ¿qué aporta cada párrafo?`,
+  });
+
+  // 4. SIN DATOS INVENTADOS — atribuciones falsas a instituciones o fuentes anónimas sin sustento
+  const atribucionesFalsasDetectadas = /\b(la\s+policía\s+(?:informó|confirmó)|las\s+autoridades\s+(?:confirmaron|informaron)|el\s+ministerio\s+de\s+salud\s+(?:precisó|confirmó)|la\s+alcaldía\s+(?:informó|confirmó))\b/i.test(textoLower);
+  const fuentesAnonimas = /\bsegún\s+fuentes\s+anónimas\b|\bsegún\s+informantes\s+anónimos\b/i.test(textoLower);
+  checks.push({
+    nombre: 'Sin datos inventados',
+    estado: !atribucionesFalsasDetectadas && !fuentesAnonimas ? 'PASS' : 'FAIL',
+    mensaje: atribucionesFalsasDetectadas
+      ? 'Atribución falsa a institución estatal sin comunicado verificable. Corregir o sustentar.'
+      : fuentesAnonimas
+        ? 'Fuentes anónimas sin sustento. Usar "según el reporte" o "sin confirmación oficial" si el dato no es verificable.'
+        : 'Sin indicios de datos inventados.',
   });
 
   const puntuacion = checks.filter(c => c.estado === 'PASS').length / checks.length * 100;
   const fails = checks.filter(c => c.estado === 'FAIL').length;
   return {
-    aprobado: puntuacion >= 60 && fails === 0,
+    aprobado: fails === 0,
     puntuacion: Math.round(puntuacion),
     checks,
   };
@@ -1014,8 +839,8 @@ function generarAcciones(
   if (!filtros.eeat.aprobado) {
     acciones.push('EEAT: Revisar atribuciones a instituciones (no inventar fuentes estatales)');
   }
-  if (!filtros.aiRisk.aprobado) {
-    acciones.push('Riesgo IA: Variar verbos, romper simetría de párrafos, alternar longitud de frases, reducir conectores enumerativos');
+  if (!filtros.valorEditorial.aprobado) {
+    acciones.push('Valor Editorial: Revisar origen del dato, fuentes identificables, extensión justificada y evitar datos inventados');
   }
 
   if (palabrasSensibles && palabrasSensibles.length > 0) {
@@ -1075,7 +900,7 @@ function extraerKeywordsLSI(n: NoticiaInput): string[] {
     .replace(/[áéíóúÁÉÍÓÚ]/g, a => ({'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'}[a] || a))
     .split(/[^a-zñáéíóú]+/)
     .filter(w => w.length >= 5 && !stopWords.has(w));
-  const delTitulo = [...new Set(palabrasTitulo)];
+  const delTitulo = Array.from(new Set(palabrasTitulo));
 
   // Unificar sin duplicados, priorizando del mapa y del usuario
   const unicas = Array.from(new Set([...delMapa, ...delUsuario, ...delTitulo]));

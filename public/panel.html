@@ -3851,9 +3851,10 @@ sin texto ni marcas de agua, composición periodística"
       // 3) Consultar backend
       let serverInfo = null;
       try {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
           body: JSON.stringify({ titulo, contenido, resumen, categoria, imagenDestacada: imagen, slug: '', autor: 'Keyling Elieth Rivera Muñoz' })
         });
         if (resp.ok) {
@@ -6756,7 +6757,7 @@ VERIFICACIÓN FINAL
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // ANALIZADOR FORENSE — 7 NIVELES (incluye detector de riesgo IA)
+    // ANALIZADOR FORENSE — 6 NIVELES (AdSense, Discover, News, SEO, E-E-A-T, Valor Editorial)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarAnalisisForense = async function() {
       const titulo = document.getElementById('titulo').value.trim();
@@ -6773,12 +6774,13 @@ VERIFICACIÓN FINAL
       const panel = document.getElementById('panelAnalisisForense');
       const resultado = document.getElementById('resultadoAnalisisForense');
       panel.style.display = 'block';
-      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 7 niveles (incluye detector IA)...</div>';
+      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 6 niveles de calidad...</div>';
 
       try {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
           body: JSON.stringify({ titulo, contenido, resumen, categoria, imagenDestacada: imagenUrl, slug: '', autor: 'Keyling Elieth Rivera Muñoz' })
         });
         const data = await resp.json();
@@ -6810,11 +6812,11 @@ VERIFICACIÓN FINAL
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[nivel] + ';">' + iconoNivel[nivel] + ' NIVEL ' + nivel + '</h3>';
       html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + data.puntuacion + '/100</p></div>';
-      const aiColors = { 'LOW': '#16a34a', 'MEDIUM': '#d97706', 'HIGH': '#dc2626' };
-      const aiBg = { 'LOW': '#dcfce7', 'MEDIUM': '#fef3c7', 'HIGH': '#fee2e2' };
-      const aiLabels = { 'LOW': '🟢 Riesgo IA: BAJO', 'MEDIUM': '🟡 Riesgo IA: MEDIO', 'HIGH': '🔴 Riesgo IA: ALTO' };
-      const aiL = data.aiRiskLevel || 'LOW';
-      html += '<div style="text-align:right;"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:' + aiBg[aiL] + ';color:' + aiColors[aiL] + ';margin-bottom:4px;display:inline-block;">' + aiLabels[aiL] + '</span><br>';
+      const veAprobado = data.filtros && data.filtros.valorEditorial && data.filtros.valorEditorial.aprobado;
+      const veColor = veAprobado ? '#16a34a' : '#dc2626';
+      const veBg = veAprobado ? '#dcfce7' : '#fee2e2';
+      const veLabel = veAprobado ? '✅ Valor Editorial: APROBADO' : '❌ Valor Editorial: RECHAZADO';
+      html += '<div style="text-align:right;"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:' + veBg + ';color:' + veColor + ';margin-bottom:4px;display:inline-block;">' + veLabel + '</span><br>';
       html += '<span style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:' + colorNivel[nivel] + ';color:white;">' + (data.aprobado ? 'APROBADO' : 'NO PUBLICAR') + '</span></div>';
       html += '</div></div>';
 
@@ -6865,20 +6867,6 @@ VERIFICACIÓN FINAL
           html += '<div style="color:#9a3412;font-style:italic;font-size:11px;">Contexto: "...' + p.contexto + '..."</div>';
           html += '</div>';
         });
-        html += '</div></div>';
-      }
-
-      // MÉTRICAS IA DETALLADAS
-      if (data.aiMetrics) {
-        html += '<div style="background:#f3f4f6;border:1px solid #9ca3af;border-radius:8px;padding:12px;margin-top:16px;">';
-        html += '<h4 style="margin:0 0 8px;font-size:13px;color:#374151;"><i class="fas fa-robot"></i> Métricas de detector IA:</h4>';
-        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:11px;">';
-        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Repetición verbos:</strong> ' + (data.aiMetrics.repeticion_verbos * 100).toFixed(1) + '%</div>';
-        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Simetría párrafos:</strong> ' + (data.aiMetrics.simetria_parrafos * 100).toFixed(1) + '%</div>';
-        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Cadencia:</strong> ' + (data.aiMetrics.cadencia_oraciones * 100).toFixed(1) + '%</div>';
-        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Simetría H2:</strong> ' + (data.aiMetrics.simetria_h2 * 100).toFixed(1) + '%</div>';
-        html += '<div style="background:#fff;border-radius:4px;padding:6px;"><strong>Enumerativos:</strong> ' + (data.aiMetrics.exceso_enumerativo * 100).toFixed(1) + '%</div>';
-        html += '<div style="background:' + (data.aiMetrics.h2_repetidos > 0 ? '#fee2e2' : '#fff') + ';border-radius:4px;padding:6px;"><strong>H2s repetidos:</strong> ' + (data.aiMetrics.h2_repetidos || 0) + (data.aiMetrics.h2_repetidos > 0 ? ' ❌' : ' ✅') + '</div>';
         html += '</div></div>';
       }
 
