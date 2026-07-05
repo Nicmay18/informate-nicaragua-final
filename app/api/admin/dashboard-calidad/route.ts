@@ -232,8 +232,7 @@ async function computeDashboardMetrics() {
       ctaPct * 0.10
     ));
 
-    // Score Monetización AdSense (0-100): sin thin + sin emocional + con autor + con imagen + estructura rica + recursos + evergreen
-    const conEmocional = 0; // ya limpiamos, se puede integrar auditoría forense posteriormente
+    // Score Monetización AdSense (0-100): sin thin + con autor + con imagen + estructura rica + recursos + evergreen
     const scoreMonetizacion = Math.min(100, Math.round(
       (thinCount === 0 ? 25 : Math.max(0, 25 - (thinCount / total) * 100)) +
       (sinAutor === 0 ? 15 : Math.max(0, 15 - (sinAutor / total) * 75)) +
