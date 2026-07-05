@@ -43,6 +43,16 @@ interface MetricasCalidad {
   problemasCriticos: string[];
   problemasAdvertencia: string[];
   recomendaciones: string[];
+  // Métricas de contenido de valor y monetización
+  tiempoLecturaPromedio: number;
+  estructuraRica: { count: number; porcentaje: number; };
+  conDatosEstadisticos: { count: number; porcentaje: number; };
+  conRecursosUtiles: { count: number; porcentaje: number; };
+  conCTA: { count: number; porcentaje: number; };
+  scoreRetencion: number;
+  scoreMonetizacion: number;
+  contenidoEvergreen: { count: number; porcentaje: number; };
+  densidadValor: number;
 }
 
 async function computeDashboardMetrics() {
@@ -63,6 +73,13 @@ async function computeDashboardMetrics() {
     let frescas = 0;
     const totalAutoresUnicos = new Set<string>();
     let totalFuentes = 0;
+    let totalTiempoLectura = 0;
+    let estructuraRicaCount = 0;
+    let datosEstadisticosCount = 0;
+    let recursosUtilesCount = 0;
+    let ctaCount = 0;
+    let evergreenCount = 0;
+    let totalValorWords = 0;
 
     const thinIds: string[] = [];
     const thinDetails: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}> = [];
@@ -126,6 +143,37 @@ async function computeDashboardMetrics() {
       const linksExternos = (contenidoRaw.match(/href="https?:\/\//gi) || []).length;
       if (linksExternos >= 1 || (contenidoRaw.match(/<blockquote>/gi) || []).length >= 1) totalFuentes++;
 
+      // Tiempo de lectura estimado (200 palabras/minuto)
+      totalTiempoLectura += Math.max(1, Math.ceil(palabras / 200));
+
+      // Estructura rica: listas, tablas, blockquotes, imágenes, videos
+      const tieneListas = (contenidoRaw.match(/<(ul|ol|li|table|tr|td)>/gi) || []).length >= 1;
+      const tieneCitas = (contenidoRaw.match(/<blockquote>/gi) || []).length >= 1;
+      const tieneImagenes = (contenidoRaw.match(/<img/gi) || []).length >= 1 || !!data.imagen;
+      const tieneVideos = (contenidoRaw.match(/<(iframe|video)/gi) || []).length >= 1;
+      if (tieneListas || tieneCitas || tieneImagenes || tieneVideos) estructuraRicaCount++;
+
+      // Datos/estadísticas: números, porcentajes, fechas específicas, montos
+      const tieneDatos = /\b\d{1,3}(\.\d{3})*\b|\b\d+%|\b\d+\.\d+%|\bC\$\s*\d+|USD\s*\d+|\d{4}/i.test(contenido);
+      if (tieneDatos) datosEstadisticosCount++;
+
+      // Recursos útiles: teléfonos, emails, links de ayuda, consejos prácticos
+      const tieneRecursos = /118|128|115|133|denunciar|emergencia|prevencion|consejo|recomendacion|teléfono|contacto|soporte|ayuda/i.test(contenidoRaw);
+      if (tieneRecursos) recursosUtilesCount++;
+
+      // CTAs: llamadas a la acción para engagement
+      const tieneCTA = /comparte|síguenos|suscríbete|comenta|compartir|follow|subscribe|comment|dejanos|tu opinion|interactúa/i.test(contenidoRaw + ' ' + titulo);
+      if (tieneCTA) ctaCount++;
+
+      // Evergreen: no es suceso efímero, tiene datos/estadísticas + recursos + >400 palabras
+      const esSuceso = (data.categoria || '').toLowerCase() === 'sucesos';
+      const tieneEvergreenValue = palabras >= 400 && (tieneDatos || tieneRecursos || tieneListas);
+      if (!esSuceso || tieneEvergreenValue) evergreenCount++;
+
+      // Densidad de valor: palabras en recursos / total (proxy)
+      const valorWords = (contenido.match(/\b(policía|bomberos|hospital|salud|prevención|consejo|recomendación|dato|estadística|estudio|investigación|experto|especialista|fuente|teléfono|contacto|emergencia)\b/gi) || []).length;
+      totalValorWords += valorWords;
+
       const cat = data.categoria || 'Sin categoria';
       categorias[cat] = (categorias[cat] || 0) + 1;
     }
@@ -166,14 +214,45 @@ async function computeDashboardMetrics() {
       scoreEeat * 0.05
     );
 
-    // Score Maestro: promedio ponderado con SEO internacional
+    // Métricas de contenido de valor
+    const tiempoLecturaPromedio = Math.round(totalTiempoLectura / total);
+    const estructuraRicaPct = Math.round((estructuraRicaCount / total) * 100);
+    const datosPct = Math.round((datosEstadisticosCount / total) * 100);
+    const recursosPct = Math.round((recursosUtilesCount / total) * 100);
+    const ctaPct = Math.round((ctaCount / total) * 100);
+    const evergreenPct = Math.round((evergreenCount / total) * 100);
+    const densidadValor = Math.round((totalValorWords / totalPalabras) * 1000); // por cada 1000 palabras
+
+    // Score Retención (0-100): estructura rica + tiempo lectura + recursos + datos + CTAs
+    const scoreRetencion = Math.min(100, Math.round(
+      estructuraRicaPct * 0.30 +
+      Math.min(100, tiempoLecturaPromedio * 10) * 0.20 + // 10 min = 100 puntos
+      recursosPct * 0.25 +
+      datosPct * 0.15 +
+      ctaPct * 0.10
+    ));
+
+    // Score Monetización AdSense (0-100): sin thin + sin emocional + con autor + con imagen + estructura rica + recursos + evergreen
+    const conEmocional = 0; // ya limpiamos, se puede integrar auditoría forense posteriormente
+    const scoreMonetizacion = Math.min(100, Math.round(
+      (thinCount === 0 ? 25 : Math.max(0, 25 - (thinCount / total) * 100)) +
+      (sinAutor === 0 ? 15 : Math.max(0, 15 - (sinAutor / total) * 75)) +
+      (sinImagen === 0 ? 15 : Math.max(0, 15 - (sinImagen / total) * 50)) +
+      (estructuraRicaPct * 0.15) +
+      (recursosPct * 0.15) +
+      (evergreenPct * 0.15)
+    ));
+
+    // Score Maestro: promedio ponderado con SEO internacional + contenido de valor
     const scoreMaestro = Math.round(
-      scoreDominio * 0.35 +
-      scoreEeat * 0.20 +
-      scoreFrescas * 0.15 +
-      scoreTitulos * 0.10 +
-      scoreMeta * 0.10 +
-      scoreLinks * 0.10
+      scoreDominio * 0.30 +
+      scoreEeat * 0.15 +
+      scoreFrescas * 0.10 +
+      scoreTitulos * 0.08 +
+      scoreMeta * 0.08 +
+      scoreLinks * 0.07 +
+      scoreRetencion * 0.12 +
+      scoreMonetizacion * 0.10
     );
 
     // Estado de salud
@@ -226,6 +305,26 @@ async function computeDashboardMetrics() {
       problemasAdvertencia.push(`Score E-E-A-T ${scoreEeat}/100 — autoridad y confianza debajo del estándar`);
       recomendaciones.push('Agrega páginas de "Quiénes Somos" y "Contacto" con datos reales del equipo editorial. Incluye biografías de autores con foto y credenciales.');
     }
+    if (scoreRetencion < 50) {
+      problemasAdvertencia.push(`Score Retención ${scoreRetencion}/100 — lectores no se quedan, alto bounce rate`);
+      recomendaciones.push('Agrega listas, tablas, datos estadísticos y recursos útiles (teléfonos, consejos). El contenido rico retiene 40% más tiempo.');
+    }
+    if (scoreMonetizacion < 70) {
+      problemasAdvertencia.push(`Score Monetización ${scoreMonetizacion}/100 — AdSense puede rechazar o limitar ads`);
+      recomendaciones.push('Aumenta estructura rica (listas, imágenes, citas), agrega recursos útiles y reduce contenido efímero sin valor añadido.');
+    }
+    if (recursosPct < 30) {
+      problemasAdvertencia.push(`Solo ${recursosPct}% de noticias tienen recursos útiles — contenido descartable`);
+      recomendaciones.push('Toda noticia debe aportar valor: teléfonos de emergencia, consejos prácticos, links de ayuda, pasos a seguir.');
+    }
+    if (estructuraRicaPct < 40) {
+      problemasAdvertencia.push(`Solo ${estructuraRicaPct}% con estructura rica (listas, tablas, citas) — lectores abandonan muros de texto`);
+      recomendaciones.push('Usa listas, tablas comparativas, blockquotes de expertos y subtítulos H2. Mejora scaneabilidad y tiempo en página.');
+    }
+    if (evergreenPct < 50) {
+      problemasAdvertencia.push(`Solo ${evergreenPct}% de contenido evergreen — tráfico orgánico a largo plazo comprometido`);
+      recomendaciones.push('Expande noticias de sucesos con contexto, antecedentes y recursos. El contenido evergreen genera tráfico constante por años.');
+    }
 
     // Alertas legacy (mantener compatibilidad)
     if (thinCount > 0) alertas.push(`${thinCount} articulos thin content (<350 palabras). Esto bloquea AdSense.`);
@@ -265,6 +364,15 @@ async function computeDashboardMetrics() {
       problemasCriticos,
       problemasAdvertencia,
       recomendaciones: [...new Set(recomendaciones)],
+      tiempoLecturaPromedio,
+      estructuraRica: { count: estructuraRicaCount, porcentaje: estructuraRicaPct },
+      conDatosEstadisticos: { count: datosEstadisticosCount, porcentaje: datosPct },
+      conRecursosUtiles: { count: recursosUtilesCount, porcentaje: recursosPct },
+      conCTA: { count: ctaCount, porcentaje: ctaPct },
+      scoreRetencion,
+      scoreMonetizacion,
+      contenidoEvergreen: { count: evergreenCount, porcentaje: evergreenPct },
+      densidadValor,
     };
 
     return metricas;
