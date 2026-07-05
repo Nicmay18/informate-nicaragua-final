@@ -21,23 +21,21 @@ function normalize(str: string): string {
 
 function quitarAdjetivos(html: string): { limpio: string; reemplazos: string[] } {
   const reemplazos: string[] = [];
-  let limpio = html;
-  const normalizedHtml = normalize(html);
+  const prohibidosNorm = new Set(ADJETIVOS_PROHIBIDOS.map(normalize));
 
-  for (const adj of ADJETIVOS_PROHIBIDOS) {
-    const normAdj = normalize(adj);
-    const pattern = new RegExp(`\\b${normAdj}\\b`, 'gi');
-    if (pattern.test(normalizedHtml)) {
-      reemplazos.push(adj);
-      // Reemplazar en el HTML original (case-insensitive, preservando el resto del texto)
-      limpio = limpio.replace(pattern, '');
+  // Procesar token por token, preservando HTML y puntuación
+  const limpio = html.replace(/[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+/g, (match) => {
+    if (prohibidosNorm.has(normalize(match))) {
+      reemplazos.push(match);
+      return '';
     }
-  }
+    return match;
+  });
 
   // Limpiar espacios dobles dejados por eliminaciones
-  limpio = limpio.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
+  const cleaned = limpio.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
 
-  return { limpio, reemplazos };
+  return { limpio: cleaned, reemplazos: [...new Set(reemplazos.map(normalize))] };
 }
 
 export async function POST(request: NextRequest) {
