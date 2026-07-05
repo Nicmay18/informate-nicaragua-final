@@ -15,18 +15,21 @@ const ADJETIVOS_PROHIBIDOS = [
   'tragedia', 'fatal', 'horror', 'desgarrador',
 ];
 
+function normalize(str: string): string {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
 function quitarAdjetivos(html: string): { limpio: string; reemplazos: string[] } {
   const reemplazos: string[] = [];
   let limpio = html;
+  const normalizedHtml = normalize(html);
 
   for (const adj of ADJETIVOS_PROHIBIDOS) {
-    // Regex case-insensitive para la palabra completa con o sin tildes
-    const pattern = new RegExp(
-      `\\b${adj}\\b`,
-      'gi'
-    );
-    if (pattern.test(limpio)) {
+    const normAdj = normalize(adj);
+    const pattern = new RegExp(`\\b${normAdj}\\b`, 'gi');
+    if (pattern.test(normalizedHtml)) {
       reemplazos.push(adj);
+      // Reemplazar en el HTML original (case-insensitive, preservando el resto del texto)
       limpio = limpio.replace(pattern, '');
     }
   }
