@@ -36,7 +36,9 @@ export async function GET(request: NextRequest) {
         publicado: data.publicado !== false,
       };
     });
-    return NextResponse.json({ success: true, news });
+    return NextResponse.json({ success: true, news }, {
+      headers: { 'Cache-Control': 'no-store, must-revalidate' },
+    });
   } catch (err) {
     console.error('[admin/news GET]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
