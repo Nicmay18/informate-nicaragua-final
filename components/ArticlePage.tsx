@@ -314,7 +314,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </Suspense>
 
         {/* 3 Puntos Clave */}
-        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} />
+        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
 
         {/* Tabla de contenidos (artículos largos) */}
         {showToc && (

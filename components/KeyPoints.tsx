@@ -35,7 +35,7 @@ export default function KeyPoints({ puntosClave }: KeyPointsProps) {
     borderBottom: '2px solid #111827',
   };
 
-  const labels = ['Ubicación', 'Dato personal / Detalle', 'Estado actual'];
+  const labels = ['Qué / Dónde', 'Por qué / Cómo', 'Consecuencia / Impacto'];
 
   return (
     <section style={sectionStyle} aria-label="Resumen de puntos clave">
