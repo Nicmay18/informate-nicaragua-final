@@ -97,15 +97,25 @@ export async function POST(request: NextRequest) {
     }
 
     const dryRun = request.nextUrl.searchParams.get('dryRun') === 'true';
+    const soloId = request.nextUrl.searchParams.get('soloId') || '';
     const adminDb = getAdminDb();
 
     // ─── Traer noticias thin (<350 palabras) ───
-    const snapshot = await adminDb.collection('noticias').limit(200).get();
-    const thinDocs = snapshot.docs.filter(d => {
-      const data = d.data();
-      const palabras = contarPalabras(stripHtml(data.contenido || ''));
-      return palabras < 350;
-    }).slice(0, 5);
+    let thinDocs;
+    if (soloId) {
+      const doc = await adminDb.collection('noticias').doc(soloId).get();
+      if (!doc.exists) {
+        return NextResponse.json({ mensaje: 'Noticia no encontrada.', expandidas: 0, errores: 0 });
+      }
+      thinDocs = [doc];
+    } else {
+      const snapshot = await adminDb.collection('noticias').limit(200).get();
+      thinDocs = snapshot.docs.filter(d => {
+        const data = d.data();
+        const palabras = contarPalabras(stripHtml(data.contenido || ''));
+        return palabras < 350;
+      }).slice(0, 5);
+    }
 
     if (thinDocs.length === 0) {
       return NextResponse.json({ mensaje: 'No hay notas que requieran expansión.', expandidas: 0, errores: 0 });
@@ -128,6 +138,7 @@ export async function POST(request: NextRequest) {
 
     for (const doc of thinDocs) {
       const data = doc.data();
+      if (!data) continue;
       const contenidoActual = data.contenido || '';
       const palabrasAntes = contarPalabras(stripHtml(contenidoActual));
 
