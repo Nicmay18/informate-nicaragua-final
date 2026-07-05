@@ -24,10 +24,19 @@ interface NoticiaData {
 }
 
 async function generarPuntosClave(titulo: string, contenido: string, resumen?: string): Promise<string[]> {
-  if (!GEMINI_API_KEY) {
-    throw new Error('GEMINI_API_KEY no configurada');
+  // Primero intentar con Gemini; si no hay key o falla, usar extractor heurístico.
+  if (GEMINI_API_KEY) {
+    try {
+      const puntos = await generarConGemini(titulo, contenido, resumen);
+      if (puntos.length === 3) return puntos;
+    } catch (err) {
+      console.warn('[generar-puntos-clave] Gemini falló, usando fallback:', err);
+    }
   }
+  return generarHeuristico(titulo, contenido, resumen);
+}
 
+async function generarConGemini(titulo: string, contenido: string, resumen?: string): Promise<string[]> {
   const texto = stripHtml(contenido || resumen || titulo).slice(0, 4000);
   const prompt = `ACTUÁ COMO EDITOR DE NICARAGUA INFORMATE.
 
@@ -59,7 +68,6 @@ CONTENIDO: ${texto}`;
         generationConfig: {
           temperature: 0.3,
           maxOutputTokens: 400,
-          responseMimeType: 'application/json',
         },
       }),
     }
@@ -87,6 +95,41 @@ CONTENIDO: ${texto}`;
     .map((l: string) => l.replace(/^[-\d.\)]+\s*/, '').trim())
     .filter((l: string) => l.length > 20 && l.length < 200);
   return lines.slice(0, 3);
+}
+
+function generarHeuristico(titulo: string, contenido: string, resumen?: string): string[] {
+  const texto = stripHtml(contenido || resumen || titulo).replace(/\s+/g, ' ').trim();
+  const oraciones = texto.split(/(?<=[\.\!\?])\s+/).filter((o: string) => o.length > 20 && o.length < 200);
+
+  const puntos: string[] = [];
+
+  // Punto 1: primera oración relevante (qué/dónde)
+  if (oraciones[0]) puntos.push(limitarPalabras(oraciones[0], 18));
+
+  // Punto 2: buscar causa o mecanismo
+  const palabrasCausa = /\b(tras|por|debido a|según|segun|originado|causado|cuando|mientras|durante|después|despues)\b/i;
+  const oracionCausa = oraciones.find((o: string) => palabrasCausa.test(o) && o.length > 30) || oraciones[1];
+  if (oracionCausa) puntos.push(limitarPalabras(oracionCausa, 18));
+
+  // Punto 3: última oración con consecuencia o impacto, o la última disponible
+  const oracionFinal = oraciones[oraciones.length - 1] || '';
+  const oracionImpacto = oraciones.find((o: string) => /\b(autoridades|investigan|confirmaron|reportaron|afectados|heridos|fallecidos|detenidos|daños|costos|cifra|número|miles|cientos)\b/i.test(o));
+  const punto3 = oracionImpacto && oracionImpacto !== oracionCausa ? oracionImpacto : oracionFinal;
+  if (punto3) puntos.push(limitarPalabras(punto3, 18));
+
+  // Rellenar si faltan puntos
+  while (puntos.length < 3) {
+    puntos.push(limitarPalabras(resumen || titulo, 18));
+  }
+
+  return puntos.slice(0, 3);
+}
+
+function limitarPalabras(texto: string, max: number): string {
+  const palabras = texto.split(/\s+/).filter(Boolean);
+  if (palabras.length <= max) return texto.replace(/\.$/, '').trim() + '.';
+  const truncado = palabras.slice(0, max).join(' ').replace(/[\,\;\:]\s*$/, '');
+  return truncado + '...';
 }
 
 function stripHtml(html: string): string {
@@ -122,7 +165,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const resultados: { id: string; puntosClave: string[]; ok: boolean }[] = [];
+    const resultados: { id: string; puntosClave: string[]; ok: boolean; error?: string }[] = [];
     for (const doc of docs) {
       const data = doc.data() as NoticiaData;
       try {
@@ -133,7 +176,7 @@ export async function POST(request: NextRequest) {
         if (data.slug) revalidatePath(`/noticias/${data.slug}`);
         resultados.push({ id: doc.id, puntosClave: puntos, ok: true });
       } catch (err) {
-        resultados.push({ id: doc.id, puntosClave: [], ok: false });
+        resultados.push({ id: doc.id, puntosClave: [], ok: false, error: String(err) });
       }
     }
 
