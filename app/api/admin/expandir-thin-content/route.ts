@@ -129,6 +129,7 @@ export async function POST(request: NextRequest) {
       scoreAntes: number;
       scoreDespues: number;
       aplicado: boolean;
+      error?: string;
     }> = [];
 
     let procesadas = 0;
@@ -161,6 +162,7 @@ export async function POST(request: NextRequest) {
             scoreAntes: data.scoreCalidad || 0,
             scoreDespues: 0,
             aplicado: false,
+            error: err.message,
           });
           continue;
         }
