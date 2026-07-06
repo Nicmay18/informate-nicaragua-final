@@ -38,7 +38,11 @@ export async function GET(request: NextRequest) {
       };
     });
     return NextResponse.json({ success: true, news }, {
-      headers: { 'Cache-Control': 'no-store, must-revalidate' },
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
     });
   } catch (err) {
     console.error('[admin/news GET]', err);
