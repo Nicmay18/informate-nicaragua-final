@@ -4491,6 +4491,7 @@ sin texto ni marcas de agua, composición periodística"
         // No hay endpoint de ping, guardamos directo
         localStorage.setItem('admin_api_key', key);
         el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Guardada</span>';
+        checkAdminAuthBanner();
       } catch (e) {
         el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Error</span>';
       }
