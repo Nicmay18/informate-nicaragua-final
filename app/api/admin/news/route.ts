@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
         destacada: !!data.destacada,
         vistas: data.vistas || 0,
         publicado: data.publicado !== false,
+        puntosClave: data.puntosClave || [],
       };
     });
     return NextResponse.json({ success: true, news }, {

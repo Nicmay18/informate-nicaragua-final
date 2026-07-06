@@ -98,11 +98,13 @@ CONTENIDO: ${texto}`;
 }
 
 function generarHeuristico(titulo: string, contenido: string, resumen?: string): string[] {
-  const texto = stripHtml(contenido || resumen || titulo).replace(/\s+/g, ' ').trim();
-  const oraciones = texto
-    .split(/(?<=[\.\!\?])\s+/)
-    .map((o: string) => o.trim())
-    .filter((o: string) => o.length > 30 && o.length < 220);
+  const html = contenido || resumen || titulo;
+  const parrafos = extraerParrafos(html).filter((p: string) => p.length > 30);
+
+  const primeraOracion = (p: string) =>
+    p.split(/(?<=[\.\!\?])\s+/)
+      .map((o: string) => o.trim())
+      .find((o: string) => o.length > 30 && o.length < 220) || p;
 
   const puntos: string[] = [];
   const usados = new Set<string>();
@@ -115,17 +117,14 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
     }
   };
 
-  // Punto 1: primera oración relevante (qué/dónde)
-  if (oraciones[0]) agregar(oraciones[0]);
+  // Punto 1: primera oración del primer párrafo (qué/dónde)
+  if (parrafos[0]) agregar(primeraOracion(parrafos[0]));
 
-  // Punto 2: oración del medio (por qué / cómo)
-  const idxMedio = Math.floor(oraciones.length / 2);
-  const oracionMedio = oraciones[idxMedio] || oraciones[1];
-  if (oracionMedio) agregar(oracionMedio);
+  // Punto 2: primera oración del segundo párrafo (por qué/cómo)
+  if (parrafos[1]) agregar(primeraOracion(parrafos[1]));
 
-  // Punto 3: última oración (consecuencia / impacto)
-  const oracionFinal = oraciones[oraciones.length - 1] || '';
-  if (oracionFinal) agregar(oracionFinal);
+  // Punto 3: primera oración del último párrafo (consecuencia/impacto)
+  if (parrafos[parrafos.length - 1]) agregar(primeraOracion(parrafos[parrafos.length - 1]));
 
   // Rellenar si faltan puntos con el resumen/título
   while (puntos.length < 3) {
@@ -133,6 +132,13 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
   }
 
   return puntos.slice(0, 3);
+}
+
+function extraerParrafos(html: string): string[] {
+  return html
+    .split(/<\/p>|<h[1-6][^>]*>/i)
+    .map((p: string) => stripHtml(p).trim())
+    .filter((p: string) => p.length > 10);
 }
 
 function limitarPalabras(texto: string, max: number): string {
