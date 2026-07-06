@@ -28,7 +28,7 @@ async function generarPuntosClave(titulo: string, contenido: string, resumen?: s
   if (GEMINI_API_KEY) {
     try {
       const puntos = await generarConGemini(titulo, contenido, resumen);
-      if (puntos.length === 3) return puntos;
+      if (puntos.length === 3 && validarPuntos(puntos)) return puntos;
     } catch (err) {
       console.warn('[generar-puntos-clave] Gemini falló, usando fallback:', err);
     }
@@ -36,23 +36,38 @@ async function generarPuntosClave(titulo: string, contenido: string, resumen?: s
   return generarHeuristico(titulo, contenido, resumen);
 }
 
+function validarPuntos(puntos: string[]): boolean {
+  return puntos.every(p => {
+    const palabras = p.split(/\s+/).filter(Boolean).length;
+    const terminaBien = /[\.!\?]$/.test(p.trim());
+    const noTruncado = !p.includes('...');
+    return palabras >= 10 && palabras <= 25 && terminaBien && noTruncado;
+  });
+}
+
 async function generarConGemini(titulo: string, contenido: string, resumen?: string): Promise<string[]> {
   const texto = stripHtml(contenido || resumen || titulo).slice(0, 4000);
-  const prompt = `ACTUÁ COMO EDITOR DE NICARAGUA INFORMATE.
+  const prompt = `Sos un Editor de Noticias Digitales de alto rendimiento. Tu tarea es extraer exactamente 3 "Puntos Clave" de la noticia proporcionada.
 
-Generá exactamente 3 puntos clave de esta noticia para mostrar al inicio del artículo.
+REGLAS ESTRICTAS:
+1. Cada punto DEBE ser una oración COMPLETA con sujeto, verbo y predicado. NUNCA dejes frases cortadas, inconclusas o con puntos suspensivos.
+2. Cada punto debe tener entre 15 y 20 palabras. Ni más, ni menos.
+3. Lenguaje periodístico profesional (estilo Reuters/BBC), neutral, sin opiniones ni adjetivos emocionales.
+4. Enfocate ÚNICAMENTE en hechos duros verificables de la nota.
 
-Formato obligatorio:
-- Punto 1 (Qué / Dónde): qué pasó y dónde.
-- Punto 2 (Por qué / Cómo): causa o mecanismo del hecho.
-- Punto 3 (Consecuencia / Impacto): resultado, cifra o relevancia.
+ESTRUCTURA OBLIGATORIA:
+- Punto 1 (Qué / Dónde): Resumen del hecho principal combinado con la ubicación exacta. Debe responder de un vistazo qué pasó y dónde.
+- Punto 2 (Por qué / Cómo): La causa, el origen, el contexto o la mecánica de los hechos. Responde cómo ocurrió o por qué.
+- Punto 3 (Consecuencia / Impacto): El balance final, saldo de víctimas, daños materiales, acciones legales o resultado concreto. La cifra y el resultado deben quedar completamente cerrados.
 
-Reglas:
-- Cada punto debe tener entre 12 y 18 palabras.
-- Lenguaje periodístico, neutral, sin adjetivos emocionales.
-- No uses viñetas, solo texto.
-- Devolvé ÚNICAMENTE un JSON con este formato exacto (sin markdown, sin backticks, sin explicaciones):
-["punto 1", "punto 2", "punto 3"]
+EJEMPLO CORRECTO:
+["Cuatro graves accidentes de tránsito se registraron en diferentes puntos de Matagalpa, Jinotega y Managua.", "Los siniestros viales fueron provocados presuntamente por exceso de velocidad, invasión de carril y malas condiciones climáticas.", "El saldo total del fin de semana fue de cuatro personas fallecidas, dos menores lesionados y cuantiosos daños materiales."]
+
+EJEMPLO INCORRECTO (NO hacer esto):
+["Cuatro accidentes de tránsito registrados entre la tarde del sábado y la mañana de...", "Tres de los hechos ocurrieron en los departamentos de Matagalpa y Jinotega, mientras el cuarto se registró en...", "Los cuatro accidentes dejaron un mismo balance: cuatro personas fallecidas, dos menores lesionados y al menos un adulto..."]
+
+Devolvé ÚNICAMENTE un JSON array con exactamente 3 strings. Sin markdown, sin backticks, sin explicaciones adicionales:
+["punto 1 completo con punto final.", "punto 2 completo con punto final.", "punto 3 completo con punto final."]
 
 TÍTULO: ${titulo}
 RESUMEN: ${resumen || ''}
@@ -244,9 +259,18 @@ function quitarDateline(texto: string): string {
 
 function limitarPalabras(texto: string, max: number): string {
   const palabras = texto.split(/\s+/).filter(Boolean);
-  if (palabras.length <= max) return texto.replace(/\.$/, '').trim() + '.';
-  const truncado = palabras.slice(0, max).join(' ').replace(/[\,\;\:]\s*$/, '');
-  return truncado + '...';
+  if (palabras.length <= max) return texto.replace(/\.+$/, '').trim() + '.';
+  // Buscar un corte natural (punto, coma) dentro del rango
+  let corte = max;
+  for (let i = max; i >= Math.max(max - 5, 8); i--) {
+    const palabra = palabras[i - 1];
+    if (palabra && /[\.!\?]$/.test(palabra)) {
+      corte = i;
+      break;
+    }
+  }
+  const resultado = palabras.slice(0, corte).join(' ').replace(/[\,\;\:]$/, '').replace(/\.+$/, '').trim();
+  return resultado + '.';
 }
 
 function stripHtml(html: string): string {
