@@ -16,11 +16,13 @@ interface ImageLoaderProps {
 }
 
 export default function weservLoader({ src, width, quality = 80 }: ImageLoaderProps): string {
-  // URLs ya optimizadas o de servicios de optimización — no re-procesar
+  // URLs ya optimizadas o servidas por CDN confiable — no re-procesar
   if (
     src.includes('images.weserv.nl') ||
     src.includes('cloudinary') ||
-    src.includes('imgix')
+    src.includes('imgix') ||
+    src.includes('cdn.jsdelivr.net') ||
+    src.includes('raw.githubusercontent.com')
   ) {
     return src;
   }

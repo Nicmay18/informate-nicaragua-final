@@ -99,12 +99,12 @@ CONTENIDO: ${texto}`;
 
 function generarHeuristico(titulo: string, contenido: string, resumen?: string): string[] {
   const html = contenido || resumen || titulo;
-  const parrafos = extraerParrafos(html).filter((p: string) => p.length > 30);
+  const secciones = extraerSeccionesH2(html).filter((s: any) => s.texto.length > 30);
 
-  const primeraOracion = (p: string) =>
-    p.split(/(?<=[\.\!\?])\s+/)
-      .map((o: string) => o.trim())
-      .find((o: string) => o.length > 20 && o.length < 400) || p;
+  const primeraOracion = (texto: string) =>
+    texto.split(/(?<=[\.\!\?])\s+/)
+      .map((o: string) => quitarDateline(o.trim()).replace(/^\s*[A-Z][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, ''))
+      .find((o: string) => o.length > 20 && o.length < 400) || texto;
 
   const puntos: string[] = [];
   const usados = new Set<string>();
@@ -117,14 +117,17 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
     }
   };
 
-  // Punto 1: primera oración del primer párrafo (qué/dónde)
-  if (parrafos[0]) agregar(primeraOracion(parrafos[0]));
+  // Punto 1: primera oración de la primera sección (qué/dónde)
+  if (secciones[0]) agregar(primeraOracion(secciones[0].texto));
 
-  // Punto 2: primera oración del segundo párrafo (por qué/cómo)
-  if (parrafos[1]) agregar(primeraOracion(parrafos[1]));
+  // Punto 2: primera sección que explique causa/mecanismo (por qué/cómo)
+  const causas = /cómo ocurrió|por qué|causa|mecanismo|tras|según|originado|por qué pasó/i;
+  const seccionCausa = secciones.find((s: any) => causas.test(s.titulo)) || secciones[1];
+  if (seccionCausa) agregar(primeraOracion(seccionCausa.texto));
 
-  // Punto 3: primera oración del último párrafo (consecuencia/impacto)
-  if (parrafos[parrafos.length - 1]) agregar(primeraOracion(parrafos[parrafos.length - 1]));
+  // Punto 3: primera oración de la última sección (consecuencia/impacto)
+  const ultima = secciones[secciones.length - 1];
+  if (ultima) agregar(primeraOracion(ultima.texto));
 
   // Rellenar si faltan puntos con el resumen/título
   while (puntos.length < 3) {
@@ -134,15 +137,37 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
   return puntos.slice(0, 3);
 }
 
-function extraerParrafos(html: string): string[] {
-  return html
-    .split(/<\/p>|<h[1-6][^>]*>/i)
-    .map((p: string) => quitarDateline(stripHtml(p).trim()))
-    .filter((p: string) => p.length > 10);
+interface SeccionH2 {
+  titulo: string;
+  texto: string;
+}
+
+function extraerSeccionesH2(html: string): SeccionH2[] {
+  // Divide el contenido en secciones por cada H2, conservando el título
+  const partes = html.split(/<h2[^>]*>(.*?)<\/h2>/i);
+  const secciones: SeccionH2[] = [];
+
+  // El primer bloque es el lead (antes del primer H2)
+  if (partes[0]) {
+    const texto = quitarDateline(stripHtml(partes[0]).trim());
+    if (texto.length > 10) secciones.push({ titulo: '', texto });
+  }
+
+  // Cada par título/texto después de un H2
+  for (let i = 1; i < partes.length; i += 2) {
+    const titulo = stripHtml(partes[i]).trim().toLowerCase();
+    const textoHtml = partes[i + 1] || '';
+    const texto = quitarDateline(stripHtml(textoHtml).trim());
+    if (titulo || texto.length > 10) {
+      secciones.push({ titulo, texto });
+    }
+  }
+
+  return secciones;
 }
 
 function quitarDateline(texto: string): string {
-  // Elimina prefijos tipo "MANAGUA / NICARAGUA —" o "ROSITA —" al inicio del párrafo
+  // Elimina prefijos tipo "MANAGUA / NICARAGUA —" o "ROSITA —" al inicio
   return texto.replace(/^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, '').trim();
 }
 
