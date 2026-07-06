@@ -32,7 +32,12 @@ export function getHeroImageUrl(url: string, width = 1200): string {
     return responsiveUrl;
   }
 
-  // Para jsDelivr y otras URLs externas: pasar por weserv.nl a 1200px (cubre desktop + mobile + Google Discover)
+  // Imágenes ya servidas por CDN confiable: devolver directo (evita doble proxy y esqueletos grises)
+  if (responsiveUrl.includes('cdn.jsdelivr.net') || responsiveUrl.includes('raw.githubusercontent.com')) {
+    return responsiveUrl;
+  }
+
+  // Para otras URLs externas: pasar por weserv.nl a 1200px (cubre desktop + mobile + Google Discover)
   const params = new URLSearchParams();
   params.set('url', responsiveUrl);
   params.set('w', width.toString());
