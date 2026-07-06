@@ -130,7 +130,7 @@ export async function GET(request: Request) {
     let cuerpo = '';
     candidatas.forEach((n, i) => {
       const emoji = CAT_EMOJI[n.categoria || ''] || '📰';
-      const url = `https://nicaraguainformate.com/noticias/${n.slug}`;
+      const url = `https://nicaraguainformate.com/noticias/${n.slug}?utm_source=telegram`;
       const titulo = escTelegram((n.titulo || '').substring(0, 110));
       cuerpo += `${NUMEROS[i]} ${emoji} <b>${titulo}</b>\n🔗 <a href="${url}">Leer la noticia</a>\n\n`;
     });

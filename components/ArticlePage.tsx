@@ -64,7 +64,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         const referrer = typeof document !== 'undefined' ? document.referrer : '';
         const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
         const utmSource = urlParams?.get('utm_source') || '';
-        const result = await trackViewAction(noticia.slug, referrer, utmSource);
+        const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+        const result = await trackViewAction(noticia.slug, referrer, utmSource, userAgent);
         if (result.ok && typeof result.views === 'number') {
           setViews(result.views);
           sessionStorage.setItem(sessionKey, 'true');

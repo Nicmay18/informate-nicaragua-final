@@ -65,7 +65,7 @@ async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore)
     const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=telegram`;
     const emoji: Record<string, string> = {
       Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
       Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
@@ -136,7 +136,7 @@ async function enviarFacebook(noticia: Noticia): Promise<{ ok: boolean; error?: 
     const FB_PAGE_ID = process.env.FB_PAGE_ID || '';
     if (!FB_TOKEN || !FB_PAGE_ID) return { ok: false, error: 'Faltan credenciales Facebook' };
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=facebook`;
     const emoji: Record<string, string> = {
       Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
       Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
@@ -207,7 +207,7 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
     const ONESIGNAL_REST_KEY = process.env.ONESIGNAL_REST_API_KEY || '';
     if (!ONESIGNAL_REST_KEY) return { ok: true, error: 'Push: ONESIGNAL_REST_API_KEY no configurada (opcional)' };
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=push`;
 
     const res = await fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
@@ -242,7 +242,7 @@ async function enviarTwitter(noticia: Noticia): Promise<{ ok: boolean; error?: s
     const bearer = process.env.TWITTER_BEARER_TOKEN || '';
     if (!bearer) return { ok: false, error: 'Falta TWITTER_BEARER_TOKEN' };
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=twitter`;
     const emoji: Record<string, string> = {
       Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
       Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'

@@ -54,7 +54,7 @@ async function notifyTelegram(titulo: string, resumen: string, slug: string, cat
   const token = customToken || process.env.TG_TOKEN;
   const chatId = customChat || process.env.TG_CHAT;
   if (!token || !chatId) return;
-  const url = `https://nicaraguainformate.com/noticias/${slug}/`;
+  const url = `https://nicaraguainformate.com/noticias/${slug}/?utm_source=telegram`;
   const catEmojis: Record<string, string> = {
     Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍',
     Espectáculos: '🎬', Tecnología: '💻', Economía: '📈', Cultura: '🎭',

@@ -233,16 +233,24 @@ function isValidSlug(slug: string): boolean {
  * 
  * Ahora también registra el evento de tráfico para analítica en tiempo real.
  */
-function detectarFuente(referrer?: string, utmSource?: string): string {
+function detectarFuente(referrer?: string, utmSource?: string, userAgent?: string): string {
   const ref = (referrer || '').toLowerCase();
   const utm = (utmSource || '').toLowerCase();
+  const ua = (userAgent || '').toLowerCase();
 
+  // UTM tiene prioridad
   if (utm.includes('facebook') || utm.includes('fb')) return 'facebook';
   if (utm.includes('telegram') || utm.includes('tg')) return 'telegram';
   if (utm.includes('whatsapp') || utm.includes('wa')) return 'whatsapp';
   if (utm.includes('twitter') || utm.includes('x.com')) return 'twitter';
   if (utm.includes('google')) return 'google';
 
+  // User-Agent de apps (WhatsApp/Telegram a veces no mandan referrer)
+  if (ua.includes('telegram')) return 'telegram';
+  if (ua.includes('whatsapp')) return 'whatsapp';
+  if (ua.includes('facebookexternalhit') || ua.includes('fb_iab')) return 'facebook';
+
+  // Referrer
   if (ref.includes('facebook.com') || ref.includes('fb.me') || ref.includes('fb.com')) return 'facebook';
   if (ref.includes('t.me') || ref.includes('telegram.org')) return 'telegram';
   if (ref.includes('whatsapp.com') || ref.includes('wa.me')) return 'whatsapp';
@@ -258,7 +266,8 @@ function detectarFuente(referrer?: string, utmSource?: string): string {
 export async function incrementViewsBySlug(
   slug: string,
   referrer?: string,
-  utmSource?: string
+  utmSource?: string,
+  userAgent?: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
@@ -299,7 +308,8 @@ export async function incrementViewsBySlug(
         titulo: data.titulo || '',
         referrer: referrer || '',
         utmSource: utmSource || '',
-        source: detectarFuente(referrer, utmSource),
+        userAgent: userAgent || '',
+        source: detectarFuente(referrer, utmSource, userAgent),
         timestamp: FieldValue.serverTimestamp(),
       });
     } catch (trafficErr) {

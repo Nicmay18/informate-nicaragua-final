@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         .replace(/\s+/g, '-')
         .substring(0, 60);
     }
-    const url = `https://nicaraguainformate.com/noticias/${encodeURIComponent(slug)}`;
+    const url = `https://nicaraguainformate.com/noticias/${encodeURIComponent(slug)}?utm_source=telegram`;
 
     // Hashtags
     const htEsc = escTelegram('#NicaraguaInformate');
