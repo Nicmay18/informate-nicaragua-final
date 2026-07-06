@@ -100,11 +100,7 @@ CONTENIDO: ${texto}`;
 function generarHeuristico(titulo: string, contenido: string, resumen?: string): string[] {
   const html = contenido || resumen || titulo;
   const secciones = extraerSeccionesH2(html).filter((s: any) => s.texto.length > 30);
-
-  const primeraOracion = (texto: string) =>
-    texto.split(/(?<=[\.\!\?])\s+/)
-      .map((o: string) => quitarDateline(o.trim()).replace(/^\s*[A-Z][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, ''))
-      .find((o: string) => o.length > 20 && o.length < 400) || texto;
+  const oraciones = extraerOraciones(html).map(o => quitarDateline(o)).filter(o => o.length > 20 && o.length < 400);
 
   const puntos: string[] = [];
   const usados = new Set<string>();
@@ -117,17 +113,46 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
     }
   };
 
-  // Punto 1: primera oración de la primera sección (qué/dónde)
-  if (secciones[0]) agregar(primeraOracion(secciones[0].texto));
+  // Punto 1: primera oración del lead (qué/dónde), sin dateline
+  if (secciones[0]) {
+    const lead = primeraOracion(secciones[0].texto);
+    agregar(lead);
+  }
 
-  // Punto 2: primera sección que explique causa/mecanismo (por qué/cómo)
-  const causas = /cómo ocurrió|por qué|causa|mecanismo|tras|según|originado|por qué pasó/i;
-  const seccionCausa = secciones.find((s: any) => causas.test(s.titulo)) || secciones[1];
-  if (seccionCausa) agregar(primeraOracion(seccionCausa.texto));
+  // Punto 2: la oración que mejor describa causa o mecanismo (por qué/cómo)
+  // 1. Si existe una sección H2 con título causal, usar su primera oración.
+  // 2. Si no, buscar en el lead (excepto la primera oración) una oración con palabras causales.
+  // 3. Si no, buscar en todo el artículo.
+  const tituloCausal = /cómo ocurrió|por qué|causa|causas|mecanismo|originado/i;
+  const seccionCausa = secciones.find(s => tituloCausal.test(s.titulo));
+  let oracionCausa = '';
+  if (seccionCausa) {
+    oracionCausa = primeraOracion(seccionCausa.texto);
+  } else {
+    const oracionesLead = extraerOracionesDeTexto(secciones[0]?.texto || '').slice(1);
+    oracionCausa = elegirMejorOracionCausal(oracionesLead, 40);
+    if (!oracionCausa) {
+      oracionCausa = elegirMejorOracionCausal(oraciones.slice(1), 40);
+    }
+  }
+  if (oracionCausa) agregar(oracionCausa);
 
-  // Punto 3: primera oración de la última sección (consecuencia/impacto)
-  const ultima = secciones[secciones.length - 1];
-  if (ultima) agregar(primeraOracion(ultima.texto));
+  // Punto 3: la oración con el impacto global (consecuencia/impacto)
+  // Preferimos las últimas oraciones y elegimos la que tenga más palabras de impacto
+  const impactoGlobal = /dejaron|dejó|fallecid|muert|lesionad|herid|hospitalizad|atención médica|evolución|grave|menores/i;
+  const ultimas = oraciones.slice(-3);
+  const candidatosImpacto = ultimas.filter(o => impactoGlobal.test(o));
+  let oracionImpacto = elegirMejorOracion(candidatosImpacto, 40);
+  if (!oracionImpacto) {
+    oracionImpacto = elegirMejorOracion(oraciones.filter(o => impactoGlobal.test(o)), 40);
+  }
+  if (oracionImpacto) agregar(oracionImpacto);
+
+  // Fallback: si faltan puntos, rellenar con secciones H2
+  for (const sec of secciones.slice(1)) {
+    if (puntos.length >= 3) break;
+    agregar(primeraOracion(sec.texto));
+  }
 
   // Rellenar si faltan puntos con el resumen/título
   while (puntos.length < 3) {
@@ -135,6 +160,52 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
   }
 
   return puntos.slice(0, 3);
+}
+
+function primeraOracion(texto: string): string {
+  return texto.split(/(?<=[\.\!\?])\s+/)
+    .map((o: string) => quitarDateline(o.trim()).replace(/^\s*[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, ''))
+    .find((o: string) => o.length > 20 && o.length < 400) || texto;
+}
+
+function extraerOraciones(html: string): string[] {
+  // Separar títulos H2 del párrafo siguiente para que no se mezclen en una oración
+  const texto = stripHtml(html.replace(/<\/h2>/gi, '. '));
+  return texto
+    .split(/(?<=[\.\!\?])\s+/)
+    .map(o => quitarDateline(o.trim()).replace(/^\s*[A-Z][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, ''))
+    .filter(o => o.length > 20 && o.length < 400);
+}
+
+function elegirMejorOracion(oraciones: string[], minLength: number): string {
+  return oraciones
+    .filter(o => o.length >= minLength)
+    .sort((a, b) => (puntajeOracion(b) - puntajeOracion(a)) || (b.length - a.length))[0] || '';
+}
+
+function puntajeOracion(texto: string): number {
+  const claves = /cómo ocurrió|por qué|causa|mecanismo|circunstancias|involucr|colision|impact|atropell|choc|exceso de velocidad|ebriedad|cruzó la vía|fallecid|muert|lesionad|herid|hospitalizad|atención médica|dejaron|dejó|evidencia|detenido|huyó|grave/gi;
+  return (texto.match(claves) || []).length;
+}
+
+function extraerOracionesDeTexto(texto: string): string[] {
+  return texto
+    .split(/(?<=[\.\!\?])\s+/)
+    .map(o => quitarDateline(o.trim()).replace(/^\s*[A-Z][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, ''))
+    .filter(o => o.length > 20 && o.length < 400);
+}
+
+function elegirMejorOracionCausal(oraciones: string[], minLength: number): string {
+  const causal = /cómo ocurrió|por qué|causa|mecanismo|circunstancias|involucr|colision|impact|atropell|choc|exceso de velocidad|ebriedad|cruzó la vía|esquiv|intentó/gi;
+  const mecanismo = /motocicleta|camioneta|vehículo|peatón|conductor|poste|abismo|carretera|carril/gi;
+  const general = /cada caso|los hechos|los accidentes|casos|general/i;
+  return oraciones
+    .filter(o => o.length >= minLength && (causal.test(o) || mecanismo.test(o)))
+    .sort((a, b) => {
+      const scoreA = (a.match(causal) || []).length * 2 + (a.match(mecanismo) || []).length + (general.test(a) ? 2 : 0);
+      const scoreB = (b.match(causal) || []).length * 2 + (b.match(mecanismo) || []).length + (general.test(b) ? 2 : 0);
+      return scoreB - scoreA || b.length - a.length;
+    })[0] || '';
 }
 
 interface SeccionH2 {
