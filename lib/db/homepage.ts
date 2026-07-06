@@ -233,8 +233,32 @@ function isValidSlug(slug: string): boolean {
  * 
  * Ahora también registra el evento de tráfico para analítica en tiempo real.
  */
+function detectarFuente(referrer?: string, utmSource?: string): string {
+  const ref = (referrer || '').toLowerCase();
+  const utm = (utmSource || '').toLowerCase();
+
+  if (utm.includes('facebook') || utm.includes('fb')) return 'facebook';
+  if (utm.includes('telegram') || utm.includes('tg')) return 'telegram';
+  if (utm.includes('whatsapp') || utm.includes('wa')) return 'whatsapp';
+  if (utm.includes('twitter') || utm.includes('x.com')) return 'twitter';
+  if (utm.includes('google')) return 'google';
+
+  if (ref.includes('facebook.com') || ref.includes('fb.me') || ref.includes('fb.com')) return 'facebook';
+  if (ref.includes('t.me') || ref.includes('telegram.org')) return 'telegram';
+  if (ref.includes('whatsapp.com') || ref.includes('wa.me')) return 'whatsapp';
+  if (ref.includes('twitter.com') || ref.includes('x.com') || ref.includes('t.co')) return 'twitter';
+  if (ref.includes('google.com') || ref.includes('google')) return 'google';
+  if (ref.includes('bing.com')) return 'google';
+  if (ref.includes('yahoo.com')) return 'google';
+
+  if (ref && ref.startsWith('http')) return 'otro';
+  return 'directo';
+}
+
 export async function incrementViewsBySlug(
-  slug: string
+  slug: string,
+  referrer?: string,
+  utmSource?: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
@@ -267,6 +291,20 @@ export async function incrementViewsBySlug(
     await docRef.update({
       vistas: FieldValue.increment(1),
     });
+
+    // 2. Registrar evento de tráfico para analítica en tiempo real
+    try {
+      await db.collection('traffic_log').add({
+        slug,
+        titulo: data.titulo || '',
+        referrer: referrer || '',
+        utmSource: utmSource || '',
+        source: detectarFuente(referrer, utmSource),
+        timestamp: FieldValue.serverTimestamp(),
+      });
+    } catch (trafficErr) {
+      logger.warn('[homepage.ts] No se pudo registrar traffic_log:', trafficErr instanceof Error ? trafficErr.message : String(trafficErr));
+    }
 
     return currentViews + 1;
   } catch (err) {

@@ -61,7 +61,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
     const trackView = async () => {
       try {
-        const result = await trackViewAction(noticia.slug);
+        const referrer = typeof document !== 'undefined' ? document.referrer : '';
+        const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+        const utmSource = urlParams?.get('utm_source') || '';
+        const result = await trackViewAction(noticia.slug, referrer, utmSource);
         if (result.ok && typeof result.views === 'number') {
           setViews(result.views);
           sessionStorage.setItem(sessionKey, 'true');
