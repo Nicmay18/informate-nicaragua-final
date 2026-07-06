@@ -171,14 +171,11 @@ export async function POST(request: NextRequest) {
       const doc = await noticiasRef.doc(id).get();
       if (doc.exists) docs.push(doc);
     } else {
-      // Procesar artículos que aún no tienen puntos clave
-      const snap = await noticiasRef.where('puntosClave', '==', null).limit(10).get();
-      docs = snap.docs;
-      if (docs.length === 0) {
-        // Si no hay null, buscar arrays vacíos o undefined
-        const all = await noticiasRef.limit(10).get();
-        docs = all.docs.filter(d => !d.data().puntosClave || d.data().puntosClave.length === 0);
-      }
+      // Procesar artículos que aún no tienen puntos clave (máximo 10 por llamada)
+      const all = await noticiasRef.limit(200).get();
+      docs = all.docs
+        .filter(d => !d.data().puntosClave || d.data().puntosClave.length === 0)
+        .slice(0, 10);
     }
 
     const resultados: { id: string; puntosClave: string[]; ok: boolean; error?: string }[] = [];
