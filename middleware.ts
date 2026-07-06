@@ -117,6 +117,12 @@ export function middleware(request: NextRequest) {
   // ADMIN API PROTECTION — Auth + Rate Limit centralizado
   // ═══════════════════════════════════════════════════════════════
   if (pathname.startsWith('/api/admin/')) {
+    // Endpoints que NO requieren auth (session entrega el token, estado es diagnóstico)
+    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config'];
+    if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
+      return NextResponse.next();
+    }
+
     // 1. Auth
     const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
     const cronSecret = request.headers.get('x-cron-secret') || '';
