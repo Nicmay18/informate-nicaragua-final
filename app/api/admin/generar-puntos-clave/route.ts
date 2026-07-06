@@ -99,27 +99,37 @@ CONTENIDO: ${texto}`;
 
 function generarHeuristico(titulo: string, contenido: string, resumen?: string): string[] {
   const texto = stripHtml(contenido || resumen || titulo).replace(/\s+/g, ' ').trim();
-  const oraciones = texto.split(/(?<=[\.\!\?])\s+/).filter((o: string) => o.length > 20 && o.length < 200);
+  const oraciones = texto
+    .split(/(?<=[\.\!\?])\s+/)
+    .map((o: string) => o.trim())
+    .filter((o: string) => o.length > 30 && o.length < 220);
 
   const puntos: string[] = [];
+  const usados = new Set<string>();
+
+  const agregar = (texto: string) => {
+    const clave = texto.toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!usados.has(clave) && puntos.length < 3) {
+      usados.add(clave);
+      puntos.push(limitarPalabras(texto, 18));
+    }
+  };
 
   // Punto 1: primera oración relevante (qué/dónde)
-  if (oraciones[0]) puntos.push(limitarPalabras(oraciones[0], 18));
+  if (oraciones[0]) agregar(oraciones[0]);
 
-  // Punto 2: buscar causa o mecanismo
-  const palabrasCausa = /\b(tras|por|debido a|según|segun|originado|causado|cuando|mientras|durante|después|despues)\b/i;
-  const oracionCausa = oraciones.find((o: string) => palabrasCausa.test(o) && o.length > 30) || oraciones[1];
-  if (oracionCausa) puntos.push(limitarPalabras(oracionCausa, 18));
+  // Punto 2: oración del medio (por qué / cómo)
+  const idxMedio = Math.floor(oraciones.length / 2);
+  const oracionMedio = oraciones[idxMedio] || oraciones[1];
+  if (oracionMedio) agregar(oracionMedio);
 
-  // Punto 3: última oración con consecuencia o impacto, o la última disponible
+  // Punto 3: última oración (consecuencia / impacto)
   const oracionFinal = oraciones[oraciones.length - 1] || '';
-  const oracionImpacto = oraciones.find((o: string) => /\b(autoridades|investigan|confirmaron|reportaron|afectados|heridos|fallecidos|detenidos|daños|costos|cifra|número|miles|cientos)\b/i.test(o));
-  const punto3 = oracionImpacto && oracionImpacto !== oracionCausa ? oracionImpacto : oracionFinal;
-  if (punto3) puntos.push(limitarPalabras(punto3, 18));
+  if (oracionFinal) agregar(oracionFinal);
 
-  // Rellenar si faltan puntos
+  // Rellenar si faltan puntos con el resumen/título
   while (puntos.length < 3) {
-    puntos.push(limitarPalabras(resumen || titulo, 18));
+    agregar(resumen || titulo);
   }
 
   return puntos.slice(0, 3);
