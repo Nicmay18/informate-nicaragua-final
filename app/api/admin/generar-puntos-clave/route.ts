@@ -104,7 +104,7 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
   const primeraOracion = (p: string) =>
     p.split(/(?<=[\.\!\?])\s+/)
       .map((o: string) => o.trim())
-      .find((o: string) => o.length > 30 && o.length < 220) || p;
+      .find((o: string) => o.length > 20 && o.length < 400) || p;
 
   const puntos: string[] = [];
   const usados = new Set<string>();
