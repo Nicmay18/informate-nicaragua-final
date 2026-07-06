@@ -137,8 +137,13 @@ function generarHeuristico(titulo: string, contenido: string, resumen?: string):
 function extraerParrafos(html: string): string[] {
   return html
     .split(/<\/p>|<h[1-6][^>]*>/i)
-    .map((p: string) => stripHtml(p).trim())
+    .map((p: string) => quitarDateline(stripHtml(p).trim()))
     .filter((p: string) => p.length > 10);
+}
+
+function quitarDateline(texto: string): string {
+  // Elimina prefijos tipo "MANAGUA / NICARAGUA —" o "ROSITA —" al inicio del párrafo
+  return texto.replace(/^[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s\/]{2,40}[—\-–]\s*/, '').trim();
 }
 
 function limitarPalabras(texto: string, max: number): string {
@@ -163,6 +168,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json().catch(() => ({}));
     const id = body.id;
+    const force = !!body.force;
+    const offset = typeof body.offset === 'number' ? body.offset : 0;
     const db = getAdminDb();
     const noticiasRef = db.collection('noticias');
 
@@ -170,6 +177,10 @@ export async function POST(request: NextRequest) {
     if (id) {
       const doc = await noticiasRef.doc(id).get();
       if (doc.exists) docs.push(doc);
+    } else if (force) {
+      // Reprocesar TODOS los artículos (paginado por offset, 10 por llamada)
+      const all = await noticiasRef.limit(200).get();
+      docs = all.docs.slice(offset, offset + 10);
     } else {
       // Procesar artículos que aún no tienen puntos clave (máximo 10 por llamada)
       const all = await noticiasRef.limit(200).get();
