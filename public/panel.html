@@ -735,7 +735,7 @@
                   <button type="button" class="btn btn-secondary btn-sm" onclick="formatearContenidoLegible()" title="Ordenar párrafos y subtítulos para leerlos fácil"><i class="fas fa-align-left"></i> Ordenar texto</button>
                   <button type="button" class="btn btn-success btn-sm" onclick="pularConIA()" title="Detectar y corregir errores automáticamente"><i class="fas fa-magic"></i> Pular con IA</button>
                   <button type="button" class="btn btn-info btn-sm" onclick="autoFormatearNota()" title="Convertir texto plano a HTML con H2, blockquotes y strong"><i class="fas fa-code"></i> Auto-formatear</button>
-                  <button type="button" class="btn btn-warning btn-sm" onclick="ejecutarAnalisisForense()" title="Analizar noticia con 6 niveles de calidad"><i class="fas fa-flask"></i> Analizar Completo</button>
+                  <button type="button" class="btn btn-warning btn-sm" onclick="ejecutarAnalisisForense()" title="Editor IA: analizar valor periodístico, detectores y publicación"><i class="fas fa-robot"></i> Analizar con Editor IA</button>
                 </div>
                 <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
@@ -896,13 +896,13 @@
                 </div>
               </div>
 
-              <!-- ANALIZADOR FORENSE 6 NIVELES -->
+              <!-- EDITOR IA — NIVELES 7-10 + DETECTORES -->
               <div class="form-group" style="margin-top: 24px;">
                 <label class="form-label" style="display: flex; align-items: center; gap: 8px;">
-                  <i class="fas fa-flask" style="color: var(--info);"></i>
-                  Analizador Forense — 6 Niveles (AdSense, Discover, News, SEO, E-E-A-T)
+                  <i class="fas fa-robot" style="color: var(--info);"></i>
+                  Editor IA — Nicaragua Informate (Niveles 7-10 + Facebook, Google, EEAT Real)
                   <button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarAnalisisForense()" style="margin-left: auto;">
-                    <i class="fas fa-play"></i> Analizar Completo
+                    <i class="fas fa-play"></i> Analizar nota
                   </button>
                 </label>
                 <div id="panelAnalisisForense" style="display: none; margin-top: 10px; border-radius: var(--radius-md); overflow: hidden;">
@@ -6758,7 +6758,9 @@ VERIFICACIÓN FINAL
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // ANALIZADOR FORENSE — 6 NIVELES (AdSense, Discover, News, SEO, E-E-A-T, Valor Editorial)
+    // EDITOR IA — NICARAGUA INFORMATE
+    // Niveles 7-10 + Detectores Facebook, Google y EEAT Real
+    // Mantiene los 6 filtros originales (AdSense, Discover, News, SEO, E-E-A-T, Valor Editorial)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarAnalisisForense = async function() {
       const titulo = document.getElementById('titulo').value.trim();
@@ -6775,7 +6777,7 @@ VERIFICACIÓN FINAL
       const panel = document.getElementById('panelAnalisisForense');
       const resultado = document.getElementById('resultadoAnalisisForense');
       panel.style.display = 'block';
-      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Analizando 6 niveles de calidad...</div>';
+      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Editor IA analizando valor periodístico, detectores y publicación...</div>';
 
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
@@ -6875,6 +6877,72 @@ VERIFICACIÓN FINAL
       if (data.cierreGenerico) {
         html += '<div style="background:#fef9c3;border:1px solid #ca8a04;border-radius:8px;padding:12px;margin-top:16px;font-size:12px;color:#854d0e;">';
         html += '<i class="fas fa-info-circle"></i> <strong>Cierre genérico detectado:</strong> El final del artículo contiene frases tipo "autoridades investigan" o "hasta el momento no hay detenidos". Considera reemplazarlas por citas reales de fuentes.';
+        html += '</div>';
+      }
+
+      // EDITOR IA — NIVEL 7-10 + DETECTORES
+      if (data.reporteVPR) {
+        const vpr = data.reporteVPR;
+        html += '<div style="background:#1e1b4b;border:1px solid #4c1d95;border-radius:12px;padding:16px;margin-top:20px;color:#e2e8f0;">';
+        html += '<h3 style="margin:0 0 12px;font-size:16px;color:#c4b5fd;"><i class="fas fa-robot"></i> Editor IA — Valor Periodístico Real</h3>';
+
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px;background:#312e81;border-radius:8px;">';
+        html += '<div><div style="font-size:13px;color:#c4b5fd;">Veredicto</div><div style="font-size:15px;font-weight:700;">' + vpr.veredicto + '</div></div>';
+        html += '<div style="text-align:right;"><div style="font-size:13px;color:#c4b5fd;">Puntuación VPR</div><div style="font-size:22px;font-weight:800;">' + vpr.puntuacion + '/100</div></div>';
+        html += '</div>';
+
+        const campo = (titulo, texto) => {
+          return '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">' + titulo + '</div><div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + texto + '</div></div>';
+        };
+
+        html += campo('¿Por qué existe este artículo?', vpr.porQueExiste);
+        html += campo('Aporte original', vpr.aporteOriginal);
+        html += campo('¿Qué le falta?', vpr.queLeFalta);
+        html += campo('Investigación adicional recomendada', vpr.investigacionAdicional);
+        html += campo('Pregunta sin responder', vpr.preguntaSinResponder);
+        html += campo('Dato enriquecedor sugerido', vpr.datoEnriquecedor);
+        html += campo('Cómo convertirla en nota de referencia', vpr.comoConvertirReferencia);
+        html += campo('Detector Nicaragua Informate', vpr.detectorNicaraguaInformate);
+        html += campo('Google Discover', vpr.discoverRazon + ' (' + vpr.discoverSiNo + ')');
+        html += campo('¿Por qué se compartiría?', vpr.porQueCompartible + ' (' + vpr.compartibleSiNo + ')');
+
+        html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
+        html += campo('NIVEL 8 — Impacto en el lector', '<em style="color:#94a3b8;">¿Qué gana el lector al dedicar 3 minutos a leer esto?</em><br>' + vpr.nivel8_impactoLector);
+
+        if (vpr.nivel9_preguntasSinRespuesta && vpr.nivel9_preguntasSinRespuesta.length) {
+          html += '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">NIVEL 9 — Preguntas sin respuesta</div><div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">Lo que aún falta investigar para convertirla en reportaje:</div><ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
+          vpr.nivel9_preguntasSinRespuesta.forEach(p => { html += '<li style="margin-bottom:3px;">' + p + '</li>'; });
+          html += '</ul></div>';
+        }
+
+        if (vpr.nivel10_oportunidades && vpr.nivel10_oportunidades.length) {
+          html += '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">NIVEL 10 — Oportunidades periodísticas</div><div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">Notas que pueden salir de esta:</div><ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
+          vpr.nivel10_oportunidades.forEach(o => { html += '<li style="margin-bottom:3px;">' + o + '</li>'; });
+          html += '</ul></div>';
+        }
+
+        html += campo('Detector Facebook', vpr.detectorFacebook);
+        html += campo('Detector Google', vpr.detectorGoogle);
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Detector EEAT Real</div>';
+        html += '<div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">¿Por qué confiar en Nicaragua Informate?</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.detectorEEATReal + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        if (vpr.criterios && vpr.criterios.length) {
+          html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
+          html += '<div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:8px;">Puntuación por criterio</div>';
+          html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">';
+          vpr.criterios.forEach(c => {
+            html += '<div style="background:#312e81;border-radius:6px;padding:8px;">';
+            html += '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span style="color:#e2e8f0;">' + c.nombre + '</span><span style="color:#c4b5fd;font-weight:700;">' + c.puntuacion + '/' + c.maximo + '</span></div>';
+            html += '<div style="font-size:10px;color:#94a3b8;">' + c.justificacion + '</div>';
+            html += '</div>';
+          });
+          html += '</div></div>';
+        }
+
         html += '</div>';
       }
 
