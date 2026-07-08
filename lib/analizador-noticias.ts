@@ -48,6 +48,12 @@ export interface ReporteVPR {
   detectorNicaraguaInformate: string;
   veredicto: '🔴 Reemplazable' | '🟡 Competitiva' | '🟢 Referencia' | '🏆 Periodismo de alto valor';
   criterios: { nombre: string; puntuacion: number; maximo: number; justificacion: string }[];
+  nivel8_impactoLector: string;
+  nivel9_preguntasSinRespuesta: string[];
+  nivel10_oportunidades: string[];
+  detectorFacebook: string;
+  detectorGoogle: string;
+  detectorEEATReal: string;
 }
 
 export interface ResultadoAnalisis {
@@ -966,6 +972,20 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteVPR {
     ? 'Porque aporta información útil, contexto o análisis que justifica compartirla.'
     : 'Porque no ofrece valor diferencial respecto a lo que ya circula en redes y otros medios.';
 
+  // ─── NIVEL 8 — IMPACTO EN EL LECTOR ───
+  const nivel8_impactoLector = generarImpactoLector(textoLower, n.categoria, puntuacionTotal);
+
+  // ─── NIVEL 9 — PREGUNTAS SIN RESPUESTA ───
+  const nivel9_preguntasSinRespuesta = generarPreguntasSinRespuesta(textoLower, n.categoria, n.titulo);
+
+  // ─── NIVEL 10 — OPORTUNIDADES PERIODÍSTICAS ───
+  const nivel10_oportunidades = generarOportunidadesPeriodisticas(n.categoria, n.titulo);
+
+  // ─── DETECTORES ADICIONALES ───
+  const detectorFacebook = generarDetectorFacebook(puntuacionTotal, scoreUtilidad, scoreContexto, scoreAnalisis, aportePropio);
+  const detectorGoogle = generarDetectorGoogle(puntuacionTotal, p1, p7, scoreContexto, scoreInvestigacion, aportePropio);
+  const detectorEEATReal = generarDetectorEEATReal(tieneAtribucion, tieneDatosConcretos, tieneNombresPropios, scoreContexto, scoreInvestigacion, scoreAnalisis, aportePropio);
+
   return {
     puntuacion: puntuacionTotal,
     porQueExiste,
@@ -982,7 +1002,195 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteVPR {
     detectorNicaraguaInformate: detector,
     veredicto,
     criterios,
+    nivel8_impactoLector,
+    nivel9_preguntasSinRespuesta,
+    nivel10_oportunidades,
+    detectorFacebook,
+    detectorGoogle,
+    detectorEEATReal,
   };
+}
+
+// ───────────────────────────────────────────────
+// NIVEL 8 — IMPACTO EN EL LECTOR
+// ───────────────────────────────────────────────
+
+function generarImpactoLector(textoLower: string, categoria: string, puntuacionTotal: number): string {
+  const cat = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const tieneCausa = /\b(por que|causa|motivo|origen|factor|provocado|ocasionado|exceso de|falta de)\b/i.test(textoLower);
+  const tieneConsecuencia = /\b(consecuencia|impacto|afecta|cambio|resultado|medida|prevencion|recomendacion)\b/i.test(textoLower);
+  const tieneDatoUtil = /\b(como|cuando|donde|cuanto|cuesta|pasos|requisito|prevencion|evitar|cuidado)\b/i.test(textoLower);
+
+  if (puntuacionTotal >= 80 && tieneCausa && tieneConsecuencia) {
+    return 'El lector entiende por qué ocurrió el hecho, cómo lo afecta y qué puede hacer al respecto.';
+  }
+  if (cat.includes('suceso') && tieneCausa) {
+    return 'El lector conoce las circunstancias del hecho, pero aún no entiende el patrón ni qué medidas tomar.';
+  }
+  if (cat.includes('salud') && tieneDatoUtil) {
+    return 'El lector obtiene información para cuidarse o entender un riesgo de salud.';
+  }
+  if (cat.includes('economia') && /\b(precio|costo|subida|baja|dolar|cotizacion|mercado)\b/i.test(textoLower)) {
+    return 'El lector entiende cómo el dato económico afecta su bolsillo o decisiones.';
+  }
+  if (puntuacionTotal >= 70) {
+    return 'El lector se informa con contexto y datos, aunque la nota podría profundizar más en la utilidad práctica.';
+  }
+  return 'El lector apenas conoce el hecho; la nota no justifica bien esos 3 minutos de lectura.';
+}
+
+// ───────────────────────────────────────────────
+// NIVEL 9 — PREGUNTAS SIN RESPUESTA
+// ───────────────────────────────────────────────
+
+function generarPreguntasSinRespuesta(textoLower: string, categoria: string, titulo: string): string[] {
+  const cat = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const tit = titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const preguntas: string[] = [];
+
+  const menciona = (palabra: string) => textoLower.includes(palabra);
+  const enTitulo = (palabra: string) => tit.includes(palabra);
+
+  if (cat.includes('suceso') || enTitulo('accidente') || enTitulo('choque')) {
+    if (!menciona('denuncia') && !menciona('antecedente')) preguntas.push('¿Hubo antecedentes similares en el mismo lugar?');
+    if (!menciona('policia')) preguntas.push('¿Qué dice la Policía Nacional sobre las causas?');
+    if (!menciona('velocidad') && !menciona('alcohol')) preguntas.push('¿Estaban involucrados exceso de velocidad o alcohol?');
+    if (!menciona('herido') && !menciona('estado de salud')) preguntas.push('¿Cuál es el estado de salud de las víctimas?');
+    if (!menciona('medida')) preguntas.push('¿Qué medidas se han tomado para evitar que se repita?');
+  }
+
+  if (cat.includes('judicial') || enTitulo('adolescente') || enTitulo('feminicidio') || enTitulo('legitima defensa')) {
+    if (!menciona('denuncia anterior')) preguntas.push('¿La víctima o familiares habían denunciado antes?');
+    if (!menciona('antecedentes')) preguntas.push('¿El imputado tiene antecedentes policiales?');
+    if (!menciona('vecinos')) preguntas.push('¿Los vecinos conocían la situación de riesgo?');
+    if (!menciona('medida de proteccion')) preguntas.push('¿Existían medidas de protección para la víctima?');
+    if (!menciona('legitima defensa')) preguntas.push('¿Qué dice la legislación sobre legítima defensa o tentativa?');
+  }
+
+  if (cat.includes('salud') || enTitulo('malaria') || enTitulo('dengue')) {
+    if (!menciona('causa')) preguntas.push('¿Por qué volvió a crecer el problema?');
+    if (!menciona('region') && !menciona('frontera')) preguntas.push('¿En qué regiones o municipios se concentra?');
+    if (!menciona('minsa')) preguntas.push('¿Qué acciones está tomando el Ministerio de Salud?');
+    if (!menciona('prevencion')) preguntas.push('¿Qué debe hacer la población para protegerse?');
+  }
+
+  if (cat.includes('politica') || enTitulo('acuerdo') || enTitulo('ley')) {
+    if (!menciona('cambio')) preguntas.push('¿Qué cambia concretamente con este acuerdo o ley?');
+    if (!menciona('critica') && !menciona('oposicion')) preguntas.push('¿Qué dicen los sectores críticos?');
+    if (!menciona('plazo')) preguntas.push('¿Cuándo entra en vigencia o hay plazos?');
+  }
+
+  if (preguntas.length === 0) {
+    preguntas.push('¿Qué institución tiene la responsabilidad directa?');
+    preguntas.push('¿Existen datos históricos que permitan comparar?');
+    preguntas.push('¿Qué pasos siguen tras este hecho?');
+  }
+
+  return preguntas.slice(0, 6);
+}
+
+// ───────────────────────────────────────────────
+// NIVEL 10 — OPORTUNIDADES PERIODÍSTICAS
+// ───────────────────────────────────────────────
+
+function generarOportunidadesPeriodisticas(categoria: string, titulo: string): string[] {
+  const cat = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const tit = titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const ideas: string[] = [];
+
+  if (cat.includes('suceso') || tit.includes('accidente')) {
+    ideas.push('¿Por qué aumentan los accidentes los fines de semana?');
+    ideas.push('Las cinco carreteras o zonas con más accidentes en Nicaragua.');
+    ideas.push('Qué dice la Policía de Tránsito sobre exceso de velocidad.');
+    ideas.push('Cómo influye el alcohol en los accidentes viales.');
+    ideas.push('Qué pasa con el uso del casco y el cinturón de seguridad.');
+    ideas.push('Cuánto cuesta económicamente un accidente para una familia nicaragüense.');
+    ideas.push('Cómo cambió la mortalidad vial respecto al año anterior.');
+  }
+
+  if (cat.includes('salud') || tit.includes('malaria') || tit.includes('dengue')) {
+    ideas.push('Mapa de los municipios con más casos este año.');
+    ideas.push('¿Por qué volvió a crecer la enfermedad en la frontera?');
+    ideas.push('Qué cambia con el nuevo acuerdo o plan de salud.');
+    ideas.push('Entrevista con el médico o epidemiólogo a cargo.');
+    ideas.push('Costo del tratamiento para las familias afectadas.');
+  }
+
+  if (cat.includes('judicial') || tit.includes('adolescente') || tit.includes('feminicidio')) {
+    ideas.push('Historial de casos similares en el mismo departamento.');
+    ideas.push('¿Funcionan las medidas de protección a víctimas?');
+    ideas.push('Entrevista con organizaciones de derechos humanos.');
+    ideas.push('Explicación del marco legal y posibles penas.');
+  }
+
+  if (cat.includes('economia') || tit.includes('precio') || tit.includes('dolar')) {
+    ideas.push('Comparativa de precios con el año pasado.');
+    ideas.push('Cómo afecta el dato a la canasta básica.');
+    ideas.push('Opinión de economistas o sectores productivos.');
+  }
+
+  if (ideas.length === 0) {
+    ideas.push('Perfil de los protagonistas del hecho.');
+    ideas.push('Cronología completa de los antecedentes.');
+    ideas.push('Reacciones de la comunidad o instituciones involucradas.');
+    ideas.push('Impacto económico o social a mediano plazo.');
+  }
+
+  return ideas.slice(0, 6);
+}
+
+// ───────────────────────────────────────────────
+// DETECTOR FACEBOOK
+// ───────────────────────────────────────────────
+
+function generarDetectorFacebook(puntuacionTotal: number, scoreUtilidad: number, scoreContexto: number, scoreAnalisis: number, aportePropio: boolean): string {
+  if (puntuacionTotal >= 80 && (scoreUtilidad > 0 || scoreContexto > 1)) {
+    return 'Sí se compartiría: la nota aporta información útil o reveladora que el lector querrá difundir, no solo un titular fuerte.';
+  }
+  if (aportePropio && scoreAnalisis > 1) {
+    return 'Probablemente se comparta entre audiencias interesadas en el tema, porque incluye contexto o reporteo propio.';
+  }
+  if (puntuacionTotal >= 60) {
+    return 'Se compartiría moderadamente; no es viral por utilidad, sino por relevancia informativa básica.';
+  }
+  return 'No se compartiría por valor: carece de sorpresa, utilidad o contexto que justifique la difusión.';
+}
+
+// ───────────────────────────────────────────────
+// DETECTOR GOOGLE
+// ───────────────────────────────────────────────
+
+function generarDetectorGoogle(puntuacionTotal: number, p1: number, p7: number, scoreContexto: number, scoreInvestigacion: number, aportePropio: boolean): string {
+  if (puntuacionTotal >= 85 && p1 >= 15 && p7 >= 6 && (scoreContexto > 0 || scoreInvestigacion > 0 || aportePropio)) {
+    return 'Sí: si todos los medios desaparecieran, esta nota merecería ser elegida porque aporta contexto, verificación y valor original.';
+  }
+  if (puntuacionTotal >= 70 && (scoreContexto > 0 || aportePropio)) {
+    return 'Posiblemente sí, pero competiría con versiones similares; necesita más diferenciador para ser la primera opción.';
+  }
+  return 'No: es reemplazable por la cobertura estándar de otros medios; no aporta razón para que Google la prefiera.';
+}
+
+// ───────────────────────────────────────────────
+// DETECTOR EEAT REAL
+// ───────────────────────────────────────────────
+
+function generarDetectorEEATReal(tieneAtribucion: boolean, tieneDatosConcretos: boolean, tieneNombresPropios: boolean, scoreContexto: number, scoreInvestigacion: number, scoreAnalisis: number, aportePropio: boolean): string {
+  const partes: string[] = [];
+  if (aportePropio) partes.push('investigó o verificó en el lugar');
+  if (tieneAtribucion) partes.push('cita fuentes identificables');
+  if (tieneDatosConcretos) partes.push('aporta datos concretos');
+  if (tieneNombresPropios) partes.push('menciona personas o instituciones reales');
+  if (scoreContexto > 0) partes.push('contextualiza la información');
+  if (scoreInvestigacion > 0) partes.push('consultó documentos o cifras');
+  if (scoreAnalisis > 0) partes.push('explica el significado del hecho');
+
+  if (partes.length >= 4) {
+    return `El lector debería confiar porque Nicaragua Informate ${partes.join(', ')}.`;
+  }
+  if (partes.length >= 2) {
+    return `Tiene señales de credibilidad parcial (${partes.join(', ')}), pero falta sustento para que el lector prefiera NI sobre otro medio.`;
+  }
+  return 'No hay razón sólida: solo repite un dato sin investigación, verificación ni contexto propio.';
 }
 
 // ───────────────────────────────────────────────

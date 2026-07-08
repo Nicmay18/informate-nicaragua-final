@@ -84,7 +84,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
         onClick={analizar}
         className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition"
       >
-        🔍 Analizar Noticia Completa (SEO + AdSense + Discover + News)
+        🤖 Editor IA — Analizar valor periodístico, SEO y publicación
       </button>
     );
   }
@@ -221,6 +221,50 @@ export default function AnalizadorPanel({ noticia }: Props) {
             <div>
               <p className="font-semibold text-purple-300">¿Por qué se compartiría?</p>
               <p>{resultado.reporteVPR.porQueCompartible}</p>
+            </div>
+
+            {/* Nivel 8 */}
+            <div className="pt-3 border-t border-purple-500/30">
+              <p className="font-semibold text-purple-300">NIVEL 8 — Impacto en el lector</p>
+              <p className="italic">“¿Qué gana el lector al dedicar 3 minutos a leer esto?”</p>
+              <p>{resultado.reporteVPR.nivel8_impactoLector}</p>
+            </div>
+
+            {/* Nivel 9 */}
+            <div className="pt-3 border-t border-purple-500/30">
+              <p className="font-semibold text-purple-300">NIVEL 9 — Preguntas sin respuesta</p>
+              <p className="italic mb-1">Lo que aún falta investigar para convertirla en reportaje:</p>
+              <ul className="list-disc list-inside space-y-1">
+                {resultado.reporteVPR.nivel9_preguntasSinRespuesta.map((p, i) => (
+                  <li key={i}>{p}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Nivel 10 */}
+            <div className="pt-3 border-t border-purple-500/30">
+              <p className="font-semibold text-purple-300">NIVEL 10 — Oportunidades periodísticas</p>
+              <p className="italic mb-1">Notas que pueden salir de esta:</p>
+              <ul className="list-disc list-inside space-y-1">
+                {resultado.reporteVPR.nivel10_oportunidades.map((o, i) => (
+                  <li key={i}>{o}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Detectores adicionales */}
+            <div className="pt-3 border-t border-purple-500/30">
+              <p className="font-semibold text-purple-300">Detector Facebook</p>
+              <p>{resultado.reporteVPR.detectorFacebook}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-purple-300">Detector Google</p>
+              <p>{resultado.reporteVPR.detectorGoogle}</p>
+            </div>
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Detector EEAT Real</p>
+              <p className="italic mb-1">¿Por qué confiar en Nicaragua Informate?</p>
+              <p>{resultado.reporteVPR.detectorEEATReal}</p>
             </div>
           </div>
 
