@@ -63,6 +63,7 @@ export default function CorreccionesPage() {
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<string[]>([]);
   const [filter, setFilter] = useState('');
+  const [selectedNews, setSelectedNews] = useState<NewsDoc | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -105,6 +106,17 @@ export default function CorreccionesPage() {
       return normalize(item.titulo).includes(q) || normalize(item.slug).includes(q);
     });
   }, [auditorData, filter]);
+
+  async function selectArticle(item: AuditorItem) {
+    setLog(prev => [...prev, `🔍 Cargando contenido para análisis: ${item.titulo}`]);
+    const article = await loadNewsBySlug(item.slug);
+    if (article) {
+      setSelectedNews(article);
+      setLog(prev => [...prev, `✅ Artículo cargado: ${article.titulo}`]);
+    } else {
+      setLog(prev => [...prev, `❌ No se pudo cargar el artículo: ${item.slug}`]);
+    }
+  }
 
   async function loadNewsBySlug(slug: string): Promise<NewsDoc | null> {
     if (!db) return null;
@@ -316,21 +328,38 @@ export default function CorreccionesPage() {
                       {item.fuentes_atribuidas === 0 && <span style={{ color: '#dc2626', marginLeft: 8 }}>Sin fuentes</span>}
                     </td>
                     <td style={{ padding: 10, textAlign: 'center' }}>
-                      <button 
-                        onClick={() => applyFix(item)}
-                        disabled={running}
-                        style={{ 
-                          padding: '4px 10px', 
-                          fontSize: 12,
-                          background: '#4f46e5', 
-                          color: '#fff', 
-                          borderRadius: 4, 
-                          border: 'none',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Corregir
-                      </button>
+                      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                        <button 
+                          onClick={() => selectArticle(item)}
+                          disabled={running}
+                          style={{ 
+                            padding: '4px 10px', 
+                            fontSize: 12,
+                            background: '#7c3aed', 
+                            color: '#fff', 
+                            borderRadius: 4, 
+                            border: 'none',
+                            cursor: running ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          🤖 Analizar
+                        </button>
+                        <button 
+                          onClick={() => applyFix(item)}
+                          disabled={running}
+                          style={{ 
+                            padding: '4px 10px', 
+                            fontSize: 12,
+                            background: '#4f46e5', 
+                            color: '#fff', 
+                            borderRadius: 4, 
+                            border: 'none',
+                            cursor: running ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Corregir
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -342,22 +371,31 @@ export default function CorreccionesPage() {
           </div>
         </div>
 
-        {/* Analizador Forense */}
+        {/* Editor IA — Analizador de valor periodístico */}
         <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid #334155', padding: 20, marginBottom: 20 }}>
-          <h2 style={{ marginTop: 0, fontSize: 18, color: '#e2e8f0', marginBottom: 16 }}>
-            🔬 Analizador Forense — 6 Niveles
+          <h2 style={{ marginTop: 0, fontSize: 18, color: '#e2e8f0', marginBottom: 8 }}>
+            🤖 Editor IA — Nicaragua Informate
           </h2>
-          {auditorData.length > 0 && (
+          <p style={{ margin: 0, fontSize: 13, color: '#94a3b8', marginBottom: 16 }}>
+            Niveles 7-10 + Detectores Facebook, Google y EEAT Real. Selecciona una nota y presiona “Analizar”.
+          </p>
+          {selectedNews ? (
             <AnalizadorPanel
               noticia={{
-                titulo: auditorData[0]?.titulo || '',
-                contenido: '',
-                resumen: '',
-                categoria: 'General',
-                autor: '',
-                slug: auditorData[0]?.slug || '',
+                titulo: selectedNews.titulo || '',
+                contenido: selectedNews.contenido || '',
+                resumen: selectedNews.resumen || '',
+                categoria: selectedNews.categoria || 'General',
+                autor: selectedNews.autor || 'Redacción NI',
+                slug: selectedNews.slug || '',
+                fecha: new Date().toISOString(),
+                imagenDestacada: '',
               }}
             />
+          ) : (
+            <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8', border: '1px dashed #334155', borderRadius: 8 }}>
+              Selecciona una nota de la tabla y presiona “🤖 Analizar” para ver el análisis editorial completo.
+            </div>
           )}
         </div>
 
