@@ -186,6 +186,36 @@ export default function AnalizadorPanel({ noticia }: Props) {
           </div>
 
           <div className="space-y-3 text-sm text-gray-200">
+            {/* Nivel de Evidencia */}
+            <div className="bg-gray-900/50 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300 mb-2">🧾 Nivel de Evidencia</p>
+              <p className="italic mb-2 text-xs text-purple-300/80">Solo se puntúa lo demostrable en el texto. No se infiere trabajo periodístico.</p>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-purple-300 border-b border-purple-500/30">
+                    <th className="pb-1">Criterio</th>
+                    <th className="pb-1 text-center">Detectado</th>
+                    <th className="pb-1 text-right">Puntaje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {resultado.reporteVPR.nivelEvidencia.map((e, i) => (
+                    <tr key={i} className="border-b border-purple-500/10 last:border-0">
+                      <td className="py-1.5 text-gray-200">{e.criterio}</td>
+                      <td className="py-1.5 text-center">
+                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${
+                          e.detectado === 'Sí' ? 'bg-green-600 text-white' : e.detectado === 'Parcial' ? 'bg-yellow-500 text-black' : 'bg-red-600 text-white'
+                        }`}>
+                          {e.detectado}
+                        </span>
+                      </td>
+                      <td className="py-1.5 text-right font-mono text-purple-200">{e.puntaje}/{e.maximo}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
             <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
               <p className="font-semibold text-purple-300">¿Por qué existe este artículo?</p>
               <p>{resultado.reporteVPR.porQueExiste}</p>

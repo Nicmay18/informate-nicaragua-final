@@ -6891,6 +6891,25 @@ VERIFICACIÓN FINAL
         html += '<div style="text-align:right;"><div style="font-size:13px;color:#c4b5fd;">Puntuación</div><div style="font-size:22px;font-weight:800;">' + vpr.puntuacion + '/100</div></div>';
         html += '</div>';
 
+        // Nivel de Evidencia
+        if (vpr.nivelEvidencia && vpr.nivelEvidencia.length) {
+          html += '<div style="margin-bottom:16px;padding:12px;background:#111827;border:1px solid #4c1d95;border-radius:8px;">';
+          html += '<div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:4px;">🧾 Nivel de Evidencia</div>';
+          html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Solo se puntúa lo demostrable en el texto. No se infiere trabajo periodístico.</div>';
+          html += '<table style="width:100%;border-collapse:collapse;font-size:12px;color:#e2e8f0;">';
+          html += '<thead><tr style="border-bottom:1px solid #4c1d95;color:#a78bfa;text-align:left;"><th style="padding:4px 0;">Criterio</th><th style="padding:4px 0;text-align:center;">Detectado</th><th style="padding:4px 0;text-align:right;">Puntaje</th></tr></thead><tbody>';
+          vpr.nivelEvidencia.forEach(e => {
+            const badgeColor = e.detectado === 'Sí' ? '#16a34a' : (e.detectado === 'Parcial' ? '#ca8a04' : '#dc2626');
+            html += '<tr style="border-bottom:1px solid #312e81;">';
+            html += '<td style="padding:6px 0;">' + e.criterio + '</td>';
+            html += '<td style="padding:6px 0;text-align:center;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgeColor + ';">' + e.detectado + '</span></td>';
+            html += '<td style="padding:6px 0;text-align:right;font-family:monospace;color:#c4b5fd;">' + e.puntaje + '/' + e.maximo + '</td>';
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          html += '</div>';
+        }
+
         const campo = (titulo, texto) => {
           return '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">' + titulo + '</div><div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + texto + '</div></div>';
         };
