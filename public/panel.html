@@ -6880,46 +6880,71 @@ VERIFICACIÓN FINAL
         html += '</div>';
       }
 
-      // EDITOR IA — NIVEL 7-10 + DETECTORES
+      // EDITOR JEFE IA — NIVEL 7-10 + DETECTORES
       if (data.reporteVPR) {
         const vpr = data.reporteVPR;
         html += '<div style="background:#1e1b4b;border:1px solid #4c1d95;border-radius:12px;padding:16px;margin-top:20px;color:#e2e8f0;">';
-        html += '<h3 style="margin:0 0 12px;font-size:16px;color:#c4b5fd;"><i class="fas fa-robot"></i> Editor IA — Valor Periodístico Real</h3>';
+        html += '<h3 style="margin:0 0 12px;font-size:16px;color:#c4b5fd;"><i class="fas fa-robot"></i> Editor Jefe IA</h3>';
 
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px;background:#312e81;border-radius:8px;">';
-        html += '<div><div style="font-size:13px;color:#c4b5fd;">Veredicto</div><div style="font-size:15px;font-weight:700;">' + vpr.veredicto + '</div></div>';
-        html += '<div style="text-align:right;"><div style="font-size:13px;color:#c4b5fd;">Puntuación VPR</div><div style="font-size:22px;font-weight:800;">' + vpr.puntuacion + '/100</div></div>';
+        html += '<div><div style="font-size:13px;color:#c4b5fd;">Veredicto</div><div style="font-size:15px;font-weight:700;">' + vpr.veredicto + '</div><div style="font-size:12px;color:#a78bfa;margin-top:4px;">Tipo editorial: <strong>' + vpr.tipoNota + '</strong></div><div style="font-size:11px;color:#94a3b8;font-style:italic;">' + vpr.razonamientoTipo + '</div></div>';
+        html += '<div style="text-align:right;"><div style="font-size:13px;color:#c4b5fd;">Puntuación</div><div style="font-size:22px;font-weight:800;">' + vpr.puntuacion + '/100</div></div>';
         html += '</div>';
 
         const campo = (titulo, texto) => {
           return '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">' + titulo + '</div><div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + texto + '</div></div>';
         };
 
+        const lista = (titulo, subtitulo, items) => {
+          if (!items || !items.length) return '';
+          let out = '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">' + titulo + '</div>';
+          if (subtitulo) out += '<div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">' + subtitulo + '</div>';
+          out += '<ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
+          items.forEach(it => { out += '<li style="margin-bottom:3px;">' + it + '</li>'; });
+          out += '</ul></div>';
+          return out;
+        };
+
         html += campo('¿Por qué existe este artículo?', vpr.porQueExiste);
         html += campo('Aporte original', vpr.aporteOriginal);
-        html += campo('¿Qué le falta?', vpr.queLeFalta);
+        html += lista('🌱 Oportunidades editoriales', 'Antes se llamaba “falta”; ahora es lo que puede mejorar con el tiempo disponible:', vpr.oportunidadesEditoriales);
+        html += lista('Cómo convertirla en nota de referencia', '', vpr.comoConvertirReferencia);
         html += campo('Investigación adicional recomendada', vpr.investigacionAdicional);
         html += campo('Pregunta sin responder', vpr.preguntaSinResponder);
         html += campo('Dato enriquecedor sugerido', vpr.datoEnriquecedor);
-        html += campo('Cómo convertirla en nota de referencia', vpr.comoConvertirReferencia);
-        html += campo('Detector Nicaragua Informate', vpr.detectorNicaraguaInformate);
+
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:12px;">';
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Factibilidad</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.factibilidad + '</div></div>';
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Tiempo estimado para referencia</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.tiempoReferencia + '</div></div>';
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Retorno periodístico</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.retornoPeriodistico + '</div></div>';
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Prioridad Editorial NI</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.prioridadEditorial + '</div></div>';
+        html += '</div>';
+
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Valor para el lector</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.valorParaLector + '</div>';
+        html += '</div>';
+
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">¿Por qué leer esta versión de Nicaragua Informate?</div>';
+        html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">Si TN8, La Prensa o Canal 10 publican lo mismo, ¿por qué leer la de NI?</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.razonamientoReferencia + '</div>';
+        html += '</div>';
+
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Detector Nicaragua Informate</div>';
+        html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">¿Qué hizo Nicaragua Informate para mejorar la comprensión del evento?</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.detectorNicaraguaInformate + '</div>';
+        html += '</div>';
+
         html += campo('Google Discover', vpr.discoverRazon + ' (' + vpr.discoverSiNo + ')');
         html += campo('¿Por qué se compartiría?', vpr.porQueCompartible + ' (' + vpr.compartibleSiNo + ')');
 
         html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
         html += campo('NIVEL 8 — Impacto en el lector', '<em style="color:#94a3b8;">¿Qué gana el lector al dedicar 3 minutos a leer esto?</em><br>' + vpr.nivel8_impactoLector);
 
-        if (vpr.nivel9_preguntasSinRespuesta && vpr.nivel9_preguntasSinRespuesta.length) {
-          html += '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">NIVEL 9 — Preguntas sin respuesta</div><div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">Lo que aún falta investigar para convertirla en reportaje:</div><ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
-          vpr.nivel9_preguntasSinRespuesta.forEach(p => { html += '<li style="margin-bottom:3px;">' + p + '</li>'; });
-          html += '</ul></div>';
-        }
-
-        if (vpr.nivel10_oportunidades && vpr.nivel10_oportunidades.length) {
-          html += '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">NIVEL 10 — Oportunidades periodísticas</div><div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">Notas que pueden salir de esta:</div><ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
-          vpr.nivel10_oportunidades.forEach(o => { html += '<li style="margin-bottom:3px;">' + o + '</li>'; });
-          html += '</ul></div>';
-        }
+        html += lista('NIVEL 9 — Preguntas sin respuesta', 'Lo que aún falta investigar para convertirla en reportaje:', vpr.nivel9_preguntasSinRespuesta);
+        html += lista('NIVEL 10 — Oportunidades periodísticas', 'Notas que pueden salir de esta:', vpr.nivel10_oportunidades);
 
         html += campo('Detector Facebook', vpr.detectorFacebook);
         html += campo('Detector Google', vpr.detectorGoogle);

@@ -160,16 +160,20 @@ export default function AnalizadorPanel({ noticia }: Props) {
         ))}
       </div>
 
-      {/* NIVEL 7: Valor Periodístico Real */}
+      {/* NIVEL 7: Editor Jefe IA */}
       {resultado.reporteVPR && (
         <div className="p-5 bg-purple-900/20 border border-purple-500 rounded-lg">
           <h4 className="font-bold text-purple-300 mb-3 text-lg">
-            🔬 NIVEL 7 — Valor Periodístico Real (VPR)
+            🧠 NIVEL 7 — Editor Jefe IA
           </h4>
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-3xl font-bold text-white">{resultado.reporteVPR.puntuacion}/100</p>
               <p className="text-sm text-purple-300">{resultado.reporteVPR.veredicto}</p>
+              <p className="text-xs text-purple-400 mt-1">
+                Tipo editorial: <strong>{resultado.reporteVPR.tipoNota}</strong>
+              </p>
+              <p className="text-xs text-purple-400/80 italic">{resultado.reporteVPR.razonamientoTipo}</p>
             </div>
             <div className="text-right text-sm">
               <p className="text-purple-200">
@@ -182,7 +186,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
           </div>
 
           <div className="space-y-3 text-sm text-gray-200">
-            <div>
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
               <p className="font-semibold text-purple-300">¿Por qué existe este artículo?</p>
               <p>{resultado.reporteVPR.porQueExiste}</p>
             </div>
@@ -190,10 +194,26 @@ export default function AnalizadorPanel({ noticia }: Props) {
               <p className="font-semibold text-purple-300">Aporte original</p>
               <p>{resultado.reporteVPR.aporteOriginal}</p>
             </div>
-            <div>
-              <p className="font-semibold text-purple-300">¿Qué le falta?</p>
-              <p>{resultado.reporteVPR.queLeFalta}</p>
+
+            <div className="pt-3 border-t border-purple-500/30">
+              <p className="font-semibold text-purple-300">🌱 Oportunidades editoriales</p>
+              <p className="italic mb-1 text-xs text-purple-300/80">Antes se llamaba “falta”; ahora es lo que puede mejorar con el tiempo disponible:</p>
+              <ul className="list-disc list-inside space-y-1">
+                {resultado.reporteVPR.oportunidadesEditoriales.map((op, i) => (
+                  <li key={i}>{op}</li>
+                ))}
+              </ul>
             </div>
+
+            <div>
+              <p className="font-semibold text-purple-300">Cómo convertirla en nota de referencia</p>
+              <ul className="list-disc list-inside space-y-1">
+                {resultado.reporteVPR.comoConvertirReferencia.map((paso, i) => (
+                  <li key={i}>{paso}</li>
+                ))}
+              </ul>
+            </div>
+
             <div>
               <p className="font-semibold text-purple-300">Investigación adicional recomendada</p>
               <p>{resultado.reporteVPR.investigacionAdicional}</p>
@@ -206,14 +226,44 @@ export default function AnalizadorPanel({ noticia }: Props) {
               <p className="font-semibold text-purple-300">Dato enriquecedor sugerido</p>
               <p>{resultado.reporteVPR.datoEnriquecedor}</p>
             </div>
-            <div>
-              <p className="font-semibold text-purple-300">Cómo convertirla en nota de referencia</p>
-              <p>{resultado.reporteVPR.comoConvertirReferencia}</p>
+
+            {/* Indicadores Editor Jefe 2.0 */}
+            <div className="pt-3 border-t border-purple-500/30 grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
+                <p className="font-semibold text-purple-300 text-xs uppercase">Factibilidad</p>
+                <p>{resultado.reporteVPR.factibilidad}</p>
+              </div>
+              <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
+                <p className="font-semibold text-purple-300 text-xs uppercase">Tiempo estimado para referencia</p>
+                <p>{resultado.reporteVPR.tiempoReferencia}</p>
+              </div>
+              <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
+                <p className="font-semibold text-purple-300 text-xs uppercase">Retorno periodístico</p>
+                <p>{resultado.reporteVPR.retornoPeriodistico}</p>
+              </div>
+              <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
+                <p className="font-semibold text-purple-300 text-xs uppercase">Prioridad Editorial Nicaragua Informate</p>
+                <p>{resultado.reporteVPR.prioridadEditorial}</p>
+              </div>
             </div>
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Valor para el lector</p>
+              <p>{resultado.reporteVPR.valorParaLector}</p>
+            </div>
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">¿Por qué leer esta versión de Nicaragua Informate?</p>
+              <p className="italic mb-1 text-xs text-purple-300/80">Si TN8, La Prensa o Canal 10 publican lo mismo, ¿por qué leer la de NI?</p>
+              <p>{resultado.reporteVPR.razonamientoReferencia}</p>
+            </div>
+
             <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
               <p className="font-semibold text-purple-300">Detector Nicaragua Informate</p>
+              <p className="italic mb-1 text-xs text-purple-300/80">¿Qué hizo Nicaragua Informate para mejorar la comprensión del evento?</p>
               <p>{resultado.reporteVPR.detectorNicaraguaInformate}</p>
             </div>
+
             <div>
               <p className="font-semibold text-purple-300">Google Discover</p>
               <p>{resultado.reporteVPR.discoverRazon}</p>
