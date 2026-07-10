@@ -186,6 +186,12 @@ export default function AnalizadorPanel({ noticia }: Props) {
           </div>
 
           <div className="space-y-3 text-sm text-gray-200">
+            {/* Principio rector */}
+            <div className="bg-purple-900/50 p-4 rounded border border-purple-400/40">
+              <p className="font-semibold text-purple-300 mb-1">📜 Principio rector del Editor Jefe</p>
+              <p className="italic text-purple-100/90 leading-relaxed">{resultado.reporteVPR.principioRector}</p>
+            </div>
+
             {/* Nivel de Evidencia */}
             <div className="bg-gray-900/50 p-3 rounded border border-purple-400/30">
               <p className="font-semibold text-purple-300 mb-2">🧾 Nivel de Evidencia</p>
@@ -310,10 +316,28 @@ export default function AnalizadorPanel({ noticia }: Props) {
               <p>{resultado.reporteVPR.nivel8_impactoLector}</p>
             </div>
 
+            {/* Nivel 7.5 */}
+            {resultado.reporteVPR.nivel7_5_evidenciaAporte && resultado.reporteVPR.nivel7_5_evidenciaAporte.length > 0 && (
+              <div className="pt-3 border-t border-purple-500/30">
+                <p className="font-semibold text-purple-300">NIVEL 7.5 — Evidencia del aporte</p>
+                <p className="italic mb-1">Fragmentos donde el medio aporta contexto, explicación o datos propios:</p>
+                <ul className="space-y-2">
+                  {resultado.reporteVPR.nivel7_5_evidenciaAporte.map((e, i) => (
+                    <li key={i} className="text-sm bg-purple-900/20 p-2 rounded border border-purple-400/20">
+                      <span className="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-purple-700/50 text-purple-100 mr-2 capitalize">
+                        {e.tipo}
+                      </span>
+                      {e.snippet}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* Nivel 9 */}
             <div className="pt-3 border-t border-purple-500/30">
-              <p className="font-semibold text-purple-300">NIVEL 9 — Preguntas sin respuesta</p>
-              <p className="italic mb-1">Lo que aún falta investigar para convertirla en reportaje:</p>
+              <p className="font-semibold text-purple-300">NIVEL 9 — Preguntas de seguimiento por tipo de noticia</p>
+              <p className="italic mb-1">Oportunidades de crecimiento según la categoría detectada:</p>
               <ul className="list-disc list-inside space-y-1">
                 {resultado.reporteVPR.nivel9_preguntasSinRespuesta.map((p, i) => (
                   <li key={i}>{p}</li>
@@ -348,6 +372,12 @@ export default function AnalizadorPanel({ noticia }: Props) {
             </div>
           </div>
 
+          <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30 my-4">
+            <p className="font-semibold text-purple-300">Pregunta final</p>
+            <p className="italic text-sm mb-1">{resultado.reporteVPR.preguntaFinal}</p>
+            <p className="text-sm text-gray-200">{resultado.reporteVPR.razonamientoReferencia}</p>
+          </div>
+
           <div className="mt-4 space-y-2">
             <p className="text-xs font-bold text-purple-300 uppercase">Puntuación por criterio</p>
             {resultado.reporteVPR.criterios.map((c, i) => (
@@ -356,8 +386,9 @@ export default function AnalizadorPanel({ noticia }: Props) {
                   <p className="text-gray-200">{c.nombre}</p>
                   <p className="text-xs text-gray-500">{c.justificacion}</p>
                 </div>
-                <span className="font-mono text-purple-200 whitespace-nowrap">
-                  {c.puntuacion}/{c.maximo}
+                <span className="whitespace-nowrap" title={`${c.puntuacion}/${c.maximo}`}>
+                  <span className="text-yellow-400 tracking-widest text-base">{c.estrellas || '☆☆☆☆☆'}</span>
+                  <span className="ml-2 text-xs text-gray-400">{c.puntuacion}/{c.maximo}</span>
                 </span>
               </div>
             ))}
