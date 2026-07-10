@@ -393,6 +393,24 @@ export default function AnalizadorPanel({ noticia }: Props) {
               </div>
             ))}
           </div>
+
+          {resultado.reporteVPR.auditoriaInterna && (
+            <div className="mt-4 bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="text-xs font-bold text-purple-300 uppercase mb-1">Autoauditoría Constitución V6.0</p>
+              <p className="text-sm text-gray-200">
+                {resultado.reporteVPR.auditoriaInterna.aprobado
+                  ? '✅ Análisis aprobado sin observaciones por el director de noticias simulado.'
+                  : '🔎 El análisis fue revisado y ajustado antes de entregarse:'}
+              </p>
+              {resultado.reporteVPR.auditoriaInterna.observaciones.length > 0 && (
+                <ul className="list-disc list-inside text-xs text-gray-400 mt-1 space-y-0.5">
+                  {resultado.reporteVPR.auditoriaInterna.observaciones.map((o, i) => (
+                    <li key={i}>{o}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       )}
 

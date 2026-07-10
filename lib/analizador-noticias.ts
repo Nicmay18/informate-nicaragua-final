@@ -33,13 +33,25 @@ export interface PalabraSensibleDetectada {
 }
 
 export type TipoNotaEditorial =
-  | 'Breaking News'
-  | 'Nota informativa'
-  | 'Nota informativa + contexto'
-  | 'Nota explicativa'
-  | 'Análisis'
+  | 'Noticias'
+  | 'Seguimiento'
+  | 'Judicial'
+  | 'Investigación'
   | 'Reportaje'
-  | 'Investigación';
+  | 'Explicador'
+  | 'Datos'
+  | 'Servicio'
+  | 'Opinión'
+  | 'Entrevista'
+  | 'Crónica'
+  | 'Deportes'
+  | 'Economía'
+  | 'Tecnología'
+  | 'Salud'
+  | 'Política'
+  | 'Internacionales'
+  | 'Sucesos'
+  | 'Cultura';
 
 export interface CriterioEditorJefe {
   nombre: string;
@@ -59,7 +71,7 @@ export interface ReporteEditorJefe {
   razonamientoTipo: string;
   puntuacion: number;
   puntuacionMaxima: number;
-  veredicto: '🔴 Reemplazable' | '🟡 Competitiva' | '🟢 Referencia' | '🏆 Periodismo de alto valor';
+  veredicto: '⚠️ Publicable con oportunidades' | '✅ Publicable con fortalezas' | '🏆 Nota de referencia' | '⭐ Periodismo de alto valor';
   criterios: CriterioEditorJefe[];
 
   // Editor Jefe — análisis editorial
@@ -108,6 +120,13 @@ export interface ReporteEditorJefe {
   discoverSiNo: 'Sí' | 'No';
   porQueCompartible: string;
   compartibleSiNo: 'Sí' | 'No';
+
+  // Autoauditoría Constitución V6.0
+  auditoriaInterna: {
+    aprobado: boolean;
+    observaciones: string[];
+    ajustesRealizados: string[];
+  };
 }
 
 export interface ResultadoAnalisis {
@@ -895,35 +914,60 @@ function analizarFiltroValorEditorial(n: NoticiaInput): FiltroResultado {
 // Clasifica el tipo de cobertura editorial y evalúa con criterios justos
 // ═══════════════════════════════════════════════════════════════
 
-function clasificarTipoNota(titulo: string, contenido: string, _categoria: string, palabraCount: number, evidencia: EvidenciaVerificable): { tipo: TipoNotaEditorial; razon: string } {
+function clasificarTipoNota(titulo: string, contenido: string, categoria: string, palabraCount: number, evidencia: EvidenciaVerificable): { tipo: TipoNotaEditorial; razon: string } {
   const texto = (titulo + ' ' + contenido).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const tit = titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const cat = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
-  const frasesInvestigacion = /\b(documentos exclusivos|meses de investigacion|semanas de investigacion|trabajo de investigacion|investigacion de este medio|investigacion de Nicaragua Informate|denuncia documentada|pruebas documentales|evidencia documental|fuentes multiples|verificacion documental|informacion inedita|revelacion|hallazgo)\b/i.test(texto);
-  const entrevistasMultiples = (texto.match(/\b(entrevista|entrevistó|entrevisto|testimonio|declaraciones)\b/g) || []).length >= 2;
+  // Detectores de forma específica según la Constitución
+  const esEntrevista = /\b(entrevista exclusiva|entrevista|entrevist[oó]|dialog[oó]|convers[oó]|en\s+di[áa]logo\s+con)\b/i.test(tit) || (texto.match(/\b(entrevist[oó]|declar[oó]|dijo\s+el|dijo\s+la|seg[úu]n\s+\w+\s+\w+)\b/g) || []).length >= 4;
+  const esOpinion = /\b(opini[oó]n|columna|editorial|punto\s+de\s+vista|mi\s+opini[oó]n|la\s+opini[oó]n\s+de|an[áa]lisis\s+opiniado|voto\s+critico)\b/i.test(tit) || /\b(considero\s+que|en\s+mi\s+opini[oó]n|creo\s+que|pienso\s+que|a\s+mi\s+parecer|deber[íi]a|deber[íi]amos)\b/i.test(texto);
+  const esCronica = /\b(cronica|cr[oó]nica|relato|testimonio|vida|memoria|as[ií]\s+se\s+vivio|el\s+d[ií]a\s+que|ayer\s+en)\b/i.test(tit) || (palabraCount > 400 && /\b(cronica|cr[oó]nica|relato|memoria|escena|diario|testimonio)\b/i.test(texto));
+  const esDatos = /\b(datos|cifras|estad[íi]stica|gr[áa]fico|tabla|estudio|informe\s+num[eé]rico|an[áa]lisis\s+de\s+datos|mapa\s+de\s+datos)\b/i.test(tit) || (texto.match(/\b(\d{1,2}(?:\.\d+)?%|\d{1,3}\s+millones?|\d{2,4}|aument[oó]|disminuy[oó]|creci[oó]|descendi[oó])\b/g) || []).length >= 8;
+  const esServicio = /\b(gu[íi]a|paso\s+a\s+paso|c[oó]mo|recomendaciones|consejos|tips|qu[eé]\s+hacer|d[óo]nde|cu[áa]ndo|c[óo]mo\s+llegar|servicio|pr[áa]ctico|utilidad)\b/i.test(tit) || /\b(sigue\s+estos\s+pasos|recomendaciones|consejos|para\s+evitar|c[oó]mo\s+protegerse|c[oó]mo\s+tramitar)\b/i.test(texto);
+  const esExplicador = /\b(qu[eé]\s+es|c[oó]mo\s+funciona|qu[eé]\s+significa|explicador|explicaci[oó]n|por\s+qu[eé]|significado|entender|aprender|enseñar|todo\s+sobre)\b/i.test(tit) || /\b(explica|enseñ[áa]|aprende|entender[aá]s|significa|funciona|de\s+qu[eé]\s+se\s+trata)\b/i.test(texto);
+  const esSeguimiento = /\b(actualizaci[oó]n|seguimiento|en\s+desarrollo|segunda\s+parte|segunda\s+edici[oó]n|versi[oó]n\s+actualizada|nueva\s+informaci[oó]n|lo\s+[úu]ltimo|actualizado|sigue\s+el\s+caso|minuto\s+a\s+minuto|cronolog[ií]a)\b/i.test(tit + ' ' + texto);
+
+  const frasesInvestigacion = /\b(documentos exclusivos|meses de investigacion|semanas de investigacion|trabajo de investigacion|investigacion de este medio|investigacion de Nicaragua Informate|denuncia documentada|pruebas documentales|evidencia documental|fuentes multiples|verificacion documental|informacion inedita|revelacion|hallazgo|exclusiva)\b/i.test(texto);
+  const entrevistasMultiples = (texto.match(/\b(entrevista|entrevist[oó]|testimonio|declaraciones)\b/g) || []).length >= 2;
   const hayDocumentoYOtros = evidencia.documentoOficialIdentificado && (evidencia.dosFuentesIndependientes || entrevistasMultiples || evidencia.trabajoDeCampo);
   const esInvestigacion = (evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo || hayDocumentoYOtros) &&
-    (frasesInvestigacion || (palabraCount > 600 && entrevistasMultiples && evidencia.documentoOficialIdentificado));
+    (frasesInvestigacion || (palabraCount > 500 && entrevistasMultiples && evidencia.documentoOficialIdentificado));
 
   const esReportaje = (evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado) &&
-    /\b(entrevista|documento|testimonio|cronologia|antecedentes|reportaje|mapa|estadistica|dato historico|contexto social|impacto economico|declaraciones)\b/i.test(texto) && palabraCount > 400;
+    /\b(entrevista|documento|testimonio|cronologia|antecedentes|reportaje|mapa|estadistica|dato historico|contexto social|impacto economico|declaraciones|observaci[oó]n|verificaci[oó]n\s+presencial)\b/i.test(texto) && palabraCount > 350;
 
-  const esExplicativa = /\b(por que|que significa|como funciona|explicacion|que es|significado de|guia|consecuencias de|paso a paso|tutorial)\b/i.test(tit) || /\b(enseña|explica|aprende|entender|significado|como afecta|por que ocurre|como funciona|de que se trata)\b/i.test(texto);
+  const mapaCategorias: Record<string, TipoNotaEditorial> = {
+    'tecnologia': 'Tecnología', 'tecnolog[íi]a': 'Tecnología', 'tech': 'Tecnología',
+    'sucesos': 'Sucesos', 'accidentes': 'Sucesos', 'transito': 'Sucesos',
+    'economia': 'Economía', 'finanzas': 'Economía', 'empresas': 'Economía',
+    'salud': 'Salud', 'sanidad': 'Salud', 'epidemia': 'Salud',
+    'judicial': 'Judicial', 'policial': 'Judicial', 'justicia': 'Judicial', 'crimen': 'Judicial',
+    'nacionales': 'Noticias', 'nacional': 'Noticias', 'general': 'Noticias', 'actualidad': 'Noticias',
+    'deportes': 'Deportes', 'beisbol': 'Deportes', 'futbol': 'Deportes', 'boxeo': 'Deportes',
+    'internacionales': 'Internacionales', 'mundo': 'Internacionales', 'global': 'Internacionales',
+    'espectaculos': 'Cultura', 'arte': 'Cultura', 'musica': 'Cultura', 'cultura': 'Cultura',
+    'politica': 'Política', 'gobierno': 'Política', 'asamblea': 'Política',
+    'infraestructura': 'Noticias', 'educacion': 'Noticias', 'educaci[óo]n': 'Noticias',
+  };
 
-  const esAnalisis = !esInvestigacion && !esReportaje && (palabraCount > 350) &&
-    (/\b(analisis|analiza|interpretacion|contexto|consecuencias|impacto|causas|implicaciones|significado|tendencia|panorama|escenario|comparativa)\b/i.test(texto) || /\b(por que|como afecta|que\s+significa|quien\s+gana|quien\s+pierde|a\s+largo\s+plazo)\b/i.test(tit));
+  let tipoBase: TipoNotaEditorial | null = null;
+  for (const [clave, valor] of Object.entries(mapaCategorias)) {
+    const regex = new RegExp(`(?:^|\\s)${clave}(?:\\s|$)`, 'i');
+    if (regex.test(cat)) { tipoBase = valor; break; }
+  }
+  if (!tipoBase) tipoBase = 'Noticias';
 
-  const esBreaking = (/(ultima hora|hace minutos|hace pocos minutos|se registra|acaba de|recien|emergencia|informacion preliminar|primeros reportes|en vivo)/i.test(tit) || /\b(accidente|incendio|captura|terremoto|asesinato|fallecio|murio|heridos|explosion|colapso)\b/i.test(tit)) && palabraCount < 300;
-
-  const esDesarrollo = /\b(actualizacion|en desarrollo|sigue evolucionando|nueva informacion|se reporta|ultimo balance|cobertura|minuto a minuto|segunda edicion|version actualizada|actualizado)\b/i.test(texto);
-
-  if (esInvestigacion) return { tipo: 'Investigación', razon: 'Reúne documentos, fuentes múltiples y/o trabajo de campo propio con revelación de información no publicada.' };
+  if (esInvestigacion) return { tipo: 'Investigación', razon: 'Reúne evidencia documental, fuentes múltiples y/o trabajo de campo con revelación verificable.' };
   if (esReportaje) return { tipo: 'Reportaje', razon: 'Incluye señales verificables de entrevistas, documentos o trabajo de campo.' };
-  if (esExplicativa) return { tipo: 'Nota explicativa', razon: 'Su objetivo principal es enseñar o explicar un fenómeno.' };
-  if (esAnalisis) return { tipo: 'Análisis', razon: 'Interpreta causas, consecuencias o implicaciones sin reportaje original de campo.' };
-  if (esBreaking) return { tipo: 'Breaking News', razon: 'El título y la extensión indican un hecho reciente con información aún limitada.' };
-  if (esDesarrollo) return { tipo: 'Nota informativa + contexto', razon: 'El hecho sigue evolucionando y la nota actualiza información previa con contexto adicional.' };
-  return { tipo: 'Nota informativa', razon: 'El hecho ya ocurrió y la nota narra los hechos de manera informativa.' };
+  if (esEntrevista) return { tipo: 'Entrevista', razon: 'El formato se centra en una conversación con una fuente protagonista.' };
+  if (esOpinion) return { tipo: 'Opinión', razon: 'El texto interpreta, valora o propone un punto de vista sobre un hecho.' };
+  if (esCronica) return { tipo: 'Crónica', razon: 'Relata una experiencia, escena o testimonio con construcción narrativa.' };
+  if (esDatos) return { tipo: 'Datos', razon: 'Se basa en cifras, estadísticas o información cuantitativa verificable.' };
+  if (esServicio) return { tipo: 'Servicio', razon: 'Orienta al lector sobre cómo actuar, prevenir o resolver algo.' };
+  if (esExplicador) return { tipo: 'Explicador', razon: 'Su objetivo principal es explicar un fenómeno para que el lector lo entienda.' };
+  if (esSeguimiento) return { tipo: 'Seguimiento', razon: 'Actualiza un hecho previo con información nueva disponible.' };
+  return { tipo: tipoBase, razon: 'El contenido se ajusta a la categoría editorial principal ingresada.' };
 }
 
 interface EvidenciaVerificable {
@@ -1012,97 +1056,214 @@ function toStars(puntos: number, max: number): string {
 function obtenerCriteriosEditorJefe(tipoNota: TipoNotaEditorial, s: SenalesEditoriales): { criterios: ReporteEditorJefe['criterios']; max: number } {
   const criterios: ReporteEditorJefe['criterios'] = [];
   const add = (nombre: string, max: number, raw: number, justificacion: string) => {
-    const puntuacion = Math.min(max, Math.round(raw));
+    const puntuacion = Math.min(max, Math.max(0, Math.round(raw)));
     criterios.push({ nombre, puntuacion, maximo: max, justificacion, estrellas: toStars(puntuacion, max) });
   };
+  const just = (detectado: boolean, positivo: string, neutral: string, ausente: string) =>
+    detectado ? positivo : (s.tieneAtribucion || s.evidencia.datoConcreto) ? neutral : ausente;
 
-  const verificacionJustificacion = s.evidencia.dosFuentesIndependientes
-    ? 'Se detecta al menos una fuente identificable y atribuciones claras. Se contrastan versiones.'
-    : s.evidencia.fuenteOficialIdentificada || s.tieneAtribucion
-      ? 'Se detecta al menos una fuente identificable y atribuciones claras.'
-      : 'No se detecta fuente identificable ni atribución clara.';
+  const ptsOficial = s.evidencia.evidenciaOficial ? 20 : s.evidencia.fuenteOficialIdentificada ? 14 : s.tieneAtribucion ? 8 : 2;
+  const ptsCampo = s.evidencia.trabajoDeCampo ? 20 : s.evidencia.dosFuentesIndependientes ? 14 : s.tieneAtribucion ? 6 : 2;
+  const ptsDato = s.evidencia.datoConcreto ? 20 : s.tieneDatosConcretos ? 12 : 2;
+  const ptsContexto = s.scoreContexto >= 4 ? 20 : s.scoreContexto >= 2 ? 14 : s.scoreContexto >= 1 ? 6 : 2;
+  const ptsUtilidad = s.scoreUtilidad >= 4 ? 20 : s.scoreUtilidad >= 2 ? 14 : s.scoreUtilidad >= 1 ? 6 : 2;
+  const ptsClaridad = s.p3 >= 6 ? 20 : s.p3 >= 4 ? 14 : s.p3 >= 2 ? 6 : 2;
 
-  const trabajoPropioEstricto = s.evidencia.trabajoDeCampo || s.aportePropio;
-  const trabajoPropioJustificacion = s.evidencia.trabajoDeCampo
-    ? 'Trabajo de campo propio demostrado.'
-    : s.aportePropio
-      ? 'Se detecta frase de trabajo propio (confirmó/consultó/verificó/obtuvo).'
-      : 'No es posible determinar si existió trabajo propio desde el texto. No se castiga lo no demostrable.';
+  const matrices: Record<TipoNotaEditorial, { nombre: string; max: number; raw: number; just: string }[]> = {
+    'Noticias': [
+      { nombre: 'Qué pasó', max: 20, raw: ptsClaridad, just: just(s.p3 >= 5, 'Narra el hecho con claridad.', 'El relato es comprensible, aunque puede precisar más detalles.', 'La narrativa del hecho no es clara en el texto.') },
+      { nombre: 'Fuente identificable', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Se identifica fuente oficial o documento.', 'Hay atribución, pero falta identificación oficial clara.', 'No se detecta fuente identificable.') },
+      { nombre: 'Datos concretos', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Aporta fechas, cifras o cantidades concretas.', 'Tiene algún dato, aunque podría reforzar cifras.', 'No se detectan datos concretos verificables.') },
+      { nombre: 'Contexto básico', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el hecho con antecedentes o marco institucional.', 'Tiene algo de contexto.', 'No se detecta contexto en el texto.') },
+      { nombre: 'Utilidad para el lector', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Entrega utilidad práctica o clarifica impacto.', 'La utilidad es limitada en el texto.', 'No se detecta utilidad práctica clara.') },
+    ],
+    'Seguimiento': [
+      { nombre: 'Información nueva respecto a versiones previas', max: 20, raw: s.aportePropio ? 18 : s.scoreContexto >= 2 ? 14 : 4, just: just(s.aportePropio || s.scoreContexto >= 2, 'Aporta datos nuevos o contexto actualizado.', 'Actualiza el caso, aunque con pocos datos nuevos.', 'No se detecta avance respecto a versiones anteriores.') },
+      { nombre: 'Estado actual del hecho', max: 20, raw: ptsClaridad, just: just(s.p3 >= 5, 'Deja claro el estado actual.', 'El estado actual es parcial.', 'No se entiende el estado actual del hecho.') },
+      { nombre: 'Fuentes oficiales o identificables', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes oficiales o identificables.', 'Hay atribución, pero no fuente oficial clara.', 'No se detectan fuentes claras.') },
+      { nombre: 'Cronología o antecedentes', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Reconstruye la línea temporal.', 'Hay algun antecedente.', 'No se detecta cronología.') },
+      { nombre: 'Utilidad para seguir el caso', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Orienta sobre próximos pasos confirmados.', 'Ofrece poca orientación.', 'No se orienta sobre cómo seguir el caso.') },
+    ],
+    'Judicial': [
+      { nombre: 'Etapa procesal clara', max: 20, raw: s.evidencia.contextoLegal ? 18 : s.scoreContexto >= 2 ? 12 : 4, just: just(s.evidencia.contextoLegal, 'Identifica etapa del proceso y garantías.', 'Menciona el proceso, pero sin detalle de etapa.', 'No se detecta etapa procesal clara.') },
+      { nombre: 'Fuentes institucionales', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita Fiscalía, Policía, juzgado u otra institución.', 'Hay atribución, pero no institucional clara.', 'No se detectan fuentes institucionales.') },
+      { nombre: 'Marco legal o derechos', max: 20, raw: s.evidencia.contextoLegal ? 20 : s.scoreContexto >= 2 ? 10 : 2, just: just(s.evidencia.contextoLegal, 'Menciona ley, artículo o derecho relevante.', 'Hay referencias legales parciales.', 'No se detecta marco legal.') },
+      { nombre: 'Derechos de víctimas e imputados', max: 20, raw: s.scoreUtilidad >= 2 ? 14 : 4, just: just(s.scoreUtilidad >= 2, 'Informa sobre garantías o situación de las partes.', 'Menciona a las partes sin profundizar en derechos.', 'No se abordan garantías de las partes.') },
+      { nombre: 'Consecuencias o próximos pasos', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Explica consecuencias o próximos pasos confirmados.', 'Menciona consecuencias sin desarrollar.', 'No se detectan consecuencias o próximos pasos.') },
+    ],
+    'Investigación': [
+      { nombre: 'Fuentes contrastadas', max: 20, raw: s.evidencia.dosFuentesIndependientes ? 20 : s.evidencia.fuenteOficialIdentificada ? 10 : 4, just: just(s.evidencia.dosFuentesIndependientes, 'Se contrastan dos o más fuentes independientes.', 'Hay una fuente oficial o atribución.', 'No se detectan fuentes múltiples.') },
+      { nombre: 'Documentos o evidencia verificable', max: 20, raw: s.evidencia.documentoOficialIdentificado ? 20 : s.evidencia.datoConcreto ? 12 : 4, just: just(s.evidencia.documentoOficialIdentificado, 'Identifica documento o evidencia oficial.', 'Tiene datos, pero no documento verificable.', 'No se detecta documento ni evidencia sólida.') },
+      { nombre: 'Trabajo propio', max: 20, raw: s.evidencia.trabajoDeCampo ? 20 : s.aportePropio ? 14 : 4, just: just(s.evidencia.trabajoDeCampo || s.aportePropio, 'Hay evidencia de trabajo propio de Nicaragua Informate.', 'Hay indicios de trabajo propio.', 'No se detecta trabajo propio verificable en el texto.') },
+      { nombre: 'Hallazgo claro', max: 20, raw: s.p3 >= 6 ? 18 : s.p2 >= 4 ? 12 : 4, just: just(s.p3 >= 5, 'Explica con claridad el hallazgo principal.', 'El hallazgo es mencionado, pero poco desarrollado.', 'No se detecta un hallazgo claro.') },
+      { nombre: 'Impacto público', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Explica el impacto en el público.', 'Impacto parcial.', 'No se detecta impacto comunicado.') },
+    ],
+    'Reportaje': [
+      { nombre: 'Trabajo de campo o presencia', max: 20, raw: ptsCampo, just: just(s.evidencia.trabajoDeCampo, 'Hay evidencia de trabajo de campo.', 'Hay entrevistas o fuentes, aunque no trabajo de campo visible.', 'No se detecta trabajo de campo.') },
+      { nombre: 'Testimonios o fuentes directas', max: 20, raw: s.evidencia.dosFuentesIndependientes ? 20 : s.tieneAtribucion ? 10 : 4, just: just(s.evidencia.dosFuentesIndependientes, 'Incluye testimonios o fuentes directas.', 'Hay alguna atribución, pero pocas voces directas.', 'No se detectan testimonios ni fuentes directas.') },
+      { nombre: 'Contexto social o histórico', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el tema en contexto social o histórico.', 'Hay algo de contexto.', 'Contexto limitado.') },
+      { nombre: 'Documentos o datos', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Sustenta con datos o documentos.', 'Tiene algún dato.', 'No se detectan datos ni documentos.') },
+      { nombre: 'Narrativa y utilidad', max: 20, raw: ptsUtilidad + (s.palabraCount > 350 ? 4 : 0), just: just(s.scoreUtilidad >= 2 || s.palabraCount > 350, 'Combina narrativa con utilidad para el lector.', 'Narrativa presente, utilidad limitada.', 'No se detecta narrativa ni utilidad clara.') },
+    ],
+    'Explicador': [
+      { nombre: 'Claridad explicativa', max: 20, raw: s.p4 >= 6 ? 20 : s.p4 >= 4 ? 14 : 4, just: just(s.p4 >= 5, 'Explica de forma clara y comprensible.', 'Explica, aunque podría ser más claro.', 'No logra explicar el tema.') },
+      { nombre: 'Contexto suficiente', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Entrega el contexto necesario.', 'Contexto parcial.', 'Contexto insuficiente.') },
+      { nombre: 'Ejemplos concretos', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Usa ejemplos o datos concretos.', 'Tiene algún ejemplo.', 'No se detectan ejemplos concretos.') },
+      { nombre: 'Utilidad práctica', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'El lector puede aplicar lo aprendido.', 'Utilidad parcial.', 'No se detecta utilidad práctica.') },
+      { nombre: 'Fuentes verificables', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes verificables.', 'Hay alguna fuente.', 'Fuentes no identificables.') },
+    ],
+    'Datos': [
+      { nombre: 'Precisión y cantidad de datos', max: 20, raw: s.evidencia.datoConcreto ? 20 : s.tieneDatosConcretos ? 14 : 4, just: just(s.evidencia.datoConcreto, 'Aporta datos concretos y precisos.', 'Tiene algunos datos.', 'No se detectan datos concretos.') },
+      { nombre: 'Fuentes de los datos', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Identifica la fuente de los datos.', 'Atribuye datos, pero no con fuente oficial clara.', 'No se detecta fuente de datos.') },
+      { nombre: 'Contexto histórico o comparativo', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Compara con periodos anteriores.', 'Comparación parcial.', 'Sin contexto histórico.') },
+      { nombre: 'Interpretación de los datos', max: 20, raw: s.scoreAnalisis >= 3 ? 18 : s.scoreAnalisis >= 1 ? 12 : 4, just: just(s.scoreAnalisis >= 2, 'Interpreta el significado de los datos.', 'Interpretación parcial.', 'No se interpretan los datos.') },
+      { nombre: 'Utilidad para el lector', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'El dato es útil para el lector.', 'Utilidad limitada.', 'No se detecta utilidad del dato.') },
+    ],
+    'Servicio': [
+      { nombre: 'Utilidad práctica', max: 25, raw: s.scoreUtilidad >= 4 ? 25 : s.scoreUtilidad >= 2 ? 18 : 6, just: just(s.scoreUtilidad >= 3, 'Resuelve una necesidad práctica del lector.', 'Tiene utilidad, pero poco desarrollada.', 'No se detecta utilidad práctica clara.') },
+      { nombre: 'Pasos accionables', max: 20, raw: s.scoreUtilidad >= 3 ? 18 : s.scoreUtilidad >= 1 ? 10 : 4, just: just(s.scoreUtilidad >= 3, 'Entrega pasos concretos para actuar.', 'Pasos vagos o incompletos.', 'No se entregan pasos para actuar.') },
+      { nombre: 'Fuentes oficiales o especialistas', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes oficiales o especialistas.', 'Hay alguna fuente.', 'No se detectan fuentes de autoridad.') },
+      { nombre: 'Claridad', max: 20, raw: ptsClaridad, just: just(s.p3 >= 5, 'Instrucciones claras.', 'Claridad parcial.', 'No es claro cómo actuar.') },
+      { nombre: 'Vigencia', max: 15, raw: s.evidencia.datoConcreto ? 15 : 6, just: just(s.evidencia.datoConcreto, 'Incluye fechas, horarios o vigencia.', 'Vigencia parcial.', 'No se detectan datos de vigencia.') },
+    ],
+    'Opinión': [
+      { nombre: 'Argumento central', max: 25, raw: s.p4 >= 5 ? 22 : s.p3 >= 5 ? 14 : 6, just: just(s.p4 >= 5 || s.p3 >= 5, 'Plantea un argumento claro.', 'El argumento es difuso.', 'No se detecta argumento central.') },
+      { nombre: 'Fundamentación verificable', max: 20, raw: s.evidencia.datoConcreto ? 18 : s.scoreContexto >= 2 ? 12 : 4, just: just(s.evidencia.datoConcreto || s.scoreContexto >= 2, 'Apoya la opinión con datos o hechos.', 'Fundamentación débil.', 'Opinión sin hechos verificables.') },
+      { nombre: 'Contexto', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Situía el tema en contexto.', 'Contexto parcial.', 'Sin contexto.') },
+      { nombre: 'Propuesta o conclusión', max: 20, raw: s.scoreUtilidad >= 2 ? 16 : 6, just: just(s.scoreUtilidad >= 2, 'Ofrece una propuesta o conclusión.', 'Conclusión débil.', 'No se detecta propuesta o conclusión.') },
+      { nombre: 'Respeto a los hechos', max: 15, raw: s.atribucionFalsa ? 0 : s.tieneAtribucion ? 12 : 6, just: just(!s.atribucionFalsa && s.tieneAtribucion, 'Respeta los hechos y no inventa fuentes.', 'Riesgo de atribución poco clara.', 'Se detectan atribuciones problemáticas.') },
+    ],
+    'Entrevista': [
+      { nombre: 'Fuente identificada', max: 25, raw: s.tieneNombresPropios ? 22 : s.tieneAtribucion ? 12 : 4, just: just(s.tieneNombresPropios, 'Identifica claramente al entrevistado.', 'Menciona una fuente, pero no con nombre claro.', 'No se identifica al entrevistado.') },
+      { nombre: 'Preguntas relevantes', max: 20, raw: s.p4 >= 5 ? 18 : s.scoreUtilidad >= 2 ? 12 : 4, just: just(s.p4 >= 5 || s.scoreUtilidad >= 2, 'Plantea preguntas relevantes.', 'Preguntas poco relevantes.', 'No se detectan preguntas relevantes.') },
+      { nombre: 'Citas atribuidas', max: 20, raw: s.tieneAtribucion ? 18 : 4, just: just(s.tieneAtribucion, 'Cita correctamente al entrevistado.', 'Citas escasas.', 'No se detectan citas atribuidas.') },
+      { nombre: 'Contexto del entrevistado', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Contextualiza quién es la fuente.', 'Contexto parcial.', 'No se contextualiza la fuente.') },
+      { nombre: 'Utilidad para el lector', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'La entrevista entrega valor al lector.', 'Utilidad parcial.', 'No se detecta utilidad para el lector.') },
+    ],
+    'Crónica': [
+      { nombre: 'Narrativa vívida', max: 25, raw: s.palabraCount > 350 && s.tieneAtribucion ? 22 : s.palabraCount > 250 ? 14 : 6, just: just(s.palabraCount > 350 && s.tieneAtribucion, 'Relata con voz narrativa propia.', 'Relato presente, narrativa débil.', 'No se detecta narrativa vívida.') },
+      { nombre: 'Personajes o escena', max: 20, raw: s.tieneNombresPropios ? 18 : s.tieneAtribucion ? 10 : 4, just: just(s.tieneNombresPropios, 'Presenta personajes o escenas concretas.', 'Hay nombres, pero escena poco definida.', 'No se detectan personajes ni escenas.') },
+      { nombre: 'Evidencia del lugar o tiempo', max: 20, raw: s.evidencia.trabajoDeCampo ? 20 : s.evidencia.datoConcreto ? 14 : 6, just: just(s.evidencia.trabajoDeCampo || s.evidencia.datoConcreto, 'Aporta datos de lugar, fecha o presencia.', 'Datos de contexto parciales.', 'No se detecta evidencia de lugar o tiempo.') },
+      { nombre: 'Sentido periodístico', max: 20, raw: s.scoreUtilidad >= 2 ? 16 : 6, just: just(s.scoreUtilidad >= 2, 'La crónica tiene sentido periodístico público.', 'Sentido periodístico débil.', 'No se detecta sentido periodístico claro.') },
+      { nombre: 'Utilidad', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Deja una enseñanza o reflexión útil.', 'Utilidad parcial.', 'No se detecta utilidad.') },
+    ],
+    'Deportes': [
+      { nombre: 'Resultado o acontecimiento', max: 20, raw: ptsClaridad, just: just(s.p3 >= 5, 'Deja claro el resultado o acontecimiento.', 'El resultado es mencionado, pero no destacado.', 'No se detecta resultado claro.') },
+      { nombre: 'Estadísticas o datos del evento', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Aporta estadísticas o datos concretos.', 'Datos deportivos parciales.', 'No se detectan estadísticas.') },
+      { nombre: 'Declaraciones o protagonistas', max: 20, raw: s.tieneAtribucion ? 18 : 4, just: just(s.tieneAtribucion, 'Incluye declaraciones o protagonistas.', 'Atribuciones escasas.', 'No se detectan declaraciones.') },
+      { nombre: 'Contexto del torneo o posición', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Situía el evento en el torneo o tabla.', 'Contexto parcial.', 'Sin contexto de competición.') },
+      { nombre: 'Utilidad para el aficionado', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Informa de próximos juegos o implicaciones.', 'Utilidad parcial.', 'No se detecta utilidad para el aficionado.') },
+    ],
+    'Economía': [
+      { nombre: 'Dato económico concreto', max: 25, raw: s.evidencia.datoConcreto ? 25 : s.tieneDatosConcretos ? 16 : 6, just: just(s.evidencia.datoConcreto, 'Aporta cifras, precios o indicadores concretos.', 'Tiene algún dato económico.', 'No se detectan datos económicos concretos.') },
+      { nombre: 'Fuentes oficiales o empresariales', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes oficiales o empresariales.', 'Atribución presente, fuente oficial débil.', 'No se detectan fuentes económicas claras.') },
+      { nombre: 'Impacto en el consumidor', max: 20, raw: s.scoreUtilidad >= 3 ? 18 : s.scoreUtilidad >= 1 ? 10 : 4, just: just(s.scoreUtilidad >= 2, 'Explica el impacto en el bolsillo o decisiones.', 'Impacto parcial.', 'No se explica impacto en el consumidor.') },
+      { nombre: 'Contexto histórico', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Compara con periodos anteriores.', 'Contexto parcial.', 'Sin contexto histórico.') },
+      { nombre: 'Claridad explicativa', max: 15, raw: s.p4 >= 5 ? 14 : s.p4 >= 3 ? 8 : 4, just: just(s.p4 >= 5, 'Explica bien el fenómeno económico.', 'Explicación parcial.', 'No se explica el fenómeno económico.') },
+    ],
+    'Tecnología': [
+      { nombre: 'Qué cambia o novedad', max: 25, raw: ptsClaridad, just: just(s.p3 >= 5, 'Explica claramente la novedad tecnológica.', 'La novedad es mencionada sin explicar.', 'No se detecta qué cambia.') },
+      { nombre: 'Fuentes oficiales o empresariales', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes oficiales o de la empresa.', 'Atribución débil.', 'No se detectan fuentes tecnológicas claras.') },
+      { nombre: 'Impacto en usuarios', max: 20, raw: s.scoreUtilidad >= 3 ? 18 : s.scoreUtilidad >= 1 ? 10 : 4, just: just(s.scoreUtilidad >= 2, 'Explica el impacto en usuarios.', 'Impacto parcial.', 'No se explica impacto en usuarios.') },
+      { nombre: 'Contexto del cambio', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa la novedad en contexto regional o global.', 'Contexto parcial.', 'Sin contexto tecnológico.') },
+      { nombre: 'Utilidad práctica', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Entrega utilidad práctica al usuario.', 'Utilidad parcial.', 'No se detecta utilidad práctica.') },
+    ],
+    'Salud': [
+      { nombre: 'Prevención o utilidad práctica', max: 25, raw: s.scoreUtilidad >= 4 ? 25 : s.scoreUtilidad >= 2 ? 18 : 6, just: just(s.scoreUtilidad >= 3, 'Entrega orientación práctica de prevención o cuidado.', 'Utilidad parcial.', 'No se detecta utilidad práctica.') },
+      { nombre: 'Instituciones o especialistas', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita MINSA, hospitales o especialistas.', 'Atribución presente, institución no clara.', 'No se detectan fuentes de salud claras.') },
+      { nombre: 'Dato epidemiológico o clínico', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Aporta datos epidemiológicos o clínicos.', 'Datos de salud parciales.', 'No se detectan datos de salud concretos.') },
+      { nombre: 'Contexto de salud pública', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el tema en contexto de salud pública.', 'Contexto parcial.', 'Sin contexto de salud pública.') },
+      { nombre: 'Claridad para el lector', max: 15, raw: ptsClaridad, just: just(s.p3 >= 5, 'Explica el tema con claridad.', 'Claridad parcial.', 'No se explica con claridad.') },
+    ],
+    'Política': [
+      { nombre: 'Decisión, acuerdo o evento político', max: 25, raw: ptsClaridad, just: just(s.p3 >= 5, 'Explica claramente la decisión o acuerdo.', 'La decisión es mencionada sin desarrollar.', 'No se detecta decisión política clara.') },
+      { nombre: 'Instituciones involucradas', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita instituciones y actores políticos identificables.', 'Atribución parcial.', 'No se detectan instituciones claras.') },
+      { nombre: 'Antecedentes', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Entrega antecedentes políticos.', 'Antecedentes parciales.', 'Sin antecedentes políticos.') },
+      { nombre: 'Impacto en ciudadanos', max: 20, raw: s.scoreUtilidad >= 3 ? 18 : s.scoreUtilidad >= 1 ? 10 : 4, just: just(s.scoreUtilidad >= 2, 'Explica el impacto en la ciudadanía.', 'Impacto parcial.', 'No se explica impacto ciudadano.') },
+      { nombre: 'Cronología o próximos pasos', max: 15, raw: s.evidencia.datoConcreto ? 14 : s.scoreContexto >= 1 ? 8 : 4, just: just(s.evidencia.datoConcreto, 'Incluye fechas o próximos pasos.', 'Cronología parcial.', 'No se detectan próximos pasos ni fechas.') },
+    ],
+    'Internacionales': [
+      { nombre: 'Qué pasó en el exterior', max: 25, raw: ptsClaridad, just: just(s.p3 >= 5, 'Explica claramente el hecho internacional.', 'El hecho es mencionado sin desarrollar.', 'No se detecta qué pasó en el exterior.') },
+      { nombre: 'Fuentes reconocibles', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes internacionales reconocibles.', 'Atribución presente, fuente no clara.', 'No se detectan fuentes internacionales claras.') },
+      { nombre: 'Relevancia para Nicaragua', max: 20, raw: s.scoreUtilidad >= 3 ? 18 : s.scoreUtilidad >= 1 ? 10 : 4, just: just(s.scoreUtilidad >= 2, 'Explica relevancia para Nicaragua.', 'Relevancia parcial.', 'No se explica relevancia local.') },
+      { nombre: 'Contexto global', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el hecho en contexto global.', 'Contexto parcial.', 'Sin contexto global.') },
+      { nombre: 'Utilidad para el lector', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Entrega utilidad al lector.', 'Utilidad parcial.', 'No se detecta utilidad.') },
+    ],
+    'Sucesos': [
+      { nombre: 'Qué pasó', max: 20, raw: ptsClaridad, just: just(s.p3 >= 5, 'Narra el suceso con claridad.', 'El suceso es mencionado sin desarrollar.', 'No se entiende el suceso.') },
+      { nombre: 'Fuentes oficiales', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita bomberos, policía, tránsito u otra fuente oficial.', 'Atribución parcial.', 'No se detectan fuentes oficiales.') },
+      { nombre: 'Datos concretos', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Aporta hora, lugar, cifras o nombres.', 'Datos parciales.', 'No se detectan datos concretos.') },
+      { nombre: 'Circunstancias', max: 20, raw: s.scoreCausaConsecuencia >= 2 ? 18 : s.scoreCausaConsecuencia >= 1 ? 10 : 4, just: just(s.scoreCausaConsecuencia >= 2, 'Explica circunstancias o causas.', 'Circunstancias parciales.', 'No se explican circunstancias.') },
+      { nombre: 'Estado de víctimas o consecuencias', max: 20, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Informa sobre víctimas, heridos o consecuencias.', 'Consecuencias parciales.', 'No se informa sobre estado de víctimas ni consecuencias.') },
+    ],
+    'Cultura': [
+      { nombre: 'Información del evento u obra', max: 25, raw: ptsClaridad, just: just(s.p3 >= 5, 'Explica claramente el evento u obra cultural.', 'La información es parcial.', 'No se detecta información clara del evento u obra.') },
+      { nombre: 'Protagonistas o creadores', max: 20, raw: s.tieneNombresPropios ? 20 : s.tieneAtribucion ? 10 : 4, just: just(s.tieneNombresPropios, 'Identifica protagonistas o creadores.', 'Menciona nombres sin desarrollar.', 'No se identifican protagonistas.') },
+      { nombre: 'Contexto cultural', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el evento en contexto cultural.', 'Contexto parcial.', 'Sin contexto cultural.') },
+      { nombre: 'Fuentes', max: 20, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes organizadoras o de los protagonistas.', 'Atribución parcial.', 'No se detectan fuentes culturales claras.') },
+      { nombre: 'Utilidad para asistentes o público', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Entrega datos útiles para asistir o entender.', 'Utilidad parcial.', 'No se detecta utilidad para el público.') },
+    ],
+  };
 
-  switch (tipoNota) {
-    case 'Breaking News': {
-      add('Rapidez y claridad', 15, s.p3 + (s.palabraCount < 200 ? 4 : 0) + (s.tieneAtribucion ? 3 : 0), s.p3 >= 6 ? 'Informa el hecho con rapidez y claridad pese al poco tiempo.' : 'El relato inicial no logra comunicar con claridad qué ocurrió.');
-      add('Fuente identificable', 20, s.p7 + s.p1 / 2, s.p7 >= 8 ? 'Cita o atribuye la información a una fuente.' : 'No se identifica de dónde proviene la información.');
-      add('Datos confirmados', 20, (s.tieneDatosConcretos ? 12 : 0) + s.p1 / 2, s.tieneDatosConcretos ? 'Aporta datos concretos sin inventar.' : 'Faltan datos verificables o hay riesgo de invención.');
-      add('Responde qué pasó', 20, s.p3 * 2, s.p3 >= 6 ? 'Responde la pregunta esencial del hecho.' : 'No queda claro el hecho central.');
-      add('Responde qué sigue', 10, s.p8 + (s.scoreCausaConsecuencia ? 2 : 0), s.p8 >= 4 ? 'Indica pasos inmediatos o próximas acciones.' : 'No anticipa qué viene después.');
-      add('Sin inventar', 10, s.atribucionFalsa ? 0 : 10, s.atribucionFalsa ? 'Detectada atribución falsa o fuente anónima sin respaldo.' : 'Evita atribuciones falsas o fuentes anónimas sin sustento.');
-      return { criterios, max: 95 };
-    }
-    case 'Nota informativa + contexto': {
-      add('Qué cambió respecto a antes', 15, s.p2 + s.p9 + (s.aportePropio ? 3 : 0), s.p2 + s.p9 >= 6 ? 'Aporta información nueva respecto a versiones previas.' : 'No se percibe el avance respecto a la última versión.');
-      add('Información nueva verificable', 20, s.p1 + s.p7, s.p1 + s.p7 >= 12 ? 'Agrega datos verificables de fuentes.' : 'La "actualización" carece de datos nuevos.');
-      add('Qué falta confirmar', 15, s.p8 + (s.scoreCausaConsecuencia ? 4 : 0) + 4, s.p8 + (s.scoreCausaConsecuencia ? 4 : 0) + 4 >= 8 ? 'Reconoce lo que aún no está confirmado.' : 'No deja claro qué información sigue siendo provisional.');
-      add('Contexto del evento', 15, s.p5 + s.p2, s.p5 + s.p2 >= 8 ? 'Situación del hecho en su contexto.' : 'Falta contexto para entender la evolución.');
-      add('Fuentes y atribuciones', 15, s.p7 + s.p1 / 3, verificacionJustificacion);
-      add('Utilidad para seguimiento', 10, s.p8 + (s.scoreUtilidad ? 2 : 0), s.p8 >= 4 ? 'Útil para quienes siguen el caso.' : 'No aporta orientación sobre cómo seguir el hecho.');
-      return { criterios, max: 90 };
-    }
-    case 'Nota informativa': {
-      add('Qué pasó', 20, s.p3 * 2, s.p3 >= 6 ? 'Narra el hecho con claridad.' : 'El hecho no está claro.');
-      add('Por qué ocurrió', 15, s.scoreCausaConsecuencia * 2 + (s.scoreAnalisis ? 3 : 0), s.scoreCausaConsecuencia > 0 ? 'Explica causas o motivos.' : 'No aborda las causas.');
-      add('Cómo ocurrió', 15, s.p3 + (s.tieneDatosConcretos ? 4 : 0), s.p3 + (s.tieneDatosConcretos ? 4 : 0) >= 8 ? 'Detalla mecanismo o circunstancias.' : 'Falta el "cómo" del hecho.');
-      add('Consecuencias', 15, s.p8 + s.scoreCausaConsecuencia * 2, s.p8 + s.scoreCausaConsecuencia * 2 >= 8 ? 'Menciona impacto o consecuencias.' : 'No explica qué cambia por el hecho.');
-      add('Contexto', 10, s.p5 + (s.scoreContexto ? 2 : 0), s.p5 >= 4 ? 'Incluye contexto básico.' : 'Carece de antecedentes.');
-      add('Utilidad práctica', 10, s.p8, s.p8 >= 4 ? 'Tiene utilidad para el lector.' : 'No ofrece utilidad clara.');
-      return { criterios, max: 85 };
-    }
-    case 'Nota explicativa': {
-      add('Enseña algo nuevo', 25, s.p4 * 2 + (s.scoreAnalisis ? 5 : 0), s.p4 >= 6 ? 'El lector aprende un concepto o relación nueva.' : 'No logra que el lector aprenda.');
-      add('Contexto suficiente', 20, s.p5 * 2, s.p5 >= 4 ? 'Provee el contexto necesario para entender.' : 'Contexto insuficiente.');
-      add('Análisis claro', 20, s.p2 * 2, s.p2 >= 4 ? 'Explica causas, consecuencias o implicaciones.' : 'Falta análisis.');
-      add('Datos concretos', 15, (s.tieneDatosConcretos ? 8 : 0) + s.p7 / 2, s.tieneDatosConcretos ? 'Sustenta con datos o ejemplos.' : 'Falta sustento de datos.');
-      add('Utilidad para decisiones', 10, s.p8 + (s.scoreUtilidad ? 3 : 0), s.p8 >= 4 ? 'El lector puede actuar o decidir mejor.' : 'No aporta aplicación práctica.');
-      return { criterios, max: 90 };
-    }
-    case 'Análisis': {
-      add('Pregunta central', 20, s.p3 * 2, s.p3 >= 6 ? 'Plantea claramente qué fenómeno analiza.' : 'No queda claro el objeto de análisis.');
-      add('Contexto y antecedentes', 20, s.p5 * 2 + (s.scoreContexto ? 4 : 0), s.p5 >= 4 ? 'Provee contexto necesario para interpretar.' : 'Falta contexto para sostener el análisis.');
-      add('Interpretación propia', 20, s.p2 * 2 + (s.scoreAnalisis ? 6 : 0), s.scoreAnalisis > 0 ? 'Aporta una interpretación, no solo datos.' : 'Solo acumula datos sin interpretación.');
-      add('Fuentes identificables', 20, s.p7 + s.p1 / 2, verificacionJustificacion);
-      add('Utilidad del análisis', 20, s.p8 + (s.scoreUtilidad ? 4 : 0), s.p8 >= 4 ? 'El lector entiende implicaciones o puede actuar.' : 'El análisis no termina de ser útil.');
-      return { criterios, max: 100 };
-    }
-    case 'Reportaje': {
-      const puntajeInvestigacionVisible = s.evidencia.trabajoDeCampo ? 20 : s.evidencia.documentoOficialIdentificado ? 16 : s.p6 >= 4 ? 8 : 2;
-      add('Investigación visible', 20, puntajeInvestigacionVisible, s.evidencia.trabajoDeCampo ? 'Se demuestra trabajo de campo propio.' : s.evidencia.documentoOficialIdentificado ? 'Se identifica documento oficial, pero no se demuestra trabajo de campo.' : 'No se detecta investigación verificable: solo narración o palabras clave.');
-      const puntajeFuentesPropias = s.evidencia.dosFuentesIndependientes ? 20 : s.evidencia.trabajoDeCampo ? 16 : s.p7 + s.p9 >= 8 ? 6 : 2;
-      add('Entrevistas o fuentes propias', 20, puntajeFuentesPropias, s.evidencia.dosFuentesIndependientes ? 'Se detectan dos o más fuentes independientes.' : s.evidencia.trabajoDeCampo ? 'Hay trabajo de campo, pero no se contrastan fuentes.' : 'No se demuestran entrevistas ni fuentes propias.');
-      add('Contexto amplio', 15, s.p5 + (s.scoreContexto ? 4 : 0), s.p5 >= 4 ? 'Contexto rico y amplio.' : 'Contexto limitado para un reportaje.');
-      add('Análisis y explicación', 15, s.p2 + s.p4, s.p2 + s.p4 >= 8 ? 'Analiza, no solo describe.' : 'Falta análisis.');
-      const puntajeDocumentos = s.evidencia.documentoOficialIdentificado ? 15 : s.evidencia.datoConcreto ? 6 : 2;
-      add('Documentos o datos', 15, puntajeDocumentos, s.evidencia.documentoOficialIdentificado ? 'Documento o dato oficial identificado.' : s.evidencia.datoConcreto ? 'Dato concreto, pero no documento verificable.' : 'Falta evidencia documental.');
-      add('Impacto o utilidad', 10, s.p8, s.p8 >= 4 ? 'Impacto o utilidad para el lector.' : 'Poca utilidad o impacto.');
-      return { criterios, max: 95 };
-    }
-    case 'Investigación': {
-      const puntajeFuentesMultiples = s.evidencia.dosFuentesIndependientes ? 20 : s.evidencia.fuenteOficialIdentificada ? 8 : 2;
-      add('Fuentes múltiples y contrastadas', 20, puntajeFuentesMultiples, s.evidencia.dosFuentesIndependientes ? 'Se detectan dos o más fuentes independientes.' : s.evidencia.fuenteOficialIdentificada ? 'Solo una fuente oficial identificada; no se contrastan versiones.' : 'No se detectan fuentes múltiples ni contrastadas.');
-      const puntajeDocumentos = s.evidencia.documentoOficialIdentificado ? 20 : s.evidencia.datoConcreto ? 6 : 2;
-      add('Documentos / evidencia', 20, puntajeDocumentos, s.evidencia.documentoOficialIdentificado ? 'Documento oficial identificado.' : s.evidencia.datoConcreto ? 'Dato concreto, pero no documento oficial citado.' : 'No se identifica documento ni evidencia sólida.');
-      const puntajeVerificacion = (s.evidencia.dosFuentesIndependientes || s.evidencia.trabajoDeCampo || s.evidencia.fuenteOficialIdentificada || s.tieneAtribucion) ? 20 : 4;
-      add('Verificación y contraste', 20, puntajeVerificacion, verificacionJustificacion);
-      const puntajeTrabajoPropio = trabajoPropioEstricto ? 20 : 10;
-      add('Trabajo propio de Nicaragua Informate', 20, puntajeTrabajoPropio, trabajoPropioJustificacion);
-      add('Impacto del hallazgo', 10, s.p8 + (s.scoreCausaConsecuencia ? 3 : 0), s.p8 >= 4 ? 'El hallazgo tiene impacto público.' : 'Poco impacto comunicado.');
-      add('Claridad de hallazgos', 10, s.p2 + s.p4, s.p2 + s.p4 >= 6 ? 'Explica bien los hallazgos.' : 'Hallazgos poco claros.');
-      return { criterios, max: 100 };
-    }
-    default:
-      add('Información básica', 50, s.p3 * 3, s.p3 >= 6 ? 'Narra el hecho con claridad.' : 'El hecho no está claro.');
-      add('Fuentes y atribuciones', 50, s.p7 + s.p1 / 2, verificacionJustificacion);
-      return { criterios, max: 100 };
+  const matriz = matrices[tipoNota] || matrices['Noticias'];
+  for (const c of matriz) add(c.nombre, c.max, c.raw, c.just);
+  return { criterios, max: matriz.reduce((sum, c) => sum + c.max, 0) };
+}
+
+// ───────────────────────────────────────────────
+// AUTOAUDITORÍA CONSTITUCIÓN V6.0
+// ───────────────────────────────────────────────
+
+function autoauditarConstitucion(
+  reporte: ReporteEditorJefe,
+  senales: SenalesEditoriales,
+  textoLower: string
+): { ajustes: Partial<ReporteEditorJefe>; observaciones: string[] } {
+  const observaciones: string[] = [];
+  const ajustes: Partial<ReporteEditorJefe> = {};
+  const ev = senales.evidencia;
+  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado;
+
+  // 1. Alucinación de puntuación: puntaje alto sin evidencia visible
+  if (reporte.puntuacion >= 85 && !evidenciaFuerte && !ev.fuenteOficialIdentificada) {
+    observaciones.push('Autoauditoría: puntaje alto sin fuente oficial ni evidencia de trabajo propio; se ajusta para evitar alucinación.');
+    ajustes.puntuacion = Math.min(reporte.puntuacion, 79);
+    ajustes.veredicto = '✅ Publicable con fortalezas';
   }
+
+  // 2. Veredicto inconsistente con score
+  if (reporte.puntuacion < 60 && reporte.veredicto !== '⚠️ Publicable con oportunidades') {
+    observaciones.push('Autoauditoría: el veredicto no coincide con el puntaje bajo; se corrige.');
+    ajustes.veredicto = '⚠️ Publicable con oportunidades';
+  }
+  if (reporte.puntuacion >= 90 && reporte.veredicto !== '⭐ Periodismo de alto valor') {
+    observaciones.push('Autoauditoría: el puntaje justifica el máximo reconocimiento periodístico.');
+    ajustes.veredicto = '⭐ Periodismo de alto valor';
+  }
+
+  // 3. Investigación/Reportaje sin evidencia mínima
+  if (reporte.tipoNota === 'Investigación' && !evidenciaFuerte) {
+    observaciones.push('Autoauditoría: una Investigación requiere evidencia visible de trabajo propio; se reclasifica como Noticias.');
+    ajustes.tipoNota = 'Noticias';
+  }
+  if (reporte.tipoNota === 'Reportaje' && !(ev.trabajoDeCampo || ev.documentoOficialIdentificado)) {
+    observaciones.push('Autoauditoría: un Reportaje requiere evidencia de campo o documento; se reclasifica como Noticias.');
+    ajustes.tipoNota = 'Noticias';
+  }
+
+  // 4. Lenguaje prohibido o negativo
+  const palabrasProhibidas = /\b(malo|pesimo|horrible|negligente|incompetente|mentira|falso|fake|ridiculo|vergonzoso|asco|basura|chafa|amarillista|sesgado|manipulador)\b/gi;
+  const palabrasDetectadas = (textoLower.match(palabrasProhibidas) || []);
+  if (palabrasDetectadas.length > 0) {
+    observaciones.push(`Autoauditoría detectó lenguaje no constitucional en análisis: ${palabrasDetectadas.join(', ')}. El reporte evita esos términos.`);
+  }
+
+  // 5. Oportunidades vacías
+  if (reporte.oportunidadesEditoriales.length === 0) {
+    observaciones.push('Autoauditoría: no se generaron oportunidades editoriales; se mantiene mensaje por defecto.');
+  }
+
+  return { ajustes, observaciones };
 }
 
 function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
@@ -1172,14 +1333,14 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   if (!tieneAtribucion && !evidencia.fuenteOficialIdentificada) score100 = Math.min(score100, 60);
 
   let veredicto: ReporteEditorJefe['veredicto'];
-  if (score100 >= 90) veredicto = '🏆 Periodismo de alto valor';
-  else if (score100 >= 80) veredicto = '🟢 Referencia';
-  else if (score100 >= 60) veredicto = '🟡 Competitiva';
-  else veredicto = '🔴 Reemplazable';
+  if (score100 >= 90) veredicto = '⭐ Periodismo de alto valor';
+  else if (score100 >= 80) veredicto = '🏆 Nota de referencia';
+  else if (score100 >= 60) veredicto = '✅ Publicable con fortalezas';
+  else veredicto = '⚠️ Publicable con oportunidades';
 
   const porQueExiste = (evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado || scoreAnalisis > 2)
     ? 'Este artículo aporta información verificada, contexto o evidencia que lo diferencia de una simple repetición.'
-    : 'Este artículo narra un hecho relevante, pero no se detecta evidencia demostrable de trabajo propio, verificación adicional o documentos que lo diferencien. Oportunidad editorial: contrastar con fuentes o agregar contexto cuando esté disponible.';
+    : 'Este artículo narra un hecho relevante; no se detecta evidencia demostrable de trabajo propio, verificación adicional o documentos que lo diferencien. Oportunidad editorial: contrastar con fuentes o agregar contexto cuando esté disponible.';
 
   const aporteOriginal = (evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado || scoreAnalisis > 2)
     ? `Aporta ${evidencia.trabajoDeCampo ? 'reporteo propio' : evidencia.dosFuentesIndependientes ? 'fuentes contrastadas' : evidencia.documentoOficialIdentificado ? 'evidencia oficial' : 'contexto o análisis'}${scoreAnalisis > 2 ? ' y contexto adicional' : '.'}`
@@ -1188,11 +1349,9 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   const comoConvertirReferencia = generarComoConvertirReferencia(senales, tipoNota);
   const oportunidadesEditoriales = generarOportunidadesEditoriales(senales, tipoNota);
 
-  const investigacionAdicional = tipoNota === 'Breaking News'
-    ? 'En una nota de última hora no se exige investigación profunda; basta con confirmar datos y fuentes oficiales.'
-    : p6 < 6
-      ? 'Oportunidad editorial: cuando estén disponibles, incorporar documentos oficiales, estadísticas históricas, declaraciones institucionales o testimonios directos.'
-      : 'Oportunidad editorial: ampliar con cifras comparativas o una línea de tiempo para reforzar la solidez.';
+  const investigacionAdicional = p6 < 6
+    ? 'Oportunidad editorial: cuando estén disponibles, incorporar documentos oficiales, estadísticas históricas, declaraciones institucionales o testimonios directos.'
+    : 'Oportunidad editorial: ampliar con cifras comparativas o una línea de tiempo para reforzar la solidez.';
 
   const preguntaSinResponder = scoreCausaConsecuencia > 0
     ? 'Oportunidad editorial: profundizar en qué medidas o cambios se derivan del hecho cuando estén confirmados.'
@@ -1228,7 +1387,7 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   // Indicadores Editor Jefe 2.0
   const factibilidad = generarFactibilidad(senales, tipoNota);
   const tiempoReferencia = generarTiempoReferencia(tipoNota, score100);
-  const retornoPeriodistico = generarRetornoPeriodistico(tipoNota, n.categoria, n.titulo, score100);
+  const retornoPeriodistico = generarRetornoPeriodistico(tipoNota, n.categoria, score100);
   const prioridadEditorial = generarPrioridadEditorial(tipoNota, score100, n.categoria);
   const valorParaLector = generarValorParaLector(textoLower, n.categoria, score100, scoreUtilidad, scoreCausaConsecuencia);
   const razonamientoReferencia = generarRazonamientoReferencia(senales);
@@ -1242,7 +1401,7 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     { criterio: 'Contexto legal / institucional', detectado: evidencia.contextoLegal ? 'Sí' : 'No', puntaje: evidencia.contextoLegal ? 3 : 0, maximo: 3 },
   ];
 
-  return {
+  const reporteBase: ReporteEditorJefe = {
     tipoNota,
     razonamientoTipo,
     puntuacion: score100,
@@ -1283,6 +1442,22 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     discoverSiNo,
     porQueCompartible,
     compartibleSiNo,
+
+    auditoriaInterna: { aprobado: true, observaciones: [], ajustesRealizados: [] },
+  };
+
+  // Simulación del director de noticias: autoauditar y aplicar ajustes antes de entregar
+  const { ajustes, observaciones } = autoauditarConstitucion(reporteBase, senales, textoLower);
+  const ajustesRealizados = Object.keys(ajustes).map(k => `Se ajustó "${k}" para cumplir la Constitución V6.0.`);
+
+  return {
+    ...reporteBase,
+    ...ajustes,
+    auditoriaInterna: {
+      aprobado: observaciones.length === 0,
+      observaciones,
+      ajustesRealizados,
+    },
   };
 }
 
@@ -1321,17 +1496,14 @@ function detectarEvidenciaAporte(textoPlano: string, aportePropio: boolean, evid
 
 function generarComoConvertirReferencia(s: SenalesEditoriales, tipoNota: TipoNotaEditorial): string[] {
   const pasos: string[] = [];
-  if (tipoNota === 'Breaking News') {
-    pasos.push('Confirmar la fuente y el dato central con una atribución clara.');
-    pasos.push('Actualizar la nota a medida que haya más información disponible.');
-    if (!s.evidencia.datoConcreto) pasos.push('Añadir el dato concreto básico (hora, lugar, número de afectados).');
-    return pasos;
-  }
+  const requiereTrabajoPropio = tipoNota === 'Investigación' || tipoNota === 'Reportaje' || tipoNota === 'Entrevista' || tipoNota === 'Crónica';
+  const requiereDocumento = tipoNota === 'Investigación' || tipoNota === 'Reportaje' || tipoNota === 'Datos' || tipoNota === 'Judicial' || tipoNota === 'Economía';
   if (!s.evidencia.fuenteOficialIdentificada) pasos.push('Oportunidad editorial: cuando esté disponible, añadir fuente oficial con nombre y cargo o documento que respalde el dato central.');
-  if (!s.evidencia.dosFuentesIndependientes && tipoNota !== 'Nota informativa') pasos.push('Oportunidad editorial: contrastar el dato con al menos una fuente independiente si es accesible.');
-  if (!s.evidencia.documentoOficialIdentificado && (tipoNota === 'Reportaje' || tipoNota === 'Investigación')) pasos.push('Oportunidad editorial: identificar el documento, informe o dato oficial que respalde la investigación cuando sea público.');
-  if (!s.evidencia.trabajoDeCampo && (tipoNota === 'Reportaje' || tipoNota === 'Investigación')) pasos.push('Oportunidad editorial: incluir evidencia de trabajo de campo (observación, entrevista o verificación presencial) si es accesible.');
-  if (!s.evidencia.contextoLegal && tipoNota === 'Investigación') pasos.push('Oportunidad editorial: incluir marco legal o institucional relevante.');
+  if (!s.evidencia.dosFuentesIndependientes && requiereTrabajoPropio) pasos.push('Oportunidad editorial: contrastar el dato con al menos una fuente independiente si es accesible.');
+  if (!s.evidencia.documentoOficialIdentificado && requiereDocumento) pasos.push('Oportunidad editorial: identificar el documento, informe o dato oficial que respalde la pieza cuando sea público.');
+  if (!s.evidencia.trabajoDeCampo && requiereTrabajoPropio) pasos.push('Oportunidad editorial: incluir evidencia de trabajo de campo (observación, entrevista o verificación presencial) si es accesible.');
+  if (!s.evidencia.contextoLegal && (tipoNota === 'Judicial' || tipoNota === 'Investigación')) pasos.push('Oportunidad editorial: incluir marco legal o institucional relevante.');
+  if (s.scoreUtilidad < 2) pasos.push('Oportunidad editorial: explicitar la utilidad práctica o impacto para el lector.');
   if (pasos.length === 0) {
     pasos.push('Mantener el nivel actual y verificar que el dato central siga vigente.');
     pasos.push('Considerar una actualización si surge nueva información relevante.');
@@ -1341,18 +1513,16 @@ function generarComoConvertirReferencia(s: SenalesEditoriales, tipoNota: TipoNot
 
 function generarOportunidadesEditoriales(s: SenalesEditoriales, tipoNota: TipoNotaEditorial): string[] {
   const oportunidades: string[] = [];
-  if (tipoNota === 'Breaking News') {
-    oportunidades.push('Confirmar la fuente oficial del dato central.');
-    oportunidades.push('Añadir dato concreto (hora, lugar, número de afectados).');
-    if (!s.evidencia.datoConcreto) oportunidades.push('Actualizar con el estado de las víctimas o próximos pasos.');
-    return oportunidades;
-  }
+  const requiereTrabajoPropio = tipoNota === 'Investigación' || tipoNota === 'Reportaje' || tipoNota === 'Entrevista' || tipoNota === 'Crónica';
+  const requiereDocumento = tipoNota === 'Investigación' || tipoNota === 'Reportaje' || tipoNota === 'Datos' || tipoNota === 'Judicial' || tipoNota === 'Economía';
   if (!s.evidencia.fuenteOficialIdentificada) oportunidades.push('Oportunidad editorial: cuando sea posible, identificar fuente oficial con nombre o documento.');
-  if (!s.evidencia.dosFuentesIndependientes && tipoNota !== 'Nota informativa') oportunidades.push('Oportunidad editorial: contrastar con al menos una fuente independiente si está disponible.');
-  if (!s.evidencia.documentoOficialIdentificado && (tipoNota === 'Reportaje' || tipoNota === 'Investigación')) oportunidades.push('Oportunidad editorial: consultar documento o dato oficial cuando sea público.');
-  if (!s.evidencia.trabajoDeCampo && (tipoNota === 'Reportaje' || tipoNota === 'Investigación')) oportunidades.push('Oportunidad editorial: incluir evidencia de trabajo de campo o entrevista directa si es accesible.');
+  if (!s.evidencia.dosFuentesIndependientes && requiereTrabajoPropio) oportunidades.push('Oportunidad editorial: contrastar con al menos una fuente independiente si está disponible.');
+  if (!s.evidencia.documentoOficialIdentificado && requiereDocumento) oportunidades.push('Oportunidad editorial: consultar documento o dato oficial cuando sea público.');
+  if (!s.evidencia.trabajoDeCampo && requiereTrabajoPropio) oportunidades.push('Oportunidad editorial: incluir evidencia de trabajo de campo o entrevista directa si es accesible.');
   if (s.p8 < 5 && s.scoreCausaConsecuencia === 0) oportunidades.push('Oportunidad editorial: explicar consecuencias o utilidad práctica para el lector.');
-  if (oportunidades.length === 0) oportunidades.push('Nada crítico; se recomienda mantener el nivel y actualizar si surgen nuevos datos.');
+  if (s.scoreUtilidad < 2) oportunidades.push('Oportunidad editorial: explicitar qué gana el lector con esta información (protección, decisión, comprensión).');
+  if (!s.evidencia.datoConcreto) oportunidades.push('Oportunidad editorial: incorporar datos concretos (hora, lugar, cifras) cuando estén confirmados.');
+  if (oportunidades.length === 0) oportunidades.push('La nota mantiene su nivel; se recomienda actualizar si surgen nuevos datos.');
   return oportunidades;
 }
 
@@ -1370,45 +1540,35 @@ function generarDetectorNicaraguaInformate(s: SenalesEditoriales): string {
 }
 
 function generarFactibilidad(s: SenalesEditoriales, tipoNota: TipoNotaEditorial): string {
-  const { palabraCount, p7, evidencia } = s;
-  if (tipoNota === 'Breaking News') {
-    if (palabraCount < 150 && !evidencia.fuenteOficialIdentificada) return 'Es factible: solo se puede pedir rapidez, claridad y fuente. No se exige investigación profunda.';
-    return 'Es factible y está bien ejecutada para una nota de última hora.';
-  }
-  if (tipoNota === 'Nota informativa' && palabraCount < 250) {
-    return 'Es factible como nota breve, pero no se le puede exigir entrevistas ni documentos.';
-  }
+  const { evidencia } = s;
   if (tipoNota === 'Reportaje' && !(evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado)) {
     return 'Para consolidarse como reportaje requeriría entrevistas, documentos o evidencia de campo; no se castiga la ausencia si no existe todavía.';
   }
   if (tipoNota === 'Investigación' && !(evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo)) {
-    return 'Para ser una investigación requeriría fuentes múltiples, documentos y verificación; si no están disponibles, puede titularse como nota informativa o análisis.';
+    return 'Para ser una investigación requeriría fuentes múltiples, documentos y verificación; si no están disponibles, puede titularse como Noticias o Explicador.';
   }
-  if (p7 < 6 && !evidencia.fuenteOficialIdentificada) return 'No es razonable pedir investigación profunda a esta altura; las sugerencias se ajustan al tipo de nota.';
   return 'Las sugerencias son factibles y se ajustan al tiempo y tipo de cobertura.';
 }
 
 function generarTiempoReferencia(tipoNota: TipoNotaEditorial, score100: number): string {
   if (score100 >= 85) return 'Ya es nota de referencia. Solo requiere mantenimiento si cambian los hechos.';
-  if (tipoNota === 'Breaking News') return '15-30 minutos para confirmar fuente y actualizar con datos nuevos.';
-  if (tipoNota === 'Nota informativa + contexto') return '30 minutos - 2 horas para agregar contexto y confirmar información faltante.';
-  if (tipoNota === 'Nota informativa') {
-    if (score100 < 60) return '2-4 horas: agregar antecedentes, consecuencias y fuentes claras.';
-    return '1-2 horas: completar causas, consecuencias y contexto.';
+  if (tipoNota === 'Noticias' || tipoNota === 'Sucesos') {
+    return score100 < 60 ? 'Actualización inmediata: confirmar fuente, consecuencias y contexto básico.' : 'Actualización corta: completar causas, consecuencias y contexto.';
   }
-  if (tipoNota === 'Nota explicativa') return '2-4 horas: profundizar ejemplos, datos y utilidad práctica.';
-  if (tipoNota === 'Reportaje') return '1-3 días: entrevistas, documentos, análisis y edición.';
-  return '1 semana o más: investigación documental, múltiples fuentes y verificación.';
+  if (tipoNota === 'Seguimiento') return 'Actualización inmediata: agregar datos nuevos y estado actual.';
+  if (tipoNota === 'Explicador' || tipoNota === 'Servicio') return 'Actualización corta: profundizar ejemplos, datos y utilidad práctica.';
+  if (tipoNota === 'Reportaje') return 'Tiempo de reporteo: entrevistas, documentos, análisis y edición.';
+  if (tipoNota === 'Investigación') return 'Tiempo de investigación: recopilar evidencia, contrastar fuentes y verificar.';
+  return 'Tiempo de desarrollo editorial: dependerá del acceso a fuentes y documentos.';
 }
 
-function generarRetornoPeriodistico(tipoNota: TipoNotaEditorial, categoria: string, titulo: string, score100: number): string {
-  const tit = titulo.toLowerCase();
+function generarRetornoPeriodistico(tipoNota: TipoNotaEditorial, categoria: string, score100: number): string {
   const cat = categoria.toLowerCase();
   if (tipoNota === 'Investigación' || tipoNota === 'Reportaje') return 'Alto: este tipo de pieza construye autoridad y diferenciación a largo plazo.';
   if (score100 >= 80) return 'Alto: la nota tiene potencial para convertirse en referencia y generar tráfico sostenido.';
-  if (tit.includes('femicidio') || tit.includes('asesinato') || tit.includes('muerte') || cat.includes('judicial')) return 'Alto: temas de alto interés público que justifican inversión editorial.';
-  if (tit.includes('accidente') || tit.includes('incendio') || cat.includes('suceso')) return 'Medio: noticia de tráfico inmediato, pero con ventana corta de interés.';
-  if (tipoNota === 'Nota explicativa') return 'Medio-alto: si explica bien, puede generar tráfico recurrente de búsqueda.';
+  if (cat.includes('judicial')) return 'Alto: temas de alto interés público que justifican inversión editorial.';
+  if (cat.includes('suceso')) return 'Medio: noticia de tráfico inmediato, pero con ventana corta de interés.';
+  if (tipoNota === 'Explicador' || tipoNota === 'Servicio') return 'Medio-alto: si explica bien, puede generar tráfico recurrente de búsqueda.';
   return 'Oportunidad editorial: evaluar si el hecho tiene ángulo de servicio, contexto histórico o comparación que justifique más cobertura.';
 }
 
@@ -1416,10 +1576,10 @@ function generarPrioridadEditorial(tipoNota: TipoNotaEditorial, score100: number
   const cat = categoria.toLowerCase();
   if (tipoNota === 'Investigación' || tipoNota === 'Reportaje') return '★★★★★ — Merece portada y promoción destacada.';
   if (score100 >= 85) return '★★★★★ — Nota de referencia, ideal para portada.';
-  if (tipoNota === 'Breaking News') return '★★★★☆ — Prioridad alta por actualidad, aunque puede ser breve.';
+  if (tipoNota === 'Noticias' || tipoNota === 'Sucesos') return '★★★★☆ — Prioridad alta por actualidad, aunque puede ser breve.';
   if (cat.includes('suceso') || cat.includes('judicial')) return '★★★★☆ — Alta atención del público.';
-  if (tipoNota === 'Nota informativa + contexto') return '★★★☆☆ — Seguimiento necesario, no necesariamente portada principal.';
-  if (tipoNota === 'Nota explicativa' && score100 >= 70) return '★★★★☆ — Buen contenido de fondo, promoción en redes y SEO.';
+  if (tipoNota === 'Seguimiento') return '★★★☆☆ — Seguimiento necesario, no necesariamente portada principal.';
+  if ((tipoNota === 'Explicador' || tipoNota === 'Servicio') && score100 >= 70) return '★★★★☆ — Buen contenido de fondo, promoción en redes.';
   if (score100 >= 60) return '★★★☆☆ — Publicable, pero no prioridad máxima.';
   return '★★☆☆☆ — Publicable como nota breve o redes sociales.';
 }
@@ -1459,7 +1619,7 @@ function generarRazonamientoReferencia(s: SenalesEditoriales): string {
 }
 
 function generarPreguntasSinRespuesta(textoLower: string, categoria: string, titulo: string, tipoNota: TipoNotaEditorial): string[] {
-  if (tipoNota === 'Breaking News') {
+  if (tipoNota === 'Noticias' || tipoNota === 'Sucesos' || tipoNota === 'Seguimiento') {
     return ['¿Qué datos aún faltan confirmar?', '¿Cuál es el estado actual de las personas afectadas?', '¿Qué pasos sigue la autoridad competente?'];
   }
 
@@ -1703,7 +1863,7 @@ function generarDetectorFacebook(puntuacionTotal: number, scoreUtilidad: number,
   if (puntuacionTotal >= 60) {
     return 'Se compartiría moderadamente; no es viral por utilidad, sino por relevancia informativa básica.';
   }
-  return 'Oportunidad editorial: la nota carece de sorpresa, utilidad o contexto demostrable; agregar uno de esos elementos aumentaría la difusión.';
+  return 'Oportunidad editorial: agregar un elemento de sorpresa, utilidad o contexto demostrable aumentaría la difusión de la nota.';
 }
 
 // ───────────────────────────────────────────────
@@ -1717,7 +1877,7 @@ function generarDetectorGoogle(puntuacionTotal: number, p1: number, p7: number, 
   if (puntuacionTotal >= 70 && (scoreContexto > 0 || aportePropio)) {
     return 'Posiblemente sí, pero competiría con versiones similares; necesita más diferenciador para ser la primera opción.';
   }
-  return 'Oportunidad editorial: la nota es reemplazable por la cobertura estándar; agregar contexto, verificación o utilidad diferenciaría su posición.';
+  return 'Oportunidad editorial: agregar contexto, verificación o utilidad diferenciaría la nota frente a la cobertura estándar.';
 }
 
 // ───────────────────────────────────────────────
@@ -1737,9 +1897,9 @@ function generarDetectorEEATReal(s: SenalesEditoriales): string {
     return `El lector debería confiar porque Nicaragua Informate ${partes.slice(0, -1).join(', ')} y ${partes[partes.length - 1]}.`;
   }
   if (partes.length >= 2) {
-    return `Tiene señales de credibilidad parcial (${partes.join(', ')}), pero falta sustento para que el lector prefiera NI sobre otro medio.`;
+    return `Tiene señales de credibilidad parcial (${partes.join(', ')}). Oportunidad editorial: sumar más evidencia visible para que el lector prefiera NI sobre otro medio.`;
   }
-  if (partes.length === 1) return `Tiene una señal de credibilidad (${partes[0]}), pero no es suficiente para preferir NI.`;
+  if (partes.length === 1) return `Tiene una señal de credibilidad (${partes[0]}). Oportunidad editorial: sumar una segunda señal verificable reforzaría la confianza del lector.`;
   return 'No se detecta en el texto evidencia de investigación, verificación o contexto propio; no se asume que no existió, solo que no es demostrable aquí.';
 }
 

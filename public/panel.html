@@ -6987,6 +6987,19 @@ VERIFICACIÓN FINAL
           html += '</div></div>';
         }
 
+        if (vpr.auditoriaInterna) {
+          html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
+          html += '<div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:8px;">Autoauditoría Constitución V6.0</div>';
+          html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;">';
+          html += '<div style="font-size:12px;color:#e2e8f0;margin-bottom:4px;">' + (vpr.auditoriaInterna.aprobado ? '✅ Análisis aprobado sin observaciones por el director de noticias simulado.' : '🔎 El análisis fue revisado y ajustado antes de entregarse:') + '</div>';
+          if (vpr.auditoriaInterna.observaciones && vpr.auditoriaInterna.observaciones.length) {
+            vpr.auditoriaInterna.observaciones.forEach(o => {
+              html += '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">• ' + o + '</div>';
+            });
+          }
+          html += '</div></div>';
+        }
+
         html += '</div>';
       }
 
