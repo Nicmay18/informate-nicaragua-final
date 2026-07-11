@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
@@ -15,31 +15,12 @@ const URGENTE_KEYWORDS = ['última hora', 'breaking', 'urgente', 'alerta'];
 
 export default function SeccionSucesos({ noticias }: SeccionSucesosProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollStart, setScrollStart] = useState(0);
 
   if (!noticias.length) return null;
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
     scrollRef.current.scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' });
-  };
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    setStartX(e.clientX);
-    setScrollStart(scrollRef.current?.scrollLeft || 0);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging || !scrollRef.current) return;
-    const delta = startX - e.clientX;
-    scrollRef.current.scrollLeft = scrollStart + delta;
-  };
-
-  const handlePointerUp = () => {
-    setIsDragging(false);
   };
 
   const esUrgente = (titulo: string) =>
@@ -71,15 +52,7 @@ export default function SeccionSucesos({ noticias }: SeccionSucesosProps) {
           </div>
         </header>
 
-        <div
-          className="sucesos-scroll"
-          ref={scrollRef}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-          style={{ cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'pan-y' }}
-        >
+        <div className="sucesos-scroll" ref={scrollRef}>
           {noticias.map((noticia) => {
             const urgente = esUrgente(noticia.titulo);
             return (
