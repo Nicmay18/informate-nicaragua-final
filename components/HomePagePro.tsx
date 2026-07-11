@@ -1,647 +1,306 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useRef, useCallback, memo } from 'react';
-import Link from 'next/link';
-
-// Componente Link con prefetch desactivado para no competir con LCP
-const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
-  <Link {...props} prefetch={false} />
-);
-import Image from 'next/image';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Flame, Radio, Mail, TrendingUp, BookOpen, BarChart3, CloudSun, Globe, FolderOpen } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
 import type { Noticia } from '@/lib/types';
-import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
-import { getAllEvergreen } from '@/lib/evergreen';
-import dynamic from 'next/dynamic';
+import HeroPrincipal from './pro/HeroPrincipal';
+import TickerUltimaHora from './pro/TickerUltimaHora';
+import EditorsPick from './pro/EditorsPick';
+import SeccionSucesos from './pro/SeccionSucesos';
+import GridTematico from './pro/GridTematico';
+import ZonaMultimedia from './pro/ZonaMultimedia';
+import ZonaIndicadores from './pro/ZonaIndicadores';
 
-const RadioPlayer = dynamic(() => import('./RadioPlayer'), { ssr: false, loading: () => <div style={{ height: 80, background: '#f1f5f9', borderRadius: 8 }} /> });
-const EconomicBar = dynamic(() => import('./EconomicBar'), { ssr: false, loading: () => <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} /> });
-const WeatherWidget = dynamic(() => import('./WeatherWidget'), { ssr: false, loading: () => <div style={{ height: 140, background: '#f1f5f9', borderRadius: 8 }} /> });
-const WorldClock = dynamic(() => import('./WorldClock'), { ssr: false, loading: () => <div style={{ height: 140, background: '#f1f5f9', borderRadius: 8 }} /> });
-
-// ============================================================================
-// UTILIDADES DE RENDIMIENTO Y ACCESIBILIDAD
-// ============================================================================
-
-function timeAgo(dateInput: unknown): string {
-  const dateStr = typeof dateInput === 'string' ? dateInput : '';
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return '';
-    return formatDistanceToNow(d, { addSuffix: true, locale: es });
-  } catch {
-    return '';
-  }
-}
-
-const TRENDS = [
-  { label: 'Elecciones 2026', href: '/buscar?q=elecciones' },
-  { label: 'Dólar / Córdoba', href: '/buscar?q=dolar' },
-  { label: 'Liga Primera', href: '/buscar?q=liga+primera' },
-  { label: 'Bluefields', href: '/buscar?q=bluefields' },
-  { label: 'Costa Caribe', href: '/buscar?q=costa+caribe' },
+const MOCK_NOTICIAS: Noticia[] = [
+  {
+    id: 'mock-1',
+    slug: 'pacto-de-seguridad-managua',
+    titulo: 'Nicaragua refuerza el pacto de seguridad en Managua tras la jornada de tensión',
+    resumen: 'Las autoridades activan protocolos de vigilancia en puntos estratégicos del país.',
+    categoria: 'Nacionales',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    autor: 'María López',
+  },
+  {
+    id: 'mock-2',
+    slug: 'reunion-mercados-internacionales',
+    titulo: 'Los mercados regionales registran una reacción mixta tras la reunión internacional',
+    resumen: 'Analistas evalúan el impacto de la nueva ronda de diálogo comercial en la región.',
+    categoria: 'Internacionales',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    autor: 'David Rivas',
+  },
+  {
+    id: 'mock-3',
+    slug: 'rescate-ambiental-rio',
+    titulo: 'Equipo de rescatistas y vecinos realizan operación ambiental en el río de la zona norte',
+    resumen: 'El operativo busca mitigar el impacto de la acumulación de residuos en puntos críticos.',
+    categoria: 'Sucesos',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 110).toISOString(),
+    autor: 'Sofía Cruz',
+  },
+  {
+    id: 'mock-4',
+    slug: 'economia-agricola-exportaciones',
+    titulo: 'La economía agrícola repunta con nuevas exportaciones hacia mercados vecinos',
+    resumen: 'El sector se recupera tras la estabilidad en los precios y la logística del país.',
+    categoria: 'Economía',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 150).toISOString(),
+    autor: 'Elena Flores',
+  },
+  {
+    id: 'mock-5',
+    slug: 'lanzamiento-plataforma-tecnologica',
+    titulo: 'Una startup nacional lanza una plataforma para conectar pequeños negocios con clientes',
+    resumen: 'La herramienta busca simplificar la gestión digital de ventas y pagos.',
+    categoria: 'Tecnología',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+    autor: 'Josué Ortega',
+  },
+  {
+    id: 'mock-6',
+    slug: 'seleccion-futbol-preparacion',
+    titulo: 'La selección nacional inicia la preparación para la próxima ventana internacional',
+    resumen: 'El cuerpo técnico define la lista de concentrados para los próximos partidos.',
+    categoria: 'Deportes',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 210).toISOString(),
+    autor: 'Rafael Mena',
+  },
+  {
+    id: 'mock-7',
+    slug: 'festival-cultural-manfut',
+    titulo: 'El festival cultural de la capital reúne música, teatro y gastronomía',
+    resumen: 'El evento reúne a artistas locales en una agenda pensada para toda la familia.',
+    categoria: 'Espectáculos',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 240).toISOString(),
+    autor: 'Ana Castillo',
+  },
+  {
+    id: 'mock-8',
+    slug: 'programa-educacion-digital',
+    titulo: 'El programa de educación digital amplía su cobertura en zonas rurales',
+    resumen: 'Más comunidades acceden a conectividad y formación para el uso de herramientas básicas.',
+    categoria: 'Nacionales',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 300).toISOString(),
+    autor: 'Clara Salinas',
+  },
+  {
+    id: 'mock-9',
+    slug: 'alerta-climatica-regional',
+    titulo: 'Autoridades mantienen alerta climática ante la entrada de un sistema frontal',
+    resumen: 'Las lluvias podrían afectar carreteras y zonas de baja elevación durante la tarde.',
+    categoria: 'Sucesos',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 340).toISOString(),
+    autor: 'Noelia Meneses',
+  },
+  {
+    id: 'mock-10',
+    slug: 'reunion-multinacionales-energia',
+    titulo: 'Empresas de energía analizan inversiones en infraestructura en la región',
+    resumen: 'El sector apuesta por modernizar redes y ampliar la cobertura de servicio.',
+    categoria: 'Economía',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 380).toISOString(),
+    autor: 'Tomás Vega',
+  },
+  {
+    id: 'mock-11',
+    slug: 'cumbre-inteligencia-artificial',
+    titulo: 'La cumbre de inteligencia artificial reúne a expertos en innovación y regulación',
+    resumen: 'El evento expone casos de uso y nuevos modelos de gobernanza para el sector.',
+    categoria: 'Tecnología',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 420).toISOString(),
+    autor: 'Laura Pineda',
+  },
+  {
+    id: 'mock-12',
+    slug: 'torneo-voley-juvenil',
+    titulo: 'El torneo juvenil de voleibol suma nuevas sedes en el norte del país',
+    resumen: 'Los equipos se preparan para la fase regional con un calendario renovado.',
+    categoria: 'Deportes',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 460).toISOString(),
+    autor: 'Fernando Benítez',
+  },
+  {
+    id: 'mock-13',
+    slug: 'estreno-cine-nicaraguense',
+    titulo: 'Un estreno de cine nicaragüense captará la atención del público en la capital',
+    resumen: 'La producción destaca historias locales con una mirada contemporánea y crítica.',
+    categoria: 'Espectáculos',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 500).toISOString(),
+    autor: 'Martha Solís',
+  },
+  {
+    id: 'mock-14',
+    slug: 'inversion-publica-transporte',
+    titulo: 'La inversión pública en transporte busca mejorar la conectividad urbana',
+    resumen: 'El proyecto prioriza rutas de alta demanda y mayor seguridad para los usuarios.',
+    categoria: 'Nacionales',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 560).toISOString(),
+    autor: 'Karina Pereira',
+  },
+  {
+    id: 'mock-15',
+    slug: 'analisis-politico-regional',
+    titulo: 'El análisis político regional marca un nuevo escenario para la agenda del próximo trimestre',
+    resumen: 'Expertos coinciden en que los diálogos y las alianzas serán clave en la región.',
+    categoria: 'Internacionales',
+    imagen: '/logo.webp',
+    fecha: new Date(Date.now() - 1000 * 60 * 620).toISOString(),
+    autor: 'Miguel Acosta',
+  },
 ];
 
-// Orden: guias/nacionales primero, sucesos AL FINAL (< 30% visible)
-const CATEGORIES = [
-  { name: 'Nacionales', slug: 'nacionales', color: 'nacionales' },
-  { name: 'Internacionales', slug: 'internacionales', color: 'internacionales' },
-  { name: 'Tecnología', slug: 'tecnologia', color: 'tecnologia' },
-  { name: 'Deportes', slug: 'deportes', color: 'deportes' },
-  { name: 'Espectáculos', slug: 'espectaculos', color: 'espectaculos' },
-  { name: 'Sucesos', slug: 'sucesos', color: 'sucesos' },
-];
-
-// Precalcular lookup de categoría → slug (evita normalize en cada render)
-const CAT_LOOKUP: Record<string, string> = {};
-CATEGORIES.forEach(c => {
-  CAT_LOOKUP[c.slug] = c.slug;
-  CAT_LOOKUP[c.name.toLowerCase()] = c.slug;
-  CAT_LOOKUP[c.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')] = c.slug;
-});
-
-function catClass(cat?: string) {
-  const key = cat?.toLowerCase() || '';
-  return CAT_LOOKUP[key] || CAT_LOOKUP[key.normalize('NFD').replace(/[\u0300-\u036f]/g, '')] || 'nacionales';
+interface HomePageProProps {
+  noticias: Noticia[];
+  masLeidas: Noticia[];
+  populares: Noticia[];
 }
 
-// Precalcular evergreen (array estático, no cambia en runtime)
-const EVERGREEN_GUIDES = getAllEvergreen().slice(0, 4);
+/**
+ * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
+ * Asignación: Hero > Última Hora > Destacados > Sucesos > Temáticos > Feed
+ */
+function distribuirNoticias(noticias: Noticia[]) {
+  const usados = new Set<string>();
+  const take = (lista: Noticia[], n: number) => {
+    const resultado: Noticia[] = [];
+    for (const item of lista) {
+      if (resultado.length >= n) break;
+      if (!usados.has(item.id)) {
+        usados.add(item.id);
+        resultado.push(item);
+      }
+    }
+    return resultado;
+  };
 
-function BreakingMarquee({ noticias }: { noticias: Noticia[] }) {
-  const list = useMemo(() => noticias.slice(0, 6), [noticias]);
-  if (list.length === 0) return null;
-  return (
-    <div className="ni-marquee-bar">
-      <div className="ni-marquee-bar__badge">Última hora</div>
-      <div className="ni-marquee-bar__content">
-        <div className="ni-marquee-bar__scroll">
-          {list.map((n) => (
-            <NoPrefetchLink key={`${n.id}-a`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
-              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
-            </NoPrefetchLink>
-          ))}
-          {list.map((n) => (
-            <NoPrefetchLink key={`${n.id}-b`} href={`/noticias/${n.slug}`} className="ni-marquee-bar__item">
-              <span className="ni-marquee-bar__arrow">➔</span> {n.titulo}
-            </NoPrefetchLink>
-          ))}
-        </div>
-      </div>
-    </div>
+  const porCategoria = (cat: string) =>
+    noticias.filter(n => n.categoria === cat && !usados.has(n.id));
+
+  // 1. Hero: la noticia más reciente con imagen
+  const conImagen = noticias.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
+  const heroNoticias = take(conImagen.length > 0 ? conImagen : noticias, 1);
+
+  // 2. Última Hora: 6 titulares recientes (sin imagen requerida)
+  const ultimaHora = take(noticias, 6);
+
+  // 3. Editors Pick: 1 Nacional + 1 Internacional + 1 variada
+  const nacional = take(porCategoria('Nacionales'), 1);
+  const internacional = take(porCategoria('Internacionales'), 1);
+  const variada = take(
+    noticias.filter(n => !['Sucesos'].includes(n.categoria) && !usados.has(n.id)),
+    1
   );
-}
+  const editorsPick = [...nacional, ...internacional, ...variada];
 
-function TabbedSidebarWidget({ ultimas, populares, tendencias }: { ultimas: Noticia[]; populares: Noticia[]; tendencias: Noticia[] }) {
-  const [activeTab, setActiveTab] = useState<'ultimas' | 'populares' | 'tendencias'>('ultimas');
-
-  const list = useMemo(() => {
-    if (activeTab === 'ultimas') return ultimas.slice(0, 5);
-    if (activeTab === 'populares') return populares.slice(0, 5);
-    return tendencias.slice(0, 5);
-  }, [activeTab, ultimas, populares, tendencias]);
-
-  return (
-    <div className="ni-sidebar__widget ni-tab-widget">
-      <div className="ni-tab-widget__header">
-        <button className={`ni-tab-widget__btn ${activeTab === 'ultimas' ? 'is-active' : ''}`} onClick={() => setActiveTab('ultimas')}>
-          <TrendingUp size={12} style={{ marginRight: 4 }} /> Más leídas
-        </button>
-        <button className={`ni-tab-widget__btn ${activeTab === 'populares' ? 'is-active' : ''}`} onClick={() => setActiveTab('populares')}>
-          <Flame size={12} style={{ marginRight: 4 }} /> Populares
-        </button>
-        <button className={`ni-tab-widget__btn ${activeTab === 'tendencias' ? 'is-active' : ''}`} onClick={() => setActiveTab('tendencias')}>
-          <TrendingUp size={12} style={{ marginRight: 4 }} /> Tendencias
-        </button>
-      </div>
-      <div className="ni-tab-widget__body">
-        <ul className="ni-tab-list">
-          {list.map((n) => (
-            <li key={n.id} className="ni-tab-item">
-              <div className="ni-tab-item__img">
-                {n.imagen ? (
-                  <Image src={getResponsiveImageUrl(n.imagen, 100)} alt={n.titulo} width={64} height={64} style={{ objectFit: 'cover' }} unoptimized={n.imagen.endsWith('.gif')} />
-                ) : (
-                  <div className="ni-tab-item__fallback">🇳🇮</div>
-                )}
-              </div>
-              <div className="ni-tab-item__content">
-                <span className={`ni-tab-item__pill ni-tab-item__pill--${catClass(n.categoria)}`}>{n.categoria}</span>
-                <NoPrefetchLink href={`/noticias/${n.slug}`} className="ni-tab-item__title">{n.titulo}</NoPrefetchLink>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+  // 4. Sucesos: máx 4, con máx 40% de tránsito
+  const sucesosAll = porCategoria('Sucesos');
+  const transitoKeywords = ['tránsito', 'transito', 'vial', 'moto', 'accidente', 'colisión'];
+  const sucesosNoTransito = sucesosAll.filter(
+    n => !transitoKeywords.some(k => n.titulo.toLowerCase().includes(k))
   );
+  const sucesosTransito = sucesosAll.filter(
+    n => transitoKeywords.some(k => n.titulo.toLowerCase().includes(k))
+  );
+  // Max 40% tránsito = max 1-2 de 4
+  const sucesosCards = [
+    ...take(sucesosNoTransito, 3),
+    ...take(sucesosTransito, 1),
+  ].slice(0, 4);
+  sucesosCards.forEach(n => usados.add(n.id));
+
+  // 5. Temáticos
+  const economia = take(porCategoria('Economía'), 5);
+  const tecnologia = take(porCategoria('Tecnología'), 5);
+  const deportes = take(porCategoria('Deportes'), 5);
+  const cultura = take(porCategoria('Espectáculos'), 5);
+
+  return {
+    heroNoticias,
+    ultimaHora,
+    editorsPick,
+    sucesosCards,
+    economia,
+    tecnologia,
+    deportes,
+    cultura,
+  };
 }
 
-const SLIDE_DURATION = 5000; // 5 segundos por slide
+export default function HomePagePro({ noticias, masLeidas, populares }: HomePageProProps) {
+  const noticiasBase = noticias.length ? noticias : MOCK_NOTICIAS;
 
-function Hero({ noticias }: { noticias: Noticia[] }) {
-  const [idx, setIdx] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const items = useMemo(() => noticias.slice(0, 5), [noticias]);
-  const touchStartX = useRef<number | null>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+    if (!nodes.length) return undefined;
 
-  const goToSlide = useCallback((i: number) => {
-    setIdx(i);
+    nodes.forEach(node => node.classList.add('is-visible'));
+
+    if (typeof IntersectionObserver === 'undefined') {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    nodes.forEach(node => observer.observe(node));
+    return () => observer.disconnect();
   }, []);
 
-  const nextSlide = useCallback(() => {
-    setIdx(p => (p + 1) % items.length);
-  }, [items.length]);
-
-  // Auto-advance simple y confiable con setInterval
-  useEffect(() => {
-    if (items.length <= 1) return;
-    timerRef.current = setInterval(() => {
-      if (!isPaused) {
-        setIdx(p => (p + 1) % items.length);
-      }
-    }, SLIDE_DURATION);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [items.length, isPaused]);
+  const dist = useMemo(() => distribuirNoticias(noticiasBase), [noticiasBase]);
 
   return (
-    <section
-      className="ni-hero"
-      aria-label="Noticias destacadas"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={(e) => { touchStartX.current = e.changedTouches[0].screenX; }}
-      onTouchEnd={(e) => {
-        if (touchStartX.current === null) return;
-        const diff = touchStartX.current - e.changedTouches[0].screenX;
-        const threshold = 50;
-        if (diff > threshold) {
-          nextSlide();
-        } else if (diff < -threshold) {
-          goToSlide((idx - 1 + items.length) % items.length);
-        }
-        touchStartX.current = null;
-      }}
-    >
-      <div className="ni-hero__track">
-        {items.map((item, i) => {
-          const isActive = i === idx;
-          const isNext = i === (idx + 1) % items.length;
-          const isPrev = i === (idx - 1 + items.length) % items.length;
-          const shouldRender = isActive || isNext || isPrev;
-          return (
-            <article key={item.id} className={`ni-hero__slide${isActive ? ' is-active' : ''}`}>
-              <div className="ni-hero__media">
-                {item.imagen ? (
-                  i === 0 ? (
-                    // Primer slide = LCP: carga directo sin intermediarios
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={getHeroImageUrl(item.imagen)}
-                      srcSet={`${getHeroImageUrl(item.imagen, 400)} 400w, ${getHeroImageUrl(item.imagen, 800)} 800w`}
-                      sizes="(max-width: 768px) 100vw, 580px"
-                      alt={item.titulo}
-                      loading="eager"
-                      fetchPriority="high"
-                      decoding="async"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
-                    />
-                  ) : shouldRender ? (
-                    <Image
-                      src={getResponsiveImageUrl(item.imagen, 400)}
-                      alt={item.titulo}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 580px"
-                      style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                      loading="lazy"
-                      crossOrigin="anonymous"
-                      unoptimized={false}
-                    />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', background: '#e2e8f0' }} aria-hidden="true" />
-                  )
-                ) : null}
-              </div>
-            </article>
-          );
-        })}
-      </div>
+    <div className="home-pro" data-reveal>
+      {/* Ticker de última hora */}
+      <TickerUltimaHora noticias={dist.ultimaHora} />
 
-      <div className="ni-hero__info">
-        <span className={`ni-hero__badge ni-hero__badge--${catClass(items[idx]?.categoria)}`}>{items[idx]?.categoria || 'Noticia'}</span>
-        <span className="ni-hero__title">
-          <NoPrefetchLink href={`/noticias/${items[idx]?.slug}`}>{items[idx]?.titulo}</NoPrefetchLink>
-        </span>
-        <p className="ni-hero__lead">{items[idx]?.resumen || items[idx]?.titulo}</p>
-        <div className="ni-hero__meta">
-          <time dateTime={items[idx]?.fecha} suppressHydrationWarning>{timeAgo(items[idx]?.fecha || '')}</time>
-          <span>•</span>
-          <span>{items[idx]?.autor || 'Nicaragua Informate'}</span>
-        </div>
-      </div>
+      {/* ZONA 0: Hero Principal */}
+      <HeroPrincipal
+        heroNoticia={dist.heroNoticias[0] || null}
+        ultimaHora={dist.ultimaHora}
+      />
 
-      {items.length > 1 && (
-        <>
-          <button className="ni-hero__arrow ni-hero__arrow--prev" onClick={() => goToSlide((idx - 1 + items.length) % items.length)} aria-label="Anterior">‹</button>
-          <button className="ni-hero__arrow ni-hero__arrow--next" onClick={() => nextSlide()} aria-label="Siguiente">›</button>
-          <div className="ni-hero__indicators">
-            {items.map((item, i) => (
-              <button key={i} className={`ni-hero__ind${i === idx ? ' is-active' : ''}`} onClick={() => goToSlide(i)} aria-label={`Noticia ${i + 1}`}>
-                <span className="ni-hero__ind-label">{item.categoria}</span>
-                {i === idx && (
-                  <span className="ni-hero__ind-bar">
-                    <span className="ni-hero__ind-bar__fill" />
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </section>
-  );
-}
+      {/* ZONA 1: Editors Pick */}
+      <EditorsPick noticias={dist.editorsPick} />
 
-const Card = memo(function Card({ noticia, index = 0 }: { noticia: Noticia; index?: number }) {
-  const cat = catClass(noticia.categoria);
-  return (
-    <article
-      className="ni-card"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '100px 1fr',
-        gap: 12,
-        padding: '12px 0',
-        borderBottom: '1px solid #e2e8f0',
-        alignItems: 'start',
-        overflow: 'hidden',
-        animationDelay: `${index * 60}ms`,
-      }}
-      data-animate="fadeInUp"
-    >
-      <div
-        className="ni-card__thumb"
-        style={{
-          position: 'relative',
-          width: 100,
-          height: 70,
-          borderRadius: 8,
-          overflow: 'hidden',
-          flexShrink: 0,
-          background: '#e2e8f0',
-        }}
-      >
-        {noticia.imagen ? (
-          <Image
-            src={getResponsiveImageUrl(noticia.imagen, 400)}
-            alt={noticia.titulo}
-            fill
-            sizes="(max-width: 768px) 100px, (max-width: 1024px) 220px, 33vw"
-            style={{ objectFit: 'cover' }}
-            loading={index === 0 ? 'eager' : 'lazy'}
-          />
-        ) : null}
-      </div>
-      <div className="ni-card__content" style={{ width: '100%', padding: 0, minWidth: 0, overflow: 'hidden' }}>
-        <span className={`ni-card__pill ni-card__pill--${cat}`} style={{ fontSize: '0.6rem', marginBottom: 2, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0f172a' }}>{noticia.categoria || 'Noticia'}</span>
-        <span className="ni-card__title" style={{ fontFamily: "'Merriweather', serif", fontSize: '0.95rem', fontWeight: 700, lineHeight: 1.25, color: '#0f172a', marginBottom: 3, display: 'block' }}>
-          <NoPrefetchLink href={`/noticias/${noticia.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{noticia.titulo}</NoPrefetchLink>
-        </span>
-        <p className="ni-card__excerpt" style={{ fontSize: '0.8rem', lineHeight: 1.4, marginBottom: 4, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{noticia.resumen || noticia.titulo}</p>
-        <div className="ni-card__meta" style={{ fontSize: '0.68rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 8px', marginTop: 0 }}>
-          <time dateTime={noticia.fecha} suppressHydrationWarning>{timeAgo(noticia.fecha)}</time>
-          {noticia.fechaActualizacion && (
-            <time dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ color: '#991b1b', fontWeight: 500, fontSize: 12 }}>
-              Actualizado {timeAgo(noticia.fechaActualizacion)}
-            </time>
-          )}
-          <span>{noticia.autor || 'Nicaragua Informate'}</span>
-        </div>
-        <div style={{ display: 'flex', gap: 6, marginTop: 10, alignItems: 'center' }}>
-          <span style={{ fontSize: '0.62rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginRight: 2 }}>Compartir</span>
-          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en Facebook" className="ni-share-btn" style={{ '--sh': '#1877f2' } as React.CSSProperties}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-          </a>
-          <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://nicaraguainformate.com/noticias/' + noticia.slug)}&text=${encodeURIComponent(noticia.titulo)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en X" className="ni-share-btn" style={{ '--sh': '#000000' } as React.CSSProperties}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(noticia.titulo + ' https://nicaraguainformate.com/noticias/' + noticia.slug)}`} target="_blank" rel="noopener noreferrer nofollow" aria-label="Compartir en WhatsApp" className="ni-share-btn" style={{ '--sh': '#25D366' } as React.CSSProperties}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.738-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.074-.148-.668-1.611-.916-2.206-.241-.579-.486-.5-.668-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          </a>
-        </div>
-      </div>
-    </article>
-  );
-});
+      {/* ZONA 2: Sucesos */}
+      <SeccionSucesos noticias={dist.sucesosCards} />
 
-function useInView(ref: React.RefObject<HTMLElement | null>, options?: IntersectionObserverInit) {
-  const [isInView, setIsInView] = useState(false);
-  useEffect(() => {
-    let cleanup: (() => void) | undefined;
-    const el = ref.current;
-    if (el && typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      }, { rootMargin: '200px', threshold: 0, ...options });
-      observer.observe(el);
-      cleanup = () => observer.disconnect();
-    } else {
-      setIsInView(true);
-    }
-    return cleanup;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref.current, options?.rootMargin, options?.threshold]);
-  return isInView;
-}
+      {/* ZONA 3: Grid Temático */}
+      <GridTematico
+        economia={dist.economia}
+        tecnologia={dist.tecnologia}
+        deportes={dist.deportes}
+        cultura={dist.cultura}
+      />
 
-function LazySection({ title, slug, color, noticias }: { title: string; slug: string; color: string; noticias: Noticia[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref);
-  if (noticias.length === 0) return null;
-  if (!isInView) {
-    return (
-      <section ref={ref} className="ni-section" style={{ minHeight: 200 }} aria-hidden="true">
-        <div className="ni-section__header">
-          <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
-        </div>
-        <div style={{ height: 120, background: '#f1f5f9', borderRadius: 8 }} />
-      </section>
-    );
-  }
-  return (
-    <section ref={ref} className="ni-section">
-      <div className="ni-section__header">
-        <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
-        <NoPrefetchLink href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</NoPrefetchLink>
-      </div>
-      {noticias.length <= 2 ? (
-        noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
-      ) : (
-        <div className="ni-grid-2">
-          {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-        </div>
-      )}
-    </section>
-  );
-}
+      {/* ZONA 4: Multimedia */}
+      <ZonaMultimedia />
 
-function Section({ title, slug, color, noticias }: { title: string; slug: string; color: string; noticias: Noticia[] }) {
-  if (noticias.length === 0) return null;
-  return (
-    <section className="ni-section">
-      <div className="ni-section__header">
-        <h2 className={`ni-section__title ni-section__title--${color}`}>{title}</h2>
-        <NoPrefetchLink href={`/categoria/${slug}`} className="ni-section__more">Ver más noticias de {title} →</NoPrefetchLink>
-      </div>
-      {noticias.length <= 2 ? (
-        noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)
-      ) : (
-        <div className="ni-grid-2">
-          {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-        </div>
-      )}
-    </section>
-  );
-}
-
-export default function HomePagePro({ noticias, masLeidas, populares = [], isNoticiasPage = false }: { noticias: Noticia[]; masLeidas: Noticia[]; populares?: Noticia[]; isNoticiasPage?: boolean }) {
-  // Carrusel: las 7 noticias más recientes
-  const heroNoticias = useMemo(() => noticias.slice(0, 7), [noticias]);
-
-  // IDs del carousel
-  const heroIds = useMemo(() => new Set(heroNoticias.map(n => n.id)), [heroNoticias]);
-
-  // IDs de masLeidas para evitar duplicación con populares
-  const masLeidasIds = useMemo(() => new Set(masLeidas.map(n => n.id)), [masLeidas]);
-
-  // Resto = todas las noticias menos las del hero
-  const resto = useMemo(
-    () => noticias.filter(n => !heroIds.has(n.id)),
-    [noticias, heroIds]
-  );
-
-  // Populares filtrados: excluir noticias que ya están en Más leídos
-  const popularesFiltrados = useMemo(
-    () => populares.filter(n => !masLeidasIds.has(n.id)),
-    [populares, masLeidasIds]
-  );
-
-  // Últimas 12 noticias
-  const ultimas = useMemo(() => resto.slice(0, 12), [resto]);
-
-  // Categorías — usar RESTO (noticias fuera del carrusel) para evitar duplicación
-  // Sucesos limitado a 3 (menos del 30% del contenido visible)
-  const porCategoria = useMemo(() => {
-    const map: Record<string, Noticia[]> = {};
-    CATEGORIES.forEach(c => { map[c.slug] = []; });
-    for (const n of resto) {
-      const slug = CAT_LOOKUP[n.categoria?.toLowerCase() || ''];
-      if (slug && map[slug]) map[slug].push(n);
-    }
-    CATEGORIES.forEach(c => {
-      const limit = c.slug === 'sucesos' ? 3 : 6;
-      map[c.slug] = map[c.slug].slice(0, limit);
-    });
-    return map;
-  }, [resto]);
-
-
-  return (
-    <div>
-      {isNoticiasPage ? (
-        <h1 className="ni-page-title">Todas las Noticias de Nicaragua</h1>
-      ) : (
-        <h1 className="ni-page-title">Noticias de Nicaragua — Sucesos Nacionales y Actualidad</h1>
-      )}
-      {/* ETIQUETAS PRINCIPALES */}
-      <div className="ni-top-tags">
-        <span className="ni-top-tags__label"># Etiquetas principales</span>
-        <div className="ni-top-tags__list">
-          {TRENDS.map(t => (
-            <NoPrefetchLink key={t.label} href={t.href} className="ni-top-tag" rel="nofollow">{t.label}</NoPrefetchLink>
-          ))}
-        </div>
-      </div>
-
-      {/* MARQUEE / TICKER — solo en homepage */}
-      {!isNoticiasPage && <BreakingMarquee noticias={noticias} />}
-
-      {/* HERO — solo en homepage */}
-      {!isNoticiasPage && <Hero noticias={heroNoticias} />}
-
-      {/* GUÍAS Y RECURSOS EVERGREEN */}
-      {!isNoticiasPage && (
-        <section className="ni-section" style={{ marginTop: 24 }}>
-          <div className="ni-section__header">
-            <h2 className="ni-section__title" style={{ color: '#7c3aed' }}><BookOpen size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Guías útiles</h2>
-            <NoPrefetchLink href="/guia" className="ni-section__more">Ver todas →</NoPrefetchLink>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-            {EVERGREEN_GUIDES.map((guia) => (
-              <NoPrefetchLink
-                key={guia.slug}
-                href={`/guia/${guia.slug}`}
-                style={{
-                  display: 'block',
-                  padding: '16px',
-                  background: 'var(--card-bg, #fff)',
-                  borderRadius: 10,
-                  border: '1px solid var(--border, #e5e7eb)',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                }}
-              >
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase' }}>{guia.category}</span>
-                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '6px 0 4px', lineHeight: 1.4 }}>{guia.title}</h3>
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>{guia.description.slice(0, 90)}…</p>
-              </NoPrefetchLink>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* MAIN */}
-      <div className="ni-main">
-        <div className="ni-content">
-          {/* Página /noticias: listado completo limpio */}
-          {isNoticiasPage ? (
-            <section className="ni-section" style={{ marginTop: 0 }}>
-              <div className="ni-section__header" style={{ marginBottom: 8 }}>
-                <h2 className="ni-section__title ni-section__title--sucesos">{noticias.length} noticias publicadas</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                {noticias.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-              </div>
-            </section>
-          ) : (
-            <>
-              {/* Últimas */}
-              {ultimas.length > 0 && (
-                <section className="ni-section">
-                  <div className="ni-section__header">
-                    <h2 className="ni-section__title ni-section__title--sucesos">Últimas noticias</h2>
-                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
-                  </div>
-                  {ultimas.map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-                </section>
-              )}
-
-              {/* MÁS LEÍDAS */}
-              {masLeidas.length > 0 && (
-                <section className="ni-section">
-                  <div className="ni-section__header">
-                    <h2 className="ni-section__title ni-section__title--sucesos"><TrendingUp size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Más leídos</h2>
-                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
-                  </div>
-                  <div className="ni-grid-2">
-                    {masLeidas.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-                  </div>
-                </section>
-              )}
-
-              {CATEGORIES.slice(0, 3).map(c => (
-                <Section key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
-              ))}
-
-              {/* DESTACADOS */}
-              {popularesFiltrados.length > 0 && (
-                <section className="ni-section">
-                  <div className="ni-section__header">
-                    <h2 className="ni-section__title ni-section__title--sucesos"><Flame size={18} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Destacados</h2>
-                    <NoPrefetchLink href="/noticias" className="ni-section__more">Ver todas →</NoPrefetchLink>
-                  </div>
-                  <div className="ni-grid-2">
-                    {popularesFiltrados.slice(0, 4).map((n, i) => <Card key={n.id} noticia={n} index={i} />)}
-                  </div>
-                </section>
-              )}
-
-              {CATEGORIES.slice(3).map(c => (
-                <LazySection key={c.slug} title={c.name} slug={c.slug} color={c.color} noticias={porCategoria[c.slug]} />
-              ))}
-            </>
-          )}
-        </div>
-
-        {/* SIDEBAR */}
-        <aside className="ni-sidebar">
-          {/* TABBED WIDGET (Más leídas all-time, Populares 7d, Tendencias recientes) */}
-          <TabbedSidebarWidget ultimas={masLeidas} populares={popularesFiltrados.length > 0 ? popularesFiltrados : resto.slice(0, 5)} tendencias={resto.slice(5, 10)} />
-
-          {/* Radio en vivo */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><Radio size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Radio en Vivo</h3>
-            <RadioPlayer />
-          </div>
-
-          {/* Indicadores económicos */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><BarChart3 size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Indicadores</h3>
-            <EconomicBar />
-          </div>
-
-          {/* Clima */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><CloudSun size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Clima Nicaragua</h3>
-            <WeatherWidget />
-          </div>
-
-          {/* Reloj mundial */}
-          <div className="ni-sidebar__widget ni-widget-compact">
-            <h3 className="ni-widget-compact__title"><Globe size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Reloj Mundial</h3>
-            <WorldClock />
-          </div>
-
-          {/* Categorías */}
-          <div className="ni-sidebar__widget">
-            <h3 className="ni-sidebar__title"><FolderOpen size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Categorías</h3>
-            <ul className="ni-cat-list">
-              {CATEGORIES.map(c => (
-                <li key={c.slug}><Link href={`/categoria/${c.slug}`}>{c.name}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          {/* RECURSOS ÚTILES — visible para AdSense y E-E-A-T */}
-          <div className="ni-sidebar__widget" style={{ background: '#fef3c7', border: '1px solid #fbbf24', borderRadius: 10, padding: 16 }}>
-            <h3 className="ni-sidebar__title" style={{ color: '#92400e', marginBottom: 12 }}>📞 Recursos Útiles</h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 13, lineHeight: 2 }}>
-              <li><strong>118</strong> — Policía Nacional (emergencias)</li>
-              <li><strong>128</strong> — Cruz Blanca (ambulancias)</li>
-              <li><strong>115</strong> — Bomberos Unidos</li>
-              <li><strong>133</strong> — INSS (información)</li>
-            </ul>
-            <NoPrefetchLink href="/contacto" style={{ display: 'inline-block', marginTop: 10, fontSize: 12, fontWeight: 600, color: '#92400e' }}>¿Cómo denunciar? →</NoPrefetchLink>
-          </div>
-
-          {/* Sobre nosotros — resumen */}
-          <div className="ni-sidebar__widget" style={{ background: '#f3f4f6', borderRadius: 10, padding: 16 }}>
-            <h3 className="ni-sidebar__title" style={{ marginBottom: 8 }}>Sobre Nicaragua Informate</h3>
-            <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>
-              Medio digital independiente con cobertura nacional. Periodismo verificado, contexto local y recursos útiles para nicaragüenses.
-            </p>
-            <NoPrefetchLink href="/nosotros" style={{ display: 'inline-block', marginTop: 8, fontSize: 12, fontWeight: 600, color: '#991b1b' }}>Conocé más →</NoPrefetchLink>
-          </div>
-
-          {/* Newsletter */}
-          <div className="ni-sidebar__widget ni-newsletter">
-            <h3 className="ni-sidebar__title"><Mail size={16} style={{ display: 'inline', verticalAlign: 'text-bottom', marginRight: 6 }} /> Newsletter</h3>
-            <p>Recibe las noticias más importantes de Nicaragua cada mañana.</p>
-            <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
-            <input id="newsletter-email" type="email" placeholder="tucorreo@gmail.com" aria-label="Tu correo electrónico para el newsletter" />
-            <button type="submit" aria-label="Suscribirse al newsletter">Suscribirme gratis</button>
-          </div>
-        </aside>
-      </div>
-
+      {/* ZONA 5: Indicadores + Newsletter */}
+      <ZonaIndicadores />
     </div>
   );
 }

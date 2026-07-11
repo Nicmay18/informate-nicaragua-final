@@ -37,6 +37,10 @@ export function timeAgo(date: string | Date | undefined): string {
   }
 }
 
+export function tiempoRelativo(date: string | Date | undefined): string {
+  return timeAgo(date);
+}
+
 export function formatTime(date: string | Date | undefined): string {
   if (!date) return '';
   try {
