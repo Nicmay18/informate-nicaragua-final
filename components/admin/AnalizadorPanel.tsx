@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { ResultadoAnalisis } from '@/lib/analizador-noticias';
+import type { ResultadoAnalisis, SugerenciaV7 } from '@/lib/analizador-noticias';
 
 interface Props {
   noticia: {
@@ -44,6 +44,25 @@ const estadoColor: Record<string, string> = {
   WARN: 'text-yellow-400',
   FAIL: 'text-red-400',
 };
+
+function SugerenciaCard({ s }: { s: SugerenciaV7 }) {
+  const dificultadColor = {
+    Baja: 'bg-green-600',
+    Media: 'bg-yellow-500',
+    Alta: 'bg-red-500',
+  }[s.dificultad];
+  return (
+    <li className="bg-purple-900/20 p-2 rounded border border-purple-400/20">
+      <p className="font-medium">{s.texto}</p>
+      <div className="flex flex-wrap gap-2 mt-1 text-xs">
+        <span className="px-2 py-0.5 rounded bg-purple-700/50 text-purple-100">Impacto: {s.impacto}</span>
+        <span className="px-2 py-0.5 rounded bg-blue-700/50 text-blue-100">Tiempo: {s.tiempo}</span>
+        <span className={`px-2 py-0.5 rounded text-white ${dificultadColor}`}>Dificultad: {s.dificultad}</span>
+        <span className="px-2 py-0.5 rounded bg-green-700/50 text-green-100">Beneficio: {s.beneficio}</span>
+      </div>
+    </li>
+  );
+}
 
 export default function AnalizadorPanel({ noticia }: Props) {
   const [resultado, setResultado] = useState<ResultadoAnalisis | null>(null);
@@ -177,7 +196,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
             </div>
             <div className="text-right text-sm">
               <p className="text-purple-200">
-                Discover: <strong>{resultado.reporteVPR.discoverSiNo}</strong>
+                Discover: <strong>{resultado.reporteVPR.descubreProbabilidad}</strong>
               </p>
               <p className="text-purple-200">
                 Compartible: <strong>{resultado.reporteVPR.compartibleSiNo}</strong>
@@ -234,18 +253,18 @@ export default function AnalizadorPanel({ noticia }: Props) {
             <div className="pt-3 border-t border-purple-500/30">
               <p className="font-semibold text-purple-300">🌱 Oportunidades editoriales</p>
               <p className="italic mb-1 text-xs text-purple-300/80">Antes se llamaba “falta”; ahora es lo que puede mejorar con el tiempo disponible:</p>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="space-y-2">
                 {resultado.reporteVPR.oportunidadesEditoriales.map((op, i) => (
-                  <li key={i}>{op}</li>
+                  <SugerenciaCard key={i} s={op} />
                 ))}
               </ul>
             </div>
 
             <div>
               <p className="font-semibold text-purple-300">Cómo convertirla en nota de referencia</p>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="space-y-2">
                 {resultado.reporteVPR.comoConvertirReferencia.map((paso, i) => (
-                  <li key={i}>{paso}</li>
+                  <SugerenciaCard key={i} s={paso} />
                 ))}
               </ul>
             </div>
@@ -274,8 +293,13 @@ export default function AnalizadorPanel({ noticia }: Props) {
                 <p>{resultado.reporteVPR.tiempoReferencia}</p>
               </div>
               <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
-                <p className="font-semibold text-purple-300 text-xs uppercase">Retorno periodístico</p>
-                <p>{resultado.reporteVPR.retornoPeriodistico}</p>
+                <p className="font-semibold text-purple-300 text-xs uppercase">Retorno editorial</p>
+                <p>
+                  <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold mr-1 ${resultado.reporteVPR.retornoEditorial === 'ALTO' ? 'bg-green-600' : resultado.reporteVPR.retornoEditorial === 'MEDIO' ? 'bg-yellow-500 text-black' : 'bg-red-600'}`}>
+                    {resultado.reporteVPR.retornoEditorial}
+                  </span>
+                  {resultado.reporteVPR.retornoExplicacion}
+                </p>
               </div>
               <div className="bg-gray-800/50 p-3 rounded border border-gray-700">
                 <p className="font-semibold text-purple-300 text-xs uppercase">Prioridad Editorial Nicaragua Informate</p>
@@ -349,9 +373,9 @@ export default function AnalizadorPanel({ noticia }: Props) {
             <div className="pt-3 border-t border-purple-500/30">
               <p className="font-semibold text-purple-300">NIVEL 10 — Oportunidades periodísticas</p>
               <p className="italic mb-1">Notas que pueden salir de esta:</p>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="space-y-2">
                 {resultado.reporteVPR.nivel10_oportunidades.map((o, i) => (
-                  <li key={i}>{o}</li>
+                  <SugerenciaCard key={i} s={o} />
                 ))}
               </ul>
             </div>

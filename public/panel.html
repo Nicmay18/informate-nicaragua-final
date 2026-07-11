@@ -6887,7 +6887,7 @@ VERIFICACIÓN FINAL
         html += '<h3 style="margin:0 0 12px;font-size:16px;color:#c4b5fd;"><i class="fas fa-robot"></i> Editor Jefe IA</h3>';
 
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px;background:#312e81;border-radius:8px;">';
-        html += '<div><div style="font-size:13px;color:#c4b5fd;">Veredicto</div><div style="font-size:15px;font-weight:700;">' + vpr.veredicto + '</div><div style="font-size:12px;color:#a78bfa;margin-top:4px;">Tipo editorial: <strong>' + vpr.tipoNota + '</strong></div><div style="font-size:11px;color:#94a3b8;font-style:italic;">' + vpr.razonamientoTipo + '</div></div>';
+        html += '<div><div style="font-size:13px;color:#c4b5fd;">Veredicto</div><div style="font-size:15px;font-weight:700;">' + vpr.veredicto + '</div><div style="font-size:12px;color:#a78bfa;margin-top:4px;">Tipo editorial: <strong>' + vpr.tipoNota + '</strong></div><div style="font-size:12px;color:#a78bfa;margin-top:2px;">Tipo de artículo: <strong>' + (vpr.tipoArticulo || 'No detectado') + '</strong></div><div style="font-size:11px;color:#94a3b8;font-style:italic;">' + vpr.razonamientoTipo + '</div></div>';
         html += '<div style="text-align:right;"><div style="font-size:13px;color:#c4b5fd;">Puntuación</div><div style="font-size:22px;font-weight:800;">' + vpr.puntuacion + '/100</div></div>';
         html += '</div>';
 
@@ -6919,7 +6919,21 @@ VERIFICACIÓN FINAL
           let out = '<div style="margin-bottom:12px;"><div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">' + titulo + '</div>';
           if (subtitulo) out += '<div style="font-size:12px;color:#94a3b8;margin-bottom:4px;">' + subtitulo + '</div>';
           out += '<ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;">';
-          items.forEach(it => { out += '<li style="margin-bottom:3px;">' + it + '</li>'; });
+          items.forEach(it => {
+            if (it && typeof it === 'object' && it.texto) {
+              const badgeColor = it.dificultad === 'Alta' ? '#dc2626' : (it.dificultad === 'Media' ? '#ca8a04' : '#16a34a');
+              out += '<li style="margin-bottom:8px;padding:8px;background:#312e81;border:1px solid #4c1d95;border-radius:6px;">';
+              out += '<div style="font-weight:700;margin-bottom:4px;">' + it.texto + '</div>';
+              out += '<div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:#e2e8f0;">';
+              out += '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#6b21a8;">Impacto: ' + it.impacto + '</span>';
+              out += '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#1d4ed8;">Tiempo: ' + it.tiempo + '</span>';
+              out += '<span style="display:inline-block;padding:2px 6px;border-radius:4px;color:#fff;background:' + badgeColor + ';">Dificultad: ' + it.dificultad + '</span>';
+              out += '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#15803d;">Beneficio: ' + it.beneficio + '</span>';
+              out += '</div></li>';
+            } else {
+              out += '<li style="margin-bottom:3px;">' + it + '</li>';
+            }
+          });
           out += '</ul></div>';
           return out;
         };
@@ -6935,7 +6949,8 @@ VERIFICACIÓN FINAL
         html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:12px;">';
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Factibilidad</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.factibilidad + '</div></div>';
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Tiempo estimado para referencia</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.tiempoReferencia + '</div></div>';
-        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Retorno periodístico</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.retornoPeriodistico + '</div></div>';
+        const badgeRetorno = vpr.retornoEditorial === 'ALTO' ? '#16a34a' : (vpr.retornoEditorial === 'MEDIO' ? '#ca8a04' : '#dc2626');
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Retorno editorial</div><div style="font-size:12px;color:#e2e8f0;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgeRetorno + ';margin-right:4px;">' + vpr.retornoEditorial + '</span>' + vpr.retornoExplicacion + '</div></div>';
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Prioridad Editorial NI</div><div style="font-size:12px;color:#e2e8f0;">' + vpr.prioridadEditorial + '</div></div>';
         html += '</div>';
 
@@ -6944,10 +6959,17 @@ VERIFICACIÓN FINAL
         html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.valorParaLector + '</div>';
         html += '</div>';
 
+        const badgePortada = vpr.publicarPortada === 'Sí' ? '#16a34a' : '#dc2626';
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">¿Publicarías esta nota en portada?</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgePortada + ';margin-right:4px;">' + vpr.publicarPortada + '</span>' + vpr.porQuePublicarPortada + '</div>';
+        html += '</div>';
+
+        const badgeRazon = vpr.razonReferenciaSiNo === 'Sí' ? '#16a34a' : '#dc2626';
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
         html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">¿Por qué leer esta versión de Nicaragua Informate?</div>';
         html += '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">Si TN8, La Prensa o Canal 10 publican lo mismo, ¿por qué leer la de NI?</div>';
-        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.razonamientoReferencia + '</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgeRazon + ';margin-right:4px;">' + vpr.razonReferenciaSiNo + '</span>' + vpr.razonamientoReferencia + '</div>';
         html += '</div>';
 
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
@@ -6956,7 +6978,8 @@ VERIFICACIÓN FINAL
         html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.detectorNicaraguaInformate + '</div>';
         html += '</div>';
 
-        html += campo('Google Discover', vpr.discoverRazon + ' (' + vpr.discoverSiNo + ')');
+        const badgeDiscover = vpr.descubreProbabilidad === 'ALTA' ? '#16a34a' : (vpr.descubreProbabilidad === 'MEDIA' ? '#ca8a04' : '#dc2626');
+        html += campo('Google Discover', '<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgeDiscover + ';margin-right:4px;">' + vpr.descubreProbabilidad + '</span>' + vpr.discoverRazon);
         html += campo('¿Por qué se compartiría?', vpr.porQueCompartible + ' (' + vpr.compartibleSiNo + ')');
 
         html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
@@ -6989,7 +7012,7 @@ VERIFICACIÓN FINAL
 
         if (vpr.auditoriaInterna) {
           html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
-          html += '<div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:8px;">Autoauditoría Constitución V6.0</div>';
+          html += '<div style="font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;margin-bottom:8px;">Autoauditoría Constitución V7.0</div>';
           html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;">';
           html += '<div style="font-size:12px;color:#e2e8f0;margin-bottom:4px;">' + (vpr.auditoriaInterna.aprobado ? '✅ Análisis aprobado sin observaciones por el director de noticias simulado.' : '🔎 El análisis fue revisado y ajustado antes de entregarse:') + '</div>';
           if (vpr.auditoriaInterna.observaciones && vpr.auditoriaInterna.observaciones.length) {

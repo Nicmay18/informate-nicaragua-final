@@ -23,8 +23,51 @@ async function main() {
   const resultado = await analizarNoticia(noticia);
   console.log('Nivel:', resultado.nivel);
   console.log('Puntuación general:', resultado.puntuacion);
+  console.log('Tipo artículo:', resultado.reporteVPR?.tipoArticulo);
+  console.log('Categoría editorial:', resultado.reporteVPR?.tipoNota);
   console.log('--- REPORTE EDITOR JEFE IA ---');
   console.log(JSON.stringify(resultado.reporteVPR, null, 2));
+
+  // Validación mínima de estructura V7
+  if (resultado.reporteVPR) {
+    const r = resultado.reporteVPR;
+    const sugerencias = [
+      ...r.oportunidadesEditoriales,
+      ...r.comoConvertirReferencia,
+      ...r.nivel10_oportunidades,
+    ];
+    const validas = sugerencias.every(s =>
+      typeof s.texto === 'string' &&
+      typeof s.impacto === 'string' &&
+      typeof s.tiempo === 'string' &&
+      ['Baja', 'Media', 'Alta'].includes(s.dificultad) &&
+      typeof s.beneficio === 'string'
+    );
+    console.log('Sugerencias V7 estructuradas:', validas ? 'OK' : 'FALLÓ');
+    if (!validas) {
+      throw new Error('Algunas sugerencias no cumplen el formato SugerenciaV7');
+    }
+
+    const veredictosValidos = [
+      '★ Reemplazable',
+      '★★ Necesita desarrollo',
+      '★★★ Publicable',
+      '★★★★ Competitiva',
+      '★★★★☆ Muy competitiva',
+      '★★★★★ Nota de referencia',
+    ];
+    console.log('Veredicto V7:', veredictosValidos.includes(r.veredicto) ? 'OK' : 'FALLÓ');
+    console.log('Razón referencia SI/NO:', ['Sí', 'No'].includes(r.razonReferenciaSiNo) ? 'OK' : 'FALLÓ');
+    console.log('Retorno editorial:', ['ALTO', 'MEDIO', 'BAJO'].includes(r.retornoEditorial) ? 'OK' : 'FALLÓ');
+    console.log('Publicar portada:', ['Sí', 'No'].includes(r.publicarPortada) ? 'OK' : 'FALLÓ');
+    console.log('Descubre probabilidad:', ['ALTA', 'MEDIA', 'BAJA'].includes(r.descubreProbabilidad) ? 'OK' : 'FALLÓ');
+
+    if (!veredictosValidos.includes(r.veredicto)) throw new Error('Veredicto no pertenece a la escala V7');
+    if (!['Sí', 'No'].includes(r.razonReferenciaSiNo)) throw new Error('razonReferenciaSiNo inválido');
+    if (!['ALTO', 'MEDIO', 'BAJO'].includes(r.retornoEditorial)) throw new Error('retornoEditorial inválido');
+    if (!['Sí', 'No'].includes(r.publicarPortada)) throw new Error('publicarPortada inválido');
+    if (!['ALTA', 'MEDIA', 'BAJA'].includes(r.descubreProbabilidad)) throw new Error('descubreProbabilidad inválida');
+  }
 }
 
 main().catch(console.error);
