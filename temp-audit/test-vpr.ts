@@ -59,14 +59,21 @@ async function main() {
     console.log('Veredicto V7:', veredictosValidos.includes(r.veredicto) ? 'OK' : 'FALLÓ');
     console.log('Razón referencia SI/NO:', ['Sí', 'No'].includes(r.razonReferenciaSiNo) ? 'OK' : 'FALLÓ');
     console.log('Retorno editorial:', ['ALTO', 'MEDIO', 'BAJO'].includes(r.retornoEditorial) ? 'OK' : 'FALLÓ');
-    console.log('Publicar portada:', ['Sí', 'No'].includes(r.publicarPortada) ? 'OK' : 'FALLÓ');
+    console.log('Decisión portada:', ['No publicar', 'Publicar breve', 'Publicar estándar', 'Portada', 'Cobertura especial'].includes(r.decisionPortada) ? 'OK' : 'FALLÓ');
     console.log('Descubre probabilidad:', ['ALTA', 'MEDIA', 'BAJA'].includes(r.descubreProbabilidad) ? 'OK' : 'FALLÓ');
+    console.log('Categoría Facebook:', ['Servicio', 'Utilidad', 'Impacto', 'Identificación', 'Debate', 'Orgullo local', 'Sorpresa', 'Ninguna'].includes(r.categoriaFacebook) ? 'OK' : 'FALLÓ');
+    console.log('Riesgo legal:', ['Bajo', 'Medio', 'Alto'].includes(r.riesgoLegal.nivel) ? 'OK' : 'FALLÓ');
+    console.log('Firma director:', typeof r.firmaDirector === 'string' && r.firmaDirector.length > 10 ? 'OK' : 'FALLÓ');
+    console.log('Producción Nicaragua Informate:', Array.isArray(r.produccionNicaraguaInformate) ? 'OK' : 'FALLÓ');
 
     if (!veredictosValidos.includes(r.veredicto)) throw new Error('Veredicto no pertenece a la escala V7');
     if (!['Sí', 'No'].includes(r.razonReferenciaSiNo)) throw new Error('razonReferenciaSiNo inválido');
     if (!['ALTO', 'MEDIO', 'BAJO'].includes(r.retornoEditorial)) throw new Error('retornoEditorial inválido');
-    if (!['Sí', 'No'].includes(r.publicarPortada)) throw new Error('publicarPortada inválido');
+    if (!['No publicar', 'Publicar breve', 'Publicar estándar', 'Portada', 'Cobertura especial'].includes(r.decisionPortada)) throw new Error('decisionPortada inválida');
     if (!['ALTA', 'MEDIA', 'BAJA'].includes(r.descubreProbabilidad)) throw new Error('descubreProbabilidad inválida');
+    if (!['Servicio', 'Utilidad', 'Impacto', 'Identificación', 'Debate', 'Orgullo local', 'Sorpresa', 'Ninguna'].includes(r.categoriaFacebook)) throw new Error('categoriaFacebook inválida');
+    if (!['Bajo', 'Medio', 'Alto'].includes(r.riesgoLegal.nivel)) throw new Error('riesgoLegal.nivel inválido');
+    if (typeof r.firmaDirector !== 'string' || r.firmaDirector.length < 10) throw new Error('firmaDirector inválida');
   }
 }
 

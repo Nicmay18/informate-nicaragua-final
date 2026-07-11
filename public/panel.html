@@ -6959,10 +6959,16 @@ VERIFICACIÓN FINAL
         html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.valorParaLector + '</div>';
         html += '</div>';
 
-        const badgePortada = vpr.publicarPortada === 'Sí' ? '#16a34a' : '#dc2626';
+        const colorPortada = {
+          'Cobertura especial': '#9333ea',
+          'Portada': '#16a34a',
+          'Publicar estándar': '#2563eb',
+          'Publicar breve': '#ca8a04',
+          'No publicar': '#dc2626'
+        }[vpr.decisionPortada] || '#64748b';
         html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
-        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">¿Publicarías esta nota en portada?</div>';
-        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgePortada + ';margin-right:4px;">' + vpr.publicarPortada + '</span>' + vpr.porQuePublicarPortada + '</div>';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Decisión del Director de Portada</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + colorPortada + ';margin-right:4px;">' + vpr.decisionPortada + '</span>' + vpr.explicacionPortada + '</div>';
         html += '</div>';
 
         const badgeRazon = vpr.razonReferenciaSiNo === 'Sí' ? '#16a34a' : '#dc2626';
@@ -6981,6 +6987,26 @@ VERIFICACIÓN FINAL
         const badgeDiscover = vpr.descubreProbabilidad === 'ALTA' ? '#16a34a' : (vpr.descubreProbabilidad === 'MEDIA' ? '#ca8a04' : '#dc2626');
         html += campo('Google Discover', '<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + badgeDiscover + ';margin-right:4px;">' + vpr.descubreProbabilidad + '</span>' + vpr.discoverRazon);
         html += campo('¿Por qué se compartiría?', vpr.porQueCompartible + ' (' + vpr.compartibleSiNo + ')');
+        html += campo('Categoría Facebook', '<span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:#2563eb;margin-right:4px;">' + vpr.categoriaFacebook + '</span>' + vpr.razonFacebook);
+
+        if (vpr.produccionNicaraguaInformate && vpr.produccionNicaraguaInformate.length) {
+          html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+          html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">¿Qué produjo Nicaragua Informate?</div>';
+          html += '<ul style="margin:0;padding-left:16px;font-size:12px;color:#e2e8f0;line-height:1.5;">';
+          vpr.produccionNicaraguaInformate.forEach(item => { html += '<li>' + item + '</li>'; });
+          html += '</ul></div>';
+        }
+
+        const colorRiesgo = vpr.riesgoLegal.nivel === 'Bajo' ? '#16a34a' : (vpr.riesgoLegal.nivel === 'Medio' ? '#ca8a04' : '#dc2626');
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Riesgo legal</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:' + colorRiesgo + ';margin-right:4px;">' + vpr.riesgoLegal.nivel + '</span>' + vpr.riesgoLegal.explicacion + '</div>';
+        html += '</div>';
+
+        html += '<div style="background:#312e81;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px;">Firma del Director Editorial</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + vpr.firmaDirector + '</div>';
+        html += '</div>';
 
         html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid #4c1d95;">';
         html += campo('NIVEL 8 — Impacto en el lector', '<em style="color:#94a3b8;">¿Qué gana el lector al dedicar 3 minutos a leer esto?</em><br>' + vpr.nivel8_impactoLector);

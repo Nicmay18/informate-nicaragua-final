@@ -313,6 +313,62 @@ export default function AnalizadorPanel({ noticia }: Props) {
             </div>
 
             <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Decisión del Director de Portada</p>
+              <p>
+                <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold mr-1 ${
+                  resultado.reporteVPR.decisionPortada === 'Cobertura especial' ? 'bg-purple-600' :
+                  resultado.reporteVPR.decisionPortada === 'Portada' ? 'bg-green-600' :
+                  resultado.reporteVPR.decisionPortada === 'Publicar estándar' ? 'bg-blue-600' :
+                  resultado.reporteVPR.decisionPortada === 'Publicar breve' ? 'bg-yellow-500 text-black' :
+                  'bg-red-600'
+                }`}>
+                  {resultado.reporteVPR.decisionPortada}
+                </span>
+                {resultado.reporteVPR.explicacionPortada}
+              </p>
+            </div>
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Motivo de compartición en Facebook</p>
+              <p>
+                <span className="inline-block px-2 py-0.5 rounded text-xs font-bold mr-1 bg-blue-600">
+                  {resultado.reporteVPR.categoriaFacebook}
+                </span>
+                {resultado.reporteVPR.razonFacebook}
+              </p>
+            </div>
+
+            {resultado.reporteVPR.produccionNicaraguaInformate.length > 0 && (
+              <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+                <p className="font-semibold text-purple-300">¿Qué produjo Nicaragua Informate?</p>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  {resultado.reporteVPR.produccionNicaraguaInformate.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Riesgo legal</p>
+              <p>
+                <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold mr-1 ${
+                  resultado.reporteVPR.riesgoLegal.nivel === 'Bajo' ? 'bg-green-600' :
+                  resultado.reporteVPR.riesgoLegal.nivel === 'Medio' ? 'bg-yellow-500 text-black' :
+                  'bg-red-600'
+                }`}>
+                  {resultado.reporteVPR.riesgoLegal.nivel}
+                </span>
+                {resultado.reporteVPR.riesgoLegal.explicacion}
+              </p>
+            </div>
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
+              <p className="font-semibold text-purple-300">Firma del Director Editorial</p>
+              <p>{resultado.reporteVPR.firmaDirector}</p>
+            </div>
+
+            <div className="bg-purple-900/30 p-3 rounded border border-purple-400/30">
               <p className="font-semibold text-purple-300">¿Por qué leer esta versión de Nicaragua Informate?</p>
               <p className="italic mb-1 text-xs text-purple-300/80">Si TN8, La Prensa o Canal 10 publican lo mismo, ¿por qué leer la de NI?</p>
               <p>{resultado.reporteVPR.razonamientoReferencia}</p>

@@ -138,14 +138,39 @@ export interface ReporteEditorJefe {
   retornoExplicacion: string;
   prioridadEditorial: string;
   valorParaLector: string;
-  publicarPortada: 'Sí' | 'No';
-  porQuePublicarPortada: string;
+  decisionPortada:
+    | 'No publicar'
+    | 'Publicar breve'
+    | 'Publicar estándar'
+    | 'Portada'
+    | 'Cobertura especial';
+  explicacionPortada: string;
 
   // Discover / compartir
   discoverRazon: string;
   descubreProbabilidad: 'ALTA' | 'MEDIA' | 'BAJA';
   porQueCompartible: string;
   compartibleSiNo: 'Sí' | 'No';
+  categoriaFacebook:
+    | 'Servicio'
+    | 'Utilidad'
+    | 'Impacto'
+    | 'Identificación'
+    | 'Debate'
+    | 'Orgullo local'
+    | 'Sorpresa'
+    | 'Ninguna';
+  razonFacebook: string;
+
+  // Producción propia y riesgo legal
+  produccionNicaraguaInformate: string[];
+  riesgoLegal: {
+    nivel: 'Bajo' | 'Medio' | 'Alto';
+    explicacion: string;
+  };
+
+  // Firma del Director Editorial
+  firmaDirector: string;
 
   // Autoauditoría Constitución V7.0
   auditoriaInterna: {
@@ -1305,24 +1330,51 @@ function autoauditarConstitucion(
     observaciones.push(`Autoauditoría V7 detectó lenguaje no constitucional: ${palabrasDetectadas.join(', ')}.`);
   }
 
-  // 5. Alineación de sugerencias con el tema detectado
+  // 5. Eliminar sugerencias duplicadas
+  const dedupeSugerencias = (lista: SugerenciaV7[]) =>
+    [...new Map(lista.map(s => [s.texto.trim().toLowerCase(), s])).values()];
+  ajustes.oportunidadesEditoriales = dedupeSugerencias(reporte.oportunidadesEditoriales);
+  ajustes.comoConvertirReferencia = dedupeSugerencias(reporte.comoConvertirReferencia);
+  ajustes.nivel10_oportunidades = dedupeSugerencias(reporte.nivel10_oportunidades);
+  if (
+    ajustes.oportunidadesEditoriales.length < reporte.oportunidadesEditoriales.length ||
+    ajustes.comoConvertirReferencia.length < reporte.comoConvertirReferencia.length ||
+    ajustes.nivel10_oportunidades.length < reporte.nivel10_oportunidades.length
+  ) {
+    observaciones.push('Autoauditoría V7: se eliminaron recomendaciones duplicadas.');
+  }
+
+  // 6. Alineación de sugerencias con el tema detectado
   const claves = palabrasClaveTema(tema);
   const alineada = (s: SugerenciaV7) => claves.some(k => s.texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(k));
   const alineadaTexto = (s: string) => claves.some(k => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(k));
 
-  const oportunidades = reporte.oportunidadesEditoriales.filter(alineada);
+  const oportunidades = (ajustes.oportunidadesEditoriales || reporte.oportunidadesEditoriales).filter(alineada);
   if (oportunidades.length < 2) {
     observaciones.push('Autoauditoría V7: se reforzaron oportunidades editoriales para que coincidan con el tema.');
   }
 
-  const comoReferencia = reporte.comoConvertirReferencia.filter(alineada);
-  const nivel10 = reporte.nivel10_oportunidades.filter(alineada);
+  const comoReferencia = (ajustes.comoConvertirReferencia || reporte.comoConvertirReferencia).filter(alineada);
+  const nivel10 = (ajustes.nivel10_oportunidades || reporte.nivel10_oportunidades).filter(alineada);
   const nivel9 = reporte.nivel9_preguntasSinRespuesta.filter(alineadaTexto);
 
   if (oportunidades.length < 2) ajustes.oportunidadesEditoriales = oportunidades.slice(0, 3);
   if (comoReferencia.length < 2) ajustes.comoConvertirReferencia = comoReferencia.slice(0, 3);
   if (nivel10.length < 2) ajustes.nivel10_oportunidades = nivel10.slice(0, 3);
   if (nivel9.length < 2) ajustes.nivel9_preguntasSinRespuesta = nivel9.slice(0, 4);
+
+  // 7. Verificar que cada sugerencia tenga todos los campos requeridos
+  const sugerenciasFinales = [
+    ...(ajustes.oportunidadesEditoriales || reporte.oportunidadesEditoriales),
+    ...(ajustes.comoConvertirReferencia || reporte.comoConvertirReferencia),
+    ...(ajustes.nivel10_oportunidades || reporte.nivel10_oportunidades),
+  ];
+  const estructuraInvalida = sugerenciasFinales.some(
+    s => !s.texto || !s.impacto || !s.tiempo || !s.dificultad || !s.beneficio
+  );
+  if (estructuraInvalida) {
+    observaciones.push('Autoauditoría V7: se detectó una recomendación sin acción, impacto, tiempo, dificultad o beneficio; se debe corregir.');
+  }
 
   return { ajustes, observaciones };
 }
@@ -1452,7 +1504,8 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   const nivel10_oportunidades = sinContradicciones(nivel10Crudas);
 
   // Detectores
-  const detectorFacebook = generarDetectorFacebook(score100, scoreUtilidad, scoreContexto, scoreAnalisis, aportePropio);
+  const { categoria: categoriaFacebook, razon: razonFacebook } = evaluarCategoriaFacebook(senales, textoLower);
+  const detectorFacebook = generarDetectorFacebook(categoriaFacebook, razonFacebook);
 
   // Discover / compartir
   const descubreProbabilidad: ReporteEditorJefe['descubreProbabilidad'] = p10 >= 7 ? 'ALTA' : p10 >= 5 ? 'MEDIA' : 'BAJA';
@@ -1477,10 +1530,13 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   const { retorno: retornoEditorial, explicacion: retornoExplicacion } = generarRetornoEditorial(tipoArticulo, n.categoria, score100);
   const prioridadEditorial = generarPrioridadEditorial(tipoArticulo, score100, n.categoria);
   const valorParaLector = generarValorParaLector(senales);
-  const publicarPortada: ReporteEditorJefe['publicarPortada'] = score100 >= 70 ? 'Sí' : 'No';
-  const porQuePublicarPortada = publicarPortada === 'Sí'
-    ? 'La nota tiene actualidad y elementos diferenciadores que justifican su lugar en portada.'
-    : 'La nota carece de suficiente evidencia o diferenciador para ocupar la portada principal; conviene desarrollarla primero.';
+  const { decision: decisionPortada, explicacion: explicacionPortada } = evaluarDecisionPortada(
+    senales,
+    score100,
+    razonReferenciaSiNo
+  );
+  const produccionNicaraguaInformate = detectarProduccionNicaraguaInformate(senales);
+  const riesgoLegal = evaluarRiesgoLegal(textoLower);
 
   const nivelEvidencia: ReporteEditorJefe['nivelEvidencia'] = [
     { criterio: 'Fuente oficial identificada', detectado: evidencia.fuenteOficialIdentificada ? 'Sí' : tieneAtribucion ? 'Parcial' : 'No', puntaje: evidencia.fuenteOficialIdentificada ? 3 : tieneAtribucion ? 1 : 0, maximo: 3 },
@@ -1530,16 +1586,24 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     retornoExplicacion,
     prioridadEditorial,
     valorParaLector,
-    publicarPortada,
-    porQuePublicarPortada,
+    decisionPortada,
+    explicacionPortada,
 
     discoverRazon,
     descubreProbabilidad,
     porQueCompartible,
     compartibleSiNo,
+    categoriaFacebook,
+    razonFacebook,
+
+    produccionNicaraguaInformate,
+    riesgoLegal,
+    firmaDirector: 'Pendiente de autoauditoría editorial',
 
     auditoriaInterna: { aprobado: true, observaciones: [], ajustesRealizados: [] },
   };
+
+  const firmaDirector = generarFirmaDirector(reporteBase);
 
   // Simulación del director de noticias: autoauditar y aplicar ajustes antes de entregar
   const { ajustes, observaciones } = autoauditarConstitucion(reporteBase, senales, textoLower, tema);
@@ -1548,6 +1612,7 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   return {
     ...reporteBase,
     ...ajustes,
+    firmaDirector,
     auditoriaInterna: {
       aprobado: observaciones.length === 0,
       observaciones,
@@ -1829,17 +1894,17 @@ function generarPrioridadEditorial(tipoArticulo: TipoArticulo, score100: number,
 function generarValorParaLector(s: SenalesEditoriales): string {
   const ev = s.evidencia;
   const ganancias: string[] = [];
-  if (ev.contextoLegal) ganancias.push('conoce el marco legal que aplica al caso');
-  if (ev.datoConcreto) ganancias.push('tiene cifras o fechas concretas para entender la magnitud');
-  if (ev.fuenteOficialIdentificada) ganancias.push('sabe qué institución está actuando');
-  if (ev.trabajoDeCampo) ganancias.push('accede a una verificación hecha en el lugar');
-  if (s.scoreUtilidad > 1) ganancias.push('encuentra información útil para actuar o protegerse');
-  if (s.scoreAnalisis > 2) ganancias.push('entiende por qué ocurrió y qué implica');
-  if (s.scoreContexto > 2) ganancias.push('puede comparar con antecedentes');
+  if (ev.contextoLegal) ganancias.push('qué dice la ley o qué institución decide');
+  if (ev.datoConcreto) ganancias.push('cuánto, cuándo o dónde ocurrió exactamente');
+  if (ev.fuenteOficialIdentificada) ganancias.push('qué dice la autoridad competente');
+  if (ev.trabajoDeCampo) ganancias.push('qué se verificó en el lugar');
+  if (s.scoreUtilidad > 1) ganancias.push('qué puede hacer para protegerse o actuar');
+  if (s.scoreAnalisis > 2) ganancias.push('por qué ocurrió y qué implica');
+  if (s.scoreContexto > 2) ganancias.push('cómo se compara con antecedentes');
 
-  if (ganancias.length === 0) return 'No se detecta una utilidad concreta para el lector en el texto: conoce el hecho, pero no gana contexto, antecedentes ni información práctica demostrables.';
-  if (ganancias.length === 1) return `El lector gana algo concreto: ${ganancias[0]}.`;
-  return `El lector gana: ${ganancias.slice(0, -1).join(', ')} y ${ganancias[ganancias.length - 1]}.`;
+  if (ganancias.length === 0) return 'Después de leer esta nota el lector conoce el hecho, pero no gana información práctica, antecedentes ni contexto demostrable.';
+  if (ganancias.length === 1) return `Después de leer esta nota el lector ahora sabe ${ganancias[0]}.`;
+  return `Después de leer esta nota el lector ahora sabe ${ganancias.slice(0, -1).join(', ')} y ${ganancias[ganancias.length - 1]}.`;
 }
 
 function evaluarRazonamientoReferencia(s: SenalesEditoriales): { siNo: 'Sí' | 'No'; razon: string; faltantes: string[] } {
@@ -1847,32 +1912,32 @@ function evaluarRazonamientoReferencia(s: SenalesEditoriales): { siNo: 'Sí' | '
   const presentes: string[] = [];
   if (ev.trabajoDeCampo) presentes.push('trabajo de campo verificable');
   if (ev.dosFuentesIndependientes) presentes.push('fuentes contrastadas');
-  if (ev.documentoOficialIdentificado) presentes.push('documento o dato oficial identificado');
+  if (ev.documentoOficialIdentificado) presentes.push('documento o dato oficial');
   if (ev.fuenteOficialIdentificada) presentes.push('fuente oficial identificada');
-  if (ev.datoConcreto) presentes.push('cifras, fechas o datos concretos');
-  if (ev.contextoLegal) presentes.push('contexto legal o institucional');
+  if (ev.datoConcreto) presentes.push('cifras, fecha o lugar exactos');
+  if (ev.contextoLegal) presentes.push('marco legal aplicable');
   if (s.aportePropio) presentes.push('reporteo propio de Nicaragua Informate');
-  if (s.scoreAnalisis > 2) presentes.push('contexto que explica por qué importa');
-  if (s.scoreUtilidad > 1) presentes.push('utilidad práctica para el lector');
+  if (s.scoreAnalisis > 2) presentes.push('explicación de por qué importa');
+  if (s.scoreUtilidad > 1) presentes.push('información útil para actuar');
   if (s.scoreContexto > 2) presentes.push('antecedentes o comparación');
 
   const faltantes: string[] = [];
-  if (!ev.fuenteOficialIdentificada && !s.tieneAtribucion) faltantes.push('fuente oficial o atribución identificable');
-  if (!ev.datoConcreto) faltantes.push('cifras, fechas o datos concretos');
-  if (!ev.trabajoDeCampo) faltantes.push('trabajo de campo');
+  if (!ev.fuenteOficialIdentificada && !s.tieneAtribucion) faltantes.push('declaración de una autoridad identificada');
+  if (!ev.datoConcreto) faltantes.push('cifras, fecha o lugar exactos');
+  if (!ev.trabajoDeCampo) faltantes.push('trabajo de campo que confirme el hecho');
   if (!ev.dosFuentesIndependientes) faltantes.push('segunda fuente independiente');
   if (!ev.documentoOficialIdentificado) faltantes.push('documento oficial citado');
-  if (s.scoreAnalisis <= 2) faltantes.push('contexto que explique por qué importa');
-  if (s.scoreUtilidad <= 1) faltantes.push('utilidad práctica para el lector');
-  if (s.scoreContexto <= 2) faltantes.push('antecedentes o comparación');
+  if (s.scoreAnalisis <= 2) faltantes.push('explicación de por qué este hecho afecta al lector hoy');
+  if (s.scoreUtilidad <= 1) faltantes.push('información útil que el lector pueda usar');
+  if (s.scoreContexto <= 2) faltantes.push('antecedentes o comparación con casos similares');
 
   if (presentes.length >= 2) {
     return { siNo: 'Sí', razon: `Sí hay razón objetiva: Nicaragua Informate aporta ${presentes.slice(0, -1).join(', ')} y ${presentes[presentes.length - 1]}.`, faltantes: [] };
   }
   if (presentes.length === 1) {
-    return { siNo: 'No', razon: `Tiene una señal (${presentes[0]}), pero no es suficiente para convertirse en referencia frente a TN8, La Prensa o Canal 10. Hace falta: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
+    return { siNo: 'No', razon: `Tiene una señal (${presentes[0]}), pero no es suficiente frente a TN8, La Prensa o Canal 10. Hace falta producir: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
   }
-  return { siNo: 'No', razon: `No existe una razón objetiva demostrable en el texto: si todos los medios publican lo mismo, Nicaragua Informate no aporta ventaja clara. Hace falta: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
+  return { siNo: 'No', razon: `No existe razón objetiva demostrable en el texto: si todos los medios publican lo mismo, Nicaragua Informate no aporta ventaja clara. Hace falta producir: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
 }
 
 // generarPreguntasSinRespuesta ha sido reemplazado por generarSugerenciasV7 en Constitución V7.0.
@@ -1915,18 +1980,11 @@ function generarImpactoLector(textoLower: string, categoria: string, puntuacionT
 // DETECTOR FACEBOOK
 // ───────────────────────────────────────────────
 
-function generarDetectorFacebook(puntuacionTotal: number, scoreUtilidad: number, scoreContexto: number, scoreAnalisis: number, aportePropio: boolean): string {
-  const ayuda = scoreUtilidad > 0 || scoreContexto > 1;
-  if (puntuacionTotal >= 80 && ayuda) {
-    return 'Sí se compartiría: la nota aporta información útil que ayuda a alguien a entender o actuar, no solo un titular fuerte.';
+function generarDetectorFacebook(categoria: ReporteEditorJefe['categoriaFacebook'], razon: string): string {
+  if (categoria === 'Ninguna') {
+    return 'No se detecta un motivo claro de compartición en redes sociales. Oportunidad editorial: agregar utilidad práctica o verificación que impulse la difusión.';
   }
-  if (aportePropio && scoreAnalisis > 1 && ayuda) {
-    return 'Probablemente se comparta entre audiencias interesadas, porque incluye contexto o reporteo propio que ayuda a comprender el hecho.';
-  }
-  if (puntuacionTotal >= 60 && ayuda) {
-    return 'Se compartiría moderadamente; la utilidad es limitada pero puede servir a lectores del tema.';
-  }
-  return 'Oportunidad editorial: agregar utilidad práctica o contexto demostrable que ayude al lector aumentaría la difusión.';
+  return `Motivo de compartición en Facebook: ${categoria}. ${razon}`;
 }
 
 // ───────────────────────────────────────────────
@@ -1964,6 +2022,119 @@ function generarDetectorEEATReal(s: SenalesEditoriales): string {
   }
   if (partes.length === 1) return `Tiene una señal de credibilidad (${partes[0]}). Oportunidad editorial: sumar una segunda señal verificable reforzaría la confianza del lector.`;
   return 'No se detecta en el texto evidencia de investigación, verificación o contexto propio; no se asume que no existió, solo que no es demostrable aquí.';
+}
+
+// ───────────────────────────────────────────────
+// NUEVOS CAMPOS CONSTITUCIÓN EDITORIAL V7.0
+// ───────────────────────────────────────────────
+
+function detectarProduccionNicaraguaInformate(s: SenalesEditoriales): string[] {
+  const produccion: string[] = [];
+  if (s.evidencia.trabajoDeCampo) produccion.push('Trabajo de campo');
+  if (s.evidencia.dosFuentesIndependientes) produccion.push('Dos fuentes independientes');
+  if (s.evidencia.documentoOficialIdentificado) produccion.push('Documento oficial');
+  if (s.evidencia.fuenteOficialIdentificada) produccion.push('Fuente oficial identificada');
+  if (s.evidencia.datoConcreto) produccion.push('Dato verificable');
+  if (s.evidencia.contextoLegal) produccion.push('Contexto legal');
+  if (s.aportePropio) produccion.push('Reporteo propio');
+  if (s.scoreAnalisis > 2) produccion.push('Explicación / análisis');
+  if (s.scoreContexto > 2) produccion.push('Contexto histórico / comparación');
+  if (s.scoreUtilidad > 1) produccion.push('Servicio al lector');
+  return produccion;
+}
+
+function evaluarDecisionPortada(
+  s: SenalesEditoriales,
+  score100: number,
+  razonReferenciaSiNo: 'Sí' | 'No'
+): { decision: ReporteEditorJefe['decisionPortada']; explicacion: string } {
+  const ev = s.evidencia;
+  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado;
+  if (score100 >= 95 && evidenciaFuerte) {
+    return { decision: 'Cobertura especial', explicacion: 'Nota de referencia con evidencia propia: merece cobertura especial y promoción destacada.' };
+  }
+  if (score100 >= 90 && razonReferenciaSiNo === 'Sí') {
+    return { decision: 'Portada', explicacion: 'Nota competitiva con razón objetiva para leer a Nicaragua Informate.' };
+  }
+  if (score100 >= 80 && razonReferenciaSiNo === 'Sí') {
+    return { decision: 'Publicar estándar', explicacion: 'Publicable con buen nivel, aunque no necesariamente lidera portada.' };
+  }
+  if (score100 >= 70) {
+    return { decision: 'Publicar breve', explicacion: 'Publicable como nota breve o actualización; conviene desarrollarla para ganar posición.' };
+  }
+  if (score100 >= 60) {
+    return { decision: 'Publicar breve', explicacion: 'Necesita desarrollo, pero puede publicarse como breve mientras se completa.' };
+  }
+  return { decision: 'No publicar', explicacion: 'No reúne evidencia suficiente para ocupar espacio editorial; requiere reporteo adicional.' };
+}
+
+function evaluarCategoriaFacebook(
+  s: SenalesEditoriales,
+  textoLower: string
+): { categoria: ReporteEditorJefe['categoriaFacebook']; razon: string } {
+  if (s.scoreUtilidad > 1 || /\b(prevencion|proteger|como denunciar|como acceder|pasos|requisito|guia|evitar|cuidado)\b/i.test(textoLower)) {
+    return { categoria: 'Servicio', razon: 'La gente la comparte porque ayuda a alguien a resolver algo o protegerse.' };
+  }
+  if (s.scoreContexto > 2 || /\b(explicacion|por que|contexto|analisis|como afecta)\b/i.test(textoLower)) {
+    return { categoria: 'Impacto', razon: 'Comparte para que otros entiendan la importancia del hecho.' };
+  }
+  if (s.scoreAnalisis > 2 || /\b(debate|polem|controversia|critica|posicion|postura|tension)\b/i.test(textoLower)) {
+    return { categoria: 'Debate', razon: 'Genera conversación porque presenta posturas o tensiones.' };
+  }
+  if (/\b(managua|leon|granada|esteli|chinandega|matagalpa|juigalpa|carazo|rivas|madriz|nueva segovia|rio san juan|boaco|masaya)\b/i.test(textoLower)) {
+    return { categoria: 'Orgullo local', razon: 'Conecta con la identidad o el orgullo de una comunidad nicaragüense.' };
+  }
+  if (s.evidencia.trabajoDeCampo || s.evidencia.dosFuentesIndependientes) {
+    return { categoria: 'Sorpresa', razon: 'Aporta información verificada que otros medios no tienen.' };
+  }
+  if (s.evidencia.datoConcreto) {
+    return { categoria: 'Utilidad', razon: 'Dato concreto que ayuda a decidir o entender una situación.' };
+  }
+  if (/\b(testimonio|entrevista|familia|victima|afectado|sobreviviente)\b/i.test(textoLower)) {
+    return { categoria: 'Identificación', razon: 'La gente se identifica con la experiencia de las personas en la nota.' };
+  }
+  return { categoria: 'Ninguna', razon: 'No se detecta un motivo claro de difusión en redes sociales.' };
+}
+
+function evaluarRiesgoLegal(
+  textoLower: string
+): { nivel: ReporteEditorJefe['riesgoLegal']['nivel']; explicacion: string } {
+  const riesgos: string[] = [];
+  if (/\b(presunto|presuntamente|imputado|acusado|condenado|culpable|inocente)\b/i.test(textoLower)) riesgos.push('presunción de inocencia / imputación');
+  if (/\b(menor|adolescente|niño|niña|infantil|menor de edad)\b/i.test(textoLower) && /\b(victima|agresion|violacion|abuso|secuestro|desaparecid)\b/i.test(textoLower)) {
+    riesgos.push('protección de menores');
+  }
+  if (/\b(nombre completo|identidad|dni|cedula|fotografia|video de|imagen de)\b/i.test(textoLower) && /\b(victima|imputado|acusado|detenido|preso)\b/i.test(textoLower)) {
+    riesgos.push('identificación indebida');
+  }
+  if (/\b(asesino|criminal|delincuente|violador|abusador|monstruo|degenerado|escoria|maltratador|ladron)\b/i.test(textoLower)) {
+    riesgos.push('lenguaje condenatorio');
+  }
+  if (/\b(violencia de genero|feminicidio|violencia intrafamiliar|agresion a mujer|pareja|expareja|maltrato|violencia contra la mujer)\b/i.test(textoLower)) {
+    riesgos.push('violencia de género');
+  }
+  if (/\b(difamacion|calumnia|injuria|chantaje|extorsion)\b/i.test(textoLower)) riesgos.push('difamación');
+
+  if (riesgos.length >= 2) {
+    return { nivel: 'Alto', explicacion: `Riesgo alto por: ${riesgos.join(', ')}. Verificar redacción y atribuciones antes de publicar.` };
+  }
+  if (riesgos.length === 1) {
+    return { nivel: 'Medio', explicacion: `Riesgo medio: ${riesgos[0]}. Revisar que el texto no asuma culpabilidad ni exponga indebidamente.` };
+  }
+  return { nivel: 'Bajo', explicacion: 'No se detectan señales de riesgo legal evidente en el texto.' };
+}
+
+function generarFirmaDirector(reporte: ReporteEditorJefe): string {
+  if (reporte.razonReferenciaSiNo === 'No') {
+    return `No firmaría este análisis como decisión final: ${reporte.porQueExiste}. Recomiendo producir la información faltante antes de publicar.`;
+  }
+  if (reporte.riesgoLegal.nivel === 'Alto') {
+    return 'No firmaría la publicación sin revisión legal: el texto tiene riesgos que deben mitigarse antes de salir a portada.';
+  }
+  if (reporte.decisionPortada === 'No publicar' || reporte.decisionPortada === 'Publicar breve') {
+    return `Firmo la recomendación editorial con reserva: ${reporte.explicacionPortada}. La nota puede salir, pero no como pieza principal.`;
+  }
+  return `Firmo este veredicto como Director Editorial: ${reporte.decisionPortada} porque ${reporte.explicacionPortada.toLowerCase()}`;
 }
 
 // ───────────────────────────────────────────────
