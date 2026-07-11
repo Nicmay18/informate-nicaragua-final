@@ -18,20 +18,22 @@ const CATEGORIES = [
   { slug: 'internacionales', label: 'Internacionales' },
 ];
 
+const NAV_LINKS = [
+  { href: '/', label: 'Inicio' },
+  ...CATEGORIES.map(c => ({ href: `/categoria/${c.slug}`, label: c.label })),
+];
+
 export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [headerDateIso, setHeaderDateIso] = useState('');
-  const [headerDateHuman, setHeaderDateHuman] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const now = new Date();
-    setHeaderDateIso(now.toISOString());
-    setHeaderDateHuman(
-      now.toLocaleDateString('es-NI', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-    );
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -52,9 +54,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="ni-header">
-        {/* Top bar: logo + fecha + acciones */}
-        <div className="ni-header__top">
+      <header className={`ni-header ${scrolled ? 'ni-header--scrolled' : ''}`}>
+        <div className="ni-header__inner">
           <NoPrefetchLink href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
             <Image
               src="/logo.webp"
@@ -64,41 +65,35 @@ export default function Header() {
               sizes="128px"
               className="ni-logo__img"
             />
-            <div className="ni-logo__text">
-              <strong>Nicaragua Informate</strong>
-              <span className="ni-logo__tagline">INFORMATE AL INSTANTE</span>
-            </div>
+            <span className="ni-logo__wordmark">NICARAGUA INFORMATE</span>
           </NoPrefetchLink>
 
-          <time className="ni-header__date" dateTime={headerDateIso} suppressHydrationWarning>
-            {headerDateHuman}
-          </time>
+          <nav className="ni-header__nav" aria-label="Navegación principal">
+            <ul className="ni-nav">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <NoPrefetchLink href={link.href} className="ni-nav-link">
+                    {link.label}
+                  </NoPrefetchLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           <div className="ni-header__actions">
-            {/* Buscador */}
-            <form
-              onSubmit={handleSearch}
-              style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-            >
+            <NoPrefetchLink href="/radio" className="ni-live-btn" aria-label="Radio en vivo">
+              <span className="ni-live-dot" aria-hidden="true" />
+              EN VIVO
+            </NoPrefetchLink>
+
+            <form onSubmit={handleSearch} className="ni-search-form">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar..."
                 aria-label="Buscar noticias"
-                style={{
-                  width: searchFocused ? 200 : 140,
-                  height: 36,
-                  padding: '0 12px',
-                  border: '1px solid #e5e5e5',
-                  borderRadius: 20,
-                  fontSize: 13,
-                  outline: 'none',
-                  transition: 'width 0.2s, box-shadow 0.2s',
-                  boxShadow: searchFocused ? '0 0 0 2px rgba(0,0,0,0.05)' : 'none',
-                }}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
+                className="ni-search-input"
               />
               <button
                 type="submit"
@@ -111,7 +106,6 @@ export default function Header() {
               </button>
             </form>
 
-            {/* Menú hamburguesa */}
             <button
               className="ni-hamburger"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -122,18 +116,6 @@ export default function Header() {
             </button>
           </div>
         </div>
-
-        {/* Barra de navegación */}
-        <nav className="ni-header__nav" aria-label="Navegación principal">
-          <ul className="ni-nav">
-            <li><NoPrefetchLink href="/">Inicio</NoPrefetchLink></li>
-            {CATEGORIES.map((cat) => (
-              <li key={cat.slug}>
-                <NoPrefetchLink href={`/categoria/${cat.slug}`}>{cat.label}</NoPrefetchLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </header>
 
       {/* Menú móvil */}
@@ -149,14 +131,14 @@ export default function Header() {
               ✕
             </button>
             <ul className="ni-mobile-menu__nav">
-              <li><NoPrefetchLink href="/" onClick={() => setMenuOpen(false)}>Inicio</NoPrefetchLink></li>
-              {CATEGORIES.map((cat) => (
-                <li key={cat.slug}>
-                  <NoPrefetchLink href={`/categoria/${cat.slug}`} onClick={() => setMenuOpen(false)}>
-                    {cat.label}
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <NoPrefetchLink href={link.href} onClick={() => setMenuOpen(false)}>
+                    {link.label}
                   </NoPrefetchLink>
                 </li>
               ))}
+              <li><NoPrefetchLink href="/radio" onClick={() => setMenuOpen(false)}>Radio en vivo</NoPrefetchLink></li>
             </ul>
           </nav>
         </div>
