@@ -1266,9 +1266,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 .home-pro .hero-inner {
   position: relative;
-  height: calc(100vh - 64px);
-  min-height: 520px;
-  max-height: 800px;
+  height: calc(70vh - 64px);
+  min-height: 420px;
+  max-height: 620px;
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 24px 55px rgba(15, 23, 42, 0.18);
@@ -2278,11 +2278,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   .home-pro .hero-inner {
     height: auto;
-    min-height: 520px;
+    min-height: 380px;
+    max-height: 520px;
   }
 
   .home-pro .hero-content-wrap {
-    min-height: 520px;
+    min-height: 380px;
     padding: 1.25rem;
   }
 
