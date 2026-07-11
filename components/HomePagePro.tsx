@@ -165,8 +165,9 @@ const MOCK_NOTICIAS: Noticia[] = [
 
 interface HomePageProProps {
   noticias: Noticia[];
-  masLeidas: Noticia[];
-  populares: Noticia[];
+  masLeidas?: Noticia[];
+  populares?: Noticia[];
+  isNoticiasPage?: boolean;
 }
 
 /**
@@ -240,7 +241,7 @@ function distribuirNoticias(noticias: Noticia[]) {
   };
 }
 
-export default function HomePagePro({ noticias, masLeidas, populares }: HomePageProProps) {
+export default function HomePagePro({ noticias, isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
   const noticiasBase = noticias.length ? noticias : MOCK_NOTICIAS;
 
   useEffect(() => {
