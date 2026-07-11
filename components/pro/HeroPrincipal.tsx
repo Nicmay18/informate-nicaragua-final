@@ -1,37 +1,75 @@
 "use client";
 
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, User, BookOpen, ArrowRight } from 'lucide-react';
+import { Clock, User, BookOpen, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { CATEGORY_COLORS } from '@/lib/types';
 import { tiempoRelativo, tiempoLectura } from '@/lib/formateo';
 
 interface HeroPrincipalProps {
-  heroNoticia: Noticia | null;
-  ultimaHora: Noticia[];
+  heroNoticias: Noticia[];
 }
 
-export default function HeroPrincipal({ heroNoticia, ultimaHora }: HeroPrincipalProps) {
-  if (!heroNoticia) return null;
+const INTERVAL_MS = 6000;
 
-  const readTime = tiempoLectura(heroNoticia.contenido || heroNoticia.resumen || '');
-  const relTime = tiempoRelativo(heroNoticia.fecha);
-  const catColor = CATEGORY_COLORS[heroNoticia.categoria] || '#B45309';
+export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
+  const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const total = heroNoticias.length;
+  const current = total > 0 ? heroNoticias[active] : null;
+
+  const nextSlide = useCallback(() => {
+    if (total <= 1) return;
+    setActive((prev) => (prev + 1) % total);
+  }, [total]);
+
+  const prevSlide = useCallback(() => {
+    if (total <= 1) return;
+    setActive((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
+  useEffect(() => {
+    if (total <= 1 || isPaused) return undefined;
+    const timer = setInterval(nextSlide, INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, [total, isPaused, nextSlide]);
+
+  if (!current) return null;
+
+  const readTime = tiempoLectura(current.contenido || current.resumen || '');
+  const relTime = tiempoRelativo(current.fecha);
+  const catColor = CATEGORY_COLORS[current.categoria] || '#B45309';
 
   return (
-    <section className="hero-principal" aria-label="Noticia principal" data-reveal>
+    <section
+      className="hero-principal"
+      aria-label="Noticia principal"
+      data-reveal
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="hero-inner">
-        {/* Imagen de fondo */}
+        {/* Imagen de fondo con transición */}
         <div className="hero-bg">
-          <Image
-            src={heroNoticia.imagen || '/logo.webp'}
-            alt={heroNoticia.titulo}
-            fill
-            priority
-            sizes="100vw"
-            className="hero-bg-img"
-          />
+          {heroNoticias.map((n, i) => (
+            <div
+              key={n.id}
+              className={`hero-bg-slide ${i === active ? 'is-active' : ''}`}
+              aria-hidden={i !== active}
+            >
+              <Image
+                src={n.imagen || '/logo.webp'}
+                alt={n.titulo}
+                fill
+                priority={i === 0}
+                sizes="100vw"
+                className="hero-bg-img"
+              />
+            </div>
+          ))}
           <div className="hero-overlay" />
         </div>
 
@@ -43,27 +81,27 @@ export default function HeroPrincipal({ heroNoticia, ultimaHora }: HeroPrincipal
               className="hero-category-tag"
               style={{ backgroundColor: catColor }}
             >
-              {heroNoticia.categoria?.toUpperCase()}
+              {current.categoria?.toUpperCase()}
             </span>
 
             {/* Título */}
             <h1 className="hero-title">
-              <Link href={`/noticias/${heroNoticia.slug}`}>
-                {heroNoticia.titulo}
+              <Link href={`/noticias/${current.slug}`}>
+                {current.titulo}
               </Link>
             </h1>
 
             {/* Resumen */}
-            {heroNoticia.resumen && (
-              <p className="hero-lead">{heroNoticia.resumen}</p>
+            {current.resumen && (
+              <p className="hero-lead">{current.resumen}</p>
             )}
 
             {/* Meta */}
             <div className="hero-meta">
-              {heroNoticia.autor && (
+              {current.autor && (
                 <span className="hero-meta-item">
                   <User size={14} />
-                  {heroNoticia.autor.split(' ').slice(0, 2).join(' ')}
+                  {current.autor.split(' ').slice(0, 2).join(' ')}
                 </span>
               )}
               <span className="hero-meta-item">
@@ -78,34 +116,45 @@ export default function HeroPrincipal({ heroNoticia, ultimaHora }: HeroPrincipal
 
             {/* CTA */}
             <Link
-              href={`/noticias/${heroNoticia.slug}`}
+              href={`/noticias/${current.slug}`}
               className="hero-cta"
             >
               Leer completo
               <ArrowRight size={16} />
             </Link>
-          </div>
 
-          {/* Panel Última Hora (desktop) */}
-          <aside className="hero-ultima-hora" aria-label="Última hora">
-            <div className="ultima-hora-header">
-              <span className="ultima-hora-label">ÚLTIMA HORA</span>
-            </div>
-            <ul className="ultima-hora-list">
-              {ultimaHora.slice(0, 5).map((noticia) => (
-                <li key={noticia.id} className="ultima-hora-item">
-                  <Link href={`/noticias/${noticia.slug}`} className="ultima-hora-link">
-                    <span
-                      className="ultima-hora-dot"
-                      style={{ backgroundColor: CATEGORY_COLORS[noticia.categoria] || '#DC2626' }}
-                    />
-                    <span className="ultima-hora-text">{noticia.titulo}</span>
-                    <span className="ultima-hora-time">{tiempoRelativo(noticia.fecha)}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </aside>
+            {/* Indicadores de slide */}
+            {total > 1 && (
+              <div className="hero-indicators" role="tablist" aria-label="Noticias principales">
+                <button
+                  className="hero-nav hero-nav--prev"
+                  onClick={prevSlide}
+                  aria-label="Noticia anterior"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                {heroNoticias.map((n, i) => (
+                  <button
+                    key={n.id}
+                    className={`hero-dot ${i === active ? 'is-active' : ''}`}
+                    onClick={() => setActive(i)}
+                    role="tab"
+                    aria-selected={i === active}
+                    aria-label={`Noticia ${i + 1}: ${n.titulo}`}
+                  >
+                    <span className="hero-dot-progress" />
+                  </button>
+                ))}
+                <button
+                  className="hero-nav hero-nav--next"
+                  onClick={nextSlide}
+                  aria-label="Siguiente noticia"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

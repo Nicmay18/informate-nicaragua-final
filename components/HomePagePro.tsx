@@ -4,12 +4,10 @@ import { useEffect, useMemo } from 'react';
 import type { Noticia } from '@/lib/types';
 import HeroPrincipal from './pro/HeroPrincipal';
 import TickerUltimaHora from './pro/TickerUltimaHora';
-import EditorsPick from './pro/EditorsPick';
-import SeccionSucesos from './pro/SeccionSucesos';
-import GridTematico from './pro/GridTematico';
-import ZonaMultimedia from './pro/ZonaMultimedia';
-import ZonaIndicadores from './pro/ZonaIndicadores';
-import HerramientasCiudadanas from './pro/HerramientasCiudadanas';
+import BarraUltimaHora from './pro/BarraUltimaHora';
+import SeccionDestacados from './pro/SeccionDestacados';
+import SeccionCategoria from './pro/SeccionCategoria';
+import SidebarPro from './pro/SidebarPro';
 
 const MOCK_NOTICIAS: Noticia[] = [
   {
@@ -171,12 +169,19 @@ interface HomePageProProps {
   isNoticiasPage?: boolean;
 }
 
+const TRANSITO_KEYWORDS = ['tránsito', 'transito', 'vial', 'moto', 'accidente', 'colisión', 'choque', 'volcamiento', 'atropellado'];
+
+function esTransito(n: Noticia): boolean {
+  return TRANSITO_KEYWORDS.some(k => n.titulo.toLowerCase().includes(k));
+}
+
 /**
  * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
- * Asignación: Hero > Última Hora > Destacados > Sucesos > Temáticos > Feed
+ * Orden jerárquico: Hero > Última Hora > Destacados > Secciones temáticas
  */
 function distribuirNoticias(noticias: Noticia[]) {
   const usados = new Set<string>();
+
   const take = (lista: Noticia[], n: number) => {
     const resultado: Noticia[] = [];
     for (const item of lista) {
@@ -189,60 +194,70 @@ function distribuirNoticias(noticias: Noticia[]) {
     return resultado;
   };
 
-  const porCategoria = (cat: string) =>
-    noticias.filter(n => n.categoria === cat && !usados.has(n.id));
+  const porCategoria = (cat: string) => noticias.filter(n => n.categoria === cat && !usados.has(n.id));
 
-  // 1. Hero: la noticia más reciente con imagen
+  // 1. Hero Principal: hasta 3 noticias con imagen (rotan cada 6s)
   const conImagen = noticias.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
-  const heroNoticias = take(conImagen.length > 0 ? conImagen : noticias, 1);
+  const heroNoticias = take(conImagen.length > 0 ? conImagen : noticias, 3);
 
-  // 2. Última Hora: 6 titulares recientes (sin imagen requerida)
-  const ultimaHora = take(noticias, 6);
+  // 2. Última Hora: 4 titulares exclusivos (nunca en Hero)
+  const ultimaHora = take(noticias, 4);
 
-  // 3. Editors Pick: 1 Nacional + 1 Internacional + 1 variada
-  const nacional = take(porCategoria('Nacionales'), 1);
-  const internacional = take(porCategoria('Internacionales'), 1);
-  const variada = take(
-    noticias.filter(n => !['Sucesos'].includes(n.categoria) && !usados.has(n.id)),
-    1
-  );
-  const editorsPick = [...nacional, ...internacional, ...variada];
+  // 3. Destacados: 4 noticias (1 Nacional, 1 Internacional, 1 Deportes, 1 Suceso no tránsito)
+  const destacados = [
+    ...take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
+    ...take(porCategoria('Internacionales').filter(n => !esTransito(n)), 1),
+    ...take(porCategoria('Deportes'), 1),
+    ...take(porCategoria('Sucesos').filter(n => !esTransito(n)), 1),
+  ];
+  // Si falta alguna, rellenar con lo disponible
+  const faltantes = 4 - destacados.length;
+  if (faltantes > 0) {
+    destacados.push(...take(noticias.filter(n => !usados.has(n.id)), faltantes));
+  }
 
-  // 4. Sucesos: máx 4, con máx 40% de tránsito
+  // 4. Secciones temáticas con conteos específicos
+  const nacionales = {
+    principal: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
+    secundarias: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 2),
+  };
+
+  const internacionales = {
+    principal: take(porCategoria('Internacionales').filter(n => !esTransito(n)), 1),
+    secundarias: take(porCategoria('Internacionales').filter(n => !esTransito(n)), 2),
+  };
+
   const sucesosAll = porCategoria('Sucesos');
-  const transitoKeywords = ['tránsito', 'transito', 'vial', 'moto', 'accidente', 'colisión'];
-  const sucesosNoTransito = sucesosAll.filter(
-    n => !transitoKeywords.some(k => n.titulo.toLowerCase().includes(k))
-  );
-  const sucesosTransito = sucesosAll.filter(
-    n => transitoKeywords.some(k => n.titulo.toLowerCase().includes(k))
-  );
-  // Max 40% tránsito = max 1-2 de 4
-  const sucesosCards = [
-    ...take(sucesosNoTransito, 3),
-    ...take(sucesosTransito, 1),
-  ].slice(0, 4);
-  sucesosCards.forEach(n => usados.add(n.id));
+  const sucesosNoTransito = sucesosAll.filter(n => !esTransito(n));
+  const sucesosTransito = sucesosAll.filter(n => esTransito(n));
+  const sucesos = {
+    // 2 de tránsito + 1 judicial/social + 1 variada
+    items: [
+      ...take(sucesosTransito, 2),
+      ...take(sucesosNoTransito, 2),
+    ].slice(0, 4),
+  };
+  sucesos.items.forEach(n => usados.add(n.id));
 
-  // 5. Temáticos
-  const economia = take(porCategoria('Economía'), 5);
-  const tecnologia = take(porCategoria('Tecnología'), 5);
-  const deportes = take(porCategoria('Deportes'), 5);
-  const cultura = take(porCategoria('Espectáculos'), 5);
+  const deportesAll = porCategoria('Deportes');
+  const deportes = {
+    // Solo mostrar si hay al menos 4 noticias
+    visible: deportesAll.length >= 4,
+    items: take(deportesAll, 4),
+  };
 
   return {
     heroNoticias,
     ultimaHora,
-    editorsPick,
-    sucesosCards,
-    economia,
-    tecnologia,
+    destacados,
+    nacionales,
+    internacionales,
+    sucesos,
     deportes,
-    cultura,
   };
 }
 
-export default function HomePagePro({ noticias, isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
+export default function HomePagePro({ noticias, masLeidas = [], populares = [], isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
   const noticiasBase = noticias.length ? noticias : MOCK_NOTICIAS;
 
   useEffect(() => {
@@ -275,37 +290,61 @@ export default function HomePagePro({ noticias, isNoticiasPage: _isNoticiasPage 
 
   return (
     <div className="home-pro" data-reveal>
-      {/* Ticker de última hora */}
-      <TickerUltimaHora noticias={dist.ultimaHora} />
+      {/* 1. TICKER ÚLTIMA HORA: máximo 3 titulares rotativos */}
+      <TickerUltimaHora noticias={dist.ultimaHora.slice(0, 3)} />
 
-      {/* ZONA 0: Hero Principal */}
-      <HeroPrincipal
-        heroNoticia={dist.heroNoticias[0] || null}
-        ultimaHora={dist.ultimaHora}
-      />
+      {/* 2. HERO PRINCIPAL: máximo 3 noticias, rotan cada 6s */}
+      <HeroPrincipal heroNoticias={dist.heroNoticias} />
 
-      {/* ZONA 1: Editors Pick */}
-      <EditorsPick noticias={dist.editorsPick} />
+      {/* 2. BARRA ÚLTIMA HORA: 4 titulares exclusivos en línea horizontal */}
+      <BarraUltimaHora noticias={dist.ultimaHora} />
 
-      {/* ZONA 2: Sucesos */}
-      <SeccionSucesos noticias={dist.sucesosCards} />
+      <div className="ni-main">
+        <div className="ni-content">
+          {/* 3. DESTACADOS: 4 noticias, 2x2, mix de categorías */}
+          <SeccionDestacados noticias={dist.destacados} />
 
-      {/* ZONA 3: Grid Temático */}
-      <GridTematico
-        economia={dist.economia}
-        tecnologia={dist.tecnologia}
-        deportes={dist.deportes}
-        cultura={dist.cultura}
-      />
+          {/* 4. SECCIONES TEMÁTICAS */}
+          <SeccionCategoria
+            titulo="Nacionales"
+            slug="nacionales"
+            color="#B45309"
+            principal={dist.nacionales.principal[0] || null}
+            secundarias={dist.nacionales.secundarias}
+          />
 
-      {/* ZONA 4: Multimedia */}
-      <ZonaMultimedia />
+          <SeccionCategoria
+            titulo="Internacionales"
+            slug="internacionales"
+            color="#0F172A"
+            principal={dist.internacionales.principal[0] || null}
+            secundarias={dist.internacionales.secundarias}
+          />
 
-      {/* ZONA 5: Indicadores + Newsletter */}
-      <ZonaIndicadores />
+          <SeccionCategoria
+            titulo="Sucesos"
+            slug="sucesos"
+            color="#DC2626"
+            principal={dist.sucesos.items[0] || null}
+            secundarias={dist.sucesos.items.slice(1)}
+            layout="grid"
+          />
 
-      {/* ZONA 6: Herramientas ciudadanas (radio, indicadores, clima, reloj, emergencias, guías) */}
-      <HerramientasCiudadanas />
+          {dist.deportes.visible && (
+            <SeccionCategoria
+              titulo="Deportes"
+              slug="deportes"
+              color="#059669"
+              principal={dist.deportes.items[0] || null}
+              secundarias={dist.deportes.items.slice(1)}
+              layout="grid"
+            />
+          )}
+        </div>
+
+        {/* 5. SIDEBAR REORGANIZADO */}
+        <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} />
+      </div>
     </div>
   );
 }
