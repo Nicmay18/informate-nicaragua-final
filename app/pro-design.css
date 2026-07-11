@@ -2577,15 +2577,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .clock-widget{font-size:0.85rem}
 .clock-widget__featured{display:flex;align-items:center;gap:12px;padding:16px;background:var(--ni-navy);border-radius:8px;margin-bottom:12px;animation:clockFadeIn 0.5s ease}
 
-/* Sidebar compacto: indicadores en 2 columnas */
-.ni-sidebar .econ-widget{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ni-sidebar .econ-widget__section{margin-bottom:0}
-.ni-sidebar .econ-widget__subtitle{font-size:0.7rem;margin-bottom:6px}
-.ni-sidebar .econ-widget__row{padding:4px 0}
-.ni-sidebar .econ-widget__label{font-size:0.72rem}
-.ni-sidebar .econ-widget__value{font-size:0.85rem}
-.ni-sidebar .econ-widget__divider{display:none}
-.ni-sidebar .econ-widget__source{grid-column:1/-1;text-align:left;margin-top:0;font-size:0.6rem}
+/* Sidebar compacto: indicadores */
+.ni-sidebar .econ-widget__subtitle{font-size:0.72rem;margin-bottom:6px}
+.ni-sidebar .econ-widget__row{padding:4px 0;flex-wrap:nowrap;gap:8px}
+.ni-sidebar .econ-widget__label{font-size:0.72rem;white-space:nowrap}
+.ni-sidebar .econ-widget__value{font-size:0.85rem;white-space:nowrap}
+.ni-sidebar .econ-widget__change{font-size:0.65rem;white-space:nowrap}
+.ni-sidebar .econ-widget__divider{margin:8px 0}
+.ni-sidebar .econ-widget__source{font-size:0.6rem}
 
 /* Sidebar compacto: clima */
 .ni-sidebar .weather-widget-full{padding:16px}
