@@ -105,27 +105,10 @@ export default function Footer() {
         {/* Columna 4: Radio Nicaragua */}
         <div>
           <h3 className="ni-footer__col-title">Radio Nicaragua</h3>
-          <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(255,255,255,0.7)', marginBottom: 12 }}>
+          <p className="ni-footer__radio-desc">
             Escucha las radios más populares del país.
           </p>
-          <NoPrefetchLink
-            href="/radio"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: 14,
-              fontWeight: 600,
-              color: '#fff',
-              textDecoration: 'none',
-              padding: '8px 16px',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              borderRadius: 8,
-              transition: 'background-color 0.2s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; }}
-          >
+          <NoPrefetchLink href="/radio" className="ni-footer__radio-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /><path d="M7.8 16.2c-2.4-2.4-2.4-6.4 0-8.8" /><circle cx="12" cy="12" r="2" /><path d="M16.2 7.8c2.4 2.4 2.4 6.4 0 8.8" /><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" />
             </svg>
@@ -136,18 +119,18 @@ export default function Footer() {
       </div>
 
       {/* Políticas editoriales visibles — señal EEAT crítica para Google */}
-      <div className="ni-footer__policies" style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', justifyContent: 'center', fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
-        <NoPrefetchLink href="/politica-editorial" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Política Editorial</NoPrefetchLink>
+      <div className="ni-footer__policies">
+        <NoPrefetchLink href="/politica-editorial">Política Editorial</NoPrefetchLink>
         <span>•</span>
-        <NoPrefetchLink href="/correcciones" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Correcciones</NoPrefetchLink>
+        <NoPrefetchLink href="/correcciones">Correcciones</NoPrefetchLink>
         <span>•</span>
-        <NoPrefetchLink href="/privacidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacidad</NoPrefetchLink>
+        <NoPrefetchLink href="/privacidad">Privacidad</NoPrefetchLink>
         <span>•</span>
-        <NoPrefetchLink href="/terminos" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Términos</NoPrefetchLink>
+        <NoPrefetchLink href="/terminos">Términos</NoPrefetchLink>
         <span>•</span>
-        <NoPrefetchLink href="/cookies" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Cookies</NoPrefetchLink>
+        <NoPrefetchLink href="/cookies">Cookies</NoPrefetchLink>
         <span>•</span>
-        <NoPrefetchLink href="/publicidad" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Publicidad</NoPrefetchLink>
+        <NoPrefetchLink href="/publicidad">Publicidad</NoPrefetchLink>
       </div>
 
       {/* Barra inferior */}

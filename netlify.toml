@@ -1,0 +1,20 @@
+[build]
+  command = "NODE_OPTIONS='--max-old-space-size=4096' npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/index.php"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/feed"
+  to = "/rss.xml"
+  status = 301

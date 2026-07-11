@@ -9,6 +9,7 @@ import SeccionSucesos from './pro/SeccionSucesos';
 import GridTematico from './pro/GridTematico';
 import ZonaMultimedia from './pro/ZonaMultimedia';
 import ZonaIndicadores from './pro/ZonaIndicadores';
+import HerramientasCiudadanas from './pro/HerramientasCiudadanas';
 
 const MOCK_NOTICIAS: Noticia[] = [
   {
@@ -302,6 +303,9 @@ export default function HomePagePro({ noticias, isNoticiasPage: _isNoticiasPage 
 
       {/* ZONA 5: Indicadores + Newsletter */}
       <ZonaIndicadores />
+
+      {/* ZONA 6: Herramientas ciudadanas (radio, indicadores, clima, reloj, emergencias, guías) */}
+      <HerramientasCiudadanas />
     </div>
   );
 }
