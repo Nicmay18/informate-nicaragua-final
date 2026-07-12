@@ -96,33 +96,45 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   // Container principal
   const containerStyle: React.CSSProperties = {
-    maxWidth: 896,
+    maxWidth: 980,
     margin: '0 auto',
-    padding: '24px 16px 64px',
+    padding: '28px 20px 80px',
   };
 
   const metaStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '10px 18px',
+    gap: '10px 22px',
     fontSize: 13.5,
     color: '#64748b',
-    padding: '14px 0',
-    marginBottom: 28,
-    borderTop: '1px solid #eef0f3',
-    borderBottom: '1px solid #eef0f3',
+    padding: '16px 0',
+    marginBottom: 30,
+    borderTop: '1px solid #e2e8f0',
+    borderBottom: '1px solid #e2e8f0',
   };
 
   const badgeStyle: React.CSSProperties = {
     display: 'inline-block',
-    padding: '4px 12px',
-    fontSize: 12,
-    fontWeight: 700,
+    padding: '5px 14px',
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
     color: '#fff',
     borderRadius: 9999,
     marginBottom: 12,
     backgroundColor: category.color,
+  };
+
+  const kickerStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: 12,
+    fontWeight: 700,
+    color: category.color,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    marginBottom: 8,
   };
 
   const fontBtnStyle: React.CSSProperties = {
@@ -145,26 +157,30 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     position: 'relative',
     width: '100%',
     aspectRatio: '16 / 9',
-    maxHeight: 500,
-    borderRadius: 14,
+    maxHeight: 580,
+    borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#f3f4f6',
-    boxShadow: '0 10px 30px -12px rgba(15,23,42,0.25)',
+    boxShadow: '0 18px 45px -18px rgba(15,23,42,0.35)',
   };
 
   const captionStyle: React.CSSProperties = {
+    position: 'relative',
     fontSize: 12,
-    color: '#6b7280',
+    color: '#fff',
     textAlign: 'right',
-    marginBottom: 24,
-    padding: '4px 8px',
-    backgroundColor: '#f9fafb',
-    borderRadius: 4,
+    marginTop: -34,
+    marginBottom: 28,
+    padding: '10px 14px',
+    background: 'linear-gradient(transparent, rgba(15,23,42,0.85))',
+    borderRadius: '0 0 16px 16px',
+    zIndex: 2,
   };
 
   const contentStyle: React.CSSProperties = {
+    fontFamily: "'Merriweather', serif",
     fontSize: `${fontSize}em`,
-    lineHeight: 1.8,
+    lineHeight: 1.85,
     color: '#374151',
   };
 
@@ -218,14 +234,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           {/* Category Badge */}
         <span style={badgeStyle} itemProp="articleSection">{category.name}</span>
 
+        {/* Kicker */}
+        <span style={kickerStyle}>{category.name}</span>
+
         {/* Title */}
-        <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, color: '#111827', lineHeight: 1.2, margin: '0 0 16px', textWrap: 'balance' }} itemProp="headline">
+        <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: 'clamp(2rem, 5vw, 3.1rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.15, margin: '0 0 18px', textWrap: 'balance', letterSpacing: '-0.3px' }} itemProp="headline">
           {noticia.titulo}
         </h1>
 
         {/* Resumen / Lead con acento editorial */}
         {noticia.resumen && (
-          <p style={{ fontSize: 19, color: '#334155', lineHeight: 1.65, marginBottom: 24, paddingLeft: 18, borderLeft: `4px solid ${category.color}`, fontWeight: 500 }} itemProp="description">
+          <p style={{ fontFamily: "'Merriweather', serif", fontSize: 20, color: '#334155', lineHeight: 1.6, marginBottom: 28, paddingLeft: 20, borderLeft: `4px solid ${category.color}`, fontWeight: 500 }} itemProp="description">
             {noticia.resumen}
           </p>
         )}

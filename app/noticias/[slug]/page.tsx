@@ -1,3 +1,4 @@
+import '@/app/articulo.css';
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
