@@ -37,19 +37,17 @@ async function main() {
   console.log(JSON.stringify(forense, null, 2));
 
   console.log('Versión forense:', forense.version === '1.0' ? 'OK' : 'FALLÓ');
-  console.log('Fases aprobadas:', forense.fasesAprobadas >= 0 && forense.fasesAprobadas <= forense.fasesTotal ? 'OK' : 'FALLÓ');
+  console.log('Rol auditoría:', forense.rol === 'auditoria' ? 'OK' : 'FALLÓ');
   console.log('Triage items:', forense.fase1_triage.items.length === 9 ? 'OK' : 'FALLÓ');
   console.log('Cadena de custodia parrafos:', forense.fase4_cadenaCustodia.parrafos.length > 0 ? 'OK' : 'FALLÓ');
-  console.log('Detector contaminación:', typeof forense.fase5_detectorContaminacion.aprobado === 'boolean' ? 'OK' : 'FALLÓ');
   console.log('EEAT checks:', forense.fase9_resonanciaEEAT.checks.length === 9 ? 'OK' : 'FALLÓ');
-  console.log('Forense utilidad aprobado:', typeof forense.fase14_forenseUtilidad.aprobado === 'boolean' ? 'OK' : 'FALLÓ');
-  console.log('Forense diferenciador:', typeof forense.fase15_forenseDiferenciador.tieneRespuesta === 'boolean' ? 'OK' : 'FALLÓ');
-  console.log('Firma digital:', forense.fase22_firmaDigital.firma.length > 0 ? 'OK' : 'FALLÓ');
+  console.log('Observaciones (array):', Array.isArray(forense.observaciones) ? 'OK' : 'FALLÓ');
+  console.log('Advertencias (array):', Array.isArray(forense.advertencias) ? 'OK' : 'FALLÓ');
+  console.log('Hallazgos (array):', Array.isArray(forense.hallazgos) ? 'OK' : 'FALLÓ');
 
   if (forense.version !== '1.0') throw new Error('Versión Forense V1 inválida');
+  if (forense.rol !== 'auditoria') throw new Error('El reporte forense debe ser rol de auditoría');
   if (forense.fase1_triage.items.length !== 9) throw new Error('Fase 1 no tiene 9 preguntas');
-  if (!['Sí', 'No'].includes(forense.fase21_terceraAutoauditoria.publicaria)) throw new Error('publicaria del Director General inválido');
-  if (forense.fase22_firmaDigital.firma.length === 0) throw new Error('Firma digital vacía');
 
   // Validación mínima de estructura V7
   if (resultado.reporteVPR) {

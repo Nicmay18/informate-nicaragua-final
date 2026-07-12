@@ -145,7 +145,7 @@ async function runRepair() {
 
   const report: any[] = [];
   let repairedEmotional = 0, repairedInvented = 0, repairedClosings = 0;
-  let thinNoticias: any[] = [];
+  const thinNoticias: any[] = [];
 
   for (let i = 0; i < noticias.length; i++) {
     const n = noticias[i];

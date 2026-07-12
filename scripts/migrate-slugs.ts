@@ -82,7 +82,7 @@ async function main() {
       continue;
     }
 
-    let baseSlug = generateSlug(titulo);
+    const baseSlug = generateSlug(titulo);
     let slug = baseSlug;
     let counter = 1;
 

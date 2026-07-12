@@ -14,7 +14,6 @@ import type {
   AccionEditorialV2,
   TipoNotaEditorialV2,
   EvidenciaPuntuada,
-  ForenseSummary,
 } from './engine';
 
 const norm = (s: string) =>
@@ -114,11 +113,9 @@ function mapDecisionPortada(accion: AccionEditorialV2): ReporteEditorJefe['decis
   }
 }
 
-function mapVeredicto(
-  accion: AccionEditorialV2,
-  forense: ForenseSummary
-): ReporteEditorJefe['veredicto'] {
-  if (!forense.aprobado) return '★ Reemplazable';
+function mapVeredicto(accion: AccionEditorialV2): ReporteEditorJefe['veredicto'] {
+  // RFC-002: el veredicto es una traducción de la decisión del Editor Jefe V2.
+  // La Constitución Forense no puede vetar ni cambiar esta escala.
   switch (accion) {
     case 'cobertura_especial': return '★★★★★ Nota de referencia';
     case 'portada':
@@ -207,23 +204,23 @@ function detectarEvidenciaAporteV2(textoPlano: string): EvidenciaAporte[] {
 export function mapearReporteEditorJefe(
   n: NoticiaInput,
   v2: ResultadoEditorJefeV2,
-  forense: ForenseSummary
+  observacionesAuditoria: string[] = []
 ): ReporteEditorJefe {
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const decision = v2.fase3_decision;
   const accion = decision.accion;
-  const aprobadoForense = forense.aprobado;
+  const publicable = accion !== 'no_publicar';
 
   const tipoNota = inferirCategoriaNota(n);
   const tipoArticulo = mapTipoArticulo(v2.fase2_tipoNota.tipo);
-  const veredicto = mapVeredicto(accion, forense);
+  const veredicto = mapVeredicto(accion);
   const decisionPortada = mapDecisionPortada(accion);
   const explicacionPortada = mapExplicacionPortada(accion, v2.fase4_contextoNicaragua.explicacion);
 
-  const razonReferenciaSiNo: ReporteEditorJefe['razonReferenciaSiNo'] = aprobadoForense ? 'Sí' : 'No';
-  const razonamientoReferencia = aprobadoForense
-    ? `La nota aporta evidencia verificable y el análisis forense la aprueba. ${decision.justificacion}`
-    : 'El análisis forense no aprueba la nota; no se detecta razón objetiva para publicarla.';
+  const razonReferenciaSiNo: ReporteEditorJefe['razonReferenciaSiNo'] = publicable ? 'Sí' : 'No';
+  const razonamientoReferencia = publicable
+    ? `La nota aporta evidencia verificable y el Editor Jefe V2 decide publicarla. ${decision.justificacion}`
+    : 'El Editor Jefe V2 considera que la nota no reúne evidencia suficiente para publicar.';
 
   const sugerencias = v2.fase5_sugerencias;
 
@@ -239,9 +236,9 @@ export function mapearReporteEditorJefe(
     veredicto,
     criterios,
 
-    porQueExiste: aprobadoForense
-      ? 'La nota merece existir porque el análisis forense la aprueba y dispone de evidencia verificable.'
-      : 'La nota no debe publicarse porque el análisis forense la rechazó.',
+    porQueExiste: publicable
+      ? 'La nota merece existir porque el Editor Jefe V2 decide publicarla con la evidencia disponible.'
+      : 'La nota no debe publicarse porque el Editor Jefe V2 no detecta evidencia suficiente.',
     aporteOriginal: v2.fase1_evidencia.originalidad >= 50
       ? 'Se detecta aporte editorial propio o verificación del medio.'
       : 'La nota se basa en información pública disponible; no se detecta aporte exclusivo.',
@@ -256,7 +253,7 @@ export function mapearReporteEditorJefe(
     detectorNicaraguaInformate: v2.fase1_evidencia.originalidad >= 50 ? 'Aporte propio detectado' : 'Sin aporte propio detectado',
     detectorFacebook: 'Evaluado por el motor editorial V2',
     detectorGoogle: 'Evaluado por el motor editorial V2',
-    detectorEEATReal: aprobadoForense ? 'Cumple estándar EEAT mínimo' : 'No cumple estándar EEAT mínimo',
+    detectorEEATReal: publicable ? 'Cumple estándar EEAT mínimo' : 'No cumple estándar EEAT mínimo',
 
     principioRector: 'Nicaragua Informate evalúa cada nota con la información pública disponible al cierre editorial. No se exige trabajo de campo presencial, entrevistas exclusivas ni acceso institucional como condición para publicar. El trabajo periodístico se considera suficiente cuando existe evidencia verificable: fuente oficial, medio nacional identificado, documento, video, fotografía o testimonio publicado por una fuente reconocible.',
     preguntaFinal: '¿Con la información pública disponible, esta nota está bien construida y resulta útil para el lector de Nicaragua Informate?',
@@ -305,9 +302,9 @@ export function mapearReporteEditorJefe(
     firmaDirector: `Director Editorial V2 — ${decisionPortada}`,
 
     auditoriaInterna: {
-      aprobado: v2.fase6_consistencia.aprobado,
-      observaciones: v2.fase6_consistencia.contradicciones,
-      ajustesRealizados: v2.fase6_consistencia.contradicciones.length > 0 ? ['Motor editorial V2 corrigió inconsistencias entre Forense y Director Editorial.'] : [],
+      aprobado: true,
+      observaciones: observacionesAuditoria,
+      ajustesRealizados: [],
     },
   };
 }

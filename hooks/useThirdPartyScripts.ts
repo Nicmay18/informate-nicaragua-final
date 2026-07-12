@@ -167,6 +167,7 @@ export default function useThirdPartyScripts(config: ThirdPartyConfig) {
       window.removeEventListener('scroll', onUserInteraction);
       window.removeEventListener('click', onUserInteraction);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.gtmId, config.adsClient, config.fundingChoices]);
 }
 

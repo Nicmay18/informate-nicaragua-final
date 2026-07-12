@@ -74,6 +74,8 @@ gitbranch.txt
 gitlog.txt
 status.txt
 audit-files.txt
+auditoria-*.log.jsonl
+probar-jefe-ia-resultados.json
 
 # Sistema
 .DS_Store

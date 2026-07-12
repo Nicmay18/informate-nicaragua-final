@@ -1,17 +1,17 @@
 /**
  * Motor de Decisión Editorial V2 — Nicaragua Informate
  * ======================================================
- * Arquitectura separada en 6 fases que nunca se contradicen:
+ * Arquitectura unificada (RFC-002): solo este archivo decide el destino editorial.
  *
  * 1. EVIDENCIA    → números puros, sin opiniones.
  * 2. TIPO         → una sola clasificación, inmutable.
- * 3. DECISIÓN     → basada únicamente en evidencia + forense.
+ * 3. DECISIÓN     → basada únicamente en evidencia y tipo de nota.
  * 4. CONTEXTO NI  → reglas reales del periodismo en Nicaragua.
  * 5. SUGERENCIAS  → alcanzables y dependientes del tema.
- * 6. CONSISTENCIA → el Director Editorial no puede contradecir al Forense.
+ * 6. CONSISTENCIA → observación; ninguna otra capa puede sobreescribir la decisión.
  *
- * REGLA ABSOLUTA: si el Analizador Forense aprueba, el Director Editorial
- * nunca puede decir "No publicar" ni "Reemplazable".
+ * REGLA ABSOLUTA: la Constitución Forense y el Auditor solo explican, recomiendan
+ * y auditen; nunca vetan, cambian o degrada la decisión del Editor Jefe V2.
  */
 
 import type { NoticiaInput, SugerenciaV7 } from '../analizador-noticias';
@@ -86,13 +86,6 @@ export interface ResultadoEditorJefeV2 {
   };
 }
 
-export interface ForenseSummary {
-  aprobado: boolean;
-  nivel: string; // FORENSE, ORO, PLATA, BRONCE, RECHAZADO
-  puntuacion: number;
-  checksOK: number;
-  checksTotal: number;
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // UTILIDADES
@@ -249,42 +242,35 @@ function promedioEvidencia(ev: EvidenciaPuntuada): number {
 }
 
 function decidirEditorialV2(
-  forense: ForenseSummary,
   ev: EvidenciaPuntuada,
   tipo: TipoNotaEditorialV2
 ): DecisionEditorialV2 {
   const promedio = promedioEvidencia(ev);
-  const justificacionBase = `Evidencia promedio ${promedio}%. Tipo ${tipo}. Forense ${forense.nivel} (${forense.puntuacion}/100).`;
+  const justificacionBase = `Evidencia promedio ${promedio}%. Tipo ${tipo}.`;
 
-  // Regla absoluta: Forense rechazado → no publicar
-  if (!forense.aprobado) {
-    return { accion: 'no_publicar', prioridad: 0, justificacion: `Forense rechazó la nota. ${justificacionBase}` };
+  // Cobertura especial: cuando la nota misma lo declara y la evidencia es alta
+  if (tipo === 'Cobertura' && promedio >= 85) {
+    return { accion: 'cobertura_especial', prioridad: 95, justificacion: `Cobertura con evidencia alta: cobertura especial. ${justificacionBase}` };
   }
 
-  // REGLA ABSOLUTA: si la puntuación forense >= 95, la nota debe publicarse
-  // con prioridad máxima (portada, destacado o cobertura). Nunca como breve.
-  if (forense.puntuacion >= 95) {
-    return { accion: 'portada', prioridad: 95, justificacion: `Forense >=95: portada. ${justificacionBase}` };
+  if (promedio >= 85) {
+    return { accion: 'portada', prioridad: 90, justificacion: `Evidencia sólida: portada. ${justificacionBase}` };
   }
 
-  // Regla absoluta: evidencia >= 70 nunca puede ser no_publicar
   if (promedio >= 70) {
-    if (forense.nivel === 'FORENSE') {
-      return { accion: 'publicar_destacado', prioridad: 88, justificacion: `Forense aprobado y evidencia >=70: destacado. ${justificacionBase}` };
-    }
-    if (promedio >= 85 && forense.puntuacion >= 80) {
-      return { accion: 'publicar_destacado', prioridad: 85, justificacion: `Evidencia alta y forense sólido: destacado. ${justificacionBase}` };
-    }
-    return { accion: 'publicar_estandar', prioridad: 75, justificacion: `Evidencia verificable: publicar estándar. ${justificacionBase}` };
+    return { accion: 'publicar_destacado', prioridad: 80, justificacion: `Evidencia verificable: publicar destacado. ${justificacionBase}` };
   }
 
-  // Evidencia media: breve o estándar según forense
   if (promedio >= 50) {
-    return { accion: 'publicar_breve', prioridad: 55, justificacion: `Evidencia parcial: publicar como breve. ${justificacionBase}` };
+    return { accion: 'publicar_estandar', prioridad: 65, justificacion: `Evidencia parcial: publicar estándar. ${justificacionBase}` };
   }
 
-  // Evidencia débil pero forense aprobado: breve como mínimo (no penalizar por contexto NI)
-  return { accion: 'publicar_breve', prioridad: 45, justificacion: `Forense aprueba con evidencia limitada: publicar breve. ${justificacionBase}` };
+  if (promedio >= 30) {
+    return { accion: 'publicar_breve', prioridad: 45, justificacion: `Evidencia limitada: publicar breve. ${justificacionBase}` };
+  }
+
+  // Evidencia insuficiente para ocupar espacio editorial
+  return { accion: 'no_publicar', prioridad: 0, justificacion: `Evidencia insuficiente: no publicar. ${justificacionBase}` };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -530,57 +516,23 @@ function generarSugerenciasV2(n: NoticiaInput, ev: EvidenciaPuntuada): Sugerenci
 // FASE 6 — CONSISTENCIA (Director Editorial no contradice al Forense)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function verificarConsistencia(
-  forense: ForenseSummary,
-  decision: DecisionEditorialV2
-): { aprobado: boolean; contradicciones: string[] } {
-  const contradicciones: string[] = [];
-
-  if (forense.aprobado && decision.accion === 'no_publicar') {
-    contradicciones.push('CONTRADICCIÓN: Forense aprueba pero la decisión es "No publicar".');
-  }
-
-  if (forense.puntuacion >= 95) {
-    const permitidas: AccionEditorialV2[] = ['publicar_destacado', 'portada', 'cobertura_especial'];
-    if (!permitidas.includes(decision.accion)) {
-      contradicciones.push(`CONTRADICCIÓN: Forense >=95 (${forense.puntuacion}) pero la decisión es ${decision.accion}.`);
-    }
-  }
-
-  return { aprobado: contradicciones.length === 0, contradicciones };
+function verificarConsistencia(_decision: DecisionEditorialV2): { aprobado: boolean; contradicciones: string[] } {
+  // RFC-002: el Editor Jefe V2 es la única autoridad. La consistencia es solo una
+  // observación informativa; ninguna otra capa fuerza o corrige la decisión aquí.
+  return { aprobado: true, contradicciones: [] };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOTOR PRINCIPAL
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function evaluarEditorJefeV2(
-  n: NoticiaInput,
-  forense: ForenseSummary
-): ResultadoEditorJefeV2 {
+export function evaluarEditorJefeV2(n: NoticiaInput): ResultadoEditorJefeV2 {
   const ev = evaluarEvidencia(n);
   const tipo = clasificarTipoNotaV2(n, ev);
-  let decision = decidirEditorialV2(forense, ev, tipo.tipo);
+  const decision = decidirEditorialV2(ev, tipo.tipo);
   const contextoNI = detectarContextoNicaragua(n, ev);
   const sugerencias = generarSugerenciasV2(n, ev);
-
-  // FASE 4 ya está integrada en decidirEditorialV2: si forense aprueba pero la
-  // evidencia es limitada (caso típico de Sucesos en Nicaragua), la nota se
-  // publica como breve en lugar de no_publicar. No se requiere override adicional.
-
-  const consistencia = verificarConsistencia(forense, decision);
-
-  // Si hay contradicción, forzar una decisión consistente
-  if (!consistencia.aprobado && forense.aprobado) {
-    const promedio = promedioEvidencia(ev);
-    if (forense.nivel === 'FORENSE' && forense.puntuacion >= 95) {
-      decision = { accion: 'portada', prioridad: 95, justificacion: 'Corregido por consistencia: Forense >=95 obliga a publicar con prioridad máxima.' };
-    } else if (promedio >= 70) {
-      decision = { accion: 'publicar_estandar', prioridad: 75, justificacion: 'Corregido por consistencia: evidencia sólida y forense aprobado.' };
-    } else {
-      decision = { accion: 'publicar_breve', prioridad: 45, justificacion: 'Corregido por consistencia: forense aprobado, se publica como breve.' };
-    }
-  }
+  const consistencia = verificarConsistencia(decision);
 
   return {
     fase1_evidencia: ev,

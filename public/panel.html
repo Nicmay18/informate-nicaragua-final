@@ -7052,30 +7052,22 @@ VERIFICACIÓN FINAL
         html += '</div>';
       }
 
-      // ═══════════════════ FORENSE V1.0 ═══════════════════
+      // ═══════════════════ FORENSE V1.0 — AUDITORÍA ═══════════════════
       if (data.reporteForenseV1) {
         const f = data.reporteForenseV1;
-        const fBg = f.aprobado ? '#d1fae5' : '#fee2e2';
-        const fBorder = f.aprobado ? '#059669' : '#dc2626';
-        const fColor = f.aprobado ? '#065f46' : '#991b1b';
-        html += '<div style="background:' + fBg + ';border:2px solid ' + fBorder + ';border-radius:12px;padding:16px;margin-top:20px;">';
+        const total = (f.observaciones || []).length + (f.advertencias || []).length + (f.hallazgos || []).length;
+        const fBorder = total === 0 ? '#16a34a' : (f.advertencias.length || f.hallazgos.length ? '#ca8a04' : '#2563eb');
+        html += '<div style="background:#f8fafc;border:2px solid ' + fBorder + ';border-radius:12px;padding:16px;margin-top:20px;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
-        html += '<h3 style="margin:0;font-size:16px;color:' + fColor + ';">🔬 Constitución Forense V1.0</h3>';
-        html += '<span style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;color:#fff;background:' + fBorder + ';">' + (f.aprobado ? '✔ APROBADA' : '✘ NO APROBADA') + ' — ' + f.fasesAprobadas + '/' + f.fasesTotal + '</span>';
+        html += '<h3 style="margin:0;font-size:16px;color:#1e3a8a;">🔬 Constitución Forense V1.0 — Auditoría</h3>';
+        html += '<span style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;color:#fff;background:' + fBorder + ';">' + (total === 0 ? 'SIN OBSERVACIONES' : total + ' SEÑAL(ES)') + '</span>';
         html += '</div>';
-
-        if (f.bloqueos && f.bloqueos.length) {
-          html += '<div style="background:#fee2e2;border:1px solid #dc2626;border-radius:8px;padding:10px;margin-bottom:12px;">';
-          html += '<div style="font-size:12px;font-weight:700;color:#dc2626;margin-bottom:4px;">Bloqueos:</div>';
-          html += '<ul style="margin:0;padding-left:16px;font-size:11px;color:#991b1b;">';
-          f.bloqueos.forEach(b => { html += '<li>' + b + '</li>'; });
-          html += '</ul></div>';
-        }
+        html += '<p style="font-size:11px;color:#64748b;margin-bottom:12px;">Esta sección solo audita y recomienda. La decisión editorial final corresponde al Editor Jefe V2.</p>';
 
         html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:12px;">';
         html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:var(--gray-500);">Tipo de nota</div><div style="font-size:13px;font-weight:700;">' + f.fase0_identificacion.tipoNota + '</div></div>';
         html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:var(--gray-500);">Nivel de riesgo</div><div style="font-size:13px;font-weight:700;">' + f.fase0_identificacion.nivelRiesgo + '</div></div>';
-        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:var(--gray-500);">Triage</div><div style="font-size:13px;font-weight:700;">' + (f.fase1_triage.aprobado ? '✅ Aprobado' : '❌ Bloqueado') + '</div></div>';
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;"><div style="font-size:11px;font-weight:700;color:var(--gray-500);">Triage</div><div style="font-size:13px;font-weight:700;">' + f.fase1_triage.items.filter(i => i.respuesta === 'Sí').length + '/' + f.fase1_triage.items.length + ' Sí</div></div>';
         html += '</div>';
 
         // Triage items
@@ -7083,21 +7075,21 @@ VERIFICACIÓN FINAL
         html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:6px;">Fase 1 — Triage Editorial</div>';
         html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
         f.fase1_triage.items.forEach(item => {
-          const bg = item.respuesta === 'Sí' ? '#dcfce7' : (item.bloquea ? '#fee2e2' : '#fef9c3');
-          const color = item.respuesta === 'Sí' ? '#16a34a' : (item.bloquea ? '#dc2626' : '#ca8a04');
+          const bg = item.respuesta === 'Sí' ? '#dcfce7' : '#fef9c3';
+          const color = item.respuesta === 'Sí' ? '#16a34a' : '#ca8a04';
           html += '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;background:' + bg + ';color:' + color + ';">' + (item.respuesta === 'Sí' ? '✓' : '✗') + ' ' + item.pregunta.replace('¿Existe ', '').replace('?', '') + '</span>';
         });
         html += '</div></div>';
 
         // Fase 4 Cadena
         html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:12px;">';
-        html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:4px;">Fase 4 — Cadena de Custodia ' + (f.fase4_cadenaCustodia.aprobado ? '✅' : '❌') + '</div>';
-        html += '<div style="font-size:12px;color:var(--gray-700);">' + f.fase4_cadenaCustodia.rojos + ' párrafo(s) con marca roja de ' + f.fase4_cadenaCustodia.parrafos.length + ' analizados.</div>';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:4px;">Fase 4 — Cadena de Custodia</div>';
+        html += '<div style="font-size:12px;color:var(--gray-700);">' + f.fase4_cadenaCustodia.observaciones.length + ' observación(es) de ' + f.fase4_cadenaCustodia.parrafos.length + ' párrafo(s) analizados.</div>';
         html += '</div>';
 
         // Fase 5 Contaminación
         html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:12px;">';
-        html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:4px;">Fase 5 — Contaminación ' + (f.fase5_detectorContaminacion.aprobado ? '✅' : '❌') + '</div>';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:4px;">Fase 5 — Contaminación</div>';
         if (f.fase5_detectorContaminacion.hallazgos.length > 0) {
           f.fase5_detectorContaminacion.hallazgos.slice(0, 5).forEach(h => {
             html += '<div style="font-size:11px;color:#dc2626;">• [' + h.tipo + '] "' + h.texto + '" → ' + h.sugerencia + '</div>';
@@ -7110,13 +7102,13 @@ VERIFICACIÓN FINAL
 
         // SEO + EEAT + Legal + AdSense grid
         html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;margin-bottom:12px;">';
-        const miniCheck = (label, ok) => '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">' + label + '</div><div style="font-size:14px;">' + (ok ? '✅' : '❌') + '</div></div>';
-        html += miniCheck('SEO', f.fase8_tomografiaSEO.aprobado);
-        html += miniCheck('EEAT', f.fase9_resonanciaEEAT.aprobado);
-        html += miniCheck('Legal', f.fase10_forenseLegal.aprobado);
-        html += miniCheck('AdSense', f.fase11_forenseAdsense.aprobado);
-        html += miniCheck('Facebook', f.fase12_forenseFacebook.aprobado);
-        html += miniCheck('Utilidad', f.fase14_forenseUtilidad.aprobado);
+        const miniCheck2 = (label, items, passFn) => '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">' + label + '</div><div style="font-size:12px;color:#64748b;">' + items.filter(passFn).length + '/' + items.length + '</div></div>';
+        html += miniCheck2('SEO', f.fase8_tomografiaSEO.checks, c => c.estado === 'PASS');
+        html += miniCheck2('EEAT', f.fase9_resonanciaEEAT.checks, c => c.presente);
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">Legal</div><div style="font-size:12px;color:#64748b;">' + f.fase10_forenseLegal.riesgos.length + ' riesgo(s)</div></div>';
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">AdSense</div><div style="font-size:12px;color:#64748b;">' + f.fase11_forenseAdsense.palabras.length + ' palabra(s)</div></div>';
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">Facebook</div><div style="font-size:12px;color:#64748b;">' + f.fase12_forenseFacebook.riesgos.length + ' riesgo(s)</div></div>';
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">Utilidad</div><div style="font-size:12px;color:#64748b;">' + f.fase14_forenseUtilidad.ganancias.length + ' ganancia(s)</div></div>';
         html += '</div>';
 
         // Discover + Facebook prob + Google
@@ -7127,31 +7119,36 @@ VERIFICACIÓN FINAL
         };
         html += probBadge('Discover', f.fase13_forenseDiscover.probabilidad);
         html += probBadge('Facebook', f.fase17_forenseFacebookProbabilidad.probabilidad);
-        const gBg = f.fase18_forenseGoogle.puedeCompetir === 'Sí' ? '#16a34a' : '#dc2626';
-        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">Google</div><span style="display:inline-block;margin-top:4px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;color:#fff;background:' + gBg + ';">' + f.fase18_forenseGoogle.puedeCompetir + '</span></div>';
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;font-weight:700;color:var(--gray-500);">Google</div><p style="font-size:10px;color:#64748b;margin:4px 0 0;">' + f.fase18_forenseGoogle.observacion + '</p></div>';
         html += '</div>';
 
-        // Firma digital
-        html += '<div style="background:' + (f.fase22_firmaDigital.aprobado ? '#d1fae5' : '#fee2e2') + ';border:1px solid ' + (f.fase22_firmaDigital.aprobado ? '#059669' : '#dc2626') + ';border-radius:8px;padding:12px;margin-bottom:12px;">';
-        html += '<div style="font-size:14px;font-weight:800;color:' + (f.fase22_firmaDigital.aprobado ? '#065f46' : '#991b1b') + ';margin-bottom:8px;">' + f.fase22_firmaDigital.firma + '</div>';
-        html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
-        f.fase22_firmaDigital.checklist.forEach(c => {
-          const cBg = c.aprobado ? '#dcfce7' : '#fee2e2';
-          const cColor = c.aprobado ? '#16a34a' : '#dc2626';
-          html += '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:' + cBg + ';color:' + cColor + ';">' + (c.aprobado ? '✓' : '✗') + ' ' + c.item + '</span>';
-        });
-        html += '</div></div>';
+        // Portada
+        html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:12px;">';
+        html += '<div style="font-size:11px;font-weight:700;color:var(--gray-500);margin-bottom:4px;">Portada</div>';
+        html += '<div style="font-size:12px;color:#64748b;">' + f.fase16_forensePortada.observacion + '</div>';
+        html += '</div>';
 
         if (f.observaciones && f.observaciones.length) {
-          html += '<div style="background:#fef9c3;border:1px solid #ca8a04;border-radius:8px;padding:10px;font-size:11px;color:#854d0e;">';
+          html += '<div style="background:#eff6ff;border:1px solid #2563eb;border-radius:8px;padding:10px;margin-bottom:8px;font-size:11px;color:#1e40af;">';
           html += '<div style="font-weight:700;margin-bottom:4px;">Observaciones:</div>';
           f.observaciones.forEach(o => { html += '<div>• ' + o + '</div>'; });
+          html += '</div>';
+        }
+        if (f.advertencias && f.advertencias.length) {
+          html += '<div style="background:#fef9c3;border:1px solid #ca8a04;border-radius:8px;padding:10px;margin-bottom:8px;font-size:11px;color:#854d0e;">';
+          html += '<div style="font-weight:700;margin-bottom:4px;">Advertencias:</div>';
+          f.advertencias.forEach(o => { html += '<div>• ' + o + '</div>'; });
+          html += '</div>';
+        }
+        if (f.hallazgos && f.hallazgos.length) {
+          html += '<div style="background:#fff7ed;border:1px solid #f97316;border-radius:8px;padding:10px;margin-bottom:8px;font-size:11px;color:#c2410c;">';
+          html += '<div style="font-weight:700;margin-bottom:4px;">Hallazgos:</div>';
+          f.hallazgos.forEach(o => { html += '<div>• ' + o + '</div>'; });
           html += '</div>';
         }
 
         html += '</div>';
       }
-
       return html;
     }
 

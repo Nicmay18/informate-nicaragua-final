@@ -107,48 +107,11 @@ function detectarContradicciones(r: ResultadoAnalisis, slug: string): Contradicc
   const vpr = r.reporteVPR;
   if (!vpr) return contradicciones;
 
-  if (r.nivel !== 'RECHAZADO') {
-    if (vpr.decisionPortada === 'No publicar') {
-      contradicciones.push({
-        regla: 'FORENSE_APRUEBA_NO_PUBLICAR',
-        modulo: 'lib/editor-jefe/engine.ts:decidirEditorialV2',
-        descripcion: `Forense aprueba (nivel ${r.nivel}) pero Director Editorial dice "No publicar" en ${slug}.`,
-      });
-    }
-    if (vpr.veredicto === '★ Reemplazable' || vpr.veredicto === '★★ Necesita desarrollo') {
-      contradicciones.push({
-        regla: 'FORENSE_APRUEBA_REEMPLAZABLE',
-        modulo: 'lib/editor-jefe/mapper.ts:mapVeredicto',
-        descripcion: `Forense aprueba pero Editor Jefe dice "${vpr.veredicto}" en ${slug}.`,
-      });
-    }
-  }
-
-  if (r.puntuacion >= 95) {
-    const permitidas = ['Portada', 'Cobertura especial'];
-    if (!permitidas.includes(vpr.decisionPortada)) {
-      contradicciones.push({
-        regla: 'FORENSE_95_NO_PORTADA',
-        modulo: 'lib/editor-jefe/engine.ts:decidirEditorialV2',
-        descripcion: `Forense >=95 (${r.puntuacion}) pero decisión editorial es "${vpr.decisionPortada}" en ${slug}.`,
-      });
-    }
-  }
-
   if (vpr.auditoriaInterna?.observaciones?.some((o: string) => o.includes('CONTRADICCIÓN'))) {
     contradicciones.push({
       regla: 'CONTRADICCION_INTERNA_V2',
       modulo: 'lib/editor-jefe/engine.ts:verificarConsistencia',
       descripcion: `El motor V2 detectó una inconsistencia interna en ${slug}: ${vpr.auditoriaInterna.observaciones.join('; ')}`,
-    });
-  }
-
-  const todosAprueban = Object.values(r.filtros).every(f => f.aprobado);
-  if (todosAprueban && vpr.decisionPortada === 'No publicar') {
-    contradicciones.push({
-      regla: 'TODOS_FILTROS_APRUEBAN_NO_PUBLICAR',
-      modulo: 'lib/editor-jefe/engine.ts:decidirEditorialV2',
-      descripcion: `Todos los filtros principales aprueban pero Director Editorial dice "No publicar" en ${slug}.`,
     });
   }
 

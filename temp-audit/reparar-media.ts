@@ -15,7 +15,7 @@ async function run() {
 
   let titulo = n.titulo || '';
   let contenido = n.contenido || '';
-  let resumen = n.resumen || '';
+  const resumen = n.resumen || '';
 
   // 1. Quitar adjetivo emocional del título
   titulo = titulo.replace(/violentos/gi, '').replace(/violento/gi, '');

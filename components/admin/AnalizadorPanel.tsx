@@ -65,25 +65,17 @@ function SugerenciaCard({ s }: { s: SugerenciaV7 }) {
 }
 
 function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
-  const badgeColor = forense.aprobado ? 'bg-green-600' : 'bg-red-600';
+  const totalSenales = forense.observaciones.length + forense.advertencias.length + forense.hallazgos.length;
+  const badgeColor = totalSenales === 0 ? 'bg-green-600' : forense.advertencias.length > 0 || forense.hallazgos.length > 0 ? 'bg-yellow-600' : 'bg-blue-600';
   return (
     <div className="p-5 bg-gray-900/60 border border-cyan-500 rounded-lg space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-bold text-cyan-300 text-lg">🔬 Constitución Forense V1.0</h4>
+        <h4 className="font-bold text-cyan-300 text-lg">🔬 Constitución Forense V1.0 — Auditoría</h4>
         <span className={`px-3 py-1 rounded text-xs font-bold text-white ${badgeColor}`}>
-          {forense.aprobado ? '✔ APROBADA' : '✘ NO APROBADA'} — {forense.fasesAprobadas}/{forense.fasesTotal}
+          {totalSenales === 0 ? 'SIN OBSERVACIONES' : `${totalSenales} SEÑAL(ES)`}
         </span>
       </div>
-
-      {/* Bloqueos */}
-      {forense.bloqueos.length > 0 && (
-        <div className="bg-red-900/30 p-3 rounded border border-red-500">
-          <p className="font-semibold text-red-400 text-sm mb-1">Bloqueos detectados:</p>
-          <ul className="space-y-1 text-xs text-red-300">
-            {forense.bloqueos.map((b, i) => <li key={i}>• {b}</li>)}
-          </ul>
-        </div>
-      )}
+      <p className="text-xs text-gray-400">Esta sección solo audita y recomienda. La decisión editorial final corresponde al Editor Jefe V2.</p>
 
       {/* Fase 0 */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
@@ -93,10 +85,10 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
 
       {/* Fase 1 Triage */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 1 — Triage Editorial {forense.fase1_triage.aprobado ? '✅' : '❌'}</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 1 — Triage Editorial</p>
         <div className="grid grid-cols-3 gap-1 text-xs">
           {forense.fase1_triage.items.map((item, i) => (
-            <span key={i} className={`px-1.5 py-0.5 rounded ${item.respuesta === 'Sí' ? 'bg-green-900/50 text-green-300' : item.bloquea ? 'bg-red-900/50 text-red-300' : 'bg-yellow-900/50 text-yellow-300'}`}>
+            <span key={i} className={`px-1.5 py-0.5 rounded ${item.respuesta === 'Sí' ? 'bg-green-900/50 text-green-300' : 'bg-yellow-900/50 text-yellow-300'}`}>
               {item.respuesta === 'Sí' ? '✓' : '✗'} {item.pregunta.replace('¿Existe ', '').replace('?', '')}
             </span>
           ))}
@@ -119,13 +111,13 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
 
       {/* Fase 4 Cadena de Custodia */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 4 — Cadena de Custodia {forense.fase4_cadenaCustodia.aprobado ? '✅' : '❌'}</p>
-        <p className="text-xs text-gray-300">{forense.fase4_cadenaCustodia.rojos} párrafo(s) con marca roja de {forense.fase4_cadenaCustodia.parrafos.length} analizados.</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 4 — Cadena de Custodia</p>
+        <p className="text-xs text-gray-300">{forense.fase4_cadenaCustodia.observaciones.length} observación(es) de {forense.fase4_cadenaCustodia.parrafos.length} párrafo(s) analizados.</p>
       </div>
 
       {/* Fase 5 Contaminación */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 5 — Detector Contaminación {forense.fase5_detectorContaminacion.aprobado ? '✅' : '❌'}</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 5 — Detector Contaminación</p>
         {forense.fase5_detectorContaminacion.hallazgos.length > 0 ? (
           <ul className="text-xs text-yellow-300 space-y-0.5">
             {forense.fase5_detectorContaminacion.hallazgos.slice(0, 5).map((h, i) => (
@@ -140,13 +132,17 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
 
       {/* Fase 7 Hemorragia */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 7 — Control de Hemorragia {forense.fase7_controlHemorragia.aprobado ? '✅' : '❌'}</p>
-        <p className="text-xs text-gray-300">Mantener: {forense.fase7_controlHemorragia.mantener} · Eliminar: {forense.fase7_controlHemorragia.eliminar}</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 7 — Control de Hemorragia</p>
+        <p className="text-xs text-gray-300">
+          Mantener: {forense.fase7_controlHemorragia.parrafos.filter(p => p.accion === 'mantener').length} ·
+          Eliminar: {forense.fase7_controlHemorragia.parrafos.filter(p => p.accion === 'eliminar').length} ·
+          Condensar: {forense.fase7_controlHemorragia.parrafos.filter(p => p.accion === 'condensar').length}
+        </p>
       </div>
 
       {/* Fase 8 SEO */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 8 — Tomografía SEO {forense.fase8_tomografiaSEO.aprobado ? '✅' : '⚠️'}</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 8 — Tomografía SEO</p>
         <div className="flex flex-wrap gap-1 text-xs">
           {forense.fase8_tomografiaSEO.checks.map((c, i) => (
             <span key={i} className={`px-1.5 py-0.5 rounded ${c.estado === 'PASS' ? 'bg-green-900/50 text-green-300' : c.estado === 'WARN' ? 'bg-yellow-900/50 text-yellow-300' : 'bg-red-900/50 text-red-300'}`}>
@@ -158,7 +154,7 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
 
       {/* Fase 9 EEAT */}
       <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-        <p className="font-semibold text-cyan-300 mb-1">Fase 9 — EEAT {forense.fase9_resonanciaEEAT.aprobado ? '✅' : '⚠️'}</p>
+        <p className="font-semibold text-cyan-300 mb-1">Fase 9 — EEAT</p>
         <div className="flex flex-wrap gap-1 text-xs">
           {forense.fase9_resonanciaEEAT.checks.map((c, i) => (
             <span key={i} className={`px-1.5 py-0.5 rounded ${c.presente ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
@@ -171,15 +167,15 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
       {/* Fase 10-11 Legal + AdSense */}
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-          <p className="font-semibold text-cyan-300 mb-1">Fase 10 — Legal {forense.fase10_forenseLegal.aprobado ? '✅' : '❌'}</p>
+          <p className="font-semibold text-cyan-300 mb-1">Fase 10 — Legal</p>
           {forense.fase10_forenseLegal.riesgos.length > 0 ? (
             <ul className="text-xs text-red-300 space-y-0.5">
-              {forense.fase10_forenseLegal.riesgos.map((r, i) => <li key={i}>• {r.tipo}: {r.correccion}</li>)}
+              {forense.fase10_forenseLegal.riesgos.map((r, i) => <li key={i}>• {r}</li>)}
             </ul>
           ) : <p className="text-xs text-green-300">Sin riesgo legal.</p>}
         </div>
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
-          <p className="font-semibold text-cyan-300 mb-1">Fase 11 — AdSense {forense.fase11_forenseAdsense.aprobado ? '✅' : '❌'}</p>
+          <p className="font-semibold text-cyan-300 mb-1">Fase 11 — AdSense</p>
           <p className="text-xs text-gray-300">{forense.fase11_forenseAdsense.palabras.length} palabra(s) de riesgo</p>
         </div>
       </div>
@@ -194,14 +190,14 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
         </div>
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
           <p className="font-semibold text-cyan-300 mb-1">Utilidad</p>
-          <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${forense.fase14_forenseUtilidad.aprobado ? 'bg-green-600' : 'bg-red-600'}`}>
-            {forense.fase14_forenseUtilidad.aprobado ? 'APROBADA' : 'NO APROBADA'}
+          <span className="inline-block px-2 py-0.5 rounded text-xs font-bold bg-cyan-700 text-cyan-100">
+            {forense.fase14_forenseUtilidad.ganancias.length} ganancia(s) detectada(s)
           </span>
         </div>
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
           <p className="font-semibold text-cyan-300 mb-1">Diferenciador</p>
-          <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${forense.fase15_forenseDiferenciador.tieneRespuesta ? 'bg-green-600' : 'bg-red-600'}`}>
-            {forense.fase15_forenseDiferenciador.tieneRespuesta ? 'SÍ' : 'NO'}
+          <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${forense.fase15_forenseDiferenciador.evidencia.length > 0 ? 'bg-green-600' : 'bg-red-600'}`}>
+            {forense.fase15_forenseDiferenciador.evidencia.length > 0 ? 'SÍ' : 'NO'}
           </span>
         </div>
       </div>
@@ -210,7 +206,7 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
           <p className="font-semibold text-cyan-300 mb-1">Portada</p>
-          <p className="text-xs text-gray-200">{forense.fase16_forensePortada.clasificacion}</p>
+          <p className="text-xs text-gray-200">{forense.fase16_forensePortada.observacion}</p>
         </div>
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
           <p className="font-semibold text-cyan-300 mb-1">Facebook</p>
@@ -220,29 +216,27 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
         </div>
         <div className="bg-gray-800/50 p-3 rounded border border-gray-700 text-sm">
           <p className="font-semibold text-cyan-300 mb-1">Google</p>
-          <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${forense.fase18_forenseGoogle.puedeCompetir === 'Sí' ? 'bg-green-600' : 'bg-red-600'}`}>
-            {forense.fase18_forenseGoogle.puedeCompetir}
-          </span>
+          <p className="text-xs text-gray-200">{forense.fase18_forenseGoogle.observacion}</p>
         </div>
       </div>
 
-      {/* Fase 22 Firma Digital */}
-      <div className={`p-4 rounded border ${forense.fase22_firmaDigital.aprobado ? 'border-green-500 bg-green-900/20' : 'border-red-500 bg-red-900/20'}`}>
-        <p className="font-bold text-lg text-white mb-2">{forense.fase22_firmaDigital.firma}</p>
-        <div className="flex flex-wrap gap-1">
-          {forense.fase22_firmaDigital.checklist.map((c, i) => (
-            <span key={i} className={`px-2 py-0.5 rounded text-xs font-bold ${c.aprobado ? 'bg-green-700 text-green-100' : 'bg-red-700 text-red-100'}`}>
-              {c.aprobado ? '✓' : '✗'} {c.item}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Observaciones */}
+      {/* Observaciones / Advertencias / Hallazgos */}
       {forense.observaciones.length > 0 && (
-        <div className="bg-yellow-900/20 p-3 rounded border border-yellow-500/50 text-xs text-yellow-300">
+        <div className="bg-blue-900/20 p-3 rounded border border-blue-500/50 text-xs text-blue-300">
           <p className="font-semibold mb-1">Observaciones:</p>
           <ul className="space-y-0.5">{forense.observaciones.map((o, i) => <li key={i}>• {o}</li>)}</ul>
+        </div>
+      )}
+      {forense.advertencias.length > 0 && (
+        <div className="bg-yellow-900/20 p-3 rounded border border-yellow-500/50 text-xs text-yellow-300">
+          <p className="font-semibold mb-1">Advertencias:</p>
+          <ul className="space-y-0.5">{forense.advertencias.map((o, i) => <li key={i}>• {o}</li>)}</ul>
+        </div>
+      )}
+      {forense.hallazgos.length > 0 && (
+        <div className="bg-orange-900/20 p-3 rounded border border-orange-500/50 text-xs text-orange-300">
+          <p className="font-semibold mb-1">Hallazgos:</p>
+          <ul className="space-y-0.5">{forense.hallazgos.map((o, i) => <li key={i}>• {o}</li>)}</ul>
         </div>
       )}
     </div>

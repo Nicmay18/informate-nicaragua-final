@@ -120,28 +120,9 @@ async function main() {
         problemas.push(`SUGERENCIA NO REALIZABLE: ${sugerenciasSospechosas[0].texto}`);
       }
 
-      // Reglas de consistencia absoluta entre Forense, Editor Jefe y Director Editorial
-      if (r.nivel !== 'RECHAZADO') {
-        if (vpr.decisionPortada === 'No publicar') {
-          problemas.push('CONTRADICCIÓN ABSOLUTA: Forense aprueba y Director Editorial dice "No publicar".');
-        }
-        if (vpr.veredicto === '★ Reemplazable' || vpr.veredicto === '★★ Necesita desarrollo') {
-          problemas.push('CONTRADICCIÓN ABSOLUTA: Forense aprueba y Editor Jefe dice "Reemplazable" o "Necesita desarrollo".');
-        }
-      }
-      if (r.puntuacion >= 95) {
-        const permitidas = ['Portada', 'Cobertura especial'];
-        if (!permitidas.includes(vpr.decisionPortada)) {
-          problemas.push(`CONTRADICCIÓN ABSOLUTA: Forense >=95 (${r.puntuacion}) pero la decisión editorial es "${vpr.decisionPortada}".`);
-        }
-      }
+      // Verificar observaciones internas del motor editorial V2
       if (vpr.auditoriaInterna?.observaciones?.some((o: string) => o.includes('CONTRADICCIÓN'))) {
         problemas.push('CONTRADICCIÓN INTERNA: el motor editorial V2 detectó una inconsistencia.');
-      }
-      // Cross-check: si todos los filtros principales aprueban, el Director no puede rechazar
-      const todosAprueban = Object.values(r.filtros).every(f => f.aprobado);
-      if (todosAprueban && vpr.decisionPortada === 'No publicar') {
-        problemas.push('CONTRADICCIÓN ABSOLUTA: todos los filtros aprueban y Director Editorial dice "No publicar".');
       }
 
       if (problemas.length) {
