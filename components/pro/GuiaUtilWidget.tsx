@@ -1,15 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, ArrowRight, Plane, Car, Building2, Scale, Stethoscope, GraduationCap } from 'lucide-react';
+import { FileText, ArrowRight, Plane, Scale, Building2, Wallet, Coins } from 'lucide-react';
 
 const GUIAS = [
-  { slug: 'pasaporte-nicaragua-2026', label: 'Trámites de pasaporte', icon: Plane },
-  { slug: 'licencia-conducir-nicaragua-2026', label: 'Licencia de conducir', icon: Car },
-  { slug: 'inss-nicaragua-2026', label: 'Servicios INSS', icon: Building2 },
-  { slug: 'denuncia-nicaragua-2026', label: 'Cómo denunciar', icon: Scale },
-  { slug: 'salud-nicaragua-2026', label: 'Centros de salud', icon: Stethoscope },
-  { slug: 'becas-nicaragua-2026', label: 'Becas y educación', icon: GraduationCap },
+  { slug: 'tramites-migratorios-nicaraguenses-costa-rica-eeuu-espana-2026', label: 'Trámites migratorios', icon: Plane },
+  { slug: 'apostillar-documentos-nicaragua-2026', label: 'Apostillar documentos', icon: FileText },
+  { slug: 'anular-recurso-policial-nicaragua-2026', label: 'Anular récord policial', icon: Scale },
+  { slug: 'salario-minimo-nicaragua-2026', label: 'Salario mínimo 2026', icon: Wallet },
+  { slug: 'costo-de-vida-nicaragua-2026', label: 'Costo de vida', icon: Building2 },
+  { slug: 'dolar-a-cordoba-nicaragua-hoy-2026', label: 'Dólar a córdoba', icon: Coins },
 ];
 
 export default function GuiaUtilWidget() {
