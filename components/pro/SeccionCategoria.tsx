@@ -12,7 +12,6 @@ interface SeccionCategoriaProps {
   color: string;
   principal: Noticia | null;
   secundarias: Noticia[];
-  layout?: 'split' | 'grid';
 }
 
 export default function SeccionCategoria({
@@ -21,9 +20,14 @@ export default function SeccionCategoria({
   color,
   principal,
   secundarias,
-  layout = 'split',
 }: SeccionCategoriaProps) {
   if (!principal && secundarias.length === 0) return null;
+
+  const todas = [principal, ...secundarias].filter((n): n is Noticia => Boolean(n));
+  const destacada = todas[0];
+  const resto = todas.slice(1, 3);
+
+  if (!destacada) return null;
 
   return (
     <section className="seccion-categoria" aria-label={titulo} data-reveal>
@@ -37,72 +41,52 @@ export default function SeccionCategoria({
         </Link>
       </header>
 
-      {layout === 'split' && principal ? (
-        <div className="categoria-split">
-          <article className="categoria-principal">
-            <Link href={`/noticias/${principal.slug}`} className="categoria-principal-link">
-              <div className="categoria-principal-thumb">
-                {principal.imagen ? (
-                  <Image
-                    src={getResponsiveImageUrl(principal.imagen, 600)}
-                    alt={principal.titulo}
-                    fill
-                    sizes="(max-width: 720px) 100vw, 55vw"
-                    style={{ objectFit: 'cover' }}
-                    unoptimized={principal.imagen.endsWith('.gif')}
-                  />
-                ) : null}
-              </div>
-              <h3 className="categoria-principal-title">{principal.titulo}</h3>
-              <p className="categoria-principal-resumen">{principal.resumen}</p>
-            </Link>
-          </article>
+      <div className="categoria-portal">
+        <article className="categoria-destacada">
+          <Link href={`/noticias/${destacada.slug}`} className="categoria-destacada-link">
+            <div className="categoria-destacada-thumb">
+              {destacada.imagen ? (
+                <Image
+                  src={getResponsiveImageUrl(destacada.imagen, 700)}
+                  alt={destacada.titulo}
+                  fill
+                  sizes="(max-width: 720px) 100vw, 55vw"
+                  style={{ objectFit: 'cover' }}
+                  unoptimized={destacada.imagen.endsWith('.gif')}
+                />
+              ) : null}
+            </div>
+            <div className="categoria-destacada-body">
+              <h3 className="categoria-destacada-title">{destacada.titulo}</h3>
+              <p className="categoria-destacada-resumen">{destacada.resumen}</p>
+            </div>
+          </Link>
+        </article>
 
+        {resto.length > 0 && (
           <div className="categoria-secundarias">
-            {secundarias.map((n) => (
-              <article key={n.id} className="categoria-item">
-                <Link href={`/noticias/${n.slug}`} className="categoria-item-link">
+            {resto.map((n) => (
+              <article key={n.id} className="categoria-secundaria">
+                <Link href={`/noticias/${n.slug}`} className="categoria-secundaria-link">
                   {n.imagen ? (
-                    <div className="categoria-item-thumb">
+                    <div className="categoria-secundaria-thumb">
                       <Image
-                        src={getResponsiveImageUrl(n.imagen, 120)}
+                        src={getResponsiveImageUrl(n.imagen, 220)}
                         alt={n.titulo}
-                        width={80}
-                        height={80}
+                        fill
+                        sizes="(max-width: 720px) 100vw, 25vw"
                         style={{ objectFit: 'cover' }}
                         unoptimized={n.imagen.endsWith('.gif')}
                       />
                     </div>
                   ) : null}
-                  <h4 className="categoria-item-title">{n.titulo}</h4>
+                  <h4 className="categoria-secundaria-title">{n.titulo}</h4>
                 </Link>
               </article>
             ))}
           </div>
-        </div>
-      ) : (
-        <div className="categoria-grid-2">
-          {[principal, ...secundarias].filter(Boolean).map((n) => (
-            <article key={n!.id} className="categoria-card">
-              <Link href={`/noticias/${n!.slug}`} className="categoria-card-link">
-                <div className="categoria-card-thumb">
-                  {n!.imagen ? (
-                    <Image
-                      src={getResponsiveImageUrl(n!.imagen, 400)}
-                      alt={n!.titulo}
-                      fill
-                      sizes="(max-width: 720px) 100vw, 50vw"
-                      style={{ objectFit: 'cover' }}
-                      unoptimized={n!.imagen.endsWith('.gif')}
-                    />
-                  ) : null}
-                </div>
-                <h4 className="categoria-card-title">{n!.titulo}</h4>
-              </Link>
-            </article>
-          ))}
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 }

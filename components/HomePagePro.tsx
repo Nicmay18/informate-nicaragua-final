@@ -8,6 +8,7 @@ import BarraUltimaHora from './pro/BarraUltimaHora';
 import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
 import SidebarPro from './pro/SidebarPro';
+import ServiciosCiudadano from './pro/ServiciosCiudadano';
 
 const MOCK_NOTICIAS: Noticia[] = [
   {
@@ -216,7 +217,7 @@ function distribuirNoticias(noticias: Noticia[]) {
     destacados.push(...take(noticias.filter(n => !usados.has(n.id)), faltantes));
   }
 
-  // 4. Secciones temáticas con conteos específicos
+  // 4. Secciones temáticas: 3 noticias visibles por categoría
   const nacionales = {
     principal: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
     secundarias: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 2),
@@ -231,19 +232,19 @@ function distribuirNoticias(noticias: Noticia[]) {
   const sucesosNoTransito = sucesosAll.filter(n => !esTransito(n));
   const sucesosTransito = sucesosAll.filter(n => esTransito(n));
   const sucesos = {
-    // 2 de tránsito + 1 judicial/social + 1 variada
+    // Máximo 2 de tránsito + al menos 1 judicial/social, total 3
     items: [
+      ...take(sucesosNoTransito, 1),
       ...take(sucesosTransito, 2),
-      ...take(sucesosNoTransito, 2),
-    ].slice(0, 4),
+    ].slice(0, 3),
   };
   sucesos.items.forEach(n => usados.add(n.id));
 
   const deportesAll = porCategoria('Deportes');
   const deportes = {
-    // Solo mostrar si hay al menos 4 noticias
-    visible: deportesAll.length >= 4,
-    items: take(deportesAll, 4),
+    // Mostrar si hay al menos 3 noticias
+    visible: deportesAll.length >= 3,
+    items: take(deportesAll, 3),
   };
 
   return {
@@ -327,7 +328,6 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
             color="#DC2626"
             principal={dist.sucesos.items[0] || null}
             secundarias={dist.sucesos.items.slice(1)}
-            layout="grid"
           />
 
           {dist.deportes.visible && (
@@ -337,7 +337,6 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
               color="#059669"
               principal={dist.deportes.items[0] || null}
               secundarias={dist.deportes.items.slice(1)}
-              layout="grid"
             />
           )}
         </div>
@@ -345,6 +344,9 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         {/* 5. SIDEBAR REORGANIZADO */}
         <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} />
       </div>
+
+      {/* 6. SERVICIOS PARA EL LECTOR: reloj, emergencias, guías */}
+      <ServiciosCiudadano />
     </div>
   );
 }

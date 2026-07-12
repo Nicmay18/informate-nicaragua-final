@@ -1129,29 +1129,56 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   gap: 0.55rem;
 }
 
-.home-pro .categoria-split {
+.home-pro .categoria-portal {
   display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
+  grid-template-columns: 1.25fr 0.75fr;
   gap: 1.25rem;
   align-items: start;
 }
 
-.home-pro .categoria-principal-thumb {
-  position: relative;
-  aspect-ratio: 16 / 10;
+.home-pro .categoria-destacada {
+  background: var(--ni-white);
+  border: 1px solid var(--ni-border);
   border-radius: 0.85rem;
   overflow: hidden;
-  background: var(--ni-bg);
-  margin-bottom: 0.85rem;
+  transition: box-shadow 0.25s, transform 0.25s;
 }
 
-.home-pro .categoria-principal-title {
+.home-pro .categoria-destacada:hover {
+  box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.14);
+  transform: translateY(-2px);
+}
+
+.home-pro .categoria-destacada-link {
+  display: block;
+}
+
+.home-pro .categoria-destacada-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--ni-bg);
+}
+
+.home-pro .categoria-destacada-thumb img {
+  transition: transform 0.5s;
+}
+
+.home-pro .categoria-destacada:hover .categoria-destacada-thumb img {
+  transform: scale(1.04);
+}
+
+.home-pro .categoria-destacada-body {
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.home-pro .categoria-destacada-title {
   font-family: 'Merriweather', serif;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.28;
   color: var(--ni-navy);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -1159,11 +1186,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   overflow: hidden;
 }
 
-.home-pro .categoria-principal-title:hover {
+.home-pro .categoria-destacada-title:hover {
   color: var(--ni-red);
 }
 
-.home-pro .categoria-principal-resumen {
+.home-pro .categoria-destacada-resumen {
   font-size: 0.9rem;
   color: var(--ni-text-light);
   line-height: 1.5;
@@ -1177,49 +1204,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .home-pro .categoria-secundarias {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
-.home-pro .categoria-item-link {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.home-pro .categoria-item-thumb {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 0.6rem;
-  overflow: hidden;
-  flex-shrink: 0;
-  background: var(--ni-bg);
-}
-
-.home-pro .categoria-item-title {
-  font-family: 'Merriweather', serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--ni-navy);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.home-pro .categoria-item-title:hover {
-  color: var(--ni-red);
-}
-
-.home-pro .categoria-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.home-pro .categoria-card {
+.home-pro .categoria-secundaria {
   background: var(--ni-white);
   border: 1px solid var(--ni-border);
   border-radius: 0.85rem;
@@ -1227,37 +1215,105 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   transition: box-shadow 0.25s, transform 0.25s;
 }
 
-.home-pro .categoria-card:hover {
+.home-pro .categoria-secundaria:hover {
   box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.12);
   transform: translateY(-2px);
 }
 
-.home-pro .categoria-card-thumb {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
+.home-pro .categoria-secundaria-link {
+  display: block;
 }
 
-.home-pro .categoria-card-thumb img {
+.home-pro .categoria-secundaria-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--ni-bg);
+}
+
+.home-pro .categoria-secundaria-thumb img {
   transition: transform 0.5s;
 }
 
-.home-pro .categoria-card:hover .categoria-card-thumb img {
+.home-pro .categoria-secundaria:hover .categoria-secundaria-thumb img {
   transform: scale(1.04);
 }
 
-.home-pro .categoria-card-title {
+.home-pro .categoria-secundaria-title {
   font-family: 'Merriweather', serif;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.3;
   color: var(--ni-navy);
-  padding: 0.8rem 0.9rem 1rem;
+  padding: 0.75rem 0.9rem 0.9rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.home-pro .categoria-secundaria-title:hover {
+  color: var(--ni-red);
+}
+
+/* SERVICIOS PARA EL LECTOR */
+.home-pro .servicios-ciudadano {
+  padding: 2.5rem 1rem;
+  background: var(--ni-bg);
+  border-top: 1px solid var(--ni-border);
+}
+
+.home-pro .servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.home-pro .servicio-card {
+  background: var(--ni-white);
+  border: 1px solid var(--ni-border);
+  border-radius: 0.85rem;
+  overflow: hidden;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.home-pro .servicio-card:hover {
+  box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.12);
+  transform: translateY(-2px);
+}
+
+.home-pro .servicio-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--ni-border);
+  background: var(--ni-navy);
+}
+
+.home-pro .servicio-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--ni-white);
+}
+
+.home-pro .servicio-card-title {
+  font-family: 'Merriweather', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ni-white);
+  margin: 0;
+}
+
+.home-pro .servicio-card-body {
+  padding: 1rem;
+  font-size: 0.85rem;
 }
 
 .home-pro .hero-principal {
@@ -1266,9 +1322,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 .home-pro .hero-inner {
   position: relative;
-  height: calc(70vh - 64px);
-  min-height: 420px;
-  max-height: 620px;
+  height: calc(60vh - 64px);
+  min-height: 360px;
+  max-height: 560px;
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 24px 55px rgba(15, 23, 42, 0.18);
@@ -1298,8 +1354,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 35%, rgba(15, 23, 42, 0.35) 100%),
-    linear-gradient(to top, rgba(15, 23, 42, 0.65) 0%, transparent 55%);
+    linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.88) 40%, rgba(15, 23, 42, 0.72) 100%),
+    linear-gradient(to top, rgba(15, 23, 42, 0.75) 0%, transparent 55%);
   z-index: 1;
 }
 
@@ -1334,9 +1390,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 .home-pro .hero-title {
   font-family: 'Merriweather', serif;
-  font-size: clamp(1.9rem, 4vw, 3rem);
-  line-height: 1.15;
-  margin-bottom: 1.1rem;
+  font-size: clamp(1.75rem, 3.6vw, 2.8rem);
+  line-height: 1.22;
+  margin: 0.25rem 0 1.1rem;
   color: var(--ni-white);
   text-shadow: 0 2px 12px rgba(0,0,0,0.25);
   overflow: visible;
@@ -2249,7 +2305,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .home-pro .categoria-split {
+  .home-pro .categoria-portal {
     grid-template-columns: 1fr;
   }
 
@@ -2279,12 +2335,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   .home-pro .hero-inner {
     height: auto;
-    min-height: 380px;
-    max-height: 520px;
+    min-height: 320px;
+    max-height: 460px;
   }
 
   .home-pro .hero-content-wrap {
-    min-height: 380px;
+    min-height: 320px;
     padding: 1.25rem;
   }
 
@@ -2313,17 +2369,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   }
 
   .home-pro .destacados-grid,
-  .home-pro .categoria-grid-2 {
+  .home-pro .servicios-grid {
     grid-template-columns: 1fr;
   }
 
-  .home-pro .categoria-split {
+  .home-pro .categoria-portal {
     grid-template-columns: 1fr;
   }
 
-  .home-pro .categoria-item-thumb {
-    width: 64px;
-    height: 64px;
+  .home-pro .categoria-secundaria-title {
+    font-size: 1rem;
   }
 
   .home-pro .barra-ultima-hora {
