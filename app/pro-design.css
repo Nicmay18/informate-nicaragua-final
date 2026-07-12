@@ -1605,18 +1605,20 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .home-pro .hero-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
   background: #dc2626;
-  padding: 14px 32px;
-  border-radius: 50px;
+  padding: 10px 22px;
+  border-radius: 999px;
   text-decoration: none;
   transition: all 0.3s ease;
-  width: auto;
+  width: max-content;
+  max-width: 100%;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .home-pro .hero-btn:hover {
