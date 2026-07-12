@@ -1,11 +1,22 @@
 /**
- * Analizador Forense de Noticias - Nicaragua Informate v2.0
- * REGLA RECTORA: "Es mejor una noticia de 350 palabras totalmente verificable
- * que una de 800 palabras con informacion inferida."
+ * Analizador Forense de Noticias - Nicaragua Informate v2.1
+ * REGLA RECTORA: El Director Editorial evalua la noticia con la informacion
+ * publica disponible en este momento. No exige recursos que el medio no tiene:
+ * corresponsales permanentes, acceso a hospitales, Policia, Medicina Legal,
+ * expedientes judiciales ni entrevistas exclusivas.
+ *
+ * El "trabajo de campo" se redefine como "evidencia verificable". Si la nota
+ * cita una fuente oficial, medio identificado, documento, video, fotografia o
+ * testimonio publicado por un medio reconocido, el trabajo periodistico se
+ * considera SATISFECHO.
  *
  * Niveles: FORENSE > ORO > PLATA > BRONCE > RECHAZADO
- * Prioridad: VERIFICABILIDAD sobre longitud.
+ * Prioridad: VERIFICABILIDAD sobre longitud. No se penaliza por informacion
+ * que depende de terceros; se marca como "Oportunidad futura de actualizacion".
  */
+
+import { evaluarEditorJefeV2 } from './editor-jefe/engine';
+import { mapearReporteEditorJefe } from './editor-jefe/mapper';
 
 export type NoticiaTipo =
   | 'Tecnologia' | 'Sucesos' | 'Economia' | 'Salud' | 'Infraestructura' | 'Judicial'
@@ -678,7 +689,17 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     filtros,
     accionesRequeridas: generarAcciones(filtros, palabrasSensiblesDetectadas, cierreGenerico),
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
-    reporteVPR: analizarValorPeriodisticoReal(noticia),
+    reporteVPR: (() => {
+      const forenseSummary = {
+        aprobado: nivel !== 'RECHAZADO',
+        nivel,
+        puntuacion: scoreTotal,
+        checksOK,
+        checksTotal: checks.length,
+      };
+      const v2 = evaluarEditorJefeV2(noticia, forenseSummary);
+      return mapearReporteEditorJefe(noticia, v2, forenseSummary);
+    })(),
     reporteForenseV1: analizarForenseV1(noticia),
   };
 }
@@ -1196,10 +1217,16 @@ function clasificarArticuloV7(titulo: string, contenido: string, categoria: stri
   const tit = titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const cat = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
-  // 1. ENTREVISTA: solo si hay patrón P/R o citas largas protagonistas
-  const patronEntrevista = /\b(p\s*[:.)]|r\s*[:.)]|pregunta\s*[:.)]|respuesta\s*[:.)]|pregunt[oó]\s*:|entrevistador\s*:|entrevistad[oae]\s*:)/i;
-  const citasLargas = (texto.match(/["“][^"”]{40,}["”]\s*(?:[,\s]*(?:dijo|declar[oó]|indic[oó]|señal[oó]|precis[oó]|explic[oó]|mencion[oó]|asegur[oó]))/gi) || []).length >= 2;
-  const esEntrevista = patronEntrevista.test(texto) || citasLargas;
+  // 1. ENTREVISTA: REGLA 1 / REGLA 7. Solo se clasifica como entrevista si hay
+  // patrón explícito de preguntas y respuestas, encabezado "Entrevista con...",
+  // o múltiples citas largas protagonistas con marcadores de entrevista.
+  // No basta con tener citas breves en una nota informativa.
+  // Solo se clasifica como entrevista si hay marcadores explícitos. Las citas
+  // atribuidas normales de una nota informativa no bastan.
+  const patronEntrevista = /\b(pregunta\s*[:.)]|respuesta\s*[:.)]|entrevistador\s*:|entrevistad[oae]\s*:|entrevista\s+(?:a|con)\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)/i;
+  const marcasEntrevista = /\b(entrevista\s+(?:con|a|al|a la)|en\s+(?:entrevista|di[áa]logo)\s+(?:con|a|para)|dialog[oó]\s+con|convers[oó]\s+con|nota\s+con)\b/i.test(tit) ||
+    /\b(entrevista\s+(?:con|a|al|a la)|en\s+(?:entrevista|di[áa]logo)\s+(?:con|a|para))\b/i.test(texto);
+  const esEntrevista = patronEntrevista.test(texto) || marcasEntrevista;
 
   // 2. ANÁLISIS: más del 40% del texto con interpretación
   const oraciones = texto.split(/[.!?]+/).filter(o => o.trim().length > 10);
@@ -1207,9 +1234,15 @@ function clasificarArticuloV7(titulo: string, contenido: string, categoria: stri
   const oracionesAnalisis = oraciones.filter(o => marcadoresAnalisis.test(o)).length;
   const esAnalisis = oraciones.length > 0 && (oracionesAnalisis / oraciones.length) > 0.4;
 
-  // 3. REPORTAJE: trabajo de campo demostrable
-  const frasesReportaje = /\b(visitamos|recorrimos|observamos|nuestro equipo comprob[oó]|Nicaragua Informate confirm[oó]|estuvimos en el lugar|testimonio presencial|entrevista en el sitio|fotograf[ií]as propias|im[áa]genes de nuestro equipo)\b/i;
-  const esReportaje = frasesReportaje.test(texto) && (evidencia.trabajoDeCampo || evidencia.dosFuentesIndependientes || evidencia.documentoOficialIdentificado) && palabraCount > 250;
+  // 3. REPORTAJE: evidencia verificable + cobertura de fondo. REGLA 7 / REGLA 2 / REGLA 6.
+  // No se exige presencia física; basta con fuentes, documentos o material audiovisual,
+  // pero debe tener extensión suficiente y alguna señal de profundidad (contexto,
+  // análisis o utilidad desarrollada). Si no, es una Noticia.
+  const evidenciaReportaje = evidencia.trabajoDeCampo || evidencia.dosFuentesIndependientes || evidencia.documentoOficialIdentificado || evidencia.evidenciaOficial;
+  const profundidadReportaje = /(según|de acuerdo con|indicó|declaró|precisó|confirmó|dijo|mencionó|señaló|explicó|reportó|aseguró|detalló)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+(?:de\s+(?:la\s+|el\s+|los\s+|las\s+)?)?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,3}/gi;
+  const citasAtribuidas = (texto.match(profundidadReportaje) || []).length;
+  const subheadings = (texto.match(/<h[2-6]\b/gi) || []).length;
+  const esReportaje = evidenciaReportaje && palabraCount >= 400 && (citasAtribuidas >= 3 || subheadings >= 1 || /\b(contexto|antecedente|antecedentes|trasfondo|historia|impacto|consecuencia)\b/i.test(texto));
 
   // 4. INVESTIGACIÓN: pruebas documentales + evidencia real
   const pruebasInvestigacion = /\b(documentos|solicitudes|registros|filtraciones|contratos|bases de datos|expedientes|informes oficiales|actas|partidas|certificados|resoluciones|acuerdos|decretos)\b/i;
@@ -1236,7 +1269,7 @@ function clasificarArticuloV7(titulo: string, contenido: string, categoria: stri
   const razon = (() => {
     if (tipoArticulo === 'Entrevista') return 'El texto contiene un patrón de preguntas y respuestas o citas protagonistas que identifican una entrevista.';
     if (tipoArticulo === 'Análisis') return `Más del 40% de las oraciones contienen interpretación (${Math.round((oracionesAnalisis / oraciones.length) * 100)}%).`;
-    if (tipoArticulo === 'Reportaje') return 'Se detectan frases de trabajo de campo verificable.';
+    if (tipoArticulo === 'Reportaje') return 'Se detecta evidencia verificable (fuentes, documentos o material audiovisual) que permite una cobertura de fondo.';
     if (tipoArticulo === 'Investigación') return 'Se detectan pruebas documentales o evidencia de investigación verificable.';
     if (tipoArticulo === 'Explicador') return 'El contenido explica un fenómeno para que el lector lo entienda.';
     if (tipoArticulo === 'Servicio') return 'El contenido orienta al lector sobre cómo actuar o resolver algo.';
@@ -1294,9 +1327,9 @@ function detectarTema(titulo: string, contenido: string, categoria: string): str
     [/accidente de transito|accidente vial|choque|colision|vuelco|atropello|accidentes/, 'accidente_transito'],
     [/incendio|conato de incendio|fuego consumio/, 'incendio'],
     [/robo|asalto|atraco|hurto/, 'robo'],
-    [/homicidio|asesinato|muerto a|muere a/, 'homicidio'],
+    [/\b(homicidio|asesinato|muerto a|muere a|muerte de\s+(?:persona|nino|bebe|menor|adulto|mujer|hombre)|hallado muerto|encontrado muerto|muerto en)\b/, 'homicidio'],
     [/secuestro|privacion ilegal de libertad|privado de libertad/, 'secuestro'],
-    [/dengue|zika|malaria|covid|vacuna|epidemia|virus|casos de|enfermedad/, 'salud_publica'],
+    [/\b(dengue|zika|malaria|covid|sarampion| influenza|vacuna|epidemia|virus|brote|contagio|casos de (?:dengue|zika|malaria|covid|enfermedad|virus)|enfermedad)\b/, 'salud_publica'],
     [/precio del dolar|tipo de cambio|canasta basica|inflacion|gasolina|remesas|precios/, 'economia'],
     [/eleccion|voto|asamblea|decreto|ley|gobierno|politica/, 'politica'],
     [/deportes|beisbol|futbol|boxeo|torneo|liga|juego/, 'deportes'],
@@ -1316,7 +1349,7 @@ function fabricarSugerencia(texto: string, impacto: string, tiempo: string, difi
   return { texto, impacto, tiempo, dificultad, beneficio };
 }
 
-interface EvidenciaVerificable {
+export interface EvidenciaVerificable {
   fuenteOficialIdentificada: boolean;
   dosFuentesIndependientes: boolean;
   documentoOficialIdentificado: boolean;
@@ -1334,16 +1367,17 @@ interface SenalesEditoriales {
 }
 
 function detectarEvidencia(textoLower: string, textoPlano: string): EvidenciaVerificable {
-  // Lista extendida de instituciones oficiales nicaragüenses
-  const nombresOficiales = 'polic[ií]a nacional|ministerio p[úu]blico|fiscal[íi]a|ministerio de salud|minsa|alcald[ií]a|polic[ií]a de tr[áa]nsito|c[áa]mara de comercio|asamblea nacional|instituto nicarag[uü]ense de seguridad social|inss|mifamilia|ministerio de la familia|ministerio de gobernaci[óo]n|ministerio de educaci[óo]n|mined|medicina legal|bomberos|cruz roja|juzgado|tribunal|comisar[ií]a|hospital|cl[ií]nica|delegaci[óo]n policial|corte suprema|poder judicial|consejo supremo electoral|cse|ineter|invur|ej[ée]rcito de nicaragua|ej[ée]rcito|fuerza a[ée]rea|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuradur[íi]a|contralor[íi]a|banco central|c[áa]mara de comercio';
+  // Instituciones oficiales y medios nacionales reconocidos como fuentes validas.
+  // Nicaragua Informate no tiene acceso directo, pero puede citar sus reportes.
+  const nombresOficiales = 'polic[ií]a nacional|ministerio p[úu]blico|fiscal[íi]a|ministerio de salud|minsa|alcald[ií]a|polic[ií]a de tr[áa]nsito|c[áa]mara de comercio|asamblea nacional|instituto nicarag[uü]ense de seguridad social|inss|mifamilia|ministerio de la familia|ministerio de gobernaci[óo]n|ministerio de educaci[óo]n|mined|medicina legal|bomberos|cruz roja|cruz blanca|juzgado|tribunal|comisar[ií]a|hospital|cl[ií]nica|delegaci[óo]n policial|corte suprema|poder judicial|consejo supremo electoral|cse|ineter|invur|comupred|sinapred|ej[ée]rcito de nicaragua|ej[ée]rcito nicaragu[ue]ense|ej[ée]rcito|fuerza a[ée]rea|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuradur[íi]a|contralor[íi]a|banco central|c[áa]mara de comercio|direcci[óo]n general|direcci[óo]n de tr[áa]nsito|municipio|delegaci[óo]n';
+  const mediosNacionales = 'radio ya|tn8|canal 10|canal 13|canal 4|canal 6|vos tv|vos|la prensa|articulo 66|el 19 digital|confidencial nicaragua|100% noticias|hoy|nuevo diario|monitoreo|informate|nicaragua informate|telenorte|cdnn|el digital|nica|mossa';
 
   // Fuente oficial: institución concreta citada, no genérica
   const oficiales = new RegExp(`\\b(?:${nombresOficiales})\\b`, 'i');
   const fuenteOficialIdentificada = oficiales.test(textoLower);
 
-  // Fuentes independientes: solo entidades que aportan información al hecho.
-  // No cuentan leyes, códigos, artículos ni menciones genéricas sin atribución.
-  const institucionesValidas = new RegExp(`\\b(?:${nombresOficiales})\\b`, 'i');
+  // Fuentes independientes: instituciones oficiales, medios nacionales o personas citadas.
+  const institucionesValidas = new RegExp(`\\b(?:${nombresOficiales}|${mediosNacionales})\\b`, 'i');
   const noSonFuentes = /\b(c[óo]digo penal|ley n[º°]?\s*\d+|art[ií]culo|decreto|resoluci[óo]n|acuerdo|normativa|reglamento)\b/i;
 
   const atribuciones = textoPlano.match(/\b(?:seg[uú]n|de acuerdo con|indic[óo]|declar[óo]|precis[óo]|confirm[óo]|dijo|menci[óo]|señal[óo]|explic[óo]|report[óo]|asegur[óo]|detall[óo])\s+(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+(?:de\s+la\s+|del\s+|de\s+|la\s+|el\s+)?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,4})\b/g) || [];
@@ -1357,7 +1391,7 @@ function detectarEvidencia(textoLower: string, textoPlano: string): EvidenciaVer
 
   const fuentesInstitucionales = new Set<string>();
   let m2;
-  const institucionesRegex = new RegExp(`\\b(?:${nombresOficiales})\\b`, 'gi');
+  const institucionesRegex = new RegExp(`\\b(?:${nombresOficiales}|${mediosNacionales})\\b`, 'gi');
   while ((m2 = institucionesRegex.exec(textoPlano)) !== null) {
     fuentesInstitucionales.add(m2[0].toLowerCase().replace(/\s+de\s+la\s+|\s+del\s+|\s+de\s+/g, ' ').trim());
   }
@@ -1369,15 +1403,24 @@ function detectarEvidencia(textoLower: string, textoPlano: string): EvidenciaVer
   const dosFuentesIndependientes = totalFuentesIndependientes >= 2;
 
   // Documento o evidencia oficial: ley, informe, resolución, etc., o atribución a institución oficial
-  const documentoMencionado = /\b(ley\s+n[º°]?\s*\d+|c[óo]digo\s+de|informe\s+(?:oficial|anual|mensual|t[eé]cnico)|resoluci[óo]n\s+n[º°]?\s*\d+|acuerdo\s+n[º°]?\s*\d+|decreto\s+n[º°]?\s*\d+|estad[ií]stica\s+oficial|documento\s+oficial|partida\s+de\s+defunci[óo]n|bolet[ií]n\s+oficial|informe\s+policial|certificado\s+m[eé]dico|expediente\s+judicial|acta policial)\b/i.test(textoLower);
+  const documentoMencionado = /\b(ley\s+n[º°]?\s*\d+|c[óo]digo\s+de|informe\s+(?:oficial|anual|mensual|t[eé]cnico)|resoluci[óo]n\s+n[º°]?\s*\d+|acuerdo\s+n[º°]?\s*\d+|decreto\s+n[º°]?\s*\d+|estad[ií]stica\s+oficial|documento\s+oficial|partida\s+de\s+defunci[óo]n|bolet[ií]n\s+oficial|informe\s+policial|certificado\s+m[eé]dico|expediente\s+judicial|acta policial|comunicado\s+oficial|reporte\s+oficial|parte\s+oficial)\b/i.test(textoLower);
   const documentoOficialIdentificado = documentoMencionado || fuenteOficialIdentificada;
   const evidenciaOficial = fuenteOficialIdentificada || documentoOficialIdentificado;
 
-  // Trabajo de campo: solo si hay frases explícitas de verificación presencial
-  const trabajoDeCampo = /\b(?:pudo\s+(?:constatar|verificar|confirmar)\s+(?:en\s+el\s+lugar|este\s+medio|Nicaragua\s+Informate)|nuestro\s+equipo\s+(?:estuvo|recorri[óo])|en\s+el\s+lugar\s+(?:se\s+observ|se\s+verific|se\s+constat)|fotograf[íi]as\s+propias|im[áa]genes\s+de\s+nuestro\s+equipo|testimonio\s+presencial|entrevista\s+en\s+el\s+lugar)\b/i.test(textoLower);
+  // Material audiovisual verificable citado en la nota.
+  const materialAudiovisual = /\b(video|fotograf[íi]a|im[áa]gen|captura|grabaci[óo]n|material audiovisual)\s+(?:de|del|publicado|compartido|proporcionado|enviado|difundido)\b/i.test(textoLower);
+
+  // Testimonio publicado por un medio identificado.
+  const testimonioPublicado = /\b(testimonio|versi[óo]n|declaraci[óo]n|relato)\s+(?:publicad[oa]|compartid[oa]|difundid[oa]|recogid[oa]|de un medio|en redes|por\s+(?:radio|canal|tv|medio))\b/i.test(textoLower) ||
+    /\b(seg[úu]n\s+(?:testimonio|relato|versi[óo]n)|testimonio\s+de)\b/i.test(textoLower);
+
+  // REGLA 6: Trabajo de campo = evidencia verificable.
+  // Cualquiera de estas señales satisface el criterio: fuente oficial, dos fuentes,
+  // documento oficial, material audiovisual o testimonio publicado por medio identificado.
+  const trabajoDeCampo = evidenciaOficial || dosFuentesIndependientes || documentoOficialIdentificado || materialAudiovisual || testimonioPublicado;
 
   // Dato concreto: fechas, cifras, montos, cantidades verificables
-  const datoConcreto = /\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|C?\$\s*\d+|\b\d{2,3}\s+(?:kil[óo]metros?|km|metros?|m|a[ñn]os?|frascos?|personas?|heridos?|afectados?|fallecidos?|v[íi]ctimas?)\b/i.test(textoPlano);
+  const datoConcreto = /\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|C?\$\s*\d+|\b\d{2,3}\s+(?:kil[óo]metros?|km|metros?|m|a[ñn]os?|frascos?|personas?|heridos?|afectados?|fallecidos?|v[ií]ctimas?)\b/i.test(textoPlano);
 
   // Contexto legal: ley, artículo, código, delito, pena, proceso
   const contextoLegal = /\b(ley|art[ií]culo|c[óo]digo|pena|delito|proceso|judicial|juez|fiscal|defensa|sentencia|imputado|acusado|investigaci[óo]n)\b/i.test(textoLower);
@@ -1408,8 +1451,9 @@ function obtenerCriteriosEditorJefe(tipoArticulo: TipoArticulo, _tipoNota: TipoN
   const just = (detectado: boolean, positivo: string, neutral: string, ausente: string) =>
     detectado ? positivo : (s.tieneAtribucion || s.evidencia.datoConcreto) ? neutral : ausente;
 
-  const ptsOficial = s.evidencia.evidenciaOficial ? 20 : s.evidencia.fuenteOficialIdentificada ? 14 : s.tieneAtribucion ? 8 : 2;
-  const ptsCampo = s.evidencia.trabajoDeCampo ? 20 : s.evidencia.dosFuentesIndependientes ? 14 : s.tieneAtribucion ? 6 : 2;
+  const ptsOficial = s.evidencia.evidenciaOficial ? 20 : s.evidencia.fuenteOficialIdentificada ? 16 : s.tieneAtribucion ? 10 : 4;
+  // REGLA 6: Trabajo de campo = evidencia verificable (oficial, dos fuentes, documento, audiovisual).
+  const ptsCampo = s.evidencia.trabajoDeCampo ? 25 : s.tieneAtribucion ? 12 : 4;
   const ptsDato = s.evidencia.datoConcreto ? 20 : s.tieneDatosConcretos ? 12 : 2;
   const ptsContexto = s.scoreContexto >= 4 ? 20 : s.scoreContexto >= 2 ? 14 : s.scoreContexto >= 1 ? 6 : 2;
   const ptsUtilidad = s.scoreUtilidad >= 4 ? 20 : s.scoreUtilidad >= 2 ? 14 : s.scoreUtilidad >= 1 ? 6 : 2;
@@ -1432,8 +1476,8 @@ function obtenerCriteriosEditorJefe(tipoArticulo: TipoArticulo, _tipoNota: TipoN
       { nombre: 'Fuentes verificables', max: 15, raw: ptsOficial, just: just(s.evidencia.evidenciaOficial, 'Cita fuentes verificables.', 'Hay alguna fuente.', 'Fuentes no identificables.') },
     ],
     'Reportaje': [
-      { nombre: 'Trabajo de campo o presencia', max: 25, raw: ptsCampo, just: just(s.evidencia.trabajoDeCampo, 'Hay evidencia de trabajo de campo.', 'Hay entrevistas o fuentes, aunque no trabajo de campo visible.', 'No se detecta trabajo de campo.') },
-      { nombre: 'Testimonios o fuentes directas', max: 20, raw: s.evidencia.dosFuentesIndependientes ? 20 : s.tieneAtribucion ? 10 : 4, just: just(s.evidencia.dosFuentesIndependientes, 'Incluye testimonios o fuentes directas.', 'Hay alguna atribución, pero pocas voces directas.', 'No se detectan testimonios ni fuentes directas.') },
+      { nombre: 'Evidencia verificable', max: 25, raw: ptsCampo, just: just(s.evidencia.trabajoDeCampo, 'La nota se sustenta en fuente oficial, documento, medios identificados o material audiovisual.', 'Hay atribución, aunque podría explicitarse mejor la fuente.', 'No se detecta evidencia verificable identificable.') },
+      { nombre: 'Testimonios o fuentes identificadas', max: 20, raw: s.evidencia.dosFuentesIndependientes ? 20 : s.tieneAtribucion ? 10 : 4, just: just(s.evidencia.dosFuentesIndependientes, 'Incluye fuentes identificadas o testimonios publicados.', 'Hay alguna atribución, pero pocas fuentes identificadas.', 'No se detectan fuentes identificadas ni testimonios citados.') },
       { nombre: 'Contexto social o histórico', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Sitúa el tema en contexto social o histórico.', 'Hay algo de contexto.', 'Contexto limitado.') },
       { nombre: 'Documentos o datos', max: 20, raw: ptsDato, just: just(s.evidencia.datoConcreto, 'Sustenta con datos o documentos.', 'Tiene algún dato.', 'No se detectan datos ni documentos.') },
       { nombre: 'Narrativa y utilidad', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Combina narrativa con utilidad para el lector.', 'Narrativa presente, utilidad limitada.', 'No se detecta narrativa ni utilidad clara.') },
@@ -1442,13 +1486,15 @@ function obtenerCriteriosEditorJefe(tipoArticulo: TipoArticulo, _tipoNota: TipoN
       { nombre: 'Fuentes contrastadas', max: 25, raw: s.evidencia.dosFuentesIndependientes ? 25 : s.evidencia.fuenteOficialIdentificada ? 14 : 4, just: just(s.evidencia.dosFuentesIndependientes, 'Se contrastan dos o más fuentes independientes.', 'Hay una fuente oficial o atribución.', 'No se detectan fuentes múltiples.') },
       { nombre: 'Evidencia documental verificable', max: 25, raw: s.evidencia.documentoOficialIdentificado ? 25 : s.evidencia.datoConcreto ? 16 : 4, just: just(s.evidencia.documentoOficialIdentificado, 'Identifica documento o evidencia oficial.', 'Tiene datos, pero no documento verificable.', 'No se detecta documento ni evidencia sólida.') },
       { nombre: 'Hallazgo principal claro', max: 20, raw: s.p3 >= 6 ? 18 : s.p2 >= 4 ? 12 : 4, just: just(s.p3 >= 5, 'Explica con claridad el hallazgo principal.', 'El hallazgo es mencionado, pero poco desarrollado.', 'No se detecta un hallazgo claro.') },
-      { nombre: 'Trabajo propio', max: 15, raw: s.evidencia.trabajoDeCampo ? 15 : s.aportePropio ? 10 : 4, just: just(s.evidencia.trabajoDeCampo || s.aportePropio, 'Hay evidencia de trabajo propio de Nicaragua Informate.', 'Hay indicios de trabajo propio.', 'No se detecta trabajo propio verificable en el texto.') },
+      { nombre: 'Aporte editorial propio', max: 15, raw: s.aportePropio ? 15 : s.scoreContexto >= 2 || s.scoreAnalisis >= 2 ? 10 : 4, just: just(s.aportePropio || s.scoreContexto >= 2 || s.scoreAnalisis >= 2, 'La nota aporta contexto, explicación o marco legal propio.', 'Hay indicios de aporte editorial.', 'No se detecta aporte editorial diferenciado.') },
       { nombre: 'Impacto público', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'Explica el impacto en el público.', 'Impacto parcial.', 'No se detecta impacto comunicado.') },
     ],
     'Entrevista': [
-      { nombre: 'Fuente identificada', max: 25, raw: s.tieneNombresPropios ? 22 : s.tieneAtribucion ? 12 : 4, just: just(s.tieneNombresPropios, 'Identifica claramente al entrevistado.', 'Menciona una fuente, pero no con nombre claro.', 'No se identifica al entrevistado.') },
-      { nombre: 'Preguntas relevantes', max: 20, raw: s.p4 >= 5 ? 18 : s.scoreUtilidad >= 2 ? 12 : 4, just: just(s.p4 >= 5 || s.scoreUtilidad >= 2, 'Plantea preguntas relevantes.', 'Preguntas poco relevantes.', 'No se detectan preguntas relevantes.') },
-      { nombre: 'Citas atribuidas', max: 20, raw: s.tieneAtribucion ? 18 : 4, just: just(s.tieneAtribucion, 'Cita correctamente al entrevistado.', 'Citas escasas.', 'No se detectan citas atribuidas.') },
+      // REGLA 7 / REGLA 11: una entrevista también se evalúa por evidencia verificable.
+      // Si no hay señales claras de entrevista, los criterios no deben colapsar la puntuación.
+      { nombre: 'Fuente identificada', max: 25, raw: s.tieneNombresPropios ? 22 : s.evidencia.fuenteOficialIdentificada ? 18 : s.evidencia.dosFuentesIndependientes ? 16 : s.tieneAtribucion ? 12 : 4, just: just(s.tieneNombresPropios || s.evidencia.fuenteOficialIdentificada || s.evidencia.dosFuentesIndependientes, 'Identifica claramente la fuente o fuentes.', 'Menciona una fuente, pero no con nombre claro.', 'No se identifica al entrevistado ni una fuente reconocida.') },
+      { nombre: 'Preguntas relevantes', max: 20, raw: s.p4 >= 5 ? 18 : s.scoreUtilidad >= 2 ? 12 : s.evidencia.datoConcreto ? 10 : 4, just: just(s.p4 >= 5 || s.scoreUtilidad >= 2 || s.evidencia.datoConcreto, 'Plantea preguntas o aporta datos relevantes.', 'Preguntas poco relevantes.', 'No se detectan preguntas ni datos relevantes.') },
+      { nombre: 'Citas o evidencia atribuida', max: 20, raw: s.tieneAtribucion ? 18 : s.evidencia.evidenciaOficial ? 16 : s.evidencia.trabajoDeCampo ? 12 : 4, just: just(s.tieneAtribucion || s.evidencia.evidenciaOficial || s.evidencia.trabajoDeCampo, 'Cita o sustenta con fuentes identificables.', 'Citas escasas o sin fuente clara.', 'No se detectan citas ni evidencia atribuida.') },
       { nombre: 'Contexto de la fuente', max: 20, raw: ptsContexto, just: just(s.scoreContexto >= 2, 'Contextualiza quién es la fuente.', 'Contexto parcial.', 'No se contextualiza la fuente.') },
       { nombre: 'Utilidad para el lector', max: 15, raw: ptsUtilidad, just: just(s.scoreUtilidad >= 2, 'La entrevista entrega valor al lector.', 'Utilidad parcial.', 'No se detecta utilidad para el lector.') },
     ],
@@ -1490,7 +1536,7 @@ function palabrasClaveTema(tema: string): string[] {
     'accidente_transito': ['accidente', 'tránsito', 'vehículo', 'conductor', 'herido', 'víctima', 'policía', 'carretera', 'señalización', 'velocidad', 'ruta'],
     'incendio': ['incendio', 'fuego', 'bomberos', 'vivienda', 'conato', 'evacuación', 'afectado', 'material'],
     'robo': ['robo', 'asalto', 'delincuencia', 'víctima', 'policía', 'denuncia', 'seguridad'],
-    'homicidio': ['homicidio', 'asesinato', 'víctima', 'autor', 'investigación', 'policía', 'escena'],
+    'homicidio': ['homicidio', 'asesinato', 'víctima', 'autor', 'investigación', 'policía', 'escena', 'fiscalía', 'judicial', 'legal', 'procesal', 'delito'],
     'secuestro': ['secuestro', 'libertad', 'rescate', 'víctima', 'investigación', 'policía'],
     'salud_publica': ['salud', 'enfermedad', 'vacuna', 'dengue', 'médico', 'hospital', 'minsa', 'casos', 'prevención'],
     'economia': ['precio', 'dólar', 'economía', 'mercado', 'inflación', 'canasta', 'salario', 'remesas'],
@@ -1515,7 +1561,8 @@ function autoauditarConstitucion(
   const observaciones: string[] = [];
   const ajustes: Partial<ReporteEditorJefe> = {};
   const ev = senales.evidencia;
-  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado;
+  // REGLA 10: auditoría de consistencia. Trabajo de campo = evidencia verificable.
+  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado || ev.fuenteOficialIdentificada;
 
   function veredictoPorPuntuacion(p: number): ReporteEditorJefe['veredicto'] {
     if (p >= 95) return '★★★★★ Nota de referencia';
@@ -1539,14 +1586,13 @@ function autoauditarConstitucion(
     ajustes.veredicto = veredictoPorPuntuacion(reporte.puntuacion);
   }
 
-  // 3. Tipo de artículo vs evidencia mínima
-  if (reporte.tipoArticulo === 'Investigación' && !evidenciaFuerte) {
-    observaciones.push('Autoauditoría V7: una Investigación requiere evidencia visible de trabajo propio; se reclasifica como Noticia.');
-    ajustes.tipoArticulo = 'Noticia';
-  }
-  if (reporte.tipoArticulo === 'Reportaje' && !(ev.trabajoDeCampo || ev.documentoOficialIdentificado)) {
-    observaciones.push('Autoauditoría V7: un Reportaje requiere evidencia de campo o documento; se reclasifica como Noticia.');
-    ajustes.tipoArticulo = 'Noticia';
+  // 3. REGLA 10: Auditoría de consistencia. Si existen dos fuentes, documento o
+  // fuente oficial, "trabajo de campo" debe ser SÍ. Corregir contradicción lógica.
+  if (!ev.trabajoDeCampo && (ev.dosFuentesIndependientes || ev.documentoOficialIdentificado || ev.fuenteOficialIdentificada)) {
+    observaciones.push('Autoauditoría V7.1: existen fuentes/documento/fuente oficial pero trabajo de campo marcado como No; se corrige la inconsistencia lógica.');
+    ajustes.nivelEvidencia = reporte.nivelEvidencia.map(n =>
+      n.criterio === 'Trabajo de campo verificable' ? { ...n, detectado: 'Sí', puntaje: n.maximo } : n
+    );
   }
 
   // 4. Lenguaje prohibido o negativo
@@ -1575,19 +1621,50 @@ function autoauditarConstitucion(
   const alineada = (s: SugerenciaV7) => claves.some(k => s.texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(k));
   const alineadaTexto = (s: string) => claves.some(k => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(k));
 
-  const oportunidades = (ajustes.oportunidadesEditoriales || reporte.oportunidadesEditoriales).filter(alineada);
-  if (oportunidades.length < 2) {
-    observaciones.push('Autoauditoría V7: se reforzaron oportunidades editoriales para que coincidan con el tema.');
+  const origOportunidades = ajustes.oportunidadesEditoriales || reporte.oportunidadesEditoriales;
+  const origComoReferencia = ajustes.comoConvertirReferencia || reporte.comoConvertirReferencia;
+  const origNivel10 = ajustes.nivel10_oportunidades || reporte.nivel10_oportunidades;
+
+  const oportunidadesAlineadas = origOportunidades.filter(alineada);
+  const comoReferenciaAlineadas = origComoReferencia.filter(alineada);
+  const nivel10Alineadas = origNivel10.filter(alineada);
+  const nivel9Alineadas = reporte.nivel9_preguntasSinRespuesta.filter(alineadaTexto);
+
+  // REGLA 10: si el filtro por tema deja la lista casi vacía, conservar las sugerencias
+  // originales para no perder oportunidades editoriales.
+  ajustes.oportunidadesEditoriales = oportunidadesAlineadas.length >= 2 ? oportunidadesAlineadas.slice(0, 4) : origOportunidades.slice(0, 4);
+  ajustes.comoConvertirReferencia = comoReferenciaAlineadas.length >= 2 ? comoReferenciaAlineadas.slice(0, 4) : origComoReferencia.slice(0, 4);
+  ajustes.nivel10_oportunidades = nivel10Alineadas.length >= 2 ? nivel10Alineadas.slice(0, 4) : origNivel10.slice(0, 4);
+  ajustes.nivel9_preguntasSinRespuesta = nivel9Alineadas.length >= 2 ? nivel9Alineadas.slice(0, 4) : reporte.nivel9_preguntasSinRespuesta.slice(0, 4);
+  if (oportunidadesAlineadas.length < 2 || comoReferenciaAlineadas.length < 2 || nivel10Alineadas.length < 2) {
+    observaciones.push('Autoauditoría V7: se conservaron sugerencias originales porque pocas coincidían con el tema; evita dejar recomendaciones vacías.');
   }
 
-  const comoReferencia = (ajustes.comoConvertirReferencia || reporte.comoConvertirReferencia).filter(alineada);
-  const nivel10 = (ajustes.nivel10_oportunidades || reporte.nivel10_oportunidades).filter(alineada);
-  const nivel9 = reporte.nivel9_preguntasSinRespuesta.filter(alineadaTexto);
-
-  if (oportunidades.length < 2) ajustes.oportunidadesEditoriales = oportunidades.slice(0, 3);
-  if (comoReferencia.length < 2) ajustes.comoConvertirReferencia = comoReferencia.slice(0, 3);
-  if (nivel10.length < 2) ajustes.nivel10_oportunidades = nivel10.slice(0, 3);
-  if (nivel9.length < 2) ajustes.nivel9_preguntasSinRespuesta = nivel9.slice(0, 4);
+  // REGLA 9 / REGLA 10: si hay evidencia verificable, no debe quedar una
+  // explicación o veredicto que diga "no reúne evidencia suficiente".
+  const tieneEvidencia = ev.trabajoDeCampo || ev.fuenteOficialIdentificada || ev.documentoOficialIdentificado || ev.datoConcreto || ev.dosFuentesIndependientes;
+  if (tieneEvidencia) {
+    if (/no\s+re[uú]ne\s+evidencia\s+suficiente|falta\s+evidencia\s+p[uú]blica|no\s+hay\s+evidencia/i.test(reporte.porQueExiste)) {
+      observaciones.push('Autoauditoría V7 (REGLA 9): se detectó evidencia pero el texto decía "no reúne evidencia"; se corrige.');
+      ajustes.porQueExiste = 'Con la información pública disponible, la nota aporta evidencia verificable. Puede fortalecerse con más contexto o datos si están disponibles.';
+    }
+    if (/no\s+re[uú]ne\s+evidencia\s+suficiente|falta\s+evidencia\s+p[uú]blica/i.test(reporte.explicacionPortada)) {
+      observaciones.push('Autoauditoría V7 (REGLA 9): se detectó evidencia pero la decisión de portada decía "no reúne evidencia"; se corrige.');
+      ajustes.explicacionPortada = 'Publicable con la evidencia pública disponible; conviene seguir desarrollando contexto si surgen nuevos datos.';
+      if (ajustes.decisionPortada === 'No publicar') ajustes.decisionPortada = 'Publicar breve';
+    }
+    // Si el puntaje quedó bajo a pesar de la evidencia, ajustar hacia arriba
+    if (reporte.puntuacion < 65) {
+      observaciones.push('Autoauditoría V7 (REGLA 10): evidencia verificable presente pero puntuación baja; se corrige contradicción.');
+      const nuevaPuntuacion = Math.min(reporte.puntuacion + 15, 75);
+      ajustes.puntuacion = nuevaPuntuacion;
+      ajustes.veredicto = veredictoPorPuntuacion(nuevaPuntuacion);
+      if (ajustes.decisionPortada === 'No publicar' || reporte.decisionPortada === 'No publicar') {
+        ajustes.decisionPortada = 'Publicar breve';
+        ajustes.explicacionPortada = 'Publicable con la evidencia pública disponible; conviene seguir desarrollando contexto si surgen nuevos datos.';
+      }
+    }
+  }
 
   // 7. Verificar que cada sugerencia tenga todos los campos requeridos
   const sugerenciasFinales = [
@@ -2068,7 +2145,7 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
   return reporte;
 }
 
-function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
+export function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const textoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const palabraCount = textoPlano.split(/\s+/).filter(p => p.length > 0).length;
@@ -2129,11 +2206,23 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     criterios.forEach(c => { c.puntuacion = Math.round(c.puntuacion * factor); });
   }
 
-  // Veredicto escalado a 100 (capado por evidencia real para evitar alucinaciones)
+  // Veredicto escalado a 100. No se penaliza por falta de acceso institucional o
+  // trabajo de campo presencial. REGLA 6: trabajo de campo = evidencia verificable.
   let score100 = Math.round((puntuacionTotal / puntuacionMaxima) * 100);
-  if (tipoArticulo === 'Investigación' && !(evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo)) score100 = Math.min(score100, 60);
-  if (tipoArticulo === 'Reportaje' && !(evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado)) score100 = Math.min(score100, 65);
-  if (!tieneAtribucion && !evidencia.fuenteOficialIdentificada) score100 = Math.min(score100, 60);
+
+  // REGLA 9 / REGLA 10: si hay evidencia verificable sólida, el puntaje no debe
+  // colapsar por errores de clasificación o pesos desproporcionados.
+  const evidenciaFuerteVPR = evidencia.trabajoDeCampo || evidencia.fuenteOficialIdentificada || evidencia.documentoOficialIdentificado;
+  const evidenciaMedia = evidencia.datoConcreto || evidencia.dosFuentesIndependientes || evidencia.contextoLegal;
+  if (evidenciaFuerteVPR && evidencia.datoConcreto) {
+    score100 = Math.max(score100, 78);
+  } else if (evidenciaFuerteVPR || (evidencia.dosFuentesIndependientes && evidencia.datoConcreto)) {
+    score100 = Math.max(score100, 72);
+  } else if (evidenciaMedia && senales.tieneAtribucion) {
+    score100 = Math.max(score100, 65);
+  }
+
+  if (!evidencia.trabajoDeCampo && !evidencia.fuenteOficialIdentificada && !evidencia.datoConcreto) score100 = Math.min(score100, 60);
 
   // Detectores (se necesitan antes de las decisiones editoriales)
   const detectorNicaraguaInformate = generarDetectorNicaraguaInformate(senales);
@@ -2188,9 +2277,9 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     });
   };
 
-  const oportunidadesEditoriales = sinContradicciones(oportunidadesCrudas);
-  const comoConvertirReferencia = sinContradicciones(comoReferenciaCrudas);
-  const nivel10_oportunidades = sinContradicciones(nivel10Crudas);
+  const oportunidadesEditoriales = sinContradicciones(oportunidadesCrudas).length >= 2 ? sinContradicciones(oportunidadesCrudas) : oportunidadesCrudas;
+  const comoConvertirReferencia = sinContradicciones(comoReferenciaCrudas).length >= 2 ? sinContradicciones(comoReferenciaCrudas) : comoReferenciaCrudas;
+  const nivel10_oportunidades = sinContradicciones(nivel10Crudas).length >= 2 ? sinContradicciones(nivel10Crudas) : nivel10Crudas;
 
   // Detectores
   const { categoria: categoriaFacebook, razon: razonFacebook } = evaluarCategoriaFacebook(senales, textoLower);
@@ -2260,8 +2349,8 @@ function analizarValorPeriodisticoReal(n: NoticiaInput): ReporteEditorJefe {
     detectorGoogle,
     detectorEEATReal,
 
-    principioRector: 'El periodismo no se mide por la cantidad de información, sino por la calidad de la verificación, el contexto y la utilidad que ofrece al lector. Nunca penalices una nota por información que no existe oficialmente o que no puede obtenerse razonablemente al momento de su publicación.',
-    preguntaFinal: 'Si todos los medios publicaran exactamente el mismo hecho, ¿por qué un lector debería abrir esta versión?',
+    principioRector: 'Nicaragua Informate evalúa cada nota con la información pública disponible al cierre editorial. No se exige trabajo de campo presencial, entrevistas exclusivas ni acceso institucional como condición para publicar. El trabajo periodístico se considera suficiente cuando existe evidencia verificable: fuente oficial, medio nacional identificado, documento, video, fotografía o testimonio publicado por una fuente reconocible. La única pregunta que responde el Director Editorial es: "¿Con la información disponible, esta es la mejor nota que podemos producir?"',
+    preguntaFinal: '¿Con la información pública disponible, esta nota está bien construida y resulta útil para el lector de Nicaragua Informate?',
 
     nivel7_5_evidenciaAporte,
     nivel8_impactoLector,
@@ -2343,6 +2432,55 @@ function detectarEvidenciaAporte(textoPlano: string, aportePropio: boolean, evid
 // EDITOR JEFE IA — FUNCIONES AUXILIARES
 // ───────────────────────────────────────────────
 
+// REGLA 4: el Director Editorial solo puede recomendar acciones realizables por
+// la redacción de Nicaragua Informate. No exige entrevistas exclusivas, acceso a
+// hospitales, policía, bomberos, medicina legal, expedientes ni trabajo de campo presencial.
+const ACCIONES_PROHIBIDAS = /\b(entrevistar|entrevista\s+(?:a|con|al|a\s+la)|hablar\s+(?:con|del|de|al?\s+la?)|ir\s+(?:al?|a\s+la?)|visitar\s+(?:al?|a\s+la?)|solicitar\s+(?:expediente|copia|ficha|documento|informe)|consultar\s+(?:hospital|medicina\s+legal|fiscal|policia|bomberos|comisaria|juzgado|alcaldia)|esperar\s+(?:version|declaracion|informe)\s+(?:policial|oficial|institucional)|en\s+el\s+lugar|presencial|presencialmente|testimonio\s+directo|testigo\s+directo|acceso\s+(?:institucional|a\s+(?:la|el|los|las))|obtener\s+(?:copia|expediente|ficha|documento)|ir\s+a\s+preguntar|preguntar\s+(?:a|en|al))\b/i;
+
+function generarSugerenciaReemplazo(tema: string): SugerenciaV7 {
+  // REGLA 5: reemplazar sugerencia prohibida por una acción realizable.
+  const t = tema.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (t.includes('accidente')) {
+    return fabricarSugerencia('Comparar con datos públicos de accidentes similares y actualizar cuando haya nuevos boletines oficiales.', 'Contextualiza sin exigir acceso institucional.', '30-60 min', 'Baja', 'Mejora autoridad y permanencia.');
+  }
+  if (t.includes('salud')) {
+    return fabricarSugerencia('Comparar con datos históricos públicos de la enfermedad y actualizar con nuevos boletines oficiales.', 'Contexto epidemiológico verificable.', '30-60 min', 'Baja', 'Refuerza autoridad en salud.');
+  }
+  if (t.includes('femicidio') || t.includes('homicidio') || t.includes('robo')) {
+    return fabricarSugerencia('Construir cronología con datos públicos oficiales y actualizar con avances del proceso cuando sean públicos.', 'Documenta sin requerir acceso institucional.', '30-60 min', 'Baja', 'Mejora permanencia y factualidad.');
+  }
+  if (t.includes('incendio')) {
+    return fabricarSugerencia('Comparar con datos oficiales de incendios similares y actualizar con nuevos boletines públicos.', 'Contexto verificable.', '30-60 min', 'Baja', 'Refuerza autoridad editorial.');
+  }
+  if (t.includes('economia')) {
+    return fabricarSugerencia('Comparar con cifras históricas oficiales del mismo indicador y actualizar cuando se publiquen nuevos datos.', 'Contexto económico verificable.', '30-60 min', 'Baja', 'Refuerza autoridad en economía.');
+  }
+  if (t.includes('politica')) {
+    return fabricarSugerencia('Comparar con decisiones similares anteriores y actualizar con nuevas declaraciones oficiales públicas.', 'Contexto político verificable.', '30-60 min', 'Baja', 'Mejora autoridad editorial.');
+  }
+  if (t.includes('deportes')) {
+    return fabricarSugerencia('Comparar con resultados históricos del equipo y actualizar con resultados oficiales posteriores.', 'Contexto deportivo verificable.', '30-60 min', 'Baja', 'Refuerce autoridad deportiva.');
+  }
+  return fabricarSugerencia(
+    'Cuando existan nuevos datos públicos, actualizar la nota con cifras oficiales, declaraciones públicas o antecedentes.',
+    'Mantiene la pieza vigente sin exigir acceso exclusivo.',
+    '10-20 min',
+    'Baja',
+    'Mejora permanencia y autoridad editorial.'
+  );
+}
+
+function filtrarSugerenciasRealizables(lista: SugerenciaV7[], tema: string = 'general'): SugerenciaV7[] {
+  const reemplazo = generarSugerenciaReemplazo(tema);
+  return lista
+    .map(s => {
+      const t = s.texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!ACCIONES_PROHIBIDAS.test(t)) return s;
+      return reemplazo;
+    })
+    .filter((s, i, arr) => arr.findIndex(x => x.texto === s.texto) === i);
+}
+
 function generarSugerenciasV7(
   s: SenalesEditoriales,
   _tipoArticulo: TipoArticulo,
@@ -2361,54 +2499,58 @@ function generarSugerenciasV7(
   const e = s.evidencia;
   const sugerencia = fabricarSugerencia;
 
+  // REGLA 4 y REGLA 5: todas las sugerencias deben ser acciones realizables con
+  // información pública. No se incluyen entrevistas exclusivas, trabajo de campo
+  // presencial ni acceso institucional. Se prioriza: actualizar con datos públicos,
+  // agregar contexto, marco legal, antecedentes, cifras comparativas, cronología y utilidad.
   const banco: Record<string, { oportunidades: SugerenciaV7[]; comoReferencia: SugerenciaV7[]; nivel10: SugerenciaV7[]; nivel9: string[] }> = {
     general: {
       oportunidades: [
-        sugerencia('Identificar fuente oficial con nombre y cargo que respalde el dato central.', 'Eleva la credibilidad factual.', '10-20 min', 'Baja', 'Reduce riesgo de desmentido y mejora EEAT.'),
+        sugerencia('Citar con nombre y cargo la fuente oficial o medio que respalde el dato central.', 'Eleva la credibilidad factual.', '10-20 min', 'Baja', 'Reduce riesgo de desmentido y mejora EEAT.'),
         sugerencia('Incorporar dato concreto: fecha, hora, lugar, cifra o cantidad verificable.', 'Da precisión periodística.', '5-15 min', 'Baja', 'Mejora posicionamiento en búsquedas de datos.'),
         sugerencia('Explicitar la utilidad práctica: qué gana el lector con esta información.', 'Convierte la nota en servicio.', '10-20 min', 'Baja', 'Aumenta compartibilidad y tiempo de lectura.'),
-        sugerencia('Agregar contexto legal, institucional o histórico breve.', 'Sitúa el hecho en un marco.', '15-30 min', 'Media', 'Diferencia frente a medios que solo narran.'),
+        sugerencia('Agregar contexto legal, institucional o histórico breve con datos públicos.', 'Sitúa el hecho en un marco.', '15-30 min', 'Media', 'Diferencia frente a medios que solo narran.'),
       ],
       comoReferencia: [
-        sugerencia('Obtener y citar documento oficial o declaración institucional.', 'Convierte la pieza en referencia documentada.', '1-3 días', 'Alta', 'Autoridad a largo plazo y citas externas.'),
-        sugerencia('Entrevistar a protagonista, especialista o autoridad.', 'Aporta voz propia y originalidad.', '2-4 horas', 'Media', 'Diferenciación frente a competidores.'),
-        sugerencia('Construir una cronología o línea de tiempo verificable.', 'Organiza la información compleja.', '30-60 min', 'Media', 'Mejora comprensión y tráfico recurrente.'),
-        sugerencia('Comparar con cifras históricas o datos oficiales anteriores.', 'Amplía la relevancia.', '30-60 min', 'Media', 'Contextualiza y aporta análisis.'),
+        sugerencia('Citar documento oficial o declaración institucional pública disponible.', 'Convierte la pieza en referencia documentada.', '30-60 min', 'Media', 'Autoridad a largo plazo y citas externas.'),
+        sugerencia('Construir una cronología o línea de tiempo con fechas verificables.', 'Organiza la información compleja.', '30-60 min', 'Media', 'Mejora comprensión y tráfico recurrente.'),
+        sugerencia('Comparar con cifras históricas o datos oficiales anteriores del mismo fenómeno.', 'Amplía la relevancia.', '30-60 min', 'Media', 'Contextualiza y aporta análisis.'),
+        sugerencia('Actualizar la nota cuando aparezcan nuevos datos públicos oficiales.', 'Mantiene la pieza vigente.', '10-20 min', 'Baja', 'Refuerza autoridad editorial.'),
       ],
       nivel10: [
-        sugerencia('¿Es un patrón? Análisis de datos históricos del mismo fenómeno.', 'Referencia de datos públicos.', '2-3 días', 'Alta', 'Alto potencial de consulta recurrente.'),
+        sugerencia('¿Es un patrón? Análisis de datos históricos públicos del mismo fenómeno.', 'Referencia de datos públicos.', '2-3 días', 'Alta', 'Alto potencial de consulta recurrente.'),
         sugerencia('Guía práctica para el lector: pasos, medidas de protección o recomendaciones.', 'Contenido evergreen.', '1 día', 'Baja', 'Tráfico orgánico sostenido.'),
-        sugerencia('Entrevista con especialista o autoridad sobre el tema.', 'Pieza de fondo sostenida.', '3-5 días', 'Media', 'Autoridad editorial y engagement.'),
-        sugerencia('Mapa o comparativa regional del fenómeno.', 'Referencia visual y datos.', '2-4 días', 'Alta', 'Compartibilidad en redes y medios.'),
+        sugerencia('Comparativa regional del fenómeno con datos oficiales disponibles.', 'Referencia visual y datos.', '2-4 días', 'Alta', 'Compartibilidad en redes y medios.'),
+        sugerencia('Explicar causas y consecuencias a partir de información pública verificable.', 'Aporta análisis editorial.', '1-2 días', 'Media', 'Autoridad y engagement.'),
       ],
       nivel9: [
         '¿Qué datos aún faltan confirmar?',
-        '¿Cuál es la posición de la institución responsable?',
+        '¿Cuál es la posición pública de la institución responsable?',
         '¿Cómo afecta esto al lector de manera concreta?',
         '¿Qué pasos se siguen a partir de ahora?',
       ],
     },
     femicidio: {
       oportunidades: [
-        sugerencia('Identificar fuente oficial (Policía, Ministerio Público o juzgado) que confirme el hecho y su estado procesal.', 'Mueve la nota de "denuncia" a "caso verificado".', '10-20 min', 'Baja', 'Mayor confianza y menor riesgo de desmentido.'),
-        sugerencia('Incluir datos concretos: fecha, hora, lugar, edad y vínculo con el agresor si están confirmados.', 'Da precisión periodística.', '5-15 min', 'Baja', 'Mejora ranking factual y evita imprecisiones.'),
+        sugerencia('Citar fuente oficial (Policía, Ministerio Público o juzgado) que confirme el hecho y su estado procesal.', 'Mueve la nota de "denuncia" a "caso verificado".', '10-20 min', 'Baja', 'Mayor confianza y menor riesgo de desmentido.'),
+        sugerencia('Incluir datos concretos: fecha, hora, lugar, edad y vínculo con el agresor si están confirmados públicamente.', 'Da precisión periodística.', '5-15 min', 'Baja', 'Mejora ranking factual y evita imprecisiones.'),
         sugerencia('Agregar contexto sobre denuncias o medidas de protección previas si son públicas.', 'Explica señales de riesgo.', '15-30 min', 'Media', 'Aporta contexto social y legal relevante.'),
         sugerencia('Explicitar utilidad: líneas de denuncia, medidas de protección o marco legal.', 'Transforma la nota en servicio.', '10-20 min', 'Baja', 'Aumenta compartibilidad y utilidad pública.'),
       ],
       comoReferencia: [
-        sugerencia('Obtener copia de la denuncia o resolución judicial para citar documento oficial.', 'Pieza documentada.', '1-3 días', 'Alta', 'Referencia citada por otros medios.'),
-        sugerencia('Entrevistar a fiscal, defensora o especialista en violencia de género.', 'Da autoridad institucional.', '2-4 horas', 'Media', 'Refuerza EEAT y confianza lectora.'),
-        sugerencia('Construir cronología de denuncia, medidas y hechos.', 'Línea de tiempo verificable.', '30-60 min', 'Media', 'Mejora permanencia en búsqueda.'),
-        sugerencia('Comparar con cifras oficiales del mismo delito en el departamento o país.', 'Sitúa el caso en un patrón.', '30-60 min', 'Media', 'Contextualiza y amplía relevancia.'),
+        sugerencia('Citar resolución judicial o comunicado oficial público sobre el caso.', 'Pieza documentada.', '30-60 min', 'Media', 'Referencia citada por otros medios.'),
+        sugerencia('Construir cronología del hecho con datos públicos verificables.', 'Línea de tiempo verificable.', '30-60 min', 'Media', 'Mejora permanencia en búsqueda.'),
+        sugerencia('Comparar con cifras oficiales públicas del mismo delito en el departamento o país.', 'Sitúa el caso en un patrón.', '30-60 min', 'Media', 'Contextualiza y amplía relevancia.'),
+        sugerencia('Actualizar la nota con nuevos datos del proceso cuando sean públicos.', 'Mantiene vigencia.', '10-20 min', 'Baja', 'Refuerza autoridad editorial.'),
       ],
       nivel10: [
-        sugerencia('Mapa de femicidios por departamento y tendencia anual.', 'Referencia de datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
-        sugerencia('¿Funcionan las medidas de protección a víctimas de violencia de género?', 'Investigación de servicio público.', '1-2 semanas', 'Alta', 'Impacto social y autoridad editorial.'),
+        sugerencia('Mapa de femicidios por departamento con datos oficiales disponibles.', 'Referencia de datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
         sugerencia('Guía práctica: cómo denunciar violencia de género y pedir medidas de protección.', 'Contenido evergreen.', '1 día', 'Baja', 'Alto valor a largo plazo.'),
-        sugerencia('Cronología de un caso judicial emblemático y su tránsito por el sistema.', 'Pieza de fondo.', '3-5 días', 'Media', 'Tráfico orgánico recurrente.'),
+        sugerencia('Cronología de un caso judicial emblemático con información pública.', 'Pieza de fondo.', '3-5 días', 'Media', 'Tráfico orgánico recurrente.'),
+        sugerencia('Análisis del marco legal sobre violencia de género en Nicaragua.', 'Contexto legal.', '1-2 días', 'Media', 'Autoridad editorial.'),
       ],
       nivel9: [
-        '¿Existían denuncias previas de la víctima o familiares?',
+        '¿Existían denuncias previas públicas de la víctima o familiares?',
         '¿Había medidas de protección vigentes?',
         '¿La Policía Nacional confirmó antecedentes del agresor?',
         '¿Qué dice el marco legal sobre este tipo de caso?',
@@ -2417,25 +2559,25 @@ function generarSugerenciasV7(
     },
     accidente_transito: {
       oportunidades: [
-        sugerencia('Confirmar con fuente oficial (Policía de Tránsito, hospital o bomberos) el estado de las víctimas.', 'Dato verificado.', '10-20 min', 'Baja', 'Reduce rumores y desinformación.'),
+        sugerencia('Citar fuente oficial (Policía de Tránsito, hospital o bomberos) sobre el estado de las víctimas.', 'Dato verificado.', '10-20 min', 'Baja', 'Reduce rumores y desinformación.'),
         sugerencia('Incluir datos concretos: hora, ruta, vehículos involucrados y número de heridos.', 'Precisión periodística.', '5-15 min', 'Baja', 'Mejora factualidad.'),
-        sugerencia('Mencionar posibles factores: exceso de velocidad, condiciones de la vía o vehículo.', 'Contexto causal.', '10-20 min', 'Baja', 'Aporta comprensión del hecho.'),
+        sugerencia('Mencionar posibles factores públicamente conocidos: exceso de velocidad, condiciones de la vía o vehículo.', 'Contexto causal.', '10-20 min', 'Baja', 'Aporta comprensión del hecho.'),
         sugerencia('Agregar recomendación de seguridad vial o prevención para el lector.', 'Utilidad práctica.', '10-20 min', 'Baja', 'Aumenta valor de servicio.'),
       ],
       comoReferencia: [
-        sugerencia('Obtener parte oficial de tránsito o boletín de la Policía Nacional.', 'Documento verificable.', '1 día', 'Media', 'Referencia factual sólida.'),
-        sugerencia('Entrevistar a testigo, conductor o familiar de víctima.', 'Voz directa.', '1-2 horas', 'Baja', 'Diferenciación emocional y periodística.'),
-        sugerencia('Comparar con datos de accidentes en la misma ruta o periodo.', 'Contexto de patrón.', '1-2 días', 'Media', 'Amplía relevancia.'),
-        sugerencia('Fotografiar o describir el punto del accidente y señalización.', 'Evidencia de campo.', '30-60 min', 'Baja', 'Refuerza reporteo propio.'),
+        sugerencia('Citar parte oficial de tránsito o boletín público de la Policía Nacional.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia factual sólida.'),
+        sugerencia('Comparar con datos públicos de accidentes en la misma ruta o periodo.', 'Contexto de patrón.', '1-2 días', 'Media', 'Amplía relevancia.'),
+        sugerencia('Construir cronología del accidente con horas y lugares verificables.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Mejora comprensión.'),
+        sugerencia('Actualizar cuando haya nuevos datos oficiales sobre las víctimas.', 'Mantiene vigencia.', '10-20 min', 'Baja', 'Refuerza autoridad.'),
       ],
       nivel10: [
-        sugerencia('Las rutas con más accidentes viales en Nicaragua este año.', 'Referencia de datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
+        sugerencia('Rutas con más accidentes viales en Nicaragua según datos oficiales disponibles.', 'Referencia de datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
         sugerencia('¿Cómo influyen el exceso de velocidad y el alcohol en los accidentes?', 'Análisis de servicio.', '3-5 días', 'Alta', 'Impacto social.'),
         sugerencia('Guía de seguridad vial para conductores y motociclistas.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico sostenido.'),
-        sugerencia('Costo humano y económico de los accidentes de tránsito.', 'Pieza de fondo.', '3-5 días', 'Alta', 'Autoridad editorial.'),
+        sugerencia('Costo humano y económico de los accidentes de tránsito con cifras oficiales.', 'Pieza de fondo.', '3-5 días', 'Alta', 'Autoridad editorial.'),
       ],
       nivel9: [
-        '¿Cuál es el estado de salud de las víctimas?',
+        '¿Cuál es el estado de salud de las víctimas según datos públicos?',
         '¿Estaba involucrado exceso de velocidad, alcohol o distracción?',
         '¿En qué condiciones se encuentra la carretera o punto del accidente?',
         '¿Hubo antecedentes similares en el mismo lugar?',
@@ -2444,28 +2586,184 @@ function generarSugerenciasV7(
     },
     salud_publica: {
       oportunidades: [
-        sugerencia('Confirmar datos con MINSA u otra fuente oficial de salud.', 'Dato verificado.', '10-20 min', 'Baja', 'Evita alarmismo.'),
-        sugerencia('Incluir cifras: casos confirmados, zonas afectadas y medidas.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
-        sugerencia('Agregar contexto epidemiológico o histórico.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
-        sugerencia('Explicitar medidas de prevención o dónde acudir.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+        sugerencia('Citar datos públicos de MINSA u otra fuente oficial de salud.', 'Dato verificado.', '10-20 min', 'Baja', 'Evita alarmismo.'),
+        sugerencia('Incluir cifras oficiales: casos confirmados, zonas afectadas y medidas.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto epidemiológico o histórico con datos públicos.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar medidas de prevención o dónde acudir según información oficial.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
       ],
       comoReferencia: [
-        sugerencia('Obtener boletín oficial del Ministerio de Salud.', 'Documento verificable.', '1 día', 'Baja', 'Referencia.'),
-        sugerencia('Entrevistar a médico, epidemiólogo o vocero de salud.', 'Autoridad.', '1-2 horas', 'Baja', 'EEAT.'),
-        sugerencia('Comparar con datos históricos de la misma enfermedad.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
-        sugerencia('Elaborar guía de síntomas y prevención.', 'Evergreen.', '1 día', 'Baja', 'Valor sostenido.'),
+        sugerencia('Citar boletín oficial público del Ministerio de Salud.', 'Documento verificable.', '30-60 min', 'Baja', 'Referencia.'),
+        sugerencia('Comparar con datos históricos públicos de la misma enfermedad.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Elaborar guía de síntomas y prevención con recomendaciones oficiales.', 'Evergreen.', '1 día', 'Baja', 'Valor sostenido.'),
+        sugerencia('Actualizar la nota con nuevos boletines oficiales.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
       ],
       nivel10: [
-        sugerencia('Mapa de casos por departamento o municipio.', 'Datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
+        sugerencia('Mapa de casos por departamento o municipio con datos oficiales.', 'Datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
         sugerencia('¿Por qué repuntan las enfermedades vectoriales?', 'Análisis.', '3-5 días', 'Alta', 'Impacto.'),
-        sugerencia('Guía completa de prevención y tratamiento.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
-        sugerencia('Entrevista con especialista sobre desafíos del sistema de salud.', 'Fondo.', '2-4 días', 'Media', 'Autoridad.'),
+        sugerencia('Guía completa de prevención y tratamiento con fuentes oficiales.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Análisis de los desafíos del sistema de salud con datos públicos.', 'Fondo.', '2-4 días', 'Media', 'Autoridad.'),
       ],
       nivel9: [
         '¿En qué regiones o municipios se concentra el problema?',
-        '¿Qué acciones está tomando el Ministerio de Salud?',
+        '¿Qué acciones públicas está tomando el Ministerio de Salud?',
         '¿Qué debe hacer la población para protegerse?',
-        '¿Dónde se puede acceder al tratamiento o vacuna?',
+        '¿Dónde se puede acceder al tratamiento o vacuna según datos oficiales?',
+      ],
+    },
+    incendio: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial (Bomberos, Policía o Alcaldía) sobre el incendio y afectados.', 'Dato verificado.', '10-20 min', 'Baja', 'Reduce especulación.'),
+        sugerencia('Incluir datos concretos: hora, lugar, estructura afectada y personas involucradas.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto sobre causas conocidas o factores de riesgo públicos.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar medidas de prevención o números de emergencia.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Citar boletín oficial de Bomberos o institución competente.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia.'),
+        sugerencia('Comparar con datos oficiales de incendios similares en la zona.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Construir cronología del incidente con horas verificables.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Comprensión.'),
+        sugerencia('Actualizar con nuevos datos oficiales sobre daños o afectados.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+      ],
+      nivel10: [
+        sugerencia('Mapa de incendios por departamento con datos oficiales.', 'Datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
+        sugerencia('Guía de prevención de incendios en viviendas y comercios.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Causas más comunes de incendios en Nicaragua según datos oficiales.', 'Análisis.', '3-5 días', 'Alta', 'Impacto.'),
+        sugerencia('Costo económico de los incendios con cifras públicas.', 'Fondo.', '3-5 días', 'Alta', 'Autoridad.'),
+      ],
+      nivel9: [
+        '¿Cuántas personas resultaron afectadas o evacuadas?',
+        '¿Cuál fue la causa inicial del incendio?',
+        '¿Qué daños materiales se reportan?',
+        '¿Qué medidas de prevención aplican en este caso?',
+      ],
+    },
+    robo: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial (Policía o Fiscalía) sobre el hecho y estado de la investigación.', 'Dato verificado.', '10-20 min', 'Baja', 'Reduce rumores.'),
+        sugerencia('Incluir datos concretos: fecha, hora, lugar, objetos sustraídos y valor si es público.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto sobre patrones de robos en la zona con datos públicos.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar recomendaciones de seguridad o canales de denuncia.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Citar informe policial o comunicado oficial público.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia.'),
+        sugerencia('Comparar con estadísticas oficiales de robos en el mismo periodo.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Construir cronología del hecho con datos verificables.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Comprensión.'),
+        sugerencia('Actualizar con avances oficiales de la investigación.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+      ],
+      nivel10: [
+        sugerencia('Mapa de robos por departamento con datos oficiales disponibles.', 'Datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
+        sugerencia('Guía práctica de prevención de robos para hogares y comercios.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Análisis de factores asociados a robos según datos públicos.', 'Análisis.', '3-5 días', 'Alta', 'Impacto.'),
+        sugerencia('¿Qué hacer si fuiste víctima de robo? Pasos y canales de denuncia.', 'Servicio.', '1 día', 'Baja', 'Utilidad pública.'),
+      ],
+      nivel9: [
+        '¿Qué objetos o valores fueron sustraídos?',
+        '¿Hay detenidos o investigados?',
+        '¿Existen antecedentes similares en la zona?',
+        '¿Qué medidas de prevención recomiendan las autoridades?',
+      ],
+    },
+    homicidio: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial (Policía, Fiscalía o juzgado) sobre el hecho y la investigación.', 'Dato verificado.', '10-20 min', 'Baja', 'Reduce especulación.'),
+        sugerencia('Incluir datos concretos: fecha, hora, lugar, arma o motivo si son públicos.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto sobre homicidios en la zona con cifras oficiales.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar marco legal o etapa procesal según información pública.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Citar informe oficial o comunicado institucional público.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia.'),
+        sugerencia('Comparar con estadísticas oficiales de homicidios en el departamento o país.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Construir cronología del hecho con datos verificables.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Comprensión.'),
+        sugerencia('Actualizar con avances oficiales cuando sean públicos.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+      ],
+      nivel10: [
+        sugerencia('Mapa de homicidios por departamento con datos oficiales.', 'Datos.', '2-3 días', 'Alta', 'Consulta recurrente.'),
+        sugerencia('Análisis de causas y tendencias de homicidios según datos públicos.', 'Análisis.', '3-5 días', 'Alta', 'Impacto.'),
+        sugerencia('Marco legal sobre homicidio en Nicaragua.', 'Contexto legal.', '1-2 días', 'Media', 'Autoridad.'),
+        sugerencia('Cronología de casos judiciales emblemáticos con información pública.', 'Fondo.', '3-5 días', 'Media', 'Tráfico recurrente.'),
+      ],
+      nivel9: [
+        '¿Cuál es el estado de la investigación oficial?',
+        '¿Hay detenidos o imputados identificados?',
+        '¿Cuál fue el móvil del hecho?',
+        '¿Existen antecedentes similares en la zona?',
+      ],
+    },
+    politica: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial o declaración pública que respalde el dato central.', 'Credibilidad.', '10-20 min', 'Baja', 'Reduce riesgo de desmentido.'),
+        sugerencia('Incluir datos concretos: fecha, nombres, instituciones y cifras si son públicos.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto histórico o marco legal relevante.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar impacto de la decisión política en el lector.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Citar decreto, ley o comunicado oficial público.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia.'),
+        sugerencia('Comparar con decisiones políticas similares anteriores.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Construir cronología de los hechos con fechas verificables.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Comprensión.'),
+        sugerencia('Actualizar con nuevas declaraciones oficiales.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+      ],
+      nivel10: [
+        sugerencia('Análisis del impacto de la medida con datos oficiales.', 'Análisis.', '2-4 días', 'Alta', 'Autoridad.'),
+        sugerencia('Guía práctica sobre trámites o derechos afectados.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Comparativa con otras experiencias regionales públicas.', 'Contexto.', '2-3 días', 'Alta', 'Compartibilidad.'),
+        sugerencia('Cronología completa del proceso político.', 'Fondo.', '2-4 días', 'Media', 'Tráfico recurrente.'),
+      ],
+      nivel9: [
+        '¿Qué institución tomó la decisión?',
+        '¿Cuándo entra en vigencia la medida?',
+        '¿Cómo afecta a la población?',
+        '¿Qué dice la oposición u otros actores políticos públicamente?',
+      ],
+    },
+    economia: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial (Banco Central, institución o comunicado) para el dato económico.', 'Credibilidad.', '10-20 min', 'Baja', 'Reduce riesgo de desmentido.'),
+        sugerencia('Incluir cifras concretas: precios, tasas, montos o porcentajes.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto histórico o tendencia del indicador.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar utilidad práctica para el lector.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Citar informe oficial o comunicado institucional público.', 'Documento verificable.', '30-60 min', 'Media', 'Referencia.'),
+        sugerencia('Comparar con cifras históricas del mismo indicador.', 'Contexto.', '1-2 días', 'Media', 'Relevancia.'),
+        sugerencia('Construir gráfica o tabla explicativa con datos públicos.', 'Visual.', '1-2 días', 'Media', 'Comprensión.'),
+        sugerencia('Actualizar cuando se publiquen nuevos datos oficiales.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+      ],
+      nivel10: [
+        sugerencia('Análisis de tendencia del indicador con datos oficiales.', 'Análisis.', '2-4 días', 'Alta', 'Autoridad.'),
+        sugerencia('Guía práctica: cómo afecta el cambio a la economía familiar.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Comparativa regional del mismo indicador.', 'Contexto.', '2-3 días', 'Alta', 'Compartibilidad.'),
+        sugerencia('Cronología de decisiones económicas recientes.', 'Fondo.', '2-4 días', 'Media', 'Tráfico recurrente.'),
+      ],
+      nivel9: [
+        '¿Cuál es la cifra oficial exacta?',
+        '¿Cómo se compara con el periodo anterior?',
+        '¿Qué institución publicó el dato?',
+        '¿Cómo impacta en los precios o salarios?',
+      ],
+    },
+    deportes: {
+      oportunidades: [
+        sugerencia('Citar fuente oficial o medio reconocido sobre el resultado o declaración.', 'Credibilidad.', '10-20 min', 'Baja', 'Reduce errores.'),
+        sugerencia('Incluir datos concretos: marcador, fecha, lugar, jugadores o equipos.', 'Precisión.', '5-15 min', 'Baja', 'Factualidad.'),
+        sugerencia('Agregar contexto sobre torneo, clasificación o antecedentes del equipo.', 'Contexto.', '15-30 min', 'Media', 'Comprensión.'),
+        sugerencia('Explicitar utilidad para el aficionado.', 'Utilidad.', '10-20 min', 'Baja', 'Valor público.'),
+      ],
+      comoReferencia: [
+        sugerencia('Comparar con resultados históricos del equipo o jugador.', 'Contexto.', '30-60 min', 'Media', 'Relevancia.'),
+        sugerencia('Construir cronología del torneo o serie.', 'Línea de tiempo.', '30-60 min', 'Baja', 'Comprensión.'),
+        sugerencia('Actualizar con resultados o declaraciones oficiales posteriores.', 'Vigencia.', '10-20 min', 'Baja', 'Autoridad.'),
+        sugerencia('Agregar estadísticas oficiales del torneo.', 'Datos.', '30-60 min', 'Baja', 'Referencia.'),
+      ],
+      nivel10: [
+        sugerencia('Análisis de rendimiento del equipo con estadísticas oficiales.', 'Análisis.', '2-4 días', 'Alta', 'Autoridad.'),
+        sugerencia('Guía de calendario y próximos partidos.', 'Evergreen.', '1 día', 'Baja', 'Valor práctico.'),
+        sugerencia('Comparativa histórica del equipo en el torneo.', 'Contexto.', '2-3 días', 'Alta', 'Compartibilidad.'),
+        sugerencia('Cronología de momentos clave de la temporada.', 'Fondo.', '2-4 días', 'Media', 'Tráfico recurrente.'),
+      ],
+      nivel9: [
+        '¿Cuál fue el marcador o resultado final?',
+        '¿Quiénes fueron las figuras del partido?',
+        '¿Cómo queda la clasificación?',
+        '¿Cuándo es el próximo encuentro?',
       ],
     },
   };
@@ -2497,13 +2795,16 @@ function generarSugerenciasV7(
     : nivel9).slice(0, 4);
 
   const preguntaSinResponder = nivel9_preguntasSinRespuesta[0] || 'Oportunidad editorial: explicar por qué ocurrió y cuál es el impacto real, en la medida en que la información esté disponible.';
-  const investigacionAdicional = oportunidadesEditoriales[0]?.texto || 'Oportunidad editorial: cuando estén disponibles, incorporar documentos oficiales, estadísticas históricas, declaraciones institucionales o testimonios directos.';
-  const datoEnriquecedor = oportunidadesEditoriales[1]?.texto || 'Oportunidad editorial: cuando existan, agregar antecedentes recientes, estadísticas comparativas o el marco legal relevante.';
+  const oportunidadesRealistas = filtrarSugerenciasRealizables(oportunidadesEditoriales, tema);
+  const comoReferenciaRealistas = filtrarSugerenciasRealizables(comoConvertirReferencia, tema);
+  const nivel10Realistas = filtrarSugerenciasRealizables(nivel10_oportunidades, tema);
+  const investigacionAdicional = oportunidadesRealistas[0]?.texto || 'Oportunidad editorial: cuando existan nuevos datos públicos, actualizar con cifras, declaraciones oficiales o antecedentes.';
+  const datoEnriquecedor = oportunidadesRealistas[1]?.texto || 'Oportunidad editorial: cuando existan, agregar antecedentes recientes, estadísticas comparativas o el marco legal relevante.';
 
   return {
-    oportunidadesEditoriales,
-    comoConvertirReferencia,
-    nivel10_oportunidades,
+    oportunidadesEditoriales: oportunidadesRealistas,
+    comoConvertirReferencia: comoReferenciaRealistas,
+    nivel10_oportunidades: nivel10Realistas,
     nivel9_preguntasSinRespuesta,
     preguntaSinResponder,
     investigacionAdicional,
@@ -2513,24 +2814,25 @@ function generarSugerenciasV7(
 
 function generarDetectorNicaraguaInformate(s: SenalesEditoriales): string {
   const acciones: string[] = [];
-  if (s.evidencia.trabajoDeCampo) acciones.push('verificó en el lugar (trabajo de campo)');
+  // REGLA 6: trabajo de campo = evidencia verificable (oficial, documento, medios, datos).
+  if (s.evidencia.trabajoDeCampo) acciones.push('sustenta el hecho con evidencia verificable');
   if (s.evidencia.dosFuentesIndependientes) acciones.push('contrastó fuentes independientes');
   if (s.evidencia.documentoOficialIdentificado) acciones.push('consultó un documento o dato oficial');
   if (s.evidencia.fuenteOficialIdentificada) acciones.push('citó una fuente oficial identificable');
   if (s.evidencia.datoConcreto) acciones.push('aportó datos concretos');
 
-  if (acciones.length === 0) return 'No se detecta en el texto un aporte verificable de Nicaragua Informate (confirmó, consultó, verificó u obtuvo). No se asume que no existió; solo no es demostrable aquí.';
+  if (acciones.length === 0) return 'No se detecta en el texto un aporte verificable de Nicaragua Informate con la información disponible. No se asume que no existió; solo no es demostrable aquí.';
   if (acciones.length === 1) return `Nicaragua Informate ${acciones[0]}.`;
   return `Nicaragua Informate ${acciones.slice(0, -1).join(', ')} y ${acciones[acciones.length - 1]}.`;
 }
 
 function generarFactibilidad(s: SenalesEditoriales, tipoArticulo: TipoArticulo): string {
   const { evidencia } = s;
-  if (tipoArticulo === 'Reportaje' && !(evidencia.trabajoDeCampo || evidencia.documentoOficialIdentificado)) {
-    return 'Para consolidarse como reportaje requeriría entrevistas, documentos o evidencia de campo; no se castiga la ausencia si no existe todavía.';
+  if (tipoArticulo === 'Reportaje' && !evidencia.trabajoDeCampo) {
+    return 'El reportaje puede publicarse con evidencia verificable disponible; no se requiere trabajo de campo presencial.';
   }
-  if (tipoArticulo === 'Investigación' && !(evidencia.dosFuentesIndependientes || evidencia.trabajoDeCampo)) {
-    return 'Para ser una investigación requeriría fuentes múltiples, documentos y verificación; si no están disponibles, puede titularse como Noticia o Explicador.';
+  if (tipoArticulo === 'Investigación' && !evidencia.trabajoDeCampo) {
+    return 'La investigación se fundamenta con la evidencia pública disponible; no se exige acceso exclusivo ni campo presencial.';
   }
   return 'Las sugerencias son factibles y se ajustan al tiempo y tipo de cobertura.';
 }
@@ -2541,9 +2843,9 @@ function generarTiempoReferencia(tipoArticulo: TipoArticulo, score100: number): 
     return score100 < 60 ? 'Actualización inmediata: confirmar fuente, consecuencias y contexto básico.' : 'Actualización corta: completar causas, consecuencias y contexto.';
   }
   if (tipoArticulo === 'Explicador' || tipoArticulo === 'Servicio') return 'Actualización corta: profundizar ejemplos, datos y utilidad práctica.';
-  if (tipoArticulo === 'Reportaje') return 'Tiempo de reporteo: entrevistas, documentos, análisis y edición.';
-  if (tipoArticulo === 'Investigación') return 'Tiempo de investigación: recopilar evidencia, contrastar fuentes y verificar.';
-  if (tipoArticulo === 'Entrevista') return 'Tiempo de entrevista: contactar fuente, preparar preguntas y verificar citas.';
+  if (tipoArticulo === 'Reportaje') return 'Tiempo de desarrollo: consolidar evidencia verificable, contexto y análisis.';
+  if (tipoArticulo === 'Investigación') return 'Tiempo de desarrollo: recopilar evidencia pública, contrastar fuentes y estructurar hallazgo.';
+  if (tipoArticulo === 'Entrevista') return 'Tiempo de desarrollo: estructurar preguntas, citar correctamente y contextualizar a la fuente.';
   if (tipoArticulo === 'Análisis') return 'Tiempo de análisis: recopilar datos, contrastar posturas y estructurar argumento.';
   if (tipoArticulo === 'Opinión') return 'Tiempo de opinión: fundamentar argumento con datos y contexto.';
   return 'Tiempo de desarrollo editorial: dependerá del acceso a fuentes y documentos.';
@@ -2611,22 +2913,22 @@ function evaluarRazonamientoReferencia(s: SenalesEditoriales): { siNo: 'Sí' | '
   if (s.scoreContexto > 2) presentes.push('antecedentes o comparación');
 
   const faltantes: string[] = [];
-  if (!ev.fuenteOficialIdentificada && !s.tieneAtribucion) faltantes.push('declaración de una autoridad identificada');
-  if (!ev.datoConcreto) faltantes.push('cifras, fecha o lugar exactos');
-  if (!ev.trabajoDeCampo) faltantes.push('trabajo de campo que confirme el hecho');
-  if (!ev.dosFuentesIndependientes) faltantes.push('segunda fuente independiente');
-  if (!ev.documentoOficialIdentificado) faltantes.push('documento oficial citado');
-  if (s.scoreAnalisis <= 2) faltantes.push('explicación de por qué este hecho afecta al lector hoy');
-  if (s.scoreUtilidad <= 1) faltantes.push('información útil que el lector pueda usar');
-  if (s.scoreContexto <= 2) faltantes.push('antecedentes o comparación con casos similares');
+  // REGLA 4: solo sugerencias realizables. No se exige entrevista, acceso institucional ni campo presencial.
+  if (!ev.fuenteOficialIdentificada && !s.tieneAtribucion) faltantes.push('citar fuente oficial o medio identificado disponible');
+  if (!ev.datoConcreto) faltantes.push('agregar fecha, cifra o lugar exacto si está disponible públicamente');
+  if (!ev.dosFuentesIndependientes && ev.fuenteOficialIdentificada) faltantes.push('buscar segunda referencia pública del mismo hecho');
+  if (!ev.documentoOficialIdentificado && ev.fuenteOficialIdentificada) faltantes.push('citar documento oficial disponible si existe');
+  if (s.scoreAnalisis <= 2) faltantes.push('explicar por qué este hecho afecta al lector hoy');
+  if (s.scoreUtilidad <= 1) faltantes.push('agregar información útil que el lector pueda usar');
+  if (s.scoreContexto <= 2) faltantes.push('agregar antecedentes o comparación con casos similares');
 
   if (presentes.length >= 2) {
-    return { siNo: 'Sí', razon: `Sí hay razón objetiva: Nicaragua Informate aporta ${presentes.slice(0, -1).join(', ')} y ${presentes[presentes.length - 1]}.`, faltantes: [] };
+    return { siNo: 'Sí', razon: `Sí hay razón objetiva: Nicaragua Informate aporta ${presentes.slice(0, -1).join(', ')} y ${presentes[presentes.length - 1]}.`, faltantes };
   }
   if (presentes.length === 1) {
-    return { siNo: 'No', razon: `Tiene una señal (${presentes[0]}), pero no es suficiente frente a TN8, La Prensa o Canal 10. Hace falta producir: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
+    return { siNo: 'No', razon: `Tiene una señal (${presentes[0]}), pero aún puede fortalecerse con: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
   }
-  return { siNo: 'No', razon: `No existe razón objetiva demostrable en el texto: si todos los medios publican lo mismo, Nicaragua Informate no aporta ventaja clara. Hace falta producir: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
+  return { siNo: 'No', razon: `No existe razón objetiva demostrable en el texto: con la información disponible, Nicaragua Informate no aporta aún una ventaja clara frente a TN8, La Prensa o Canal 10. Oportunidades: ${faltantes.slice(0, 3).join(', ')}.`, faltantes };
 }
 
 // generarPreguntasSinRespuesta ha sido reemplazado por generarSugerenciasV7 en Constitución V7.0.
@@ -2738,9 +3040,10 @@ function evaluarDecisionPortada(
   razonReferenciaSiNo: 'Sí' | 'No'
 ): { decision: ReporteEditorJefe['decisionPortada']; explicacion: string } {
   const ev = s.evidencia;
-  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado;
+  const evidenciaFuerte = ev.trabajoDeCampo || ev.dosFuentesIndependientes || ev.documentoOficialIdentificado || ev.fuenteOficialIdentificada;
+  const tieneEvidencia = evidenciaFuerte || ev.datoConcreto;
   if (score100 >= 95 && evidenciaFuerte) {
-    return { decision: 'Cobertura especial', explicacion: 'Nota de referencia con evidencia propia: merece cobertura especial y promoción destacada.' };
+    return { decision: 'Cobertura especial', explicacion: 'Nota de referencia con evidencia verificable: merece cobertura especial y promoción destacada.' };
   }
   if (score100 >= 90 && razonReferenciaSiNo === 'Sí') {
     return { decision: 'Portada', explicacion: 'Nota competitiva con razón objetiva para leer a Nicaragua Informate.' };
@@ -2754,7 +3057,11 @@ function evaluarDecisionPortada(
   if (score100 >= 60) {
     return { decision: 'Publicar breve', explicacion: 'Necesita desarrollo, pero puede publicarse como breve mientras se completa.' };
   }
-  return { decision: 'No publicar', explicacion: 'No reúne evidencia suficiente para ocupar espacio editorial; requiere reporteo adicional.' };
+  // REGLA 9: si existe evidencia verificable, nunca decir "no reúne evidencia suficiente".
+  if (tieneEvidencia) {
+    return { decision: 'Publicar breve', explicacion: 'Con evidencia pública verificable disponible, puede publicarse como breve; conviene fortalecer contexto si surgen más datos.' };
+  }
+  return { decision: 'No publicar', explicacion: 'No reúne evidencia pública verificable suficiente para ocupar espacio editorial; conviene esperar más datos oficiales o medios identificados.' };
 }
 
 function evaluarCategoriaFacebook(
