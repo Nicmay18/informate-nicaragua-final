@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, User, BookOpen, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -17,6 +17,7 @@ const INTERVAL_MS = 6000;
 export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   const total = heroNoticias.length;
   const current = total > 0 ? heroNoticias[active] : null;
@@ -37,6 +38,21 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
     return () => clearInterval(timer);
   }, [total, isPaused, nextSlide]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.changedTouches[0].screenX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].screenX;
+    const threshold = 50;
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+    touchStartX.current = null;
+  };
+
   if (!current) return null;
 
   const readTime = tiempoLectura(current.contenido || current.resumen || '');
@@ -45,58 +61,47 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
 
   return (
     <section
-      className="hero-principal"
+      className="hero-carousel"
       aria-label="Noticia principal"
       data-reveal
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      <div className="hero-inner">
-        {/* Imagen de fondo con transición */}
-        <div className="hero-bg">
-          {heroNoticias.map((n, i) => (
-            <div
-              key={n.id}
-              className={`hero-bg-slide ${i === active ? 'is-active' : ''}`}
-              aria-hidden={i !== active}
-            >
-              <Image
-                src={n.imagen || '/logo.webp'}
-                alt={n.titulo}
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className="hero-bg-img"
-              />
-            </div>
-          ))}
+      {heroNoticias.map((n, i) => (
+        <div
+          key={n.id}
+          className={`hero-slide ${i === active ? 'active' : ''}`}
+          aria-hidden={i !== active}
+        >
+          <div className="hero-image-wrapper">
+            <Image
+              src={n.imagen || '/logo.webp'}
+              alt={n.titulo}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="hero-bg"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
           <div className="hero-overlay" />
-        </div>
 
-        {/* Contenido principal */}
-        <div className="hero-content-wrap">
           <div className="hero-content">
-            {/* Tag categoría */}
             <span
-              className="hero-category-tag"
+              className="hero-tag"
               style={{ backgroundColor: catColor }}
             >
               {current.categoria?.toUpperCase()}
             </span>
 
-            {/* Título */}
             <h1 className="hero-title">
-              <Link href={`/noticias/${current.slug}`}>
-                <span className="hero-title-text">{current.titulo}</span>
-              </Link>
+              <Link href={`/noticias/${current.slug}`}>{current.titulo}</Link>
             </h1>
 
-            {/* Resumen */}
-            {current.resumen && (
-              <p className="hero-lead">{current.resumen}</p>
-            )}
+            {current.resumen && <p className="hero-excerpt">{current.resumen}</p>}
 
-            {/* Meta */}
             <div className="hero-meta">
               {current.autor && (
                 <span className="hero-meta-item">
@@ -114,49 +119,50 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
               </span>
             </div>
 
-            {/* CTA */}
             <Link
               href={`/noticias/${current.slug}`}
-              className="hero-cta"
+              className="hero-btn"
             >
               Leer completo
               <ArrowRight size={16} />
             </Link>
 
-            {/* Indicadores de slide */}
             {total > 1 && (
-              <div className="hero-indicators" role="tablist" aria-label="Noticias principales">
-                <button
-                  className="hero-nav hero-nav--prev"
-                  onClick={prevSlide}
-                  aria-label="Noticia anterior"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                {heroNoticias.map((n, i) => (
+              <div className="hero-dots" role="tablist" aria-label="Noticias principales">
+                {heroNoticias.map((n2, j) => (
                   <button
-                    key={n.id}
-                    className={`hero-dot ${i === active ? 'is-active' : ''}`}
-                    onClick={() => setActive(i)}
+                    key={n2.id}
+                    className={`hero-dot ${j === active ? 'active' : ''}`}
+                    onClick={() => setActive(j)}
                     role="tab"
-                    aria-selected={i === active}
-                    aria-label={`Noticia ${i + 1}: ${n.titulo}`}
-                  >
-                    <span className="hero-dot-progress" />
-                  </button>
+                    aria-selected={j === active}
+                    aria-label={`Noticia ${j + 1}: ${n2.titulo}`}
+                  />
                 ))}
-                <button
-                  className="hero-nav hero-nav--next"
-                  onClick={nextSlide}
-                  aria-label="Siguiente noticia"
-                >
-                  <ChevronRight size={20} />
-                </button>
               </div>
             )}
           </div>
         </div>
-      </div>
+      ))}
+
+      {total > 1 && (
+        <>
+          <button
+            className="hero-nav hero-prev"
+            onClick={prevSlide}
+            aria-label="Noticia anterior"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            className="hero-nav hero-next"
+            onClick={nextSlide}
+            aria-label="Siguiente noticia"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </>
+      )}
     </section>
   );
 }
