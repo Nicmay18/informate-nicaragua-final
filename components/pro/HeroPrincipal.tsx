@@ -87,7 +87,7 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
             {/* Título */}
             <h1 className="hero-title">
               <Link href={`/noticias/${current.slug}`}>
-                {current.titulo}
+                <span className="hero-title-text">{current.titulo}</span>
               </Link>
             </h1>
 

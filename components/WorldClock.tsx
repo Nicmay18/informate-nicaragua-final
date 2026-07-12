@@ -7,10 +7,6 @@ const CITIES = [
   { country: 'Ciudad de México', code: 'MX', flag: '🇲🇽', tz: 'America/Mexico_City' },
   { country: 'Miami', code: 'US', flag: '🇺🇸', tz: 'America/New_York' },
   { country: 'Madrid', code: 'ES', flag: '🇪🇸', tz: 'Europe/Madrid' },
-  { country: 'Moscú', code: 'RU', flag: '🇷🇺', tz: 'Europe/Moscow' },
-  { country: 'Beijing', code: 'CN', flag: '🇨🇳', tz: 'Asia/Shanghai' },
-  { country: 'Buenos Aires', code: 'AR', flag: '🇦🇷', tz: 'America/Argentina/Buenos_Aires' },
-  { country: 'Bogotá', code: 'CO', flag: '🇨🇴', tz: 'America/Bogota' },
 ];
 
 function getTime(tz: string) {

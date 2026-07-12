@@ -4,7 +4,6 @@ import { useEffect, useMemo } from 'react';
 import type { Noticia } from '@/lib/types';
 import HeroPrincipal from './pro/HeroPrincipal';
 import TickerUltimaHora from './pro/TickerUltimaHora';
-import BarraUltimaHora from './pro/BarraUltimaHora';
 import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
 import SidebarPro from './pro/SidebarPro';
@@ -178,7 +177,7 @@ function esTransito(n: Noticia): boolean {
 
 /**
  * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
- * Orden jerárquico: Hero > Última Hora > Destacados > Secciones temáticas
+ * Jerarquía: Hero > Lo Destacado > Secciones temáticas > Más leídas.
  */
 function distribuirNoticias(noticias: Noticia[]) {
   const usados = new Set<string>();
@@ -195,66 +194,54 @@ function distribuirNoticias(noticias: Noticia[]) {
     return resultado;
   };
 
-  const porCategoria = (cat: string) => noticias.filter(n => n.categoria === cat && !usados.has(n.id));
+  const disponibles = () => noticias.filter(n => !usados.has(n.id));
+  const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
 
-  // 1. Hero Principal: hasta 3 noticias con imagen (rotan cada 6s)
+  // 1. Hero Principal: máximo 3 noticias con imagen
   const conImagen = noticias.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
   const heroNoticias = take(conImagen.length > 0 ? conImagen : noticias, 3);
 
-  // 2. Última Hora: 4 titulares exclusivos (nunca en Hero)
-  const ultimaHora = take(noticias, 4);
+  // 2. Última Hora: máximo 3 titulares exclusivos
+  const ultimaHora = take(disponibles(), 3);
 
-  // 3. Destacados: 4 noticias (1 Nacional, 1 Internacional, 1 Deportes, 1 Suceso no tránsito)
+  // 3. Lo Destacado: 4 noticias (1 Nacional, 1 Internacional, 1 Deportes, 1 Suceso no tránsito)
   const destacados = [
     ...take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
     ...take(porCategoria('Internacionales').filter(n => !esTransito(n)), 1),
     ...take(porCategoria('Deportes'), 1),
     ...take(porCategoria('Sucesos').filter(n => !esTransito(n)), 1),
   ];
-  // Si falta alguna, rellenar con lo disponible
   const faltantes = 4 - destacados.length;
   if (faltantes > 0) {
-    destacados.push(...take(noticias.filter(n => !usados.has(n.id)), faltantes));
+    destacados.push(...take(disponibles(), faltantes));
   }
 
-  // 4. Secciones temáticas: 3 noticias visibles por categoría
-  const nacionales = {
-    principal: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
-    secundarias: take(porCategoria('Nacionales').filter(n => !esTransito(n)), 2),
-  };
-
-  const internacionales = {
-    principal: take(porCategoria('Internacionales').filter(n => !esTransito(n)), 1),
-    secundarias: take(porCategoria('Internacionales').filter(n => !esTransito(n)), 2),
+  // 4. Secciones temáticas: exactamente 3 noticias por categoría
+  const seccion = (cat: string, min = 3) => {
+    const items = take(porCategoria(cat).filter(n => !esTransito(n)), 3);
+    return items.length >= min ? items : [];
   };
 
   const sucesosAll = porCategoria('Sucesos');
   const sucesosNoTransito = sucesosAll.filter(n => !esTransito(n));
   const sucesosTransito = sucesosAll.filter(n => esTransito(n));
-  const sucesos = {
-    // Máximo 2 de tránsito + al menos 1 judicial/social, total 3
-    items: [
-      ...take(sucesosNoTransito, 1),
-      ...take(sucesosTransito, 2),
-    ].slice(0, 3),
-  };
-  sucesos.items.forEach(n => usados.add(n.id));
-
-  const deportesAll = porCategoria('Deportes');
-  const deportes = {
-    // Mostrar si hay al menos 3 noticias
-    visible: deportesAll.length >= 3,
-    items: take(deportesAll, 3),
-  };
+  const sucesosItems = [
+    ...take(sucesosNoTransito, 1),
+    ...take(sucesosTransito, 2),
+  ].slice(0, 3);
+  sucesosItems.forEach(n => usados.add(n.id));
 
   return {
     heroNoticias,
     ultimaHora,
     destacados,
-    nacionales,
-    internacionales,
-    sucesos,
-    deportes,
+    nacionales: seccion('Nacionales'),
+    internacionales: seccion('Internacionales'),
+    sucesos: sucesosItems.length >= 3 ? sucesosItems : [],
+    deportes: seccion('Deportes'),
+    espectaculos: seccion('Espectáculos'),
+    tecnologia: seccion('Tecnología'),
+    excluidos: new Set(usados),
   };
 }
 
@@ -297,52 +284,34 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
       {/* 2. HERO PRINCIPAL: máximo 3 noticias, rotan cada 6s */}
       <HeroPrincipal heroNoticias={dist.heroNoticias} />
 
-      {/* 2. BARRA ÚLTIMA HORA: 4 titulares exclusivos en línea horizontal */}
-      <BarraUltimaHora noticias={dist.ultimaHora} />
-
       <div className="ni-main">
         <div className="ni-content">
           {/* 3. DESTACADOS: 4 noticias, 2x2, mix de categorías */}
           <SeccionDestacados noticias={dist.destacados} />
 
           {/* 4. SECCIONES TEMÁTICAS */}
-          <SeccionCategoria
-            titulo="Nacionales"
-            slug="nacionales"
-            color="#B45309"
-            principal={dist.nacionales.principal[0] || null}
-            secundarias={dist.nacionales.secundarias}
-          />
-
-          <SeccionCategoria
-            titulo="Internacionales"
-            slug="internacionales"
-            color="#0F172A"
-            principal={dist.internacionales.principal[0] || null}
-            secundarias={dist.internacionales.secundarias}
-          />
-
-          <SeccionCategoria
-            titulo="Sucesos"
-            slug="sucesos"
-            color="#DC2626"
-            principal={dist.sucesos.items[0] || null}
-            secundarias={dist.sucesos.items.slice(1)}
-          />
-
-          {dist.deportes.visible && (
-            <SeccionCategoria
-              titulo="Deportes"
-              slug="deportes"
-              color="#059669"
-              principal={dist.deportes.items[0] || null}
-              secundarias={dist.deportes.items.slice(1)}
-            />
+          {dist.nacionales.length > 0 && (
+            <SeccionCategoria titulo="Nacionales" slug="nacionales" color="#2563EB" noticias={dist.nacionales} />
+          )}
+          {dist.internacionales.length > 0 && (
+            <SeccionCategoria titulo="Internacionales" slug="internacionales" color="#059669" noticias={dist.internacionales} />
+          )}
+          {dist.sucesos.length > 0 && (
+            <SeccionCategoria titulo="Sucesos" slug="sucesos" color="#DC2626" noticias={dist.sucesos} />
+          )}
+          {dist.deportes.length > 0 && (
+            <SeccionCategoria titulo="Deportes" slug="deportes" color="#D97706" noticias={dist.deportes} />
+          )}
+          {dist.espectaculos.length > 0 && (
+            <SeccionCategoria titulo="Espectáculos" slug="espectaculos" color="#7C3AED" noticias={dist.espectaculos} />
+          )}
+          {dist.tecnologia.length > 0 && (
+            <SeccionCategoria titulo="Tecnología" slug="tecnologia" color="#0891B2" noticias={dist.tecnologia} />
           )}
         </div>
 
         {/* 5. SIDEBAR REORGANIZADO */}
-        <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} />
+        <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} excluirIds={dist.excluidos} />
       </div>
 
       {/* 6. SERVICIOS PARA EL LECTOR: reloj, emergencias, guías */}

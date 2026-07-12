@@ -14,6 +14,7 @@ interface SidebarProProps {
   masLeidas?: Noticia[];
   populares?: Noticia[];
   noticias?: Noticia[];
+  excluirIds?: Set<string>;
 }
 
 function MasLeidas({ noticias }: { noticias: Noticia[] }) {
@@ -69,18 +70,17 @@ function Newsletter() {
         <button type="submit" aria-label="Suscribirse al newsletter">Suscribirme gratis</button>
       </form>
       {status === 'success' && <span className="newsletter-success">¡Gracias por suscribirte!</span>}
-      <span className="newsletter-meta">Únete a 15,000 nicaragüenses informados</span>
+      <span className="newsletter-meta">Únete a miles de nicaragüenses informados.</span>
     </div>
   );
 }
 
-export default function SidebarPro({ masLeidas = [], populares = [], noticias = [] }: SidebarProProps) {
+export default function SidebarPro({ masLeidas = [], populares = [], noticias = [], excluirIds }: SidebarProProps) {
   // Si no hay masLeidas explícitas, usar noticias como fallback
   const lecturas = useMemo(() => {
-    if (masLeidas.length) return masLeidas;
-    if (populares.length) return populares;
-    return noticias.slice(0, 5);
-  }, [masLeidas, populares, noticias]);
+    const base = masLeidas.length ? masLeidas : populares.length ? populares : noticias;
+    return base.filter(n => !excluirIds?.has(n.id)).slice(0, 5);
+  }, [masLeidas, populares, noticias, excluirIds]);
 
   return (
     <aside className="ni-sidebar" aria-label="Sidebar">

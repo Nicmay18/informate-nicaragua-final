@@ -9,6 +9,16 @@ interface SeccionDestacadosProps {
   noticias: Noticia[];
 }
 
+const CAT_COLORS: Record<string, string> = {
+  nacionales: '#2563EB',
+  internacionales: '#059669',
+  deportes: '#D97706',
+  sucesos: '#DC2626',
+  espectaculos: '#7C3AED',
+  tecnologia: '#0891B2',
+  economia: '#0F172A',
+};
+
 export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) {
   if (!noticias.length) return null;
 
@@ -33,28 +43,34 @@ export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) 
       </header>
 
       <div className="destacados-grid">
-        {noticias.slice(0, 4).map((n) => (
-          <article key={n.id} className="destacado-card">
-            <Link href={`/noticias/${n.slug}`} className="destacado-link">
-              <div className="destacado-thumb">
-                {n.imagen ? (
-                  <Image
-                    src={getResponsiveImageUrl(n.imagen, 400)}
-                    alt={n.titulo}
-                    fill
-                    sizes="(max-width: 720px) 100vw, 50vw"
-                    style={{ objectFit: 'cover' }}
-                    unoptimized={n.imagen.endsWith('.gif')}
-                  />
-                ) : null}
-                <span className={`destacado-pill destacado-pill--${catClass(n.categoria)}`}>
-                  {n.categoria || 'Noticia'}
-                </span>
-              </div>
-              <h3 className="destacado-title">{n.titulo}</h3>
-            </Link>
-          </article>
-        ))}
+        {noticias.slice(0, 4).map((n) => {
+          const cat = catClass(n.categoria);
+          return (
+            <article key={n.id} className="destacado-card">
+              <Link href={`/noticias/${n.slug}`} className="destacado-link">
+                <div className="destacado-thumb">
+                  {n.imagen ? (
+                    <Image
+                      src={getResponsiveImageUrl(n.imagen, 400)}
+                      alt={n.titulo}
+                      fill
+                      sizes="(max-width: 720px) 100vw, 50vw"
+                      style={{ objectFit: 'cover' }}
+                      unoptimized={n.imagen.endsWith('.gif')}
+                    />
+                  ) : null}
+                  <span className="destacado-pill" style={{ backgroundColor: CAT_COLORS[cat] || '#0F172A' }}>
+                    {n.categoria || 'Noticia'}
+                  </span>
+                </div>
+                <div className="destacado-body">
+                  <h3 className="destacado-title">{n.titulo}</h3>
+                  {n.resumen && <p className="destacado-extract">{n.resumen}</p>}
+                </div>
+              </Link>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
