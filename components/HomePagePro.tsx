@@ -7,7 +7,6 @@ import TickerUltimaHora from './pro/TickerUltimaHora';
 import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
 import SidebarPro from './pro/SidebarPro';
-import ServiciosCiudadano from './pro/ServiciosCiudadano';
 
 const MOCK_NOTICIAS: Noticia[] = [
   {
@@ -314,8 +313,6 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} excluirIds={dist.excluidos} />
       </div>
 
-      {/* 6. SERVICIOS PARA EL LECTOR: reloj, emergencias, guías */}
-      <ServiciosCiudadano />
     </div>
   );
 }

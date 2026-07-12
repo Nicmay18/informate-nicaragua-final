@@ -2,8 +2,20 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { Clock } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+
+function tiempoRelativo(fecha?: string): string {
+  if (!fecha) return '';
+  const diff = Date.now() - new Date(fecha).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 60) return `hace ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  return `hace ${d} d`;
+}
 
 interface SeccionDestacadosProps {
   noticias: Noticia[];
@@ -66,6 +78,9 @@ export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) 
                 <div className="destacado-body">
                   <h3 className="destacado-title">{n.titulo}</h3>
                   {n.resumen && <p className="destacado-extract">{n.resumen}</p>}
+                  <span className="destacado-meta">
+                    <Clock size={13} /> {tiempoRelativo(n.fecha)}
+                  </span>
                 </div>
               </Link>
             </article>

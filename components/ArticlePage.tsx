@@ -127,16 +127,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     backgroundColor: category.color,
   };
 
-  const kickerStyle: React.CSSProperties = {
-    display: 'block',
-    fontSize: 12,
-    fontWeight: 700,
-    color: category.color,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    marginBottom: 8,
-  };
-
   const fontBtnStyle: React.CSSProperties = {
     width: 30,
     height: 30,
@@ -157,11 +147,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     position: 'relative',
     width: '100%',
     aspectRatio: '16 / 9',
-    maxHeight: 580,
-    borderRadius: 16,
+    maxHeight: 520,
+    borderRadius: 14,
     overflow: 'hidden',
     backgroundColor: '#f3f4f6',
-    boxShadow: '0 18px 45px -18px rgba(15,23,42,0.35)',
+    boxShadow: '0 20px 50px -18px rgba(15,23,42,0.32)',
   };
 
   const captionStyle: React.CSSProperties = {
@@ -169,11 +159,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     fontSize: 12,
     color: '#fff',
     textAlign: 'right',
-    marginTop: -34,
+    marginTop: -38,
     marginBottom: 28,
-    padding: '10px 14px',
-    background: 'linear-gradient(transparent, rgba(15,23,42,0.85))',
-    borderRadius: '0 0 16px 16px',
+    padding: '12px 16px',
+    background: 'linear-gradient(transparent, rgba(15,23,42,0.88))',
+    borderRadius: '0 0 14px 14px',
     zIndex: 2,
   };
 
@@ -234,11 +224,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           {/* Category Badge */}
         <span style={badgeStyle} itemProp="articleSection">{category.name}</span>
 
-        {/* Kicker */}
-        <span style={kickerStyle}>{category.name}</span>
-
         {/* Title */}
-        <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: 'clamp(2rem, 5vw, 3.1rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.15, margin: '0 0 18px', textWrap: 'balance', letterSpacing: '-0.3px' }} itemProp="headline">
+        <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: 'clamp(1.85rem, 5.2vw, 3.2rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.16, margin: '0 0 20px', textWrap: 'balance', letterSpacing: '-0.3px' }} itemProp="headline">
           {noticia.titulo}
         </h1>
 

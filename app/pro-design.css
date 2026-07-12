@@ -888,14 +888,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   gap: 0.85rem;
   background: var(--ni-navy);
   color: var(--ni-white);
-  padding: 0.7rem 1rem;
+  padding: 0 1rem;
+  min-height: 40px;
+  max-height: 40px;
   overflow: hidden;
 }
 
 .home-pro .ticker-label {
-  padding: 0.25rem 0.65rem;
+  padding: 0.2rem 0.55rem;
   background: var(--ni-red);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -906,22 +908,36 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .home-pro .ticker-content {
   flex: 1;
   min-width: 0;
+  position: relative;
+  height: 1.5rem;
 }
 
 .home-pro .ticker-item {
-  display: none;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
   color: rgba(255,255,255,0.95);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
+  opacity: 0;
+  transform: translateY(0.35rem);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .home-pro .ticker-item.ticker-item--active {
-  display: inline-block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .home-pro .ticker-dots {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 /* Barra horizontal de Última Hora */
@@ -992,13 +1008,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 
 .home-pro .ticker-dot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.85rem;
+  height: 0.18rem;
   border-radius: 999px;
   background: rgba(255,255,255,0.35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
 }
 
 .home-pro .ticker-dot--active {
+  width: 1.1rem;
   background: var(--ni-white);
 }
 
@@ -1093,12 +1114,22 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   font-weight: 400;
   line-height: 1.5;
   color: #64748B;
-  margin: 0;
+  margin: 0 0 0.6rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.home-pro .destacado-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #94A3B8;
+  margin-top: auto;
 }
 
 /* SECCIONES TEMÁTICAS */
@@ -2679,8 +2710,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-chip:hover{background:var(--ni-navy);color:var(--ni-white);border-color:var(--ni-navy)}
 
 /* Main layout */
-.ni-main{max-width:1200px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:40px;overflow:hidden}
+.ni-main{max-width:1200px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:40px;overflow:visible;align-items:start}
 .ni-content,.ni-sidebar{min-width:0}
+.ni-sidebar{position:sticky;top:84px;align-self:start;max-height:calc(100vh - 104px);overflow-y:auto;scrollbar-width:thin}
+.ni-sidebar::-webkit-scrollbar{width:6px}
+.ni-sidebar::-webkit-scrollbar-thumb{background:rgba(15,23,42,0.15);border-radius:999px}
 
 /* Sections */
 .ni-section{margin-bottom:48px}
@@ -2842,7 +2876,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-grid-2{grid-template-columns:minmax(0,1fr);gap:0}
   .ni-grid-2 .ni-card{grid-template-columns:220px minmax(0,1fr);gap:18px}
   .ni-grid-2 .ni-card__thumb{width:220px;height:150px}
-  .ni-sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .ni-sidebar{position:static;align-self:auto;max-height:none;overflow-y:visible;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
   .ni-sidebar__widget{margin-bottom:0}
   .ni-footer__inner{grid-template-columns:1fr 1fr}
 }

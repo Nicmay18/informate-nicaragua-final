@@ -5,6 +5,7 @@ import { useState, useMemo } from 'react';
 import { Mail, Radio, BarChart3, CloudSun, TrendingUp } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import dynamic from 'next/dynamic';
+import GuiaUtilWidget from './GuiaUtilWidget';
 
 const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false });
 const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false });
@@ -113,6 +114,12 @@ export default function SidebarPro({ masLeidas = [], populares = [], noticias = 
 
       {/* Newsletter */}
       <Newsletter />
+
+      {/* Guías Útiles */}
+      <div className="ni-sidebar__widget" data-reveal>
+        <h3 className="ni-sidebar__title">Guías útiles</h3>
+        <GuiaUtilWidget />
+      </div>
     </aside>
   );
 }
