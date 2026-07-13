@@ -20,7 +20,6 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
   const touchStartX = useRef<number | null>(null);
 
   const total = heroNoticias.length;
-  const current = total > 0 ? heroNoticias[active] : null;
 
   const nextSlide = useCallback(() => {
     if (total <= 1) return;
@@ -53,11 +52,7 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
     touchStartX.current = null;
   };
 
-  if (!current) return null;
-
-  const readTime = tiempoLectura(current.contenido || current.resumen || '');
-  const relTime = tiempoRelativo(current.fecha);
-  const catColor = CATEGORY_COLORS[current.categoria] || '#B45309';
+  if (total === 0) return null;
 
   return (
     <section
@@ -72,97 +67,91 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
       {heroNoticias.map((n, i) => (
         <div
           key={n.id}
-          className={`hero-slide ${i === active ? 'active' : ''}`}
+          className={'hero-slide ' + (i === active ? 'active' : '')}
           aria-hidden={i !== active}
         >
-          <div className="hero-image-wrapper">
-            <Image
-              src={n.imagen || '/logo.webp'}
-              alt={n.titulo}
-              fill
-              priority={i === 0}
-              sizes="100vw"
-              className="hero-bg"
-              style={{ objectFit: 'cover' }}
-            />
-          </div>
-          <div className="hero-overlay" />
-
-          <div className="hero-content">
-            <span
-              className="hero-tag"
-              style={{ backgroundColor: catColor }}
-            >
-              {current.categoria?.toUpperCase()}
-            </span>
-
-            <h1 className="hero-title">
-              <Link href={`/noticias/${current.slug}`}>{current.titulo}</Link>
-            </h1>
-
-            {current.resumen && <p className="hero-excerpt">{current.resumen}</p>}
-
-            <div className="hero-meta">
-              {current.autor && (
-                <span className="hero-meta-item">
-                  <User size={14} />
-                  {current.autor.split(' ').slice(0, 2).join(' ')}
-                </span>
+          <div className="hero-card">
+            <div className="hero-media">
+              <Image
+                src={n.imagen || '/logo.webp'}
+                alt={n.titulo}
+                fill
+                priority={i === 0}
+                sizes="(max-width: 900px) 100vw, 55vw"
+                className="hero-media-img"
+                style={{ objectFit: 'cover' }}
+              />
+              {i === active && total > 1 && (
+                <>
+                  <div className="hero-dots" role="tablist" aria-label="Noticias principales">
+                    {heroNoticias.map((n2, j) => (
+                      <button
+                        key={n2.id}
+                        className={'hero-dot ' + (j === active ? 'active' : '')}
+                        onClick={() => setActive(j)}
+                        role="tab"
+                        aria-selected={j === active}
+                        aria-label={'Noticia ' + (j + 1) + ': ' + n2.titulo}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    className="hero-nav hero-prev"
+                    onClick={prevSlide}
+                    aria-label="Noticia anterior"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    className="hero-nav hero-next"
+                    onClick={nextSlide}
+                    aria-label="Siguiente noticia"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
               )}
-              <span className="hero-meta-item">
-                <Clock size={14} />
-                {relTime}
-              </span>
-              <span className="hero-meta-item">
-                <BookOpen size={14} />
-                {readTime} min de lectura
-              </span>
             </div>
 
-            <Link
-              href={`/noticias/${current.slug}`}
-              className="hero-btn"
-            >
-              Leer completo
-              <ArrowRight size={16} />
-            </Link>
+            <div className="hero-body">
+              <span
+                className="hero-tag"
+                style={{ backgroundColor: CATEGORY_COLORS[n.categoria] || '#B45309' }}
+              >
+                {n.categoria?.toUpperCase()}
+              </span>
 
-            {total > 1 && (
-              <div className="hero-dots" role="tablist" aria-label="Noticias principales">
-                {heroNoticias.map((n2, j) => (
-                  <button
-                    key={n2.id}
-                    className={`hero-dot ${j === active ? 'active' : ''}`}
-                    onClick={() => setActive(j)}
-                    role="tab"
-                    aria-selected={j === active}
-                    aria-label={`Noticia ${j + 1}: ${n2.titulo}`}
-                  />
-                ))}
+              <h1 className="hero-title">
+                <Link href={'/noticias/' + n.slug}>{n.titulo}</Link>
+              </h1>
+
+              {n.resumen && <p className="hero-excerpt">{n.resumen}</p>}
+
+              <div className="hero-meta">
+                {n.autor && (
+                  <span className="hero-meta-item">
+                    <User size={14} />
+                    {n.autor.split(' ').slice(0, 2).join(' ')}
+                  </span>
+                )}
+                <span className="hero-meta-item">
+                  <Clock size={14} />
+                  {tiempoRelativo(n.fecha)}
+                </span>
+                <span className="hero-meta-item">
+                  <BookOpen size={14} />
+                  {tiempoLectura(n.contenido || n.resumen || '')} min de lectura
+                </span>
               </div>
-            )}
+
+              <Link href={'/noticias/' + n.slug} className="hero-btn">
+                Leer completo
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
         </div>
       ))}
-
-      {total > 1 && (
-        <>
-          <button
-            className="hero-nav hero-prev"
-            onClick={prevSlide}
-            aria-label="Noticia anterior"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            className="hero-nav hero-next"
-            onClick={nextSlide}
-            aria-label="Siguiente noticia"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </>
-      )}
     </section>
   );
 }
