@@ -6,6 +6,7 @@ import {
   textoCompleto,
   textoPlano,
   detectoresValorAgregado,
+  detectoresEvidencia,
   evaluarDiferenciadorNI,
   calcularOriginalidadPorEstructura,
   prioridadDesdeDecision,
@@ -23,14 +24,48 @@ function detectarContextoEspectaculos(n: NoticiaInput): boolean {
   return /\b(contexto|antecedente|proyecto|producci[oó]n|evento|concierto|estreno|lanzamiento|gira|festival|obra|pel[íi]cula|serie|album)\b/i.test(textoCompleto(n));
 }
 
+const temasSensibles = /\b(ruptura|separaci[oó]n|divorcio|embarazo|relaci[oó]n|pareja|noviazgo|matrimonio|fallecimiento|muerte|muerto|muerta|suicidio|esc[aá]ndalo|pol[eé]mica)\b/i;
+const marcasRumor = /\b(rumor|rumores|supuestamente|dicen que|se dice|versiones no confirmadas|sin confirmar|podr[ií]a|se especula|seg[uú]n fuentes no oficiales|se rumorea)\b/i;
+const marcasConfirmacion = /\b(comunicado oficial|representante|manager|prensa oficial|red social oficial|cuenta oficial|confirmado por|oficialmente|la productora|el sello|la disquera)\b/i;
+
+function detectarRumor(n: NoticiaInput): boolean {
+  return marcasRumor.test(textoCompleto(n)) && !marcasConfirmacion.test(textoCompleto(n));
+}
+
+function detectarConfirmacionOficial(n: NoticiaInput): boolean {
+  return detectoresEvidencia.redOficial(n) || marcasConfirmacion.test(textoCompleto(n));
+}
+
 function sugerenciasEspectaculos(n: NoticiaInput, _ev: EvidenciaPuntuada): SugerenciasV2 {
   const tray = detectarTrayectoria(n);
   const contexto = detectarContextoEspectaculos(n);
   const decla = declaraciones.test(textoPlano(n));
   const reaccion = reaccionPublica.test(textoCompleto(n));
   const cronologia = detectoresValorAgregado.cronologia(n);
+  const rumor = detectarRumor(n);
+  const confirmacionOficial = detectarConfirmacionOficial(n);
 
   const oportunidades = [];
+
+  if (rumor) {
+    oportunidades.push(fabricarSugerencia(
+      'Tratar la información como rumor hasta contar con comunicado oficial, representante o red social verificada. No afirmar hechos sensibles.',
+      'Verificación.',
+      '10-20 min',
+      'Baja',
+      'Evita difundir información no confirmada.'
+    ));
+  }
+
+  if (!confirmacionOficial && temasSensibles.test(textoCompleto(n))) {
+    oportunidades.push(fabricarSugerencia(
+      'Exigir fuente oficial (representante, comunicado, red social verificada o productora) antes de publicar datos sensibles como rupturas, embarazos o fallecimientos.',
+      'Riesgo reputacional.',
+      '10-20 min',
+      'Baja',
+      'Protege credibilidad.'
+    ));
+  }
 
   if (!tray) {
     oportunidades.push(fabricarSugerencia(
@@ -160,7 +195,9 @@ export function evaluarEspectaculos(n: NoticiaInput, v2: ResultadoEditorJefeV2):
     consistencia: { aprobado: true, contradicciones: consistenciaEspectaculos(n, ev) },
     diferenciadorNI: { ...diferenciador, puntuacion: Math.max(diferenciador.puntuacion, originalidad >= 50 ? 50 : 0) },
     prioridadEditorial: prioridadDesdeDecision(v2, utilidad, originalidad),
-    valorAgregado: diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'],
+    valorAgregado: diferenciador.elementosDetectados.length > 0
+      ? diferenciador.elementosDetectados
+      : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'],
   };
 }
 

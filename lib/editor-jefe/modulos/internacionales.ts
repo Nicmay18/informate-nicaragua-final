@@ -10,7 +10,7 @@ import {
   prioridadDesdeDecision,
 } from './base';
 
-const fuentesInternacionales = /\b(onu|reuters|associated press|ap|afp|bbc|deutsche welle|dw|cnn|al jazeera|europa press|efe|agencia|gobierno de|secretar[ií]a de|canciller[ií]a|embajada|organismo internacional)\b/i;
+const fuentesInternacionales = /\b(o ea|oea|onu|ops|oms|unicef|acnur|corte internacional|cpi|reuters|associated press|ap|afp|bbc|deutsche welle|dw|cnn|al jazeera|europa press|efe|agencia|gobierno de|secretar[ií]a de|canciller[ií]a|embajada|organismo internacional|gobierno|presidencia|ministerio de relaciones exteriores|canciller)\b/i;
 
 function detectarContextoRegional(n: NoticiaInput): boolean {
   return /\b(regi[oó]n|latinoam[eé]rica|centroam[eé]rica|am[eé]rica latina|pa[ií]ses vecinos|escenario internacional|geopol[ií]tica|relaciones bilaterales)\b/i.test(textoCompleto(n));
@@ -145,7 +145,9 @@ export function evaluarInternacionales(n: NoticiaInput, v2: ResultadoEditorJefeV
     consistencia: { aprobado: true, contradicciones: consistenciaInternacionales(n, ev) },
     diferenciadorNI: { ...diferenciador, puntuacion: Math.max(diferenciador.puntuacion, originalidad >= 50 ? 50 : 0) },
     prioridadEditorial: prioridadDesdeDecision(v2, utilidad, originalidad),
-    valorAgregado: diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'],
+    valorAgregado: diferenciador.elementosDetectados.length > 0
+      ? diferenciador.elementosDetectados
+      : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'],
   };
 }
 

@@ -10,9 +10,9 @@ import {
   prioridadDesdeDecision,
 } from './base';
 
-const marcasEstadisticas = /\b(marcador|resultado|goles?|puntos?|posici[oó]n|tabla|clasificaci[oó]n|estad[íi]sticas?|anotaciones?|tarjetas?|tiros|parciales?|sets?|entradas?|innings?)\b/i;
-const figuras = /\b(jugador|figura|delantero|portero|entrenador|director t[ée]cnico|capit[áa]n|goleador|asistencia|mvp)\b/i;
-const proximoPartido = /\b(pr[oó]ximo partido|pr[oó]xima fecha|jornada|calendario|horario|rival|se enfrenta|visita a)\b/i;
+const marcasEstadisticas = /\b(marcador|resultado|goles?|puntos?|posici[oó]n|tabla|clasificaci[oó]n|estad[íi]sticas?|anotaciones?|tarjetas?|tiros|parciales?|sets?|entradas?|innings?|fixture|convocatoria|convocados|transferencia|r[eé]cord|rachas?|rendimiento|victorias?|derrotas?|empates?)\b/i;
+const figuras = /\b(jugador|figura|delantero|portero|entrenador|director t[ée]cnico|capit[áa]n|goleador|asistencia|mvp|estrella|crack)\b/i;
+const proximoPartido = /\b(pr[oó]ximo partido|pr[oó]xima fecha|jornada|calendario|horario|rival|se enfrenta|visita a|fixture|agenda deportiva)\b/i;
 
 function detectarEstadisticas(n: NoticiaInput): boolean {
   return marcasEstadisticas.test(textoCompleto(n)) && /\d/.test(textoCompleto(n));
@@ -135,6 +135,7 @@ function sugerenciasDeportes(n: NoticiaInput, _ev: EvidenciaPuntuada): Sugerenci
 function calcularUtilidadDeportes(n: NoticiaInput, ev: EvidenciaPuntuada): number {
   let puntos = 40; // base de interés para aficionados
   if (detectarEstadisticas(n)) puntos += 30;
+  if (figuras.test(textoCompleto(n))) puntos += 10;
   if (proximoPartido.test(textoCompleto(n))) puntos += 20;
   if (detectoresValorAgregado.explicacionImpacto(n)) puntos += 10;
   return Math.max(ev.utilidad, Math.min(100, puntos));
@@ -165,7 +166,9 @@ export function evaluarDeportes(n: NoticiaInput, v2: ResultadoEditorJefeV2): Eva
     consistencia: { aprobado: true, contradicciones: consistenciaDeportes(n, ev) },
     diferenciadorNI: { ...diferenciador, puntuacion: Math.max(diferenciador.puntuacion, originalidad >= 50 ? 50 : 0) },
     prioridadEditorial: prioridadDesdeDecision(v2, utilidad, originalidad),
-    valorAgregado: diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'],
+    valorAgregado: diferenciador.elementosDetectados.length > 0
+      ? diferenciador.elementosDetectados
+      : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'],
   };
 }
 

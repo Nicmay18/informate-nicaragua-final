@@ -6,6 +6,11 @@ import {
   textoCompleto,
   textoPlano,
   detectoresValorAgregado,
+  detectoresEvidencia,
+  detectoresLegal,
+  detectoresCoberturaContinua,
+  detectoresHechoEnDesarrollo,
+  detectarEvidenciaPeriodistica,
   evaluarDiferenciadorNI,
   calcularOriginalidadPorEstructura,
   prioridadDesdeDecision,
@@ -34,8 +39,14 @@ function detectarServicioSucesos(n: NoticiaInput): { tiene: boolean; items: stri
   return { tiene: items.length > 0, items };
 }
 
+const tiposSuceso = /\b(accidente|incendio|homicidio|femicidio|feminicidio|desaparici[oó]n|rescate|explosi[oó]n|derrumbe|allanamiento|captura|juicio|sentencia|operativo|atentado|secuestro|robo|hurto|enfrentamiento)\b/i;
+
+function detectarTipoSuceso(n: NoticiaInput): boolean {
+  return tiposSuceso.test(textoCompleto(n));
+}
+
 function detectarCronologiaSucesos(n: NoticiaInput): boolean {
-  return /\b(a las\s+\d{1,2}:\d{2}|primero|luego|despu[eé]s|posteriormente|minutos m[aá]s tarde|horas m[aá]s tarde|al d[ií]a siguiente|cronolog[ií]a|secuencia de hechos|inicialmente|finalmente|cuando ocurri[oó]|en ese momento)\b/i.test(textoPlano(n));
+  return /\b(a las\s+\d{1,2}:\d{2}|primero|luego|despu[eé]s|posteriormente|minutos m[aá]s tarde|horas m[aá]s tarde|al d[ií]a siguiente|cronolog[ií]a|secuencia de hechos|inicialmente|finalmente|cuando ocurri[oó]|en ese momento|hora|fecha|lugar|secuencia|traslado|investigaci[oó]n)\b/i.test(textoPlano(n));
 }
 
 function detectarAntecedentesSucesos(n: NoticiaInput): boolean {
@@ -43,21 +54,44 @@ function detectarAntecedentesSucesos(n: NoticiaInput): boolean {
 }
 
 function sugerenciasSucesos(n: NoticiaInput, _ev: EvidenciaPuntuada): SugerenciasV2 {
-  const tieneEvidencia = institucionesSucesos.test(textoCompleto(n)) || testigosIdentificados.test(textoPlano(n));
+  const evidenciaPeriodistica =
+    detectarEvidenciaPeriodistica(n) ||
+    institucionesSucesos.test(textoCompleto(n)) ||
+    testigosIdentificados.test(textoPlano(n));
+  const hechoEnDesarrollo = detectoresHechoEnDesarrollo.activo(n);
   const cronologia = detectarCronologiaSucesos(n);
   const antecedentes = detectarAntecedentesSucesos(n);
   const servicio = detectarServicioSucesos(n);
-  const seguimiento = detectarSeguimiento(n);
+  const seguimiento = detectoresCoberturaContinua.haySeguimiento(n);
+  const tipoDetectado = detectarTipoSuceso(n);
 
   const oportunidades: ReturnType<typeof fabricarSugerencia>[] = [];
 
-  if (!tieneEvidencia) {
+  if (!evidenciaPeriodistica) {
+    if (hechoEnDesarrollo) {
+      oportunidades.push(fabricarSugerencia(
+        'Documento oficial aún no disponible por tratarse de un hecho en desarrollo. Verificar con fuentes en el lugar o comunicados oficiales posteriores.',
+        'Contexto de emergencia.',
+        '5-10 min',
+        'Baja',
+        'Evita exigir documento inexistente.'
+      ));
+    } else {
+      oportunidades.push(fabricarSugerencia(
+        'Citar la fuente institucional que confirmó el hecho (Policía, Bomberos, COMUPRED, Medicina Legal u hospital) o un testigo identificado.',
+        'Dato verificado.',
+        '10-20 min',
+        'Baja',
+        'Reduce especulación y rumores.'
+      ));
+    }
+  } else {
     oportunidades.push(fabricarSugerencia(
-      'Citar la fuente institucional que confirmó el hecho (Policía, Bomberos, COMUPRED, Medicina Legal u hospital).',
-      'Dato verificado.',
-      '10-20 min',
+      'Evidencia periodística verificable detectada. Mantener atribución clara y actualizar cuando haya documento oficial.',
+      'Rigor factual.',
+      '5-10 min',
       'Baja',
-      'Reduce especulación y rumores.'
+      'Refuerza la autoridad de la pieza.'
     ));
   }
 
@@ -81,7 +115,7 @@ function sugerenciasSucesos(n: NoticiaInput, _ev: EvidenciaPuntuada): Sugerencia
     ));
   }
 
-  if (!servicio.tiene) {
+  if (!servicio.tiene && tipoDetectado) {
     oportunidades.push(fabricarSugerencia(
       'Explicitar medidas de prevención, rutas alternas o información útil para el ciudadano si es pertinente.',
       'Utilidad práctica.',
@@ -98,6 +132,17 @@ function sugerenciasSucesos(n: NoticiaInput, _ev: EvidenciaPuntuada): Sugerencia
       '5-10 min',
       'Baja',
       'Prepara actualización sin exigir documento inexistente.'
+    ));
+  }
+
+  const implicaResponsable = /\b(homicidio|femicidio|feminicidio|captura|acusado|imputado|detenido|sospechoso|responsable|detenidos|indagado)\b/i.test(textoCompleto(n));
+  if (implicaResponsable && !detectoresLegal.presuncionInocencia(n)) {
+    oportunidades.push(fabricarSugerencia(
+      'Incluir términos que preserven la presunción de inocencia (presuntamente, según investigación preliminar, etc.) cuando se mencionen responsables.',
+      'Riesgo legal.',
+      '5-10 min',
+      'Baja',
+      'Protege al medio y respeta derechos.'
     ));
   }
 
@@ -166,8 +211,13 @@ function sugerenciasSucesos(n: NoticiaInput, _ev: EvidenciaPuntuada): Sugerencia
 
 function calcularUtilidadSucesos(n: NoticiaInput, ev: EvidenciaPuntuada): number {
   const servicio = detectarServicioSucesos(n);
-  if (servicio.tiene) return Math.max(ev.utilidad, 80 + Math.min(20, servicio.items.length * 5));
-  return Math.round(ev.utilidad * 0.7);
+  let puntos = 0;
+  if (servicio.tiene) puntos += 80 + Math.min(20, servicio.items.length * 5);
+  if (detectoresHechoEnDesarrollo.activo(n)) puntos += 30;
+  if (detectarEvidenciaPeriodistica(n)) puntos += 25;
+  if (detectoresCoberturaContinua.haySeguimiento(n)) puntos += 20;
+  if (detectoresLegal.presuncionInocencia(n)) puntos += 10;
+  return Math.max(ev.utilidad, Math.min(100, puntos));
 }
 
 function consistenciaSucesos(n: NoticiaInput, ev: EvidenciaPuntuada): string[] {
@@ -175,7 +225,7 @@ function consistenciaSucesos(n: NoticiaInput, ev: EvidenciaPuntuada): string[] {
   if (!detectarCronologiaSucesos(n)) faltantes.push('faltó cronología');
   if (!detectarAntecedentesSucesos(n)) faltantes.push('faltó antecedentes');
   if (!detectarServicioSucesos(n).tiene) faltantes.push('faltó prevención o servicio');
-  if (!detectarSeguimiento(n)) faltantes.push('faltó seguimiento');
+  if (!detectoresCoberturaContinua.haySeguimiento(n)) faltantes.push('faltó seguimiento');
   if (ev.fuenteIdentificada < 60) faltantes.push('faltó evidencia institucional');
   return faltantes;
 }
@@ -187,7 +237,13 @@ export function evaluarSucesos(n: NoticiaInput, v2: ResultadoEditorJefeV2): Eval
   const originalidad = Math.max(ev.originalidad, calcularOriginalidadPorEstructura(n, ev));
   const diferenciador = evaluarDiferenciadorNI(n);
   const contradicciones = consistenciaSucesos(n, ev);
-  const valorAgregado = diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'];
+  const valorAgregado = diferenciador.elementosDetectados.length > 0
+    ? diferenciador.elementosDetectados
+    : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'];
+
+  if (detectoresHechoEnDesarrollo.activo(n) && !detectoresEvidencia.documentoOficial(n)) {
+    valorAgregado.push('Documento oficial aún no disponible por tratarse de un hecho en desarrollo.');
+  }
 
   return {
     vertical: 'Sucesos',

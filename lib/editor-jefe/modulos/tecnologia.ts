@@ -10,13 +10,14 @@ import {
   prioridadDesdeDecision,
 } from './base';
 
-const especificaciones = /\b(especificaciones|caracter[íi]sticas|ficha t[ée]cnica|modelo|versi[oó]n|procesador|memoria ram|almacenamiento|pantalla|bater[íi]a|conectividad|resoluci[oó]n)\b/i;
-const compatibilidad = /\b(compatibilidad|compatible|soporta|requiere|funciona en|disponible para|sistema operativo|android|ios|windows|linux|macos)\b/i;
-const comoUsarlo = /\b(c[óo]mo usar|c[óo]mo funciona|c[óo]mo activar|pasos para|configurar|habilitar|tutorial|gu[íi]a r[áa]pida|primera vez)\b/i;
-const riesgos = /\b(riesgo|amenaza|vulnerabilidad|privacidad|seguridad|estafa|cuidado|precauci[oó]n|virus|malware|phishing|filtraci[oó]n)\b/i;
+const especificaciones = /\b(especificaciones|caracter[íi]sticas|ficha t[ée]cnica|modelo|versi[oó]n|procesador|memoria ram|almacenamiento|pantalla|bater[íi]a|conectividad|resoluci[oó]n|gpu|chip|c[aá]mara)\b/i;
+const compatibilidad = /\b(compatibilidad|compatible|soporta|requiere|funciona en|disponible para|sistema operativo|android|ios|windows|linux|macos|iphone|samsung|xiaomi|pixel|motorola|huawei|oneplus|smartphone|pc|laptop|tablet|wearable)\b/i;
+const comoUsarlo = /\b(c[óo]mo usar|c[óo]mo funciona|c[óo]mo activar|pasos para|configurar|habilitar|tutorial|gu[íi]a r[áa]pida|primera vez|c[óo]mo instalar|c[óo]mo acceder)\b/i;
+const riesgos = /\b(riesgo|amenaza|vulnerabilidad|privacidad|seguridad|estafa|cuidado|precauci[oó]n|virus|malware|phishing|filtraci[oó]n|ciberseguridad|hackeo|brecha|robo de datos)\b/i;
+const empresasTech = /\b(ia|inteligencia artificial|openai|chatgpt|google|apple|samsung|microsoft|meta|tesla|amazon|nvidia|android|iphone|windows|linux|macos|ios|x|twitter|facebook|instagram|whatsapp|tiktok|youtube|spotify|netflix)\b/i;
 
 function detectarQueCambia(n: NoticiaInput): boolean {
-  return /\b(qu[eé] cambia|novedad|nueva funci[oó]n|nueva app|nueva herramienta|nueva plataforma|actualizaci[oó]n|mejora|cambio|ahora permite|ahora ofrece|permite|habilita|posibilita|lanzamiento)\b/i.test(textoCompleto(n));
+  return /\b(qu[eé] cambia|novedad|nueva funci[oó]n|nueva app|nueva herramienta|nueva plataforma|actualizaci[oó]n|mejora|cambio|ahora permite|ahora ofrece|permite|habilita|posibilita|lanzamiento)\b/i.test(textoCompleto(n)) || empresasTech.test(textoCompleto(n));
 }
 
 function detectarBeneficiario(n: NoticiaInput): boolean {
@@ -163,7 +164,9 @@ export function evaluarTecnologia(n: NoticiaInput, v2: ResultadoEditorJefeV2): E
     consistencia: { aprobado: true, contradicciones: consistenciaTecnologia(n, ev) },
     diferenciadorNI: { ...diferenciador, puntuacion: Math.max(diferenciador.puntuacion, originalidad >= 50 ? 50 : 0) },
     prioridadEditorial: prioridadDesdeDecision(v2, utilidad, originalidad),
-    valorAgregado: diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'],
+    valorAgregado: diferenciador.elementosDetectados.length > 0
+      ? diferenciador.elementosDetectados
+      : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'],
   };
 }
 

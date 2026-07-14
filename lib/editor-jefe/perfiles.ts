@@ -22,6 +22,7 @@ export type VerticalEditorial =
   | 'Economía'
   | 'Política'
   | 'Opinión'
+  | 'Reportajes'
   | 'Servicio'
   | 'General';
 

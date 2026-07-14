@@ -11,6 +11,7 @@ export type VerticalEditorial =
   | 'Economía'
   | 'Política'
   | 'Opinión'
+  | 'Reportajes'
   | 'Servicio'
   | 'General';
 
@@ -142,7 +143,7 @@ export const detectoresValorAgregado = {
 
   recopilacionFuentes: (n: NoticiaInput): boolean => {
     const t = textoPlano(n);
-    const marcasAtribucion = (t.match(/\b(seg[úu]n|de acuerdo con|indic[óo]|declar[óo]|precis[óo]|confirm[óo]|dijo|menci[óo]|señal[óo]|explic[óo]|report[óo]|asegur[óo]|detall[óo])\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
+    const marcasAtribucion = (t.match(/\b([Ss]eg[úu]n|[Dd]e acuerdo con|[Ii]ndic[óo]|[Dd]eclar[óo]|[Pp]recis[óo]|[Cc]onfirm[óo]|[Dd]ijo|[Mm]encion[óo]|[Ss]eñal[óo]|[Ee]xplic[óo]|[Rr]eport[óo]|[Aa]segur[óo]|[Dd]etall[óo])\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
     return marcasAtribucion >= 2;
   },
 
@@ -154,7 +155,161 @@ export const detectoresValorAgregado = {
 
   datosConcretos: (n: NoticiaInput): boolean =>
     /\b\d{1,2}:\d{2}\b|\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\bC?\$\s*\d+|\b\d{2,3}\s+(kil[óo]metros?|km|metros?|m|años?|personas?|heridos?|afectados?|fallecidos?|v[ií]ctimas?)\b/i.test(textoPlano(n)),
+
+  reorganizacionExplicativa: (n: NoticiaInput): boolean =>
+    /\b(en resumen|en otras palabras|esto significa que|esto implica|para entenderlo|lo importante es|aqu[ií] te explicamos|as[ií] funciona|de forma sencilla|qu[eé] debes saber|preguntas frecuentes|lo que cambia|resumido)\b/i.test(textoCompleto(n)),
+
+  analisisProfundo: (n: NoticiaInput): boolean =>
+    /\b(an[áa]lisis|profundiza|explica por qu[eé]|factores que|razones por las|causas principales|consecuencias|impacto real)\b/i.test(textoCompleto(n)),
+
+  visualizacionDatos: (n: NoticiaInput): boolean =>
+    /\b(gr[áa]fica|tabla|mapa|infograf[íi]a|cuadro comparativo|cronolog[íi]a visual|diagrama|lista de pasos)\b/i.test(textoCompleto(n)),
+
+  preguntasRespondidas: (n: NoticiaInput): boolean =>
+    /\b(¿qu[eé] pasar[aá]?|¿qu[eé] significa?|¿c[óo]mo afecta?|¿qui[eé]nes?|¿d[óo]nde?|¿cu[áa]ndo?|¿por qu[eé]?|preguntas frecuentes|respuestas)\b/i.test(textoCompleto(n)),
 };
+
+export const detectoresEvidencia = {
+  documentoOficial: (n: NoticiaInput): boolean =>
+    /\b(parte policial|informe oficial|documento oficial|resoluci[oó]n|decreto|acuerdo|ley|normativa|acta|expediente|dictamen|oficio|sentencia|auto judicial|resoluci[oó]n administrativa)\b/i.test(textoCompleto(n)),
+
+  comunicado: (n: NoticiaInput): boolean =>
+    /\b(comunicado oficial|comunicado de prensa|nota de prensa|bolet[ií]n|posici[oó]n oficial|comunicado institucional)\b/i.test(textoCompleto(n)),
+
+  video: (n: NoticiaInput): boolean =>
+    /\b(v[ií]deo|footage|transmisi[oó]n en vivo|en vivo|clip|material audiovisual)\b/i.test(textoCompleto(n)),
+
+  fotografia: (n: NoticiaInput): boolean =>
+    /\b(foto|fotograf[ií]a|imagen|galer[ií]a|captura)\b/i.test(textoCompleto(n)),
+
+  trabajoDeCampo: (n: NoticiaInput): boolean =>
+    /\b(trabajo de campo|desde el lugar|en el lugar|en el sitio|periodista en|corresponsal|enviado especial|reporte desde|testimonio presencial|en el epicentro|desde la zona)\b/i.test(textoCompleto(n)),
+
+  testigoIdentificado: (n: NoticiaInput): boolean =>
+    /\b(testigo|vecino|habitante|morador|comerciante|conductor|pasajero|familiar)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/i.test(textoPlano(n)),
+
+  fuenteInstitucional: (n: NoticiaInput): boolean =>
+    /\b(polic[ií]a|bomberos|hospital|medicina legal|fiscal[ií]a|juzgado|tribunal|ministerio|alcald[ií]a|instituci[oó]n|comupred|sinapred|delegaci[oó]n|asamblea nacional|banco central)\b/i.test(textoCompleto(n)),
+
+  periodista: (n: NoticiaInput): boolean =>
+    /\b(periodista|reportero|corresponsal|enviado especial|redacci[oó]n|por nuestro corresponsal|por nuestro periodista)\b/i.test(textoCompleto(n)),
+
+  redOficial: (n: NoticiaInput): boolean =>
+    /\b(cuenta oficial|red social oficial|perfil oficial|publicaci[oó]n oficial|comunicado en redes|oficial en redes)\b/i.test(textoCompleto(n)),
+};
+
+export const detectoresLegal = {
+  presuncionInocencia: (n: NoticiaInput): boolean =>
+    /\b(presuntamente|investiga|investigaci[oó]n|seg[uú]n informaci[oó]n preliminar|habr[ií]a|aparentemente|presunto|sospechoso|imputado|acusado|indagado|alegadamente|versiones preliminares|sin confirmar|en investigaci[oó]n)\b/i.test(textoCompleto(n)),
+};
+
+export const detectoresCoberturaContinua = {
+  haySeguimiento: (n: NoticiaInput): boolean =>
+    /\b(continuar[aá]|seguiremos informando|se espera parte oficial|la investigaci[oó]n contin[uú]a|la instituci[oó]n actualizar[aá]|pr[oó]ximas horas|pr[oó]ximos d[ií]as|actualizaremos|ampliaremos|nuevos datos|dar[aá] seguimiento|nicaragua informate dar[aá] seguimiento|mant[eé]ngase informado)\b/i.test(textoCompleto(n)),
+};
+
+export const detectoresHechoEnDesarrollo = {
+  activo: (n: NoticiaInput): boolean =>
+    /\b([uú]ltima hora|hace minutos|en desarrollo|momento|reci[eé]n|al cierre de esta edici[oó]n|informaci[oó]n en desarrollo|se informar[aá] m[aá]s tarde|se confirmar[aá] posteriormente|hecho en desarrollo|en curso|en estos momentos)\b/i.test(textoCompleto(n)),
+};
+
+export const detectoresUtilidad = {
+  guia: (n: NoticiaInput): boolean =>
+    /\b(c[óo]mo|pasos|qu[eé] hacer|tutorial|gu[íi]a r[áa]pida|paso a paso|instrucciones|c[óo]mo hacer)\b/i.test(textoCompleto(n)),
+
+  consejos: (n: NoticiaInput): boolean =>
+    /\b(consejos?|recomendaciones?|tips?|sugerencias?|buenas pr[aá]cticas)\b/i.test(textoCompleto(n)),
+
+  prevencion: (n: NoticiaInput): boolean =>
+    /\b(prevenci[oó]n|evitar|prevenir|cuidado|medidas? de seguridad|protegerse|a tener en cuenta|se recomienda)\b/i.test(textoCompleto(n)),
+
+  derechos: (n: NoticiaInput): boolean =>
+    /\b(derechos?|deberes|garant[íi]as?|amparo|recurso legal|puedes exigir|tienes derecho)\b/i.test(textoCompleto(n)),
+
+  telefonos: (n: NoticiaInput): boolean =>
+    /\b(n[uú]mero de emergencia|l[ií]nea de emergencia|llamar al\s*\d|tel[eé]fono de emergencia|\d{3,4}[-\s]\d{4})\b/i.test(textoCompleto(n)),
+
+  direcciones: (n: NoticiaInput): boolean =>
+    /\b(direcci[oó]n|ubicaci[oó]n|d[óo]nde acudir|oficina|sede|lugar de atenci[oó]n|mapa)\b/i.test(textoCompleto(n)),
+
+  recomendaciones: (n: NoticiaInput): boolean =>
+    /\b(recomendaciones?|se recomienda|se sugiere|aconseja|sugerimos)\b/i.test(textoCompleto(n)),
+
+  tramites: (n: NoticiaInput): boolean =>
+    /\b(tr[aá]mite|requisito|formulario|solicitud|documentaci[oó]n|plazo|presentar)\b/i.test(textoCompleto(n)),
+
+  explicaciones: (n: NoticiaInput): boolean =>
+    /\b(explicaci[oó]n|qu[eé] significa|qu[eé] implica|c[óo]mo impacta|para entender|c[óo]mo funciona)\b/i.test(textoCompleto(n)),
+};
+
+export const detectoresContextoRico = {
+  antecedentes: (n: NoticiaInput): boolean => detectoresValorAgregado.antecedentes(n),
+
+  casosSimilares: (n: NoticiaInput): boolean =>
+    /\b(casos similares|otros casos|similar a|se repite|ha ocurrido antes|misma situaci[oó]n|como ocurri[oó]|precedentes)\b/i.test(textoCompleto(n)),
+
+  estadisticas: (n: NoticiaInput): boolean =>
+    /\b(estad[íi]sticas?|cifras?|datos de|seg[uú]n datos|estudio indica|reporte de|encuesta)\b/i.test(textoCompleto(n)),
+
+  leyes: (n: NoticiaInput): boolean =>
+    /\b(ley|decreto|acuerdo|normativa|reglamento|resoluci[oó]n|c[oó]digo|art[ií]culo|constituci[oó]n)\b/i.test(textoCompleto(n)),
+
+  historia: (n: NoticiaInput): boolean =>
+    /\b(historia|hist[oó]rico|en el pasado|a[ñn]os atr[aá]s|desde|tradici[oó]n|antigua|evoluci[oó]n)\b/i.test(textoCompleto(n)),
+
+  comparaciones: (n: NoticiaInput): boolean => detectoresValorAgregado.comparacion(n),
+};
+
+export const detectoresDiscover = {
+  actualidadMasiva: (n: NoticiaInput): boolean =>
+    /\b([uú]ltima hora|hoy|ayer|este martes|este mi[eé]rcoles|este jueves|este viernes|este fin de semana|alerta|nuevo|anunci[oó]|confirm[oó]|gobierno|miles|impacto)\b/i.test(textoCompleto(n)),
+
+  servicio: (n: NoticiaInput): boolean =>
+    detectoresUtilidad.guia(n) || detectoresUtilidad.telefonos(n) || detectoresUtilidad.direcciones(n),
+
+  preguntasFrecuentes: (n: NoticiaInput): boolean =>
+    /\b(preguntas frecuentes|faq|lo m[aá]s consultado|dudas comunes|qu[eé] debo saber)\b/i.test(textoCompleto(n)),
+
+  datosOriginales: (n: NoticiaInput): boolean =>
+    detectoresValorAgregado.datosConcretos(n) || detectoresContextoRico.estadisticas(n),
+};
+
+export const detectoresFacebook = {
+  curiosidad: (n: NoticiaInput): boolean =>
+    /\b(descubre|por qu[eé]|qu[eé] pas[oó]|c[óo]mo|secretos?|sorpresa|inesperado|revelan|confirmado)\b/i.test(textoCompleto(n)),
+
+  claridad: (n: NoticiaInput): boolean =>
+    n.titulo.length >= 20 && n.titulo.length <= 90,
+
+  impacto: (n: NoticiaInput): boolean =>
+    /\b(afecta|cambia|impacto|beneficia|perjudica|gana|pierde|nuevo|urgente)\b/i.test(textoCompleto(n)),
+
+  compartibilidad: (n: NoticiaInput): boolean =>
+    /\b(comparte|compartir|difunde|avisa|informa|alerta|servicio|gratis|ayuda)\b/i.test(textoCompleto(n)),
+};
+
+export function detectarEvidenciaPeriodistica(n: NoticiaInput): boolean {
+  return (
+    detectoresEvidencia.video(n) ||
+    detectoresEvidencia.fotografia(n) ||
+    detectoresEvidencia.trabajoDeCampo(n) ||
+    detectoresEvidencia.testigoIdentificado(n) ||
+    detectoresEvidencia.fuenteInstitucional(n) ||
+    detectoresEvidencia.periodista(n) ||
+    detectoresEvidencia.redOficial(n)
+  );
+}
+
+export function evaluarRiesgoEditorial(n: NoticiaInput): 'Alto' | 'Medio' | 'Bajo' {
+  const t = textoCompleto(n);
+  if (/\b(menor de edad|niño|niña|adolescente|violaci[oó]n|violencia sexual|abuso sexual|femicidio|feminicidio|suicidio|autoinmoli|difamaci[oó]n|calumnia|injuria|judicial activo|imputado|acusado)\b/i.test(t)) {
+    return 'Alto';
+  }
+  if (/\b(accidente|incendio|explosi[oó]n|derrumbe|rescate|captura|allanamiento|operativo|heridos|fallecidos|v[ií]ctimas|detenidos|herido grave)\b/i.test(t)) {
+    return 'Medio';
+  }
+  return 'Bajo';
+}
 
 export function evaluarDiferenciadorNI(n: NoticiaInput): DiferenciadorNI {
   const elementos: string[] = [];
@@ -166,11 +321,15 @@ export function evaluarDiferenciadorNI(n: NoticiaInput): DiferenciadorNI {
   if (detectoresValorAgregado.comparacion(n)) elementos.push('Agregó comparación con hechos anteriores');
   if (detectoresValorAgregado.contexto(n)) elementos.push('Agregó contexto explicativo');
   if (detectoresValorAgregado.datosConcretos(n)) elementos.push('Incluyó datos concretos verificables');
+  if (detectoresValorAgregado.reorganizacionExplicativa(n)) elementos.push('Reorganizó o simplificó información para el lector');
+  if (detectoresValorAgregado.analisisProfundo(n)) elementos.push('Agregó análisis o explicación de fondo');
+  if (detectoresValorAgregado.visualizacionDatos(n)) elementos.push('Usó visualización, tabla, mapa o cronología');
+  if (detectoresValorAgregado.preguntasRespondidas(n)) elementos.push('Respondió preguntas clave del lector');
 
   const puntuacion = elementos.length === 0 ? 0 : Math.min(100, 20 + elementos.length * 12);
   const resumen = elementos.length === 0
-    ? 'Sin elementos diferenciadores de Nicaragua Informate detectados.'
-    : `Diferenciador NI: ${elementos.join('; ')}.`;
+    ? 'La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores editoriales adicionales.'
+    : `Aporte editorial detectado: ${elementos.join('; ')}.`;
 
   return { elementosDetectados: elementos, puntuacion, resumen };
 }
@@ -189,6 +348,10 @@ export function calcularOriginalidadPorEstructura(
   if (detectoresValorAgregado.recopilacionFuentes(n)) elementos.push(25);
   if (detectoresValorAgregado.recomendacionesServicio(n)) elementos.push(25);
   if (detectoresValorAgregado.datosConcretos(n)) elementos.push(20);
+  if (detectoresValorAgregado.reorganizacionExplicativa(n)) elementos.push(20);
+  if (detectoresValorAgregado.analisisProfundo(n)) elementos.push(30);
+  if (detectoresValorAgregado.visualizacionDatos(n)) elementos.push(25);
+  if (detectoresValorAgregado.preguntasRespondidas(n)) elementos.push(20);
 
   if (elementos.length === 0) return 0;
   return Math.min(100, Math.round(elementos.reduce((a, b) => a + b, 0) / Math.max(1, elementos.length - 1)));

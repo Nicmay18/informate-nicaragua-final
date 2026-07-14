@@ -8,17 +8,26 @@ import { evaluarInternacionales } from './internacionales';
 import { evaluarDeportes } from './deportes';
 import { evaluarEspectaculos } from './espectaculos';
 import { evaluarTecnologia } from './tecnologia';
+import { evaluarEconomia } from './economia';
+import { evaluarOpinion } from './opinion';
+import { evaluarReportajes } from './reportajes';
+import { evaluarGuias } from './guias';
 
 export function evaluarPorVertical(
   n: NoticiaInput,
   v2: ResultadoEditorJefeV2
 ): EvaluacionVertical {
+  if (v2.fase2_tipoNota.tipo === 'Reportaje') {
+    return evaluarReportajes(n, v2);
+  }
+
   const vertical = detectarVertical(n);
 
   switch (vertical) {
     case 'Sucesos':
       return evaluarSucesos(n, v2);
     case 'Nacionales':
+    case 'Política':
       return evaluarNacionales(n, v2);
     case 'Internacionales':
       return evaluarInternacionales(n, v2);
@@ -28,6 +37,14 @@ export function evaluarPorVertical(
       return evaluarEspectaculos(n, v2);
     case 'Tecnología':
       return evaluarTecnologia(n, v2);
+    case 'Economía':
+      return evaluarEconomia(n, v2);
+    case 'Opinión':
+      return evaluarOpinion(n, v2);
+    case 'Servicio':
+      return evaluarGuias(n, v2);
+    case 'Reportajes':
+      return evaluarReportajes(n, v2);
     default:
       return evaluarGenerico(n, v2, vertical);
   }

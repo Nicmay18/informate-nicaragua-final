@@ -5,6 +5,8 @@ import {
   fabricarSugerencia,
   textoCompleto,
   detectoresValorAgregado,
+  detectoresContextoRico,
+  detectoresUtilidad,
   evaluarDiferenciadorNI,
   calcularOriginalidadPorEstructura,
   prioridadDesdeDecision,
@@ -13,7 +15,19 @@ import {
 const institucionesNacionales = /\b(asamblea nacional|presidencia|ministerio|alcald[ií]a|municipio|inss|mifamilia|migob|mific|mitrabajo|mined|minsa|ineter|invur|cse|banco central|fiscal[ií]a|poder judicial|contralor[ií]a|procuradur[ií]a|direcci[oó]n general|instituto nacional)\b/i;
 
 function detectarImpactoCiudadano(n: NoticiaInput): boolean {
-  return /\b(ciudadano|ciudadan[íi]a|poblaci[oó]n|afecta(?:r[aá])?|beneficiar[aá]s?|beneficiarios|afectados|usuarios|trabajadores|estudiantes|familias|comunidad|pueblos|sector|gremio|empresas|pymes|miles de personas|cientos de personas)\b/i.test(textoCompleto(n));
+  return /\b(ciudadanos?|ciudadan[íi]a|poblaci[oó]n|afecta(?:r[aá])?|beneficiar[aá]s?|beneficiarios?|afectados?|usuarios?|trabajadores?|estudiantes?|familias?|comunidad|pueblos?|sector(?:es)?|gremios?|empresas?|pymes|miles de personas|cientos de personas|hogares?|consumidores?|contribuyentes?)\b/i.test(textoCompleto(n));
+}
+
+function detectarQueCambia(n: NoticiaInput): boolean {
+  return /\b(qu[eé] cambia|nueva medida|nueva normativa|reforma|modificaci[oó]n|se aprob[oó]|entr[aá] en vigor|entr[aá] en vigencia|rige a partir|desde ahora|ahora se exige|nuevo requisito)\b/i.test(textoCompleto(n));
+}
+
+function detectarDesdeCuando(n: NoticiaInput): boolean {
+  return /\b(desde|a partir de|entr[aá] en vigor|entr[aá] en vigencia|vigente|rige|plazo|fecha l[ií]mite|hasta|a partir del \d{1,2})\b/i.test(textoCompleto(n));
+}
+
+function detectarComoImpacta(n: NoticiaInput): boolean {
+  return detectoresValorAgregado.explicacionImpacto(n) || /\b(impactar[aá]|significa que|esto implica|para el lector|para el ciudadano|para la ciudadan[íi]a|consecuencia|cambiar[aá]\s+(la forma|el proceso|el tr[áa]mite)|m[áa]s r[áa]pido|m[áa]s f[aá]cil|m[áa]s caro|m[áa]s barato)\b/i.test(textoCompleto(n));
 }
 
 function detectarMarcoLegal(n: NoticiaInput): boolean {
@@ -21,7 +35,7 @@ function detectarMarcoLegal(n: NoticiaInput): boolean {
 }
 
 function detectarBeneficiariosAfectados(n: NoticiaInput): boolean {
-  return /\b(beneficiar[aá]s?(?:\s+\w{1,6}){0,4}\s+\d+|afecta(?:da)?s?(?:\s+\w{1,6}){0,4}\s+\d+|poblaci[oó]n\s+impactada|miles de|centenares de|cientos de|alcance nacional|departamentos afectados)\b/i.test(textoCompleto(n));
+  return /\b(beneficiar[aá]s?|afectados?|afectadas?|poblaci[oó]n impactada|miles|millones?|mill[oó]n|centenares|cientos|alcance nacional|departamentos afectados|m[aá]s de \d)\b/i.test(textoCompleto(n));
 }
 
 function detectarTramite(n: NoticiaInput): boolean {
@@ -133,19 +147,27 @@ function sugerenciasNacionales(n: NoticiaInput, _ev: EvidenciaPuntuada): Sugeren
 
 function calcularUtilidadNacionales(n: NoticiaInput, ev: EvidenciaPuntuada): number {
   let puntos = 0;
-  if (detectarImpactoCiudadano(n)) puntos += 40;
-  if (detectarTramite(n)) puntos += 30;
+  if (detectarImpactoCiudadano(n)) puntos += 35;
+  if (detectarTramite(n) || detectoresUtilidad.tramites(n)) puntos += 30;
   if (detectarBeneficiariosAfectados(n)) puntos += 20;
-  if (detectarMarcoLegal(n)) puntos += 10;
+  if (detectarMarcoLegal(n) || detectoresContextoRico.leyes(n)) puntos += 10;
+  if (detectarQueCambia(n)) puntos += 10;
+  if (detectarDesdeCuando(n)) puntos += 5;
+  if (detectarComoImpacta(n)) puntos += 10;
+  if (detectoresUtilidad.explicaciones(n)) puntos += 5;
+  if (detectoresContextoRico.estadisticas(n)) puntos += 10;
   return Math.max(ev.utilidad, Math.min(100, puntos + (puntos > 0 ? 10 : 0)));
 }
 
 function consistenciaNacionales(n: NoticiaInput, ev: EvidenciaPuntuada): string[] {
   const faltantes: string[] = [];
   if (!detectarImpactoCiudadano(n)) faltantes.push('faltó impacto ciudadano');
+  if (!detectarComoImpacta(n)) faltantes.push('faltó explicación del impacto');
   if (!institucionesNacionales.test(textoCompleto(n)) && ev.fuenteIdentificada < 60) faltantes.push('faltó institución o fuente oficial');
-  if (!detectarMarcoLegal(n) && !detectoresValorAgregado.antecedentes(n)) faltantes.push('faltó marco legal o antecedentes');
-  if (!detectarBeneficiariosAfectados(n)) faltantes.push('faltó beneficiarios o afectados');
+  if (!detectarMarcoLegal(n) && !detectoresValorAgregado.antecedentes(n) && !detectoresContextoRico.leyes(n)) {
+    faltantes.push('faltó marco legal o antecedentes');
+  }
+  if (!detectarBeneficiariosAfectados(n) && !detectarImpactoCiudadano(n)) faltantes.push('faltó beneficiarios o afectados');
   return faltantes;
 }
 
@@ -165,7 +187,9 @@ export function evaluarNacionales(n: NoticiaInput, v2: ResultadoEditorJefeV2): E
     consistencia: { aprobado: true, contradicciones },
     diferenciadorNI: { ...diferenciador, puntuacion: Math.max(diferenciador.puntuacion, originalidad >= 50 ? 50 : 0) },
     prioridadEditorial: prioridadDesdeDecision(v2, utilidad, originalidad),
-    valorAgregado: diferenciador.elementosDetectados.length > 0 ? diferenciador.elementosDetectados : ['Sin aporte propio detectado'],
+    valorAgregado: diferenciador.elementosDetectados.length > 0
+      ? diferenciador.elementosDetectados
+      : ['La nota cumple los criterios básicos de su vertical; no se detectaron diferenciadores adicionales.'],
   };
 }
 
