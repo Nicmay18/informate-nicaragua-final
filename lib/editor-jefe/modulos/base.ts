@@ -136,7 +136,7 @@ export const detectoresValorAgregado = {
     /\b(antecedente|hist[oó]rico|anteriormente|previamente|no es la primera vez|en a[ñn]os anteriores|en el pasado|casos similares|coinciden con|se repite)\b/i.test(textoCompleto(n)),
 
   recomendacionesServicio: (n: NoticiaInput): boolean =>
-    /\b(recomendar|recomendaci[oó]n|consejo|evitar|prevenir|cuidado|medida de seguridad|protegerse|a tener en cuenta|se recomienda|se sugiere|pasos a seguir)\b/i.test(textoCompleto(n)),
+    /\b(recomendar|recomendaci[oó]n|consejo|evitar|prevenir|cuidado|medida de seguridad|protegerse|a tener en cuenta|se recomienda|se sugiere|pasos a seguir|pasos para|requisito|d[óo]nde acudir|l[ií]nea telef[oó]nica|denunciar)\b/i.test(textoCompleto(n)),
 
   explicacionImpacto: (n: NoticiaInput): boolean =>
     /\b(impacto|afecta|significa que|esto implica|para el lector|para la ciudadan[ií]a|consecuencia directa|qu[eé] cambia|qu[eé] significa)\b/i.test(textoCompleto(n)),
@@ -167,6 +167,10 @@ export const detectoresValorAgregado = {
 
   preguntasRespondidas: (n: NoticiaInput): boolean =>
     /\b(¿qu[eé] pasar[aá]?|¿qu[eé] significa?|¿c[óo]mo afecta?|¿qui[eé]nes?|¿d[óo]nde?|¿cu[áa]ndo?|¿por qu[eé]?|preguntas frecuentes|respuestas)\b/i.test(textoCompleto(n)),
+
+  explicacionLegal: (n: NoticiaInput): boolean =>
+    /\b(marco legal|ley|normativa|art[ií]culo|decreto|resoluci[oó]n|sentencia|fallo|juzgado|tribunal|fiscal[ií]a|ministerio p[uú]blico|ministerio)\b/i.test(textoCompleto(n)) &&
+    /\b(explica|significa|implica|afecta|c[óo]mo|por qu[eé]|qu[eé] cambia|qu[eé] dice)\b/i.test(textoCompleto(n)),
 };
 
 export const detectoresEvidencia = {
@@ -295,6 +299,8 @@ export function detectarEvidenciaPeriodistica(n: NoticiaInput): boolean {
     detectoresEvidencia.trabajoDeCampo(n) ||
     detectoresEvidencia.testigoIdentificado(n) ||
     detectoresEvidencia.fuenteInstitucional(n) ||
+    detectoresEvidencia.documentoOficial(n) ||
+    detectoresEvidencia.comunicado(n) ||
     detectoresEvidencia.periodista(n) ||
     detectoresEvidencia.redOficial(n)
   );
@@ -320,6 +326,7 @@ export function evaluarDiferenciadorNI(n: NoticiaInput): DiferenciadorNI {
   if (detectoresValorAgregado.explicacionImpacto(n)) elementos.push('Explicó el impacto para el lector');
   if (detectoresValorAgregado.comparacion(n)) elementos.push('Agregó comparación con hechos anteriores');
   if (detectoresValorAgregado.contexto(n)) elementos.push('Agregó contexto explicativo');
+  if (detectoresValorAgregado.explicacionLegal(n)) elementos.push('Agregó explicación legal o normativa');
   if (detectoresValorAgregado.datosConcretos(n)) elementos.push('Incluyó datos concretos verificables');
   if (detectoresValorAgregado.reorganizacionExplicativa(n)) elementos.push('Reorganizó o simplificó información para el lector');
   if (detectoresValorAgregado.analisisProfundo(n)) elementos.push('Agregó análisis o explicación de fondo');
@@ -344,6 +351,7 @@ export function calcularOriginalidadPorEstructura(
   if (detectoresValorAgregado.antecedentes(n)) elementos.push(35);
   if (detectoresValorAgregado.comparacion(n)) elementos.push(35);
   if (detectoresValorAgregado.contexto(n)) elementos.push(30);
+  if (detectoresValorAgregado.explicacionLegal(n)) elementos.push(35);
   if (detectoresValorAgregado.explicacionImpacto(n)) elementos.push(30);
   if (detectoresValorAgregado.recopilacionFuentes(n)) elementos.push(25);
   if (detectoresValorAgregado.recomendacionesServicio(n)) elementos.push(25);

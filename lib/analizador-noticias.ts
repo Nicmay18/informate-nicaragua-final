@@ -15,10 +15,25 @@
  * que depende de terceros; se marca como "Oportunidad futura de actualizacion".
  */
 
-import { evaluarEditorJefeV2 } from './editor-jefe/engine';
+import { evaluarEditorJefeV2, type ResultadoEditorJefeV2 } from './editor-jefe/engine';
 import { mapearReporteEditorJefe } from './editor-jefe/mapper';
 import type { VerticalEditorial } from './editor-jefe/perfiles';
 import { evaluarPorVertical, type DiferenciadorNI } from './editor-jefe/modulos';
+
+function limpiarContenidoNoticia(contenido: string): string {
+  // Eliminar bloques típicos de panel/CMS/IA: panel de administración, mensajes del sistema, prompts, UI, etc.
+  return contenido
+    .replace(/\[panel[^\]]*\][\s\S]*?\[\/panel\]/gi, ' ')
+    .replace(/\[sistema[^\]]*\][\s\S]*?\[\/sistema\]/gi, ' ')
+    .replace(/\[ui[^\]]*\][\s\S]*?\[\/ui\]/gi, ' ')
+    .replace(/\[instruccion[^\]]*\][\s\S]*?\[\/instruccion\]/gi, ' ')
+    // Líneas o frases que comienzan con etiquetas de panel/sistema/prompt/interfaz
+    .replace(/(?:^|\n)\s*(?:panel de administraci[oó]n|panel|mensaje del sistema|nota del sistema|instrucci[oó]n(?:es)? del sistema|prompt del sistema|contexto del sistema|ui|interfaz|sidebar|men[uú]|login|dashboard|consola|debug|system message|system prompt|user prompt|assistant prompt)\s*(?::|—|–|-)?\s*.*/gim, ' ')
+    // Etiquetas tipo HTML de sistema/panel
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 export type NoticiaTipo =
   | 'Tecnologia' | 'Sucesos' | 'Economia' | 'Salud' | 'Infraestructura' | 'Judicial'
@@ -563,7 +578,14 @@ function detectarCierreGenerico(texto: string): boolean {
 // MOTOR PRINCIPAL (LOGICA UNIFICADA ORO)
 // ───────────────────────────────────────────────
 
-export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoAnalisis> {
+export async function analizarNoticia(noticiaOriginal: NoticiaInput): Promise<ResultadoAnalisis> {
+  // Asegurar que el análisis se haga únicamente sobre el contenido de la noticia,
+  // nunca sobre textos del panel, mensajes del sistema o elementos de la interfaz.
+  const noticia: NoticiaInput = {
+    ...noticiaOriginal,
+    contenido: limpiarContenidoNoticia(noticiaOriginal.contenido),
+  };
+
   const t = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
   // Detectar problemas
@@ -574,6 +596,9 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   // Anti-atribuciones falsas a instituciones (EEAT Nicaragua)
   const atribucionesFalsas = /\bpolicia\s+nacional\s+de\s+nicaragua\b|\bpnc\b|\bministerio\s+de\s+salud\s+de\s+nicaragua\b|\bmina\b|\bsilais\b.*\bnicaragua\b|\balcald[ií]a\s+de\s+managua\b|\bsupremo\s+poder\b.*\bnicaragua\b/i.test(contenidoLower) &&
     !/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/.test(contenidoLower);
+
+  // ─── EDITOR JEFE V2 PRIMERO para garantizar consistencia con la Constitución Forense ───
+  const v2 = evaluarEditorJefeV2(noticia);
 
   // ─── NUEVAS DETECCIONES FORENSE NICARAGUA ───
   const palabrasSensiblesDetectadas = detectarPalabrasSensibles(noticia.contenido + ' ' + noticia.titulo);
@@ -663,7 +688,10 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
   else nivel = 'RECHAZADO';
 
   const aprobado = nivel !== 'RECHAZADO';
-  const reporteForense = analizarForenseV1(noticia);
+  const reporteForense = analizarForenseV1(noticia, v2);
+
+  // Sincronizar observaciones contradictorias entre Editor Jefe y Constitución Forense
+  const reporteForenseSincronizado = sincronizarForenseConEditorJefe(reporteForense, v2, filtros);
 
   return {
     aprobado,
@@ -676,11 +704,10 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
     metadataSugerida: generarMetadataSugerida(noticia, filtros),
     reporteVPR: (() => {
       const observacionesForense = [
-        ...reporteForense.observaciones,
-        ...reporteForense.advertencias,
-        ...reporteForense.hallazgos,
+        ...reporteForenseSincronizado.observaciones,
+        ...reporteForenseSincronizado.advertencias,
+        ...reporteForenseSincronizado.hallazgos,
       ];
-      const v2 = evaluarEditorJefeV2(noticia);
       const ajustes = evaluarPorVertical(noticia, v2);
       v2.fase1_evidencia.utilidad = ajustes.utilidad;
       v2.fase1_evidencia.originalidad = ajustes.originalidad;
@@ -692,7 +719,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
       reporte.valorAgregado = ajustes.valorAgregado;
       return reporte;
     })(),
-    reporteForenseV1: reporteForense,
+    reporteForenseV1: reporteForenseSincronizado,
   };
 }
 
@@ -1213,7 +1240,7 @@ function analizarFiltroValorEditorial(n: NoticiaInput): FiltroResultado {
 // AUTOAUDITORÍA CONSTITUCIÓN V6.0
 // ───────────────────────────────────────────────
 
-function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
+function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteForenseV1 {
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const textoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const palabraCount = textoPlano.split(/\s+/).filter(p => p.length > 0).length;
@@ -1224,6 +1251,15 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
   const observaciones: string[] = [];
   const advertencias: string[] = [];
   const hallazgos: string[] = [];
+
+  // RFC-012: si el Editor Jefe V2 ya aprobó evidencia, la Constitución Forense no puede contradecirlo.
+  const evEditorJefe = v2.fase1_evidencia;
+  const editorJefeApruebaEvidencia =
+    evEditorJefe.fuenteIdentificada >= 60 ||
+    evEditorJefe.documentoOficial >= 60 ||
+    evEditorJefe.trabajoDeCampo >= 60 ||
+    evEditorJefe.dosFuentes >= 60;
+  const editorJefeApruebaDatos = editorJefeApruebaEvidencia || evEditorJefe.datosConcretos >= 60;
 
   // ─── FASE 0: IDENTIFICACIÓN DEL PACIENTE ───
   const catLower = n.categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -1262,10 +1298,10 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
   const existeNoticia = /\b(ocurri[oó]|sucedi[oó]|pas[oó]|registr[oó]|report[oó]|confirm[oó]|inform[oó]|detuvieron|capturaron|falleci[oó]|herido|accidente|incendio|robo|hurto|allanamiento|proceso|juicio|audiencia|fallo|sentencia|decreto|resoluci[óo]n|acuerdo|medida|anuncio|declaraci[óo]n)\b/i.test(textoLower);
   const interesPublico = /\b(poblaci[óo]n|comunidad|ciudadan[íi]a|afecta|impacta|servicio p[úu]blico|salud|seguridad|econom[íi]a|educaci[óo]n|tr[áa]nsito|justicia|derechos|vulneraci[óo]n|denuncia|protesta|marcha)\b/i.test(textoLower);
   const actualidad = /\b(hoy|este|ayer|este lunes|este martes|la mañana|la tarde|la noche|[úu]ltimo|reciente|actualizaci[óo]n|en desarrollo|contin[uú]a|se espera|pr[oó]xim)\b/i.test(textoLower) || palabraCount > 0;
-  const evidencia = /\b(dijo|indic[oó]|precis[oó]|señal[oó]|confirm[oó]|declar[oó]|inform[oó]|report[oó]|testimonio|versi[óo]n|documento|fotograf[íi]a|video|peritaje|expediente|acta|oficio|nota|comunicado)\b/i.test(textoLower);
-  const fuente = /\b(?:polic[ií]a|fiscal[íi]a|ministerio|alcald[ií]a|juzgado|tribunal|comisar[ií]a|bomberos|hospital|autoridad|vocero|director|jefe|representante|testigo|vecino|habitante|comerciante)\b/i.test(textoLower);
-  const datoVerificable = /\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\bC?\$\s*\d+|\b\d{2,3}\s+(kil[óo]metros?|km|metros?|años?|personas?|heridos?|afectados?|fallecidos?|v[ií]ctimas?)\b|\b\d{1,2}:\d{2}\b/.test(textoPlano);
-  const utilidad = /\b(c[óo]mo|qu[eé] hacer|a d[oó]nde|requisito|paso|prevenci[óo]n|evitar|cuidado|proteger|denunciar|consultar|medida|seguimiento|derecho|proceso)\b/i.test(textoLower);
+  const evidencia = editorJefeApruebaEvidencia || /\b(dijo|indic[oó]|precis[oó]|señal[oó]|confirm[oó]|declar[oó]|inform[oó]|report[oó]|testimonio|versi[óo]n|documento|fotograf[íi]a|video|peritaje|expediente|acta|oficio|nota|comunicado)\b/i.test(textoLower);
+  const fuente = editorJefeApruebaEvidencia || /\b(?:polic[ií]a|fiscal[íi]a|ministerio|alcald[ií]a|juzgado|tribunal|comisar[ií]a|bomberos|hospital|autoridad|vocero|director|jefe|representante|testigo|vecino|habitante|comerciante)\b/i.test(textoLower);
+  const datoVerificable = editorJefeApruebaDatos || /\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\bC?\$\s*\d+|\b\d{2,3}\s+(kil[óo]metros?|km|metros?|años?|personas?|heridos?|afectados?|fallecidos?|v[ií]ctimas?)\b|\b\d{1,2}:\d{2}\b/.test(textoPlano);
+  const utilidad = /\b(c[óo]mo|qu[eé] hacer|a d[óo]nde|requisito|paso|prevenci[óo]n|evitar|cuidado|proteger|denunciar|consultar|medida|seguimiento|derecho|proceso)\b/i.test(textoLower);
   const contexto = /\b(por qu[eé]|causa|motivo|origen|antecedente|historia|contexto|marco legal|ley|instituci[óo]n|proceso|consecuencia|impacto|resultado)\b/i.test(textoLower);
   const proceso = /\b(proceso|investigaci[óo]n|juicio|audiencia|fallo|resoluci[óo]n|etapa|seguimiento|contin[uú]a|pr[oó]xim|a partir de)\b/i.test(textoLower);
 
@@ -1309,6 +1345,8 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
   };
 
   // ─── FASE 3: NECROPSIA DE EVIDENCIA ───
+  const contextoLegalRegex = /\b(?:ley|juez|jueces|tribunal|fiscal[íi]a|ministerio\s+p[úu]blico|fiscal|juzgado|sentencia|fallo|resoluci[oó]n|decreto|art[íi]culo|norma|proceso|judicial|legal|imputado|acusado|delito|pena|defensor|magistrado|procuradur[íi]a|abogado)\b/i;
+  const condicionalesEspeculativos = /\b(?:se desconoce|no se sabe|podr[íi]a|podria|eventualmente|de confirmarse|de confirmar|supuestamente|presuntamente|al parecer|seg[úu]n versiones no confirmadas)\b/i;
   const etiquetarOracion = (oracion: string): OracionEtiquetada['origen'] => {
     const o = oracion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (/\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo)\s+(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|bomberos|hospital|autoridad|oficial|vocero)\b/i.test(oracion)) return 'OFICIAL';
@@ -1316,7 +1354,11 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
     if (/\b(?:testimonio|testigo|vecino|habitante|comerciante|conductor|pasajero|familiar|afectado|dijo|indicó|señaló)\b/i.test(o)) return 'TESTIGO';
     if (/\b(?:documento|oficio|acta|resolución|decreto|expediente|peritaje|comunicado|nota)\b/i.test(o)) return 'DOCUMENTAL';
     if (/\b(?:redes sociales|publicación|post|tuit|comentario|viral|mensaje en redes)\b/i.test(o)) return 'REDES';
-    if (/\b(?:se desconoce|no se sabe|podría|supuestamente|presuntamente|al parecer|según versiones no confirmadas)\b/i.test(o)) return 'SIN ORIGEN';
+    if (condicionalesEspeculativos.test(o)) {
+      // RFC-012: expresiones condicionales en contexto legal son descriptivas, no especulativas.
+      if (contextoLegalRegex.test(o)) return evOficial ? 'OFICIAL' : 'PERIODÍSTICO';
+      return 'SIN ORIGEN';
+    }
     if (/\b(?:verificó|constató|en el lugar|en el sitio|presencialmente|trabajo de campo)\b/i.test(o)) return 'FORENSE';
     if (evOficial) return 'SEMIOFICIAL';
     return 'SIN ORIGEN';
@@ -1361,8 +1403,13 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
       hallazgosContaminacion.push({ tipo: 'emocion', texto: match[0], sugerencia: 'Sustituir el adjetivo emocional por un dato verificable.' });
     }
   });
-  const especulativas = /\b(podría|podria|quizás|quiza|tal vez|posiblemente|se especula|se rumor|se cree|se supone|se sospecha|parece ser|al parecer)\b/gi;
+  const especulativas = /\b(podr[íi]a|podria|quiz[áa]s|quiza|tal vez|posiblemente|se especula|se rumor|se cree|se supone|se sospecha|parece ser|al parecer|eventualmente|de confirmarse|de confirmar)\b/gi;
   while ((match = especulativas.exec(textoPlano)) !== null) {
+    // RFC-012: no marcar como especulación las expresiones condicionales usadas en contexto legal.
+    const inicio = Math.max(0, match.index - 80);
+    const fin = Math.min(textoPlano.length, match.index + match[0].length + 80);
+    const ventana = textoPlano.slice(inicio, fin).toLowerCase();
+    if (contextoLegalRegex.test(ventana)) continue;
     hallazgosContaminacion.push({ tipo: 'especulacion', texto: match[0], sugerencia: 'Eliminar especulación; usar atribución clara o eliminar la frase.' });
   }
   const suposiciones = /\b(supuestamente|según se dice|la gente dice|se comenta|dicen que|versiones indican|sin confirmar)\b/gi;
@@ -1576,6 +1623,11 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
   if (/\b(?:documento|oficio|acta|peritaje|expediente|resolución|decreto)\b/i.test(textoLower)) diferenciadorEvidencia.push('documento o evidencia oficial');
   if (/\b(?:dijo|indicó|precisó|señaló|declaró|confirmó)\s+(?:el|la)\s+(?:testigo|vecino|habitante|comerciante|familiar|afectado)\b/i.test(textoLower)) diferenciadorEvidencia.push('voz directa de afectado o testigo');
   if (/\b(?:por qué|causa|motivo|contexto|marco legal|institución|proceso|consecuencia)\b/i.test(textoLower)) diferenciadorEvidencia.push('contexto o explicación');
+  // RFC-012: reconocer reorganización editorial, cronología, explicación legal y valor de servicio como aporte propio
+  if (/\b(?:primero|luego|después|posteriormente|a las|minutos más tarde|horas más tarde|el mismo día|al día siguiente|cronología|secuencia|inicialmente|finalmente)\b/i.test(textoLower)) diferenciadorEvidencia.push('cronología o secuencia explicativa');
+  if (/\b(?:en resumen|en otras palabras|esto significa que|esto implica|para entenderlo|lo importante es|aquí te explicamos|así funciona|de forma sencilla|qué debes saber|preguntas frecuentes|lo que cambia|resumido|te explicamos|te contamos)\b/i.test(textoLower)) diferenciadorEvidencia.push('reorganización editorial para el lector');
+  if (/\b(?:marco legal|ley|normativa|artículo|decreto|resolución|sentencia|fallo|juzgado|tribunal|fiscalía|ministerio público)\b/i.test(textoLower) && /\b(?:explica|significa|implica|afecta|cómo|por qué)\b/i.test(textoLower)) diferenciadorEvidencia.push('explicación legal');
+  if (/\b(?:cómo|qué hacer|a dónde acudir|requisito|paso|medida|prevención|evitar|cuidado|proteger|denunciar|consultar|línea telefónica)\b/i.test(textoLower)) diferenciadorEvidencia.push('valor de servicio para el lector');
   const fase15Observacion = diferenciadorEvidencia.length > 0
     ? `Diferenciadores detectados: ${diferenciadorEvidencia.join(', ')}.`
     : 'No se detecta una razón objetiva para preferir esta versión sobre otros medios.';
@@ -1622,6 +1674,61 @@ function analizarForenseV1(n: NoticiaInput): ReporteForenseV1 {
     fase18_forenseGoogle: fase18,
   };
   return reporte;
+}
+
+function sincronizarForenseConEditorJefe(
+  forense: ReporteForenseV1,
+  v2: ResultadoEditorJefeV2,
+  filtros: ResultadoAnalisis['filtros']
+): ReporteForenseV1 {
+  const ev = v2.fase1_evidencia;
+  const editorJefeApruebaEvidencia =
+    ev.fuenteIdentificada >= 60 ||
+    ev.documentoOficial >= 60 ||
+    ev.trabajoDeCampo >= 60 ||
+    ev.dosFuentes >= 60;
+  const editorJefeApruebaDatos = editorJefeApruebaEvidencia || ev.datosConcretos >= 60;
+
+  // RFC-012: si Editor Jefe ya aprobó evidencia/datos, la Constitución Forense no puede decir lo contrario.
+  const fase1 = forense.fase1_triage;
+  const aprobarItem = (pregunta: string) => {
+    const item = fase1.items.find(i => i.pregunta === pregunta);
+    if (item) {
+      item.respuesta = 'Sí';
+      item.observacion = undefined;
+    }
+  };
+
+  if (editorJefeApruebaEvidencia) {
+    aprobarItem('¿Existe evidencia?');
+    aprobarItem('¿Existe fuente?');
+  }
+  if (editorJefeApruebaDatos) {
+    aprobarItem('¿Existe dato verificable?');
+  }
+  if (ev.trabajoDeCampo >= 60) {
+    aprobarItem('¿Existe proceso?');
+  }
+
+  // Filtrar observaciones contradictorias
+  forense.observaciones = forense.observaciones.filter(o => {
+    if (editorJefeApruebaEvidencia && /Fase 1 Triage — (?:¿Existe evidencia\?|¿Existe fuente\?)/.test(o)) return false;
+    if (editorJefeApruebaDatos && /Fase 1 Triage — ¿Existe dato verificable\?/.test(o)) return false;
+    if (ev.trabajoDeCampo >= 60 && /Fase 4 Cadena de custodia|Párrafo sin atribución ni fuente identificable/.test(o)) return false;
+    if (filtros?.eeat?.aprobado && o.startsWith('Fase 9 EEAT:')) return false;
+    return true;
+  });
+
+  // Si Editor Jefe aprobó evidencia, no puede decirse que no hay razón objetiva para preferir la nota.
+  if (editorJefeApruebaEvidencia && forense.fase15_forenseDiferenciador.observacion.includes('No se detecta una razón objetiva')) {
+    forense.fase15_forenseDiferenciador.observacion =
+      'El Editor Jefe detectó evidencia verificable (fuente, documento, testimonio o campo) que fundamenta el aporte propio.';
+    if (forense.fase15_forenseDiferenciador.evidencia.length === 0) {
+      forense.fase15_forenseDiferenciador.evidencia.push('evidencia verificable reconocida por el Editor Jefe');
+    }
+  }
+
+  return forense;
 }
 
 // ───────────────────────────────────────────────
