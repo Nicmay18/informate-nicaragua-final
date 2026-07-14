@@ -82,10 +82,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ? noticia.titulo
       : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
 
-    // Truncar a máximo 70 caracteres para Bing/Google (evita 'Título demasiado largo')
-    if (finalTitle.length > 70) {
-      const cutAt = finalTitle.lastIndexOf(' ', 67);
-      finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 67) + '…';
+    // Truncar a máximo 60 caracteres para Bing/Google (evita 'Título demasiado largo')
+    if (finalTitle.length > 60) {
+      const cutAt = finalTitle.lastIndexOf(' ', 57);
+      finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 57) + '…';
     }
 
     // Meta description: priorizar resumen editorial > metaDescription > generada
@@ -114,7 +114,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       : 'https://nicaraguainformate.com/logo.webp';
 
     return {
-      title: finalTitle,
+      title: { absolute: finalTitle },
       description,
       authors: [{ name: authorName }],
       alternates: { canonical: url },

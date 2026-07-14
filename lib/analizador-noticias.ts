@@ -17,7 +17,8 @@
 
 import { evaluarEditorJefeV2 } from './editor-jefe/engine';
 import { mapearReporteEditorJefe } from './editor-jefe/mapper';
-import { generarSugerenciasPorVertical, type VerticalEditorial } from './editor-jefe/perfiles';
+import type { VerticalEditorial } from './editor-jefe/perfiles';
+import { evaluarPorVertical, type DiferenciadorNI } from './editor-jefe/modulos';
 
 export type NoticiaTipo =
   | 'Tecnologia' | 'Sucesos' | 'Economia' | 'Salud' | 'Infraestructura' | 'Judicial'
@@ -169,6 +170,9 @@ export interface ReporteEditorJefe {
     benchmark: string[];
     ee: string[];
   };
+
+  diferenciadorNI?: DiferenciadorNI;
+  valorAgregado?: string[];
 
   // Discover / compartir
   discoverRazon: string;
@@ -677,8 +681,16 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
         ...reporteForense.hallazgos,
       ];
       const v2 = evaluarEditorJefeV2(noticia);
-      v2.fase5_sugerencias = generarSugerenciasPorVertical(noticia, v2.fase1_evidencia);
-      return mapearReporteEditorJefe(noticia, v2, observacionesForense);
+      const ajustes = evaluarPorVertical(noticia, v2);
+      v2.fase1_evidencia.utilidad = ajustes.utilidad;
+      v2.fase1_evidencia.originalidad = ajustes.originalidad;
+      v2.fase5_sugerencias = ajustes.sugerencias;
+      v2.fase6_consistencia = ajustes.consistencia;
+      const reporte = mapearReporteEditorJefe(noticia, v2, observacionesForense);
+      reporte.diferenciadorNI = ajustes.diferenciadorNI;
+      reporte.prioridadEditorial = ajustes.prioridadEditorial;
+      reporte.valorAgregado = ajustes.valorAgregado;
+      return reporte;
     })(),
     reporteForenseV1: reporteForense,
   };
