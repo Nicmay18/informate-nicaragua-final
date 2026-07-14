@@ -1,0 +1,55 @@
+name: Auditoría Editorial Diaria — 100 noticias
+
+on:
+  schedule:
+    # 6:00 AM hora Nicaragua (UTC-6) = 12:00 PM UTC
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'lib/editor-jefe/**'
+      - 'lib/analizador-noticias.ts'
+      - 'probar-jefe-ia.ts'
+      - '.github/workflows/auditoria-editorial-diaria.yml'
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  auditoria-editorial:
+    name: Validar 100 noticias con Editor Jefe V2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit --skipLibCheck
+
+      - name: ESLint check
+        run: npm run lint -- --max-warnings 0
+
+      - name: Ejecutar auditoría de 100 noticias
+        run: npx sucrase-node probar-jefe-ia.ts
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}
+
+      - name: Subir resultados como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-auditoria-editorial
+          path: probar-jefe-ia-resultados.json

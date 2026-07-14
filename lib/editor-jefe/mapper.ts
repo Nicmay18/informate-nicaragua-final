@@ -15,6 +15,7 @@ import type {
   TipoNotaEditorialV2,
   EvidenciaPuntuada,
 } from './engine';
+import { detectarVertical, resumenPerfilEditorial } from './perfiles';
 
 const norm = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -283,6 +284,8 @@ export function mapearReporteEditorJefe(
       : 'La nota informa el hecho pero su utilidad práctica es limitada.',
     decisionPortada,
     explicacionPortada,
+
+    perfilVertical: resumenPerfilEditorial(detectarVertical(n)),
 
     discoverRazon: decision.prioridad >= 80
       ? 'Actualidad, utilidad y señales de confianza la hacen candidata fuerte para Discover.'

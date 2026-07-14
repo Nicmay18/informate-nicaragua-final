@@ -17,6 +17,7 @@
 
 import { evaluarEditorJefeV2 } from './editor-jefe/engine';
 import { mapearReporteEditorJefe } from './editor-jefe/mapper';
+import { generarSugerenciasPorVertical, type VerticalEditorial } from './editor-jefe/perfiles';
 
 export type NoticiaTipo =
   | 'Tecnologia' | 'Sucesos' | 'Economia' | 'Salud' | 'Infraestructura' | 'Judicial'
@@ -156,6 +157,18 @@ export interface ReporteEditorJefe {
     | 'Portada'
     | 'Cobertura especial';
   explicacionPortada: string;
+
+  // Perfil editorial especializado por vertical
+  perfilVertical: {
+    vertical: VerticalEditorial;
+    criterios: string[];
+    evidenciaAceptada: string[];
+    utilidad: string[];
+    contexto: string[];
+    preguntas: string[];
+    benchmark: string[];
+    ee: string[];
+  };
 
   // Discover / compartir
   discoverRazon: string;
@@ -664,6 +677,7 @@ export async function analizarNoticia(noticia: NoticiaInput): Promise<ResultadoA
         ...reporteForense.hallazgos,
       ];
       const v2 = evaluarEditorJefeV2(noticia);
+      v2.fase5_sugerencias = generarSugerenciasPorVertical(noticia, v2.fase1_evidencia);
       return mapearReporteEditorJefe(noticia, v2, observacionesForense);
     })(),
     reporteForenseV1: reporteForense,
