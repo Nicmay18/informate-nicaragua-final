@@ -72,31 +72,10 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
             aria-hidden={i !== active}
           >
             <div className="hero-card">
-              <div className="hero-media">
-                <Image
-                  src={n.imagen || '/logo.webp'}
-                  alt={n.titulo}
-                  fill
-                  priority={i === 0}
-                  sizes="(max-width: 900px) 100vw, 55vw"
-                  className="hero-media-img"
-                  style={{ objectFit: 'cover' }}
-                />
-                {i === active && total > 1 && (
-                  <div
-                    className="hero-progress-track"
-                    key={active}
-                    aria-hidden="true"
-                  >
-                    <div className="hero-progress-bar" />
-                  </div>
-                )}
-              </div>
-
               <div
                 className="hero-body"
                 style={{
-                  borderLeftColor: CATEGORY_COLORS[n.categoria] || '#B45309',
+                  borderRightColor: CATEGORY_COLORS[n.categoria] || '#B45309',
                   borderTopColor: CATEGORY_COLORS[n.categoria] || '#B45309',
                 }}
               >
@@ -137,6 +116,44 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
                   <ArrowRight size={16} />
                 </Link>
               </div>
+
+              <div className="hero-media">
+                <Image
+                  src={n.imagen || '/logo.webp'}
+                  alt={n.titulo}
+                  fill
+                  priority={i === 0}
+                  sizes="(max-width: 900px) 100vw, 55vw"
+                  className="hero-media-img"
+                  style={{ objectFit: 'cover' }}
+                />
+                {i === active && total > 1 && (
+                  <div
+                    className="hero-progress-track"
+                    key={active}
+                    aria-hidden="true"
+                  >
+                    <div className="hero-progress-bar" />
+                  </div>
+                )}
+                {i === active && total > 1 && (
+                  <div className="hero-dots" role="tablist" aria-label="Noticias principales">
+                    {heroNoticias.map((n2, j) => (
+                      <button
+                        key={n2.id}
+                        className={'hero-dot ' + (j === active ? 'active' : '')}
+                        onClick={() => setActive(j)}
+                        role="tab"
+                        aria-selected={j === active}
+                        aria-label={'Noticia ' + (j + 1) + ': ' + n2.titulo}
+                      />
+                    ))}
+                    <span className="hero-fraction" aria-hidden="true">
+                      {active + 1} / {total}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -144,22 +161,6 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
 
       {total > 1 && (
         <>
-          <div className="hero-dots" role="tablist" aria-label="Noticias principales">
-            {heroNoticias.map((n2, j) => (
-              <button
-                key={n2.id}
-                className={'hero-dot ' + (j === active ? 'active' : '')}
-                onClick={() => setActive(j)}
-                role="tab"
-                aria-selected={j === active}
-                aria-label={'Noticia ' + (j + 1) + ': ' + n2.titulo}
-              />
-            ))}
-            <span className="hero-fraction" aria-hidden="true">
-              {active + 1} / {total}
-            </span>
-          </div>
-
           <button
             className="hero-nav hero-prev"
             onClick={prevSlide}
