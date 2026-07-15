@@ -46,7 +46,7 @@ export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) 
   };
 
   return (
-    <section className="seccion-destacados" aria-label="Destacados" data-reveal>
+    <section className="seccion-destacados" aria-label="Lo destacado" data-reveal>
       <header className="section-header">
         <h2 className="section-title">
           <span>LO DESTACADO</span>

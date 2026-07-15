@@ -115,16 +115,16 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
   const todo = `${tituloLower} ${contenidoLower}`;
 
   // 1. Fuente identificada
-  const fuentesOficiales = /\b(?:policia nacional|fiscalia|ministerio publico|ministerio de salud|minsa|alcaldia|policia de transito|camara de comercio|asamblea nacional|inss|mifamilia|ministerio de gobernacion|ministerio de educacion|mined|medicina legal|bomberos|cruz roja|cruz blanca|juzgado|tribunal|comisaria|hospital|clinica|delegacion policial|corte suprema|poder judicial|consejo supremo electoral|cse|ineter|invur|comupred|sinapred|ejercito de nicaragua|ejercito nicaraguense|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuraduria|contraloria|banco central|direccion general|direccion de transito|municipio|delegacion)\b/;
+  const fuentesOficiales = /\b(?:policia nacional|fiscalia|ministerio publico|ministerio de salud|minsa|alcaldia|policia de transito|camara de comercio|asamblea nacional|inss|mifamilia|ministerio de gobernacion|ministerio de educacion|mined|medicina legal|bomberos|cruz roja|cruz blanca|juzgado|tribunal|comisaria|hospital|clinica|delegacion policial|corte suprema|poder judicial|consejo supremo electoral|cse|ineter|invur|comupred|sinapred|ejercito de nicaragua|ejercito nicaraguense|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuraduria|contraloria|banco central|direccion general|direccion de transito|municipio|delegacion|fifa|uefa|conmebol|concacaf|coi|comite olimpico|ifab|federacion|federación)\b/;
   const mediosNacionales = /\b(?:radio ya|tn8|canal 10|canal 13|canal 4|canal 6|vos tv|vos|la prensa|articulo 66|el 19 digital|confidencial nicaragua|100% noticias|hoy|nuevo diario|monitoreo|informate|nicaragua informate|telenorte|cdnn|el digital|nica|mossa)\b/;
   const fuenteIdentificada = fuentesOficiales.test(todo) || mediosNacionales.test(todo);
 
   // 2. Documento oficial
-  const documentoOficial = /\b(ley\s+n[º°]?\s*\d+|codigo\s+de|informe\s+(?:oficial|anual|mensual|tecnico)|resolucion\s+n[º°]?\s*\d+|acuerdo\s+n[º°]?\s*\d+|decreto\s+n[º°]?\s*\d+|estadistica\s+oficial|documento\s+oficial|partida\s+de\s+defuncion|boletin\s+oficial|informe\s+policial|certificado\s+medico|expediente\s+judicial|acta policial|comunicado\s+oficial|reporte\s+oficial|parte\s+oficial)\b/.test(todo);
+  const documentoOficial = /\b(?:ley\s+n[º°]?\s*\d+|codigo\s+de|informe\s+(?:oficial|anual|mensual|tecnico)|resolucion|circular|oficio|acta|expediente|auto\s+judicial|sentencia|reglamento|comunicado\s+oficial|nota\s+informativa|decreto|acuerdo|estadistica\s+oficial|documento\s+oficial|partida\s+de\s+defuncion|boletin\s+oficial|informe\s+policial|certificado\s+medico|expediente\s+judicial|acta policial|reporte\s+oficial|parte\s+oficial)\b/i.test(todo);
 
   // 3. Dos o más fuentes independientes
   const atribuciones = (textoPlano.match(/\b(?:seg[úu]n|de acuerdo con|indic[óo]|declar[óo]|precis[óo]|confirm[óo]|dijo|menci[óo]|señal[óo]|explic[óo]|report[óo]|asegur[óo]|detall[óo])\s+(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+(?:de\s+(?:la\s+|el\s+|los\s+|las\s+)?)?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,4})\b/g) || []);
-  const institucionesUnicas = new Set((textoPlano.match(/\b(?:Policía Nacional|Ministerio Público|Fiscalía|Ministerio de Salud|Minsa|Alcaldía|Policía de Tránsito|Cámara de Comercio|Asamblea Nacional|INSS|Mifamilia|Ministerio de Gobernación|Ministerio de Educación|Mined|Medicina Legal|Bomberos|Cruz Roja|Juzgado|Tribunal|Comisaría|Hospital|Clínica|Delegación policial|Corte Suprema|Poder Judicial|Consejo Supremo Electoral|INETER|INVUR|Ejército de Nicaragua|MIGOB|MIFIC|MITRABAJO|MIFAM|MAGFOR|MINEDUC|Marena|Procuraduría|Contraloría|Banco Central)\b/gi) || []).map(x => x.toLowerCase()));
+  const institucionesUnicas = new Set((textoPlano.match(/\b(?:Policía Nacional|Ministerio Público|Fiscalía|Ministerio de Salud|Minsa|Alcaldía|Policía de Tránsito|Cámara de Comercio|Asamblea Nacional|INSS|Mifamilia|Ministerio de Gobernación|Ministerio de Educación|Mined|Medicina Legal|Bomberos|Cruz Roja|Juzgado|Tribunal|Comisaría|Hospital|Clínica|Delegación policial|Corte Suprema|Poder Judicial|Consejo Supremo Electoral|INETER|INVUR|Ejército de Nicaragua|MIGOB|MIFIC|MITRABAJO|MIFAM|MAGFOR|MINEDUC|Marena|Procuraduría|Contraloría|Banco Central|FIFA|UEFA|CONMEBOL|CONCACAF|COI|Comité Olímpico|IFAB|Federación de Fútbol|Federación Nicaragüense)\b/gi) || []).map(x => x.toLowerCase()));
   const personasPropias = new Set((textoPlano.match(/\b(?:testigo|vecino|habitante|familiar|conductor|pasajero|comerciante|médico|forense|abogado|experto|vocero)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?/g) || []).map(p => p.toLowerCase()));
   const nombresPropios = new Set((textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?/g) || []).map(n => n.toLowerCase()));
   const totalFuentes = new Set([...atribuciones.map(a => a.toLowerCase()), ...institucionesUnicas, ...personasPropias, ...nombresPropios]).size;
@@ -140,7 +140,16 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
   const datosConcretos = /\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|C?\$\s*\d+|\b\d{2,3}\s+(?:kilometros?|km|metros?|m|años?|frascos?|personas?|heridos?|afectados?|fallecidos?|victimas?)\b|\b\d{1,2}:\d{2}\b/.test(textoPlano);
 
   // 6. Contexto
-  const contexto = /\b(por que|causa|motivo|origen|antecedente|historia|contexto|marco legal|ley|institucion|proceso|consecuencia|impacto|resultado|trasfondo)\b/.test(todo);
+  const contextoTerminos = [
+    'por que', 'causa', 'motivo', 'origen', 'antecedente', 'historia', 'contexto',
+    'marco legal', 'ley', 'institucion', 'proceso', 'consecuencia', 'impacto',
+    'resultado', 'trasfondo', 'historico', 'en junio', 'anteriormente',
+    'segun registros', 'temporadas anteriores', 'patron', 'contexto economico',
+    'contexto social', 'contexto institucional', 'condiciones meteorologicas',
+    'impacto economico', 'impacto social', 'reglamento', 'protocolo', 'operativo',
+    'estadisticas', 'cronologia',
+  ];
+  const contexto = contextoTerminos.some(t => new RegExp(`\\b${t}\\b`, 'i').test(todo));
 
   // 7. Utilidad
   const utilidad = porcentajePorMatches(todo, [

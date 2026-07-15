@@ -63,8 +63,14 @@ let _validationError: string | null = null;
  * Llama automáticamente en lib/firebase-admin.ts
  */
 export function validateEnv(): { success: boolean; error?: string } {
-  if (_validated) return { success: true };
-  if (_validationError) return { success: false, error: _validationError };
+  // En entorno de test no cacheamos para que cada caso pueda mutar process.env.
+  const isTest = process.env.NODE_ENV === 'test';
+  if (!isTest && _validated) return { success: true };
+  if (!isTest && _validationError) return { success: false, error: _validationError };
+  if (isTest) {
+    _validated = null;
+    _validationError = null;
+  }
 
   try {
     const result = FullSchema.parse(process.env);
@@ -89,7 +95,8 @@ export function validateEnv(): { success: boolean; error?: string } {
  * Obtiene variable validada (con fallback seguro)
  */
 export function getEnv<K extends keyof EnvVars>(key: K): EnvVars[K] | undefined {
-  if (!_validated) {
+  const isTest = process.env.NODE_ENV === 'test';
+  if (isTest || !_validated) {
     const validation = validateEnv();
     if (!validation.success) {
       throw new Error(`Cannot get env var "${String(key)}": validation failed`);

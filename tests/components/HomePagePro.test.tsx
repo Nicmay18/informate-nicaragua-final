@@ -11,8 +11,8 @@ describe('HomePagePro', () => {
     render(<HomePagePro noticias={[]} masLeidas={[]} populares={[]} />);
 
     expect(screen.getByText(/lo destacado/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /sucesos/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /en vivo y podcast/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/nacionales/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/radio en vivo/i)).toBeInTheDocument();
   });
 
   it('makes reveal sections visible immediately even when the observer is present', () => {

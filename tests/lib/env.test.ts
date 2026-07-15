@@ -6,7 +6,7 @@ describe('Environment Validation', () => {
     // Setup
     process.env.FIREBASE_PROJECT_ID = 'test-project';
     process.env.FIREBASE_CLIENT_EMAIL = 'test@iam.gserviceaccount.com';
-    process.env.FIREBASE_PRIVATE_KEY = 'dummy-key-with-more-than-100-chars-to-pass-validation-test-suite-implementation';
+    process.env.FIREBASE_PRIVATE_KEY = 'dummy-key-with-more-than-100-characters-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-to-pass-validation-test-suite-implementation';
 
     // Execute
     const result = validateEnv();
@@ -17,10 +17,12 @@ describe('Environment Validation', () => {
 
   it('should fail validation when required Firebase vars are missing', () => {
     // Setup
-    delete process.env.FIREBASE_PROJECT_ID;
+    vi.stubEnv('FIREBASE_PROJECT_ID', '');
 
     // Execute & Assert
     expect(() => requireEnv('FIREBASE_PROJECT_ID')).toThrow();
+
+    vi.unstubAllEnvs();
   });
 
   it('should get validated environment variable', () => {

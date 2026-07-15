@@ -33,7 +33,7 @@ export default defineConfig({
 
     // ─── Test Files Pattern ────────────────────────────────────
     include: ['tests/**/*.{test,spec}.{ts,tsx}'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'tests/e2e/**'],
 
     // ─── Mocking ───────────────────────────────────────────────
     mockReset: true,

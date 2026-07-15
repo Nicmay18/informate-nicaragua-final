@@ -29,9 +29,11 @@ function limpiarContenidoNoticia(contenido: string): string {
     .replace(/\[instruccion[^\]]*\][\s\S]*?\[\/instruccion\]/gi, ' ')
     // Líneas o frases que comienzan con etiquetas de panel/sistema/prompt/interfaz
     .replace(/(?:^|\n)\s*(?:panel de administraci[oó]n|panel|mensaje del sistema|nota del sistema|instrucci[oó]n(?:es)? del sistema|prompt del sistema|contexto del sistema|ui|interfaz|sidebar|men[uú]|login|dashboard|consola|debug|system message|system prompt|user prompt|assistant prompt)\s*(?::|—|–|-)?\s*.*/gim, ' ')
-    // Etiquetas tipo HTML de sistema/panel
+    // Etiquetas tipo HTML de sistema/panel (preservar saltos de párrafo)
+    .replace(/<p[^>]*>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
     .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/[ \t]+/g, ' ')
     .trim();
 }
 
@@ -245,7 +247,7 @@ export interface CheckParrafo {
   como: string;
   donde: string;
   verificable: 'Sí' | 'No' | 'Parcial';
-  tieneFuente: 'Sí' | 'No' | 'Parcial';
+  tieneFuente: 'Sí' | 'No' | 'Parcial' | 'Heredada';
   marcaRoja: boolean;
   motivo?: string;
 }
@@ -586,6 +588,13 @@ export async function analizarNoticia(noticiaOriginal: NoticiaInput): Promise<Re
     contenido: limpiarContenidoNoticia(noticiaOriginal.contenido),
   };
 
+  // Preservar la estructura editorial (h2, strong) para que los filtros la reconozcan aunque el HTML se limpie.
+  const h2sOriginal = (noticiaOriginal.contenido.match(/<h2/gi) || []).length;
+  const strongsOriginal = (noticiaOriginal.contenido.match(/<strong/gi) || []).length;
+  if (h2sOriginal > 0 || strongsOriginal > 0) {
+    noticia.contenido += ' ' + Array.from({ length: h2sOriginal }, () => '[H2]').join(' ') + ' ' + Array.from({ length: strongsOriginal }, () => '[STRONG]').join(' ');
+  }
+
   const t = noticia.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
   // Detectar problemas
@@ -609,9 +618,9 @@ export async function analizarNoticia(noticiaOriginal: NoticiaInput): Promise<Re
   const palabrasTotales = textoPlano.split(' ').filter(p => p.length > 0).length;
   const leadTexto2 = textoPlano.split(/\n|\./)[0] || '';
   const leadPalabras = leadTexto2.split(' ').filter(p => p.length > 0).length;
-  const h2s = (noticia.contenido.match(/<h2/gi) || []).length;
-  const strongs = (noticia.contenido.match(/<strong/gi) || []).length;
-  const blockquotes2 = (noticia.contenido.match(/<blockquote>/gi) || []).length;
+  const h2s = (noticia.contenido.match(/<h2|\[H2\]/gi) || []).length;
+  const strongs = (noticia.contenido.match(/<strong|\[STRONG\]/gi) || []).length;
+  const blockquotes2 = (noticia.contenido.match(/<blockquote>|\[BLOCKQUOTE\]/gi) || []).length;
   const tituloLen = (noticia.titulo || '').length;
   const resumenLen = (noticia.resumen || '').length;
 
@@ -737,7 +746,7 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   // 1. Extension adecuada (verificabilidad > longitud)
   // Densidad de datos verificables para evaluar extensión
   const nombresOro = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
-  const instOro = (textoPlano.toLowerCase().match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal)\b/g) || []).length;
+  const instOro = (textoPlano.toLowerCase().match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal|fifa|uefa|conmebol|concacaf|coi|comité\s+olímpico|ifab|federación|selección\s+nacional|liga\s+nacional|primera\s+división)\b/g) || []).length;
   const datosOro = (textoPlano.match(/\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/gi) || []).length
     + (textoPlano.match(/\bC?\$\s*\d{1,3}(?:,\d{3})*\b/g) || []).length;
   const densidadOro = nombresOro + instOro + datosOro;
@@ -822,8 +831,8 @@ function analizarFiltroOro(n: NoticiaInput): FiltroResultado {
   });
 
   // 6. Estructura
-  let h2s = (n.contenido.match(/<h2>/gi) || []).length;
-  let strongs = (n.contenido.match(/<strong>/gi) || []).length;
+  let h2s = (n.contenido.match(/<h2>|\[H2\]/gi) || []).length;
+  let strongs = (n.contenido.match(/<strong>|\[STRONG\]/gi) || []).length;
   
   // Detectar <p> con subtitulos de seccion como si fueran h2
   const pConSubtitulo = (n.contenido.match(/<p>\s*(hechos principales|declaraciones de fuentes|desarrollo|antecedentes|contexto|detalles del incidente|respuesta institucional|reacciones|impacto|consecuencias|medidas adoptadas|investigacion|estadisticas|cifras|datos oficiales|historial|antecedentes similares|marco legal|sanciones|penas|contexto regional|reacciones oficiales|declaraciones institucionales|declaraciones oficiales)\s*<\/p>/gi) || []).length;
@@ -1177,7 +1186,7 @@ function analizarFiltroValorEditorial(n: NoticiaInput): FiltroResultado {
 
   // 2. FUENTE REAL — nombre/cargo/institución citado
   const nombresPropios = (textoPlano.match(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/g) || []).length;
-  const instituciones = (textoLower.match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal)\b/g) || []).length;
+  const instituciones = (textoLower.match(/\b(fiscalía|policía|bomberos|hospital|ministerio|alcaldía|municipio|departamento|instituto|jueza|comisaría|dirección|unidad|centro|clínica|juzgado|tribunal|procuraduría|defensoría|medicina\s+legal|fifa|uefa|conmebol|concacaf|coi|comité\s+olímpico|ifab|federación|selección\s+nacional|liga\s+nacional|primera\s+división)\b/g) || []).length;
   const passFuenteReal = nombresPropios >= 1 || instituciones >= 1 || tieneFuentePropia;
   checks.push({
     nombre: 'Fuente real identificable',
@@ -1244,7 +1253,11 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
   const textoPlano = n.contenido.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const textoLower = textoPlano.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const palabraCount = textoPlano.split(/\s+/).filter(p => p.length > 0).length;
-  const parrafos = textoPlano.split(/\n+/).map(p => p.trim()).filter(p => p.length > 0);
+  // RFC: dividir por saltos de línea reales (provenientes de <p>) y descartar subtítulos cortos.
+  const parrafos = n.contenido
+    .split(/\n+/)
+    .map(p => p.replace(/<[^>]*>/g, ' ').replace(/[ \t]+/g, ' ').trim())
+    .filter(p => p.length > 30 && !/^\s*[-–—*#]+\s*/.test(p));
   const oraciones = textoPlano.split(/[.!?]+/).map(o => o.trim()).filter(o => o.length > 10);
   const aportePropio = /\b(Nicaragua\s+Informate|Informate|este\s+medio|nuestro\s+equipo|nuestra\s+redacci[oó]n)\s+(confirm[oó]|consult[oó]|verific[oó]|obtuvo|constat[oó]|descubri[oó]|revis[oó]|investig[oó]|entrevist[oó])\b/i.test(textoPlano);
 
@@ -1263,7 +1276,7 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
 
   // ─── FASE 0: IDENTIFICACIÓN DEL PACIENTE ───
   const catLower = n.categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const tipoNota: string = (() => {
+  let tipoNota: string = (() => {
     if (catLower.includes('suces')) return 'Sucesos';
     if (catLower.includes('nacional')) return 'Nacionales';
     if (catLower.includes('internacional')) return 'Internacionales';
@@ -1289,21 +1302,45 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
     return 'Bajo';
   })();
   const observacionFase0 = tipoNota === 'Sucesos'
-    ? 'Fase 0: nota tipo Sucesos. Se activa protocolo Sucesos. Nunca se clasifica como Reportaje o Investigación.'
+    ? 'Fase 0: nota tipo Sucesos. Se activa protocolo Sucesos.'
     : `Fase 0: nota tipo ${tipoNota}. Nivel de riesgo ${nivelRiesgo}.`;
   observaciones.push(observacionFase0);
 
   // ─── FASE 1: TRIAGE EDITORIAL ───
-  const evOficial = /\b(?:polic[ií]a nacional|fiscal[íi]a|ministerio p[úu]blico|ministerio de salud|minsa|alcald[ií]a|juzgado|tribunal|comisar[ií]a|bomberos|cruz roja|hospital|medicina legal|asamblea nacional|inss|poder judicial|consejo supremo electoral|ineter|invur|ej[ée]rcito|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuradur[íi]a|contralor[íi]a|banco central)\b/i.test(textoLower);
+  const evOficial = /\b(?:polic[ií]a nacional|fiscal[íi]a|ministerio p[úu]blico|ministerio de salud|minsa|alcald[ií]a|juzgado|tribunal|comisar[ií]a|bomberos|cruz roja|hospital|medicina legal|asamblea nacional|inss|poder judicial|consejo supremo electoral|ineter|invur|ej[ée]rcito|migob|mific|mitrabajo|mifam|magfor|mineduc|marena|procuradur[íi]a|contralor[íi]a|banco central|fifa|uefa|conmebol|concacaf|coi|comit[eé]\s+ol[ií]mpico|ifab|federaci[oó]n|liga\s+nacional|primera\s+divisi[oó]n)\b/i.test(textoLower);
   const existeNoticia = /\b(ocurri[oó]|sucedi[oó]|pas[oó]|registr[oó]|report[oó]|confirm[oó]|inform[oó]|detuvieron|capturaron|falleci[oó]|herido|accidente|incendio|robo|hurto|allanamiento|proceso|juicio|audiencia|fallo|sentencia|decreto|resoluci[óo]n|acuerdo|medida|anuncio|declaraci[óo]n)\b/i.test(textoLower);
-  const interesPublico = /\b(poblaci[óo]n|comunidad|ciudadan[íi]a|afecta|impacta|servicio p[úu]blico|salud|seguridad|econom[íi]a|educaci[óo]n|tr[áa]nsito|justicia|derechos|vulneraci[óo]n|denuncia|protesta|marcha)\b/i.test(textoLower);
+  const interesPublico = /\b(poblaci[óo]n|comunidad|ciudadan[íi]a|afecta|impacta|servicio p[úu]blico|salud|seguridad|econom[íi]a|educaci[óo]n|tr[áa]nsito|justicia|derechos|vulneraci[óo]n|denuncia|protesta|marcha|torneo|campeonato|selecci[oó]n\s+nacional|la\s+selecci[oó]n|mundial|juegos\s+ol[ií]mpicos|olimpiadas|eliminatoria|final|semifinal)\b/i.test(textoLower);
   const actualidad = /\b(hoy|este|ayer|este lunes|este martes|la mañana|la tarde|la noche|[úu]ltimo|reciente|actualizaci[óo]n|en desarrollo|contin[uú]a|se espera|pr[oó]xim)\b/i.test(textoLower) || palabraCount > 0;
-  const evidencia = editorJefeApruebaEvidencia || /\b(dijo|indic[oó]|precis[oó]|señal[oó]|confirm[oó]|declar[oó]|inform[oó]|report[oó]|testimonio|versi[óo]n|documento|fotograf[íi]a|video|peritaje|expediente|acta|oficio|nota|comunicado)\b/i.test(textoLower);
+  const documentoOficialFase1 = /\b(?:nota\s+informativa|comunicado\s+oficial|resoluci[oó]n|decreto|circular|oficio|acta|expediente|auto\s+judicial|sentencia|reglamento|ley|documento\s+oficial|comunicado|informe)\b/i.test(textoLower);
+  const evidencia = editorJefeApruebaEvidencia || documentoOficialFase1 || /\b(dijo|indic[oó]|precis[oó]|señal[oó]|confirm[oó]|declar[oó]|inform[oó]|report[oó]|testimonio|versi[óo]n|documento|fotograf[íi]a|video|peritaje|expediente|acta|oficio|nota|comunicado)\b/i.test(textoLower);
   const fuente = editorJefeApruebaEvidencia || /\b(?:polic[ií]a|fiscal[íi]a|ministerio|alcald[ií]a|juzgado|tribunal|comisar[ií]a|bomberos|hospital|autoridad|vocero|director|jefe|representante|testigo|vecino|habitante|comerciante)\b/i.test(textoLower);
   const datoVerificable = editorJefeApruebaDatos || /\b\d{1,2}\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|\bC?\$\s*\d+|\b\d{2,3}\s+(kil[óo]metros?|km|metros?|años?|personas?|heridos?|afectados?|fallecidos?|v[ií]ctimas?)\b|\b\d{1,2}:\d{2}\b/.test(textoPlano);
   const utilidad = /\b(c[óo]mo|qu[eé] hacer|a d[óo]nde|requisito|paso|prevenci[óo]n|evitar|cuidado|proteger|denunciar|consultar|medida|seguimiento|derecho|proceso)\b/i.test(textoLower);
-  const contexto = /\b(por qu[eé]|causa|motivo|origen|antecedente|historia|contexto|marco legal|ley|instituci[óo]n|proceso|consecuencia|impacto|resultado)\b/i.test(textoLower);
-  const proceso = /\b(proceso|investigaci[óo]n|juicio|audiencia|fallo|resoluci[óo]n|etapa|seguimiento|contin[uú]a|pr[oó]xim|a partir de)\b/i.test(textoLower);
+  const contextoTerminos = [
+    'antecedentes', 'hist[oó]rico', 'en junio', 'anteriormente', 'seg[uú]n registros',
+    'temporadas anteriores', 'patr[oó]n', 'contexto econ[oó]mico', 'contexto social',
+    'contexto institucional', 'condiciones meteorol[oó]gicas', 'impacto econ[oó]mico',
+    'impacto social', 'reglamento', 'ley', 'protocolo', 'operativo', 'estad[ií]sticas', 'cronolog[ií]a',
+  ];
+  const contextoMatches = contextoTerminos.reduce((acc, t) => acc + (new RegExp(`\\b${t}\\b`, 'i').test(textoLower) ? 1 : 0), 0);
+  const contexto = contextoMatches >= 2 || /\b(por qu[eé]|causa|motivo|origen|antecedente|historia|contexto|marco legal|ley|instituci[óo]n|proceso|consecuencia|impacto|resultado|hist[oó]rico|cronolog[ií]a|estad[ií]sticas)\b/i.test(textoLower);
+  const proceso = /\b(proceso|investigaci[óo]n|juicio|audiencia|fallo|resoluci[óo]n|etapa|seguimiento|contin[uú]a|pr[oó]xim|a partir de|jornada|fecha|ronda|fase|grupo)\b/i.test(textoLower);
+
+  // Investigación breve: una Suceso/Crónica bien documentada se eleva de categoría.
+  const cronologiaDetectada = /\b(?:primero|luego|despu[eé]s|posteriormente|a las|minutos\s+m[aá]s\s+tarde|horas\s+m[aá]s\s+tarde|el\s+mismo\s+d[ií]a|al\s+d[ií]a\s+siguiente|cronolog[ií]a|anteriormente|seg[uú]n\s+registros|temporadas\s+anteriores|en\s+junio)\b/i.test(textoLower);
+  const fuentesMultiples = evEditorJefe.dosFuentes >= 60;
+  const documentoOficialDetectado = documentoOficialFase1 || evEditorJefe.documentoOficial >= 60;
+  const esInvestigacionBreve =
+    tipoNota !== 'Investigación' &&
+    tipoNota !== 'Reportaje' &&
+    cronologiaDetectada &&
+    fuentesMultiples &&
+    documentoOficialDetectado &&
+    contexto &&
+    proceso;
+  if (esInvestigacionBreve) {
+    tipoNota = 'Investigación';
+  }
 
   const triageItems: FaseTriageItem[] = [
     { pregunta: '¿Existe noticia?', respuesta: existeNoticia ? 'Sí' : 'No', observacion: !existeNoticia ? 'No se detecta un relato de hecho claro.' : undefined },
@@ -1352,7 +1389,7 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
     if (/\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo)\s+(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|bomberos|hospital|autoridad|oficial|vocero)\b/i.test(oracion)) return 'OFICIAL';
     if (/\b(?:según|version de|informa|indica|precisa|redes sociales|medios locales|trascendió|se conoció)\b/i.test(o)) return 'PERIODÍSTICO';
     if (/\b(?:testimonio|testigo|vecino|habitante|comerciante|conductor|pasajero|familiar|afectado|dijo|indicó|señaló)\b/i.test(o)) return 'TESTIGO';
-    if (/\b(?:documento|oficio|acta|resolución|decreto|expediente|peritaje|comunicado|nota)\b/i.test(o)) return 'DOCUMENTAL';
+    if (/\b(?:documento|oficio|acta|resoluci[oó]n|decreto|circular|expediente|peritaje|comunicado|informe|nota\s+informativa|comunicado\s+oficial|auto\s+judicial|sentencia|reglamento|ley|nota)\b/i.test(o)) return 'DOCUMENTAL';
     if (/\b(?:redes sociales|publicación|post|tuit|comentario|viral|mensaje en redes)\b/i.test(o)) return 'REDES';
     if (condicionalesEspeculativos.test(o)) {
       // RFC-012: expresiones condicionales en contexto legal son descriptivas, no especulativas.
@@ -1371,14 +1408,28 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
   const fase3 = { oraciones: oracionesEtiquetadas, conteo: conteoOrigenes };
 
   // ─── FASE 4: CADENA DE CUSTODIA ───
+  // RFC: heredar la fuente principal a párrafos derivados para evitar falsos positivos.
+  const conectorHeredado = /^(?:asimismo|además|también|por su parte|de acuerdo con|según el|según la|según lo|en tanto|mientras tanto|por otro lado|en ese sentido|de esta forma|en consecuencia|por consiguiente|siguiendo|continuando|finalmente|para finalizar|en resumen|por último|luego|después|posteriormente|a su vez|eso|esto|aquello)\b/i;
+  const referenciaFuenteHeredada = /\b(?:el comunicado|la entidad|el organismo|la federación|el coi|la fifa|la uefa|el torneo|la competencia|el evento|el campeonato|la jornada|el partido|el encuentro|el reglamento|las bases|el formato|la clasificación|el calendario|el fixture|el informe|la resolución|la medida)\b/i;
+  let fuenteActiva = false;
   const checkParrafos = parrafos.slice(0, 20).map(p => {
     const pl = p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const quien = /\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo)\s+(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|bomberos|hospital|autoridad|oficial|vocero|testigo|vecino|habitante|comerciante|familiar)\b/i.test(p) ? 'Sí' : 'No';
-    const como = /\b(?:dijo|indicó|precisó|señaló|declaró|confirmó|testimonio|documento|oficio|acta|resolución|decreto|peritaje|constató|verificó)\b/i.test(p) ? 'Sí' : 'No';
-    const donde = /\b(?:en el lugar|en el sitio|en la escena|en el hospital|en la comisaría|en el juzgado|en la alcaldía|frente a|cerca de|barrio|colonia|municipio|departamento)\b/i.test(p) ? 'Sí' : 'No';
-    const verificable: CheckParrafo['verificable'] = (quien === 'Sí' && como === 'Sí') ? 'Sí' : (quien === 'Sí' || como === 'Sí') ? 'Parcial' : 'No';
-    const tieneFuente: CheckParrafo['tieneFuente'] = quien;
-    const marcaRoja = verificable === 'No' && p.length > 60 && !/\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo|testimonio|documento|oficio|acta|resolución|decreto|peritaje)\b/i.test(p) && !/\b(?:el hecho|el incidente|la información|la nota|este medio)\b/i.test(pl);
+    const quien = /\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo)\s+(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|bomberos|hospital|autoridad|oficial|vocero|testigo|vecino|habitante|comerciante|familiar|fifa|uefa|conmebol|concacaf|coi|comité olímpico|ifab|federación|federacion|selección nacional|liga nacional|primera división)\b/i.test(p) ? 'Sí' : 'No';
+    const como = /\b(?:dijo|indicó|precisó|señaló|declaró|confirmó|testimonio|documento|oficio|acta|resolución|decreto|circular|expediente|peritaje|constató|verificó|reglamento|comunicado|informe|nota\s+informativa|comunicado\s+oficial|auto\s+judicial|sentencia|ley)\b/i.test(p) ? 'Sí' : 'No';
+    const donde = /\b(?:en el lugar|en el sitio|en la escena|en el hospital|en la comisaría|en el juzgado|en la alcaldía|en el estadio|frente a|cerca de|barrio|colonia|municipio|departamento)\b/i.test(p) ? 'Sí' : 'No';
+    const verificableBase = (quien === 'Sí' && como === 'Sí') ? 'Sí' : (quien === 'Sí' || como === 'Sí') ? 'Parcial' : 'No';
+    let heredada = false;
+    if (quien === 'Sí' || como === 'Sí') {
+      fuenteActiva = true;
+      heredada = false;
+    } else if (fuenteActiva && p.length < 300 && (conectorHeredado.test(p.trim()) || referenciaFuenteHeredada.test(p) || /^\s*(asimismo|adem[áa]s|tambi[ée]n|por su parte|de acuerdo con|seg[úu]n|en tanto|mientras tanto|por otro lado|en ese sentido|de esta forma|en consecuencia|por consiguiente|siguiendo|continuando|finalmente|para finalizar|en resumen|por [úu]ltimo|luego|despu[ée]s|posteriormente|a su vez|eso|esto|aquello)\b/i.test(p))) {
+      heredada = true;
+    } else {
+      fuenteActiva = false;
+    }
+    const verificable: CheckParrafo['verificable'] = heredada ? 'Parcial' : verificableBase;
+    const tieneFuente: CheckParrafo['tieneFuente'] = quien === 'Sí' ? 'Sí' : heredada ? 'Heredada' : 'No';
+    const marcaRoja = verificable === 'No' && p.length > 60 && !/\b(?:según|de acuerdo con|informó|precisó|señaló|declaró|confirmó|dijo|testimonio|documento|oficio|acta|resolución|decreto|circular|expediente|peritaje|reglamento|comunicado|informe|nota\s+informativa|comunicado\s+oficial|auto\s+judicial|sentencia|ley)\b/i.test(p) && !/\b(?:el hecho|el incidente|la información|la nota|este medio|el partido|el encuentro|el torneo|la competencia|el evento|el campeonato|la jornada|la fecha)\b/i.test(pl);
     const motivo = marcaRoja ? 'Párrafo sin atribución ni fuente identificable.' : undefined;
     return { parrafo: p.slice(0, 200), quien, como, donde, verificable, tieneFuente, marcaRoja, motivo };
   });
@@ -1449,7 +1500,7 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
   const elementosEstructura: Record<string, ElementoEstructural> = {
     lead: { presente: /^(?:En|La|Un|El|Una|Este|Ayer|Hoy|En la mañana|En la tarde|En horas|Durante|Según|Al menos)/.test(textoPlano) || parrafos[0]?.length > 20, evaluacion: parrafos[0]?.length > 20 ? 'Lead detectado' : 'Lead ausente o muy corto' },
     cronologia: { presente: /\b(?:primero|luego|después|posteriormente|a las|minutos más tarde|horas más tarde|el mismo día|al día siguiente)\b/i.test(textoLower), evaluacion: 'Cronología en construcción' },
-    contexto: { presente: /\b(?:por qué|causa|motivo|antecedente|contexto|marco legal|histórico)\b/i.test(textoLower), evaluacion: 'Contexto presente' },
+    contexto: { presente: contexto, evaluacion: 'Contexto presente' },
     proceso: { presente: /\b(?:investigación|proceso|juicio|audiencia|fallo|resolución|seguimiento|etapa)\b/i.test(textoLower), evaluacion: 'Proceso detectado' },
     consecuencias: { presente: /\b(?:consecuencia|impacto|resultado|afecta|cambiará|medida|prevención|recomendación)\b/i.test(textoLower), evaluacion: 'Consecuencias presentes' },
     servicio: { presente: /\b(?:cómo denunciar|qué hacer|a dónde acudir|requisito|paso|medida|prevención|evitar|cuidado|proteger|consultar|línea telefónica)\b/i.test(textoLower), evaluacion: 'Servicio al lector detectado' },
@@ -1510,10 +1561,10 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
   const checksEEAT: CheckEEAT[] = [
     { criterio: 'Autor identificado', presente: !!(n.autor && n.autor.length > 1), evidencia: n.autor },
     { criterio: 'Fuente identificada', presente: evOficial || fuente, evidencia: 'Detectada en texto' },
-    { criterio: 'Documento o dato oficial', presente: /\b(?:documento|oficio|acta|resolución|decreto|peritaje|expediente|comunicado)\b/i.test(textoLower) },
-    { criterio: 'Institución mencionada', presente: /\b(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|hospital|bomberos)\b/i.test(textoLower) },
+    { criterio: 'Documento o dato oficial', presente: /\b(?:documento|oficio|acta|resolución|decreto|circular|expediente|peritaje|comunicado|informe|nota\s+informativa|comunicado\s+oficial|auto\s+judicial|sentencia|reglamento|ley|fixture|calendario)\b/i.test(textoLower) },
+    { criterio: 'Institución mencionada', presente: /\b(?:policía|fiscalía|ministerio|alcaldía|juzgado|tribunal|hospital|bomberos|fifa|uefa|conmebol|concacaf|coi|comité olímpico|ifab|federación|liga nacional|primera división)\b/i.test(textoLower) },
     { criterio: 'Proceso descrito', presente: /\b(?:proceso|investigación|juicio|audiencia|fallo|resolución|etapa)\b/i.test(textoLower) },
-    { criterio: 'Contexto aportado', presente: /\b(?:por qué|causa|motivo|antecedente|contexto|marco legal)\b/i.test(textoLower) },
+    { criterio: 'Contexto aportado', presente: contexto },
     { criterio: 'Verificación visible', presente: /\b(?:verificó|constató|en el lugar|en el sitio|trabajo de campo|presencialmente)\b/i.test(textoLower) },
     { criterio: 'Valor agregado / comparación', presente: /\b(?:comparación|en contraste|a diferencia|anteriormente|en otras ocasiones|históricamente)\b/i.test(textoLower) },
     { criterio: 'Utilidad práctica', presente: /\b(?:cómo|qué hacer|a dónde|requisito|paso|prevención|evitar|cuidado)\b/i.test(textoLower) },
@@ -1620,9 +1671,9 @@ function analizarForenseV1(n: NoticiaInput, v2: ResultadoEditorJefeV2): ReporteF
   // ─── FASE 15: FORENSE DIFERENCIADOR ───
   const diferenciadorEvidencia: string[] = [];
   if (/\b(?:verificó|constató|en el lugar|en el sitio|presencialmente|trabajo de campo)\b/i.test(textoLower)) diferenciadorEvidencia.push('trabajo de campo verificable');
-  if (/\b(?:documento|oficio|acta|peritaje|expediente|resolución|decreto)\b/i.test(textoLower)) diferenciadorEvidencia.push('documento o evidencia oficial');
+  if (/\b(?:documento|oficio|acta|peritaje|expediente|resolución|decreto|circular|informe|nota\s+informativa|comunicado\s+oficial|auto\s+judicial|sentencia|reglamento|ley)\b/i.test(textoLower)) diferenciadorEvidencia.push('documento o evidencia oficial');
   if (/\b(?:dijo|indicó|precisó|señaló|declaró|confirmó)\s+(?:el|la)\s+(?:testigo|vecino|habitante|comerciante|familiar|afectado)\b/i.test(textoLower)) diferenciadorEvidencia.push('voz directa de afectado o testigo');
-  if (/\b(?:por qué|causa|motivo|contexto|marco legal|institución|proceso|consecuencia)\b/i.test(textoLower)) diferenciadorEvidencia.push('contexto o explicación');
+  if (contexto) diferenciadorEvidencia.push('contexto o explicación');
   // RFC-012: reconocer reorganización editorial, cronología, explicación legal y valor de servicio como aporte propio
   if (/\b(?:primero|luego|después|posteriormente|a las|minutos más tarde|horas más tarde|el mismo día|al día siguiente|cronología|secuencia|inicialmente|finalmente)\b/i.test(textoLower)) diferenciadorEvidencia.push('cronología o secuencia explicativa');
   if (/\b(?:en resumen|en otras palabras|esto significa que|esto implica|para entenderlo|lo importante es|aquí te explicamos|así funciona|de forma sencilla|qué debes saber|preguntas frecuentes|lo que cambia|resumido|te explicamos|te contamos)\b/i.test(textoLower)) diferenciadorEvidencia.push('reorganización editorial para el lector');

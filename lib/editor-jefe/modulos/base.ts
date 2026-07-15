@@ -193,7 +193,7 @@ export const detectoresEvidencia = {
     /\b(testigo|vecino|habitante|morador|comerciante|conductor|pasajero|familiar)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/i.test(textoPlano(n)),
 
   fuenteInstitucional: (n: NoticiaInput): boolean =>
-    /\b(polic[ií]a|bomberos|hospital|medicina legal|fiscal[ií]a|juzgado|tribunal|ministerio|alcald[ií]a|instituci[oó]n|comupred|sinapred|delegaci[oó]n|asamblea nacional|banco central)\b/i.test(textoCompleto(n)),
+    /\b(polic[ií]a|bomberos|hospital|medicina legal|fiscal[ií]a|juzgado|tribunal|ministerio|alcald[ií]a|instituci[oó]n|comupred|sinapred|delegaci[oó]n|asamblea nacional|banco central|fifa|uefa|conmebol|concacaf|coi|comit[eé] ol[ií]mpico|ifab|federaci[oó]n|liga nacional|primera divisi[oó]n)\b/i.test(textoCompleto(n)),
 
   periodista: (n: NoticiaInput): boolean =>
     /\b(periodista|reportero|corresponsal|enviado especial|redacci[oó]n|por nuestro corresponsal|por nuestro periodista)\b/i.test(textoCompleto(n)),
