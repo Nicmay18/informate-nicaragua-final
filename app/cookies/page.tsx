@@ -3,8 +3,8 @@ import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Política de Cookies',
-  description: 'Información detallada sobre el uso de cookies en Nicaragua Informate. Cómo utilizamos cookies y tecnologías similares para mejorar tu experiencia.',
+  title: { absolute: 'Política de Cookies | Nicaragua Informate' },
+  description: 'Política de cookies de Nicaragua Informate: tipos de cookies que usamos, cookies de terceros, gestión de preferencias y contacto de privacidad.',
   alternates: { canonical: 'https://nicaraguainformate.com/cookies' },
 };
 

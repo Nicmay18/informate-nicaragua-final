@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const { slug } = await params;
     const noticia = await getNewsBySlug(slug);
-    if (!noticia) {
+    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) {
       return {
         title: 'Página no encontrada',
         robots: { index: false },
@@ -184,8 +184,8 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     );
   }
 
-  // 2. Noticia no encontrada → 404 de Next.js (FUERA del try/catch)
-  if (!noticia) return notFound();
+  // 2. Noticia no encontrada o con datos mínimos incompletos → 404 de Next.js
+  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) return notFound();
 
   // 3. Slug obsoleto → redirigir 301
   if (noticia.slug && noticia.slug !== slug) {

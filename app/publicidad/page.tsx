@@ -4,8 +4,8 @@ import LegalPageShell from '@/components/LegalPageShell';
 import { Megaphone, Users, Globe, TrendingUp, Mail, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Publicidad y alianzas | Nicaragua Informate',
-  description: 'Media kit oficial de Nicaragua Informate. Espacios publicitarios, tarifas y alianzas comerciales para llegar a audiencia nicaragÃ¼ense en Managua y el exterior.',
+  title: { absolute: 'Publicidad y alianzas comerciales | Nicaragua Informate' },
+  description: 'Media kit oficial de Nicaragua Informate: espacios publicitarios, tarifas de banners, patrocinios editoriales y datos de contacto comercial para anunciantes.',
   alternates: { canonical: 'https://nicaraguainformate.com/publicidad' },
   robots: { index: true, follow: true },
 };

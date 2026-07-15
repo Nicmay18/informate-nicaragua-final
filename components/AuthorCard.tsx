@@ -26,17 +26,17 @@ const AUTORES: Record<string, { role: string; bio: string; slug: string }> = {
   'Keyling Elieth Rivera Muñoz': {
     role: 'Directora Editorial',
     bio: 'Periodista nicaragüense con más de 8 años de experiencia. Especialista en sucesos, cobertura comunitaria y periodismo de investigación. Directora editorial y cofundadora de Nicaragua Informate desde 2024. Certificada en periodismo digital y narrativa multimedia.',
-    slug: 'keyling-eliet-rivera-munoz',
+    slug: 'keyling-rivera',
   },
   'Maycol Josué Nicaragua Rivas': {
     role: 'Director Técnico y Analista',
     bio: 'Ingeniero en sistemas computacionales y analista de datos. Director técnico de Nicaragua Informate desde 2024. Encargado de verificación de fuentes digitales, seguridad informática y optimización de plataformas. Especialista en fact-checking y análisis de tendencias informativas.',
-    slug: 'maycol-josue-nicaragua-rivas',
+    slug: 'maycol-nicaragua',
   },
   'José Luis López Ramírez': {
     role: 'Director de Operaciones',
     bio: 'Ingeniero en Sistemas. Coordina la operación diaria, la publicación oportuna de contenido y la organización del equipo en Nicaragua Informate. Encargado de la difusión en plataformas oficiales: canal de WhatsApp, Telegram y Facebook. Su trabajo garantiza que toda la información salga a tiempo y con calidad.',
-    slug: 'jose-luis-lopez-ramirez',
+    slug: 'jose-lopez',
   },
 };
 

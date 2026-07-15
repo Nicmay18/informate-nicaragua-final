@@ -3,8 +3,9 @@ import { Home, Newspaper } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Página no encontrada',
-  description: 'La página que buscas no existe o ha sido movida.',
+  title: { absolute: 'Página no encontrada | Nicaragua Informate' },
+  description: 'La página que buscas no existe, fue eliminada o la dirección es incorrecta. Explora las últimas noticias de Nicaragua.',
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
 };
 
 export default function NotFound() {

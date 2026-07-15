@@ -3,8 +3,8 @@ import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Términos y Condiciones | Nicaragua Informate',
-  description: 'Términos y condiciones de uso de Nicaragua Informate.',
+  title: { absolute: 'Términos y Condiciones | Nicaragua Informate' },
+  description: 'Términos y condiciones de uso de Nicaragua Informate. Reglas de navegación, propiedad intelectual, responsabilidad y contacto legal.',
   alternates: { canonical: 'https://nicaraguainformate.com/terminos' },
 };
 

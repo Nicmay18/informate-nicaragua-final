@@ -18,6 +18,7 @@ import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
 import ArticleFaq from './ArticleFaq';
 import type { Noticia } from '@/lib/types';
+import { AUTHORS } from '@/lib/authors';
 
 /* Lazy-load componentes pesados que no están en el viewport inicial */
 const AudioButton = lazy(() => import('./AudioButton'));
@@ -84,6 +85,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const vistas = fmtViews(views);
   const tags = useMemo(() => [noticia.categoria, ...extractPoints(noticia.titulo, 3)], [noticia.categoria, noticia.titulo]);
   const readAlso = related.slice(0, 3);
+
+  const autorData = useMemo(
+    () => Object.values(AUTHORS).find((a) => a.name === noticia.autor?.trim()),
+    [noticia.autor]
+  );
+  const authorPhoto = autorData?.photo || noticia.autorFoto;
 
   const pieDeFoto = noticia.pieFoto?.trim()
     ? noticia.pieFoto
@@ -238,16 +245,22 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* Byline de autor profesional */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-          {noticia.autorFoto ? (
-            <img src={noticia.autorFoto} alt={noticia.autor} width={42} height={42} style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${category.color}` }} />
+          {authorPhoto ? (
+            <img src={authorPhoto} alt={noticia.autor || 'Redacción'} width={42} height={42} style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${category.color}` }} />
           ) : (
             <span style={{ width: 42, height: 42, borderRadius: '50%', background: category.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
               {(noticia.autor || 'R').trim().charAt(0).toUpperCase()}
             </span>
           )}
           <div style={{ lineHeight: 1.3 }}>
-            <div style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b' }}>{noticia.autor || 'Redacción Nicaragua Informate'}</div>
-            <div style={{ fontSize: 12.5, color: '#94a3b8' }}>Redacción · {category.name}</div>
+            {autorData?.slug ? (
+              <Link href={`/autor/${autorData.slug}`} rel="author" style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b', textDecoration: 'none' }}>
+                {noticia.autor || 'Redacción Nicaragua Informate'}
+              </Link>
+            ) : (
+              <div style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b' }}>{noticia.autor || 'Redacción Nicaragua Informate'}</div>
+            )}
+            <div style={{ fontSize: 12.5, color: '#94a3b8' }}>{autorData?.role || 'Redacción'} · {category.name}</div>
           </div>
         </div>
 
@@ -468,7 +481,10 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <meta itemProp="name" content={noticia.autor} />
           <AuthorCard
             name={noticia.autor}
-            photo={noticia.autorFoto}
+            photo={authorPhoto}
+            bio={autorData?.bio}
+            role={autorData?.role}
+            slug={autorData?.slug}
             publishedDate={noticia.fecha}
             updatedDate={(noticia as any).fechaActualizacion}
           />

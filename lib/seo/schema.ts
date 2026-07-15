@@ -4,6 +4,7 @@
  */
 
 import type { Noticia } from '../types';
+import { AUTHORS } from '../authors';
 
 /** Ensure image URLs are absolute for Google Rich Snippets */
 function toAbsoluteUrl(url?: string): string {
@@ -34,7 +35,10 @@ export function buildNewsArticleJsonLdEnhanced(
     : 0;
 
   const authorName = article.autor || 'Redacción Nicaragua Informate';
-  const isKeyling = authorName === 'Keyling Elieth Rivera Muñoz';
+  const knownAuthor = Object.values(AUTHORS).find((a) => a.name === authorName.trim());
+  const authorUrl = knownAuthor?.slug
+    ? `https://nicaraguainformate.com/autor/${knownAuthor.slug}`
+    : 'https://nicaraguainformate.com/nosotros';
   const absoluteImageUrl = toAbsoluteUrl(article.imagen);
 
   return {
@@ -73,10 +77,8 @@ export function buildNewsArticleJsonLdEnhanced(
     author: {
       '@type': 'Person',
       name: authorName,
-      jobTitle: isKeyling ? 'Directora Editorial y Cofundadora' : 'Periodista',
-      url: isKeyling
-        ? 'https://nicaraguainformate.com/autor/keyling-rivera'
-        : 'https://nicaraguainformate.com/nosotros',
+      jobTitle: knownAuthor?.role || 'Periodista',
+      url: authorUrl,
       worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
     },
     editor: {

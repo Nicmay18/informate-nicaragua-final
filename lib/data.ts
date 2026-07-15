@@ -183,7 +183,16 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       return true; // sin estado ni publicado = mostrar por defecto
     });
 
-    // 2. Deduplicar por slug: quedarse con la más reciente
+    // 2. Filtrar noticias con contenido mínimo válido (evita soft 404 con homepage)
+    noticias = noticias.filter(
+      (n) =>
+        n.slug?.trim() &&
+        n.titulo?.trim().length > 5 &&
+        n.contenido?.trim().length > 20 &&
+        n.categoria?.trim()
+    );
+
+    // 3. Deduplicar por slug: quedarse con la más reciente
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
       const existing = unique.get(n.slug);
@@ -319,12 +328,20 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
     if (!snap.empty) {
       const doc = snap.docs[0];
       const data = doc.data();
+      const slug = data.slug || doc.id;
+      const titulo = capitalizeFirst(data.titulo || '');
+      const contenido = data.contenido || '';
+      // Rechazar documentos vacíos o de baja calidad: evita soft 404 / homepage
+      if (!slug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
+        logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
+        return null;
+      }
       return {
         id: doc.id,
-        slug: data.slug || doc.id,
-        titulo: capitalizeFirst(data.titulo || ''),
+        slug,
+        titulo,
         resumen: data.resumen || '',
-        contenido: data.contenido || '',
+        contenido,
         categoria: data.categoria || 'Actualidad',
         imagen: normalizeImage(data.imagen || ''),
         fecha: safeDateString(data.fecha),

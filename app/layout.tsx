@@ -145,6 +145,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        {/* AdSense script base — las unidades reales se inyectan vía AdsenseUnit */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
+          crossOrigin="anonymous"
+        />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit */}

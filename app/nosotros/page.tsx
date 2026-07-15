@@ -33,7 +33,7 @@ const ORG_SCHEMA = {
       '@type': 'Person',
       name: 'Keyling Elieth Rivera Muñoz',
       jobTitle: 'Directora Editorial',
-      url: 'https://nicaraguainformate.com/autor/keyling-eliet-rivera-munoz',
+      url: 'https://nicaraguainformate.com/autor/keyling-rivera',
       sameAs: ['https://www.facebook.com/keyling.elieth.rivera.munoz'],
     },
     {
@@ -52,7 +52,7 @@ const ORG_SCHEMA = {
 };
 
 export const metadata: Metadata = {
-  title: 'Sobre Nicaragua Informate — Noticias de Nicaragua',
+  title: { absolute: 'Sobre Nicaragua Informate — Noticias de Nicaragua | Nicaragua Informate' },
   description: 'Conoce a Nicaragua Informate: equipo, misión y visión del medio digital nicaragüense dedicado a noticias verificadas.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
