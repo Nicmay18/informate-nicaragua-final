@@ -15,6 +15,7 @@ import { FieldValue, type QueryDocumentSnapshot } from 'firebase-admin/firestore
 
 const APLICAR = process.argv.includes('--apply');
 const LOTE = 500;
+const BATCH_MAX = 25;
 
 async function safeDate(value: unknown): Promise<Date | null> {
   if (!value) return null;
@@ -55,6 +56,22 @@ async function toInput(data: FirebaseFirestore.DocumentData, id: string): Promis
   };
 }
 
+function esPlainObject(o: any): boolean {
+  return o !== null && typeof o === 'object' && !Array.isArray(o) && Object.getPrototypeOf(o) === Object.prototype;
+}
+
+function sinUndefined<T>(obj: T): any {
+  if (obj === undefined) return null;
+  if (obj === null) return null;
+  if (typeof obj !== 'object') return obj;
+  if (obj instanceof Date) return obj;
+  if (Array.isArray(obj)) return obj.map(sinUndefined);
+  if (!esPlainObject(obj)) return obj;
+  const out: any = {};
+  for (const [k, v] of Object.entries(obj)) out[k] = sinUndefined(v);
+  return out;
+}
+
 async function main() {
   const db = getAdminDb();
   let lastDoc: QueryDocumentSnapshot | undefined;
@@ -75,7 +92,7 @@ async function main() {
     const snap = await query.get();
     if (snap.empty) break;
 
-    const batch = db.batch();
+    let batch = db.batch();
     let enBatch = 0;
 
     for (const doc of snap.docs) {
@@ -88,7 +105,7 @@ async function main() {
 
         if (APLICAR) {
           batch.update(doc.ref, {
-            analisisEditorial: resultado,
+            analisisEditorial: sinUndefined(resultado),
             puntuacion: resultado.puntuacion,
             nivel: resultado.nivel,
             aprobado: resultado.aprobado,
@@ -98,6 +115,14 @@ async function main() {
             fechaAnalisis: FieldValue.serverTimestamp(),
           });
           enBatch++;
+
+          if (enBatch >= BATCH_MAX) {
+            await batch.commit();
+            actualizadas += enBatch;
+            console.log(`\n✅ Sub-lote confirmado: ${enBatch} documentos actualizados (total ${actualizadas}).\n`);
+            enBatch = 0;
+            batch = db.batch();
+          }
         }
 
         console.log(`[${procesadas}] ${input.slug} → ${resultado.nivel} (${resultado.puntuacion}/100)`);
