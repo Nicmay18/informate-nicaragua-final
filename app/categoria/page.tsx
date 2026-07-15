@@ -5,7 +5,7 @@ import { CATEGORIES } from '@/lib/types';
 const SITE_URL = 'https://nicaraguainformate.com';
 
 export const metadata: Metadata = {
-  title: 'Categorías | Nicaragua Informate',
+  title: 'Categorías de noticias',
   description: 'Explora todas las secciones de Nicaragua Informate: Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
   alternates: { canonical: `${SITE_URL}/categoria` },
   openGraph: {

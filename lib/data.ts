@@ -1,6 +1,7 @@
 import { type Noticia, FALLBACK_IMAGE } from './types';
 import { capitalizeFirst } from './formateo';
 import { logger } from './logger';
+import { unstable_cache, revalidateTag } from 'next/cache';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -142,26 +143,21 @@ function mapDocToNoticia(d: any): Noticia {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// CACHE EN MEMORIA para reducir reads de Firestore (costo $$$)
-// TTL: 5 minutos (300000 ms). En serverless Vercel el proceso
-// puede morir, pero durante tráfico activo evita cientos de reads.
+// CACHE DE DATOS de Next.js (persistente en Vercel Data Cache)
+// Revalidate Tag para invalidaciones desde API admin
 // ═══════════════════════════════════════════════════════════════
-let _firestoreCache: Noticia[] | null = null;
-let _firestoreCacheTime = 0;
-const FIRESTORE_CACHE_TTL = 30000; // 30 segundos (noticias deben aparecer rápido)
 
-/** Invalidar cache cuando se publica/actualiza una noticia */
+/** Invalidar cache de noticias cuando se publica/actualiza una noticia */
 export function invalidateFirestoreCache() {
-  _firestoreCache = null;
-  _firestoreCacheTime = 0;
+  try {
+    revalidateTag('noticias');
+  } catch {
+    // No está disponible fuera del runtime de Next.js (ej. scripts Node)
+  }
 }
 
-/** Trae todas las noticias de Firestore con orderBy fecha desc. */
-async function fetchAllNoticias(): Promise<Noticia[]> {
-  // Usar cache si es válido
-  if (_firestoreCache && Date.now() - _firestoreCacheTime < FIRESTORE_CACHE_TTL) {
-    return _firestoreCache;
-  }
+/** Trae todas las noticias de Firestore con orderBy fecha desc. Cacheado entre peticiones. */
+const _fetchAllNoticiasRaw = async (): Promise<Noticia[]> => {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
@@ -171,16 +167,13 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       .get();
     let noticias = snap.docs.map(mapDocToNoticia);
 
-    // 1. Filtrar SOLO publicadas:
-    //    - estado === 'publicado' (legacy)
-    //    - sin campo estado Y publicado !== false (panel admin)
-    //    - sin estado ni publicado (máxima compatibilidad)
+    // 1. Filtrar SOLO publicadas
     noticias = noticias.filter(n => {
       const data = n as any;
       if (data.estado === 'publicado') return true;
       if (data.estado === 'borrador') return false;
       if (data.publicado === false) return false;
-      return true; // sin estado ni publicado = mostrar por defecto
+      return true;
     });
 
     // 2. Filtrar noticias con contenido mínimo válido (evita soft 404 con homepage)
@@ -201,14 +194,21 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
       }
     }
     noticias = Array.from(unique.values());
-    // Guardar en cache
-    _firestoreCache = noticias;
-    _firestoreCacheTime = Date.now();
     return noticias;
   } catch (err) {
     logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
-    return _firestoreCache || []; // fallback a cache viejo si existe
+    return [];
   }
+};
+
+async function fetchAllNoticias(): Promise<Noticia[]> {
+  // Next.js Data Cache (persistente en Vercel) para reducir lecturas y memoria
+  const cached = unstable_cache(
+    _fetchAllNoticiasRaw,
+    ['noticias-all'],
+    { revalidate: 60, tags: ['noticias'] }
+  );
+  return cached();
 }
 
 // =============================================================================

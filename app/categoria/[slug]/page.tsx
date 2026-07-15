@@ -10,7 +10,7 @@ const SITE_URL = 'https://nicaraguainformate.com';
 /** Metadata atractiva por categoría para mejorar CTR */
 const CATEGORIA_META: Record<string, { titulo: string; description: string }> = {
   sucesos: {
-    titulo: 'Sucesos en Nicaragua | Policíales y Accidentes Hoy',
+    titulo: 'Sucesos en Nicaragua | Policiales y Accidentes Hoy',
     description: 'Reportes de sucesos en Nicaragua: accidentes de tránsito, hechos policiales y emergencias en tiempo real.',
   },
   nacionales: {
@@ -81,8 +81,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+// ISR: sin loading.tsx global, slugs inválidos devuelven HTTP 404 real vía notFound()
 export const dynamicParams = true;
-export const revalidate = 86400; // 24h para reducir consumo ISR
+export const revalidate = 3600;
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -92,9 +93,10 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
 
   let noticias: Noticia[] = [];
   try {
-    noticias = await getNewsByCategory(catName, 100);
+    noticias = await getNewsByCategory(catName, 30);
   } catch (error) {
     console.error('[CategoriaPage] Error:', error);
+    notFound();
   }
 
   return <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} />;

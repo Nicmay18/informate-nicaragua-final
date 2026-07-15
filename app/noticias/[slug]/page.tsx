@@ -13,6 +13,8 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
+// ISR: páginas estáticas con revalidación. Sin loading.tsx el render de slugs
+// desconocidos es bloqueante y notFound() devuelve HTTP 404 real.
 export const revalidate = 3600;
 export const dynamicParams = true;
 
@@ -170,18 +172,12 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   let noticia: Awaited<ReturnType<typeof getNewsBySlug>> = null;
   let related: Awaited<ReturnType<typeof getRelatedNews>> = [];
 
-  // 1. Cargar noticia (errores de Firebase = "Error de conexión")
+  // 1. Cargar noticia. Cualquier error se trata como 404 para evitar soft 404s con HTTP 200.
   try {
     noticia = await getNewsBySlug(slug);
   } catch (error) {
     logger.error('Error cargando noticia:', error);
-    return (
-      <div style={{ maxWidth: 768, margin: '0 auto', padding: '80px 16px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 12 }}>Error de conexión</h1>
-        <p style={{ color: '#6b7280', marginBottom: 24 }}>No pudimos cargar esta noticia en este momento. Por favor, intenta de nuevo en unos segundos.</p>
-        <a href={`/noticias/${slug}`} style={{ color: '#991b1b', textDecoration: 'underline', fontWeight: 600 }}>Recargar página</a>
-      </div>
-    );
+    notFound();
   }
 
   // 2. Noticia no encontrada o con datos mínimos incompletos → 404 de Next.js

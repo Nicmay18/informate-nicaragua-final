@@ -4,7 +4,7 @@ import LegalPageShell from '@/components/LegalPageShell';
 import { AlertCircle, Mail, Clock, FileText, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Política de Correcciones | Nicaragua Informate',
+  title: 'Política de Correcciones',
   description: 'Nuestro compromiso con la precisión. Cómo reportamos errores y el proceso de corrección en Nicaragua Informate.',
   alternates: { canonical: 'https://nicaraguainformate.com/correcciones' },
 };

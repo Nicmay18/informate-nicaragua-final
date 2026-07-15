@@ -5,7 +5,7 @@ import { MapPin, Clock, Mail, Share2, Info, Send, Shield, Scale, Megaphone } fro
 import BrandIcon from '@/components/BrandIcon';
 
 export const metadata: Metadata = {
-  title: 'Contacto | Nicaragua Informate',
+  title: 'Contacto',
   description: 'Contacta a Nicaragua Informate. Correo: contacto@nicaraguainformate.com. Dirección en Managua, Nicaragua. Redes sociales y formulario de contacto.',
   alternates: { canonical: 'https://nicaraguainformate.com/contacto' },
 };

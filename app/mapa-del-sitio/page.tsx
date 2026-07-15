@@ -4,7 +4,7 @@ import LegalPageShell from '@/components/LegalPageShell';
 import { Home, Newspaper, Flag, AlertTriangle, Trophy, Globe, Film, Laptop, FileText, Shield, Mail, Info } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Mapa del Sitio | Nicaragua Informate',
+  title: 'Mapa del Sitio',
   description: 'Explora todas las secciones y páginas de Nicaragua Informate. Noticias, categorías, legal y contacto.',
   alternates: { canonical: 'https://nicaraguainformate.com/mapa-del-sitio' },
 };

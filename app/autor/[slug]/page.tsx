@@ -6,6 +6,7 @@ import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { getNews } from '@/lib/data';
 import type { Author } from '@/lib/authors';
 
+// ISR: sin loading.tsx global, autores inexistentes devuelven HTTP 404 real vía notFound()
 export const dynamicParams = true;
 export const revalidate = 86400; // 24h
 
@@ -20,17 +21,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!author) {
     return {
-      title: 'Autor no encontrado',
+      title: { absolute: 'Autor no encontrado | Nicaragua Informate' },
+      description: 'El perfil de autor que buscas no existe en Nicaragua Informate.',
       robots: { index: false },
     };
   }
 
   // Verificar si el autor tiene artículos para decidir indexación
-  const allNews = await getNews(100);
+  let allNews: Awaited<ReturnType<typeof getNews>> = [];
+  try {
+    allNews = await getNews(100);
+  } catch {
+    allNews = [];
+  }
   const hasArticles = allNews.some((n) => n.autor === author.name);
 
   return {
-    title: `Artículos de ${author.name} | Nicaragua Informate`,
+    title: { absolute: `Artículos de ${author.name} | Nicaragua Informate` },
     description: author.bio,
     alternates: {
       canonical: `https://nicaraguainformate.com/autor/${slug}`,
@@ -77,7 +84,12 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
   }
 
   // Obtener artículos de este autor
-  const allNews = await getNews(100);
+  let allNews: Awaited<ReturnType<typeof getNews>> = [];
+  try {
+    allNews = await getNews(100);
+  } catch {
+    notFound();
+  }
   const authorArticles = allNews.filter((n) => n.autor === author.name);
 
   return (

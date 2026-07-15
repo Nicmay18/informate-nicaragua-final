@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getAllEvergreen } from '@/lib/evergreen';
 
 export const metadata: Metadata = {
-  title: 'Guías y recursos útiles | Nicaragua Informate',
+  title: 'Guías y recursos útiles de Nicaragua',
   description: 'Guías prácticas sobre trámites, turismo, deportes y más en Nicaragua. Información actualizada y verificada.',
   alternates: { canonical: 'https://nicaraguainformate.com/guia' },
   openGraph: {

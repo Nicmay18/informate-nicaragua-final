@@ -3,7 +3,7 @@ import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 
 export const metadata: Metadata = {
-  title: 'Política Editorial | Nicaragua Informate',
+  title: 'Política Editorial',
   description: 'Política editorial de Nicaragua Informate — nuestros principios, autonomía y compromiso con el periodismo verificado.',
   alternates: { canonical: 'https://nicaraguainformate.com/politica-editorial' },
 };
