@@ -27,16 +27,29 @@ export default function CrecimientoPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetch('/api/admin/crecimiento', { cache: 'no-store' })
-      .then(r => r.json())
-      .then((d: Reporte) => {
-        setData(d);
-        setLoading(false);
-      })
-      .catch((e) => {
+    (async () => {
+      try {
+        const res = await fetch('/api/admin/crecimiento', { cache: 'no-store' });
+        const d = await res.json();
+        if (!res.ok || d.success === false || d.error) {
+          throw new Error(d.error || `Error ${res.status} cargando el reporte`);
+        }
+        const safe: Reporte = {
+          ...d,
+          distribucionCategorias: d.distribucionCategorias || {},
+          ultimosTitulos: d.ultimosTitulos || [],
+          trendingTopics: d.trendingTopics || [],
+          gaps: d.gaps || [],
+          planSemanal: d.planSemanal || [],
+          objetivos: d.objetivos || [],
+        };
+        setData(safe);
+      } catch (e) {
         setError(String(e));
+      } finally {
         setLoading(false);
-      });
+      }
+    })();
   }, []);
 
   const copyPrompt = () => {
