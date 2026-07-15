@@ -64,94 +64,118 @@ export default function HeroPrincipal({ heroNoticias }: HeroPrincipalProps) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {heroNoticias.map((n, i) => (
-        <div
-          key={n.id}
-          className={'hero-slide ' + (i === active ? 'active' : '')}
-          aria-hidden={i !== active}
-        >
-          <div className="hero-card">
-            <div className="hero-media">
-              <Image
-                src={n.imagen || '/logo.webp'}
-                alt={n.titulo}
-                fill
-                priority={i === 0}
-                sizes="(max-width: 900px) 100vw, 55vw"
-                className="hero-media-img"
-                style={{ objectFit: 'cover' }}
-              />
-              {i === active && total > 1 && (
-                <>
-                  <div className="hero-dots" role="tablist" aria-label="Noticias principales">
-                    {heroNoticias.map((n2, j) => (
-                      <button
-                        key={n2.id}
-                        className={'hero-dot ' + (j === active ? 'active' : '')}
-                        onClick={() => setActive(j)}
-                        role="tab"
-                        aria-selected={j === active}
-                        aria-label={'Noticia ' + (j + 1) + ': ' + n2.titulo}
-                      />
-                    ))}
+      <div className="hero-slides" aria-live="polite" aria-atomic="true">
+        {heroNoticias.map((n, i) => (
+          <div
+            key={n.id}
+            className={'hero-slide ' + (i === active ? 'active' : '')}
+            aria-hidden={i !== active}
+          >
+            <div className="hero-card">
+              <div className="hero-media">
+                <Image
+                  src={n.imagen || '/logo.webp'}
+                  alt={n.titulo}
+                  fill
+                  priority={i === 0}
+                  sizes="(max-width: 900px) 100vw, 55vw"
+                  className="hero-media-img"
+                  style={{ objectFit: 'cover' }}
+                />
+                {i === active && total > 1 && (
+                  <div
+                    className="hero-progress-track"
+                    key={active}
+                    aria-hidden="true"
+                  >
+                    <div className="hero-progress-bar" />
                   </div>
-                  <button
-                    className="hero-nav hero-prev"
-                    onClick={prevSlide}
-                    aria-label="Noticia anterior"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                  <button
-                    className="hero-nav hero-next"
-                    onClick={nextSlide}
-                    aria-label="Siguiente noticia"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                </>
-              )}
-            </div>
-
-            <div className="hero-body">
-              <span
-                className="hero-tag"
-                style={{ backgroundColor: CATEGORY_COLORS[n.categoria] || '#B45309' }}
-              >
-                {n.categoria?.toUpperCase()}
-              </span>
-
-              <h1 className="hero-title">
-                <Link href={'/noticias/' + n.slug}>{n.titulo}</Link>
-              </h1>
-
-              {n.resumen && <p className="hero-excerpt">{n.resumen}</p>}
-
-              <div className="hero-meta">
-                {n.autor && (
-                  <span className="hero-meta-item">
-                    <User size={14} />
-                    {n.autor.split(' ').slice(0, 2).join(' ')}
-                  </span>
                 )}
-                <span className="hero-meta-item">
-                  <Clock size={14} />
-                  {tiempoRelativo(n.fecha)}
-                </span>
-                <span className="hero-meta-item">
-                  <BookOpen size={14} />
-                  {tiempoLectura(n.contenido || n.resumen || '')} min de lectura
-                </span>
               </div>
 
-              <Link href={'/noticias/' + n.slug} className="hero-btn">
-                Leer completo
-                <ArrowRight size={16} />
-              </Link>
+              <div
+                className="hero-body"
+                style={{
+                  borderLeftColor: CATEGORY_COLORS[n.categoria] || '#B45309',
+                  borderTopColor: CATEGORY_COLORS[n.categoria] || '#B45309',
+                }}
+              >
+                <span className="hero-eyebrow">Destacado</span>
+
+                <span
+                  className="hero-tag"
+                  style={{ backgroundColor: CATEGORY_COLORS[n.categoria] || '#B45309' }}
+                >
+                  {n.categoria?.toUpperCase()}
+                </span>
+
+                <h1 className="hero-title">
+                  <Link href={'/noticias/' + n.slug}>{n.titulo}</Link>
+                </h1>
+
+                {n.resumen && <p className="hero-excerpt">{n.resumen}</p>}
+
+                <div className="hero-meta">
+                  {n.autor && (
+                    <span className="hero-meta-item">
+                      <User size={14} />
+                      {n.autor.split(' ').slice(0, 2).join(' ')}
+                    </span>
+                  )}
+                  <span className="hero-meta-item">
+                    <Clock size={14} />
+                    {tiempoRelativo(n.fecha)}
+                  </span>
+                  <span className="hero-meta-item">
+                    <BookOpen size={14} />
+                    {tiempoLectura(n.contenido || n.resumen || '')} min de lectura
+                  </span>
+                </div>
+
+                <Link href={'/noticias/' + n.slug} className="hero-btn">
+                  Leer completo
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      {total > 1 && (
+        <>
+          <div className="hero-dots" role="tablist" aria-label="Noticias principales">
+            {heroNoticias.map((n2, j) => (
+              <button
+                key={n2.id}
+                className={'hero-dot ' + (j === active ? 'active' : '')}
+                onClick={() => setActive(j)}
+                role="tab"
+                aria-selected={j === active}
+                aria-label={'Noticia ' + (j + 1) + ': ' + n2.titulo}
+              />
+            ))}
+            <span className="hero-fraction" aria-hidden="true">
+              {active + 1} / {total}
+            </span>
+          </div>
+
+          <button
+            className="hero-nav hero-prev"
+            onClick={prevSlide}
+            aria-label="Noticia anterior"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            className="hero-nav hero-next"
+            onClick={nextSlide}
+            aria-label="Siguiente noticia"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </>
+      )}
     </section>
   );
 }
