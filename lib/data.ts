@@ -186,10 +186,10 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
     // 2. Filtrar noticias con contenido mínimo válido (evita soft 404 con homepage)
     noticias = noticias.filter(
       (n) =>
-        n.slug?.trim() &&
-        n.titulo?.trim().length > 5 &&
-        n.contenido?.trim().length > 20 &&
-        n.categoria?.trim()
+        Boolean(n.slug?.trim()) &&
+        (n.titulo?.trim() ?? '').length > 5 &&
+        (n.contenido?.trim() ?? '').length > 20 &&
+        Boolean(n.categoria?.trim())
     );
 
     // 3. Deduplicar por slug: quedarse con la más reciente
