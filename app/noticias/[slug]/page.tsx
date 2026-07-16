@@ -1,6 +1,6 @@
 import '@/app/articulo.css';
 import ArticlePage from '@/components/ArticlePage';
-import { getNewsBySlug, getRelatedNews, getAllSlugs } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -13,10 +13,10 @@ import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/l
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
-// ISR: páginas estáticas con revalidación. Sin loading.tsx el render de slugs
-// desconocidos es bloqueante y notFound() devuelve HTTP 404 real.
-export const revalidate = 3600;
-export const dynamicParams = true;
+// Dynamic rendering: evita timeout/memoria al generar 200+ páginas estáticas
+// y garantiza HTTP 404 reales para slugs inexistentes. El contenido se cachea
+// vía unstable_cache en lib/data.ts con revalidate de 3600s.
+export const dynamic = 'force-dynamic';
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -35,27 +35,12 @@ function toNoticiaTipo(value: string): NoticiaTipo {
   return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
 }
 
-export async function generateStaticParams() {
-  try {
-    const slugs = await getAllSlugs();
-    if (slugs.length > 0) {
-      return slugs.map((slug) => ({ slug }));
-    }
-  } catch {
-    // Firebase falló, ISR fallback generará dinámicamente
-  }
-  return [];
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
     const noticia = await getNewsBySlug(slug);
     if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) {
-      return {
-        title: 'Página no encontrada',
-        robots: { index: false },
-      };
+      notFound();
     }
 
     // Slug obsoleto: redirigir al canonical en lugar de servir metadatos duplicados

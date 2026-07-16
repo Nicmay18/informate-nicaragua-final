@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  // output: 'standalone' // desactivado localmente para evitar EBUSY en copia; Vercel usa serverless por defecto
   trailingSlash: false,
   eslint: {
     ignoreDuringBuilds: true, // Desactivado temporalmente: demasiados errores preexistentes
@@ -131,6 +131,12 @@ const nextConfig: NextConfig = {
       {
         source: '/categoria/economia',
         destination: '/categoria/nacionales',
+        permanent: true,
+      },
+      // Redirigir slug de autor legacy al canonical
+      {
+        source: '/autor/keyling-eliet-rivera-munoz',
+        destination: '/autor/keyling-rivera',
         permanent: true,
       },
       // Redirigir URLs con query params basura a URLs limpias

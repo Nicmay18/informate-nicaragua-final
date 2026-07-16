@@ -2,29 +2,19 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
+import { getAuthorBySlug } from '@/lib/authors';
 import { getNews } from '@/lib/data';
 import type { Author } from '@/lib/authors';
 
-// ISR: sin loading.tsx global, autores inexistentes devuelven HTTP 404 real vía notFound()
-export const dynamicParams = true;
-export const revalidate = 86400; // 24h
-
-export async function generateStaticParams() {
-  const authors = getAllAuthors();
-  return authors.map((author) => ({ slug: author.slug }));
-}
+// Dynamic rendering: evita timeout en build y garantiza 404 reales para autores inexistentes
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const author = getAuthorBySlug(slug);
 
   if (!author) {
-    return {
-      title: { absolute: 'Autor no encontrado | Nicaragua Informate' },
-      description: 'El perfil de autor que buscas no existe en Nicaragua Informate.',
-      robots: { index: false },
-    };
+    notFound();
   }
 
   // Verificar si el autor tiene artículos para decidir indexación

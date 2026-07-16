@@ -66,12 +66,16 @@ export async function POST(request: NextRequest) {
     // Invalidar caches por tag (homepage usa estos tags)
     // 'all-noticias' es el cache compartido de lectura de Firestore: invalidarlo
     // fuerza UNA relectura fresca que las 3 funciones de portada reusan.
+    revalidateTag('noticias');
     revalidateTag('all-noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
     revalidateTag('popular-news');
     revalidateTag('news-by-slug');
     revalidateTag('related-news');
+    revalidateTag('feed-xml');
+    revalidateTag('news-sitemap');
+    revalidateTag('sitemap-news');
 
     // CRITICO para indexacion rapida: invalidar sitemaps al instante
     // para que Google News vea la noticia nueva sin esperar 1h de revalidate.

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CategoryPagePro from '@/components/CategoryPagePro';
 import { getNewsByCategory } from '@/lib/data';
-import { slugToCategory, CATEGORIES, categoryToSlug } from '@/lib/types';
+import { slugToCategory } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -39,17 +39,16 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
   },
 };
 
+// generateStaticParams vacío porque la ruta es force-dynamic
 export async function generateStaticParams() {
-  return CATEGORIES.map((cat) => ({
-    slug: categoryToSlug(cat.name),
-  }));
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const slugLower = slug.toLowerCase();
   const catName = slugToCategory(slugLower);
-  if (!catName) return { title: 'Categoría no encontrada' };
+  if (!catName) notFound();
 
   const meta = CATEGORIA_META[slugLower] || {
     titulo: `${catName} | Noticias de Nicaragua`,
@@ -81,9 +80,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-// ISR: sin loading.tsx global, slugs inválidos devuelven HTTP 404 real vía notFound()
-export const dynamicParams = true;
-export const revalidate = 3600;
+// Dynamic rendering: evita timeout en build y garantiza 404 reales para categorías inválidas
+export const dynamic = 'force-dynamic';
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

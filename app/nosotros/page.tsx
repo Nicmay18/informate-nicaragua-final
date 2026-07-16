@@ -52,7 +52,7 @@ const ORG_SCHEMA = {
 };
 
 export const metadata: Metadata = {
-  title: { absolute: 'Sobre Nicaragua Informate — Noticias de Nicaragua | Nicaragua Informate' },
+  title: { absolute: 'Sobre Nicaragua Informate' },
   description: 'Conoce a Nicaragua Informate: equipo, misión y visión del medio digital nicaragüense dedicado a noticias verificadas.',
   alternates: { canonical: 'https://nicaraguainformate.com/nosotros' },
 };
