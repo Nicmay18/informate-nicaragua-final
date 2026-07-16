@@ -1,0 +1,10 @@
+const slug = 'camioneta-impacta-dos-motos-en-managua-y-deja-tres-lesionados';
+const h = await (await fetch('http://localhost:3000/noticias/' + slug)).text();
+const title = h.match(/<title>([\s\S]*?)<\/title>/i)?.[1].replace(/\s+/g, ' ').trim();
+const og = h.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i)?.[1];
+const tw = h.match(/<meta[^>]+name="twitter:title"[^>]+content="([^"]+)"/i)?.[1];
+const desc = h.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"/i)?.[1];
+const canonical = h.match(/<link rel="canonical" href="([^"]+)"/i)?.[1];
+const news = /"@type":\s*"NewsArticle"/i.test(h);
+const bread = /"@type":\s*"BreadcrumbList"/i.test(h);
+console.log({ title, og, tw, desc: desc?.slice(0,80), canonical, news, bread });

@@ -1,0 +1,15 @@
+{
+  "total": 32,
+  "categories": {
+    "Deportes": 7,
+    "Sucesos": 14,
+    "Nacionales": 7,
+    "Internacionales": 4
+  },
+  "percentages": {
+    "Deportes": "21.9%",
+    "Sucesos": "43.8%",
+    "Nacionales": "21.9%",
+    "Internacionales": "12.5%"
+  }
+}

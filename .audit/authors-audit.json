@@ -1,0 +1,36 @@
+[
+  {
+    "url": "http://localhost:3000/autor/keyling-rivera",
+    "title": "Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate",
+    "hasPersonSchema": true,
+    "personName": "Keyling Elieth Rivera Muñoz",
+    "personJobTitle": "Directora Editorial y Cofundadora",
+    "personImage": "https://nicaraguainformate.com/keyling-rivera.jpg",
+    "personDescription": "Periodista nicaragüense, co-fundadora y directora editorial de Nicaragua Informate. Especializada en",
+    "hasPhotoElement": false,
+    "hasAuthorRel": true,
+    "hasArticlesSection": true
+  },
+  {
+    "url": "http://localhost:3000/autor/maycol-nicaragua",
+    "title": "Artículos de Maycol Josué Nicaragua Rivas | Nicaragua Informate",
+    "hasPersonSchema": true,
+    "personName": "Maycol Josué Nicaragua Rivas",
+    "personJobTitle": "Director Técnico",
+    "personDescription": "Ingeniero en Sistemas. Se encarga del desarrollo tecnológico, la infraestructura web y todo lo relac",
+    "hasPhotoElement": false,
+    "hasAuthorRel": true,
+    "hasArticlesSection": true
+  },
+  {
+    "url": "http://localhost:3000/autor/jose-lopez",
+    "title": "Artículos de José Luis López Ramírez | Nicaragua Informate",
+    "hasPersonSchema": true,
+    "personName": "José Luis López Ramírez",
+    "personJobTitle": "Director de Operaciones",
+    "personDescription": "Ingeniero en Sistemas. Coordina la operación diaria, la publicación oportuna de contenido y la organ",
+    "hasPhotoElement": false,
+    "hasAuthorRel": true,
+    "hasArticlesSection": true
+  }
+]

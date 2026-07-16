@@ -1,0 +1,19 @@
+{
+  "total": 16,
+  "categories": {
+    "NACIONALES": 3,
+    "Nacionales": 1,
+    "Internacionales": 3,
+    "DEPORTES": 4,
+    "GUÍAS ÚTILES": 1,
+    "SUCESOS": 4
+  },
+  "percentages": {
+    "NACIONALES": "18.8%",
+    "Nacionales": "6.3%",
+    "Internacionales": "18.8%",
+    "DEPORTES": "25.0%",
+    "GUÍAS ÚTILES": "6.3%",
+    "SUCESOS": "25.0%"
+  }
+}

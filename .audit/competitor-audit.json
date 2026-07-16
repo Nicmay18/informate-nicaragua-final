@@ -1,0 +1,77 @@
+[
+  {
+    "name": "BBC Mundo",
+    "url": "https://www.bbc.com/mundo",
+    "finalUrl": "https://www.bbc.com/mundo",
+    "status": 200,
+    "description": "BBC Mundo le presenta una selección de contenidos y acontecimientos más importantes de la actualidad. Las últimas noticias e información en materia internacional, sobre América Latina, tecnología, ciencia, salud, economía. Fotos y videos.",
+    "ogTitle": "Noticias - BBC News Mundo",
+    "canonical": null,
+    "jsonLdTypes": [],
+    "hasBreadcrumb": false,
+    "hasNewsSchema": false,
+    "hasAuthorRel": false,
+    "hasLazy": true,
+    "ads": false
+  },
+  {
+    "name": "Infobae America",
+    "url": "https://www.infobae.com/america/",
+    "finalUrl": "https://www.infobae.com/america/",
+    "status": 200,
+    "title": "Infobae América - Infobae",
+    "description": "El sitio de noticias en español más leído en el mundo. Con redacciones en Ciudad de México, Madrid, Bogotá, Lima y Buenos Aires; y corresponsales en las principales ciudades del mundo.",
+    "ogTitle": "Infobae América",
+    "canonical": "https://www.infobae.com/america/",
+    "jsonLdTypes": [
+      "NewsMediaOrganization"
+    ],
+    "hasBreadcrumb": false,
+    "hasNewsSchema": false,
+    "hasAuthorRel": false,
+    "hasLazy": true,
+    "ads": true
+  },
+  {
+    "name": "La Prensa Nicaragua",
+    "url": "https://www.laprensa.com.ni",
+    "error": "fetch failed"
+  },
+  {
+    "name": "TN8",
+    "url": "https://www.tn8.tv",
+    "finalUrl": "https://www.tn8.ni/",
+    "status": 403,
+    "title": "Just a moment...",
+    "description": null,
+    "ogTitle": null,
+    "canonical": null,
+    "jsonLdTypes": [],
+    "hasBreadcrumb": false,
+    "hasNewsSchema": false,
+    "hasAuthorRel": false,
+    "hasLazy": false,
+    "ads": false
+  },
+  {
+    "name": "Canal 10",
+    "url": "https://canal10.com.ni",
+    "finalUrl": "https://www.canal10.com.ni/",
+    "status": 200,
+    "title": "Portada - Canal 10",
+    "description": null,
+    "ogTitle": "Portada - Canal 10",
+    "canonical": "https://www.canal10.com.ni/",
+    "jsonLdTypes": [],
+    "hasBreadcrumb": true,
+    "hasNewsSchema": false,
+    "hasAuthorRel": false,
+    "hasLazy": false,
+    "ads": false
+  },
+  {
+    "name": "100% Noticias",
+    "url": "https://100noticias.com.ni",
+    "error": "fetch failed"
+  }
+]
