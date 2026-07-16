@@ -16,6 +16,7 @@ interface SidebarProProps {
   populares?: Noticia[];
   noticias?: Noticia[];
   excluirIds?: Set<string>;
+  ocultarSucesos?: boolean;
 }
 
 function MasLeidas({ noticias }: { noticias: Noticia[] }) {
@@ -76,12 +77,15 @@ function Newsletter() {
   );
 }
 
-export default function SidebarPro({ masLeidas = [], populares = [], noticias = [], excluirIds }: SidebarProProps) {
+export default function SidebarPro({ masLeidas = [], populares = [], noticias = [], excluirIds, ocultarSucesos }: SidebarProProps) {
   // Si no hay masLeidas explícitas, usar noticias como fallback
   const lecturas = useMemo(() => {
     const base = masLeidas.length ? masLeidas : populares.length ? populares : noticias;
-    return base.filter(n => !excluirIds?.has(n.id)).slice(0, 5);
-  }, [masLeidas, populares, noticias, excluirIds]);
+    return base
+      .filter(n => !excluirIds?.has(n.id))
+      .filter(n => !ocultarSucesos || n.categoria !== 'Sucesos')
+      .slice(0, 5);
+  }, [masLeidas, populares, noticias, excluirIds, ocultarSucesos]);
 
   return (
     <aside className="ni-sidebar" aria-label="Sidebar">

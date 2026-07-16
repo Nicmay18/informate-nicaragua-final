@@ -7,6 +7,7 @@ import TickerUltimaHora from './pro/TickerUltimaHora';
 import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
 import SidebarPro from './pro/SidebarPro';
+import GuiaUtilWidget from './pro/GuiaUtilWidget';
 
 const MOCK_NOTICIAS: Noticia[] = [
   {
@@ -168,15 +169,10 @@ interface HomePageProProps {
   isNoticiasPage?: boolean;
 }
 
-const TRANSITO_KEYWORDS = ['tránsito', 'transito', 'vial', 'moto', 'accidente', 'colisión', 'choque', 'volcamiento', 'atropellado'];
-
-function esTransito(n: Noticia): boolean {
-  return TRANSITO_KEYWORDS.some(k => n.titulo.toLowerCase().includes(k));
-}
-
 /**
  * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
- * Jerarquía: Hero > Lo Destacado > Secciones temáticas > Más leídas.
+ * Jerarquía editorial (2026-07-15): reducir peso visual de Sucesos,
+ * potenciar Nacionales, Deportes, Internacionales, Tecnología, Economía y Guías.
  */
 function distribuirNoticias(noticias: Noticia[]) {
   const usados = new Set<string>();
@@ -196,39 +192,45 @@ function distribuirNoticias(noticias: Noticia[]) {
   const disponibles = () => noticias.filter(n => !usados.has(n.id));
   const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
 
-  // 1. Hero Principal: máximo 3 noticias con imagen
+  const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos', 'Sucesos'];
   const conImagen = noticias.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
-  const heroNoticias = take(conImagen.length > 0 ? conImagen : noticias, 3);
-
-  // 2. Última Hora: máximo 3 titulares exclusivos
-  const ultimaHora = take(disponibles(), 3);
-
-  // 3. Lo Destacado: 4 noticias (1 Nacional, 1 Internacional, 1 Deportes, 1 Suceso no tránsito)
-  const destacados = [
-    ...take(porCategoria('Nacionales').filter(n => !esTransito(n)), 1),
-    ...take(porCategoria('Internacionales').filter(n => !esTransito(n)), 1),
-    ...take(porCategoria('Deportes'), 1),
-    ...take(porCategoria('Sucesos').filter(n => !esTransito(n)), 1),
-  ];
-  const faltantes = 4 - destacados.length;
-  if (faltantes > 0) {
-    destacados.push(...take(disponibles(), faltantes));
+  const baseHero = conImagen.length > 0 ? conImagen : noticias;
+  const heroNoticias = take(
+    prioridadHero.flatMap(cat => baseHero.filter(n => n.categoria === cat)),
+    3
+  );
+  if (heroNoticias.length < 3) {
+    heroNoticias.push(...take(disponibles(), 3 - heroNoticias.length));
   }
 
-  // 4. Secciones temáticas: exactamente 3 noticias por categoría
+  // Ticker: excluir Sucesos para evitar que dominen la parte superior
+  const prioridadTicker = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos'];
+  const ultimaHora = take(
+    prioridadTicker.flatMap(cat => porCategoria(cat)),
+    3
+  );
+  if (ultimaHora.length < 3) {
+    ultimaHora.push(...take(disponibles(), 3 - ultimaHora.length));
+  }
+
+  // Destacados: 4 noticias de categorías preferidas, NUNCA Sucesos
+  const prioridadDestacados = ['Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Economía', 'Espectáculos'];
+  const destacados = take(
+    prioridadDestacados.flatMap(cat => porCategoria(cat)),
+    4
+  );
+  if (destacados.length < 4) {
+    destacados.push(...take(disponibles(), 4 - destacados.length));
+  }
+
+  // Secciones temáticas: 3 noticias por categoría (si existen)
   const seccion = (cat: string, min = 3) => {
-    const items = take(porCategoria(cat).filter(n => !esTransito(n)), 3);
+    const items = take(porCategoria(cat), 3);
     return items.length >= min ? items : [];
   };
 
-  const sucesosAll = porCategoria('Sucesos');
-  const sucesosNoTransito = sucesosAll.filter(n => !esTransito(n));
-  const sucesosTransito = sucesosAll.filter(n => esTransito(n));
-  const sucesosItems = [
-    ...take(sucesosNoTransito, 1),
-    ...take(sucesosTransito, 2),
-  ].slice(0, 3);
-  sucesosItems.forEach(n => usados.add(n.id));
+  // Sucesos: máximo 3 en TODA la home (hero/ticker/destacados ya consumieron usados)
+  const sucesosItems = take(porCategoria('Sucesos'), 3);
 
   return {
     heroNoticias,
@@ -236,10 +238,11 @@ function distribuirNoticias(noticias: Noticia[]) {
     destacados,
     nacionales: seccion('Nacionales'),
     internacionales: seccion('Internacionales'),
-    sucesos: sucesosItems.length >= 3 ? sucesosItems : [],
     deportes: seccion('Deportes'),
-    espectaculos: seccion('Espectáculos'),
     tecnologia: seccion('Tecnología'),
+    economia: seccion('Economía'),
+    espectaculos: seccion('Espectáculos'),
+    sucesos: sucesosItems,
     excluidos: new Set(usados),
   };
 }
@@ -288,29 +291,45 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
           {/* 3. DESTACADOS: 4 noticias, 2x2, mix de categorías */}
           <SeccionDestacados noticias={dist.destacados} />
 
-          {/* 4. SECCIONES TEMÁTICAS */}
+          {/* 4. SECCIONES TEMÁTICAS: ordenadas por prioridad editorial */}
           {dist.nacionales.length > 0 && (
             <SeccionCategoria titulo="Nacionales" slug="nacionales" color="#2563EB" noticias={dist.nacionales} />
-          )}
-          {dist.internacionales.length > 0 && (
-            <SeccionCategoria titulo="Internacionales" slug="internacionales" color="#059669" noticias={dist.internacionales} />
-          )}
-          {dist.sucesos.length > 0 && (
-            <SeccionCategoria titulo="Sucesos" slug="sucesos" color="#DC2626" noticias={dist.sucesos} />
           )}
           {dist.deportes.length > 0 && (
             <SeccionCategoria titulo="Deportes" slug="deportes" color="#D97706" noticias={dist.deportes} />
           )}
-          {dist.espectaculos.length > 0 && (
-            <SeccionCategoria titulo="Espectáculos" slug="espectaculos" color="#7C3AED" noticias={dist.espectaculos} />
+          {dist.internacionales.length > 0 && (
+            <SeccionCategoria titulo="Internacionales" slug="internacionales" color="#059669" noticias={dist.internacionales} />
           )}
           {dist.tecnologia.length > 0 && (
             <SeccionCategoria titulo="Tecnología" slug="tecnologia" color="#0891B2" noticias={dist.tecnologia} />
           )}
+          {dist.economia.length > 0 && (
+            <SeccionCategoria titulo="Economía" slug="economia" color="#0F172A" noticias={dist.economia} />
+          )}
+          {dist.espectaculos.length > 0 && (
+            <SeccionCategoria titulo="Espectáculos" slug="espectaculos" color="#7C3AED" noticias={dist.espectaculos} />
+          )}
+
+          {/* 5. GUÍAS ÚTILES (evergreen): contenido de servicio, indexable, no consume noticias */}
+          <section className="seccion-categoria" aria-label="Guías útiles" data-reveal>
+            <header className="section-header" style={{ borderBottomColor: '#10B981' }}>
+              <h2 className="section-title">
+                <span>GUÍAS ÚTILES</span>
+                <span className="section-title-line" style={{ backgroundColor: '#10B981' }} />
+              </h2>
+            </header>
+            <GuiaUtilWidget />
+          </section>
+
+          {/* 6. SUCESOS: colocado al final, máximo 3 noticias en toda la home */}
+          {dist.sucesos.length > 0 && (
+            <SeccionCategoria titulo="Sucesos" slug="sucesos" color="#DC2626" noticias={dist.sucesos} />
+          )}
         </div>
 
-        {/* 5. SIDEBAR REORGANIZADO */}
-        <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} excluirIds={dist.excluidos} />
+        {/* 7. SIDEBAR REORGANIZADO: oculta Sucesos para no romper el tope visual */}
+        <SidebarPro masLeidas={masLeidas} populares={populares} noticias={noticiasBase} excluirIds={dist.excluidos} ocultarSucesos />
       </div>
 
     </div>
