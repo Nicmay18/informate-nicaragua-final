@@ -165,6 +165,7 @@ function construirCriterios(ev: EvidenciaPuntuada): CriterioEditorJefe[] {
     add('Utilidad', ev.utilidad, ev.utilidad >= 50 ? 'Aporta utilidad al lector.' : 'Utilidad limitada.'),
     add('Originalidad', ev.originalidad, ev.originalidad >= 50 ? 'Aporte editorial propio.' : 'Originalidad limitada.'),
     add('Aporte propio (NIVEL 11)', ev.aportePropio * 4, ev.aportePropioDetalle.length > 0 ? `Detectado: ${ev.aportePropioDetalle.join(', ')}.` : 'Sin aporte propio detectado.'),
+    add('Alucinación institucional (FASE 13)', ev.alucinacionInstitucional, ev.alucinacionInstitucional >= 70 ? 'Afirmaciones respaldadas.' : `⚠ Citas sin respaldo: ${ev.alucinacionDetalle.filter(d => d.includes('sin respaldo')).join('; ')}`),
   ];
 }
 
@@ -178,6 +179,7 @@ function construirNivelEvidencia(ev: EvidenciaPuntuada): ReporteEditorJefe['nive
     { criterio: 'Datos concretos', detectado: toDetalle(ev.datosConcretos), puntaje: ev.datosConcretos >= 70 ? 3 : 0, maximo: 3 },
     { criterio: 'Contexto legal / institucional', detectado: toDetalle(ev.contexto), puntaje: ev.contexto >= 70 ? 3 : 0, maximo: 3 },
     { criterio: 'Aporte propio NIVEL 11', detectado: ev.aportePropio >= 15 ? 'Sí' : ev.aportePropio >= 7 ? 'Parcial' : 'No', puntaje: ev.aportePropio >= 15 ? 3 : ev.aportePropio >= 7 ? 1 : 0, maximo: 3 },
+    { criterio: 'Alucinación institucional FASE 13', detectado: ev.alucinacionInstitucional >= 70 ? 'Sí' : ev.alucinacionInstitucional >= 40 ? 'Parcial' : 'No', puntaje: ev.alucinacionInstitucional >= 70 ? 3 : ev.alucinacionInstitucional >= 40 ? 1 : 0, maximo: 3 },
   ];
 }
 

@@ -29,9 +29,11 @@ export interface EvidenciaPuntuada {
   contexto: number;             // 0-100
   utilidad: number;             // 0-100
   servicio: number;             // 0-100
-  originalidad: number;         // 0-100
+  originalidad: number;         // 0-100 (rediseñado: 8x10 + 20 exclusiva)
   aportePropio: number;         // 0-25 (NIVEL 11)
   aportePropioDetalle: string[]; // checklist de ítems detectados
+  alucinacionInstitucional: number; // 0-100 (FASE 13)
+  alucinacionDetalle: string[];    // ítems detectados/no detectados
 }
 
 export type TipoNotaEditorialV2 =
@@ -167,12 +169,22 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
     /\b(linea telefonica|numero de emergencia|llamar a|acudir|hospital|centro de salud)\b/,
   ]);
 
-  // 9. Originalidad
-  const originalidad = porcentajePorMatches(textoPlano, [
-    /\b(Nicaragua Informate|Informate|este medio|nuestro equipo|nuestra redaccion)\s+(confirm[óo]|consult[óo]|verific[óo]|obtuvo|constat[óo]|descubri[óo]|revis[óo]|investig[óo])\b/,
-    /\b(dato exclusivo|informacion obtenida|documento obtenido|constato|verifico)\b/,
-    /\b(analisis propio|contexto de este medio|trabajo de redaccion)\b/,
-  ]);
+  // 9. Originalidad — rediseñado (0-100)
+  // 8 ítems x 10 pts + 20 pts exclusiva = 100 máximo
+  const originalidadItems: { label: string; regex: RegExp }[] = [
+    { label: 'Comparó documentos', regex: /\b(?:compar[óo]|cotej[óo]|contrast[óo])\s+(?:documentos?|registros?|informes?|datos?|cifras?|versiones?)\b/i },
+    { label: 'Encontró diferencias', regex: /\b(?:diferencia|discrepancia|contradicci[óo]n|inconsistencia|no\s+coincide)\b/i },
+    { label: 'Explicó algo', regex: /\b(?:este\s+medio\s+(?:explica|analiza)|nuestra\s+redacci[óo]n\s+(?:explica|analiza)|en\s+Nicaragua\s+Informate\s+explicamos|esto\s+significa|lo\s+que\s+implica)\b/i },
+    { label: 'Resumió datos dispersos', regex: /\b(?:seg[úu]n\s+(?:datos|registros|cifras|estad[íi]sticas)|recopilaci[óo]n\s+de\s+datos|s[íi]ntesis\s+de\s+informaci[óo]n|reuni[óo]\s+(?:datos|cifras|informes))\b/i },
+    { label: 'Aclaró contradicciones', regex: /\b(?:aclaraci[óo]n|desmentir|corrige|rectifica|versi[óo]n\s+oficial\s+(?:difiere|contradice)|sin\s+embargo\s+(?:los\s+datos|las\s+cifras|la\s+versi[óo]n))\b/i },
+    { label: 'Hizo cronología', regex: /\b(?:cronolog[íi]a|l[íi]nea\s+de\s+tiempo|secuencia\s+de\s+hechos|primero\s+.+luego\s+.+despu[ée]s)\b/i },
+    { label: 'Verificó cifras', regex: /\b(?:verific[óo]|confirm[óo]|constat[óo])\s+(?:cifras?|datos?|n[úu]meros?|montos?|porcentajes?|estad[íi]sticas?)\b/i },
+    { label: 'Explicó impacto', regex: /\b(?:impacto\s+(?:en|sobre|para)|c[óo]mo\s+afecta|consecuencia\s+(?:para|en)|qu[ée]\s+significa\s+(?:para|en))\b/i },
+  ];
+  const originalidadDetectados = originalidadItems.filter(item => item.regex.test(textoPlano));
+  const exclusiva = /\b(?:Nicaragua\s+Informate|Informate|este\s+medio|nuestro\s+equipo|nuestra\s+redaccion)\s+(?:confirm[óo]|consult[óo]|verific[óo]|obtuvo|constat[óo]|descubri[óo]|revis[óo]|investig[óo])\b/.test(textoPlano)
+    || /\b(?:dato\s+exclusivo|informaci[óo]n\s+obtenida|documento\s+obtenido|exclusiva\s+de\s+este\s+medio)\b/i.test(textoPlano);
+  const originalidad = Math.min(100, originalidadDetectados.length * 10 + (exclusiva ? 20 : 0));
 
   // 10. NIVEL 11 — Aporte propio de Nicaragua Informate (0-25)
   // 7 ítems binarios, cada uno vale ~3.57 pts (25/7 ≈ 3.57)
@@ -189,6 +201,63 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
   const aportePropio = Math.round(aporteDetectados.length * (25 / 7));
   const aportePropioDetalle = aporteDetectados.map(item => item.label);
 
+  // 11. FASE 13 — Alucinación Institucional (0-100)
+  // Detecta si las afirmaciones institucionales/técnicas citadas son respaldables.
+  // 8 ítems binarios, cada uno vale 12.5 pts (100/8 = 12.5)
+  // Cada ítem verifica si la nota cita algo Y si hay evidencia de respaldo verificable.
+  const alucinacionItems: { label: string; citaRegex: RegExp; respaldoRegex: RegExp }[] = [
+    {
+      label: 'Existe el documento citado',
+      citaRegex: /\b(?:documento|informe|acta|resoluci[óo]n|decreto|acuerdo|oficio|sentencia|expediente|certificado|parte\s+oficial)\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:el|la|los|las)\s+(?:documento|informe|acta|resoluci[óo]n|decreto|acuerdo|oficio|sentencia|expediente)|publicado\s+en|disponible\s+en|consultado\s+por\s+este\s+medio|obtenido\s+por)\b/i,
+    },
+    {
+      label: 'Existe el cargo citado',
+      citaRegex: /\b(?:director|ministro|jefe|coordinador|vocero|presidente|vicepresidente|secretario|titular|gerente|comisionado)\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s*,?\s*(?:director|ministro|jefe|coordinador|vocero|presidente|vicepresidente|secretario|titular|gerente|comisionado)|(?:director|ministro|jefe|coordinador|vocero|presidente|vicepresidente|secretario|titular|gerente|comisionado)\s+(?:de|del)\s+[A-ZÁÉÍÓÚÑ])\b/i,
+    },
+    {
+      label: 'Existe el plan citado',
+      citaRegex: /\b(?:plan\s+(?:nacional|estrat[ée]gico|de\s+acci[óo]n|de\s+desarrollo|de\s+gobierno)|programa\s+(?:nacional|de\s+)|proyecto\s+(?:de\s+|nacional))\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:el|la)\s+(?:plan|programa|proyecto)|publicado\s+(?:por|en)|anunciado\s+por|lanzado\s+por|aprobado\s+por)\b/i,
+    },
+    {
+      label: 'Existe la estadística citada',
+      citaRegex: /\b(?:\d{1,3}(?:\.\d+)?\s*%|porcentaje|tasa\s+de|estad[íi]stica|cifra\s+(?:oficial|de)|\d+\s+(?:casos|muertos|heridos|detenidos|millones|mil\s+millones))\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:datos|estad[íi]sticas|cifras)\s+(?:del|de\s+la|oficiales)|(?:informados?|reportados?|confirmados?)\s+(?:por|seg[úu]n))\b/i,
+    },
+    {
+      label: 'Existe el nombre del programa',
+      citaRegex: /\b(?:programa\s+[A-ZÁÉÍÓÚÑ]|plan\s+[A-ZÁÉÍÓÚÑ]|iniciativa\s+[A-ZÁÉÍÓÚÑ]|campaa\s+[A-ZÁÉÍÓÚÑ])\b/,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:el|la)\s+(?:programa|plan|iniciativa|campaa)|(?:del|del\s+programa|del\s+plan)\s+[A-ZÁÉÍÓÚÑ])\b/i,
+    },
+    {
+      label: 'Existe el dato técnico',
+      citaRegex: /\b(?:\d+(?:\.\d+)?\s*(?:MW|kW|kV|toneladas?|hect[áa]reas?|kil[óo]metros?|metros?\s+c[úu]bicos?|ppm|dB|GHz|MHz|Mbps)|especificaci[óo]n\s+t[ée]cnica)\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:especificaci[óo]n|datos?|informe)\s+t[ée]cnico|(?:indicado|especificado|certificado)\s+(?:por|en|seg[úu]n))\b/i,
+    },
+    {
+      label: 'Existe la dependencia estatal',
+      citaRegex: /\b(?:ministerio\s+de|direcci[óo]n\s+general|instituto|entidad\s+aut[óo]noma|alcald[íi]a|vicepresidencia|comisi[óo]n\s+nacional)\b/i,
+      respaldoRegex: /\b(?:seg[úu]n\s+(?:el|la)\s+(?:ministerio|direcci[óo]n|instituto|alcald[íi]a|comisi[óo]n)|(?:inform[óo]|confirm[óo]|declar[óo])\s+(?:el|la)\s+(?:ministerio|direcci[óo]n|instituto|alcald[íi]a|comisi[óo]n))\b/i,
+    },
+    {
+      label: 'Existe la cronología citada',
+      citaRegex: /\b(?:en\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+20\d{2}|el\s+\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre))\b/i,
+      respaldoRegex: /\b(?:registrado\s+(?:en|el)|documentado\s+(?:en|el)|seg[úu]n\s+(?:registros?|archivos?|actas?))\b/i,
+    },
+  ];
+  const alucinacionDetalle = alucinacionItems.map(item => {
+    const cita = item.citaRegex.test(textoPlano);
+    const respaldo = item.respaldoRegex.test(textoPlano);
+    if (!cita) return `${item.label}: no cita`;
+    return respaldo ? `${item.label}: respaldado` : `${item.label}: ⚠ sin respaldo`;
+  });
+  const alucinacionRespaldados = alucinacionItems.filter(item => item.citaRegex.test(textoPlano) && item.respaldoRegex.test(textoPlano)).length;
+  const alucinacionCitados = alucinacionItems.filter(item => item.citaRegex.test(textoPlano)).length;
+  // Score = respaldados / max(1, citados) * 100. Si no cita nada, 100 (no alucina).
+  const alucinacionInstitucional = alucinacionCitados === 0 ? 100 : Math.round((alucinacionRespaldados / alucinacionCitados) * 100);
+
   return {
     fuenteIdentificada: puntajeBooleano(fuenteIdentificada, 100, porcentajePorMatches(todo, [fuentesOficiales, mediosNacionales, /\b(vocero|director|jefe|representante|portavoz)\b/])),
     documentoOficial: puntajeBooleano(documentoOficial, 100, porcentajePorMatches(todo, [/\bdocumento\b/, /\boficial\b/, /\binforme\b/])),
@@ -201,6 +270,8 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
     originalidad,
     aportePropio,
     aportePropioDetalle,
+    alucinacionInstitucional,
+    alucinacionDetalle,
   };
 }
 
@@ -288,11 +359,17 @@ function decidirEditorialV2(
   ev: EvidenciaPuntuada,
   tipo: TipoNotaEditorialV2
 ): DecisionEditorialV2 {
-  const base = promedioEvidencia(ev);
+  const baseRaw = promedioEvidencia(ev);
   const techo = MAX_SCORE_POR_TIPO[tipo] ?? 90;
+  // FASE 13: si la alucinación institucional es baja, penaliza el base.
+  // Cada punto por debajo de 70 resta 0.5 pts del base (máx penalización ~35 pts).
+  const penalizacionAlucinacion = ev.alucinacionInstitucional < 70
+    ? Math.round((70 - ev.alucinacionInstitucional) * 0.5)
+    : 0;
+  const base = Math.max(0, baseRaw - penalizacionAlucinacion);
   // Score final = base + aporte propio (0-25), capped por techo del tipo
   const score = Math.min(techo, base + ev.aportePropio);
-  const justificacionBase = `Score ${score} (base ${base} + aporte ${ev.aportePropio}/25, techo ${techo}). Tipo ${tipo}.`;
+  const justificacionBase = `Score ${score} (base ${baseRaw}${penalizacionAlucinacion > 0 ? ` -${penalizacionAlucinacion} alucinación` : ''} = ${base} + aporte ${ev.aportePropio}/25, techo ${techo}). Tipo ${tipo}. Alucinación institucional: ${ev.alucinacionInstitucional}/100.`;
 
   // Cobertura especial: cuando la nota misma lo declara y la evidencia es alta
   if (tipo === 'Cobertura' && score >= 85) {
