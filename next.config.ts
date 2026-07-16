@@ -125,12 +125,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/economia',
-        destination: '/categoria/nacionales',
-        permanent: true,
-      },
-      {
-        source: '/categoria/economia',
-        destination: '/categoria/nacionales',
+        destination: '/categoria/economia',
         permanent: true,
       },
       // Redirigir slug de autor legacy al canonical

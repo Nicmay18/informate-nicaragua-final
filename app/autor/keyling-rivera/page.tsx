@@ -4,10 +4,17 @@ import AuthorProfile from '@/components/AuthorProfile';
 import { getNews } from '@/lib/data';
 
 export const metadata: Metadata = {
-  title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
+  title: { absolute: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate' },
   description:
     'Conoce a Keyling Elieth Rivera Muñoz, Directora Editorial de Nicaragua Informate. Periodista nicaragüense con trayectoria en cobertura de Sucesos, Nacionales, Deportes, Internacionales, Tecnología y Espectáculos.',
   alternates: { canonical: 'https://nicaraguainformate.com/autor/keyling-rivera' },
+  openGraph: {
+    title: 'Keyling Elieth Rivera Muñoz | Directora Editorial | Nicaragua Informate',
+    url: 'https://nicaraguainformate.com/autor/keyling-rivera',
+    siteName: 'Nicaragua Informate',
+    locale: 'es_NI',
+    type: 'profile',
+  },
 };
 
 export default async function AutorKeylingRiveraPage() {

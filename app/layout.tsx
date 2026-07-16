@@ -95,8 +95,6 @@ export const metadata: Metadata = {
     locale: 'es_NI',
     url: 'https://nicaraguainformate.com',
     siteName: 'Nicaragua Informate',
-    title: 'Nicaragua Informate — Noticias de Nicaragua al Instante',
-    description: 'Últimas noticias de Nicaragua hoy: sucesos, nacionales, deportes, espectáculos y tecnología. Periodismo verificado desde Managua. Entérate al instante.',
     images: [
       {
         url: 'https://nicaraguainformate.com/logo.webp',
@@ -110,8 +108,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@NicInformate',
     creator: '@NicInformate',
-    title: 'Nicaragua Informate — Noticias de Nicaragua al Instante',
-    description: 'Últimas noticias de Nicaragua hoy: sucesos, nacionales, deportes, espectáculos y tecnología. Periodismo verificado desde Managua. Entérate al instante.',
     images: ['https://nicaraguainformate.com/logo.webp'],
   },
   alternates: {
