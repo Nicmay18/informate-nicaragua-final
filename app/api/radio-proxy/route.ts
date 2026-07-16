@@ -1,86 +1,15 @@
 ﻿// app/api/radio-proxy/route.ts
-// UTF-8 encoding fix
+// DESHABILITADO: evitar consumo de ancho de banda de App Engine.
+// El reproductor usa stream directo desde el cliente (RadioPlayer.tsx).
 import { NextResponse } from 'next/server';
 
-const RADIOS_NICARAGUA: Record<string, string> = {
-  'radioya': 'https://stream.ecmdigital.net:8010/radioya',
-  'buenisima': 'https://stream.zeno.fm/f24tdg9bq68uv',
-  'pachanguera': 'https://stream.zeno.fm/8qhxqhx2gg0uv',
-  'futura': 'https://stream.zeno.fm/nqhxqhx2gg0uv',
-  'vivafm': 'https://stream.zeno.fm/aqf8fnx2gg0uv'
-};
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const radio = searchParams.get('radio');
-
-  if (!radio || !RADIOS_NICARAGUA[radio]) {
-    return NextResponse.json({ 
-      error: 'Radio no encontrada',
-      available: Object.keys(RADIOS_NICARAGUA)
-    }, { status: 400 });
-  }
-
-  const streamUrl = RADIOS_NICARAGUA[radio];
-  
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(streamUrl, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'audio/*, */*',
-        'Icy-MetaData': '1',
-        'Connection': 'keep-alive',
-      },
-      redirect: 'follow'
-    });
-
-    clearTimeout(timeout);
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    // Crear stream response con headers correctos
-    const headers = new Headers({
-      'Content-Type': response.headers.get('content-type') || 'audio/mpeg',
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*',
-    });
-
-    // Pasar icy-metaint si existe (metadata de la canci├│n)
-    const icyMetaInt = response.headers.get('icy-metaint');
-    if (icyMetaInt) {
-      headers.set('icy-metaint', icyMetaInt);
-    }
-
-    return new Response(response.body, {
-      status: 200,
-      headers: headers,
-    });
-
-  } catch (error) {
-    console.error('Error streaming:', error);
-    return NextResponse.json({ 
-      error: 'Error al conectar con la radio',
-      details: error instanceof Error ? error.message : String(error)
-    }, { status: 500 });
-  }
+export async function GET() {
+  return NextResponse.json(
+    { error: 'Endpoint deshabilitado. Use el stream directo de la radio.' },
+    { status: 410 }
+  );
 }
 
-// Manejar OPTIONS para CORS preflight
 export async function OPTIONS() {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return new Response(null, { status: 410 });
 }
