@@ -30,6 +30,8 @@ export interface EvidenciaPuntuada {
   utilidad: number;             // 0-100
   servicio: number;             // 0-100
   originalidad: number;         // 0-100
+  aportePropio: number;         // 0-25 (NIVEL 11)
+  aportePropioDetalle: string[]; // checklist de ítems detectados
 }
 
 export type TipoNotaEditorialV2 =
@@ -133,8 +135,8 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
   // 4. Trabajo de campo (evidencia verificable, no presencia física)
   const materialAudiovisual = /\b(video|fotografia|imagen|captura|grabacion|material audiovisual)\s+(?:de|del|publicado|compartido|proporcionado|enviado|difundido)\b/.test(todo);
   const testimonioPublicado = /\b(testimonio|version|declaracion|relato)\s+(?:publicad[oa]|compartid[oa]|difundid[oa]|recogid[oa]|de un medio|en redes|por\s+(?:radio|canal|tv|medio))\b/.test(todo) || /\b(seg[úu]n\s+(?:testimonio|relato|version)|testimonio\s+de)\b/.test(todo);
-  const aportePropio = /\b(Nicaragua\s+Informate|Informate|este\s+medio|nuestro\s+equipo|nuestra\s+redaccion)\s+(confirm[óo]|consult[óo]|verific[óo]|obtuvo|constat[óo]|descubri[óo]|revis[óo]|investig[óo]|entrevist[óo])\b/.test(textoPlano);
-  const trabajoDeCampo = fuenteIdentificada || dosFuentes || documentoOficial || materialAudiovisual || testimonioPublicado || aportePropio;
+  const aportePropioBoolean = /\b(Nicaragua\s+Informate|Informate|este\s+medio|nuestro\s+equipo|nuestra\s+redaccion)\s+(confirm[óo]|consult[óo]|verific[óo]|obtuvo|constat[óo]|descubri[óo]|revis[óo]|investig[óo]|entrevist[óo])\b/.test(textoPlano);
+  const trabajoDeCampo = fuenteIdentificada || dosFuentes || documentoOficial || materialAudiovisual || testimonioPublicado || aportePropioBoolean;
 
   // 5. Datos concretos
   const datosConcretos = /\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b|C?\$\s*\d+|\b\d{2,3}\s+(?:kilometros?|km|metros?|m|años?|frascos?|personas?|heridos?|afectados?|fallecidos?|victimas?)\b|\b\d{1,2}:\d{2}\b/.test(textoPlano);
@@ -172,6 +174,21 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
     /\b(analisis propio|contexto de este medio|trabajo de redaccion)\b/,
   ]);
 
+  // 10. NIVEL 11 — Aporte propio de Nicaragua Informate (0-25)
+  // 7 ítems binarios, cada uno vale ~3.57 pts (25/7 ≈ 3.57)
+  const aporteItems: { label: string; regex: RegExp }[] = [
+    { label: 'Comparó documentos', regex: /\b(?:compar[óo]|cotej[óo]|contrast[óo])\s+(?:documentos?|registros?|informes?|datos?|cifras?|versiones?)\b/i },
+    { label: 'Revisó antecedentes', regex: /\b(?:antecedentes?|historial|registros?\s+previos?|casos?\s+anteriores?|a[ñn]os\s+anteriores?|temporadas?\s+anteriores?)\b/i },
+    { label: 'Verificó cronología', regex: /\b(?:cronolog[íi]a|l[íi]nea\s+de\s+tiempo|secuencia\s+de\s+hechos|verific[óo]\s+(?:fechas?|horas?|el\s+orden))\b/i },
+    { label: 'Detectó diferencias', regex: /\b(?:diferencia|discrepancia|contradicci[óo]n|inconsistencia|diverge|no\s+coincide)\b/i },
+    { label: 'Añadió explicación', regex: /\b(?:este\s+medio\s+(?:explica|analiza)|nuestra\s+redacci[óo]n\s+(?:explica|analiza)|an[áa]lisis\s+de\s+este\s+medio|en\s+Nicaragua\s+Informate\s+explicamos)\b/i },
+    { label: 'Hizo seguimiento', regex: /\b(?:seguimiento|actualizaci[óo]n\s+de\s+esta\s+nota|contin[úu]a\s+la\s+historia|en\s+desarrollo|posteriores?\s+actualizaciones?)\b/i },
+    { label: 'Consultó otra fuente', regex: /\b(?:Nicaragua\s+Informate\s+(?:consult[óo]|confirm[óo]|verific[óo])|este\s+medio\s+(?:consult[óo]|confirm[óo]|verific[óo])|nuestro\s+equipo\s+(?:consult[óo]|confirm[óo]|verific[óo]))\b/i },
+  ];
+  const aporteDetectados = aporteItems.filter(item => item.regex.test(textoPlano));
+  const aportePropio = Math.round(aporteDetectados.length * (25 / 7));
+  const aportePropioDetalle = aporteDetectados.map(item => item.label);
+
   return {
     fuenteIdentificada: puntajeBooleano(fuenteIdentificada, 100, porcentajePorMatches(todo, [fuentesOficiales, mediosNacionales, /\b(vocero|director|jefe|representante|portavoz)\b/])),
     documentoOficial: puntajeBooleano(documentoOficial, 100, porcentajePorMatches(todo, [/\bdocumento\b/, /\boficial\b/, /\binforme\b/])),
@@ -182,6 +199,8 @@ function evaluarEvidencia(n: NoticiaInput): EvidenciaPuntuada {
     utilidad,
     servicio,
     originalidad,
+    aportePropio,
+    aportePropioDetalle,
   };
 }
 
@@ -208,10 +227,12 @@ function clasificarTipoNotaV2(n: NoticiaInput, ev: EvidenciaPuntuada): { tipo: T
     return { tipo: 'Opinión', confianza: 90, razon: 'Texto con marcadores de opinión o columna.' };
   }
 
-  // 3. Investigación: pruebas documentales explícitas
-  const pruebasInvestigacion = /\b(documentos|solicitudes|registros|filtraciones|contratos|bases de datos|expedientes|informes oficiales|actas|partidas|certificados|resoluciones|acuerdos|decretos)\b/.test(todo);
-  if (pruebasInvestigacion && (ev.documentoOficial >= 70 || ev.dosFuentes >= 70) && palabras > 300) {
-    return { tipo: 'Investigación', confianza: 85, razon: 'Pruebas documentales y profundidad suficiente.' };
+  // 3. Investigación: requiere aporte propio explícito + pruebas documentales + profundidad
+  // FIX: antes clasificaba como Investigación cualquier nota que mencionara "documentos" o "registros".
+  // Ahora exige aporte propio del medio (NIVEL 11 ≥ 10), documento oficial fuerte y extensión ≥ 500 palabras.
+  const markersInvestigacion = /\b(investigaci[óo]n\s+(?:propia|de\s+este\s+medio|exclusiva)|filtraci[óo]n|expediente\s+judicial|base\s+de\s+datos|contratos?\s+(?:obtenidos?|filtrados?|revelados?))\b/;
+  if (markersInvestigacion.test(todo) && ev.documentoOficial >= 80 && ev.aportePropio >= 10 && palabras >= 500) {
+    return { tipo: 'Investigación', confianza: 90, razon: 'Investigación propia con pruebas documentales y aporte del medio.' };
   }
 
   // 4. Reportaje: evidencia + profundidad
@@ -250,32 +271,48 @@ function promedioEvidencia(ev: EvidenciaPuntuada): number {
   return Math.round(valores.reduce((a, b) => a + b, 0) / valores.length);
 }
 
+// NIVEL 11: el aporte propio (0-25) se suma al base score.
+// El techo por tipo evita que una Noticia puntúe como una Investigación.
+const MAX_SCORE_POR_TIPO: Record<TipoNotaEditorialV2, number> = {
+  'Noticia': 90,
+  'Breve': 70,
+  'Cobertura': 95,
+  'Investigación': 100,
+  'Reportaje': 100,
+  'Entrevista': 95,
+  'Opinión': 85,
+  'Crónica': 95,
+};
+
 function decidirEditorialV2(
   ev: EvidenciaPuntuada,
   tipo: TipoNotaEditorialV2
 ): DecisionEditorialV2 {
-  const promedio = promedioEvidencia(ev);
-  const justificacionBase = `Evidencia promedio ${promedio}%. Tipo ${tipo}.`;
+  const base = promedioEvidencia(ev);
+  const techo = MAX_SCORE_POR_TIPO[tipo] ?? 90;
+  // Score final = base + aporte propio (0-25), capped por techo del tipo
+  const score = Math.min(techo, base + ev.aportePropio);
+  const justificacionBase = `Score ${score} (base ${base} + aporte ${ev.aportePropio}/25, techo ${techo}). Tipo ${tipo}.`;
 
   // Cobertura especial: cuando la nota misma lo declara y la evidencia es alta
-  if (tipo === 'Cobertura' && promedio >= 85) {
-    return { accion: 'cobertura_especial', prioridad: 95, justificacion: `Cobertura con evidencia alta: cobertura especial. ${justificacionBase}` };
+  if (tipo === 'Cobertura' && score >= 85) {
+    return { accion: 'cobertura_especial', prioridad: Math.min(score, techo), justificacion: `Cobertura con evidencia alta: cobertura especial. ${justificacionBase}` };
   }
 
-  if (promedio >= 85) {
-    return { accion: 'portada', prioridad: 90, justificacion: `Evidencia sólida: portada. ${justificacionBase}` };
+  if (score >= 85) {
+    return { accion: 'portada', prioridad: Math.min(score, techo), justificacion: `Evidencia sólida: portada. ${justificacionBase}` };
   }
 
-  if (promedio >= 70) {
-    return { accion: 'publicar_destacado', prioridad: 80, justificacion: `Evidencia verificable: publicar destacado. ${justificacionBase}` };
+  if (score >= 70) {
+    return { accion: 'publicar_destacado', prioridad: Math.min(score, techo), justificacion: `Evidencia verificable: publicar destacado. ${justificacionBase}` };
   }
 
-  if (promedio >= 50) {
-    return { accion: 'publicar_estandar', prioridad: 65, justificacion: `Evidencia parcial: publicar estándar. ${justificacionBase}` };
+  if (score >= 50) {
+    return { accion: 'publicar_estandar', prioridad: Math.min(score, techo), justificacion: `Evidencia parcial: publicar estándar. ${justificacionBase}` };
   }
 
-  if (promedio >= 30) {
-    return { accion: 'publicar_breve', prioridad: 45, justificacion: `Evidencia limitada: publicar breve. ${justificacionBase}` };
+  if (score >= 30) {
+    return { accion: 'publicar_breve', prioridad: Math.min(score, techo), justificacion: `Evidencia limitada: publicar breve. ${justificacionBase}` };
   }
 
   // Evidencia insuficiente para ocupar espacio editorial

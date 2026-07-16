@@ -164,6 +164,7 @@ function construirCriterios(ev: EvidenciaPuntuada): CriterioEditorJefe[] {
     add('Contexto', ev.contexto, ev.contexto >= 70 ? 'Contexto legal, institucional o histórico.' : 'Contexto insuficiente.'),
     add('Utilidad', ev.utilidad, ev.utilidad >= 50 ? 'Aporta utilidad al lector.' : 'Utilidad limitada.'),
     add('Originalidad', ev.originalidad, ev.originalidad >= 50 ? 'Aporte editorial propio.' : 'Originalidad limitada.'),
+    add('Aporte propio (NIVEL 11)', ev.aportePropio * 4, ev.aportePropioDetalle.length > 0 ? `Detectado: ${ev.aportePropioDetalle.join(', ')}.` : 'Sin aporte propio detectado.'),
   ];
 }
 
@@ -176,6 +177,7 @@ function construirNivelEvidencia(ev: EvidenciaPuntuada): ReporteEditorJefe['nive
     { criterio: 'Trabajo de campo verificable', detectado: toDetalle(ev.trabajoDeCampo), puntaje: ev.trabajoDeCampo >= 70 ? 3 : 0, maximo: 3 },
     { criterio: 'Datos concretos', detectado: toDetalle(ev.datosConcretos), puntaje: ev.datosConcretos >= 70 ? 3 : 0, maximo: 3 },
     { criterio: 'Contexto legal / institucional', detectado: toDetalle(ev.contexto), puntaje: ev.contexto >= 70 ? 3 : 0, maximo: 3 },
+    { criterio: 'Aporte propio NIVEL 11', detectado: ev.aportePropio >= 15 ? 'Sí' : ev.aportePropio >= 7 ? 'Parcial' : 'No', puntaje: ev.aportePropio >= 15 ? 3 : ev.aportePropio >= 7 ? 1 : 0, maximo: 3 },
   ];
 }
 
