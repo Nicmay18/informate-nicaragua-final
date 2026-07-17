@@ -175,10 +175,23 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   };
 
   // ── ORIGINALIDAD ─────────────────────────────
+  // Calibración V4.1: originalidad no es solo exclusiva.
+  // Seleccionar, organizar, contextualizar y relacionar hechos también es aporte editorial.
+  const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
+  const tieneReporteo = /seg[uú]n\s+pudo\s+(?:constatar|verificar|confirmar)\s+(?:este\s+medio|nuestra\s+redacci[oó]n)/i.test(textoPlano);
+  const tieneCoberturaEditorial = (textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3;
+  const tieneContextualizacion = /\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano);
+  const tieneOrganizacion = /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano);
+
   const originality: OriginalityEvidence = {
-    tieneAportePropio: /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano),
-    aportePropioItems: [],
-    tieneReporteoPropio: /seg[uú]n\s+pudo\s+(?:constatar|verificar|confirmar)\s+(?:este\s+medio|nuestra\s+redacci[oó]n)/i.test(textoPlano),
+    tieneAportePropio: tieneMarcaPropia || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
+    aportePropioItems: [
+      ...(tieneMarcaPropia ? ['marca propia'] : []),
+      ...(tieneCoberturaEditorial ? ['cobertura editorial múltiple'] : []),
+      ...(tieneContextualizacion ? ['contextualización'] : []),
+      ...(tieneOrganizacion ? ['organización editorial'] : []),
+    ],
+    tieneReporteoPropio: tieneReporteo,
     esReformulacion: palabraCount < 100 && !uniqueFuentes.length,
   };
 
@@ -197,9 +210,9 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
 
   // ── FOLLOW UP ────────────────────────────────
   const followUp: FollowUpEvidence = {
-    tieneSeguimiento: /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n)\b/i.test(textoPlano),
-    actualizable: /\b(?:pr[oó]ximo|pr[oó]xima|semana\s+que\s+viene|ma[nñ]ana|agosto|septiembre|octubre)\b/i.test(textoPlano),
-    pendienteConfirmacion: /\b(?:se\s+espera|pendiente|por\s+confirmar|resultados?\s+(?:preliminares|finales))\b/i.test(textoPlano),
+    tieneSeguimiento: /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n|contin[uú]an|investigaciones?\s+(?:contin[uú]an|en\s+curso)|se\s+actualizar[aá]|actualizar[aá]\s+esta)\b/i.test(textoPlano),
+    actualizable: /\b(?:pr[oó]ximo|pr[oó]xima|semana\s+que\s+viene|ma[nñ]ana|agosto|septiembre|octubre|cuando\s+las?\s+autoridades|nuevos?\s+datos)\b/i.test(textoPlano),
+    pendienteConfirmacion: /\b(?:se\s+espera|pendiente|por\s+confirmar|resultados?\s+(?:preliminares|finales)|confirmen|establecer\s+las?\s+causas|responsabilidades?\s+adicionales?)\b/i.test(textoPlano),
   };
 
   // ── SOURCES ──────────────────────────────────

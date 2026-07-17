@@ -55,13 +55,33 @@ export function evaluate(
 
   // ── 6. Score ponderado con pesos del perfil ──
   const w = profile.scoreWeights;
-  const scoreFinal = Math.round(
+  let scoreFinal = Math.round(
     evidenciaScore * (w.evidencia / 100) +
     fuenteScore * (w.fuente / 100) +
     contextoScore * (w.contexto / 100) +
     utilidadScore * (w.utilidad / 100) +
     originalidadScore * (w.originalidad / 100)
   );
+
+  // ── 6.1 Calibración V4.1: Respetar evidencia de módulos ──
+  // Si los módulos objetivos coinciden en que la nota es sólida,
+  // el Editor Jefe no puede degradarla sin justificación objetiva.
+  const modulosObjetivos = [
+    results.seo.score,
+    results.eeat.score,
+    results.forense.score,
+    results.valorEditorial.score,
+  ];
+  const modulosPerfectos = modulosObjetivos.filter(s => s >= 100).length;
+  const modulosAltos = modulosObjetivos.filter(s => s >= 85).length;
+
+  if (modulosPerfectos >= 4) {
+    // Todos los módulos objetivos dan 100: piso de 80
+    scoreFinal = Math.max(scoreFinal, 80);
+  } else if (modulosAltos >= 4) {
+    // Todos los módulos objetivos dan 85+: piso de 70
+    scoreFinal = Math.max(scoreFinal, 70);
+  }
 
   // ── 7. Decisión: umbrales del perfil ──
   const t = profile.editorialThreshold;
