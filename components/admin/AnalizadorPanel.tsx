@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ResultadoEditorial } from '@/lib/editor-jefe-v4';
+import EditorDebugPanel from './EditorDebugPanel';
 
 interface Props {
   noticia: {
@@ -123,6 +124,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
   const [resultado, setResultado] = useState<ResultadoEditorial | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mostrarDebug, setMostrarDebug] = useState(false);
 
   const analizar = async () => {
     setCargando(true);
@@ -261,6 +263,19 @@ export default function AnalizadorPanel({ noticia }: Props) {
           )}
         </ul>
       </section>
+
+      {resultado && (
+        <div className="border-t border-gray-800 pt-4">
+          <button
+            type="button"
+            onClick={() => setMostrarDebug(prev => !prev)}
+            className="mb-4 px-4 py-2 rounded bg-gray-800 hover:bg-gray-700 border border-gray-600 text-sm text-gray-200 transition"
+          >
+            {mostrarDebug ? 'Ocultar Debug' : 'Mostrar Debug'}
+          </button>
+          {mostrarDebug && <EditorDebugPanel resultado={resultado} />}
+        </div>
+      )}
 
       <div className="text-center">
         <button

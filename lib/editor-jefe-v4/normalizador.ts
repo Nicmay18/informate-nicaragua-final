@@ -11,6 +11,7 @@ import type {
   NormalizedResults,
   PenalizacionDeduplicada,
 } from './types';
+import { ScoreTracer } from './score-tracer';
 
 type ModuleEvaluator = (evidence: ArticleEvidence) => EvaluationResult;
 
@@ -23,12 +24,15 @@ const evaluarSEO: ModuleEvaluator = (ev): EvaluationResult => {
   const warnings: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'SEO');
+  tracer.start(score, 'Score base del módulo SEO');
 
   if (ev.seo.tituloOptimizado) {
     signals.push('Título con longitud óptima (40-70 caracteres)');
   } else {
     warnings.push(`Título con longitud ${ev.seo.tituloLength} caracteres (óptimo: 40-70)`);
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Ajustar longitud del título entre 40 y 70 caracteres');
   }
 
@@ -37,10 +41,12 @@ const evaluarSEO: ModuleEvaluator = (ev): EvaluationResult => {
   } else if (ev.seo.resumenLength < 120) {
     warnings.push(`Meta descripción muy corta (${ev.seo.resumenLength} caracteres)`);
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Ampliar la meta descripción a 120-160 caracteres');
   } else {
     warnings.push(`Meta descripción demasiado larga (${ev.seo.resumenLength} caracteres)`);
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Recortar la meta descripción a máximo 160 caracteres');
   }
 
@@ -49,6 +55,7 @@ const evaluarSEO: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('Faltan subtítulos H2 en el contenido');
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Agregar al menos 2 subtítulos H2 para estructurar el contenido');
   }
 
@@ -57,6 +64,7 @@ const evaluarSEO: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('Pocos elementos de énfasis (strong)');
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Usar negritas en datos clave para mejorar escaneabilidad');
   }
 
@@ -65,12 +73,14 @@ const evaluarSEO: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('No se definieron keywords');
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Definir palabras clave relevantes para la nota');
   }
 
   return {
     modulo: 'SEO',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors: [],
@@ -85,12 +95,15 @@ const evaluarEEAT: ModuleEvaluator = (ev): EvaluationResult => {
   const errors: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'EEAT');
+  tracer.start(score, 'Score base del módulo EEAT');
 
   if (ev.eeat.autorVisible) {
     signals.push(`Autor identificado: ${ev.eeat.autor}`);
   } else {
     warnings.push('Autor no visible o genérico (Redacción)');
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Identificar al autor con nombre completo');
   }
 
@@ -100,16 +113,19 @@ const evaluarEEAT: ModuleEvaluator = (ev): EvaluationResult => {
     signals.push('1 fuente oficial detectada');
     warnings.push('Solo una fuente oficial. Idealmente 2+ fuentes independientes');
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Agregar al menos una fuente oficial adicional');
   } else {
     warnings.push('No se detectaron fuentes oficiales');
     score -= 15;
+    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Citar al menos una fuente oficial identificable');
   }
 
   if (ev.eeat.tieneAtribucionesFalsas) {
     errors.push('Se detectaron atribuciones falsas o anónimas');
     score -= 20;
+    tracer.sub(20, errors[errors.length - 1], 'PENALTY');
     recommendations.push('Reemplazar atribuciones vagas con fuentes identificables');
   }
 
@@ -120,6 +136,7 @@ const evaluarEEAT: ModuleEvaluator = (ev): EvaluationResult => {
   return {
     modulo: 'EEAT',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors,
@@ -134,10 +151,13 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   const errors: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'FORENSE');
+  tracer.start(score, 'Score base del módulo FORENSE');
 
   if (ev.forense.adjetivosEmocionales.length > 3) {
     warnings.push(`${ev.forense.adjetivosEmocionales.length} adjetivos emocionales detectados`);
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Reducir adjetivos emocionales y usar lenguaje neutral');
   } else {
     signals.push('Lenguaje neutral sin exceso de adjetivos');
@@ -146,6 +166,7 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   if (ev.forense.transicionesIA.length > 2) {
     warnings.push(`${ev.forense.transicionesIA.length} transiciones típicas de IA detectadas`);
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Reescribir transiciones para sonar más natural');
   } else {
     signals.push('Sin transiciones típicas de IA');
@@ -154,21 +175,25 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   if (ev.forense.tieneRedundancia) {
     warnings.push('Se detectó redundancia entre párrafos');
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Eliminar contenido redundante entre párrafos');
   }
 
   if (ev.forense.riesgosLegales.length > 0) {
     warnings.push(`${ev.forense.riesgosLegales.length} palabras de riesgo legal detectadas`);
     score -= ev.forense.riesgosLegales.length * 3;
+    tracer.sub(ev.forense.riesgosLegales.length * 3, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Revisar uso de palabras sensibles desde el punto de vista legal');
   }
 
   if (ev.forense.nivelRiesgo === 'Crítico') {
     errors.push('Nivel de riesgo crítico');
     score -= 15;
+    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
   } else if (ev.forense.nivelRiesgo === 'Alto') {
     warnings.push('Nivel de riesgo alto');
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
   }
 
   if (ev.forense.estructuraHtml.h2 >= 2) {
@@ -178,6 +203,7 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   return {
     modulo: 'FORENSE',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors,
@@ -192,10 +218,13 @@ const evaluarAdSense: ModuleEvaluator = (ev): EvaluationResult => {
   const errors: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'ADSENSE');
+  tracer.start(score, 'Score base del módulo ADSENSE');
 
   if (ev.adsense.palabraCount < 300) {
     warnings.push(`Contenido con solo ${ev.adsense.palabraCount} palabras (mínimo recomendado: 300)`);
     score -= 15;
+    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Ampliar el contenido a al menos 300 palabras');
   } else {
     signals.push(`Contenido con ${ev.adsense.palabraCount} palabras`);
@@ -204,6 +233,7 @@ const evaluarAdSense: ModuleEvaluator = (ev): EvaluationResult => {
   if (ev.adsense.tieneClickbait) {
     errors.push('Se detectaron patrones de clickbait');
     score -= 20;
+    tracer.sub(20, errors[errors.length - 1], 'PENALTY');
     recommendations.push('Eliminar títulos o frases sensacionalistas');
   } else {
     signals.push('Sin patrones de clickbait');
@@ -214,18 +244,21 @@ const evaluarAdSense: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('No se detectaron datos concretos');
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir cifras, fechas o nombres específicos');
   }
 
   if (ev.adsense.palabrasSensibles.length > 3) {
     warnings.push(`${ev.adsense.palabrasSensibles.length} palabras sensibles para AdSense`);
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Revisar palabras que pueden afectar monetización');
   }
 
   return {
     modulo: 'ADSENSE',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors,
@@ -239,18 +272,22 @@ const evaluarDiscover: ModuleEvaluator = (ev): EvaluationResult => {
   const warnings: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'DISCOVER');
+  tracer.start(score, 'Score base del módulo DISCOVER');
 
   if (ev.discover.tieneImagen) {
     signals.push('Imagen destacada presente');
   } else {
     warnings.push('No se detectó imagen destacada');
     score -= 15;
+    tracer.sub(15, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Agregar una imagen destacada de calidad');
   }
 
   if (ev.discover.tituloClickbait) {
     warnings.push('Título con patrón clickbait para Discover');
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Usar título descriptivo sin sensacionalismo');
   } else {
     signals.push('Título sin clickbait');
@@ -261,6 +298,7 @@ const evaluarDiscover: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('Falta fecha de publicación');
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir fecha de publicación visible');
   }
 
@@ -271,6 +309,7 @@ const evaluarDiscover: ModuleEvaluator = (ev): EvaluationResult => {
   return {
     modulo: 'DISCOVER',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors: [],
@@ -285,12 +324,15 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   const errors: string[] = [];
   const recommendations: string[] = [];
   let score = 100;
+  const tracer = new ScoreTracer('normalizador.ts', 'VALOR_EDITORIAL');
+  tracer.start(score, 'Score base del módulo VALOR_EDITORIAL');
 
   if (ev.valorEditorial.tieneFuentePropia) {
     signals.push('Aporte propio del medio detectado');
   } else {
     warnings.push('No se detectó aporte propio del medio');
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Agregar contexto o verificación propia del medio');
   }
 
@@ -299,12 +341,14 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push('No se detectaron citas específicas');
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir citas directas de fuentes');
   }
 
   if (ev.valorEditorial.tieneAtribucionVaga) {
     errors.push('Atribuciones vagas detectadas');
     score -= 15;
+    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Reemplazar atribuciones vagas con fuentes identificadas');
   }
 
@@ -313,6 +357,7 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push(`Solo ${ev.valorEditorial.nombresPropiosCount} nombres propios`);
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir más nombres propios de personas o instituciones');
   }
 
@@ -321,6 +366,7 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   } else {
     warnings.push(`Solo ${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
     score -= 5;
+    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Mencionar instituciones relevantes');
   }
 
@@ -331,24 +377,28 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   if (ratioSinDato > 0.5) {
     warnings.push(`${ev.valorEditorial.parrafosSinDato} de ${ev.valorEditorial.parrafosTotal} párrafos sin datos concretos`);
     score -= 10;
+    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Cada párrafo debe contener al menos un dato verificable');
   }
 
   if (ev.valorEditorial.tieneDatosInventados) {
     errors.push('Posibles datos inventados (atribuciones falsas sin fuentes)');
     score -= 20;
+    tracer.sub(20, errors[errors.length - 1], 'PENALTY');
     recommendations.push('Verificar todas las atribuciones con fuentes identificables');
   }
 
   if (ev.valorEditorial.tieneFuentesAnonimas) {
     warnings.push('Fuentes anónimas detectadas');
     score -= 8;
+    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Identificar fuentes o eliminar referencias anónimas');
   }
 
   return {
     modulo: 'VALOR_EDITORIAL',
     score: Math.max(0, Math.min(100, score)),
+    trace: tracer.getTrace(),
     signals,
     warnings,
     errors,

@@ -159,6 +159,7 @@ export interface EvaluationResult {
   errors: string[];                     // errores críticos
   evidence: Record<string, unknown>;    // evidencia estructurada
   recommendations: string[];            // recomendaciones
+  trace?: DebugTrace;                   // traza opcional de cada cambio de score
 }
 
 // ───────────────────────────────────────────────
@@ -252,6 +253,27 @@ export interface ExplainabilityItem {
 }
 
 // ───────────────────────────────────────────────
+// DebugTrace — trazabilidad de cada regla de puntuación
+// ───────────────────────────────────────────────
+
+export interface ScoreTraceEntry {
+  id: string;
+  tipo: 'start' | 'add' | 'sub' | 'set' | 'floor' | 'ceiling' | 'bonus' | 'weight';
+  source: string;                       // archivo/función que emitió la regla
+  modulo?: string;                      // módulo afectado (SEO, EEAT, etc.)
+  rule: string;                         // identificador corto de la regla
+  motivo: string;                       // mensaje legible para el editor
+  delta: number;                        // cambio de puntos
+  scoreAfter: number;                   // score después de aplicar
+}
+
+export interface DebugTrace {
+  scoreInicial: number;
+  scoreFinal: number;
+  entries: ScoreTraceEntry[];
+}
+
+// ───────────────────────────────────────────────
 // ResultadoEditorial — salida final del EditorJefeEngine
 // ───────────────────────────────────────────────
 
@@ -289,4 +311,5 @@ export interface ResultadoEditorial {
   consistencia: ConsistencyCheck;
   evidence: ArticleEvidence;
   results: NormalizedResults;
+  debugTrace: DebugTrace;
 }

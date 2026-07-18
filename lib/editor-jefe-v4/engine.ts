@@ -17,6 +17,7 @@ import type {
 } from './types';
 import { generateExplainability } from './explainability';
 import { validateVerdicto } from './consistency-engine';
+import { ScoreTracer } from './score-tracer';
 
 export function evaluate(
   evidence: ArticleEvidence,
@@ -34,14 +35,23 @@ export function evaluate(
   const originalidadScore = results.valorEditorial.score;
 
   // ── 6. Score ponderado con pesos del perfil ──
+  const engineTracer = new ScoreTracer('engine.ts', 'EDITOR_JEFE');
+  engineTracer.start(0, 'Inicio del cálculo editorial');
+
   const w = profile.scoreWeights;
-  let scoreFinal = Math.round(
+  const scorePonderado = Math.round(
     evidenciaScore * (w.evidencia / 100) +
     fuenteScore * (w.fuente / 100) +
     contextoScore * (w.contexto / 100) +
     utilidadScore * (w.utilidad / 100) +
     originalidadScore * (w.originalidad / 100)
   );
+  engineTracer.add(
+    scorePonderado,
+    `Suma ponderada (evidencia ${w.evidencia}%, fuente ${w.fuente}%, contexto ${w.contexto}%, utilidad ${w.utilidad}%, originalidad ${w.originalidad}%)`,
+    'ENGINE-WEIGHTED-SUM'
+  );
+  let scoreFinal = engineTracer.getScore();
 
   // ── 6.1 Calibración V4.1: Respetar evidencia de módulos ──
   // Si los módulos objetivos coinciden en que la nota es sólida,
@@ -57,16 +67,22 @@ export function evaluate(
 
   if (modulosPerfectos >= 4) {
     // Todos los módulos objetivos dan 100: piso de 80
-    scoreFinal = Math.max(scoreFinal, 80);
+    engineTracer.floor(80, 'Calibración V4.1: piso 80 por 4+ módulos objetivos = 100', 'CAL-FLOOR-80');
   } else if (modulosAltos >= 4) {
     // Todos los módulos objetivos dan 85+: piso de 70
-    scoreFinal = Math.max(scoreFinal, 70);
+    engineTracer.floor(70, 'Calibración V4.1: piso 70 por 4+ módulos objetivos ≥ 85', 'CAL-FLOOR-70');
   }
 
   // ── 6.2 Bonificación por utilidad pública / prevención / servicio ──
   if (evidence.utility.tieneServicio || evidence.utility.tieneRecomendaciones) {
     const bonificacion = evidence.utility.tieneServicio ? 6 : 3;
-    scoreFinal = Math.min(100, scoreFinal + bonificacion);
+    const beforeBonus = engineTracer.getScore();
+    const afterBonus = Math.min(100, beforeBonus + bonificacion);
+    engineTracer.add(
+      afterBonus - beforeBonus,
+      `Bonificación por utilidad pública / prevención / servicio (+${afterBonus - beforeBonus})`,
+      'BONUS-UTILIDAD'
+    );
   }
 
   // ── 7. Decisión: umbrales del perfil ──
@@ -89,6 +105,9 @@ export function evaluate(
   if (violacionPost) {
     veredicto = 'EDITOR_INCONSISTENT';
   }
+
+  // ── 7. Score final del Editor Jefe
+  scoreFinal = engineTracer.getScore();
 
   // ── 9. Explainability detallada (REGLA 10) ──
   const explainability = generateExplainability(evidence, results, profile);
@@ -132,5 +151,6 @@ export function evaluate(
     consistencia: consistenciaFinal,
     evidence,
     results,
+    debugTrace: engineTracer.getTrace(),
   };
 }
