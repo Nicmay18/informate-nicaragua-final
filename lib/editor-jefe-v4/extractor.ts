@@ -110,8 +110,11 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const instituciones = Array.from(textoPlano.matchAll(INSTITUCIONES)).map(m => m[0]);
   const parrafosSinDato = parrafos.filter(p => !CIFRAS_REGEX.test(p) && !NOMBRES_PROPIOS.test(p) && !INSTITUCIONES.test(p));
 
+  const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
+  const tieneVerificacionPropia = /informaci[oó]n\s+verificada(?:\s+por\s+Nicaragua\s+Informate)?|confirmado\s+por\s+este\s+medio|en\s+el\s+lugar\s+del\s+hecho|equipo\s+de\s+Nicaragua\s+Informate|report[oó]\s+desde|verificaci[oó]n\s+propia|testigos\s+identificados|cobertura\s+propia|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por\s+este\s+medio/i.test(textoPlano);
+
   const valorEditorial: ValorEditorialEvidence = {
-    tieneFuentePropia: /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
+    tieneFuentePropia: tieneMarcaPropia || tieneVerificacionPropia || /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
     tieneCitaEspecifica: /seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]/i.test(textoPlano),
     tieneAtribucionVaga: ATRIBUCIONES_FALSAS.test(textoPlano),
     nombresPropiosCount: nombresPropios.length,
@@ -177,22 +180,22 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // ── ORIGINALIDAD ─────────────────────────────
   // Calibración V4.1: originalidad no es solo exclusiva.
   // Seleccionar, organizar, contextualizar y relacionar hechos también es aporte editorial.
-  const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
-  const tieneReporteo = /seg[uú]n\s+pudo\s+(?:constatar|verificar|confirmar)\s+(?:este\s+medio|nuestra\s+redacci[oó]n)/i.test(textoPlano);
+
+  // consolidado en tieneVerificacionPropia
   const tieneCoberturaEditorial = (textoPlano.match(LUGARES_REGEX) || []).length >= 2 && palabraCount >= 250 && uniqueFuentes.length >= 2;
   const tieneContextualizacion = /\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano);
   const tieneOrganizacion = /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano);
 
   const originality: OriginalityEvidence = {
-    tieneAportePropio: tieneMarcaPropia || tieneReporteo || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
+    tieneAportePropio: tieneMarcaPropia || tieneVerificacionPropia || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
     aportePropioItems: [
       ...(tieneMarcaPropia ? ['marca propia'] : []),
-      ...(tieneReporteo ? ['reporteo propio'] : []),
+      ...(tieneVerificacionPropia ? ['verificación periodística propia'] : []),
       ...(tieneCoberturaEditorial ? ['cobertura editorial múltiple'] : []),
       ...(tieneContextualizacion ? ['contextualización'] : []),
       ...(tieneOrganizacion ? ['organización editorial'] : []),
     ],
-    tieneReporteoPropio: tieneReporteo,
+    tieneReporteoPropio: tieneVerificacionPropia,
     esReformulacion: palabraCount < 100 && !uniqueFuentes.length,
   };
 
