@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NoticiaInput } from '@/lib/analizador-noticias';
 import { pipelineV4 } from '@/lib/editor-jefe-v4/pipeline';
-import { mapV4ToV3 } from '@/lib/editor-jefe-v4/mapper-v3';
+import { mapV4ToV3, consistencyAudit } from '@/lib/editor-jefe-v4';
 
 export async function POST(request: Request) {
   try {
@@ -22,10 +22,12 @@ export async function POST(request: Request) {
 
     const resultadoV4 = pipelineV4(noticia);
     const resultadoV3 = mapV4ToV3(resultadoV4);
+    const auditoria = consistencyAudit(resultadoV4, resultadoV3);
 
     return NextResponse.json({
       ...resultadoV3,
       _v4: resultadoV4,
+      _auditoria: auditoria,
     });
   } catch (error) {
     console.error('Error en analisis V4:', error);

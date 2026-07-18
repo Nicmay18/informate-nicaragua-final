@@ -13,6 +13,8 @@ export { pipelineV4 } from './pipeline';
 export { runParallel } from './parallel-runner';
 export type { ParallelResult, ComparacionV3V4 } from './parallel-runner';
 export { mapV4ToV3 } from './mapper-v3';
+export { consistencyAudit } from './consistency-audit';
+export type { ConsistencyAudit } from './consistency-audit';
 export { detectCategory } from './category-detector';
 export { recordEditorialDecision, getEditorialDecisions, getDecisionsByCategory, getDisagreements, getDisagreementStats, detectErrorPatterns, getModuleContributionStats } from './observatorio';
 export type { EditorialDecision } from './observatorio';
