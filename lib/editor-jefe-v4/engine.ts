@@ -63,6 +63,12 @@ export function evaluate(
     scoreFinal = Math.max(scoreFinal, 70);
   }
 
+  // ── 6.2 Bonificación por utilidad pública / prevención / servicio ──
+  if (evidence.utility.tieneServicio || evidence.utility.tieneRecomendaciones) {
+    const bonificacion = evidence.utility.tieneServicio ? 6 : 3;
+    scoreFinal = Math.min(100, scoreFinal + bonificacion);
+  }
+
   // ── 7. Decisión: umbrales del perfil ──
   const t = profile.editorialThreshold;
   let veredicto: VeredictoEditorial;

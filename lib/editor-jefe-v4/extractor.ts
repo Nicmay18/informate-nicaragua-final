@@ -30,7 +30,7 @@ const ADJETIVOS_EMOCIONALES = /\b(?:incre[ií]ble|impresionante|escalofriante|co
 
 const TRANSICIONES_IA = /\b(?:en resumen|en conclusi[oó]n|cabe destacar|vale la pena mencionar|es importante se[nñ]alar|hay que tener en cuenta|como es de esperarse|no obstante|por otro lado|por lo tanto|en definitiva|en t[eé]rminos generales)\b/gi;
 
-const PALABRAS_SENSIBLES = /\b(?:violaci[oó]n|violada|asesinato|masacre|genocidio|tortura|secuestro|narcot[rá]fico|narco|cartel|pandilla|marero|terrorismo|corrupci[oó]n|fraude|lavado|contrabando)\b/gi;
+const PALABRAS_SENSIBLES = /\b(?:violaci[oó]n|violada|tortura|genocidio)\b/gi;
 
 const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidenciales|no identificadas)|se pudo conocer|trascendi[oó]|al parecer|presuntamente|aparentemente|de acuerdo con informaciones)\b/gi;
 
@@ -179,14 +179,15 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // Seleccionar, organizar, contextualizar y relacionar hechos también es aporte editorial.
   const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
   const tieneReporteo = /seg[uú]n\s+pudo\s+(?:constatar|verificar|confirmar)\s+(?:este\s+medio|nuestra\s+redacci[oó]n)/i.test(textoPlano);
-  const tieneCoberturaEditorial = (textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3;
+  const tieneCoberturaEditorial = (textoPlano.match(LUGARES_REGEX) || []).length >= 2 && palabraCount >= 250 && uniqueFuentes.length >= 2;
   const tieneContextualizacion = /\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano);
   const tieneOrganizacion = /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano);
 
   const originality: OriginalityEvidence = {
-    tieneAportePropio: tieneMarcaPropia || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
+    tieneAportePropio: tieneMarcaPropia || tieneReporteo || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
     aportePropioItems: [
       ...(tieneMarcaPropia ? ['marca propia'] : []),
+      ...(tieneReporteo ? ['reporteo propio'] : []),
       ...(tieneCoberturaEditorial ? ['cobertura editorial múltiple'] : []),
       ...(tieneContextualizacion ? ['contextualización'] : []),
       ...(tieneOrganizacion ? ['organización editorial'] : []),
