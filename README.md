@@ -31,13 +31,15 @@ Resumen:
 - 50+ console.logs silenciados en producción
 - 200+ archivos huérfanos movidos a `scripts/`
 
-## 🧊 Regla de oro V4.1 — Motor congelado
+## 🧊 Editor IA V4.1 LTS — Motor congelado
 
-El motor `editor-jefe-v4` está **congelado**. No se modifica por una sola noticia que falle.
+El motor `editor-jefe-v4` está marcado como **Long Term Support**: congelado, estable y en mantenimiento solamente.
 
-> **Regla de oro:** Solo se modifica el motor cuando un mismo patrón aparece en al menos 10 artículos reales y existe evidencia de que la corrección mejora el sistema sin perjudicar otras categorías.
+> **Regla de oro:** No se modifica el motor por una sola noticia que falle. Solo se modifica cuando un mismo patrón aparece en al menos 10 artículos reales y existe evidencia de que la corrección mejora el sistema sin perjudicar otras categorías.
 
-Antes de declarar **V4.1 estable**, ejecutar la auditoría de 100 noticias reales documentada en [`docs/auditoria-100-noticias.md`](docs/auditoria-100-noticias.md).
+> **Principio LTS:** No romperemos una versión estable para intentar hacerla perfecta.
+
+Antes de declarar **Editor IA V4.1 LTS estable**, ejecutar la auditoría de 100 noticias reales documentada en [`docs/auditoria-100-noticias.md`](docs/auditoria-100-noticias.md).
 
 ## 📊 Monitoreo
 

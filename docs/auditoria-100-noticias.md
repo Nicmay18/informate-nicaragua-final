@@ -1,6 +1,6 @@
-# Auditoría V4.1 — 100 noticias reales
+# Auditoría Editor IA V4.1 LTS — 100 noticias reales
 
-Objetivo: medir al Editor IA V4.1 con noticias reales **sin modificar el motor**. Se busca consistencia, no perfección.
+Objetivo: medir al **Editor IA V4.1 LTS** con noticias reales **sin modificar el motor**. Se busca consistencia, no perfección.
 
 ## Criterios de evaluación
 
@@ -16,7 +16,7 @@ Para cada noticia, responder **Sí / No / Discutible**.
 | ¿Hubo alguna recomendación absurda? | | | |
 | ¿El editor terminó publicando? | | | |
 
-## Umbrales para declarar V4.1 estable
+## Umbrales para declarar Editor IA V4.1 LTS estable
 
 - **≥ 92 decisiones correctas**: producto serio, congelar motor.
 - **5-10 discutibles**: aceptable, documentar y observar.
