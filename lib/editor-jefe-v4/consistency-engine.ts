@@ -100,12 +100,13 @@ export function validateVerdicto(
   scoreFinal: number,
   veredicto: string
 ): ViolacionConsistencia | null {
-  const { seo, eeat, forense, valorEditorial } = results;
+  const { seo, eeat, forense, discover, valorEditorial } = results;
 
   const todosAltos =
     seo.score > 95 &&
     eeat.score > 95 &&
     forense.score > 95 &&
+    discover.score > 95 &&
     valorEditorial.score > 95;
 
   if (todosAltos) {
@@ -113,7 +114,7 @@ export function validateVerdicto(
       return {
         tipo: 'EDITOR_INCONSISTENT',
         descripcion: `Todos los módulos >95 pero veredicto=${veredicto}. REGLA 13 violada.`,
-        modulos: ['SEO', 'EEAT', 'FORENSE', 'VALOR_EDITORIAL'],
+        modulos: ['SEO', 'EEAT', 'FORENSE', 'DISCOVER', 'VALOR_EDITORIAL'],
         scoreEsperado: 90,
         scoreObtenido: scoreFinal,
       };
@@ -122,7 +123,7 @@ export function validateVerdicto(
       return {
         tipo: 'EDITOR_INCONSISTENT',
         descripcion: `Todos los módulos >95 pero score final=${scoreFinal} <90. REGLA 13 violada.`,
-        modulos: ['SEO', 'EEAT', 'FORENSE', 'VALOR_EDITORIAL'],
+        modulos: ['SEO', 'EEAT', 'FORENSE', 'DISCOVER', 'VALOR_EDITORIAL'],
         scoreEsperado: 90,
         scoreObtenido: scoreFinal,
       };

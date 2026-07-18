@@ -24,34 +24,14 @@ export function evaluate(
   results: NormalizedResults,
   consistency: ConsistencyCheck,
 ): ResultadoEditorial {
-  const texto = evidence.textoPlano;
-
-  // ── 1. Evidencia: recorre las regex del perfil ──
-  // Base de 40 + crédito proporcional para evitar scores demasiado bajos
-  let evidenciaFound = 0;
-  let evidenciaTotal = 0;
-  for (const [, regex] of Object.entries(profile.requiredEvidence)) {
-    evidenciaTotal++;
-    if (regex.test(texto)) evidenciaFound++;
-  }
-  const evidenciaRatio = evidenciaTotal > 0 ? evidenciaFound / evidenciaTotal : 0;
-  const evidenciaScore = 25 + evidenciaRatio * 75; // 25-100
-
-  // ── 2. Fuente: verifica allowedSources ──
-  const fuenteScore = profile.allowedSources.some(s =>
-    new RegExp(s, 'i').test(texto)
-  ) ? 100 : evidence.sources.numeroFuentes > 0 ? 50 : 20;
-
-  // ── 3. Contexto: verifica patrones del perfil ──
-  const contextoScore = profile.requiredContext.patrones.some(r => r.test(texto)) ? 100 : 35;
-
-  // ── 4. Utilidad: verifica preguntas del perfil ──
-  const utilidadScore = profile.requiredUtility.preguntas.some(p =>
-    new RegExp(p, 'i').test(texto)
-  ) ? 100 : 35;
-
-  // ── 5. Originalidad: aporte propio del medio ──
-  const originalidadScore = evidence.originality.tieneAportePropio ? 100 : evidence.originality.tieneReporteoPropio ? 70 : 25;
+  // ── 1-5. Reutilizar scores ya normalizados de los módulos ──
+  // El Editor Jefe no recalcula criterios; los pesos del perfil se aplican
+  // sobre las evaluaciones objetivas de Forense, EEAT, Discover, SEO y Valor Editorial.
+  const evidenciaScore = results.forense.score;
+  const fuenteScore = results.eeat.score;
+  const contextoScore = results.discover.score;
+  const utilidadScore = results.seo.score;
+  const originalidadScore = results.valorEditorial.score;
 
   // ── 6. Score ponderado con pesos del perfil ──
   const w = profile.scoreWeights;

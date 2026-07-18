@@ -111,7 +111,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const parrafosSinDato = parrafos.filter(p => !CIFRAS_REGEX.test(p) && !NOMBRES_PROPIOS.test(p) && !INSTITUCIONES.test(p));
 
   const valorEditorial: ValorEditorialEvidence = {
-    tieneFuentePropia: /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal/i.test(textoPlano),
+    tieneFuentePropia: /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
     tieneCitaEspecifica: /seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]/i.test(textoPlano),
     tieneAtribucionVaga: ATRIBUCIONES_FALSAS.test(textoPlano),
     nombresPropiosCount: nombresPropios.length,
