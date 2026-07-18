@@ -21,7 +21,7 @@ interface Props {
 const publicarLabel: Record<string, string> = {
   cobertura_especial: 'COBERTURA ESPECIAL',
   portada: 'PORTADA',
-  publicar_destacado: 'PORTADA',
+  publicar_destacado: 'PUBLICAR DESTACADO',
   publicar_estandar: 'PUBLICAR ESTÁNDAR',
   publicar_breve: 'PUBLICAR BREVE',
   no_publicar: 'NO PUBLICAR',
@@ -30,7 +30,7 @@ const publicarLabel: Record<string, string> = {
 
 const estrellas: Record<string, string> = {
   cobertura_especial: '★★★★★',
-  portada: '★★★★☆',
+  portada: '★★★★★',
   publicar_destacado: '★★★★☆',
   publicar_estandar: '★★★☆☆',
   publicar_breve: '★★☆☆☆',
@@ -48,64 +48,75 @@ const tipoLabel: Record<string, string> = {
   EDITOR_INCONSISTENT: 'Revisar',
 };
 
-function confianza(r: ResultadoEditorial): string {
-  if (!r.consistencia.ok) return 'Revisar (inconsistencia)';
-  if (r.scores.final >= 90) return 'Muy alta';
-  if (r.scores.final >= 75) return 'Alta';
-  if (r.scores.final >= 60) return 'Media';
-  return 'Baja';
+function getConfianza(r: ResultadoEditorial): { porcentaje: number; bases: string[] } {
+  const bases: string[] = [];
+  if (r.evidence.sources.documentoOficial) bases.push('Fuente oficial');
+  if (r.evidence.sources.numeroFuentes >= 2) bases.push('Múltiples fuentes');
+  if (r.evidence.context.contextoHistorico) bases.push('Contexto histórico');
+  if (r.evidence.context.contextoInstitucional) bases.push('Contexto institucional');
+  if (r.evidence.evidence.esNotaVerificable) bases.push('Evidencia verificable');
+  if (r.evidence.utility.preguntasRespondidas.length > 0) bases.push('Utilidad demostrada');
+  if (r.evidence.originality.tieneAportePropio) bases.push('Aporte propio');
+  if (r.evidence.eeat.tieneCitasEstructuradas) bases.push('Citas estructuradas');
+  if (r.evidence.forense.nivelRiesgo === 'Bajo') bases.push('Riesgo forense bajo');
+  return { porcentaje: r.scores.final, bases: bases.slice(0, 6) };
 }
 
 function getRazones(r: ResultadoEditorial): string[] {
   const raz: string[] = [];
-
-  if (r.evidence.seo.keywords.length > 0) {
-    raz.push(`SEO: ${r.evidence.seo.keywords.length} palabra(s) clave identificada(s)`);
+  const d = r.evidence.evidence.datosConcretos;
+  const partes: string[] = [];
+  if (d.fechas > 0) partes.push(`${d.fechas} fecha(s)`);
+  if (d.cifras > 0) partes.push(`${d.cifras} cifra(s)`);
+  if (d.lugares > 0) partes.push(`${d.lugares} lugar(es)`);
+  if (d.nombres > 0) partes.push(`${d.nombres} nombre(s) propio(s)`);
+  if (partes.length > 0) {
+    raz.push(`Incluye ${partes.join(', ')}`);
   }
-  if (r.evidence.seo.tituloLength > 0 && r.evidence.seo.tituloLength <= 70) {
-    raz.push('Título con longitud adecuada');
+
+  if (r.evidence.sources.fuentesIdentificadas.length > 0) {
+    raz.push(`Fuentes: ${r.evidence.sources.fuentesIdentificadas.join(', ')}`);
   }
   if (r.evidence.eeat.autor) {
     raz.push(`Autor identificado: ${r.evidence.eeat.autor}`);
   }
+  if (r.evidence.originality.aportePropioItems.length > 0) {
+    raz.push(`Aporte propio: ${r.evidence.originality.aportePropioItems.join(', ')}`);
+  }
+  if (r.evidence.context.contextoHistorico) raz.push('Incluye contexto histórico');
+  if (r.evidence.context.contextoInstitucional) raz.push('Incluye contexto institucional');
+  if (r.evidence.context.patronesEncontrados.length > 0) {
+    raz.push(`Contexto: ${r.evidence.context.patronesEncontrados.join(', ')}`);
+  }
+  if (r.evidence.chronology.tieneCronologia) {
+    raz.push(`Cronología con ${r.evidence.chronology.fechasMencionadas.length} fecha(s) mencionada(s)`);
+  }
+  if (r.evidence.utility.preguntasRespondidas.length > 0) {
+    raz.push(`Responde: ${r.evidence.utility.preguntasRespondidas.join(', ')}`);
+  }
+  if (r.evidence.seo.keywords.length > 0) {
+    raz.push(`SEO: ${r.evidence.seo.keywords.slice(0, 4).join(', ')}`);
+  }
+  if (r.evidence.discover.tieneImagen) raz.push('Imagen destacada presente');
   if (r.evidence.eeat.fuentesDetectadas.length > 0) {
-    raz.push(`Fuentes: ${r.evidence.eeat.fuentesDetectadas.join(', ')}`);
-  }
-  if (r.evidence.originality.tieneAportePropio) {
-    raz.push('Aporte editorial propio');
-  } else if (r.evidence.originality.tieneReporteoPropio) {
-    raz.push('Reporteo propio detectado');
-  }
-  if (r.evidence.discover.tieneImagen) {
-    raz.push('Imagen destacada presente');
-  }
-  if (r.results.discover.signals.length > 0) {
-    raz.push(`Discover: ${r.results.discover.signals[0]}`);
-  }
-  if (r.results.eeat.signals.length > 0) {
-    raz.push(`EEAT: ${r.results.eeat.signals[0]}`);
-  }
-  if (r.results.seo.signals.length > 0) {
-    raz.push(`SEO: ${r.results.seo.signals[0]}`);
-  }
-  if (r.results.valorEditorial.signals.length > 0) {
-    raz.push(`Valor editorial: ${r.results.valorEditorial.signals[0]}`);
+    raz.push(`Fuentes detectadas en texto: ${r.evidence.eeat.fuentesDetectadas.join(', ')}`);
   }
 
   return raz.slice(0, 8);
 }
 
 function getMejoras(r: ResultadoEditorial): string[] {
-  const mejoras: string[] = [...r.sugerencias];
+  const mejoras: string[] = [];
 
   for (const item of r.explainability) {
-    if (item.solucion && !mejoras.includes(item.solucion)) {
-      mejoras.push(item.solucion);
+    if (item.solucion) {
+      const texto = item.motivo ? `${item.solucion}: ${item.motivo}` : item.solucion;
+      if (!mejoras.includes(texto)) mejoras.push(texto);
     }
     if (mejoras.length >= 6) break;
   }
 
-  return mejoras;
+  return mejoras.length > 0 ? mejoras : r.sugerencias.slice(0, 6);
 }
 
 export default function AnalizadorPanel({ noticia }: Props) {
@@ -176,6 +187,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
 
   const publicar = publicarLabel[resultado.veredicto] ?? resultado.veredicto;
   const tipo = tipoLabel[resultado.veredicto] ?? 'Noticia';
+  const confianza = getConfianza(resultado);
   const razones = getRazones(resultado);
   const mejoras = getMejoras(resultado);
 
@@ -191,7 +203,22 @@ export default function AnalizadorPanel({ noticia }: Props) {
         <Fila label="Publicar" value={publicar} />
         <Fila label="Tipo" value={tipo} />
         <Fila label="Categoría" value={resultado.categoria} />
-        <Fila label="Confianza" value={confianza(resultado)} />
+      </div>
+
+      <div className="p-4 rounded bg-gray-800/50 border border-gray-700">
+        <p className="text-sm text-gray-400">Confianza</p>
+        <p className="text-3xl font-bold text-white">{confianza.porcentaje}%</p>
+        <p className="text-xs text-gray-400 mt-1">Basada en:</p>
+        <ul className="flex flex-wrap gap-2 mt-2">
+          {confianza.bases.map((b, i) => (
+            <li key={i} className="px-2 py-1 rounded bg-green-900/40 text-green-200 text-xs">
+              ✓ {b}
+            </li>
+          ))}
+          {confianza.bases.length === 0 && (
+            <li className="text-xs text-gray-500">Sin indicadores de confianza destacados</li>
+          )}
+        </ul>
       </div>
 
       {resultado.consistencia.violaciones.length > 0 && (
