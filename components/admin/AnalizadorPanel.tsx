@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { ResultadoAnalisis, SugerenciaV7, ReporteForenseV1 } from '@/lib/analizador-noticias';
-import type { ResultadoEditorial, ComparacionV3V4 } from '@/lib/editor-jefe-v4';
+import type { ResultadoEditorial } from '@/lib/editor-jefe-v4';
 
 interface Props {
   noticia: {
@@ -244,38 +244,24 @@ function ForensePanel({ forense }: { forense: ReporteForenseV1 }) {
   );
 }
 
-type ModoAnalisis = 'v3' | 'v4' | 'paralelo';
-
 export default function AnalizadorPanel({ noticia }: Props) {
   const [resultado, setResultado] = useState<ResultadoAnalisis | null>(null);
   const [resultadoV4, setResultadoV4] = useState<ResultadoEditorial | null>(null);
-  const [comparacion, setComparacion] = useState<ComparacionV3V4 | null>(null);
   const [cargando, setCargando] = useState(false);
-  const [modo, setModo] = useState<ModoAnalisis>('v3');
 
   const analizar = async () => {
     setCargando(true);
     setResultado(null);
     setResultadoV4(null);
-    setComparacion(null);
     try {
-      const endpoint = modo === 'v4' ? '/api/admin/analizar-v4' : modo === 'paralelo' ? '/api/admin/analizar-paralelo' : '/api/admin/analizar';
-      const res = await fetch(endpoint, {
+      const res = await fetch('/api/admin/analizar-v4', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(noticia),
       });
       const data = await res.json();
-      if (modo === 'v4') {
-        setResultado(data);
-        setResultadoV4(data._v4 || null);
-      } else if (modo === 'paralelo') {
-        setResultado(data.v3 || null);
-        setResultadoV4(data.v4 || null);
-        setComparacion(data.comparacion || null);
-      } else {
-        setResultado(data);
-      }
+      setResultado(data);
+      setResultadoV4(data._v4 || null);
     } catch (error) {
       console.error(error);
     }
@@ -298,25 +284,11 @@ export default function AnalizadorPanel({ noticia }: Props) {
   if (!resultado && !resultadoV4) {
     return (
       <div className="space-y-3">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setModo('v3')}
-            className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'v3' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-          >V3 (actual)</button>
-          <button
-            onClick={() => setModo('v4')}
-            className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'v4' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-          >V4 (nuevo)</button>
-          <button
-            onClick={() => setModo('paralelo')}
-            className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'paralelo' ? 'bg-green-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-          >Paralelo V3+V4</button>
-        </div>
         <button
           onClick={analizar}
-          className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition"
+          className="w-full py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition"
         >
-          🤖 Editor IA {modo === 'v4' ? 'V4' : modo === 'paralelo' ? 'Paralelo' : ''} — Analizar valor periodístico, SEO y publicación
+          🤖 Editor IA V4 — Analizar valor periodístico, SEO y publicación
         </button>
       </div>
     );
@@ -324,52 +296,9 @@ export default function AnalizadorPanel({ noticia }: Props) {
 
   return (
     <div className="space-y-4">
-      {/* Selector de modo */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => { setModo('v3'); setResultado(null); setResultadoV4(null); setComparacion(null); }}
-          className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'v3' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-        >V3</button>
-        <button
-          onClick={() => { setModo('v4'); setResultado(null); setResultadoV4(null); setComparacion(null); }}
-          className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'v4' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-        >V4</button>
-        <button
-          onClick={() => { setModo('paralelo'); setResultado(null); setResultadoV4(null); setComparacion(null); }}
-          className={`px-3 py-1.5 rounded text-sm font-medium transition ${modo === 'paralelo' ? 'bg-green-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
-        >Paralelo</button>
+      <div className="text-xs text-gray-400">
+        Todos los indicadores provienen del motor V4.1 congelado; no se recalculan en el panel.
       </div>
-
-      {/* Comparación V3 vs V4 */}
-      {comparacion && (
-        <div className="p-4 bg-green-900/20 border border-green-500 rounded-lg">
-          <h4 className="font-bold text-green-300 mb-2">📊 Comparación V3 vs V4</h4>
-          <div className="grid grid-cols-3 gap-3 text-sm">
-            <div className="bg-gray-800/50 p-2 rounded">
-              <p className="text-xs text-gray-400">V3 Score</p>
-              <p className="text-lg font-bold text-blue-300">{comparacion.scoreV3 ?? 'N/A'}</p>
-              <p className="text-xs text-gray-500">{comparacion.veredictoV3 ?? ''}</p>
-            </div>
-            <div className="bg-gray-800/50 p-2 rounded">
-              <p className="text-xs text-gray-400">V4 Score</p>
-              <p className="text-lg font-bold text-purple-300">{comparacion.scoreV4}</p>
-              <p className="text-xs text-gray-500">{comparacion.veredictoV4}</p>
-            </div>
-            <div className="bg-gray-800/50 p-2 rounded">
-              <p className="text-xs text-gray-400">Diferencia</p>
-              <p className={`text-lg font-bold ${comparacion.diferenciaScore !== null && Math.abs(comparacion.diferenciaScore) > 20 ? 'text-red-400' : 'text-green-400'}`}>
-                {comparacion.diferenciaScore !== null ? `${comparacion.diferenciaScore > 0 ? '+' : ''}${comparacion.diferenciaScore}` : 'N/A'}
-              </p>
-              <p className="text-xs text-gray-500">{comparacion.coinciden ? '✅ Coinciden' : '⚠️ Difieren'}</p>
-            </div>
-          </div>
-          {comparacion.observaciones.length > 0 && (
-            <ul className="mt-2 text-xs text-gray-400 space-y-0.5">
-              {comparacion.observaciones.map((obs, i) => <li key={i}>• {obs}</li>)}
-            </ul>
-          )}
-        </div>
-      )}
 
       {/* Resultado V3 (si existe) */}
       {resultado && (
@@ -808,7 +737,7 @@ export default function AnalizadorPanel({ noticia }: Props) {
         onClick={analizar}
         className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm"
       >
-        🔄 Reanalizar ({modo === 'v4' ? 'V4' : modo === 'paralelo' ? 'Paralelo' : 'V3'})
+        🔄 Reanalizar (V4)
       </button>
     </div>
   );
