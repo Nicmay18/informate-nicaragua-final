@@ -42,13 +42,15 @@ export function detectCategory(noticia: NoticiaInput, textoPlano?: string): stri
     scores[patron.categoria] = (scores[patron.categoria] || 0) + count * patron.peso;
   }
 
-  // 3. Bonus fuerte si la categoría del input coincide (respeta la categoría declarada)
+  // 3. Bonus fuerte si la categoría del input es explícita (respeta la categoría declarada)
   if (categoriaInput) {
     const catNormalizada = normalizarCategoria(categoriaInput);
+    const esGenerica = ['general', 'nacional', 'nacionales'].includes(categoriaInput.trim().toLowerCase());
+    const bonus = esGenerica ? 15 : 100;
     if (scores[catNormalizada] !== undefined) {
-      scores[catNormalizada] += 15;
+      scores[catNormalizada] += bonus;
     } else {
-      scores[catNormalizada] = 15;
+      scores[catNormalizada] = bonus;
     }
   }
 

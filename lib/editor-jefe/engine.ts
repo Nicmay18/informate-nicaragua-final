@@ -307,12 +307,11 @@ function clasificarTipoNotaV2(n: NoticiaInput, ev: EvidenciaPuntuada): { tipo: T
   // 4. Reportaje: evidencia + profundidad real (≥700 palabras + múltiples atribuciones o documento)
   const profundidad = (todo.match(/\b(según|de acuerdo con|indicó|declaró|precisó|confirmó|dijo|mencionó|señaló|explicó|reportó|aseguró|detalló)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/gi) || []).length;
   const subheadings = (n.contenido.match(/<h[2-6]\b/gi) || []).length;
-  const esReportaje = palabras >= 700 && ev.trabajoDeCampo >= 70 && (
+  const esReportaje = palabras >= 700 && ev.dosFuentes >= 70 && ev.trabajoDeCampo >= 70 && (
     profundidad >= 5 ||
     subheadings >= 2 ||
     ev.aportePropio >= 15 ||
-    ev.documentoOficial >= 80 ||
-    ev.dosFuentes >= 70
+    ev.documentoOficial >= 80
   );
   if (esReportaje) {
     return { tipo: 'Reportaje', confianza: 80, razon: 'Evidencia verificable con extensión y profundidad periodística.' };

@@ -122,10 +122,15 @@ const evaluarEEAT: ModuleEvaluator = (ev): EvaluationResult => {
       recommendations.push('Agregar al menos una fuente oficial adicional');
     }
   } else {
-    warnings.push('No se detectaron fuentes oficiales');
-    score -= 15;
-    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Citar al menos una fuente oficial identificable');
+    const atribucionGenerica = ev.valorEditorial.tieneCitaEspecifica || ev.valorEditorial.nombresPropiosCount >= 1;
+    if (esCorta && atribucionGenerica) {
+      signals.push('Atribución o referencia identificable detectada (suficiente para nota de actualidad)');
+    } else {
+      warnings.push('No se detectaron fuentes oficiales');
+      score -= 15;
+      tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
+      recommendations.push('Citar al menos una fuente oficial identificable');
+    }
   }
 
   if (ev.eeat.tieneAtribucionesFalsas) {

@@ -39,7 +39,7 @@ const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓ
 
 const INSTITUCIONES = /\b(?:Polic[ií]a Nacional|Fiscal[ií]a|Bomberos|Cruz Roja|Medicina Legal|Hospital|Ministerio|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea Nacional|Banco Central|ENATREL|ENACAL|Telecom|Tigo|Claro|UNAN|UCA|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Procuradur[ií]a|Corte Suprema|Consejo Supremo Electoral)\b/g;
 
-const FUENTES_OFICIALES = /\b(?:Polic[ií]a Nacional|Fiscal[ií]a|Bomberos|Cruz Roja|Medicina Legal|Hospital|Ministerio|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea Nacional|Banco Central|ENATREL|ENACAL|FAO|OMS|OPS|UNESCO|ACNUR|FMI|BID|BCN|MAG|MARENA|MTI|INTUR)\b/gi;
+const FUENTES_OFICIALES = /\b(?:Polic[ií]a(?:\s+Nacional)?|Fiscal[ií]a|Ministerio|Poder\s+Judicial|Corte\s+Suprema|Autoridad(?:es)?|Oficiales?|Bomberos|Cruz\s+Roja|Medicina\s+Legal|Hospital|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea\s+Nacional|Banco\s+Central|ENATREL|ENACAL|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Direcci[oó]n)\b/gi;
 
 const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|\d{4}|2025|2024)\b/gi;
 
@@ -77,7 +77,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // ── EEAT ─────────────────────────────────────
   const fuentesDetectadas = Array.from(textoPlano.matchAll(FUENTES_OFICIALES)).map(m => m[0]);
   const uniqueFuentes = [...new Set(fuentesDetectadas.map(f => f.trim()))];
-  const tieneAtribucionesFalsas = ATRIBUCIONES_FALSAS.test(textoPlano);
+  const tieneAtribucionesFalsas = ATRIBUCIONES_FALSAS.test(textoPlano) && uniqueFuentes.length === 0;
 
   const eeat: EeatEvidence = {
     autor: noticia.autor,
@@ -109,7 +109,13 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // ── VALOR EDITORIAL ──────────────────────────
   const nombresPropios = Array.from(textoPlano.matchAll(NOMBRES_PROPIOS)).map(m => m[0]);
   const instituciones = Array.from(textoPlano.matchAll(INSTITUCIONES)).map(m => m[0]);
-  const parrafosSinDato = parrafos.filter(p => !CIFRAS_REGEX.test(p) && !NOMBRES_PROPIOS.test(p) && !INSTITUCIONES.test(p));
+  const parrafosSinDato = parrafos.filter(p =>
+    !CIFRAS_REGEX.test(p) &&
+    !NOMBRES_PROPIOS.test(p) &&
+    !INSTITUCIONES.test(p) &&
+    !LUGARES_REGEX.test(p) &&
+    !/\d/.test(p)
+  );
 
   const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
   const tieneVerificacionPropia = /informaci[oó]n\s+verificada(?:\s+por\s+Nicaragua\s+Informate)?|confirmado\s+por\s+este\s+medio|en\s+el\s+lugar\s+del\s+hecho|equipo\s+de\s+Nicaragua\s+Informate|report[oó]\s+desde|verificaci[oó]n\s+propia|testigos\s+identificados|cobertura\s+propia|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por\s+este\s+medio/i.test(textoPlano);
@@ -117,7 +123,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const valorEditorial: ValorEditorialEvidence = {
     tieneFuentePropia: tieneMarcaPropia || tieneVerificacionPropia || /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
     tieneCitaEspecifica: /seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]/i.test(textoPlano),
-    tieneAtribucionVaga: ATRIBUCIONES_FALSAS.test(textoPlano),
+    tieneAtribucionVaga: tieneAtribucionesFalsas,
     nombresPropiosCount: nombresPropios.length,
     institucionesCount: instituciones.length,
     parrafosSinDato: parrafosSinDato.length,
@@ -253,7 +259,8 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     }
     if (
       palabraCount >= 700 &&
-      (sourceEvidence.numeroFuentes >= 2 || originality.tieneAportePropio || chronology.tieneCronologia)
+      sourceEvidence.numeroFuentes >= 2 &&
+      (sourceEvidence.trabajoCampo || originality.tieneAportePropio || sourceEvidence.documentoOficial)
     ) {
       return 'REPORTAJE';
     }
