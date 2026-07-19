@@ -71,7 +71,7 @@ export function calcularMetricas(logs: ShadowLogEntry[]): MetricasGlobales {
     distVeredictos[log.veredictoV4] = (distVeredictos[log.veredictoV4] || 0) + 1;
   }
 
-  // Reglas que más penalizan (aproximado desde observaciones)
+  // Reglas que más penalizan (desde observaciones y explainability)
   const reglasCount: Record<string, number> = {};
   for (const log of logs) {
     for (const obs of log.observaciones) {
@@ -79,6 +79,9 @@ export function calcularMetricas(logs: ShadowLogEntry[]): MetricasGlobales {
       if (match) {
         reglasCount[match[1]] = (reglasCount[match[1]] || 0) + 1;
       }
+    }
+    for (const regla of log.explainabilityReglas || []) {
+      reglasCount[regla] = (reglasCount[regla] || 0) + 1;
     }
   }
   const reglasQueMasPenalizan = Object.entries(reglasCount)

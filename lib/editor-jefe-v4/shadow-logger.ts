@@ -29,6 +29,7 @@ export interface ShadowLogEntry {
   violacionesConsistencia: number;
   explainabilityItems: number;
   observaciones: string[];
+  explainabilityReglas: string[];
   // Datos de aprendizaje (APRENDIZAJE)
   estructura: {
     h2Count: number;
@@ -101,6 +102,7 @@ export async function logShadowRun(
       violacionesConsistencia: v4.consistencia.violaciones.length,
       explainabilityItems: v4.explainability.length,
       observaciones: comparacion.observaciones,
+      explainabilityReglas: v4.explainability.map(e => e.regla),
       estructura: {
         h2Count: v4.evidence.seo.h2Count,
         strongCount: v4.evidence.seo.strongCount,
@@ -125,6 +127,64 @@ export async function logShadowRun(
     await db.collection('shadow_logs').add(entry);
   } catch (error) {
     console.error('[shadow-logger] Error guardando log:', error);
+  }
+}
+
+/**
+ * Registra un análisis V4 sin comparación V3 (modo V4-only).
+ */
+export async function logV4Run(
+  noticia: { titulo: string; slug: string; categoria: string },
+  v4: ResultadoEditorial,
+  tiempoV4Ms: number,
+): Promise<void> {
+  try {
+    const db = getAdminDb();
+
+    const entry: ShadowLogEntry = {
+      timestamp: new Date().toISOString(),
+      slug: noticia.slug,
+      titulo: noticia.titulo,
+      categoriaInput: noticia.categoria,
+      categoriaDetectadaV4: v4.categoria,
+      scoreV3: null,
+      scoreV4: v4.scores.final,
+      veredictoV3: null,
+      veredictoV4: v4.veredicto,
+      diferenciaScore: null,
+      coinciden: true,
+      tiempoV3Ms: null,
+      tiempoV4Ms,
+      moduloMayorDiferencia: null,
+      consistenciaOk: v4.consistencia.ok,
+      violacionesConsistencia: v4.consistencia.violaciones.length,
+      explainabilityItems: v4.explainability.length,
+      observaciones: v4.consistencia.violaciones.map(v => `${v.tipo}: ${v.descripcion}`),
+      explainabilityReglas: v4.explainability.map(e => e.regla),
+      estructura: {
+        h2Count: v4.evidence.seo.h2Count,
+        strongCount: v4.evidence.seo.strongCount,
+        blockquoteCount: v4.evidence.forense.estructuraHtml.blockquote,
+        palabraCount: v4.evidence.adsense.palabraCount,
+      },
+      fuentes: {
+        numeroFuentes: v4.evidence.sources.numeroFuentes,
+        fuentesDetectadas: v4.evidence.sources.fuentesIdentificadas,
+        tieneFuentePropia: v4.evidence.valorEditorial.tieneFuentePropia,
+      },
+      seguimiento: {
+        tieneSeguimiento: v4.evidence.followUp.tieneSeguimiento,
+        actualizable: v4.evidence.followUp.actualizable,
+      },
+      utilidad: {
+        tieneServicio: v4.evidence.utility.tieneServicio,
+        tieneRecomendaciones: v4.evidence.utility.tieneRecomendaciones,
+      },
+    };
+
+    await db.collection('shadow_logs').add(entry);
+  } catch (error) {
+    console.error('[shadow-logger] Error guardando log V4:', error);
   }
 }
 
