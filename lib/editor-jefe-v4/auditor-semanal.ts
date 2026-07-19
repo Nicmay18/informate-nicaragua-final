@@ -176,6 +176,7 @@ function getISOWeek(date: Date): number {
  * Guarda el reporte semanal en Firestore.
  */
 export async function saveWeeklyAudit(report: WeeklyAuditReport): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getAdminDb } = require('../firebase-admin');
   try {
     const db = getAdminDb();
@@ -189,6 +190,7 @@ export async function saveWeeklyAudit(report: WeeklyAuditReport): Promise<void> 
  * Recupera reportes semanales.
  */
 export async function getWeeklyAudits(limit = 10): Promise<WeeklyAuditReport[]> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getAdminDb } = require('../firebase-admin');
   try {
     const db = getAdminDb();

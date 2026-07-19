@@ -150,7 +150,7 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   const warnings: string[] = [];
   const errors: string[] = [];
   const recommendations: string[] = [];
-  let score = 100;
+  const score = 100;
   const tracer = new ScoreTracer('normalizador.ts', 'FORENSE');
   tracer.start(score, 'Score base del módulo FORENSE');
 
