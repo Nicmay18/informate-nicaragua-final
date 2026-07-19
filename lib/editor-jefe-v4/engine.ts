@@ -120,10 +120,16 @@ export function evaluate(
   }
 
   // ── 10. Sugerencias del perfil, filtrando prohibidas ──
-  const sugerencias = [
-    ...profile.sugerenciasBase.oportunidades,
-    ...profile.sugerenciasBase.convertirReferencia,
-  ].filter(s => !profile.forbiddenRecommendations.some(fr => s.toLowerCase().includes(fr.toLowerCase())));
+  const esCorta = evidence.tipoContenido === 'FLASH' || evidence.tipoContenido === 'NOTICIA';
+  const prohibidasCorta = /reportaje|investigaci[oó]n|entrevista|cronolog[ií]a|l[ií]nea de tiempo|antecedente|hechos similares|comparar|documental/i;
+
+  const sugerenciasBase = esCorta
+    ? profile.sugerenciasBase.oportunidades
+    : [...profile.sugerenciasBase.oportunidades, ...profile.sugerenciasBase.convertirReferencia];
+
+  const sugerencias = sugerenciasBase
+    .filter(s => !profile.forbiddenRecommendations.some(fr => s.toLowerCase().includes(fr.toLowerCase())))
+    .filter(s => !esCorta || !prohibidasCorta.test(s));
 
   // Sugerencias de estilo opcionales (no penalizan score)
   if (evidence.forense.adjetivosEmocionales.length > 3) {

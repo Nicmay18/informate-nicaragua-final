@@ -121,6 +121,8 @@ export interface RiskEvidence {
   atribucionesFalsas: boolean;
 }
 
+export type TipoContenido = 'FLASH' | 'NOTICIA' | 'REPORTAJE' | 'INVESTIGACION';
+
 export interface ArticleEvidence {
   // Datos crudos extraídos en la única pasada
   seo: SeoEvidence;
@@ -140,6 +142,7 @@ export interface ArticleEvidence {
   sources: SourceEvidence;
   risk: RiskEvidence;
   category: string;
+  tipoContenido: TipoContenido;
 
   // Metadata
   noticia: NoticiaInput;

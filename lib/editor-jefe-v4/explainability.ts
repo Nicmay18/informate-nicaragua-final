@@ -20,24 +20,29 @@ export function generateExplainability(
   const items: ExplainabilityItem[] = [];
   const texto = evidence.textoPlano;
   const parrafos = evidence.parrafos;
+  const esCorta = evidence.tipoContenido === 'FLASH' || evidence.tipoContenido === 'NOTICIA';
 
   // ── Evidencia faltante ──────────────────────
-  for (const [key, regex] of Object.entries(profile.requiredEvidence)) {
-    if (!regex.test(texto)) {
-      const parrafoReferencia = findBestParagraph(parrafos, key);
-      items.push({
-        regla: `requiredEvidence.${key}`,
-        parrafo: parrafoReferencia,
-        motivo: `No se encontró el patrón "${key}" en el contenido del artículo. Se buscó con la expresión regular del perfil de ${profile.categoria}.`,
-        solucion: getSolutionForEvidence(key, profile.categoria),
-        puntosPerdidos: 0, // Se calcula en el engine
-      });
+  // Las advertencias específicas por perfil solo se muestran en reportajes/investigaciones.
+  // Para noticias y flash basta con verificar fuente, datos verificables y estructura general.
+  if (!esCorta) {
+    for (const [key, regex] of Object.entries(profile.requiredEvidence)) {
+      if (!regex.test(texto)) {
+        const parrafoReferencia = findBestParagraph(parrafos, key);
+        items.push({
+          regla: `requiredEvidence.${key}`,
+          parrafo: parrafoReferencia,
+          motivo: `No se encontró el patrón "${key}" en el contenido del artículo. Se buscó con la expresión regular del perfil de ${profile.categoria}.`,
+          solucion: getSolutionForEvidence(key, profile.categoria),
+          puntosPerdidos: 0, // Se calcula en el engine
+        });
+      }
     }
   }
 
   // ── Contexto faltante ───────────────────────
   const contextFound = profile.requiredContext.patrones.some(r => r.test(texto));
-  if (!contextFound) {
+  if (!contextFound && !esCorta) {
     items.push({
       regla: 'requiredContext',
       parrafo: parrafos.length > 1 ? `Párrafos 1-${parrafos.length}` : 'Párrafo 1',
@@ -51,7 +56,7 @@ export function generateExplainability(
   const utilityFound = profile.requiredUtility.preguntas.some(p =>
     new RegExp(p, 'i').test(texto)
   );
-  if (!utilityFound) {
+  if (!utilityFound && (!esCorta || profile.categoria === 'Servicio')) {
     items.push({
       regla: 'requiredUtility',
       parrafo: parrafos.length > 0 ? `Párrafo ${Math.min(2, parrafos.length)}` : 'Párrafo 1',
@@ -96,9 +101,9 @@ export function generateExplainability(
   }
 
   // ── Párrafos sin dato ───────────────────────
-  if (evidence.valorEditorial.parrafosSinDato > 0 && evidence.valorEditorial.parrafosTotal > 0) {
+  if (!esCorta && evidence.valorEditorial.parrafosSinDato > 0 && evidence.valorEditorial.parrafosTotal > 0) {
     const ratio = evidence.valorEditorial.parrafosSinDato / evidence.valorEditorial.parrafosTotal;
-    if (ratio > 0.4) {
+    if (ratio > 0.5) {
       items.push({
         regla: 'valorEditorial.parrafosSinDato',
         parrafo: `Párrafos 2-${evidence.valorEditorial.parrafosTotal}`,
@@ -110,12 +115,15 @@ export function generateExplainability(
   }
 
   // ── Contenido corto ─────────────────────────
-  if (evidence.adsense.palabraCount < 300) {
+  const minPalabras = evidence.tipoContenido === 'FLASH' ? 150
+    : evidence.tipoContenido === 'NOTICIA' ? 300
+    : 700;
+  if (evidence.adsense.palabraCount < minPalabras) {
     items.push({
       regla: 'adsense.palabraCount',
       parrafo: 'Artículo completo',
-      motivo: `El artículo tiene ${evidence.adsense.palabraCount} palabras. El mínimo recomendado es 300 para evitar clasificación como thin content.`,
-      solucion: 'Ampliar el contenido a al menos 300 palabras con información relevante y verificable.',
+      motivo: `El artículo tiene ${evidence.adsense.palabraCount} palabras. El mínimo recomendado es ${minPalabras} para el tipo ${evidence.tipoContenido}.`,
+      solucion: `Ampliar el contenido a al menos ${minPalabras} palabras con información relevante y verificable.`,
       puntosPerdidos: 0,
     });
   }
@@ -132,7 +140,7 @@ export function generateExplainability(
   }
 
   // ── Sin autor visible ───────────────────────
-  if (!evidence.eeat.autorVisible) {
+  if (!evidence.eeat.autorVisible && !esCorta) {
     items.push({
       regla: 'eeat.autorVisible',
       parrafo: 'N/A (metadata del artículo)',

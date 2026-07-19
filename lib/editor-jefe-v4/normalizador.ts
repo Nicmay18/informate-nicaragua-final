@@ -98,23 +98,29 @@ const evaluarEEAT: ModuleEvaluator = (ev): EvaluationResult => {
   const tracer = new ScoreTracer('normalizador.ts', 'EEAT');
   tracer.start(score, 'Score base del módulo EEAT');
 
+  const esCorta = ev.tipoContenido === 'FLASH' || ev.tipoContenido === 'NOTICIA';
+
   if (ev.eeat.autorVisible) {
     signals.push(`Autor identificado: ${ev.eeat.autor}`);
-  } else {
+  } else if (!esCorta) {
     warnings.push('Autor no visible o genérico (Redacción)');
     score -= 10;
     tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Identificar al autor con nombre completo');
+  } else {
+    signals.push('Autor genérico aceptado para nota de actualidad');
   }
 
   if (ev.eeat.fuentesDetectadas.length >= 2) {
     signals.push(`${ev.eeat.fuentesDetectadas.length} fuentes oficiales detectadas`);
   } else if (ev.eeat.fuentesDetectadas.length === 1) {
     signals.push('1 fuente oficial detectada');
-    warnings.push('Solo una fuente oficial. Idealmente 2+ fuentes independientes');
-    score -= 5;
-    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Agregar al menos una fuente oficial adicional');
+    if (!esCorta) {
+      warnings.push('Solo una fuente oficial. Idealmente 2+ fuentes independientes');
+      score -= 5;
+      tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
+      recommendations.push('Agregar al menos una fuente oficial adicional');
+    }
   } else {
     warnings.push('No se detectaron fuentes oficiales');
     score -= 15;
@@ -311,22 +317,28 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
   const tracer = new ScoreTracer('normalizador.ts', 'VALOR_EDITORIAL');
   tracer.start(score, 'Score base del módulo VALOR_EDITORIAL');
 
+  const esLargo = ev.tipoContenido === 'REPORTAJE' || ev.tipoContenido === 'INVESTIGACION';
+
   if (ev.valorEditorial.tieneFuentePropia) {
     signals.push('Aporte propio del medio detectado');
-  } else {
+  } else if (esLargo) {
     warnings.push('No se detectó aporte propio del medio');
     score -= 10;
     tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Agregar contexto o verificación propia del medio');
+  } else {
+    signals.push('No se exige aporte propio en nota de actualidad');
   }
 
   if (ev.valorEditorial.tieneCitaEspecifica) {
     signals.push('Citas específicas detectadas');
-  } else {
+  } else if (esLargo) {
     warnings.push('No se detectaron citas específicas');
     score -= 8;
     tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir citas directas de fuentes');
+  } else {
+    signals.push('No se exigen citas directas en nota de actualidad');
   }
 
   if (ev.valorEditorial.tieneAtribucionVaga) {
@@ -338,27 +350,31 @@ const evaluarValorEditorial: ModuleEvaluator = (ev): EvaluationResult => {
 
   if (ev.valorEditorial.nombresPropiosCount >= 3) {
     signals.push(`${ev.valorEditorial.nombresPropiosCount} nombres propios detectados`);
-  } else {
+  } else if (esLargo) {
     warnings.push(`Solo ${ev.valorEditorial.nombresPropiosCount} nombres propios`);
     score -= 5;
     tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Incluir más nombres propios de personas o instituciones');
+  } else if (ev.valorEditorial.nombresPropiosCount >= 1) {
+    signals.push(`${ev.valorEditorial.nombresPropiosCount} nombres propios detectados`);
   }
 
   if (ev.valorEditorial.institucionesCount >= 2) {
     signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
-  } else {
+  } else if (esLargo) {
     warnings.push(`Solo ${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
     score -= 5;
     tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
     recommendations.push('Mencionar instituciones relevantes');
+  } else if (ev.valorEditorial.institucionesCount >= 1) {
+    signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
   }
 
   const ratioSinDato = ev.valorEditorial.parrafosTotal > 0
     ? ev.valorEditorial.parrafosSinDato / ev.valorEditorial.parrafosTotal
     : 0;
 
-  if (ratioSinDato > 0.5) {
+  if (ratioSinDato > 0.5 && esLargo) {
     warnings.push(`${ev.valorEditorial.parrafosSinDato} de ${ev.valorEditorial.parrafosTotal} párrafos sin datos concretos`);
     score -= 10;
     tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');

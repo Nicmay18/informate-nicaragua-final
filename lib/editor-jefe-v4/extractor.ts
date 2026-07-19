@@ -8,6 +8,7 @@
 import type { NoticiaInput } from '../analizador-noticias';
 import type {
   ArticleEvidence,
+  TipoContenido,
   SeoEvidence,
   EeatEvidence,
   DiscoverEvidence,
@@ -238,6 +239,27 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // ── CATEGORIA ────────────────────────────────
   const category = detectCategory(noticia, textoPlano);
 
+  // ── TIPO DE CONTENIDO ────────────────────────
+  // FLASH / NOTICIA / REPORTAJE / INVESTIGACION
+  const tipoContenido: TipoContenido = (() => {
+    if (palabraCount < 300) return 'FLASH';
+    if (
+      sourceEvidence.documentoOficial &&
+      sourceEvidence.numeroFuentes >= 2 &&
+      (sourceEvidence.trabajoCampo || originality.tieneReporteoPropio || originality.tieneAportePropio) &&
+      palabraCount >= 700
+    ) {
+      return 'INVESTIGACION';
+    }
+    if (
+      palabraCount >= 700 &&
+      (sourceEvidence.numeroFuentes >= 2 || originality.tieneAportePropio || chronology.tieneCronologia)
+    ) {
+      return 'REPORTAJE';
+    }
+    return 'NOTICIA';
+  })();
+
   return {
     seo,
     eeat,
@@ -254,6 +276,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     sources: sourceEvidence,
     risk,
     category,
+    tipoContenido,
     noticia,
     textoPlano,
     parrafos,
