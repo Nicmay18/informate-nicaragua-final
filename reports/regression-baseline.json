@@ -1,0 +1,21 @@
+{
+  "fecha": "2026-07-19",
+  "total": 176,
+  "averages": {
+    "SEO": 94.47,
+    "EEAT": 100.0,
+    "DISCOVER": 100.0,
+    "ADSENSE": 92.61,
+    "VALOR_EDITORIAL": 94.08,
+    "FORENSE": 99.72
+  },
+  "verdictDistribution": {
+    "cobertura_especial": 144,
+    "portada": 27,
+    "publicar_destacado": 5,
+    "no_publicar": 0,
+    "publicar_breve": 0,
+    "publicar_estandar": 0
+  },
+  "noPublicarCount": 0
+}

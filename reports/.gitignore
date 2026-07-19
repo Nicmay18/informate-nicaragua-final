@@ -1,0 +1,4 @@
+# Reportes generados automáticamente por la auditoría de regresión.
+# Solo se versiona el baseline y el presupuesto.
+*.md
+regression-latest.json

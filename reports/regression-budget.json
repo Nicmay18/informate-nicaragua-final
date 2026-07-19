@@ -1,0 +1,7 @@
+{
+  "moduleAverageDropThreshold": 3.0,
+  "noPublicarIncreasePercentagePointsThreshold": 5.0,
+  "maxContradictions": 0,
+  "maxExecutionErrors": 0,
+  "maxDeterminismFailures": 0
+}
