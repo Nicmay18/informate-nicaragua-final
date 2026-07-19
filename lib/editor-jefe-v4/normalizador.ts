@@ -155,45 +155,29 @@ const evaluarForense: ModuleEvaluator = (ev): EvaluationResult => {
   tracer.start(score, 'Score base del módulo FORENSE');
 
   if (ev.forense.adjetivosEmocionales.length > 3) {
-    warnings.push(`${ev.forense.adjetivosEmocionales.length} adjetivos emocionales detectados`);
-    score -= 10;
-    tracer.sub(10, warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Reducir adjetivos emocionales y usar lenguaje neutral');
+    recommendations.push(`Sugerencia de estilo: ${ev.forense.adjetivosEmocionales.length} adjetivos emocionales detectados. Considera reemplazarlos por datos concretos.`);
   } else {
     signals.push('Lenguaje neutral sin exceso de adjetivos');
   }
 
   if (ev.forense.transicionesIA.length > 2) {
-    warnings.push(`${ev.forense.transicionesIA.length} transiciones típicas de IA detectadas`);
-    score -= 8;
-    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Reescribir transiciones para sonar más natural');
+    recommendations.push(`Sugerencia de estilo: ${ev.forense.transicionesIA.length} transiciones típicas de IA detectadas. Considera reescribirlas.`);
   } else {
     signals.push('Sin transiciones típicas de IA');
   }
 
   if (ev.forense.tieneRedundancia) {
-    warnings.push('Se detectó redundancia entre párrafos');
-    score -= 5;
-    tracer.sub(5, warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Eliminar contenido redundante entre párrafos');
+    recommendations.push('Sugerencia de estilo: redundancia detectada entre párrafos. Considera eliminar repeticiones.');
   }
 
   if (ev.forense.riesgosLegales.length > 0) {
-    warnings.push(`${ev.forense.riesgosLegales.length} palabras de riesgo legal detectadas`);
-    score -= ev.forense.riesgosLegales.length * 3;
-    tracer.sub(ev.forense.riesgosLegales.length * 3, warnings[warnings.length - 1], 'PENALTY');
-    recommendations.push('Revisar uso de palabras sensibles desde el punto de vista legal');
+    recommendations.push(`Sugerencia de estilo: ${ev.forense.riesgosLegales.length} palabras de riesgo legal detectadas. Revisa si son necesarias en el contexto.`);
   }
 
   if (ev.forense.nivelRiesgo === 'Crítico') {
-    errors.push('Nivel de riesgo crítico');
-    score -= 15;
-    tracer.sub(15, errors[errors.length - 1] || warnings[warnings.length - 1], 'PENALTY');
+    recommendations.push('Sugerencia de estilo: nivel de riesgo crítico detectado. Verifica que el contexto justifique el término.');
   } else if (ev.forense.nivelRiesgo === 'Alto') {
-    warnings.push('Nivel de riesgo alto');
-    score -= 8;
-    tracer.sub(8, warnings[warnings.length - 1], 'PENALTY');
+    recommendations.push('Sugerencia de estilo: nivel de riesgo alto detectado. Verifica que el contexto justifique el término.');
   }
 
   if (ev.forense.estructuraHtml.h2 >= 2) {

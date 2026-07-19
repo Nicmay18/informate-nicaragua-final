@@ -117,7 +117,7 @@ function getMejoras(r: ResultadoEditorial): string[] {
     if (mejoras.length >= 6) break;
   }
 
-  return mejoras.length > 0 ? mejoras : r.sugerencias.slice(0, 6);
+  return mejoras;
 }
 
 export default function AnalizadorPanel({ noticia }: Props) {
@@ -263,6 +263,20 @@ export default function AnalizadorPanel({ noticia }: Props) {
           )}
         </ul>
       </section>
+
+      {resultado?.sugerencias && resultado.sugerencias.length > 0 && (
+        <section>
+          <h3 className="text-lg font-semibold text-white mb-3">Sugerencias de estilo (opcionales)</h3>
+          <ul className="space-y-2">
+            {resultado.sugerencias.map((s, i) => (
+              <li key={i} className="flex items-start gap-2 text-blue-200">
+                <span>•</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {resultado && (
         <div className="border-t border-gray-800 pt-4">

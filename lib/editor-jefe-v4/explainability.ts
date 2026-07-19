@@ -84,18 +84,6 @@ export function generateExplainability(
     });
   }
 
-  // ── Adjetivos emocionales ───────────────────
-  if (evidence.forense.adjetivosEmocionales.length > 3) {
-    const parrafoAdjetivos = findParagraphWith(parrafos, /incre[ií]ble|impresionante|escalofriante|conmocionado/i);
-    items.push({
-      regla: 'forense.adjetivosEmocionales',
-      parrafo: parrafoAdjetivos || 'Párrafos 1-3',
-      motivo: `Se detectaron ${evidence.forense.adjetivosEmocionales.length} adjetivos emocionales: ${evidence.forense.adjetivosEmocionales.slice(0, 5).join(', ')}. El exceso de adjetivos emocionales reduce la objetividad editorial.`,
-      solucion: 'Reemplazar adjetivos emocionales con datos concretos y neutros.',
-      puntosPerdidos: 0,
-    });
-  }
-
   // ── Datos concretos insuficientes ───────────
   if (!evidence.evidence.esNotaVerificable) {
     items.push({

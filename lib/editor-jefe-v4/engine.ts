@@ -125,6 +125,20 @@ export function evaluate(
     ...profile.sugerenciasBase.convertirReferencia,
   ].filter(s => !profile.forbiddenRecommendations.some(fr => s.toLowerCase().includes(fr.toLowerCase())));
 
+  // Sugerencias de estilo opcionales (no penalizan score)
+  if (evidence.forense.adjetivosEmocionales.length > 3) {
+    sugerencias.push(`Puedes reemplazar adjetivos emocionales (${evidence.forense.adjetivosEmocionales.slice(0, 5).join(', ')}) por datos concretos si buscas un tono más neutro.`);
+  }
+  if (evidence.forense.transicionesIA.length > 2) {
+    sugerencias.push('Algunas frases suenan a transiciones típicas de IA; considera reescribirlas.');
+  }
+  if (evidence.forense.tieneRedundancia) {
+    sugerencias.push('Hay redundancia entre párrafos; considera eliminar repeticiones.');
+  }
+  if (evidence.forense.riesgosLegales.length > 0) {
+    sugerencias.push(`Revisa palabras de riesgo legal: ${evidence.forense.riesgosLegales.slice(0, 5).join(', ')}.`);
+  }
+
   // ── 11. Score breakdown completo ──
   const scores: ScoreBreakdown = {
     seo: results.seo.score,
