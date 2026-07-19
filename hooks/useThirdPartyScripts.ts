@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { isAdsenseSafePath } from '@/lib/adsense-guard';
+import { isAdsenseSafePath } from '@/lib/editorial/adsense-safety';
 
 interface ThirdPartyConfig {
   gtmId?: string;

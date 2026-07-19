@@ -10,7 +10,7 @@ import {
   SECTION_META,
 } from '@/lib/portada/helpers';
 import type { Noticia } from '@/lib/types';
-import type { ResultadoEditorial } from '@/lib/editor-jefe-v4/types';
+import type { ResultadoEditorial } from '@/lib/editorial';
 import type { PortadaSectionId, PortadaSlot } from '@/lib/portada/types';
 
 interface Props {
@@ -72,7 +72,7 @@ export default function PortadaCard({
         </h4>
         <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-400">
           <span className="text-cyan-300 font-semibold">
-            {resultado.scores.final}/100
+            {resultado.scoreFinal}/100
           </span>
           <span>{noticia.autor || '—'}</span>
           <span>{(noticia.vistas ?? 0).toLocaleString('es-NI')} vistas</span>

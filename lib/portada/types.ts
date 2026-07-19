@@ -1,5 +1,5 @@
 import type { Noticia } from '@/lib/types';
-import type { ResultadoEditorial } from '@/lib/editor-jefe-v4/types';
+import type { ResultadoEditorial } from '@/lib/editorial';
 
 export type PortadaSectionId =
   | 'principal'

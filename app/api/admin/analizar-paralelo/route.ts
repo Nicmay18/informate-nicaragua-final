@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NoticiaInput } from '@/lib/analizador-noticias';
-import { analizarNoticia } from '@/lib/analizador-noticias';
-import { runParallel } from '@/lib/editor-jefe-v4/parallel-runner';
-import { mapV4ToV3 } from '@/lib/editor-jefe-v4/mapper-v3';
-import { logShadowRun } from '@/lib/editor-jefe-v4/shadow-logger';
+import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 
 export async function POST(request: Request) {
   try {
@@ -22,35 +18,20 @@ export async function POST(request: Request) {
       palabrasClave: body.palabrasClave || [],
     };
 
-    const tV3Start = Date.now();
-    const v3Result = await analizarNoticia(noticia);
-    const tV3Ms = Date.now() - tV3Start;
-
     const tV4Start = Date.now();
-    const parallel = runParallel(noticia, v3Result);
+    const v4 = evaluate(noticia);
     const tV4Ms = Date.now() - tV4Start;
-
-    // FASE 1: Shadow Mode — registrar automáticamente
-    await logShadowRun(
-      { titulo: noticia.titulo, slug: noticia.slug, categoria: noticia.categoria },
-      parallel.v3,
-      parallel.v4,
-      parallel.comparacion,
-      tV3Ms,
-      tV4Ms,
-    );
+    const v3 = mapV4ToV3(v4);
 
     return NextResponse.json({
-      v3: parallel.v3,
-      v4: parallel.v4,
-      v4_mapeado: parallel.v4 ? mapV4ToV3(parallel.v4) : null,
-      comparacion: parallel.comparacion,
-      timing: { v3Ms: tV3Ms, v4Ms: tV4Ms },
+      v4,
+      v3,
+      timing: { v4Ms: tV4Ms },
     });
   } catch (error) {
-    console.error('Error en analisis paralelo:', error);
+    console.error('Error en analisis:', error);
     return NextResponse.json(
-      { error: 'Error al analizar en modo paralelo' },
+      { error: 'Error al analizar la noticia' },
       { status: 500 }
     );
   }

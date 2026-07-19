@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
+import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       palabrasClave: body.palabrasClave || [],
     };
 
-    const resultado = await analizarNoticia(noticia);
+    const resultado = mapV4ToV3(evaluate(noticia));
 
     return NextResponse.json(resultado);
   } catch (error) {

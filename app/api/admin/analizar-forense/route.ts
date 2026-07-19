@@ -1,11 +1,11 @@
 ﻿import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
-import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
+import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 
 export const dynamic = 'force-dynamic';
 
-//  AUDITORÍA FORENSE MASIVA 
-// Usa lib/analizador-noticias.ts (motor unificado v2.0)
+//  AUDITORÍA FORENSE MASIVA
+// Usa el motor editorial determinístico (lib/editorial)
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       palabrasClave: body.keywords || [],
     };
 
-    const resultado = await analizarNoticia(noticia);
+    const resultado = mapV4ToV3(evaluate(noticia));
     return NextResponse.json({ success: true, analisis: resultado });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
           slug: data.slug || '',
           palabrasClave: data.keywords || [],
         };
-        const analisis = await analizarNoticia(noticia);
+        const analisis = mapV4ToV3(evaluate(noticia));
         return {
           id: doc.id,
           titulo: noticia.titulo,

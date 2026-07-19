@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { analizarNoticia, type NoticiaInput } from '@/lib/analizador-noticias';
+import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
-import { generarMetaDescription, generarTituloSEO } from '@/lib/generador-meta';
+import { generarMetaDescription, generarTituloSEO } from '@/lib/editorial/meta';
 
 export const maxDuration = 30;
 
@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
       palabrasClave: body.palabrasClave || [],
     };
 
-    const analisis = await analizarNoticia(noticiaInput);
+    const v4 = evaluate(noticiaInput);
+    const analisis = mapV4ToV3(v4);
 
     // 2. Detector de duplicados
     const db = getAdminDb();
@@ -61,12 +62,7 @@ export async function POST(request: NextRequest) {
     // 3. Generar metadata si falta
     let metaGenerada = resumen;
     if (!metaGenerada || metaGenerada.length < 150) {
-      metaGenerada = generarMetaDescription(
-        titulo,
-        contenido,
-        categoria || 'General',
-        body.palabrasClave
-      );
+      metaGenerada = generarMetaDescription(v4.evidence.textoPlano, resumen);
     }
 
     // 4. BLOQUEO si no pasa filtros criticos
@@ -77,16 +73,13 @@ export async function POST(request: NextRequest) {
         duplicado,
         sugerencias: {
           metaDescription: metaGenerada,
-          tituloSEO: generarTituloSEO(titulo, categoria || 'General', departamento),
+          tituloSEO: generarTituloSEO(titulo, categoria, departamento),
         }
       }, { status: 400 });
     }
 
-    // Contar palabras reales (sin HTML)
-    const palabras = contenido
-      .replace(/<[^>]*>/g, ' ')
-      .split(/\s+/)
-      .filter(Boolean).length;
+    // Contar palabras usando la evidencia extraída una sola vez
+    const palabras = v4.evidence.textoPlano.split(/\s+/).filter(Boolean).length;
 
     // Datos a actualizar
     const updateData: Record<string, unknown> = {

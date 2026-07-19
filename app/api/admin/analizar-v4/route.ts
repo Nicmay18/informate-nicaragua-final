@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NoticiaInput } from '@/lib/analizador-noticias';
-import { pipelineV4 } from '@/lib/editor-jefe-v4/pipeline';
-import { mapV4ToV3, consistencyAudit } from '@/lib/editor-jefe-v4';
-import { logV4Run } from '@/lib/editor-jefe-v4/shadow-logger';
+import { evaluate, mapV4ToV3, verifyIntegrity, type NoticiaInput } from '@/lib/editorial';
 
 export async function POST(request: Request) {
   try {
@@ -22,22 +19,15 @@ export async function POST(request: Request) {
     };
 
     const tV4Start = Date.now();
-    const resultadoV4 = pipelineV4(noticia);
+    const resultadoV4 = evaluate(noticia);
     const tV4Ms = Date.now() - tV4Start;
+    verifyIntegrity(resultadoV4);
     const resultadoV3 = mapV4ToV3(resultadoV4);
-    const auditoria = consistencyAudit(resultadoV4, resultadoV3);
-
-    // FASE 2: recolectar estadísticas del panel sin afectar scoring
-    void logV4Run(
-      { titulo: noticia.titulo, slug: noticia.slug, categoria: noticia.categoria },
-      resultadoV4,
-      tV4Ms,
-    );
 
     return NextResponse.json({
       ...resultadoV3,
       _v4: resultadoV4,
-      _auditoria: auditoria,
+      _timingMs: tV4Ms,
     });
   } catch (error) {
     console.error('Error en analisis V4:', error);

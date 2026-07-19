@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getLatestNews } from '@/lib/db/homepage';
-import { pipelineV4 } from '@/lib/editor-jefe-v4/pipeline';
+import { evaluate as pipelineV4 } from '@/lib/editorial';
 import { getPortadaConfig, savePortadaConfig } from '@/lib/portada/config-service';
 import { buildDefaultConfig, noticiaToInput } from '@/lib/portada/helpers';
 import type { PortadaCandidatesResponse, PortadaConfig, PortadaItem } from '@/lib/portada/types';

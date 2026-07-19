@@ -1,4 +1,4 @@
-import type { NoticiaInput } from '@/lib/analizador-noticias';
+import type { NoticiaInput } from '@/lib/editorial';
 import type { Noticia } from '@/lib/types';
 import type { PortadaConfig, PortadaItem, PortadaSectionId, PortadaSlot } from './types';
 
@@ -174,7 +174,7 @@ export function buildDefaultConfig(items: PortadaItem[]): PortadaConfig {
   const used = new Set<string>();
 
   const byScore = [...items].sort(
-    (a, b) => b.resultado.scores.final - a.resultado.scores.final,
+    (a, b) => b.resultado.scoreFinal - a.resultado.scoreFinal,
   );
   const byDate = [...items].sort(
     (a, b) =>
