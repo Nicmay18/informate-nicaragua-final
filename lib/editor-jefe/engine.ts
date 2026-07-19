@@ -298,20 +298,24 @@ function clasificarTipoNotaV2(n: NoticiaInput, ev: EvidenciaPuntuada): { tipo: T
     return { tipo: 'Opinión', confianza: 90, razon: 'Texto con marcadores de opinión o columna.' };
   }
 
-  // 3. Investigación: requiere aporte propio explícito + pruebas documentales + profundidad
-  // FIX: antes clasificaba como Investigación cualquier nota que mencionara "documentos" o "registros".
-  // Ahora exige aporte propio del medio (NIVEL 11 ≥ 10), documento oficial fuerte y extensión ≥ 500 palabras.
+  // 3. Investigación: requiere aporte propio explícito + pruebas documentales + múltiples fuentes + extensión
   const markersInvestigacion = /\b(investigaci[óo]n\s+(?:propia|de\s+este\s+medio|exclusiva)|filtraci[óo]n|expediente\s+judicial|base\s+de\s+datos|contratos?\s+(?:obtenidos?|filtrados?|revelados?))\b/;
-  if (markersInvestigacion.test(todo) && ev.documentoOficial >= 80 && ev.aportePropio >= 10 && palabras >= 500) {
-    return { tipo: 'Investigación', confianza: 90, razon: 'Investigación propia con pruebas documentales y aporte del medio.' };
+  if (markersInvestigacion.test(todo) && ev.documentoOficial >= 80 && ev.aportePropio >= 15 && ev.dosFuentes >= 70 && palabras >= 700) {
+    return { tipo: 'Investigación', confianza: 90, razon: 'Investigación propia con pruebas documentales, múltiples fuentes y aporte del medio.' };
   }
 
-  // 4. Reportaje: evidencia + profundidad
+  // 4. Reportaje: evidencia + profundidad real (≥700 palabras + múltiples atribuciones o documento)
   const profundidad = (todo.match(/\b(según|de acuerdo con|indicó|declaró|precisó|confirmó|dijo|mencionó|señaló|explicó|reportó|aseguró|detalló)\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/gi) || []).length;
   const subheadings = (n.contenido.match(/<h[2-6]\b/gi) || []).length;
-  const esReportaje = ev.trabajoDeCampo >= 70 && palabras >= 400 && (profundidad >= 3 || subheadings >= 1 || /\b(contexto|antecedente|trasfondo|historia|impacto|consecuencia)\b/.test(todo));
+  const esReportaje = palabras >= 700 && ev.trabajoDeCampo >= 70 && (
+    profundidad >= 5 ||
+    subheadings >= 2 ||
+    ev.aportePropio >= 15 ||
+    ev.documentoOficial >= 80 ||
+    ev.dosFuentes >= 70
+  );
   if (esReportaje) {
-    return { tipo: 'Reportaje', confianza: 80, razon: 'Evidencia verificable con extensión y profundidad.' };
+    return { tipo: 'Reportaje', confianza: 80, razon: 'Evidencia verificable con extensión y profundidad periodística.' };
   }
 
   // 5. Crónica: narrativa de suceso con secuencia temporal y detalle
@@ -337,29 +341,34 @@ function clasificarTipoNotaV2(n: NoticiaInput, ev: EvidenciaPuntuada): { tipo: T
 // FASE 3 — DECISIÓN EDITORIAL
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function promedioEvidencia(ev: EvidenciaPuntuada): number {
-  const valores = [ev.fuenteIdentificada, ev.documentoOficial, ev.dosFuentes, ev.trabajoDeCampo, ev.datosConcretos, ev.contexto, ev.utilidad];
+function promedioEvidencia(ev: EvidenciaPuntuada, tipo: TipoNotaEditorialV2): number {
+  const esDiaria = ['Noticia', 'Breve', 'Crónica', 'Cobertura'].includes(tipo);
+  // Las noticias diarias no se penalizan por no tener documento oficial, múltiples
+  // fuentes ni trabajo de campo; basta con fuente identificable y datos verificables.
+  const valores = esDiaria
+    ? [ev.fuenteIdentificada, ev.datosConcretos, ev.utilidad]
+    : [ev.fuenteIdentificada, ev.documentoOficial, ev.dosFuentes, ev.trabajoDeCampo, ev.datosConcretos, ev.contexto, ev.utilidad];
   return Math.round(valores.reduce((a, b) => a + b, 0) / valores.length);
 }
 
 // NIVEL 11: el aporte propio (0-25) se suma al base score.
 // El techo por tipo evita que una Noticia puntúe como una Investigación.
 const MAX_SCORE_POR_TIPO: Record<TipoNotaEditorialV2, number> = {
-  'Noticia': 90,
-  'Breve': 70,
-  'Cobertura': 95,
+  'Noticia': 100,
+  'Breve': 95,
+  'Cobertura': 100,
   'Investigación': 100,
   'Reportaje': 100,
-  'Entrevista': 95,
-  'Opinión': 85,
-  'Crónica': 95,
+  'Entrevista': 100,
+  'Opinión': 95,
+  'Crónica': 100,
 };
 
 function decidirEditorialV2(
   ev: EvidenciaPuntuada,
   tipo: TipoNotaEditorialV2
 ): DecisionEditorialV2 {
-  const baseRaw = promedioEvidencia(ev);
+  const baseRaw = promedioEvidencia(ev, tipo);
   const techo = MAX_SCORE_POR_TIPO[tipo] ?? 90;
   // FASE 13: si la alucinación institucional es baja, penaliza el base.
   // Cada punto por debajo de 70 resta 0.5 pts del base (máx penalización ~35 pts).
@@ -367,9 +376,11 @@ function decidirEditorialV2(
     ? Math.round((70 - ev.alucinacionInstitucional) * 0.5)
     : 0;
   const base = Math.max(0, baseRaw - penalizacionAlucinacion);
-  // Score final = base + aporte propio (0-25), capped por techo del tipo
-  const score = Math.min(techo, base + ev.aportePropio);
-  const justificacionBase = `Score ${score} (base ${baseRaw}${penalizacionAlucinacion > 0 ? ` -${penalizacionAlucinacion} alucinación` : ''} = ${base} + aporte ${ev.aportePropio}/25, techo ${techo}). Tipo ${tipo}. Alucinación institucional: ${ev.alucinacionInstitucional}/100.`;
+  // Score final = base + aporte propio (0-25), + bonificación diaria si aplica, capped por techo del tipo
+  const esDiaria = ['Noticia', 'Breve', 'Crónica', 'Cobertura'].includes(tipo);
+  const bonificacionDiaria = esDiaria && ev.fuenteIdentificada >= 70 && ev.datosConcretos >= 70 ? 18 : 0;
+  const score = Math.min(techo, base + ev.aportePropio + bonificacionDiaria);
+  const justificacionBase = `Score ${score} (base ${baseRaw}${penalizacionAlucinacion > 0 ? ` -${penalizacionAlucinacion} alucinación` : ''} = ${base} + aporte ${ev.aportePropio}/25${bonificacionDiaria > 0 ? ` +${bonificacionDiaria} diaria` : ''}, techo ${techo}). Tipo ${tipo}. Alucinación institucional: ${ev.alucinacionInstitucional}/100.`;
 
   // Cobertura especial: cuando la nota misma lo declara y la evidencia es alta
   if (tipo === 'Cobertura' && score >= 85) {
@@ -481,9 +492,11 @@ function detectarTemaV2(n: NoticiaInput): string {
   return 'general';
 }
 
-function generarSugerenciasV2(n: NoticiaInput, ev: EvidenciaPuntuada): SugerenciasV2 {
+function generarSugerenciasV2(n: NoticiaInput, ev: EvidenciaPuntuada, tipo: TipoNotaEditorialV2): SugerenciasV2 {
   const tema = detectarTemaV2(n);
   const e = ev;
+  const esDiaria = ['Noticia', 'Breve', 'Crónica', 'Cobertura'].includes(tipo);
+  const prohibidasSugerenciaDiaria = /(antecedente|historico|historial|cronologia|l[ií]nea\s+de\s+tiempo|entrevista|comparar|similares|hechos\s+similares|reportaje|investigacion|m[aá]s\s+fuentes|m[aá]s\s+contexto|ir\s+a\s+preguntar|solicitar\s+expediente)/i;
 
   const banco: Record<string, SugerenciasV2> = {
     accidente_transito: {
@@ -621,17 +634,24 @@ function generarSugerenciasV2(n: NoticiaInput, ev: EvidenciaPuntuada): Sugerenci
     const seleccion: SugerenciaV7[] = [];
     if (e.fuenteIdentificada < 70) seleccion.push(...lista.filter(x => /fuente oficial|autoridad|institucion/i.test(x.texto)));
     if (e.datosConcretos < 70) seleccion.push(...lista.filter(x => /dato concreto|cifra|fecha|hora|lugar/i.test(x.texto)));
-    if (e.contexto < 70) seleccion.push(...lista.filter(x => /contexto|marco legal|antecedente/i.test(x.texto)));
+    if (e.contexto < 70) seleccion.push(...lista.filter(x => /contexto|marco legal/i.test(x.texto)));
     if (e.utilidad < 70) seleccion.push(...lista.filter(x => /utilidad|lector|proteccion|decision|comprension/i.test(x.texto)));
     if (seleccion.length < 2) seleccion.push(...lista);
     const unicos = [...new Map(seleccion.map(x => [x.texto, x])).values()];
-    return filtrarSugerenciasRealizables(unicos.slice(0, 4));
+    const filtrados = esDiaria
+      ? unicos.filter(x => !prohibidasSugerenciaDiaria.test(x.texto))
+      : unicos;
+    return filtrarSugerenciasRealizables(filtrados.slice(0, 4));
   };
+
+  // Para noticias diarias no se exige convertir en reportaje ni añadir investigación.
+  const referencia = esDiaria ? [] : filtrarSugerenciasRealizables(raw.comoConvertirReferencia.slice(0, 4));
+  const nivel10 = esDiaria ? [] : filtrarSugerenciasRealizables(raw.nivel10.slice(0, 4));
 
   return {
     oportunidadesEditoriales: seleccionar(raw.oportunidadesEditoriales),
-    comoConvertirReferencia: filtrarSugerenciasRealizables(raw.comoConvertirReferencia.slice(0, 4)),
-    nivel10: filtrarSugerenciasRealizables(raw.nivel10.slice(0, 4)),
+    comoConvertirReferencia: referencia,
+    nivel10,
   };
 }
 
@@ -654,7 +674,7 @@ export function evaluarEditorJefeV2(n: NoticiaInput): ResultadoEditorJefeV2 {
   const tipo = clasificarTipoNotaV2(n, ev);
   const decision = decidirEditorialV2(ev, tipo.tipo);
   const contextoNI = detectarContextoNicaragua(n, ev);
-  const sugerencias = generarSugerenciasV2(n, ev);
+  const sugerencias = generarSugerenciasV2(n, ev, tipo.tipo);
   const consistencia = verificarConsistencia(decision);
 
   return {
