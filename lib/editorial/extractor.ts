@@ -70,7 +70,9 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     slug: noticia.slug,
     h2Count: (noticia.contenido.match(/<h2[^>]*>/gi) || []).length,
     strongCount: (noticia.contenido.match(/<strong[^>]*>/gi) || []).length,
-    keywords: noticia.palabrasClave || noticia.keywords?.split(',').map(k => k.trim()) || [],
+    keywords: noticia.palabrasClave?.length
+      ? noticia.palabrasClave
+      : noticia.keywords?.split(',').map(k => k.trim()) || [],
     tituloOptimizado: noticia.titulo.length >= 40 && noticia.titulo.length <= 70,
   };
 
@@ -100,7 +102,11 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const palabrasSensiblesEncontradas = Array.from(textoPlano.matchAll(PALABRAS_SENSIBLES)).map(m => m[0]);
   const adsense: AdsenseEvidence = {
     palabraCount,
-    tieneDatosConcretos: CIFRAS_REGEX.test(textoPlano),
+    tieneDatosConcretos:
+      CIFRAS_REGEX.test(textoPlano) ||
+      FECHAS_REGEX.test(textoPlano) ||
+      NOMBRES_PROPIOS.test(textoPlano) ||
+      LUGARES_REGEX.test(textoPlano),
     tieneClickbait: CLICKBAIT_PATTERNS.test(noticia.titulo) || CLICKBAIT_PATTERNS.test(textoPlano),
     ratioUnicidad: palabraCount > 0 ? Math.min(1, palabraCount / 300) : 0,
     palabrasSensibles: [...new Set(palabrasSensiblesEncontradas)],

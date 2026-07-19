@@ -36,9 +36,9 @@ export function noticiaToInput(noticia: Noticia): NoticiaInput {
     imagen: noticia.imagen,
     slug: noticia.slug || noticia.id,
     palabrasClave:
-      noticia.tags ||
-      noticia.keywords?.split(',').map(k => k.trim()).filter(Boolean) ||
-      [],
+      noticia.tags?.length
+        ? noticia.tags
+        : noticia.keywords?.split(',').map(k => k.trim()).filter(Boolean) || [],
     keywords: noticia.keywords,
   };
 }
