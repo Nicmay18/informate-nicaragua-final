@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAdminFetch } from '@/hooks/useAdminFetch';
 
 interface Reporte {
   fecha: string;
@@ -25,11 +26,12 @@ export default function CrecimientoPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const { adminFetch } = useAdminFetch();
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/admin/crecimiento', { cache: 'no-store' });
+        const res = await adminFetch('/api/admin/crecimiento', { cache: 'no-store' });
         const d = await res.json();
         if (!res.ok || d.success === false || d.error) {
           throw new Error(d.error || `Error ${res.status} cargando el reporte`);
@@ -50,7 +52,7 @@ export default function CrecimientoPage() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [adminFetch]);
 
   const copyPrompt = () => {
     if (!data?.promptEditorial) return;

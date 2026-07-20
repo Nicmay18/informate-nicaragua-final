@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ResultadoEditorial } from '@/lib/editorial';
+import { getAdminToken } from '@/hooks/useAdminFetch';
 
 interface Props {
   noticia: {
@@ -108,9 +109,10 @@ export default function AnalizadorPanel({ noticia }: Props) {
     setError(null);
     setResultado(null);
     try {
+      const token = getAdminToken();
       const res = await fetch('/api/admin/analizar-v4', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
         body: JSON.stringify(noticia),
       });
       if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);

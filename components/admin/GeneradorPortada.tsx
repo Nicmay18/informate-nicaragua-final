@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { getAdminToken } from '@/hooks/useAdminFetch';
 import PortadaSeccion from './portada/PortadaSeccion';
 import PortadaProgramador from './portada/PortadaProgramador';
 import {
@@ -19,8 +20,15 @@ export default function GeneradorPortada() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const adminFetch = useCallback((url: string, options: RequestInit = {}) => {
+    const token = getAdminToken();
+    const headers = new Headers(options.headers);
+    headers.set('x-admin-token', token);
+    return fetch(url, { ...options, headers });
+  }, []);
+
   useEffect(() => {
-    fetch('/api/admin/portada')
+    adminFetch('/api/admin/portada')
       .then(r => r.json())
       .then((d: { items: PortadaItem[]; config: PortadaConfig }) => {
         setData(d);
@@ -30,7 +38,7 @@ export default function GeneradorPortada() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [adminFetch]);
 
   const updateConfig = (updater: (c: PortadaConfig) => PortadaConfig) => {
     setData(prev => (prev ? { ...prev, config: updater(prev.config) } : prev));
@@ -64,7 +72,7 @@ export default function GeneradorPortada() {
     if (!data) return;
     setSaving(true);
     try {
-      const res = await fetch('/api/admin/portada', {
+      const res = await adminFetch('/api/admin/portada', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ config: data.config }),

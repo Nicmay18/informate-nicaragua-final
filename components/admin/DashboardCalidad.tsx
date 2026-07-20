@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { getAdminToken } from '@/hooks/useAdminFetch';
 
 interface Metricas {
   totalNoticias: number;
@@ -21,13 +22,18 @@ export default function DashboardCalidad() {
   const [data, setData] = useState<Metricas | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const adminFetch = useCallback((url: string) => {
+    const token = getAdminToken();
+    return fetch(url, { headers: { 'x-admin-token': token } });
+  }, []);
+
   useEffect(() => {
-    fetch('/api/admin/dashboard-calidad')
+    adminFetch('/api/admin/dashboard-calidad')
       .then((r) => r.json())
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, []);
+  }, [adminFetch]);
 
   if (loading) return <div className="p-6 text-white">Cargando metricas...</div>;
   if (!data) return <div className="p-6 text-red-400">Error cargando dashboard</div>;
