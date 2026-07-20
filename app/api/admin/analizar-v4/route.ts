@@ -13,8 +13,10 @@ export async function POST(request: Request) {
       autor: body.autor || '',
       fecha: body.fecha || new Date().toISOString(),
       fechaActualizacion: body.fechaActualizacion,
+      imagen: body.imagen,
       imagenDestacada: body.imagenDestacada,
       slug: body.slug || '',
+      keywords: body.keywords,
       palabrasClave: body.palabrasClave || [],
     };
 

@@ -14,7 +14,9 @@ interface Props {
     slug?: string;
     fecha?: string;
     fechaActualizacion?: string;
+    imagen?: string;
     imagenDestacada?: string;
+    keywords?: string;
     palabrasClave?: string[];
   };
 }

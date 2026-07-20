@@ -43,6 +43,10 @@ type NewsDoc = {
   dateline?: string;
   autor?: string;
   slug?: string;
+  keywords?: string;
+  imagen?: string;
+  imagenDestacada?: string;
+  fechaActualizacion?: string;
 };
 
 function normalize(text: string) {
@@ -389,7 +393,10 @@ export default function CorreccionesPage() {
                 autor: selectedNews.autor || 'Redacción NI',
                 slug: selectedNews.slug || '',
                 fecha: new Date().toISOString(),
-                imagenDestacada: '',
+                fechaActualizacion: selectedNews.fechaActualizacion,
+                keywords: selectedNews.keywords,
+                imagen: selectedNews.imagen,
+                imagenDestacada: selectedNews.imagenDestacada,
               }}
             />
           ) : (
