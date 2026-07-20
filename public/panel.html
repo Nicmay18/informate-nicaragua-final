@@ -6817,6 +6817,8 @@ VERIFICACIÓN FINAL
       const resumen = document.getElementById('resumen').value.trim();
       const categoria = document.getElementById('categoria').value;
       const imagenUrl = document.getElementById('imagenUrl').value.trim();
+      const keywords = document.getElementById('keywords').value.trim();
+      const autor = document.getElementById('autor').value || 'Redacción Nicaragua Informate';
 
       if (!titulo || !contenido) {
         showToast('Completa al menos titulo y contenido', 'warning');
@@ -6833,7 +6835,7 @@ VERIFICACIÓN FINAL
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-          body: JSON.stringify({ titulo, contenido, resumen, categoria, imagenDestacada: imagenUrl, slug: '', autor: 'Keyling Elieth Rivera Muñoz' })
+          body: JSON.stringify({ titulo, contenido, resumen, categoria, imagen: imagenUrl, imagenDestacada: imagenUrl, slug: '', keywords, autor })
         });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error en analisis');
