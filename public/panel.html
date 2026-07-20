@@ -2639,11 +2639,37 @@ sin texto ni marcas de agua, composición periodística"
     }
 
     // SEO Preview
+    window.generarKeywordsAutomaticas = function(titulo, contenido, categoria) {
+      if (!titulo) return '';
+      const texto = (titulo + ' ' + (contenido || '').replace(/<[^>]*>/g, ' ')).toLowerCase();
+      const kw = new Set();
+      if (categoria) kw.add(categoria);
+      kw.add('Nicaragua');
+      const locs = ['managua','leon','granada','esteli','matagalpa','jinotega','chinandega','masaya','rivas','boaco','chontales','carazo','madriz','nueva segovia','rio san juan','raan','raas','nicaragua','centroamérica'];
+      locs.forEach(l => { if (texto.includes(l)) kw.add(l); });
+      const cats = ['tecnología','deportes','espectáculos','turismo','economía','inversión','fútbol','béisbol','cinema','música','celulares','internet','programación','software','hardware','streaming','criptomonedas','startup','emprendimiento','negocios','sucesos','nacionales','internacionales','cultura','salud','política','judicial','educación'];
+      cats.forEach(c => { if (texto.includes(c)) kw.add(c); });
+      const entidades = titulo.match(/[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*/g) || [];
+      entidades.forEach(e => { if (e.length > 3) kw.add(e.toLowerCase()); });
+      const stopwords = new Set(['para','con','por','que','una','los','las','del','como','ante','bajo','desde','entre','hacia','hasta','sobre','tras','pero','mas','sin','tambien','donde','cuando','cada','todos','todas','este','esta','ese','esa','el','la','de','en','un','una','al','es','se','su','lo','le','y','o','a','no','si','me','te','mi','ya','ni','son','fue','eran','era','han','ha','habia','habian','sido','ser','estan','estaban','estara','también','está','están','fueron']);
+      const words = titulo.toLowerCase().replace(/[^a-záéíóúñ\s]/g,'').split(/\s+/).filter(w => w.length > 3 && !stopwords.has(w));
+      words.slice(0,4).forEach(w => kw.add(w));
+      return [...kw].slice(0,10).join(', ');
+    };
+
     window.actualizarSeoPreview = function() {
       const titulo = document.getElementById('titulo').value || 'Título de la noticia aparecerá aquí';
       const resumen = document.getElementById('resumen').value || 'La descripción de la noticia aparecerá aquí. Optimiza el resumen para mejorar el CTR en resultados de búsqueda.';
       const slug = generarSlug(titulo).substring(0, 40);
-      
+
+      // Auto-generar keywords si el usuario no los escribió y no está editando el campo
+      const keywordsInput = document.getElementById('keywords');
+      const tituloReal = document.getElementById('titulo').value;
+      if (keywordsInput && document.activeElement !== keywordsInput && !keywordsInput.value.trim() && tituloReal.trim()) {
+        const contenidoRaw = document.getElementById('contenido').value || '';
+        keywordsInput.value = window.generarKeywordsAutomaticas(tituloReal, contenidoRaw, document.getElementById('categoria').value);
+      }
+
       // Actualizar contador de caracteres del resumen
       const contadorResumen = document.getElementById('contadorResumen');
       if (contadorResumen) {
@@ -3994,6 +4020,12 @@ sin texto ni marcas de agua, composición periodística"
 
       try {
         const slug = noticiaId ? undefined : generarSlug(titulo);
+
+        // Auto-generar keywords si el campo está vacío (para análisis y persistencia)
+        const keywordsInput = document.getElementById('keywords');
+        if (keywordsInput && !keywordsInput.value.trim()) {
+          keywordsInput.value = window.generarKeywordsAutomaticas(titulo, contenido, categoria);
+        }
 
         // Calcular nivel de calidad (forense) para persistirlo y mostrarlo en la lista
         let nivelInfo = { nivel: 'SIN NIVEL', score: 0 };
@@ -6339,9 +6371,17 @@ VERIFICACIÓN FINAL
         status.textContent = '✓ Noticia generada e inyectada con el formato estricto de Nicaragua Informate.';
         status.style.color = '#4ade80';
 
-        // Mostrar keywords extraídas si existen
-        if (keywordsExtraidas) {
-          showToast('Keywords generadas: ' + keywordsExtraidas, 'info');
+        // Inyectar keywords generadas automáticamente
+        const keywordsInputAI = document.getElementById('keywords');
+        if (keywordsInputAI) {
+          if (keywordsExtraidas) {
+            keywordsInputAI.value = keywordsExtraidas;
+          } else if (titularExtraido) {
+            keywordsInputAI.value = window.generarKeywordsAutomaticas(titularExtraido, contenidoLimpio, categoria);
+          }
+          if (keywordsInputAI.value.trim()) {
+            showToast('Keywords generadas: ' + keywordsInputAI.value, 'info');
+          }
         }
 
         // Redirigir automáticamente a la pestaña de edición
