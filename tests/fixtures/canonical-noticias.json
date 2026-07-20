@@ -19,13 +19,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -51,13 +51,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
+      "scoreFinal": 98.5,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -115,13 +115,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 91.6,
+      "scoreFinal": 93.1,
       "veredicto": "portada",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 82,
         "FORENSE": 100
       }
@@ -147,13 +147,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 94.6,
-      "veredicto": "portada",
+      "scoreFinal": 96.1,
+      "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 92,
         "FORENSE": 100
       }
@@ -211,13 +211,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -243,13 +243,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -275,13 +275,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
+      "scoreFinal": 98.5,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -307,13 +307,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
+      "scoreFinal": 98.5,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -339,13 +339,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -371,13 +371,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -435,13 +435,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -499,13 +499,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -531,13 +531,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
+      "scoreFinal": 98.5,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 90,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -563,13 +563,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
-      "veredicto": "cobertura_especial",
+      "scoreFinal": 94.75,
+      "veredicto": "portada",
       "scores": {
         "SEO": 90,
-        "EEAT": 100,
+        "EEAT": 85,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -595,13 +595,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -627,13 +627,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -691,13 +691,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -723,13 +723,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -755,13 +755,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }
@@ -819,13 +819,13 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.75,
+      "scoreFinal": 99.25,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 95,
         "EEAT": 100,
         "DISCOVER": 100,
-        "ADSENSE": 90,
+        "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,
         "FORENSE": 100
       }

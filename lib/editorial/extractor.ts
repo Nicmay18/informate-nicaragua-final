@@ -51,6 +51,14 @@ const LUGARES_REGEX = /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|
 
 const CLICKBAIT_PATTERNS = /\b(?:no creer[aá]s|te sorprender[aá]|incre[ií]ble pero|mira lo que|esto fue lo que|lo que nadie te dijo|secreto revelado|la verdad detr[aá]s|no vas a creer)\b/i;
 
+/**
+ * Normaliza un string de keywords separadas por coma.
+ * Elimina elementos vacíos y espacios en blanco.
+ */
+export function normalizeKeywords(value?: string): string[] {
+  if (!value) return [];
+  return value.split(',').map(k => k.trim()).filter(Boolean);
+}
 
 export function extract(noticia: NoticiaInput): ArticleEvidence {
   const textoPlano = noticia.contenido
@@ -72,7 +80,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     strongCount: (noticia.contenido.match(/<strong[^>]*>/gi) || []).length,
     keywords: noticia.palabrasClave?.length
       ? noticia.palabrasClave
-      : noticia.keywords?.split(',').map(k => k.trim()) || [],
+      : normalizeKeywords(noticia.keywords),
     tituloOptimizado: noticia.titulo.length >= 40 && noticia.titulo.length <= 70,
   };
 

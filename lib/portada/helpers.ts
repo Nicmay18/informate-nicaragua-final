@@ -1,4 +1,5 @@
 import type { NoticiaInput } from '@/lib/editorial';
+import { normalizeKeywords } from '@/lib/editorial/extractor';
 import type { Noticia } from '@/lib/types';
 import type { PortadaConfig, PortadaItem, PortadaSectionId, PortadaSlot } from './types';
 
@@ -38,7 +39,7 @@ export function noticiaToInput(noticia: Noticia): NoticiaInput {
     palabrasClave:
       noticia.tags?.length
         ? noticia.tags
-        : noticia.keywords?.split(',').map(k => k.trim()).filter(Boolean) || [],
+        : normalizeKeywords(noticia.keywords),
     keywords: noticia.keywords,
   };
 }
