@@ -1,0 +1,481 @@
+{
+  "fecha": "2026-07-21T03:31:01.762Z",
+  "total": 185,
+  "actualizados": 79,
+  "aplicados": [
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "tituloAnterior": "Mundial 2030: por qué habrá partidos en Sudamérica y Europa",
+      "nuevoTitulo": "Mundial 2030: por qué habrá partidos en Sudamérica y Europa",
+      "nuevaMeta": "La FIFA confirmó que el Mundial 2030 tendrá seis países anfitriones. Conocé por qué habrá partidos en Sudamérica y dónde se jugará la mayor parte del..."
+    },
+    {
+      "id": "096760aFi8gk8aUBtkFR",
+      "tituloAnterior": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "nuevoTitulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "nuevaMeta": "Accidentes registrados entre el sábado y el lunes en varios departamentos dejaron personas fallecidas, lesionadas y daños materiales en distintas vías..."
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "tituloAnterior": "Cinco afectados en accidentes viales en Managua y regiones",
+      "nuevoTitulo": "Cinco afectados en accidentes viales en Managua y regiones",
+      "nuevaMeta": "Cuatro personas fallecieron en accidentes de motocicleta en Managua, Chontales y el Caribe Norte. Un quinto resultó herido en Madriz."
+    },
+    {
+      "id": "12vpZYJonwqLUyW1rlpl",
+      "tituloAnterior": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU.",
+      "nuevoTitulo": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU.",
+      "nuevaMeta": "Un nicaragüense fue capturado en Estelí por un requerimiento internacional relacionado con un accidente de tránsito ocurrido en Arkansas en 2022."
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "tituloAnterior": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+      "nuevoTitulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+      "nuevaMeta": "Samsung inicia la fase beta de One UI 9 basado en Android 17. Conoce los más de 60 dispositivos Galaxy compatibles y la actualización prevista para todo..."
+    },
+    {
+      "id": "2LRMqTFV3a6XPkdfoEjh",
+      "tituloAnterior": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "nuevoTitulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "nuevaMeta": "Un joven de 27 años falleció en Santa Rosa del Peñón y otro hombre falleció en Sébaco durante la madrugada del sábado y domingo en el norte del país."
+    },
+    {
+      "id": "3p9PHUH5WeJIGlMFVrLn",
+      "tituloAnterior": "Chile declara Estado de Catástrofe en Coquimbo y Huasco",
+      "nuevoTitulo": "Chile declara Estado de Catástrofe en Coquimbo y Huasco",
+      "nuevaMeta": "Chile declara Estado de Catástrofe en Coquimbo y Huasco por un río atmosférico. El Senapred reporta 5 fallecidos, 4 desaparecidos y 2,205 damnificados."
+    },
+    {
+      "id": "7aOBbeIDRKR06tnYfklr",
+      "tituloAnterior": "Accidente con rastra deja una joven fallecida en Managua",
+      "nuevoTitulo": "Accidente con rastra deja una joven fallecida en Managua",
+      "nuevaMeta": "Orfa Liliana García Larios, de 22 años, falleció en un accidente de tránsito en el km 6 de la Carretera Norte, Managua. El conductor del camión fue..."
+    },
+    {
+      "id": "8rgPZMc8nFJWiAbW7pgj",
+      "tituloAnterior": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "nuevoTitulo": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "nuevaMeta": "Julio Eduardo Sánchez, de 20 años, falleció en la Laguna de Apoyo, sector La Islita, Diriá. Erick Ortiz, guarda vida del Hotel Paraíso, rescató el cuerpo."
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "tituloAnterior": "Madrid gestiona logística masiva durante encuentro religioso",
+      "nuevoTitulo": "Madrid gestiona logística masiva durante encuentro religioso",
+      "nuevaMeta": "Madrid coordinó un operativo de seguridad y logística para medio millón de asistentes durante la vigilia con el papa León XIV. Lee el informe completo..."
+    },
+    {
+      "id": "AWqrtVA03l9qMReNApx6",
+      "tituloAnterior": "Nicaragua impulsa talento digital, IA y expansión del 5G",
+      "nuevoTitulo": "Nicaragua impulsa talento digital, IA y expansión del 5G",
+      "nuevaMeta": "Nicaragua avanza en innovación tecnológica con proyectos de inteligencia artificial, formación de talento joven y expansión de conectividad 4G y 5G en..."
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "tituloAnterior": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "nuevoTitulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "nuevaMeta": "Nicaragua recibirá entre junio y noviembre de 2026 conciertos de artistas internacionales como Ricardo Arjona, Aventura, Romeo Santos, Prince Royce,..."
+    },
+    {
+      "id": "BAcOCY6ZJ7XpDdzfRUZ1",
+      "tituloAnterior": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "nuevoTitulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "nuevaMeta": "Un motociclista falleció en la carretera Masaya-Managua y otros accidentes registrados en Jinotega, Masaya y Chontales dejaron personas lesionadas"
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "tituloAnterior": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "nuevoTitulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "nuevaMeta": "Dos trabajadores fallecieron y dos resultaron gravemente heridos en accidentes laborales ocurridos entre el viernes y el sábado en distintos puntos del..."
+    },
+    {
+      "id": "C6Q405XAouocDIs02qKy",
+      "tituloAnterior": "Cinco equipos dominan la lucha por el liderato del Pomares",
+      "nuevoTitulo": "Cinco equipos dominan la lucha por el liderato del Pomares",
+      "nuevaMeta": "Dantos, Bóer, Matagalpa, Granada y Rivas protagonizan la pelea por el primer lugar del Pomares 2026 cuando la temporada entra en una etapa decisiva."
+    },
+    {
+      "id": "CnHlW2RyUcpwlJBKeFug",
+      "tituloAnterior": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "nuevoTitulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "nuevaMeta": "Debido a los accidentes de tránsito en Nicaragua, Nicaragua Infórmate presenta una guía sobre las líneas en la carretera, artículos de la Ley 431 y sus..."
+    },
+    {
+      "id": "CyV2dxk6PD7dXEUneJfi",
+      "tituloAnterior": "Nicaragua tendrá presencia en la final del Mundial gracias a FIFA",
+      "nuevoTitulo": "Nicaragua tendrá presencia en la final del Mundial gracias a FIFA",
+      "nuevaMeta": "La árbitra nicaragüense Tatiana Guzmán fue designada por la FIFA para integrar el equipo VAR de la final del Mundial 2026 entre Argentina y España,..."
+    },
+    {
+      "id": "D310EXZbS4v6j8rsMCRB",
+      "tituloAnterior": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "nuevoTitulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "nuevaMeta": "Nicaragua y Costa Rica firmaron un acuerdo para reforzar la vigilancia contra la malaria en la frontera, con acciones conjuntas de prevención,..."
+    },
+    {
+      "id": "DabSeh90gN6BreMLkDow",
+      "tituloAnterior": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "nuevoTitulo": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "nuevaMeta": "Una mujer falleció y tres personas resultaron lesionadas tras un accidente ocurrido en el kilómetro 177 de la carretera entre Juigalpa y Santo Tomás,..."
+    },
+    {
+      "id": "Dll52HugAZbEwPfOA9SL",
+      "tituloAnterior": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "nuevoTitulo": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "nuevaMeta": "Nicaragua incorpora semáforos solares y radares de velocidad en puntos estratégicos para mejorar la seguridad vial, ordenar el tránsito y prevenir..."
+    },
+    {
+      "id": "EDvI8A7DAwrDFuBf3f18",
+      "tituloAnterior": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "nuevoTitulo": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "nuevaMeta": "Dos personas fueron detenidas en Guatemala en relación con el crimen de una doctora nicaragüense. El caso es investigado por las autoridades locales."
+    },
+    {
+      "id": "EK8pDgblNpScPCoGCgab",
+      "tituloAnterior": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "nuevoTitulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "nuevaMeta": "Un bebé de un año sufrió quemaduras en la espalda tras un accidente doméstico en Diriá, Granada. Fue atendido en un centro de salud local."
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "tituloAnterior": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "nuevoTitulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "nuevaMeta": "Un juez condenó al dueño de tres semovientes a pagar más de 769 mil córdobas por la muerte de un motociclista y lesiones a otro en Jalapa, Nueva Segovia"
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "tituloAnterior": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "nuevoTitulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "nuevaMeta": "Las intensas lluvias registradas durante la noche del jueves y madrugada de este viernes provocaron inundaciones y afectaciones en varias comunidades..."
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "tituloAnterior": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital",
+      "nuevoTitulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital",
+      "nuevaMeta": "La esperada película Toy Story 5 llegará a Nicaragua en junio de 2026 con Woody, Buzz y Jessie enfrentando el impacto de la tecnología y las pantallas..."
+    },
+    {
+      "id": "HxsDqbeHSSO2MRyl1Cpu",
+      "tituloAnterior": "Accidente grave en Masaya en Villa Bosco",
+      "nuevoTitulo": "Accidente grave en Masaya en Villa Bosco — Nicaragua Informate",
+      "nuevaMeta": "Nicaragua Informate intentó obtener versión oficial accidente de tránsito en Villa Bosco Monge, Masaya. Reporte técnico sobre la colisión entre un..."
+    },
+    {
+      "id": "HyUcJbnUzefWCcape0UQ",
+      "tituloAnterior": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "nuevoTitulo": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "nuevaMeta": "Siete nicaragüenses fallecieron en el extranjero en julio de 2026. Los casos ocurrieron en Costa Rica, El Salvador, España y Panamá."
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "tituloAnterior": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "nuevoTitulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "nuevaMeta": "El sueño de la casa propia se hizo realidad para 575 familias nicaragüenses. El Gobierno Sandinista, a través de la Alcaldía de Managua, inauguró el..."
+    },
+    {
+      "id": "J1ZUf7ZxMxaUjb64rkXj",
+      "tituloAnterior": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "nuevoTitulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "nuevaMeta": "Tres personas fallecieron y varias más resultaron lesionadas en cinco accidentes de tránsito registrados durante las últimas 24 horas en distintos..."
+    },
+    {
+      "id": "KDsFrw5UitY7JGQ9uOPq",
+      "tituloAnterior": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "nuevoTitulo": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "nuevaMeta": "Un migrante originario de Rivas, Nicaragua, falleció tras un ataque armado contra una camioneta en Quepos, Costa Rica. El conductor del vehículo también..."
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "tituloAnterior": "Turismo en Nicaragua crece 11% en primer trimestre de 2026 según INTUR",
+      "nuevoTitulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+      "nuevaMeta": "El Instituto Nicaragüense de Turismo reportó 278 mil 937 visitantes internacionales entre enero y marzo de 2026. Estados Unidos lideró el origen."
+    },
+    {
+      "id": "M9tek6rwIxTjSEbbI71k",
+      "tituloAnterior": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "nuevoTitulo": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "nuevaMeta": "NASA publicó en Nature un estudio que cuestiona el límite de la respuesta terrestre al viento solar y advierte riesgos para satélites y GPS."
+    },
+    {
+      "id": "PiXjB5ugRBQxjWXIvyuF",
+      "tituloAnterior": "Portugal elimina a Croacia y el Mundial se despide de Modrić",
+      "nuevoTitulo": "Portugal elimina a Croacia y el Mundial se despide de Modrić",
+      "nuevaMeta": "Portugal venció 2-1 a Croacia y avanzó a octavos del Mundial 2026. El partido marcó la despedida mundialista de Luka Modrić tras cinco Copas del Mundo."
+    },
+    {
+      "id": "S8jrH6rYwBEuwzpBDw82",
+      "tituloAnterior": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
+      "nuevoTitulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
+      "nuevaMeta": "Inició la construcción del Hospital Oriental \"Lesbia Carrasquilla\" en Managua. Conoce las características del proyecto, su capacidad, especialidades y..."
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "tituloAnterior": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "nuevoTitulo": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "nuevaMeta": "Milka Chausler Santana, de 27 años, quedó en libertad bajo medidas cautelares tras un juzgado rechazar la prisión preventiva solicitada por la Fiscalía...."
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "tituloAnterior": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "nuevoTitulo": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "nuevaMeta": "La ciudad de Bluefields vuelve a llenarse de música, baile y tradición con las festividades del Palo de Mayo, una de las celebraciones culturales más..."
+    },
+    {
+      "id": "WNZ8XRJLMOhR4ilO7Jfp",
+      "tituloAnterior": "Nicaragua: primera autopista de peaje de su historia",
+      "nuevoTitulo": "Nicaragua: primera autopista de peaje de su historia",
+      "nuevaMeta": "Nicaragua construirá su primera autopista de peaje entre Managua y el Aeropuerto Internacional Punta Huete, con una inversión de 75.56 millones de dólares."
+    },
+    {
+      "id": "WR9ixdDXutGgVpZ9awuQ",
+      "tituloAnterior": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954.",
+      "nuevoTitulo": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954.",
+      "nuevaMeta": "Venezuela actualizó el balance de los terremotos: 2,954 fallecidos, más de 16 mil heridos y miles de familias sin hogar. Esto es lo que se sabe."
+    },
+    {
+      "id": "Xt18bdt10Mt6CIloPKSu",
+      "tituloAnterior": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "nuevoTitulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "nuevaMeta": "Dos personas fueron encontradas sin vida en sus viviendas en Rivas y Tola tras varios días sin ser vistas. Autoridades investigan ambos casos."
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "tituloAnterior": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "nuevoTitulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "nuevaMeta": "Los depósitos del público en el sistema financiero alcanzaron C$291,214.3 millones en abril de 2026, con un crecimiento interanual de 14.7%, informó el..."
+    },
+    {
+      "id": "Zu389gS3tQxY0EYfXrE9",
+      "tituloAnterior": "España gana Mundial 2026 y es recibida con honores en Madrid",
+      "nuevoTitulo": "España gana Mundial 2026 y es recibida con honores en Madrid",
+      "nuevaMeta": "España conquistó el Mundial 2026 al vencer 1-0 a Argentina y fue recibida en Madrid por la Familia Real y Pedro Sánchez en la Plaza de Cibeles."
+    },
+    {
+      "id": "a43EAAR543PNuVXni2v3",
+      "tituloAnterior": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "nuevoTitulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "nuevaMeta": "El MINSA inauguró equipos de imagenología de alta resolución en el Hospital Bertha Calderón de Managua, reduciendo 22% los tiempos de espera en..."
+    },
+    {
+      "id": "aDUNDXKB5AaqwW6SfyaG",
+      "tituloAnterior": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
+      "nuevoTitulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
+      "nuevaMeta": "El río Tuma alcanzó su mayor nivel del año en Mulukukú este sábado. COMUPRED mantiene monitoreo permanente ante las lluvias."
+    },
+    {
+      "id": "aXtBaU598FRn27J0X2nD",
+      "tituloAnterior": "Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo",
+      "nuevoTitulo": "Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo",
+      "nuevaMeta": "La nueva terminal de buses de Managua reemplaza a Casimiro Sotelo por obras del Tramo II de la Pista Héroes y Mártires. Conecta Masaya, Granada y León."
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "tituloAnterior": "Brigada médica realiza cirugía cardíacas gratuitas en hospital…",
+      "nuevoTitulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospital…",
+      "nuevaMeta": "Especialistas realizan cirugías cardíacas y colocan stents y marcapasos en pacientes atendidos en el Hospital Escuela Oscar Danilo Rosales de León...."
+    },
+    {
+      "id": "bNTteIqTORrl2X7opjvG",
+      "tituloAnterior": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "nuevoTitulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "nuevaMeta": "Dos cuidadores, padre e hijo, murieron tras enfrentar a presuntos ladrones de ganado en una finca de Matagalpa. La Policía investiga el doble homicidio."
+    },
+    {
+      "id": "dJXd3qsmEK8AY4p0ctko",
+      "tituloAnterior": "Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua",
+      "nuevoTitulo": "Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua",
+      "nuevaMeta": "La originaria de Bluefields se convirtió en la primera mujer nicaragüense con licencia arbitral internacional FIBA y participa en el Centrobasket..."
+    },
+    {
+      "id": "djn1DLmztxyOXwfSQsbx",
+      "tituloAnterior": "ICE detiene a dos nicaragüenses en operativos en EE. UU.",
+      "nuevoTitulo": "ICE detiene a dos nicaragüenses en operativos en EE. UU.",
+      "nuevaMeta": "Dos nicaragüenses fueron detenidos por ICE en operativos en Nueva Jersey y Rhode Island debido a procesos judiciales y antecedentes penales."
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "tituloAnterior": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…",
+      "nuevoTitulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…",
+      "nuevaMeta": "El brasileño Joao Fonseca protagonizó una de las mayores sorpresas de la temporada al remontar dos sets en contra y derrotar al serbio Novak Djokovic en..."
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "tituloAnterior": "Chinandega estrena 75 viviendas con servicios completos",
+      "nuevoTitulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "nuevaMeta": "Setenta y cinco familias recibirán este jueves viviendas con agua, energía, calles adoquinadas y áreas recreativas en Chinandega como parte de un plan..."
+    },
+    {
+      "id": "i9duvDflEon1d6yAhT0W",
+      "tituloAnterior": "Joven muere en accidente de tránsito en carretera a Masaya",
+      "nuevoTitulo": "Joven muere en accidente de tránsito en carretera a Masaya",
+      "nuevaMeta": "Ernesto Antonio Cárdenas, de 23 años, falleció tras impactar su motocicleta contra un árbol en el km 12 de la carretera Managua-Masaya."
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "tituloAnterior": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "nuevoTitulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "nuevaMeta": "El gobierno de la Ciudad de México eligió a Julieta Venegas para interpretar la canción cultural del Mundial 2026. No es el himno oficial FIFA."
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "tituloAnterior": "Yadel reúne a más de 30 mil personas en Managua",
+      "nuevoTitulo": "Yadel reúne a más de 30 mil personas en Managua",
+      "nuevaMeta": "El jueves 28 de mayo, más de 30 mil personas abarrotaron el Estadio Soberanía de Managua para asistir al concierto del artista urbano Yadel. El evento..."
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "tituloAnterior": "Nicaragua abre ante Colombia en Santo Domingo 2026.",
+      "nuevoTitulo": "Nicaragua abre ante Colombia en Santo Domingo 2026.",
+      "nuevaMeta": "Nicaragua enfrentará a Colombia, Panamá y México en la fase de grupos del torneo de béisbol de los Juegos Centroamericanos y del Caribe Santo Domingo 2026."
+    },
+    {
+      "id": "n0qOx4zq7JyVP4gFwEwW",
+      "tituloAnterior": "Conductor ebrio invade carril y motociclista pierde la vida",
+      "nuevoTitulo": "Conductor ebrio invade carril y motociclista pierde la vida",
+      "nuevaMeta": "Un motociclista falleció en un accidente en el kilómetro 19 de la Carretera Sur, Managua. La Policía informó que el conductor dio positivo a alcoholemia."
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "tituloAnterior": "Capturan a pinolero por llevarse a niña de 13 años",
+      "nuevoTitulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "nuevaMeta": "La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo por trasladar ilegalmente a una menor nicaragüense de 13 años con engaños."
+    },
+    {
+      "id": "n64la9Hnrkp0sENv0z5U",
+      "tituloAnterior": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "nuevoTitulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "nuevaMeta": "Los fallecimientos de una adolescente en Somoto y un joven en Villa El Carmen reavivan la importancia de buscar ayuda ante crisis emocional."
+    },
+    {
+      "id": "ngAKEUkSVkZ6OlfQCQtb",
+      "tituloAnterior": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+      "nuevoTitulo": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+      "nuevaMeta": "La Fuerza Naval y comunitarios buscan la panga \"The Husther\" con cuatro marinos desaparecidos tras zarpar de Corn Island bajo mal tiempo en el Caribe."
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "tituloAnterior": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "nuevoTitulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "nuevaMeta": "El béisbol mantiene su posición como el deporte con mayor respaldo entre los nicaragüenses durante 2026, de acuerdo con un estudio divulgado por M&R..."
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "tituloAnterior": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "nuevoTitulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "nuevaMeta": "Brenda López sufrió lesiones graves en Nindirí. El sospechoso fue detenido y el caso pasa a la Policía Nacional bajo la Ley contra la Violencia hacia..."
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "tituloAnterior": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "nuevoTitulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "nuevaMeta": "La Policía Nacional mantiene detenido a un hombre de 38 años mientras investiga la muerte de una joven de 18 años hallada en la laguna Las Vegas, en..."
+    },
+    {
+      "id": "qkurWkzG1J2bG01EVVru",
+      "tituloAnterior": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "nuevoTitulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "nuevaMeta": "Una camioneta colisionó con dos motocicletas en los semáforos del Hospital del Niño en Managua este domingo, dejando tres personas lesionadas, una de..."
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "tituloAnterior": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "nuevoTitulo": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "nuevaMeta": "KFC confirmó que abrirá su primer restaurante en Nicaragua el próximo 24 de julio, pero antes seleccionará a 50 seguidores para formar parte de una..."
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "tituloAnterior": "Cinco agentes fallecen en operativo en Honduras",
+      "nuevoTitulo": "Cinco agentes fallecen en operativo en Honduras",
+      "nuevaMeta": "La Secretaría de Seguridad de Honduras intervino la DIPAMPCO tras el fallecimiento de cinco uniformados en una operación en Cortés."
+    },
+    {
+      "id": "sgysqhqcvwAMBJZSxNVL",
+      "tituloAnterior": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+      "nuevoTitulo": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+      "nuevaMeta": "Cisle Ricardo Williams, de 23 años, falleció tras ser alcanzado por un rayo en Kukra Hill. Otro trabajador murió en La Paz Centro durante la tormenta."
+    },
+    {
+      "id": "spoz8oqZQ8Wer7c1GSXp",
+      "tituloAnterior": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "nuevoTitulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "nuevaMeta": "Un estudiante de 13 años murió tras recibir un golpe en la nuca durante un juego en el anexo Santa Juana de Diriomo, Granada. El caso es investigado por..."
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "tituloAnterior": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "nuevoTitulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "nuevaMeta": "El niño, de 3 años y con síndrome de Down, murió por golpes en Tipitapa; su madre y padrastro enfrentan cargos por maltrato"
+    },
+    {
+      "id": "u61mgNNEpC2vKvMa1fqZ",
+      "tituloAnterior": "Nicaragua reduce mortalidad materna e infantil en 2025",
+      "nuevoTitulo": "Nicaragua reduce mortalidad materna e infantil en 2025",
+      "nuevaMeta": "Nicaragua redujo la mortalidad materna a 16 casos por cada 100 mil nacidos vivos y fortaleció la atención perinatal, vacunación e infraestructura..."
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "tituloAnterior": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "nuevoTitulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "nuevaMeta": "Dos ciudadanos nicaragüenses resultaron afectados esta semana en distintos hechos graves ocurridos en Costa Rica, casos que han causado preocupación entre."
+    },
+    {
+      "id": "vXJ22LObIbnd5WKA3VDE",
+      "tituloAnterior": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
+      "nuevoTitulo": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
+      "nuevaMeta": "Cabo Verde celebró el regreso de su selección con una multitudinaria bienvenida que coincidió con el 51º aniversario de su independencia."
+    },
+    {
+      "id": "w5XzTjYCWTJRDX9NIPng",
+      "tituloAnterior": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "nuevoTitulo": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "nuevaMeta": "Isidro Aguirre Ruiz y José Rodolfo Moreno Palacios perdieron la vida este domingo 21 de junio en distintos hechos de tránsito en el departamento de..."
+    },
+    {
+      "id": "wEp7yZu7N154jf3CcWrk",
+      "tituloAnterior": "Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales",
+      "nuevoTitulo": "Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales",
+      "nuevaMeta": "Dos hermanos originarios de El Crucero fallecieron por sumersión accidental en el río El Torno, en Acoyapa, Chontales. Las autoridades investigan el caso."
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "tituloAnterior": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18 de mayo",
+      "nuevoTitulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18",
+      "nuevaMeta": "El Hospital Pediátrico Las Segovias iniciará operaciones este 18 de mayo para brindar cobertura médica especializada a la niñez del norte de Nicaragua en."
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "tituloAnterior": "Megahospitales transformarán la atención médica en Nicaragua",
+      "nuevoTitulo": "Megahospitales transformarán la atención médica en Nicaragua",
+      "nuevaMeta": "Nicaragua prepara dos de las obras hospitalarias más grandes de los últimos años con proyectos en Managua y Bluefields que prometen ampliar la atención..."
+    },
+    {
+      "id": "yJUWd9Sy8L6qck3mNZ0O",
+      "tituloAnterior": "Fallo judicial reabre debate sobre la defensa de una madre.",
+      "nuevoTitulo": "Fallo judicial reabre debate sobre la defensa de una madre.",
+      "nuevaMeta": "Un juzgado absolvió al adolescente que actuó para proteger a su madre de una agresión. El caso reabre el debate sobre la legítima defensa y la prevención."
+    },
+    {
+      "id": "ye0lMTaRlB1eXJibvfoO",
+      "tituloAnterior": "Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10",
+      "nuevoTitulo": "Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10",
+      "nuevaMeta": "Lluvias de este 22 de junio causan desbordes en puentes de Siuna, Mulukukú y Río Blanco. El Ineter proyecta el ingreso de la Onda Tropical 10 para el 24..."
+    },
+    {
+      "id": "yo3uA9Pd7mf7k44dTLOX",
+      "tituloAnterior": "Argentina supera a Suiza y va contra Inglaterra en semis.",
+      "nuevoTitulo": "Argentina supera a Suiza y va contra Inglaterra en semis.",
+      "nuevaMeta": "Argentina venció 1-0 a Suiza y avanzó a semifinales del Mundial. Conozca el historial ante Inglaterra, la guía de transmisión y los horarios en Nicaragua."
+    },
+    {
+      "id": "zDcmowDI8lVo6Is7n2ad",
+      "tituloAnterior": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "nuevoTitulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "nuevaMeta": "Autoridades e IML investigan la identidad de dos personas halladas en Managua y mantienen búsqueda de ciudadano arrastrado por río. Conozca las..."
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "tituloAnterior": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "nuevoTitulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "nuevaMeta": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de..."
+    }
+  ]
+}
