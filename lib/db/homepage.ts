@@ -123,10 +123,14 @@ async function fetchAllNoticias(): Promise<Noticia[]> {
         .orderBy('fecha', 'desc')
         .limit(500)
         .get();
-      let noticias = snap.docs.map(mapNoticia);
-
-      // 1. Filtrar SOLO publicadas: estado 'publicado' o sin campo estado (backward compat)
-      noticias = noticias.filter(n => n.estado === 'publicado' || !n.estado);
+      let noticias = snap.docs
+        .filter((d) => {
+          const data = d.data() || {};
+          const publicado = data.publicado !== false;
+          const estadoOk = data.estado === 'publicado' || !data.estado;
+          return publicado && estadoOk;
+        })
+        .map(mapNoticia);
 
       // 2. Deduplicar por slug: quedarse con la más reciente
       const unique = new Map<string, Noticia>();

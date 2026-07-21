@@ -192,13 +192,20 @@ function distribuirNoticias(noticias: Noticia[]) {
   const disponibles = () => noticias.filter(n => !usados.has(n.id));
   const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
 
-  const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos', 'Sucesos'];
-  const conImagen = noticias.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
-  const baseHero = conImagen.length > 0 ? conImagen : noticias;
-  const heroNoticias = take(
-    prioridadHero.flatMap(cat => baseHero.filter(n => n.categoria === cat)),
-    3
-  );
+  const conImagen = (lista: Noticia[]) => lista.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
+
+  // HERO: primero las marcadas como destacada con imagen, luego por categoría
+  const destacadas = disponibles().filter(n => n.destacada);
+  const heroNoticias = take(conImagen(destacadas), 3);
+  if (heroNoticias.length < 3) {
+    const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos', 'Sucesos'];
+    const imagenesDisponibles = conImagen(disponibles());
+    const baseHero = imagenesDisponibles.length > 0 ? imagenesDisponibles : disponibles();
+    heroNoticias.push(...take(
+      prioridadHero.flatMap(cat => baseHero.filter(n => n.categoria === cat)),
+      3 - heroNoticias.length
+    ));
+  }
   if (heroNoticias.length < 3) {
     heroNoticias.push(...take(disponibles(), 3 - heroNoticias.length));
   }
@@ -213,14 +220,17 @@ function distribuirNoticias(noticias: Noticia[]) {
     ultimaHora.push(...take(disponibles(), 3 - ultimaHora.length));
   }
 
-  // Destacados: 4 noticias de categorías preferidas, NUNCA Sucesos
+  // Destacados: primero destacadas de categorías preferidas, luego categorías
   const prioridadDestacados = ['Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Economía', 'Espectáculos'];
-  const destacados = take(
-    prioridadDestacados.flatMap(cat => porCategoria(cat)),
+  const destacados: Noticia[] = take(
+    destacadas.filter(n => prioridadDestacados.includes(n.categoria)),
     4
   );
   if (destacados.length < 4) {
-    destacados.push(...take(disponibles(), 4 - destacados.length));
+    destacados.push(...take(
+      prioridadDestacados.flatMap(cat => porCategoria(cat)),
+      4 - destacados.length
+    ));
   }
 
   // Secciones temáticas: 3 noticias por categoría (si existen)
