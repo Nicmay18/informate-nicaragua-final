@@ -7,7 +7,7 @@ const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
 );
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
@@ -23,11 +23,58 @@ const NAV_LINKS = [
   ...CATEGORIES.map(c => ({ href: `/categoria/${c.slug}`, label: c.label })),
 ];
 
+type MiniNoticia = { id: string; slug: string; titulo: string; fecha?: string };
+
+function tiempoCorto(fecha?: string): string {
+  if (!fecha) return '';
+  const diff = Date.now() - new Date(fecha).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 60) return `hace ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  return `hace ${d} d`;
+}
+
 export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredCat, setHoveredCat] = useState<string | null>(null);
+  const [catNews, setCatNews] = useState<Record<string, MiniNoticia[]>>({});
+  const [loadingCat, setLoadingCat] = useState<string | null>(null);
+  const fetchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const fetchCategoryNews = async (slug: string) => {
+    if (catNews[slug]) return;
+    setLoadingCat(slug);
+    try {
+      const res = await fetch(`/api/list-all?categoria=${slug}&limit=5`, { cache: 'force-cache' });
+      const data = await res.json();
+      const items = data.articles || data;
+      if (Array.isArray(items)) {
+        setCatNews(prev => ({ ...prev, [slug]: items.slice(0, 5).map((n: any) => ({ id: n.id, slug: n.slug, titulo: n.titulo, fecha: n.fecha })) }));
+      }
+    } catch {
+      // silent fail
+    } finally {
+      setLoadingCat(null);
+    }
+  };
+
+  const handleCatEnter = (slug: string) => {
+    if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
+    fetchTimeoutRef.current = setTimeout(() => {
+      setHoveredCat(slug);
+      fetchCategoryNews(slug);
+    }, 200);
+  };
+
+  const handleCatLeave = () => {
+    if (fetchTimeoutRef.current) clearTimeout(fetchTimeoutRef.current);
+    setHoveredCat(null);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -70,13 +117,45 @@ export default function Header() {
 
           <nav className="ni-header__nav" aria-label="Navegación principal">
             <ul className="ni-nav">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <NoPrefetchLink href={link.href} className="ni-nav-link">
-                    {link.label}
-                  </NoPrefetchLink>
-                </li>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const cat = CATEGORIES.find(c => `/categoria/${c.slug}` === link.href);
+                return (
+                  <li
+                    key={link.href}
+                    className="ni-nav-item"
+                    onMouseEnter={cat ? () => handleCatEnter(cat.slug) : undefined}
+                    onMouseLeave={cat ? handleCatLeave : undefined}
+                  >
+                    <NoPrefetchLink href={link.href} className="ni-nav-link">
+                      {link.label}
+                    </NoPrefetchLink>
+                    {cat && hoveredCat === cat.slug && (
+                      <div className="ni-nav-dropdown" role="menu">
+                        <div className="ni-nav-dropdown__header">
+                          <span>{cat.label}</span>
+                          <NoPrefetchLink href={`/categoria/${cat.slug}`} className="ni-nav-dropdown__more">Ver todas →</NoPrefetchLink>
+                        </div>
+                        <ul className="ni-nav-dropdown__list">
+                          {loadingCat === cat.slug && !catNews[cat.slug] ? (
+                            <li className="ni-nav-dropdown__loading">Cargando…</li>
+                          ) : (catNews[cat.slug] || []).length === 0 ? (
+                            <li className="ni-nav-dropdown__loading">Sin noticias recientes</li>
+                          ) : (
+                            (catNews[cat.slug] || []).map((n) => (
+                              <li key={n.id}>
+                                <NoPrefetchLink href={`/noticias/${n.slug}`} className="ni-nav-dropdown__link">
+                                  <span className="ni-nav-dropdown__title">{n.titulo}</span>
+                                  {n.fecha && <span className="ni-nav-dropdown__time">{tiempoCorto(n.fecha)}</span>}
+                                </NoPrefetchLink>
+                              </li>
+                            ))
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
