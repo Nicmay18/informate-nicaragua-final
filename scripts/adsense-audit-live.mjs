@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs';
+import { resolve } from 'path';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -226,7 +227,7 @@ async function runAudit() {
   md += `**${fixHours} horas hombre** aproximadas para llevar todo el contenido a estado APTO.\n\n`;
   md += `*Generado automáticamente por script de auditoría AdSense*\n`;
 
-  const outPath = 'g:\\\\RESPALDO\\\\informate-nicaragua-worktree\\\\adsense-audit-report.md';
+  const outPath = resolve(process.cwd(), 'adsense-audit-report.md');
   writeFileSync(outPath, md, 'utf8');
   console.log(`[AdSense Audit] Reporte guardado en: ${outPath}`);
   console.log(`[AdSense Audit] APTO: ${aptoCount} | NO APTO: ${noAptoCount} | REVISIÓN: ${revisionCount}`);
