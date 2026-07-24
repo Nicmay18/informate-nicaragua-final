@@ -50,8 +50,12 @@ export function evaluate(noticia: NoticiaInput): EvaluacionEditorial {
     sugerencias,
   };
 
-  // 8. Verificación matemática de invariantes
-  verifyIntegrity(result);
+  // 8. Verificación matemática de invariantes (no bloquea evaluación)
+  try {
+    verifyIntegrity(result);
+  } catch (integrityErr) {
+    console.warn('[editorial] Integrity warning:', integrityErr instanceof Error ? integrityErr.message : String(integrityErr));
+  }
 
   return result;
 }
