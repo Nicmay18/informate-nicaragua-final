@@ -59,13 +59,14 @@ export async function GET() {
       try {
         evaluacionV4 = evaluate(noticia);
         analisis = mapV4ToV3(evaluacionV4);
-      } catch {
+      } catch (err: any) {
+        const errMsg = err?.message || String(err);
         analisis = {
           aprobado: false,
           nivel: 'ERROR',
           puntuacion: 0,
           filtros: {},
-          accionesRequeridas: ['Error al evaluar con motor editorial'],
+          accionesRequeridas: [`Error motor editorial: ${errMsg}`],
           metadataSugerida: {},
         };
       }
