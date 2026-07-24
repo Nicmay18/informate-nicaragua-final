@@ -29,11 +29,12 @@ export class ScoreTracer {
     if (delta <= 0) return;
     const before = this.current;
     this.current = Math.max(0, this.current - delta);
+    const actualDelta = this.current - before;
     this.entries.push({
       modulo: this.modulo,
       regla,
       motivo,
-      delta: -delta,
+      delta: actualDelta,
       before,
       after: this.current,
     });
