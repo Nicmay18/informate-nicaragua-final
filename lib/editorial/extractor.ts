@@ -55,8 +55,9 @@ const CLICKBAIT_PATTERNS = /\b(?:no creer[aá]s|te sorprender[aá]|incre[ií]ble
  * Normaliza un string de keywords separadas por coma.
  * Elimina elementos vacíos y espacios en blanco.
  */
-export function normalizeKeywords(value?: string): string[] {
+export function normalizeKeywords(value?: string | string[]): string[] {
   if (!value) return [];
+  if (Array.isArray(value)) return value.map(k => k.trim()).filter(Boolean);
   return value.split(',').map(k => k.trim()).filter(Boolean);
 }
 

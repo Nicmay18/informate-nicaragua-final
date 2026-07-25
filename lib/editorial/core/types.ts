@@ -25,7 +25,7 @@ export interface NoticiaInput {
   imagenDestacada?: string;
   slug: string;
   palabrasClave?: string[];
-  keywords?: string;
+  keywords?: string | string[];
 }
 
 // ───────────────────────────────────────────────
