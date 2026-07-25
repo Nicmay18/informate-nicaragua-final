@@ -35,7 +35,7 @@ export async function GET() {
 
     const resultados = snapshot.docs.map((doc) => {
       const data = doc.data();
-      const contenidoHtml = data.contenido || '';
+      const contenidoHtml = typeof data.contenido === 'string' ? data.contenido : String(data.contenido || '');
       const textoPlano = stripHtml(contenidoHtml);
       const palabras = countWords(textoPlano);
 

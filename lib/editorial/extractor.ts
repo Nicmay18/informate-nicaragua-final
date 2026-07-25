@@ -55,14 +55,16 @@ const CLICKBAIT_PATTERNS = /\b(?:no creer[aá]s|te sorprender[aá]|incre[ií]ble
  * Normaliza un string de keywords separadas por coma.
  * Elimina elementos vacíos y espacios en blanco.
  */
-export function normalizeKeywords(value?: string | string[]): string[] {
+export function normalizeKeywords(value?: unknown): string[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value.map(k => k.trim()).filter(Boolean);
-  return value.split(',').map(k => k.trim()).filter(Boolean);
+  if (Array.isArray(value)) return value.map(k => String(k).trim()).filter(Boolean);
+  if (typeof value === 'string') return value.split(',').map(k => k.trim()).filter(Boolean);
+  return [];
 }
 
 export function extract(noticia: NoticiaInput): ArticleEvidence {
-  const textoPlano = noticia.contenido
+  const contenidoStr = typeof noticia.contenido === 'string' ? noticia.contenido : String(noticia.contenido || '');
+  const textoPlano = contenidoStr
     .replace(/<p[^>]*>/gi, '\n')
     .replace(/<\/p>/gi, '\n')
     .replace(/<[^>]*>/g, ' ')
@@ -154,7 +156,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const tiposContaminacion: string[] = [];
   if (adjetivosEmocionales.length > 3) tiposContaminacion.push('exceso_adjetivos_emocionales');
   if (transicionesIA.length > 2) tiposContaminacion.push('transiciones_ia');
-  if (noticia.contenido.match(/<p[^>]*>\s*<\/p>/gi)) tiposContaminacion.push('parrafos_vacios');
+  if (contenidoStr.match(/<p[^>]*>\s*<\/p>/gi)) tiposContaminacion.push('parrafos_vacios');
 
   const nivelRiesgo = riesgosLegales.length > 5 ? 'Crítico' : riesgosLegales.length > 3 ? 'Alto' : riesgosLegales.length > 0 ? 'Medio' : 'Bajo';
 
@@ -164,9 +166,9 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     transicionesIA: [...new Set(transicionesIA)],
     tieneRedundancia: parrafos.length > 2 && parrafos.some((p, i) => i > 0 && p.slice(0, 30) === parrafos[i - 1].slice(0, 30)),
     estructuraHtml: {
-      h2: (noticia.contenido.match(/<h2[^>]*>/gi) || []).length,
-      strong: (noticia.contenido.match(/<strong[^>]*>/gi) || []).length,
-      blockquote: (noticia.contenido.match(/<blockquote[^>]*>/gi) || []).length,
+      h2: (contenidoStr.match(/<h2[^>]*>/gi) || []).length,
+      strong: (contenidoStr.match(/<strong[^>]*>/gi) || []).length,
+      blockquote: (contenidoStr.match(/<blockquote[^>]*>/gi) || []).length,
     },
     riesgosLegales: [...new Set(riesgosLegales)],
     tiposContaminacion,

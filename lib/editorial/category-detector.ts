@@ -28,7 +28,7 @@ const PATRONES: CategoryPattern[] = [
 ];
 
 export function detectCategory(noticia: NoticiaInput, textoPlano?: string): string {
-  const texto = textoPlano || noticia.contenido.replace(/<[^>]*>/g, ' ');
+  const texto = textoPlano || (typeof noticia.contenido === 'string' ? noticia.contenido : String(noticia.contenido || '')).replace(/<[^>]*>/g, ' ');
   const textoCompleto = `${noticia.titulo} ${texto} ${noticia.resumen || ''}`;
 
   // 1. Si la categoría del input ya es válida, usarla como base
