@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 /**
  * Auditoría integrada con el motor editorial V4 ("jefe IA").
  *
