@@ -100,6 +100,12 @@ export async function POST(request: NextRequest) {
     if (departamento !== undefined) updateData.departamento = departamento;
     if (imagen !== undefined) updateData.imagen = imagen;
     if (publicado !== undefined) updateData.publicado = publicado;
+    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (body.categoriaSlug !== undefined) updateData.categoriaSlug = body.categoriaSlug;
+    if (body.autor !== undefined) updateData.autor = body.autor;
+    if (body.palabrasClave !== undefined) updateData.palabrasClave = body.palabrasClave;
+    if (body.scoreMeni !== undefined) updateData.scoreMeni = body.scoreMeni;
+    if (body.aprobadoMeni !== undefined) updateData.aprobadoMeni = body.aprobadoMeni;
 
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
     if (id) {

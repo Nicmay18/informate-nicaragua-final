@@ -18,6 +18,41 @@ export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const db = getAdminDb();
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
+
+    if (slug) {
+      const snap = await db.collection('noticias').where('slug', '==', slug).limit(1).get();
+      if (snap.empty) {
+        return NextResponse.json({ success: false, error: 'Noticia no encontrada' }, { status: 404 });
+      }
+      const d = snap.docs[0];
+      const data = d.data();
+      const news = {
+        id: d.id,
+        slug: data.slug || d.id,
+        titulo: data.titulo || '',
+        resumen: data.resumen || '',
+        contenido: data.contenido || '',
+        categoria: data.categoria || 'General',
+        departamento: data.departamento || '',
+        autor: data.autor || 'Nicaragua Informate',
+        imagen: data.imagen || '',
+        imagenDestacada: data.imagenDestacada || '',
+        keywords: data.keywords || '',
+        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || new Date().toISOString(),
+        fechaActualizacion: data.fechaActualizacion?.toDate ? data.fechaActualizacion.toDate().toISOString() : data.fechaActualizacion || null,
+        publicado: data.publicado !== false,
+      };
+      return NextResponse.json({ success: true, news }, {
+        headers: {
+          'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
+    }
+
     const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
     const news = snap.docs.map((d) => {
       const data = d.data();

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
-import { getFirestore, collection, doc, getDocs, limit, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { getAdminToken } from '@/hooks/useAdminFetch';
 import { categoryToSlug } from '@/lib/types';
 import AnalizadorPanel from '@/components/admin/AnalizadorPanel';
 
@@ -62,7 +62,6 @@ export default function CorreccionesPage() {
   const [loading, setLoading] = useState(true);
   const [auditorLoading, setAuditorLoading] = useState(false);
   const [auditorData, setAuditorData] = useState<AuditorItem[]>([]);
-  const [db, setDb] = useState<ReturnType<typeof getFirestore> | null>(null);
   const [auth, setAuth] = useState<ReturnType<typeof getAuth> | null>(null);
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<string[]>([]);
@@ -73,8 +72,6 @@ export default function CorreccionesPage() {
     if (typeof window === 'undefined') return;
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     const authInstance = getAuth(app);
-    const firestore = getFirestore(app);
-    setDb(firestore);
     setAuth(authInstance);
     const unsub = onAuthStateChanged(authInstance, (u) => {
       setUser(u);
@@ -123,11 +120,15 @@ export default function CorreccionesPage() {
   }
 
   async function loadNewsBySlug(slug: string): Promise<NewsDoc | null> {
-    if (!db) return null;
-    const snap = await getDocs(query(collection(db, 'noticias'), where('slug', '==', slug), limit(1)));
-    if (snap.empty) return null;
-    const d = snap.docs[0];
-    return { id: d.id, ...d.data() } as NewsDoc;
+    const token = getAdminToken();
+    const res = await fetch(`/api/admin/news?slug=${encodeURIComponent(slug)}`, {
+      headers: { 'x-admin-token': token },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.success || !data.news) return null;
+    return data.news as NewsDoc;
   }
 
   async function revalidateArticle(article: NewsDoc) {
@@ -156,7 +157,6 @@ export default function CorreccionesPage() {
   }
 
   async function applyFix(item: AuditorItem) {
-    if (!db) return;
     try {
       const article = await loadNewsBySlug(item.slug);
       if (!article) {
@@ -190,13 +190,19 @@ export default function CorreccionesPage() {
 
       const versionPulida = pulido.version_pulida;
 
-      // Guardar cambios en Firestore
-      await updateDoc(doc(db, 'noticias', article.id), {
-        contenido: versionPulida.contenido,
-        resumen: versionPulida.meta_descripcion,
-        palabras: versionPulida.palabras,
-        fechaActualizacion: serverTimestamp(),
+      // Guardar cambios via API con Admin SDK
+      const token = getAdminToken();
+      const updateResp = await fetch(`/api/admin/news/${article.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({
+          contenido: versionPulida.contenido,
+          resumen: versionPulida.meta_descripcion,
+        }),
       });
+      if (!updateResp.ok) {
+        throw new Error(`Error al guardar: ${updateResp.status}`);
+      }
 
       await revalidateArticle({ ...article, slug: article.slug || '', categoria: article.categoria });
       
