@@ -27,8 +27,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { id, titulo, contenido, resumen, categoria, departamento, imagen, publicado = true } = body;
 
-    if (!id || !titulo || !contenido) {
-      return NextResponse.json({ error: 'Faltan campos obligatorios: id, titulo, contenido' }, { status: 400 });
+    if (!titulo || !contenido) {
+      return NextResponse.json({ error: 'Faltan campos obligatorios: titulo, contenido' }, { status: 400 });
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -101,8 +101,16 @@ export async function POST(request: NextRequest) {
     if (imagen !== undefined) updateData.imagen = imagen;
     if (publicado !== undefined) updateData.publicado = publicado;
 
-    // Actualizar directamente con Admin SDK (ignora security rules)
-    await db.collection('noticias').doc(id).update(updateData);
+    // Actualizar o crear directamente con Admin SDK (ignora security rules)
+    if (id) {
+      await db.collection('noticias').doc(id).update(updateData);
+    } else {
+      const docRef = db.collection('noticias').doc();
+      await docRef.set({
+        ...updateData,
+        id: docRef.id,
+      });
+    }
 
     // Invalidar cachés afectadas
     revalidateTag('latest-news');

@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
 import type { MeniAutonomousResult } from '@/lib/meni/editor-autonomo/types';
@@ -168,28 +167,37 @@ export default function EditorPage() {
     setError(null);
     setMensaje(null);
     try {
-      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-      const db = getFirestore(app);
-      const slug = news.slug || slugify(news.titulo);
-      const categoriaSlug = categoryToSlug(news.categoria || 'General');
-      await addDoc(collection(db, 'noticias'), {
-        titulo: news.titulo.trim(),
-        contenido: news.contenido.trim(),
-        resumen: (news.resumen || resultado.seo.metaDescripcion).trim(),
-        categoria: news.categoria,
-        departamento: news.departamento,
-        autor: news.autor || 'Redacción Nicaragua Informate',
-        slug,
-        categoriaSlug,
-        palabras: wordCount(news.contenido),
-        palabrasClave: resultado.seo.keywords || [],
-        imagen: news.imagen || '',
-        publicado: publicar,
-        fecha: serverTimestamp(),
-        fechaActualizacion: serverTimestamp(),
-        scoreMeni: resultado.scoreFinal,
-        aprobadoMeni: resultado.aprobado,
+      const token = getAdminToken();
+      if (!token) {
+        setError('No se encontró token de admin. Inicia sesión desde panel.html.');
+        setGuardando(false);
+        return;
+      }
+      const res = await fetch('/api/admin/guardar-directo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({
+          titulo: news.titulo.trim(),
+          contenido: news.contenido.trim(),
+          resumen: (news.resumen || resultado.seo.metaDescripcion).trim(),
+          categoria: news.categoria,
+          departamento: news.departamento,
+          autor: news.autor || 'Redacción Nicaragua Informate',
+          slug: news.slug || slugify(news.titulo),
+          categoriaSlug: categoryToSlug(news.categoria || 'General'),
+          palabras: wordCount(news.contenido),
+          palabrasClave: resultado.seo.keywords || [],
+          imagen: news.imagen || '',
+          publicado: publicar,
+          scoreMeni: resultado.scoreFinal,
+          aprobadoMeni: resultado.aprobado,
+        }),
       });
+      const data = await res.json().catch(() => ({ error: 'Respuesta inválida del servidor' }));
+      if (!res.ok) {
+        setError(data?.error || `Error ${res.status}: no se pudo guardar`);
+        return;
+      }
       setMensaje(publicar ? 'Noticia publicada correctamente.' : 'Borrador guardado correctamente.');
       setNews({ titulo: '', contenido: '', resumen: '', categoria: 'General', autor: 'Redacción Nicaragua Informate', departamento: '', imagen: '', slug: '' });
       setResultado(null);
