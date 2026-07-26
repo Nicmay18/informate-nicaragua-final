@@ -1,13 +1,13 @@
 import { runMeni } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
-import { runIntelligenceEngine } from '@/lib/meni/intelligence';
-import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
+import { runEditorialBrain } from '@/lib/meni/editorial-brain';
+import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
- * MENI OS v4.0 — Prompt mínimo.
- * Todas las decisiones editoriales ya fueron calculadas por el Intelligence Engine.
- * El LLM solo redacta el artículo siguiendo las decisiones.
+ * MENI OS v5.0 — Editorial Brain + Intelligence Engine.
+ * El Editorial Brain analiza el HECHO y decide.
+ * El LLM solo redacta siguiendo las decisiones.
  */
 const SYSTEM_PROMPT = `Eres el redactor de Nicaragua Informate.
 
@@ -36,34 +36,21 @@ Devuelve ÚNICAMENTE un JSON con este formato:
   "promptImagenIA": "string en inglés para imagen editorial realista"
 }`;
 
-function buildUserPrompt(input: MeniAutonomousInput, intel: IntelligenceResult): string {
-  const bloques = intel.structure.bloques
-    .sort((a, b) => a.prioridad - b.prioridad)
-    .map((b) => `${b.prioridad}. ${b.tipo}: ${b.contenido}`)
-    .join('\n');
-
-  const contexto = intel.context.contextoRequerido.length > 0
-    ? intel.context.contextoRequerido.map((c) => `- ${c}`).join('\n')
+function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision): string {
+  const instr = decision.llmInstructions;
+  const contexto = instr.contextoNecesario.length > 0
+    ? instr.contextoNecesario.map((c) => `- ${c}`).join('\n')
     : 'Sin contexto adicional requerido.';
 
-  const antecedentes = intel.background.antecedentes.length > 0
-    ? intel.background.antecedentes.map((a) => `- ${a.hecho} (${a.relevancia})`).join('\n')
-    : 'Sin antecedentes adicionales.';
+  const explicaciones = instr.explicacionesObligatorias.length > 0
+    ? instr.explicacionesObligatorias.map((e) => `- ${e}`).join('\n')
+    : 'Ninguna.';
 
-  const explicaciones: string[] = [];
-  for (const s of intel.clarity.siglasDetectadas) {
-    explicaciones.push(`- ${s.sigla}: ${s.significado}`);
-  }
-  for (const i of intel.clarity.institucionesMencionadas) {
-    explicaciones.push(`- ${i.nombre}: ${i.descripcion}`);
-  }
-  for (const c of intel.clarity.conceptosDificiles) {
-    explicaciones.push(`- ${c.termino}: ${c.explicacion}`);
-  }
-
-  const preguntas = intel.readerValue.preguntasSinResponder.length > 0
-    ? intel.readerValue.preguntasSinResponder.map((p) => `- ${p}`).join('\n')
+  const preguntas = instr.preguntasAResponder.length > 0
+    ? instr.preguntasAResponder.map((p) => `- ${p}`).join('\n')
     : 'Sin preguntas pendientes.';
+
+  const estructura = instr.estructura.join('\n');
 
   return `HECHO NOTICIOSO:
 ${input.fuente}
@@ -71,40 +58,50 @@ ${input.url ? `URL: ${input.url}` : ''}
 
 CATEGORÍA: ${input.categoriaSugerida || 'General'}
 
-DECISIONES DEL SISTEMA (sigue exactamente):
+DECISIONES DEL EDITORIAL BRAIN (sigue exactamente):
 
 ÁNGULO DIFERENCIAL:
-${intel.angle.anguloDiferencial}
+${instr.angulo}
 
-POR QUÉ MERECE EXISTIR:
-${intel.angle.porQueMereceExistir}
+SELLO EDITORIAL:
+${instr.selloEditorial}
 
-CONEXIÓN CON NICARAGUA:
-${intel.angle.conexionNicaragua}
+ENFOQUE DIFERENCIAL:
+${instr.enfoqueDiferencial}
+
+POR QUÉ LEER AQUÍ Y NO EN OTRO MEDIO:
+${decision.nicaraguaInformate.porQueLeerAqui}
+
+QUÉ HARÍAN TN8 / CANAL 4 / LA PRENSA:
+- TN8: ${decision.competition.enfoqueTN8}
+- Canal 4: ${decision.competition.enfoqueCanal4}
+- La Prensa: ${decision.competition.enfoqueLaPrensa}
+
+NOSOTROS NO HAREMOS ESO. HAREMOS:
+${decision.competition.enfoqueNicaraguaInformate}
 
 ORDEN DE LA NOTICIA:
-${bloques}
+${estructura}
 
 CONTEXTO REQUERIDO:
 ${contexto}
 
-ANTECEDENTES:
-${antecedentes}
-
 EXPLICACIONES OBLIGATORIAS (incluye en el texto):
-${explicaciones.length > 0 ? explicaciones.join('\n') : 'Ninguna.'}
+${explicaciones}
 
-PREGUNTAS QUE EL LECTOR TENDRÁ (responde en el texto):
+PREGUNTAS OBLIGATORIAS DEL LECTOR (responde TODAS):
 ${preguntas}
 
-TÍTULO SEO: ${intel.google.tituloSEO}
-META DESCRIPCIÓN: ${intel.google.metaDescripcion}
-SLUG: ${intel.google.slug}
-KEYWORDS: ${intel.google.keywords.join(', ')}
+TÍTULO SEO: ${instr.tituloSEO}
+META DESCRIPCIÓN: ${instr.metaDescripcion}
+SLUG: ${instr.slug}
+KEYWORDS: ${instr.keywords.join(', ')}
 
-COPY FACEBOOK: ${intel.facebook.copy}
+COPY FACEBOOK: ${instr.copyFacebook}
 
-Redacta el artículo completo siguiendo estas decisiones.`;
+PIE DE FOTO: ${instr.pieFoto}
+
+Redacta el artículo completo siguiendo estas decisiones. Mínimo 400 palabras.`;
 }
 
 function stripHtml(html: string): string {
@@ -134,13 +131,13 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     imagenDestacada: '',
   };
 
-  const intel = runIntelligenceEngine({
+  const decision = runEditorialBrain({
     ...noticiaInput,
     fuente: input.fuente,
     categoriaSugerida: input.categoriaSugerida,
   });
 
-  if (intel.bloquear) {
+  if (decision.bloquear) {
     return {
       tituloSEO: '',
       bajada: '',
@@ -156,21 +153,21 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       copyTelegram: '',
       jsonLd: '',
       checklistEeatDiscover: '',
-      diagnosticoEditorial: 'BLOQUEADO por Intelligence Engine',
-      diagnosticoTecnico: intel.motivoBloqueo || 'No aporta valor diferencial al lector.',
+      diagnosticoEditorial: 'BLOQUEADO por Editorial Brain',
+      diagnosticoTecnico: decision.motivoBloqueo || 'No aporta valor diferencial al lector.',
       riesgoEditorial: 'ROJO',
       riesgoTecnico: 'ALTO',
       scoreMeni: 0,
       aprobado: false,
       correccionesAplicadas: [],
-      recomendaciones: [intel.motivoBloqueo || intel.readerValue.motivoBloqueo || 'La nota no aporta valor diferencial.'],
+      recomendaciones: [decision.motivoBloqueo || decision.nicaraguaInformate.motivoBloqueo || 'La nota no aporta valor diferencial.'],
       evaluacion: {} as any,
-      _provider: 'groq+intelligence',
-      _error: intel.motivoBloqueo || 'Bloqueado por Intelligence Engine',
+      _provider: 'groq+editorial-brain',
+      _error: decision.motivoBloqueo || 'Bloqueado por Editorial Brain',
     };
   }
 
-  const userPrompt = buildUserPrompt(input, intel);
+  const userPrompt = buildUserPrompt(input, decision);
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -209,31 +206,33 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
 
   const getString = (k: string, fallback = '') => String(payload[k] ?? fallback);
 
+  const instr = decision.llmInstructions;
+
   const generated: MeniAutonomousResult = {
-    tituloSEO: intel.google.tituloSEO,
+    tituloSEO: instr.tituloSEO,
     bajada: getString('bajada'),
     articuloCompleto: getString('articuloCompleto'),
-    metaDescripcion: intel.google.metaDescripcion,
-    slug: intel.google.slug,
-    tags: intel.google.keywords,
+    metaDescripcion: instr.metaDescripcion,
+    slug: instr.slug,
+    tags: instr.keywords,
     categoria: input.categoriaSugerida || 'General',
     departamento: '',
     promptImagenIA: getString('promptImagenIA'),
-    copyFacebook: intel.facebook.copy,
-    copyWhatsApp: `${intel.google.tituloSEO} https://informate.ni/noticias/${intel.google.slug}`,
-    copyTelegram: `${intel.google.tituloSEO}\n\n${getString('bajada')}\n\nhttps://informate.ni/noticias/${intel.google.slug}`,
+    copyFacebook: instr.copyFacebook,
+    copyWhatsApp: `${instr.tituloSEO} https://informate.ni/noticias/${instr.slug}`,
+    copyTelegram: `${instr.tituloSEO}\n\n${getString('bajada')}\n\nhttps://informate.ni/noticias/${instr.slug}`,
     jsonLd: '',
-    checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait. Intelligence Score: ${intel.scoreIntelligence}/100`,
-    diagnosticoEditorial: intel.angle.anguloDiferencial,
-    diagnosticoTecnico: `Originalidad: ${intel.originality.veredicto} (${intel.originality.score}/100). Reader Value: ${intel.readerValue.score}/100. Context: ${intel.context.score}/100. Clarity: ${intel.clarity.score}/100.`,
+    checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait. Editorial Brain: ${decision.score}/100. News Value: ${decision.newsValue.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%`,
+    diagnosticoEditorial: `${decision.nicaraguaInformate.porQueLeerAqui}`,
+    diagnosticoTecnico: `News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}). Competition: ${decision.competition.score}/100. NI Engine: ${decision.nicaraguaInformate.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%. Public Value: ${decision.publicValue.score}/100. Completeness: ${decision.storyCompleteness.score}/100.`,
     riesgoEditorial: 'VERDE',
     riesgoTecnico: 'BAJO',
     scoreMeni: 0,
     aprobado: false,
-    correccionesAplicadas: intel.readerValue.queFaltaExplicar,
-    recomendaciones: intel.readerValue.preguntasSinResponder,
+    correccionesAplicadas: decision.storyCompleteness.respuestasFaltantes,
+    recomendaciones: decision.storyCompleteness.dudasPendientes,
     evaluacion: {} as any,
-    _provider: 'groq+intelligence',
+    _provider: 'groq+editorial-brain',
   };
 
   const textoPlano = stripHtml(generated.articuloCompleto);
@@ -259,7 +258,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     const evaluacion = runMeni(evalInput);
     generated.evaluacion = evaluacion;
     generated.scoreMeni = evaluacion.scoreFinal;
-    generated.aprobado = evaluacion.scoreFinal >= 90 && evaluacion.aprobado && !intel.bloquear;
+    generated.aprobado = evaluacion.scoreFinal >= 90 && evaluacion.aprobado && !decision.bloquear;
     generated.riesgoEditorial = evaluacion.riesgo.nivel;
   } catch (e) {
     generated.evaluacion = {} as any;
