@@ -42,7 +42,7 @@ export function decide(
       ? detalle.reduce((acc, d) => acc + d.score * d.peso, 0) / totalWeight
       : 0;
 
-  const scoreRounded = Math.max(0, Math.min(100, Number(scoreFinal.toFixed(2))));
+  const scoreRounded = Math.max(0, Math.min(100, Math.round(scoreFinal * 1000) / 1000));
 
   // Gate 1: EEAT mínimo
   if (modules.eeat.score < profile.gates.eeatMinimo) {

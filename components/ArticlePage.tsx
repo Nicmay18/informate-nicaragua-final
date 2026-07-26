@@ -296,6 +296,16 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </div>
         </header>
 
+        {/* AdSense 728x90 — debajo del título, lazy-loaded */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="3827619433"
+            format="horizontal"
+            responsive={true}
+            minHeight={90}
+            style={{ margin: '0 0 24px', maxWidth: 728, marginLeft: 'auto', marginRight: 'auto' }}
+          />
+        </Suspense>
 
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
@@ -337,6 +347,17 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         {/* 3 Puntos Clave */}
         <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
+
+        {/* AdSense 300x250 — inline entre contenido superior y cuerpo */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="4492386174"
+            format="rectangle"
+            responsive={true}
+            minHeight={250}
+            style={{ margin: '24px auto', maxWidth: 336, display: 'flex', justifyContent: 'center' }}
+          />
+        </Suspense>
 
         {/* Tabla de contenidos (artículos largos) */}
         {showToc && (

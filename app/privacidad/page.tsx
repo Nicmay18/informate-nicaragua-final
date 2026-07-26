@@ -60,7 +60,11 @@ export default function PrivacidadPage() {
         <strong>Cookies analíticas:</strong> nos ayudan a entender cómo interactúas con el sitio, qué páginas visitas y cuánto tiempo permaneces en ellas. Estas cookies son gestionadas por Google Analytics.
       </p>
       <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        <strong>Cookies de publicidad:</strong> en el futuro, podemos utilizar servicios como Google AdSense para mostrar anuncios relevantes. En ese caso, se te pedirá consentimiento explícito antes de activar estas cookies.
+        <strong>Cookies de publicidad (Google AdSense):</strong> utilizamos Google AdSense para mostrar anuncios en nuestro sitio. Google AdSense, a trav&eacute;s de su proveedor DoubleClick, puede almacenar y acceder a cookies en tu dispositivo para mostrar anuncios relevantes basados en tu inter&eacute;s. Estas cookies incluyen:<br /><br />
+        &bull; <strong>__gads</strong>: cookie de DoubleClick que gestiona la frecuencia y rotaci&oacute;n de anuncios.<br />
+        &bull; <strong>__gpi</strong>: cookie de preferencias de anuncios personalizados.<br />
+        &bull; <strong>IDE</strong>: cookie de DoubleClick para publicidad personalizada.<br /><br />
+        Puedes desactivar estas cookies en cualquier momento mediante nuestro banner de consentimiento o desde la <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>configuraci&oacute;n de anuncios de Google</a>. Tambi&eacute;n puedes visitar <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>www.aboutads.info/choices</a> para gestionar tus preferencias de publicidad.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Google Analytics</h2>

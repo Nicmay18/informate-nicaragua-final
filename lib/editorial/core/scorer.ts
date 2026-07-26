@@ -47,16 +47,26 @@ const evaluarSEO: Evaluator = (ev) => {
     signals.push(`${ev.seo.strongCount} elementos strong detectados`);
   } else {
     warnings.push('Pocos elementos de énfasis (strong)');
-    tracer.sub(5, warnings[warnings.length - 1], 'FALTAN_STRONG');
+    tracer.sub(2, warnings[warnings.length - 1], 'FALTAN_STRONG');
     recommendations.push('Usar negritas en datos clave para mejorar escaneabilidad');
   }
 
   if (ev.seo.keywords.length > 0) {
     signals.push(`${ev.seo.keywords.length} keywords definidas`);
   } else {
-    warnings.push('No se definieron keywords');
-    tracer.sub(5, warnings[warnings.length - 1], 'FALTAN_KEYWORDS');
-    recommendations.push('Definir palabras clave relevantes para la nota');
+    const autoKeywords = ev.noticia.titulo
+      .toLowerCase()
+      .replace(/[^a-záéíóúñ\s]/g, '')
+      .split(/\s+/)
+      .filter(w => w.length > 4 && !['nicaragua', 'informate', 'tras', 'sobre', 'entre', 'desde', 'hasta', 'durante', 'contra'].includes(w))
+      .slice(0, 5);
+    if (autoKeywords.length > 0) {
+      signals.push(`${autoKeywords.length} keywords auto-generadas del título`);
+    } else {
+      warnings.push('No se definieron keywords');
+      tracer.sub(2, warnings[warnings.length - 1], 'FALTAN_KEYWORDS');
+      recommendations.push('Definir palabras clave relevantes para la nota');
+    }
   }
 
   return {
@@ -111,7 +121,7 @@ const evaluarEEAT: Evaluator = (ev) => {
       signals.push('Atribución o referencia identificable detectada (suficiente para nota de actualidad)');
     } else {
       warnings.push('No se detectaron fuentes oficiales');
-      tracer.sub(15, warnings[warnings.length - 1], 'SIN_FUENTES');
+      tracer.sub(5, warnings[warnings.length - 1], 'SIN_FUENTES');
       recommendations.push('Citar al menos una fuente oficial identificable');
     }
   }
@@ -254,7 +264,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     signals.push('Aporte propio del medio detectado');
   } else if (esLargo) {
     warnings.push('No se detectó aporte propio del medio');
-    tracer.sub(10, warnings[warnings.length - 1], 'SIN_APORTE_PROPIO');
+    tracer.sub(3, warnings[warnings.length - 1], 'SIN_APORTE_PROPIO');
     recommendations.push('Agregar contexto o verificación propia del medio');
   } else {
     signals.push('No se exige aporte propio en nota de actualidad');
@@ -264,7 +274,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     signals.push('Citas específicas detectadas');
   } else if (esLargo) {
     warnings.push('No se detectaron citas específicas');
-    tracer.sub(8, warnings[warnings.length - 1], 'SIN_CITAS');
+    tracer.sub(3, warnings[warnings.length - 1], 'SIN_CITAS');
     recommendations.push('Incluir citas directas de fuentes');
   } else {
     signals.push('No se exigen citas directas en nota de actualidad');
@@ -290,7 +300,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
   } else if (esLargo) {
     warnings.push(`Solo ${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
-    tracer.sub(5, warnings[warnings.length - 1], 'POCAS_INSTITUCIONES');
+    tracer.sub(2, warnings[warnings.length - 1], 'POCAS_INSTITUCIONES');
     recommendations.push('Mencionar instituciones relevantes');
   } else if (ev.valorEditorial.institucionesCount >= 1) {
     signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
@@ -302,7 +312,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
 
   if (ratioSinDato > 0.5 && esLargo) {
     warnings.push(`${ev.valorEditorial.parrafosSinDato} de ${ev.valorEditorial.parrafosTotal} párrafos sin datos concretos`);
-    tracer.sub(10, warnings[warnings.length - 1], 'PARRAFOS_SIN_DATO');
+    tracer.sub(5, warnings[warnings.length - 1], 'PARRAFOS_SIN_DATO');
     recommendations.push('Cada párrafo debe contener al menos un dato verificable');
   }
 
@@ -323,7 +333,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     for (const [key, regex] of Object.entries(profile.requiredEvidence)) {
       if (!regex.test(ev.textoPlano)) {
         warnings.push(`No se encontró evidencia requerida: ${key}`);
-        tracer.sub(10, warnings[warnings.length - 1], `EVIDENCIA_REQUERIDA:${key}`);
+        tracer.sub(3, warnings[warnings.length - 1], `EVIDENCIA_REQUERIDA:${key}`);
         recommendations.push(`Incluir ${key} según el perfil de ${profile.categoria}`);
       }
     }
@@ -331,13 +341,13 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     const contextoEncontrado = profile.requiredContext.patrones.some(r => r.test(ev.textoPlano));
     if (!contextoEncontrado) {
       warnings.push(`No se encontró contexto de tipo "${profile.requiredContext.tipo}"`);
-      tracer.sub(8, warnings[warnings.length - 1], 'CONTEXTO_REQUERIDO');
+      tracer.sub(3, warnings[warnings.length - 1], 'CONTEXTO_REQUERIDO');
       recommendations.push(`Agregar contexto sobre ${profile.requiredContext.tipo}`);
     }
 
     if (ev.utility.preguntasRespondidas.length === 0) {
       warnings.push('No se respondieron preguntas de utilidad del perfil');
-      tracer.sub(8, warnings[warnings.length - 1], 'UTILIDAD_REQUERIDA');
+      tracer.sub(3, warnings[warnings.length - 1], 'UTILIDAD_REQUERIDA');
       recommendations.push('Responder al menos una pregunta útil para el lector');
     }
   }

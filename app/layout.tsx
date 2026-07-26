@@ -14,6 +14,7 @@ import { escapeJsonLd } from '@/lib/sanitize';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import DeferredAnalytics from '@/components/DeferredAnalytics';
+import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
@@ -159,6 +160,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <TopBar />
           <Header />
           <main id="main-content" role="main" aria-label="Contenido principal" style={{ flex: 1 }}>
             {children}
