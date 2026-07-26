@@ -57,7 +57,7 @@ function cleanTag(full: string): string {
     const attrName = m[1].toLowerCase();
     if (!ALLOWED_ATTR_SET.has(attrName) || FORBID_ATTR.includes(attrName)) continue;
 
-    let value = m[2] ?? m[3] ?? m[4] ?? '';
+    const value = m[2] ?? m[3] ?? m[4] ?? '';
 
     if (attrName === 'href' || attrName === 'src') {
       if (!isAllowedUrl(value)) continue;
