@@ -3621,9 +3621,14 @@ sin texto ni marcas de agua, composición periodística"
 
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
-      const snap = await getDocs(query(collection(db, "noticias"), orderBy('fecha', 'desc'), limit(300)));
-      const arr = [];
-      snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const resp = await fetch('/api/admin/news', {
+        headers: { 'x-admin-token': adminToken },
+        cache: 'no-store'
+      });
+      if (!resp.ok) throw new Error('Error cargando noticias: ' + resp.status);
+      const data = await resp.json();
+      const arr = data.news || [];
       _panelCache = arr;
       _panelCacheTime = Date.now();
       return arr;
@@ -4064,12 +4069,28 @@ sin texto ni marcas de agua, composición periodística"
               document.getElementById('noticiaSlug').value = slugLimpio;
             }
           }
-          await updateDoc(doc(db, "noticias", noticiaId), noticiaData);
+          // Guardar via API con Admin SDK (ignora security rules)
+          const adminToken = localStorage.getItem('admin_api_key') || '';
+          const saveRes = await fetch('/api/admin/guardar-directo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+            body: JSON.stringify({ id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado })
+          });
+          const saveData = await saveRes.json().catch(() => ({}));
+          if (!saveRes.ok) throw new Error(saveData?.error || 'Error guardando via API');
           acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
         } else {
-          const docRef = await addDoc(collection(db, "noticias"), noticiaData);
-          noticiaData.id = docRef.id;
-          noticiaId = docRef.id;
+          // Crear via API con Admin SDK
+          const adminToken = localStorage.getItem('admin_api_key') || '';
+          const saveRes = await fetch('/api/admin/guardar-directo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+            body: JSON.stringify({ ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug })
+          });
+          const saveData = await saveRes.json().catch(() => ({}));
+          if (!saveRes.ok) throw new Error(saveData?.error || 'Error publicando via API');
+          noticiaId = saveData.id || '';
+          noticiaData.id = noticiaId;
           acciones.push('✅ Noticia publicada');
         }
 

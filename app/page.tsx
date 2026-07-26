@@ -4,6 +4,8 @@ import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { getHeroImageUrl } from '@/lib/image-utils';
 import { logger } from '@/lib/logger';
+import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 // ============================================================================
 // ISR: Home regenerado cada 5 minutos para que noticias nuevas aparezcan rapido.
@@ -72,6 +74,22 @@ export default async function HomePage() {
   const heroSrc400 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 400) : null;
   const heroSrc800 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 800) : null;
 
+  // Top 6 noticias para structured data (Google puede mostrarlas en rich snippets / Top Stories)
+  const topStories = noticias.slice(0, 6);
+  const homeItemList = topStories.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Noticias principales — Nicaragua Informate',
+        itemListElement: topStories.map((n, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `${SITE_URL}/noticias/${n.slug}`,
+          item: buildNewsArticleJsonLdEnhanced(n, `${SITE_URL}/noticias/${n.slug}`),
+        })),
+      }
+    : null;
+
   return (
     <>
       {heroSrc400 && heroSrc800 && (
@@ -82,6 +100,12 @@ export default async function HomePage() {
           imageSizes="(max-width: 768px) 100vw, 580px"
           type="image/webp"
           crossOrigin="anonymous"
+        />
+      )}
+      {homeItemList && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
       <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />

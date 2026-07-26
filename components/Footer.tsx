@@ -10,6 +10,7 @@ import Image from 'next/image';
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
   { slug: 'nacionales', label: 'Nacionales' },
+  { slug: 'economia', label: 'Economía' },
   { slug: 'espectaculos', label: 'Espectáculos' },
   { slug: 'deportes', label: 'Deportes' },
   { slug: 'tecnologia', label: 'Tecnología' },
@@ -38,8 +39,8 @@ export default function Footer() {
             <span itemProp="name">Nicaragua Informate</span>
           </div>
           <p className="ni-footer__desc" itemProp="description">
-            Portal de noticias de Nicaragua con cobertura nacional e internacional.
-            INFORMATE AL INSTANTE desde Managua.
+            Medio digital nicaragüense de noticias verificadas. Periodismo independiente con cobertura
+            nacional e internacional desde Managua. Fundado en 2024 y editado por periodistas locales.
           </p>
           <div className="ni-footer__social">
             <a
