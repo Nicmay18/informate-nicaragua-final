@@ -8,6 +8,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const root = path.resolve(path.dirname(__filename), '..');
@@ -218,6 +219,180 @@ function runAudit(graph) {
   };
 }
 
+function hashContent(content) {
+  return crypto.createHash('md5').update(content).digest('hex');
+}
+
+function inferDomain(p, type) {
+  const lower = p.toLowerCase();
+  if (lower.includes('app/api/admin') || lower.includes('app/admin') || lower.includes('/admin/')) return 'Admin';
+  if (lower.includes('lib/meni')) return 'MENI';
+  if (lower.includes('lib/seo') || lower.includes('seo')) return 'SEO';
+  if (lower.includes('lib/db') || lower.includes('firebase') || lower.includes('firestore')) return 'Firebase';
+  if (lower.includes('app/noticias') || lower.includes('/noticias/')) return 'Noticias';
+  if (lower.includes('app/categoria') || lower.includes('/categoria/')) return 'Categorías';
+  if (lower.includes('audio') || lower.includes('radio')) return 'Audio';
+  if (lower.includes('adsense') || lower.includes('ads')) return 'Adsense';
+  if (lower.includes('analytics') || lower.includes('gtag')) return 'Analytics';
+  if (lower.includes('jsonld') || lower.includes('schema')) return 'JSON-LD';
+  if (lower.includes('discover') || lower.includes('eeat') || lower.includes('scoring')) return 'IA / EEAT';
+  if (lower.includes('/components/') || lower.startsWith('components/')) return 'UI';
+  if (lower.startsWith('app/') || type === 'page' || type === 'layout') return 'App';
+  if (lower.startsWith('scripts/')) return 'Scripts';
+  if (lower.startsWith('hooks/')) return 'Hooks';
+  return 'General';
+}
+
+function assetRisk(a) {
+  let score = 0;
+  if (a.firestoreCollections.length > 0) score += 2;
+  if (a.apiRoutes.length > 0) score += 1;
+  if (a.serverActions.length > 0) score += 1;
+  if (a.dependsOn.some((d) => d.toLowerCase().includes('firestore') || d.toLowerCase().includes('db/homepage'))) score += 2;
+  if (a.dependsOn.some((d) => d.toLowerCase().includes('seo'))) score += 1;
+  if (a.dependsOn.some((d) => d.toLowerCase().includes('metadata') || d.toLowerCase().includes('jsonld'))) score += 1;
+  if (a.dependsOn.some((d) => d.toLowerCase().includes('homepage') || d === 'app/page.tsx')) score += 1;
+  if (a.dependsOn.some((d) => d.toLowerCase().includes('admin'))) score += 1;
+  if (a.domain === 'Firebase' || a.domain === 'SEO') score += 1;
+  if (score >= 6) return 'critical';
+  if (score >= 4) return 'high';
+  if (score >= 2) return 'medium';
+  return 'low';
+}
+
+function assetStatus(a) {
+  const lower = a.path.toLowerCase();
+  if (lower.includes('deprecated') || lower.includes('/deprecated/')) return 'deprecated';
+  if (lower.includes('experimental') || lower.includes('draft')) return 'experimental';
+  const isEntry = a.path === 'app/layout.tsx' || a.path === 'app/page.tsx' || a.path.startsWith('app/api/') || a.path.startsWith('scripts/') || a.type === 'api' || a.type === 'page' || a.type === 'layout';
+  if (!isEntry && a.usedBy.length === 0) return 'orphan';
+  return 'active';
+}
+
+function buildRegistryFromGraph(root, graph) {
+  const generatedAt = new Date().toISOString();
+  const assetMap = new Map();
+
+  for (const n of graph.nodes) {
+    const full = path.join(root, n.file.replace(/\//g, path.sep));
+    let content = '';
+    let mtime = generatedAt;
+    let birthtime = generatedAt;
+    try {
+      content = fs.readFileSync(full, 'utf-8');
+      const stat = fs.statSync(full);
+      mtime = stat.mtime.toISOString();
+      birthtime = stat.birthtime.toISOString();
+    } catch {}
+
+    let type = n.type;
+    if (n.file.includes('/layout.tsx') || n.file.includes('/layout.ts') || n.file.endsWith('/layout.tsx')) type = 'layout';
+    if (content.includes('"use server"') || content.includes("'use server'")) type = 'action';
+
+    const name = path.basename(n.file);
+    const domain = inferDomain(n.file, type);
+    const asset = {
+      id: n.id,
+      name,
+      path: n.file,
+      type,
+      domain,
+      dependsOn: [],
+      usedBy: [],
+      exports: n.exports ?? [],
+      imports: n.imports ?? [],
+      firestoreCollections: n.collections ?? [],
+      apiRoutes: n.route ? [n.route] : [],
+      serverActions: type === 'action' ? (n.exports ?? []) : [],
+      hooks: [],
+      tags: [type, domain],
+      risk: 'low',
+      status: 'active',
+      createdAt: birthtime,
+      updatedAt: mtime,
+      lastAudit: generatedAt,
+      hash: hashContent(content),
+    };
+    assetMap.set(n.id, asset);
+  }
+
+  for (const n of graph.nodes) {
+    const a = assetMap.get(n.id);
+    a.dependsOn = graph.edges
+      .filter((e) => e.from === n.id && e.to !== n.id)
+      .map((e) => e.to)
+      .filter((v, i, arr) => arr.indexOf(v) === i);
+    a.usedBy = graph.edges
+      .filter((e) => e.to === n.id && e.from !== n.id)
+      .map((e) => e.from)
+      .filter((v, i, arr) => arr.indexOf(v) === i);
+    a.hooks = a.dependsOn.filter((depId) => assetMap.get(depId)?.type === 'hook');
+  }
+
+  const assets = Array.from(assetMap.values());
+  for (const a of assets) {
+    a.risk = assetRisk(a);
+    a.status = assetStatus(a);
+    a.tags = [...new Set([a.type, a.domain, ...(a.firestoreCollections.length ? ['firestore'] : []), ...(a.apiRoutes.length ? ['api'] : []), ...(a.serverActions.length ? ['server-action'] : []), ...(a.hooks.length ? ['hooks'] : []), ...(a.risk === 'high' || a.risk === 'critical' ? ['high-risk'] : []), ...(a.status === 'orphan' ? ['orphan'] : [])])];
+  }
+
+  const byType = {};
+  const byStatus = {};
+  const byRisk = {};
+  const byDomain = {};
+  const domains = {};
+  for (const a of assets) {
+    byType[a.type] = (byType[a.type] ?? 0) + 1;
+    byStatus[a.status] = (byStatus[a.status] ?? 0) + 1;
+    byRisk[a.risk] = (byRisk[a.risk] ?? 0) + 1;
+    byDomain[a.domain] = (byDomain[a.domain] ?? 0) + 1;
+    domains[a.domain] = domains[a.domain] ?? [];
+    domains[a.domain].push(a.id);
+  }
+
+  const warnings = [];
+  const orphans = assets.filter((a) => a.status === 'orphan').map((a) => a.id);
+  if (orphans.length) warnings.push({ code: 'ORPHAN', severity: 'medium', message: `${orphans.length} activos huérfanos`, assetIds: orphans });
+  const byName = new Map();
+  for (const a of assets) byName.set(a.name, [...(byName.get(a.name) ?? []), a.id]);
+  const dupes = Array.from(byName.values()).filter((arr) => arr.length > 1).flat();
+  if (dupes.length) warnings.push({ code: 'DUPLICATE_NAME', severity: 'low', message: 'Nombres de archivo duplicados', assetIds: dupes });
+  const highRisk = assets.filter((a) => a.risk === 'high' || a.risk === 'critical').map((a) => a.id);
+  if (highRisk.length) warnings.push({ code: 'HIGH_RISK', severity: 'high', message: `${highRisk.length} activos de alto riesgo`, assetIds: highRisk });
+
+  return {
+    version: '3.0',
+    generatedAt,
+    root,
+    assets,
+    domains,
+    summary: {
+      total: assets.length,
+      byType,
+      byDomain,
+      byStatus,
+      byRisk,
+      orphans: orphans.length,
+      duplicates: dupes.length,
+      highRisk: highRisk.length,
+    },
+    audit: { generatedAt, warnings },
+  };
+}
+
+function saveRegistry(root, registry) {
+  const dir = path.join(root, 'data', 'meni');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'registry.json'), JSON.stringify(registry, null, 2), 'utf-8');
+  fs.mkdirSync(path.join(root, 'public', 'data'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'public', 'data', 'meni-registry.json'), JSON.stringify(registry, null, 2), 'utf-8');
+
+  const historyDir = path.join(root, 'data', 'meni', 'history');
+  fs.mkdirSync(historyDir, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  fs.writeFileSync(path.join(historyDir, `registry-${ts}.json`), JSON.stringify(registry, null, 2), 'utf-8');
+}
+
 function writeJson(file, data) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8');
@@ -228,5 +403,9 @@ const audit = runAudit(graph);
 writeJson(path.join(root, 'public', 'data', 'meni-architect.json'), graph);
 writeJson(path.join(root, 'public', 'data', 'meni-audit.json'), audit);
 
-console.log(`[MENI v2.1] Arquitectura escaneada: ${graph.nodes.length} nodos, ${graph.edges.length} aristas`);
-console.log(`[MENI v2.1] Auditoría: score ${audit.score}/100, ${audit.issues.length} problemas`);
+const registry = buildRegistryFromGraph(root, graph);
+saveRegistry(root, registry);
+
+console.log(`[MENI v3.0] Arquitectura escaneada: ${graph.nodes.length} nodos, ${graph.edges.length} aristas`);
+console.log(`[MENI v3.0] Registry: ${registry.summary.total} activos, ${registry.summary.orphans} huérfanos, ${registry.summary.highRisk} riesgo alto`);
+console.log(`[MENI v3.0] Auditoría: score ${audit.score}/100, ${audit.issues.length} problemas`);
