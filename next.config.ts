@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: true,
   },
+  serverExternalPackages: ['isomorphic-dompurify', 'jsdom'],
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
     scrollRestoration: true,
