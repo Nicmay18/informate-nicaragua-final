@@ -8,9 +8,7 @@ import TickerUltimaHora from './pro/TickerUltimaHora';
 import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
 import SeccionOpinion from './pro/SeccionOpinion';
-import NewsletterBanner from './pro/NewsletterBanner';
 import SidebarPro from './pro/SidebarPro';
-import GuiaUtilWidget from './pro/GuiaUtilWidget';
 
 interface HomePageProProps {
   noticias: Noticia[];
@@ -21,8 +19,8 @@ interface HomePageProProps {
 
 /**
  * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
- * Jerarquía editorial (2026-07-15): reducir peso visual de Sucesos,
- * potenciar Nacionales, Deportes, Internacionales, Tecnología, Economía y Guías.
+ * Categorías activas: Sucesos, Nacionales, Internacionales, Deportes, Espectáculos, Tecnología.
+ * Sucesos se limita visualmente para no dominar la portada.
  */
 function distribuirNoticias(noticias: Noticia[]) {
   const usados = new Set<string>();
@@ -48,7 +46,7 @@ function distribuirNoticias(noticias: Noticia[]) {
   const destacadas = disponibles().filter(n => n.destacada);
   const heroNoticias = take(conImagen(destacadas), 3);
   if (heroNoticias.length < 3) {
-    const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos', 'Sucesos'];
+    const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos', 'Sucesos'];
     const imagenesDisponibles = conImagen(disponibles());
     const baseHero = imagenesDisponibles.length > 0 ? imagenesDisponibles : disponibles();
     heroNoticias.push(...take(
@@ -61,7 +59,7 @@ function distribuirNoticias(noticias: Noticia[]) {
   }
 
   // Ticker: excluir Sucesos para evitar que dominen la parte superior
-  const prioridadTicker = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Economía', 'Espectáculos'];
+  const prioridadTicker = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos'];
   const ultimaHora = take(
     prioridadTicker.flatMap(cat => porCategoria(cat)),
     3
@@ -71,7 +69,7 @@ function distribuirNoticias(noticias: Noticia[]) {
   }
 
   // Destacados: primero destacadas de categorías preferidas, luego categorías
-  const prioridadDestacados = ['Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Economía', 'Espectáculos'];
+  const prioridadDestacados = ['Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
   const destacados: Noticia[] = take(
     destacadas.filter(n => prioridadDestacados.includes(n.categoria)),
     4
@@ -100,7 +98,6 @@ function distribuirNoticias(noticias: Noticia[]) {
     internacionales: seccion('Internacionales'),
     deportes: seccion('Deportes'),
     tecnologia: seccion('Tecnología'),
-    economia: seccion('Economía'),
     espectaculos: seccion('Espectáculos'),
     sucesos: sucesosItems,
     excluidos: new Set(usados),
@@ -186,29 +183,12 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
           {dist.tecnologia.length > 0 && (
             <SeccionCategoria titulo="Tecnología" slug="tecnologia" color="#0891B2" noticias={dist.tecnologia} />
           )}
-          {dist.economia.length > 0 && (
-            <SeccionCategoria titulo="Economía" slug="economia" color="#0F172A" noticias={dist.economia} />
-          )}
           {dist.espectaculos.length > 0 && (
             <SeccionCategoria titulo="Espectáculos" slug="espectaculos" color="#7C3AED" noticias={dist.espectaculos} />
           )}
 
-          {/* 5b. OPINIÓN / EDITORIAL: 3 columnas con foto del autor */}
+          {/* 5. OPINIÓN / EDITORIAL: 3 columnas con foto del autor */}
           <SeccionOpinion noticias={noticiasBase.filter(n => !dist.excluidos.has(n.id)).slice(0, 3)} />
-
-          {/* 5c. NEWSLETTER BANNER full-width */}
-          <NewsletterBanner />
-
-          {/* 5d. GUÍAS ÚTILES (evergreen): contenido de servicio, indexable, no consume noticias */}
-          <section className="seccion-categoria" aria-label="Guías útiles" data-reveal>
-            <header className="section-header" style={{ borderBottomColor: '#10B981' }}>
-              <h2 className="section-title">
-                <span>GUÍAS ÚTILES</span>
-                <span className="section-title-line" style={{ backgroundColor: '#10B981' }} />
-              </h2>
-            </header>
-            <GuiaUtilWidget />
-          </section>
 
           {/* 6. SUCESOS: colocado al final, máximo 3 noticias en toda la home */}
           {dist.sucesos.length > 0 && (

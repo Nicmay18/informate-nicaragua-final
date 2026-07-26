@@ -28,7 +28,6 @@ const CAT_COLORS: Record<string, string> = {
   sucesos: '#DC2626',
   espectaculos: '#7C3AED',
   tecnologia: '#0891B2',
-  economia: '#0F172A',
 };
 
 export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) {

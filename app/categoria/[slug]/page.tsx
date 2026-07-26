@@ -24,10 +24,6 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
     titulo: 'Tecnología en Nicaragua | Innovación y Digital',
     description: 'Avances tecnológicos en Nicaragua: internet, telecomunicaciones, startups y transformación digital.',
   },
-  economia: {
-    titulo: 'Economía de Nicaragua | Finanzas, Dólar y Mercado',
-    description: 'Noticias económicas de Nicaragua: tipo de cambio dólar córdoba, inflación, precios y mercado financiero.',
-  },
   deportes: {
     titulo: 'Deportes en Nicaragua | Fútbol, Béisbol y Atletismo',
     description: 'Resultados, fichajes y noticias del deporte nicaragüense. Liga Primera, selección nacional y eventos deportivos.',

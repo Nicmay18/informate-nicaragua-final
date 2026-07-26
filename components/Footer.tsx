@@ -10,7 +10,6 @@ import Image from 'next/image';
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
   { slug: 'nacionales', label: 'Nacionales' },
-  { slug: 'economia', label: 'Economía' },
   { slug: 'espectaculos', label: 'Espectáculos' },
   { slug: 'deportes', label: 'Deportes' },
   { slug: 'tecnologia', label: 'Tecnología' },
