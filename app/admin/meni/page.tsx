@@ -81,8 +81,8 @@ export default function MeniPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">MENI v2.1</h1>
-            <p className="text-slate-600">Sistema nervioso central de Nicaragua Informate</p>
+            <h1 className="text-3xl font-bold text-slate-900">MENI — Diagnóstico técnico avanzado</h1>
+            <p className="text-slate-600">Auditoría técnica y arquitectura. El flujo editorial diario ahora vive en Editor IA.</p>
           </div>
           <Link href="/admin/meni/arquitectura" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
             Arquitectura
@@ -154,7 +154,7 @@ export default function MeniPage() {
                 disabled={loading}
                 className="w-full rounded-lg bg-slate-900 py-3 font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
               >
-                {loading ? 'Analizando...' : 'Ejecutar MENI v2.0'}
+                {loading ? 'Analizando...' : 'Auditoría MENI avanzada'}
               </button>
             </form>
             {error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-red-700">{error}</p>}
