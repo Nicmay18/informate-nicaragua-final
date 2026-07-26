@@ -4,42 +4,33 @@
       "collectionGroup": "noticias",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "categoria",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "fecha",
-          "order": "DESCENDING"
-        }
+        { "fieldPath": "estado", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "noticias",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "estado", "order": "ASCENDING" },
+        { "fieldPath": "categoria", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
       ]
     },
     {
       "collectionGroup": "newsletter_subscribers",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "preferences.frequency",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "preferences.frequency", "order": "ASCENDING" }
       ]
     },
     {
       "collectionGroup": "newsletter_campaigns",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "sentAt",
-          "order": "DESCENDING"
-        }
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "sentAt", "order": "DESCENDING" }
       ]
     }
   ],

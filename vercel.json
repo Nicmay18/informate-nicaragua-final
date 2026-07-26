@@ -11,7 +11,7 @@
   },
   "crons": [
     {
-      "path": "/api/cron/resumen-diario?secret=ni-agente-2024-xyz789",
+      "path": "/api/cron/resumen-diario",
       "schedule": "0 12 * * *"
     }
   ],

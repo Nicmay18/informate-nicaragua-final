@@ -3,37 +3,29 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // ========== NOTICIAS ==========
-    // ⚠️ SEGURIDAD CRÍTICA: TODAS las escrituras están bloqueadas para clientes.
-    // El backend (Next.js Route Handlers / Server Actions) usa Firebase Admin SDK,
-    // el cual BLOQUEA las security rules por completo y opera con privilegios de
-    // service account. Esto garantiza que NUNCA un usuario público pueda modificar
-    // noticias desde el navegador, incluso si obtiene el API key del cliente.
     match /noticias/{noticiaId} {
-      // Lectura pública (todo el mundo puede leer noticias)
+      // Lectura pública
       allow get, list: if true;
 
-      // CREATE: permitido desde el panel admin (Client SDK) con validación estricta.
-      // Se exige que vengan los campos mínimos para evitar documentos vacíos.
-      allow create: if request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
+      // Solo admins autenticados pueden crear/editar
+      allow create: if request.auth != null && request.auth.token.admin == true
+          && request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
           && request.resource.data.titulo is string
           && request.resource.data.titulo.size() > 0
           && request.resource.data.titulo.size() <= 200
           && request.resource.data.contenido is string
           && request.resource.data.contenido.size() <= 50000
-          && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología'];
+          && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectaculos','Tecnologia'];
 
-      // UPDATE: permitido desde el panel admin. Valida solo los campos que se envíen.
-      // Permite actualizaciones parciales como {publicado: true} o {destacada: true}.
-      allow update: if
-          (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
+      allow update: if request.auth != null && request.auth.token.admin == true
+          && (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
           && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000))
-          && (!('categoria' in request.resource.data) || request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectáculos','Tecnología']);
+          && (!('categoria' in request.resource.data) || request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectaculos','Tecnologia']);
 
-      // DELETE: bloqueado para clientes. Solo backend vía adminDb.
       allow delete: if false;
     }
 
-    // ========== NEWSLETTER SUBSCRIBERS ==========
+    // ========== NEWSLETTER ==========
     match /newsletter_subscribers/{email} {
       allow read: if request.auth != null && request.auth.token.admin == true;
       allow create: if request.resource.data.email == email
@@ -71,12 +63,7 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // ========== VIEWS (CONTADOR DE VISITAS) ==========
-    // Escritura directa desde navegador (client-side) para evitar costo Vercel.
-    // CREATE: solo count=1 con timestamps (documento nuevo).
-    // UPDATE: solo incremento de +1 en count (evita inflado arbitrario).
-    // Nota: serverTimestamp() no pasa validacion 'is timestamp' en rules,
-    // por eso se relaja la validacion de tipo para createdAt/updatedAt.
+    // ========== VIEWS ==========
     match /views/{slug} {
       allow read: if true;
       allow create: if request.resource.data.keys().hasOnly(['count','createdAt','updatedAt'])
@@ -87,14 +74,13 @@ service cloud.firestore {
     }
 
     // ========== CONFIGURACIÓN ==========
-    // ⚠️ NUNCA dejes write en true: cualquiera podría destruir tu app
     match /config/{docId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if false;
     }
     match /configuracion/{docId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if false;
     }
   }
 }

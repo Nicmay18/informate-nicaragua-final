@@ -7,25 +7,36 @@ const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
 
-// =============================================================================
-// NORMALIZAR IMÁGENES: Firebase Storage URL → ruta local /images/
-// Las imágenes WebP se suben a public/images/ vía GitHub API
-// Firestore solo guarda el URL original; lo mapeamos a la ruta local
-// =============================================================================
+export const LIST_FIELDS = [
+  'slug',
+  'titulo',
+  'resumen',
+  'imagen',
+  'categoria',
+  'fecha',
+  'fechaActualizacion',
+  'vistas',
+  'estado',
+  'publicado',
+  'noindex',
+  'autor',
+  'autorFoto',
+  'destacada',
+  'pieFoto',
+  'keywords',
+  'metaDescription',
+  'metaDescripcion',
+  'tags',
+  'palabras',
+] as const;
+
 function normalizeImage(imagen: string): string {
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
-
-  // Ya es ruta local
   if (imagen.startsWith('/images/')) return imagen;
-
-  // Data URI (imagen inline del admin) → mantener
   if (imagen.startsWith('data:')) return imagen;
-
-  // Firebase Storage URL → extraer filename y mapear a /images/ local
   if (imagen.includes('firebasestorage.googleapis.com') || imagen.includes('storage.googleapis.com')) {
     try {
       const url = new URL(imagen);
-      // Formato: /v0/b/BUCKET/o/images%2Ffilename.webp
       const pathMatch = url.pathname.match(/\/(?:v0\/b\/[^/]+\/o\/)?(?:images%2F)?(.+)$/);
       if (pathMatch) {
         const encoded = pathMatch[1];
@@ -33,25 +44,15 @@ function normalizeImage(imagen: string): string {
         const filename = decoded.split('/').pop()?.trim();
         if (filename && filename.length > 1) return `/images/${filename}`;
       }
-      // Fallback: extraer último segmento del pathname
       const segments = url.pathname.split('/').filter(Boolean);
       const last = segments.pop();
       if (last && last.length > 1) return `/images/${last}`;
-    } catch {
-      // fallback a extract manual
-    }
-    // Último fallback: extraer nombre de archivo crudo
+    } catch { /* fallback */ }
     const raw = imagen.split('/').pop()?.split('?')[0]?.trim();
     if (raw && raw.length > 1) return `/images/${raw}`;
     return FALLBACK_IMAGE;
   }
-
-  // jsDelivr CDN → mantener directo (CDN global rápido y confiable)
-  if (imagen.includes('cdn.jsdelivr.net')) {
-    return imagen.split('?')[0];
-  }
-
-  // GitHub raw URLs → convertir a jsDelivr CDN (más confiable para producción)
+  if (imagen.includes('cdn.jsdelivr.net')) return imagen.split('?')[0];
   if (imagen.includes('githubusercontent.com')) {
     const clean = imagen.split('?')[0];
     const match = clean.match(/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/);
@@ -61,41 +62,22 @@ function normalizeImage(imagen: string): string {
     }
     return clean;
   }
-
-  // URL externa (Unsplash, etc.) → quitar query params
-  if (imagen.startsWith('http://') || imagen.startsWith('https://')) {
-    return imagen.split('?')[0];
-  }
-
-  // Ruta relativa images/
+  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen.split('?')[0];
   if (imagen.startsWith('images/')) return `/${imagen}`;
-
-  // Ruta absoluta ya normalizada
   if (imagen.startsWith('/')) return imagen;
-
-  // Solo nombre de archivo → asumir /images/
   const fn = imagen.split('/').pop()?.trim();
   if (!fn || fn.length < 2) return FALLBACK_IMAGE;
   return `/images/${fn}`;
 }
 
-// =============================================================================
-// FORZADO FIREBASE ADMIN SDK - Sin fallback mock data
-// =============================================================================
-// El sistema ahora solo funciona con noticias reales de Firebase
-// Si Firebase falla, el sitio mostrará estado vacío con logs de error
-
-// Sanitiza cualquier representación de fecha de Firestore (Timestamp, raw object, string) a ISO string
 function safeDateString(value: unknown): string {
   if (!value) return '';
-  // Firestore Timestamp con toDate()
   if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
     try {
       const d = (value as any).toDate();
       return d instanceof Date && !isNaN(d.getTime()) ? d.toISOString() : '';
     } catch { return ''; }
   }
-  // Raw Firestore Timestamp object {_seconds, _nanoseconds}
   if (typeof value === 'object' && value !== null && '_seconds' in value) {
     try {
       const sec = Number((value as any)._seconds);
@@ -138,54 +120,31 @@ function mapDocToNoticia(d: any): Noticia {
     puntosClave: data.puntosClave,
     metaDescription: data.metaDescription || data.metaDescripcion || '',
     keywords: data.keywords || '',
+    estado: data.estado || 'publicado',
     noindex: !!data.noindex,
   };
 }
 
-// ═══════════════════════════════════════════════════════════════
-// CACHE DE DATOS de Next.js (persistente en Vercel Data Cache)
-// Revalidate Tag para invalidaciones desde API admin
-// ═══════════════════════════════════════════════════════════════
-
-/** Invalidar cache de noticias cuando se publica/actualiza una noticia */
 export function invalidateFirestoreCache() {
   try {
     revalidateTag('noticias');
-  } catch {
-    // No está disponible fuera del runtime de Next.js (ej. scripts Node)
-  }
+  } catch { /* runtime only */ }
 }
 
-/** Trae todas las noticias de Firestore con orderBy fecha desc. Cacheado entre peticiones. */
-const _fetchAllNoticiasRaw = async (): Promise<Noticia[]> => {
+/** Query base para listados: publicadas, ordenadas, proyectadas */
+async function fetchNoticiasList(fields: string[], limit: number): Promise<Noticia[]> {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
+      .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
-      .limit(500)
+      .select(...fields)
+      .limit(limit)
       .get();
-    let noticias = snap.docs.map(mapDocToNoticia);
 
-    // 1. Filtrar SOLO publicadas
-    noticias = noticias.filter(n => {
-      const data = n as any;
-      if (data.estado === 'publicado') return true;
-      if (data.estado === 'borrador') return false;
-      if (data.publicado === false) return false;
-      return true;
-    });
+    const noticias = snap.docs.map(mapDocToNoticia);
 
-    // 2. Filtrar noticias con contenido mínimo válido (evita soft 404 con homepage)
-    noticias = noticias.filter(
-      (n) =>
-        Boolean(n.slug?.trim()) &&
-        (n.titulo?.trim() ?? '').length > 5 &&
-        (n.contenido?.trim() ?? '').length > 20 &&
-        Boolean(n.categoria?.trim())
-    );
-
-    // 3. Deduplicar por slug: quedarse con la más reciente
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
       const existing = unique.get(n.slug);
@@ -193,98 +152,75 @@ const _fetchAllNoticiasRaw = async (): Promise<Noticia[]> => {
         unique.set(n.slug, n);
       }
     }
-    noticias = Array.from(unique.values());
-    return noticias;
+    return Array.from(unique.values());
   } catch (err) {
-    logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] fetchNoticiasList error:', err instanceof Error ? err.message : String(err));
     return [];
   }
-};
-
-async function fetchAllNoticias(): Promise<Noticia[]> {
-  // Next.js Data Cache (persistente en Vercel) para reducir lecturas y memoria
-  const cached = unstable_cache(
-    _fetchAllNoticiasRaw,
-    ['noticias-all'],
-    { revalidate: 60, tags: ['noticias'] }
-  );
-  return cached();
 }
 
-// =============================================================================
-// Firebase Admin SDK - OBLIGATORIO para noticias reales
-// =============================================================================
-async function tryFirebaseAdmin(count: number): Promise<Noticia[] | null> {
-  try {
-    const noticias = await fetchAllNoticias();
-    if (noticias.length === 0) return null;
-    return noticias
-      .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(0, Math.min(count, 200));
-  } catch (err) {
-    logger.error('[data.ts] ERROR CRÍTICO: Firebase Admin SDK falló:', err instanceof Error ? err.message : String(err));
-    logger.error('[data.ts] VERIFICAR: Variables de entorno FIREBASE_* en Vercel');
-    return null;
-  }
-}
+const _cachedGetNews = unstable_cache(
+  async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
+  ['noticias-list'],
+  { revalidate: 60, tags: ['noticias'] }
+);
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  const firebaseNews = await tryFirebaseAdmin(validatedCount);
-  if (firebaseNews && firebaseNews.length > 0) {
-    return firebaseNews;
-  }
-  return [];
+  return _cachedGetNews(validatedCount);
 }
+
+const _cachedGetByCategory = unstable_cache(
+  async (categoria: string, count: number) => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .where('categoria', '==', categoria)
+        .orderBy('fecha', 'desc')
+        .select(...LIST_FIELDS)
+        .limit(count)
+        .get();
+      return snap.docs.map(mapDocToNoticia);
+    } catch (err) {
+      logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  },
+  ['noticias-cat'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  try {
-    // Obtenemos noticias recientes (sin filtro de categoría para evitar índice compuesto)
-    // y filtramos por categoría en JavaScript
-    const allNews = await getNews(200);
-    const normalizeCat = (s: string) => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
-    const filtered = allNews.filter(n =>
-      normalizeCat(n.categoria || '') === normalizeCat(categoria)
-    );
-    return filtered.slice(0, validatedCount);
-  } catch (err) {
-    logger.error(`[data.ts] ERROR categoría ${categoria}:`, err instanceof Error ? err.message : String(err));
-  }
-  return [];
+  return _cachedGetByCategory(categoria, validatedCount);
 }
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
   try {
     const { Timestamp } = await import('firebase-admin/firestore');
-    const noticias = await fetchAllNoticias();
+    const noticias = await getNews(100);
     if (noticias.length === 0) return [];
 
     const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
     const cutoffMs7 = cutoff7.toDate().getTime();
 
-    const sortedByDate = noticias.sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+    const withViews = noticias
+      .filter((n) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
+      .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
 
-    const withViews = sortedByDate
-      .filter((n: Noticia) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
-      .sort((a: Noticia, b: Noticia) => (b.vistas ?? 0) - (a.vistas ?? 0));
+    if (withViews.length >= validatedCount) return withViews.slice(0, validatedCount);
 
-    if (withViews.length >= validatedCount) {
-      return withViews.slice(0, validatedCount);
-    }
-
-    // Fallback: contenido fresco de últimos 3 días
     const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
     const cutoffMs3 = cutoff3.toDate().getTime();
-    const recent3 = sortedByDate.filter((n: Noticia) => new Date(n.fecha).getTime() >= cutoffMs3);
+    const recent3 = noticias.filter((n) => new Date(n.fecha).getTime() >= cutoffMs3);
     if (recent3.length >= validatedCount) return recent3.slice(0, validatedCount);
 
-    // Fallback final: más recientes que haya
-    return sortedByDate.slice(0, validatedCount);
-
+    return noticias.slice(0, validatedCount);
   } catch (err) {
-    logger.error('[data.ts] ERROR: No se pudieron obtener más leídas de Firebase:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
   }
   return [];
 }
@@ -304,15 +240,13 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   try {
     const { adminDb } = await import('./firebase-admin');
 
-    // 1. Búsqueda determinística EXACTA por campo slug
     let snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
+      .where('estado', '==', 'publicado')
       .limit(1)
       .get();
 
-    // 2. Fallback: URLs compartidas en redes pueden tener sufijo aleatorio viejo
-    //    Si no encuentra, intentar quitando el sufijo tipo -abc123 del final
     if (snap.empty) {
       const slugSinSufijo = slug.replace(/-[a-z0-9]{6,}$/i, '');
       if (slugSinSufijo !== slug && slugSinSufijo.length >= 3) {
@@ -320,6 +254,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         snap = await adminDb
           .collection('noticias')
           .where('slug', '==', slugSinSufijo)
+          .where('estado', '==', 'publicado')
           .limit(1)
           .get();
       }
@@ -331,7 +266,6 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       const slug = data.slug || doc.id;
       const titulo = capitalizeFirst(data.titulo || '');
       const contenido = data.contenido || '';
-      // Rechazar documentos vacíos o de baja calidad: evita soft 404 / homepage
       if (!slug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
         logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
         return null;
@@ -356,11 +290,12 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         puntosClave: data.puntosClave,
         metaDescription: data.metaDescription || data.metaDescripcion || '',
         keywords: data.keywords || '',
+        estado: data.estado || 'publicado',
         noindex: !!data.noindex,
       };
     }
   } catch (err) {
-    logger.error('[data.ts] ERROR: No se pudo obtener noticia por slug:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] getNewsBySlug error:', err instanceof Error ? err.message : String(err));
   }
   return null;
 }
@@ -370,67 +305,47 @@ export async function getAllSlugs(): Promise<string[]> {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
+      .where('estado', '==', 'publicado')
       .select('slug')
       .limit(2000)
       .get();
-    
+
     return snap.docs
       .map((d: any) => d.data().slug)
       .filter(Boolean);
   } catch (err) {
-    logger.error('[data.ts] ERROR: No se pudieron obtener slugs:', err instanceof Error ? err.message : String(err));
+    logger.error('[data.ts] getAllSlugs error:', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
 
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
   const validatedCount = validateCount(count, 3);
-
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
+      .where('estado', '==', 'publicado')
       .where('categoria', '==', categoria)
       .orderBy('fecha', 'desc')
+      .select(...LIST_FIELDS)
       .limit(validatedCount + 1)
       .get();
 
-    const related = snap.docs
-      .map((d: any) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          slug: data.slug || d.id,
-          titulo: capitalizeFirst(data.titulo || ''),
-          resumen: data.resumen || '',
-          contenido: data.contenido,
-          categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
-          fecha: safeDateString(data.fecha),
-          autor: data.autor,
-          autorFoto: data.autorFoto,
-          destacada: data.destacada,
-          vistas: data.vistas,
-          palabras: data.palabras,
-          pieFoto: data.pieFoto,
-        };
-      })
-      .filter((n: Noticia) => n.slug !== excludeSlug)
+    return snap.docs
+      .map(mapDocToNoticia)
+      .filter((n) => n.slug !== excludeSlug)
       .slice(0, validatedCount);
-
-    return related;
   } catch (err) {
-    logger.error('[data.ts] ERROR: No se pudieron obtener noticias relacionadas por índice:', err instanceof Error ? err.message : String(err));
-    // Fallback: usar getNews del cache existente (evita lectura masiva de Firestore)
+    logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
     try {
       const all = await getNews(30);
-      const related = all
-        .filter((n: Noticia) => n.categoria === categoria && n.slug !== excludeSlug)
-        .sort((a: Noticia, b: Noticia) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      return all
+        .filter((n) => n.categoria === categoria && n.slug !== excludeSlug)
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
         .slice(0, validatedCount);
-      return related;
     } catch (fallbackErr) {
-      logger.error('[data.ts] Fallback también falló:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
+      logger.error('[data.ts] getRelatedNews fallback error:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
     }
   }
   return [];

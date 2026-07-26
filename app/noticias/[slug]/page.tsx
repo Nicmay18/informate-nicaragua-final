@@ -12,11 +12,10 @@ import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/s
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
 import { escapeJsonLd } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
+import { unstable_cache } from 'next/cache';
 
-// Dynamic rendering: evita timeout/memoria al generar 200+ páginas estáticas
-// y garantiza HTTP 404 reales para slugs inexistentes. El contenido se cachea
-// vía unstable_cache en lib/data.ts con revalidate de 3600s.
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
@@ -35,15 +34,26 @@ function toNoticiaTipo(value: string): NoticiaTipo {
   return NOTICIA_TIPOS.includes(value as NoticiaTipo) ? (value as NoticiaTipo) : 'General';
 }
 
+const getCachedNewsBySlug = unstable_cache(
+  async (slug: string) => getNewsBySlug(slug),
+  ['noticia-by-slug'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
+
+const getCachedRelated = unstable_cache(
+  async (categoria: string, excludeSlug: string) => getRelatedNews(categoria, excludeSlug, 6),
+  ['related-news'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const noticia = await getNewsBySlug(slug);
+    const noticia = await getCachedNewsBySlug(slug);
     if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) {
       notFound();
     }
 
-    // Slug obsoleto: redirigir al canonical en lugar de servir metadatos duplicados
     if (noticia.slug && noticia.slug !== slug) {
       permanentRedirect(`/noticias/${noticia.slug}`);
     }
@@ -53,8 +63,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const category = noticia.categoria || 'General';
     const seoTipo = toNoticiaTipo(category);
 
-    // SEO Title optimization (máx 60 chars para evitar truncamiento en SERPs)
-    // Preferir titulo original si ya es SEO-friendly; solo reescribir si es muy malo
     const originalValidation = validateTitle(noticia.titulo);
     const seoTitleResult = generateOptimizedTitle({
       tipo: seoTipo,
@@ -64,19 +72,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       contexto: noticia.resumen?.substring(0, 40),
     });
     const titleValidation = validateTitle(seoTitleResult);
-    // Usar original si ya es bueno (score >= 70) y no es mucho peor que el SEO rewrite
+
     let finalTitle = originalValidation.score >= 70
       ? noticia.titulo
       : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
 
-    // Truncar a máximo 60 caracteres para Bing/Google (evita 'Título demasiado largo')
     if (finalTitle.length > 60) {
       const cutAt = finalTitle.lastIndexOf(' ', 57);
       finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 57) + '…';
     }
 
-    // Meta description: priorizar resumen editorial > metaDescription > generada
-    // El resumen escrito por el periodista es mas atractivo que las plantillas genericas
     const rawDescription = noticia.resumen?.trim()
       || noticia.metaDescription?.trim()
       || generateMetaDescription(noticia);
@@ -90,12 +95,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     const shouldNoindex = noticia.noindex === true;
-
-    // Para redes sociales usamos el título ORIGINAL (más legible para humanos)
-    // El SEO title (finalTitle) solo va en <title> para Google SERPs
     const socialTitle = noticia.titulo || finalTitle;
 
-    // Normalizar imagen a URL absoluta para Open Graph / Telegram / Discord
     const absoluteImage = noticia.imagen
       ? (noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`)
       : 'https://nicaraguainformate.com/logo.webp';
@@ -115,9 +116,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         publishedTime: noticia.fecha,
         modifiedTime: noticia.fechaActualizacion || noticia.fecha,
         section: category,
-        images: [
-          { url: absoluteImage, width: 1200, height: 630, alt: imageAlt },
-        ],
+        images: [{ url: absoluteImage, width: 1200, height: 630, alt: imageAlt }],
       },
       twitter: {
         card: 'summary_large_image',
@@ -146,8 +145,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         keywords: keywords.split(',').map((k: string) => k.trim()).filter(Boolean),
       },
     };
-  } catch {
-    return {};
+  } catch (err) {
+    logger.error('[article-metadata] Error generando metadata:', err);
+    notFound();
   }
 }
 
@@ -157,25 +157,21 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   let noticia: Awaited<ReturnType<typeof getNewsBySlug>> = null;
   let related: Awaited<ReturnType<typeof getRelatedNews>> = [];
 
-  // 1. Cargar noticia. Cualquier error se trata como 404 para evitar soft 404s con HTTP 200.
   try {
-    noticia = await getNewsBySlug(slug);
+    noticia = await getCachedNewsBySlug(slug);
   } catch (error) {
     logger.error('Error cargando noticia:', error);
     notFound();
   }
 
-  // 2. Noticia no encontrada o con datos mínimos incompletos → 404 de Next.js
   if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) return notFound();
 
-  // 3. Slug obsoleto → redirigir 301
   if (noticia.slug && noticia.slug !== slug) {
     permanentRedirect(`/noticias/${noticia.slug}`);
   }
 
-  // 4. Cargar relacionadas (si falla, array vacío, no rompe la página)
   try {
-    related = await getRelatedNews(noticia.categoria, noticia.slug, 6);
+    related = await getCachedRelated(noticia.categoria, noticia.slug);
   } catch (error) {
     logger.error('Error cargando relacionadas:', error);
     related = [];

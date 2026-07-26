@@ -1,10 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // output: 'standalone' // desactivado localmente para evitar EBUSY en copia; Vercel usa serverless por defecto
   trailingSlash: false,
   eslint: {
-    ignoreDuringBuilds: true, // Desactivado temporalmente: demasiados errores preexistentes
+    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: false,
@@ -13,12 +12,9 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: true,
   },
-  // Build trigger: refresh deployment to fix missing chunks
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
     scrollRestoration: true,
-    // NOTA: optimizeCss descartado — critters falla en build de Vercel (/404).
-    // Critical CSS ya se inyecta manualmente en layout.tsx via lib/critical-css.ts
   },
   images: {
     unoptimized: false,
@@ -46,29 +42,24 @@ const nextConfig: NextConfig = {
   },
   compress: true,
   poweredByHeader: false,
-  webpack: (config, { isServer }) => {
-    // Next.js maneja splitChunks automáticamente; no sobreescribir
-    // Fix: Windows casing issues causing duplicate React modules
+  webpack: (config) => {
     config.resolve.symlinks = false;
     return config;
   },
   async redirects() {
     return [
-      // 🔴 CRÍTICO: Unificar dominio www → non-www (canonical = sin www)
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.nicaraguainformate.com' }],
         destination: 'https://nicaraguainformate.com/:path*',
         permanent: true,
       },
-      // Forzar HTTPS si llega por HTTP (x-forwarded-proto es agregado por Vercel/nginx)
       {
         source: '/:path*',
         has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
         destination: 'https://nicaraguainformate.com/:path*',
         permanent: true,
       },
-      // Redirigir URLs alternativas de páginas legales (AdSense busca estas rutas)
       {
         source: '/sobre-nosotros',
         destination: '/nosotros',
@@ -79,7 +70,6 @@ const nextConfig: NextConfig = {
         destination: '/privacidad',
         permanent: true,
       },
-      // Redirigir URLs de categoría con query params a rutas limpias /categoria/
       {
         source: '/',
         has: [{ type: 'query', key: 'cat' }],
@@ -92,7 +82,6 @@ const nextConfig: NextConfig = {
         destination: '/categoria/:cat',
         permanent: true,
       },
-      // Redirigir rutas de categoría antiguas (root-level) a /categoria/
       {
         source: '/sucesos',
         destination: '/categoria/sucesos',
@@ -128,13 +117,11 @@ const nextConfig: NextConfig = {
         destination: '/categoria/economia',
         permanent: true,
       },
-      // Redirigir slug de autor legacy al canonical
       {
         source: '/autor/keyling-eliet-rivera-munoz',
         destination: '/autor/keyling-rivera',
         permanent: true,
       },
-      // Redirigir URLs con query params basura a URLs limpias
       {
         source: '/noticias/:slug',
         has: [{ type: 'query' as const, key: 'slug' }],
@@ -147,7 +134,6 @@ const nextConfig: NextConfig = {
         destination: '/noticias/:slug',
         permanent: true,
       },
-      // Redirigir categorías inexistentes a existentes similares
       {
         source: '/categoria/cultura',
         destination: '/categoria/espectaculos',
@@ -165,7 +151,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // /noticia.html sin query params → redirige al listado de noticias
         source: '/noticia.html',
         destination: '/noticias',
         permanent: true,
@@ -180,7 +165,6 @@ const nextConfig: NextConfig = {
         destination: '/privacidad',
         permanent: true,
       },
-      // Redirecciones estándar
       {
         source: '/quienes-somos',
         destination: '/nosotros',
@@ -216,14 +200,11 @@ const nextConfig: NextConfig = {
         destination: '/cookies',
         permanent: true,
       },
-      // Admin viejo acceso directo
       {
         source: '/panel',
         destination: '/api/panel',
         permanent: false,
       },
-      // ─── REDIRECTS RSS/FEED ───
-      // Rutas comunes de feeds que crawlers y agregadores buscan
       {
         source: '/index.php/feed',
         destination: '/feed.xml',
@@ -259,7 +240,6 @@ const nextConfig: NextConfig = {
         destination: '/feed.xml',
         permanent: true,
       },
-      // ─── BLOQUEAR SCANNERS DE WORDPRESS ───
       {
         source: '/wp-admin/:path*',
         destination: '/403',
@@ -278,9 +258,7 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      // Re-activar cuando se necesite service worker personalizado
-    ];
+    return [];
   },
   async headers() {
     return [
@@ -291,8 +269,6 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
-      // Cache-Control para / y /noticias manejado por Next.js ISR (force-static + revalidate)
-      // No forzar max-age=0 para evitar anular cache de Vercel
       {
         source: '/',
         headers: [
@@ -302,38 +278,14 @@ const nextConfig: NextConfig = {
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           {
             key: 'Content-Security-Policy',
             value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://static.cloudflareinsights.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://cdn.onesignal.com https://api.onesignal.com https://*.onesignal.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://onesignal.com https://*.onesignal.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://www.google.com https://raw.githubusercontent.com https://api.github.com https://api.open-meteo.com https://www.gstatic.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://static.cloudflareinsights.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://onesignal.com https://*.onesignal.com; frame-src https://accounts.google.com https://*.firebaseapp.com https://*.firebaseio.com https://*.googleusercontent.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com https://fundingchoicesmessages.google.com https://*.onesignal.com; worker-src 'self' blob: https://cdn.onesignal.com; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"

@@ -7,7 +7,6 @@ import type { Noticia } from '@/lib/types';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
-/** Metadata atractiva por categoría para mejorar CTR */
 const CATEGORIA_META: Record<string, { titulo: string; description: string }> = {
   sucesos: {
     titulo: 'Sucesos en Nicaragua | Policiales y Accidentes Hoy',
@@ -39,10 +38,8 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
   },
 };
 
-// generateStaticParams vacío porque la ruta es force-dynamic
-export async function generateStaticParams() {
-  return [];
-}
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -79,9 +76,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
   };
 }
-
-// Dynamic rendering: evita timeout en build y garantiza 404 reales para categorías inválidas
-export const dynamic = 'force-dynamic';
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
