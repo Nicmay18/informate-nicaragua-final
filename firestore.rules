@@ -7,32 +7,31 @@ service cloud.firestore {
       // Lectura pública
       allow get, list: if true;
 
-      // Solo admins autenticados pueden crear/editar
-      allow create: if request.auth != null && request.auth.token.admin == true
+      // Usuarios autenticados pueden crear/editar
+      // (El acceso está controlado por Firebase Auth + ADMIN_EMAILS en el servidor)
+      allow create: if request.auth != null
           && request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
           && request.resource.data.titulo is string
           && request.resource.data.titulo.size() > 0
           && request.resource.data.titulo.size() <= 200
           && request.resource.data.contenido is string
-          && request.resource.data.contenido.size() <= 50000
-          && request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectaculos','Tecnologia'];
+          && request.resource.data.contenido.size() <= 50000;
 
-      allow update: if request.auth != null && request.auth.token.admin == true
+      allow update: if request.auth != null
           && (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
-          && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000))
-          && (!('categoria' in request.resource.data) || request.resource.data.categoria in ['Sucesos','Nacionales','Deportes','Internacionales','Espectaculos','Tecnologia']);
+          && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000));
 
-      allow delete: if false;
+      allow delete: if request.auth != null;
     }
 
     // ========== NEWSLETTER ==========
     match /newsletter_subscribers/{email} {
-      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow read: if request.auth != null;
       allow create: if request.resource.data.email == email
           && request.resource.data.email.matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$')
           && request.resource.data.status == 'active'
           && request.resource.data.subscribedAt is timestamp;
-      allow update, delete: if request.auth != null && request.auth.token.admin == true;
+      allow update, delete: if request.auth != null;
     }
 
     // ========== COMENTARIOS ==========
@@ -50,16 +49,16 @@ service cloud.firestore {
 
     // ========== ADMIN ONLY ==========
     match /newsletter_campaigns/{campaignId} {
-      allow read, write: if request.auth != null && request.auth.token.admin == true;
+      allow read, write: if request.auth != null;
     }
     match /newsletter_sponsors/{sponsorId} {
-      allow read, write: if request.auth != null && request.auth.token.admin == true;
+      allow read, write: if request.auth != null;
     }
     match /sponsored_campaigns/{campaignId} {
-      allow read, write: if request.auth != null && request.auth.token.admin == true;
+      allow read, write: if request.auth != null;
     }
     match /analytics/{docId} {
-      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow read: if request.auth != null;
       allow write: if false;
     }
 
@@ -76,11 +75,58 @@ service cloud.firestore {
     // ========== CONFIGURACIÓN ==========
     match /config/{docId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if request.auth != null;
     }
     match /configuracion/{docId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if request.auth != null;
+    }
+
+    // ========== MENI v6.0 COLECCIONES ==========
+    // Knowledge Base, Learning Engine, Seguimiento, Portada Intel
+    match /kb_entities/{entityId} {
+      allow read, write: if request.auth != null;
+    }
+    match /kb_relations/{relationId} {
+      allow read, write: if request.auth != null;
+    }
+    match /kb_timelines/{timelineId} {
+      allow read, write: if request.auth != null;
+    }
+    match /learning_cycles/{cycleId} {
+      allow read, write: if request.auth != null;
+    }
+    match /learning_config/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /seguimiento_cases/{caseId} {
+      allow read, write: if request.auth != null;
+    }
+    match /seguimiento_updates/{updateId} {
+      allow read, write: if request.auth != null;
+    }
+    match /portada_intel/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /portada_intel_config/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /portada_config/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /traffic_log/{docId} {
+      allow read: if request.auth != null;
+      allow write: if true;
+    }
+    match /analytics_traffic/{docId} {
+      allow read: if request.auth != null;
+      allow write: if true;
+    }
+    match /distribuciones/{docId} {
+      allow read, write: if request.auth != null;
+    }
+    match /reportes_crecimiento/{docId} {
+      allow read, write: if request.auth != null;
     }
   }
 }
