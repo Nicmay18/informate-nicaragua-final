@@ -108,10 +108,12 @@ export async function POST(request: NextRequest) {
     if (body.aprobadoMeni !== undefined) updateData.aprobadoMeni = body.aprobadoMeni;
 
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
+    let articleDocId = id;
     if (id) {
       await db.collection('noticias').doc(id).update(updateData);
     } else {
       const docRef = db.collection('noticias').doc();
+      articleDocId = docRef.id;
       await docRef.set({
         ...updateData,
         id: docRef.id,
@@ -135,6 +137,25 @@ export async function POST(request: NextRequest) {
       const { invalidateFirestoreCache } = await import('@/lib/data');
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
+
+    // Knowledge Base — ingestar artículo publicado al grafo de conocimiento
+    if (publicado) {
+      try {
+        const { ingestArticle } = await import('@/lib/meni/knowledge-base');
+        await ingestArticle(db, {
+          articleId: articleDocId!,
+          title: titulo.trim(),
+          content: contenido.trim(),
+          slug: body.slug || '',
+          category: categoria || 'General',
+          departamento: departamento || '',
+          date: (body.fecha as string) || new Date().toISOString(),
+          author: body.autor || '',
+        });
+      } catch (kbError) {
+        console.warn('[guardar-directo] Knowledge Base ingestion failed (non-blocking):', kbError);
+      }
+    }
 
     return NextResponse.json({
       success: true,
