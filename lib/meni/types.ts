@@ -3,6 +3,7 @@
  */
 
 import type { NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
+import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
 
 export type NoticiaInput = EditorialNoticiaInput & { departamento?: string };
 
@@ -112,6 +113,7 @@ export interface MeniResult {
     contenido?: string;
     slug: string;
   };
+  intelligence?: IntelligenceResult;
 }
 
 export interface MeniReport {

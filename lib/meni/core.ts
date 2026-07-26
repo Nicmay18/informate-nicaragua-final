@@ -12,6 +12,7 @@ import { computePriority, scoreToGrade, approved, normalizeCategory } from './sc
 import { audit, buildRecomendaciones } from './auditor';
 import { buildValorEditorial, buildDiagnostico } from './editor-chief';
 import { getModule } from './modules';
+import { runIntelligenceEngine } from './intelligence';
 
 export function runMeni(input: NoticiaInput): MeniResult {
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
@@ -41,6 +42,11 @@ export function runMeni(input: NoticiaInput): MeniResult {
   const textoPlano = evaluacion.evidence.textoPlano ?? (input.contenido || '');
   const resumenOptimizado = generarMetaDescription(textoPlano, input.resumen);
 
+  const intelligence = runIntelligenceEngine({
+    ...input,
+    fuente: input.contenido,
+  });
+
   return {
     version: '2.0',
     estado: 'Activo',
@@ -66,5 +72,6 @@ export function runMeni(input: NoticiaInput): MeniResult {
       contenido: input.contenido,
       slug: seo.slug,
     },
+    intelligence,
   };
 }
