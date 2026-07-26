@@ -23,7 +23,9 @@
     "test:all": "npm run lint && npm run type-check && npm run test && npm run test:e2e",
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
     "audit": "node scripts/audit-costs.mjs",
-    "scripts:organize": "node scripts/cli.js organize"
+    "scripts:organize": "node scripts/cli.js organize",
+    "meni:sync": "node scripts/meni-prebuild.mjs",
+    "prebuild": "node scripts/meni-prebuild.mjs"
   },
   "dependencies": {
     "@tiptap/extension-placeholder": "^3.23.4",

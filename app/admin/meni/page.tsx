@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
 
@@ -78,9 +79,14 @@ export default function MeniPage() {
   return (
     <main className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">MENI v2.0</h1>
-          <p className="text-slate-600">Motor Editorial Nicaragua Informate</p>
+        <header className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">MENI v2.1</h1>
+            <p className="text-slate-600">Sistema nervioso central de Nicaragua Informate</p>
+          </div>
+          <Link href="/admin/meni/arquitectura" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+            Arquitectura
+          </Link>
         </header>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
