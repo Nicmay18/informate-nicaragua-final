@@ -207,7 +207,8 @@ vercel-runtime*.json
 vercel-*.log
 meni-output/
 scripts/output/
-.devin/prompts/
+.devin/prompts/*
+!.devin/prompts/meni-os-*.md
 firebase.json
 
 # MENI OS v3.0 — artefactos generados en prebuild
