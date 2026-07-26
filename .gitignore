@@ -201,3 +201,11 @@ procesar-salvable.js
 
 # TypeScript cache
 tsconfig.tsbuildinfo
+
+# Archivos temporales de debugging/deploy
+vercel-runtime*.json
+vercel-*.log
+meni-output/
+scripts/output/
+.devin/prompts/
+firebase.json
