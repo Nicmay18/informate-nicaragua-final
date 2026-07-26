@@ -155,6 +155,25 @@ export async function POST(request: NextRequest) {
       } catch (kbError) {
         console.warn('[guardar-directo] Knowledge Base ingestion failed (non-blocking):', kbError);
       }
+
+      // Sistema de Seguimiento — detectar/vincular casos abiertos
+      try {
+        const { processArticle } = await import('@/lib/meni/seguimiento');
+        const result = await processArticle(
+          db,
+          articleDocId!,
+          titulo.trim(),
+          contenido.trim(),
+          body.slug || '',
+          categoria || 'General',
+          departamento || '',
+        );
+        if (result.action !== 'none') {
+          console.log('[guardar-directo] Seguimiento:', result.action, result.caseId || '', result.reason);
+        }
+      } catch (segError) {
+        console.warn('[guardar-directo] Seguimiento detection failed (non-blocking):', segError);
+      }
     }
 
     return NextResponse.json({
