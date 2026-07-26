@@ -10,7 +10,7 @@ import {
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
-import { escapeJsonLd } from '@/lib/sanitize';
+import { escapeJsonLd } from '@/lib/jsonld';
 import { logger } from '@/lib/logger';
 import { unstable_cache } from 'next/cache';
 

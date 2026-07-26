@@ -10,7 +10,7 @@ import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
 } from '@/lib/seo/schema';
-import { escapeJsonLd } from '@/lib/sanitize';
+import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import DeferredAnalytics from '@/components/DeferredAnalytics';

@@ -1,0 +1,21 @@
+{
+  "total": 1,
+  "approved": 0,
+  "rejected": 1,
+  "errors": 0,
+  "dryRun": false,
+  "provider": "ollama",
+  "threshold": 95,
+  "results": [
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "slug": "mundial-2030-por-que-habra-partidos-en-sudamerica-y-europa",
+      "categoria": "Deportes",
+      "modulo": "DEPORTES",
+      "score": 0,
+      "approved": false,
+      "title": "",
+      "status": "rechazado"
+    }
+  ]
+}
