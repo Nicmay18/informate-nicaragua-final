@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
+import { runMeni } from '@/lib/meni';
+import type { NoticiaInput } from '@/lib/meni';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
-import { generarMetaDescription, generarTituloSEO } from '@/lib/editorial/meta';
+import { stripHtml } from '@/lib/meni/utils/helpers';
 
 export const maxDuration = 30;
 
@@ -38,16 +39,17 @@ export async function POST(request: NextRequest) {
       contenido: contenido.trim(),
       resumen: resumen?.trim() || '',
       categoria: categoria || 'General',
+      departamento: departamento || '',
       autor: body.autor || '',
       fecha: body.fecha || new Date().toISOString(),
       fechaActualizacion: body.fechaActualizacion,
+      imagen: imagen || body.imagen,
       imagenDestacada: imagen || body.imagenDestacada,
       slug: body.slug || '',
       palabrasClave: body.palabrasClave || [],
     };
 
-    const v4 = evaluate(noticiaInput);
-    const analisis = mapV4ToV3(v4);
+    const meni = runMeni(noticiaInput);
 
     // 2. Detector de duplicados
     const db = getAdminDb();
@@ -62,24 +64,24 @@ export async function POST(request: NextRequest) {
     // 3. Generar metadata si falta
     let metaGenerada = resumen;
     if (!metaGenerada || metaGenerada.length < 150) {
-      metaGenerada = generarMetaDescription(v4.evidence.textoPlano, resumen);
+      metaGenerada = meni.seo.metaDescripcion;
     }
 
     // 4. BLOQUEO si no pasa filtros criticos
-    if (!analisis.aprobado || duplicado.esDuplicado) {
+    if (!meni.aprobado || duplicado.esDuplicado) {
       return NextResponse.json({
         error: 'Noticia rechazada por calidad',
-        analisis,
+        meni,
         duplicado,
         sugerencias: {
           metaDescription: metaGenerada,
-          tituloSEO: generarTituloSEO(titulo, categoria, departamento),
+          tituloSEO: meni.seo.tituloSEO,
         }
       }, { status: 400 });
     }
 
-    // Contar palabras usando la evidencia extraída una sola vez
-    const palabras = v4.evidence.textoPlano.split(/\s+/).filter(Boolean).length;
+    // Contar palabras usando el contenido recibido
+    const palabras = stripHtml(contenido).split(/\s+/).filter(Boolean).length;
 
     // Datos a actualizar
     const updateData: Record<string, unknown> = {
@@ -125,6 +127,13 @@ export async function POST(request: NextRequest) {
       id,
       palabras,
       mensaje: `Noticia actualizada directamente. ${palabras} palabras.`,
+      meni: {
+        scoreFinal: meni.scoreFinal,
+        aprobado: meni.aprobado,
+        calificacion: meni.calificacion,
+        diagnostico: meni.diagnostico,
+        recomendaciones: meni.recomendaciones.slice(0, 5),
+      },
     }, { status: 200 });
 
   } catch (error) {
