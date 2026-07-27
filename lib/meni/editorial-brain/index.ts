@@ -23,6 +23,7 @@ import { runPublicValueEngine } from './public-value-engine';
 import { runReaderRetentionEngine } from './reader-retention-engine';
 import { runStoryCompletenessEngine } from './story-completeness-engine';
 import { runIntelligenceEngine } from '@/lib/meni/intelligence';
+import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
 
 export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision {
   // 1. News Value — ¿Vale la pena publicarla?
@@ -72,20 +73,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   if (newsValue.veredicto === 'baja' && newsValue.score < 30) motivosBloqueo.push(`Valor noticioso muy bajo (${newsValue.score}/100). No justifica publicación.`);
   const motivoBloqueo = motivosBloqueo.length > 0 ? motivosBloqueo.join(' | ') : null;
 
-  // Score global del Editorial Brain
-  const scores = [
-    newsValue.score,
-    competition.score,
-    nicaraguaInformate.score,
-    readerQuestions.score,
-    explanation.score,
-    editorialDifference.score,
-    publicValue.score,
-    readerRetention.score,
-    storyCompleteness.score,
-  ];
-  const score = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-  const publicar = !bloquear && score >= 60;
+  // El score final se calculará a partir del ADN NI (computeEditorialDNA) abajo.
 
   // ═══════════════════════════════════════════════════════════
   // LLM Instructions — lo que el LLM recibe
@@ -115,7 +103,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     pieFoto: 'Foto cortesía de RR.SS / Redacción Keyling Rivera M. / INFORMATE NICARAGUA',
   };
 
-  return {
+  const baseDecision: Omit<EditorialDecision, 'editorialDna'> = {
     newsValue,
     competition,
     nicaraguaInformate,
@@ -126,12 +114,28 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     readerRetention,
     storyCompleteness,
     intelligence,
-    score,
-    publicar,
+    score: 0,
+    publicar: false,
     bloquear,
     motivoBloqueo,
     llmInstructions,
   };
+
+  const editorialDna = computeEditorialDNA({ decision: baseDecision });
+  const score = editorialDna.adnNI;
+  const publicar = !bloquear && !editorialDna.bloquear && score >= 60;
+  const finalMotivoBloqueo = [motivoBloqueo, editorialDna.motivoBloqueo].filter(Boolean).join(' | ') || null;
+
+  const decision: EditorialDecision = {
+    ...baseDecision,
+    score,
+    publicar,
+    bloquear: bloquear || editorialDna.bloquear,
+    motivoBloqueo: finalMotivoBloqueo,
+    editorialDna,
+  };
+
+  return decision;
 }
 
 export type { EditorialDecision, EditorialBrainInput, LlmInstructions } from './types';

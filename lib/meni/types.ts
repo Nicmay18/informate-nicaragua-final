@@ -7,6 +7,7 @@ import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
 import type { ResultadoDuplicado } from '@/lib/analizador-duplicados';
 import type { QualityGateResult } from '@/lib/meni/quality-gate';
 import type { EditorBrainResult } from '@/lib/meni/editor-brain';
+import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 
 export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
@@ -137,6 +138,7 @@ export interface MeniResult {
   warnings?: MeniBlockingIssue[];
   autoCorrected?: boolean;
   autoCorrections?: { campo: string; antes: string; despues: string; descripcion: string }[];
+  editorialDna?: EditorialDnaResult;
 }
 
 export interface MeniReport {

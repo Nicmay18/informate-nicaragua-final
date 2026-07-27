@@ -29,6 +29,7 @@ import {
   logTime,
 } from './diagnostics';
 import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '@/lib/meni/editor-brain';
+import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 
 export interface MeniRunOptions {
   db?: any; // Admin Firestore instance
@@ -72,6 +73,14 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     fuente: input.contenido,
   });
 
+  // Editorial Brain + ADN NI: evalúa exclusividad, WOW y sello Nicaragua Informate
+  const editorialDecision = runEditorialBrain({
+    ...input,
+    fuente: input.contenido,
+    categoriaSugerida: input.categoria,
+  });
+  const editorialDna = editorialDecision.editorialDna;
+
   // Quality Gate — corre siempre dentro de runMeni (único punto de entrada).
   // No se ejecuta un "Analizador" separado: esta es la revisión final MENI.
   const qualityGate = runQualityGate({
@@ -81,7 +90,7 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     stage: 'POST_LLM',
   });
 
-  const aprobadoFinal = aprobado && !qualityGate.bloqueado;
+  const aprobadoFinal = aprobado && !qualityGate.bloqueado && !editorialDna.bloquear;
   const recomendacionesFinal = qualityGate.bloqueado
     ? [
         ...qualityGate.motivosBloqueo.map((m) => ({
@@ -93,7 +102,7 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
       ]
     : recomendaciones;
 
-  const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal });
+  const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal, editorialDna });
   logMeni('Quality gate result', {
     bloqueado: qualityGate.bloqueado,
     issuesCount: qualityGate.issues.length,
@@ -101,8 +110,16 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     editorScore: qualityGate.editorScore,
     motivosBloqueo: qualityGate.motivosBloqueo,
   });
+  logMeni('ADN NI result', {
+    adnNI: editorialDna.adnNI,
+    exclusividad: editorialDna.exclusividad.score,
+    wow: editorialDna.wow.score,
+    selloNI: editorialDna.selloNI,
+    bloquear: editorialDna.bloquear,
+  });
   logMeni('=== runMeni end ===', {
     scoreFinal,
+    adnNI: editorialDna.adnNI,
     aprobado: aprobadoFinal,
     blockingIssues: blockingIssues.length,
     warnings: warnings.length,
@@ -138,6 +155,7 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     },
     qualityGate,
     intelligence,
+    editorialDna,
   };
 }
 

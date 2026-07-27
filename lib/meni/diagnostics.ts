@@ -1,5 +1,7 @@
 import type { MeniBlockingIssue } from './types';
 import type { QualityGateIssue, QualityGateResult } from './quality-gate/types';
+import type { EditorialDnaResult } from './editorial-dna/types';
+import { MIN_APPROVED_SCORE } from './scoring';
 import {
   MAX_TRANSCRIPTION_PERCENT,
   MIN_ORIGINALITY_PERCENT,
@@ -169,6 +171,7 @@ export function buildMeniDiagnostics(opts: {
   qualityGate?: QualityGateResult;
   scoreFinal: number;
   aprobado: boolean;
+  editorialDna?: EditorialDnaResult;
 }): { blockingIssues: MeniBlockingIssue[]; warnings: MeniBlockingIssue[] } {
   const blockingIssues: MeniBlockingIssue[] = [];
   const warnings: MeniBlockingIssue[] = [];
@@ -193,6 +196,49 @@ export function buildMeniDiagnostics(opts: {
     }
   }
 
+  if (opts.editorialDna) {
+    const dna = opts.editorialDna;
+    if (dna.exclusividad.bloquear && dna.exclusividad.razon) {
+      blockingIssues.push({
+        code: 'EDITORIAL_DNA_EXCLUSIVIDAD',
+        module: 'editorial-dna',
+        severity: 'BLOCKER',
+        title: 'Valor diferencial insuficiente',
+        description: dna.exclusividad.razon,
+        currentValue: `${dna.exclusividad.score}%`,
+        expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
+        howToFix: 'Incluí contexto, explicación, antecedentes o utilidad que otros medios no aportan.',
+        field: 'contenido',
+      });
+    }
+    if (dna.wow.bloquear && dna.wow.razon) {
+      blockingIssues.push({
+        code: 'EDITORIAL_DNA_WOW',
+        module: 'editorial-dna',
+        severity: 'BLOCKER',
+        title: 'El lector no aprende nada nuevo',
+        description: dna.wow.razon,
+        currentValue: `${dna.wow.score}%`,
+        expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
+        howToFix: 'Respondé qué ocurrió, por qué, qué significa, qué cambia y cómo afecta al lector.',
+        field: 'contenido',
+      });
+    }
+    if (dna.transcripcion.bloquear && dna.transcripcion.razon) {
+      blockingIssues.push({
+        code: 'EDITORIAL_DNA_TRANSCRIPCION',
+        module: 'editorial-dna',
+        severity: 'BLOCKER',
+        title: 'Riesgo de transcripción de la fuente',
+        description: dna.transcripcion.razon,
+        currentValue: `${dna.transcripcion.score}%`,
+        expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
+        howToFix: 'Parafraseá la fuente. Sumá análisis propio, contexto y explicación.',
+        field: 'contenido',
+      });
+    }
+  }
+
   if (!opts.aprobado && blockingIssues.length === 0) {
     blockingIssues.push({
       code: 'MENI_SCORE_THRESHOLD',
@@ -201,7 +247,7 @@ export function buildMeniDiagnostics(opts: {
       title: 'Score final por debajo del umbral',
       description: `La nota obtuvo ${opts.scoreFinal} puntos, insuficiente para aprobar.`,
       currentValue: opts.scoreFinal,
-      expectedValue: '≥ 70',
+      expectedValue: `≥ ${MIN_APPROVED_SCORE}`,
       howToFix: 'Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.',
       field: 'general',
     });

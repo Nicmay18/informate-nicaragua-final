@@ -8,6 +8,7 @@
 
 import type { NoticiaInput } from '@/lib/meni/types';
 import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
+import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
@@ -187,4 +188,5 @@ export interface EditorialDecision {
   bloquear: boolean;
   motivoBloqueo: string | null;
   llmInstructions: LlmInstructions;
+  editorialDna: EditorialDnaResult;
 }
