@@ -103,7 +103,13 @@ export async function POST(request: NextRequest) {
     if (body.slug !== undefined) updateData.slug = body.slug;
     if (body.categoriaSlug !== undefined) updateData.categoriaSlug = body.categoriaSlug;
     if (body.autor !== undefined) updateData.autor = body.autor;
-    if (body.palabrasClave !== undefined) updateData.palabrasClave = body.palabrasClave;
+    if (body.palabrasClave !== undefined) {
+      updateData.palabrasClave = body.palabrasClave;
+      updateData.tags = body.palabrasClave;
+      updateData.keywords = Array.isArray(body.palabrasClave)
+        ? body.palabrasClave.join(', ')
+        : String(body.palabrasClave);
+    }
     if (body.scoreMeni !== undefined) updateData.scoreMeni = body.scoreMeni;
     if (body.aprobadoMeni !== undefined) updateData.aprobadoMeni = body.aprobadoMeni;
 

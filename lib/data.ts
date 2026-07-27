@@ -115,11 +115,11 @@ function mapDocToNoticia(d: any): Noticia {
     destacada: data.destacada,
     vistas: data.vistas,
     palabras: data.palabras,
-    tags: data.tags,
+    tags: data.tags || data.palabrasClave || [],
     pieFoto: data.pieFoto,
     puntosClave: data.puntosClave,
     metaDescription: data.metaDescription || data.metaDescripcion || '',
-    keywords: data.keywords || '',
+    keywords: data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || '',
     estado: data.estado || 'publicado',
     noindex: !!data.noindex,
   };

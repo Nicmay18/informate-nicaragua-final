@@ -424,7 +424,7 @@ function Input({ label, value, onChange, placeholder = '' }: { label: string; va
 }
 
 function Select({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
-  const categorias = ['General', 'Sucesos', 'Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Economía', 'Cultura', 'Espectáculos', 'Política', 'Salud', 'Educación'];
+  const categorias = ['General', 'Nacionales', 'Sucesos', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
   return (
     <div>
       <label className="block text-sm text-slate-400 mb-1">{label}</label>

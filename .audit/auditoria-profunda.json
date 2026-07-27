@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "total": 208,
+    "tooShort": 0,
+    "noResumen": 0,
+    "noImage": 0,
+    "genericImage": 0,
+    "lowQuality": 0,
+    "noTags": 0,
+    "orphanEconomia": 0,
+    "noindexArchive": 0,
+    "similarContent": 0,
+    "emptyTitle": 0,
+    "duplicateTitles": 0
+  },
+  "result": {
+    "tooShort": [],
+    "noResumen": [],
+    "noImage": [],
+    "genericImage": [],
+    "lowQuality": [],
+    "noTags": [],
+    "orphanEconomia": [],
+    "noindexArchive": [],
+    "similarContent": [],
+    "emptyTitle": [],
+    "duplicateTitles": []
+  }
+}
