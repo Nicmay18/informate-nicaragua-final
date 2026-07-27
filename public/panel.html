@@ -1080,7 +1080,7 @@
           </p>
           <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
             <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857); opacity: 0.6; cursor: not-allowed;" disabled><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
-            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()" style="opacity: 0.5; cursor: not-allowed;" disabled><i class="fas fa-magic"></i> Redactar (requiere API key)</button>
+            <button class="ai-btn" id="btnRedactarIA" onclick="redactarConIA()" style="background: linear-gradient(135deg,#4f46e5,#4338ca);"><i class="fas fa-magic"></i> Redactar con MENI (Modo periodista)</button>
           </div>
           <div id="iaStatus" style="margin-top: 12px; font-size: 13px; color: #92400e; font-weight: 500;"></div>
         </div>
@@ -8535,6 +8535,66 @@ VERIFICACIÓN FINAL
     '</div>';
   }
 })();
+</script>
+<script>
+  // Sobrescribe redactarConIA para usar el pipeline MENI (modo periodista) en lugar de llamar a Gemini desde el cliente
+  window.redactarConIA = async function() {
+    const titulo = document.getElementById('iaTitulo').value.trim();
+    const categoria = document.getElementById('iaCategoria').value;
+    const departamento = document.getElementById('iaDepartamento').value;
+    const contenidoCrudo = document.getElementById('iaContenidoCrudo').value.trim();
+    if (!titulo && !contenidoCrudo) { showToast('Escribe el titular o pegá una fuente primero', 'warning'); return; }
+
+    const status = document.getElementById('iaStatus');
+    const btn = document.getElementById('btnRedactarIA');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...'; }
+    if (status) { status.textContent = 'MENI está analizando la fuente y redactando en modo periodista...'; status.style.color = '#92400e'; }
+
+    try {
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const res = await fetch('/api/admin/meni/generar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ fuente: contenidoCrudo || titulo, categoriaSugerida: categoria, url: '' })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Error generando con MENI');
+      const r = data.resultado;
+      if (!r) throw new Error('MENI no devolvió borrador');
+
+      // Si MENI bloqueó el borrador, mostrar el diagnóstico
+      if (!r.aprobado && r.evaluacion) {
+        mostrarDiagnosticoMeni({
+          ...r.evaluacion,
+          correcciones: [
+            ...(r.evaluacion.autoCorrections || []),
+            ...(r.evaluacion.qualityGate?.corregidos || []),
+          ]
+        });
+      }
+
+      // Inyectar en el formulario principal
+      document.getElementById('titulo').value = r.tituloSEO || titulo;
+      document.getElementById('categoria').value = r.categoria || categoria;
+      const deptEl = document.getElementById('departamento');
+      if (deptEl) deptEl.value = departamento;
+      document.getElementById('contenido').value = r.articuloCompleto || '';
+      document.getElementById('resumen').value = r.metaDescripcion || r.bajada || '';
+      const keywords = Array.isArray(r.tags) ? r.tags.join(', ') : (r.tags || '');
+      document.getElementById('keywords').value = keywords;
+
+      actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar'; }
+      if (status) { status.textContent = '✓ Borrador generado — Score MENI: ' + (r.scoreMeni || '—') + (r.aprobado ? ' ✅' : ' ⚠️ revisá el diagnóstico'); status.style.color = r.aprobado ? '#16a34a' : '#f59e0b'; }
+
+      showTab('nueva-tab', document.querySelectorAll('.nav-link')[1]);
+      showToast(r.aprobado ? 'Noticia redactada y aprobada por MENI' : 'Borrador generado. Revisá el diagnóstico antes de publicar.', r.aprobado ? 'success' : 'warning');
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar'; }
+      if (status) { status.textContent = 'Error al generar: ' + err.message; status.style.color = '#f87171'; }
+      showToast('Error MENI: ' + err.message, 'error');
+    }
+  };
 </script>
 </body>
 </html>

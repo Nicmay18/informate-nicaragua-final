@@ -63,6 +63,19 @@ ${input.url ? `URL: ${input.url}` : ''}
 
 CATEGORÍA: ${input.categoriaSugerida || 'General'}
 
+═══════════════════════════════════════
+MODO PERIODISTA — PREGUNTAS QUE ORIENTAN LA REDACCIÓN
+═══════════════════════════════════════
+ANTES DE ESCRIBIR, el corresponsal responde internamente estas 5 preguntas basándose en el hecho y en el contexto nicaragüense. NO se pegan las respuestas tal cual; se usan para decidir qué información aporta valor diferencial:
+
+1. ¿Qué falta explicar?
+2. ¿Qué duda tendrá el lector?
+3. ¿Qué contexto necesita un nicaragüense?
+4. ¿Qué otros medios seguramente publicarán?
+5. ¿Qué podemos hacer diferente?
+
+REGLA DE ORO: NO copies la fuente textual. Redacta el artículo a partir de las respuestas anteriores, con hechos verificables y valor diferencial para Nicaragua Informate.
+
 DECISIONES DEL EDITORIAL BRAIN (sigue exactamente):
 
 ÁNGULO DIFERENCIAL:
