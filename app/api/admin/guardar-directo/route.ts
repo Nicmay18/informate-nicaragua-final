@@ -7,6 +7,15 @@ import { stripHtml } from '@/lib/meni/utils/helpers';
 
 export const maxDuration = 30;
 
+function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
+  if (!aprobado || score < 70) return 'RECHAZADO';
+  if (score >= 98) return 'FORENSE';
+  if (score >= 95) return 'ORO';
+  if (score >= 90) return 'PLATA';
+  if (score >= 85) return 'BRONCE';
+  return 'SIN NIVEL';
+}
+
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
   const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
@@ -86,6 +95,12 @@ export async function POST(request: NextRequest) {
       palabras,
       publicado,
       estado: publicado ? 'publicado' : 'borrador',
+      scoreMeni: meni.scoreFinal,
+      aprobadoMeni: meni.aprobado,
+      calificacionMeni: meni.calificacion,
+      nivel: mapMeniScoreToNivel(meni.scoreFinal, meni.aprobado),
+      recomendacionesMeni: meni.recomendaciones.map((r: any) => `${r.area}: ${r.mensaje}`),
+      diagnosticoMeni: meni.diagnostico,
     };
 
     // CRÍTICO: Establecer fecha de publicación si no existe

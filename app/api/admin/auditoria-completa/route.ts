@@ -47,7 +47,34 @@ interface AnalisisNoticia {
 
 function analizarNoticia(doc: any): AnalisisNoticia {
   const data = doc.data();
-  const titulo = (data.titulo || '').toLowerCase();
+  const tituloRaw = data.titulo || '(sin título)';
+
+  // ─── Prioridad MENI: si la noticia fue evaluada por el motor MENI,
+  // usamos ese veredicto para que Auditoría Forense y MENI siempre coincidan.
+  if (typeof data.scoreMeni === 'number' && data.aprobadoMeni !== undefined) {
+    const score = data.scoreMeni;
+    const aprobado = data.aprobadoMeni;
+    let nivelRiesgo: 'BAJO' | 'MEDIO' | 'ALTO' | 'CRITICO' = 'BAJO';
+    if (!aprobado || score < 70) nivelRiesgo = 'CRITICO';
+    else if (score < 85) nivelRiesgo = 'ALTO';
+    else if (score < 95) nivelRiesgo = 'MEDIO';
+
+    const problemas = Array.isArray(data.recomendacionesMeni)
+      ? data.recomendacionesMeni.slice(0, 5).map(String)
+      : [];
+
+    return {
+      id: doc.id,
+      titulo: tituloRaw,
+      categoria: data.categoria || 'Sin categoría',
+      palabras: data.palabras || 0,
+      problemas,
+      nivelRiesgo,
+      sugerencia: data.diagnosticoMeni || (aprobado ? 'APROBABLE: Coincide con análisis MENI' : 'RECHAZADA: No pasa el filtro MENI'),
+    };
+  }
+
+  const titulo = tituloRaw.toLowerCase();
   const contenido = (data.contenido || '').toLowerCase();
   const resumen = (data.resumen || '').toLowerCase();
   const textoCompleto = titulo + ' ' + resumen + ' ' + contenido;
