@@ -172,15 +172,10 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
 const _cachedGetByCategory = unstable_cache(
   async (categoria: string, count: number) => {
     try {
-      const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
-        .collection('noticias')
-        .where('categoria', '==', categoria)
-        .orderBy('fecha', 'desc')
-        .select(...LIST_FIELDS)
-        .limit(count)
-        .get();
-      return snap.docs.map(mapDocToNoticia).filter(n => n.estado === 'publicado');
+      // Leemos noticias ya publicadas y filtramos por categoría en memoria
+      // para evitar depender de índices compuestos en Firestore.
+      const noticias = await fetchNoticiasList([...LIST_FIELDS], MAX_COUNT);
+      return noticias.filter(n => n.categoria === categoria).slice(0, count);
     } catch (err) {
       logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
       return [];
