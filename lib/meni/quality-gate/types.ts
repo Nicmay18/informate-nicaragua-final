@@ -54,6 +54,20 @@ export interface ExplanationIndex {
   porcentajeServicio: number;
 }
 
+export interface ParagraphTranscriptionEntry {
+  indice: number;
+  extracto: string;
+  similitud: number;
+  veredicto: 'OK' | 'REESCRIBIR';
+}
+
+export interface TranscriptionReportResult {
+  parrafos: ParagraphTranscriptionEntry[];
+  parrafosParaReescribir: number;
+  similitudPromedio: number;
+  similitudMaxima: number;
+}
+
 export interface QualityGateResult {
   stage: QualityGateStage;
   entidades: EntityMap;
@@ -67,6 +81,7 @@ export interface QualityGateResult {
   discoverListo: boolean;
   editorScore: number;
   textoCorregido: string;
+  transcriptionReport?: TranscriptionReportResult;
   timestamp: string;
 }
 

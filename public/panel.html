@@ -8489,6 +8489,24 @@ VERIFICACIÓN FINAL
     if (data.diagnostico) {
       scoreEl.innerHTML += '<div style="margin-top:8px; color:#4b5563; font-size:13px;">' + data.diagnostico + '</div>';
     }
+    if (data.editorialDna) {
+      const dna = data.editorialDna;
+      const s = dna.selloNI || {};
+      const dnaColor = dna.adnNI >= 90 ? '#16a34a' : (dna.adnNI >= 70 ? '#f59e0b' : '#dc2626');
+      function fila(nombre, valor) {
+        const v = Math.round(valor ?? 0);
+        const c = v >= 90 ? '#16a34a' : (v >= 70 ? '#f59e0b' : '#dc2626');
+        return '<div style="display:flex; align-items:center; gap:8px; font-size:12px;"><span style="width:110px;">' + nombre + '</span><div style="flex:1; height:8px; background:#e5e7eb; border-radius:4px; overflow:hidden;"><div style="width:' + v + '%; height:100%; background:' + c + ';"></div></div><span style="width:34px; text-align:right; font-weight:700; color:' + c + ';">' + v + '</span></div>';
+      }
+      scoreEl.innerHTML += '<div style="margin-top:12px; padding:14px; border:1px solid #e5e7eb; border-radius:10px; background:#fafafa;">' +
+        '<div style="font-weight:800; font-size:13px; margin-bottom:8px;">🧬 SELLO NICARAGUA INFORMATE</div>' +
+        '<div style="display:flex; flex-direction:column; gap:5px;">' +
+          fila('Explica', s.explica) + fila('Contextualiza', s.contextualiza) + fila('Servicio', s.servicio) +
+          fila('Originalidad', s.originalidad) + fila('Competencia', s.competencia) + fila('Utilidad', s.utilidad) + fila('Valor', s.valor) +
+        '</div>' +
+        '<div style="margin-top:10px; text-align:center; font-size:14px;">Este artículo tiene <strong style="font-size:20px; color:' + dnaColor + ';">' + dna.adnNI + '%</strong> de ADN Nicaragua Informate</div>' +
+      '</div>';
+    }
     let html = '';
     const blockers = (data.blockingIssues || []);
     const warnings = (data.warnings || []);

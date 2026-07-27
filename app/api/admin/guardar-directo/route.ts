@@ -87,6 +87,7 @@ export async function POST(request: NextRequest) {
         scoreFinal: meni.scoreFinal,
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
+        editorialDna: meni.editorialDna,
         duplicado: meni.duplicado,
         correcciones: [
           ...(meni.autoCorrections || []),
@@ -219,6 +220,7 @@ export async function POST(request: NextRequest) {
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
         recomendaciones: meni.recomendaciones.slice(0, 5),
+        editorialDna: meni.editorialDna,
       },
     }, { status: 200 });
 

@@ -26,6 +26,7 @@ import {
 } from './validator';
 import { applyAutoFix } from './autoFix';
 import { computeExplanationIndex, computeOriginalityPercent, computeEditorScore } from './editorScore';
+import { detectParagraphTranscription } from './transcription-detector';
 
 export type { EntityMap, QualityGateInput, QualityGateIssue, QualityGateResult } from './types';
 
@@ -59,8 +60,12 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     ...detectSensationalism(textoPlano),
   ];
 
+  // Detector de transcripción párrafo a párrafo (requiere fuente original)
+  const transcription = detectParagraphTranscription(input.contenido, input.fuenteOriginal);
+
   if (input.stage === 'POST_LLM') {
     issues = [...issues, ...detectServiceValue(textoPlano)];
+    issues = [...issues, ...transcription.issues];
     if (porQueLeerAqui !== undefined) {
       issues = [...issues, ...detectDifferentialValue(porQueLeerAqui)];
     }
@@ -97,6 +102,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     discoverListo: discoverListo(input.titulo, textoCorregido),
     editorScore: score,
     textoCorregido,
+    transcriptionReport: transcription.report ?? undefined,
     timestamp: new Date().toISOString(),
   };
 }

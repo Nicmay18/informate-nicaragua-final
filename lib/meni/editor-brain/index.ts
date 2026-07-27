@@ -115,8 +115,15 @@ export function buildEditorialContext(memory: EditorialMemoryResult): EditorialC
     }
   }
 
-  const contextoParaLlm = contexto.length > 0
-    ? `CONTEXTO EDITORIAL (usar para enriquecer, no copiar):\n${contexto.map((c) => `- ${c}`).join('\n')}`
+  // Resumen de memoria editorial: evita que el LLM repita y le indica cómo conectar con el historial
+  const recientes = memory.timeline.slice(0, 5);
+  const resumenMemoria =
+    memory.totalArticles > 0
+      ? `MEMORIA EDITORIAL: Ya publicamos ${memory.totalArticles} noticia(s) relacionada(s).${recientes.length > 0 ? ` Últimas: ${recientes.map((t) => `"${t.title}" (${t.date.slice(0, 10)})`).join('; ')}.` : ''} Antecedentes clave: ${memory.antecedentes.slice(0, 5).join('. ')}. REGLA: no repetir lo que ya publicamos. Solo añadir lo nuevo del caso y, si aplica, conectar brevemente con el historial (ej. "Este es el tercer decomiso superior a 100 kilos este año").`
+      : '';
+
+  const contextoParaLlm = contexto.length > 0 || resumenMemoria
+    ? `CONTEXTO EDITORIAL (usar para enriquecer, no copiar):\n${resumenMemoria}\n${contexto.map((c) => `- ${c}`).join('\n')}`
     : '';
 
   return {
