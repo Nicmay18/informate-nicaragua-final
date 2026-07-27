@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight, Clock } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
+import SafeImage from '@/components/SafeImage';
 
 interface SeccionCategoriaProps {
   titulo: string;
@@ -50,16 +50,14 @@ export default function SeccionCategoria({
         <article className="categoria-destacada">
           <Link href={`/noticias/${principal.slug}`} className="categoria-destacada-link">
             <div className="categoria-destacada-thumb">
-              {principal.imagen ? (
-                <Image
-                  src={getResponsiveImageUrl(principal.imagen, 700)}
-                  alt={principal.titulo}
-                  fill
-                  sizes="(max-width: 720px) 100vw, 60vw"
-                  style={{ objectFit: 'cover' }}
-                  unoptimized={principal.imagen.endsWith('.gif')}
-                />
-              ) : null}
+              <SafeImage
+                src={getResponsiveImageUrl(principal.imagen, 700)}
+                alt={principal.titulo}
+                fill
+                sizes="(max-width: 720px) 100vw, 60vw"
+                style={{ objectFit: 'cover' }}
+                unoptimized={principal.imagen.endsWith('.gif')}
+              />
               <span className="categoria-tag" style={{ backgroundColor: color }}>
                 {titulo.toUpperCase()}
               </span>
@@ -78,21 +76,19 @@ export default function SeccionCategoria({
           {secundarias.slice(0, 2).map((n) => (
             <article key={n.id} className="categoria-secundaria">
               <Link href={`/noticias/${n.slug}`} className="categoria-secundaria-link">
-                {n.imagen ? (
-                  <div className="categoria-secundaria-thumb">
-                    <Image
-                      src={getResponsiveImageUrl(n.imagen, 220)}
-                      alt={n.titulo}
-                      fill
-                      sizes="(max-width: 720px) 100vw, 40vw"
-                      style={{ objectFit: 'cover' }}
-                      unoptimized={n.imagen.endsWith('.gif')}
-                    />
-                    <span className="categoria-tag" style={{ backgroundColor: color }}>
-                      {titulo.toUpperCase()}
-                    </span>
-                  </div>
-                ) : null}
+                <div className="categoria-secundaria-thumb">
+                  <SafeImage
+                    src={getResponsiveImageUrl(n.imagen, 220)}
+                    alt={n.titulo}
+                    fill
+                    sizes="(max-width: 720px) 100vw, 40vw"
+                    style={{ objectFit: 'cover' }}
+                    unoptimized={n.imagen.endsWith('.gif')}
+                  />
+                  <span className="categoria-tag" style={{ backgroundColor: color }}>
+                    {titulo.toUpperCase()}
+                  </span>
+                </div>
                 <div className="categoria-secundaria-body">
                   <h4 className="categoria-secundaria-title">{n.titulo}</h4>
                   <span className="categoria-secundaria-meta">

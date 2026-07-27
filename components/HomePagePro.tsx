@@ -5,9 +5,7 @@ import Link from 'next/link';
 import type { Noticia } from '@/lib/types';
 import HeroPrincipal from './pro/HeroPrincipal';
 import TickerUltimaHora from './pro/TickerUltimaHora';
-import SeccionDestacados from './pro/SeccionDestacados';
 import SeccionCategoria from './pro/SeccionCategoria';
-import SeccionOpinion from './pro/SeccionOpinion';
 import SidebarPro from './pro/SidebarPro';
 
 interface HomePageProProps {
@@ -19,8 +17,7 @@ interface HomePageProProps {
 
 /**
  * REGLA DE ORO: Cada noticia aparece UNA SOLA VEZ en toda la home.
- * Categorías activas: Sucesos, Nacionales, Internacionales, Deportes, Espectáculos, Tecnología.
- * Sucesos se limita visualmente para no dominar la portada.
+ * Orden editorial: Nacional/Suceso primero, luego secciones duras, luego lifestyle.
  */
 function distribuirNoticias(noticias: Noticia[]) {
   const usados = new Set<string>();
@@ -42,20 +39,16 @@ function distribuirNoticias(noticias: Noticia[]) {
 
   const conImagen = (lista: Noticia[]) => lista.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
 
-  // HERO: primero las marcadas como destacada con imagen, luego por categoría
-  const destacadas = disponibles().filter(n => n.destacada);
-  const heroNoticias = take(conImagen(destacadas), 3);
-  if (heroNoticias.length < 3) {
-    const prioridadHero = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos', 'Sucesos'];
-    const imagenesDisponibles = conImagen(disponibles());
-    const baseHero = imagenesDisponibles.length > 0 ? imagenesDisponibles : disponibles();
-    heroNoticias.push(...take(
-      prioridadHero.flatMap(cat => baseHero.filter(n => n.categoria === cat)),
-      3 - heroNoticias.length
-    ));
+  // HERO: UNA sola noticia principal, preferiblemente Nacional o Suceso con imagen
+  const prioridadHero = ['Nacionales', 'Sucesos', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos'];
+  const heroNoticias: Noticia[] = [];
+  for (const cat of prioridadHero) {
+    const primera = conImagen(porCategoria(cat))[0];
+    if (primera) { heroNoticias.push(primera); usados.add(primera.id); break; }
   }
-  if (heroNoticias.length < 3) {
-    heroNoticias.push(...take(disponibles(), 3 - heroNoticias.length));
+  if (heroNoticias.length === 0) {
+    const primera = take(conImagen(disponibles()), 1);
+    if (primera.length) heroNoticias.push(primera[0]);
   }
 
   // Ticker: excluir Sucesos para evitar que dominen la parte superior
@@ -68,38 +61,21 @@ function distribuirNoticias(noticias: Noticia[]) {
     ultimaHora.push(...take(disponibles(), 3 - ultimaHora.length));
   }
 
-  // Destacados: primero destacadas de categorías preferidas, luego categorías
-  const prioridadDestacados = ['Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
-  const destacados: Noticia[] = take(
-    destacadas.filter(n => prioridadDestacados.includes(n.categoria)),
-    4
-  );
-  if (destacados.length < 4) {
-    destacados.push(...take(
-      prioridadDestacados.flatMap(cat => porCategoria(cat)),
-      4 - destacados.length
-    ));
-  }
-
-  // Secciones temáticas: 3 noticias por categoría (si existen)
+  // Secciones temáticas: 3 noticias por categoría, en orden editorial profesional
   const seccion = (cat: string, min = 3) => {
     const items = take(porCategoria(cat), 3);
     return items.length >= min ? items : [];
   };
 
-  // Sucesos: máximo 3 en TODA la home (hero/ticker/destacados ya consumieron usados)
-  const sucesosItems = take(porCategoria('Sucesos'), 3);
-
   return {
     heroNoticias,
     ultimaHora,
-    destacados,
     nacionales: seccion('Nacionales'),
-    internacionales: seccion('Internacionales'),
+    sucesos: seccion('Sucesos'),
     deportes: seccion('Deportes'),
+    internacionales: seccion('Internacionales'),
     tecnologia: seccion('Tecnología'),
     espectaculos: seccion('Espectáculos'),
-    sucesos: sucesosItems,
     excluidos: new Set(usados),
   };
 }
@@ -162,17 +138,17 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
       {/* 1. TICKER ÚLTIMA HORA: máximo 3 titulares rotativos */}
       <TickerUltimaHora noticias={dist.ultimaHora.slice(0, 3)} />
 
-      {/* 2. HERO PRINCIPAL: máximo 3 noticias, rotan cada 6s */}
+      {/* 2. HERO PRINCIPAL: una sola noticia, sin carrusel */}
       <HeroPrincipal heroNoticias={dist.heroNoticias} />
 
       <div className="ni-main">
         <div className="ni-content">
-          {/* 3. DESTACADOS: 4 noticias, 2x2, mix de categorías */}
-          <SeccionDestacados noticias={dist.destacados} />
-
-          {/* 4. SECCIONES TEMÁTICAS: ordenadas por prioridad editorial */}
+          {/* 3. SECCIONES TEMÁTICAS: orden editorial Nacionales → Sucesos → Deportes → Internacionales → Tecnología → Espectáculos */}
           {dist.nacionales.length > 0 && (
             <SeccionCategoria titulo="Nacionales" slug="nacionales" color="#2563EB" noticias={dist.nacionales} />
+          )}
+          {dist.sucesos.length > 0 && (
+            <SeccionCategoria titulo="Sucesos" slug="sucesos" color="#DC2626" noticias={dist.sucesos} />
           )}
           {dist.deportes.length > 0 && (
             <SeccionCategoria titulo="Deportes" slug="deportes" color="#D97706" noticias={dist.deportes} />
@@ -185,14 +161,6 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
           )}
           {dist.espectaculos.length > 0 && (
             <SeccionCategoria titulo="Espectáculos" slug="espectaculos" color="#7C3AED" noticias={dist.espectaculos} />
-          )}
-
-          {/* 5. OPINIÓN / EDITORIAL: 3 columnas con foto del autor */}
-          <SeccionOpinion noticias={noticiasBase.filter(n => !dist.excluidos.has(n.id)).slice(0, 3)} />
-
-          {/* 6. SUCESOS: colocado al final, máximo 3 noticias en toda la home */}
-          {dist.sucesos.length > 0 && (
-            <SeccionCategoria titulo="Sucesos" slug="sucesos" color="#DC2626" noticias={dist.sucesos} />
           )}
         </div>
 
