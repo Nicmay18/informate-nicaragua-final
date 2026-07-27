@@ -1,0 +1,266 @@
+/**
+ * MENI Quality Gate — Validator
+ * =============================
+ * Extrae entidades y detecta problemas de contradicción, cronología,
+ * coherencia, terminología, precisión, lenguaje y sensacionalismo.
+ */
+
+import type { EntityMap, QualityGateIssue } from './types';
+import {
+  TERMINOLOGY_VARIANTS,
+  FILLER_WORDS,
+  SENSATIONALIST_PHRASES,
+  UNSUPPORTED_CLAIM_PATTERNS,
+  CHRONOLOGY_CONTRADICTION_PATTERNS,
+} from './rules';
+
+export function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+const INSTITUCIONES_CONOCIDAS = [
+  'policía nacional', 'ministerio de salud', 'minsa', 'ejército de nicaragua',
+  'cruz roja', 'bomberos', 'alcaldía', 'ineter', 'mined', 'corte suprema',
+  'asamblea nacional', 'sinapred', 'meter',
+];
+
+export function extractEntities(textoPlano: string): EntityMap {
+  const texto = textoPlano;
+
+  const edades = Array.from(texto.matchAll(/\b(\d{1,3})\s*años\b/gi)).map((m) => m[1]);
+  const fechas = Array.from(
+    texto.matchAll(/\b(\d{1,2}\s+de\s+[a-záéíóú]+(?:\s+del?\s+\d{4})?)\b/gi)
+  ).map((m) => m[1]);
+  const horas = Array.from(texto.matchAll(/\b(\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)?)\b/g)).map((m) => m[1]);
+  const cantidades = Array.from(texto.matchAll(/\b(\d+)\s*(personas|heridos|fallecidos|muertos|vehículos|víctimas)\b/gi)).map(
+    (m) => `${m[1]} ${m[2]}`
+  );
+  const nombres = Array.from(
+    texto.matchAll(/\b([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})\b/g)
+  ).map((m) => m[1]);
+  const institucionesEncontradas = INSTITUCIONES_CONOCIDAS.filter((i) =>
+    texto.toLowerCase().includes(i)
+  );
+  const lugares = Array.from(
+    texto.matchAll(/\b(?:en|de)\s+(Managua|León|Granada|Masaya|Chinandega|Estelí|Matagalpa|Rivas|Jinotega|Boaco|Carazo|Chontales|Madriz|Nueva Segovia|Río San Juan|Bluefields|RACCS|RACCN)\b/g)
+  ).map((m) => m[1]);
+
+  return {
+    edades: [...new Set(edades)],
+    fechas: [...new Set(fechas)],
+    horas: [...new Set(horas)],
+    cantidades: [...new Set(cantidades)],
+    nombres: [...new Set(nombres)],
+    instituciones: [...new Set(institucionesEncontradas)],
+    lugares: [...new Set(lugares)],
+  };
+}
+
+export function detectInternalContradictions(entidades: EntityMap): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+
+  if (entidades.edades.length > 1) {
+    issues.push({
+      categoria: 'contradiccion',
+      severidad: 'blocking',
+      mensaje: `Se mencionan edades distintas para la misma persona: ${entidades.edades.join(' / ')}`,
+      evidencia: entidades.edades.join(', '),
+      corregible: false,
+    });
+  }
+
+  if (entidades.horas.length > 2) {
+    issues.push({
+      categoria: 'contradiccion',
+      severidad: 'warning',
+      mensaje: `Se mencionan varias horas distintas, verificar consistencia: ${entidades.horas.join(' / ')}`,
+      evidencia: entidades.horas.join(', '),
+      corregible: false,
+    });
+  }
+
+  return issues;
+}
+
+export function detectCrossContradictions(
+  entidadesFuente: EntityMap,
+  entidadesGeneradas: EntityMap
+): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+
+  if (
+    entidadesFuente.edades.length === 1 &&
+    entidadesGeneradas.edades.length === 1 &&
+    entidadesFuente.edades[0] !== entidadesGeneradas.edades[0]
+  ) {
+    issues.push({
+      categoria: 'contradiccion',
+      severidad: 'blocking',
+      mensaje: `La edad cambió respecto a la fuente: fuente=${entidadesFuente.edades[0]} años, generado=${entidadesGeneradas.edades[0]} años`,
+      corregible: false,
+    });
+  }
+
+  if (
+    entidadesFuente.cantidades.length > 0 &&
+    entidadesGeneradas.cantidades.length > 0 &&
+    entidadesFuente.cantidades.join('|') !== entidadesGeneradas.cantidades.join('|')
+  ) {
+    const soloEnFuente = entidadesFuente.cantidades.filter((c) => !entidadesGeneradas.cantidades.includes(c));
+    if (soloEnFuente.length > 0) {
+      issues.push({
+        categoria: 'contradiccion',
+        severidad: 'warning',
+        mensaje: `Cantidades mencionadas en la fuente no coinciden con el artículo generado: ${soloEnFuente.join(', ')}`,
+        corregible: false,
+      });
+    }
+  }
+
+  return issues;
+}
+
+export function detectChronologyIssues(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const lower = textoPlano.toLowerCase();
+
+  for (const [muerte, traslado] of CHRONOLOGY_CONTRADICTION_PATTERNS) {
+    const muerteMatch = muerte.exec(lower);
+    const trasladoMatch = traslado.exec(lower);
+    if (muerteMatch && trasladoMatch && muerteMatch.index < trasladoMatch.index) {
+      issues.push({
+        categoria: 'cronologia',
+        severidad: 'blocking',
+        mensaje: 'Cronología incoherente: se menciona traslado con vida después de reportar el fallecimiento.',
+        corregible: false,
+      });
+      break;
+    }
+  }
+
+  return issues;
+}
+
+export function detectDuplicateParagraphs(contenidoHtml: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const parrafos = contenidoHtml
+    .split(/<\/p>|\n{2,}/i)
+    .map((p) => stripHtml(p).trim())
+    .filter((p) => p.length > 30);
+
+  const vistos = new Map<string, number>();
+  for (const p of parrafos) {
+    const key = p.toLowerCase().slice(0, 80);
+    vistos.set(key, (vistos.get(key) || 0) + 1);
+  }
+
+  const duplicados = [...vistos.entries()].filter(([, count]) => count > 1);
+  if (duplicados.length > 0) {
+    issues.push({
+      categoria: 'coherencia',
+      severidad: 'warning',
+      mensaje: `Se detectaron ${duplicados.length} párrafo(s) repetidos o muy similares.`,
+      corregible: true,
+    });
+  }
+
+  return issues;
+}
+
+export function detectTerminologyVariants(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const lower = textoPlano.toLowerCase();
+
+  for (const [canonico, variantes] of Object.entries(TERMINOLOGY_VARIANTS)) {
+    const encontradas = variantes.filter((v) => lower.includes(v));
+    const unicas = new Set(encontradas);
+    if (unicas.size > 1) {
+      issues.push({
+        categoria: 'terminologia',
+        severidad: 'warning',
+        mensaje: `Se usan varias formas del mismo término (debería ser "${canonico}"): ${[...unicas].join(', ')}`,
+        corregible: true,
+      });
+    }
+  }
+
+  return issues;
+}
+
+export function detectUnsupportedClaims(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  for (const pattern of UNSUPPORTED_CLAIM_PATTERNS) {
+    const match = pattern.exec(textoPlano);
+    if (match) {
+      issues.push({
+        categoria: 'precision',
+        severidad: 'warning',
+        mensaje: `Afirmación absoluta sin respaldo detectada: "${match[0]}"`,
+        evidencia: match[0],
+        corregible: true,
+      });
+    }
+  }
+  return issues;
+}
+
+export function detectFillerLanguage(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const lower = textoPlano.toLowerCase();
+  const encontradas = FILLER_WORDS.filter((w) => new RegExp(`\\b${w}\\b`, 'i').test(lower));
+  if (encontradas.length > 0) {
+    issues.push({
+      categoria: 'lenguaje',
+      severidad: 'info',
+      mensaje: `Palabras de relleno detectadas: ${encontradas.join(', ')}`,
+      corregible: true,
+    });
+  }
+  return issues;
+}
+
+export function detectSensationalism(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const lower = textoPlano.toLowerCase();
+  const encontradas = SENSATIONALIST_PHRASES.filter((p) => lower.includes(p));
+  if (encontradas.length > 0) {
+    issues.push({
+      categoria: 'sensacionalismo',
+      severidad: 'blocking',
+      mensaje: `Lenguaje sensacionalista detectado: ${encontradas.join(', ')}`,
+      corregible: true,
+    });
+  }
+  return issues;
+}
+
+export function detectServiceValue(textoPlano: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  const lower = textoPlano.toLowerCase();
+  const tieneServicio =
+    /\bqué\s+hacer\b|\bcómo\s+afecta\b|\bqué\s+significa\b|\bqué\s+cambia\b|\bprevención\b|\brecomendacion|\bantecedente|\bcontexto\b|\bdijeron\s+las\s+autoridades\b|\bautoridades\s+(informaron|indicaron|explicaron)\b/i.test(
+      lower
+    );
+  if (!tieneServicio) {
+    issues.push({
+      categoria: 'servicio',
+      severidad: 'blocking',
+      mensaje: 'La nota no responde qué hacer, qué significa, qué cambia o no da contexto/antecedentes útiles para el lector.',
+      corregible: false,
+    });
+  }
+  return issues;
+}
+
+export function detectDifferentialValue(porQueLeerAqui?: string): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  if (!porQueLeerAqui || porQueLeerAqui.trim().length < 10) {
+    issues.push({
+      categoria: 'valor_diferencial',
+      severidad: 'blocking',
+      mensaje: '¿Por qué alguien leería esta nota en Nicaragua Informate y no en TN8? — sin respuesta.',
+      corregible: false,
+    });
+  }
+  return issues;
+}

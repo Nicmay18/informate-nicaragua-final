@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runMeni } from '@/lib/meni';
+import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
-import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 
 export const maxDuration = 30;
@@ -34,7 +33,10 @@ export async function POST(request: NextRequest) {
     // ═══════════════════════════════════════════════════════════════
     // ANALIZADOR FORENSE — BLOQUEO DE PUBLICACION
     // ═══════════════════════════════════════════════════════════════
+    const db = getAdminDb();
+
     const noticiaInput: NoticiaInput = {
+      id: id || undefined,
       titulo: titulo.trim(),
       contenido: contenido.trim(),
       resumen: resumen?.trim() || '',
@@ -49,30 +51,23 @@ export async function POST(request: NextRequest) {
       palabrasClave: body.palabrasClave || [],
     };
 
-    const meni = runMeni(noticiaInput);
+    // MENI + analizador de duplicados trabajando juntos
+    // skipEditorBrain: el Editor Brain es para evaluación/contexto previo al LLM,
+    // no para el guardado. Evita timeouts innecesarios al publicar.
+    const meni = await runMeniAsync(noticiaInput, { db, skipEditorBrain: true });
 
-    // 2. Detector de duplicados
-    const db = getAdminDb();
-    const duplicado = await detectarDuplicadoAdmin(
-      db,
-      contenido,
-      titulo,
-      0.35,
-      id
-    );
-
-    // 3. Generar metadata si falta
+    // Generar metadata si falta
     let metaGenerada = resumen;
     if (!metaGenerada || metaGenerada.length < 150) {
       metaGenerada = meni.seo.metaDescripcion;
     }
 
-    // 4. BLOQUEO si no pasa filtros criticos
-    if (!meni.aprobado || duplicado.esDuplicado) {
+    // BLOQUEO si no pasa filtros criticos
+    if (!meni.aprobado) {
       return NextResponse.json({
         error: 'Noticia rechazada por calidad',
         meni,
-        duplicado,
+        duplicado: meni.duplicado,
         sugerencias: {
           metaDescription: metaGenerada,
           tituloSEO: meni.seo.tituloSEO,
@@ -184,7 +179,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      id,
+      id: articleDocId,
       palabras,
       mensaje: `Noticia actualizada directamente. ${palabras} palabras.`,
       meni: {

@@ -4,8 +4,11 @@
 
 import type { NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
 import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
+import type { ResultadoDuplicado } from '@/lib/analizador-duplicados';
+import type { QualityGateResult } from '@/lib/meni/quality-gate';
+import type { EditorBrainResult } from '@/lib/meni/editor-brain';
 
-export type NoticiaInput = EditorialNoticiaInput & { departamento?: string };
+export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
 export type MeniCategoria =
   | 'Sucesos'
@@ -113,7 +116,10 @@ export interface MeniResult {
     contenido?: string;
     slug: string;
   };
+  duplicado?: ResultadoDuplicado;
+  qualityGate?: QualityGateResult;
   intelligence?: IntelligenceResult;
+  editorBrain?: EditorBrainResult;
 }
 
 export interface MeniReport {

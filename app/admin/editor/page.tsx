@@ -363,6 +363,97 @@ export default function EditorPage() {
             </div>
           </div>
 
+          {resultado?.qualityGate && (
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
+                <h2 className="text-lg font-semibold">MENI Quality Gate</h2>
+                <span
+                  className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                    resultado.qualityGate.bloqueado
+                      ? 'bg-red-900/40 text-red-300 border border-red-500/30'
+                      : 'bg-green-900/40 text-green-300 border border-green-500/30'
+                  }`}
+                >
+                  {resultado.qualityGate.bloqueado ? 'BLOQUEADO' : 'OK'}
+                </span>
+              </div>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Score Quality Gate</span>
+                  <span className={`font-semibold ${colorScore(resultado.qualityGate.editorScore)}`}>
+                    {resultado.qualityGate.editorScore}/100
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Originalidad</span>
+                  <span className="font-semibold text-slate-200">{resultado.qualityGate.originalidadPorcentaje}%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Explicación</span>
+                  <span className="font-semibold text-slate-200">
+                    {resultado.qualityGate.explanationIndex.porcentajeExplicacion}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Transcripción</span>
+                  <span className="font-semibold text-slate-200">
+                    {resultado.qualityGate.explanationIndex.porcentajeTranscripcion}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Servicio al lector</span>
+                  <span className="font-semibold text-slate-200">
+                    {resultado.qualityGate.explanationIndex.porcentajeServicio}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">CTR estimado Facebook</span>
+                  <span className="font-semibold text-slate-200">{resultado.qualityGate.ctrEstimadoFacebook}%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Discover listo</span>
+                  <span className={resultado.qualityGate.discoverListo ? 'text-green-400 font-semibold' : 'text-yellow-400 font-semibold'}>
+                    {resultado.qualityGate.discoverListo ? 'Sí' : 'No'}
+                  </span>
+                </div>
+              </div>
+
+              {resultado.qualityGate.corregidos.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-slate-800">
+                  <p className="text-xs font-semibold text-cyan-300 mb-1">Corregido automáticamente</p>
+                  <ul className="text-xs space-y-1 text-slate-300">
+                    {resultado.qualityGate.corregidos.slice(0, 5).map((c, i) => (
+                      <li key={i}>• {c.descripcion}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {resultado.qualityGate.issues.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-slate-800">
+                  <p className="text-xs font-semibold text-yellow-300 mb-1">Detectado</p>
+                  <ul className="text-xs space-y-1">
+                    {resultado.qualityGate.issues.slice(0, 6).map((issue, i) => (
+                      <li
+                        key={i}
+                        className={
+                          issue.severidad === 'blocking'
+                            ? 'text-red-300'
+                            : issue.severidad === 'warning'
+                            ? 'text-yellow-200'
+                            : 'text-slate-400'
+                        }
+                      >
+                        • {issue.mensaje}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
             <button
               onClick={optimizar}

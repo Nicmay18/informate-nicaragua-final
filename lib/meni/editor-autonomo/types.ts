@@ -1,4 +1,6 @@
 import type { MeniResult } from '@/lib/meni';
+import type { QualityGateResult } from '@/lib/meni/quality-gate';
+import type { EditorBrainResult } from '@/lib/meni/editor-brain';
 
 export interface MeniAutonomousInput {
   fuente: string;
@@ -30,6 +32,9 @@ export interface MeniAutonomousResult {
   correccionesAplicadas: string[];
   recomendaciones: string[];
   evaluacion: MeniResult;
+  qualityGatePre?: QualityGateResult;
+  qualityGatePost?: QualityGateResult;
+  editorBrain?: EditorBrainResult;
   _provider?: string;
   _error?: string;
 }

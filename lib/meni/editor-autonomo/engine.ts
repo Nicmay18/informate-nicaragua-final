@@ -2,6 +2,9 @@ import { runMeni } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
+import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gate';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
@@ -36,11 +39,13 @@ Devuelve ÚNICAMENTE un JSON con este formato:
   "promptImagenIA": "string en inglés para imagen editorial realista"
 }`;
 
-function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision): string {
+function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision, brain?: EditorBrainResult): string {
   const instr = decision.llmInstructions;
-  const contexto = instr.contextoNecesario.length > 0
+  const contextoEditorial = brain?.context.contextoParaLlm || '';
+  const contextoBase = instr.contextoNecesario.length > 0
     ? instr.contextoNecesario.map((c) => `- ${c}`).join('\n')
     : 'Sin contexto adicional requerido.';
+  const contexto = contextoEditorial ? `${contextoBase}\n\n${contextoEditorial}` : contextoBase;
 
   const explicaciones = instr.explicacionesObligatorias.length > 0
     ? instr.explicacionesObligatorias.map((e) => `- ${e}`).join('\n')
@@ -137,6 +142,31 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     categoriaSugerida: input.categoriaSugerida,
   });
 
+  // Quality Gate PRE-LLM: analiza el hecho original antes de redactar.
+  const qualityGatePre = runQualityGate({
+    titulo: noticiaInput.titulo,
+    contenido: input.fuente,
+    categoria: input.categoriaSugerida || 'General',
+    stage: 'PRE_LLM',
+  });
+  let db: ReturnType<typeof getAdminDb> | undefined;
+  try { db = getAdminDb(); } catch { db = undefined; }
+  await appendQualityGateHistory(qualityGatePre, { titulo: noticiaInput.titulo, categoria: input.categoriaSugerida || 'General' }, db);
+
+  // Editor Brain: consultar memoria y contexto antes de redactar.
+  let brain: EditorBrainResult | undefined;
+  if (db) {
+    try {
+      brain = await runEditorBrain(db, {
+        titulo: noticiaInput.titulo,
+        contenido: input.fuente,
+        categoria: input.categoriaSugerida || 'General',
+      });
+    } catch {
+      brain = undefined;
+    }
+  }
+
   if (decision.bloquear) {
     return {
       tituloSEO: '',
@@ -162,12 +192,13 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       correccionesAplicadas: [],
       recomendaciones: [decision.motivoBloqueo || decision.nicaraguaInformate.motivoBloqueo || 'La nota no aporta valor diferencial.'],
       evaluacion: {} as any,
+      qualityGatePre,
       _provider: 'groq+editorial-brain',
       _error: decision.motivoBloqueo || 'Bloqueado por Editorial Brain',
     };
   }
 
-  const userPrompt = buildUserPrompt(input, decision);
+  const userPrompt = buildUserPrompt(input, decision, brain);
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -240,6 +271,38 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     generated.recomendaciones.push('Artículo demasiado corto. Amplíe a mínimo 400 palabras con contexto y desarrollo.');
   }
 
+  // Quality Gate POST-LLM: analiza el texto redactado, compara contra la
+  // fuente y aplica correcciones automáticas antes de bloquear.
+  const qualityGatePost = runQualityGate(
+    {
+      titulo: generated.tituloSEO,
+      contenido: generated.articuloCompleto,
+      categoria: generated.categoria,
+      fuenteOriginal: input.fuente,
+      entidadesPrevias: qualityGatePre.entidades,
+      stage: 'POST_LLM',
+    },
+    decision.nicaraguaInformate.porQueLeerAqui
+  );
+  await appendQualityGateHistory(qualityGatePost, { titulo: generated.tituloSEO, categoria: generated.categoria }, db);
+
+  generated.qualityGatePre = qualityGatePre;
+  generated.qualityGatePost = qualityGatePost;
+  generated.editorBrain = brain;
+  generated.articuloCompleto = qualityGatePost.textoCorregido;
+  generated.correccionesAplicadas = [
+    ...generated.correccionesAplicadas,
+    ...qualityGatePost.corregidos.map((c) => c.descripcion),
+  ];
+
+  if (qualityGatePost.bloqueado) {
+    generated.aprobado = false;
+    generated.riesgoEditorial = 'ROJO';
+    generated.diagnosticoTecnico = `Quality Gate bloqueó la publicación: ${qualityGatePost.motivosBloqueo.join(' | ')}`;
+    generated.recomendaciones = [...qualityGatePost.motivosBloqueo, ...generated.recomendaciones];
+  }
+
+  // Revisión final MENI — corre sobre el texto ya corregido por el Quality Gate.
   const evalInput: NoticiaInput = {
     titulo: generated.tituloSEO,
     contenido: generated.articuloCompleto,
@@ -258,8 +321,12 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     const evaluacion = runMeni(evalInput);
     generated.evaluacion = evaluacion;
     generated.scoreMeni = evaluacion.scoreFinal;
-    generated.aprobado = evaluacion.scoreFinal >= 90 && evaluacion.aprobado && !decision.bloquear;
-    generated.riesgoEditorial = evaluacion.riesgo.nivel;
+    generated.aprobado =
+      evaluacion.scoreFinal >= 90 &&
+      evaluacion.aprobado &&
+      !decision.bloquear &&
+      !qualityGatePost.bloqueado;
+    generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : evaluacion.riesgo.nivel;
   } catch (e) {
     generated.evaluacion = {} as any;
     generated._error = `Evaluación local falló: ${e instanceof Error ? e.message : String(e)}`;

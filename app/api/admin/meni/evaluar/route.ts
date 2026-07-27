@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runMeni } from '@/lib/meni';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { runMeni, runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 
 export const maxDuration = 30;
@@ -23,6 +24,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const noticia: NoticiaInput = {
+      id: body.id || undefined,
       titulo: body.titulo || '',
       contenido: body.contenido || '',
       resumen: body.resumen || '',
@@ -38,7 +40,14 @@ export async function POST(request: NextRequest) {
     };
 
     const tStart = Date.now();
-    const resultado = runMeni(noticia);
+    const checkDuplicates = body.checkDuplicates !== false;
+    let resultado;
+    if (checkDuplicates) {
+      const db = getAdminDb();
+      resultado = await runMeniAsync(noticia, { db });
+    } else {
+      resultado = runMeni(noticia);
+    }
     const tMs = Date.now() - tStart;
 
     return NextResponse.json({

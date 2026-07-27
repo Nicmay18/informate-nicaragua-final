@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
+    const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(500).get();
     const news = snap.docs.map((d) => {
       const data = d.data();
       return {
@@ -70,6 +70,11 @@ export async function GET(request: NextRequest) {
         vistas: data.vistas || 0,
         publicado: data.publicado !== false,
         puntosClave: data.puntosClave || [],
+        palabras: data.palabras || 0,
+        nivel: data.nivel || null,
+        nivelScore: data.nivelScore || 0,
+        departamento: data.departamento || '',
+        keywords: data.keywords || '',
       };
     });
     return NextResponse.json({ success: true, news }, {
