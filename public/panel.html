@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0" />
   <title>Panel Editorial | NicaraguaInformate.com</title>
   <meta name="version" content="5.0.3">
+  <link rel="stylesheet" href="/panel-mobile.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -550,8 +551,10 @@
         <button class="btn btn-ghost btn-icon-only" onclick="logout()" data-tooltip="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
     <main class="main-content">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="Abrir menú"><i class="fas fa-bars"></i></button>
       <!-- Banner de alerta cuando falta autenticación admin -->
       <div id="adminAuthBanner" style="display:none; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:12px 16px; margin:16px 16px 0; color:#991b1b; font-size:13px; align-items:center; gap:10px;">
         <i class="fas fa-exclamation-circle" style="font-size:16px; color:#dc2626;"></i>
@@ -8423,6 +8426,26 @@ VERIFICACIÓN FINAL
 
     console.log('🔬 Función corregirTitulosMasivoPanel() cargada. Ejecutá: await corregirTitulosMasivoPanel()');
     console.log('🔍 Función revertirSensacionalismo() cargada. Ejecutá: await revertirSensacionalismo()');
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar?.classList.toggle('open');
+      if (overlay) overlay.classList.toggle('show');
+    }
+    function closeSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar?.classList.remove('open');
+      if (overlay) overlay.classList.remove('show');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.nav-link').forEach(function (el) {
+        el.addEventListener('click', closeSidebar);
+      });
+    });
   </script>
 </body>
 </html>
