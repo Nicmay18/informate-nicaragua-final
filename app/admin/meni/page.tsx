@@ -6,18 +6,13 @@ import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
 
 const CATEGORIAS = [
-  'Sucesos',
+  'General',
   'Nacionales',
+  'Sucesos',
   'Internacionales',
   'Deportes',
   'Tecnología',
-  'Economía',
-  'Cultura',
   'Espectáculos',
-  'Política',
-  'Salud',
-  'Educación',
-  'General',
 ];
 
 const severidadColor: Record<string, string> = {
