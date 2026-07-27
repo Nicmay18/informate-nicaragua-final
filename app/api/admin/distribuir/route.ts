@@ -28,12 +28,12 @@ async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
     const data = snap.data() || {};
     return {
       token: data.telegram?.token || process.env.TG_TOKEN || '',
-      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || '',
+      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
     };
   } catch {
     return {
       token: process.env.TG_TOKEN || '',
-      chatId: process.env.TG_CHAT_ID || '',
+      chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
     };
   }
 }

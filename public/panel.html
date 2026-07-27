@@ -4194,8 +4194,8 @@ sin texto ni marcas de agua, composición periodística"
 
         // ─── DISTRIBUCIÓN UNIFICADA (un solo envío por canal) ───
         // Solo distribuir si la noticia está publicada
-        // En edición: también distribuir si pasó de borrador → publicado
-        if (publicado && slug && (esNueva || pasoAPublicado)) {
+        // En edición: también distribuir si pasó de borrador → publicado o si se marcó "Enviar a Telegram"
+        if (publicado && slug && (esNueva || pasoAPublicado || enviarTelegram)) {
           const canalesDistribuir = [];
           if (enviarTelegram || pasoAPublicado) canalesDistribuir.push('telegram');
           canalesDistribuir.push('indexnow', 'push');

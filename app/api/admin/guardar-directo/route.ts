@@ -155,31 +155,6 @@ export async function POST(request: NextRequest) {
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
 
-    // Notificar Telegram al publicar (non-blocking)
-    if (publicado && articleDocId) {
-      try {
-        const token = process.env.TG_TOKEN;
-        const chatId = process.env.TG_CHAT;
-        if (token && chatId) {
-          const url = `https://nicaraguainformate.com/noticias/${body.slug || articleDocId}/?utm_source=telegram`;
-          const catEmojis: Record<string, string> = {
-            Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍',
-            Espectáculos: '🎬', Tecnología: '💻', Economía: '📈', Cultura: '🎭',
-          };
-          const emoji = catEmojis[categoria || ''] || '📰';
-          const text = `${emoji} *${titulo.trim()}*\n\n${(resumen || '').trim()}\n\n🔗 [Leer noticia completa](${url})`;
-          const tgUrl = `https://api.telegram.org/bot${token}/sendMessage`;
-          await fetch(tgUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown', disable_web_page_preview: false }),
-          });
-        }
-      } catch (tgError) {
-        console.warn('[guardar-directo] Telegram notify failed (non-blocking):', tgError);
-      }
-    }
-
     // Knowledge Base — ingestar artículo publicado al grafo de conocimiento
     if (publicado) {
       try {
