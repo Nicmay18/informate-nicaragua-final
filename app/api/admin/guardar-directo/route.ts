@@ -73,14 +73,21 @@ export async function POST(request: NextRequest) {
 
     // BLOQUEO si no pasa filtros criticos
     if (!meni.aprobado) {
+      const first = meni.blockingIssues?.[0];
       return NextResponse.json({
-        error: 'Noticia rechazada por calidad',
-        meni,
+        error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
+        code: first?.code || 'MENI_NOT_APPROVED',
+        blockingIssues: meni.blockingIssues || [],
+        warnings: meni.warnings || [],
+        scoreFinal: meni.scoreFinal,
+        calificacion: meni.calificacion,
+        diagnostico: meni.diagnostico,
         duplicado: meni.duplicado,
+        correcciones: meni.qualityGate?.corregidos || [],
         sugerencias: {
           metaDescription: metaGenerada,
           tituloSEO: meni.seo.tituloSEO,
-        }
+        },
       }, { status: 400 });
     }
 

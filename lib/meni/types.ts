@@ -91,6 +91,19 @@ export interface MeniRecomendacion {
   mensaje: string;
 }
 
+export interface MeniBlockingIssue {
+  code: string;
+  module: string;
+  severity: 'INFO' | 'WARNING' | 'ERROR' | 'BLOCKER';
+  title: string;
+  description: string;
+  currentValue: number | string;
+  expectedValue: number | string;
+  howToFix: string;
+  field: 'titulo' | 'resumen' | 'contenido' | 'keywords' | 'autor' | 'categoria' | 'imagen' | 'general';
+  evidence?: string;
+}
+
 export interface MeniResult {
   version: '2.0';
   estado: 'Activo';
@@ -120,6 +133,8 @@ export interface MeniResult {
   qualityGate?: QualityGateResult;
   intelligence?: IntelligenceResult;
   editorBrain?: EditorBrainResult;
+  blockingIssues?: MeniBlockingIssue[];
+  warnings?: MeniBlockingIssue[];
 }
 
 export interface MeniReport {

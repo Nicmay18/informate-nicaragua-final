@@ -1,0 +1,227 @@
+import type { MeniBlockingIssue } from './types';
+import type { QualityGateIssue, QualityGateResult } from './quality-gate/types';
+import {
+  MAX_TRANSCRIPTION_PERCENT,
+  MIN_ORIGINALITY_PERCENT,
+  MIN_EXPLANATION_SCORE,
+} from './quality-gate/rules';
+
+const DEBUG = process.env.MENI_DEBUG === 'true';
+
+export function logMeni(...args: unknown[]): void {
+  if (DEBUG) {
+    console.log('[MENI-DEBUG]', ...args);
+  }
+}
+
+function logTime(label: string, t0: number): void {
+  if (DEBUG) {
+    console.log(`[MENI-DEBUG] ⏱ ${label}: ${Date.now() - t0}ms`);
+  }
+}
+
+const SEVERITY_MAP: Record<string, MeniBlockingIssue['severity']> = {
+  blocking: 'BLOCKER',
+  warning: 'WARNING',
+  info: 'INFO',
+};
+
+interface IssueMeta {
+  code: string;
+  title: string;
+  field: MeniBlockingIssue['field'];
+  howToFix: string;
+  expected: string;
+}
+
+const CODE_META: Record<string, IssueMeta> = {
+  contradiccion: {
+    code: 'QUALITY_GATE_FACT_CONTRADICTION',
+    title: 'Contradicción factual',
+    field: 'contenido',
+    howToFix: 'Revisar edades, cantidades y datos entre fuente y artículo. Unifica nombres y cifras.',
+    expected: 'Sin contradicciones',
+  },
+  cronologia: {
+    code: 'QUALITY_GATE_CHRONOLOGY',
+    title: 'Cronología incoherente',
+    field: 'contenido',
+    howToFix: 'Ordena los hechos: primero el traslado/vivo, luego el fallecimiento.',
+    expected: 'Orden cronológico lógico',
+  },
+  coherencia: {
+    code: 'QUALITY_GATE_DUPLICATE_PARAGRAPHS',
+    title: 'Párrafos duplicados',
+    field: 'contenido',
+    howToFix: 'Elimina repeticiones y reescribe con información nueva.',
+    expected: 'Sin párrafos repetidos',
+  },
+  terminologia: {
+    code: 'QUALITY_GATE_TERMINOLOGY',
+    title: 'Terminología inconsistente',
+    field: 'contenido',
+    howToFix: 'Usa un solo término canónico (ej. "pitbull", "motocicleta").',
+    expected: 'Término canónico único',
+  },
+  precision: {
+    code: 'QUALITY_GATE_UNSUPPORTED_CLAIM',
+    title: 'Afirmación no respaldada',
+    field: 'contenido',
+    howToFix: 'Sustituye afirmaciones absolutas por datos verificables o atribuidos.',
+    expected: 'Sin afirmaciones absolutas',
+  },
+  lenguaje: {
+    code: 'QUALITY_GATE_FILLER_LANGUAGE',
+    title: 'Lenguaje de relleno',
+    field: 'contenido',
+    howToFix: 'Elimina adjetivos emocionales y palabras vacías.',
+    expected: 'Sin palabras de relleno',
+  },
+  sensacionalismo: {
+    code: 'QUALITY_GATE_SENSATIONALISM',
+    title: 'Lenguaje sensacionalista',
+    field: 'contenido',
+    howToFix: 'Reemplaza frases alarmistas por hechos objetivos.',
+    expected: 'Sin sensacionalismo',
+  },
+  servicio: {
+    code: 'QUALITY_GATE_SERVICE_VALUE',
+    title: 'Valor de servicio insuficiente',
+    field: 'contenido',
+    howToFix: 'Agrega qué hacer, qué significa, consecuencias o declaración de autoridades.',
+    expected: 'Contexto/utilidad presente',
+  },
+  valor_diferencial: {
+    code: 'QUALITY_GATE_EDITORIAL_DIFFERENCE',
+    title: 'Diferencial editorial insuficiente',
+    field: 'contenido',
+    howToFix: 'Explica por qué leer esta nota en Nicaragua Informate y no en la competencia.',
+    expected: 'Justificación diferencial',
+  },
+  explicacion: {
+    code: 'QUALITY_GATE_EXPLANATION',
+    title: 'Explicación insuficiente',
+    field: 'contenido',
+    howToFix: 'Añade por qué ocurrió, qué significa y consecuencias.',
+    expected: `≥ ${MIN_EXPLANATION_SCORE}%`,
+  },
+  originalidad: {
+    code: 'QUALITY_GATE_ORIGINALITY',
+    title: 'Originalidad baja',
+    field: 'contenido',
+    howToFix: 'Reducí transcripción textual, agregá contexto y explicación propia.',
+    expected: `≥ ${MIN_ORIGINALITY_PERCENT}%`,
+  },
+};
+
+function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
+  const meta = CODE_META[issue.categoria] || {
+    code: `QUALITY_GATE_${issue.categoria.toUpperCase()}`,
+    title: `Quality Gate: ${issue.categoria}`,
+    field: 'contenido',
+    howToFix: 'Revisar el texto del artículo.',
+    expected: 'Cumplir con los criterios editoriales',
+  };
+
+  return {
+    code: meta.code,
+    module: 'quality-gate',
+    severity: SEVERITY_MAP[issue.severidad] || 'INFO',
+    title: meta.title,
+    description: issue.mensaje,
+    currentValue: issue.evidencia || 'Detectado',
+    expectedValue: meta.expected,
+    howToFix: meta.howToFix,
+    field: meta.field,
+    evidence: issue.evidencia,
+  };
+}
+
+function originalidadBlocker(current: number): MeniBlockingIssue {
+  return {
+    code: 'QUALITY_GATE_ORIGINALITY',
+    module: 'quality-gate',
+    severity: 'BLOCKER',
+    title: 'Originalidad demasiado baja',
+    description: `La originalidad de la nota es ${current}%, inferior al mínimo requerido.`,
+    currentValue: `${current}%`,
+    expectedValue: `≥ ${MIN_ORIGINALITY_PERCENT}%`,
+    howToFix: 'Agregar explicación propia. Agregar contexto. Reducir texto transcrito.',
+    field: 'contenido',
+  };
+}
+
+function transcripcionBlocker(current: number): MeniBlockingIssue {
+  return {
+    code: 'QUALITY_GATE_TRANSCRIPTION',
+    module: 'quality-gate',
+    severity: 'BLOCKER',
+    title: 'Transcripción excesiva',
+    description: `El porcentaje de transcripción de la fuente es ${current}%, superior al máximo permitido.`,
+    currentValue: `${current}%`,
+    expectedValue: `≤ ${MAX_TRANSCRIPTION_PERCENT}%`,
+    howToFix: 'Parafrasear la fuente en lugar de copiar bloques de texto. Aportar análisis propio.',
+    field: 'contenido',
+  };
+}
+
+export function buildMeniDiagnostics(opts: {
+  qualityGate?: QualityGateResult;
+  scoreFinal: number;
+  aprobado: boolean;
+}): { blockingIssues: MeniBlockingIssue[]; warnings: MeniBlockingIssue[] } {
+  const blockingIssues: MeniBlockingIssue[] = [];
+  const warnings: MeniBlockingIssue[] = [];
+
+  if (opts.qualityGate) {
+    const qg = opts.qualityGate;
+    for (const issue of qg.issues || []) {
+      const mapped = mapQualityGateIssue(issue);
+      if (mapped.severity === 'BLOCKER') {
+        blockingIssues.push(mapped);
+      } else {
+        warnings.push(mapped);
+      }
+    }
+
+    if (qg.originalidadPorcentaje < MIN_ORIGINALITY_PERCENT) {
+      blockingIssues.push(originalidadBlocker(qg.originalidadPorcentaje));
+    }
+
+    if (qg.explanationIndex && qg.explanationIndex.porcentajeTranscripcion > MAX_TRANSCRIPTION_PERCENT) {
+      blockingIssues.push(transcripcionBlocker(qg.explanationIndex.porcentajeTranscripcion));
+    }
+  }
+
+  if (!opts.aprobado && blockingIssues.length === 0) {
+    blockingIssues.push({
+      code: 'MENI_SCORE_THRESHOLD',
+      module: 'meni-core',
+      severity: 'BLOCKER',
+      title: 'Score final por debajo del umbral',
+      description: `La nota obtuvo ${opts.scoreFinal} puntos, insuficiente para aprobar.`,
+      currentValue: opts.scoreFinal,
+      expectedValue: '≥ 70',
+      howToFix: 'Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.',
+      field: 'general',
+    });
+  }
+
+  return { blockingIssues, warnings };
+}
+
+export function buildDuplicateBlockingIssue(similitud: number): MeniBlockingIssue {
+  return {
+    code: 'DUPLICATE_CONTENT',
+    module: 'duplicados',
+    severity: 'BLOCKER',
+    title: 'Contenido duplicado con otra noticia',
+    description: `El artículo coincide en un ${similitud}% con una noticia ya publicada.`,
+    currentValue: `${similitud}%`,
+    expectedValue: '< 35%',
+    howToFix: 'Cambiar el enfoque, añadir información nueva, modificar el título y lead.',
+    field: 'contenido',
+  };
+}
+
+export { logTime };

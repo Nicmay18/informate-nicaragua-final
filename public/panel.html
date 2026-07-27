@@ -4073,7 +4073,10 @@ sin texto ni marcas de agua, composición periodística"
             body: JSON.stringify({ id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado })
           });
           const saveData = await saveRes.json().catch(() => ({}));
-          if (!saveRes.ok) throw new Error(saveData?.error || 'Error guardando via API');
+          if (!saveRes.ok) {
+            if (saveData?.blockingIssues?.length) mostrarDiagnosticoMeni(saveData);
+            throw new Error(saveData?.error || 'Error guardando via API');
+          }
           acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
         } else {
           // Crear via API con Admin SDK
@@ -4084,7 +4087,10 @@ sin texto ni marcas de agua, composición periodística"
             body: JSON.stringify({ ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug })
           });
           const saveData = await saveRes.json().catch(() => ({}));
-          if (!saveRes.ok) throw new Error(saveData?.error || 'Error publicando via API');
+          if (!saveRes.ok) {
+            if (saveData?.blockingIssues?.length) mostrarDiagnosticoMeni(saveData);
+            throw new Error(saveData?.error || 'Error publicando via API');
+          }
           noticiaId = saveData.id || '';
           noticiaData.id = noticiaId;
           acciones.push('✅ Noticia publicada');
@@ -8444,5 +8450,91 @@ VERIFICACIÓN FINAL
       });
     });
   </script>
+
+<div id="diagnosticoMeniModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; padding:16px; overflow:auto;">
+  <div style="background:#fff; max-width:760px; width:100%; border-radius:12px; max-height:90vh; overflow:auto; padding:24px; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #e5e7eb; padding-bottom:12px;">
+      <h2 style="margin:0; font-size:20px;">Diagnóstico MENI</h2>
+      <button type="button" onclick="cerrarDiagnosticoMeni()" style="border:none; background:none; font-size:24px; cursor:pointer; color:#6b7280;">&times;</button>
+    </div>
+    <div id="diagnosticoMeniScore" style="margin-bottom:16px;"></div>
+    <div id="diagnosticoMeniContenido"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const FIELD_MAP = { titulo: 'titulo', resumen: 'resumen', contenido: 'contenido', keywords: 'keywords', autor: 'autor', categoria: 'categoria', imagen: 'imagenUrl', general: null };
+  function limpiarResaltadoMeni() {
+    document.querySelectorAll('.meni-error-field').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('meni-error-field'); });
+  }
+  window.resaltarCampoMeni = function(field) {
+    const id = FIELD_MAP[field] || field;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('meni-error-field');
+    el.style.borderColor = '#dc2626';
+  };
+  window.cerrarDiagnosticoMeni = function() {
+    document.getElementById('diagnosticoMeniModal').style.display = 'none';
+    limpiarResaltadoMeni();
+  };
+  window.mostrarDiagnosticoMeni = function(data) {
+    limpiarResaltadoMeni();
+    const modal = document.getElementById('diagnosticoMeniModal');
+    const scoreEl = document.getElementById('diagnosticoMeniScore');
+    const cont = document.getElementById('diagnosticoMeniContenido');
+    if (!modal || !cont) return;
+    scoreEl.innerHTML = '<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;"><div><strong>Score:</strong> ' + (data.scoreFinal ?? '—') + '</div><div><strong>Calificación:</strong> ' + (data.calificacion ?? '—') + '</div></div>';
+    if (data.diagnostico) {
+      scoreEl.innerHTML += '<div style="margin-top:8px; color:#4b5563; font-size:13px;">' + data.diagnostico + '</div>';
+    }
+    let html = '';
+    const blockers = (data.blockingIssues || []);
+    const warnings = (data.warnings || []);
+    const correcciones = (data.correcciones || []);
+    if (blockers.length) {
+      html += '<h3 style="color:#dc2626; font-size:16px; margin-bottom:8px;">🔴 BLOQUEANTES</h3>';
+      html += blockers.map(function(i) { return renderIssue(i, 'BLOCKER'); }).join('');
+    }
+    if (warnings.length) {
+      html += '<h3 style="color:#f59e0b; font-size:16px; margin:16px 0 8px;">🟡 ADVERTENCIAS</h3>';
+      html += warnings.map(function(i) { return renderIssue(i, 'WARNING'); }).join('');
+    }
+    if (correcciones.length) {
+      html += '<h3 style="color:#16a34a; font-size:16px; margin:16px 0 8px;">🟢 CORRECCIONES AUTOMÁTICAS</h3>';
+      html += correcciones.map(function(c) { return '<div style="padding:10px 12px; background:#f0fdf4; border-left:4px solid #16a34a; border-radius:6px; margin-bottom:8px; font-size:13px;">' + (typeof c === 'string' ? c : (c.descripcion || JSON.stringify(c))) + '</div>'; }).join('');
+    }
+    if (!blockers.length && !warnings.length && !correcciones.length) {
+      html += '<p style="color:#6b7280; font-size:13px;">No se recibieron detalles del diagnóstico.</p>';
+    }
+    if (data.sugerencias) {
+      html += '<h3 style="font-size:16px; margin:16px 0 8px;">💡 Sugerencias</h3>';
+      if (data.sugerencias.tituloSEO) html += '<div style="font-size:13px; margin-bottom:6px;"><strong>Título SEO:</strong> ' + data.sugerencias.tituloSEO + '</div>';
+      if (data.sugerencias.metaDescription) html += '<div style="font-size:13px; margin-bottom:6px;"><strong>Meta descripción:</strong> ' + data.sugerencias.metaDescription + '</div>';
+    }
+    cont.innerHTML = html;
+    modal.style.display = 'flex';
+  };
+  function renderIssue(i, fallbackSeverity) {
+    const sev = i.severity || fallbackSeverity;
+    const color = sev === 'BLOCKER' ? '#dc2626' : (sev === 'ERROR' ? '#ef4444' : (sev === 'WARNING' ? '#f59e0b' : '#3b82f6'));
+    const icon = sev === 'BLOCKER' ? '⛔' : (sev === 'ERROR' ? '❌' : (sev === 'WARNING' ? '⚠️' : 'ℹ️'));
+    const btn = i.field && i.field !== 'general' ? '<button type="button" onclick="resaltarCampoMeni(\'' + i.field + '\')" style="margin-top:8px; padding:4px 10px; font-size:12px; border:1px solid ' + color + '; background:#fff; color:' + color + '; border-radius:6px; cursor:pointer;">Mostrar dónde</button>' : '';
+    return '<div style="padding:12px; border:1px solid ' + color + '; border-left:4px solid ' + color + '; border-radius:8px; margin-bottom:12px; background:#fff; font-size:13px;">' +
+      '<div style="font-weight:700; color:' + color + '; margin-bottom:6px;">' + icon + ' ' + (i.code || '') + ' — ' + (i.title || '') + '</div>' +
+      '<div style="margin-bottom:6px;"><strong>Módulo:</strong> ' + (i.module || '') + '</div>' +
+      '<div style="margin-bottom:6px;">' + (i.description || '') + '</div>' +
+      (i.evidence ? '<div style="background:#f3f4f6; padding:6px 8px; border-radius:4px; margin-bottom:6px; font-family:monospace; font-size:12px;">Detectado: ' + i.evidence + '</div>' : '') +
+      '<div style="display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:#4b5563; margin-bottom:6px;">' +
+        (i.currentValue !== undefined && i.currentValue !== '' ? '<span><strong>Actual:</strong> ' + i.currentValue + '</span>' : '') +
+        (i.expectedValue !== undefined && i.expectedValue !== '' ? '<span><strong>Esperado:</strong> ' + i.expectedValue + '</span>' : '') +
+      '</div>' +
+      '<div style="font-size:12px; color:#065f46;"><strong>Cómo corregir:</strong> ' + (i.howToFix || '') + '</div>' +
+      btn +
+    '</div>';
+  }
+})();
+</script>
 </body>
 </html>

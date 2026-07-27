@@ -15,6 +15,12 @@ import { getModule } from './modules';
 import { runIntelligenceEngine } from './intelligence';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { runQualityGate } from '@/lib/meni/quality-gate';
+import {
+  buildMeniDiagnostics,
+  buildDuplicateBlockingIssue,
+  logMeni,
+  logTime,
+} from './diagnostics';
 import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '@/lib/meni/editor-brain';
 
 export interface MeniRunOptions {
@@ -25,6 +31,8 @@ export interface MeniRunOptions {
 }
 
 export function runMeni(input: NoticiaInput): MeniResult {
+  const t0 = Date.now();
+  logMeni('=== runMeni start ===', input.titulo);
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
   const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
   const categoria = normalizeCategory(rawCategory);
@@ -78,6 +86,22 @@ export function runMeni(input: NoticiaInput): MeniResult {
       ]
     : recomendaciones;
 
+  const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal });
+  logMeni('Quality gate result', {
+    bloqueado: qualityGate.bloqueado,
+    issuesCount: qualityGate.issues.length,
+    originalidad: qualityGate.originalidadPorcentaje,
+    editorScore: qualityGate.editorScore,
+    motivosBloqueo: qualityGate.motivosBloqueo,
+  });
+  logMeni('=== runMeni end ===', {
+    scoreFinal,
+    aprobado: aprobadoFinal,
+    blockingIssues: blockingIssues.length,
+    warnings: warnings.length,
+  });
+  logTime('runMeni', t0);
+
   return {
     version: '2.0',
     estado: 'Activo',
@@ -97,6 +121,8 @@ export function runMeni(input: NoticiaInput): MeniResult {
     aprobado: aprobadoFinal,
     calificacion,
     recomendaciones: recomendacionesFinal,
+    blockingIssues,
+    warnings,
     articulo: {
       titulo: seo.tituloSEO,
       resumen: resumenOptimizado,
@@ -135,6 +161,9 @@ export async function runMeniAsync(
     return { ...base, editorBrain };
   }
 
+  const t1 = Date.now();
+  logMeni('=== runMeniAsync start ===', input.titulo);
+
   const duplicado = await detectarDuplicadoAdmin(
     options.db,
     input.contenido,
@@ -143,9 +172,13 @@ export async function runMeniAsync(
     input.id
   );
 
+  logMeni('Duplicate check', { esDuplicado: duplicado.esDuplicado, similitud: duplicado.similitud, id: input.id });
+
   const aprobado = base.aprobado && !duplicado.esDuplicado;
   let diagnostico = base.diagnostico;
   let recomendaciones = base.recomendaciones;
+  let blockingIssues = base.blockingIssues || [];
+  const warnings = base.warnings || [];
 
   if (duplicado.esDuplicado) {
     diagnostico = `Duplicado detectado (${duplicado.similitud}% de similitud). ${diagnostico}`;
@@ -157,13 +190,19 @@ export async function runMeniAsync(
       },
       ...recomendaciones,
     ];
+    blockingIssues = [...blockingIssues, buildDuplicateBlockingIssue(duplicado.similitud)];
   }
+
+  logMeni('=== runMeniAsync end ===', { aprobado, similitud: duplicado.similitud, blockingIssues: blockingIssues.length, warnings: warnings.length, tMs: Date.now() - t1 });
+  logTime('runMeniAsync', t1);
 
   return {
     ...base,
     aprobado,
     diagnostico,
     recomendaciones,
+    blockingIssues,
+    warnings,
     duplicado,
     editorBrain,
   };
