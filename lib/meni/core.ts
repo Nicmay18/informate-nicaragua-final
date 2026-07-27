@@ -8,7 +8,14 @@ import { analyzeEEAT } from './eeat';
 import { analyzeSEO } from './seo';
 import { analyzeDiscover } from './discover';
 import { analyzeAdSense } from './adsense';
-import { computePriority, scoreToGrade, approved, normalizeCategory } from './scoring';
+import {
+  computePriority,
+  scoreToGrade,
+  approved,
+  normalizeCategory,
+  MIN_APPROVED_SCORE,
+} from './scoring';
+import { autoCorrectNoticia, type AutoCorrection } from './autocorrect';
 import { audit, buildRecomendaciones } from './auditor';
 import { buildValorEditorial, buildDiagnostico } from './editor-chief';
 import { getModule } from './modules';
@@ -30,7 +37,7 @@ export interface MeniRunOptions {
   editorBrain?: EditorBrainResult;
 }
 
-export function runMeni(input: NoticiaInput): MeniResult {
+function evaluateMeni(input: NoticiaInput): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
@@ -132,6 +139,29 @@ export function runMeni(input: NoticiaInput): MeniResult {
     qualityGate,
     intelligence,
   };
+}
+
+export function runMeni(input: NoticiaInput): MeniResult {
+  let currentInput = input;
+  logMeni('=== runMeni (auto-correct wrapper) start ===', input.titulo);
+  let result = evaluateMeni(currentInput);
+  let autoCorrections: AutoCorrection[] = [];
+  if (!result.aprobado) {
+    const corrected = autoCorrectNoticia(currentInput, result);
+    if (corrected.corrections.length > 0) {
+      autoCorrections = corrected.corrections;
+      currentInput = corrected.input;
+      result = evaluateMeni(currentInput);
+    }
+  }
+  logMeni('=== runMeni (auto-correct wrapper) end ===', {
+    scoreFinal: result.scoreFinal,
+    aprobado: result.aprobado,
+    autoCorrected: autoCorrections.length > 0,
+    correctionsCount: autoCorrections.length,
+    minScore: MIN_APPROVED_SCORE,
+  });
+  return { ...result, autoCorrected: autoCorrections.length > 0, autoCorrections };
 }
 
 export async function runMeniAsync(

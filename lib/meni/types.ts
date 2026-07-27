@@ -135,6 +135,8 @@ export interface MeniResult {
   editorBrain?: EditorBrainResult;
   blockingIssues?: MeniBlockingIssue[];
   warnings?: MeniBlockingIssue[];
+  autoCorrected?: boolean;
+  autoCorrections?: { campo: string; antes: string; despues: string; descripcion: string }[];
 }
 
 export interface MeniReport {

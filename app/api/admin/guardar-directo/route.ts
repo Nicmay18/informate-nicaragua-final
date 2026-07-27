@@ -66,10 +66,15 @@ export async function POST(request: NextRequest) {
     const meni = await runMeniAsync(noticiaInput, { db, skipEditorBrain: true });
 
     // Generar metadata si falta
-    let metaGenerada = resumen;
-    if (!metaGenerada || metaGenerada.length < 150) {
-      metaGenerada = meni.seo.metaDescripcion;
-    }
+    const finalTitulo = meni.articulo?.titulo || titulo.trim();
+    const finalContenido = meni.articulo?.contenido || contenido.trim();
+    const finalResumen = meni.articulo?.resumen || resumen?.trim() || meni.seo.metaDescripcion;
+    const finalSlug = body.slug || meni.articulo?.slug || '';
+    const autoKeywordsDespues = meni.autoCorrections?.find((c: any) => c.campo === 'keywords')?.despues;
+    const finalPalabrasClave = autoKeywordsDespues
+      ? String(autoKeywordsDespues).split(',').map((k: string) => k.trim()).filter(Boolean)
+      : (body.palabrasClave || []);
+    const metaGenerada = finalResumen.length >= 120 ? finalResumen : meni.seo.metaDescripcion;
 
     // BLOQUEO si no pasa filtros criticos
     if (!meni.aprobado) {
@@ -83,7 +88,10 @@ export async function POST(request: NextRequest) {
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
         duplicado: meni.duplicado,
-        correcciones: meni.qualityGate?.corregidos || [],
+        correcciones: [
+          ...(meni.autoCorrections || []),
+          ...(meni.qualityGate?.corregidos || []),
+        ],
         sugerencias: {
           metaDescription: metaGenerada,
           tituloSEO: meni.seo.tituloSEO,
@@ -91,13 +99,13 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Contar palabras usando el contenido recibido
-    const palabras = stripHtml(contenido).split(/\s+/).filter(Boolean).length;
+    // Contar palabras usando el contenido corregido por MENI
+    const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
 
     // Datos a actualizar
     const updateData: Record<string, unknown> = {
-      titulo: titulo.trim(),
-      contenido: contenido.trim(),
+      titulo: finalTitulo,
+      contenido: finalContenido,
       fechaActualizacion: new Date(),
       palabras,
       publicado,
@@ -114,19 +122,19 @@ export async function POST(request: NextRequest) {
     // Usar fecha del body si se proporciona, o fechaActualizacion
     updateData.fecha = body.fecha || new Date();
 
-    if (resumen !== undefined) updateData.resumen = resumen.trim();
+    if (finalResumen !== undefined) updateData.resumen = finalResumen;
     if (categoria !== undefined) updateData.categoria = categoria;
     if (departamento !== undefined) updateData.departamento = departamento;
     if (imagen !== undefined) updateData.imagen = imagen;
-    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (finalSlug !== undefined) updateData.slug = finalSlug;
     if (body.categoriaSlug !== undefined) updateData.categoriaSlug = body.categoriaSlug;
     if (body.autor !== undefined) updateData.autor = body.autor;
-    if (body.palabrasClave !== undefined) {
-      updateData.palabrasClave = body.palabrasClave;
-      updateData.tags = body.palabrasClave;
-      updateData.keywords = Array.isArray(body.palabrasClave)
-        ? body.palabrasClave.join(', ')
-        : String(body.palabrasClave);
+    if (finalPalabrasClave !== undefined) {
+      updateData.palabrasClave = finalPalabrasClave;
+      updateData.tags = finalPalabrasClave;
+      updateData.keywords = Array.isArray(finalPalabrasClave)
+        ? finalPalabrasClave.join(', ')
+        : String(finalPalabrasClave);
     }
     if (body.scoreMeni !== undefined) updateData.scoreMeni = body.scoreMeni;
     if (body.aprobadoMeni !== undefined) updateData.aprobadoMeni = body.aprobadoMeni;
@@ -168,9 +176,9 @@ export async function POST(request: NextRequest) {
         const { ingestArticle } = await import('@/lib/meni/knowledge-base');
         await ingestArticle(db, {
           articleId: articleDocId!,
-          title: titulo.trim(),
-          content: contenido.trim(),
-          slug: body.slug || '',
+          title: finalTitulo,
+          content: finalContenido,
+          slug: finalSlug,
           category: categoria || 'General',
           departamento: departamento || '',
           date: (body.fecha as string) || new Date().toISOString(),
@@ -186,9 +194,9 @@ export async function POST(request: NextRequest) {
         const result = await processArticle(
           db,
           articleDocId!,
-          titulo.trim(),
-          contenido.trim(),
-          body.slug || '',
+          finalTitulo,
+          finalContenido,
+          finalSlug,
           categoria || 'General',
           departamento || '',
         );

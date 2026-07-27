@@ -1,5 +1,7 @@
 import type { MeniPrioridad, MeniCategoria } from './types';
 
+export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '90');
+
 export function computePriority(veredicto: string): MeniPrioridad {
   switch (veredicto) {
     case 'cobertura_especial':
@@ -44,5 +46,5 @@ export function normalizeCategory(raw: string): MeniCategoria {
 }
 
 export function approved(veredicto: string, score: number): boolean {
-  return veredicto !== 'no_publicar' && veredicto !== 'EDITOR_INCONSISTENT' && score >= 70;
+  return veredicto !== 'no_publicar' && veredicto !== 'EDITOR_INCONSISTENT' && score >= MIN_APPROVED_SCORE;
 }
