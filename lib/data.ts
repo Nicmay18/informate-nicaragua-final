@@ -120,7 +120,7 @@ function mapDocToNoticia(d: any): Noticia {
     puntosClave: data.puntosClave,
     metaDescription: data.metaDescription || data.metaDescripcion || '',
     keywords: data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || '',
-    estado: data.estado || 'publicado',
+    estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
     noindex: !!data.noindex,
   };
 }
@@ -137,13 +137,12 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
-      .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
       .select(...fields)
       .limit(limit)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia);
+    const noticias = snap.docs.map(mapDocToNoticia).filter(n => n.estado === 'publicado');
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -176,13 +175,12 @@ const _cachedGetByCategory = unstable_cache(
       const { adminDb } = await import('./firebase-admin');
       const snap = await adminDb
         .collection('noticias')
-        .where('estado', '==', 'publicado')
         .where('categoria', '==', categoria)
         .orderBy('fecha', 'desc')
         .select(...LIST_FIELDS)
         .limit(count)
         .get();
-      return snap.docs.map(mapDocToNoticia);
+      return snap.docs.map(mapDocToNoticia).filter(n => n.estado === 'publicado');
     } catch (err) {
       logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
       return [];
@@ -290,7 +288,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         puntosClave: data.puntosClave,
         metaDescription: data.metaDescription || data.metaDescripcion || '',
         keywords: data.keywords || '',
-        estado: data.estado || 'publicado',
+        estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
         noindex: !!data.noindex,
       };
     }
