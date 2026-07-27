@@ -5845,18 +5845,17 @@ window.batchRestore = async function() {
       el.textContent = 'Verificando...';
       el.style.color = '#8a8a9e';
       try {
-        const res = await fetch('https://api.telegram.org/bot' + token + '/getMe');
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/verificar-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({ token, chatId })
+        });
         const data = await res.json();
-        if (!data.ok) { throw new Error(data.description || 'Token inválido'); }
-        const bot = data.result;
+        if (!res.ok || !data.ok) { throw new Error(data.error || 'Error en el servidor'); }
+        const bot = data.bot;
         if (chatId) {
-          const sendRes = await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: '✅ Conexión verificada desde el admin de Nicaragua Informate' })
-          });
-          const sendData = await sendRes.json();
-          if (sendData.ok) {
+          if (data.sent) {
             el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado</span> (@' + bot.username + ' → Chat ID ' + chatId + ')';
           } else {
             el.innerHTML = '<span style="color:#f59e0b;"><i class="fas fa-exclamation-circle"></i> Bot OK, chat ID inválido</span> (@' + bot.username + ')';
