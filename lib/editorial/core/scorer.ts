@@ -310,7 +310,7 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     ? ev.valorEditorial.parrafosSinDato / ev.valorEditorial.parrafosTotal
     : 0;
 
-  if (ratioSinDato > 0.5 && esLargo) {
+  if (ratioSinDato > 0.7 && esLargo) {
     warnings.push(`${ev.valorEditorial.parrafosSinDato} de ${ev.valorEditorial.parrafosTotal} párrafos sin datos concretos`);
     tracer.sub(5, warnings[warnings.length - 1], 'PARRAFOS_SIN_DATO');
     recommendations.push('Cada párrafo debe contener al menos un dato verificable');
