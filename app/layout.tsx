@@ -142,6 +142,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        {/* Fuentes del rediseño de portada */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
         {/* AdSense script base — las unidades reales se inyectan vía AdsenseUnit */}
         <script
           async
@@ -160,12 +167,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          <TopBar />
-          <Header />
+          <div className="site-shell">
+            <TopBar />
+            <Header />
+          </div>
           <main id="main-content" role="main" aria-label="Contenido principal" style={{ flex: 1 }}>
             {children}
           </main>
-          <Footer />
+          <div className="site-shell">
+            <Footer />
+          </div>
         </div>
         <CookieBanner />
         <ConsentScript />

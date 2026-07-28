@@ -159,8 +159,8 @@ export default function EditorPage() {
   };
 
   const guardar = async (publicar: boolean) => {
-    if (!resultado || resultado.scoreFinal < 90) {
-      setError('Score MENI menor a 90. No se puede guardar/publicar hasta cumplir el estándar.');
+    if (!resultado || resultado.recomendacionEditorial === 'revisar') {
+      setError('El editor recomienda revisar antes de publicar. No se puede guardar hasta resolver las observaciones.');
       return;
     }
     setGuardando(true);
@@ -191,6 +191,9 @@ export default function EditorPage() {
           publicado: publicar,
           scoreMeni: resultado.scoreFinal,
           aprobadoMeni: resultado.aprobado,
+          estadoEditorial: resultado.estadoEditorial,
+          recomendacionEditorial: resultado.recomendacionEditorial,
+          mensajeEditor: resultado.mensajeEditor,
         }),
       });
       const data = await res.json().catch(() => ({ error: 'Respuesta inválida del servidor' }));
@@ -217,6 +220,20 @@ export default function EditorPage() {
     if (score >= 90) return 'text-green-400';
     if (score >= 80) return 'text-yellow-400';
     return 'text-red-400';
+  };
+
+  const estadoEditorialInfo: Record<string, { label: string; badge: string; dot: string }> = {
+    excelente: { label: 'Excelente', badge: 'bg-green-900/40 text-green-300 border-green-500/30', dot: 'bg-green-400' },
+    muy_buena: { label: 'Muy buena', badge: 'bg-emerald-900/40 text-emerald-300 border-emerald-500/30', dot: 'bg-emerald-400' },
+    necesita_explicacion: { label: 'Necesita explicación', badge: 'bg-yellow-900/40 text-yellow-300 border-yellow-500/30', dot: 'bg-yellow-400' },
+    demasiado_parecida: { label: 'Demasiado parecida', badge: 'bg-orange-900/40 text-orange-300 border-orange-500/30', dot: 'bg-orange-400' },
+    no_aporta: { label: 'No aporta', badge: 'bg-red-900/40 text-red-300 border-red-500/30', dot: 'bg-red-400' },
+  };
+
+  const recomendacionInfo: Record<string, { label: string; badge: string }> = {
+    publicar: { label: 'Publicar', badge: 'bg-green-900/40 text-green-300 border-green-500/30' },
+    mejorar: { label: 'Mejorar', badge: 'bg-yellow-900/40 text-yellow-300 border-yellow-500/30' },
+    revisar: { label: 'Revisar', badge: 'bg-red-900/40 text-red-300 border-red-500/30' },
   };
 
   if (loading) return <div className="p-12 text-center text-gray-300">Cargando...</div>;
@@ -313,157 +330,90 @@ export default function EditorPage() {
               )}
             </div>
 
-            <div className="space-y-3">
-              <ScoreBar label="SEO" score={resultado?.seo.score} loading={evaluando} />
-              <ScoreBar label="EEAT" score={resultado?.eeat.score} loading={evaluando} />
-              <ScoreBar label="Discover" score={resultado?.discover.score} loading={evaluando} />
-              <ScoreBar label="Forense" score={resultado?.forense.score} loading={evaluando} />
-              <ScoreBar label="Facebook" score={optimizado ? 99 : undefined} loading={optimizando} />
-              <ScoreBar label="Google" score={optimizado ? 100 : undefined} loading={optimizando} />
-              <ScoreBar label="Arquitectura" score={100} loading={false} />
-            </div>
-
-            {/* Riesgo */}
-            <div className="mt-4 pt-4 border-t border-slate-800">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">Riesgo</span>
-                {resultado ? (
-                  <span className={`font-semibold ${resultado.riesgo.nivel === 'VERDE' ? 'text-green-400' : resultado.riesgo.nivel === 'AMARILLO' ? 'text-yellow-400' : 'text-red-400'}`}>
-                    {resultado.riesgo.nivel === 'VERDE' ? 'BAJO' : resultado.riesgo.nivel === 'AMARILLO' ? 'MEDIO' : 'ALTO'}
-                  </span>
-                ) : (
-                  <span className="text-slate-500">—</span>
-                )}
-              </div>
-            </div>
-
-            {/* Score MENI final */}
-            <div className="mt-4 pt-4 border-t border-slate-800">
-              <p className="text-sm text-slate-400 mb-1">Score MENI</p>
-              <div className="flex items-baseline gap-2">
-                <p className={`text-5xl font-bold ${resultado ? colorScore(resultado.scoreFinal) : 'text-slate-600'}`}>
-                  {resultado ? resultado.scoreFinal : '—'}
-                </p>
-                {resultado && (
-                  <span className="text-lg text-slate-500">/100</span>
-                )}
-              </div>
-              {resultado && (
-                <div className={`mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold ${resultado.aprobado ? 'bg-green-900/40 text-green-300 border border-green-500/30' : 'bg-red-900/40 text-red-300 border border-red-500/30'}`}>
-                  <span className={`h-2 w-2 rounded-full ${resultado.aprobado ? 'bg-green-400' : 'bg-red-400'}`} />
-                  {resultado.aprobado ? 'APROBADO' : 'REQUIERE MEJORAS'}
-                </div>
-              )}
-              {resultado?.editorialTier && (
-                <div className="mt-3 rounded-lg border border-indigo-700/40 bg-indigo-900/30 p-3">
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-indigo-500 px-2.5 py-0.5 text-xs font-bold text-white">
-                      {resultado.editorialTier}
-                    </span>
-                    <span className="text-xs font-semibold text-indigo-300">Tier Editorial</span>
+            {/* Veredicto Editorial */}
+            <div className="space-y-4">
+              {resultado && resultado.estadoEditorial && (
+                <div>
+                  <p className="text-sm text-slate-400 mb-2">Estado Editorial</p>
+                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold border ${estadoEditorialInfo[resultado.estadoEditorial]?.badge ?? 'bg-slate-800 text-slate-300 border-slate-600'}`}>
+                    <span className={`h-2 w-2 rounded-full ${estadoEditorialInfo[resultado.estadoEditorial]?.dot ?? 'bg-slate-400'}`} />
+                    {estadoEditorialInfo[resultado.estadoEditorial]?.label ?? resultado.estadoEditorial}
                   </div>
-                  {resultado.editorialReason && (
-                    <p className="mt-2 text-sm text-indigo-200">{resultado.editorialReason.resumen}</p>
-                  )}
-                </div>
-              )}
-              {evaluando && !resultado && (
-                <p className="text-sm text-slate-500 mt-2">Evaluando…</p>
-              )}
-              {!evaluando && !resultado && (
-                <p className="text-sm text-slate-500 mt-2">Escribe un título y contenido para empezar.</p>
-              )}
-            </div>
-          </div>
-
-          {resultado?.qualityGate && (
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
-                <h2 className="text-lg font-semibold">MENI Quality Gate</h2>
-                <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                    resultado.qualityGate.bloqueado
-                      ? 'bg-red-900/40 text-red-300 border border-red-500/30'
-                      : 'bg-green-900/40 text-green-300 border border-green-500/30'
-                  }`}
-                >
-                  {resultado.qualityGate.bloqueado ? 'BLOQUEADO' : 'OK'}
-                </span>
-              </div>
-
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Score Quality Gate</span>
-                  <span className={`font-semibold ${colorScore(resultado.qualityGate.editorScore)}`}>
-                    {resultado.qualityGate.editorScore}/100
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Originalidad</span>
-                  <span className="font-semibold text-slate-200">{resultado.qualityGate.originalidadPorcentaje}%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Explicación</span>
-                  <span className="font-semibold text-slate-200">
-                    {resultado.qualityGate.explanationIndex.porcentajeExplicacion}%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Transcripción</span>
-                  <span className="font-semibold text-slate-200">
-                    {resultado.qualityGate.explanationIndex.porcentajeTranscripcion}%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Servicio al lector</span>
-                  <span className="font-semibold text-slate-200">
-                    {resultado.qualityGate.explanationIndex.porcentajeServicio}%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">CTR estimado Facebook</span>
-                  <span className="font-semibold text-slate-200">{resultado.qualityGate.ctrEstimadoFacebook}%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Discover listo</span>
-                  <span className={resultado.qualityGate.discoverListo ? 'text-green-400 font-semibold' : 'text-yellow-400 font-semibold'}>
-                    {resultado.qualityGate.discoverListo ? 'Sí' : 'No'}
-                  </span>
-                </div>
-              </div>
-
-              {resultado.qualityGate.corregidos.length > 0 && (
-                <div className="mt-4 pt-3 border-t border-slate-800">
-                  <p className="text-xs font-semibold text-cyan-300 mb-1">Corregido automáticamente</p>
-                  <ul className="text-xs space-y-1 text-slate-300">
-                    {resultado.qualityGate.corregidos.slice(0, 5).map((c, i) => (
-                      <li key={i}>• {c.descripcion}</li>
-                    ))}
-                  </ul>
                 </div>
               )}
 
-              {resultado.qualityGate.issues.length > 0 && (
-                <div className="mt-4 pt-3 border-t border-slate-800">
-                  <p className="text-xs font-semibold text-yellow-300 mb-1">Detectado</p>
-                  <ul className="text-xs space-y-1">
-                    {resultado.qualityGate.issues.slice(0, 6).map((issue, i) => (
-                      <li
-                        key={i}
-                        className={
-                          issue.severidad === 'blocking'
-                            ? 'text-red-300'
-                            : issue.severidad === 'warning'
-                            ? 'text-yellow-200'
-                            : 'text-slate-400'
-                        }
-                      >
-                        • {issue.mensaje}
+              {resultado && resultado.recomendacionEditorial && (
+                <div>
+                  <p className="text-sm text-slate-400 mb-2">Recomendación del Editor</p>
+                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold border ${recomendacionInfo[resultado.recomendacionEditorial]?.badge ?? 'bg-slate-800 text-slate-300 border-slate-600'}`}>
+                    {recomendacionInfo[resultado.recomendacionEditorial]?.label ?? resultado.recomendacionEditorial}
+                  </div>
+                </div>
+              )}
+
+              {resultado?.mensajeEditor && (
+                <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
+                  <p className="text-xs font-semibold text-cyan-300 mb-2">Mensaje del Editor</p>
+                  <p className="text-sm text-slate-200 leading-relaxed">{resultado.mensajeEditor}</p>
+                </div>
+              )}
+
+              {resultado?.razonamientoEditorial && resultado.razonamientoEditorial.length > 0 && (
+                <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
+                  <p className="text-xs font-semibold text-slate-300 mb-3">Razonamiento Editorial</p>
+                  <ul className="space-y-2">
+                    {resultado.razonamientoEditorial.map((r, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <span className={`mt-0.5 ${r.positivo ? 'text-green-400' : 'text-yellow-400'}`}>
+                          {r.positivo ? '✓' : '⚠'}
+                        </span>
+                        <span className="text-slate-200">{r.punto}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
+
+              {evaluando && !resultado && (
+                <p className="text-sm text-slate-500 animate-pulse">Evaluando…</p>
+              )}
+              {!evaluando && !resultado && (
+                <p className="text-sm text-slate-500">Escribe un título y contenido para empezar.</p>
+              )}
+            </div>
+          </div>
+
+          {resultado?.diagnosticoEditorial && (
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <h2 className="text-lg font-semibold border-b border-slate-800 pb-2 mb-4">Diagnóstico Editorial</h2>
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="text-xs font-semibold text-cyan-300 mb-1">¿Vale la pena publicar?</p>
+                  <p className="text-slate-200">{resultado.diagnosticoEditorial.valeLaPenaPublicar.razon}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-cyan-300 mb-1">¿Qué aprenderá que no en otro medio?</p>
+                  <p className="text-slate-200">{resultado.diagnosticoEditorial.queAprenderaQueNoEnOtroMedio.respuesta}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-cyan-300 mb-1">¿Qué aporta Nicaragua Informate?</p>
+                  <p className="text-slate-200">{resultado.diagnosticoEditorial.queAportaNicaraguaInformate.respuesta}</p>
+                </div>
+                {resultado.diagnosticoEditorial.queLeFaltaParaReferencia.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-yellow-300 mb-1">¿Qué le falta para ser referencia?</p>
+                    <ul className="space-y-1">
+                      {resultado.diagnosticoEditorial.queLeFaltaParaReferencia.map((f, i) => (
+                        <li key={i} className="text-slate-200">• {f}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs font-semibold text-cyan-300 mb-1">¿Publicar en portada?</p>
+                  <p className="text-slate-200">{resultado.diagnosticoEditorial.publicarEnPortada.razon}</p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -477,36 +427,39 @@ export default function EditorPage() {
             </button>
             <button
               onClick={() => guardar(false)}
-              disabled={guardando || !resultado || !resultado.aprobado}
+              disabled={guardando || !resultado || resultado.recomendacionEditorial === 'revisar'}
               className="w-full px-4 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-white font-semibold transition"
             >
               {guardando ? 'Guardando...' : 'Guardar borrador'}
             </button>
             <button
               onClick={() => guardar(true)}
-              disabled={guardando || !resultado || !resultado.aprobado}
+              disabled={guardando || !resultado || resultado.recomendacionEditorial !== 'publicar'}
               className="w-full px-4 py-3 rounded-lg bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white font-semibold transition"
             >
               {guardando ? 'Publicando...' : 'Publicar'}
             </button>
-            {resultado && !resultado.aprobado && (
-              <p className="text-xs text-red-400">Score &lt; 90: bloqueado hasta optimizar.</p>
+            {resultado && resultado.recomendacionEditorial === 'revisar' && (
+              <p className="text-xs text-red-400">El editor recomienda revisar antes de publicar.</p>
+            )}
+            {resultado && resultado.recomendacionEditorial === 'mejorar' && (
+              <p className="text-xs text-yellow-400">El editor sugiere mejoras. Puedes guardar como borrador.</p>
             )}
           </div>
 
           {error && <div className="p-4 rounded-lg bg-red-900/20 border border-red-500/40 text-red-300 text-sm">{error}</div>}
           {mensaje && <div className="p-4 rounded-lg bg-green-900/20 border border-green-500/40 text-green-300 text-sm">{mensaje}</div>}
 
-          {resultado && resultado.recomendaciones.length > 0 && (
+          {resultado?.recomendaciones && resultado.recomendaciones.length > 0 && (
             <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-slate-300 mb-2">Recomendaciones</h3>
+              <h3 className="text-sm font-semibold text-slate-300 mb-2">Recomendaciones técnicas</h3>
               <ul className="text-sm space-y-2">
                 {resultado.recomendaciones.slice(0, 6).map((r, i) => (
                   <li key={i} className="text-yellow-200">• {r.mensaje}</li>
                 ))}
               </ul>
             </div>
-          )}
+          )
         </aside>
       </div>
     </main>

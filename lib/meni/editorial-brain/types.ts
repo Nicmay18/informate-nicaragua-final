@@ -1,8 +1,8 @@
 /**
- * MENI OS v5.0 — Editorial Brain Types
+ * Editorial Brain — Tipos
  * =====================================
- * La capa superior. No analiza texto. Analiza el HECHO.
- * Decide si vale la pena publicar, qué ángulo tomar, qué preguntas responder.
+ * Un editor, no un policía.
+ * No bloquea: guía. No aprueba: recomienda.
  * El LLM solo ejecuta lo que el Editorial Brain decide.
  */
 
@@ -175,9 +175,11 @@ export interface StoryCompletenessDecision {
 export interface UtilityGateResult {
   aportaNuevo: boolean;
   queAprendeElLector: string[];
+  recomendacionesEditoriales: string[];
+  score: number;
+  // Backward compat (computed from recomendacionesEditoriales)
   bloquear: boolean;
   motivoBloqueo: string | null;
-  score: number;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -185,7 +187,16 @@ export interface UtilityGateResult {
 // ═══════════════════════════════════════════════════════════
 
 export interface DiagnosticoEditorial {
-  valeLaPenaPublicar: boolean;
+  // 5 preguntas obligatorias del Diagnóstico Editorial NI
+  valeLaPenaPublicar: { respuesta: boolean; razon: string };
+  queAprenderaQueNoEnOtroMedio: { respuesta: string; razon: string };
+  queAportaNicaraguaInformate: { respuesta: string; razon: string };
+  queLeFaltaParaReferencia: string[];
+  publicarEnPortada: { respuesta: boolean; razon: string };
+  // Síntesis narrativa del editor
+  mensajeEditor: string;
+  razonamiento: { punto: string; positivo: boolean }[];
+  // Campos de apoyo (backward compat)
   razonValorPeriodistico: string;
   queAportaAlLector: string;
   queAportaFrenteTN8: string;
@@ -256,6 +267,15 @@ export interface LlmInstructions {
 // EditorialDecision — el objeto final
 // ═══════════════════════════════════════════════════════════
 
+export type RecomendacionEditorial = 'publicar' | 'mejorar' | 'revisar';
+
+export type EstadoEditorial =
+  | 'excelente'
+  | 'muy_buena'
+  | 'necesita_explicacion'
+  | 'demasiado_parecida'
+  | 'no_aporta';
+
 export interface EditorialDecision {
   newsValue: NewsValueDecision;
   competition: CompetitionDecision;
@@ -267,14 +287,17 @@ export interface EditorialDecision {
   readerRetention: ReaderRetentionDecision;
   storyCompleteness: StoryCompletenessDecision;
   intelligence: IntelligenceResult;
-  // MENI v7: nuevos módulos
   storyPlan: StoryPlan;
   antiClickbait: AntiClickbaitResult;
   readerJourney: ReaderJourneyResult;
-  // MENI v8: Editor en Jefe unificado
   utilityGate: UtilityGateResult;
   diagnostico: DiagnosticoEditorial;
+  recomendacionEditorial: RecomendacionEditorial;
+  estadoEditorial: EstadoEditorial;
+  mensajeEditor: string;
+  razonamiento: { punto: string; positivo: boolean }[];
   score: number;
+  // Backward compat (computed from recomendacionEditorial)
   publicar: boolean;
   bloquear: boolean;
   motivoBloqueo: string | null;

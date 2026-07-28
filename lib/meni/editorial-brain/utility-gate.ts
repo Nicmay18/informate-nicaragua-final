@@ -1,11 +1,11 @@
 /**
  * Utility Gate — ¿El lector termina sabiendo algo nuevo?
  * ========================================================
- * No es un motor más. Es la pregunta fundamental.
- * Si el lector no aprende nada, la nota no merece existir.
+ * MENI v9: No bloquea. Guía.
+ * Si el lector no aprende nada, el editor le dice qué falta.
  *
  * Sintetiza: ReaderJourney + PublicValue + StoryPlanner + KnowledgeContext
- * para determinar si hay valor informativo nuevo.
+ * para generar recomendaciones editoriales accionables.
  */
 
 import type {
@@ -28,7 +28,7 @@ export function runUtilityGate(params: {
   const { readerJourney, publicValue, storyPlan, newsValue, knowledgeContext, contenido } = params;
 
   const queAprende: string[] = [];
-  const bloqueadores: string[] = [];
+  const recomendacionesEditoriales: string[] = [];
 
   // 1. ¿Qué aprenderá el lector? — desde ReaderJourney
   if (readerJourney.queEntendera.length > 0) {
@@ -45,12 +45,12 @@ export function runUtilityGate(params: {
 
   // 3. ¿El Public Value dice que solo informa?
   if (publicValue.soloInforma && queAprende.length === 0) {
-    bloqueadores.push('La nota solo informa datos sin aportar explicación, contexto ni servicio al lector.');
+    recomendacionesEditoriales.push('La nota solo informa datos. Agrega explicación, contexto o servicio al lector para que aporte valor real.');
   }
 
   // 4. ¿El Reader Journey detectó brecha de conocimiento pero no hay qué entenderá?
   if (readerJourney.brechaDeConocimiento.length > 0 && readerJourney.queEntendera.length === 0) {
-    bloqueadores.push('Se detectaron vacíos de conocimiento pero el artículo no los resolverá.');
+    recomendacionesEditoriales.push(`El lector tendrá dudas: ${readerJourney.brechaDeConocimiento.slice(0, 3).join('; ')}. Responde estas preguntas en el texto.`);
   }
 
   // 5. ¿Es un hecho repetido sin nueva información? — desde KnowledgeContext
@@ -60,35 +60,37 @@ export function runUtilityGate(params: {
       return days <= 7;
     });
     if (antecedentesRecientes.length >= 3 && queAprende.length <= 1) {
-      bloqueadores.push(`Este tema ya apareció ${antecedentesRecientes.length} veces en los últimos 7 días sin que la nota aporte un ángulo nuevo.`);
+    recomendacionesEditoriales.push(`Este tema ya apareció ${antecedentesRecientes.length} veces en los últimos 7 días. Encuentra un ángulo nuevo o aporta datos adicionales que la cobertura anterior no tuvo.`);
     }
   }
 
   // 6. ¿El News Value es muy bajo?
   if (newsValue.veredicto === 'baja' && newsValue.utilidad < 20) {
-    bloqueadores.push(`Utilidad muy baja (${newsValue.utilidad}/100). El lector no obtiene valor práctico.`);
+    recomendacionesEditoriales.push(`La utilidad para el lector es baja (${newsValue.utilidad}/100). Considera qué servicio práctico puede ofrecer esta nota.`);
   }
 
   // 7. ¿El contenido es demasiado breve para aportar valor?
   const palabras = contenido.split(/\s+/).filter(Boolean).length;
   if (palabras < 30 && queAprende.length === 0) {
-    bloqueadores.push('El hecho es demasiado breve para generar valor informativo.');
+    recomendacionesEditoriales.push('El hecho es demasiado breve. Amplía con contexto, antecedentes o explicación para generar valor informativo.');
   }
 
-  const aportaNuevo = queAprende.length > 0 && bloqueadores.length === 0;
-  const bloquear = bloqueadores.length > 0;
-  const motivoBloqueo = bloquear ? bloqueadores.join(' | ') : null;
+  const aportaNuevo = queAprende.length > 0 && recomendacionesEditoriales.length === 0;
+  // Backward compat: bloquear = true when there are critical recommendations
+  const bloquear = recomendacionesEditoriales.length > 0 && !aportaNuevo;
+  const motivoBloqueo = bloquear ? recomendacionesEditoriales.join(' | ') : null;
 
   // Score: basado en cuántas cosas aprenderá el lector
   const baseScore = Math.min(queAprende.length * 15, 60);
   const bonusServicio = storyPlan.explicacionesServicio.length > 0 ? 20 : 0;
   const bonusConocimiento = knowledgeContext?.hasMemory ? 10 : 0;
-  const penalty = bloqueadores.length * 20;
+  const penalty = recomendacionesEditoriales.length * 15;
   const score = Math.max(0, Math.min(100, baseScore + bonusServicio + bonusConocimiento - penalty));
 
   return {
     aportaNuevo,
     queAprendeElLector: queAprende,
+    recomendacionesEditoriales,
     bloquear,
     motivoBloqueo,
     score,

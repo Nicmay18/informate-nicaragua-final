@@ -178,6 +178,35 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function estadoToRiesgo(estado: string): 'VERDE' | 'AMARILLO' | 'ROJO' {
+  switch (estado) {
+    case 'excelente':
+    case 'muy_buena':
+      return 'VERDE';
+    case 'necesita_explicacion':
+      return 'AMARILLO';
+    default:
+      return 'ROJO';
+  }
+}
+
+function estadoToScore(estado: string): number {
+  switch (estado) {
+    case 'excelente':
+      return 95;
+    case 'muy_buena':
+      return 85;
+    case 'necesita_explicacion':
+      return 70;
+    case 'demasiado_parecida':
+      return 50;
+    case 'no_aporta':
+      return 30;
+    default:
+      return 0;
+  }
+}
+
 function cleanJson(text: string): string {
   return text.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
 }
@@ -252,7 +281,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   });
   await appendQualityGateHistory(qualityGatePre, { titulo: noticiaInput.titulo, categoria: input.categoriaSugerida || 'General' }, db);
 
-  if (decision.bloquear) {
+  if (decision.recomendacionEditorial === 'revisar') {
     return {
       tituloSEO: '',
       bajada: '',
@@ -268,20 +297,27 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       copyTelegram: '',
       jsonLd: '',
       checklistEeatDiscover: '',
-      diagnosticoEditorial: 'BLOQUEADO por Editorial Brain',
-      diagnosticoTecnico: decision.motivoBloqueo || 'No aporta valor diferencial al lector.',
-      riesgoEditorial: 'ROJO',
+      diagnosticoEditorial: decision.mensajeEditor,
+      diagnosticoTecnico: `El editor recomienda revisar antes de publicar. ${decision.diagnostico.mensajeEditor}`,
+      riesgoEditorial: estadoToRiesgo(decision.estadoEditorial),
       riesgoTecnico: 'ALTO',
-      scoreMeni: 0,
+      scoreMeni: estadoToScore(decision.estadoEditorial),
       aprobado: false,
+      estadoEditorial: decision.estadoEditorial,
+      recomendacionEditorial: decision.recomendacionEditorial,
+      diagnosticoEditorialNI: decision.diagnostico,
+      mensajeEditor: decision.mensajeEditor,
+      razonamientoEditorial: decision.razonamiento,
       correccionesAplicadas: [],
-      recomendaciones: [decision.motivoBloqueo || decision.nicaraguaInformate.motivoBloqueo || 'La nota no aporta valor diferencial.'],
+      recomendaciones: decision.diagnostico.queLeFaltaParaReferencia.length > 0
+        ? decision.diagnostico.queLeFaltaParaReferencia
+        : [decision.mensajeEditor],
       evaluacion: {} as any,
       qualityGatePre,
       editorBrain: brain,
       editorialVerification: undefined,
       _provider: 'groq+editorial-brain',
-      _error: decision.motivoBloqueo || 'Bloqueado por Editorial Brain',
+      _error: decision.mensajeEditor,
     };
   }
 
@@ -340,15 +376,22 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     copyWhatsApp: `${instr.tituloSEO} https://informate.ni/noticias/${instr.slug}`,
     copyTelegram: `${instr.tituloSEO}\n\n${getString('bajada')}\n\nhttps://informate.ni/noticias/${instr.slug}`,
     jsonLd: '',
-    checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait. Editorial Brain: ${decision.score}/100. News Value: ${decision.newsValue.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%`,
-    diagnosticoEditorial: decision.diagnostico.razonValorPeriodistico,
-    diagnosticoTecnico: `MENI v8 | Utility Gate: ${decision.utilityGate.aportaNuevo ? 'APROBADO' : 'BLOQUEADO'} (${decision.utilityGate.score}/100) | Vale la pena: ${decision.diagnostico.valeLaPenaPublicar ? 'SÍ' : 'NO'} | Prioridad: ${decision.diagnostico.prioridad} | Story Planner: ${decision.storyPlan.tipoLabel} (${decision.storyPlan.score}/100) | Anti Clickbait: ${decision.antiClickbait.veredicto} (${decision.antiClickbait.score}/100) | Reader Journey: ${decision.readerJourney.score}/100 | News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}) | Competition: ${decision.competition.score}/100 | NI Engine: ${decision.nicaraguaInformate.score}/100 | Difference: ${decision.editorialDifference.porcentajeDiferencia}% | Public Value: ${decision.publicValue.score}/100 | Completeness: ${decision.storyCompleteness.score}/100`,
-    riesgoEditorial: 'VERDE',
+    checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait.`,
+    diagnosticoEditorial: decision.mensajeEditor,
+    diagnosticoTecnico: decision.diagnostico.mensajeEditor,
+    riesgoEditorial: estadoToRiesgo(decision.estadoEditorial),
     riesgoTecnico: 'BAJO',
-    scoreMeni: 0,
+    scoreMeni: estadoToScore(decision.estadoEditorial),
     aprobado: false,
+    estadoEditorial: decision.estadoEditorial,
+    recomendacionEditorial: decision.recomendacionEditorial,
+    diagnosticoEditorialNI: decision.diagnostico,
+    mensajeEditor: decision.mensajeEditor,
+    razonamientoEditorial: decision.razonamiento,
     correccionesAplicadas: decision.storyCompleteness.respuestasFaltantes,
-    recomendaciones: decision.storyCompleteness.dudasPendientes,
+    recomendaciones: decision.diagnostico.queLeFaltaParaReferencia.length > 0
+      ? decision.diagnostico.queLeFaltaParaReferencia
+      : decision.storyCompleteness.dudasPendientes,
     evaluacion: {} as any,
     _provider: 'groq+editorial-brain',
   };
@@ -392,7 +435,9 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   if (qualityGatePost.bloqueado) {
     generated.aprobado = false;
     generated.riesgoEditorial = 'ROJO';
-    generated.diagnosticoTecnico = `Quality Gate bloqueó la publicación: ${qualityGatePost.motivosBloqueo.join(' | ')}`;
+    generated.estadoEditorial = 'no_aporta';
+    generated.recomendacionEditorial = 'revisar';
+    generated.diagnosticoTecnico = `Quality Gate: ${qualityGatePost.motivosBloqueo.join(' | ')}`;
     generated.recomendaciones = [...qualityGatePost.motivosBloqueo, ...generated.recomendaciones];
   }
 
@@ -414,15 +459,21 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   try {
     const evaluacion = runMeni(evalInput);
     generated.evaluacion = evaluacion;
-    generated.scoreMeni = evaluacion.scoreFinal;
+    // Score derivado del veredicto editorial, no del score técnico
+    generated.scoreMeni = estadoToScore(generated.estadoEditorial);
+    // Aprobado = el editor recomienda publicar y no hay issues técnicos críticos
     generated.aprobado =
-      evaluacion.scoreFinal >= 90 &&
-      evaluacion.aprobado &&
-      !decision.bloquear &&
-      !decision.utilityGate.bloquear &&
-      !qualityGatePost.bloqueado &&
-      verification.pasa;
-    generated.riesgoEditorial = (qualityGatePost.bloqueado || !verification.pasa) ? 'ROJO' : evaluacion.riesgo.nivel;
+      generated.recomendacionEditorial === 'publicar' &&
+      !qualityGatePost.bloqueado;
+    // Si no pasa verificación editorial, bajar recomendación
+    if (!verification.pasa && generated.recomendacionEditorial === 'publicar') {
+      generated.recomendacionEditorial = 'mejorar';
+      generated.estadoEditorial = 'necesita_explicacion';
+      generated.scoreMeni = estadoToScore(generated.estadoEditorial);
+    }
+    // Riesgo derivado del estado editorial
+    generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : estadoToRiesgo(generated.estadoEditorial);
+    generated.riesgoTecnico = qualityGatePost.bloqueado ? 'ALTO' : qualityGatePost.issues.length > 0 ? 'MEDIO' : 'BAJO';
   } catch (e) {
     generated.evaluacion = {} as any;
     generated._error = `Evaluación local falló: ${e instanceof Error ? e.message : String(e)}`;

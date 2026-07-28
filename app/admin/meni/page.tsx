@@ -15,21 +15,19 @@ const CATEGORIAS = [
   'Espectáculos',
 ];
 
-const severidadColor: Record<string, string> = {
-  baja: 'bg-blue-100 text-blue-800',
-  media: 'bg-yellow-100 text-yellow-800',
-  alta: 'bg-red-100 text-red-800',
+const estadoEditorialInfo: Record<string, { label: string; badge: string; dot: string }> = {
+  excelente: { label: 'Excelente', badge: 'bg-green-100 text-green-800 border-green-300', dot: 'bg-green-500' },
+  muy_buena: { label: 'Muy buena', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', dot: 'bg-emerald-500' },
+  necesita_explicacion: { label: 'Necesita explicación', badge: 'bg-yellow-100 text-yellow-800 border-yellow-300', dot: 'bg-yellow-500' },
+  demasiado_parecida: { label: 'Demasiado parecida', badge: 'bg-orange-100 text-orange-800 border-orange-300', dot: 'bg-orange-500' },
+  no_aporta: { label: 'No aporta', badge: 'bg-red-100 text-red-800 border-red-300', dot: 'bg-red-500' },
 };
 
-function ScoreBadge({ label, score }: { label: string; score: number }) {
-  const color = score >= 80 ? 'bg-emerald-100 text-emerald-800' : score >= 60 ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800';
-  return (
-    <div className="flex items-center justify-between rounded-lg border p-3">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
-      <span className={`rounded-full px-3 py-1 text-xs font-bold ${color}`}>{score}/100</span>
-    </div>
-  );
-}
+const recomendacionInfo: Record<string, { label: string; badge: string }> = {
+  publicar: { label: 'Publicar', badge: 'bg-green-100 text-green-800 border-green-300' },
+  mejorar: { label: 'Mejorar', badge: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+  revisar: { label: 'Revisar', badge: 'bg-red-100 text-red-800 border-red-300' },
+};
 
 export default function MeniPage() {
   const [form, setForm] = useState({
@@ -76,8 +74,8 @@ export default function MeniPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">MENI — Diagnóstico técnico avanzado</h1>
-            <p className="text-slate-600">Auditoría técnica y arquitectura. El flujo editorial diario ahora vive en Editor IA.</p>
+            <h1 className="text-3xl font-bold text-slate-900">MENI — Diagnóstico editorial</h1>
+            <p className="text-slate-600">Veredicto editorial del editor y diagnóstico técnico de respaldo.</p>
           </div>
           <Link href="/admin/meni/arquitectura" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
             Arquitectura
@@ -157,17 +155,84 @@ export default function MeniPage() {
 
           {result && (
             <section className="space-y-6">
+              {/* Veredicto Editorial */}
               <div className="rounded-2xl bg-white p-6 shadow">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-semibold">Diagnóstico</h2>
-                    <p className="text-sm text-slate-500">{result.diagnostico}</p>
-                  </div>
-                  <span className={`rounded-full px-4 py-2 font-bold ${result.aprobado ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
-                    {result.aprobado ? 'APROBADO' : 'RECHAZADO'} · {result.calificacion}
-                  </span>
+                <h2 className="mb-4 text-lg font-semibold">Veredicto Editorial</h2>
+                <div className="flex flex-wrap items-center gap-3 mb-4">
+                  {result.estadoEditorial && estadoEditorialInfo[result.estadoEditorial] && (
+                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border ${estadoEditorialInfo[result.estadoEditorial].badge}`}>
+                      <span className={`h-2.5 w-2.5 rounded-full ${estadoEditorialInfo[result.estadoEditorial].dot}`} />
+                      {estadoEditorialInfo[result.estadoEditorial].label}
+                    </div>
+                  )}
+                  {result.recomendacionEditorial && recomendacionInfo[result.recomendacionEditorial] && (
+                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border ${recomendacionInfo[result.recomendacionEditorial].badge}`}>
+                      {recomendacionInfo[result.recomendacionEditorial].label}
+                    </div>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {result.mensajeEditor && (
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 mb-4">
+                    <p className="text-xs font-semibold text-indigo-600 mb-2">Mensaje del Editor</p>
+                    <p className="text-sm text-slate-700 leading-relaxed">{result.mensajeEditor}</p>
+                  </div>
+                )}
+                {result.razonamientoEditorial && result.razonamientoEditorial.length > 0 && (
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-xs font-semibold text-slate-600 mb-3">Razonamiento Editorial</p>
+                    <ul className="space-y-2">
+                      {result.razonamientoEditorial.map((r, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm">
+                          <span className={`mt-0.5 font-bold ${r.positivo ? 'text-green-600' : 'text-yellow-600'}`}>
+                            {r.positivo ? '✓' : '⚠'}
+                          </span>
+                          <span className="text-slate-700">{r.punto}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Diagnóstico Editorial */}
+              {result.diagnosticoEditorial && (
+                <div className="rounded-2xl bg-white p-6 shadow">
+                  <h2 className="mb-4 text-lg font-semibold">Diagnóstico Editorial</h2>
+                  <div className="space-y-4 text-sm">
+                    <div>
+                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Vale la pena publicar?</p>
+                      <p className="text-slate-700">{result.diagnosticoEditorial.valeLaPenaPublicar.razon}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Qué aprenderá que no en otro medio?</p>
+                      <p className="text-slate-700">{result.diagnosticoEditorial.queAprenderaQueNoEnOtroMedio.respuesta}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Qué aporta Nicaragua Informate?</p>
+                      <p className="text-slate-700">{result.diagnosticoEditorial.queAportaNicaraguaInformate.respuesta}</p>
+                    </div>
+                    {result.diagnosticoEditorial.queLeFaltaParaReferencia.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-yellow-600 mb-1">¿Qué le falta para ser referencia?</p>
+                        <ul className="space-y-1">
+                          {result.diagnosticoEditorial.queLeFaltaParaReferencia.map((f, i) => (
+                            <li key={i} className="text-slate-700">• {f}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Publicar en portada?</p>
+                      <p className="text-slate-700">{result.diagnosticoEditorial.publicarEnPortada.razon}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+
+              {/* Diagnóstico técnico de respaldo */}
+              <div className="rounded-2xl bg-white p-6 shadow">
+                <h2 className="mb-4 text-lg font-semibold text-slate-500">Diagnóstico técnico de respaldo</h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-4">
                   <div className="rounded-lg bg-slate-100 p-3 text-center">
                     <p className="text-xs text-slate-500">Score</p>
                     <p className="text-xl font-bold">{result.scoreFinal}</p>
@@ -185,67 +250,61 @@ export default function MeniPage() {
                     <p className="text-sm font-bold">{result.prioridad}</p>
                   </div>
                 </div>
-                {result.editorialTier && (
-                  <div className="mt-4 rounded-lg border border-indigo-200 bg-indigo-50 p-4">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-indigo-600 px-3 py-1 text-xs font-bold text-white">
-                        {result.editorialTier}
-                      </span>
-                      <span className="text-sm font-semibold text-indigo-900">Tier Editorial</span>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">SEO</span>
+                    <span className="text-sm font-bold text-slate-600">{result.seo.score}/100</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">EEAT</span>
+                    <span className="text-sm font-bold text-slate-600">{result.eeat.score}/100</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">Google Discover</span>
+                    <span className="text-sm font-bold text-slate-600">{result.discover.score}/100</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">AdSense</span>
+                    <span className="text-sm font-bold text-slate-600">{result.adsense.score}/100</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">Forense</span>
+                    <span className="text-sm font-bold text-slate-600">{result.forense.score}/100</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <span className="text-sm font-medium text-slate-700">Valor editorial</span>
+                    <span className="text-sm font-bold text-slate-600">{result.auditoria.utilidad}/100</span>
+                  </div>
+                </div>
+                {result.riesgo && (
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <p className="text-xs font-semibold text-slate-500 mb-2">Riesgo editorial</p>
+                    <div className="mb-2 flex items-center gap-2">
+                      <span
+                        className={`h-3 w-3 rounded-full ${result.riesgo.nivel === 'VERDE' ? 'bg-emerald-500' : result.riesgo.nivel === 'AMARILLO' ? 'bg-amber-500' : 'bg-rose-500'}`}
+                      />
+                      <span className="text-sm font-semibold text-slate-600">{result.riesgo.nivel}</span>
                     </div>
-                    {result.editorialReason && (
-                      <p className="mt-2 text-sm text-indigo-800">{result.editorialReason.resumen}</p>
-                    )}
+                    <p className="text-sm text-slate-500">{result.riesgo.motivo}</p>
                   </div>
                 )}
               </div>
 
-              <div className="rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-4 text-lg font-semibold">Auditoría por dimensiones</h2>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <ScoreBadge label="SEO" score={result.seo.score} />
-                  <ScoreBadge label="EEAT" score={result.eeat.score} />
-                  <ScoreBadge label="Google Discover" score={result.discover.score} />
-                  <ScoreBadge label="AdSense" score={result.adsense.score} />
-                  <ScoreBadge label="Forense" score={result.forense.score} />
-                  <ScoreBadge label="Valor editorial" score={result.auditoria.utilidad} />
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-4 text-lg font-semibold">Riesgo editorial</h2>
-                <div className="mb-2 flex items-center gap-2">
-                  <span
-                    className={`h-4 w-4 rounded-full ${result.riesgo.nivel === 'VERDE' ? 'bg-emerald-500' : result.riesgo.nivel === 'AMARILLO' ? 'bg-amber-500' : 'bg-rose-500'}`}
-                  />
-                  <span className="font-semibold">{result.riesgo.nivel}</span>
-                </div>
-                <p className="text-sm text-slate-600">{result.riesgo.motivo}</p>
-                {result.riesgo.advertencias.length > 0 && (
-                  <ul className="mt-3 list-inside list-disc text-sm text-slate-700">
-                    {result.riesgo.advertencias.map((a, i) => (
-                      <li key={i}>{a}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div className="rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-4 text-lg font-semibold">Recomendaciones</h2>
-                <div className="space-y-2">
-                  {result.recomendaciones.map((r, i) => (
-                    <div key={i} className="flex items-start gap-3 rounded-lg border p-3">
-                      <span className={`rounded px-2 py-0.5 text-xs font-semibold ${severidadColor[r.severidad]}`}>
-                        {r.severidad.toUpperCase()}
-                      </span>
-                      <div>
-                        <p className="text-xs text-slate-500">{r.area}</p>
-                        <p className="text-sm text-slate-800">{r.mensaje}</p>
+              {result.recomendaciones && result.recomendaciones.length > 0 && (
+                <div className="rounded-2xl bg-white p-6 shadow">
+                  <h2 className="mb-4 text-lg font-semibold text-slate-500">Recomendaciones técnicas</h2>
+                  <div className="space-y-2">
+                    {result.recomendaciones.map((r, i) => (
+                      <div key={i} className="flex items-start gap-3 rounded-lg border p-3">
+                        <div>
+                          <p className="text-xs text-slate-400">{r.area}</p>
+                          <p className="text-sm text-slate-600">{r.mensaje}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )
 
               <div className="rounded-2xl bg-white p-6 shadow">
                 <h2 className="mb-4 text-lg font-semibold">Artículo optimizado</h2>

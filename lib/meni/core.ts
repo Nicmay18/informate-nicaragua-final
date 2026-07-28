@@ -221,6 +221,12 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     aprobado: aprobadoFinal,
     calificacion,
     recomendaciones: recomendacionesFinal,
+    // Estado Editorial — veredicto periodístico del editor
+    estadoEditorial: editorialDecision.estadoEditorial,
+    recomendacionEditorial: editorialDecision.recomendacionEditorial,
+    diagnosticoEditorial: editorialDecision.diagnostico,
+    mensajeEditor: editorialDecision.mensajeEditor,
+    razonamientoEditorial: editorialDecision.razonamiento,
     blockingIssues,
     warnings,
     articulo: {

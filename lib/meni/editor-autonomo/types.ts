@@ -1,7 +1,7 @@
 import type { MeniResult } from '@/lib/meni';
 import type { QualityGateResult } from '@/lib/meni/quality-gate';
 import type { EditorBrainResult } from '@/lib/meni/editor-brain';
-import type { EditorialVerification } from '@/lib/meni/editorial-brain/types';
+import type { EditorialVerification, EstadoEditorial, RecomendacionEditorial, DiagnosticoEditorial } from '@/lib/meni/editorial-brain/types';
 
 export interface MeniAutonomousInput {
   fuente: string;
@@ -30,6 +30,12 @@ export interface MeniAutonomousResult {
   riesgoTecnico: 'BAJO' | 'MEDIO' | 'ALTO';
   scoreMeni: number;
   aprobado: boolean;
+  // Estado Editorial — veredicto periodístico del editor
+  estadoEditorial: EstadoEditorial;
+  recomendacionEditorial: RecomendacionEditorial;
+  diagnosticoEditorialNI: DiagnosticoEditorial;
+  mensajeEditor: string;
+  razonamientoEditorial: { punto: string; positivo: boolean }[];
   correccionesAplicadas: string[];
   recomendaciones: string[];
   evaluacion: MeniResult;

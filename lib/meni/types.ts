@@ -1,5 +1,5 @@
 /**
- * MENI v2.0 — Tipos del Motor Editorial Nicaragua Informate
+ * Tipos del Motor Editorial Nicaragua Informate
  */
 
 import type { NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
@@ -10,6 +10,7 @@ import type { EditorBrainResult } from '@/lib/meni/editor-brain';
 import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import type { EditorialTier } from '@/lib/meni/editorial-tiers';
 import type { EditorialReason } from '@/lib/meni/editorial-reason';
+import type { EstadoEditorial, RecomendacionEditorial, DiagnosticoEditorial as DiagnosticoEditorialNI } from '@/lib/meni/editorial-brain/types';
 
 export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
@@ -94,7 +95,7 @@ export interface MeniRecomendacion {
   mensaje: string;
 }
 
-export interface MeniBlockingIssue {
+export interface RevisionEditorJefe {
   code: string;
   module: string;
   severity: 'INFO' | 'WARNING' | 'ERROR' | 'BLOCKER';
@@ -106,6 +107,9 @@ export interface MeniBlockingIssue {
   field: 'titulo' | 'resumen' | 'contenido' | 'keywords' | 'autor' | 'categoria' | 'imagen' | 'general';
   evidence?: string;
 }
+
+// Backward compat alias
+export type MeniBlockingIssue = RevisionEditorJefe;
 
 export interface MeniResult {
   version: '2.0';
@@ -126,6 +130,12 @@ export interface MeniResult {
   aprobado: boolean;
   calificacion: string;
   recomendaciones: MeniRecomendacion[];
+  // Estado Editorial — veredicto periodístico
+  estadoEditorial?: EstadoEditorial;
+  recomendacionEditorial?: RecomendacionEditorial;
+  diagnosticoEditorial?: DiagnosticoEditorialNI;
+  mensajeEditor?: string;
+  razonamientoEditorial?: { punto: string; positivo: boolean }[];
   articulo?: {
     titulo: string;
     resumen: string;
@@ -136,8 +146,8 @@ export interface MeniResult {
   qualityGate?: QualityGateResult;
   intelligence?: IntelligenceResult;
   editorBrain?: EditorBrainResult;
-  blockingIssues?: MeniBlockingIssue[];
-  warnings?: MeniBlockingIssue[];
+  blockingIssues?: RevisionEditorJefe[];
+  warnings?: RevisionEditorJefe[];
   autoCorrected?: boolean;
   autoCorrections?: { campo: string; antes: string; despues: string; descripcion: string }[];
   editorialDna?: EditorialDnaResult;
