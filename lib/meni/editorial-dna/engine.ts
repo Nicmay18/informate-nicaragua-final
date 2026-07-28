@@ -23,7 +23,7 @@ function average(arr: number[]): number {
 }
 
 interface ComputeDnaOptions {
-  decision?: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial'>;
+  decision?: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'>;
   evaluacion?: EvaluacionEditorial;
   qualityGate?: QualityGateResult;
   memory?: { totalArticles: number };

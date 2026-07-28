@@ -153,6 +153,64 @@ export interface MeniResult {
   editorialDna?: EditorialDnaResult;
   editorialTier?: EditorialTier;
   editorialReason?: EditorialReason;
+  editorialDecision?: EditorialDecisionFlat;
+}
+
+export interface EditorialDecisionFlat {
+  valeLaPenaPublicar: boolean;
+  motivoPrincipal: string;
+  aportaAlLector: string;
+  diferenciaCompetencia: string;
+  utilidadReal: string;
+  explicacion: string;
+  contexto: string;
+  servicio: string;
+  riesgoEditorial: 'BAJO' | 'MEDIO' | 'ALTO';
+  acciones: string[];
+  // Editor Jefe
+  patronesAplicados: { campo: string; descripcion: string; frecuencia: number }[];
+  correccionesSugeridas: string[];
+  ranking: {
+    estrellas: number;
+    etiqueta: string;
+    valorPortada: string;
+    valorDiscover: string;
+    valorFacebook: string;
+    valorServicio: string;
+    razon: string;
+  };
+  saturacion?: {
+    distribucion: { categoria: string; cantidad: number; porcentaje: number }[];
+    categoriasSaturadas: string[];
+    categoriasFaltantes: string[];
+    recomendacion: string;
+    nivelSaturacion: string;
+    horasSinNoticiaPositiva?: number;
+  };
+  memoriaEditorial?: {
+    antecedentes: string[];
+    cronologia: { fecha: string; titulo: string; categoria: string; slug: string }[];
+    entidadesRelacionadas: string[];
+    tendencia: string | null;
+    contextoNarrativo: string;
+    totalRelacionadas: number;
+  };
+  // MENI Editor Jefe Ejecutivo — la única salida visible
+  veredictoEjecutivo?: {
+    publicar: string;
+    confianza: number;
+    respuestaEjecutiva: string;
+    valorParaLector: string;
+    valorFrenteCompetencia: string;
+    riesgoEditorial: string;
+    queFalta: string[];
+    recomendacionPortada: string;
+    probabilidadFacebook: string;
+    probabilidadDiscover: string;
+    antecedentesUsados: string[];
+    patronesAplicados: string[];
+    correccionesEditor: string[];
+  };
 }
 
 export interface MeniReport {

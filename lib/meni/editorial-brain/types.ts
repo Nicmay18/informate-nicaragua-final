@@ -13,6 +13,7 @@ import type { TierThresholds } from '@/lib/meni/editorial-tiers';
 import type { StoryPlan } from '@/lib/meni/story-planner/types';
 import type { AntiClickbaitResult } from '@/lib/meni/anti-clickbait/types';
 import type { ReaderJourneyResult } from '@/lib/meni/reader-journey/types';
+import type { KnowledgeQueryResult } from '@/lib/meni/knowledge-base/types';
 
 /** Contexto de conocimiento histórico (desde editor-brain async) */
 export interface KnowledgeContext {
@@ -33,6 +34,12 @@ export type EditorialBrainInput = NoticiaInput & {
   categoriaSugerida?: string;
   tierThresholds?: TierThresholds;
   knowledgeContext?: KnowledgeContext;
+  // Editor Jefe — Fase 1: patrones aprendidos del editor humano
+  editorPatterns?: EditorPattern[];
+  // Editor Jefe — Fase 2: datos de portada para saturación
+  portadaData?: { categoria: string; fecha: string }[];
+  // Editor Jefe — Fase 3: query de Knowledge Base
+  knowledgeQuery?: KnowledgeQueryResult;
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -264,8 +271,93 @@ export interface LlmInstructions {
 }
 
 // ═══════════════════════════════════════════════════════════
-// EditorialDecision — el objeto final
+// Editor Jefe — Fase 1: Aprendizaje del Editor
 // ═══════════════════════════════════════════════════════════
+
+export type CampoCorreccion = 'titulo' | 'entrada' | 'contexto' | 'servicio' | 'orden' | 'cuerpo' | 'frases';
+
+export interface EditorPattern {
+  campo: CampoCorreccion;
+  descripcion: string;
+  frecuencia: number;
+  categorias: string[];
+  ejemploAntes: string;
+  ejemploDespues: string;
+  confianzaNivel: number;
+  ultimaVez: string;
+}
+
+export interface CorreccionRegistrada {
+  articleId: string;
+  campo: CampoCorreccion;
+  antes: string;
+  despues: string;
+  categoria: string;
+  fecha: string;
+  diferenciaTipo: 'acortar' | 'ampliar' | 'agregar_contexto' | 'eliminar_relleno' | 'agregar_servicio' | 'reordenar' | 'otro';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Editor Jefe — Fase 2: Ranking Editorial + Saturación
+// ═══════════════════════════════════════════════════════════
+
+export interface EditorialRanking {
+  estrellas: 1 | 2 | 3 | 4 | 5;
+  etiqueta: 'Portada Principal' | 'Portada' | 'Destacada' | 'Secundaria' | 'No vale portada';
+  valorPortada: 'principal' | 'portada' | 'destacada' | 'secundaria' | 'no_portada';
+  valorDiscover: 'Alta' | 'Media' | 'Baja';
+  valorFacebook: 'Alta' | 'Media' | 'Baja';
+  valorServicio: 'Muy alto' | 'Alto' | 'Medio' | 'Bajo';
+  razon: string;
+}
+
+export interface SaturacionPortada {
+  distribucion: { categoria: string; cantidad: number; porcentaje: number }[];
+  categoriasSaturadas: string[];
+  categoriasFaltantes: string[];
+  recomendacion: string;
+  nivelSaturacion: 'verde' | 'amarillo' | 'rojo';
+  horasSinNoticiaPositiva?: number;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Editor Jefe — Fase 3: Memoria Editorial Inteligente
+// ═══════════════════════════════════════════════════════════
+
+export interface MemoriaEditorial {
+  antecedentes: string[];
+  cronologia: { fecha: string; titulo: string; categoria: string; slug: string }[];
+  entidadesRelacionadas: string[];
+  tendencia: string | null;
+  contextoNarrativo: string;
+  totalRelacionadas: number;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Editorial Jefe Ejecutivo — veredicto único
+// ═══════════════════════════════════════════════════════════
+
+export type VeredictoEjecutivoPublicar = 'SI' | 'NO' | 'MEJORAR';
+
+export interface VeredictoEditorJefe {
+  // Respuesta a la única pregunta del editor
+  publicar: VeredictoEjecutivoPublicar;
+  confianza: number; // 0-100
+  respuestaEjecutiva: string; // una frase del Editor Jefe
+  // Evidencia que alimenta el veredicto
+  valorParaLector: string;
+  valorFrenteCompetencia: string;
+  riesgoEditorial: 'BAJO' | 'MEDIO' | 'ALTO';
+  queFalta: string[];
+  // Distribución y canales
+  recomendacionPortada: 'Hero principal' | 'Portada principal' | 'Portada' | 'Destacada' | 'Secundaria' | 'No va a portada';
+  probabilidadFacebook: 'Muy alta' | 'Alta' | 'Media' | 'Baja' | 'Muy baja';
+  probabilidadDiscover: 'Muy alta' | 'Alta' | 'Media' | 'Baja' | 'Muy baja';
+  // Memoria y aprendizaje
+  antecedentesUsados: string[];
+  patronesAplicados: string[];
+  correccionesEditor: string[];
+}
 
 export type RecomendacionEditorial = 'publicar' | 'mejorar' | 'revisar';
 
@@ -303,4 +395,38 @@ export interface EditorialDecision {
   motivoBloqueo: string | null;
   llmInstructions: LlmInstructions;
   editorialDna: EditorialDnaResult;
+  // ─────────────────────────────────────────────────────────────
+  // Campos planos — única fuente de verdad para UI y engine.ts
+  // Todo el sistema deriva de estos campos, no de los sub-motores.
+  // ─────────────────────────────────────────────────────────────
+  valeLaPenaPublicar: boolean;
+  motivoPrincipal: string;
+  aportaAlLector: string;
+  diferenciaCompetencia: string;
+  utilidadReal: string;
+  explicacion: string;
+  contexto: string;
+  servicio: string;
+  riesgoEditorial: 'BAJO' | 'MEDIO' | 'ALTO';
+  acciones: string[];
+  // ─────────────────────────────────────────────────────────────
+  // Fase 1: Aprendizaje del Editor
+  // Patrones detectados de correcciones manuales del editor humano.
+  // ─────────────────────────────────────────────────────────────
+  patronesAplicados: EditorPattern[];
+  correccionesSugeridas: string[];
+  // ─────────────────────────────────────────────────────────────
+  // Fase 2: Ranking Editorial + Editor de Portada
+  // ─────────────────────────────────────────────────────────────
+  ranking: EditorialRanking;
+  saturacion?: SaturacionPortada;
+  // ─────────────────────────────────────────────────────────────
+  // Fase 3: Memoria Editorial Inteligente
+  // Contexto narrativo generado desde la Knowledge Base.
+  // ─────────────────────────────────────────────────────────────
+  memoriaEditorial?: MemoriaEditorial;
+  // ─────────────────────────────────────────────────────────────
+  // Veredicto ejecutivo único: la única salida del Editor Jefe
+  // ─────────────────────────────────────────────────────────────
+  veredictoEjecutivo: VeredictoEditorJefe;
 }

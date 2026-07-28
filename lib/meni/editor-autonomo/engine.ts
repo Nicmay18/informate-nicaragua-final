@@ -1,5 +1,5 @@
 import { runMeni } from '@/lib/meni';
-import type { NoticiaInput } from '@/lib/meni';
+import type { NoticiaInput, EditorialDecisionFlat } from '@/lib/meni';
 import { runEditorialBrain, verifyEditorialDecisions } from '@/lib/meni/editorial-brain';
 import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gate';
@@ -178,33 +178,29 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-function estadoToRiesgo(estado: string): 'VERDE' | 'AMARILLO' | 'ROJO' {
-  switch (estado) {
-    case 'excelente':
-    case 'muy_buena':
-      return 'VERDE';
-    case 'necesita_explicacion':
-      return 'AMARILLO';
-    default:
-      return 'ROJO';
-  }
+function decisionRiesgoToRiesgo(riesgo: 'BAJO' | 'MEDIO' | 'ALTO'): 'VERDE' | 'AMARILLO' | 'ROJO' {
+  return riesgo === 'BAJO' ? 'VERDE' : riesgo === 'MEDIO' ? 'AMARILLO' : 'ROJO';
 }
 
-function estadoToScore(estado: string): number {
-  switch (estado) {
-    case 'excelente':
-      return 95;
-    case 'muy_buena':
-      return 85;
-    case 'necesita_explicacion':
-      return 70;
-    case 'demasiado_parecida':
-      return 50;
-    case 'no_aporta':
-      return 30;
-    default:
-      return 0;
-  }
+function buildDecisionFlat(decision: EditorialDecision): EditorialDecisionFlat {
+  return {
+    valeLaPenaPublicar: decision.valeLaPenaPublicar,
+    motivoPrincipal: decision.motivoPrincipal,
+    aportaAlLector: decision.aportaAlLector,
+    diferenciaCompetencia: decision.diferenciaCompetencia,
+    utilidadReal: decision.utilidadReal,
+    explicacion: decision.explicacion,
+    contexto: decision.contexto,
+    servicio: decision.servicio,
+    riesgoEditorial: decision.riesgoEditorial,
+    acciones: decision.acciones,
+    patronesAplicados: decision.patronesAplicados.map(p => ({ campo: p.campo, descripcion: p.descripcion, frecuencia: p.frecuencia })),
+    correccionesSugeridas: decision.correccionesSugeridas,
+    ranking: decision.ranking,
+    veredictoEjecutivo: decision.veredictoEjecutivo,
+    ...(decision.saturacion ? { saturacion: decision.saturacion } : {}),
+    ...(decision.memoriaEditorial ? { memoriaEditorial: decision.memoriaEditorial } : {}),
+  };
 }
 
 function cleanJson(text: string): string {
@@ -298,10 +294,10 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       jsonLd: '',
       checklistEeatDiscover: '',
       diagnosticoEditorial: decision.mensajeEditor,
-      diagnosticoTecnico: `El editor recomienda revisar antes de publicar. ${decision.diagnostico.mensajeEditor}`,
-      riesgoEditorial: estadoToRiesgo(decision.estadoEditorial),
+      diagnosticoTecnico: decision.motivoPrincipal,
+      riesgoEditorial: decisionRiesgoToRiesgo(decision.riesgoEditorial),
       riesgoTecnico: 'ALTO',
-      scoreMeni: estadoToScore(decision.estadoEditorial),
+      scoreMeni: decision.score,
       aprobado: false,
       estadoEditorial: decision.estadoEditorial,
       recomendacionEditorial: decision.recomendacionEditorial,
@@ -309,15 +305,14 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       mensajeEditor: decision.mensajeEditor,
       razonamientoEditorial: decision.razonamiento,
       correccionesAplicadas: [],
-      recomendaciones: decision.diagnostico.queLeFaltaParaReferencia.length > 0
-        ? decision.diagnostico.queLeFaltaParaReferencia
-        : [decision.mensajeEditor],
+      recomendaciones: decision.acciones,
       evaluacion: {} as any,
       qualityGatePre,
       editorBrain: brain,
       editorialVerification: undefined,
       _provider: 'groq+editorial-brain',
       _error: decision.mensajeEditor,
+      editorialDecision: buildDecisionFlat(decision),
     };
   }
 
@@ -378,22 +373,21 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     jsonLd: '',
     checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait.`,
     diagnosticoEditorial: decision.mensajeEditor,
-    diagnosticoTecnico: decision.diagnostico.mensajeEditor,
-    riesgoEditorial: estadoToRiesgo(decision.estadoEditorial),
+    diagnosticoTecnico: decision.motivoPrincipal,
+    riesgoEditorial: decisionRiesgoToRiesgo(decision.riesgoEditorial),
     riesgoTecnico: 'BAJO',
-    scoreMeni: estadoToScore(decision.estadoEditorial),
+    scoreMeni: decision.score,
     aprobado: false,
     estadoEditorial: decision.estadoEditorial,
     recomendacionEditorial: decision.recomendacionEditorial,
     diagnosticoEditorialNI: decision.diagnostico,
     mensajeEditor: decision.mensajeEditor,
     razonamientoEditorial: decision.razonamiento,
-    correccionesAplicadas: decision.storyCompleteness.respuestasFaltantes,
-    recomendaciones: decision.diagnostico.queLeFaltaParaReferencia.length > 0
-      ? decision.diagnostico.queLeFaltaParaReferencia
-      : decision.storyCompleteness.dudasPendientes,
+    correccionesAplicadas: decision.acciones,
+    recomendaciones: decision.acciones,
     evaluacion: {} as any,
     _provider: 'groq+editorial-brain',
+    editorialDecision: buildDecisionFlat(decision),
   };
 
   const textoPlano = stripHtml(generated.articuloCompleto);
@@ -459,20 +453,17 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   try {
     const evaluacion = runMeni(evalInput);
     generated.evaluacion = evaluacion;
-    // Score derivado del veredicto editorial, no del score técnico
-    generated.scoreMeni = estadoToScore(generated.estadoEditorial);
-    // Aprobado = el editor recomienda publicar y no hay issues técnicos críticos
-    generated.aprobado =
-      generated.recomendacionEditorial === 'publicar' &&
-      !qualityGatePost.bloqueado;
+    // Score derivado del EditorialDecision (ADN NI), no de cálculo paralelo
+    generated.scoreMeni = decision.score;
+    // Aprobado = EditorialDecision.publicar y no hay issues técnicos críticos
+    generated.aprobado = decision.publicar && !qualityGatePost.bloqueado;
     // Si no pasa verificación editorial, bajar recomendación
     if (!verification.pasa && generated.recomendacionEditorial === 'publicar') {
       generated.recomendacionEditorial = 'mejorar';
       generated.estadoEditorial = 'necesita_explicacion';
-      generated.scoreMeni = estadoToScore(generated.estadoEditorial);
     }
-    // Riesgo derivado del estado editorial
-    generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : estadoToRiesgo(generated.estadoEditorial);
+    // Riesgo derivado del EditorialDecision
+    generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : decisionRiesgoToRiesgo(decision.riesgoEditorial);
     generated.riesgoTecnico = qualityGatePost.bloqueado ? 'ALTO' : qualityGatePost.issues.length > 0 ? 'MEDIO' : 'BAJO';
   } catch (e) {
     generated.evaluacion = {} as any;

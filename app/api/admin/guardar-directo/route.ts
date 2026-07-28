@@ -176,6 +176,7 @@ export async function POST(request: NextRequest) {
     } catch (e) { /* noop */ }
 
     // Knowledge Base — ingestar artículo publicado al grafo de conocimiento
+    let pipelineResult: Awaited<ReturnType<typeof import('@/lib/meni/publication-pipeline').runPublicationPipeline>> | null = null;
     if (publicado) {
       try {
         const { ingestArticle } = await import('@/lib/meni/knowledge-base');
@@ -191,6 +192,59 @@ export async function POST(request: NextRequest) {
         });
       } catch (kbError) {
         console.warn('[guardar-directo] Knowledge Base ingestion failed (non-blocking):', kbError);
+      }
+
+      // Editor Jefe — Fase 1: registrar correcciones del editor
+      if (body.correcciones && Array.isArray(body.correcciones) && body.correcciones.length > 0) {
+        try {
+          const { registerCorrection } = await import('@/lib/meni/editor-jefe/correction-tracker');
+          for (const corr of body.correcciones) {
+            await registerCorrection(db, {
+              articleId: articleDocId!,
+              campo: corr.campo,
+              antes: corr.antes || '',
+              despues: corr.despues || '',
+              categoria: categoria || 'General',
+            });
+          }
+          console.log('[guardar-directo] Editor Jefe: correcciones registradas:', body.correcciones.length);
+        } catch (corrError) {
+          console.warn('[guardar-directo] Correction tracking failed (non-blocking):', corrError);
+        }
+      }
+
+      // Editor Jefe — Dashboard: registrar predicciones del veredicto ejecutivo
+      const veredicto = meni.editorialDecision?.veredictoEjecutivo;
+      if (veredicto) {
+        try {
+          await db.collection('meni_predictions').add({
+            articleId: articleDocId!,
+            predFacebook: veredicto.probabilidadFacebook || null,
+            predDiscover: veredicto.probabilidadDiscover || null,
+            predPortada: veredicto.recomendacionPortada || null,
+            predPublicar: veredicto.publicar || null,
+            confianza: veredicto.confianza || 0,
+            fecha: new Date().toISOString(),
+            // Campos que se llenarán después con métricas reales:
+            realFacebook: null,
+            realDiscover: null,
+            realPortada: null,
+          });
+        } catch (predError) {
+          console.warn('[guardar-directo] Prediction tracking failed (non-blocking):', predError);
+        }
+      }
+
+      // Editor Jefe — Dashboard: registrar score diario de MENI
+      try {
+        await db.collection('meni_daily_score').add({
+          fecha: new Date().toISOString(),
+          score: meni.scoreFinal || 0,
+          aprobado: meni.aprobado,
+          categoria: categoria || 'General',
+        });
+      } catch (scoreError) {
+        console.warn('[guardar-directo] Daily score tracking failed (non-blocking):', scoreError);
       }
 
       // Sistema de Seguimiento — detectar/vincular casos abiertos
@@ -211,6 +265,28 @@ export async function POST(request: NextRequest) {
       } catch (segError) {
         console.warn('[guardar-directo] Seguimiento detection failed (non-blocking):', segError);
       }
+
+      // Publication Pipeline — distribución automática sin intervención
+      try {
+        const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
+        pipelineResult = await runPublicationPipeline({
+          db,
+          articleId: articleDocId!,
+          slug: finalSlug,
+          titulo: finalTitulo,
+          resumen: finalResumen || '',
+          contenido: finalContenido,
+          categoria: categoria || 'General',
+          imagen: body.imagen || undefined,
+          imagenRedes: body.imagenRedes || undefined,
+          autor: body.autor || undefined,
+          departamento: departamento || undefined,
+          veredictoEjecutivo: meni.editorialDecision?.veredictoEjecutivo as any,
+        });
+        console.log('[guardar-directo] Pipeline completado en', pipelineResult.duracionMs, 'ms');
+      } catch (pipeError) {
+        console.warn('[guardar-directo] Publication pipeline failed (non-blocking):', pipeError);
+      }
     }
 
     return NextResponse.json({
@@ -225,7 +301,13 @@ export async function POST(request: NextRequest) {
         diagnostico: meni.diagnostico,
         recomendaciones: meni.recomendaciones.slice(0, 5),
         editorialDna: meni.editorialDna,
+        editorialDecision: meni.editorialDecision,
       },
+      pipeline: pipelineResult ? {
+        distribucion: pipelineResult.distribucion,
+        socialCopy: pipelineResult.socialCopy,
+        duracionMs: pipelineResult.duracionMs,
+      } : null,
     }, { status: 200 });
 
   } catch (error) {

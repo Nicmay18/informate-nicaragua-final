@@ -1,9 +1,8 @@
 import { pipelineV4 } from '@/lib/editorial';
 import type { EvaluacionEditorial, NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
 import { generarMetaDescription } from '@/lib/editorial/meta';
-import type { NoticiaInput, MeniResult } from './types';
+import type { NoticiaInput, MeniResult, MeniRiesgoEditorial, MeniRecomendacion } from './types';
 import { analyzeForensic } from './forensic';
-import { analyzeRisk } from './risk';
 import { analyzeEEAT } from './eeat';
 import { analyzeSEO } from './seo';
 import { analyzeDiscover } from './discover';
@@ -11,13 +10,12 @@ import { analyzeAdSense } from './adsense';
 import {
   computePriority,
   scoreToGrade,
-  approved,
   normalizeCategory,
   MIN_APPROVED_SCORE,
 } from './scoring';
 import { autoCorrectNoticia, type AutoCorrection } from './autocorrect';
-import { audit, buildRecomendaciones } from './auditor';
-import { buildValorEditorial, buildDiagnostico } from './editor-chief';
+import { audit } from './auditor';
+import { buildValorEditorial } from './editor-chief';
 import { getModule } from './modules';
 import { runIntelligenceEngine } from './intelligence';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
@@ -40,9 +38,14 @@ export interface MeniRunOptions {
   skipEditorBrain?: boolean;
   editorBrain?: EditorBrainResult;
   activeAdjustments?: ActiveAdjustments;
+  editorJefe?: {
+    editorPatterns?: import('@/lib/meni/editorial-brain/types').EditorPattern[];
+    portadaData?: { categoria: string; fecha: string }[];
+    knowledgeQuery?: import('@/lib/meni/knowledge-base/types').KnowledgeQueryResult;
+  };
 }
 
-function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments): MeniResult {
+function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe']): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
 
@@ -66,6 +69,25 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   logMeni('Editorial tier detected', { tier, descripcion: thresholds.descripcion });
 
+  // ═══════════════════════════════════════════════════════════
+  // 1. EDITORIAL BRAIN — la única fuente de verdad
+  // Todo deriva de aquí: score, aprobado, estado, diagnostico, riesgo
+  // ═══════════════════════════════════════════════════════════
+  const editorialDecision = runEditorialBrain({
+    ...input,
+    fuente: input.contenido,
+    categoriaSugerida: input.categoria,
+    tierThresholds: thresholds,
+    ...(editorJefe?.editorPatterns ? { editorPatterns: editorJefe.editorPatterns } : {}),
+    ...(editorJefe?.portadaData ? { portadaData: editorJefe.portadaData } : {}),
+    ...(editorJefe?.knowledgeQuery ? { knowledgeQuery: editorJefe.knowledgeQuery } : {}),
+  });
+  const editorialDna = editorialDecision.editorialDna;
+
+  // ═══════════════════════════════════════════════════════════
+  // 2. ANÁLISIS TÉCNICO — secundario, no gobierna aprobación
+  // SEO, EEAT, Discover, AdSense, Forense = datos de respaldo
+  // ═══════════════════════════════════════════════════════════
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
   const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
   const categoria = normalizeCategory(rawCategory);
@@ -73,23 +95,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   const seo = analyzeSEO(evaluacion, input);
   const forense = analyzeForensic(evaluacion);
-  const riesgo = analyzeRisk(evaluacion);
   const eeat = analyzeEEAT(evaluacion);
   const discover = analyzeDiscover(evaluacion);
   const adsense = analyzeAdSense(evaluacion);
   const valorEditorial = buildValorEditorial(evaluacion);
   const auditoria = audit(evaluacion);
-  const recomendaciones = [
-    ...buildRecomendaciones(evaluacion),
-    ...modulo.recomendaciones(evaluacion),
-  ];
-
-  const scoreFinal = Math.round(evaluacion.scoreFinal);
-  const minScore = activeAdjustments?.minApprovedScore ?? MIN_APPROVED_SCORE;
-  const aprobado = approved(evaluacion.veredicto, scoreFinal) && scoreFinal >= minScore;
-  const calificacion = scoreToGrade(scoreFinal);
-  const prioridad = computePriority(evaluacion.veredicto);
-  const diagnostico = buildDiagnostico(evaluacion);
 
   const textoPlano = evaluacion.evidence.textoPlano ?? (input.contenido || '');
   const resumenOptimizado = generarMetaDescription(textoPlano, input.resumen);
@@ -99,17 +109,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     fuente: input.contenido,
   });
 
-  // Editorial Brain + ADN NI: evalúa exclusividad, WOW y sello Nicaragua Informate
-  const editorialDecision = runEditorialBrain({
-    ...input,
-    fuente: input.contenido,
-    categoriaSugerida: input.categoria,
-    tierThresholds: thresholds,
-  });
-  const editorialDna = editorialDecision.editorialDna;
-
-  // Quality Gate — corre siempre dentro de runMeni (único punto de entrada).
-  // No se ejecuta un "Analizador" separado: esta es la revisión final MENI.
+  // ═══════════════════════════════════════════════════════════
+  // 3. QUALITY GATE — verificación técnica, puede bloquear
+  // ═══════════════════════════════════════════════════════════
   const qualityGate = runQualityGate({
     titulo: input.titulo,
     contenido: input.contenido,
@@ -117,18 +119,12 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     stage: 'POST_LLM',
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // Aprobación graduada por tier editorial
-  // Un FLASH no necesita cumplir los mismos requisitos que un REPORTAJE.
-  // ─────────────────────────────────────────────────────────────
   const palabrasTexto = textoPlano.split(/\s+/).filter(Boolean).length;
 
   // Quality Gate: solo bloquear por service value si el tier lo exige
   const tierBlockingIssues = qualityGate.issues.filter((i) => {
-    if (i.severidad !== 'blocking') return true; // warnings e info siempre pasan
-    // Service value solo bloquea si el tier lo exige
+    if (i.severidad !== 'blocking') return true;
     if (i.categoria === 'servicio' && !thresholds.exigeServiceValue) return false;
-    // Differential value solo bloquea si el tier lo exige
     if (i.categoria === 'valor_diferencial' && !thresholds.exigeDifferentialValue) return false;
     return true;
   });
@@ -136,20 +132,39 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking')
     || qualityGate.motivosBloqueo.length > 0 && tierBlockingIssues.some((i) => i.severidad === 'blocking');
 
-  // ADN NI: usar umbrales del tier en lugar de umbrales fijos
-  const adnBloquear =
-    (editorialDna.exclusividad.score < thresholds.minExclusividad && thresholds.exigeDifferentialValue) ||
-    (editorialDna.wow.score < thresholds.minWow && thresholds.exigeContexto) ||
-    editorialDna.adnNI < thresholds.minAdnNI;
-
   const adnTranscripcionBloquear =
     (qualityGate.explanationIndex?.porcentajeTranscripcion ?? 0) > thresholds.maxTranscripcion;
 
-  const aprobadoFinal = aprobado
+  // ═══════════════════════════════════════════════════════════
+  // 4. DERIVAR TODO DE EDITORIAL DECISION
+  // No hay scores paralelos. El ADN NI es el score final.
+  // ═══════════════════════════════════════════════════════════
+  const scoreFinal = editorialDecision.score;
+  const aprobadoFinal = editorialDecision.publicar
     && !tierQualityGateBloqueado
-    && !adnBloquear
     && !adnTranscripcionBloquear
     && qualityGate.editorScore >= thresholds.minQualityGateScore;
+
+  const calificacion = scoreToGrade(scoreFinal);
+  const prioridad = computePriority(evaluacion.veredicto);
+  const diagnostico = editorialDecision.mensajeEditor;
+
+  // Riesgo derivado del EditorialDecision, no de pipelineV4
+  const riesgoEditorial: MeniRiesgoEditorial = {
+    nivel: editorialDecision.riesgoEditorial === 'BAJO' ? 'VERDE'
+      : editorialDecision.riesgoEditorial === 'MEDIO' ? 'AMARILLO' : 'ROJO',
+    motivo: editorialDecision.motivoPrincipal,
+    advertencias: editorialDecision.acciones,
+  };
+
+  // Recomendaciones derivadas de EditorialDecision.acciones
+  const recomendacionesFinal: MeniRecomendacion[] = !aprobadoFinal
+    ? editorialDecision.acciones.map((a) => ({
+        area: 'editorial' as const,
+        severidad: 'alta' as const,
+        mensaje: a,
+      }))
+    : [];
 
   // Construir razón editorial explicativa
   const editorialReason = buildEditorialReason({
@@ -161,22 +176,6 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     palabras: palabrasTexto,
     categoria,
   });
-
-  const recomendacionesFinal = !aprobadoFinal
-    ? [
-        ...editorialReason.bloqueadores.map((m) => ({
-          area: 'editorial-tier' as const,
-          severidad: 'alta' as const,
-          mensaje: m,
-        })),
-        ...editorialReason.puntosMejora.map((m) => ({
-          area: 'editorial-tier' as const,
-          severidad: 'media' as const,
-          mensaje: m,
-        })),
-        ...recomendaciones,
-      ]
-    : recomendaciones;
 
   const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal, editorialDna });
   logMeni('Quality gate result', {
@@ -208,7 +207,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria,
     modulo: modulo.nombre,
     prioridad,
-    riesgo,
+    riesgo: riesgoEditorial,
     seo,
     eeat,
     discover,
@@ -227,6 +226,25 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     diagnosticoEditorial: editorialDecision.diagnostico,
     mensajeEditor: editorialDecision.mensajeEditor,
     razonamientoEditorial: editorialDecision.razonamiento,
+    // Campos planos del EditorialDecision
+    editorialDecision: {
+      valeLaPenaPublicar: editorialDecision.valeLaPenaPublicar,
+      motivoPrincipal: editorialDecision.motivoPrincipal,
+      aportaAlLector: editorialDecision.aportaAlLector,
+      diferenciaCompetencia: editorialDecision.diferenciaCompetencia,
+      utilidadReal: editorialDecision.utilidadReal,
+      explicacion: editorialDecision.explicacion,
+      contexto: editorialDecision.contexto,
+      servicio: editorialDecision.servicio,
+      riesgoEditorial: editorialDecision.riesgoEditorial,
+      acciones: editorialDecision.acciones,
+      patronesAplicados: editorialDecision.patronesAplicados.map(p => ({ campo: p.campo, descripcion: p.descripcion, frecuencia: p.frecuencia })),
+      correccionesSugeridas: editorialDecision.correccionesSugeridas,
+      ranking: editorialDecision.ranking,
+      veredictoEjecutivo: editorialDecision.veredictoEjecutivo,
+      ...(editorialDecision.saturacion ? { saturacion: editorialDecision.saturacion } : {}),
+      ...(editorialDecision.memoriaEditorial ? { memoriaEditorial: editorialDecision.memoriaEditorial } : {}),
+    },
     blockingIssues,
     warnings,
     articulo: {
@@ -246,14 +264,14 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 export function runMeni(input: NoticiaInput, options?: MeniRunOptions): MeniResult {
   let currentInput = input;
   logMeni('=== runMeni (auto-correct wrapper) start ===', input.titulo);
-  let result = evaluateMeni(currentInput, options?.activeAdjustments);
+  let result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe);
   let autoCorrections: AutoCorrection[] = [];
   if (!result.aprobado) {
     const corrected = autoCorrectNoticia(currentInput, result);
     if (corrected.corrections.length > 0) {
       autoCorrections = corrected.corrections;
       currentInput = corrected.input;
-      result = evaluateMeni(currentInput, options?.activeAdjustments);
+      result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe);
     }
   }
   logMeni('=== runMeni (auto-correct wrapper) end ===', {
@@ -282,7 +300,55 @@ export async function runMeniAsync(
     }
   }
 
-  const base = runMeni(input, { ...options, activeAdjustments });
+  // ─────────────────────────────────────────────────────────────
+  // Editor Jefe — cargar datos asíncronos desde Firestore
+  // ─────────────────────────────────────────────────────────────
+  let editorJefe = options.editorJefe;
+  if (!editorJefe && options.db) {
+    const tasks: Promise<void>[] = [];
+
+    // Fase 1: patrones del editor
+    if (!editorJefe) editorJefe = {};
+    const patternsTask = import('@/lib/meni/editor-jefe/correction-tracker')
+      .then(({ loadEditorPatterns }) => loadEditorPatterns(options.db))
+      .then(patterns => { if (patterns.length > 0) editorJefe!.editorPatterns = patterns; })
+      .catch(() => {});
+    tasks.push(patternsTask);
+
+    // Fase 2: datos de portada para saturación
+    const portadaTask = options.db.collection('noticias')
+      .where('publicado', '!=', false)
+      .orderBy('fecha', 'desc')
+      .limit(20)
+      .get()
+      .then((snap: any) => {
+        const portadaData = snap.docs.map((d: any) => ({
+          categoria: d.get('categoria') || 'General',
+          fecha: d.get('fecha') || new Date().toISOString(),
+        }));
+        if (portadaData.length > 0) editorJefe!.portadaData = portadaData;
+      })
+      .catch(() => {});
+    tasks.push(portadaTask);
+
+    // Fase 3: query de Knowledge Base
+    const kbTask = import('@/lib/meni/knowledge-base')
+      .then(({ queryKnowledgeForArticle }) => queryKnowledgeForArticle(
+        options.db, input.titulo, input.contenido, input.categoria || 'General',
+      ))
+      .then(query => { if (query.totalArticles > 0) editorJefe!.knowledgeQuery = query; })
+      .catch(() => {});
+    tasks.push(kbTask);
+
+    await Promise.all(tasks);
+    logMeni('Editor Jefe data loaded', {
+      patterns: editorJefe.editorPatterns?.length || 0,
+      portada: editorJefe.portadaData?.length || 0,
+      knowledge: editorJefe.knowledgeQuery?.totalArticles || 0,
+    });
+  }
+
+  const base = runMeni(input, { ...options, activeAdjustments, editorJefe });
 
   if (!options.db) {
     return base;

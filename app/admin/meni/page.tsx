@@ -15,20 +15,6 @@ const CATEGORIAS = [
   'Espectáculos',
 ];
 
-const estadoEditorialInfo: Record<string, { label: string; badge: string; dot: string }> = {
-  excelente: { label: 'Excelente', badge: 'bg-green-100 text-green-800 border-green-300', dot: 'bg-green-500' },
-  muy_buena: { label: 'Muy buena', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300', dot: 'bg-emerald-500' },
-  necesita_explicacion: { label: 'Necesita explicación', badge: 'bg-yellow-100 text-yellow-800 border-yellow-300', dot: 'bg-yellow-500' },
-  demasiado_parecida: { label: 'Demasiado parecida', badge: 'bg-orange-100 text-orange-800 border-orange-300', dot: 'bg-orange-500' },
-  no_aporta: { label: 'No aporta', badge: 'bg-red-100 text-red-800 border-red-300', dot: 'bg-red-500' },
-};
-
-const recomendacionInfo: Record<string, { label: string; badge: string }> = {
-  publicar: { label: 'Publicar', badge: 'bg-green-100 text-green-800 border-green-300' },
-  mejorar: { label: 'Mejorar', badge: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
-  revisar: { label: 'Revisar', badge: 'bg-red-100 text-red-800 border-red-300' },
-};
-
 export default function MeniPage() {
   const [form, setForm] = useState({
     titulo: '',
@@ -41,6 +27,7 @@ export default function MeniPage() {
   const [result, setResult] = useState<MeniResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showTechnical, setShowTechnical] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -77,9 +64,14 @@ export default function MeniPage() {
             <h1 className="text-3xl font-bold text-slate-900">MENI — Diagnóstico editorial</h1>
             <p className="text-slate-600">Veredicto editorial del editor y diagnóstico técnico de respaldo.</p>
           </div>
-          <Link href="/admin/meni/arquitectura" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
-            Arquitectura
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/admin/meni-dashboard" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+              Dashboard MENI
+            </Link>
+            <Link href="/admin/meni/arquitectura" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+              Arquitectura
+            </Link>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -155,157 +147,353 @@ export default function MeniPage() {
 
           {result && (
             <section className="space-y-6">
-              {/* Veredicto Editorial */}
-              <div className="rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-4 text-lg font-semibold">Veredicto Editorial</h2>
-                <div className="flex flex-wrap items-center gap-3 mb-4">
-                  {result.estadoEditorial && estadoEditorialInfo[result.estadoEditorial] && (
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border ${estadoEditorialInfo[result.estadoEditorial].badge}`}>
-                      <span className={`h-2.5 w-2.5 rounded-full ${estadoEditorialInfo[result.estadoEditorial].dot}`} />
-                      {estadoEditorialInfo[result.estadoEditorial].label}
-                    </div>
-                  )}
-                  {result.recomendacionEditorial && recomendacionInfo[result.recomendacionEditorial] && (
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border ${recomendacionInfo[result.recomendacionEditorial].badge}`}>
-                      {recomendacionInfo[result.recomendacionEditorial].label}
-                    </div>
-                  )}
-                </div>
-                {result.mensajeEditor && (
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 mb-4">
-                    <p className="text-xs font-semibold text-indigo-600 mb-2">Mensaje del Editor</p>
-                    <p className="text-sm text-slate-700 leading-relaxed">{result.mensajeEditor}</p>
+              {/* ═══════════════════════════════════════════════════════════
+                  PANEL EDITORIAL — única fuente de verdad: EditorialDecision
+                  Campos planos, no 20 métricas dispersas.
+              ═══════════════════════════════════════════════════════════ */}
+              {/* MENI Editor Jefe Ejecutivo — única salida visible */}
+              {result.editorialDecision?.veredictoEjecutivo && (
+                <div className={`rounded-2xl p-6 shadow border-l-4 ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'bg-green-50 border-green-500' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'bg-amber-50 border-amber-500' : 'bg-red-50 border-red-500'}`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-slate-800">MENI Editor Jefe Ejecutivo</h2>
+                    <span className="text-xs font-semibold text-slate-500">Confianza: {result.editorialDecision.veredictoEjecutivo.confianza}%</span>
                   </div>
-                )}
-                {result.razonamientoEditorial && result.razonamientoEditorial.length > 0 && (
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-xs font-semibold text-slate-600 mb-3">Razonamiento Editorial</p>
-                    <ul className="space-y-2">
-                      {result.razonamientoEditorial.map((r, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <span className={`mt-0.5 font-bold ${r.positivo ? 'text-green-600' : 'text-yellow-600'}`}>
-                            {r.positivo ? '✓' : '⚠'}
-                          </span>
-                          <span className="text-slate-700">{r.punto}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className={`text-4xl font-black ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'text-green-700' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'text-amber-700' : 'text-red-700'}`}>
+                      {result.editorialDecision.veredictoEjecutivo.publicar}
+                    </div>
+                    <div className="text-lg text-slate-700">
+                      {result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'Se publica' : result.editorialDecision.veredictoEjecutivo.publicar === 'NO' ? 'No se publica' : 'Mejorar antes de publicar'}
+                    </div>
                   </div>
-                )}
-              </div>
+                  <p className="text-slate-700 mb-6 leading-relaxed">{result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
 
-              {/* Diagnóstico Editorial */}
-              {result.diagnosticoEditorial && (
-                <div className="rounded-2xl bg-white p-6 shadow">
-                  <h2 className="mb-4 text-lg font-semibold">Diagnóstico Editorial</h2>
-                  <div className="space-y-4 text-sm">
-                    <div>
-                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Vale la pena publicar?</p>
-                      <p className="text-slate-700">{result.diagnosticoEditorial.valeLaPenaPublicar.razon}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-semibold text-slate-500 mb-1">Portada</p>
+                      <p className="font-bold text-slate-800">{result.editorialDecision.veredictoEjecutivo.recomendacionPortada}</p>
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Qué aprenderá que no en otro medio?</p>
-                      <p className="text-slate-700">{result.diagnosticoEditorial.queAprenderaQueNoEnOtroMedio.respuesta}</p>
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-semibold text-slate-500 mb-1">Facebook</p>
+                      <p className="font-bold text-slate-800">{result.editorialDecision.veredictoEjecutivo.probabilidadFacebook} probabilidad</p>
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Qué aporta Nicaragua Informate?</p>
-                      <p className="text-slate-700">{result.diagnosticoEditorial.queAportaNicaraguaInformate.respuesta}</p>
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-semibold text-slate-500 mb-1">Google Discover</p>
+                      <p className="font-bold text-slate-800">{result.editorialDecision.veredictoEjecutivo.probabilidadDiscover} probabilidad</p>
                     </div>
-                    {result.diagnosticoEditorial.queLeFaltaParaReferencia.length > 0 && (
+                  </div>
+
+                  {/* ¿Por qué? — evidencia desplegable */}
+                  <details className="group rounded-lg bg-white/70 shadow-sm open:bg-white">
+                    <summary className="cursor-pointer p-4 text-sm font-semibold text-slate-700 list-none flex items-center justify-between">
+                      <span>¿Por qué?</span>
+                      <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="px-4 pb-4 space-y-3 text-sm text-slate-700">
                       <div>
-                        <p className="text-xs font-semibold text-yellow-600 mb-1">¿Qué le falta para ser referencia?</p>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">Valor para el lector</p>
+                        <p>{result.editorialDecision.veredictoEjecutivo.valorParaLector}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">Valor frente a la competencia</p>
+                        <p>{result.editorialDecision.veredictoEjecutivo.valorFrenteCompetencia}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">Riesgo editorial</p>
+                        <p className={`font-semibold ${result.editorialDecision.veredictoEjecutivo.riesgoEditorial === 'BAJO' ? 'text-green-600' : result.editorialDecision.veredictoEjecutivo.riesgoEditorial === 'MEDIO' ? 'text-amber-600' : 'text-red-600'}`}>{result.editorialDecision.veredictoEjecutivo.riesgoEditorial}</p>
+                      </div>
+                      {result.editorialDecision.veredictoEjecutivo.queFalta.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">Qué falta / corregir</p>
+                          <ul className="space-y-1">
+                            {result.editorialDecision.veredictoEjecutivo.queFalta.map((q, i) => (
+                              <li key={i}>• {q}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {result.editorialDecision.veredictoEjecutivo.antecedentesUsados.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">Antecedentes utilizados</p>
+                          <ul className="space-y-1">
+                            {result.editorialDecision.veredictoEjecutivo.antecedentesUsados.map((a, i) => (
+                              <li key={i}>• {a}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {result.editorialDecision.veredictoEjecutivo.patronesAplicados.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">Patrones aplicados</p>
+                          <p>{result.editorialDecision.veredictoEjecutivo.patronesAplicados.join('; ')}</p>
+                        </div>
+                      )}
+                      {result.editorialDecision.veredictoEjecutivo.correccionesEditor.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">Correcciones sugeridas por el Editor Jefe</p>
+                          <ul className="space-y-1">
+                            {result.editorialDecision.veredictoEjecutivo.correccionesEditor.map((c, i) => (
+                              <li key={i}>• {c}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </details>
+                </div>
+              )}
+
+              {/* EditorialDecision — campos planos */}
+              {result.editorialDecision && (
+                <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-indigo-500">
+                  <h2 className="mb-4 text-lg font-semibold">Decisión Editorial</h2>
+                  <div className="space-y-4 text-sm">
+                    <div className="flex items-start gap-3">
+                      <span className={`mt-0.5 text-lg ${result.editorialDecision.valeLaPenaPublicar ? 'text-green-600' : 'text-red-600'}`}>
+                        {result.editorialDecision.valeLaPenaPublicar ? '✓' : '✗'}
+                      </span>
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600">¿Vale la pena publicar?</p>
+                        <p className="text-slate-700">{result.editorialDecision.valeLaPenaPublicar ? 'Sí' : 'No'}</p>
+                      </div>
+                    </div>
+                    {result.editorialDecision.motivoPrincipal && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Motivo principal</p>
+                        <p className="text-slate-700">{result.editorialDecision.motivoPrincipal}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.aportaAlLector && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Aporta al lector</p>
+                        <p className="text-slate-700">{result.editorialDecision.aportaAlLector}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.diferenciaCompetencia && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Diferencia frente a competencia</p>
+                        <p className="text-slate-700">{result.editorialDecision.diferenciaCompetencia}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.utilidadReal && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Utilidad real</p>
+                        <p className="text-slate-700">{result.editorialDecision.utilidadReal}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.explicacion && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Explicación</p>
+                        <p className="text-slate-700">{result.editorialDecision.explicacion}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.contexto && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Contexto</p>
+                        <p className="text-slate-700">{result.editorialDecision.contexto}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.servicio && (
+                      <div>
+                        <p className="text-xs font-semibold text-indigo-600 mb-1">Servicio</p>
+                        <p className="text-slate-700">{result.editorialDecision.servicio}</p>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                      <span className="text-xs font-semibold text-slate-500">Riesgo editorial:</span>
+                      <span className={`text-sm font-bold ${result.editorialDecision.riesgoEditorial === 'BAJO' ? 'text-green-600' : result.editorialDecision.riesgoEditorial === 'MEDIO' ? 'text-yellow-600' : 'text-red-600'}`}>
+                        {result.editorialDecision.riesgoEditorial}
+                      </span>
+                    </div>
+                    {result.editorialDecision.acciones.length > 0 && (
+                      <div className="pt-2">
+                        <p className="text-xs font-semibold text-yellow-600 mb-2">Acciones requeridas</p>
                         <ul className="space-y-1">
-                          {result.diagnosticoEditorial.queLeFaltaParaReferencia.map((f, i) => (
-                            <li key={i} className="text-slate-700">• {f}</li>
+                          {result.editorialDecision.acciones.map((a, i) => (
+                            <li key={i} className="text-slate-700">• {a}</li>
                           ))}
                         </ul>
                       </div>
                     )}
-                    <div>
-                      <p className="text-xs font-semibold text-indigo-600 mb-1">¿Publicar en portada?</p>
-                      <p className="text-slate-700">{result.diagnosticoEditorial.publicarEnPortada.razon}</p>
-                    </div>
                   </div>
                 </div>
               )}
 
-              {/* Diagnóstico técnico de respaldo */}
-              <div className="rounded-2xl bg-white p-6 shadow">
-                <h2 className="mb-4 text-lg font-semibold text-slate-500">Diagnóstico técnico de respaldo</h2>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-4">
-                  <div className="rounded-lg bg-slate-100 p-3 text-center">
-                    <p className="text-xs text-slate-500">Score</p>
-                    <p className="text-xl font-bold">{result.scoreFinal}</p>
+              {/* Editor Jefe — Ranking Editorial */}
+              {result.editorialDecision?.ranking && (
+                <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-amber-500">
+                  <h2 className="mb-4 text-lg font-semibold">Ranking Editorial</h2>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-2xl">
+                      {'★'.repeat(result.editorialDecision.ranking.estrellas)}
+                      <span className="text-slate-300">{'★'.repeat(5 - result.editorialDecision.ranking.estrellas)}</span>
+                    </span>
+                    <span className="text-sm font-semibold text-slate-700">{result.editorialDecision.ranking.etiqueta}</span>
                   </div>
-                  <div className="rounded-lg bg-slate-100 p-3 text-center">
-                    <p className="text-xs text-slate-500">Categoría</p>
-                    <p className="text-sm font-bold">{result.categoria}</p>
-                  </div>
-                  <div className="rounded-lg bg-slate-100 p-3 text-center">
-                    <p className="text-xs text-slate-500">Módulo</p>
-                    <p className="text-sm font-bold">{result.modulo}</p>
-                  </div>
-                  <div className="rounded-lg bg-slate-100 p-3 text-center">
-                    <p className="text-xs text-slate-500">Prioridad</p>
-                    <p className="text-sm font-bold">{result.prioridad}</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">SEO</span>
-                    <span className="text-sm font-bold text-slate-600">{result.seo.score}/100</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">EEAT</span>
-                    <span className="text-sm font-bold text-slate-600">{result.eeat.score}/100</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">Google Discover</span>
-                    <span className="text-sm font-bold text-slate-600">{result.discover.score}/100</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">AdSense</span>
-                    <span className="text-sm font-bold text-slate-600">{result.adsense.score}/100</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">Forense</span>
-                    <span className="text-sm font-bold text-slate-600">{result.forense.score}/100</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-sm font-medium text-slate-700">Valor editorial</span>
-                    <span className="text-sm font-bold text-slate-600">{result.auditoria.utilidad}/100</span>
-                  </div>
-                </div>
-                {result.riesgo && (
-                  <div className="mt-4 pt-4 border-t border-slate-200">
-                    <p className="text-xs font-semibold text-slate-500 mb-2">Riesgo editorial</p>
-                    <div className="mb-2 flex items-center gap-2">
-                      <span
-                        className={`h-3 w-3 rounded-full ${result.riesgo.nivel === 'VERDE' ? 'bg-emerald-500' : result.riesgo.nivel === 'AMARILLO' ? 'bg-amber-500' : 'bg-rose-500'}`}
-                      />
-                      <span className="text-sm font-semibold text-slate-600">{result.riesgo.nivel}</span>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="rounded-lg border p-3">
+                      <p className="text-xs font-semibold text-slate-500">Google Discover</p>
+                      <p className={`font-bold ${result.editorialDecision.ranking.valorDiscover === 'Alta' ? 'text-green-600' : result.editorialDecision.ranking.valorDiscover === 'Media' ? 'text-yellow-600' : 'text-slate-400'}`}>
+                        {result.editorialDecision.ranking.valorDiscover}
+                      </p>
                     </div>
-                    <p className="text-sm text-slate-500">{result.riesgo.motivo}</p>
+                    <div className="rounded-lg border p-3">
+                      <p className="text-xs font-semibold text-slate-500">Facebook</p>
+                      <p className={`font-bold ${result.editorialDecision.ranking.valorFacebook === 'Alta' ? 'text-green-600' : result.editorialDecision.ranking.valorFacebook === 'Media' ? 'text-yellow-600' : 'text-slate-400'}`}>
+                        {result.editorialDecision.ranking.valorFacebook}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border p-3">
+                      <p className="text-xs font-semibold text-slate-500">Servicio al lector</p>
+                      <p className={`font-bold ${result.editorialDecision.ranking.valorServicio === 'Muy alto' || result.editorialDecision.ranking.valorServicio === 'Alto' ? 'text-green-600' : result.editorialDecision.ranking.valorServicio === 'Medio' ? 'text-yellow-600' : 'text-slate-400'}`}>
+                        {result.editorialDecision.ranking.valorServicio}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border p-3">
+                      <p className="text-xs font-semibold text-slate-500">Valor para portada</p>
+                      <p className="font-bold text-slate-700 capitalize">{result.editorialDecision.ranking.valorPortada.replace(/_/g, ' ')}</p>
+                    </div>
                   </div>
-                )}
-              </div>
+                  <p className="mt-3 text-xs text-slate-500">{result.editorialDecision.ranking.razon}</p>
+                </div>
+              )}
 
-              {result.recomendaciones && result.recomendaciones.length > 0 && (
-                <div className="rounded-2xl bg-white p-6 shadow">
-                  <h2 className="mb-4 text-lg font-semibold text-slate-500">Recomendaciones técnicas</h2>
-                  <div className="space-y-2">
-                    {result.recomendaciones.map((r, i) => (
-                      <div key={i} className="flex items-start gap-3 rounded-lg border p-3">
-                        <div>
-                          <p className="text-xs text-slate-400">{r.area}</p>
-                          <p className="text-sm text-slate-600">{r.mensaje}</p>
-                        </div>
+              {/* Editor Jefe — Saturación de Portada */}
+              {result.editorialDecision?.saturacion && (
+                <div className={`rounded-2xl bg-white p-6 shadow border-l-4 ${result.editorialDecision.saturacion.nivelSaturacion === 'rojo' ? 'border-red-500' : result.editorialDecision.saturacion.nivelSaturacion === 'amarillo' ? 'border-yellow-500' : 'border-green-500'}`}>
+                  <h2 className="mb-4 text-lg font-semibold">Editor de Portada</h2>
+                  <div className="space-y-3 text-sm">
+                    <div className={`rounded-lg p-3 ${result.editorialDecision.saturacion.nivelSaturacion === 'rojo' ? 'bg-red-50' : result.editorialDecision.saturacion.nivelSaturacion === 'amarillo' ? 'bg-yellow-50' : 'bg-green-50'}`}>
+                      <p className="text-slate-700">{result.editorialDecision.saturacion.recomendacion}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Distribución actual de portada</p>
+                      <div className="space-y-1">
+                        {result.editorialDecision.saturacion.distribucion.map((d, i) => (
+                          <div key={i} className="flex items-center justify-between text-xs">
+                            <span className="text-slate-600">{d.categoria}</span>
+                            <span className={`font-semibold ${d.porcentaje >= 40 ? 'text-red-600' : 'text-slate-500'}`}>{d.cantidad} ({d.porcentaje}%)</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {result.editorialDecision.saturacion.categoriasFaltantes.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">Categorías ausentes</p>
+                        <p className="text-xs text-slate-600">{result.editorialDecision.saturacion.categoriasFaltantes.join(', ')}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Editor Jefe — Aprendizaje del Editor */}
+              {result.editorialDecision?.patronesAplicados && result.editorialDecision.patronesAplicados.length > 0 && (
+                <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-purple-500">
+                  <h2 className="mb-4 text-lg font-semibold">Aprendizaje del Editor</h2>
+                  <p className="text-xs text-slate-500 mb-3">Patrones detectados de correcciones manuales anteriores</p>
+                  <div className="space-y-2 text-sm">
+                    {result.editorialDecision.patronesAplicados.map((p, i) => (
+                      <div key={i} className="rounded-lg border border-purple-200 bg-purple-50 p-3">
+                        <p className="text-xs font-semibold text-purple-600 capitalize">{p.campo}</p>
+                        <p className="text-slate-700">{p.descripcion}</p>
+                        <p className="text-xs text-slate-500 mt-1">Frecuencia: {p.frecuencia} correcciones</p>
                       </div>
                     ))}
                   </div>
+                  {result.editorialDecision.correccionesSugeridas.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-xs font-semibold text-purple-600 mb-2">Correcciones sugeridas para esta nota</p>
+                      <ul className="space-y-1">
+                        {result.editorialDecision.correccionesSugeridas.map((c, i) => (
+                          <li key={i} className="text-sm text-slate-700">• {c}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
 
+              {/* Editor Jefe — Memoria Editorial */}
+              {result.editorialDecision?.memoriaEditorial && (
+                <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-teal-500">
+                  <h2 className="mb-4 text-lg font-semibold">Memoria Editorial</h2>
+                  <div className="space-y-3 text-sm">
+                    {result.editorialDecision.memoriaEditorial.tendencia && (
+                      <div className="rounded-lg bg-teal-50 border border-teal-200 p-3">
+                        <p className="text-xs font-semibold text-teal-600 mb-1">Tendencia detectada</p>
+                        <p className="text-slate-700">{result.editorialDecision.memoriaEditorial.tendencia}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.memoriaEditorial.contextoNarrativo && (
+                      <div>
+                        <p className="text-xs font-semibold text-teal-600 mb-1">Contexto narrativo</p>
+                        <p className="text-slate-700">{result.editorialDecision.memoriaEditorial.contextoNarrativo}</p>
+                      </div>
+                    )}
+                    {result.editorialDecision.memoriaEditorial.cronologia.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-2">Noticias relacionadas ({result.editorialDecision.memoriaEditorial.totalRelacionadas})</p>
+                        <ul className="space-y-1">
+                          {result.editorialDecision.memoriaEditorial.cronologia.map((c, i) => (
+                            <li key={i} className="text-xs text-slate-600">
+                              <span className="font-semibold">{new Date(c.fecha).toLocaleDateString('es-NI')}</span> — {c.titulo}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {result.editorialDecision.memoriaEditorial.entidadesRelacionadas.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">Entidades relacionadas</p>
+                        <p className="text-xs text-slate-600">{result.editorialDecision.memoriaEditorial.entidadesRelacionadas.join(', ')}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ADN NI — Sello editorial */}
+              {result.editorialDna && (
+                <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-indigo-500">
+                  <h2 className="mb-4 text-lg font-semibold">ADN NI — Sello Editorial</h2>
+                  <div className="mb-4 rounded-lg bg-indigo-50 p-4 text-center">
+                    <p className="text-xs font-semibold text-indigo-600">ADN Nicaragua Informate</p>
+                    <p className="text-3xl font-bold text-indigo-700">{result.editorialDna.adnNI}%</p>
+                  </div>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center justify-between rounded-lg border p-3">
+                      <span className="font-medium text-slate-700">Exclusividad</span>
+                      <span className="font-bold text-slate-600">{result.editorialDna.exclusividad.score}/100</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-lg border p-3">
+                      <span className="font-medium text-slate-700">WOW (¿aprendió algo?)</span>
+                      <span className="font-bold text-slate-600">{result.editorialDna.wow.score}/100</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-lg border p-3">
+                      <span className="font-medium text-slate-700">Sello NI</span>
+                      <span className="font-bold text-slate-600">
+                        {Math.round(
+                          (result.editorialDna.selloNI.explica +
+                            result.editorialDna.selloNI.contextualiza +
+                            result.editorialDna.selloNI.servicio +
+                            result.editorialDna.selloNI.originalidad +
+                            result.editorialDna.selloNI.competencia +
+                            result.editorialDna.selloNI.utilidad +
+                            result.editorialDna.selloNI.valor) / 7
+                        )}/100
+                      </span>
+                    </div>
+                    {result.editorialDna.bloquear && (
+                      <div className="rounded-lg bg-red-50 border border-red-200 p-3">
+                        <p className="text-sm font-semibold text-red-700">Bloqueado: {result.editorialDna.motivoBloqueo}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Artículo optimizado */}
               <div className="rounded-2xl bg-white p-6 shadow">
                 <h2 className="mb-4 text-lg font-semibold">Artículo optimizado</h2>
                 {result.articulo && (
@@ -317,10 +505,218 @@ export default function MeniPage() {
                   </div>
                 )}
               </div>
+
+              {/* ═══════════════════════════════════════════════════════════
+                  PANEL TÉCNICO SECUNDARIO — colapsable
+                  SEO, EEAT, Discover, AdSense, Forense = respaldo
+              ═══════════════════════════════════════════════════════════ */}
+              <div className="rounded-2xl bg-slate-100 p-4 shadow-sm">
+                <button
+                  onClick={() => setShowTechnical(!showTechnical)}
+                  className="flex w-full items-center justify-between text-left"
+                >
+                  <h2 className="text-sm font-semibold text-slate-500">Diagnóstico técnico de respaldo</h2>
+                  <span className="text-xs text-slate-400">{showTechnical ? '▼ ocultar' : '▶ mostrar'}</span>
+                </button>
+                {showTechnical && (
+                  <div className="mt-4 space-y-4">
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                      <div className="rounded-lg bg-white p-3 text-center">
+                        <p className="text-xs text-slate-500">Score</p>
+                        <p className="text-xl font-bold">{result.scoreFinal}</p>
+                      </div>
+                      <div className="rounded-lg bg-white p-3 text-center">
+                        <p className="text-xs text-slate-500">Categoría</p>
+                        <p className="text-sm font-bold">{result.categoria}</p>
+                      </div>
+                      <div className="rounded-lg bg-white p-3 text-center">
+                        <p className="text-xs text-slate-500">Módulo</p>
+                        <p className="text-sm font-bold">{result.modulo}</p>
+                      </div>
+                      <div className="rounded-lg bg-white p-3 text-center">
+                        <p className="text-xs text-slate-500">Prioridad</p>
+                        <p className="text-sm font-bold">{result.prioridad}</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">SEO</span>
+                        <span className="text-sm font-bold text-slate-600">{result.seo.score}/100</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">EEAT</span>
+                        <span className="text-sm font-bold text-slate-600">{result.eeat.score}/100</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">Google Discover</span>
+                        <span className="text-sm font-bold text-slate-600">{result.discover.score}/100</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">AdSense</span>
+                        <span className="text-sm font-bold text-slate-600">{result.adsense.score}/100</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">Forense</span>
+                        <span className="text-sm font-bold text-slate-600">{result.forense.score}/100</span>
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-white border p-3">
+                        <span className="text-sm font-medium text-slate-700">Valor editorial</span>
+                        <span className="text-sm font-bold text-slate-600">{result.auditoria.utilidad}/100</span>
+                      </div>
+                    </div>
+                    {result.riesgo && (
+                      <div className="pt-2 border-t border-slate-200">
+                        <p className="text-xs font-semibold text-slate-500 mb-2">Riesgo editorial</p>
+                        <div className="mb-2 flex items-center gap-2">
+                          <span
+                            className={`h-3 w-3 rounded-full ${result.riesgo.nivel === 'VERDE' ? 'bg-emerald-500' : result.riesgo.nivel === 'AMARILLO' ? 'bg-amber-500' : 'bg-rose-500'}`}
+                          />
+                          <span className="text-sm font-semibold text-slate-600">{result.riesgo.nivel}</span>
+                        </div>
+                        <p className="text-sm text-slate-500">{result.riesgo.motivo}</p>
+                      </div>
+                    )}
+                    {result.recomendaciones && result.recomendaciones.length > 0 && (
+                      <div className="pt-2 border-t border-slate-200">
+                        <p className="text-xs font-semibold text-slate-500 mb-2">Recomendaciones técnicas</p>
+                        <div className="space-y-2">
+                          {result.recomendaciones.map((r, i) => (
+                            <div key={i} className="flex items-start gap-3 rounded-lg bg-white border p-3">
+                              <div>
+                                <p className="text-xs text-slate-400">{r.area}</p>
+                                <p className="text-sm text-slate-600">{r.mensaje}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </section>
           )}
+
+          {/* Widget de calificación del periodista */}
+          {result && <RatingWidget />}
         </div>
       </div>
     </main>
+  );
+}
+
+function RatingWidget() {
+  const [estrellas, setEstrellas] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [razones, setRazones] = useState<string[]>([]);
+  const [comentario, setComentario] = useState('');
+  const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+
+  const RAZONES = [
+    { id: 'buen_contexto', label: 'Buen contexto' },
+    { id: 'buen_titulo', label: 'Buen título' },
+    { id: 'buena_estructura', label: 'Buena estructura' },
+    { id: 'explico_bien', label: 'Explicó bien' },
+    { id: 'perdio_tiempo', label: 'Perdió tiempo' },
+    { id: 'no_aporto', label: 'No aportó nada' },
+  ];
+
+  function toggleRazon(id: string) {
+    setRazones(prev =>
+      prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
+    );
+  }
+
+  async function enviar() {
+    if (estrellas === 0) return;
+    setEnviando(true);
+    try {
+      const token = getAdminToken();
+      await fetch('/api/admin/meni-rating', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token,
+        },
+        body: JSON.stringify({
+          articleId: 'meni-eval',
+          estrellas,
+          razones,
+          comentario,
+        }),
+      });
+      setEnviado(true);
+    } catch {
+      // non-blocking
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  if (enviado) {
+    return (
+      <div className="rounded-2xl bg-green-50 border border-green-200 p-6 text-center">
+        <p className="text-green-700 font-semibold">¡Gracias por calificar a MENI!</p>
+        <p className="text-sm text-green-600 mt-1">Tu feedback ayuda al sistema a aprender.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-amber-400">
+      <h2 className="mb-2 text-lg font-semibold text-slate-800">¿Te ayudó MENI?</h2>
+      <p className="text-sm text-slate-500 mb-4">Califica tu experiencia con el Editor Jefe</p>
+
+      {/* Estrellas */}
+      <div className="flex gap-1 mb-4">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            onClick={() => setEstrellas(star)}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            className={`text-3xl transition ${(hover || estrellas) >= star ? 'text-amber-400' : 'text-slate-300'}`}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+
+      {/* Razones */}
+      <div className="grid grid-cols-2 gap-2 mb-4">
+        {RAZONES.map((r) => (
+          <button
+            key={r.id}
+            onClick={() => toggleRazon(r.id)}
+            className={`rounded-lg border p-2 text-sm transition ${
+              razones.includes(r.id)
+                ? 'border-amber-400 bg-amber-50 text-amber-700 font-semibold'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            {razones.includes(r.id) ? '✓ ' : '□ '}
+            {r.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Comentario opcional */}
+      <textarea
+        value={comentario}
+        onChange={(e) => setComentario(e.target.value)}
+        placeholder="Comentario (opcional)..."
+        className="mb-4 w-full rounded-lg border border-slate-200 p-3 text-sm text-slate-700"
+        rows={2}
+      />
+
+      <button
+        onClick={enviar}
+        disabled={estrellas === 0 || enviando}
+        className="rounded-lg bg-amber-500 px-6 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 disabled:opacity-40"
+      >
+        {enviando ? 'Enviando...' : 'Enviar calificación'}
+      </button>
+    </div>
   );
 }

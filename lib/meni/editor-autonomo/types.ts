@@ -1,4 +1,4 @@
-import type { MeniResult } from '@/lib/meni';
+import type { MeniResult, EditorialDecisionFlat } from '@/lib/meni';
 import type { QualityGateResult } from '@/lib/meni/quality-gate';
 import type { EditorBrainResult } from '@/lib/meni/editor-brain';
 import type { EditorialVerification, EstadoEditorial, RecomendacionEditorial, DiagnosticoEditorial } from '@/lib/meni/editorial-brain/types';
@@ -43,6 +43,8 @@ export interface MeniAutonomousResult {
   qualityGatePost?: QualityGateResult;
   editorBrain?: EditorBrainResult;
   editorialVerification?: EditorialVerification;
+  // Campos planos del EditorialDecision — única fuente de verdad
+  editorialDecision?: EditorialDecisionFlat;
   _provider?: string;
   _error?: string;
 }
