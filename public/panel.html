@@ -6852,24 +6852,190 @@ VERIFICACIÓN FINAL
       const panel = document.getElementById('panelAnalisisForense');
       const resultado = document.getElementById('resultadoAnalisisForense');
       panel.style.display = 'block';
-      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Editor IA analizando valor periodístico, detectores y publicación...</div>';
+      resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Editor IA + MENI analizando en paralelo...</div>';
 
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const resp = await fetch('/api/admin/analizar', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-          body: JSON.stringify({ titulo, contenido, resumen, categoria, imagen: imagenUrl, imagenDestacada: imagenUrl, slug: '', keywords, autor })
-        });
-        const data = await resp.json();
-        if (!resp.ok) throw new Error(data.error || 'Error en analisis');
-        // Guardar el resultado para reutilizarlo al guardar la nota
-        window._ultimoForense = { titulo, contenido, nivel: data.nivel, puntuacion: data.puntuacion };
-        resultado.innerHTML = renderAnalisisForense(data);
+        const bodyData = { titulo, contenido, resumen, categoria, imagen: imagenUrl, imagenDestacada: imagenUrl, slug: '', keywords, autor };
+
+        // Lanzar ambos análisis en paralelo
+        const [respForense, respMeni] = await Promise.allSettled([
+          fetch('/api/admin/analizar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+            body: JSON.stringify(bodyData)
+          }).then(r => r.json()),
+          fetch('/api/admin/meni/evaluar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+            body: JSON.stringify({ ...bodyData, fecha: new Date().toISOString(), checkDuplicates: false })
+          }).then(r => r.json())
+        ]);
+
+        let htmlFinal = '';
+
+        // ─── MENI DIAGNÓSTICO (primero, es el más importante) ───
+        if (respMeni.status === 'fulfilled' && respMeni.value && respMeni.value.success) {
+          const meni = respMeni.value.result;
+          window._ultimoMeni = meni;
+          htmlFinal += renderMeniDiagnostic(meni);
+        } else if (respMeni.status === 'rejected') {
+          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>MENI:</strong> ' + (respMeni.reason?.message || 'Error desconocido') + '</div>';
+        }
+
+        // ─── ANÁLISIS FORENSE (Editor IA viejo) ───
+        if (respForense.status === 'fulfilled' && respForense.value) {
+          const data = respForense.value;
+          window._ultimoForense = { titulo, contenido, nivel: data.nivel, puntuacion: data.puntuacion };
+          htmlFinal += renderAnalisisForense(data);
+        } else if (respForense.status === 'rejected') {
+          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>Forense:</strong> ' + (respForense.reason?.message || 'Error desconocido') + '</div>';
+        }
+
+        resultado.innerHTML = htmlFinal || '<div style="padding:16px;color:var(--gray-500);">Sin resultados.</div>';
       } catch (err) {
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }
     };
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER MENI DIAGNÓSTICO — Score, Sello NI, Bloqueantes, Correcciones
+    // ═══════════════════════════════════════════════════════════════
+    function renderMeniDiagnostic(meni) {
+      if (!meni) return '';
+      const score = meni.scoreFinal || 0;
+      const calif = meni.calificacion || 'F';
+      const aprobado = meni.aprobado;
+      const adnNI = meni.editorialDna?.adnNI || 0;
+      const sello = meni.editorialDna?.selloNI || {};
+      const blockingIssues = meni.blockingIssues || [];
+      const warnings = meni.warnings || [];
+      const recomendaciones = meni.recomendaciones || [];
+      const autoCorrections = meni.autoCorrections || [];
+      const veredicto = meni.editorialDecision?.veredictoEjecutivo;
+      const qg = meni.qualityGate || {};
+
+      const scoreColor = score >= 90 ? '#16a34a' : score >= 80 ? '#2563eb' : score >= 70 ? '#ca8a04' : '#dc2626';
+      const scoreBg = score >= 90 ? '#d1fae5' : score >= 80 ? '#dbeafe' : score >= 70 ? '#fef3c7' : '#fee2e2';
+      const aprobadoBadge = aprobado ? '<span style="background:#16a34a;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">APROBADO</span>' : '<span style="background:#dc2626;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">NO APROBADO</span>';
+
+      let html = '<div style="background:#0f172a;border:1px solid #1e40af;border-radius:12px;padding:20px;margin-bottom:20px;color:#e2e8f0;">';
+
+      // Header con score
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">';
+      html += '<div><h3 style="margin:0;font-size:18px;color:#93c5fd;"><i class="fas fa-brain"></i> Diagnóstico MENI</h3>';
+      html += '<p style="margin:4px 0 0;font-size:13px;color:#94a3b8;">Score: <strong style="color:' + scoreColor + ';font-size:16px;">' + score + '</strong> · Calificación: <strong>' + calif + '</strong> · ADN NI: <strong>' + adnNI + '%</strong></p></div>';
+      html += '<div>' + aprobadoBadge + '</div>';
+      html += '</div>';
+
+      // Veredicto ejecutivo
+      if (veredicto && veredicto.publicar) {
+        const vColor = veredicto.publicar === 'SI' ? '#16a34a' : veredicto.publicar === 'MEJORAR' ? '#ca8a04' : '#dc2626';
+        html += '<div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+        html += '<div><span style="font-size:12px;color:#94a3b8;">Veredicto del Editor Jefe:</span> <span style="display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;color:#fff;background:' + vColor + ';">' + veredicto.publicar + '</span></div>';
+        if (veredicto.confianza) html += '<span style="font-size:11px;color:#64748b;">Confianza: ' + veredicto.confianza + '%</span>';
+        html += '</div>';
+        if (veredicto.razon) html += '<p style="margin:8px 0 0;font-size:12px;color:#cbd5e1;">' + veredicto.razon + '</p>';
+        html += '</div>';
+      }
+
+      // Sello NI — 7 dimensiones con barras
+      const selloDims = [
+        { key: 'explica', label: 'Explica', icon: '💡' },
+        { key: 'contextualiza', label: 'Contextualiza', icon: '📍' },
+        { key: 'servicio', label: 'Servicio', icon: '🛠️' },
+        { key: 'originalidad', label: 'Originalidad', icon: '✍️' },
+        { key: 'competencia', label: 'Competencia', icon: '⚔️' },
+        { key: 'utilidad', label: 'Utilidad', icon: '📱' },
+        { key: 'valor', label: 'Valor', icon: '⭐' }
+      ];
+      html += '<div style="background:#1e293b;border-radius:8px;padding:14px;margin-bottom:16px;">';
+      html += '<div style="font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:10px;">🧬 Sello Nicaragua Informate</div>';
+      html += '<div style="font-size:11px;color:#64748b;margin-bottom:10px;">Este artículo tiene ' + adnNI + '% de ADN Nicaragua Informate</div>';
+      selloDims.forEach(d => {
+        const val = sello[d.key] || 0;
+        const barColor = val >= 80 ? '#16a34a' : val >= 60 ? '#ca8a04' : '#dc2626';
+        html += '<div style="margin-bottom:6px;">';
+        html += '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span style="color:#cbd5e1;">' + d.icon + ' ' + d.label + '</span><span style="color:' + barColor + ';font-weight:700;">' + val + '</span></div>';
+        html += '<div style="height:6px;background:#334155;border-radius:3px;overflow:hidden;"><div style="height:100%;width:' + val + '%;background:' + barColor + ';border-radius:3px;transition:width 0.3s;"></div></div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      // Bloqueantes
+      if (blockingIssues.length > 0) {
+        html += '<div style="background:#7f1d1d;border:1px solid #dc2626;border-radius:8px;padding:14px;margin-bottom:16px;">';
+        html += '<div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:10px;">🔴 BLOQUEANTES (' + blockingIssues.length + ')</div>';
+        blockingIssues.forEach(b => {
+          html += '<div style="background:#991b1b;border-radius:6px;padding:10px;margin-bottom:8px;">';
+          html += '<div style="font-size:12px;font-weight:700;color:#fca5a5;">⛔ ' + (b.code || 'BLOQUEANTE') + '</div>';
+          html += '<div style="font-size:12px;color:#fecaca;margin-top:4px;">' + (b.title || '') + '</div>';
+          html += '<div style="font-size:11px;color:#e0e0e0;margin-top:4px;">' + (b.description || '') + '</div>';
+          if (b.currentValue && b.expectedValue) html += '<div style="font-size:11px;color:#fbbf24;margin-top:4px;">Actual: ' + b.currentValue + ' → Esperado: ' + b.expectedValue + '</div>';
+          if (b.howToFix) html += '<div style="font-size:11px;color:#86efac;margin-top:4px;">💡 ' + b.howToFix + '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      // Correcciones automáticas
+      if (autoCorrections.length > 0) {
+        html += '<div style="background:#14532d;border:1px solid #16a34a;border-radius:8px;padding:14px;margin-bottom:16px;">';
+        html += '<div style="font-size:13px;font-weight:700;color:#86efac;margin-bottom:8px;">🟢 CORRECCIONES AUTOMÁTICAS (' + autoCorrections.length + ')</div>';
+        autoCorrections.forEach(c => {
+          html += '<div style="font-size:11px;color:#bbf7d0;margin-bottom:4px;">✓ ' + (c.descripcion || c.tipo || 'Corrección aplicada') + '</div>';
+        });
+        html += '</div>';
+      }
+
+      // Recomendaciones
+      if (recomendaciones.length > 0) {
+        html += '<div style="background:#1e293b;border:1px solid #4c1d95;border-radius:8px;padding:14px;margin-bottom:16px;">';
+        html += '<div style="font-size:13px;font-weight:700;color:#c4b5fd;margin-bottom:8px;">💡 Sugerencias del Editor</div>';
+        recomendaciones.forEach(r => {
+          html += '<div style="font-size:12px;color:#cbd5e1;margin-bottom:6px;padding:6px;background:#312e81;border-radius:6px;">• ' + (r.mensaje || r.area + ': ' + JSON.stringify(r)) + '</div>';
+        });
+        html += '</div>';
+      }
+
+      // Quality Gate info
+      if (qg && qg.originalidadPorcentaje != null) {
+        html += '<div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#93c5fd;margin-bottom:8px;">🔧 Quality Gate</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;font-size:11px;">';
+        html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Originalidad</div><div style="font-weight:700;color:' + (qg.originalidadPorcentaje >= 80 ? '#86efac' : '#fca5a5') + ';">' + qg.originalidadPorcentaje + '%</div></div>';
+        if (qg.explanationIndex) {
+          html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Transcripción</div><div style="font-weight:700;color:' + ((qg.explanationIndex.porcentajeTranscripcion || 0) <= 40 ? '#86efac' : '#fca5a5') + ';">' + (qg.explanationIndex.porcentajeTranscripcion || 0) + '%</div></div>';
+          html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Contexto</div><div style="font-weight:700;color:#c4b5fd;">' + (qg.explanationIndex.porcentajeContexto || 0) + '%</div></div>';
+          html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Explicación</div><div style="font-weight:700;color:#c4b5fd;">' + (qg.explanationIndex.porcentajeExplicacion || 0) + '%</div></div>';
+          html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Servicio</div><div style="font-weight:700;color:#c4b5fd;">' + (qg.explanationIndex.porcentajeServicio || 0) + '%</div></div>';
+        }
+        html += '<div style="background:#312e81;border-radius:6px;padding:8px;text-align:center;"><div style="color:#94a3b8;">Editor Score</div><div style="font-weight:700;color:' + (qg.editorScore >= 80 ? '#86efac' : '#fca5a5') + ';">' + (qg.editorScore || 0) + '</div></div>';
+        html += '</div></div>';
+      }
+
+      // Sugerencias SEO del MENI
+      if (meni.articulo) {
+        html += '<div style="background:#1e1b4b;border:1px solid #4c1d95;border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:8px;">📝 Sugerencias SEO</div>';
+        if (meni.articulo.titulo) html += '<div style="font-size:11px;color:#a78bfa;margin-bottom:4px;"><strong>Título SEO:</strong> ' + meni.articulo.titulo + '</div>';
+        if (meni.articulo.resumen) html += '<div style="font-size:11px;color:#a78bfa;margin-bottom:4px;"><strong>Meta:</strong> ' + meni.articulo.resumen + '</div>';
+        if (meni.articulo.slug) html += '<div style="font-size:11px;color:#a78bfa;"><strong>Slug:</strong> ' + meni.articulo.slug + '</div>';
+        html += '</div>';
+      }
+
+      // Mensaje del editor
+      if (meni.mensajeEditor) {
+        html += '<div style="background:#1e293b;border:1px solid #3730a3;border-radius:8px;padding:12px;margin-bottom:16px;">';
+        html += '<div style="font-size:12px;font-weight:700;color:#a5b4fc;margin-bottom:6px;">💬 Mensaje del Editor</div>';
+        html += '<div style="font-size:12px;color:#e2e8f0;line-height:1.5;">' + meni.mensajeEditor + '</div>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
 
     function renderAnalisisForense(data) {
       // Fallback: si el backend no envía nivel, calcularlo por puntuación
