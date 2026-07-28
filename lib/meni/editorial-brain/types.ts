@@ -14,10 +14,25 @@ import type { StoryPlan } from '@/lib/meni/story-planner/types';
 import type { AntiClickbaitResult } from '@/lib/meni/anti-clickbait/types';
 import type { ReaderJourneyResult } from '@/lib/meni/reader-journey/types';
 
+/** Contexto de conocimiento histórico (desde editor-brain async) */
+export interface KnowledgeContext {
+  hasMemory: boolean;
+  totalArticles: number;
+  antecedentes: string[];
+  temasFrecuentes: string[];
+  institucionesRelevantes: string[];
+  lugaresRelacionados: string[];
+  timeline: Array<{ title: string; date: string; category: string; slug: string }>;
+  relatedEntities: string[];
+  contextoParaLlm: string;
+  preguntasFrecuentes: string[];
+}
+
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
   categoriaSugerida?: string;
   tierThresholds?: TierThresholds;
+  knowledgeContext?: KnowledgeContext;
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -154,6 +169,60 @@ export interface StoryCompletenessDecision {
 }
 
 // ═══════════════════════════════════════════════════════════
+// 10. Utility Gate — ¿El lector termina sabiendo algo nuevo?
+// ═══════════════════════════════════════════════════════════
+
+export interface UtilityGateResult {
+  aportaNuevo: boolean;
+  queAprendeElLector: string[];
+  bloquear: boolean;
+  motivoBloqueo: string | null;
+  score: number;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 11. Diagnóstico Editorial Nicaragua Informate — unificado
+// ═══════════════════════════════════════════════════════════
+
+export interface DiagnosticoEditorial {
+  valeLaPenaPublicar: boolean;
+  razonValorPeriodistico: string;
+  queAportaAlLector: string;
+  queAportaFrenteTN8: string;
+  queAportaFrenteLaPrensa: string;
+  queAportaFrenteCanal4: string;
+  queAportaFrenteInternacionales: string;
+  queAprenderaElLector: string[];
+  explicacionFalta: string[];
+  contextoFalta: string[];
+  servicioFalta: string[];
+  pareceBoletin: boolean;
+  parrafosTranscritos: string[];
+  partesConAdnNI: string[];
+  prioridad: 'valor_lector' | 'diferenciacion' | 'explicacion' | 'contexto' | 'servicio' | 'originalidad' | 'calidad_tecnica';
+}
+
+// ═══════════════════════════════════════════════════════════
+// 12. Verificación post-LLM — ¿Se cumplieron las decisiones editoriales?
+// ═══════════════════════════════════════════════════════════
+
+export interface EditorialVerificationItem {
+  requisito: string;
+  tipo: 'explicacion' | 'contexto' | 'servicio' | 'pregunta' | 'diferenciacion';
+  cumplido: boolean;
+  evidencia: string | null;
+}
+
+export interface EditorialVerification {
+  items: EditorialVerificationItem[];
+  totalRequisitos: number;
+  cumplidos: number;
+  incumplidos: number;
+  pasa: boolean;
+  detalles: string;
+}
+
+// ═══════════════════════════════════════════════════════════
 // LLM Instructions — lo que el LLM recibe
 // ═══════════════════════════════════════════════════════════
 
@@ -202,6 +271,9 @@ export interface EditorialDecision {
   storyPlan: StoryPlan;
   antiClickbait: AntiClickbaitResult;
   readerJourney: ReaderJourneyResult;
+  // MENI v8: Editor en Jefe unificado
+  utilityGate: UtilityGateResult;
+  diagnostico: DiagnosticoEditorial;
   score: number;
   publicar: boolean;
   bloquear: boolean;

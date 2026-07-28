@@ -1,6 +1,7 @@
 import type { MeniResult } from '@/lib/meni';
 import type { QualityGateResult } from '@/lib/meni/quality-gate';
 import type { EditorBrainResult } from '@/lib/meni/editor-brain';
+import type { EditorialVerification } from '@/lib/meni/editorial-brain/types';
 
 export interface MeniAutonomousInput {
   fuente: string;
@@ -35,6 +36,7 @@ export interface MeniAutonomousResult {
   qualityGatePre?: QualityGateResult;
   qualityGatePost?: QualityGateResult;
   editorBrain?: EditorBrainResult;
+  editorialVerification?: EditorialVerification;
   _provider?: string;
   _error?: string;
 }

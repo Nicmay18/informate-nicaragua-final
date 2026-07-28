@@ -27,6 +27,12 @@ import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
 import { runStoryPlanner } from '@/lib/meni/story-planner';
 import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { runReaderJourney } from '@/lib/meni/reader-journey';
+import { runUtilityGate } from './utility-gate';
+import { buildDiagnostico } from './diagnostico';
+import { verifyEditorialDecisions } from './verification';
+
+export { verifyEditorialDecisions };
+export type { EditorialVerification, EditorialVerificationItem } from './types';
 
 export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision {
   // 1. News Value — ¿Vale la pena publicarla?
@@ -89,19 +95,50 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   });
 
   // ═══════════════════════════════════════════════════════════
+  // MENI v8: Editor en Jefe — Utility Gate + Diagnóstico unificado
+  // ═══════════════════════════════════════════════════════════
+
+  // 13. Utility Gate — ¿El lector termina sabiendo algo nuevo?
+  const utilityGate = runUtilityGate({
+    readerJourney,
+    publicValue,
+    storyPlan,
+    newsValue,
+    knowledgeContext: input.knowledgeContext,
+    contenido: input.contenido,
+  });
+
+  // 14. Diagnóstico Editorial Nicaragua Informate — síntesis de todos los motores
+  const diagnostico = buildDiagnostico({
+    newsValue,
+    competition,
+    nicaraguaInformate,
+    publicValue,
+    editorialDifference,
+    storyCompleteness,
+    readerJourney,
+    storyPlan,
+    utilityGate,
+    knowledgeContext: input.knowledgeContext,
+    contenido: input.contenido,
+  });
+
+  // ═══════════════════════════════════════════════════════════
   // Decisión final: ¿publicar o bloquear?
   // ═══════════════════════════════════════════════════════════
   const bloquear =
     nicaraguaInformate.bloquear ||
     editorialDifference.bloquear ||
     (newsValue.veredicto === 'baja' && newsValue.score < 30) ||
-    antiClickbait.veredicto === 'bloqueado';
+    antiClickbait.veredicto === 'bloqueado' ||
+    utilityGate.bloquear;
 
   const motivosBloqueo: string[] = [];
   if (nicaraguaInformate.bloquear && nicaraguaInformate.motivoBloqueo) motivosBloqueo.push(nicaraguaInformate.motivoBloqueo);
   if (editorialDifference.bloquear && editorialDifference.motivoBloqueo) motivosBloqueo.push(editorialDifference.motivoBloqueo);
   if (newsValue.veredicto === 'baja' && newsValue.score < 30) motivosBloqueo.push(`Valor noticioso muy bajo (${newsValue.score}/100). No justifica publicación.`);
   if (antiClickbait.veredicto === 'bloqueado') motivosBloqueo.push(`Anti Clickbait: ${antiClickbait.razon}`);
+  if (utilityGate.bloquear && utilityGate.motivoBloqueo) motivosBloqueo.push(`Utility Gate: ${utilityGate.motivoBloqueo}`);
   const motivoBloqueo = motivosBloqueo.length > 0 ? motivosBloqueo.join(' | ') : null;
 
   // El score final se calculará a partir del ADN NI (computeEditorialDNA) abajo.
@@ -121,6 +158,8 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
       ...intelligence.context.contextoRequerido,
       ...intelligence.background.antecedentes.map(a => a.hecho),
       ...readerJourney.brechaDeConocimiento,
+      ...(input.knowledgeContext?.antecedentes || []),
+      ...(input.knowledgeContext?.contextoParaLlm ? [input.knowledgeContext.contextoParaLlm] : []),
     ],
     explicacionesObligatorias: [
       ...explanation.explicaciones.map(e => `${e.pregunta} → ${e.respuesta}`),
@@ -160,6 +199,9 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     storyPlan,
     antiClickbait,
     readerJourney,
+    // MENI v8: Editor en Jefe unificado
+    utilityGate,
+    diagnostico,
     score: 0,
     publicar: false,
     bloquear,

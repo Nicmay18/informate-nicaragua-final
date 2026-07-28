@@ -1,6 +1,6 @@
 import { runMeni } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
-import { runEditorialBrain } from '@/lib/meni/editorial-brain';
+import { runEditorialBrain, verifyEditorialDecisions } from '@/lib/meni/editorial-brain';
 import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gate';
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -38,17 +38,15 @@ Devuelve ÚNICAMENTE un JSON con este formato:
   "promptImagenIA": "string en inglés para imagen editorial realista"
 }`;
 
-function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision, brain?: EditorBrainResult): string {
+function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision): string {
   const instr = decision.llmInstructions;
   const plan = decision.storyPlan;
   const journey = decision.readerJourney;
   const antiClickbait = decision.antiClickbait;
 
-  const contextoEditorial = brain?.context.contextoParaLlm || '';
-  const contextoBase = instr.contextoNecesario.length > 0
+  const contexto = instr.contextoNecesario.length > 0
     ? instr.contextoNecesario.map((c) => `- ${c}`).join('\n')
     : 'Sin contexto adicional requerido.';
-  const contexto = contextoEditorial ? `${contextoBase}\n\n${contextoEditorial}` : contextoBase;
 
   const explicaciones = instr.explicacionesObligatorias.length > 0
     ? instr.explicacionesObligatorias.map((e) => `- ${e}`).join('\n')
@@ -203,24 +201,13 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     imagenDestacada: '',
   };
 
-  const decision = runEditorialBrain({
-    ...noticiaInput,
-    fuente: input.fuente,
-    categoriaSugerida: input.categoriaSugerida,
-  });
-
-  // Quality Gate PRE-LLM: analiza el hecho original antes de redactar.
-  const qualityGatePre = runQualityGate({
-    titulo: noticiaInput.titulo,
-    contenido: input.fuente,
-    categoria: input.categoriaSugerida || 'General',
-    stage: 'PRE_LLM',
-  });
+  // ═══════════════════════════════════════════════════════════
+  // MENI v8: Knowledge ANTES de Editorial Brain
+  // El cerebro editorial decide con toda la información disponible
+  // ═══════════════════════════════════════════════════════════
   let db: ReturnType<typeof getAdminDb> | undefined;
   try { db = getAdminDb(); } catch { db = undefined; }
-  await appendQualityGateHistory(qualityGatePre, { titulo: noticiaInput.titulo, categoria: input.categoriaSugerida || 'General' }, db);
 
-  // Editor Brain: consultar memoria y contexto antes de redactar.
   let brain: EditorBrainResult | undefined;
   if (db) {
     try {
@@ -233,6 +220,37 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       brain = undefined;
     }
   }
+
+  const knowledgeContext = brain
+    ? {
+        hasMemory: brain.memory.hasMemory,
+        totalArticles: brain.memory.totalArticles,
+        antecedentes: brain.memory.antecedentes,
+        temasFrecuentes: brain.memory.temasFrecuentes,
+        institucionesRelevantes: brain.memory.institucionesRelevantes,
+        lugaresRelacionados: brain.memory.lugaresRelacionados,
+        timeline: brain.memory.timeline,
+        relatedEntities: brain.memory.relatedEntities,
+        contextoParaLlm: brain.context.contextoParaLlm,
+        preguntasFrecuentes: brain.context.preguntasFrecuentes,
+      }
+    : undefined;
+
+  const decision = runEditorialBrain({
+    ...noticiaInput,
+    fuente: input.fuente,
+    categoriaSugerida: input.categoriaSugerida,
+    knowledgeContext,
+  });
+
+  // Quality Gate PRE-LLM: analiza el hecho original antes de redactar.
+  const qualityGatePre = runQualityGate({
+    titulo: noticiaInput.titulo,
+    contenido: input.fuente,
+    categoria: input.categoriaSugerida || 'General',
+    stage: 'PRE_LLM',
+  });
+  await appendQualityGateHistory(qualityGatePre, { titulo: noticiaInput.titulo, categoria: input.categoriaSugerida || 'General' }, db);
 
   if (decision.bloquear) {
     return {
@@ -260,12 +278,14 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       recomendaciones: [decision.motivoBloqueo || decision.nicaraguaInformate.motivoBloqueo || 'La nota no aporta valor diferencial.'],
       evaluacion: {} as any,
       qualityGatePre,
+      editorBrain: brain,
+      editorialVerification: undefined,
       _provider: 'groq+editorial-brain',
       _error: decision.motivoBloqueo || 'Bloqueado por Editorial Brain',
     };
   }
 
-  const userPrompt = buildUserPrompt(input, decision, brain);
+  const userPrompt = buildUserPrompt(input, decision);
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -321,8 +341,8 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     copyTelegram: `${instr.tituloSEO}\n\n${getString('bajada')}\n\nhttps://informate.ni/noticias/${instr.slug}`,
     jsonLd: '',
     checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait. Editorial Brain: ${decision.score}/100. News Value: ${decision.newsValue.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%`,
-    diagnosticoEditorial: `${decision.nicaraguaInformate.porQueLeerAqui}`,
-    diagnosticoTecnico: `MENI v7 | Story Planner: ${decision.storyPlan.tipoLabel} (${decision.storyPlan.score}/100) | Anti Clickbait: ${decision.antiClickbait.veredicto} (${decision.antiClickbait.score}/100) | Reader Journey: ${decision.readerJourney.score}/100 | News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}) | Competition: ${decision.competition.score}/100 | NI Engine: ${decision.nicaraguaInformate.score}/100 | Difference: ${decision.editorialDifference.porcentajeDiferencia}% | Public Value: ${decision.publicValue.score}/100 | Completeness: ${decision.storyCompleteness.score}/100`,
+    diagnosticoEditorial: decision.diagnostico.razonValorPeriodistico,
+    diagnosticoTecnico: `MENI v8 | Utility Gate: ${decision.utilityGate.aportaNuevo ? 'APROBADO' : 'BLOQUEADO'} (${decision.utilityGate.score}/100) | Vale la pena: ${decision.diagnostico.valeLaPenaPublicar ? 'SÍ' : 'NO'} | Prioridad: ${decision.diagnostico.prioridad} | Story Planner: ${decision.storyPlan.tipoLabel} (${decision.storyPlan.score}/100) | Anti Clickbait: ${decision.antiClickbait.veredicto} (${decision.antiClickbait.score}/100) | Reader Journey: ${decision.readerJourney.score}/100 | News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}) | Competition: ${decision.competition.score}/100 | NI Engine: ${decision.nicaraguaInformate.score}/100 | Difference: ${decision.editorialDifference.porcentajeDiferencia}% | Public Value: ${decision.publicValue.score}/100 | Completeness: ${decision.storyCompleteness.score}/100`,
     riesgoEditorial: 'VERDE',
     riesgoTecnico: 'BAJO',
     scoreMeni: 0,
@@ -356,6 +376,13 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   generated.qualityGatePre = qualityGatePre;
   generated.qualityGatePost = qualityGatePost;
   generated.editorBrain = brain;
+
+  // ═══════════════════════════════════════════════════════════
+  // MENI v8: Verificación post-LLM — ¿se cumplieron las decisiones editoriales?
+  // ═══════════════════════════════════════════════════════════
+  const verification = verifyEditorialDecisions(decision, qualityGatePost.textoCorregido);
+  generated.editorialVerification = verification;
+
   generated.articuloCompleto = qualityGatePost.textoCorregido;
   generated.correccionesAplicadas = [
     ...generated.correccionesAplicadas,
@@ -392,12 +419,21 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       evaluacion.scoreFinal >= 90 &&
       evaluacion.aprobado &&
       !decision.bloquear &&
-      !qualityGatePost.bloqueado;
-    generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : evaluacion.riesgo.nivel;
+      !decision.utilityGate.bloquear &&
+      !qualityGatePost.bloqueado &&
+      verification.pasa;
+    generated.riesgoEditorial = (qualityGatePost.bloqueado || !verification.pasa) ? 'ROJO' : evaluacion.riesgo.nivel;
   } catch (e) {
     generated.evaluacion = {} as any;
     generated._error = `Evaluación local falló: ${e instanceof Error ? e.message : String(e)}`;
     generated.aprobado = false;
+  }
+
+  if (!verification.pasa) {
+    generated.recomendaciones = [
+      ...verification.items.filter(i => !i.cumplido).map(i => `${i.requisito}: ${i.evidencia || 'sin evidencia'}`),
+      ...generated.recomendaciones,
+    ];
   }
 
   return generated;
