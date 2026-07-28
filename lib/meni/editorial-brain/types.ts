@@ -10,6 +10,9 @@ import type { NoticiaInput } from '@/lib/meni/types';
 import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
 import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import type { TierThresholds } from '@/lib/meni/editorial-tiers';
+import type { StoryPlan } from '@/lib/meni/story-planner/types';
+import type { AntiClickbaitResult } from '@/lib/meni/anti-clickbait/types';
+import type { ReaderJourneyResult } from '@/lib/meni/reader-journey/types';
 
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
@@ -168,6 +171,16 @@ export interface LlmInstructions {
   keywords: string[];
   copyFacebook: string;
   pieFoto: string;
+  // MENI v7: directivas del Story Planner
+  storyPlan: StoryPlan;
+  // MENI v7: viaje del lector
+  readerJourney: ReaderJourneyResult;
+  // MENI v7: frases prohibidas del Story Planner
+  frasesProhibidas: string[];
+  // MENI v7: qué no hacer
+  queNoHacer: string[];
+  // MENI v7: objetivo pedagógico
+  objetivoPedagogico: string;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -185,6 +198,10 @@ export interface EditorialDecision {
   readerRetention: ReaderRetentionDecision;
   storyCompleteness: StoryCompletenessDecision;
   intelligence: IntelligenceResult;
+  // MENI v7: nuevos módulos
+  storyPlan: StoryPlan;
+  antiClickbait: AntiClickbaitResult;
+  readerJourney: ReaderJourneyResult;
   score: number;
   publicar: boolean;
   bloquear: boolean;

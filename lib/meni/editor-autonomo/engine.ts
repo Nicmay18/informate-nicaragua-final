@@ -8,23 +8,22 @@ import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain'
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
- * MENI OS v5.0 — Editorial Brain + Intelligence Engine.
- * El Editorial Brain analiza el HECHO y decide.
- * El LLM solo redacta siguiendo las decisiones.
+ * MENI v7 — Story Planner + Anti Clickbait + Reader Journey + Editorial Brain.
+ * El LLM no decide nada. Solo redacta siguiendo el plan editorial completo.
  */
-const SYSTEM_PROMPT = `Eres el redactor de Nicaragua Informate.
+const SYSTEM_PROMPT = `Eres el redactor de Nicaragua Informate. MENI v7.
 
-Genera el artículo usando el resultado producido por MENI.
-No tomes decisiones editoriales. Todas ya fueron calculadas por el sistema.
+Tu único trabajo es REDACTAR. No decides nada.
+Todas las decisiones editoriales ya fueron tomadas por el Story Planner, el Editorial Brain y el Reader Journey.
 
-Sigue exactamente:
-- El orden de bloques indicado.
-- El ángulo diferencial indicado.
-- El contexto requerido indicado.
-- Las explicaciones de siglas e instituciones indicadas.
-- El título SEO, meta descripción y slug indicados.
+Recibes un plan editorial completo. Solo escribes siguiéndolo.
 
-Reglas de redacción:
+REGLAS ABSOLUTAS:
+- Sigue EXACTAMENTE el orden narrativo indicado por el Story Planner.
+- Incluye TODAS las explicaciones de servicio indicadas.
+- NO uses ninguna de las frases prohibidas.
+- NO hagas nada de lo que está en la lista "qué NO hacer".
+- Cumple el objetivo pedagógico del Reader Journey.
 - Párrafos cortos (2-3 oraciones).
 - HTML con <p>, <h2>, <strong>, <blockquote>.
 - Mínimo 400 palabras.
@@ -41,6 +40,10 @@ Devuelve ÚNICAMENTE un JSON con este formato:
 
 function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision, brain?: EditorBrainResult): string {
   const instr = decision.llmInstructions;
+  const plan = decision.storyPlan;
+  const journey = decision.readerJourney;
+  const antiClickbait = decision.antiClickbait;
+
   const contextoEditorial = brain?.context.contextoParaLlm || '';
   const contextoBase = instr.contextoNecesario.length > 0
     ? instr.contextoNecesario.map((c) => `- ${c}`).join('\n')
@@ -57,6 +60,30 @@ function buildUserPrompt(input: MeniAutonomousInput, decision: EditorialDecision
 
   const estructura = instr.estructura.join('\n');
 
+  const frasesProhibidas = plan.frasesProhibidas.length > 0
+    ? plan.frasesProhibidas.map((f) => `- "${f}"`).join('\n')
+    : 'Ninguna.';
+
+  const queNoHacer = plan.queNoHacer.length > 0
+    ? plan.queNoHacer.map((q) => `- ${q}`).join('\n')
+    : 'Ninguna.';
+
+  const queSabe = journey.queSabe.length > 0
+    ? journey.queSabe.map((s) => `- ${s}`).join('\n')
+    : 'N/A';
+
+  const queNecesitaSaber = journey.queNecesitaSaber.length > 0
+    ? journey.queNecesitaSaber.map((s) => `- ${s}`).join('\n')
+    : 'N/A';
+
+  const queEntendera = journey.queEntendera.length > 0
+    ? journey.queEntendera.map((s) => `- ${s}`).join('\n')
+    : 'N/A';
+
+  const queRecordara = journey.queRecordara.length > 0
+    ? journey.queRecordara.map((s) => `- ${s}`).join('\n')
+    : 'N/A';
+
   return `HECHO NOTICIOSO:
 ${input.fuente}
 ${input.url ? `URL: ${input.url}` : ''}
@@ -64,20 +91,53 @@ ${input.url ? `URL: ${input.url}` : ''}
 CATEGORÍA: ${input.categoriaSugerida || 'General'}
 
 ═══════════════════════════════════════
-MODO PERIODISTA — PREGUNTAS QUE ORIENTAN LA REDACCIÓN
+MENI v7 — STORY PLANNER
 ═══════════════════════════════════════
-ANTES DE ESCRIBIR, el corresponsal responde internamente estas 5 preguntas basándose en el hecho y en el contexto nicaragüense. NO se pegan las respuestas tal cual; se usan para decidir qué información aporta valor diferencial:
+TIPO DE HISTORIA: ${plan.tipoLabel}
+ENFOQUE: ${plan.enfoque}
+PROPÓSITO: ${plan.proposito}
+ÁNGULO NICARAGUA INFORMATE: ${plan.anguloNI}
 
-1. ¿Qué falta explicar?
-2. ¿Qué duda tendrá el lector?
-3. ¿Qué contexto necesita un nicaragüense?
-4. ¿Qué otros medios seguramente publicarán?
-5. ¿Qué podemos hacer diferente?
+ORDEN NARRATIVO EXACTO (sigue este orden, no cambies):
+${estructura}
 
-REGLA DE ORO: NO copies la fuente textual. Redacta el artículo a partir de las respuestas anteriores, con hechos verificables y valor diferencial para Nicaragua Informate.
+EXPLICACIONES DE SERVICIO (incluye en el texto):
+${explicaciones}
 
-DECISIONES DEL EDITORIAL BRAIN (sigue exactamente):
+═══════════════════════════════════════
+MENI v7 — READER JOURNEY
+═══════════════════════════════════════
+OBJETIVO PEDAGÓGICO: ${journey.objetivoPedagogico}
 
+EL LECTOR YA SABE:
+${queSabe}
+
+EL LECTOR NECESITA SABER:
+${queNecesitaSaber}
+
+DESPUÉS DE LEER, EL LECTOR ENTENDERÁ:
+${queEntendera}
+
+DESPUÉS DE LEER, EL LECTOR RECORDARÁ:
+${queRecordara}
+
+═══════════════════════════════════════
+MENI v7 — ANTI CLICKBAIT
+═══════════════════════════════════════
+VEREDICTO DEL TÍTULO: ${antiClickbait.veredicto.toUpperCase()} (${antiClickbait.score}/100)
+${antiClickbait.razon}
+${antiClickbait.tituloSugerido ? `TÍTULO SUGERIDO: ${antiClickbait.tituloSugerido}` : ''}
+
+═══════════════════════════════════════
+FRASES PROHIBIDAS (NO uses ninguna):
+${frasesProhibidas}
+
+QUÉ NO HACER:
+${queNoHacer}
+
+═══════════════════════════════════════
+DECISIONES DEL EDITORIAL BRAIN
+═══════════════════════════════════════
 ÁNGULO DIFERENCIAL:
 ${instr.angulo}
 
@@ -98,14 +158,8 @@ QUÉ HARÍAN TN8 / CANAL 4 / LA PRENSA:
 NOSOTROS NO HAREMOS ESO. HAREMOS:
 ${decision.competition.enfoqueNicaraguaInformate}
 
-ORDEN DE LA NOTICIA:
-${estructura}
-
 CONTEXTO REQUERIDO:
 ${contexto}
-
-EXPLICACIONES OBLIGATORIAS (incluye en el texto):
-${explicaciones}
 
 PREGUNTAS OBLIGATORIAS DEL LECTOR (responde TODAS):
 ${preguntas}
@@ -119,7 +173,7 @@ COPY FACEBOOK: ${instr.copyFacebook}
 
 PIE DE FOTO: ${instr.pieFoto}
 
-Redacta el artículo completo siguiendo estas decisiones. Mínimo 400 palabras.`;
+Redacta el artículo completo siguiendo el Story Planner. Mínimo 400 palabras.`;
 }
 
 function stripHtml(html: string): string {
@@ -268,7 +322,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     jsonLd: '',
     checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait. Editorial Brain: ${decision.score}/100. News Value: ${decision.newsValue.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%`,
     diagnosticoEditorial: `${decision.nicaraguaInformate.porQueLeerAqui}`,
-    diagnosticoTecnico: `News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}). Competition: ${decision.competition.score}/100. NI Engine: ${decision.nicaraguaInformate.score}/100. Difference: ${decision.editorialDifference.porcentajeDiferencia}%. Public Value: ${decision.publicValue.score}/100. Completeness: ${decision.storyCompleteness.score}/100.`,
+    diagnosticoTecnico: `MENI v7 | Story Planner: ${decision.storyPlan.tipoLabel} (${decision.storyPlan.score}/100) | Anti Clickbait: ${decision.antiClickbait.veredicto} (${decision.antiClickbait.score}/100) | Reader Journey: ${decision.readerJourney.score}/100 | News Value: ${decision.newsValue.score}/100 (${decision.newsValue.veredicto}) | Competition: ${decision.competition.score}/100 | NI Engine: ${decision.nicaraguaInformate.score}/100 | Difference: ${decision.editorialDifference.porcentajeDiferencia}% | Public Value: ${decision.publicValue.score}/100 | Completeness: ${decision.storyCompleteness.score}/100`,
     riesgoEditorial: 'VERDE',
     riesgoTecnico: 'BAJO',
     scoreMeni: 0,

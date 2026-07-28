@@ -24,6 +24,9 @@ import { runReaderRetentionEngine } from './reader-retention-engine';
 import { runStoryCompletenessEngine } from './story-completeness-engine';
 import { runIntelligenceEngine } from '@/lib/meni/intelligence';
 import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
+import { runStoryPlanner } from '@/lib/meni/story-planner';
+import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
+import { runReaderJourney } from '@/lib/meni/reader-journey';
 
 export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision {
   // 1. News Value — ¿Vale la pena publicarla?
@@ -60,17 +63,45 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   });
 
   // ═══════════════════════════════════════════════════════════
+  // MENI v7: Nuevos módulos — deciden ANTES de que el LLM escriba
+  // ═══════════════════════════════════════════════════════════
+
+  // 10. Story Planner — El plan editorial completo
+  const storyPlan = runStoryPlanner({
+    titulo: input.titulo,
+    contenido: input.contenido,
+    fuente: input.fuente,
+    categoria: input.categoriaSugerida || input.categoria,
+  });
+
+  // 11. Anti Clickbait Engine — Valida el título PRE-LLM
+  const antiClickbait = runAntiClickbait({
+    titulo: input.titulo,
+    contenido: input.contenido,
+  });
+
+  // 12. Reader Journey — ¿Qué sabe → qué necesita → qué entenderá → qué recordará?
+  const readerJourney = runReaderJourney({
+    titulo: input.titulo,
+    contenido: input.contenido,
+    fuente: input.fuente,
+    categoria: input.categoriaSugerida || input.categoria,
+  });
+
+  // ═══════════════════════════════════════════════════════════
   // Decisión final: ¿publicar o bloquear?
   // ═══════════════════════════════════════════════════════════
   const bloquear =
     nicaraguaInformate.bloquear ||
     editorialDifference.bloquear ||
-    newsValue.veredicto === 'baja' && newsValue.score < 30;
+    (newsValue.veredicto === 'baja' && newsValue.score < 30) ||
+    antiClickbait.veredicto === 'bloqueado';
 
   const motivosBloqueo: string[] = [];
   if (nicaraguaInformate.bloquear && nicaraguaInformate.motivoBloqueo) motivosBloqueo.push(nicaraguaInformate.motivoBloqueo);
   if (editorialDifference.bloquear && editorialDifference.motivoBloqueo) motivosBloqueo.push(editorialDifference.motivoBloqueo);
   if (newsValue.veredicto === 'baja' && newsValue.score < 30) motivosBloqueo.push(`Valor noticioso muy bajo (${newsValue.score}/100). No justifica publicación.`);
+  if (antiClickbait.veredicto === 'bloqueado') motivosBloqueo.push(`Anti Clickbait: ${antiClickbait.razon}`);
   const motivoBloqueo = motivosBloqueo.length > 0 ? motivosBloqueo.join(' | ') : null;
 
   // El score final se calculará a partir del ADN NI (computeEditorialDNA) abajo.
@@ -78,19 +109,24 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // ═══════════════════════════════════════════════════════════
   // LLM Instructions — lo que el LLM recibe
   // ═══════════════════════════════════════════════════════════
+  // MENI v7: La estructura ahora viene del Story Planner, no del Intelligence Engine
+  const estructuraFromPlanner = storyPlan.ordenNarrativo.map(
+    b => `${b.orden}. ${b.tipo}: ${b.descripcion} — Incluir: ${b.queIncluir.join(', ')}`
+  );
+
   const llmInstructions: LlmInstructions = {
-    angulo: competition.enfoqueNicaraguaInformate,
-    estructura: intelligence.structure.bloques
-      .sort((a, b) => a.prioridad - b.prioridad)
-      .map(b => `${b.prioridad}. ${b.tipo}: ${b.contenido}`),
+    angulo: storyPlan.anguloNI,
+    estructura: estructuraFromPlanner,
     contextoNecesario: [
       ...intelligence.context.contextoRequerido,
       ...intelligence.background.antecedentes.map(a => a.hecho),
+      ...readerJourney.brechaDeConocimiento,
     ],
     explicacionesObligatorias: [
       ...explanation.explicaciones.map(e => `${e.pregunta} → ${e.respuesta}`),
       ...intelligence.clarity.siglasDetectadas.map(s => `${s.sigla}: ${s.significado}`),
       ...intelligence.clarity.institucionesMencionadas.map(i => `${i.nombre}: ${i.descripcion}`),
+      ...storyPlan.explicacionesServicio,
     ],
     preguntasAResponder: readerQuestions.preguntasObligatorias,
     enfoqueDiferencial: editorialDifference.elementosDiferenciales.join('; '),
@@ -101,6 +137,12 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     keywords: intelligence.google.keywords,
     copyFacebook: intelligence.facebook.copy,
     pieFoto: 'Foto cortesía de RR.SS / Redacción Keyling Rivera M. / INFORMATE NICARAGUA',
+    // MENI v7
+    storyPlan,
+    readerJourney,
+    frasesProhibidas: storyPlan.frasesProhibidas,
+    queNoHacer: storyPlan.queNoHacer,
+    objetivoPedagogico: readerJourney.objetivoPedagogico,
   };
 
   const baseDecision: Omit<EditorialDecision, 'editorialDna'> = {
@@ -114,6 +156,10 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     readerRetention,
     storyCompleteness,
     intelligence,
+    // MENI v7
+    storyPlan,
+    antiClickbait,
+    readerJourney,
     score: 0,
     publicar: false,
     bloquear,
