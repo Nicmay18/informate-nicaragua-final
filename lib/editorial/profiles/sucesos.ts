@@ -8,7 +8,7 @@ export const profileSucesos: EditorialProfile = {
   requiredEvidence: {
     queOcurrio:    /\b(?:ocurri[oó]|sucedi[oó]|incidente|accidente|robo|hurto|incautaci[oó]n|decomis[oa]|incendio|colisi[oó]n|explosi[oó]n|fuga|hallazgo|pelea|altercado|atropell[oa]|ahogad[oa])\b/i,
     donde:         /\b(?:barrio|colonia|carretera|ruta|km\s+\d+|municipio|departamento|comunidad|zona|sector|calle|avenida|entrada)\b/i,
-    cuando:        /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|horas?\s+de\s+la)\b/i,
+    cuando:        /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|anoche|ayer|hoy|antier|horas?\s+de\s+la|s[aá]bado|domingo|lunes|martes|mi[eé]rcoles|jueves|viernes)\b/i,
     estadoActual:  /\b(?:investigaci[oó]n|pesquisas|seguimiento|b[uú]squeda|operativo|detenid[oa]|capturad[oa]|trasladad[oa])\b/i,
     seguimiento:   /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n)\b/i,
     impacto:       /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?)\b/i,
