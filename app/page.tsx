@@ -1,3 +1,4 @@
+import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
