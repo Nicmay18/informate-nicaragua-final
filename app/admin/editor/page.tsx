@@ -216,12 +216,6 @@ export default function EditorPage() {
     setNews((prev) => ({ ...prev, [field]: value }));
   };
 
-  const colorScore = (score: number) => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 80) return 'text-yellow-400';
-    return 'text-red-400';
-  };
-
   const estadoEditorialInfo: Record<string, { label: string; badge: string; dot: string }> = {
     excelente: { label: 'Excelente', badge: 'bg-green-900/40 text-green-300 border-green-500/30', dot: 'bg-green-400' },
     muy_buena: { label: 'Muy buena', badge: 'bg-emerald-900/40 text-emerald-300 border-emerald-500/30', dot: 'bg-emerald-400' },
@@ -459,7 +453,7 @@ export default function EditorPage() {
                 ))}
               </ul>
             </div>
-          )
+          )}
         </aside>
       </div>
     </main>
@@ -498,31 +492,3 @@ function Select({ label, value, onChange }: { label: string; value: string; onCh
   );
 }
 
-function ScoreBar({ label, score, loading }: { label: string; score?: number; loading: boolean }) {
-  const value = score ?? 0;
-  const hasScore = score !== undefined;
-  const pct = Math.min(value, 100);
-  const barColor = value >= 90 ? 'bg-green-500' : value >= 75 ? 'bg-yellow-500' : value >= 60 ? 'bg-orange-500' : 'bg-red-500';
-  const textColor = value >= 90 ? 'text-green-400' : value >= 75 ? 'text-yellow-400' : value >= 60 ? 'text-orange-400' : 'text-red-400';
-
-  return (
-    <div>
-      <div className="flex items-center justify-between text-sm mb-1">
-        <span className="text-slate-300">{label}</span>
-        {loading && !hasScore ? (
-          <span className="text-cyan-400 animate-pulse text-xs">…</span>
-        ) : hasScore ? (
-          <span className={`font-semibold ${textColor}`}>{value}</span>
-        ) : (
-          <span className="text-slate-600">—</span>
-        )}
-      </div>
-      <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${loading ? 'bg-cyan-500 animate-pulse' : barColor}`}
-          style={{ width: hasScore ? `${pct}%` : '0%' }}
-        />
-      </div>
-    </div>
-  );
-}

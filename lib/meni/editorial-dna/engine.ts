@@ -23,7 +23,7 @@ function average(arr: number[]): number {
 }
 
 interface ComputeDnaOptions {
-  decision?: Omit<EditorialDecision, 'editorialDna'>;
+  decision?: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial'>;
   evaluacion?: EvaluacionEditorial;
   qualityGate?: QualityGateResult;
   memory?: { totalArticles: number };

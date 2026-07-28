@@ -176,7 +176,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     objetivoPedagogico: readerJourney.objetivoPedagogico,
   };
 
-  const baseDecision: Omit<EditorialDecision, 'editorialDna'> = {
+  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial'> = {
     newsValue,
     competition,
     nicaraguaInformate,
@@ -221,7 +221,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
       ? 'no_aporta'
       : finalRecomendacion === 'mejorar'
       ? 'necesita_explicacion'
-      : editorialDifference.diferencia < 30
+      : editorialDifference.porcentajeDiferencia < 30
       ? 'demasiado_parecida'
       : score >= 85
       ? 'excelente'
