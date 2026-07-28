@@ -120,7 +120,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   // MEMORIA: ¿tiene contexto de publicaciones anteriores?
   // ═══════════════════════════════════════════════════════════════
   const total = opts.memory?.totalArticles ?? 0;
-  const memoriaScore = clamp(30 + total * 15); // 1 artículo previo = 45, 3 = 75, 5 = 100
+  const memoriaScore = clamp(60 + total * 10); // Sin artículos = 60 (no penaliza), 1 = 70, 3 = 90, 4+ = 100
   const memoria: EditorialDnaDimension & { totalArticulosRelacionados: number } = {
     ...makeDimension(
       memoriaScore,
@@ -137,9 +137,9 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const adnNI = Math.round(
     exclusividad.score * 0.25 +
     wow.score * 0.25 +
-    selloNIPromedio * 0.25 +
+    selloNIPromedio * 0.30 +
     transcripcion.score * 0.15 +
-    memoria.score * 0.1
+    memoria.score * 0.05
   );
 
   const bloqueadores: string[] = [];

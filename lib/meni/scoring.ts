@@ -1,6 +1,6 @@
 import type { MeniPrioridad, MeniCategoria } from './types';
 
-export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '90');
+export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '85');
 
 export function computePriority(veredicto: string): MeniPrioridad {
   switch (veredicto) {
