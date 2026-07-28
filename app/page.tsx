@@ -1,7 +1,8 @@
-import HomePageRedesign from '@/components/HomePageRedesign';
-import { getLatestNews } from '@/lib/db/homepage';
+import HomePagePro from '@/components/HomePagePro';
+import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
+import { getHeroImageUrl } from '@/lib/image-utils';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
@@ -57,12 +58,21 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   let noticias: Noticia[] = [];
+  let masLeidas: Noticia[] = [];
+  let populares: Noticia[] = [];
 
   try {
-    noticias = await getLatestNews(30);
+    [noticias, masLeidas, populares] = await Promise.all([
+      getLatestNews(30),
+      getTrendingNews(5),
+      getPopularNews(5),
+    ]);
   } catch (error) {
     logger.error('[HomePage] Error:', error);
   }
+
+  const heroSrc400 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 400) : null;
+  const heroSrc800 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 800) : null;
 
   // Top 6 noticias para structured data (Google puede mostrarlas en rich snippets / Top Stories)
   const topStories = noticias.slice(0, 6);
@@ -82,14 +92,23 @@ export default async function HomePage() {
 
   return (
     <>
+      {heroSrc400 && heroSrc800 && (
+        <link
+          rel="preload"
+          as="image"
+          imageSrcSet={`${heroSrc400} 400w, ${heroSrc800} 800w`}
+          imageSizes="(max-width: 768px) 100vw, 580px"
+          type="image/webp"
+          crossOrigin="anonymous"
+        />
+      )}
       {homeItemList && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      <style dangerouslySetInnerHTML={{ __html: '.site-shell { display: none !important; }' }} />
-      <HomePageRedesign />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
     </>
   );
 }
