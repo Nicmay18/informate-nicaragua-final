@@ -194,8 +194,37 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   };
 
   // ── UTILIDAD ─────────────────────────────────
+  const UTILITY_PATTERNS: Record<string, RegExp> = {
+    'qué ocurrió':     /\b(?:ocurri[oó]|sucedi[oó]|incidente|ataque|disparo|bala|robo|hurto|accidente|incautaci[oó]n|decomis[oa]|incendio|colisi[oó]n|explosi[oó]n|pelea|altercado)\b/i,
+    'dónde':           /\b(?:barrio|colonia|carretera|ruta|km\s+\d+|municipio|departamento|comunidad|zona|sector|calle|avenida|Managua|Le[oó]n|Granada|Estel[ií])\b/i,
+    'cuándo':          /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|horas?\s+de\s+la|s[aá]bado|domingo|lunes|martes|mi[eé]rcoles|jueves|viernes)\b/i,
+    'estado actual':   /\b(?:investigaci[oó]n|pesquisas|b[uú]squeda|operativo|detenid[oa]|capturad[oa]|trasladad[oa]|hospital|recuperaci[oó]n|estable|grave|cr[ií]tico)\b/i,
+    'seguimiento':     /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n|vigilancia|monitoreo|seguimiento)\b/i,
+    'impacto':         /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?)\b/i,
+    'qué hacer':       /\b(?:recomienda|qu[eé]\s+hacer|c[oó]mo\s+actuar|pasos?\s+a\s+seguir|emergencia|128|118|primeros?\s+auxilios?)\b/i,
+    'qué significa':   /\b(?:qu[eé]\s+significa|implica|consecuencia|impacto\s+en|afecta\s+a|importancia)\b/i,
+    'qué cambia':      /\b(?:qu[eé]\s+cambia|nuevo|mejora|diferencia|anterior|versi[oó]n|upgrade)\b/i,
+    'prevención':      /\b(?:prevenci[oó]n|recomendaciones?|medidas|consejos?|evitar|precauci[oó]n)\b/i,
+    'especificaciones': /\b(?:\d+\s*(?:GB|MB|GHz|RAM|pulgadas|MP|nm)|procesador|c[aá]mara|pantalla|bater[ií]a)\b/i,
+    'precio':          /\b(?:C?\$[\d.,]+|precio|costo|d[oó]lares)\b/i,
+    'requisitos':      /\b(?:requisitos?|documentos?\s+necesarios?|se\s+requiere|debe\s+presentar)\b/i,
+    'horario':         /\b(?:horario|hora\s+de\s+atenci[oó]n|de\s+\d+\s+a\s+\d+|lunes\s+a\s+viernes)\b/i,
+    'contacto':        /\b(?:tel[eé]fono|contacto|whatsapp|correo|email|redes?\s+sociales?)\b/i,
+    'costo':           /\b(?:C?\$[\d.,]+|gratuito|gratis|costo|tarifa|pago)\b/i,
+    'fuente':          /\b(?:MINSa|ministerio\s+de\s+salud|hospital|OMS|OPS|m[eé]dic[oa]|epidemi[oó]log[oa])\b/i,
+    'cifras':          /\b(?:\d+\s+(?:casos?|personas?|muertes?|dosis)|por\s+ciento|%)\b/i,
+    'quién':           /\b(?:presidente|vicepresidente|ministro|diputad[oa]|gobierno|ministerio|autoridad|funcionario)\b/i,
+    'posición':        /\b(?:a\s+favor|en\s+contra|apoyo|rechazo|alianza|oposici[oó]n)\b/i,
+    'cronograma':      /\b(?:cronograma|calendario|fecha\s+de\s+inicio|etapa|fase|duraci[oó]n)\b/i,
+    'compatibilidad':  /\b(?:compatible|soporta|incluye|conectividad|sistema\s+operativo)\b/i,
+    'disponibilidad':  /\b(?:disponible|venta|preventa|stock|inventario|env[ií]o)\b/i,
+  };
+  const preguntasRespondidas = Object.entries(UTILITY_PATTERNS)
+    .filter(([, regex]) => regex.test(textoPlano))
+    .map(([key]) => key);
+
   const utility: UtilityEvidence = {
-    preguntasRespondidas: [],
+    preguntasRespondidas,
     tieneServicio: /\b(?:recomendaciones?|medidas|prevenci[oó]n|consejos?|gu[ií]a|pasos?\s+a\s+seguir)\b/i.test(textoPlano),
     tieneRecomendaciones: /\b(?:se\s+recomienda|recomendaciones?|deben?\s+(?:evitar|mantener|asegurar|buscar|acudir))\b/i.test(textoPlano),
     oportunidades: [],

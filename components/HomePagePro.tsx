@@ -7,6 +7,7 @@ import type { Noticia } from '@/lib/types';
 import { tiempoRelativo, tiempoLectura } from '@/lib/formateo';
 import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
+import dynamic from 'next/dynamic';
 
 interface HomePageProProps {
   noticias: Noticia[];
@@ -195,10 +196,10 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         <div className="rd-content-grid">
           <div className="rd-main-col">
             {dist.nacionales.length >= 3 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
-            {dist.sucesos.length >= 3 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
-            {dist.deportes.length >= 3 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
             {dist.internacionales.length >= 3 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
+            {dist.deportes.length >= 3 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
             {dist.tecnologia.length >= 3 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
+            {dist.sucesos.length >= 3 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
             {dist.espectaculos.length >= 3 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
           </div>
 
@@ -260,24 +261,41 @@ function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug
   );
 }
 
+const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false });
+const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false });
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
+const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false });
+const GuiaUtilWidget = dynamic(() => import('@/components/pro/GuiaUtilWidget'), { ssr: false });
+
 function SidebarRedesign({ masLeidas }: { masLeidas: Noticia[] }) {
   const lecturas = masLeidas.slice(0, 5);
 
   return (
     <>
-      <div className="rd-service">
-        <div className="rd-panel-head">Indicadores · hoy</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '9px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <span style={{ fontSize: 13, color: '#B8C2CC' }}>Dólar oficial</span>
-          <span style={{ fontFamily: 'var(--rd-mono)', fontSize: 14.5, color: '#fff' }}>C$ 37.12</span>
+      {/* Radio en vivo */}
+      <div className="rd-panel" style={{ overflow: 'hidden' }}>
+        <div className="rd-panel-head">Radio en Vivo</div>
+        <div style={{ padding: '0 0 16px' }}>
+          <RadioPlayer />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '9px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <span style={{ fontSize: 13, color: '#B8C2CC' }}>Clima Managua</span>
-          <span style={{ fontFamily: 'var(--rd-mono)', fontSize: 14.5, color: '#fff' }}>31°C, soleado</span>
-        </div>
-        <p style={{ fontFamily: 'var(--rd-mono)', fontSize: 10.5, color: '#8493A0', padding: '10px 0 16px' }}>
-          Actualizado al cierre
-        </p>
+      </div>
+
+      {/* Indicadores económicos */}
+      <div className="rd-panel" style={{ overflow: 'hidden', background: '#0f172a' }}>
+        <div className="rd-panel-head" style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>Indicadores económicos</div>
+        <EconomicBar />
+      </div>
+
+      {/* Clima */}
+      <div className="rd-panel" style={{ overflow: 'hidden', background: '#0f172a' }}>
+        <div className="rd-panel-head" style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>Clima Nicaragua</div>
+        <WeatherWidget />
+      </div>
+
+      {/* Reloj mundial */}
+      <div className="rd-panel" style={{ overflow: 'hidden', background: '#0f172a' }}>
+        <div className="rd-panel-head" style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>Reloj mundial</div>
+        <WorldClock />
       </div>
 
       {lecturas.length > 0 && (
@@ -297,6 +315,14 @@ function SidebarRedesign({ masLeidas }: { masLeidas: Noticia[] }) {
           </ol>
         </div>
       )}
+
+      {/* Guías útiles */}
+      <div className="rd-panel" style={{ overflow: 'hidden' }}>
+        <div className="rd-panel-head">Guías útiles</div>
+        <div style={{ padding: '0 16px 14px' }}>
+          <GuiaUtilWidget />
+        </div>
+      </div>
 
       <div style={{ background: 'var(--rd-accent-soft)', border: '1px solid #B9DAD6', borderRadius: 'var(--rd-radius)', padding: 20 }}>
         <h3 style={{ fontFamily: 'var(--rd-serif)', fontSize: 17, margin: '0 0 6px' }}>Boletín matutino</h3>
@@ -318,7 +344,7 @@ function SidebarRedesign({ masLeidas }: { masLeidas: Noticia[] }) {
 
       <div style={{ display: 'flex', gap: 10 }}>
         <a href="https://www.facebook.com/profile.php?id=61578261125687" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ width: 36, height: 36, border: '1px solid var(--rd-line)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--rd-ink)' }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5H16l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46H16.5V4.35C16.24 4.32 15.36 4.25 14.33 4.25c-2.15 0-3.62 1.31-3.62 3.72v2.53H8.25v3H10.71V21h2.79z" /></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5H16l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46H16.5V4.35C16.24 4.32 15.36 4.25 14.33 4.25c-2.15 0 -3.62 1.31-3.62 3.72v2.53H8.25v3H10.71V21h2.79z" /></svg>
         </a>
         <a href="https://whatsapp.com/channel/0029VbBxKdvDTkKB9SpIwS17" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ width: 36, height: 36, border: '1px solid var(--rd-line)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--rd-ink)' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 00-7.75 13.6L3 21l4.55-1.2A9 9 0 1012 3z" /></svg>
