@@ -35,21 +35,26 @@ function distribuirNoticias(noticias: Noticia[]) {
   const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
   const conImagen = (lista: Noticia[]) => lista.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
 
-  const prioridadHero = ['Nacionales', 'Sucesos', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos'];
-  const heroNoticias: Noticia[] = [];
-  for (const cat of prioridadHero) {
-    const primera = conImagen(porCategoria(cat))[0];
-    if (primera) { heroNoticias.push(primera); usados.add(primera.id); break; }
+  // Portada: una nacional, un suceso, una internacional y variedad
+  const portadaMeta: Noticia[] = [];
+  const portadaCategorias = ['Nacionales', 'Sucesos', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
+  for (const cat of portadaCategorias) {
+    if (portadaMeta.length >= 5) break;
+    const elegida = conImagen(porCategoria(cat)).find(n => !usados.has(n.id));
+    if (elegida) { portadaMeta.push(elegida); usados.add(elegida.id); }
   }
-  if (heroNoticias.length === 0) {
-    const primera = take(conImagen(disponibles()), 1);
-    if (primera.length) heroNoticias.push(primera[0]);
+  // Completar si faltan
+  while (portadaMeta.length < 5) {
+    const siguiente = conImagen(disponibles()).find(n => !usados.has(n.id));
+    if (!siguiente) break;
+    portadaMeta.push(siguiente);
+    usados.add(siguiente.id);
   }
 
-  const enPortada = take(disponibles(), 4);
+  const heroNoticias = portadaMeta.slice(0, 1);
+  const enPortada = portadaMeta.slice(1, 5);
 
-  const prioridadBreaking = ['Nacionales', 'Deportes', 'Internacionales', 'Tecnología', 'Espectáculos'];
-  const breaking = take(prioridadBreaking.flatMap(cat => porCategoria(cat)), 3);
+  const breaking = take(disponibles().filter(n => n.categoria !== 'Sucesos').slice(0, 3), 3);
   if (breaking.length < 3) breaking.push(...take(disponibles(), 3 - breaking.length));
 
   const seccion = (cat: string, min = 3) => {
@@ -198,9 +203,9 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
             {dist.nacionales.length >= 3 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
             {dist.internacionales.length >= 3 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
             {dist.deportes.length >= 3 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
+            {dist.espectaculos.length >= 3 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
             {dist.tecnologia.length >= 3 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
             {dist.sucesos.length >= 3 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
-            {dist.espectaculos.length >= 3 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
           </div>
 
           <aside className="rd-rail">
