@@ -140,7 +140,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // No hay scores paralelos. El ADN NI es el score final.
   // ═══════════════════════════════════════════════════════════
   const scoreFinal = editorialDecision.score;
-  const aprobadoFinal = editorialDecision.publicar
+  const aprobadoFinal = scoreFinal >= MIN_APPROVED_SCORE
     && !tierQualityGateBloqueado
     && !adnTranscripcionBloquear
     && qualityGate.editorScore >= thresholds.minQualityGateScore;

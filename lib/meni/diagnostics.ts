@@ -239,7 +239,7 @@ export function buildMeniDiagnostics(opts: {
     }
   }
 
-  if (!opts.aprobado && blockingIssues.length === 0) {
+  if (!opts.aprobado && opts.scoreFinal < MIN_APPROVED_SCORE && blockingIssues.length === 0) {
     blockingIssues.push({
       code: 'MENI_SCORE_THRESHOLD',
       module: 'meni-core',
