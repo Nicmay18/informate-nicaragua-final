@@ -227,7 +227,7 @@ export default function MeniPage() {
                     </div>
                   </div>
                 </div>
-              )
+              )}
 
               {/* Diagnóstico técnico de respaldo */}
               <div className="rounded-2xl bg-white p-6 shadow">
@@ -304,7 +304,7 @@ export default function MeniPage() {
                     ))}
                   </div>
                 </div>
-              )
+              )}
 
               <div className="rounded-2xl bg-white p-6 shadow">
                 <h2 className="mb-4 text-lg font-semibold">Artículo optimizado</h2>
