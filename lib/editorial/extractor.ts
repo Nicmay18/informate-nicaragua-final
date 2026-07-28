@@ -45,7 +45,7 @@ const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|juni
 
 const HORAS_REGEX = /\b(?:\d{1,2}:\d{2}(?:\s*(?:am|pm))?)\b/gi;
 
-const CIFRAS_REGEX = /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|mill[oó]n|d[oó]lares|c[oó]rdobas|libras|kilos|km|hect[aá]reas|manzanas|puntos|por ciento|%|kg|mm|cm|metros|a[ñn]os?|meses|d[ií]as|horas|minutos|segundos|personas|heridos?|detenidos?|v[ií]ctimas?|kil[oó]metros?|grados?))\b/gi;
+const CIFRAS_REGEX = /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|mill[oó]n|d[oó]lares|c[oó]rdobas|libras|kilos|km|hect[aá]reas|manzanas|puntos|por ciento|%|kg|mm|cm|metros|años?|meses|d[ií]as|horas|minutos|segundos|personas|heridos?|detenidos?|v[ií]ctimas?|grados?))\b/gi;
 
 const LUGARES_REGEX = /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Tipitapa|Bluefields|Rivas|Carazo|Boaco|Chontales|Nueva Segovia|Madriz|R[ií]o San Juan|Costa Caribe(?:\s+(?:Norte|Sur))?|Barrio\s+\w+|Colonia\s+\w+|km\s+\d+|El\s+\w+|La\s+\w+|Las\s+\w+|Los\s+\w+|San\s+\w+|Santa\s+\w+|Santo\s+\w+|Rep[uú]blica|Nicaragua|Centroam[eé]rica|Departamento|Municipio|Comarca|Comunidad|Sector|Zona)\b/gi;
 
