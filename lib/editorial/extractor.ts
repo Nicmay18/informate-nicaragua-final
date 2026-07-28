@@ -35,9 +35,9 @@ const PALABRAS_SENSIBLES = /\b(?:violaci[oó]n|violada|tortura|genocidio)\b/gi;
 
 const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidenciales|no identificadas)|se pudo conocer|trascendi[oó]|al parecer|presuntamente|aparentemente|de acuerdo con informaciones)\b/gi;
 
-const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,3}\b/g;
+const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}\b/g;
 
-const INSTITUCIONES = /\b(?:Polic[ií]a(?:\s+Nacional)?|Fiscal[ií]a|Bomberos|Cruz Roja|Medicina Legal|Hospital|Ministerio|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea Nacional|Banco Central|ENATREL|ENACAL|Telecom|Tigo|Claro|UNAN|UCA|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Procuradur[ií]a|Corte Suprema|Consejo Supremo Electoral|Distrito|Comisar[ií]a|Unidad de Investigaci[oó]n|Fuerza P[uú]blica|Ej[eé]rcito|Gobierno|Poder (?:Judicial|Ejecutivo|Legislativo)|Migraci[oó]n|Aduana|PEN|Penitenciar[ií]a)\b/g;
+const INSTITUCIONES = /\b(?:Polic[ií]a Nacional|Fiscal[ií]a|Bomberos|Cruz Roja|Medicina Legal|Hospital|Ministerio|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea Nacional|Banco Central|ENATREL|ENACAL|Telecom|Tigo|Claro|UNAN|UCA|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Procuradur[ií]a|Corte Suprema|Consejo Supremo Electoral)\b/g;
 
 const FUENTES_OFICIALES = /\b(?:Polic[ií]a(?:\s+Nacional)?|Fiscal[ií]a|Ministerio|Poder\s+Judicial|Corte\s+Suprema|Autoridad(?:es)?|Oficiales?|Bomberos|Cruz\s+Roja|Medicina\s+Legal|Hospital|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea\s+Nacional|Banco\s+Central|ENATREL|ENACAL|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Direcci[oó]n)\b/gi;
 
@@ -45,9 +45,9 @@ const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|juni
 
 const HORAS_REGEX = /\b(?:\d{1,2}:\d{2}(?:\s*(?:am|pm))?)\b/gi;
 
-const CIFRAS_REGEX = /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|mill[oó]n|d[oó]lares|c[oó]rdobas|libras|kilos|km|hect[aá]reas|manzanas|puntos|por ciento|%|kg|mm|cm|metros|años?|meses|d[ií]as|horas|minutos|segundos|personas|heridos?|detenidos?|v[ií]ctimas?|grados?))\b/gi;
+const CIFRAS_REGEX = /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|mill[oó]n|d[oó]lares|c[oó]rdobas|libras|kilos|km|hect[aá]reas|manzanas|puntos|por ciento|%|kg|mm|cm|metros)))\b/gi;
 
-const LUGARES_REGEX = /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Tipitapa|Bluefields|Rivas|Carazo|Boaco|Chontales|Nueva Segovia|Madriz|R[ií]o San Juan|Costa Caribe(?:\s+(?:Norte|Sur))?|Barrio\s+\w+|Colonia\s+\w+|km\s+\d+|El\s+\w+|La\s+\w+|Las\s+\w+|Los\s+\w+|San\s+\w+|Santa\s+\w+|Santo\s+\w+|Rep[uú]blica|Nicaragua|Centroam[eé]rica|Departamento|Municipio|Comarca|Comunidad|Sector|Zona)\b/gi;
+const LUGARES_REGEX = /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Tipitapa|Bluefields|Rivas|Carazo|Boaco|Chontales|Nueva Segovia|Madriz|R[ií]o San Juan|Costa Caribe(?:\s+(?:Norte|Sur))?|Barrio\s+\w+|Colonia\s+\w+|km\s+\d+)\b/gi;
 
 const CLICKBAIT_PATTERNS = /\b(?:no creer[aá]s|te sorprender[aá]|incre[ií]ble pero|mira lo que|esto fue lo que|lo que nadie te dijo|secreto revelado|la verdad detr[aá]s|no vas a creer)\b/i;
 
@@ -131,9 +131,6 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     !NOMBRES_PROPIOS.test(p) &&
     !INSTITUCIONES.test(p) &&
     !LUGARES_REGEX.test(p) &&
-    !FECHAS_REGEX.test(p) &&
-    !HORAS_REGEX.test(p) &&
-    !/\b(?:seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]|confirm[oó]|dijeron|explicaron|asegur[oó]|revel[oó])\b/i.test(p) &&
     !/\d/.test(p)
   );
 
