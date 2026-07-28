@@ -8,6 +8,8 @@ import type { ResultadoDuplicado } from '@/lib/analizador-duplicados';
 import type { QualityGateResult } from '@/lib/meni/quality-gate';
 import type { EditorBrainResult } from '@/lib/meni/editor-brain';
 import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
+import type { EditorialTier } from '@/lib/meni/editorial-tiers';
+import type { EditorialReason } from '@/lib/meni/editorial-reason';
 
 export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
@@ -139,6 +141,8 @@ export interface MeniResult {
   autoCorrected?: boolean;
   autoCorrections?: { campo: string; antes: string; despues: string; descripcion: string }[];
   editorialDna?: EditorialDnaResult;
+  editorialTier?: EditorialTier;
+  editorialReason?: EditorialReason;
 }
 
 export interface MeniReport {

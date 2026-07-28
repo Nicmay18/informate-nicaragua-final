@@ -196,5 +196,77 @@ export function analyzeCorrelations(articles: ArticleMetrics[]): Correlation[] {
     });
   }
 
+  // ─── Tiempo de lectura vs vistas ───
+  const withReadTime = withViews.filter((a) => a.tiempoLecturaSeg != null && a.tiempoLecturaSeg > 0);
+  if (withReadTime.length >= 5) {
+    const readTimes = withReadTime.map((a) => a.tiempoLecturaSeg!);
+    const readViews = withReadTime.map((a) => a.vistas);
+    const corrRead = pearsonCorrelation(readTimes, readViews);
+    correlations.push({
+      feature: 'tiempo_lectura',
+      description: `Correlación entre tiempo de lectura y vistas (r=${corrRead.toFixed(2)})`,
+      correlation: corrRead,
+      sampleSize: withReadTime.length,
+      recommendation: corrRead > 0.2
+        ? 'Los artículos que retienen al lector más tiempo reciben más vistas. Priorizar contenido que mantenga atención.'
+        : corrRead < -0.2
+          ? 'Los artículos largos pueden estar perdiendo lectores. Considerar notas más concisas.'
+          : 'El tiempo de lectura no correlaciona significativamente con vistas.',
+    });
+  }
+
+  // ─── CTR Facebook vs vistas ───
+  const withCtr = withViews.filter((a) => a.ctrFacebook != null && a.ctrFacebook > 0);
+  if (withCtr.length >= 5) {
+    const ctrs = withCtr.map((a) => a.ctrFacebook!);
+    const ctrViews = withCtr.map((a) => a.vistas);
+    const corrCtr = pearsonCorrelation(ctrs, ctrViews);
+    correlations.push({
+      feature: 'ctr_facebook',
+      description: `Correlación entre CTR de Facebook y vistas (r=${corrCtr.toFixed(2)})`,
+      correlation: corrCtr,
+      sampleSize: withCtr.length,
+      recommendation: corrCtr > 0.3
+        ? 'El CTR de Facebook predice bien las vistas. Optimizar copys de Facebook es clave.'
+        : 'El CTR de Facebook no predice bien las vistas. El tráfico viene de otras fuentes.',
+    });
+  }
+
+  // ─── Vistas Discover vs vistas totales ───
+  const withDiscover = withViews.filter((a) => a.vistasDiscover != null && a.vistasDiscover > 0);
+  if (withDiscover.length >= 5) {
+    const discoverViews = withDiscover.map((a) => a.vistasDiscover!);
+    const totalViews = withDiscover.map((a) => a.vistas);
+    const corrDiscover = pearsonCorrelation(discoverViews, totalViews);
+    correlations.push({
+      feature: 'vistas_discover',
+      description: `Correlación entre vistas Discover y vistas totales (r=${corrDiscover.toFixed(2)})`,
+      correlation: corrDiscover,
+      sampleSize: withDiscover.length,
+      recommendation: corrDiscover > 0.3
+        ? 'Google Discover es una fuente significativa de vistas. Optimizar títulos y imágenes para Discover.'
+        : 'Google Discover no es una fuente significativa. Enfocar en otras fuentes de tráfico.',
+    });
+  }
+
+  // ─── Tasa de retención vs score MENI ───
+  const withRetention = articles.filter((a) => a.tasaRetencion != null && a.tasaRetencion > 0 && a.scoreMeni > 0);
+  if (withRetention.length >= 5) {
+    const retention = withRetention.map((a) => a.tasaRetencion!);
+    const scores = withRetention.map((a) => a.scoreMeni);
+    const corrRetention = pearsonCorrelation(scores, retention);
+    correlations.push({
+      feature: 'retencion_vs_score',
+      description: `Correlación entre score MENI y tasa de retención (r=${corrRetention.toFixed(2)})`,
+      correlation: corrRetention,
+      sampleSize: withRetention.length,
+      recommendation: corrRetention > 0.3
+        ? 'El score MENI correlaciona con retención de lectores. El sistema está calibrado correctamente para retención.'
+        : corrRetention < -0.2
+          ? 'El score MENI no predice retención. Revisar qué tipo de contenido retiene vs el que MENI aprueba.'
+          : 'La correlación entre score MENI y retención es baja. Considerar ajustar criterios.',
+    });
+  }
+
   return correlations.sort((a, b) => Math.abs(b.correlation) - Math.abs(a.correlation));
 }

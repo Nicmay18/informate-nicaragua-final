@@ -77,6 +77,13 @@ export async function collectArticleMetrics(
       tieneResumen,
       fuentePrincipal: 'directo',
       distribuida,
+      // Métricas de aprendizaje real (opcionales — se pueblan con analytics)
+      tiempoLecturaSeg: typeof d.tiempoLecturaSeg === 'number' ? d.tiempoLecturaSeg : undefined,
+      ctrFacebook: typeof d.ctrFacebook === 'number' ? d.ctrFacebook : undefined,
+      vistasDiscover: typeof d.vistasDiscover === 'number' ? d.vistasDiscover : undefined,
+      tasaRetencion: typeof d.tasaRetencion === 'number' ? d.tasaRetencion : undefined,
+      tipoIntroduccion: typeof d.tipoIntroduccion === 'string' ? d.tipoIntroduccion : undefined,
+      longitudTitulo: (d.titulo || '').length,
     });
   }
 

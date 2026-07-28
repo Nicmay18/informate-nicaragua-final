@@ -22,6 +22,13 @@ export interface ArticleMetrics {
   tieneResumen: boolean;
   fuentePrincipal: string;
   distribuida: boolean;
+  // Métricas de aprendizaje real
+  tiempoLecturaSeg?: number;
+  ctrFacebook?: number;
+  vistasDiscover?: number;
+  tasaRetencion?: number;
+  tipoIntroduccion?: string;
+  longitudTitulo?: number;
 }
 
 /** Métricas agregadas por categoría */

@@ -30,6 +30,8 @@ import {
 } from './diagnostics';
 import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { runEditorialBrain } from '@/lib/meni/editorial-brain';
+import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
+import { buildEditorialReason } from '@/lib/meni/editorial-reason';
 
 export interface MeniRunOptions {
   db?: any; // Admin Firestore instance
@@ -41,6 +43,16 @@ export interface MeniRunOptions {
 function evaluateMeni(input: NoticiaInput): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
+
+  // Detectar tier editorial (FLASH, NOTICIA, REPORTAJE, INVESTIGACION)
+  const tier: EditorialTier = detectTier({
+    titulo: input.titulo,
+    contenido: input.contenido,
+    categoria: input.categoria,
+  });
+  const thresholds = TIER_THRESHOLDS[tier];
+  logMeni('Editorial tier detected', { tier, descripcion: thresholds.descripcion });
+
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
   const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
   const categoria = normalizeCategory(rawCategory);
@@ -90,12 +102,61 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     stage: 'POST_LLM',
   });
 
-  const aprobadoFinal = aprobado && !qualityGate.bloqueado && !editorialDna.bloquear;
-  const recomendacionesFinal = qualityGate.bloqueado
+  // ─────────────────────────────────────────────────────────────
+  // Aprobación graduada por tier editorial
+  // Un FLASH no necesita cumplir los mismos requisitos que un REPORTAJE.
+  // ─────────────────────────────────────────────────────────────
+  const palabrasTexto = textoPlano.split(/\s+/).filter(Boolean).length;
+
+  // Quality Gate: solo bloquear por service value si el tier lo exige
+  const tierBlockingIssues = qualityGate.issues.filter((i) => {
+    if (i.severidad !== 'blocking') return true; // warnings e info siempre pasan
+    // Service value solo bloquea si el tier lo exige
+    if (i.categoria === 'servicio' && !thresholds.exigeServiceValue) return false;
+    // Differential value solo bloquea si el tier lo exige
+    if (i.categoria === 'valor_diferencial' && !thresholds.exigeDifferentialValue) return false;
+    return true;
+  });
+
+  const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking')
+    || qualityGate.motivosBloqueo.length > 0 && tierBlockingIssues.some((i) => i.severidad === 'blocking');
+
+  // ADN NI: usar umbrales del tier en lugar de umbrales fijos
+  const adnBloquear =
+    (editorialDna.exclusividad.score < thresholds.minExclusividad && thresholds.exigeDifferentialValue) ||
+    (editorialDna.wow.score < thresholds.minWow && thresholds.exigeContexto) ||
+    editorialDna.adnNI < thresholds.minAdnNI;
+
+  const adnTranscripcionBloquear =
+    (qualityGate.explanationIndex?.porcentajeTranscripcion ?? 0) > thresholds.maxTranscripcion;
+
+  const aprobadoFinal = aprobado
+    && !tierQualityGateBloqueado
+    && !adnBloquear
+    && !adnTranscripcionBloquear
+    && qualityGate.editorScore >= thresholds.minQualityGateScore;
+
+  // Construir razón editorial explicativa
+  const editorialReason = buildEditorialReason({
+    aprobado: aprobadoFinal,
+    tier,
+    thresholds,
+    editorialDna,
+    qualityGate,
+    palabras: palabrasTexto,
+    categoria,
+  });
+
+  const recomendacionesFinal = !aprobadoFinal
     ? [
-        ...qualityGate.motivosBloqueo.map((m) => ({
-          area: 'quality-gate',
+        ...editorialReason.bloqueadores.map((m) => ({
+          area: 'editorial-tier' as const,
           severidad: 'alta' as const,
+          mensaje: m,
+        })),
+        ...editorialReason.puntosMejora.map((m) => ({
+          area: 'editorial-tier' as const,
+          severidad: 'media' as const,
           mensaje: m,
         })),
         ...recomendaciones,
@@ -156,6 +217,8 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     qualityGate,
     intelligence,
     editorialDna,
+    editorialTier: tier,
+    editorialReason,
   };
 }
 

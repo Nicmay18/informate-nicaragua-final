@@ -17,6 +17,7 @@ import { collectArticleMetrics, collectTrafficSources } from './metrics-collecto
 import { analyzeCategoryPerformance, analyzeTemporalPatterns, analyzeCorrelations } from './pattern-analyzer';
 import { tuneWeights } from './weight-tuner';
 import { generateInsights } from './insight-generator';
+import { persistActiveAdjustments } from './learning-adapter';
 
 let cachedResult: LearningCycleResult | null = null;
 let cacheTime = 0;
@@ -103,6 +104,14 @@ export async function runLearningCycle(
       ...result,
       updatedAt: new Date().toISOString(),
     });
+
+    // Aplicar ajustes de peso automáticamente si hay confianza suficiente
+    if (config.enableWeightTuning && weightAdjustments.length > 0) {
+      const highConfidence = weightAdjustments.filter((a) => a.confidence >= 0.6);
+      if (highConfidence.length > 0) {
+        await persistActiveAdjustments(db, highConfidence);
+      }
+    }
   } catch (err) {
     console.warn('[learning-engine] Error persistiendo ciclo:', err);
   }
@@ -155,8 +164,17 @@ export function invalidateLearningCache(): void {
   cacheTime = 0;
 }
 
+export { loadActiveAdjustments, persistActiveAdjustments, invalidateAdjustmentsCache } from './learning-adapter';
+export type { ActiveAdjustments } from './learning-adapter';
+
 export type {
   LearningCycleResult,
   LearningConfig,
   LearningInsight,
+  WeightAdjustment,
+  Correlation,
+  ArticleMetrics,
+  CategoryPerformance,
+  SourcePerformance,
+  TemporalPattern,
 } from './types';

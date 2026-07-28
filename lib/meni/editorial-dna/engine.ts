@@ -27,6 +27,9 @@ interface ComputeDnaOptions {
   evaluacion?: EvaluacionEditorial;
   qualityGate?: QualityGateResult;
   memory?: { totalArticles: number };
+  minDnaScore?: number;
+  minExclusividad?: number;
+  minWow?: number;
 }
 
 export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult {
@@ -34,6 +37,11 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const decision = opts.decision;
   const evaluacion = opts.evaluacion;
   const qualityGate = opts.qualityGate;
+
+  // Umbrales graduados por tier (defaults al valor anterior)
+  const minDna = opts.minDnaScore ?? MIN_DNA_SCORE;
+  const minExcl = opts.minExclusividad ?? MIN_DNA_SCORE;
+  const minWow = opts.minWow ?? MIN_DNA_SCORE;
 
   // ═══════════════════════════════════════════════════════════════
   // EXCLUSIVIDAD: ¿hay razón para leer esta nota en NI y no en TN8?
@@ -50,7 +58,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
 
   const exclusividad = makeDimension(
     exclusividadScore,
-    MIN_DNA_SCORE,
+    minExcl,
     'Valor diferencial insuficiente: la nota no da una razón clara para leerla en Nicaragua Informate en lugar de TN8, Canal 4 o La Prensa. Agregá contexto, explicación o utilidad que otros no aportan.'
   );
 
@@ -66,7 +74,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
 
   const wow = makeDimension(
     wowScore,
-    MIN_DNA_SCORE,
+    minWow,
     'WOW index bajo: el lector no aprende nada nuevo. La nota solo informa o transcribe. Agregá por qué ocurrió, qué significa, consecuencias y contexto que el lector no sabía.'
   );
 
@@ -104,7 +112,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
 
   const transcripcion = makeDimension(
     transcripcionScore,
-    MIN_DNA_SCORE,
+    minDna,
     'Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.'
   );
 
