@@ -88,6 +88,8 @@ export async function POST(request: NextRequest) {
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
         editorialDna: meni.editorialDna,
+        editorialTier: meni.editorialTier,
+        editorialReason: meni.editorialReason,
         duplicado: meni.duplicado,
         correcciones: [
           ...(meni.autoCorrections || []),
@@ -117,6 +119,8 @@ export async function POST(request: NextRequest) {
       nivel: mapMeniScoreToNivel(meni.scoreFinal, meni.aprobado),
       recomendacionesMeni: meni.recomendaciones.map((r: any) => `${r.area}: ${r.mensaje}`),
       diagnosticoMeni: meni.diagnostico,
+      editorialTier: meni.editorialTier,
+      editorialReason: meni.editorialReason,
     };
 
     // CRÍTICO: Establecer fecha de publicación si no existe

@@ -32,15 +32,17 @@ import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '
 import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
 import { buildEditorialReason } from '@/lib/meni/editorial-reason';
+import type { ActiveAdjustments } from '@/lib/meni/learning-engine/learning-adapter';
 
 export interface MeniRunOptions {
   db?: any; // Admin Firestore instance
   skipDuplicateCheck?: boolean;
   skipEditorBrain?: boolean;
   editorBrain?: EditorBrainResult;
+  activeAdjustments?: ActiveAdjustments;
 }
 
-function evaluateMeni(input: NoticiaInput): MeniResult {
+function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
 
@@ -50,7 +52,18 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     contenido: input.contenido,
     categoria: input.categoria,
   });
-  const thresholds = TIER_THRESHOLDS[tier];
+  let thresholds = { ...TIER_THRESHOLDS[tier] };
+
+  // Aplicar overrides del Learning Engine si existen
+  if (activeAdjustments?.tierOverrides?.[tier]) {
+    const override = activeAdjustments.tierOverrides[tier]!;
+    if (override.minAdnNI != null) thresholds = { ...thresholds, minAdnNI: override.minAdnNI };
+    if (override.minQualityGateScore != null) thresholds = { ...thresholds, minQualityGateScore: override.minQualityGateScore };
+    if (override.minExclusividad != null) thresholds = { ...thresholds, minExclusividad: override.minExclusividad };
+    if (override.minWow != null) thresholds = { ...thresholds, minWow: override.minWow };
+    logMeni('Learning Engine tier overrides applied', { tier, override });
+  }
+
   logMeni('Editorial tier detected', { tier, descripcion: thresholds.descripcion });
 
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
@@ -72,7 +85,8 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
   ];
 
   const scoreFinal = Math.round(evaluacion.scoreFinal);
-  const aprobado = approved(evaluacion.veredicto, scoreFinal);
+  const minScore = activeAdjustments?.minApprovedScore ?? MIN_APPROVED_SCORE;
+  const aprobado = approved(evaluacion.veredicto, scoreFinal) && scoreFinal >= minScore;
   const calificacion = scoreToGrade(scoreFinal);
   const prioridad = computePriority(evaluacion.veredicto);
   const diagnostico = buildDiagnostico(evaluacion);
@@ -90,6 +104,7 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
     ...input,
     fuente: input.contenido,
     categoriaSugerida: input.categoria,
+    tierThresholds: thresholds,
   });
   const editorialDna = editorialDecision.editorialDna;
 
@@ -222,17 +237,17 @@ function evaluateMeni(input: NoticiaInput): MeniResult {
   };
 }
 
-export function runMeni(input: NoticiaInput): MeniResult {
+export function runMeni(input: NoticiaInput, options?: MeniRunOptions): MeniResult {
   let currentInput = input;
   logMeni('=== runMeni (auto-correct wrapper) start ===', input.titulo);
-  let result = evaluateMeni(currentInput);
+  let result = evaluateMeni(currentInput, options?.activeAdjustments);
   let autoCorrections: AutoCorrection[] = [];
   if (!result.aprobado) {
     const corrected = autoCorrectNoticia(currentInput, result);
     if (corrected.corrections.length > 0) {
       autoCorrections = corrected.corrections;
       currentInput = corrected.input;
-      result = evaluateMeni(currentInput);
+      result = evaluateMeni(currentInput, options?.activeAdjustments);
     }
   }
   logMeni('=== runMeni (auto-correct wrapper) end ===', {
@@ -249,7 +264,19 @@ export async function runMeniAsync(
   input: NoticiaInput,
   options: MeniRunOptions = {}
 ): Promise<MeniResult> {
-  const base = runMeni(input);
+  // Cargar ajustes del Learning Engine si hay DB y no se pasaron explícitamente
+  let activeAdjustments = options.activeAdjustments;
+  if (!activeAdjustments && options.db) {
+    try {
+      const { loadActiveAdjustments } = await import('@/lib/meni/learning-engine/learning-adapter');
+      activeAdjustments = await loadActiveAdjustments(options.db);
+      logMeni('Learning Engine adjustments loaded', { source: activeAdjustments.source });
+    } catch {
+      activeAdjustments = undefined;
+    }
+  }
+
+  const base = runMeni(input, { ...options, activeAdjustments });
 
   if (!options.db) {
     return base;

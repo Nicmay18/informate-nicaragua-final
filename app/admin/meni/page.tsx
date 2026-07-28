@@ -185,6 +185,19 @@ export default function MeniPage() {
                     <p className="text-sm font-bold">{result.prioridad}</p>
                   </div>
                 </div>
+                {result.editorialTier && (
+                  <div className="mt-4 rounded-lg border border-indigo-200 bg-indigo-50 p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-indigo-600 px-3 py-1 text-xs font-bold text-white">
+                        {result.editorialTier}
+                      </span>
+                      <span className="text-sm font-semibold text-indigo-900">Tier Editorial</span>
+                    </div>
+                    {result.editorialReason && (
+                      <p className="mt-2 text-sm text-indigo-800">{result.editorialReason.resumen}</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="rounded-2xl bg-white p-6 shadow">

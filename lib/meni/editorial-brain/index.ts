@@ -121,9 +121,15 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     llmInstructions,
   };
 
-  const editorialDna = computeEditorialDNA({ decision: baseDecision });
+  const editorialDna = computeEditorialDNA({
+    decision: baseDecision,
+    minDnaScore: input.tierThresholds?.minAdnNI,
+    minExclusividad: input.tierThresholds?.minExclusividad,
+    minWow: input.tierThresholds?.minWow,
+  });
   const score = editorialDna.adnNI;
-  const publicar = !bloquear && !editorialDna.bloquear && score >= 60;
+  const minScore = input.tierThresholds?.minAdnNI ?? 60;
+  const publicar = !bloquear && !editorialDna.bloquear && score >= minScore;
   const finalMotivoBloqueo = [motivoBloqueo, editorialDna.motivoBloqueo].filter(Boolean).join(' | ') || null;
 
   const decision: EditorialDecision = {

@@ -9,10 +9,12 @@
 import type { NoticiaInput } from '@/lib/meni/types';
 import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
 import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
+import type { TierThresholds } from '@/lib/meni/editorial-tiers';
 
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
   categoriaSugerida?: string;
+  tierThresholds?: TierThresholds;
 };
 
 // ═══════════════════════════════════════════════════════════

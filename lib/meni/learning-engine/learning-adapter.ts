@@ -14,7 +14,8 @@ import type { WeightAdjustment } from './types';
 /** Ajustes activos cargados desde Firestore */
 export interface ActiveAdjustments {
   weights: Record<string, number>;
-  tierOverrides: Partial<Record<string, { minAdnNI?: number; minQualityGateScore?: number }>>;
+  tierOverrides: Partial<Record<string, { minAdnNI?: number; minQualityGateScore?: number; minExclusividad?: number; minWow?: number }>>;
+  minApprovedScore?: number;
   updatedAt: string;
   source: 'learning-engine' | 'default';
 }
@@ -50,6 +51,7 @@ export async function loadActiveAdjustments(db: Firestore): Promise<ActiveAdjust
       cachedAdjustments = {
         weights: { ...DEFAULT_WEIGHTS, ...data.weights },
         tierOverrides: data.tierOverrides || {},
+        minApprovedScore: data.minApprovedScore,
         updatedAt: data.updatedAt || new Date().toISOString(),
         source: 'learning-engine',
       };

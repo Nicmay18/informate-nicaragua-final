@@ -354,6 +354,19 @@ export default function EditorPage() {
                   {resultado.aprobado ? 'APROBADO' : 'REQUIERE MEJORAS'}
                 </div>
               )}
+              {resultado?.editorialTier && (
+                <div className="mt-3 rounded-lg border border-indigo-700/40 bg-indigo-900/30 p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full bg-indigo-500 px-2.5 py-0.5 text-xs font-bold text-white">
+                      {resultado.editorialTier}
+                    </span>
+                    <span className="text-xs font-semibold text-indigo-300">Tier Editorial</span>
+                  </div>
+                  {resultado.editorialReason && (
+                    <p className="mt-2 text-sm text-indigo-200">{resultado.editorialReason.resumen}</p>
+                  )}
+                </div>
+              )}
               {evaluando && !resultado && (
                 <p className="text-sm text-slate-500 mt-2">Evaluando…</p>
               )}
