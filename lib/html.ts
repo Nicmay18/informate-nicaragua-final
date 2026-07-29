@@ -52,6 +52,7 @@ export function enhanceArticleHtml(html: string, siteBase: string): string {
     let newAttrs = String(attrs);
     if (!/\bloading=/.test(newAttrs)) newAttrs += ' loading="lazy"';
     if (!/\bdecoding=/.test(newAttrs)) newAttrs += ' decoding="async"';
+    if (!/\bstyle=/.test(newAttrs)) newAttrs += ' style="max-width:100%;height:auto;display:block"';
     // Prefer width/height if present; do not guess sizes here
     return `<img${newAttrs}>`;
   });

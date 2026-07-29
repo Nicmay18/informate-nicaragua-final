@@ -1,0 +1,42 @@
+/* ArticlePage responsive overrides - imported in ArticlePage.tsx */
+.article-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 80px;
+}
+
+.article-hero-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 520px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  box-shadow: 0 20px 50px -18px rgba(15, 23, 42, 0.32);
+}
+
+.article-hero-img img,
+.article-hero-img [data-nimg="fill"] {
+  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .article-page {
+    padding: 18px 14px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-page {
+    padding: 14px 12px 28px;
+  }
+
+  .article-hero-img {
+    border-radius: 8px;
+    max-height: 280px;
+    aspect-ratio: 16 / 11;
+  }
+}

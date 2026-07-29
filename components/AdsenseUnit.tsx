@@ -81,17 +81,21 @@ export default function AdsenseUnit({
   }, []);
 
   useEffect(() => {
-    if (!visible || pushed.current) return;
+    if (!visible || pushed.current || !insRef.current || !containerRef.current) return;
 
     (async () => {
       await loadAdsenseScript();
-      try {
-        window.adsbygoogle = window.adsbygoogle || [];
-        window.adsbygoogle.push({});
-        pushed.current = true;
-      } catch {
-        // AdSense no cargado aun — silenciar error
-      }
+      // Esperar al siguiente frame para asegurar que el <ins> está en el DOM
+      requestAnimationFrame(() => {
+        if (!insRef.current || !insRef.current.parentElement) return;
+        try {
+          window.adsbygoogle = window.adsbygoogle || [];
+          window.adsbygoogle.push({});
+          pushed.current = true;
+        } catch {
+          // AdSense no cargado aun — silenciar error
+        }
+      });
     })();
   }, [visible]);
 

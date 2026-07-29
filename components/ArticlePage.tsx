@@ -19,6 +19,7 @@ import ReadingProgress from './ReadingProgress';
 import ArticleFaq from './ArticleFaq';
 import type { Noticia } from '@/lib/types';
 import { AUTHORS } from '@/lib/authors';
+import '@/app/article-page.css';
 
 /* Lazy-load componentes pesados que no están en el viewport inicial */
 const AudioButton = lazy(() => import('./AudioButton'));
@@ -101,12 +102,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const enhancedHtml = enhanceArticleHtml(processedHtml, SITE_CONFIG.url);
   const showToc = tocItems.length >= 3;
 
-  // Container principal
-  const containerStyle: React.CSSProperties = {
-    maxWidth: 980,
-    margin: '0 auto',
-    padding: '28px 20px 80px',
-  };
+  // Container principal (estilos en article-page.css)
 
   const metaStyle: React.CSSProperties = {
     display: 'flex',
@@ -150,16 +146,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     transition: 'background-color 0.15s, color 0.15s',
   };
 
-  const imgContainerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    aspectRatio: '16 / 9',
-    maxHeight: 520,
-    borderRadius: 14,
-    overflow: 'hidden',
-    backgroundColor: '#f3f4f6',
-    boxShadow: '0 20px 50px -18px rgba(15,23,42,0.32)',
-  };
+  // Imagen destacada (estilos en article-page.css)
 
   const captionStyle: React.CSSProperties = {
     position: 'relative',
@@ -217,7 +204,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <article style={containerStyle} itemScope itemType="https://schema.org/NewsArticle">
+      <article className="article-page" itemScope itemType="https://schema.org/NewsArticle">
         {/* Breadcrumb */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#6b7280', marginBottom: 16 }} aria-label="Miga de pan">
           <Link href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Inicio</Link>
@@ -310,7 +297,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
           <figure style={{ margin: 0, marginBottom: 8 }} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
-            <div style={imgContainerStyle}>
+            <div className="article-hero-img">
               <meta itemProp="url" content={noticia.imagen} />
               <OptimizedImage
                 src={getResponsiveImageUrl(noticia.imagen)}
