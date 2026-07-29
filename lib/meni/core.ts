@@ -29,6 +29,7 @@ import {
 import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
+import { getPerfilEditorial } from '@/lib/meni/editorial-profiles';
 import { buildEditorialReason } from '@/lib/meni/editorial-reason';
 import type { ActiveAdjustments } from '@/lib/meni/learning-engine/learning-adapter';
 
@@ -56,6 +57,17 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria: input.categoria,
   });
   let thresholds = { ...TIER_THRESHOLDS[tier] };
+
+  // Aplicar criterios del perfil editorial según tipo_noticia_detectada
+  const perfilCategoria = normalizeCategory(input.categoria || 'General');
+  const perfil = getPerfilEditorial(perfilCategoria);
+  thresholds = {
+    ...thresholds,
+    exigeServiceValue: perfil.bloqueaPorServicio,
+    exigeContexto: perfil.exigeContexto,
+    exigeDifferentialValue: perfil.exigeDiferencial,
+    minPalabras: Math.max(thresholds.minPalabras, perfil.minPalabras),
+  };
 
   // Aplicar overrides del Learning Engine si existen
   if (activeAdjustments?.tierOverrides?.[tier]) {

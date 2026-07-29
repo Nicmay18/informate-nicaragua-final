@@ -6,6 +6,7 @@
  */
 
 import type { EntityMap, QualityGateIssue } from './types';
+import { getPerfilEditorial } from '../editorial-profiles';
 import {
   TERMINOLOGY_VARIANTS,
   FILLER_WORDS,
@@ -234,18 +235,18 @@ export function detectSensationalism(textoPlano: string): QualityGateIssue[] {
   return issues;
 }
 
-export function detectServiceValue(textoPlano: string): QualityGateIssue[] {
+export function detectServiceValue(categoria: string, textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
   const lower = textoPlano.toLowerCase();
-  const tieneServicio =
-    /\bqué\s+hacer\b|\bcómo\s+afecta\b|\bqué\s+significa\b|\bqué\s+cambia\b|\bprevención\b|\brecomendacion|\bantecedente|\bcontexto\b|\bdijeron\s+las\s+autoridades\b|\bautoridades\s+(informaron|indicaron|explicaron)\b/i.test(
-      lower
-    );
-  if (!tieneServicio) {
+  const perfil = getPerfilEditorial(categoria);
+
+  // El servicio se evalúa con los patrones de la categoría detectada, nunca con plantilla universal
+  const cumple = perfil.servicio.length > 0 && perfil.servicio.some((r) => r.test(lower));
+  if (!cumple) {
     issues.push({
       categoria: 'servicio',
-      severidad: 'blocking',
-      mensaje: 'La nota no responde qué hacer, qué significa, qué cambia o no da contexto/antecedentes útiles para el lector.',
+      severidad: perfil.bloqueaPorServicio ? 'blocking' : 'warning',
+      mensaje: perfil.mensajeServicioFaltante,
       corregible: false,
     });
   }

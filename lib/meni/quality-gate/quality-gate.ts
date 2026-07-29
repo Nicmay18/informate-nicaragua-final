@@ -64,7 +64,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const transcription = detectParagraphTranscription(input.contenido, input.fuenteOriginal);
 
   if (input.stage === 'POST_LLM') {
-    issues = [...issues, ...detectServiceValue(textoPlano)];
+    issues = [...issues, ...detectServiceValue(input.categoria, textoPlano)];
     issues = [...issues, ...transcription.issues];
     if (porQueLeerAqui !== undefined) {
       issues = [...issues, ...detectDifferentialValue(porQueLeerAqui)];
