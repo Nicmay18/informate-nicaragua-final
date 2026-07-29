@@ -361,6 +361,11 @@ export interface VeredictoEditorJefe {
 
 export type RecomendacionEditorial = 'publicar' | 'mejorar' | 'revisar';
 
+export interface PuntoPerdido {
+  concepto: string;
+  puntos: number;
+}
+
 export type EstadoEditorial =
   | 'excelente'
   | 'muy_buena'
@@ -395,6 +400,7 @@ export interface EditorialDecision {
   motivoBloqueo: string | null;
   llmInstructions: LlmInstructions;
   editorialDna: EditorialDnaResult;
+  puntosPerdidos: PuntoPerdido[];
   // ─────────────────────────────────────────────────────────────
   // Campos planos — única fuente de verdad para UI y engine.ts
   // Todo el sistema deriva de estos campos, no de los sub-motores.

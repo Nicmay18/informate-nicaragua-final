@@ -11,7 +11,7 @@
  * Solo después el LLM escribe siguiendo las decisiones.
  */
 
-import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe } from './types';
+import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido } from './types';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
 import { runNicaraguaInformateEngine } from './nicaragua-informate-engine';
@@ -208,6 +208,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     bloquear,
     motivoBloqueo,
     llmInstructions,
+    puntosPerdidos: [],
   };
 
   const editorialDna = computeEditorialDNA({
@@ -219,12 +220,27 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     pesosSelloNI: profile.pesosSelloNI,
     umbralesBloqueo: profile.umbralesBloqueo,
   });
-  const score = editorialDna.adnNI;
+
+  // Acciones y puntos perdidos determinan el score ejecutivo transparente.
+  const acciones = diagnostico.queLeFaltaParaReferencia.length > 0
+    ? diagnostico.queLeFaltaParaReferencia
+    : utilityGate.recomendacionesEditoriales.length > 0
+    ? utilityGate.recomendacionesEditoriales
+    : ['Lista para publicar'];
+
+  const { score, puntosPerdidos } = calcularScoreEjecutivo(
+    acciones,
+    editorialDna.bloquear || tieneProblemasGraves,
+  );
   const minScore = input.tierThresholds?.minAdnNI ?? 60;
 
-  // If DNA blocks, upgrade recommendation to 'revisar'
+  // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
   const finalRecomendacion: RecomendacionEditorial =
-    editorialDna.bloquear ? 'revisar' : recomendacionEditorial;
+    editorialDna.bloquear || tieneProblemasGraves || score < 75
+      ? 'revisar'
+      : score < 95
+      ? 'mejorar'
+      : 'publicar';
 
   // Estado Editorial — veredicto periodístico, no número
   const estadoEditorial: EstadoEditorial =
@@ -264,11 +280,6 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
       : estadoEditorial === 'necesita_explicacion'
       ? 'MEDIO'
       : 'ALTO';
-  const acciones = diagnostico.queLeFaltaParaReferencia.length > 0
-    ? diagnostico.queLeFaltaParaReferencia
-    : utilityGate.recomendacionesEditoriales.length > 0
-    ? utilityGate.recomendacionesEditoriales
-    : ['Lista para publicar'];
 
   // ─────────────────────────────────────────────────────────────
   // Fase 1: Aprendizaje del Editor
@@ -303,6 +314,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     bloquear: bloquearFinal,
     motivoBloqueo: finalMotivoBloqueo,
     editorialDna,
+    puntosPerdidos,
     valeLaPenaPublicar,
     motivoPrincipal,
     aportaAlLector,
@@ -394,4 +406,38 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
   };
 }
 
-export type { EditorialDecision, EditorialBrainInput, LlmInstructions } from './types';
+export type { EditorialDecision, EditorialBrainInput, LlmInstructions, PuntoPerdido } from './types';
+
+function calcularScoreEjecutivo(
+  acciones: string[],
+  bloquear: boolean,
+): { score: number; puntosPerdidos: PuntoPerdido[] } {
+  const puntosPerdidos: PuntoPerdido[] = [];
+  for (const accion of acciones) {
+    if (accion === 'Lista para publicar') continue;
+    const baja = accion.toLowerCase();
+    let puntos = 5;
+    if (baja.includes('transcrib') || baja.includes('boletín') || baja.includes('copia') || baja.includes('plagiar')) {
+      puntos = 10;
+    } else if (baja.includes('sensacionalismo') || baja.includes('clickbait') || baja.includes('prohibida')) {
+      puntos = 8;
+    } else if (baja.includes('contexto') || baja.includes('antecedente') || baja.includes('historia')) {
+      puntos = 7;
+    } else if (baja.includes('explic') || baja.includes('por qué') || baja.includes('significado') || baja.includes('consecuencia')) {
+      puntos = 6;
+    } else if (baja.includes('servicio') || baja.includes('utilidad') || baja.includes('qué hacer') || baja.includes('impacto')) {
+      puntos = 6;
+    } else if (baja.includes('dato') || baja.includes('cifra') || baja.includes('nombre') || baja.includes('fuente')) {
+      puntos = 4;
+    } else if (baja.includes('longitud') || baja.includes('extensión') || baja.includes('relleno') || baja.includes('redacción')) {
+      puntos = 3;
+    }
+    puntosPerdidos.push({ concepto: accion, puntos });
+  }
+
+  let score = 100 - puntosPerdidos.reduce((s, p) => s + p.puntos, 0);
+  // Si el DNA o problemas graves bloquean, el score no puede fingir aprobación.
+  if (bloquear) score = Math.min(score, 74);
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  return { score, puntosPerdidos };
+}

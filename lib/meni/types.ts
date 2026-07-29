@@ -129,6 +129,7 @@ export interface MeniResult {
   scoreFinal: number;
   aprobado: boolean;
   calificacion: string;
+  puntosPerdidos?: { concepto: string; puntos: number }[];
   recomendaciones: MeniRecomendacion[];
   // Estado Editorial — veredicto periodístico
   estadoEditorial?: EstadoEditorial;
@@ -167,6 +168,7 @@ export interface EditorialDecisionFlat {
   servicio: string;
   riesgoEditorial: 'BAJO' | 'MEDIO' | 'ALTO';
   acciones: string[];
+  puntosPerdidos?: { concepto: string; puntos: number }[];
   // Editor Jefe
   patronesAplicados: { campo: string; descripcion: string; frecuencia: number }[];
   correccionesSugeridas: string[];
@@ -204,6 +206,7 @@ export interface EditorialDecisionFlat {
     valorFrenteCompetencia: string;
     riesgoEditorial: string;
     queFalta: string[];
+    puntosPerdidos?: { concepto: string; puntos: number }[];
     recomendacionPortada: string;
     probabilidadFacebook: string;
     probabilidadDiscover: string;

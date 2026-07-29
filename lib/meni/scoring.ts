@@ -19,11 +19,11 @@ export function computePriority(veredicto: string): MeniPrioridad {
 }
 
 export function scoreToGrade(score: number): string {
-  if (score >= 98) return 'A+';
-  if (score >= 95) return 'A';
-  if (score >= 90) return 'B+';
-  if (score >= 85) return 'B';
-  if (score >= 80) return 'C';
+  if (score >= 98) return 'Excelente';
+  if (score >= 95) return 'Muy buena';
+  if (score >= 90) return 'Publicable';
+  if (score >= 85) return 'Mejorable';
+  if (score >= 75) return 'No publicar';
   return 'F';
 }
 

@@ -239,6 +239,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     scoreFinal,
     aprobado: aprobadoFinal,
     calificacion,
+    puntosPerdidos: editorialDecision.puntosPerdidos,
     recomendaciones: recomendacionesFinal,
     // Estado Editorial — veredicto periodístico del editor
     estadoEditorial: editorialDecision.estadoEditorial,
@@ -258,6 +259,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
       servicio: editorialDecision.servicio,
       riesgoEditorial: editorialDecision.riesgoEditorial,
       acciones: editorialDecision.acciones,
+      puntosPerdidos: editorialDecision.puntosPerdidos,
       patronesAplicados: editorialDecision.patronesAplicados.map(p => ({ campo: p.campo, descripcion: p.descripcion, frecuencia: p.frecuencia })),
       correccionesSugeridas: editorialDecision.correccionesSugeridas,
       ranking: editorialDecision.ranking,

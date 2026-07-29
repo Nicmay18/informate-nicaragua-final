@@ -168,6 +168,21 @@ export default function MeniPage() {
                   </div>
                   <p className="text-slate-700 mb-6 leading-relaxed">{result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
 
+                  {result.puntosPerdidos && result.puntosPerdidos.length > 0 && (
+                    <div className="mb-6 rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Puntos perdidos</p>
+                      <ul className="space-y-2 text-sm">
+                        {result.puntosPerdidos.map((p, i) => (
+                          <li key={i} className="flex justify-between">
+                            <span className="text-slate-700">• {p.concepto}</span>
+                            <span className="font-semibold text-red-600">-{p.puntos}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-2 text-xs text-slate-500 text-right">Total: -{result.puntosPerdidos.reduce((s, p) => s + p.puntos, 0)}</p>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="rounded-lg bg-white p-4 shadow-sm">
                       <p className="text-xs font-semibold text-slate-500 mb-1">Portada</p>
