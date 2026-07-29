@@ -1,4 +1,5 @@
-import HomePageV2 from '@/components/pro/HomePageV2';
+import '@/app/home-redesign.css';
+import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -94,7 +95,7 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      <HomePageV2 noticias={noticias} masLeidas={masLeidas} populares={populares} />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
     </>
   );
 }
