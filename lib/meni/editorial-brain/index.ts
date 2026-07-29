@@ -184,7 +184,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     objetivoPedagogico: readerJourney.objetivoPedagogico,
   };
 
-  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'readerLearning' | 'editorialContribution' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'> = {
+  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'readerLearning' | 'editorialContribution' | 'fuentesFaltan' | 'journalistChecklist' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'> = {
     newsValue,
     competition,
     nicaraguaInformate,
@@ -299,6 +299,9 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Aplicar patrones aprendidos del editor humano
   // ─────────────────────────────────────────────────────────────
   const categoriaForPatterns = input.categoriaSugerida || input.categoria || 'General';
+
+  const { fuentesFaltan, journalistChecklist } = construirJournalistChecklist(input, diagnostico, categoriaForPatterns);
+
   const { patronesAplicados, correccionesSugeridas } = applyPatternsToDiagnostic(
     input.editorPatterns || [],
     categoriaForPatterns,
@@ -340,6 +343,8 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     acciones,
     readerLearning,
     editorialContribution,
+    fuentesFaltan,
+    journalistChecklist,
     patronesAplicados,
     correccionesSugeridas,
     ranking: {} as EditorialRanking, // placeholder, computed below
@@ -419,6 +424,8 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
     worthReading,
     loQueOtrosNoContaran,
     wowIdea,
+    fuentesFaltan: d.fuentesFaltan,
+    journalistChecklist: d.journalistChecklist,
     valorParaLector: d.aportaAlLector,
     valorFrenteCompetencia: d.diferenciaCompetencia,
     riesgoEditorial: d.riesgoEditorial,
@@ -536,4 +543,76 @@ function extraerIdeaWow(...fuentes: string[]): string {
 
   const mejor = frases.sort((a, b) => puntuar(b) - puntuar(a))[0];
   return mejor.replace(/\.*$/, '') + '.';
+}
+
+function construirJournalistChecklist(
+  input: EditorialBrainInput,
+  diagnostico: { contextoFalta: string[]; queLeFaltaParaReferencia: string[] },
+  categoria: string,
+): { fuentesFaltan: string[]; journalistChecklist: string[] } {
+  const raw = `${input.titulo || ''} ${input.contenido || ''} ${input.resumen || ''}`;
+  const lower = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  const checklist: string[] = [];
+  const fuentesFaltan: string[] = [];
+
+  const add = (dato: string, pregunta: string, ...terms: string[]) => {
+    const found = terms.some(t => lower.includes(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+    if (!found) {
+      checklist.push(dato);
+      fuentesFaltan.push(`La fuente no responde: ${pregunta}`);
+    }
+  };
+
+  // Datos universales que toda nota debería poder responder
+  add('edad confirmada', '¿Qué edad tenía?', 'años', 'año', 'de edad');
+  add('identidad confirmada', '¿Quién era?', 'identificado', 'identificada', 'se trata de', 'nombre es', 'llamado', 'llamada');
+  add('versión oficial', '¿Qué dicen las autoridades?', 'policia', 'policía', 'ministerio publico', 'autoridades', 'fiscalía', 'fiscalia', 'comisionado', 'comisionada');
+  add('detenidos', '¿Hay detenidos?', 'detenido', 'detenidos', 'arrestado', 'arrestados', 'capturado', 'capturados');
+  add('móvil del hecho', '¿Qué motivó el hecho?', 'motivo', 'móvil', 'provocó', 'ocasionó', 'razón');
+  add('antecedentes', '¿Hay antecedentes?', 'antecedente', 'antecedentes', 'historial', 'registro', 'pasado');
+  add('consecuencias', '¿Qué consecuencias tiene?', 'consecuencia', 'impacto', 'afectó', 'provocó', 'resultó', 'dejó');
+  add('siguiente paso', '¿Qué sigue?', 'investigación', 'próximo', 'proximo', 'siguiente', 'continúa', 'continua', 'se investiga');
+
+  const cat = categoria.toLowerCase();
+  if (cat.includes('suceso')) {
+    add('lugar confirmado', '¿Dónde ocurrió exactamente?', 'barrio', 'colonia', 'km', 'kilómetro', 'dirección');
+    add('hora del hecho', '¿A qué hora ocurrió?', 'hora', 'de la madrugada', 'de la tarde', 'de la noche');
+    add('testigo o versión familiar', '¿Qué dicen testigos o familiares?', 'testigo', 'testigos', 'familiar', 'familiares', 'versión');
+  } else if (cat.includes('nacional')) {
+    add('institución responsable', '¿Qué institución interviene?', 'institución', 'ministerio', 'alcaldía', 'gobierno', 'municipio');
+    add('alcance de la medida', '¿A quiénes afecta?', 'beneficiarios', 'afectados', 'alcance', 'población');
+  } else if (cat.includes('internacional')) {
+    add('impacto para Nicaragua', '¿Afecta a Nicaragua?', 'nicaragua', 'impacto nicaragua', 'relación', 'vínculo');
+    add('datos oficiales del otro país', '¿Qué dicen autoridades del otro país?', 'gobierno', 'país', 'oficial');
+  } else if (cat.includes('deporte')) {
+    add('tabla o clasificación', '¿Cómo quedó la clasificación?', 'tabla', 'clasificación', 'puntos', 'posición');
+    add('siguiente partido', '¿Cuál es el siguiente partido?', 'próximo', 'siguiente partido', 'siguiente encuentro');
+  } else if (cat.includes('econom')) {
+    add('cifra concreta', '¿Cuál es la cifra exacta?', 'córdoba', 'dólar', 'millones', 'miles', 'cantidad', 'monto');
+    add('fuente oficial económica', '¿Quién confirmó la cifra?', 'banco', 'ministerio de hacienda', 'banco central', 'ine');
+  } else if (cat.includes('tecnolog')) {
+    add('cómo funciona', '¿Cómo funciona?', 'funciona', 'operación', 'cómo se usa', 'características');
+    add('disponibilidad en Nicaragua', '¿Llega a Nicaragua?', 'nicaragua', 'disponible', 'precio', 'lanzamiento');
+  } else if (cat.includes('espectáculo')) {
+    add('horarios', '¿Cuándo y a qué hora?', 'horario', 'hora', 'fecha', 'día');
+    add('precio y cómo asistir', '¿Cuánto cuesta y cómo asistir?', 'precio', 'entrada', 'boleto', 'cómo asistir', 'lugar');
+  }
+
+  // Si los sub-motores detectaron carencias concretas, las añadimos sin repetir
+  const extra = [
+    ...diagnostico.contextoFalta,
+    ...diagnostico.queLeFaltaParaReferencia,
+  ].filter(Boolean).filter(c =>
+    !checklist.some(item => c.toLowerCase().includes(item.toLowerCase()) || item.toLowerCase().includes(c.toLowerCase()))
+  );
+  if (extra.length > 0) {
+    checklist.push(...extra.slice(0, 4).map(c => c.trim()));
+    fuentesFaltan.push(...extra.slice(0, 4).map(c => `La fuente no aclara: ${c}`));
+  }
+
+  return {
+    fuentesFaltan: fuentesFaltan.slice(0, 9),
+    journalistChecklist: checklist.slice(0, 9),
+  };
 }

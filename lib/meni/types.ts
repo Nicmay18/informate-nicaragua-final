@@ -207,6 +207,8 @@ export interface EditorialDecisionFlat {
     worthReading: string;
     loQueOtrosNoContaran: string[];
     wowIdea: string;
+    fuentesFaltan: string[];
+    journalistChecklist: string[];
     valorParaLector: string;
     valorFrenteCompetencia: string;
     riesgoEditorial: string;

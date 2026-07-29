@@ -349,6 +349,8 @@ export interface VeredictoEditorJefe {
   worthReading: string; // por qué abrir Nicaragua Informate y no otro medio
   loQueOtrosNoContaran: string[]; // ángulos que probablemente no cubrirán otros medios
   wowIdea: string; // una sola idea con identidad
+  fuentesFaltan: string[]; // datos que la fuente no entrega
+  journalistChecklist: string[]; // guía para el periodista antes de redactar
   // Evidencia que alimenta el veredicto
   valorParaLector: string;
   valorFrenteCompetencia: string;
@@ -423,6 +425,9 @@ export interface EditorialDecision {
   // Filosofía editorial — respuestas obligatorias
   readerLearning: string;
   editorialContribution: string;
+  // Datos que la fuente aún no entrega
+  fuentesFaltan: string[];
+  journalistChecklist: string[];
   // ─────────────────────────────────────────────────────────────
   // Fase 1: Aprendizaje del Editor
   // Patrones detectados de correcciones manuales del editor humano.

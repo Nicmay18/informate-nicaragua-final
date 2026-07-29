@@ -197,6 +197,28 @@ export default function MeniPage() {
                     </div>
                   )}
 
+                  {result.editorialDecision.veredictoEjecutivo.journalistChecklist.length > 0 && (
+                    <div className="mb-6 rounded-lg bg-sky-50 p-4 border border-sky-100">
+                      <p className="text-xs font-bold uppercase text-sky-700 mb-2">Checklist del periodista — buscar antes de redactar</p>
+                      <ul className="space-y-1 text-sm">
+                        {result.editorialDecision.veredictoEjecutivo.journalistChecklist.map((item, i) => (
+                          <li key={i} className="text-slate-700">□ {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {result.editorialDecision.veredictoEjecutivo.fuentesFaltan.length > 0 && (
+                    <div className="mb-6 rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-bold uppercase text-slate-500 mb-2">Preguntas que la fuente aún no responde</p>
+                      <ul className="space-y-1 text-sm">
+                        {result.editorialDecision.veredictoEjecutivo.fuentesFaltan.map((q, i) => (
+                          <li key={i} className="text-slate-700">• {q}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="rounded-lg bg-white p-4 shadow-sm">
                       <p className="text-xs font-semibold text-slate-500 mb-1">Portada</p>
