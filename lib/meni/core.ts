@@ -122,18 +122,27 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   });
 
   // ═══════════════════════════════════════════════════════════
-  // 3. QUALITY GATE — verificación técnica, puede bloquear
+  // 3. QUALITY GATE — verificación técnica, puede reportar issues
+  // Ahora recibe la decisión editorial como fuente de verdad para
+  // evitar recalcular originalidad, servicio o score.
   // ═══════════════════════════════════════════════════════════
   const qualityGate = runQualityGate({
     titulo: input.titulo,
     contenido: input.contenido,
     categoria,
     stage: 'POST_LLM',
+    sourceOfTruth: {
+      score: editorialDecision.score,
+      originalidad: editorialDecision.editorialDna.selloNI.originalidad,
+      servicio: editorialDecision.editorialDna.selloNI.servicio,
+      bloqueado: editorialDecision.bloquear,
+    },
   });
 
   const palabrasTexto = textoPlano.split(/\s+/).filter(Boolean).length;
 
-  // Quality Gate: solo bloquear por service value si el tier lo exige
+  // Quality Gate: solo bloquear por issues técnicos/factuales que el
+  // Editorial Brain no evalúa (contradicciones, cronología, duplicados).
   const tierBlockingIssues = qualityGate.issues.filter((i) => {
     if (i.severidad !== 'blocking') return true;
     if (i.categoria === 'servicio' && !thresholds.exigeServiceValue) return false;
@@ -141,8 +150,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     return true;
   });
 
-  const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking')
-    || qualityGate.motivosBloqueo.length > 0 && tierBlockingIssues.some((i) => i.severidad === 'blocking');
+  const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking');
 
   const adnTranscripcionBloquear =
     (qualityGate.explanationIndex?.porcentajeTranscripcion ?? 0) > thresholds.maxTranscripcion;
@@ -153,9 +161,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // ═══════════════════════════════════════════════════════════
   const scoreFinal = editorialDecision.score;
   const aprobadoFinal = scoreFinal >= MIN_APPROVED_SCORE
+    && !editorialDecision.bloquear
     && !tierQualityGateBloqueado
-    && !adnTranscripcionBloquear
-    && qualityGate.editorScore >= thresholds.minQualityGateScore;
+    && !adnTranscripcionBloquear;
 
   const calificacion = scoreToGrade(scoreFinal);
   const prioridad = computePriority(evaluacion.veredicto);

@@ -49,6 +49,7 @@ function discoverListo(titulo: string, contenidoHtml: string): boolean {
 export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string): QualityGateResult {
   const textoPlano = stripHtml(`${input.titulo} ${input.contenido}`);
   const entidades = extractEntities(textoPlano);
+  const useSource = input.sourceOfTruth != null;
 
   let issues: QualityGateIssue[] = [
     ...detectInternalContradictions(entidades),
@@ -63,7 +64,8 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   // Detector de transcripción párrafo a párrafo (requiere fuente original)
   const transcription = detectParagraphTranscription(input.contenido, input.fuenteOriginal);
 
-  if (input.stage === 'POST_LLM') {
+  if (input.stage === 'POST_LLM' && !useSource) {
+    // Solo cuando no hay fuente de verdad editorial se evalúan estos criterios aquí.
     issues = [...issues, ...detectServiceValue(input.categoria, textoPlano)];
     issues = [...issues, ...transcription.issues];
     if (porQueLeerAqui !== undefined) {
@@ -82,12 +84,24 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const issuesRestantes = issues.filter((i) => !(i.corregible && categoriasCorregidas.has(i.categoria)));
 
   const explanationIndex = computeExplanationIndex(textoPlano, input.fuenteOriginal, input.categoria);
-  const originalidadPorcentaje = computeOriginalityPercent(explanationIndex);
-  const { score, bloqueado, motivosBloqueo } = computeEditorScore(
-    issuesRestantes,
-    explanationIndex,
-    originalidadPorcentaje
-  );
+
+  // Si Editorial Brain ya decidió, usamos su veredicto y no volvemos a calcular originalidad/score.
+  let originalidadPorcentaje: number;
+  let editorScore: number;
+  let bloqueado: boolean;
+  let motivosBloqueo: string[];
+  if (useSource) {
+    originalidadPorcentaje = input.sourceOfTruth!.originalidad;
+    editorScore = input.sourceOfTruth!.score;
+    bloqueado = input.sourceOfTruth!.bloqueado;
+    motivosBloqueo = [];
+  } else {
+    originalidadPorcentaje = computeOriginalityPercent(explanationIndex);
+    const scoreResult = computeEditorScore(issuesRestantes, explanationIndex, originalidadPorcentaje);
+    editorScore = scoreResult.score;
+    bloqueado = scoreResult.bloqueado;
+    motivosBloqueo = scoreResult.motivosBloqueo;
+  }
 
   return {
     stage: input.stage,
@@ -100,7 +114,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     originalidadPorcentaje,
     ctrEstimadoFacebook: estimarCtrFacebook(input.titulo, textoPlano),
     discoverListo: discoverListo(input.titulo, textoCorregido),
-    editorScore: score,
+    editorScore,
     textoCorregido,
     transcriptionReport: transcription.report ?? undefined,
     timestamp: new Date().toISOString(),

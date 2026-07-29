@@ -3,7 +3,6 @@ import type { QualityGateIssue, QualityGateResult } from './quality-gate/types';
 import type { EditorialDnaResult } from './editorial-dna/types';
 import { MIN_APPROVED_SCORE } from './scoring';
 import {
-  MAX_TRANSCRIPTION_PERCENT,
   MIN_ORIGINALITY_PERCENT,
   MIN_EXPLANATION_SCORE,
 } from './quality-gate/rules';
@@ -139,33 +138,9 @@ function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
   };
 }
 
-function originalidadBlocker(current: number): MeniBlockingIssue {
-  return {
-    code: 'QUALITY_GATE_ORIGINALITY',
-    module: 'quality-gate',
-    severity: 'BLOCKER',
-    title: 'Originalidad demasiado baja',
-    description: `La originalidad de la nota es ${current}%, inferior al mínimo requerido.`,
-    currentValue: `${current}%`,
-    expectedValue: `≥ ${MIN_ORIGINALITY_PERCENT}%`,
-    howToFix: 'Agregar explicación propia. Agregar contexto. Reducir texto transcrito.',
-    field: 'contenido',
-  };
-}
-
-function transcripcionBlocker(current: number): MeniBlockingIssue {
-  return {
-    code: 'QUALITY_GATE_TRANSCRIPTION',
-    module: 'quality-gate',
-    severity: 'BLOCKER',
-    title: 'Transcripción excesiva',
-    description: `El porcentaje de transcripción de la fuente es ${current}%, superior al máximo permitido.`,
-    currentValue: `${current}%`,
-    expectedValue: `≤ ${MAX_TRANSCRIPTION_PERCENT}%`,
-    howToFix: 'Parafrasear la fuente en lugar de copiar bloques de texto. Aportar análisis propio.',
-    field: 'contenido',
-  };
-}
+// ─────────────────────────────────────────────────────────────
+// Builder principal
+// ─────────────────────────────────────────────────────────────
 
 export function buildMeniDiagnostics(opts: {
   qualityGate?: QualityGateResult;
@@ -187,13 +162,8 @@ export function buildMeniDiagnostics(opts: {
       }
     }
 
-    if (qg.originalidadPorcentaje < MIN_ORIGINALITY_PERCENT) {
-      blockingIssues.push(originalidadBlocker(qg.originalidadPorcentaje));
-    }
-
-    if (qg.explanationIndex && qg.explanationIndex.porcentajeTranscripcion > MAX_TRANSCRIPTION_PERCENT) {
-      blockingIssues.push(transcripcionBlocker(qg.explanationIndex.porcentajeTranscripcion));
-    }
+    // Originalidad y transcripción ya se deciden desde Editorial DNA / Editorial Brain.
+    // No duplicar blockers aquí para evitar mostrar valores contradictorios.
   }
 
   if (opts.editorialDna) {

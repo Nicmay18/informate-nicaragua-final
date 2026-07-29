@@ -93,4 +93,12 @@ export interface QualityGateInput {
   fuenteOriginal?: string;
   entidadesPrevias?: EntityMap;
   stage: QualityGateStage;
+  /** Source of truth from Editorial Brain; when present, Quality Gate will not
+   *  recompute originality/service/score and will use these values instead. */
+  sourceOfTruth?: {
+    score: number;
+    originalidad: number;
+    servicio: number;
+    bloqueado: boolean;
+  };
 }
