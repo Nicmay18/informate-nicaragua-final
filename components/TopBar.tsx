@@ -32,9 +32,15 @@ export default function TopBar() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('https://wttr.in/Managua?format=%t&lang=es', { headers: { Accept: 'text/plain' } })
-      .then(r => r.text())
-      .then(t => { if (!cancelled && t) setTemp(t.trim()); })
+    fetch('/api/weather?lat=12.1328&lon=-86.2504', { cache: 'no-store' })
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        const temp = data?.current?.temperature_2m;
+        if (!cancelled && typeof temp === 'number') {
+          const unit = data?.current_units?.temperature_2m ?? '°C';
+          setTemp(`${Math.round(temp)}${unit}`);
+        }
+      })
       .catch(() => {});
     return () => { cancelled = true; };
   }, []);

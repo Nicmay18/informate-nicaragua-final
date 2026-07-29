@@ -3,7 +3,6 @@ import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
-import { getHeroImageUrl } from '@/lib/image-utils';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
@@ -72,9 +71,6 @@ export default async function HomePage() {
     logger.error('[HomePage] Error:', error);
   }
 
-  const heroSrc400 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 400) : null;
-  const heroSrc800 = noticias[0]?.imagen ? getHeroImageUrl(noticias[0].imagen, 800) : null;
-
   // Top 6 noticias para structured data (Google puede mostrarlas en rich snippets / Top Stories)
   const topStories = noticias.slice(0, 6);
   const homeItemList = topStories.length > 0
@@ -93,16 +89,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {heroSrc400 && heroSrc800 && (
-        <link
-          rel="preload"
-          as="image"
-          imageSrcSet={`${heroSrc400} 400w, ${heroSrc800} 800w`}
-          imageSizes="(max-width: 768px) 100vw, 580px"
-          type="image/webp"
-          crossOrigin="anonymous"
-        />
-      )}
       {homeItemList && (
         <script
           type="application/ld+json"

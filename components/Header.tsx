@@ -8,6 +8,7 @@ const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
+import { RelativeTime } from '@/components/ClientTime';
 
 const CATEGORIES = [
   { slug: 'sucesos', label: 'Sucesos' },
@@ -24,17 +25,6 @@ const NAV_LINKS = [
 ];
 
 type MiniNoticia = { id: string; slug: string; titulo: string; fecha?: string };
-
-function tiempoCorto(fecha?: string): string {
-  if (!fecha) return '';
-  const diff = Date.now() - new Date(fecha).getTime();
-  const min = Math.floor(diff / 60000);
-  if (min < 60) return `hace ${min} min`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `hace ${h} h`;
-  const d = Math.floor(h / 24);
-  return `hace ${d} d`;
-}
 
 export default function Header() {
   const router = useRouter();
@@ -145,7 +135,7 @@ export default function Header() {
                               <li key={n.id}>
                                 <NoPrefetchLink href={`/noticias/${n.slug}`} className="ni-nav-dropdown__link">
                                   <span className="ni-nav-dropdown__title">{n.titulo}</span>
-                                  {n.fecha && <span className="ni-nav-dropdown__time">{tiempoCorto(n.fecha)}</span>}
+                                  {n.fecha && <span className="ni-nav-dropdown__time"><RelativeTime date={n.fecha} /></span>}
                                 </NoPrefetchLink>
                               </li>
                             ))

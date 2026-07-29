@@ -4,9 +4,10 @@ import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Noticia } from '@/lib/types';
-import { tiempoRelativo, tiempoLectura } from '@/lib/formateo';
+import { tiempoLectura } from '@/lib/formateo';
 import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
+import { RelativeTime, FullRelativeTime } from '@/components/ClientTime';
 import dynamic from 'next/dynamic';
 
 interface HomePageProProps {
@@ -77,17 +78,6 @@ function distribuirNoticias(noticias: Noticia[]) {
     espectaculos: seccion('Espectáculos'),
     excluidos: new Set(usados),
   };
-}
-
-function tiempoCorto(fecha?: string): string {
-  if (!fecha) return '';
-  const diff = Date.now() - new Date(fecha).getTime();
-  const min = Math.floor(diff / 60000);
-  if (min < 60) return `hace ${min} min`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `hace ${h} h`;
-  const d = Math.floor(h / 24);
-  return `hace ${d} d`;
 }
 
 export default function HomePagePro({ noticias, masLeidas = [], populares = [], isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
@@ -179,7 +169,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
               <div className="rd-byline">
                 {hero.autor && <span>{hero.autor.split(' ').slice(0, 2).join(' ')}</span>}
                 {hero.autor && <span className="rd-sep" />}
-                <span>{tiempoRelativo(hero.fecha)}</span>
+                <FullRelativeTime date={hero.fecha} />
                 <span className="rd-sep" />
                 <span>{tiempoLectura(hero.contenido || hero.resumen || '')} min de lectura</span>
               </div>
@@ -193,7 +183,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
                     {n.categoria}
                   </span>
                   <h3><Link href={`/noticias/${n.slug}`}>{n.titulo}</Link></h3>
-                  <time>{tiempoCorto(n.fecha)}</time>
+                  <RelativeTime date={n.fecha} />
                 </div>
               ))}
             </aside>
@@ -244,7 +234,7 @@ function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug
           </Link>
           <h3><Link href={`/noticias/${principal.slug}`}>{principal.titulo}</Link></h3>
           {principal.resumen && <p>{principal.resumen}</p>}
-          <div className="rd-byline"><span>{tiempoCorto(principal.fecha)}</span></div>
+          <div className="rd-byline"><RelativeTime date={principal.fecha} /></div>
         </article>
         <div className="rd-story-secondary">
           {secundarias.slice(0, 2).map((n) => (
@@ -260,7 +250,7 @@ function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug
               </Link>
               <div>
                 <h4><Link href={`/noticias/${n.slug}`}>{n.titulo}</Link></h4>
-                <time>{tiempoCorto(n.fecha)}</time>
+                <RelativeTime date={n.fecha} />
               </div>
             </article>
           ))}
