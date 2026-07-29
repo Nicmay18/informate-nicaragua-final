@@ -18,6 +18,9 @@ interface HomePageProProps {
 }
 
 function distribuirNoticias(noticias: Noticia[]) {
+  const sorted = [...noticias].sort((a, b) =>
+    new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+  );
   const usados = new Set<string>();
 
   const take = (lista: Noticia[], n: number) => {
@@ -32,7 +35,7 @@ function distribuirNoticias(noticias: Noticia[]) {
     return resultado;
   };
 
-  const disponibles = () => noticias.filter(n => !usados.has(n.id));
+  const disponibles = () => sorted.filter(n => !usados.has(n.id));
   const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
   const conImagen = (lista: Noticia[]) => lista.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
 
@@ -55,15 +58,15 @@ function distribuirNoticias(noticias: Noticia[]) {
   const heroNoticias = portadaMeta.slice(0, 1);
   const enPortada = portadaMeta.slice(1, 5);
 
-  const breaking = take(disponibles().filter(n => n.categoria !== 'Sucesos').slice(0, 3), 3);
-  if (breaking.length < 3) breaking.push(...take(disponibles(), 3 - breaking.length));
+  // Última hora: las 3 más recientes disponibles, sin excluir categoría
+  const breaking = take(disponibles().slice(0, 5), 3);
 
   const seccion = (cat: string, min = 1) => {
     const items = take(porCategoria(cat), 3);
     return items.length >= min ? items : [];
   };
 
-  const recientes = disponibles().slice(0, 3);
+  const recientes = take(disponibles(), 3);
 
   return {
     heroNoticias,
@@ -122,12 +125,15 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
     <div className="rd-home">
       {/* Breaking bar */}
       {dist.breaking.length > 0 && (
-        <div className="rd-breaking">
+        <div className="rd-breaking" role="marquee" aria-label="Última hora">
           <div className="rd-breaking__inner">
             <span className="rd-breaking-tag"><span className="rd-dot" />Última hora</span>
             <div className="rd-breaking-list">
-              {dist.breaking.map((n) => (
-                <Link key={n.id} href={`/noticias/${n.slug}`}>{n.titulo}</Link>
+              {[...dist.breaking, ...dist.breaking, ...dist.breaking].map((n, idx) => (
+                <Link key={`${n.id}-${idx}`} href={`/noticias/${n.slug}`} className="rd-breaking-item">
+                  <span className="rd-breaking-dot" aria-hidden="true" />
+                  <span className="rd-breaking-title">{n.titulo}</span>
+                </Link>
               ))}
             </div>
           </div>

@@ -151,7 +151,10 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
         unique.set(n.slug, n);
       }
     }
-    return Array.from(unique.values());
+    // Ordenar por fecha descendente después de deduplicar (Map puede alterar el orden de Firestore)
+    return Array.from(unique.values()).sort((a, b) =>
+      new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+    );
   } catch (err) {
     logger.error('[data.ts] fetchNoticiasList error:', err instanceof Error ? err.message : String(err));
     return [];

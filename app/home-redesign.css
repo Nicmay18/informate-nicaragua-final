@@ -300,12 +300,18 @@
 .rd-breaking {
   background: var(--rd-ink);
   color: #fff;
+  overflow: hidden;
 }
-.rd-breaking .rd-wrap {
+.rd-breaking .rd-wrap,
+.rd-breaking__inner {
   display: flex;
   align-items: center;
   gap: 16px;
   height: 44px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  overflow: hidden;
 }
 .rd-breaking-tag {
   flex: none;
@@ -327,18 +333,41 @@
 .rd-breaking-list {
   display: flex;
   gap: 34px;
-  overflow: hidden;
   white-space: nowrap;
   font-size: 13.5px;
-  flex: 1;
+  flex: none;
   min-width: 0;
+  width: max-content;
+  animation: rd-marquee 35s linear infinite;
+  will-change: transform;
 }
-.rd-breaking-list a {
+.rd-breaking:hover .rd-breaking-list,
+.rd-breaking:focus-within .rd-breaking-list {
+  animation-play-state: paused;
+}
+@keyframes rd-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.3333%); }
+}
+.rd-breaking-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
   opacity: 0.92;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.rd-breaking-list a:hover {
+.rd-breaking-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--rd-accent);
+}
+.rd-breaking-title {
+  overflow: visible;
+  white-space: nowrap;
+}
+.rd-breaking-item:hover {
   opacity: 1;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -487,13 +516,15 @@
     gap: 12px;
   }
   .rd-breaking-list {
-    gap: 20px;
-    font-size: 12.5px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    gap: 24px;
+    font-size: 12px;
+    overflow: visible;
+    animation-duration: 22s;
   }
-  .rd-breaking-list::-webkit-scrollbar { display: none; }
+  .rd-breaking-dot {
+    width: 3px;
+    height: 3px;
+  }
   .rd-en-portada {
     padding: 16px 16px;
   }
