@@ -1,4 +1,5 @@
 import { loadProfile as loadLegacyProfile } from '../profile-loader';
+import { getCategoryProfileFields } from './category-intelligence';
 import type { EditorialProfile } from './types';
 
 const defaultModuleWeights = {
@@ -25,9 +26,11 @@ const defaultThresholds: Record<string, number> = {
 
 export function loadProfile(category: string): EditorialProfile {
   const legacy = loadLegacyProfile(category);
+  const intelligence = getCategoryProfileFields(category);
 
   return {
     ...legacy,
+    ...(intelligence ? intelligence : {}),
     scoreWeights: defaultModuleWeights,
     gates: defaultGates,
     editorialThreshold: defaultThresholds as EditorialProfile['editorialThreshold'],
