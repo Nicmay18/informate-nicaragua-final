@@ -61,8 +61,8 @@ export default function MeniPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">MENI — Diagnóstico editorial</h1>
-            <p className="text-slate-600">Veredicto editorial del editor y diagnóstico técnico de respaldo.</p>
+            <h1 className="text-3xl font-bold text-slate-900">Criterio Editorial</h1>
+            <p className="text-slate-600">El Editor Jefe decide si la historia merece publicarse en Nicaragua Informate.</p>
           </div>
           <div className="flex gap-2">
             <Link href="/admin/meni-dashboard" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
@@ -139,7 +139,7 @@ export default function MeniPage() {
                 disabled={loading}
                 className="w-full rounded-lg bg-slate-900 py-3 font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
               >
-                {loading ? 'Analizando...' : 'Auditoría MENI avanzada'}
+                {loading ? 'Analizando...' : 'Evaluar criterio editorial'}
               </button>
             </form>
             {error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-red-700">{error}</p>}
@@ -155,8 +155,8 @@ export default function MeniPage() {
               {result.editorialDecision?.veredictoEjecutivo && (
                 <div className={`rounded-2xl p-6 shadow border-l-4 ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'bg-green-50 border-green-500' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'bg-amber-50 border-amber-500' : 'bg-red-50 border-red-500'}`}>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-slate-800">MENI Editor Jefe Ejecutivo</h2>
-                    <span className="text-xs font-semibold text-slate-500">Confianza: {result.editorialDecision.veredictoEjecutivo.confianza}%</span>
+                    <h2 className="text-xl font-bold text-slate-800">Veredicto del Editor Jefe</h2>
+                    <span className="text-xs font-semibold text-slate-500">Score: {result.scoreFinal} · {result.calificacion}</span>
                   </div>
                   <div className="flex items-center gap-4 mb-6">
                     <div className={`text-4xl font-black ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'text-green-700' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'text-amber-700' : 'text-red-700'}`}>
@@ -166,7 +166,21 @@ export default function MeniPage() {
                       {result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'Se publica' : result.editorialDecision.veredictoEjecutivo.publicar === 'NO' ? 'No se publica' : 'Mejorar antes de publicar'}
                     </div>
                   </div>
-                  <p className="text-slate-700 mb-6 leading-relaxed">{result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
+                  <p className="text-slate-700 mb-4 leading-relaxed">{result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
+
+                  {result.editorialDecision.veredictoEjecutivo.wowIdea && result.editorialDecision.veredictoEjecutivo.wowIdea !== 'Nada' && (
+                    <div className="mb-4 rounded-lg bg-amber-50 p-4 border border-amber-100">
+                      <p className="text-xs font-bold uppercase text-amber-600 mb-1">Momento WOW</p>
+                      <p className="text-lg font-bold text-amber-900">{result.editorialDecision.veredictoEjecutivo.wowIdea}</p>
+                    </div>
+                  )}
+
+                  {result.editorialDecision.veredictoEjecutivo.worthReading && (
+                    <div className="mb-6 rounded-lg bg-white p-4 shadow-sm">
+                      <p className="text-xs font-bold uppercase text-slate-500 mb-1">¿Por qué abrir Nicaragua Informate?</p>
+                      <p className="text-base font-medium text-slate-800">{result.editorialDecision.veredictoEjecutivo.worthReading}</p>
+                    </div>
+                  )}
 
                   {result.puntosPerdidos && result.puntosPerdidos.length > 0 && (
                     <div className="mb-6 rounded-lg bg-white p-4 shadow-sm">
@@ -201,7 +215,7 @@ export default function MeniPage() {
                   {/* ¿Por qué? — evidencia desplegable */}
                   <details className="group rounded-lg bg-white/70 shadow-sm open:bg-white">
                     <summary className="cursor-pointer p-4 text-sm font-semibold text-slate-700 list-none flex items-center justify-between">
-                      <span>¿Por qué?</span>
+                      <span>Criterio Editorial</span>
                       <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
                     </summary>
                     <div className="px-4 pb-4 space-y-3 text-sm text-slate-700">
@@ -217,9 +231,31 @@ export default function MeniPage() {
                         <p className="text-xs font-semibold text-slate-500 mb-1">Riesgo editorial</p>
                         <p className={`font-semibold ${result.editorialDecision.veredictoEjecutivo.riesgoEditorial === 'BAJO' ? 'text-green-600' : result.editorialDecision.veredictoEjecutivo.riesgoEditorial === 'MEDIO' ? 'text-amber-600' : 'text-red-600'}`}>{result.editorialDecision.veredictoEjecutivo.riesgoEditorial}</p>
                       </div>
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">✓ ¿Vale la pena publicar?</p>
+                        <p>{result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'Sí' : result.editorialDecision.veredictoEjecutivo.publicar === 'NO' ? 'No' : 'Con mejoras'} — {result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">✓ ¿Qué aprende el lector?</p>
+                        <p>{result.editorialDecision.veredictoEjecutivo.readerLearning}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-slate-500 mb-1">✓ ¿Qué aporta Nicaragua Informate?</p>
+                        <p>{result.editorialDecision.veredictoEjecutivo.editorialContribution}</p>
+                      </div>
+                      {result.editorialDecision.veredictoEjecutivo.loQueOtrosNoContaran.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">✓ Lo que otros medios probablemente no contarán</p>
+                          <ul className="space-y-1">
+                            {result.editorialDecision.veredictoEjecutivo.loQueOtrosNoContaran.map((q, i) => (
+                              <li key={i}>• {q}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                       {result.editorialDecision.veredictoEjecutivo.queFalta.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold text-slate-500 mb-1">Qué falta / corregir</p>
+                          <p className="text-xs font-semibold text-slate-500 mb-1">✓ ¿Qué debería mejorar el periodista?</p>
                           <ul className="space-y-1">
                             {result.editorialDecision.veredictoEjecutivo.queFalta.map((q, i) => (
                               <li key={i}>• {q}</li>
@@ -471,16 +507,16 @@ export default function MeniPage() {
               {/* ADN NI — Sello editorial */}
               {result.editorialDna && (
                 <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-indigo-500">
-                  <h2 className="mb-4 text-lg font-semibold">ADN NI — Sello Editorial</h2>
+                  <h2 className="mb-4 text-lg font-semibold">APORTE AL LECTOR</h2>
                   <div className="mb-4 rounded-lg bg-indigo-50 p-4 text-center">
-                    <p className="text-xs font-semibold text-indigo-600">ADN Nicaragua Informate</p>
-                    <p className="text-3xl font-bold text-indigo-700">{result.editorialDna.adnNI}%</p>
+                    <p className="text-2xl font-bold text-indigo-700 tracking-widest">
+                      {Array.from({ length: Math.max(1, Math.min(5, Math.round(result.scoreFinal / 20))) }).map(() => '★').join('')}
+                    </p>
                   </div>
+                  <p className="text-sm text-slate-700 leading-relaxed mb-4">
+                    {result.editorialDecision?.veredictoEjecutivo?.editorialContribution || 'Sin aporte editorial.'}
+                  </p>
                   <div className="space-y-3 text-sm">
-                    <div className="flex items-center justify-between rounded-lg border p-3">
-                      <span className="font-medium text-slate-700">Exclusividad</span>
-                      <span className="font-bold text-slate-600">{result.editorialDna.exclusividad.score}/100</span>
-                    </div>
                     <div className="flex items-center justify-between rounded-lg border p-3">
                       <span className="font-medium text-slate-700">WOW (¿aprendió algo?)</span>
                       <span className="font-bold text-slate-600">{result.editorialDna.wow.score}/100</span>
@@ -530,7 +566,7 @@ export default function MeniPage() {
                   onClick={() => setShowTechnical(!showTechnical)}
                   className="flex w-full items-center justify-between text-left"
                 >
-                  <h2 className="text-sm font-semibold text-slate-500">Diagnóstico técnico de respaldo</h2>
+                  <h2 className="text-sm font-semibold text-slate-500">Herramientas técnicas de respaldo</h2>
                   <span className="text-xs text-slate-400">{showTechnical ? '▼ ocultar' : '▶ mostrar'}</span>
                 </button>
                 {showTechnical && (

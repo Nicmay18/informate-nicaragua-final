@@ -346,6 +346,9 @@ export interface VeredictoEditorJefe {
   respuestaEjecutiva: string; // frase del Editor Jefe
   readerLearning: string; // qué aprende el lector
   editorialContribution: string; // qué aporta Nicaragua Informate
+  worthReading: string; // por qué abrir Nicaragua Informate y no otro medio
+  loQueOtrosNoContaran: string[]; // ángulos que probablemente no cubrirán otros medios
+  wowIdea: string; // una sola idea con identidad
   // Evidencia que alimenta el veredicto
   valorParaLector: string;
   valorFrenteCompetencia: string;

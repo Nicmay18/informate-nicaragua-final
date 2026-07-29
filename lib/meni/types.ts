@@ -202,6 +202,11 @@ export interface EditorialDecisionFlat {
     publicar: string;
     confianza: number;
     respuestaEjecutiva: string;
+    readerLearning: string;
+    editorialContribution: string;
+    worthReading: string;
+    loQueOtrosNoContaran: string[];
+    wowIdea: string;
     valorParaLector: string;
     valorFrenteCompetencia: string;
     riesgoEditorial: string;

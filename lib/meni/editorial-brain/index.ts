@@ -404,12 +404,21 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
   const patronesAplicados = d.patronesAplicados.map(p => p.descripcion);
   const correccionesEditor = d.correccionesSugeridas;
 
+  const worthReading = d.editorialContribution === 'Nada'
+    ? 'No encuentro una razón.'
+    : d.editorialContribution;
+  const loQueOtrosNoContaran = d.acciones.filter(a => a !== 'Lista para publicar');
+  const wowIdea = extraerIdeaWow(d.diferenciaCompetencia, d.aportaAlLector, d.utilidadReal, d.explicacion);
+
   return {
     publicar,
     confianza,
     respuestaEjecutiva,
     readerLearning: d.readerLearning,
     editorialContribution: d.editorialContribution,
+    worthReading,
+    loQueOtrosNoContaran,
+    wowIdea,
     valorParaLector: d.aportaAlLector,
     valorFrenteCompetencia: d.diferenciaCompetencia,
     riesgoEditorial: d.riesgoEditorial,
@@ -505,4 +514,26 @@ function computarEditorialContribution(
   if (partes.length === 0) return 'Nada';
   const limpios = partes.slice(0, 3).map(s => s.trim().replace(/^[A-ZÁÉÍÓÚÑ]/, c => c.toLowerCase()));
   return `Porque ${limpios.join(', porque ')}.`;
+}
+
+function extraerIdeaWow(...fuentes: string[]): string {
+  const texto = fuentes.filter(Boolean).join('. ').replace(/\s+/g, ' ').trim();
+  if (!texto) return 'Nada';
+  const frases = texto.split(/(?<=[.!?])\s+/).filter(f => f.length > 10 && f.length < 180);
+  if (frases.length === 0) return texto.length <= 180 ? texto : texto.slice(0, 177) + '…';
+
+  const wowWords = ['miles', 'millones', 'mayor', 'mayores', 'primera', 'primero', 'único', 'nunca', 'siempre', 'todos', 'todas', 'nadie', 'cifra', 'registró', 'alcanzó', 'superó', 'renovación', 'emergencia', 'abandonar', 'histórico'];
+  const puntuar = (f: string) => {
+    let s = 0;
+    const nums = f.match(/\d[\d.,]*/g);
+    if (nums) s += Math.min(nums.length * 3, 12);
+    const lower = f.toLowerCase();
+    for (const w of wowWords) if (lower.includes(w)) s += 2;
+    if (/\b\d+\s+(?:personas|familias|niños|camiones|dólares|kilos|metros|viviendas|hogares)\b/.test(f)) s += 5;
+    if (f.length > 25 && f.length < 120) s += 1;
+    return s;
+  };
+
+  const mejor = frases.sort((a, b) => puntuar(b) - puntuar(a))[0];
+  return mejor.replace(/\.*$/, '') + '.';
 }
