@@ -88,7 +88,7 @@ button{cursor:pointer}
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:var(--transition);-webkit-font-smoothing:antialiased;padding-bottom:80px;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:var(--transition);-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
 
 /* ===== PREFERS-REDUCED-MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -526,7 +526,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
   /* Bottom nav visible en mobile */
   .bottom-nav{display:flex}
-  body{padding-bottom:68px}
+  body{padding-bottom:env(safe-area-inset-bottom,0px)}
 
   /* Hero mobile */
   .hero-editorial-media{min-height:240px}

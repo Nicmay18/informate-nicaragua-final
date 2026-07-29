@@ -330,9 +330,13 @@
   overflow: hidden;
   white-space: nowrap;
   font-size: 13.5px;
+  flex: 1;
+  min-width: 0;
 }
 .rd-breaking-list a {
   opacity: 0.92;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .rd-breaking-list a:hover {
   opacity: 1;
@@ -419,6 +423,22 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 
+/* === LAYOUT CONTAINERS === */
+.rd-breaking__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 44px;
+}
+.rd-home__container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 34px 24px 56px;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 880px) {
   .rd-hero {
@@ -459,4 +479,110 @@
   .rd-story-secondary h4 { font-size: 14px; line-height: 1.28; }
   .rd-portada-item h3 { font-size: 15px; }
   .rd-rail { gap: 18px; }
+  .rd-home__container {
+    padding: 20px 16px 36px;
+  }
+  .rd-breaking__inner {
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .rd-breaking-list {
+    gap: 20px;
+    font-size: 12.5px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rd-breaking-list::-webkit-scrollbar { display: none; }
+  .rd-en-portada {
+    padding: 16px 16px;
+  }
+  .rd-hero {
+    gap: 24px;
+    padding-bottom: 28px;
+  }
+}
+
+/* === MÓVIL PEQUEÑO (max-width: 480px) === */
+@media (max-width: 480px) {
+  .rd-home__container {
+    padding: 16px 12px 28px;
+  }
+  .rd-breaking__inner {
+    padding: 0 12px;
+    height: 40px;
+  }
+  .rd-breaking-tag {
+    font-size: 10px;
+  }
+  .rd-breaking-list {
+    font-size: 11.5px;
+    gap: 16px;
+  }
+  .rd-lead h1 {
+    font-size: 21px;
+    line-height: 1.18;
+    margin: 8px 0 6px;
+  }
+  .rd-dek {
+    font-size: 14px;
+  }
+  .rd-byline {
+    font-size: 10.5px;
+    gap: 8px;
+  }
+  .rd-section {
+    padding: 14px 10px 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+  .rd-section-head h2 {
+    font-size: 17px;
+  }
+  .rd-section-head {
+    margin-bottom: 14px;
+    padding-bottom: 7px;
+  }
+  .rd-story-primary h3 {
+    font-size: 17px;
+    margin-top: 8px;
+  }
+  .rd-story-primary p {
+    font-size: 13px;
+  }
+  .rd-story-secondary .rd-item {
+    gap: 10px;
+    padding-bottom: 12px;
+  }
+  .rd-story-secondary .rd-thumb {
+    width: 64px;
+    height: 64px;
+  }
+  .rd-story-secondary h4 {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+  .rd-portada-item h3 {
+    font-size: 14px;
+  }
+  .rd-portada-item {
+    padding: 12px 0;
+  }
+  .rd-en-portada {
+    padding: 14px 12px;
+  }
+  .rd-rail {
+    gap: 14px;
+  }
+  .rd-panel-head {
+    font-size: 10.5px;
+    padding: 11px 12px;
+  }
+  .rd-hero {
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+  .rd-lead-photo {
+    aspect-ratio: 16 / 11;
+  }
 }

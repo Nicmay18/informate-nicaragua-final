@@ -123,7 +123,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
       {/* Breaking bar */}
       {dist.breaking.length > 0 && (
         <div className="rd-breaking">
-          <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', gap: 16, height: 44 }}>
+          <div className="rd-breaking__inner">
             <span className="rd-breaking-tag"><span className="rd-dot" />Última hora</span>
             <div className="rd-breaking-list">
               {dist.breaking.map((n) => (
@@ -145,7 +145,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         </svg>
       </div>
 
-      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '34px 24px 56px' }}>
+      <div className="rd-home__container">
         {/* HERO */}
         {hero && (
           <section className="rd-hero">
