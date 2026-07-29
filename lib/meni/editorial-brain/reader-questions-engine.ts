@@ -7,6 +7,7 @@
  */
 
 import type { EditorialBrainInput, ReaderQuestionsDecision, ReaderQuestion } from './types';
+import { getCategoryProfile } from './profiles';
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -158,12 +159,33 @@ export function runReaderQuestionsEngine(input: EditorialBrainInput): ReaderQues
   const tipo = detectarTipo(texto);
   const plantilla = PREGUNTAS_POR_TIPO[tipo] ?? PREGUNTAS_POR_TIPO.general;
 
-  const preguntas: ReaderQuestion[] = plantilla.map(p => ({
+  // Cargar preguntas del perfil de categoria
+  const categoria = input.categoriaSugerida || input.categoria || 'General';
+  const profile = getCategoryProfile(categoria);
+
+  // Combinar: preguntas del tipo de hecho + preguntas del perfil editorial
+  const preguntasTipoHecho: ReaderQuestion[] = plantilla.map(p => ({
     pregunta: p.pregunta,
     obligatoria: p.obligatoria,
     respondida: false,
   }));
 
+  // Agregar preguntas del perfil editorial como obligatorias
+  const preguntasPerfil: ReaderQuestion[] = profile.preguntasEditor.map(p => ({
+    pregunta: p,
+    obligatoria: true,
+    respondida: false,
+  }));
+
+  // Merge: preguntas del perfil primero, luego las del tipo de hecho que no esten duplicadas
+  const todas = [...preguntasPerfil];
+  for (const pt of preguntasTipoHecho) {
+    if (!todas.some(p => p.pregunta.toLowerCase() === pt.pregunta.toLowerCase())) {
+      todas.push(pt);
+    }
+  }
+
+  const preguntas = todas;
   const preguntasObligatorias = preguntas.filter(p => p.obligatoria).map(p => p.pregunta);
   const preguntasOpcionales = preguntas.filter(p => !p.obligatoria).map(p => p.pregunta);
 

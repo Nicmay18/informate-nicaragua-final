@@ -81,7 +81,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const categoriasCorregidas = new Set(corregidos.map((c) => c.categoria));
   const issuesRestantes = issues.filter((i) => !(i.corregible && categoriasCorregidas.has(i.categoria)));
 
-  const explanationIndex = computeExplanationIndex(textoPlano, input.fuenteOriginal);
+  const explanationIndex = computeExplanationIndex(textoPlano, input.fuenteOriginal, input.categoria);
   const originalidadPorcentaje = computeOriginalityPercent(explanationIndex);
   const { score, bloqueado, motivosBloqueo } = computeEditorScore(
     issuesRestantes,

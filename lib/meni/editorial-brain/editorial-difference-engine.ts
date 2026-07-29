@@ -10,6 +10,10 @@
 import type { EditorialBrainInput, EditorialDifferenceDecision, CompetitionDecision } from './types';
 import { runCompetitionEngine } from './competition-engine';
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function calcularPorcentajeDiferencia(enfoqueNI: string, enfoquesCompetencia: string[]): number {
   const palabrasNI = new Set(enfoqueNI.toLowerCase().split(/\W+/).filter(w => w.length > 4));
   const todasCompetencia = new Set<string>();
@@ -53,8 +57,18 @@ export function runEditorialDifferenceEngine(
   const enfoqueCompetencia = `${comp.enfoqueTN8} ${comp.enfoqueCanal4} ${comp.enfoqueLaPrensa}`;
   const enfoqueNI = comp.enfoqueNicaraguaInformate;
 
-  const porcentajeDiferencia = calcularPorcentajeDiferencia(enfoqueNI, [comp.enfoqueTN8, comp.enfoqueCanal4, comp.enfoqueLaPrensa]);
+  const porcentajeDiferenciaPalabras = calcularPorcentajeDiferencia(enfoqueNI, [comp.enfoqueTN8, comp.enfoqueCanal4, comp.enfoqueLaPrensa]);
   const elementosDiferenciales = detectarElementosDiferenciales(enfoqueNI, [comp.enfoqueTN8, comp.enfoqueCanal4, comp.enfoqueLaPrensa]);
+
+  const texto = stripHtml(`${input.titulo} ${input.contenido}`).toLowerCase();
+  let bonusEstructural = 0;
+  if (/<h2/i.test(input.contenido)) bonusEstructural += 10;
+  if (/\bpor\s+qu[eé]|porqu[eé]\b/i.test(texto)) bonusEstructural += 10;
+  if (/\bcontexto|antecedente|previo|historia\b/i.test(texto)) bonusEstructural += 10;
+  if (/\bqu[eé]\s+significa|qu[eé]\s+cambia|c[oó]mo\s+afecta|qu[eé]\s+implica\b/i.test(texto)) bonusEstructural += 10;
+  if (/\bprevenci[oó]n|recomendaci[oó]n|qu[eé]\s+hacer|d[oó]nde|cu[aá]ndo|cu[aá]nto\b/i.test(texto)) bonusEstructural += 10;
+
+  const porcentajeDiferencia = Math.min(porcentajeDiferenciaPalabras + bonusEstructural, 100);
 
   const bloquear = porcentajeDiferencia < 30;
   const motivoBloqueo = bloquear

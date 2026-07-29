@@ -32,11 +32,16 @@ import { verifyEditorialDecisions } from './verification';
 import { computeRanking, analyzeSaturation } from '@/lib/meni/editor-jefe/ranking';
 import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tracker';
 import { buildMemoriaEditorial } from '@/lib/meni/editor-jefe/editorial-memory';
+import { getCategoryProfile } from './profiles';
 
 export { verifyEditorialDecisions };
 export type { EditorialVerification, EditorialVerificationItem } from './types';
 
 export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision {
+  // 0. Detectar categoria y cargar perfil editorial
+  const categoria = input.categoriaSugerida || input.categoria || 'General';
+  const profile = getCategoryProfile(categoria);
+
   // 1. News Value — ¿Vale la pena publicarla?
   const newsValue = runNewsValueEngine(input);
 
@@ -164,8 +169,8 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
       ...storyPlan.explicacionesServicio,
     ],
     preguntasAResponder: readerQuestions.preguntasObligatorias,
-    enfoqueDiferencial: editorialDifference.elementosDiferenciales.join('; '),
-    selloEditorial: nicaraguaInformate.selloEditorial,
+    enfoqueDiferencial: `${profile.enfoqueDiferencial} ${editorialDifference.elementosDiferenciales.join('; ')}`,
+    selloEditorial: `${profile.promptLlm} ${nicaraguaInformate.selloEditorial}`,
     tituloSEO: intelligence.google.tituloSEO,
     metaDescripcion: intelligence.google.metaDescripcion,
     slug: intelligence.google.slug,
@@ -210,6 +215,9 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     minDnaScore: input.tierThresholds?.minAdnNI,
     minExclusividad: input.tierThresholds?.minExclusividad,
     minWow: input.tierThresholds?.minWow,
+    pesosAdnNI: profile.pesosAdnNI,
+    pesosSelloNI: profile.pesosSelloNI,
+    umbralesBloqueo: profile.umbralesBloqueo,
   });
   const score = editorialDna.adnNI;
   const minScore = input.tierThresholds?.minAdnNI ?? 60;

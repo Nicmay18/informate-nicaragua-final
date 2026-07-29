@@ -2,8 +2,27 @@ import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import type { EvaluacionEditorial } from '@/lib/editorial';
 import type { QualityGateResult } from '@/lib/meni/quality-gate/types';
 import type { EditorialDnaResult, EditorialDnaDimension, SelloNIDimensions } from './types';
+import type { AdnNiWeights, SelloNiWeights, BloqueoThresholds } from '@/lib/meni/editorial-brain/profiles/types';
 
 const MIN_DNA_SCORE = Number(process.env.MENI_MIN_DNA_SCORE || '70');
+
+const DEFAULT_ADN_WEIGHTS: AdnNiWeights = {
+  exclusividad: 0.25,
+  wow: 0.25,
+  selloNI: 0.30,
+  transcripcion: 0.15,
+  memoria: 0.05,
+};
+
+const DEFAULT_SELLO_WEIGHTS: SelloNiWeights = {
+  explica: 0.20,
+  contextualiza: 0.20,
+  servicio: 0.15,
+  originalidad: 0.15,
+  competencia: 0.10,
+  utilidad: 0.10,
+  valor: 0.10,
+};
 
 function clamp(n: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, n));
@@ -17,11 +36,6 @@ function makeDimension(score: number, threshold: number, razonBloqueo: string): 
   };
 }
 
-function average(arr: number[]): number {
-  if (arr.length === 0) return 0;
-  return Math.round(arr.reduce((a, b) => a + b, 0) / arr.length);
-}
-
 interface ComputeDnaOptions {
   decision?: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'>;
   evaluacion?: EvaluacionEditorial;
@@ -30,6 +44,9 @@ interface ComputeDnaOptions {
   minDnaScore?: number;
   minExclusividad?: number;
   minWow?: number;
+  pesosAdnNI?: AdnNiWeights;
+  pesosSelloNI?: SelloNiWeights;
+  umbralesBloqueo?: BloqueoThresholds;
 }
 
 export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult {
@@ -38,10 +55,13 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const evaluacion = opts.evaluacion;
   const qualityGate = opts.qualityGate;
 
-  // Umbrales graduados por tier (defaults al valor anterior)
-  const minDna = opts.minDnaScore ?? MIN_DNA_SCORE;
-  const minExcl = opts.minExclusividad ?? MIN_DNA_SCORE;
-  const minWow = opts.minWow ?? MIN_DNA_SCORE;
+  // Umbrales y pesos dinamicos por categoria
+  const minExcl = opts.umbralesBloqueo?.exclusividad ?? opts.minExclusividad ?? MIN_DNA_SCORE;
+  const minWow = opts.umbralesBloqueo?.wow ?? opts.minWow ?? MIN_DNA_SCORE;
+  const minTranscripcion = opts.umbralesBloqueo?.transcripcion ?? MIN_DNA_SCORE;
+  const minMemoria = opts.umbralesBloqueo?.memoria ?? 30;
+  const pesosAdn = opts.pesosAdnNI ?? DEFAULT_ADN_WEIGHTS;
+  const pesosSello = opts.pesosSelloNI ?? DEFAULT_SELLO_WEIGHTS;
 
   // ═══════════════════════════════════════════════════════════════
   // EXCLUSIVIDAD: ¿hay razón para leer esta nota en NI y no en TN8?
@@ -112,7 +132,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
 
   const transcripcion = makeDimension(
     transcripcionScore,
-    minDna,
+    minTranscripcion,
     'Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.'
   );
 
@@ -124,22 +144,30 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const memoria: EditorialDnaDimension & { totalArticulosRelacionados: number } = {
     ...makeDimension(
       memoriaScore,
-      30,
+      minMemoria,
       'Sin memoria editorial: no se encontraron noticias previas relacionadas. Si este tema ya se ha cubierto, enlazá o referenciá el historial.'
     ),
     totalArticulosRelacionados: total,
   };
 
   // ═══════════════════════════════════════════════════════════════
-  // ADN NI: promedio ponderado
+  // ADN NI: promedio ponderado con pesos dinamicos por categoria
   // ═══════════════════════════════════════════════════════════════
-  const selloNIPromedio = average(Object.values(selloNI));
+  const selloNIPromedio = Math.round(
+    selloNI.explica * pesosSello.explica +
+    selloNI.contextualiza * pesosSello.contextualiza +
+    selloNI.servicio * pesosSello.servicio +
+    selloNI.originalidad * pesosSello.originalidad +
+    selloNI.competencia * pesosSello.competencia +
+    selloNI.utilidad * pesosSello.utilidad +
+    selloNI.valor * pesosSello.valor
+  );
   const adnNI = Math.round(
-    exclusividad.score * 0.25 +
-    wow.score * 0.25 +
-    selloNIPromedio * 0.30 +
-    transcripcion.score * 0.15 +
-    memoria.score * 0.05
+    exclusividad.score * pesosAdn.exclusividad +
+    wow.score * pesosAdn.wow +
+    selloNIPromedio * pesosAdn.selloNI +
+    transcripcion.score * pesosAdn.transcripcion +
+    memoria.score * pesosAdn.memoria
   );
 
   const bloqueadores: string[] = [];

@@ -51,4 +51,4 @@ export const GENERIC_CLOSINGS = [
 
 export const MIN_EXPLANATION_SCORE = 60;
 export const MAX_TRANSCRIPTION_PERCENT = 40;
-export const MIN_ORIGINALITY_PERCENT = 80;
+export const MIN_ORIGINALITY_PERCENT = 70;
