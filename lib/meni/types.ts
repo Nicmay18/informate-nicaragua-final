@@ -207,6 +207,14 @@ export interface EditorialDecisionFlat {
     worthReading: string;
     loQueOtrosNoContaran: string[];
     wowIdea: string;
+    evaluacionCategoria?: {
+      categoria: string;
+      contexto: number;
+      explicacion: number;
+      servicio: number;
+      faltantes: string[];
+      cumplidos: string[];
+    };
     fuentesFaltan: string[];
     journalistChecklist: string[];
     valorParaLector: string;

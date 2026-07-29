@@ -182,6 +182,44 @@ export default function MeniPage() {
                     </div>
                   )}
 
+                  {result.editorialDecision.veredictoEjecutivo.evaluacionCategoria && (
+                    <div className="mb-6 rounded-lg bg-indigo-50 p-4 border border-indigo-100">
+                      <p className="text-xs font-bold uppercase text-indigo-700 mb-3">
+                        Matriz de {result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.categoria}
+                      </p>
+                      <div className="grid grid-cols-3 gap-3 mb-4">
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-indigo-800">{result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.contexto}%</p>
+                          <p className="text-xs text-indigo-600">Contexto</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-indigo-800">{result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.explicacion}%</p>
+                          <p className="text-xs text-indigo-600">Explicación</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-indigo-800">{result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.servicio}%</p>
+                          <p className="text-xs text-indigo-600">Servicio</p>
+                        </div>
+                      </div>
+                      {result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.faltantes.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-indigo-600 mb-1">Criterios a reforzar</p>
+                          <ul className="space-y-1 text-sm">
+                            {result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.faltantes.map((c, i) => (
+                              <li key={i} className="text-slate-700">□ {c}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.cumplidos.length > 0 && (
+                        <div className="mt-2">
+                          <p className="text-xs font-semibold text-indigo-600 mb-1">Cumplidos</p>
+                          <p className="text-sm text-slate-700">{result.editorialDecision.veredictoEjecutivo.evaluacionCategoria.cumplidos.join(' • ')}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {result.puntosPerdidos && result.puntosPerdidos.length > 0 && (
                     <div className="mb-6 rounded-lg bg-white p-4 shadow-sm">
                       <p className="text-xs font-semibold text-slate-500 mb-2">Puntos perdidos</p>

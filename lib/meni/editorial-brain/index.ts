@@ -11,7 +11,7 @@
  * Solo después el LLM escribe siguiendo las decisiones.
  */
 
-import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido } from './types';
+import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
 import { runNicaraguaInformateEngine } from './nicaragua-informate-engine';
@@ -240,8 +240,13 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     input.knowledgeContext?.antecedentes,
   );
 
+  const categoriaForPatterns = input.categoriaSugerida || input.categoria || 'General';
+  const textoCategoria = [input.titulo, input.contenido, input.resumen].filter(Boolean).join(' ');
+  const evaluacionCategoria = calcularEvaluacionCategoria(categoriaForPatterns, textoCategoria);
+
   const { score, puntosPerdidos } = calcularScoreEjecutivo(
     acciones,
+    evaluacionCategoria.puntosPerdidos,
     editorialDna.bloquear || tieneProblemasGraves,
     { readerLearning, editorialContribution },
   );
@@ -298,8 +303,6 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Fase 1: Aprendizaje del Editor
   // Aplicar patrones aprendidos del editor humano
   // ─────────────────────────────────────────────────────────────
-  const categoriaForPatterns = input.categoriaSugerida || input.categoria || 'General';
-
   const { fuentesFaltan, journalistChecklist } = construirJournalistChecklist(input, diagnostico, categoriaForPatterns);
 
   const { patronesAplicados, correccionesSugeridas } = applyPatternsToDiagnostic(
@@ -357,12 +360,15 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   decision.ranking = computeRanking(decision);
 
   // Veredicto ejecutivo único: la única respuesta del Editor Jefe
-  decision.veredictoEjecutivo = buildVeredictoEjecutivo(decision);
+  decision.veredictoEjecutivo = buildVeredictoEjecutivo(decision, evaluacionCategoria);
 
   return decision;
 }
 
-function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
+function buildVeredictoEjecutivo(
+  d: EditorialDecision,
+  evaluacionCategoria: EvaluacionCategoria,
+): VeredictoEditorJefe {
   // Publicar
   const publicar: VeredictoEditorJefe['publicar'] =
     d.publicar ? 'SI' : d.recomendacionEditorial === 'revisar' ? 'NO' : 'MEJORAR';
@@ -424,6 +430,7 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
     worthReading,
     loQueOtrosNoContaran,
     wowIdea,
+    evaluacionCategoria,
     fuentesFaltan: d.fuentesFaltan,
     journalistChecklist: d.journalistChecklist,
     valorParaLector: d.aportaAlLector,
@@ -439,34 +446,237 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
   };
 }
 
-export type { EditorialDecision, EditorialBrainInput, LlmInstructions, PuntoPerdido } from './types';
+interface CriterioCategoria {
+  concepto: string;
+  terminos: string[];
+}
+
+const MATRICES_CATEGORIA: Record<string, { contexto: CriterioCategoria[]; explicacion: CriterioCategoria[]; servicio: CriterioCategoria[] }> = {
+  Sucesos: {
+    contexto: [
+      { concepto: 'Qué ocurrió', terminos: ['ocurrió', 'sucedió', 'hecho', 'incidente', 'accidente', 'muerto', 'falleció', 'mató'] },
+      { concepto: 'Dónde ocurrió', terminos: ['barrio', 'comarca', 'municipio', 'departamento', 'km', 'kilómetro', 'dirección', 'lugar'] },
+      { concepto: 'Cuándo ocurrió', terminos: ['madrugada', 'tarde', 'noche', 'ayer', 'hoy', 'domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'] },
+      { concepto: 'Impacto comunitario', terminos: ['comunidad', 'vecinos', 'familiares', 'pobladores', 'zona', 'tranquilidad', 'seguridad'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué se sabe', terminos: ['se sabe', 'se confirmó', 'confirmó', 'según', 'reporte', 'versión'] },
+      { concepto: 'Qué no se sabe', terminos: ['no se sabe', 'aún no', 'sin confirmar', 'se desconoce', 'no se ha determinado'] },
+      { concepto: 'Qué sigue en la investigación', terminos: ['investigación', 'se investiga', 'indaga', 'próximos', 'siguiente paso'] },
+      { concepto: 'Qué investigan', terminos: ['indagan', 'investigan', 'delito', 'homicidio', 'asesinato', 'muerte'] },
+    ],
+    servicio: [
+      { concepto: 'Qué dice la Policía o autoridad', terminos: ['policía', 'policia', 'autoridades', 'fiscalía', 'fiscalia', 'ministerio'] },
+      { concepto: 'Qué información continúa sin confirmar', terminos: ['sin confirmar', 'sin identificar', 'se desconoce', 'aún no se ha'] },
+      { concepto: 'Qué deben esperar familiares o comunidad', terminos: ['esperar', 'comunidad', 'familiares', 'proceso', 'investigación'] },
+      { concepto: 'Qué delitos podrían investigarse', terminos: ['delito', 'homicidio', 'asesinato', 'imputar', 'acusar'] },
+    ],
+  },
+  Espectaculos: {
+    contexto: [
+      { concepto: 'Artista o espectáculo', terminos: ['artista', 'banda', 'cantante', 'actor', 'obra', 'teatro', 'concierto', 'festival'] },
+      { concepto: 'Fecha', terminos: ['fecha', 'día', 'sábado', 'domingo', 'próximo', 'este'] },
+      { concepto: 'Lugar', terminos: ['lugar', 'sede', 'teatro', 'estadio', 'salón', 'recinto'] },
+      { concepto: 'Público objetivo', terminos: ['público', 'familias', 'niños', 'adultos', 'jóvenes'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué es', terminos: ['es', 'trata de', 'se trata', 'obra', 'evento', 'show'] },
+      { concepto: 'Qué encontrará el visitante', terminos: ['encontrará', 'verá', 'escuchará', 'habrá', 'incluye'] },
+      { concepto: 'Costos', terminos: ['precio', 'costo', 'entrada', 'boleto', 'córdoba', 'dólar'] },
+      { concepto: 'Horarios', terminos: ['hora', 'horario', 'inicio', 'apertura', 'función'] },
+    ],
+    servicio: [
+      { concepto: 'Horarios', terminos: ['hora', 'horario', 'inicio', 'apertura', 'función'] },
+      { concepto: 'Precios', terminos: ['precio', 'costo', 'entrada', 'boleto'] },
+      { concepto: 'Ubicación', terminos: ['ubicado', 'dirección', 'cómo llegar', 'lugar', 'sede'] },
+      { concepto: 'Cómo comprar entradas', terminos: ['comprar', 'entrada', 'boleto', 'taquilla', 'en línea', 'reservar'] },
+    ],
+  },
+  Economia: {
+    contexto: [
+      { concepto: 'Medida o cambio anunciado', terminos: ['medida', 'decisión', 'anunció', 'aprobó', 'cambio', 'reforma'] },
+      { concepto: 'Institución responsable', terminos: ['banco', 'ministerio', 'gobierno', 'asamblea', 'autoridad'] },
+      { concepto: 'Plazo o vigencia', terminos: ['plazo', 'vigencia', 'a partir de', 'desde', 'hasta', 'próximos días'] },
+      { concepto: 'Antecedente económico', terminos: ['anterior', 'histórico', 'pasado', 'año pasado', 'comparado', 'ha venido'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué cambió', terminos: ['cambió', 'aumentó', 'disminuyó', 'subió', 'bajó', 'se modificó'] },
+      { concepto: 'Por qué cambió', terminos: ['porque', 'debido a', 'según', 'explicó', 'argumentó', 'razón'] },
+      { concepto: 'Cómo afecta', terminos: ['afecta', 'impacto', 'influye', 'repercute', 'consecuencia'] },
+      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'espera', 'continuará', 'se evaluará'] },
+    ],
+    servicio: [
+      { concepto: 'Quién gana', terminos: ['gana', 'beneficia', 'favorece', 'mejora', 'oportunidad'] },
+      { concepto: 'Quién pierde', terminos: ['pierde', 'perjudica', 'afecta negativamente', 'dificulta', 'perjuicio'] },
+      { concepto: 'Cómo afecta el bolsillo', terminos: ['bolsillo', 'presupuesto', 'precio', 'salario', 'costo de vida'] },
+      { concepto: 'Datos concretos', terminos: ['córdoba', 'dólar', 'millón', 'mil', 'cifra', 'porcentaje', '%'] },
+    ],
+  },
+  Deportes: {
+    contexto: [
+      { concepto: 'Equipos o jugadores', terminos: ['equipo', 'jugador', 'selección', 'rival', 'cuadro'] },
+      { concepto: 'Torneo o competencia', terminos: ['torneo', 'liga', 'copa', 'campeonato', 'competencia'] },
+      { concepto: 'Fecha o jornada', terminos: ['jornada', 'fecha', 'sábado', 'domingo', 'ayer', 'hoy'] },
+      { concepto: 'Estadísticas clave', terminos: ['marcador', 'goles', 'puntos', 'tiros', 'estadísticas', 'resultado'] },
+    ],
+    explicacion: [
+      { concepto: 'Resultado', terminos: ['ganó', 'perdió', 'empató', 'marcador', 'resultado', 'derrotó'] },
+      { concepto: 'Cómo se dio el partido', terminos: ['primera', 'segunda', 'minuto', 'jugada', 'anotó', 'ocasión'] },
+      { concepto: 'Consecuencias', terminos: ['consecuencia', 'impacto', 'deja', 'situación', 'clasificación'] },
+      { concepto: 'Qué necesita para clasificar', terminos: ['necesita', 'clasificar', 'puntos', 'próximo partido', 'dependerá'] },
+    ],
+    servicio: [
+      { concepto: 'Tabla o clasificación', terminos: ['tabla', 'clasificación', 'posición', 'puntos'] },
+      { concepto: 'Próximo rival', terminos: ['próximo', 'siguiente', 'rival', 'enfrentará', 'visita'] },
+      { concepto: 'Dónde ver', terminos: ['transmisión', 'canal', 'horario', 'dónde ver', 'televisión'] },
+      { concepto: 'Horario', terminos: ['hora', 'fecha', 'sábado', 'domingo'] },
+    ],
+  },
+  Tecnologia: {
+    contexto: [
+      { concepto: 'Producto o servicio', terminos: ['app', 'aplicación', 'dispositivo', 'celular', 'teléfono', 'plataforma', 'red social'] },
+      { concepto: 'Empresa o desarrollador', terminos: ['empresa', 'lanzó', 'desarrolló', 'marca', 'compañía'] },
+      { concepto: 'Mercado o país de lanzamiento', terminos: ['mercado', 'llega', 'disponible', 'lanzamiento', 'país'] },
+      { concepto: 'Requisitos', terminos: ['requisito', 'compatible', 'sistema', 'versión', 'conexión'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué es', terminos: ['es', 'permite', 'sirve', 'funciona', 'plataforma'] },
+      { concepto: 'Para qué sirve', terminos: ['sirve', 'permite', 'ayuda', 'beneficio', 'uso'] },
+      { concepto: 'Cómo funciona', terminos: ['funciona', 'operación', 'cómo se usa', 'usar', 'características'] },
+      { concepto: 'Limitaciones', terminos: ['limitación', 'no incluye', 'restricción', 'no sirve', 'problema'] },
+    ],
+    servicio: [
+      { concepto: 'Precio', terminos: ['precio', 'costo', 'cuesta', 'dólar', 'córdoba', 'gratis'] },
+      { concepto: 'Disponibilidad', terminos: ['disponible', 'llega', 'lanzamiento', 'ya está', 'próximamente'] },
+      { concepto: 'Dónde conseguirlo', terminos: ['descargar', 'comprar', 'adquirir', 'instalar', 'app store'] },
+      { concepto: 'Ventajas', terminos: ['ventaja', 'beneficio', 'mejora', 'rápido', 'fácil', 'seguro'] },
+    ],
+  },
+  Nacionales: {
+    contexto: [
+      { concepto: 'Institución o decisión', terminos: ['gobierno', 'asamblea', 'ministerio', 'alcaldía', 'institución', 'anunció'] },
+      { concepto: 'Ámbito de aplicación', terminos: ['nacional', 'municipio', 'departamento', 'comunidad', 'sector'] },
+      { concepto: 'Antecedente político', terminos: ['anterior', 'pasado', 'histórico', 'desde', 'viene', 'se venía'] },
+      { concepto: 'Cronología', terminos: ['ayer', 'anterior', 'primero', 'luego', 'después', 'antes'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué decidieron', terminos: ['decidió', 'aprobó', 'anunció', 'informó', 'resolvió'] },
+      { concepto: 'Por qué', terminos: ['porque', 'debido a', 'razón', 'argumentó', 'justificó'] },
+      { concepto: 'A quién afecta', terminos: ['afecta', 'población', 'beneficiarios', 'ciudadanos', 'familias'] },
+      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'se espera', 'futuro'] },
+    ],
+    servicio: [
+      { concepto: 'Cómo acceder', terminos: ['acceder', 'tramitar', 'solicitar', 'obtener', 'requisito'] },
+      { concepto: 'Requisitos', terminos: ['requisito', 'documento', 'presentar', 'cumplir'] },
+      { concepto: 'Plazos', terminos: ['plazo', 'fecha', 'hasta', 'desde', 'vigencia'] },
+      { concepto: 'Beneficiarios', terminos: ['beneficiario', 'población', 'familia', 'estudiante', 'trabajador'] },
+    ],
+  },
+  Internacionales: {
+    contexto: [
+      { concepto: 'Actores o países', terminos: ['país', 'gobierno', 'presidente', 'líder', 'nación', 'organización'] },
+      { concepto: 'Región o ámbito', terminos: ['región', 'mundo', 'continente', 'frontera', 'territorio'] },
+      { concepto: 'Antecedente internacional', terminos: ['histórico', 'anterior', 'pasado', 'conflicto', 'relación'] },
+      { concepto: 'Cronología', terminos: ['ayer', 'anterior', 'primero', 'luego', 'después', 'antes'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué ocurrió', terminos: ['ocurrió', 'sucedió', 'anunció', 'decidió', 'pasó'] },
+      { concepto: 'Por qué importa', terminos: ['importancia', 'relevancia', 'por qué', 'significado', 'implicación'] },
+      { concepto: 'Cómo afecta a Nicaragua', terminos: ['nicaragua', 'país', 'impacto', 'afecta', 'relación'] },
+      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'se espera'] },
+    ],
+    servicio: [
+      { concepto: 'Reacción de Nicaragua', terminos: ['nicaragua', 'gobierno', 'reacción', 'posición', 'declaró'] },
+      { concepto: 'Recomendación para nicaragüenses', terminos: ['recomendación', 'evitar', 'precaución', 'consejo', 'alerta'] },
+      { concepto: 'Impacto local', terminos: ['impacto', 'afecta', 'comercio', 'precio', 'remesas', 'turismo'] },
+      { concepto: 'Datos oficiales', terminos: ['oficial', 'gobierno', 'datos', 'cifra', 'informó'] },
+    ],
+  },
+  General: {
+    contexto: [
+      { concepto: 'Quién', terminos: ['quien', 'autoridad', 'persona', 'organización', 'responsable'] },
+      { concepto: 'Dónde', terminos: ['lugar', 'ubicación', 'país', 'municipio', 'comunidad'] },
+      { concepto: 'Cuándo', terminos: ['fecha', 'ayer', 'hoy', 'mañana', 'hora', 'cuándo'] },
+      { concepto: 'Antecedentes', terminos: ['anterior', 'pasado', 'antecedente', 'contexto', 'histórico'] },
+    ],
+    explicacion: [
+      { concepto: 'Qué pasó', terminos: ['ocurrió', 'pasó', 'sucedió', 'hecho', 'acontecimiento'] },
+      { concepto: 'Por qué', terminos: ['porque', 'razón', 'causa', 'motivo', 'debido a'] },
+      { concepto: 'Cómo afecta', terminos: ['afecta', 'impacto', 'influye', 'consecuencia'] },
+      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'espera'] },
+    ],
+    servicio: [
+      { concepto: 'Qué hacer', terminos: ['hacer', 'recomendación', 'acción', 'pasos', 'cómo actuar'] },
+      { concepto: 'Recomendación', terminos: ['recomendación', 'consejo', 'evitar', 'precaución'] },
+      { concepto: 'Dónde acudir', terminos: ['acudir', 'llamar', 'dirección', 'centro', 'oficina'] },
+      { concepto: 'Utilidad', terminos: ['útil', 'servicio', 'práctico', 'beneficio', 'para qué'] },
+    ],
+  },
+};
+
+function calcularEvaluacionCategoria(
+  categoria: string,
+  texto: string,
+): EvaluacionCategoria & { puntosPerdidos: PuntoPerdido[] } {
+  const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const base = normalizar(texto);
+  const matriz = MATRICES_CATEGORIA[categoria] || MATRICES_CATEGORIA['General'];
+
+  const puntuar = (criterios: CriterioCategoria[], puntosPorItem: number): { score: number; faltantes: string[]; cumplidos: string[]; perdidos: PuntoPerdido[] } => {
+    const faltantes: string[] = [];
+    const cumplidos: string[] = [];
+    const perdidos: PuntoPerdido[] = [];
+    for (const c of criterios) {
+      const found = c.terminos.some(t => base.includes(normalizar(t)));
+      if (found) {
+        cumplidos.push(c.concepto);
+      } else {
+        faltantes.push(c.concepto);
+        perdidos.push({ concepto: c.concepto, puntos: puntosPorItem });
+      }
+    }
+    const score = Math.max(0, Math.round(100 - (perdidos.length / criterios.length) * 100));
+    return { score, faltantes, cumplidos, perdidos };
+  };
+
+  const ctx = puntuar(matriz.contexto, 4);
+  const exp = puntuar(matriz.explicacion, 5);
+  const srv = puntuar(matriz.servicio, 5);
+
+  return {
+    categoria,
+    contexto: ctx.score,
+    explicacion: exp.score,
+    servicio: srv.score,
+    faltantes: [...ctx.faltantes, ...exp.faltantes, ...srv.faltantes],
+    cumplidos: [...ctx.cumplidos, ...exp.cumplidos, ...srv.cumplidos],
+    puntosPerdidos: [...ctx.perdidos, ...exp.perdidos, ...srv.perdidos],
+  };
+}
+
+export type { EditorialDecision, EditorialBrainInput, EvaluacionCategoria, LlmInstructions, PuntoPerdido } from './types';
 
 function calcularScoreEjecutivo(
   acciones: string[],
+  puntosCategoria: PuntoPerdido[],
   bloquear: boolean,
   respuestas: { readerLearning: string; editorialContribution: string },
 ): { score: number; puntosPerdidos: PuntoPerdido[] } {
-  const puntosPerdidos: PuntoPerdido[] = [];
+  const puntosPerdidos: PuntoPerdido[] = [...puntosCategoria];
   for (const accion of acciones) {
     if (accion === 'Lista para publicar') continue;
     const baja = accion.toLowerCase();
-    let puntos = 5;
-    if (baja.includes('transcrib') || baja.includes('boletín') || baja.includes('copia') || baja.includes('plagiar')) {
-      puntos = 10;
+    // Sólo se castigan con peso los problemas éticos o estructurales graves.
+    // Contexto, explicación y servicio se evalúan con la matriz específica de categoría.
+    if (baja.includes('transcrib') || baja.includes('copia') || baja.includes('plagiar') || baja.includes('boletín')) {
+      puntosPerdidos.push({ concepto: accion, puntos: 10 });
     } else if (baja.includes('sensacionalismo') || baja.includes('clickbait') || baja.includes('prohibida')) {
-      puntos = 8;
-    } else if (baja.includes('contexto') || baja.includes('antecedente') || baja.includes('historia')) {
-      puntos = 7;
-    } else if (baja.includes('explic') || baja.includes('por qué') || baja.includes('significado') || baja.includes('consecuencia')) {
-      puntos = 6;
-    } else if (baja.includes('servicio') || baja.includes('utilidad') || baja.includes('qué hacer') || baja.includes('impacto')) {
-      puntos = 6;
+      puntosPerdidos.push({ concepto: accion, puntos: 8 });
     } else if (baja.includes('dato') || baja.includes('cifra') || baja.includes('nombre') || baja.includes('fuente')) {
-      puntos = 4;
+      puntosPerdidos.push({ concepto: accion, puntos: 4 });
     } else if (baja.includes('longitud') || baja.includes('extensión') || baja.includes('relleno') || baja.includes('redacción')) {
-      puntos = 3;
+      puntosPerdidos.push({ concepto: accion, puntos: 3 });
     }
-    puntosPerdidos.push({ concepto: accion, puntos });
   }
 
   // Filosofía editorial: sin respuesta sólida, no merece publicarse.

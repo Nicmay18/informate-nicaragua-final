@@ -339,6 +339,15 @@ export interface MemoriaEditorial {
 
 export type VeredictoEjecutivoPublicar = 'SI' | 'NO' | 'MEJORAR';
 
+export interface EvaluacionCategoria {
+  categoria: string;
+  contexto: number; // 0-100
+  explicacion: number; // 0-100
+  servicio: number; // 0-100
+  faltantes: string[];
+  cumplidos: string[];
+}
+
 export interface VeredictoEditorJefe {
   // Respuesta a la única pregunta del editor
   publicar: VeredictoEjecutivoPublicar;
@@ -349,6 +358,7 @@ export interface VeredictoEditorJefe {
   worthReading: string; // por qué abrir Nicaragua Informate y no otro medio
   loQueOtrosNoContaran: string[]; // ángulos que probablemente no cubrirán otros medios
   wowIdea: string; // una sola idea con identidad
+  evaluacionCategoria: EvaluacionCategoria; // desempeño según la matriz de su categoría
   fuentesFaltan: string[]; // datos que la fuente no entrega
   journalistChecklist: string[]; // guía para el periodista antes de redactar
   // Evidencia que alimenta el veredicto
