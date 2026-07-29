@@ -347,6 +347,74 @@
   display: block;
 }
 
+/* === PROFESSIONAL POLISH === */
+.rd-section {
+  background: #fff;
+  border: 1px solid var(--rd-line);
+  border-radius: 12px;
+  padding: 22px 24px 26px;
+  margin-bottom: 34px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+.rd-section-head {
+  border-bottom-width: 2.5px;
+  margin-bottom: 18px;
+}
+.rd-section-head h2 {
+  font-size: 24px;
+  letter-spacing: -0.3px;
+}
+.rd-story-grid {
+  gap: 22px;
+}
+.rd-story-primary .rd-photo {
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(11,28,44,0.08);
+}
+.rd-story-primary h3 {
+  font-size: 24px;
+  letter-spacing: -0.25px;
+  margin-top: 14px;
+}
+.rd-story-primary p {
+  color: #3f4752;
+  font-size: 15.5px;
+}
+.rd-story-secondary .rd-thumb {
+  width: 92px;
+  height: 92px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.rd-story-secondary h4 {
+  font-size: 16.5px;
+  line-height: 1.28;
+}
+.rd-en-portada {
+  background: #fff;
+  border: 1px solid var(--rd-line);
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+.rd-portada-item h3 {
+  font-size: 17px;
+  line-height: 1.32;
+}
+.rd-lead-photo {
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(11,28,44,0.12);
+}
+.rd-lead h1 {
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: -0.35px;
+}
+.rd-panel {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 880px) {
   .rd-hero {

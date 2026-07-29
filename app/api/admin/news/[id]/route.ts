@@ -53,6 +53,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     await ref.update(updateData);
 
+    revalidateTag('noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
     revalidateTag('news-sitemap');

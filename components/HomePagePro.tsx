@@ -57,15 +57,18 @@ function distribuirNoticias(noticias: Noticia[]) {
   const breaking = take(disponibles().filter(n => n.categoria !== 'Sucesos').slice(0, 3), 3);
   if (breaking.length < 3) breaking.push(...take(disponibles(), 3 - breaking.length));
 
-  const seccion = (cat: string, min = 3) => {
+  const seccion = (cat: string, min = 1) => {
     const items = take(porCategoria(cat), 3);
     return items.length >= min ? items : [];
   };
+
+  const recientes = disponibles().slice(0, 3);
 
   return {
     heroNoticias,
     enPortada,
     breaking,
+    recientes,
     nacionales: seccion('Nacionales'),
     sucesos: seccion('Sucesos'),
     deportes: seccion('Deportes'),
@@ -200,7 +203,8 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         {/* CONTENT GRID */}
         <div className="rd-content-grid">
           <div className="rd-main-col">
-            {dist.nacionales.length >= 3 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
+            {dist.recientes.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={dist.recientes} reverse={false} />}
+            {dist.nacionales.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
             {dist.internacionales.length >= 3 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
             {dist.deportes.length >= 3 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
             {dist.espectaculos.length >= 3 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}

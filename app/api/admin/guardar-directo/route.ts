@@ -158,6 +158,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Invalidar cachés afectadas
+    revalidateTag('noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
     revalidateTag('popular-news');

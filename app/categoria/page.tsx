@@ -1,8 +1,18 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CATEGORIES } from '@/lib/types';
+import { Flag, AlertTriangle, Globe, Cpu, Trophy, Star } from 'lucide-react';
 
 const SITE_URL = 'https://nicaraguainformate.com';
+
+const ICONS: Record<string, React.ReactNode> = {
+  Nacionales: <Flag size={22} strokeWidth={2.2} />,
+  Sucesos: <AlertTriangle size={22} strokeWidth={2.2} />,
+  Internacionales: <Globe size={22} strokeWidth={2.2} />,
+  Tecnología: <Cpu size={22} strokeWidth={2.2} />,
+  Deportes: <Trophy size={22} strokeWidth={2.2} />,
+  Espectáculos: <Star size={22} strokeWidth={2.2} />,
+};
 
 export const metadata: Metadata = {
   title: 'Categorías de noticias',
@@ -36,7 +46,7 @@ export default function CategoriasPage() {
         Explora las noticias por tema. Selecciona una categoría para ver el contenido más reciente.
       </p>
 
-      <div style={{ display: 'grid', gap: 16 }}>
+      <div className="ni-cat-grid">
         {CATEGORIES.map((cat) => {
           const slug = cat.name
             .toLowerCase()
@@ -47,42 +57,16 @@ export default function CategoriasPage() {
             <Link
               key={cat.name}
               href={`/categoria/${slug}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                padding: '20px 24px',
-                borderRadius: 12,
-                background: 'var(--card-bg)',
-                border: '1px solid var(--border)',
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: 'transform 0.15s, box-shadow 0.15s',
-              }}
+              className="ni-cat-tile"
             >
-              <span
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 10,
-                  background: cat.color + '18',
-                  color: cat.color,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 20,
-                  fontWeight: 700,
-                  flexShrink: 0,
-                }}
-              >
-                {cat.name.charAt(0)}
+              <span className="ni-cat-tile__icon" style={{ background: `${cat.color}18`, color: cat.color }}>
+                {ICONS[cat.name] || cat.name.charAt(0)}
               </span>
-              <div>
-                <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px' }}>{cat.name}</h2>
-                <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  Ver noticias de {cat.name.toLowerCase()}
-                </p>
+              <div className="ni-cat-tile__text">
+                <h2>{cat.name}</h2>
+                <p>Ver noticias de {cat.name.toLowerCase()}</p>
               </div>
+              <span className="ni-cat-tile__arrow" aria-hidden="true">→</span>
             </Link>
           );
         })}

@@ -68,7 +68,7 @@ export default function Header() {
     fetchTimeoutRef.current = setTimeout(() => {
       setHoveredCat(slug);
       fetchCategoryNews(slug);
-    }, 200);
+    }, 50);
   };
 
   const handleCatLeave = () => {

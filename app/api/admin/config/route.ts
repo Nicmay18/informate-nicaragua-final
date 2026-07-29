@@ -27,8 +27,8 @@ export async function GET() {
         path: data.github?.path || process.env.GITHUB_PATH || 'public/images/',
       },
       telegram: {
-        token: data.telegram?.token || process.env.tg_token || '',
-        chatId: data.telegram?.chatId || process.env.tg_chat || '',
+        token: data.telegram?.token || process.env.TG_TOKEN || process.env.tg_token || '',
+        chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || process.env.tg_chat || '',
       },
       revalidate: {
         secret: data.revalidate?.secret || process.env.REVALIDATE_SECRET || '',

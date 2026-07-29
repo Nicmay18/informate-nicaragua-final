@@ -3,7 +3,7 @@ import { revalidateTag, revalidatePath } from 'next/cache';
 
 export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { Timestamp, Firestore } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 
 export const dynamic = 'force-dynamic';
@@ -90,6 +90,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
+async function getTelegramConfig(db: Firestore) {
+  try {
+    const snap = await db.collection('config').doc('admin').get();
+    const data = snap.data() || {};
+    return {
+      token: data.telegram?.token || process.env.TG_TOKEN || '',
+      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
+    };
+  } catch {
+    return { token: process.env.TG_TOKEN || '', chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || '' };
+  }
+}
+
 async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string, customToken?: string, customChat?: string) {
   const token = customToken || process.env.TG_TOKEN;
   const chatId = customChat || process.env.TG_CHAT;
@@ -150,9 +163,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (notificarTelegram !== false && publicado !== false) {
-      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '', body.telegramToken, body.telegramChat);
+      const tgConfig = await getTelegramConfig(db);
+      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '', body.telegramToken || tgConfig.token, body.telegramChat || tgConfig.chatId);
     }
 
+    revalidateTag('noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
     revalidateTag('news-sitemap');
