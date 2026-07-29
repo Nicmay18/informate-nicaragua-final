@@ -343,7 +343,9 @@ export interface VeredictoEditorJefe {
   // Respuesta a la única pregunta del editor
   publicar: VeredictoEjecutivoPublicar;
   confianza: number; // 0-100
-  respuestaEjecutiva: string; // una frase del Editor Jefe
+  respuestaEjecutiva: string; // frase del Editor Jefe
+  readerLearning: string; // qué aprende el lector
+  editorialContribution: string; // qué aporta Nicaragua Informate
   // Evidencia que alimenta el veredicto
   valorParaLector: string;
   valorFrenteCompetencia: string;
@@ -415,6 +417,9 @@ export interface EditorialDecision {
   servicio: string;
   riesgoEditorial: 'BAJO' | 'MEDIO' | 'ALTO';
   acciones: string[];
+  // Filosofía editorial — respuestas obligatorias
+  readerLearning: string;
+  editorialContribution: string;
   // ─────────────────────────────────────────────────────────────
   // Fase 1: Aprendizaje del Editor
   // Patrones detectados de correcciones manuales del editor humano.

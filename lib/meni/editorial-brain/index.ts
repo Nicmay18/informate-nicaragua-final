@@ -184,7 +184,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     objetivoPedagogico: readerJourney.objetivoPedagogico,
   };
 
-  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'> = {
+  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'readerLearning' | 'editorialContribution' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'> = {
     newsValue,
     competition,
     nicaraguaInformate,
@@ -228,9 +228,22 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     ? utilityGate.recomendacionesEditoriales
     : ['Lista para publicar'];
 
+  const readerLearning = computarReaderLearning(
+    explanation.explicaciones,
+    diagnostico.queAportaAlLector,
+    diagnostico.queAportaNicaraguaInformate.respuesta,
+  );
+  const editorialContribution = computarEditorialContribution(
+    diagnostico.queAprenderaQueNoEnOtroMedio.respuesta,
+    diagnostico.queAportaAlLector,
+    publicValue.queAporta,
+    input.knowledgeContext?.antecedentes,
+  );
+
   const { score, puntosPerdidos } = calcularScoreEjecutivo(
     acciones,
     editorialDna.bloquear || tieneProblemasGraves,
+    { readerLearning, editorialContribution },
   );
   const minScore = input.tierThresholds?.minAdnNI ?? 60;
 
@@ -325,6 +338,8 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     servicio,
     riesgoEditorial,
     acciones,
+    readerLearning,
+    editorialContribution,
     patronesAplicados,
     correccionesSugeridas,
     ranking: {} as EditorialRanking, // placeholder, computed below
@@ -356,10 +371,10 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
   confianza = Math.max(0, Math.min(100, Math.round(confianza)));
 
   const respuestaEjecutiva = publicar === 'SI'
-    ? `Publicar. ${d.aportaAlLector}. ${d.diferenciaCompetencia}.`
+    ? `📢 Veredicto del Editor Jefe: ${d.editorialContribution} Además, ${d.readerLearning}`
     : publicar === 'NO'
-    ? `No publicar. ${d.motivoPrincipal}`
-    : `Mejorar antes de publicar. ${d.acciones[0] || d.motivoPrincipal}`;
+    ? `📢 Veredicto del Editor Jefe: No publicar. ${d.motivoPrincipal}. No aporta razón suficiente para leerse en Nicaragua Informate.`
+    : `📢 Veredicto del Editor Jefe: Mejorar antes de publicar. ${d.acciones[0] || d.motivoPrincipal}. Aún no justifica por qué leerla aquí y no en otro medio.`;
 
   // Recomendación de portada desde ranking
   const portadaMap: Record<EditorialRanking['valorPortada'], VeredictoEditorJefe['recomendacionPortada']> = {
@@ -393,6 +408,8 @@ function buildVeredictoEjecutivo(d: EditorialDecision): VeredictoEditorJefe {
     publicar,
     confianza,
     respuestaEjecutiva,
+    readerLearning: d.readerLearning,
+    editorialContribution: d.editorialContribution,
     valorParaLector: d.aportaAlLector,
     valorFrenteCompetencia: d.diferenciaCompetencia,
     riesgoEditorial: d.riesgoEditorial,
@@ -411,6 +428,7 @@ export type { EditorialDecision, EditorialBrainInput, LlmInstructions, PuntoPerd
 function calcularScoreEjecutivo(
   acciones: string[],
   bloquear: boolean,
+  respuestas: { readerLearning: string; editorialContribution: string },
 ): { score: number; puntosPerdidos: PuntoPerdido[] } {
   const puntosPerdidos: PuntoPerdido[] = [];
   for (const accion of acciones) {
@@ -435,9 +453,56 @@ function calcularScoreEjecutivo(
     puntosPerdidos.push({ concepto: accion, puntos });
   }
 
+  // Filosofía editorial: sin respuesta sólida, no merece publicarse.
+  if (respuestas.readerLearning === 'Nada' || !respuestas.readerLearning || respuestas.readerLearning.trim().length < 10) {
+    puntosPerdidos.push({ concepto: 'No enseña nada nuevo al lector', puntos: 25 });
+  }
+  if (respuestas.editorialContribution === 'Nada' || !respuestas.editorialContribution || respuestas.editorialContribution.trim().length < 10) {
+    puntosPerdidos.push({ concepto: 'No aporta razón para leerla en Nicaragua Informate', puntos: 25 });
+  } else if (
+    respuestas.editorialContribution.toLowerCase().includes('seo') ||
+    respuestas.editorialContribution.toLowerCase().includes('bien escrita')
+  ) {
+    puntosPerdidos.push({ concepto: 'Aporte editorial inválido: SEO o redacción no son valor', puntos: 15 });
+  }
+
   let score = 100 - puntosPerdidos.reduce((s, p) => s + p.puntos, 0);
   // Si el DNA o problemas graves bloquean, el score no puede fingir aprobación.
   if (bloquear) score = Math.min(score, 74);
   score = Math.max(0, Math.min(100, Math.round(score)));
   return { score, puntosPerdidos };
+}
+
+function computarReaderLearning(
+  explicaciones: { pregunta: string; respuesta: string }[],
+  aportaAlLector: string,
+  aportaNI: string,
+): string {
+  const bullets = explicaciones
+    .filter(e => e.respuesta && e.respuesta.trim().length > 5)
+    .slice(0, 4)
+    .map(e => `• ${e.respuesta.trim()}`);
+  if (bullets.length === 0) {
+    if (aportaAlLector && aportaAlLector.trim().length > 10) return `Después de leer esta nota el lector entenderá: ${aportaAlLector.trim()}`;
+    if (aportaNI && aportaNI.trim().length > 10) return `Después de leer esta nota el lector entenderá: ${aportaNI.trim()}`;
+    return 'Nada';
+  }
+  return `Después de leer esta nota el lector entenderá:\n${bullets.join('\n')}`;
+}
+
+function computarEditorialContribution(
+  diferenciaCompetencia: string,
+  aportaAlLector: string,
+  utilidadReal: string,
+  antecedentes: string[] | undefined,
+): string {
+  const partes = [
+    diferenciaCompetencia,
+    aportaAlLector,
+    utilidadReal,
+    ...(antecedentes || []).slice(0, 2),
+  ].filter(Boolean).filter(s => s.trim().length > 5);
+  if (partes.length === 0) return 'Nada';
+  const limpios = partes.slice(0, 3).map(s => s.trim().replace(/^[A-ZÁÉÍÓÚÑ]/, c => c.toLowerCase()));
+  return `Porque ${limpios.join(', porque ')}.`;
 }
