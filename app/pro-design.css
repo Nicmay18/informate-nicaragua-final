@@ -2987,6 +2987,105 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-footer__col-title{font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--ni-white);margin-bottom:16px}
 .ni-footer__links{list-style:none;margin:0;padding:0}
 .ni-footer__links li{margin-bottom:11px}
+
+/* === EMERGENCY MOBILE OVERFLOW FIXES === */
+@media (max-width: 640px) {
+  .sidebar,
+  .sidebar-widget,
+  .rd-rail,
+  .rd-panel,
+  .econ-widget,
+  .weather-widget-full,
+  .ind-widget,
+  .clock-widget,
+  .radio-player {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .econ-grid,
+  .ind-grid-2,
+  .weather-forecast {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .econ-box,
+  .ind-card,
+  .weather-day {
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .econ-box-value,
+  .ind-card-value {
+    font-size: 1.05rem;
+  }
+
+  .econ-fuel-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .weather-cities {
+    max-width: 100%;
+    padding: 0 12px 12px;
+    gap: 4px;
+  }
+
+  .weather-city-pill {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .trending-item {
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .trending-content {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .trending-content h4,
+  .trending-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .clock-widget__list,
+  .ni-sidebar .clock-widget__list,
+  .radio-stations-list {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 4px;
+  }
+
+  .radio-station-name,
+  .weather-current-info h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .radio-now-playing {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .radio-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
 .ni-footer__links a{font-size:0.86rem;transition:color 0.2s;color:rgba(255,255,255,0.75)}
 .ni-footer__links a:hover{color:var(--ni-gold)}
 .ni-footer__social{display:flex;gap:12px;margin-top:18px}

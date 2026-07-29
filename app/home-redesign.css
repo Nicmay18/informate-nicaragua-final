@@ -586,3 +586,45 @@
     aspect-ratio: 16 / 11;
   }
 }
+
+/* === EMERGENCY MOBILE OVERFLOW FIXES === */
+@media (max-width: 880px) {
+  .rd-home__container,
+  .rd-hero,
+  .rd-lead,
+  .rd-rail,
+  .rd-section,
+  .rd-story-grid,
+  .rd-en-portada {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .rd-lead-photo,
+  .rd-photo,
+  .rd-thumb,
+  .rd-rail .rd-panel {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .rd-lead-photo img,
+  .rd-photo img,
+  .rd-thumb img,
+  .rd-story-primary .rd-photo img,
+  .rd-story-secondary .rd-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-width: 100%;
+  }
+
+  .rd-rail {
+    width: 100%;
+  }
+
+  .rd-rail > * {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
