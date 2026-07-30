@@ -3916,7 +3916,7 @@ sin texto ni marcas de agua, composición periodística"
       showLoading(true, 'Asignando niveles...');
       try {
         const todas = await getNoticiasCache();
-        const pendientes = todas.filter(n => !n.nivel);
+        const pendientes = todas.filter(n => !n.nivel || n.nivel === 'SIN NIVEL' || n.nivel === 'ORO');
         if (pendientes.length === 0) { showLoading(false); showToast('Todas las notas ya tienen nivel asignado.', 'success'); return; }
         let hechas = 0;
         for (const n of pendientes) {
