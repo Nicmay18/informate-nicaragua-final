@@ -57,17 +57,37 @@ export function extractEntities(textoPlano: string): EntityMap {
   };
 }
 
-export function detectInternalContradictions(entidades: EntityMap): QualityGateIssue[] {
+function extraerEdadesPorPersona(texto: string): Map<string, Set<string>> {
+  const map = new Map<string, Set<string>>();
+  const nameAgePattern = /([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})[^.!?\d]{0,80}(\d{1,3})\s*años/gi;
+  const matches = Array.from(texto.matchAll(nameAgePattern));
+  for (const m of matches) {
+    const nombre = m[1].trim();
+    const edad = m[2];
+    if (nombre && edad) {
+      const set = map.get(nombre) || new Set();
+      set.add(edad);
+      map.set(nombre, set);
+    }
+  }
+  return map;
+}
+
+export function detectInternalContradictions(entidades: EntityMap, textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
 
-  if (entidades.edades.length > 1) {
-    issues.push({
-      categoria: 'contradiccion',
-      severidad: 'blocking',
-      mensaje: `Se mencionan edades distintas para la misma persona: ${entidades.edades.join(' / ')}`,
-      evidencia: entidades.edades.join(', '),
-      corregible: false,
-    });
+  const edadesPorPersona = extraerEdadesPorPersona(textoPlano);
+  for (const [nombre, edades] of edadesPorPersona) {
+    if (edades.size > 1) {
+      const lista = Array.from(edades).join(' / ');
+      issues.push({
+        categoria: 'contradiccion',
+        severidad: 'blocking',
+        mensaje: `La persona "${nombre}" aparece con edades distintas: ${lista}`,
+        evidencia: lista,
+        corregible: false,
+      });
+    }
   }
 
   if (entidades.horas.length > 2) {

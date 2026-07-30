@@ -52,7 +52,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const useSource = input.sourceOfTruth != null;
 
   let issues: QualityGateIssue[] = [
-    ...detectInternalContradictions(entidades),
+    ...detectInternalContradictions(entidades, textoPlano),
     ...detectChronologyIssues(textoPlano),
     ...detectDuplicateParagraphs(input.contenido),
     ...detectTerminologyVariants(textoPlano),

@@ -40,7 +40,7 @@ const CODE_META: Record<string, IssueMeta> = {
     code: 'QUALITY_GATE_FACT_CONTRADICTION',
     title: 'Contradicción factual',
     field: 'contenido',
-    howToFix: 'Revisar edades, cantidades y datos entre fuente y artículo. Unifica nombres y cifras.',
+    howToFix: 'Revisa si el mismo nombre aparece con edades, cantidades o datos distintos. Si son personas diferentes, no unifiques.',
     expected: 'Sin contradicciones',
   },
   cronologia: {
