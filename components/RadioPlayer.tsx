@@ -99,6 +99,19 @@ export default function RadioPlayer() {
         if ('wakeLock' in navigator) {
           navigator.wakeLock.request('screen').then(w => { wakeLockRef.current = w; }).catch(() => {});
         }
+        if ('mediaSession' in navigator) {
+          try {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: station.name,
+              artist: 'Nicaragua Informate',
+              album: 'Radio en Vivo',
+              artwork: [{ src: '/logo.webp', sizes: '512x512', type: 'image/webp' }],
+            });
+            navigator.mediaSession.setActionHandler('play', () => playStation(station));
+            navigator.mediaSession.setActionHandler('pause', handleStop);
+            navigator.mediaSession.setActionHandler('stop', handleStop);
+          } catch { /* ignore */ }
+        }
       }).catch(() => {
         setError(`No se pudo iniciar ${station.name}`);
         setPlaying(null);
@@ -133,6 +146,33 @@ export default function RadioPlayer() {
   }, [playing, isMuted, volume, handleStop, releaseWakeLock]);
 
   useEffect(() => { return () => handleStop(); }, [handleStop]);
+
+  // Reanudar si el navegador pausó la emisión al cambiar de pestaña/apagar pantalla
+  useEffect(() => {
+    const resume = () => {
+      if (document.visibilityState !== 'visible') return;
+      const audio = audioRef.current;
+      const current = STATIONS.find(s => s.id === playing);
+      if (audio && current && audio.paused) {
+        audio.play().catch(() => {
+          setPlaying(null);
+          setLoading(null);
+        });
+      }
+    };
+    document.addEventListener('visibilitychange', resume);
+    return () => document.removeEventListener('visibilitychange', resume);
+  }, [playing]);
+
+  useEffect(() => {
+    if (playing || !('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = null;
+      navigator.mediaSession.setActionHandler('play', null);
+      navigator.mediaSession.setActionHandler('pause', null);
+      navigator.mediaSession.setActionHandler('stop', null);
+    } catch { /* ignore */ }
+  }, [playing]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);

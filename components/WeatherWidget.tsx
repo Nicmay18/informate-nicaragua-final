@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Droplets, Wind, Loader2 } from 'lucide-react';
+import { tiempoRelativo } from '@/lib/formateo';
 
 interface City {
   name: string;
@@ -29,10 +30,11 @@ interface WeatherData {
   humidity: number;
   wind: number;
   code: number;
+  updatedAt: string;
 }
 
 const CACHE_KEY = 'ni_weather_all_v1';
-const CACHE_TTL = 30 * 60 * 1000; // 30 min
+const CACHE_TTL = 5 * 60 * 1000; // 5 min
 
 function wmoToEmoji(code: number): string {
   if (code === 0 || code === 1) return '☀️';
@@ -119,7 +121,7 @@ export default function WeatherWidget() {
       }
     }
     load();
-    const refresh = setInterval(load, 600000); // 10 min
+    const refresh = setInterval(load, 300000); // 5 min
     return () => { cancelled = true; clearInterval(refresh); };
   }, []);
 
@@ -191,6 +193,13 @@ export default function WeatherWidget() {
           </span>
         </div>
       </div>
+      {w?.updatedAt && (
+        <div style={{ textAlign: 'center', marginTop: 10 }}>
+          <span style={{ fontSize: 11, color: '#94a3b8', letterSpacing: '0.3px' }}>
+            Actualizado {tiempoRelativo(w.updatedAt)}
+          </span>
+        </div>
+      )}
       <div className="weather-cities" style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
         {CITIES.map((c, i) => (
           <button

@@ -8,10 +8,10 @@ import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
 
 // ============================================================================
-// ISR: Home regenerado cada 5 minutos para que noticias nuevas aparezcan rapido.
-// Reduccion de consumo: ~99% menos lecturas vs force-dynamic.
+// ISR: Home regenerado cada 1 minuto para que noticias nuevas aparezcan rápido.
+// Reducción de consumo: ~99% menos lecturas vs force-dynamic.
 // ============================================================================
-export const revalidate = 300; // 5 minutos para que noticias nuevas aparezcan rápido
+export const revalidate = 60; // 1 minuto para máxima frescura
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;

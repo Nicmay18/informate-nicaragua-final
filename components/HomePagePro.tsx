@@ -201,11 +201,11 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
           <div className="rd-main-col">
             {dist.recientes.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={dist.recientes} reverse={false} />}
             {dist.nacionales.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
-            {dist.internacionales.length >= 3 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
-            {dist.deportes.length >= 3 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
-            {dist.espectaculos.length >= 3 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
-            {dist.tecnologia.length >= 3 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
-            {dist.sucesos.length >= 3 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
+            {dist.internacionales.length >= 1 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
+            {dist.deportes.length >= 1 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
+            {dist.espectaculos.length >= 1 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
+            {dist.tecnologia.length >= 1 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
+            {dist.sucesos.length >= 1 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
           </div>
 
           <aside className="rd-rail">

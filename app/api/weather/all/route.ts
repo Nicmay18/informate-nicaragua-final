@@ -25,14 +25,15 @@ interface WeatherData {
   humidity: number;
   wind: number;
   code: number;
+  updatedAt: string;
 }
 
 async function fetchOne(lat: number, lon: number): Promise<WeatherData> {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=America%2FManagua`;
   try {
-    const res = await fetch(url, { next: { revalidate: 1800 } });
+    const res = await fetch(url, { next: { revalidate: 300 } });
     if (!res.ok) {
-      return { temp: 0, humidity: 0, wind: 0, code: -1 };
+      return { temp: 0, humidity: 0, wind: 0, code: -1, updatedAt: new Date().toISOString() };
     }
     const data = await res.json();
     return {
@@ -40,9 +41,10 @@ async function fetchOne(lat: number, lon: number): Promise<WeatherData> {
       humidity: data.current.relative_humidity_2m,
       wind: Math.round(data.current.wind_speed_10m),
       code: data.current.weather_code,
+      updatedAt: new Date().toISOString(),
     };
   } catch {
-    return { temp: 0, humidity: 0, wind: 0, code: -1 };
+    return { temp: 0, humidity: 0, wind: 0, code: -1, updatedAt: new Date().toISOString() };
   }
 }
 
@@ -61,7 +63,7 @@ export async function GET() {
 
     return NextResponse.json(results, {
       headers: {
-        'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=3600',
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
       },
     });
   } catch (error) {
