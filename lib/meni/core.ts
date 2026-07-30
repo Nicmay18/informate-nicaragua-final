@@ -60,7 +60,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   // Aplicar criterios del perfil editorial según tipo_noticia_detectada
   const perfilCategoria = normalizeCategory(input.categoria || 'General');
-  const perfil = getPerfilEditorial(perfilCategoria);
+  const perfil = getPerfilEditorial(perfilCategoria, input.contenido);
   thresholds = {
     ...thresholds,
     exigeServiceValue: perfil.bloqueaPorServicio,

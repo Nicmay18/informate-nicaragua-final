@@ -8,8 +8,8 @@ import type { ExplanationIndex, QualityGateIssue } from './types';
 import { MAX_TRANSCRIPTION_PERCENT, MIN_ORIGINALITY_PERCENT } from './rules';
 import { getPerfilEditorial } from '../editorial-profiles';
 
-function getPatronesCategoria(categoria: string) {
-  return getPerfilEditorial(categoria);
+function getPatronesCategoria(categoria: string, textoPlano: string) {
+  return getPerfilEditorial(categoria, textoPlano);
 }
 
 function calcularPorcentajePatrones(lower: string, patrones: RegExp[]): number {
@@ -23,7 +23,7 @@ function calcularPorcentajePatrones(lower: string, patrones: RegExp[]): number {
 
 export function computeExplanationIndex(textoPlano: string, fuenteOriginal?: string, categoria?: string): ExplanationIndex {
   const lower = textoPlano.toLowerCase();
-  const patrones = getPatronesCategoria(categoria || '');
+  const patrones = getPatronesCategoria(categoria || '', textoPlano);
 
   let porcentajeTranscripcion = 0;
   if (fuenteOriginal) {

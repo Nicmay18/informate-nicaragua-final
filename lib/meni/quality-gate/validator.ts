@@ -263,7 +263,7 @@ export function detectSensationalism(textoPlano: string): QualityGateIssue[] {
 export function detectServiceValue(categoria: string, textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
   const lower = textoPlano.toLowerCase();
-  const perfil = getPerfilEditorial(categoria);
+  const perfil = getPerfilEditorial(categoria, textoPlano);
 
   // El servicio se evalúa con los patrones de la categoría detectada, nunca con plantilla universal
   const cumple = perfil.servicio.length > 0 && perfil.servicio.some((r) => r.test(lower));

@@ -191,6 +191,40 @@ export const CATEGORIAS_EDITORIALES: Record<string, EditorialCriterios> = {
     mensajeServicioFaltante:
       'La nota internacional no explica por qué importa para Nicaragua ni qué implica para el lector.',
   },
+  DeportesIndividuales: {
+    tipo: 'deportes-individuales',
+    intencionLector: 'Conocer al atleta, su disciplina, resultado, contexto de trayectoria y próximo reto.',
+    preguntasObligatorias: [
+      '¿Quién es el atleta?',
+      '¿Cuál es su nacionalidad u origen?',
+      '¿Qué disciplina deportiva compite?',
+      '¿En qué competencia participó?',
+      '¿Qué resultado obtuvo?',
+      '¿Qué sigue para su carrera?',
+    ],
+    contexto: [
+      /\btrayectoria|carrera|historia\s+deportiva|antecedente|previo|camino\b/i,
+      /\bnacionalidad|originario|nacido\s+en|de\s+(nicaragua|otro\s+pa[ií]s)\b/i,
+      /\bdisciplina|categor[ií]a|modalidad|peso|ranking\b/i,
+    ],
+    explicacion: [
+      /\bqu[eé]\s+significa\s+el\s+resultado|c[oó]mo\s+le\s+afecta\s+a\s+su\s+carrera\b/i,
+      /\bc[oó]mo\s+qued[oó]|resultado\s+obtenido|marca\s+personal|tiempo|distancia|puntaje\b/i,
+      /\bpr[oó]ximo\s+reto|pr[oó]xima\s+competencia|siguiente\s+evento|pr[oó]ximo\s+desaf[ií]o\b/i,
+    ],
+    servicio: [
+      /\bpr[oó]ximo\s+evento|pr[oó]xima\s+competencia|pr[oó]ximo\s+reto\b/i,
+      /\blugar|fecha|hora|sede|estadio|gimnasio|pista|piscina|circuito\b/i,
+      /\bcategor[ií]a|modalidad|peso|distancia|prueba\b/i,
+    ],
+    bloqueaPorServicio: false,
+    exigeContexto: true,
+    exigeDiferencial: false,
+    minPalabras: 150,
+    mensajeServicioFaltante:
+      'La nota del atleta individual no incluye datos prácticos como próximo evento, lugar, fecha o categoría/modalidad.',
+  },
+
   Deportes: {
     tipo: 'deportes',
     intencionLector: 'Conocer el evento, equipos/atletas, resultado, contexto y qué sigue.',
@@ -412,23 +446,40 @@ export const CATEGORIAS_EDITORIALES: Record<string, EditorialCriterios> = {
   },
 };
 
-export function getPerfilEditorial(categoria: string): EditorialCriterios {
+const INDIVIDUAL_SPORTS_KEYWORDS = /\b(?:artes\s+marciales|boxeo|boxeador|atletismo|atleta|nadador|nataci[oó]n|ciclismo|ciclista|gimnasia|gimnasta|halterofilia|halter[oó]filo|esgrima|esgrimista|judo|judoka|karate|karateca|taekwondo|taekwondista|surf|skate|patinaje|patinador|patinadora|tenis|tenista|golf|golfista)\b/i;
+
+export function getPerfilEditorial(categoria: string, textoPlano?: string): EditorialCriterios {
   const cat = (categoria || 'General').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (CATEGORIAS_EDITORIALES[cat]) return CATEGORIAS_EDITORIALES[cat];
-  for (const key of Object.keys(CATEGORIAS_EDITORIALES)) {
-    if (key.toLowerCase() === cat.toLowerCase()) return CATEGORIAS_EDITORIALES[key];
+
+  let key = cat;
+  if (!CATEGORIAS_EDITORIALES[key]) {
+    for (const k of Object.keys(CATEGORIAS_EDITORIALES)) {
+      if (k.toLowerCase() === cat.toLowerCase()) {
+        key = k;
+        break;
+      }
+    }
   }
+
   // Fallbacks por palabra clave
-  if (/suceso|polic|judicial|accidente|delito|crimen/i.test(cat)) return CATEGORIAS_EDITORIALES.Sucesos;
-  if (/deporte|f[uú]tbol|b[eé]isbol/i.test(cat)) return CATEGORIAS_EDITORIALES.Deportes;
-  if (/tecno|gadget|app|software/i.test(cat)) return CATEGORIAS_EDITORIALES.Tecnologia;
-  if (/espect|entreten|evento|cine|m[uú]sica|show/i.test(cat)) return CATEGORIAS_EDITORIALES.Espectaculos;
-  if (/cultur|art|patrimonio|galeria/i.test(cat)) return CATEGORIAS_EDITORIALES.Cultura;
-  if (/internac|mundial|global/i.test(cat)) return CATEGORIAS_EDITORIALES.Internacionales;
-  if (/econom|finanza|precio|salario/i.test(cat)) return CATEGORIAS_EDITORIALES.Economia;
-  if (/pol[ií]t|gobierno|asamblea/i.test(cat)) return CATEGORIAS_EDITORIALES.Politica;
-  if (/salud|minsa|vacuna|sintoma|pandemia/i.test(cat)) return CATEGORIAS_EDITORIALES.Salud;
-  if (/educ| mined|universidad|colegio/i.test(cat)) return CATEGORIAS_EDITORIALES.Educaci;
-  if (/nacional|comunidad|local|servicio publico/i.test(cat)) return CATEGORIAS_EDITORIALES.Nacionales;
-  return CATEGORIAS_EDITORIALES.General;
+  if (!CATEGORIAS_EDITORIALES[key]) {
+    if (/suceso|polic|judicial|accidente|delito|crimen/i.test(cat)) key = 'Sucesos';
+    else if (/deporte|f[uú]tbol|b[eé]isbol/i.test(cat)) key = 'Deportes';
+    else if (/tecno|gadget|app|software/i.test(cat)) key = 'Tecnologia';
+    else if (/espect|entreten|evento|cine|m[uú]sica|show/i.test(cat)) key = 'Espectaculos';
+    else if (/cultur|art|patrimonio|galeria/i.test(cat)) key = 'Cultura';
+    else if (/internac|mundial|global/i.test(cat)) key = 'Internacionales';
+    else if (/econom|finanza|precio|salario/i.test(cat)) key = 'Economia';
+    else if (/pol[ií]t|gobierno|asamblea/i.test(cat)) key = 'Politica';
+    else if (/salud|minsa|vacuna|sintoma|pandemia/i.test(cat)) key = 'Salud';
+    else if (/educ| mined|universidad|colegio/i.test(cat)) key = 'Educaci';
+    else if (/nacional|comunidad|local|servicio publico/i.test(cat)) key = 'Nacionales';
+    else key = 'General';
+  }
+
+  if (key === 'Deportes' && textoPlano && INDIVIDUAL_SPORTS_KEYWORDS.test(textoPlano)) {
+    return CATEGORIAS_EDITORIALES.DeportesIndividuales;
+  }
+
+  return CATEGORIAS_EDITORIALES[key];
 }
