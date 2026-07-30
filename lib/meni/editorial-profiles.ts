@@ -193,36 +193,46 @@ export const CATEGORIAS_EDITORIALES: Record<string, EditorialCriterios> = {
   },
   DeportesIndividuales: {
     tipo: 'deportes-individuales',
-    intencionLector: 'Conocer al atleta, su disciplina, resultado, contexto de trayectoria y próximo reto.',
+    intencionLector: 'Conocer al atleta, su origen, disciplina, resultado, contexto de trayectoria y próximo desafío.',
     preguntasObligatorias: [
       '¿Quién es el atleta?',
       '¿Cuál es su nacionalidad u origen?',
-      '¿Qué disciplina deportiva compite?',
-      '¿En qué competencia participó?',
+      '¿Qué edad tiene?',
+      '¿En qué disciplina compite?',
+      '¿En qué torneo o campeonato participó?',
       '¿Qué resultado obtuvo?',
-      '¿Qué sigue para su carrera?',
+      '¿Qué categoría o modalidad compite?',
+      '¿Cuál es su próximo evento o desafío?',
+      '¿Dónde y cuándo será el próximo reto?',
+      '¿Cuál es su trayectoria deportiva?',
     ],
     contexto: [
-      /\btrayectoria|carrera|historia\s+deportiva|antecedente|previo|camino\b/i,
-      /\bnacionalidad|originario|nacido\s+en|de\s+(nicaragua|otro\s+pa[ií]s)\b/i,
-      /\bdisciplina|categor[ií]a|modalidad|peso|ranking\b/i,
+      /\bnombre|atleta|boxeador|nadador|ciclista|gimnasta|judoka|karateca|luchador|deportista\b/i,
+      /\bnacionalidad|origen|procedente|nacido\s+en|pa[ií]s|nicaragua\b/i,
+      /\bedad|a[nñ]os|cumplea[nñ]os|joven\b/i,
+      /\bdisciplina|deporte|boxeo|atletismo|nataci[oó]n|ciclismo|sanda|wushu|lucha|mma\b/i,
+      /\btorneo|campeonato|competencia|open|juegos|mundial|continental\b/i,
+      /\btrayectoria|carrera|historia\s+deportiva|antecedente|camino\b/i,
     ],
     explicacion: [
-      /\bqu[eé]\s+significa\s+el\s+resultado|c[oó]mo\s+le\s+afecta\s+a\s+su\s+carrera\b/i,
-      /\bc[oó]mo\s+qued[oó]|resultado\s+obtenido|marca\s+personal|tiempo|distancia|puntaje\b/i,
-      /\bpr[oó]ximo\s+reto|pr[oó]xima\s+competencia|siguiente\s+evento|pr[oó]ximo\s+desaf[ií]o\b/i,
+      /\bqui[eé]n\s+es\s+el\s+atleta|perfil\s+del\s+atleta|debut|trayectoria\b/i,
+      /\bqu[eé]\s+gan[oó]|titulo|medalla|campeonato|logro|conquista|resultado\s+obtenido\b/i,
+      /\ben\s+qu[eé]\s+competencia|torneo|campeonato|prueba|combate|pelea\b/i,
+      /\bc[oó]mo\s+consigui[oó]|c[oó]mo\s+logr[oó]|c[oó]mo\s+venci[oó]|super[oó]|derrot[oó]|t[eé]cnica|estrategia\b/i,
+      /\bqu[eé]\s+viene|qu[eé]\s+sigue|pr[oó]ximo\s+evento|pr[oó]ximo\s+desaf[ií]o|pr[oó]ximo\s+reto\b/i,
     ],
     servicio: [
-      /\bpr[oó]ximo\s+evento|pr[oó]xima\s+competencia|pr[oó]ximo\s+reto\b/i,
-      /\blugar|fecha|hora|sede|estadio|gimnasio|pista|piscina|circuito\b/i,
-      /\bcategor[ií]a|modalidad|peso|distancia|prueba\b/i,
+      /\bpr[oó]ximo\s+evento|pr[oó]xima\s+competencia|pr[oó]ximo\s+desaf[ií]o|pr[oó]ximo\s+reto\b/i,
+      /\bfecha|hora|lugar|sede|estadio|gimnasio|pista|piscina|circuito\b/i,
+      /\btrayectoria|carrera|contexto\s+deportivo|historia\s+del\s+atleta\b/i,
+      /\bdatos\s+útiles|seguir|informaci[oó]n\s+pr[aá]ctica\b/i,
     ],
     bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 150,
     mensajeServicioFaltante:
-      'La nota del atleta individual no incluye datos prácticos como próximo evento, lugar, fecha o categoría/modalidad.',
+      'La nota del atleta individual no incluye datos prácticos como próximo evento, lugar, fecha o trayectoria.',
   },
 
   Deportes: {
@@ -446,7 +456,7 @@ export const CATEGORIAS_EDITORIALES: Record<string, EditorialCriterios> = {
   },
 };
 
-const INDIVIDUAL_SPORTS_KEYWORDS = /\b(?:artes\s+marciales|boxeo|boxeador|atletismo|atleta|nadador|nataci[oó]n|ciclismo|ciclista|gimnasia|gimnasta|halterofilia|halter[oó]filo|esgrima|esgrimista|judo|judoka|karate|karateca|taekwondo|taekwondista|surf|skate|patinaje|patinador|patinadora|tenis|tenista|golf|golfista)\b/i;
+export const INDIVIDUAL_SPORTS_KEYWORDS = /\b(?:artes\s+marciales|sanda|wushu|lucha|luchador|mma|muay\s+thai|kickboxing|cinturon|cintur[oó]n|boxeo|boxeador|atletismo|atleta|nadador|nataci[oó]n|ciclismo|ciclista|gimnasia|gimnasta|halterofilia|halter[oó]filo|esgrima|esgrimista|judo|judoka|karate|karateca|taekwondo|taekwondista|surf|skate|patinaje|patinador|patinadora|tenis|tenista|golf|golfista|yudo|yudoka|taekwondin)\b/i;
 
 export function getPerfilEditorial(categoria: string, textoPlano?: string): EditorialCriterios {
   const cat = (categoria || 'General').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');

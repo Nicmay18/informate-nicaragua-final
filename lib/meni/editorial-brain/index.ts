@@ -12,6 +12,7 @@
  */
 
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
+import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
 import { runNicaraguaInformateEngine } from './nicaragua-informate-engine';
@@ -532,6 +533,28 @@ const MATRICES_CATEGORIA: Record<string, { contexto: CriterioCategoria[]; explic
       { concepto: 'Horario', terminos: ['hora', 'fecha', 'sábado', 'domingo'] },
     ],
   },
+  DeportesIndividuales: {
+    contexto: [
+      { concepto: 'Nombre del atleta', terminos: ['atleta', 'deportista', 'boxeador', 'nadador', 'ciclista', 'gimnasta', 'judoka', 'karateca', 'luchador'] },
+      { concepto: 'Nacionalidad u origen', terminos: ['nacionalidad', 'origen', 'procedente', 'nacido en', 'pais', 'nicaragua'] },
+      { concepto: 'Edad confirmada', terminos: ['anos', 'edad', 'cumpleanos', 'joven'] },
+      { concepto: 'Disciplina deportiva', terminos: ['disciplina', 'boxeo', 'atletismo', 'natacion', 'ciclismo', 'sanda', 'artes marciales', 'wushu', 'lucha', 'mma', 'gimnasia', 'judo', 'karate'] },
+      { concepto: 'Torneo o campeonato', terminos: ['torneo', 'campeonato', 'competencia', 'open', 'juegos', 'mundial'] },
+      { concepto: 'Trayectoria deportiva', terminos: ['trayectoria', 'carrera', 'historia deportiva', 'antecedente', 'camino'] },
+    ],
+    explicacion: [
+      { concepto: 'Quien es el atleta', terminos: ['quien es el atleta', 'perfil del atleta', 'debut', 'trayectoria'] },
+      { concepto: 'Que gano', terminos: ['que gano', 'titulo', 'medalla', 'campeonato', 'logro', 'conquista', 'resultado obtenido'] },
+      { concepto: 'En que competencia', terminos: ['en que competencia', 'torneo', 'campeonato', 'prueba', 'combate', 'pelea'] },
+      { concepto: 'Como consiguio el resultado', terminos: ['como consiguio', 'como logro', 'como vencio', 'supero', 'derroto', 'tecnica', 'estrategia'] },
+      { concepto: 'Que viene despues', terminos: ['que viene', 'que sigue', 'proximo evento', 'proximo desafio', 'proximo reto'] },
+    ],
+    servicio: [
+      { concepto: 'Informacion del proximo evento', terminos: ['proximo evento', 'proxima competencia', 'proximo desafio', 'proximo reto', 'fecha', 'hora', 'lugar'] },
+      { concepto: 'Datos utiles para seguidores', terminos: ['donde ver', 'transmision', 'horario', 'entrada', 'boletos'] },
+      { concepto: 'Trayectoria y contexto deportivo', terminos: ['trayectoria', 'carrera', 'contexto deportivo', 'historia del atleta'] },
+    ],
+  },
   Tecnologia: {
     contexto: [
       { concepto: 'Producto o servicio', terminos: ['app', 'aplicación', 'dispositivo', 'celular', 'teléfono', 'plataforma', 'red social'] },
@@ -620,7 +643,18 @@ function calcularEvaluacionCategoria(
 ): EvaluacionCategoria & { puntosPerdidos: PuntoPerdido[] } {
   const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const base = normalizar(texto);
-  const matriz = MATRICES_CATEGORIA[categoria] || MATRICES_CATEGORIA['General'];
+  const categoriaNormalizada = (categoria || 'General').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  let matrizKey = categoriaNormalizada;
+  if (!MATRICES_CATEGORIA[matrizKey]) {
+    const match = Object.keys(MATRICES_CATEGORIA).find((k) => k.toLowerCase() === matrizKey.toLowerCase());
+    matrizKey = match || 'General';
+  }
+  if (matrizKey.toLowerCase() === 'deportes' && INDIVIDUAL_SPORTS_KEYWORDS.test(texto)) {
+    matrizKey = 'DeportesIndividuales';
+  }
+  const categoriaFinal = matrizKey;
+  const matriz = MATRICES_CATEGORIA[matrizKey] || MATRICES_CATEGORIA['General'];
 
   const puntuar = (criterios: CriterioCategoria[], puntosPorItem: number): { score: number; faltantes: string[]; cumplidos: string[]; perdidos: PuntoPerdido[] } => {
     const faltantes: string[] = [];
@@ -644,7 +678,7 @@ function calcularEvaluacionCategoria(
   const srv = puntuar(matriz.servicio, 5);
 
   return {
-    categoria,
+    categoria: categoriaFinal,
     contexto: ctx.score,
     explicacion: exp.score,
     servicio: srv.score,
