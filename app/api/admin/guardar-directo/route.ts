@@ -8,12 +8,9 @@ import { stripHtml } from '@/lib/meni/utils/helpers';
 export const maxDuration = 30;
 
 function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
-  if (!aprobado || score < 70) return 'RECHAZADO';
-  if (score >= 98) return 'FORENSE';
-  if (score >= 95) return 'ORO';
-  if (score >= 90) return 'PLATA';
-  if (score >= 85) return 'BRONCE';
-  return 'SIN NIVEL';
+  if (!aprobado || score < 85) return 'NO PUBLICAR';
+  if (score >= 90) return 'PUBLICAR';
+  return 'PUBLICAR CON CAMBIOS';
 }
 
 function verificarAuth(request: NextRequest): boolean {

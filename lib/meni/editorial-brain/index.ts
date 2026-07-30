@@ -11,6 +11,7 @@
  * Solo después el LLM escribe siguiendo las decisiones.
  */
 
+import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
 import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
@@ -452,190 +453,22 @@ interface CriterioCategoria {
   terminos: string[];
 }
 
-const MATRICES_CATEGORIA: Record<string, { contexto: CriterioCategoria[]; explicacion: CriterioCategoria[]; servicio: CriterioCategoria[] }> = {
-  Sucesos: {
-    contexto: [
-      { concepto: 'Qué ocurrió', terminos: ['ocurrió', 'sucedió', 'hecho', 'incidente', 'accidente', 'muerto', 'falleció', 'mató'] },
-      { concepto: 'Dónde ocurrió', terminos: ['barrio', 'comarca', 'municipio', 'departamento', 'km', 'kilómetro', 'dirección', 'lugar'] },
-      { concepto: 'Cuándo ocurrió', terminos: ['madrugada', 'tarde', 'noche', 'ayer', 'hoy', 'domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'] },
-      { concepto: 'Impacto comunitario', terminos: ['comunidad', 'vecinos', 'familiares', 'pobladores', 'zona', 'tranquilidad', 'seguridad'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué se sabe', terminos: ['se sabe', 'se confirmó', 'confirmó', 'según', 'reporte', 'versión'] },
-      { concepto: 'Qué no se sabe', terminos: ['no se sabe', 'aún no', 'sin confirmar', 'se desconoce', 'no se ha determinado'] },
-      { concepto: 'Qué sigue en la investigación', terminos: ['investigación', 'se investiga', 'indaga', 'próximos', 'siguiente paso'] },
-      { concepto: 'Qué investigan', terminos: ['indagan', 'investigan', 'delito', 'homicidio', 'asesinato', 'muerte'] },
-    ],
-    servicio: [
-      { concepto: 'Qué dice la Policía o autoridad', terminos: ['policía', 'policia', 'autoridades', 'fiscalía', 'fiscalia', 'ministerio'] },
-      { concepto: 'Qué información continúa sin confirmar', terminos: ['sin confirmar', 'sin identificar', 'se desconoce', 'aún no se ha'] },
-      { concepto: 'Qué deben esperar familiares o comunidad', terminos: ['esperar', 'comunidad', 'familiares', 'proceso', 'investigación'] },
-      { concepto: 'Qué delitos podrían investigarse', terminos: ['delito', 'homicidio', 'asesinato', 'imputar', 'acusar'] },
-    ],
-  },
-  Espectaculos: {
-    contexto: [
-      { concepto: 'Artista o espectáculo', terminos: ['artista', 'banda', 'cantante', 'actor', 'obra', 'teatro', 'concierto', 'festival'] },
-      { concepto: 'Fecha', terminos: ['fecha', 'día', 'sábado', 'domingo', 'próximo', 'este'] },
-      { concepto: 'Lugar', terminos: ['lugar', 'sede', 'teatro', 'estadio', 'salón', 'recinto'] },
-      { concepto: 'Público objetivo', terminos: ['público', 'familias', 'niños', 'adultos', 'jóvenes'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué es', terminos: ['es', 'trata de', 'se trata', 'obra', 'evento', 'show'] },
-      { concepto: 'Qué encontrará el visitante', terminos: ['encontrará', 'verá', 'escuchará', 'habrá', 'incluye'] },
-      { concepto: 'Costos', terminos: ['precio', 'costo', 'entrada', 'boleto', 'córdoba', 'dólar'] },
-      { concepto: 'Horarios', terminos: ['hora', 'horario', 'inicio', 'apertura', 'función'] },
-    ],
-    servicio: [
-      { concepto: 'Horarios', terminos: ['hora', 'horario', 'inicio', 'apertura', 'función'] },
-      { concepto: 'Precios', terminos: ['precio', 'costo', 'entrada', 'boleto'] },
-      { concepto: 'Ubicación', terminos: ['ubicado', 'dirección', 'cómo llegar', 'lugar', 'sede'] },
-      { concepto: 'Cómo comprar entradas', terminos: ['comprar', 'entrada', 'boleto', 'taquilla', 'en línea', 'reservar'] },
-    ],
-  },
-  Economia: {
-    contexto: [
-      { concepto: 'Medida o cambio anunciado', terminos: ['medida', 'decisión', 'anunció', 'aprobó', 'cambio', 'reforma'] },
-      { concepto: 'Institución responsable', terminos: ['banco', 'ministerio', 'gobierno', 'asamblea', 'autoridad'] },
-      { concepto: 'Plazo o vigencia', terminos: ['plazo', 'vigencia', 'a partir de', 'desde', 'hasta', 'próximos días'] },
-      { concepto: 'Antecedente económico', terminos: ['anterior', 'histórico', 'pasado', 'año pasado', 'comparado', 'ha venido'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué cambió', terminos: ['cambió', 'aumentó', 'disminuyó', 'subió', 'bajó', 'se modificó'] },
-      { concepto: 'Por qué cambió', terminos: ['porque', 'debido a', 'según', 'explicó', 'argumentó', 'razón'] },
-      { concepto: 'Cómo afecta', terminos: ['afecta', 'impacto', 'influye', 'repercute', 'consecuencia'] },
-      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'espera', 'continuará', 'se evaluará'] },
-    ],
-    servicio: [
-      { concepto: 'Quién gana', terminos: ['gana', 'beneficia', 'favorece', 'mejora', 'oportunidad'] },
-      { concepto: 'Quién pierde', terminos: ['pierde', 'perjudica', 'afecta negativamente', 'dificulta', 'perjuicio'] },
-      { concepto: 'Cómo afecta el bolsillo', terminos: ['bolsillo', 'presupuesto', 'precio', 'salario', 'costo de vida'] },
-      { concepto: 'Datos concretos', terminos: ['córdoba', 'dólar', 'millón', 'mil', 'cifra', 'porcentaje', '%'] },
-    ],
-  },
-  Deportes: {
-    contexto: [
-      { concepto: 'Equipos o jugadores', terminos: ['equipo', 'jugador', 'selección', 'rival', 'cuadro'] },
-      { concepto: 'Torneo o competencia', terminos: ['torneo', 'liga', 'copa', 'campeonato', 'competencia'] },
-      { concepto: 'Fecha o jornada', terminos: ['jornada', 'fecha', 'sábado', 'domingo', 'ayer', 'hoy'] },
-      { concepto: 'Estadísticas clave', terminos: ['marcador', 'goles', 'puntos', 'tiros', 'estadísticas', 'resultado'] },
-    ],
-    explicacion: [
-      { concepto: 'Resultado', terminos: ['ganó', 'perdió', 'empató', 'marcador', 'resultado', 'derrotó'] },
-      { concepto: 'Cómo se dio el partido', terminos: ['primera', 'segunda', 'minuto', 'jugada', 'anotó', 'ocasión'] },
-      { concepto: 'Consecuencias', terminos: ['consecuencia', 'impacto', 'deja', 'situación', 'clasificación'] },
-      { concepto: 'Qué necesita para clasificar', terminos: ['necesita', 'clasificar', 'puntos', 'próximo partido', 'dependerá'] },
-    ],
-    servicio: [
-      { concepto: 'Tabla o clasificación', terminos: ['tabla', 'clasificación', 'posición', 'puntos'] },
-      { concepto: 'Próximo rival', terminos: ['próximo', 'siguiente', 'rival', 'enfrentará', 'visita'] },
-      { concepto: 'Dónde ver', terminos: ['transmisión', 'canal', 'horario', 'dónde ver', 'televisión'] },
-      { concepto: 'Horario', terminos: ['hora', 'fecha', 'sábado', 'domingo'] },
-    ],
-  },
-  DeportesIndividuales: {
-    contexto: [
-      { concepto: 'Nombre del atleta', terminos: ['atleta', 'deportista', 'boxeador', 'nadador', 'ciclista', 'gimnasta', 'judoka', 'karateca', 'luchador'] },
-      { concepto: 'Nacionalidad u origen', terminos: ['nacionalidad', 'origen', 'procedente', 'nacido en', 'pais', 'nicaragua'] },
-      { concepto: 'Edad confirmada', terminos: ['anos', 'edad', 'cumpleanos', 'joven'] },
-      { concepto: 'Disciplina deportiva', terminos: ['disciplina', 'boxeo', 'atletismo', 'natacion', 'ciclismo', 'sanda', 'artes marciales', 'wushu', 'lucha', 'mma', 'gimnasia', 'judo', 'karate'] },
-      { concepto: 'Torneo o campeonato', terminos: ['torneo', 'campeonato', 'competencia', 'open', 'juegos', 'mundial'] },
-      { concepto: 'Trayectoria deportiva', terminos: ['trayectoria', 'carrera', 'historia deportiva', 'antecedente', 'camino'] },
-    ],
-    explicacion: [
-      { concepto: 'Quien es el atleta', terminos: ['quien es el atleta', 'perfil del atleta', 'debut', 'trayectoria'] },
-      { concepto: 'Que gano', terminos: ['que gano', 'titulo', 'medalla', 'campeonato', 'logro', 'conquista', 'resultado obtenido'] },
-      { concepto: 'En que competencia', terminos: ['en que competencia', 'torneo', 'campeonato', 'prueba', 'combate', 'pelea'] },
-      { concepto: 'Como consiguio el resultado', terminos: ['como consiguio', 'como logro', 'como vencio', 'supero', 'derroto', 'tecnica', 'estrategia'] },
-      { concepto: 'Que viene despues', terminos: ['que viene', 'que sigue', 'proximo evento', 'proximo desafio', 'proximo reto'] },
-    ],
-    servicio: [
-      { concepto: 'Informacion del proximo evento', terminos: ['proximo evento', 'proxima competencia', 'proximo desafio', 'proximo reto', 'fecha', 'hora', 'lugar'] },
-      { concepto: 'Datos utiles para seguidores', terminos: ['donde ver', 'transmision', 'horario', 'entrada', 'boletos'] },
-      { concepto: 'Trayectoria y contexto deportivo', terminos: ['trayectoria', 'carrera', 'contexto deportivo', 'historia del atleta'] },
-    ],
-  },
-  Tecnologia: {
-    contexto: [
-      { concepto: 'Producto o servicio', terminos: ['app', 'aplicación', 'dispositivo', 'celular', 'teléfono', 'plataforma', 'red social'] },
-      { concepto: 'Empresa o desarrollador', terminos: ['empresa', 'lanzó', 'desarrolló', 'marca', 'compañía'] },
-      { concepto: 'Mercado o país de lanzamiento', terminos: ['mercado', 'llega', 'disponible', 'lanzamiento', 'país'] },
-      { concepto: 'Requisitos', terminos: ['requisito', 'compatible', 'sistema', 'versión', 'conexión'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué es', terminos: ['es', 'permite', 'sirve', 'funciona', 'plataforma'] },
-      { concepto: 'Para qué sirve', terminos: ['sirve', 'permite', 'ayuda', 'beneficio', 'uso'] },
-      { concepto: 'Cómo funciona', terminos: ['funciona', 'operación', 'cómo se usa', 'usar', 'características'] },
-      { concepto: 'Limitaciones', terminos: ['limitación', 'no incluye', 'restricción', 'no sirve', 'problema'] },
-    ],
-    servicio: [
-      { concepto: 'Precio', terminos: ['precio', 'costo', 'cuesta', 'dólar', 'córdoba', 'gratis'] },
-      { concepto: 'Disponibilidad', terminos: ['disponible', 'llega', 'lanzamiento', 'ya está', 'próximamente'] },
-      { concepto: 'Dónde conseguirlo', terminos: ['descargar', 'comprar', 'adquirir', 'instalar', 'app store'] },
-      { concepto: 'Ventajas', terminos: ['ventaja', 'beneficio', 'mejora', 'rápido', 'fácil', 'seguro'] },
-    ],
-  },
-  Nacionales: {
-    contexto: [
-      { concepto: 'Institución o decisión', terminos: ['gobierno', 'asamblea', 'ministerio', 'alcaldía', 'institución', 'anunció'] },
-      { concepto: 'Ámbito de aplicación', terminos: ['nacional', 'municipio', 'departamento', 'comunidad', 'sector'] },
-      { concepto: 'Antecedente político', terminos: ['anterior', 'pasado', 'histórico', 'desde', 'viene', 'se venía'] },
-      { concepto: 'Cronología', terminos: ['ayer', 'anterior', 'primero', 'luego', 'después', 'antes'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué decidieron', terminos: ['decidió', 'aprobó', 'anunció', 'informó', 'resolvió'] },
-      { concepto: 'Por qué', terminos: ['porque', 'debido a', 'razón', 'argumentó', 'justificó'] },
-      { concepto: 'A quién afecta', terminos: ['afecta', 'población', 'beneficiarios', 'ciudadanos', 'familias'] },
-      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'se espera', 'futuro'] },
-    ],
-    servicio: [
-      { concepto: 'Cómo acceder', terminos: ['acceder', 'tramitar', 'solicitar', 'obtener', 'requisito'] },
-      { concepto: 'Requisitos', terminos: ['requisito', 'documento', 'presentar', 'cumplir'] },
-      { concepto: 'Plazos', terminos: ['plazo', 'fecha', 'hasta', 'desde', 'vigencia'] },
-      { concepto: 'Beneficiarios', terminos: ['beneficiario', 'población', 'familia', 'estudiante', 'trabajador'] },
-    ],
-  },
-  Internacionales: {
-    contexto: [
-      { concepto: 'Actores o países', terminos: ['país', 'gobierno', 'presidente', 'líder', 'nación', 'organización'] },
-      { concepto: 'Región o ámbito', terminos: ['región', 'mundo', 'continente', 'frontera', 'territorio'] },
-      { concepto: 'Antecedente internacional', terminos: ['histórico', 'anterior', 'pasado', 'conflicto', 'relación'] },
-      { concepto: 'Cronología', terminos: ['ayer', 'anterior', 'primero', 'luego', 'después', 'antes'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué ocurrió', terminos: ['ocurrió', 'sucedió', 'anunció', 'decidió', 'pasó'] },
-      { concepto: 'Por qué importa', terminos: ['importancia', 'relevancia', 'por qué', 'significado', 'implicación'] },
-      { concepto: 'Cómo afecta a Nicaragua', terminos: ['nicaragua', 'país', 'impacto', 'afecta', 'relación'] },
-      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'se espera'] },
-    ],
-    servicio: [
-      { concepto: 'Reacción de Nicaragua', terminos: ['nicaragua', 'gobierno', 'reacción', 'posición', 'declaró'] },
-      { concepto: 'Recomendación para nicaragüenses', terminos: ['recomendación', 'evitar', 'precaución', 'consejo', 'alerta'] },
-      { concepto: 'Impacto local', terminos: ['impacto', 'afecta', 'comercio', 'precio', 'remesas', 'turismo'] },
-      { concepto: 'Datos oficiales', terminos: ['oficial', 'gobierno', 'datos', 'cifra', 'informó'] },
-    ],
-  },
-  General: {
-    contexto: [
-      { concepto: 'Quién', terminos: ['quien', 'autoridad', 'persona', 'organización', 'responsable'] },
-      { concepto: 'Dónde', terminos: ['lugar', 'ubicación', 'país', 'municipio', 'comunidad'] },
-      { concepto: 'Cuándo', terminos: ['fecha', 'ayer', 'hoy', 'mañana', 'hora', 'cuándo'] },
-      { concepto: 'Antecedentes', terminos: ['anterior', 'pasado', 'antecedente', 'contexto', 'histórico'] },
-    ],
-    explicacion: [
-      { concepto: 'Qué pasó', terminos: ['ocurrió', 'pasó', 'sucedió', 'hecho', 'acontecimiento'] },
-      { concepto: 'Por qué', terminos: ['porque', 'razón', 'causa', 'motivo', 'debido a'] },
-      { concepto: 'Cómo afecta', terminos: ['afecta', 'impacto', 'influye', 'consecuencia'] },
-      { concepto: 'Qué sigue', terminos: ['siguiente', 'próximo', 'continuará', 'espera'] },
-    ],
-    servicio: [
-      { concepto: 'Qué hacer', terminos: ['hacer', 'recomendación', 'acción', 'pasos', 'cómo actuar'] },
-      { concepto: 'Recomendación', terminos: ['recomendación', 'consejo', 'evitar', 'precaución'] },
-      { concepto: 'Dónde acudir', terminos: ['acudir', 'llamar', 'dirección', 'centro', 'oficina'] },
-      { concepto: 'Utilidad', terminos: ['útil', 'servicio', 'práctico', 'beneficio', 'para qué'] },
-    ],
-  },
-};
+
+
+function buildMatricesCategoria(): Record<string, { contexto: CriterioCategoria[]; explicacion: CriterioCategoria[]; servicio: CriterioCategoria[] }> {
+  const matrices: Record<string, { contexto: CriterioCategoria[]; explicacion: CriterioCategoria[]; servicio: CriterioCategoria[] }> = {};
+  for (const key of Object.keys(CONTRATO_GLOBAL.categorias)) {
+    const contrato = CONTRATO_GLOBAL.categorias[key];
+    matrices[key] = {
+      contexto: contrato.contexto.map((i) => ({ concepto: i.concepto, terminos: i.sinonimos })),
+      explicacion: contrato.explicacion.map((i) => ({ concepto: i.concepto, terminos: i.sinonimos })),
+      servicio: contrato.servicio.map((i) => ({ concepto: i.concepto, terminos: i.sinonimos })),
+    };
+  }
+  return matrices;
+}
+
+const MATRICES_CATEGORIA = buildMatricesCategoria();
 
 function calcularEvaluacionCategoria(
   categoria: string,
@@ -643,18 +476,22 @@ function calcularEvaluacionCategoria(
 ): EvaluacionCategoria & { puntosPerdidos: PuntoPerdido[] } {
   const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const base = normalizar(texto);
-  const categoriaNormalizada = (categoria || 'General').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const categoriaNormalizada = (categoria || 'General')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 
   let matrizKey = categoriaNormalizada;
   if (!MATRICES_CATEGORIA[matrizKey]) {
-    const match = Object.keys(MATRICES_CATEGORIA).find((k) => k.toLowerCase() === matrizKey.toLowerCase());
-    matrizKey = match || 'General';
+    const match = Object.keys(MATRICES_CATEGORIA).find((k) => k === matrizKey);
+    matrizKey = match || 'general';
   }
-  if (matrizKey.toLowerCase() === 'deportes' && INDIVIDUAL_SPORTS_KEYWORDS.test(texto)) {
-    matrizKey = 'DeportesIndividuales';
+  if (matrizKey === 'deportes' && INDIVIDUAL_SPORTS_KEYWORDS.test(texto)) {
+    matrizKey = 'deportesindividuales';
   }
   const categoriaFinal = matrizKey;
-  const matriz = MATRICES_CATEGORIA[matrizKey] || MATRICES_CATEGORIA['General'];
+  const matriz = MATRICES_CATEGORIA[matrizKey] || MATRICES_CATEGORIA['general'];
 
   const puntuar = (criterios: CriterioCategoria[], puntosPorItem: number): { score: number; faltantes: string[]; cumplidos: string[]; perdidos: PuntoPerdido[] } => {
     const faltantes: string[] = [];
