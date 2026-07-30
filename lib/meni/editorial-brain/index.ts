@@ -126,9 +126,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
 
   // Recomendación editorial — el editor guía, no bloquea
   const recomendacionesCount = utilityGate.recomendacionesEditoriales.length + diagnostico.queLeFaltaParaReferencia.length;
-  const tieneProblemasGraves =
-    (newsValue.veredicto === 'baja' && newsValue.score < 30) ||
-    antiClickbait.veredicto === 'bloqueado';
+  const tieneProblemasGraves = antiClickbait.veredicto === 'bloqueado';
 
   const recomendacionEditorial: RecomendacionEditorial = tieneProblemasGraves
     ? 'revisar'
@@ -139,7 +137,6 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Backward compat: bloquear = true solo para 'revisar'
   const bloquear = recomendacionEditorial === 'revisar';
   const motivosBloqueo: string[] = [];
-  if (newsValue.veredicto === 'baja' && newsValue.score < 30) motivosBloqueo.push(`Valor noticioso muy bajo (${newsValue.score}/100). Revisar ángulo editorial.`);
   if (antiClickbait.veredicto === 'bloqueado') motivosBloqueo.push(`Anti Clickbait: ${antiClickbait.razon}`);
   if (utilityGate.recomendacionesEditoriales.length > 0) {
     motivosBloqueo.push(...utilityGate.recomendacionesEditoriales);
@@ -371,11 +368,9 @@ function buildVeredictoEjecutivo(
   d: EditorialDecision,
   evaluacionCategoria: EvaluacionCategoria,
 ): VeredictoEditorJefe {
-  // Publicar
   const publicar: VeredictoEditorJefe['publicar'] =
     d.publicar ? 'SI' : d.recomendacionEditorial === 'revisar' ? 'NO' : 'MEJORAR';
 
-  // Confianza: principalmente ADN NI, ajustada por riesgo
   let confianza = d.score;
   if (d.riesgoEditorial === 'ALTO') confianza -= 20;
   if (d.riesgoEditorial === 'MEDIO') confianza -= 10;
@@ -383,13 +378,14 @@ function buildVeredictoEjecutivo(
   if (d.patronesAplicados.length > 0) confianza += 2;
   confianza = Math.max(0, Math.min(100, Math.round(confianza)));
 
+  const queFalta = d.acciones.slice(0, 3);
+
   const respuestaEjecutiva = publicar === 'SI'
     ? `📢 Veredicto del Editor Jefe: ${d.editorialContribution} Además, ${d.readerLearning}`
     : publicar === 'NO'
     ? `📢 Veredicto del Editor Jefe: No publicar. ${d.motivoPrincipal}. No aporta razón suficiente para leerse en Nicaragua Informate.`
     : `📢 Veredicto del Editor Jefe: Mejorar antes de publicar. ${d.acciones[0] || d.motivoPrincipal}. Aún no justifica por qué leerla aquí y no en otro medio.`;
 
-  // Recomendación de portada desde ranking
   const portadaMap: Record<EditorialRanking['valorPortada'], VeredictoEditorJefe['recomendacionPortada']> = {
     principal: 'Hero principal',
     portada: 'Portada principal',
@@ -398,7 +394,6 @@ function buildVeredictoEjecutivo(
     no_portada: 'No va a portada',
   };
 
-  // Probabilidades desde ranking (Alta/Media/Baja -> Muy alta/Alta/Media/Baja/Muy baja)
   const discoverMap: Record<EditorialRanking['valorDiscover'], VeredictoEditorJefe['probabilidadDiscover']> = {
     Alta: 'Alta',
     Media: 'Media',
@@ -410,7 +405,6 @@ function buildVeredictoEjecutivo(
     Baja: 'Baja',
   };
 
-  // Antecedentes y patrones como strings legibles
   const antecedentesUsados = d.memoriaEditorial
     ? d.memoriaEditorial.cronologia.slice(0, 5).map(c => `${c.fecha}: ${c.titulo}`)
     : [];
@@ -438,7 +432,7 @@ function buildVeredictoEjecutivo(
     valorParaLector: d.aportaAlLector,
     valorFrenteCompetencia: d.diferenciaCompetencia,
     riesgoEditorial: d.riesgoEditorial,
-    queFalta: d.acciones,
+    queFalta,
     recomendacionPortada: portadaMap[d.ranking.valorPortada],
     probabilidadFacebook: facebookMap[d.ranking.valorFacebook],
     probabilidadDiscover: discoverMap[d.ranking.valorDiscover],

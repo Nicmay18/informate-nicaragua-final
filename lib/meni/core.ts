@@ -143,12 +143,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   // Quality Gate: solo bloquear por issues técnicos/factuales que el
   // Editorial Brain no evalúa (contradicciones, cronología, duplicados).
-  const tierBlockingIssues = qualityGate.issues.filter((i) => {
-    if (i.severidad !== 'blocking') return true;
-    if (i.categoria === 'servicio' && !thresholds.exigeServiceValue) return false;
-    if (i.categoria === 'valor_diferencial' && !thresholds.exigeDifferentialValue) return false;
-    return true;
-  });
+  const tierBlockingIssues = qualityGate.issues.filter((i) => i.severidad === 'blocking');
 
   const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking');
 

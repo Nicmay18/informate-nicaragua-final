@@ -1,6 +1,6 @@
 import type { MeniPrioridad, MeniCategoria } from './types';
 
-export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '85');
+export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '90');
 
 export function computePriority(veredicto: string): MeniPrioridad {
   switch (veredicto) {
@@ -19,8 +19,9 @@ export function computePriority(veredicto: string): MeniPrioridad {
 }
 
 export function scoreToGrade(score: number): string {
-  if (score >= 90) return 'PUBLICAR';
-  if (score >= 85) return 'PUBLICAR CON CAMBIOS';
+  if (score >= 95) return 'PUBLICABLE ORO';
+  if (score >= 90) return 'PUBLICABLE';
+  if (score >= 80) return 'MEJORAR';
   return 'NO PUBLICAR';
 }
 

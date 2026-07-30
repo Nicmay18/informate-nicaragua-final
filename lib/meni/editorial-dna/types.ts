@@ -23,5 +23,6 @@ export interface EditorialDnaResult {
   adnNI: number;
   bloquear: boolean;
   motivoBloqueo: string | null;
+  recomendacionesEditoriales?: string[];
   detalle: string;
 }

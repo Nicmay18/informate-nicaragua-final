@@ -58,7 +58,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     ...detectTerminologyVariants(textoPlano),
     ...detectUnsupportedClaims(textoPlano),
     ...detectFillerLanguage(textoPlano),
-    ...detectSensationalism(textoPlano),
+    ...detectSensationalism(textoPlano, input.categoria),
   ];
 
   // Detector de transcripción párrafo a párrafo (requiere fuente original)
@@ -96,7 +96,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     bloqueado = input.sourceOfTruth!.bloqueado;
     motivosBloqueo = [];
   } else {
-    originalidadPorcentaje = computeOriginalityPercent(explanationIndex);
+    originalidadPorcentaje = computeOriginalityPercent(explanationIndex, input.contenido);
     const scoreResult = computeEditorScore(issuesRestantes, explanationIndex, originalidadPorcentaje);
     editorScore = scoreResult.score;
     bloqueado = scoreResult.bloqueado;

@@ -265,18 +265,53 @@ export function detectFillerLanguage(textoPlano: string): QualityGateIssue[] {
   return issues;
 }
 
-export function detectSensationalism(textoPlano: string): QualityGateIssue[] {
+const ADJETIVOS_CONTEXTO_VALIDO: Record<string, string[]> = {
+  devastador: ['terremoto', 'huracán', 'huracan', 'tornado', 'explosión', 'explosion', 'inundación', 'inundacion', 'desastre', 'sequía', 'sequia'],
+  brutal: ['ataque', 'agresión', 'agresion', 'golpe', 'lesión', 'lesion', 'combate', 'pelea'],
+  grave: ['accidente', 'herida', 'lesión', 'lesion', 'estado', 'condición', 'condicion', 'situación', 'situacion'],
+  histórico: ['récord', 'record', 'hito', 'marca', 'primera vez', 'logro', 'conquista', 'victoria'],
+  récord: ['marca', 'tiempo', 'puntaje', 'goles', 'puntos', 'victorias', 'campeonato'],
+  record: ['marca', 'tiempo', 'puntaje', 'goles', 'puntos', 'victorias', 'campeonato'],
+  sangriento: ['balacera', 'enfrentamiento', 'ataque', 'masacre', 'homicidio', 'tiroteo'],
+  mortífero: ['accidente', 'virus', 'enfermedad', 'epidemia', 'pandemia'],
+  mortifero: ['accidente', 'virus', 'enfermedad', 'epidemia', 'pandemia'],
+};
+
+export function detectSensationalism(textoPlano: string, categoria?: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
   const lower = textoPlano.toLowerCase();
-  const encontradas = SENSATIONALIST_PHRASES.filter((p) => lower.includes(p));
-  if (encontradas.length > 0) {
+
+  // 1. Frases sensacionalistas siempre bloquean
+  const frasesEncontradas = SENSATIONALIST_PHRASES.filter((p) => lower.includes(p));
+  if (frasesEncontradas.length > 0) {
     issues.push({
       categoria: 'sensacionalismo',
       severidad: 'blocking',
-      mensaje: `Lenguaje sensacionalista detectado: ${encontradas.join(', ')}`,
+      mensaje: `Lenguaje sensacionalista detectado: ${frasesEncontradas.join(', ')}`,
       corregible: true,
     });
   }
+
+  // 2. Adjetivos: solo warning si NO están en contexto válido
+  const perfil = categoria ? getPerfilEditorial(categoria) : null;
+  const palabrasProhibidas = perfil?.palabrasProhibidas || FILLER_WORDS;
+  for (const palabra of palabrasProhibidas) {
+    const regex = new RegExp(`\\b${palabra}\\b`, 'i');
+    if (!regex.test(lower)) continue;
+    const contextosValidos = ADJETIVOS_CONTEXTO_VALIDO[palabra.toLowerCase()];
+    if (contextosValidos) {
+      const tieneContextoValido = contextosValidos.some((ctx) => lower.includes(ctx));
+      if (tieneContextoValido) continue;
+    }
+    issues.push({
+      categoria: 'sensacionalismo',
+      severidad: 'warning',
+      mensaje: `Adjetivo innecesario fuera de contexto: "${palabra}"`,
+      evidencia: palabra,
+      corregible: true,
+    });
+  }
+
   return issues;
 }
 
@@ -285,12 +320,11 @@ export function detectServiceValue(categoria: string, textoPlano: string): Quali
   const lower = textoPlano.toLowerCase();
   const perfil = getPerfilEditorial(categoria, textoPlano);
 
-  // El servicio se evalúa con los patrones de la categoría detectada, nunca con plantilla universal
   const cumple = perfil.servicio.length > 0 && perfil.servicio.some((r) => r.test(lower));
   if (!cumple) {
     issues.push({
       categoria: 'servicio',
-      severidad: perfil.bloqueaPorServicio ? 'blocking' : 'warning',
+      severidad: 'warning',
       mensaje: perfil.mensajeServicioFaltante,
       corregible: false,
     });
@@ -303,7 +337,7 @@ export function detectDifferentialValue(porQueLeerAqui?: string): QualityGateIss
   if (!porQueLeerAqui || porQueLeerAqui.trim().length < 10) {
     issues.push({
       categoria: 'valor_diferencial',
-      severidad: 'blocking',
+      severidad: 'warning',
       mensaje: '¿Por qué alguien leería esta nota en Nicaragua Informate y no en TN8? — sin respuesta.',
       corregible: false,
     });

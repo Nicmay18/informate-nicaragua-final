@@ -46,24 +46,40 @@ export function computeExplanationIndex(textoPlano: string, fuenteOriginal?: str
   return { porcentajeTranscripcion, porcentajeContexto, porcentajeExplicacion, porcentajeServicio };
 }
 
-export function computeOriginalityPercent(explanationIndex: ExplanationIndex): number {
+export function computeOriginalityPercent(explanationIndex: ExplanationIndex, textoHtml?: string): number {
   const { porcentajeTranscripcion, porcentajeContexto, porcentajeExplicacion, porcentajeServicio } = explanationIndex;
 
   const reescritura = 100 - porcentajeTranscripcion;
+
+  let organizacion = 0;
+  if (textoHtml) {
+    if (/<h2/i.test(textoHtml)) organizacion += 50;
+    if (/<h3/i.test(textoHtml)) organizacion += 25;
+    const parrafos = textoHtml.split(/<\/p>/i).filter(p => p.replace(/<[^>]+>/g, '').trim().length > 30);
+    if (parrafos.length >= 4) organizacion += 25;
+  } else {
+    organizacion = 50;
+  }
+  organizacion = Math.min(organizacion, 100);
+
   const diferenciacion = Math.min(
     Math.round((porcentajeContexto + porcentajeExplicacion + porcentajeServicio) / 3),
     100
   );
 
   const originalidad = Math.round(
-    reescritura * 0.30 +
-    porcentajeContexto * 0.25 +
-    porcentajeExplicacion * 0.20 +
-    porcentajeServicio * 0.15 +
-    diferenciacion * 0.10
+    porcentajeExplicacion * 0.25 +
+    porcentajeContexto * 0.20 +
+    porcentajeServicio * 0.20 +
+    diferenciacion * 0.15 +
+    organizacion * 0.10 +
+    reescritura * 0.10
   );
 
-  return Math.max(0, Math.min(originalidad, 100));
+  let resultado = Math.max(0, Math.min(originalidad, 100));
+  if (porcentajeTranscripcion < 20) resultado = Math.max(resultado, 70);
+
+  return resultado;
 }
 
 export function computeEditorScore(

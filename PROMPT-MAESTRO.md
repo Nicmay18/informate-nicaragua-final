@@ -175,8 +175,9 @@ Servicio significa: dónde, cuándo, cómo participar o asistir, contexto e impo
 
 2. FUENTE REAL — ¿Quién vio esto? ¿Quién lo contó?
    Nicaragua: instituciones NO dan declaraciones a medios independientes.
-   SÍ: "Vecinos del barrio X relataron...", "Testigos presentes señalaron...", "Videos difundidos en redes muestran...".
-   NO: "La Policía confirmó", "El MINSA precisó" sin nombre.
+   SÍ: "Vecinos del barrio X relataron...", "Testigos presentes señalaron...", "Videos difundidos en redes muestran...", "Un residente que prefirió omitir su nombre comentó...", "Familiares de la víctima indicaron..."
+   SÍ: "La Policía Nacional informó...", "El MINSA informó...", "Bomberos atendieron...", "Las investigaciones continúan...", "Según información preliminar..."
+   NO: Afirmaciones sin atribución (decir algo sin decir quién lo dijo o de dónde se obtuvo).
 
 3. EXTENSIÓN JUSTIFICADA — ¿Cada párrafo aporta un dato nuevo?
    PROHIBIDO: "autoridades investigan", "hasta el momento no hay más detalles", contexto genérico.
@@ -199,6 +200,22 @@ trágico, terrible, impactante, devastador, horrible, alarmante, desgarrador, la
 
 === CLICKBAIT PROHIBIDO EN TÍTULOS ===
 urgente, última hora, alerta, revelan, destapan, exclusiva, bomba, escándalo, increíble, sorprendente, no vas a creer, la verdad sobre, esto cambiará todo, puntos suspensivos al final.
+
+=== NÚMEROS EXACTOS ===
+- Título: EXACTAMENTE 58 caracteres (contar espacios)
+- Resumen: EXACTAMENTE 158 caracteres
+- Pie de Foto: 15-80 chars con crédito
+- Dateline: CIUDAD / NICARAGUA
+- Contenido: 350-500 palabras (según datos verificables). Mínimo 350 si hay ≥3 datos verificables (fecha, nombre, lugar, cifra, institución). NUNCA rellenar para llegar a un número.
+- Lead: 35-50 palabras
+- 1 <h2> mínimo para notas de 300+ palabras. Opcional para notas breves verificables (<300 palabras). Si los pones, deben ser ÚNICOS y NARRATIVOS.
+- 1 <strong> mínimo
+- 1 <blockquote> con atribución (nombre propio)
+
+=== ATRIBUCIONES CORRECTAS (Nicaragua) ===
+SÍ: Según testigos presentes, Videos difundidos en redes muestran, Familiares de la víctima indicaron, Juan Pérez, director de X, confirmó, De acuerdo con versiones recogidas.
+SÍ: La Policía Nacional informó, El MINSA informó, Bomberos atendieron, Las investigaciones continúan, Según información preliminar.
+NO: Afirmaciones sin atribución (decir algo sin decir quién lo dijo o de dónde se obtuvo).
 
 === FORMATO DE ENTREGA ===
 Título: SEO claro, sin clickbait.

@@ -10,6 +10,29 @@ import {
   CONTRATO_GLOBAL,
 } from './editorial-contract';
 
+export const PERFIL_MEDIO = {
+  nombre: 'Nicaragua Informate',
+  tipo: 'Medio digital regional',
+  poseeUnidadInvestigativa: false,
+  poseeCorresponsalesInternacionales: false,
+  poseeFuentesPermanentes: false,
+  fuentesPermanentes: [],
+  trabajo: 'Transformar información pública en periodismo útil',
+  restricciones: [
+    'No exigir fuente policial exclusiva',
+    'No exigir comunicado oficial',
+    'No exigir entrevista directa',
+    'No exigir documento exclusivo',
+    'No exigir declaración de fuente oficial',
+  ],
+  expresionesAceptadas: [
+    'según versiones preliminares',
+    'de acuerdo con medios locales',
+    'la Policía investiga',
+    'según se conoció',
+  ],
+} as const;
+
 export interface EditorialCriterios {
   /** Nombre canónico detectado */
   tipo: string;
@@ -23,6 +46,10 @@ export interface EditorialCriterios {
   explicacion: RegExp[];
   /** RegExp para detectar servicio/valor práctico en el texto */
   servicio: RegExp[];
+  /** Palabras prohibidas específicas de la categoría */
+  palabrasProhibidas: string[];
+  /** Datos que nunca deben inventarse */
+  datosNoInventar: string[];
   /** Si la ausencia de respuesta bloquea la nota */
   bloqueaPorServicio: boolean;
   /** Si se exige contexto histórico/antecedentes */
@@ -37,43 +64,53 @@ export interface EditorialCriterios {
 
 type CategoriaReglas = Pick<
   EditorialCriterios,
-  'bloqueaPorServicio' | 'exigeContexto' | 'exigeDiferencial' | 'minPalabras' | 'mensajeServicioFaltante'
+  'bloqueaPorServicio' | 'exigeContexto' | 'exigeDiferencial' | 'minPalabras' | 'mensajeServicioFaltante' | 'palabrasProhibidas' | 'datosNoInventar'
 >;
 
 const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
   sucesos: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 200,
+    palabrasProhibidas: ['consternada', 'conmoción', 'último adiós', 'fatal desenlace', 'cristiana sepultura', 'ambiente de dolor', 'profundo dolor', 'vida truncada', 'joven promesa', 'perdió la vida', 'incomprensible', 'indignante', 'irresponsable'],
+    datosNoInventar: ['nombres de funcionarios', 'comunicados oficiales', 'declaraciones de fuentes anónimas sin explicar de dónde salió el dato', 'historial de accidentes en la zona a menos que sea específico y verificable'],
     mensajeServicioFaltante: 'La nota de sucesos no responde qué ocurrió, qué se sabe, qué investiga la Policía ni qué sigue.',
   },
   politica: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: true,
     minPalabras: 250,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['nombres de funcionarios', 'comunicados oficiales', 'declaraciones de fuentes anónimas sin explicar de dónde salió el dato'],
     mensajeServicioFaltante: 'La nota política no explica qué decidieron, a quién afecta ni qué cambia para el lector.',
   },
   economia: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 200,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['cifras económicas sin fuente', 'declaraciones de funcionarios no atribuidas'],
     mensajeServicioFaltante: 'La nota económica no explica cuál es el dato, cómo impacta el bolsillo ni qué cambia prácticamente.',
   },
   nacionales: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 200,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['nombres de funcionarios', 'comunicados oficiales', 'declaraciones de fuentes anónimas sin explicar de dónde salió el dato'],
     mensajeServicioFaltante: 'La nota nacional no explica qué cambia, a quién afecta ni qué debe saber el ciudadano.',
   },
   internacionales: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 200,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['cifras sin fuente', 'declaraciones de funcionarios extranjeros no atribuidas'],
     mensajeServicioFaltante: 'La nota internacional no explica por qué importa para Nicaragua ni qué implica para el lector.',
   },
   deportesindividuales: {
@@ -81,6 +118,8 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 150,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso', 'aterrador', 'mortífero', 'sangriento', 'brutal', 'salvaje'],
+    datosNoInventar: ['resultados no verificados', 'marcas o récords no confirmados', 'declaraciones de atletas no atribuidas'],
     mensajeServicioFaltante: 'La nota del atleta individual no incluye datos prácticos como próximo evento, lugar, fecha o trayectoria.',
   },
   deportes: {
@@ -88,6 +127,8 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 150,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'brutal', 'salvaje'],
+    datosNoInventar: ['resultados no verificados', 'alineaciones no confirmadas', 'declaraciones de atletas no atribuidas'],
     mensajeServicioFaltante: 'La nota deportiva no incluye datos prácticos como cuándo, dónde o cómo ver el evento.',
   },
   cultura: {
@@ -95,6 +136,8 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 150,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso', 'aterrador', 'mortífero', 'sangriento', 'brutal', 'salvaje'],
+    datosNoInventar: ['fechas no confirmadas', 'precios no verificados', 'declaraciones de artistas no atribuidas'],
     mensajeServicioFaltante: 'La nota cultural no incluye datos prácticos: dónde, cuándo, precio o cómo asistir.',
   },
   espectaculos: {
@@ -102,6 +145,8 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     exigeContexto: false,
     exigeDiferencial: false,
     minPalabras: 120,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso', 'aterrador', 'mortífero', 'sangriento', 'brutal', 'salvaje'],
+    datosNoInventar: ['fechas no confirmadas', 'precios no verificados', 'declaraciones de artistas no atribuidas'],
     mensajeServicioFaltante: 'La nota de entretenimiento no incluye datos prácticos del evento: qué es, dónde, cuándo, precio o cómo asistir.',
   },
   tecnologia: {
@@ -109,27 +154,44 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 150,
+    palabrasProhibidas: ['increíble', 'inimaginable', 'escandaloso', 'vergonzoso', 'aterrador', 'mortífero', 'sangriento', 'brutal', 'salvaje'],
+    datosNoInventar: ['especificaciones técnicas no verificadas', 'precios no confirmados', 'disponibilidad sin fuente'],
     mensajeServicioFaltante: 'La nota tecnológica no explica para quién es, dónde conseguirlo ni el precio/disponibilidad.',
   },
   salud: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 180,
+    palabrasProhibidas: ['trágico', 'terrible', 'impactante', 'devastador', 'horrible', 'alarmante', 'desgarrador', 'lamentable', 'dramático', 'crítico', 'increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['cifras de casos sin Minsa u OMS', 'tratamientos no respaldados por autoridades de salud', 'declaraciones de médicos no atribuidas'],
     mensajeServicioFaltante: 'La nota de salud no explica qué hacer, cómo prevenir o dónde acudir.',
   },
   educacion: {
-    bloqueaPorServicio: true,
+    bloqueaPorServicio: false,
     exigeContexto: true,
     exigeDiferencial: false,
     minPalabras: 180,
+    palabrasProhibidas: ['trágico', 'terrible', 'impactante', 'devastador', 'horrible', 'alarmante', 'desgarrador', 'lamentable', 'dramático', 'crítico', 'increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['fechas de matrícula no confirmadas', 'requisitos no verificados', 'declaraciones de funcionarios del MINED no atribuidas'],
     mensajeServicioFaltante: 'La nota educativa no explica qué debe hacer el estudiante o la familia, dónde acudir ni los plazos.',
+  },
+  medioambiente: {
+    bloqueaPorServicio: false,
+    exigeContexto: true,
+    exigeDiferencial: false,
+    minPalabras: 180,
+    palabrasProhibidas: ['trágico', 'terrible', 'impactante', 'devastador', 'horrible', 'alarmante', 'desgarrador', 'lamentable', 'dramático', 'crítico', 'increíble', 'inimaginable', 'escandaloso', 'vergonzoso'],
+    datosNoInventar: ['cifras de daños sin fuente', 'declaraciones de expertos no atribuidas', 'pronósticos sin Ineter o Marena'],
+    mensajeServicioFaltante: 'La nota ambiental no explica qué hacer, qué autoridades informaron ni qué precauciones tomar.',
   },
   general: {
     bloqueaPorServicio: false,
     exigeContexto: false,
     exigeDiferencial: false,
     minPalabras: 120,
+    palabrasProhibidas: ['consternada', 'conmoción', 'último adiós', 'fatal desenlace', 'ambiente de dolor', 'profundo dolor', 'vida truncada', 'joven promesa', 'perdió la vida', 'incomprensible', 'indignante', 'irresponsable'],
+    datosNoInventar: ['nombres de funcionarios', 'comunicados oficiales', 'declaraciones de fuentes anónimas sin explicar de dónde salió el dato'],
     mensajeServicioFaltante: 'La nota no responde qué hacer ni qué cambia para el lector.',
   },
 };
@@ -176,6 +238,7 @@ export function getPerfilEditorial(categoria: string, textoPlano?: string): Edit
     else if (/pol[ií]t|gobierno|asamblea/i.test(cat)) key = 'politica';
     else if (/salud|minsa|vacuna|sintoma|pandemia/i.test(cat)) key = 'salud';
     else if (/educ|mined|universidad|colegio/i.test(cat)) key = 'educacion';
+    else if (/medio\s*ambiente|ambiental|clima|inundaci|sequ|deslizamiento|erupci/i.test(cat)) key = 'medioambiente';
     else if (/nacional|comunidad|local/i.test(cat)) key = 'nacionales';
     else key = 'general';
   }

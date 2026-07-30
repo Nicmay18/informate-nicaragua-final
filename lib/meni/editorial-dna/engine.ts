@@ -171,12 +171,14 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   );
 
   const bloqueadores: string[] = [];
-  if (exclusividad.bloquear && exclusividad.razon) bloqueadores.push(exclusividad.razon);
-  if (wow.bloquear && wow.razon) bloqueadores.push(wow.razon);
+  const recomendaciones: string[] = [];
+  if (exclusividad.bloquear && exclusividad.razon) recomendaciones.push(exclusividad.razon);
+  if (wow.bloquear && wow.razon) recomendaciones.push(wow.razon);
   if (transcripcion.bloquear && transcripcion.razon) bloqueadores.push(transcripcion.razon);
 
-  const bloquear = exclusividad.bloquear || wow.bloquear || transcripcion.bloquear;
+  const bloquear = transcripcion.bloquear;
   const motivoBloqueo = bloqueadores.length > 0 ? bloqueadores.join(' | ') : null;
+  const recomendacionesEditoriales = recomendaciones.length > 0 ? recomendaciones : undefined;
 
   return {
     exclusividad,
@@ -187,6 +189,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
     adnNI,
     bloquear,
     motivoBloqueo,
+    recomendacionesEditoriales,
     detalle: `ADN Nicaragua Informate: ${adnNI}% | Exclusividad: ${exclusividad.score}% | WOW: ${wow.score}% | Sello NI: ${selloNIPromedio}% | Transcripción: ${transcripcion.score}% | Memoria: ${memoria.score}%`,
   };
 }
