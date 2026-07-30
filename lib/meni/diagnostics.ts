@@ -47,8 +47,8 @@ const CODE_META: Record<string, IssueMeta> = {
     code: 'QUALITY_GATE_CHRONOLOGY',
     title: 'Cronología incoherente',
     field: 'contenido',
-    howToFix: 'Ordena los hechos: primero el traslado/vivo, luego el fallecimiento.',
-    expected: 'Orden cronológico lógico',
+    howToFix: 'La cronología parece revisar un desenlace antes de antecedentes. Verifique que las fechas y eventos sean compatibles antes de bloquear.',
+    expected: 'Contradicciones temporales reales',
   },
   coherencia: {
     code: 'QUALITY_GATE_DUPLICATE_PARAGRAPHS',

@@ -123,20 +123,45 @@ export function detectCrossContradictions(
 
 export function detectChronologyIssues(textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
-  const lower = textoPlano.toLowerCase();
 
-  for (const [muerte, traslado] of CHRONOLOGY_CONTRADICTION_PATTERNS) {
-    const muerteMatch = muerte.exec(lower);
-    const trasladoMatch = traslado.exec(lower);
-    if (muerteMatch && trasladoMatch && muerteMatch.index < trasladoMatch.index) {
-      issues.push({
-        categoria: 'cronologia',
-        severidad: 'blocking',
-        mensaje: 'Cronología incoherente: se menciona traslado con vida después de reportar el fallecimiento.',
-        corregible: false,
-      });
-      break;
+  for (const pattern of CHRONOLOGY_CONTRADICTION_PATTERNS) {
+    const match = pattern.exec(textoPlano);
+    if (!match) continue;
+
+    // El patrón de fechas captura días y meses.
+    const dayDeath = match[1] ? parseInt(match[1], 10) : undefined;
+    const monthDeath = match[2]?.toLowerCase();
+    const dayTransfer = match[3] ? parseInt(match[3], 10) : undefined;
+    const monthTransfer = match[4]?.toLowerCase();
+
+    if (
+      dayDeath !== undefined &&
+      dayTransfer !== undefined &&
+      monthDeath &&
+      monthTransfer &&
+      monthDeath === monthTransfer
+    ) {
+      if (dayTransfer > dayDeath) {
+        issues.push({
+          categoria: 'cronologia',
+          severidad: 'blocking',
+          mensaje: `Cronología imposible: se reporta el fallecimiento el ${dayDeath} de ${monthDeath} y la atención médica el ${dayTransfer} de ${monthTransfer}.`,
+          corregible: false,
+        });
+        break;
+      }
+      // Si las fechas son compatibles o el traslado es anterior, no hay contradicción.
+      continue;
     }
+
+    // Contradicción con conector temporal pero sin fechas explícitas.
+    issues.push({
+      categoria: 'cronologia',
+      severidad: 'blocking',
+      mensaje: 'Cronología incoherente: se describe un desenlace mortal y luego una acción posterior con vida.',
+      corregible: false,
+    });
+    break;
   }
 
   return issues;
