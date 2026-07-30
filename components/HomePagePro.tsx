@@ -37,19 +37,17 @@ function distribuirNoticias(noticias: Noticia[]) {
 
   const disponibles = () => sorted.filter(n => !usados.has(n.id));
   const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
-  const conImagen = (lista: Noticia[]) => lista.filter(n => n.imagen && n.imagen !== '/logo.webp' && n.imagen !== '/logo.png');
-
   // Portada: una nacional, un suceso, una internacional y variedad
   const portadaMeta: Noticia[] = [];
   const portadaCategorias = ['Nacionales', 'Sucesos', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
   for (const cat of portadaCategorias) {
     if (portadaMeta.length >= 5) break;
-    const elegida = conImagen(porCategoria(cat)).find(n => !usados.has(n.id));
+    const elegida = porCategoria(cat).find(n => !usados.has(n.id));
     if (elegida) { portadaMeta.push(elegida); usados.add(elegida.id); }
   }
   // Completar si faltan
   while (portadaMeta.length < 5) {
-    const siguiente = conImagen(disponibles()).find(n => !usados.has(n.id));
+    const siguiente = disponibles().find(n => !usados.has(n.id));
     if (!siguiente) break;
     portadaMeta.push(siguiente);
     usados.add(siguiente.id);
