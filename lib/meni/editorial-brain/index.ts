@@ -510,9 +510,9 @@ function calcularEvaluacionCategoria(
     return { score, faltantes, cumplidos, perdidos };
   };
 
-  const ctx = puntuar(matriz.contexto, 4);
-  const exp = puntuar(matriz.explicacion, 5);
-  const srv = puntuar(matriz.servicio, 5);
+  const ctx = puntuar(matriz.contexto, 2);
+  const exp = puntuar(matriz.explicacion, 2);
+  const srv = puntuar(matriz.servicio, 2);
 
   return {
     categoria: categoriaFinal,

@@ -32,12 +32,20 @@ Obligatorio:
 - ¿Qué se sabe?
 - ¿Qué investiga la Policía?
 - ¿Qué sigue?
+- ¿Cuál es el estado del caso?
 - ¿Qué contexto útil tiene el lector?
 - ¿Qué explicación aporta?
 - ¿Qué valor tiene para el lector?
 
-Servicio significa: qué investiga la Policía, qué pasa ahora, qué hará Medicina Legal, qué sigue en el proceso.
-No exigir: teléfonos genéricos, denuncia, recomendaciones absurdas, "cómo afecta su presupuesto".
+Servicio (Sucesos): qué sigue en la investigación, qué harán las autoridades, qué falta conocer, cómo continúa el proceso y qué peritajes faltan.
+No exigir: teléfonos genéricos, denuncia, recomendaciones absurdas, nombres de detenidos si no existen, datos de capturas si no hay, "cómo afecta su presupuesto", dónde denunciar cuando no aplica.
+
+Estado del caso — final de toda nota de sucesos:
+- Investigación abierta.
+- La Policía continúa las diligencias.
+- No hay personas detenidas. (si aplica)
+- La causa oficial permanece bajo investigación.
+- Qué peritajes o dictámenes faltan.
 
 NACIONALES
 Obligatorio:
