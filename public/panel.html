@@ -3860,7 +3860,7 @@ sin texto ni marcas de agua, composición periodística"
       ];
 
       const passCount = checks.filter(c => c.pasa).length;
-      const nivel = passCount === 8 ? 'ORO' : passCount >= 6 ? 'PLATA' : passCount >= 4 ? 'BRONCE' : 'RECHAZADO';
+      const nivel = passCount >= 4 ? 'FORENSE' : 'RECHAZADO';
       const porcentaje = Math.round((passCount / 8) * 100);
       return { nivel, checks, passCount, porcentaje };
     };
@@ -3916,7 +3916,7 @@ sin texto ni marcas de agua, composición periodística"
       showLoading(true, 'Asignando niveles...');
       try {
         const todas = await getNoticiasCache();
-        const pendientes = todas.filter(n => !n.nivel || n.nivel === 'SIN NIVEL' || n.nivel === 'ORO');
+        const pendientes = todas.filter(n => !n.nivel || n.nivel === 'SIN NIVEL' || (n.nivel !== 'FORENSE' && n.nivel !== 'RECHAZADO'));
         if (pendientes.length === 0) { showLoading(false); showToast('Todas las notas ya tienen nivel asignado.', 'success'); return; }
         let hechas = 0;
         for (const n of pendientes) {

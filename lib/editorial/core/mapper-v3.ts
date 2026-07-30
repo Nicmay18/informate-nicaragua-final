@@ -2,10 +2,10 @@ import type { EvaluacionEditorial, ResultadoAnalisis, FiltroResultado, CheckItem
 
 const veredictoToNivel: Record<string, ResultadoAnalisis['nivel']> = {
   cobertura_especial: 'FORENSE',
-  portada: 'ORO',
-  publicar_destacado: 'ORO',
-  publicar_estandar: 'PLATA',
-  publicar_breve: 'BRONCE',
+  portada: 'FORENSE',
+  publicar_destacado: 'FORENSE',
+  publicar_estandar: 'FORENSE',
+  publicar_breve: 'FORENSE',
   no_publicar: 'RECHAZADO',
 };
 
