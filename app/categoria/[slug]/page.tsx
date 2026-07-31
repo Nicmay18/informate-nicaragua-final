@@ -99,5 +99,7 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
     notFound();
   }
 
+  if (noticias.length === 0) notFound();
+
   return <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} />;
 }

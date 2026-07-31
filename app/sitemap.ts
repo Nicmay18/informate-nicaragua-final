@@ -46,7 +46,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/categoria/internacionales`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/categoria/tecnologia`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/categoria/espectaculos`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/guia`, lastModified: new Date('2026-06-25'), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/nosotros`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/contacto`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.5 },
@@ -55,8 +54,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/terminos`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/politica-editorial`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/cookies`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${baseUrl}/correcciones`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.3 },
-    { url: `${baseUrl}/mapa-del-sitio`, lastModified: new Date('2026-05-28'), changeFrequency: 'monthly', priority: 0.3 },
   ];
 
   const authors = getAllAuthors();

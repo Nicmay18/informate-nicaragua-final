@@ -5,27 +5,18 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: [
-          '/buscar',
-          '/api/',
-          '/admin/',
-          '/_next/',
-          '/js/',
-          '/cdn-cgi/',
-          '/main',
-          '/opengraph-image',
-        ],
+        allow: ['/', '/_next/', '/opengraph-image', '/js/'],
+        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/'],
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/', '/main'],
+        allow: ['/', '/_next/', '/opengraph-image', '/js/'],
+        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/'],
       },
       {
         userAgent: 'Googlebot-News',
-        allow: '/',
-        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/', '/main'],
+        allow: ['/', '/_next/', '/opengraph-image', '/js/'],
+        disallow: ['/buscar', '/api/', '/admin/', '/cdn-cgi/'],
       },
       {
         userAgent: 'AdsBot-Google',
