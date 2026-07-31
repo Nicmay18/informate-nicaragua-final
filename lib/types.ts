@@ -127,6 +127,7 @@ export function slugToCategory(slug: string): Category | null {
     tecnologia: 'Tecnología',
     deportes: 'Deportes',
     espectaculos: 'Espectáculos',
+    cultura: 'Espectáculos',
   };
   return map[slug] || null;
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import CategoryPagePro from '@/components/CategoryPagePro';
 import { getNewsByCategory } from '@/lib/data';
-import { slugToCategory } from '@/lib/types';
+import { slugToCategory, categoryToSlug } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -40,8 +40,14 @@ export const dynamicParams = true;
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const slugLower = slug.toLowerCase();
-  const catName = slugToCategory(slugLower);
+  const slugNormalized = categoryToSlug(slug);
+  const catName = slugToCategory(slugNormalized);
   if (!catName) notFound();
+
+  const canonicalSlug = categoryToSlug(catName);
+  if (canonicalSlug !== slugLower) {
+    permanentRedirect(`/categoria/${canonicalSlug}`);
+  }
 
   const meta = CATEGORIA_META[slugLower] || {
     titulo: `${catName} | Noticias de Nicaragua`,
@@ -76,8 +82,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const slugLower = slug.toLowerCase();
-  const catName = slugToCategory(slugLower);
+  const slugNormalized = categoryToSlug(slug);
+  const catName = slugToCategory(slugNormalized);
   if (!catName) return notFound();
+
+  const canonicalSlug = categoryToSlug(catName);
+  if (canonicalSlug !== slugLower) {
+    permanentRedirect(`/categoria/${canonicalSlug}`);
+  }
 
   let noticias: Noticia[] = [];
   try {

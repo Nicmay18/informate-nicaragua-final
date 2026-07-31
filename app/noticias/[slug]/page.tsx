@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const { slug } = await params;
     const noticia = await getCachedNewsBySlug(slug);
-    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) {
+    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || (noticia.estado as string) === 'borrador' || (noticia.estado as string) === 'archivado') {
       notFound();
     }
 
@@ -164,7 +164,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
-  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim()) return notFound();
+  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || noticia.estado === 'borrador' || noticia.estado === 'archivado') return notFound();
 
   if (noticia.slug && noticia.slug !== slug) {
     permanentRedirect(`/noticias/${noticia.slug}`);

@@ -176,6 +176,7 @@ export async function POST(request: NextRequest) {
       vistas: 0,
       fecha: Timestamp.now(),
       publicado: publicado !== false,
+      estado: publicado !== false ? 'publicado' : 'borrador',
       nivel: 'FORENSE',
       nivelScore: 0,
       nivelFecha: new Date().toISOString(),

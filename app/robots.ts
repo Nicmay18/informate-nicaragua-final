@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           '/js/',
           '/cdn-cgi/',
           '/main',
+          '/opengraph-image',
         ],
       },
       {

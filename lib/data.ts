@@ -142,7 +142,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
       .limit(limit)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter(n => n.estado === 'publicado');
+    const noticias = snap.docs.map(mapDocToNoticia).filter(n => n.estado !== 'borrador' && n.estado !== 'archivado');
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -239,7 +239,6 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
     let snap = await adminDb
       .collection('noticias')
       .where('slug', '==', slug)
-      .where('estado', '==', 'publicado')
       .limit(1)
       .get();
 
@@ -250,7 +249,6 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
         snap = await adminDb
           .collection('noticias')
           .where('slug', '==', slugSinSufijo)
-          .where('estado', '==', 'publicado')
           .limit(1)
           .get();
       }

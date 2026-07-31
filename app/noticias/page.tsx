@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound, permanentRedirect } from 'next/navigation';
 import HomePagePro from '@/components/HomePagePro';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
+import { categoryToSlug, slugToCategory } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
 // ISR: regenera cada 24h para reducir consumo de funciones y lecturas
@@ -55,7 +57,18 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 
 export default async function NoticiasPage({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
   const params = await searchParams;
-  const cat = params.cat || 'Todas';
+
+  if (params.cat) {
+    const raw = String(params.cat);
+    const catSlug = categoryToSlug(raw);
+    const catName = slugToCategory(catSlug);
+    if (catName) {
+      permanentRedirect(`/categoria/${categoryToSlug(catName)}`);
+    }
+    notFound();
+  }
+
+  const cat = 'Todas';
 
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];
