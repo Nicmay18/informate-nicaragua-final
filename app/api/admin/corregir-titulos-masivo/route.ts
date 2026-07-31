@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isAdminRequest, unauthorized, badRequest } from '@/lib/auth';
+import { CorregirTitulosMasivoSchema } from '@/lib/dtos';
+import type { Noticia } from '@/lib/types';
 
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 const MAX_LIMIT = 300;
 const BATCH_SIZE = 10;
-
-function isAuthorized(request: Request): boolean {
-  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-  return ADMIN_API_KEY.length > 0 && token === ADMIN_API_KEY;
-}
 
 async function runInBatches<T>(items: T[], batchSize: number, fn: (item: T) => Promise<void>) {
   for (let i = 0; i < items.length; i += batchSize) {
@@ -155,13 +152,17 @@ function limpiarSlug(slug: string): string {
 
 export async function POST(request: Request) {
   try {
-    if (!isAuthorized(request)) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    if (!isAdminRequest(request)) {
+      return unauthorized();
     }
 
-    const body = await request.json().catch(() => ({}));
-    const previewOnly = body?.preview === true;
-    const dryRun = body?.dryRun === true;
+    const raw = await request.json().catch(() => ({}));
+    const parsed = CorregirTitulosMasivoSchema.safeParse(raw);
+    if (!parsed.success) {
+      return badRequest('Datos inválidos', parsed.error.issues);
+    }
+
+    const { preview: previewOnly, dryRun } = parsed.data;
 
     const db = getAdminDb();
     const noticiasSnap = await db.collection('noticias').orderBy('fecha', 'desc').limit(MAX_LIMIT).get();
@@ -169,9 +170,9 @@ export async function POST(request: Request) {
     const cambios: { id: string; tituloOrig: string; tituloNuevo: string | null; slugOrig: string; slugNuevo: string | null }[] = [];
     
     for (const doc of noticiasSnap.docs) {
-      const data = doc.data();
-      const tituloOrig = (data.titulo || '') as string;
-      const slugOrig = (data.slug || '') as string;
+      const data = doc.data() as Partial<Noticia> & { publicado?: boolean };
+      const tituloOrig = data.titulo || '';
+      const slugOrig = data.slug || '';
       
       const tituloNuevo = aplicarReglas(tituloOrig);
       const slugNuevo = limpiarSlug(slugOrig);

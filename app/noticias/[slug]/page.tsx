@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const { slug } = await params;
     const noticia = await getCachedNewsBySlug(slug);
-    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || (noticia.estado as string) === 'borrador' || (noticia.estado as string) === 'archivado') {
+    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || noticia.estado === 'borrador' || noticia.estado === 'archivado') {
       notFound();
     }
 
@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
-    const shouldNoindex = noticia.estado === 'borrador' || noticia.estado === 'archivado';
+    const shouldNoindex = !!noticia.noindex;
     const socialTitle = noticia.titulo || finalTitle;
 
     const absoluteImage = noticia.imagen

@@ -1,4 +1,5 @@
 import { type Noticia, FALLBACK_IMAGE } from './types';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
@@ -6,6 +7,12 @@ import { unstable_cache, revalidateTag } from 'next/cache';
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
+
+type FirestoreNoticiaData = Partial<Noticia> & {
+  publicado?: boolean;
+  palabrasClave?: string[];
+  metaDescripcion?: string;
+};
 
 export const LIST_FIELDS = [
   'slug',
@@ -98,8 +105,8 @@ function validateCount(count: number, defaultCount: number): number {
   return count || defaultCount;
 }
 
-function mapDocToNoticia(d: any): Noticia {
-  const data = d.data();
+function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
+  const data = d.data() as FirestoreNoticiaData;
   return {
     id: d.id,
     slug: data.slug || d.id,
@@ -256,7 +263,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
 
     if (!snap.empty) {
       const doc = snap.docs[0];
-      const data = doc.data();
+      const data = doc.data() as FirestoreNoticiaData;
       const slug = data.slug || doc.id;
       const titulo = capitalizeFirst(data.titulo || '');
       const contenido = data.contenido || '';

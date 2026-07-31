@@ -21,7 +21,7 @@ export interface Noticia {
   vistas?: number;
   palabras?: number;
   tags?: string[];
-  estado?: 'publicado' | 'borrador' | 'archivado';
+  estado: 'publicado' | 'borrador' | 'archivado';
   pieFoto?: string;
   puntosClave?: string[];
   metaDescription?: string;
