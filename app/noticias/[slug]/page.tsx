@@ -3,7 +3,6 @@ import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -179,8 +178,6 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   }
 
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-  const h = await headers();
-  const nonce = h.get('x-nonce') ?? '';
 
   const wordCount = noticia.contenido
     ? noticia.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(w => w.length > 0).length
@@ -191,10 +188,10 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
       {faqSchema && (
-        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
       )}
       <ArticlePage noticia={noticia} related={related} />
     </>

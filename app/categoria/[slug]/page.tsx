@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import { notFound, permanentRedirect } from 'next/navigation';
 import CategoryPagePro from '@/components/CategoryPagePro';
 import { getNewsByCategory } from '@/lib/data';
 import { slugToCategory, categoryToSlug } from '@/lib/types';
-import { buildBreadcrumbJsonLdEnhanced } from '@/lib/seo/schema';
-import { escapeJsonLd } from '@/lib/jsonld';
 import type { Noticia } from '@/lib/types';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -112,17 +109,7 @@ export default async function CategoriaPage({
 
   if (noticias.length === 0) notFound();
 
-  const h = await headers();
-  const nonce = h.get('x-nonce') ?? '';
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        nonce={nonce}
-        dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(catName)) }}
-      />
-      <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} page={page} />
-    </>
+    <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} page={page} />
   );
 }
