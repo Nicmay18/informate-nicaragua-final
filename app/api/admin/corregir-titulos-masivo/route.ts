@@ -1,6 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
+const MAX_LIMIT = 300;
+const BATCH_SIZE = 10;
+
+function isAuthorized(request: Request): boolean {
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  return ADMIN_API_KEY.length > 0 && token === ADMIN_API_KEY;
+}
+
+async function runInBatches<T>(items: T[], batchSize: number, fn: (item: T) => Promise<void>) {
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    await Promise.all(batch.map(fn));
+  }
+}
+
 const REGLAS_QUIRURGICAS: [RegExp, string][] = [
   [/\bAutoridades investigan incidente (de tránsito )?en\b/gi, 'Incidente grave'],
   [/\bPolicía investiga incidente (de tránsito )?en\b/gi, 'Investigan hecho grave'],
@@ -139,12 +155,16 @@ function limpiarSlug(slug: string): string {
 
 export async function POST(request: Request) {
   try {
+    if (!isAuthorized(request)) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
     const body = await request.json().catch(() => ({}));
     const previewOnly = body?.preview === true;
     const dryRun = body?.dryRun === true;
 
     const db = getAdminDb();
-    const noticiasSnap = await db.collection('noticias').orderBy('fecha', 'desc').limit(300).get();
+    const noticiasSnap = await db.collection('noticias').orderBy('fecha', 'desc').limit(MAX_LIMIT).get();
     
     const cambios: { id: string; tituloOrig: string; tituloNuevo: string | null; slugOrig: string; slugNuevo: string | null }[] = [];
     
@@ -177,18 +197,21 @@ export async function POST(request: Request) {
     }
 
     let aplicados = 0;
-    for (const c of cambios) {
+    const fallos: string[] = [];
+
+    await runInBatches(cambios, BATCH_SIZE, async (c) => {
       const updateData: Record<string, string> = {};
       if (c.tituloNuevo) updateData.titulo = c.tituloNuevo;
       if (c.slugNuevo) updateData.slug = c.slugNuevo;
-      
+
       try {
         await db.collection('noticias').doc(c.id).update(updateData);
         aplicados++;
       } catch (e) {
-        console.error(`Error actualizando ${c.id}:`, e);
+        console.error(`[corregir-titulos-masivo] Error actualizando ${c.id}:`, e);
+        fallos.push(c.id);
       }
-    }
+    });
 
     return NextResponse.json({
       ok: true,

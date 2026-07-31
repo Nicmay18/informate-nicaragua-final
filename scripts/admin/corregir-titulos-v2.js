@@ -251,6 +251,9 @@ async function corregirTitulosMasivo() {
   }
 
   console.log('\n🔧 APLICANDO...');
+  const adminToken = localStorage.getItem('adminToken') || prompt('Token admin:');
+  if (!adminToken) { console.error('Token requerido'); return; }
+
   for (const c of cambios) {
     const body = { id: c.id };
     if (c.tituloNuevo) body.titulo = c.tituloNuevo;
@@ -259,7 +262,7 @@ async function corregirTitulosMasivo() {
     try {
       const resp = await fetch('/api/admin/corregir-titulo', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
         body: JSON.stringify(body),
       });
       if (resp.ok) {

@@ -126,8 +126,10 @@ const R=[
 [/\bMessi iguala récord histórico de 16 goles en Mundiales/gi,'Messi iguala récord histórico de 16 goles en Mundiales'],
 ];
 function A(t){let r=t.trim();for(const[e,s]of R)if(e.test(r)){r=r.replace(e,s);break}return r.replace(/\s+/g,' ').replace(/\.$/,'').trim()}
-async function X(){
+async function ejecutarCorreccionV3(){
 console.log('🔬 INICIANDO...');
+const adminToken = localStorage.getItem('adminToken') || prompt('Token admin:');
+if(!adminToken){console.error('Token requerido');return}
 const{db,collection,query,orderBy,limit,getDocs}=window;
 if(!db){console.error('❌ Recargá la página primero');return}
 const q=query(collection(db,'noticias'),orderBy('fecha','desc'),limit(300));
@@ -141,9 +143,10 @@ if(!confirm(`Corregir ${C.length} noticias?`)){console.log('❌ Cancelado');retu
 let ok=0;
 for(const c of C){
 const b={id:c.id};if(c.t)b.titulo=c.t;if(c.s)b.slug=c.s;
-try{const r=await fetch('/api/admin/corregir-titulo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+try{const r=await fetch('/api/admin/corregir-titulo',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify(b)});
 if(r.ok){ok++;console.log(`✅ ${c.id}`)}else console.error(`❌ ${c.id}`)}
 catch(e){console.error(`❌ ${c.id}:`,e)}
 await new Promise(r=>setTimeout(r,200))}
 console.log(`✅ ${ok}/${C.length} corregidas. Recargá.`)}
-await X();
+// Llamar manualmente: await ejecutarCorreccionV3()
+window.ejecutarCorreccionV3 = ejecutarCorreccionV3;
