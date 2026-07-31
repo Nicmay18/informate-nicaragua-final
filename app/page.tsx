@@ -11,7 +11,7 @@ import { escapeJsonLd } from '@/lib/jsonld';
 // ISR: Home regenerado cada 1 minuto para que noticias nuevas aparezcan rápido.
 // Reducción de consumo: ~99% menos lecturas vs force-dynamic.
 // ============================================================================
-export const revalidate = 60; // 1 minuto para máxima frescura
+export const revalidate = 1; // 1 segundo para máxima frescura
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;

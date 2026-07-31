@@ -8,9 +8,8 @@ import { stripHtml } from '@/lib/meni/utils/helpers';
 export const maxDuration = 30;
 
 function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
-  if (!aprobado || score < 85) return 'NO PUBLICAR';
-  if (score >= 90) return 'PUBLICAR';
-  return 'PUBLICAR CON CAMBIOS';
+  if (!aprobado || score < 85) return 'RECHAZADO';
+  return 'FORENSE';
 }
 
 function verificarAuth(request: NextRequest): boolean {
@@ -115,6 +114,8 @@ export async function POST(request: NextRequest) {
       calificacionMeni: meni.calificacion,
       nivel: mapMeniScoreToNivel(meni.scoreFinal, meni.aprobado),
       recomendacionesMeni: meni.recomendaciones.map((r: any) => `${r.area}: ${r.mensaje}`),
+      nivelScore: meni.scoreFinal,
+      nivelFecha: new Date().toISOString(),
       diagnosticoMeni: meni.diagnostico,
       editorialTier: meni.editorialTier,
       editorialReason: meni.editorialReason,

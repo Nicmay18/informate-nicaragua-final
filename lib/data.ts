@@ -164,7 +164,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 const _cachedGetNews = unstable_cache(
   async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
   ['noticias-list'],
-  { revalidate: 60, tags: ['noticias'] }
+  { revalidate: 1, tags: ['noticias'] }
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -185,7 +185,7 @@ const _cachedGetByCategory = unstable_cache(
     }
   },
   ['noticias-cat'],
-  { revalidate: 3600, tags: ['noticias'] }
+  { revalidate: 60, tags: ['noticias'] }
 );
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {

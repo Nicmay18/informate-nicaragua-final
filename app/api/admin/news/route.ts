@@ -160,6 +160,9 @@ export async function POST(request: NextRequest) {
       vistas: 0,
       fecha: Timestamp.now(),
       publicado: publicado !== false,
+      nivel: 'FORENSE',
+      nivelScore: 0,
+      nivelFecha: new Date().toISOString(),
     });
 
     if (notificarTelegram !== false && publicado !== false) {
