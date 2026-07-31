@@ -397,6 +397,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
 
   // Quality Gate POST-LLM: analiza el texto redactado, compara contra la
   // fuente y aplica correcciones automáticas antes de bloquear.
+  // Usa decision editorial como fuente de verdad para evitar scores contradictorios.
   const qualityGatePost = runQualityGate(
     {
       titulo: generated.tituloSEO,
@@ -405,6 +406,17 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       fuenteOriginal: input.fuente,
       entidadesPrevias: qualityGatePre.entidades,
       stage: 'POST_LLM',
+      sourceOfTruth: {
+        score: decision.score,
+        originalidad: decision.editorialDna.selloNI.originalidad,
+        servicio: decision.editorialDna.selloNI.servicio,
+        bloqueado: decision.bloquear,
+        explanationIndex: {
+          porcentajeContexto: decision.editorialDna.selloNI.contextualiza,
+          porcentajeExplicacion: decision.editorialDna.selloNI.explica,
+          porcentajeServicio: decision.editorialDna.selloNI.servicio,
+        },
+      },
     },
     decision.nicaraguaInformate.porQueLeerAqui
   );

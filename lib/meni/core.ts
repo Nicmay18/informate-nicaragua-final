@@ -136,6 +136,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
       originalidad: editorialDecision.editorialDna.selloNI.originalidad,
       servicio: editorialDecision.editorialDna.selloNI.servicio,
       bloqueado: editorialDecision.bloquear,
+      explanationIndex: {
+        porcentajeContexto: editorialDecision.editorialDna.selloNI.contextualiza,
+        porcentajeExplicacion: editorialDecision.editorialDna.selloNI.explica,
+        porcentajeServicio: editorialDecision.editorialDna.selloNI.servicio,
+      },
     },
   });
 

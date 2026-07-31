@@ -52,6 +52,11 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const entidades = extractEntities(textoPlano);
   const useSource = input.sourceOfTruth != null;
 
+  const explanationIndexBase = computeExplanationIndex(textoPlano, input.fuenteOriginal, input.categoria);
+  const explanationIndex = useSource && input.sourceOfTruth?.explanationIndex
+    ? { ...explanationIndexBase, ...input.sourceOfTruth.explanationIndex }
+    : explanationIndexBase;
+
   let issues: QualityGateIssue[] = [
     ...detectInternalContradictions(entidades, textoPlano),
     ...detectChronologyIssues(textoPlano),
@@ -84,8 +89,6 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   // Re-validar sobre el texto corregido (solo lo corregible desaparece).
   const categoriasCorregidas = new Set(corregidos.map((c) => c.categoria));
   const issuesRestantes = issues.filter((i) => !(i.corregible && categoriasCorregidas.has(i.categoria)));
-
-  const explanationIndex = computeExplanationIndex(textoPlano, input.fuenteOriginal, input.categoria);
 
   // Si Editorial Brain ya decidió, usamos su veredicto y no volvemos a calcular originalidad/score.
   let originalidadPorcentaje: number;

@@ -101,5 +101,9 @@ export interface QualityGateInput {
     originalidad: number;
     servicio: number;
     bloqueado: boolean;
+    /** Valores contexto/explicación/servicio aprobados por Editorial Brain.
+     *  Quality Gate conserva porcentajeTranscripción propio y sólo anula
+     *  los tres ejes visibles que generan la contradicción. */
+    explanationIndex?: Pick<ExplanationIndex, 'porcentajeContexto' | 'porcentajeExplicacion' | 'porcentajeServicio'>;
   };
 }
