@@ -242,17 +242,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/wp-admin/:path*',
-        destination: '/403',
+        destination: '/',
         permanent: false,
       },
       {
         source: '/admin.php',
-        destination: '/403',
+        destination: '/',
         permanent: false,
       },
       {
         source: '/xmlrpc.php',
-        destination: '/403',
+        destination: '/',
         permanent: false,
       },
     ];

@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const imageAlt = generateImageAlt(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
-    const shouldNoindex = noticia.noindex === true;
+    const shouldNoindex = noticia.estado === 'borrador' || noticia.estado === 'archivado';
     const socialTitle = noticia.titulo || finalTitle;
 
     const absoluteImage = noticia.imagen

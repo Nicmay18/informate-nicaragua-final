@@ -80,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const cleanArticles = articles.filter(article => {
       if (isToxicSlug(article.slug)) return false;
-      if (article.noindex === true) return false;
+      if (article.estado === 'borrador' || article.estado === 'archivado') return false;
       return true;
     });
 
