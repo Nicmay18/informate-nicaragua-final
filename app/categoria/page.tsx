@@ -63,8 +63,8 @@ export default function CategoriasPage() {
                 {ICONS[cat.name] || cat.name.charAt(0)}
               </span>
               <div className="ni-cat-tile__text">
-                <h2>{cat.name}</h2>
-                <p>Ver noticias de {cat.name.toLowerCase()}</p>
+                <h2 className="ni-cat-tile__title">{cat.name}</h2>
+                <p className="ni-cat-tile__desc">Ver noticias de {cat.name.toLowerCase()}</p>
               </div>
               <span className="ni-cat-tile__arrow" aria-hidden="true">→</span>
             </Link>
