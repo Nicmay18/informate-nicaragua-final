@@ -4323,7 +4323,8 @@ sin texto ni marcas de agua, composición periodística"
             const titleDiv = document.createElement('div');
             titleDiv.className = 'news-title';
             titleDiv.style.cssText = 'font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px;';
-            titleDiv.textContent = (n.titulo || '(Sin título)') + (esReciente ? ' ●' : '');
+            titleDiv.textContent = (n.titulo || '(Sin título)');
+            titleDiv.title = (n.titulo || '(Sin título)');
             content.appendChild(titleDiv);
             // Meta
             const metaDiv = document.createElement('div');
