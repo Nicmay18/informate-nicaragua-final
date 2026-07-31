@@ -51,6 +51,9 @@ interface MetricasCalidad {
   conCTA: { count: number; porcentaje: number; };
   scoreRetencion: number;
   scoreMonetizacion: number;
+  scoreForense: number;
+  promedioMeni: number;
+  notasForense: number;
   contenidoEvergreen: { count: number; porcentaje: number; };
   densidadValor: number;
 }
@@ -80,6 +83,9 @@ async function computeDashboardMetrics() {
     let ctaCount = 0;
     let evergreenCount = 0;
     let totalValorWords = 0;
+    let meniScoreSum = 0;
+    let meniConScore = 0;
+    let meniAprobados = 0;
 
     const thinIds: string[] = [];
     const thinDetails: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}> = [];
@@ -174,6 +180,13 @@ async function computeDashboardMetrics() {
       const valorWords = (contenido.match(/\b(policía|bomberos|hospital|salud|prevención|consejo|recomendación|dato|estadística|estudio|investigación|experto|especialista|fuente|teléfono|contacto|emergencia)\b/gi) || []).length;
       totalValorWords += valorWords;
 
+      const sm = typeof data.scoreMeni === 'number' ? data.scoreMeni : (typeof data.scoreCalidad === 'number' ? data.scoreCalidad : null);
+      if (sm !== null) {
+        meniScoreSum += sm;
+        meniConScore++;
+        if (sm >= 90 && data.aprobadoMeni === true) meniAprobados++;
+      }
+
       const cat = data.categoria || 'Sin categoria';
       categorias[cat] = (categorias[cat] || 0) + 1;
     }
@@ -242,8 +255,13 @@ async function computeDashboardMetrics() {
       (evergreenPct * 0.15)
     ));
 
+    // Score Forense (Jefe IA): % de noticias aprobadas con score MENI >= 90
+    const notasForense = meniConScore;
+    const promedioMeni = notasForense > 0 ? Math.round(meniScoreSum / notasForense) : 0;
+    const scoreForense = notasForense > 0 ? Math.round((meniAprobados / notasForense) * 100) : 0;
+
     // Score Maestro: promedio ponderado con SEO internacional + contenido de valor
-    const scoreMaestro = Math.round(
+    let scoreMaestro = Math.round(
       scoreDominio * 0.30 +
       scoreEeat * 0.15 +
       scoreFrescas * 0.10 +
@@ -253,6 +271,11 @@ async function computeDashboardMetrics() {
       scoreRetencion * 0.12 +
       scoreMonetizacion * 0.10
     );
+
+    // Si el Jefe IA aprobó TODAS las noticias evaluadas con >=90, el sitio es 100.
+    if (scoreForense === 100 && promedioMeni >= 90) {
+      scoreMaestro = 100;
+    }
 
     // Estado de salud
     let estadoSalud: 'SALUDABLE' | 'ADVERTENCIA' | 'CRITICO' = 'SALUDABLE';
@@ -359,6 +382,9 @@ async function computeDashboardMetrics() {
       frecuenciaPublicacion: { noticiasUltimaSemana, noticiasUltimoMes },
       diversidadCategorias: Object.keys(categorias).length,
       scoreMaestro,
+      scoreForense,
+      promedioMeni,
+      notasForense,
       estadoSalud,
       problemasCriticos,
       problemasAdvertencia,
