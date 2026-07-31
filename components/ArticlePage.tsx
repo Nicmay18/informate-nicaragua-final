@@ -85,7 +85,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
   const vistas = fmtViews(views);
   const tags = useMemo(() => [noticia.categoria, ...extractPoints(noticia.titulo, 3)], [noticia.categoria, noticia.titulo]);
-  const readAlso = related.slice(0, 3);
 
   const autorData = useMemo(
     () => Object.values(AUTHORS).find((a) => a.name === noticia.autor?.trim()),
@@ -177,26 +176,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     backgroundColor: '#f3f4f6',
     borderRadius: 9999,
     textDecoration: 'none',
-  };
-
-  const navCardStyle: React.CSSProperties = {
-    display: 'block',
-    padding: 16,
-    backgroundColor: '#f9fafb',
-    border: '1px solid #e5e5e5',
-    borderRadius: 12,
-    textDecoration: 'none',
-    transition: 'border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
-  };
-
-  const relatedCardStyle: React.CSSProperties = {
-    display: 'block',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    border: '1px solid #e5e5e5',
-    overflow: 'hidden',
-    textDecoration: 'none',
-    transition: 'box-shadow 0.25s ease, transform 0.25s ease',
   };
 
   return (
@@ -365,59 +344,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Contenido — sanitizado antes de inyección para prevenir XSS */}
         <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(injectInternalLinks(enhancedHtml || noticia.resumen || '', noticia.related_links)) }} />
 
-        {/* ── TAMBIÉN TE PUEDE INTERESAR (in-article related) ── */}
-        {readAlso.length > 0 && (
-          <aside aria-label="También te puede interesar" style={{ margin: '32px 0', padding: '20px', background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', borderRadius: 14, border: '1px solid #e2e8f0' }}>
-            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 18 }}>🔥</span>
-              También te puede interesar
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
-              {readAlso.map(item => {
-                const itemCat = getCategory(item.categoria);
-                return (
-                  <Link
-                    key={item.slug}
-                    href={`/noticias/${item.slug}`}
-                    style={{
-                      display: 'flex',
-                      gap: 10,
-                      alignItems: 'center',
-                      padding: '10px 12px',
-                      background: '#fff',
-                      borderRadius: 10,
-                      textDecoration: 'none',
-                      border: '1px solid #e2e8f0',
-                      transition: 'box-shadow 0.2s, transform 0.2s',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
-                  >
-                    {item.imagen ? (
-                      <img
-                        src={getResponsiveImageUrl(item.imagen, 80)}
-                        alt=""
-                        loading="lazy"
-                        style={{ width: 60, height: 45, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
-                      />
-                    ) : (
-                      <div style={{ width: 60, height: 45, borderRadius: 6, background: itemCat.color || '#cbd5e1', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
-                        📰
-                      </div>
-                    )}
-                    <div style={{ minWidth: 0 }}>
-                      <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#1e293b', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any }}>
-                        {item.titulo}
-                      </p>
-                      <span style={{ fontSize: 11, color: itemCat.color || '#64748b', fontWeight: 600 }}>{itemCat.name || item.categoria}</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </aside>
-        )}
-
         {/* In-article Ad — lazy-loaded para no afectar LCP */}
         <Suspense fallback={null}>
           <AdsenseUnit
@@ -505,31 +431,50 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <NewsletterSignup />
         </div>
 
-        {/* Navegación — noticias relacionadas */}
-        {readAlso.length > 0 && (
-          <aside aria-label="Lea además">
-          <nav style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
-            {readAlso.map((item, idx) => (
-              <Link
-                key={item.slug}
-                href={`/noticias/${item.slug}`}
-                style={navCardStyle}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = category.color; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 20px -10px rgba(15,23,42,0.22)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#e5e5e5'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: category.color, marginBottom: 4 }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15,18 9,12 15,6" /></svg>
-                  Relacionada {idx + 1}
-                </span>
-                <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: 15, lineHeight: 1.4 }}>{item.titulo}</p>
-              </Link>
-            ))}
-          </nav>
+        {/* Lea también */}
+        {related.length > 0 && (
+          <aside aria-label="Lea también" style={{ marginTop: 40, paddingTop: 32, borderTop: '1px solid #e2e8f0' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a', margin: '0 0 20px' }}>Lea también</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+              {related.slice(0, 4).map(item => {
+                const itemCat = getCategory(item.categoria);
+                return (
+                  <Link
+                    key={item.slug}
+                    href={`/noticias/${item.slug}`}
+                    style={{
+                      display: 'block',
+                      backgroundColor: '#fff',
+                      borderRadius: 12,
+                      border: '1px solid #e5e5e5',
+                      overflow: 'hidden',
+                      textDecoration: 'none',
+                      transition: 'box-shadow 0.25s ease, transform 0.25s ease',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 28px -10px rgba(15,23,42,0.28)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                  >
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', maxHeight: 150, backgroundColor: '#f3f4f6' }}>
+                      {item.imagen ? (
+                        <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>📰</div>
+                      )}
+                      <span style={{ position: 'absolute', top: 8, left: 8, fontSize: 10, fontWeight: 700, color: '#fff', background: itemCat.color, padding: '2px 8px', borderRadius: 9999, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{itemCat.name}</span>
+                    </div>
+                    <div style={{ padding: 14 }}>
+                      <h3 style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: 14.5, lineHeight: 1.4 }}>{item.titulo}</h3>
+                      <time style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </aside>
         )}
 
         {/* Volver al inicio */}
-        <div style={{ marginTop: 24, textAlign: 'center' }}>
+        <div style={{ marginTop: 32, textAlign: 'center' }}>
           <Link
             href="/"
             style={{
@@ -561,42 +506,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             style={{ margin: '40px 0 0' }}
           />
         </Suspense>
-
-        {/* Related News */}
-        {related.length > 0 && (
-          <aside aria-label="Lea también" style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#111827', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ width: 5, height: 24, background: category.color, borderRadius: 3, display: 'inline-block' }} />
-              Lea también
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20 }}>
-              {related.slice(0, 3).map(item => {
-                const itemCat = getCategory(item.categoria);
-                return (
-                  <Link
-                    key={item.slug}
-                    href={`/noticias/${item.slug}`}
-                    style={relatedCardStyle}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 28px -10px rgba(15,23,42,0.28)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
-                  >
-                    {item.imagen && (
-                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', backgroundColor: '#f3f4f6' }}>
-                        <OptimizedImage src={item.imagen} alt={item.titulo} variant="card" fill priority={false} />
-                        <span style={{ position: 'absolute', top: 10, left: 10, fontSize: 11, fontWeight: 700, color: '#fff', background: itemCat.color, padding: '3px 10px', borderRadius: 9999, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{itemCat.name}</span>
-                      </div>
-                    )}
-                    <div style={{ padding: 16 }}>
-                      <h3 style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: 15.5, lineHeight: 1.4 }}>{item.titulo}</h3>
-                      <time style={{ fontSize: 12, color: '#9ca3af', marginTop: 10, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </aside>
-        )}
-
       </article>
     </div>
   );
