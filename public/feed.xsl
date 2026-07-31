@@ -2,9 +2,12 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
-  xmlns:atom="http://www.w3.org/2005/Atom">
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  exclude-result-prefixes="content atom">
   
   <xsl:output method="html" encoding="UTF-8" indent="yes" doctype-system="about:legacy-compat"/>
+  <xsl:strip-space elements="*"/>
+  <xsl:param name="maxItems" select="50"/>
 
   <xsl:template match="/">
     <html lang="es">
@@ -299,22 +302,33 @@
             </div>
           </div>
 
+          <xsl:variable name="feedUrl">
+            <xsl:call-template name="safe-url">
+              <xsl:with-param name="url" select="rss/channel/atom:link/@href"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:variable name="siteUrl">
+            <xsl:call-template name="safe-url">
+              <xsl:with-param name="url" select="rss/channel/link"/>
+            </xsl:call-template>
+          </xsl:variable>
+
           <!-- SUBSCRIBE BUTTONS -->
           <div class="subscribe-title">Suscribirse con un lector</div>
           <div class="subscribe-grid">
-            <a class="sub-btn" href="https://feedly.com/i/subscription/feed/{rss/channel/atom:link/@href}" target="_blank" rel="noopener">
+            <a class="sub-btn" href="https://feedly.com/i/subscription/feed/{$feedUrl}" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="#2bb24c"><path d="M13.8 4.4L9.2 9h2.9v4.2h3.8V9h2.9l-4.6-4.6zM4 13.2V19c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-5.8h-3.8V19H7.8v-5.8H4z"/></svg>
               Feedly
             </a>
-            <a class="sub-btn" href="https://www.inoreader.com/feed/{rss/channel/atom:link/@href}" target="_blank" rel="noopener">
+            <a class="sub-btn" href="https://www.inoreader.com/feed/{$feedUrl}" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="#1875f3"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2zm4 8h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
               Inoreader
             </a>
-            <a class="sub-btn" href="https://theoldreader.com/feeds/subscribe?url={rss/channel/atom:link/@href}" target="_blank" rel="noopener">
+            <a class="sub-btn" href="https://theoldreader.com/feeds/subscribe?url={$feedUrl}" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="#ff6c00"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zm0 12.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/></svg>
               The Old Reader
             </a>
-            <a class="sub-btn" href="{rss/channel/link}" target="_blank" rel="noopener">
+            <a class="sub-btn" href="{$siteUrl}" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="#6b7280"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
               Ir al sitio
             </a>
@@ -322,18 +336,9 @@
 
           <!-- ARTICLES -->
           <div class="section-title">Últimas publicaciones (<xsl:value-of select="count(rss/channel/item)"/>)</div>
-          <xsl:for-each select="rss/channel/item">
-            <article class="article">
-              <div class="article-meta">
-                <span class="category"><xsl:value-of select="category"/></span>
-                <span class="date"><xsl:value-of select="pubDate"/></span>
-              </div>
-              <h2><a href="{link}" target="_blank" rel="noopener"><xsl:value-of select="title"/></a></h2>
-              <p class="desc"><xsl:value-of select="description"/></p>
-              <a class="read-more" href="{link}" target="_blank" rel="noopener">
-                Leer artículo completo →
-              </a>
-            </article>
+          <xsl:for-each select="rss/channel/item[position() &lt;= $maxItems]">
+            <xsl:sort select="pubDate" order="descending" data-type="text"/>
+            <xsl:call-template name="item"/>
           </xsl:for-each>
 
           <div class="footer">
@@ -342,5 +347,51 @@
         </div>
       </body>
     </html>
+  </xsl:template>
+  <xsl:template name="item">
+    <xsl:variable name="safeLink">
+      <xsl:call-template name="safe-url">
+        <xsl:with-param name="url" select="link"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <article class="article">
+      <div class="article-meta">
+        <span class="category">
+          <xsl:choose>
+            <xsl:when test="category"><xsl:value-of select="category"/></xsl:when>
+            <xsl:otherwise>General</xsl:otherwise>
+          </xsl:choose>
+        </span>
+        <span class="date">
+          <xsl:choose>
+            <xsl:when test="pubDate"><xsl:value-of select="pubDate"/></xsl:when>
+            <xsl:otherwise>Sin fecha</xsl:otherwise>
+          </xsl:choose>
+        </span>
+      </div>
+      <h2><a href="{$safeLink}" target="_blank" rel="noopener"><xsl:value-of select="title"/></a></h2>
+      <p class="desc">
+        <xsl:choose>
+          <xsl:when test="description"><xsl:value-of select="description"/></xsl:when>
+          <xsl:otherwise>Sin descripción</xsl:otherwise>
+        </xsl:choose>
+      </p>
+      <a class="read-more" href="{$safeLink}" target="_blank" rel="noopener">
+        Leer artículo completo →
+      </a>
+    </article>
+  </xsl:template>
+
+  <xsl:template name="safe-url">
+    <xsl:param name="url"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($url, 'http')">
+        <xsl:value-of select="$url"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="no">URL inválida o no segura; se omite enlace.</xsl:message>
+        <xsl:value-of select="'#'"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>
