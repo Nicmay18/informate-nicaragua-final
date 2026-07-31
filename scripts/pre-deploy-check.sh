@@ -3,13 +3,21 @@
 # Correr: bash scripts/pre-deploy-check.sh
 # (Git Bash, WSL, o Linux/macOS)
 
-set -e
+set -euo pipefail
+IFS=$'\n\t'
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+cd "${REPO_ROOT}" || exit 1
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
+
+readonly TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
 ERRORS=0
 WARNINGS=0
@@ -22,18 +30,20 @@ echo ""
 
 # ─── 1. Type check ───
 echo -e "${CYAN}[1/7]${NC} TypeScript check..."
-if npx tsc --noEmit 2>/dev/null; then
+if npx tsc --noEmit > "${TMP_DIR}/tsc.out" 2>&1; then
     echo -e "${GREEN}   ✅ Type check passed${NC}"
 else
+    cat "${TMP_DIR}/tsc.out" >&2
     echo -e "${RED}   ❌ Type errors found${NC}"
     ERRORS=$((ERRORS + 1))
 fi
 
 # ─── 2. Lint ───
 echo -e "${CYAN}[2/7]${NC} ESLint check..."
-if npx next lint --max-warnings=0 2>/dev/null; then
+if npx next lint --max-warnings=0 > "${TMP_DIR}/lint.out" 2>&1; then
     echo -e "${GREEN}   ✅ Lint passed${NC}"
 else
+    cat "${TMP_DIR}/lint.out" >&2
     echo -e "${YELLOW}   ⚠️  Lint issues (non-blocking)${NC}"
     WARNINGS=$((WARNINGS + 1))
 fi
@@ -49,7 +59,7 @@ fi
 
 # ─── 4. .env.example limpio ───
 echo -e "${CYAN}[4/7]${NC} Checking .env.example..."
-if grep -E "(GROQ|DEEPSEEK)" .env.example >/dev/null 2>&1; then
+if grep -E "(GROQ|DEEPSEEK)" ".env.example" >/dev/null 2>&1; then
     echo -e "${RED}   ❌ Dead API keys in .env.example${NC}"
     ERRORS=$((ERRORS + 1))
 else
@@ -67,7 +77,7 @@ fi
 
 # ─── 6. Verificar build no tenga console.log críticos ───
 echo -e "${CYAN}[6/7]${NC} Checking for debug console.log..."
-LOG_COUNT=$(grep -r "console\.log" --include="*.ts" --include="*.tsx" app/ components/ lib/ 2>/dev/null | grep -v "console.error\|console.warn\|// console.log" | wc -l)
+LOG_COUNT=$(grep -r "console\.log" --include="*.ts" --include="*.tsx" app/ components/ lib/ 2>/dev/null | grep -v "console.error\|console.warn\|// console.log" | wc -l | tr -d ' ')
 if [ "$LOG_COUNT" -gt 0 ]; then
     echo -e "${YELLOW}   ⚠️  $LOG_COUNT console.log found (info only)${NC}"
     WARNINGS=$((WARNINGS + 1))

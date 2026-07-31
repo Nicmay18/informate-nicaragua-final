@@ -4,7 +4,12 @@
 # (Git Bash, WSL, o Linux/macOS)
 # Este script se ejecuta antes de fusionar cambios importantes.
 
-set -e
+set -euo pipefail
+IFS=$'\n\t'
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+cd "${REPO_ROOT}" || exit 1
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
