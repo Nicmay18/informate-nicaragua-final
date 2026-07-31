@@ -178,7 +178,8 @@ async function sendFacebook(input: PipelineInput): Promise<{ ok: boolean; error?
 // ── IndexNow (Bing + Yandex) ────────────────────────────────
 async function sendIndexNow(input: PipelineInput): Promise<{ ok: boolean; error?: string }> {
   try {
-    const key = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
+    const key = process.env.INDEXNOW_KEY;
+    if (!key) { return { ok: false, error: 'INDEXNOW_KEY no configurada' }; }
     const url = buildUrl(input.slug);
     const payload = {
       host: 'nicaraguainformate.com',

@@ -83,7 +83,8 @@ async function enviarTelegramDirecto(noticia: Noticia, db: FirebaseFirestore.Fir
 /** Notifica a IndexNow directamente */
 async function enviarIndexNowDirecto(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
   try {
-    const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
+    const INDEXNOW_KEY = process.env.INDEXNOW_KEY;
+    if (!INDEXNOW_KEY) { return { ok: false, error: 'INDEXNOW_KEY no configurada' }; }
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
     const payload = {
       host: 'nicaraguainformate.com',

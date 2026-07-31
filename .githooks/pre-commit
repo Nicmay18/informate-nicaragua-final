@@ -1,0 +1,10 @@
+#!/bin/bash
+# Pre-commit hook: scan staged changes for secrets with gitleaks
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "gitleaks no instalado; omitiendo scan de secretos" >&2
+  exit 0
+fi
+
+gitleaks protect --staged --verbose

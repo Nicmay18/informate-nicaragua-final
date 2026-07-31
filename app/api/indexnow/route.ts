@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const SITE_URL = 'https://nicaraguainformate.com';
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || 'ni-indexnow-key-2026-x7k9m3p2q8r5t1u4';
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY;
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,6 +10,10 @@ export async function POST(request: NextRequest) {
 
     if (!slug) {
       return NextResponse.json({ error: 'slug requerido' }, { status: 400 });
+    }
+
+    if (!INDEXNOW_KEY) {
+      return NextResponse.json({ error: 'INDEXNOW_KEY no configurada' }, { status: 500 });
     }
 
     const url = `${SITE_URL}/noticias/${slug}`;

@@ -35,6 +35,8 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.local.example
+.env.example
 *firebase-adminsdk*.json
 fb-key-base64.txt
 firebase.json.local
@@ -193,8 +195,6 @@ auditoria-*.txt
 !public/app-ads.txt
 !app/indexnow-key.txt/route.ts
 !public/indexnow-key.txt
-scripts/*.js
-scripts/*.ts
 procesar-salvable.js
 
 .vercel
