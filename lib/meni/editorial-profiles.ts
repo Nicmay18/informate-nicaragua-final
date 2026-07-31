@@ -75,7 +75,7 @@ const REGLES_POR_CATEGORIA: Record<string, CategoriaReglas> = {
     minPalabras: 200,
     palabrasProhibidas: ['consternada', 'conmoción', 'último adiós', 'fatal desenlace', 'cristiana sepultura', 'ambiente de dolor', 'profundo dolor', 'vida truncada', 'joven promesa', 'perdió la vida', 'incomprensible', 'indignante', 'irresponsable'],
     datosNoInventar: ['nombres de funcionarios', 'comunicados oficiales', 'declaraciones de fuentes anónimas sin explicar de dónde salió el dato', 'historial de accidentes en la zona a menos que sea específico y verificable'],
-    mensajeServicioFaltante: 'La nota de sucesos no responde qué ocurrió, qué se sabe, qué investiga la Policía ni qué sigue.',
+    mensajeServicioFaltante: 'La nota de sucesos no responde qué ocurrió, dónde, quiénes estuvieron involucrados, el estado de las víctimas, qué investigan las autoridades ni qué sigue en el proceso.',
   },
   politica: {
     bloqueaPorServicio: false,
