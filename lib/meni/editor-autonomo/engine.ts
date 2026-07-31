@@ -5,6 +5,7 @@ import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gate';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
+import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
@@ -214,7 +215,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   }
 
   const noticiaInput: NoticiaInput = {
-    titulo: input.fuente.split('\n')[0].slice(0, 100),
+    titulo: limpiarSufijoLugar(input.fuente.split('\n')[0].slice(0, 100)),
     contenido: input.fuente,
     resumen: '',
     categoria: input.categoriaSugerida || 'General',

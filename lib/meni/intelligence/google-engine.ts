@@ -8,16 +8,18 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-function generarTituloSEO(titulo: string, departamento?: string): string {
-  let base = titulo.trim();
+export function limpiarSufijoLugar(titulo: string): string {
+  // Evitar títulos tipo "... - Managua" o "... - M" generados por fuentes/agentes.
+  return titulo
+    .replace(/\s*-\s*Managua\s*$/i, '')
+    .replace(/\s*-\s*[A-Z]\s*$/i, '')
+    .trim();
+}
+
+function generarTituloSEO(titulo: string, _departamento?: string): string {
+  let base = limpiarSufijoLugar(titulo.trim());
   if (base.length > 68) {
     base = base.slice(0, 65).replace(/\s+\S*$/, '') + '…';
-  }
-  if (departamento && departamento.trim() && !base.includes(departamento)) {
-    const suffix = ` en ${departamento}`;
-    if (base.length + suffix.length <= 68) {
-      base += suffix;
-    }
   }
   return base;
 }
