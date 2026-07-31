@@ -4,35 +4,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-const ADJETIVOS_PROHIBIDOS = [
-  'tragico','tragica','terrible','impactante','impactantes','conmociono','conmocionó',
-  'devastador','devastadora','horrible','alarmante','desgarrador','desgarradora',
-  'lamentable','dramatico','dramatica','escalofriante','espeluznante','increible',
-  'inimaginable','indignante','escandaloso','escandalosa','vergonzoso','vergonzosa',
-  'aterrador','aterradora','mortifero','mortifera','sangriento','sangrienta',
-  'brutal','brutales','salvaje','violento','violenta','agresivo','agresiva',
-  'desastroso','desastrosa','funesto','funesta','siniestro','siniestra',
-  'macabro','macabra','espantoso','espantosa','atroz','critico','critica',
-  'morboso','grotesco','pavoroso','fatal','nefasto','sangre','muerto','muertos',
-  'muerta','muertas','asesinato',
-  'asesinado','asesinada','asesinos','secuestro','secuestrado','violacion',
-  'violada','violaron','tortura','torturado','descuartizado','decapitado',
-  'ahorcado','ahogado','incinerado','calcina','calcino'
-];
-
 const FRASES_PROHIBIDAS = [
   'según informes preliminares','fuentes policiales indicaron',
   'las autoridades confirmaron','la víctima fue identificada como',
   'según fuentes extraoficiales','de acuerdo a testigos presenciales',
   'hasta el cierre de esta edición','en circunstancias que se investigan',
   'por razones que se desconocen','por motivos que se desconocen'
-];
-
-const PALABRAS_SENSIBLES = [
-  'muerto','muertos','muerta','muertas','asesinato','homicidio',
-  'suicidio','secuestro','violacion','tortura','drogas','narcotrafico',
-  'narco','cartel','sicario','ejecucion','ejecutado','decapitado',
-  'descuartizado','incinerado','ahogado','ahorcado'
 ];
 
 interface AnalisisNoticia {
@@ -83,11 +60,9 @@ function analizarNoticia(doc: any): AnalisisNoticia {
   const problemas: string[] = [];
   let nivelRiesgo: 'BAJO' | 'MEDIO' | 'ALTO' | 'CRITICO' = 'BAJO';
 
-  // 1. Adjetivos emocionales
-  const adjEncontrados = ADJETIVOS_PROHIBIDOS.filter(adj => textoCompleto.includes(adj));
-  if (adjEncontrados.length > 0) {
-    problemas.push(`Adjetivos emocionales: ${adjEncontrados.slice(0, 3).join(', ')}`);
-  }
+  // 1. Adjetivos emocionales — DESACTIVADO: en noticias de sucesos es inevitable
+  // const adjEncontrados = ADJETIVOS_PROHIBIDOS.filter(adj => textoCompleto.includes(adj));
+  // if (adjEncontrados.length > 0) { ... }
 
   // 2. Frases template
   const frasesEncontradas = FRASES_PROHIBIDAS.filter(fr => textoCompleto.includes(fr));
@@ -95,11 +70,9 @@ function analizarNoticia(doc: any): AnalisisNoticia {
     problemas.push(`Frases template: ${frasesEncontradas.join(', ')}`);
   }
 
-  // 3. Contenido sensible (solo graves: asesinatos, violaciones, etc.)
-  const sensibles = PALABRAS_SENSIBLES.filter(p => textoCompleto.includes(p));
-  if (sensibles.length > 0) {
-    problemas.push(`Contenido sensible: ${sensibles.slice(0, 3).join(', ')}`);
-  }
+  // 3. Contenido sensible (solo graves: asesinatos, violaciones, etc.) — DESACTIVADO
+  // const sensibles = PALABRAS_SENSIBLES.filter(p => textoCompleto.includes(p));
+  // if (sensibles.length > 0) { ... }
 
   // 4. Longitud (realista para noticias locales sin fuentes oficiales)
   if (palabras < 150) {

@@ -103,6 +103,19 @@ async function getTelegramConfig(db: Firestore) {
   }
 }
 
+async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: string) {
+  try {
+    const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
+    return snap.docs.filter((d: any) => d.id !== excludeId).slice(0, 3).map((d: any) => {
+      const data = d.data();
+      return { url: `/noticias/${data.slug || d.id}`, anchor: (data.titulo || 'Leer mas').substring(0, 70), type: 'relacionada' };
+    });
+  } catch (e) {
+    console.warn('[admin/news] getRelatedLinks error:', e);
+    return [];
+  }
+}
+
 async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string, customToken?: string, customChat?: string) {
   const token = customToken || process.env.TG_TOKEN;
   const chatId = customChat || process.env.TG_CHAT;
@@ -148,7 +161,10 @@ export async function POST(request: NextRequest) {
       const existing = await db.collection('noticias').where('slug', '==', s).limit(1).get();
       return !existing.empty;
     });
-    const docRef = await db.collection('noticias').add({
+    const docRef = db.collection('noticias').doc();
+    const relatedLinks = await getRelatedLinks(db, categoria, docRef.id);
+    await docRef.set({
+      id: docRef.id,
       titulo,
       resumen,
       contenido,
@@ -163,6 +179,7 @@ export async function POST(request: NextRequest) {
       nivel: 'FORENSE',
       nivelScore: 0,
       nivelFecha: new Date().toISOString(),
+      related_links: relatedLinks,
     });
 
     if (notificarTelegram !== false && publicado !== false) {

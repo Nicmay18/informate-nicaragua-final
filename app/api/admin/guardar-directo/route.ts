@@ -12,6 +12,19 @@ function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
   return 'FORENSE';
 }
 
+async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: string) {
+  try {
+    const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
+    return snap.docs.filter((d: any) => d.id !== excludeId).slice(0, 3).map((d: any) => {
+      const data = d.data();
+      return { url: `/noticias/${data.slug || d.id}`, anchor: (data.titulo || 'Leer mas').substring(0, 70), type: 'relacionada' };
+    });
+  } catch (e) {
+    console.warn('[guardar-directo] getRelatedLinks error:', e);
+    return [];
+  }
+}
+
 function verificarAuth(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token');
   const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
@@ -144,6 +157,7 @@ export async function POST(request: NextRequest) {
 
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
     let articleDocId = id;
+    updateData.related_links = await getRelatedLinks(db, (categoria as string) || 'General', articleDocId || '');
     if (id) {
       await db.collection('noticias').doc(id).update(updateData);
     } else {

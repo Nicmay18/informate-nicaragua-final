@@ -24,10 +24,6 @@ export function buildRecomendaciones(result: EvaluacionEditorial): MeniRecomenda
     add('Originalidad', 'Añada contexto o análisis propio que diferencie la nota.', 'media');
   }
   if (result.seo.score < 75) add('SEO', 'Optimice el título, slug y meta descripción.', 'media');
-  if (result.forense.score < 80) add('Forense', 'Revise adjetivos emocionales o riesgos legales.', 'media');
-  if (result.eeat.score < 80) add('EEAT', 'Mejore atribuciones y citas de fuentes.', 'media');
-  if (result.adsense.score < 80) add('AdSense', 'Reduzca lenguaje sensible o sensacionalista.', 'alta');
-  if (result.discover.score < 75) add('Discover', 'Use imagen destacada y evite títulos clickbait.', 'baja');
 
   result.explainability.slice(0, 6).forEach(item => {
     const sev: MeniRecomendacion['severidad'] = item.puntosPerdidos > 5 ? 'alta' : item.puntosPerdidos > 2 ? 'media' : 'baja';
