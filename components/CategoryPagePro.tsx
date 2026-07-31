@@ -36,10 +36,17 @@ interface CategoryPageProProps {
   noticias: Noticia[];
   categoryName: string;
   categorySlug: string;
+  page?: number;
 }
 
-export default function CategoryPagePro({ noticias, categoryName, categorySlug }: CategoryPageProProps) {
+export default function CategoryPagePro({ noticias, categoryName, categorySlug, page = 1 }: CategoryPageProProps) {
   const description = CATEGORY_DESCRIPTIONS[categorySlug] || `Últimas noticias de ${categoryName} en Nicaragua.`;
+  const pageSize = 12;
+  const totalPages = Math.max(1, Math.ceil(noticias.length / pageSize));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const pageNoticias = noticias.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="ni-cat-page">
@@ -57,6 +64,7 @@ export default function CategoryPagePro({ noticias, categoryName, categorySlug }
         <h1 className="ni-cat-page__title">{categoryName}</h1>
         <p className="ni-cat-page__desc">{description}</p>
         <div className="ni-cat-page__count">{noticias.length} noticias publicadas</div>
+      <div className="ni-cat-page__pages">Página {currentPage} de {totalPages}</div>
       </header>
 
       {/* Grid de noticias */}
@@ -67,7 +75,7 @@ export default function CategoryPagePro({ noticias, categoryName, categorySlug }
         </div>
       ) : (
         <div className="ni-cat-page__grid">
-          {noticias.map((n, i) => (
+          {pageNoticias.map((n, i) => (
             <article key={n.id} className={`ni-cat-card${i === 0 ? ' ni-cat-card--featured' : ''}`}>
               {n.imagen && (
                 <div className="ni-cat-card__thumb">
@@ -96,6 +104,38 @@ export default function CategoryPagePro({ noticias, categoryName, categorySlug }
             </article>
           ))}
         </div>
+      )}
+
+      {/* Paginación limpia */}
+      {totalPages > 1 && (
+        <nav aria-label="Paginación de categoría" className="ni-cat-page__pagination" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginTop: 32 }}>
+          <Link
+            href={`/categoria/${categorySlug}?page=${currentPage - 1}`}
+            className="ni-cat-page__page-link"
+            aria-disabled={currentPage === 1}
+            style={{ pointerEvents: currentPage === 1 ? 'none' : 'auto', opacity: currentPage === 1 ? 0.5 : 1 }}
+          >
+            ← Anterior
+          </Link>
+          {pages.map((p) => (
+            <Link
+              key={p}
+              href={`/categoria/${categorySlug}?page=${p}`}
+              className={`ni-cat-page__page-link${p === currentPage ? ' ni-cat-page__page-link--active' : ''}`}
+              style={{ fontWeight: p === currentPage ? 800 : 400 }}
+            >
+              {p}
+            </Link>
+          ))}
+          <Link
+            href={`/categoria/${categorySlug}?page=${currentPage + 1}`}
+            className="ni-cat-page__page-link"
+            aria-disabled={currentPage === totalPages}
+            style={{ pointerEvents: currentPage === totalPages ? 'none' : 'auto', opacity: currentPage === totalPages ? 0.5 : 1 }}
+          >
+            Siguiente →
+          </Link>
+        </nav>
       )}
 
       {/* Footer de categoría */}

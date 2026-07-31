@@ -13,7 +13,7 @@ const baseUrl = 'https://nicaraguainformate.com';
 const cachedGetNews = unstable_cache(
   async () => getNews(500),
   ['sitemap-news'],
-  { revalidate: 86400, tags: ['sitemap-news'] }
+  { revalidate: 3600, tags: ['sitemap-news'] }
 );
 
 function safeDate(value: unknown): Date {
@@ -38,28 +38,27 @@ function safeDate(value: unknown): Date {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticUrls: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
-    { url: `${baseUrl}/noticias`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-    { url: `${baseUrl}/categoria/sucesos`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria/nacionales`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria/deportes`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria/internacionales`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria/tecnologia`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/categoria/espectaculos`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${baseUrl}/guia`, lastModified: new Date('2026-06-25'), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${baseUrl}/nosotros`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/contacto`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/publicidad`, lastModified: new Date('2026-05-28'), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${baseUrl}/privacidad`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${baseUrl}/terminos`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${baseUrl}/politica-editorial`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${baseUrl}/cookies`, lastModified: new Date('2026-05-15'), changeFrequency: 'monthly', priority: 0.4 },
+    { url: baseUrl, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/noticias`, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/categoria/sucesos`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/categoria/nacionales`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/categoria/deportes`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/categoria/internacionales`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/categoria/tecnologia`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/categoria/espectaculos`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/guia`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/nosotros`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/contacto`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/publicidad`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/privacidad`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/terminos`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/politica-editorial`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/cookies`, changeFrequency: 'monthly', priority: 0.4 },
   ];
 
   const authors = getAllAuthors();
   const authorUrls: MetadataRoute.Sitemap = authors.map((author) => ({
     url: `${baseUrl}/autor/${author.slug}`,
-    lastModified: new Date('2026-05-24'),
     changeFrequency: 'monthly',
     priority: 0.3,
   }));

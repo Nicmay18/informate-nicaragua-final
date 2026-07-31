@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound, permanentRedirect } from 'next/navigation';
 import CategoryPagePro from '@/components/CategoryPagePro';
 import { getNewsByCategory } from '@/lib/data';
 import { slugToCategory, categoryToSlug } from '@/lib/types';
+import { buildBreadcrumbJsonLdEnhanced } from '@/lib/seo/schema';
+import { escapeJsonLd } from '@/lib/jsonld';
 import type { Noticia } from '@/lib/types';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -79,8 +82,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CategoriaPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ page?: string }>;
+}) {
   const { slug } = await params;
+  const sp = await (searchParams ?? Promise.resolve({} as { page?: string }));
+  const page = Math.max(1, parseInt(sp.page ?? '1', 10) || 1);
   const slugLower = slug.toLowerCase();
   const slugNormalized = categoryToSlug(slug);
   const catName = slugToCategory(slugNormalized);
@@ -93,7 +104,7 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
 
   let noticias: Noticia[] = [];
   try {
-    noticias = await getNewsByCategory(catName, 30);
+    noticias = await getNewsByCategory(catName, 200);
   } catch (error) {
     console.error('[CategoriaPage] Error:', error);
     notFound();
@@ -101,5 +112,17 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
 
   if (noticias.length === 0) notFound();
 
-  return <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} />;
+  const h = await headers();
+  const nonce = h.get('x-nonce') ?? '';
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(catName)) }}
+      />
+      <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} page={page} />
+    </>
+  );
 }
