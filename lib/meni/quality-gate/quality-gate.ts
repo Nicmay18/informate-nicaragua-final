@@ -23,6 +23,7 @@ import {
   detectSensationalism,
   detectServiceValue,
   detectDifferentialValue,
+  detectTitleRepetition,
 } from './validator';
 import { applyAutoFix } from './autoFix';
 import { computeExplanationIndex, computeOriginalityPercent, computeEditorScore } from './editorScore';
@@ -59,6 +60,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     ...detectUnsupportedClaims(textoPlano),
     ...detectFillerLanguage(textoPlano),
     ...detectSensationalism(textoPlano, input.categoria),
+    ...detectTitleRepetition(input.titulo, input.categoria, input.titulosPrevios),
   ];
 
   // Detector de transcripción párrafo a párrafo (requiere fuente original)

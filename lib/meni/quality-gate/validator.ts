@@ -344,3 +344,74 @@ export function detectDifferentialValue(porQueLeerAqui?: string): QualityGateIss
   }
   return issues;
 }
+
+const ESTRUCTURAS_RIESGO = new Set([
+  'accidente',
+  'accidentes',
+  'muere',
+  'mueren',
+  'hallan',
+  'halla',
+  'capturan',
+  'captura',
+  'inauguran',
+  'inaugura',
+  'encuentran',
+  'encuentra',
+  'detienen',
+  'detiene',
+  'aprehenden',
+  'aprehende',
+  'fallece',
+  'fallecen',
+]);
+
+function primeraPalabraEstructura(titulo: string): string {
+  const limpio = titulo
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/^[^a-záéíóúñ]+/, '');
+  const match = limpio.match(/^[a-záéíóúñ]+/i);
+  return match ? match[0].toLowerCase() : '';
+}
+
+export function detectTitleRepetition(
+  titulo: string,
+  categoria: string,
+  titulosPrevios: string[] = []
+): QualityGateIssue[] {
+  const issues: QualityGateIssue[] = [];
+  if (!titulosPrevios || titulosPrevios.length === 0) return issues;
+
+  const inicio = primeraPalabraEstructura(titulo);
+  if (!inicio) return issues;
+
+  const inicios = titulosPrevios.map(primeraPalabraEstructura).filter(Boolean);
+  const frecuencia = new Map<string, number>();
+  for (const p of inicios) {
+    frecuencia.set(p, (frecuencia.get(p) || 0) + 1);
+  }
+
+  const cuenta = frecuencia.get(inicio) || 0;
+
+  if (ESTRUCTURAS_RIESGO.has(inicio) && cuenta > 0) {
+    issues.push({
+      categoria: 'originalidad',
+      severidad: 'warning',
+      mensaje: `El título comienza con "${inicio}" (${cuenta} vez/veces en las últimas ${inicios.length} notas de ${categoria}). Esa estructura cansa la identidad editorial; variar el enfoque.`,
+      evidencia: inicio,
+      corregible: false,
+    });
+  } else if (cuenta >= 4) {
+    issues.push({
+      categoria: 'originalidad',
+      severidad: 'warning',
+      mensaje: `El título repite el inicio "${inicio}" (${cuenta} veces en las últimas ${inicios.length} notas de ${categoria}). Considerá un ángulo distinto.`,
+      evidencia: inicio,
+      corregible: false,
+    });
+  }
+
+  return issues;
+}

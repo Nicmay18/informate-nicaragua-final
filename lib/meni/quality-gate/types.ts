@@ -92,6 +92,7 @@ export interface QualityGateInput {
   departamento?: string;
   fuenteOriginal?: string;
   entidadesPrevias?: EntityMap;
+  titulosPrevios?: string[]; // últimos títulos de la misma categoría (idealmente 30) para detectar estructuras repetidas
   stage: QualityGateStage;
   /** Source of truth from Editorial Brain; when present, Quality Gate will not
    *  recompute originality/service/score and will use these values instead. */
