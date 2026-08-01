@@ -36,6 +36,7 @@ import { buildDiagnostico } from './diagnostico';
 import { analyzeUtilidad } from '@/lib/meni/utilidad';
 import { analyzeProfundidad } from '@/lib/meni/profundidad';
 import { analyzeEEAT } from '@/lib/meni/eeat';
+import { calcularPenalizacionEditorial } from '@/lib/meni/penalizacion-editorial';
 import { verifyEditorialDecisions } from './verification';
 import { computeRanking, analyzeSaturation } from '@/lib/meni/editor-jefe/ranking';
 import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tracker';
@@ -570,8 +571,13 @@ function calcularScoreEjecutivoV2(
       adnNI * w.adnNI) /
     totalDim;
 
-  // 4. Blend base/valor centralizado.
-  let score = Math.round(base.score * MENI_V2_BLEND.base + valorEditorial * MENI_V2_BLEND.valor);
+  // 4. Penalización editorial V3.2 (capa aditiva por dimensiones críticas bajas).
+  const penalizacionEditorial = calcularPenalizacionEditorial({ utilidad, profundidad, eeat });
+
+  // 5. Blend base/valor centralizado.
+  let score = Math.round(
+    base.score * MENI_V2_BLEND.base + valorEditorial * MENI_V2_BLEND.valor - penalizacionEditorial,
+  );
   if (bloquear) score = Math.min(score, 74);
   score = Math.max(0, Math.min(100, score));
 

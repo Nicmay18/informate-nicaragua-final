@@ -274,7 +274,7 @@ async function evaluar(input: NoticiaInput): Promise<Registro> {
 
 function generarMarkdown(data: any): string {
   const lineas: string[] = [];
-  lineas.push('# Validación MENI V3 vs MENI V2');
+  lineas.push('# Validación MENI V3.2 vs MENI V2');
   lineas.push('');
   lineas.push(`Muestra: ${data.meta.muestra} noticias reales de Firestore.`);
   lineas.push(`Fecha: ${data.meta.fecha}`);
@@ -432,11 +432,9 @@ async function main() {
       fecha: new Date().toISOString(),
       muestra: registros.length,
       archivosModificados: [
-        'lib/meni/eeat.ts',
-        'lib/meni/utilidad.ts',
-        'lib/meni/profundidad.ts',
+        'lib/meni/penalizacion-editorial.ts',
         'lib/meni/editorial-brain/index.ts',
-        'tests/meni-v3-dimensions.test.ts',
+        'tests/meni-v3-2-penalizacion.test.ts',
       ],
     },
     resumenV2: { media: stats(v2Scores).media, mediana: stats(v2Scores).mediana, std: stats(v2Scores).std, min: stats(v2Scores).min, max: stats(v2Scores).max },
@@ -448,8 +446,8 @@ async function main() {
     conclusion,
   };
 
-  const jsonPath = join(process.cwd(), 'validacion-meni-v3.json');
-  const mdPath = join(process.cwd(), 'VALIDACION-MENI-V3.md');
+  const jsonPath = join(process.cwd(), 'validacion-final-meni-v3-2.json');
+  const mdPath = join(process.cwd(), 'VALIDACION-FINAL-MENI-V3-2.md');
   writeFileSync(jsonPath, JSON.stringify(payload, null, 2), 'utf-8');
   writeFileSync(mdPath, generarMarkdown(payload), 'utf-8');
 
