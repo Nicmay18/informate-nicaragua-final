@@ -6,7 +6,7 @@ const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
   <Link {...props} prefetch={false} />
 );
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { RelativeTime } from '@/components/ClientTime';
 
@@ -28,6 +28,7 @@ type MiniNoticia = { id: string; slug: string; titulo: string; fecha?: string };
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
@@ -116,7 +117,7 @@ export default function Header() {
                     onMouseEnter={cat ? () => handleCatEnter(cat.slug) : undefined}
                     onMouseLeave={cat ? handleCatLeave : undefined}
                   >
-                    <NoPrefetchLink href={link.href} className="ni-nav-link">
+                    <NoPrefetchLink href={link.href} className="ni-nav-link" aria-current={pathname === link.href ? 'page' : undefined}>
                       {link.label}
                     </NoPrefetchLink>
                     {cat && hoveredCat === cat.slug && (
@@ -202,7 +203,7 @@ export default function Header() {
             <ul className="ni-mobile-menu__nav">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <NoPrefetchLink href={link.href} onClick={() => setMenuOpen(false)}>
+                  <NoPrefetchLink href={link.href} onClick={() => setMenuOpen(false)} aria-current={pathname === link.href ? 'page' : undefined}>
                     {link.label}
                   </NoPrefetchLink>
                 </li>
