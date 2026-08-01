@@ -129,7 +129,7 @@ Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede
 
 ### 4. nicaragua-en-santo-domingo-2026-medallas-beisbol-y-retos
 
-**Título actual:** Nicaragua en Santo Domingo 2026: medallas, béisbol y retos - Fe
+**Título actual:** Nicaragua en Santo Domingo 2026: medallas, béisbol y retos
 **Palabras:** 865
 **Categoría:** Deportes
 **Score MENI actual:** 100
