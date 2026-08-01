@@ -17,7 +17,7 @@ export interface EditorialEnhancerResult {
   resumenEditor: string;
 }
 
-interface CheckItem {
+export interface CheckItem {
   pregunta: string;
   informacion: string;
   seccion: string;
@@ -26,7 +26,7 @@ interface CheckItem {
   keywords: string[];
 }
 
-const BASEL_POR_CATEGORIA: Record<string, CheckItem[]> = {
+export const BASEL_POR_CATEGORIA: Record<string, CheckItem[]> = {
   sucesos: [
     {
       pregunta: '¿Qué ocurrió primero, qué ocurrió después y en qué horario?',
@@ -217,7 +217,7 @@ const BASEL_POR_CATEGORIA: Record<string, CheckItem[]> = {
   ],
 };
 
-const GENERICOS: CheckItem[] = [
+export const GENERICOS: CheckItem[] = [
   {
     pregunta: '¿Por qué importa esta noticia?',
     informacion: 'Contexto general',
@@ -244,7 +244,7 @@ const GENERICOS: CheckItem[] = [
   },
 ];
 
-function normalizarTexto(html: string): string {
+export function normalizarTexto(html: string): string {
   return (html || '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/g, ' ')
