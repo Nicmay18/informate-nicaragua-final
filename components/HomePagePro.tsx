@@ -107,10 +107,17 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
   if (noticias.length === 0) {
     return (
       <div className="rd-home">
-        <div style={{ maxWidth: 1180, margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: 'var(--rd-serif)', fontSize: 22, color: 'var(--rd-ink)' }}>No hay noticias disponibles</h2>
-          <p style={{ color: 'var(--rd-muted)', marginTop: 8 }}>Estamos preparando nuevo contenido. Vuelve pronto.</p>
-          <Link href="/noticias" style={{ color: 'var(--rd-accent)', fontWeight: 600 }}>Ver archivo de noticias →</Link>
+        <div className="rd-home__container">
+          <div className="rd-content-grid">
+            <div className="rd-main-col" style={{ textAlign: 'center', padding: '60px 24px' }}>
+              <h1 style={{ fontFamily: 'var(--rd-serif)', fontSize: 26, color: 'var(--rd-ink)', marginBottom: 12 }}>No hay noticias disponibles</h1>
+              <p style={{ color: 'var(--rd-muted)', marginBottom: 24 }}>Estamos preparando nuevo contenido. Vuelve pronto.</p>
+              <Link href="/noticias" style={{ color: 'var(--rd-accent)', fontWeight: 600 }}>Ver archivo de noticias →</Link>
+            </div>
+            <aside className="rd-rail">
+              <SidebarRedesign masLeidas={[]} />
+            </aside>
+          </div>
         </div>
       </div>
     );
