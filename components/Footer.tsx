@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 
 const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
   <Link {...props} prefetch={false} />
@@ -18,11 +17,7 @@ const CATEGORIES = [
 ];
 
 export default function Footer() {
-  const [currentYear, setCurrentYear] = useState<number | null>(null);
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="ni-footer" role="contentinfo" aria-label="Pie de página de Nicaragua Informate" itemScope itemType="https://schema.org/Organization">
@@ -141,7 +136,7 @@ export default function Footer() {
 
       {/* Barra inferior */}
       <div className="ni-footer__bottom">
-        <span>© {currentYear ?? ''} Nicaragua Informate. Todos los derechos reservados.</span>
+        <span>© {currentYear} Nicaragua Informate. Todos los derechos reservados.</span>
         <span>Managua, Nicaragua • Periodismo verificado</span>
       </div>
     </footer>
