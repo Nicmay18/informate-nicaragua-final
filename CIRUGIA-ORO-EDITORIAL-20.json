@@ -1,0 +1,872 @@
+{
+  "total": 20,
+  "items": [
+    {
+      "rank": 1,
+      "slug": "residencial-las-madres-inaugura-575-viviendas-para-familias-en-managua",
+      "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 94.63,
+      "valorLector": 94.5,
+      "potencialGoogle": 94.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Residencial Las Madres entrega 575 viviendas en Managua",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 94.63,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (74/100)",
+        "oportunidad": "La noticia \"Residencial Las Madres entrega 575 viviendas en Managua\" responde 3 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: ¿Qué decisiones o hechos anteriores explican este anuncio?. Prioridad editorial: Media."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿Qué decisiones o hechos anteriores explican este anuncio?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Residencial Las Madres entrega 575 viviendas en Managua",
+        "entrada": "El sueño de la casa propia se hizo realidad para 575 familias nicaragüenses.",
+        "estructuraHtml": "<h1>Residencial Las Madres entrega 575 viviendas en Managua</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Antecedentes</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"El sueño de la casa propia se hizo realidad para 575 familias nicaragüenses.\"",
+          "Resumen: \"El sueño de la casa propia se hizo realidad para 575 familias nicaragüenses. El Gobierno Sandinista, a través de la Alcaldía de Managua, inauguró el Reside.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Contexto histórico reciente"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Antecedentes: No inventar antecedentes no verificados"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "1-2 horas",
+      "prioridad": "Media"
+    },
+    {
+      "rank": 2,
+      "slug": "turismo-en-nicaragua-crece-11-en-primer-trimestre-de-2026-segun-intur",
+      "titulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 94.63,
+      "valorLector": 94.5,
+      "potencialGoogle": 94.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 94.63,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (67/100)",
+        "oportunidad": "La noticia \"Turismo en Nicaragua crece 11% en primer trimestre de 2026\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+        "entrada": "El Instituto Nicarag üense de Turismo ( INTUR ) reportó un incremento del 11% en la llegada de turistas internacionales durante el primer trimestre de 2026, comparado con el mismo período del año anterior.",
+        "estructuraHtml": "<h1>Turismo en Nicaragua crece 11% en primer trimestre de 2026</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"El Instituto Nicarag üense de Turismo ( INTUR ) reportó un incremento del 11% en la llegada de turistas internacionales durante el primer trimestre de 2026, comparado con el mismo período del año anterior.\"",
+          "Resumen: \"El Instituto Nicaragüense de Turismo reportó 278 mil 937 visitantes internacionales entre enero y marzo de 2026. Estados Unidos lideró el origen.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 3,
+      "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 94.63,
+      "valorLector": 94.5,
+      "potencialGoogle": 94.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 94.63,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (71/100)",
+        "oportunidad": "La noticia \"Nicaragua invertirá $13.9 millones en 49 camiones de bombero\" responde 2 de 4 preguntas clave para la categoría Nacionales. Carece de contexto esencial; falta: ¿Qué decisiones o hechos anteriores explican este anuncio?; ¿Hay cifras o comparaciones que permitan dimensionar el tema?. Prioridad editorial: Alta."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿Qué decisiones o hechos anteriores explican este anuncio?",
+        "Falta investigar: ¿Hay cifras o comparaciones que permitan dimensionar el tema?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+        "entrada": "La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incendios , una inversión que busca fortalecer la capacidad operativa de la Dirección General de Bomberos y mejorar la atención de emergencias en diferentes municipios del país.",
+        "estructuraHtml": "<h1>Nicaragua invertirá $13.9 millones en 49 camiones de bombero</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Antecedentes</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>\n<h2>Datos comparativos</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incendios , una inversión que busca fortalecer la capacidad operativa de la Dirección General de Bomberos y mejorar la atención de emergencias en diferentes municipios del país.\"",
+          "Resumen: \"La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incend...\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Contexto histórico reciente",
+          "Falta conseguir: Cifra verificable"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Antecedentes: No inventar antecedentes no verificados",
+          "Datos comparativos: No inventar porcentajes ni totales"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "2-3 horas",
+      "prioridad": "Alta"
+    },
+    {
+      "rank": 4,
+      "slug": "ia-medica-en-2026-diagnosticos-mas-certeros-que-medicos",
+      "titulo": "IA médica en 2026: diagnósticos más certeros que médicos",
+      "categoria": "Tecnología",
+      "scoreMeni": 94,
+      "retornoEditorial": 93.63,
+      "valorLector": 94.5,
+      "potencialGoogle": 89.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "IA médica en 2026: diagnósticos más certeros que médicos",
+        "categoria": "Tecnología",
+        "scoreMeni": 94,
+        "retornoEditorial": 93.63,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (61/100)",
+        "oportunidad": "La noticia \"IA médica en 2026: diagnósticos más certeros que médicos\" responde 3 de 3 preguntas clave para la categoría Tecnología. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "IA médica en 2026: diagnósticos más certeros que médicos",
+        "entrada": "GLOBAL — Dos sistemas de inteligencia artificial demostraron una capacidad diagnóstica superior a la de médicos especialistas humanos, según dos estudios publicados en la revista Nature en 2026.",
+        "estructuraHtml": "<h1>IA médica en 2026: diagnósticos más certeros que médicos</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"GLOBAL — Dos sistemas de inteligencia artificial demostraron una capacidad diagnóstica superior a la de médicos especialistas humanos, según dos estudios publicados en la revista Nature en 2026.\"",
+          "Resumen: \"Sistemas de IA como MIRA y AMIE superan a médicos en diagnóstico. La medicina de 2026 avanza con células madre, CRISPR y bioimpresión 3D de órganos.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar especificaciones técnicas, precios, disponibilidad ni riesgos no documentados."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 5,
+      "slug": "nicaragua-festival-ia-y-hackathon-impulsan-la-innovacion",
+      "titulo": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+      "categoria": "Tecnología",
+      "scoreMeni": 94,
+      "retornoEditorial": 93.63,
+      "valorLector": 94.5,
+      "potencialGoogle": 89.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+        "categoria": "Tecnología",
+        "scoreMeni": 94,
+        "retornoEditorial": 93.63,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (64/100)",
+        "oportunidad": "La noticia \"Evento de IA buscan revolucionar innovación en Nicaragua y…\" responde 3 de 3 preguntas clave para la categoría Tecnología. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+        "entrada": "Nicaragua impulsa su innovación con el Festival IA y Hackathon Nicaragua refuerza su agenda digital con el próximo Festival IA 2026 y el lanzamiento oficial de la décima edición del Hackathon Nicaragua 2026 , eventos que buscan potenciar la innovación, la creatividad y el desarrollo de soluciones digitales en sectores estratégicos del país mediante herramientas tecnológicas avanzadas.",
+        "estructuraHtml": "<h1>Evento de IA buscan revolucionar innovación en Nicaragua y…</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Nicaragua impulsa su innovación con el Festival IA y Hackathon Nicaragua refuerza su agenda digital con el próximo Festival IA 2026 y el lanzamiento oficial de la décima edición del Hackathon Nicaragua 2026 , eventos que buscan potenciar la innovación, la creatividad y el desarrollo de soluciones digitales en sectores estratégicos del país mediante herramientas tecnológicas avanzadas.\"",
+          "Resumen: \"El Festival IA y la décima edición del Hackathon Nicaragua 2026 impulsan la innovación digital en salud, educación, turismo y producción agropecuaria.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar especificaciones técnicas, precios, disponibilidad ni riesgos no documentados."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 6,
+      "slug": "siete-nicaraguenses-fallecen-en-el-extranjero-en-julio-2026",
+      "titulo": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "categoria": "Internacionales",
+      "scoreMeni": 92,
+      "retornoEditorial": 93.21,
+      "valorLector": 93.5,
+      "potencialGoogle": 89.29,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+        "categoria": "Internacionales",
+        "scoreMeni": 92,
+        "retornoEditorial": 93.21,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (63/100)",
+        "oportunidad": "La noticia \"Siete nicaragüenses fallecen en el extranjero en julio 2026\" responde 4 de 4 preguntas clave para la categoría Internacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+        "entrada": "Siete nicaragüenses fallecieron en el extranjero durante julio de 2026 en hechos ocurridos en Costa Rica, El Salvador, España, Panamá y Estados Unidos.",
+        "estructuraHtml": "<h1>Siete nicaragüenses fallecen en el extranjero en julio 2026</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Siete nicaragüenses fallecieron en el extranjero durante julio de 2026 en hechos ocurridos en Costa Rica, El Salvador, España, Panamá y Estados Unidos.\"",
+          "Resumen: \"Siete nicaragüenses fallecieron en el extranjero en julio de 2026. Los casos ocurrieron en Costa Rica, El Salvador, España y Panamá.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 7,
+      "slug": "nasa-cuestiona-limite-de-tormentas-solares-con-estudio-en",
+      "titulo": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "categoria": "Tecnología",
+      "scoreMeni": 92,
+      "retornoEditorial": 92.97,
+      "valorLector": 93.5,
+      "potencialGoogle": 88.11,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+        "categoria": "Tecnología",
+        "scoreMeni": 92,
+        "retornoEditorial": 92.97,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (59/100)",
+        "oportunidad": "La noticia \"NASA cuestiona límite de tormentas solares con estudio en Nature\" responde 3 de 3 preguntas clave para la categoría Tecnología. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "NASA cuestiona límite de tormentas solares con estudio en...",
+        "entrada": "Un estudio de la NASA publicado en julio de 2026 en la revista Nature indica que la respuesta de la Tierra al viento solar podría no tener un límite superior.",
+        "estructuraHtml": "<h1>NASA cuestiona límite de tormentas solares con estudio en...</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Un estudio de la NASA publicado en julio de 2026 en la revista Nature indica que la respuesta de la Tierra al viento solar podría no tener un límite superior.\"",
+          "Resumen: \"NASA publicó en Nature un estudio que cuestiona el límite de la respuesta terrestre al viento solar y advierte riesgos para satélites y GPS.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar especificaciones técnicas, precios, disponibilidad ni riesgos no documentados."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 8,
+      "slug": "nicaragua-tendra-dos-arbitros-en-el-mundial-2026",
+      "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+      "categoria": "Deportes",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+        "categoria": "Deportes",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (59/100)",
+        "oportunidad": "La noticia \"Nicaragua tendrá dos árbitros en el Mundial 2026\" responde 4 de 4 preguntas clave para la categoría Deportes. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+        "entrada": "Los árbitros nicaragüenses Tatiana Guzmán y Henry Pupiro integrarán el cuerpo arbitral del Mundial 2026, convirtiéndose en los representantes de Nicaragua en la máxima cita del fútbol mundial .",
+        "estructuraHtml": "<h1>Nicaragua tendrá dos árbitros en el Mundial 2026</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Los árbitros nicaragüenses Tatiana Guzmán y Henry Pupiro integrarán el cuerpo arbitral del Mundial 2026, convirtiéndose en los representantes de Nicaragua en la máxima cita del fútbol mundial .\"",
+          "Resumen: \"Tatiana Guzmán y Henry Pupiro integrarán el cuerpo arbitral del Mundial 2026, convirtiéndose en los representantes de Nicaragua en la Copa del Mundo.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar estadísticas, récords, trayectorias ni declaraciones de cuerpo técnico."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 9,
+      "slug": "nicaragua-y-costa-rica-refuerzan-lucha-contra-la-malaria",
+      "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (71/100)",
+        "oportunidad": "La noticia \"Nicaragua y Costa Rica refuerzan lucha contra la malaria\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+        "entrada": "Nicaragua y Costa Rica dieron un nuevo paso en la cooperación sanitaria al firmar un acuerdo binacional para fortalecer las acciones de prevención, vigilancia y control de la malaria en las comunidades ubicadas a ambos lados de la frontera común.",
+        "estructuraHtml": "<h1>Nicaragua y Costa Rica refuerzan lucha contra la malaria</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Nicaragua y Costa Rica dieron un nuevo paso en la cooperación sanitaria al firmar un acuerdo binacional para fortalecer las acciones de prevención, vigilancia y control de la malaria en las comunidades ubicadas a ambos lados de la frontera común.\"",
+          "Resumen: \"Nicaragua y Costa Rica firmaron un acuerdo para reforzar la vigilancia contra la malaria en la frontera, con acciones conjuntas de prevención, diagnóstico y control.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 10,
+      "slug": "bertha-calderon-estrena-equipos-de-diagnostico-avanzado",
+      "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (67/100)",
+        "oportunidad": "La noticia \"Bertha Calderón estrena equipos de diagnóstico avanzado\" responde 3 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: ¿A quién afecta esta decisión y cómo?. Prioridad editorial: Media."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿A quién afecta esta decisión y cómo?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+        "entrada": "MANAGUA / NICARAGUA — El Ministerio de Salud puso en funcionamiento esta semana nuevos equipos de imagenología de alta resolución y monitores multiparámetros en el Hospital Bertha Calderón Roque, reduciendo en un 22% los tiempos de espera para diagnóstico por imagen, según datos de supervisión del centro.",
+        "estructuraHtml": "<h1>Bertha Calderón estrena equipos de diagnóstico avanzado</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Impacto ciudadano</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"MANAGUA / NICARAGUA — El Ministerio de Salud puso en funcionamiento esta semana nuevos equipos de imagenología de alta resolución y monitores multiparámetros en el Hospital Bertha Calderón Roque, reduciendo en un 22% los tiempos de espera para diagnóstico por imagen, según datos de supervisión del centro.\"",
+          "Resumen: \"El MINSA inauguró equipos de imagenología de alta resolución en el Hospital Bertha Calderón de Managua, reduciendo 22% los tiempos de espera en diagnóstico.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Efecto práctico para el lector"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Impacto ciudadano: No inventar casos personales ni cifras"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "1-2 horas",
+      "prioridad": "Media"
+    },
+    {
+      "rank": 11,
+      "slug": "produccion-de-leche-alcanza-146-4-millones-en-nicaragua",
+      "titulo": "Producción de leche alcanza 146.4 millones en Nicaragua",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Producción de leche alcanza 146.4 millones en Nicaragua",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (75/100)",
+        "oportunidad": "La noticia \"Producción de leche alcanza 146.4 millones en Nicaragua\" responde 3 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: ¿A quién afecta esta decisión y cómo?. Prioridad editorial: Media."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿A quién afecta esta decisión y cómo?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Producción de leche alcanza 146.4 millones en Nicaragua",
+        "entrada": "La producción de leche en Nicaragua alcanzó los 146.4 millones de galones entre enero y mayo de 2026, según datos del Ministerio Agropecuario (MAG), con participación de más de 106,700 fincas ganaderas distribuidas en todo el país, en un Producción acumulada 2026 El registro oficial del Ministerio Agropecuario detalla que la producción lechera acumulada durante los primeros cinco meses de 2026 refleja el aporte sostenido de la ganadería bovina en las principales zonas productivas del país.",
+        "estructuraHtml": "<h1>Producción de leche alcanza 146.4 millones en Nicaragua</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Impacto ciudadano</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"La producción de leche en Nicaragua alcanzó los 146.4 millones de galones entre enero y mayo de 2026, según datos del Ministerio Agropecuario (MAG), con participación de más de 106,700 fincas ganaderas distribuidas en todo el país, en un Producción acumulada 2026 El registro oficial del Ministerio Agropecuario detalla que la producción lechera acumulada durante los primeros cinco meses de 2026 refleja el aporte sostenido de la ganadería bovina en las principales zonas productivas del país.\"",
+          "Resumen: \"Nicaragua produjo 146.4 millones de galones de leche entre enero y mayo de 2026 en más de 106,700 fincas ganaderas, según datos del Ministerio.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Efecto práctico para el lector"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Impacto ciudadano: No inventar casos personales ni cifras"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "1-2 horas",
+      "prioridad": "Media"
+    },
+    {
+      "rank": 12,
+      "slug": "pronostico-semanal-temperaturas-y-lluvias-en-nicaragua",
+      "titulo": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (75/100)",
+        "oportunidad": "La noticia \"Pronóstico semanal: Temperaturas y lluvias en Nicaragua\" responde 1 de 4 preguntas clave para la categoría Nacionales. Carece de contexto esencial; falta: ¿A quién afecta esta decisión y cómo?; ¿Qué decisiones o hechos anteriores explican este anuncio?; ¿Hay cifras o comparaciones que permitan dimensionar el tema?. Prioridad editorial: Alta."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿A quién afecta esta decisión y cómo?",
+        "Falta investigar: ¿Qué decisiones o hechos anteriores explican este anuncio?",
+        "Falta investigar: ¿Hay cifras o comparaciones que permitan dimensionar el tema?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+        "entrada": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua El Instituto Nicaragüense de Estudios Territoriales (INETER) presentó el informe técnico sobre las condiciones meteorológicas previstas para los próximos siete días.",
+        "estructuraHtml": "<h1>Pronóstico semanal: Temperaturas y lluvias en Nicaragua</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Impacto ciudadano</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>\n<h2>Antecedentes</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>\n<h2>Datos comparativos</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Pronóstico semanal: Temperaturas y lluvias en Nicaragua El Instituto Nicaragüense de Estudios Territoriales (INETER) presentó el informe técnico sobre las condiciones meteorológicas previstas para los próximos siete días.\"",
+          "Resumen: \"El INETER reporta temperaturas de hasta 38°C en el Pacífico y el ingreso de una onda tropical esta semana, afectando principalmente la zona del Caribe.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Efecto práctico para el lector",
+          "Falta conseguir: Contexto histórico reciente",
+          "Falta conseguir: Cifra verificable"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Impacto ciudadano: No inventar casos personales ni cifras",
+          "Antecedentes: No inventar antecedentes no verificados",
+          "Datos comparativos: No inventar porcentajes ni totales"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "2-3 horas",
+      "prioridad": "Alta"
+    },
+    {
+      "rank": 13,
+      "slug": "las-enfermedades-mas-comunes-en-nicaragua-y-como-prevenirlas",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (75/100)",
+        "oportunidad": "La noticia \"Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Neumonía, enfermedades cardíacas y dengue figuran en Nica...",
+        "entrada": "La salud pública en Nicaragua enfrenta desafíos constantes derivados de enfermedades respiratorias, padecimientos crónicos y enfermedades transmitidas por vectores.",
+        "estructuraHtml": "<h1>Neumonía, enfermedades cardíacas y dengue figuran en Nica...</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"La salud pública en Nicaragua enfrenta desafíos constantes derivados de enfermedades respiratorias, padecimientos crónicos y enfermedades transmitidas por vectores.\"",
+          "Resumen: \"La salud pública en Nicaragua enfrenta desafíos constantes derivados de enfermedades respiratorias, padecimientos crónicos y enfermedades transmitidas por.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 14,
+      "slug": "fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita",
+      "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (76/100)",
+        "oportunidad": "La noticia \"Fuertes lluvias provocan inundaciones y suspenden tráfico en…\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Fuertes lluvias provocan inundaciones y suspenden tráfico...",
+        "entrada": "Las intensas lluvias registradas durante la noche del jueves y madrugada de este viernes provocaron inundaciones y afectaciones en varias comunidades del municipio de Rosita, en la Región Autónoma del Caribe Norte de Nicaragua .",
+        "estructuraHtml": "<h1>Fuertes lluvias provocan inundaciones y suspenden tráfico...</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Las intensas lluvias registradas durante la noche del jueves y madrugada de este viernes provocaron inundaciones y afectaciones en varias comunidades del municipio de Rosita, en la Región Autónoma del Caribe Norte de Nicaragua .\"",
+          "Resumen: \"Las intensas lluvias registradas durante la noche del jueves y madrugada de este viernes provocaron inundaciones y afectaciones en varias comunidades del m.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 15,
+      "slug": "bluefields-celebra-el-palo-de-mayo-con-musica-y-tradicion-caribena",
+      "titulo": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Bluefields celebra el Palo de Mayo con música y tradición…",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (77/100)",
+        "oportunidad": "La noticia \"Bluefields celebra el Palo de Mayo con música y tradición…\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Bluefields celebra el Palo de Mayo con música y tradición…",
+        "entrada": "La ciudad de Bluefields vuelve a llenarse de música, baile y tradición con las festividades del Palo de Mayo, una de las celebraciones culturales más importantes y representativas de Nicaragua .",
+        "estructuraHtml": "<h1>Bluefields celebra el Palo de Mayo con música y tradición…</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"La ciudad de Bluefields vuelve a llenarse de música, baile y tradición con las festividades del Palo de Mayo, una de las celebraciones culturales más importantes y representativas de Nicaragua .\"",
+          "Resumen: \"La ciudad de Bluefields vuelve a llenarse de música, baile y tradición con las festividades del Palo de Mayo, una de las celebraciones culturales más impor.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 16,
+      "slug": "disminucion-de-lluvias-afecta-cultivos-y-reservas-de-agua-en-nicaragua",
+      "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+      "categoria": "Nacionales",
+      "scoreMeni": 94,
+      "retornoEditorial": 92.83,
+      "valorLector": 94.5,
+      "potencialGoogle": 85.9,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+        "categoria": "Nacionales",
+        "scoreMeni": 94,
+        "retornoEditorial": 92.83,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (78/100)",
+        "oportunidad": "La noticia \"Déficit de lluvias por El Niño afecta al Corredor Seco\" responde 2 de 4 preguntas clave para la categoría Nacionales. Carece de contexto esencial; falta: ¿Qué decisiones o hechos anteriores explican este anuncio?; ¿Hay cifras o comparaciones que permitan dimensionar el tema?. Prioridad editorial: Alta."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿Qué decisiones o hechos anteriores explican este anuncio?",
+        "Falta investigar: ¿Hay cifras o comparaciones que permitan dimensionar el tema?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+        "entrada": "Invierno registra severo impacto climático en el sector agropecuario El período lluvioso correspondiente al año 2026 ha iniciado en el territorio nacional con un marcado escenario de sequía meteorológica, registrando un déficit de precipitaciones estimado en un 20% durante el bimestre de mayo y junio.",
+        "estructuraHtml": "<h1>Déficit de lluvias por El Niño afecta al Corredor Seco</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Antecedentes</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>\n<h2>Datos comparativos</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Invierno registra severo impacto climático en el sector agropecuario El período lluvioso correspondiente al año 2026 ha iniciado en el territorio nacional con un marcado escenario de sequía meteorológica, registrando un déficit de precipitaciones estimado en un 20% durante el bimestre de mayo y junio.\"",
+          "Resumen: \"La disminución de lluvias y las altas temperaturas continúan generando afectaciones en distintos sectores productivos de Nicaragua, especialmente en áreas.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Contexto histórico reciente",
+          "Falta conseguir: Cifra verificable"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Antecedentes: No inventar antecedentes no verificados",
+          "Datos comparativos: No inventar porcentajes ni totales"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "2-3 horas",
+      "prioridad": "Alta"
+    },
+    {
+      "rank": 17,
+      "slug": "baile-de-los-chinegros-mantiene-vivo-un-ritual-de-400-anos",
+      "titulo": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+      "categoria": "Nacionales",
+      "scoreMeni": 92,
+      "retornoEditorial": 92.79,
+      "valorLector": 93.5,
+      "potencialGoogle": 93.2,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 84,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+        "categoria": "Nacionales",
+        "scoreMeni": 92,
+        "retornoEditorial": 92.79,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (59/100)",
+        "oportunidad": "La noticia \"Baile de los Chinegros mantiene vivo un ritual de 400 años\" responde 3 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: ¿Hay cifras o comparaciones que permitan dimensionar el tema?. Prioridad editorial: Media."
+      },
+      "preguntasReales": [
+        "Falta investigar: ¿Hay cifras o comparaciones que permitan dimensionar el tema?"
+      ],
+      "arquitecturaPropuesta": {
+        "h1": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+        "entrada": "En las calles de Nindirí , una tradición con más de cuatro siglos continúa reuniendo fe, historia y cultura popular.",
+        "estructuraHtml": "<h1>Baile de los Chinegros mantiene vivo un ritual de 400 años</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>\n<h2>Datos comparativos</h2>\n<p>Requiere investigación periodística sobre: [dato faltante].</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"En las calles de Nindirí , una tradición con más de cuatro siglos continúa reuniendo fe, historia y cultura popular.\"",
+          "Resumen: \"El Baile de los Chinegros de Nindirí conserva más de 400 años de historia, mezclando fe, tradición y cultura popular durante las fiestas de Santa Ana.\""
+        ],
+        "pendiente": [
+          "Falta conseguir: Cifra verificable"
+        ],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor.",
+          "Datos comparativos: No inventar porcentajes ni totales"
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "1-2 horas",
+      "prioridad": "Media"
+    },
+    {
+      "rank": 18,
+      "slug": "modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones",
+      "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+      "categoria": "Nacionales",
+      "scoreMeni": 92,
+      "retornoEditorial": 92.19,
+      "valorLector": 93.5,
+      "potencialGoogle": 84.2,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+        "categoria": "Nacionales",
+        "scoreMeni": 92,
+        "retornoEditorial": 92.19,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (65/100)",
+        "oportunidad": "La noticia \"Modernizan aeropuerto de Bluefields con inversión de US$10…\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+        "entrada": "El aeropuerto de Bluefields concluyó un amplio proceso de modernización valorado en aproximadamente 10 millones de dólares , con el objetivo de fortalecer las operaciones aéreas y mejorar la atención a pasajeros en la Costa Caribe Sur de Nicaragua .",
+        "estructuraHtml": "<h1>Modernizan aeropuerto de Bluefields con inversión de US$10…</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"El aeropuerto de Bluefields concluyó un amplio proceso de modernización valorado en aproximadamente 10 millones de dólares , con el objetivo de fortalecer las operaciones aéreas y mejorar la atención a pasajeros en la Costa Caribe Sur de Nicaragua .\"",
+          "Resumen: \"El aeropuerto de Bluefields fue modernizado con una inversión de 10 millones de dólares en pista, terminal y sistemas de seguridad para fortalecer la.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 19,
+      "slug": "beisbol-sigue-siendo-el-deporte-favorito-de-los-nicaraguenses-en-2026",
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "categoria": "Deportes",
+      "scoreMeni": 92,
+      "retornoEditorial": 92.19,
+      "valorLector": 93.5,
+      "potencialGoogle": 84.2,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+        "categoria": "Deportes",
+        "scoreMeni": 92,
+        "retornoEditorial": 92.19,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Valor noticioso medio (69/100)",
+        "oportunidad": "La noticia \"Béisbol sigue siendo deporte favorito de nicaragüenses en 2026\" responde 4 de 4 preguntas clave para la categoría Deportes. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "Béisbol sigue siendo deporte favorito de nicaragüenses en...",
+        "entrada": "El béisbol mantiene su posición como el deporte con mayor respaldo entre los nicaragüenses durante 2026, de acuerdo con un estudio divulgado por M&R Consultores sobre preferencias deportivas y hábitos de consumo de información.",
+        "estructuraHtml": "<h1>Béisbol sigue siendo deporte favorito de nicaragüenses en...</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"El béisbol mantiene su posición como el deporte con mayor respaldo entre los nicaragüenses durante 2026, de acuerdo con un estudio divulgado por M&R Consultores sobre preferencias deportivas y hábitos de consumo de información.\"",
+          "Resumen: \"El béisbol mantiene su posición como el deporte con mayor respaldo entre los nicaragüenses durante 2026, de acuerdo con un estudio divulgado por M&R Consul.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar estadísticas, récords, trayectorias ni declaraciones de cuerpo técnico."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    },
+    {
+      "rank": 20,
+      "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+      "titulo": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "categoria": "Nacionales",
+      "scoreMeni": 92,
+      "retornoEditorial": 92.19,
+      "valorLector": 93.5,
+      "potencialGoogle": 84.2,
+      "aporteNIN": 92.5,
+      "facilidadMejora": 92,
+      "actualidadInteres": 100,
+      "diagnostico": {
+        "tituloActual": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+        "categoria": "Nacionales",
+        "scoreMeni": 92,
+        "retornoEditorial": 92.19,
+        "valorActual": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "problemaPrincipal": "Alto valor noticioso (75/100)",
+        "oportunidad": "La noticia \"85 familias de Nagarote recibirán viviendas este 22 de mayo\" responde 4 de 4 preguntas clave para la categoría Nacionales. Tiene elementos sólidos, pero falta: . Prioridad editorial: Baja."
+      },
+      "preguntasReales": [],
+      "arquitecturaPropuesta": {
+        "h1": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+        "entrada": "Programa Nuevas Victorias entregará 85 viviendas a familias de Nagarote como parte de los proyectos habitacionales impulsados en Nicaragua .",
+        "estructuraHtml": "<h1>85 familias de Nagarote recibirán viviendas este 22 de mayo</h1>\n<p class=\"lead\">[Entrada: qué ocurrió + por qué importa]</p>\n<h2>Qué ocurrió</h2>\n<p>[resumen del hecho con datos confirmados]</p>"
+      },
+      "investigacion": {
+        "disponible": [
+          "Lead actual: \"Programa Nuevas Victorias entregará 85 viviendas a familias de Nagarote como parte de los proyectos habitacionales impulsados en Nicaragua .\"",
+          "Resumen: \"Programa Nuevas Victorias entregará 85 viviendas a familias de Nagarote como parte de los proyectos habitacionales impulsados en Nicaragua. 85 familias de.\""
+        ],
+        "pendiente": [],
+        "riesgos": [
+          "No inventar cifras, antecedentes institucionales ni fechas de entrada en vigor."
+        ]
+      },
+      "potencialEsperado": "ALTO: puede convertirse en contenido permanente",
+      "trabajoNecesario": "30-60 minutos",
+      "prioridad": "Baja"
+    }
+  ]
+}
