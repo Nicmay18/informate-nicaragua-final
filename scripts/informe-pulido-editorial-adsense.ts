@@ -268,7 +268,6 @@ async function main() {
 
   const lista1 = pulido.filter((p) => p.prioridad === 'Lista 1');
   const lista2 = pulido.filter((p) => p.prioridad === 'Lista 2');
-  const lista3 = pulido.filter((p) => p.prioridad === 'Lista 3');
 
   const md: string[] = [];
 

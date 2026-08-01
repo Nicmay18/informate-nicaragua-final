@@ -205,7 +205,7 @@ function problemaPrincipal(d: DiagnosticoItem, s: ReturnType<typeof analizarCont
   return partes.slice(0, 2).join('; ');
 }
 
-function preguntaQueDebeResponder(titulo: string, categoria: string): string {
+function preguntaQueDebeResponder(categoria: string): string {
   const cat = (categoria || '').toLowerCase();
   if (cat.includes('suceso')) return '¿Qué pasó, cómo fue atendido el caso, qué investigan las autoridades y qué debe conocer la comunidad?';
   if (cat.includes('internacional')) return '¿Por qué este tema importa a Nicaragua y qué consecuencias tiene para la región?';
@@ -218,7 +218,6 @@ function preguntaQueDebeResponder(titulo: string, categoria: string): string {
 
 function determinarGrupo(
   d: DiagnosticoItem,
-  s: ReturnType<typeof analizarContenido>,
   valor: string,
   originalidad: string,
 ): { grupo: string; accion: string; prioridad: string; tipo: string } {
@@ -309,7 +308,7 @@ async function main() {
     const s = analizarContenido(fdoc?.contenido || '', d.categoria);
     const valor = valorUsuario(d, s);
     const originalidad = originalidadReal(d, s);
-    const { grupo, accion, prioridad, tipo } = determinarGrupo(d, s, valor, originalidad);
+    const { grupo, accion, prioridad, tipo } = determinarGrupo(d, valor, originalidad);
 
     const item: CirugiaItem = {
       slug: d.slug,
@@ -321,7 +320,7 @@ async function main() {
       problema_principal: problemaPrincipal(d, s),
       tipo_de_mejora: tipo,
       informacion_que_falta: informacionQueFalta(d, s),
-      pregunta_que_debe_responder: preguntaQueDebeResponder(d.titulo, d.categoria),
+      pregunta_que_debe_responder: preguntaQueDebeResponder(d.categoria),
       nivel_prioridad: prioridad,
       accion_recomendada: accion,
       grupo,

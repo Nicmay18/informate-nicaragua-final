@@ -44,10 +44,6 @@ function contarPalabras(html: string): number {
   return texto.split(/\s+/).filter((w) => w.length > 0).length;
 }
 
-function normalizar(t: string): string {
-  return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
 function extraerFrase(html: string, terminos: string[]): string {
   const texto = stripTags(html);
   const oraciones = texto.split(/(?<=[.!?])\s+/);
@@ -79,10 +75,7 @@ function fraseRiesgo(html: string, palabras: string[]): string {
 }
 
 function formatearJson(obj: any): string {
-  return '```json\n' + JSON.stringify(obj, (k, v) => {
-    if (typeof v === 'number' && isNaN(v)) return null;
-    return v;
-  }, 2) + '\n```';
+  return '```json\n' + JSON.stringify(obj, null, 2) + '\n```';
 }
 
 function recomendacionesConcretas(r: any, criterio: string): string[] {
