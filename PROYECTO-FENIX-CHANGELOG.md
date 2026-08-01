@@ -10,12 +10,15 @@
 | `scripts/archive/auditoria/` | **Eliminado** | Directorio de ~170 scripts obsoletos de auditorías pasadas; no son referenciados por la app ni por scripts activos. | Reduce ruido del repositorio; ESLint y TS ya no excluyen una carpeta inexistente. |
 | `eslint.config.mjs` | **Corregido** | Eliminada exclusión `scripts/archive/**` que ya no aplica. | Configuración limpia y alineada con el repo real. |
 | `tsconfig.json` | **Corregido** | Eliminada exclusión `scripts/archive/**` que ya no aplica. | Configuración limpia y alineada con el repo real. |
+| `package.json` | **Corregido** | `build` ahora usa `cross-env NODE_OPTIONS=--max-old-space-size=4096` y se limpió `test:merge`/`test:regression` obsoleto. | Build de producción confiable y cross-platform; scripts alineados al estado real del repo. |
+| `package-lock.json` | **Corregido** | Agregado `cross-env` a `devDependencies`. | Permite elevar el heap de Node en builds grandes sin depender del shell. |
 
 ## Estado de la suite
 
 - `npm run type-check`: OK
 - `npm run lint`: OK
 - `npx vitest run`: 71/71 tests OK
+- `npm run build`: OK
 
 ## MENI V3.2
 
