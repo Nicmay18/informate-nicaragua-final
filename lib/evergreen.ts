@@ -20,61 +20,35 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-01-15',
-    updatedDate: '2026-05-24',
-    content: `<p>La apostilla es un sello que certifica la autenticidad de documentos públicos nicaragüenses para que sean válidos en países que forman parte de la Convención de La Haya. Este proceso simplifica la legalización de documentos para trámites de migración, empleo, matrimonio o estudios en el extranjero. Nicaragua es miembro de la Convención de La Haya desde 2021, por lo que los documentos apostillados en el país son reconocidos en más de 120 naciones sin necesidad de legalización consular adicional.</p>
-      
+    updatedDate: '2026-07-30',
+    content: `
+      <blockquote><h3>Qué cambió desde la última actualización (24 de mayo de 2026)</h3><ul><li>El trámite ahora se agenda por una <strong>plataforma de citas en línea</strong> (citas.cancilleria.gob.ni), no de forma presencial sin cita.</li><li>Las citas disponibles se están agotando con <strong>hasta 4 meses de espera</strong>, según un reporte de mayo de 2026.</li><li>Surgió un <strong>mercado negro de citas</strong>, con precios de USD 100 a 400 por un cupo, según denuncias ciudadanas.</li><li>Los tiempos de "3 a 5 días hábiles" que indicábamos antes <strong>ya no reflejan la realidad del trámite</strong> para la mayoría de solicitantes.</li></ul></blockquote>
+      <p>La apostilla es un sello que certifica la autenticidad de documentos públicos nicaragüenses para que sean válidos en países que forman parte de la Convención de La Haya. Nicaragua es miembro desde 2013, por lo que los documentos apostillados en el país son reconocidos en más de 120 naciones sin necesidad de legalización consular adicional. Sin embargo, en 2026 el trámite enfrenta demoras importantes que todo solicitante debe conocer antes de planificar un viaje o trámite migratorio.</p>
       <h2>Documentos que se pueden apostillar en Nicaragua</h2>
-      <ul>
-        <li>Certificados de nacimiento, matrimonio y defunción</li>
-        <li>Diplomas, títulos académicos y certificados de estudio</li>
-        <li>Certificados de antecedentes penales</li>
-        <li>Poderes notariales y actas notariales</li>
-        <li>Documentos de la Corte Suprema de Justicia y tribunales</li>
-        <li>Documentos de registros públicos y municipales</li>
-      </ul>
-      <p>Los documentos deben estar vigentes y en buen estado físico. Algunos países de destino exigen que el documento sea reciente, generalmente emitido en los últimos 3 a 6 meses.</p>
-      
+      <ul><li>Certificados de nacimiento, matrimonio y defunción</li><li>Diplomas, títulos académicos y certificados de estudio</li><li>Certificados de antecedentes penales</li><li>Poderes notariales y actas notariales</li><li>Documentos de la Corte Suprema de Justicia y tribunales</li><li>Documentos de registros públicos y municipales</li></ul>
+      <p>Los documentos deben estar vigentes y en buen estado físico. Algunos países de destino exigen que el documento sea reciente, generalmente emitido en los últimos 3 a 6 meses. Los documentos académicos (diplomas, títulos, certificados de notas) requieren autenticación previa por instituciones como el INATEC antes de poder apostillarse; ese paso previo tiene un costo de C$ 30, pagadero en cuenta de INATEC en Banpro.</p>
+      <h2>Cómo agendar la cita en línea (actualizado)</h2>
+      <p>Desde abril de 2025, la Cancillería digitalizó el proceso de citas para apostillado. Los pasos son:</p>
+      <ol><li>Ingresar a <strong>https://citas.cancilleria.gob.ni</strong></li><li>Seleccionar la institución, el departamento y la sede donde se desea ser atendido</li><li>Completar el formulario con datos personales: tipo y número de documento, nombre completo, fecha de nacimiento, sexo, nacionalidad, teléfono y correo electrónico</li><li>Verificar el correo con el código enviado</li><li>Descargar o guardar el comprobante de cita (también llega por correo)</li></ol>
+      <p>Para más información se puede llamar al 2244-8008.</p>
+      <h2>La demora real del trámite en 2026</h2>
+      <p>Aunque el sistema virtual eliminó las filas físicas frente a la Cancillería, no resolvió el cuello de botella de fondo: la demanda de citas supera la capacidad de atención. Un reporte de Despacho 505 verificó que, hasta el 13 de mayo de 2026, la cita más próxima disponible en la plataforma era para el 5 de julio, es decir, casi dos meses de espera solo para conseguir turno. Otros usuarios han reportado esperas de hasta 4 meses.</p>
+      <p>Esta escasez de citas generó un mercado paralelo: intermediarios que revenden cupos de la plataforma por montos de entre <strong>USD 100 y USD 400</strong>, según denuncias ciudadanas recogidas por Despacho 505. Si usted necesita el documento con urgencia (por ejemplo, para una entrevista de visa o un trámite migratorio con fecha límite), planifique con al menos 2 a 4 meses de anticipación y evite intermediarios no oficiales.</p>
       <h2>Requisitos para apostillar documentos en 2026</h2>
-      <p>Para apostillar un documento en Nicaragua se requiere:</p>
-      <ul>
-        <li>Documento original o copia certificada por la institución emisora</li>
-        <li>Cédula de identidad vigente del solicitante</li>
-        <li>Pago de la tasa correspondiente según tipo de documento y servicio</li>
-      </ul>
+      <ul><li>Documento original o copia certificada por la institución emisora</li><li>Cédula de identidad vigente del solicitante</li><li>Comprobante de cita generado en la plataforma en línea</li><li>Pago de la tasa correspondiente según tipo de documento y servicio</li></ul>
       <p>Los documentos extranjeros no se apostillan en Nicaragua. Deben ser apostillados en el país de origen antes de ser presentados en el país.</p>
-      
       <h2>Dónde realizar el trámite</h2>
-      <p>La apostilla se realiza en la Cancillería de Nicaragua, dependiente del Ministerio de Relaciones Exteriores, ubicada en Managua. También existen oficinas delegadas en principales ciudades del país. Se recomienda verificar los horarios de atención y disponibilidad del servicio exprés antes de acudir.</p>
-      
-      <h2>Tiempos de procesamiento</h2>
-      <p>El tiempo promedio de procesamiento es de 3 a 5 días hábiles. Para trámites urgentes, el servicio exprés puede entregar el documento en 24 horas con un costo adicional. El tiempo real puede variar según la cantidad de solicitudes y la disponibilidad de la institución.</p>
-      
+      <p>La apostilla se realiza en la Dirección General de Asuntos Consulares y Migratorios del Ministerio de Relaciones Exteriores (MINREX), en Managua. También existen oficinas delegadas en principales ciudades del país. Se recomienda verificar los horarios de atención y disponibilidad del servicio antes de acudir, incluso teniendo cita confirmada.</p>
       <h2>Costos actualizados 2026</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Servicio</th><th style="padding:10px;text-align:right;">Costo aproximado</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Apostilla estándar</td><td style="padding:10px;text-align:right;">C$ 200 por documento</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Servicio exprés (24 horas)</td><td style="padding:10px;text-align:right;">C$ 400 por documento</td></tr>
-          <tr><td style="padding:10px;">Certificaciones adicionales</td><td style="padding:10px;text-align:right;">C$ 50 cada una</td></tr>
-        </tbody>
-      </table>
-      <p>Los costos pueden cambiar según el tipo de documento y la política institucional. Se recomienda confirmar el monto actual antes de realizar el pago.</p>
-      
-      <h2>Preguntas frecuentes</h2>
-      <h3>¿Se puede apostillar en línea en Nicaragua?</h3>
-      <p>No. El trámite debe realizarse de forma presencial en la Cancillería o sus oficinas delegadas.</p>
-      <h3>¿Qué países aceptan la apostilla nicaragüense?</h3>
-      <p>Los países miembros de la Convención de La Haya, incluyendo España, México, Costa Rica, Chile, Estados Unidos y la mayoría de países de Europa y América Latina.</p>
-      <h3>¿Qué pasa si el documento está en inglés?</h3>
-      <p>Dependiendo del país de destino, podría requerirse una traducción oficial realizada por un traductor jurado. Verifica los requisitos específicos en la embajada o entidad receptora.</p>
-      
-      <h2>Fuentes consultadas</h2>
-      <p>Información basada en procedimientos del Ministerio de Relaciones Exteriores de Nicaragua y la Convención de La Haya. Los costos y tiempos son referenciales y pueden variar. Se recomienda consultar directamente con la Cancillería antes de iniciar el trámite.</p>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Servicio</th><th style="padding:10px;text-align:left;">Costo aproximado</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Apostilla estándar</td><td style="padding:10px;text-align:left;">C$ 150 - 300 por documento</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Autenticación previa de documentos académicos (INATEC)</td><td style="padding:10px;text-align:left;">C$ 30</td></tr><tr style=""><td style="padding:10px;text-align:left;">Cupos de cita revendidos en el mercado informal (no oficial, no recomendado)</td><td style="padding:10px;text-align:left;">USD 100 - 400</td></tr></tbody></table>
+      <p>Los costos oficiales pueden variar según el tipo de documento; confirme el monto exacto al momento del trámite. Evite pagar por cupos de cita fuera de la plataforma oficial: es un servicio no autorizado y no hay garantía de que la cita sea válida.</p>
     `,
     faqs: [
-      { question: '¿Cuánto tiempo dura la apostilla?', answer: 'La apostilla no tiene fecha de vencimiento, pero algunos países pueden requerir que el documento sea reciente (menos de 6 meses).' },
-      { question: '¿Puedo apostillar documentos extranjeros en Nicaragua?', answer: 'No. Los documentos extranjeros deben apostillarse en el país de origen antes de ser usados en Nicaragua.' },
-      { question: '¿Qué pasa si mi documento está en inglés?', answer: 'Si el documento está en otro idioma, debe tener traducción oficial realizada por un traductor jurado en Nicaragua.' },
+      { question: '¿Se puede apostillar en línea en Nicaragua?', answer: 'Solo la cita se agenda en línea. El trámite de apostillado en sí sigue siendo presencial, en la Cancillería o sus oficinas delegadas.' },
+      { question: '¿Cuánto tiempo real toma conseguir cita para apostillar?', answer: 'A mediados de 2026, las esperas reportadas van de 2 a 4 meses, dependiendo de la demanda y la sede elegida.' },
+      { question: '¿Es seguro comprar una cita a un intermediario?', answer: 'No es un canal oficial. La Cancillería no ha validado ni autorizado la reventa de citas, y pagar por un cupo no garantiza que el trámite se complete sin problemas.' },
+      { question: '¿Qué países aceptan la apostilla nicaragüense?', answer: 'Los países miembros de la Convención de La Haya, incluyendo España, México, Costa Rica, Chile, Estados Unidos y la mayoría de países de Europa y América Latina.' },
+      { question: '¿Qué pasa si mi documento está en inglés?', answer: 'Dependiendo del país de destino, podría requerirse una traducción oficial realizada por un traductor jurado. Verifique los requisitos específicos en la embajada o entidad receptora.' }
     ],
   },
   {
@@ -85,62 +59,45 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-02-10',
-    updatedDate: '2026-05-24',
-    content: `<p>El récord policial, también conocido como antecedentes penales, es un documento que certifica si una persona tiene registros de procesos penales en Nicaragua. Es requerido para trámites de empleo, visas, residencias y otros procedimientos legales. La anulación del récord policial es un trámite administrativo que permite solicitar la eliminación de antecedentes bajo ciertas condiciones legales. A continuación se detallan los requisitos, pasos y costos para solicitar la anulación en 2026.</p>
-      
-      <h2>Cuándo se puede solicitar la anulación</h2>
-      <p>La anulación del récord policial puede solicitarse cuando se cumplen las siguientes condiciones:</p>
-      <ul>
-        <li>Han transcurrido más de 5 años desde el cumplimiento de la pena principal y accesorias</li>
-        <li>El proceso penal fue archivado, sobreseído o terminado de forma definitiva</li>
-        <li>Se obtuvo una sentencia absolutoria firme</li>
-        <li>El delito fue de menor gravedad y no existe reincidencia</li>
-      </ul>
-      <p>La solicitud no procede si existe un proceso penal en curso contra el interesado o si la condena fue por delitos graves con restricciones legales específicas.</p>
-      
-      <h2>Requisitos para solicitar la anulación</h2>
-      <ul>
-        <li>Solicitud escrita dirigida al Director General de la Policía Nacional</li>
-        <li>Cédula de identidad vigente del solicitante</li>
-        <li>Certificación de la sentencia judicial o resolución que acredite la situación legal</li>
-        <li>Constancia de residencia actualizada</li>
-        <li>Comprobante de pago de la tasa administrativa</li>
-      </ul>
-      
-      <h2>Paso a paso del trámite</h2>
-      <ol>
-        <li>Reúna todos los documentos requeridos y verifique que estén vigentes</li>
-        <li>Presente la solicitud en la delegación de la Policía Nacional más cercana a su domicilio</li>
-        <li>Pague la tasa correspondiente según la tarifa oficial</li>
-        <li>Espere el período de revisión administrativa (30-45 días hábiles)</li>
-        <li>Recoja la resolución en la misma delegación donde presentó el trámite</li>
-      </ol>
-      
-      <h2>Tiempos y costos</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Concepto</th><th style="padding:10px;text-align:right;">Valor aproximado</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Tasa por solicitud</td><td style="padding:10px;text-align:right;">C$ 500</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Certificación adicional</td><td style="padding:10px;text-align:right;">C$ 100 cada una</td></tr>
-          <tr><td style="padding:10px;">Tiempo de respuesta</td><td style="padding:10px;text-align:right;">30 a 45 días hábiles</td></tr>
-        </tbody>
-      </table>
-      
-      <h2>Preguntas frecuentes</h2>
-      <h3>¿Cuánto tiempo tarda la anulación del récord policial?</h3>
-      <p>El trámite tarda entre 30 y 45 días hábiles desde la presentación completa de la documentación.</p>
-      <h3>¿Puedo solicitar la anulación si tengo un proceso penal en curso?</h3>
-      <p>No. La anulación solo procede cuando el proceso ha concluido con sentencia firme, archivo o sobreseimiento definitivo.</p>
-      <h3>¿La anulación elimina el registro de forma permanente?</h3>
-      <p>Sí. Una vez aprobada, el antecedente penal se elimina de los registros consultables y no aparecerá en futuras constancias.</p>
-      
-      <h2>Fuentes consultadas</h2>
-      <p>Información basada en procedimientos administrativos de la Policía Nacional de Nicaragua y disposiciones del Código Procesal Penal. Los costos y tiempos son referenciales. Se recomienda confirmar el monto y requisitos actuales en la delegación correspondiente.</p>
+    updatedDate: '2026-07-30',
+    content: `
+      <blockquote><h3>Qué cambió desde la última actualización (24 de mayo de 2026)</h3><ul><li>El costo del récord de policía (certificado de conducta) <strong>subió de C$30 a C$80</strong> (aumento del 166.7%), sin previo aviso.</li><li>La <strong>autenticación</strong> del récord ahora cuesta <strong>C$100</strong> y ya no está centralizada solo en Plaza El Sol: desde el 30 de marzo de 2026 se puede hacer en <strong>cualquier delegación regional o departamental</strong>, y en Managua en los distritos 8, 9 y 10.</li><li>La Constancia de Antecedentes Judiciales (Carta Judicial) <strong>subió de C$150 a C$300</strong>.</li><li>Ahora existe un <strong>portal en línea</strong> (tramitesenlinea.policia.gob.ni) y <strong>78 kioscos tecnológicos</strong> en todo el país para solicitar el certificado de conducta, incluso desde el extranjero.</li><li>Abogados penalistas advierten que, en la práctica, muchos récords <strong>siguen saliendo "manchados" incluso después de una anulación aprobada</strong>, por fallas en la actualización del sistema.</li></ul></blockquote>
+      <p>El récord policial, también conocido como certificado de conducta o antecedentes penales, es el documento que certifica si una persona tiene registros de procesos penales en Nicaragua. Es requerido para trámites de empleo, visas, residencias, homologación de licencias y otros procedimientos legales. Esta guía cubre tres cosas distintas pero relacionadas: cómo obtener el récord, cómo autenticarlo para uso en el extranjero, y cómo solicitar la anulación de antecedentes cuando la ley lo permite.</p>
+      <h2>1. Cómo obtener el récord de policía en 2026</h2>
+      <h3>Costo</h3>
+      <p>El récord de policía cuesta <strong>C$80</strong> (antes C$30). El pago se hace de forma previa en una sucursal del Banco de la Producción (Banpro) o en un agente Banpro autorizado, que es la única entidad autorizada para recibir este pago.</p>
+      <h3>Opción A: solicitud en línea</h3>
+      <p>En <strong>https://tramitesenlinea.policia.gob.ni/</strong>:</p>
+      <ol><li>Crear un usuario con nombre completo, correo electrónico y número de cédula</li><li>Crear una nueva solicitud en la pestaña "Trámites", indicando el motivo (laboral, académico, migratorio)</li><li>Elegir el trámite "Certificado de conducta" y la forma de entrega: Correos de Nicaragua, en la delegación policial, o impresión directa</li><li>Si se elige entrega a domicilio por Correos de Nicaragua: C$10 adicionales para entrega en papel, C$30 para material PVC</li><li>Procesar el pago e ingresar los datos del vaucher</li></ol>
+      <h3>Opción B: kioscos tecnológicos</h3>
+      <p>Existen <strong>78 kioscos tecnológicos</strong> distribuidos en todos los municipios del país, disponibles las 24 horas, todos los días de la semana:</p>
+      <ol><li>Seleccionar "Trámites en línea" en el kiosco</li><li>Colocar la cédula de identidad vigente en el lector</li><li>Verificar los datos personales mostrados</li><li>Ir a la pestaña "Certificados" → "Certificado de Conducta", elegir el motivo y generar el trámite</li><li>Pagar en el kiosco (vaucher de banco o agente Banpro) e ingresar el número SIF</li><li>Imprimir el documento</li></ol>
+      <p><strong>Importante:</strong> si usted tiene antecedentes penales, el sistema no le permitirá generar el documento de forma automática en el kiosco.</p>
+      <h3>Si usted vive en el extranjero</h3>
+      <p>Puede hacer la solicitud en línea desde fuera de Nicaragua y luego autenticar el documento (ver siguiente sección) para que tenga validez legal en el país donde lo necesite.</p>
+      <h2>2. Autenticación del récord de policía</h2>
+      <p>La autenticación es un trámite adicional, indispensable para gestiones migratorias, laborales y académicas en el extranjero.</p>
+      <ul><li><strong>Costo: C$100</strong> por cada autenticación</li><li><strong>Requisitos:</strong> certificado de conducta vigente y cédula de identidad vigente de quien realiza el trámite</li><li><strong>Dónde:</strong> desde el 30 de marzo de 2026, en cualquier delegación policial regional o departamental del país, y en Managua en los Distritos Policiales 8, 9 y 10. Antes solo se podía hacer en las oficinas centrales de Plaza El Sol.</li></ul>
+      <h2>3. Anulación de antecedentes penales</h2>
+      <p>Este es un trámite distinto al certificado de conducta: aplica cuando una persona ya cumplió una condena y quiere que sus antecedentes dejen de aparecer en el récord policial.</p>
+      <h3>Cuándo se puede solicitar la anulación</h3>
+      <ul><li>Han transcurrido más de 5 años desde el cumplimiento de la pena principal y accesorias</li><li>El proceso penal fue archivado, sobreseído o terminado de forma definitiva</li><li>Se obtuvo una sentencia absolutoria firme</li><li>El delito fue de menor gravedad y no existe reincidencia</li></ul>
+      <p>La solicitud no procede si existe un proceso penal en curso o si la condena fue por delitos graves con restricciones legales específicas.</p>
+      <h3>Requisitos</h3>
+      <ul><li>Solicitud escrita dirigida al Director General de la Policía Nacional</li><li>Cédula de identidad vigente</li><li>Certificación de la sentencia judicial o resolución que acredite la situación legal</li><li>Constancia de residencia actualizada</li><li>Comprobante de pago de la tasa administrativa</li></ul>
+      <h3>Paso a paso</h3>
+      <ol><li>Reúna todos los documentos requeridos y verifique que estén vigentes</li><li>Presente la solicitud en la delegación de la Policía Nacional más cercana a su domicilio</li><li>Pague la tasa correspondiente</li><li>Espere el período de revisión administrativa (30-45 días hábiles, según normativa vigente)</li><li>Recoja la resolución en la misma delegación</li></ol>
+      <h3>⚠️ Advertencia importante sobre la práctica real</h3>
+      <p>Abogados penalistas nicaragüenses han advertido públicamente que, aunque la anulación sea aprobada formalmente, en la práctica <strong>el récord policial puede seguir apareciendo "manchado"</strong> con el antecedente ya anulado, debido a fallas en la actualización de los registros del sistema. Si esto le ocurre, la recomendación es acudir con la resolución de anulación en mano a la delegación donde tramitó el récord y, de ser necesario, buscar asesoría de un abogado especializado en derecho penal para exigir la corrección del registro.</p>
+      <h2>Tabla de costos actualizados 2026</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Trámite</th><th style="padding:10px;text-align:left;">Costo</th><th style="padding:10px;text-align:left;">Nota</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Récord de policía / certificado de conducta</td><td style="padding:10px;text-align:left;">C$ 80</td><td style="padding:10px;text-align:left;">Antes C$ 30</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Autenticación del récord de policía</td><td style="padding:10px;text-align:left;">C$ 100</td><td style="padding:10px;text-align:left;">Disponible en todo el país desde marzo 2026</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Constancia de Antecedentes Judiciales (Carta Judicial)</td><td style="padding:10px;text-align:left;">C$ 300</td><td style="padding:10px;text-align:left;">Antes C$ 150</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Entrega a domicilio (Correos de Nicaragua, papel)</td><td style="padding:10px;text-align:left;">C$ 10</td><td style="padding:10px;text-align:left;">Adicional</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Entrega a domicilio (Correos de Nicaragua, PVC)</td><td style="padding:10px;text-align:left;">C$ 30</td><td style="padding:10px;text-align:left;">Adicional</td></tr><tr style="background:#f9fafb;"><td style="padding:10px;text-align:left;">Tasa de solicitud de anulación de antecedentes</td><td style="padding:10px;text-align:left;">C$ 500 (referencial)</td><td style="padding:10px;text-align:left;">Confirmar monto vigente en la delegación, no se identificó un ajuste específico reciente</td></tr></tbody></table>
     `,
     faqs: [
-      { question: '¿Cuánto tiempo tarda la anulación del récord policial?', answer: 'El proceso tarda entre 30 y 45 días hábiles desde la presentación de la solicitud.' },
-      { question: '¿Puedo solicitar la anulación si tengo un proceso en curso?', answer: 'No. La anulación solo procede cuando el proceso penal ha concluido con sentencia definitiva o archivo.' },
-      { question: '¿La anulación elimina el registro permanentemente?', answer: 'Sí. Una vez aprobada, el antecedente penal se elimina de los registros públicos y no aparecerá en futuras consultas.' },
+      { question: '¿Cuánto cuesta el récord de policía en 2026?', answer: 'C$80, un aumento frente a los C$30 que costaba antes de marzo de 2026.' },
+      { question: '¿Puedo tramitar el récord de policía desde el extranjero?', answer: 'Sí, a través de tramitesenlinea.policia.gob.ni. Después deberá autenticarlo para que tenga validez legal fuera de Nicaragua.' },
+      { question: '¿Dónde autentico mi récord de policía ahora?', answer: 'En cualquier delegación policial regional o departamental, o en los Distritos 8, 9 y 10 de Managua. Ya no es necesario ir únicamente a Plaza El Sol.' },
+      { question: '¿La anulación de antecedentes elimina el registro de forma permanente?', answer: 'Según la normativa, sí, pero existen reportes de que el sistema no siempre refleja la anulación de inmediato. Conserve su resolución de anulación como respaldo ante cualquier inconsistencia.' },
+      { question: '¿Puedo solicitar la anulación si tengo un proceso penal en curso?', answer: 'No. La anulación solo procede cuando el proceso ha concluido con sentencia firme, archivo o sobreseimiento definitivo.' }
     ],
   },
   {
@@ -350,84 +307,56 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-04-15',
-    updatedDate: '2026-05-24',
+    updatedDate: '2026-07-30',
     content: `
-      <p>Los nicaragüenses que desean viajar o residir en Costa Rica, Estados Unidos o España deben cumplir requisitos migratorios específicos de cada país. Esta guía resume los trámites más solicitados en 2026, con documentos comunes, costos aproximados y tiempos estimados. Se recomienda verificar la información directamente en los consulados y entidades oficiales, ya que las normas cambian frecuentemente.</p>
-      
+      <blockquote><h3>Qué cambió desde la última actualización (24 de mayo de 2026)</h3><ul><li><strong>Costa Rica</strong> redujo la vigencia mínima de pasaporte exigida a nicaragüenses de 6 a 3 meses y fijó la estancia máxima en 90 días.</li><li><strong>Costa Rica</strong> exime de visa a nicaragüenses que tengan visa o residencia vigente de EE.UU. o Canadá (incluido refugio) con al menos 3 meses de validez.</li><li><strong>Estados Unidos</strong> exige, desde el 2 de abril de 2026, una <strong>fianza de USD 5,000 a 15,000</strong> para nuevas visas de turismo/negocios (B1/B2) de nicaragüenses, que además ahora son de una sola entrada, 3 meses de validez y máximo 30 días de estadía.</li><li>El <strong>TPS para nicaragüenses</strong> fue revocado; un tribunal de apelaciones confirmó su finalización el 10 de febrero de 2026.</li><li><strong>España</strong> reestructuró el arraigo en 5 categorías y flexibilizó el arraigo sociolaboral (ya no exige contrato de 12 meses a tiempo completo).</li><li>La <strong>visa Schengen</strong> subió de €80 a €90 para adultos.</li><li>Una regularización extraordinaria en España (RD 316/2026) tuvo un plazo de solicitud del 16 de abril al 30 de junio de 2026, <strong>ya cerrado</strong>.</li></ul></blockquote>
+      <p>Los nicaragüenses que desean viajar o residir en Costa Rica, Estados Unidos o España deben cumplir requisitos migratorios específicos de cada país, y varios de esos requisitos cambiaron de forma significativa en los primeros meses de 2026. Esta guía resume los trámites más solicitados, con documentos, costos y tiempos vigentes a julio de 2026. Se recomienda verificar siempre la información directamente en los consulados y entidades oficiales, ya que las normas siguen cambiando con frecuencia.</p>
       <h2>Costa Rica</h2>
-      <h3>Requisitos para entrada</h3>
-      <ul>
-        <li>Pasaporte vigente con mínimo 6 meses de validez</li>
-        <li>Boleto de salida del país</li>
-        <li>Prueba de solvencia económica para la estadía</li>
-        <li>Seguro médico con cobertura internacional</li>
-      </ul>
+      <h3>Requisitos de entrada (actualizados)</h3>
+      <p>Las nuevas directrices generales de visas de ingreso y permanencia para extranjeros que rigen a Costa Rica redujeron la vigencia mínima de pasaporte exigida a nicaragüenses de 6 a 3 meses, y fijaron el plazo máximo de permanencia en 90 días. Antes la directriz pedía 6 meses de vigencia de pasaporte.</p>
+      <ul><li>Pasaporte vigente con mínimo <strong>3 meses</strong> de validez (aunque conviene viajar con 6 meses para evitar rechazos, ya que algunos puestos fronterizos todavía aplican el criterio anterior)</li><li>Récord de policía original y vigente, emitido por la Policía Nacional de Nicaragua</li><li>Boleto de salida del país o comprobante de continuación de viaje</li><li>Comprobación de solvencia económica: mínimo USD 100 por mes o fracción de mes de permanencia autorizada</li><li>Seguro médico con cobertura internacional</li></ul>
+      <h3>Exención de visa para quienes ya tienen visa de EE.UU. o Canadá</h3>
+      <p>Un cambio relevante: los nicaragüenses que posean visa o residencia de cualquier categoría —incluido el refugio— de Estados Unidos o Canadá, con vigencia mínima de 3 meses al momento de ingresar, <strong>no necesitan tramitar visa costarricense</strong>. También es válido viajar con el documento de viaje ("laissez-passer") emitido por el país que otorgó el refugio o por la ONU.</p>
+      <h3>Costo y trámite de la visa de turismo</h3>
+      <ul><li><strong>Costo de la visa: USD 30</strong> (bajó de USD 32)</li><li><strong>Costo de la cita: USD 7.30</strong>, se paga en agencias BAC o Lafise antes de agendar</li><li>La visa se tramita de forma presencial en el Consulado de Costa Rica en Managua (Reparto San Juan)</li><li>Vigencia de la visa: 60 días desde su expedición para ser utilizada</li><li>Se puede solicitar visa de doble entrada si el itinerario lo justifica</li><li>Cita: llamar al +505 7833-5400</li></ul>
+      <h3>Visa de tránsito aeroportuario</h3>
+      <p>Costa Rica exige visa de tránsito a nicaragüenses que hagan escala en sus aeropuertos por más de 12 horas o que no tengan visa de EE.UU. vigente por al menos 6 meses. Costo: USD 32 más USD 7.30 de cita, por cada escala.</p>
       <h3>Residencia permanente</h3>
       <p>Para solicitar residencia, el interesado debe presentar:</p>
-      <ul>
-        <li>Solicitud ante la Dirección General de Migración y Extranjería</li>
-        <li>Certificado de antecedentes penales de Nicaragua</li>
-        <li>Comprobante de ingresos o patrimonio que acredite sostenibilidad</li>
-        <li>Certificado médico y de vacunación según requisitos vigentes</li>
-      </ul>
-      
+      <ul><li>Solicitud ante la Dirección General de Migración y Extranjería</li><li>Certificado de antecedentes penales de Nicaragua</li><li>Comprobante de ingresos o patrimonio que acredite sostenibilidad</li><li>Certificado médico y de vacunación según requisitos vigentes</li></ul>
       <h2>Estados Unidos</h2>
-      <h3>Visa de turista (B1/B2)</h3>
-      <ul>
-        <li>Formulario DS-160 completado</li>
-        <li>Pasaporte vigente con validez posterior a la estadía</li>
-        <li>Fotografía reciente con especificaciones del consulado</li>
-        <li>Comprobante de empleo, ingresos o patrocinio</li>
-        <li>Cita para entrevista en el consulado de Managua</li>
-      </ul>
+      <h3>TPS: terminado para nicaragüenses</h3>
+      <p>El Estatus de Protección Temporal (TPS) para nicaragüenses fue revocado a partir del 8 de septiembre de 2025. El 10 de febrero de 2026, un tribunal federal de apelaciones (Noveno Circuito) revirtió la protección judicial que mantenía vigente el TPS para nicaragüenses y hondureños, confirmando su finalización. Quienes no cuentan con otro estatus migratorio legal quedaron indocumentados y perdieron su autorización de trabajo. Se recomienda buscar asesoría de un abogado de inmigración para revisar opciones como asilo, residencia permanente u otras visas.</p>
+      <h3>Nuevo programa de fianza para visas de turismo y negocios (B1/B2)</h3>
+      <p>Desde el <strong>2 de abril de 2026</strong>, Estados Unidos aplica a los nicaragüenses un programa de fianza migratoria para visas de turismo y negocios:</p>
+      <ul><li>El oficial consular fija una fianza de <strong>USD 5,000, 10,000 o 15,000</strong>, pagadera al momento de la entrevista</li><li>Las nuevas visas ya <strong>no tienen validez de 10 años</strong>: son de <strong>una sola entrada</strong>, con vigencia de <strong>3 meses</strong></li><li>Permiten estadías de hasta <strong>30 días</strong> (el tiempo final lo define migración al ingresar)</li><li>Solo pueden usarse para entrar <strong>por vía aérea comercial</strong></li><li>Permanecer más tiempo del autorizado puede significar la <strong>pérdida del dinero de la fianza</strong></li><li>El programa aplica a cualquier nicaragüense sin importar el país donde tramite la visa, si usa su pasaporte nicaragüense</li><li>Las <strong>visas emitidas antes del 2 de abril de 2026 siguen siendo válidas</strong> hasta su fecha de expiración original</li></ul>
+      <h3>Visa de turista (B1/B2): documentos</h3>
+      <ul><li>Formulario DS-160 completado</li><li>Pasaporte vigente con validez posterior a la estadía (mínimo 6 meses después de la entrada)</li><li>Fotografía reciente con especificaciones del consulado</li><li>Comprobante de empleo, ingresos o patrocinio</li><li>Cita para entrevista en el consulado de Managua</li><li>Formulario I-94 (registra entrada y salida)</li></ul>
       <h3>Visas de trabajo temporal H-2A y H-2B</h3>
       <p>Requieren una oferta de empleo formal de un empleador estadounidense, certificación del Departamento de Trabajo y aprobación de la petición I-129 por parte del USCIS.</p>
-      
+      <h3>Contexto: sanciones a funcionarios</h3>
+      <p>En junio de 2026, el Departamento de Estado de EE.UU. anunció restricciones de visa a más de 100 funcionarios nicaragüenses y sus familiares, en el marco de sanciones relacionadas con la muerte del preso político Brooklyn Rivera. Esta medida no afecta directamente a la población general, pero forma parte de un contexto de mayor tensión migratoria entre ambos países.</p>
       <h2>España</h2>
+      <h3>Reforma del reglamento de extranjería 2026</h3>
+      <p>España reestructuró las figuras de arraigo en <strong>cinco categorías</strong>: de segunda oportunidad, sociolaboral, social, socioformativo y familiar. El cambio más relevante para trabajadores nicaragüenses es que el <strong>arraigo sociolaboral ya no exige exclusivamente un contrato de 12 meses a tiempo completo</strong>: ahora se aceptan jornadas de 30 horas semanales y contratos fijos-discontinuos.</p>
+      <h3>Regularización extraordinaria (ya cerrada)</h3>
+      <p>En abril de 2026 se aprobó el Real Decreto 316/2026, que introdujo una regularización extraordinaria para personas que estuvieran en España antes del 31 de diciembre de 2025. El plazo de solicitud fue del <strong>16 de abril al 30 de junio de 2026</strong> y <strong>ya se cerró</strong>. Quienes no lo tramitaron dentro de ese plazo deben recurrir a las vías ordinarias de arraigo.</p>
       <h3>Visa Schengen de turismo</h3>
-      <ul>
-        <li>Formulario de solicitud de visa Schengen</li>
-        <li>Pasaporte vigente</li>
-        <li>Seguro médico con cobertura mínima de €30,000</li>
-        <li>Reservas de alojamiento y vuelo</li>
-        <li>Prueba de medios económicos para la estadía</li>
-      </ul>
+      <ul><li><strong>Costo: €90</strong> para adultos (subió desde €80), €45 para niños de 6 a 12 años, gratis para menores de 6</li><li>Formulario de solicitud de visa Schengen</li><li>Pasaporte vigente</li><li>Seguro médico con cobertura mínima de €30,000</li><li>Reservas de alojamiento y vuelo</li><li>Prueba de medios económicos para la estadía</li><li>Tiempo estimado: 15-30 días hábiles</li></ul>
       <h3>Residencia por arraigo</h3>
-      <p>El arraigo permite regularizar la situación de extranjeros que acreditan permanencia continuada en España y vínculos laborales, familiares o sociales. Requiere certificado de antecedentes penales y pago de tasas administrativas.</p>
-      
+      <p>El arraigo permite regularizar la situación de extranjeros que acreditan permanencia continuada en España y vínculos laborales, familiares o sociales. Requiere certificado de antecedentes penales apostillado y pago de tasas administrativas. Con la reforma 2026, conviene identificar cuál de las cinco categorías de arraigo se ajusta mejor al caso particular antes de iniciar el trámite.</p>
       <h2>Documentos comunes para la mayoría de trámites</h2>
-      <ul>
-        <li>Certificado de nacimiento apostillado</li>
-        <li>Certificado de matrimonio o divorcio (si aplica)</li>
-        <li>Certificado de antecedentes penales apostillado</li>
-        <li>Títulos académicos o certificaciones laborales (para visas de trabajo)</li>
-      </ul>
-      
-      <h2>Tiempos y costos estimados</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Trámite</th><th style="padding:10px;text-align:left;">Tiempo estimado</th><th style="padding:10px;text-align:right;">Costo aproximado</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Visa B1/B2 EE.UU.</td><td style="padding:10px;">6-12 meses para cita + 2-4 semanas procesamiento</td><td style="padding:10px;text-align:right;">USD 185</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Visa Schengen España</td><td style="padding:10px;">15-30 días hábiles</td><td style="padding:10px;text-align:right;">€80</td></tr>
-          <tr><td style="padding:10px;">Residencia Costa Rica</td><td style="padding:10px;">3-12 meses según categoría</td><td style="padding:10px;text-align:right;">USD 50-300</td></tr>
-        </tbody>
-      </table>
-      
-      <h2>Preguntas frecuentes</h2>
-      <h3>¿Puedo trabajar en Costa Rica con visa de turista?</h3>
-      <p>No. La visa de turista no autoriza trabajar. Se requiere una visa de residente o permiso de trabajo específico.</p>
-      <h3>¿Cuánto tiempo dura la visa de turista para EE.UU.?</h3>
-      <p>El tiempo de espera para entrevista consular puede ser de 6 a 12 meses. Una vez aprobada, la visa puede tener validez de hasta 10 años dependiendo del tipo.</p>
-      <h3>¿Qué es el arraigo social en España?</h3>
-      <p>Es una figura legal que permite regularizar a extranjeros que acreditan tres años de permanencia en España y demuestran arraigo laboral, social o familiar.</p>
-      
-      <h2>Fuentes consultadas</h2>
-      <p>Información basada en requisitos generales de la Dirección General de Migración y Extranjería de Costa Rica, el Departamento de Estado de Estados Unidos y el Ministerio de Asuntos Exteriores de España. Costos y tiempos son referenciales. Verifique siempre los requisitos actuales en el consulado o embajada correspondiente.</p>
+      <ul><li>Certificado de nacimiento apostillado</li><li>Certificado de matrimonio o divorcio (si aplica)</li><li>Certificado de antecedentes penales apostillado</li><li>Títulos académicos o certificaciones laborales (para visas de trabajo)</li></ul>
+      <p><strong>Importante:</strong> conseguir cita para apostillar documentos en la Cancillería de Nicaragua está tomando hasta 4 meses según reportes de mayo de 2026. Ver nuestra guía de apostillas para más detalles sobre este atraso.</p>
+      <h2>Tiempos y costos actualizados</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Trámite</th><th style="padding:10px;text-align:left;">Tiempo estimado</th><th style="padding:10px;text-align:left;">Costo aproximado</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Visa turismo Costa Rica</td><td style="padding:10px;text-align:left;">Cita + trámite en consulado</td><td style="padding:10px;text-align:left;">USD 30 + USD 7.30 cita</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Visa tránsito aeroportuario Costa Rica</td><td style="padding:10px;text-align:left;">Trámite en consulado</td><td style="padding:10px;text-align:left;">USD 32 + USD 7.30 cita</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Visa B1/B2 EE.UU. (nueva, desde abril 2026)</td><td style="padding:10px;text-align:left;">Cita consular + fianza</td><td style="padding:10px;text-align:left;">USD 185 (trámite) + fianza USD 5,000-15,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Visa Schengen España</td><td style="padding:10px;text-align:left;">15-30 días hábiles</td><td style="padding:10px;text-align:left;">€90</td></tr><tr style=""><td style="padding:10px;text-align:left;">Residencia Costa Rica</td><td style="padding:10px;text-align:left;">3-12 meses según categoría</td><td style="padding:10px;text-align:left;">USD 50-300</td></tr></tbody></table>
     `,
     faqs: [
-      { question: '¿Cuánto tiempo tarda la visa de turista para EE.UU.?', answer: 'El tiempo de espera para cita en consulado es de 6 a 12 meses. El procesamiento del visa toma 2-4 semanas adicionales.' },
-      { question: '¿Puedo trabajar en Costa Rica con visa de turista?', answer: 'No. La visa de turista no permite trabajar. Necesitas una visa de residente o permiso de trabajo específico.' },
-      { question: '¿Qué es el arraigo social en España?', answer: 'Es una figura legal que permite regularizar la situación migratoria de extranjeros que demuestran arraigo en España (vínculos familiares, laborales o sociales).' },
+      { question: '¿Sigue existiendo el TPS para nicaragüenses en EE.UU.?', answer: 'No. Fue revocado desde el 8 de septiembre de 2025 y un tribunal de apelaciones confirmó su finalización el 10 de febrero de 2026.' },
+      { question: '¿Cuánto es la fianza para la visa de turista de EE.UU.?', answer: 'Entre USD 5,000 y 15,000, según determine el oficial consular en la entrevista. Aplica a solicitudes hechas desde el 2 de abril de 2026 en adelante.' },
+      { question: '¿Necesito visa para entrar a Costa Rica si ya tengo visa de EE.UU.?', answer: 'No, si la visa o residencia estadounidense (o canadiense) tiene al menos 3 meses de vigencia al momento de ingresar.' },
+      { question: '¿Puedo todavía aplicar a la regularización extraordinaria en España?', answer: 'No. El plazo fue del 16 de abril al 30 de junio de 2026 y ya cerró. Las vías vigentes son las categorías ordinarias de arraigo.' },
+      { question: '¿Puedo trabajar en Costa Rica con visa de turista?', answer: 'No. La visa de turista no autoriza trabajar. Se requiere una visa de residente o permiso de trabajo específico.' }
     ],
   },
   {
@@ -438,47 +367,30 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-01-05',
-    updatedDate: '2026-06-17',
+    updatedDate: '2026-07-30',
     content: `
-      <p>El salario mínimo en Nicaragua para 2026 fue ajustado por el Ministerio del Trabajo (MITRAB) a partir de enero. Los valores varían según el sector económico y la categoría del trabajador. Esta guía detalla los montos vigentes, la institucionalidad que los fija y los derechos del trabajador.</p>
-      
-      <h2>Tabla de salarios mínimos 2026</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Sector</th><th style="padding:10px;text-align:right;">Mensual (C$)</th><th style="padding:10px;text-align:right;">Diario (C$)</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Agropecuario</td><td style="padding:10px;text-align:right;">7,185.71</td><td style="padding:10px;text-align:right;">287.43</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Servicios, industria y comercio</td><td style="padding:10px;text-align:right;">8,179.43</td><td style="padding:10px;text-align:right;">327.18</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Construcción, minas y canteras</td><td style="padding:10px;text-align:right;">9,173.15</td><td style="padding:10px;text-align:right;">366.93</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Trabajadores del hogar</td><td style="padding:10px;text-align:right;">5,500.00</td><td style="padding:10px;text-align:right;">220.00</td></tr>
-          <tr><td style="padding:10px;">Centrales azucareras (zafra)</td><td style="padding:10px;text-align:right;">9,500.00</td><td style="padding:10px;text-align:right;">380.00</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: valores referenciales basados en ajustes históricos del MITRAB. El tipo de cambio de referencia es aproximadamente C$ 36.65 por USD 1.00. Confirme el valor oficial vigente en La Gaceta o en el MITRAB.</em></p>
-      
+      <blockquote><h3>Qué cambió desde la última actualización (17 de junio de 2026)</h3><ul><li>La tabla de sectores que publicábamos antes no coincidía con las categorías oficiales de la Ley 625: son <strong>9 sectores</strong> (no 5), más zona franca aparte.</li><li>El ajuste vigente para el período <strong>marzo 2026 - febrero 2027</strong> fue de <strong>4%</strong> para 8 de los 9 sectores, aprobado el <strong>5 de marzo de 2026</strong>, con retroactividad al 1 de marzo.</li><li>Zona franca tuvo un ajuste distinto, de <strong>6.7%</strong>, por un acuerdo separado firmado en octubre de 2022.</li><li>El salario mínimo promedio (C$9,314) cubre apenas el <strong>43.8%</strong> del costo de la canasta básica familiar, según cifras del INIDE de enero de 2026.</li></ul></blockquote>
+      <p>El salario mínimo en Nicaragua para el período que va de marzo de 2026 a febrero de 2027 fue fijado por la Comisión Nacional del Salario Mínimo el 5 de marzo de 2026, con un ajuste del 4% para la mayoría de sectores, tras un acuerdo entre el Ministerio del Trabajo (MITRAB), representantes sindicales y empresariales. El ajuste beneficia a unos 325,000 trabajadores formales de nueve sectores económicos. Esta guía detalla los montos vigentes por sector, quién los fija y qué hacer si su empleador le paga menos del mínimo.</p>
+      <h2>Tabla oficial de salarios mínimos 2026 (vigente 1 marzo 2026 - 28 febrero 2027)</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Sector económico</th><th style="padding:10px;text-align:left;">C$/mes 2025</th><th style="padding:10px;text-align:left;">C$/mes 2026 (+4%)</th><th style="padding:10px;text-align:left;">Nota</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Agropecuario</td><td style="padding:10px;text-align:left;">5,950.02</td><td style="padding:10px;text-align:left;"><strong>6,188.02</strong></td><td style="padding:10px;text-align:left;">Más alimentación a cargo del empleador</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Micro y pequeña industria artesanal y turística</td><td style="padding:10px;text-align:left;">6,268.00</td><td style="padding:10px;text-align:left;"><strong>6,519.00</strong></td><td style="padding:10px;text-align:left;"></td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Industria manufacturera</td><td style="padding:10px;text-align:left;">7,999.00</td><td style="padding:10px;text-align:left;"><strong>8,320.38</strong></td><td style="padding:10px;text-align:left;"></td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Pesca y acuicultura</td><td style="padding:10px;text-align:left;">9,047.00</td><td style="padding:10px;text-align:left;"><strong>9,409.09</strong></td><td style="padding:10px;text-align:left;"></td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Industria sujeta a régimen especial</td><td style="padding:10px;text-align:left;">9,602.00</td><td style="padding:10px;text-align:left;"><strong>9,986.46</strong></td><td style="padding:10px;text-align:left;"></td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Electricidad, gas, agua, comercio, hoteles, transporte</td><td style="padding:10px;text-align:left;">10,913.54</td><td style="padding:10px;text-align:left;"><strong>11,350.08</strong></td><td style="padding:10px;text-align:left;">Sector más amplio, cubre a la mayoría de trabajadores urbanos</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Minas y canteras</td><td style="padding:10px;text-align:left;">10,686.00</td><td style="padding:10px;text-align:left;"><strong>11,113.46</strong></td><td style="padding:10px;text-align:left;"></td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Construcción, financieros y seguros</td><td style="padding:10px;text-align:left;">13,315.00</td><td style="padding:10px;text-align:left;"><strong>13,848.23</strong></td><td style="padding:10px;text-align:left;">El más alto</td></tr><tr style=""><td style="padding:10px;text-align:left;">Zona franca (acuerdo separado desde octubre 2022)</td><td style="padding:10px;text-align:left;">8,771.00</td><td style="padding:10px;text-align:left;"><strong>9,359.46</strong></td><td style="padding:10px;text-align:left;">+6.7%, no +4%</td></tr></tbody></table>
+      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: valores oficiales según acta de la Comisión Nacional del Salario Mínimo del 5 de marzo de 2026, publicados por MITRAB. El tipo de cambio de referencia del BCN para 2026 es fijo, de C$36.6243 por USD 1.00 durante todo el año.</em></p>
+      <h2>¿Cómo saber cuál es mi salario mínimo?</h2>
+      <p>El salario mínimo depende de la <strong>actividad económica de su empleador</strong>, no de su cargo, título o especialidad. Por ejemplo: un contador que trabaja en un banco tiene el mínimo del sector financiero (C$13,848.23); el mismo contador en una empresa de construcción tiene el mismo mínimo, porque construcción y financieros comparten categoría. Un guardia de seguridad en una empresa agropecuaria tiene el mínimo agropecuario; el mismo guardia en un banco tiene el mínimo financiero.</p>
       <h2>¿Quién define el salario mínimo?</h2>
-      <p>El Consejo Nacional del Salario Mínimo, conformado por representantes del gobierno, empresarios y trabajadores, fija los ajustes anuales. El MITRAB es la entidad encargada de publicar los valores oficiales en <em>La Gaceta, Diario Oficial</em> y difundirlos a través de sus canales institucionales.</p>
-      
+      <p>La Comisión Nacional del Salario Mínimo, conformada por representantes del gobierno, empleadores y trabajadores (a través del Frente Nacional de los Trabajadores, FNT), fija los ajustes. El MITRAB publica los valores oficiales y los difunde por sus canales institucionales. Para 2026, la negociación comenzó tarde: la comisión se instaló hasta el 13 de febrero, menos de dos semanas antes de que vencieran los salarios del período anterior.</p>
+      <h2>Salario mínimo frente a la canasta básica</h2>
+      <p>El salario mínimo promedio de los 9 sectores es de aproximadamente <strong>C$9,314 mensuales</strong>. Según el INIDE, la canasta básica familiar se valoró en <strong>C$21,249.74</strong> en enero de 2026, lo que significa que el salario mínimo promedio cubre apenas el <strong>43.8%</strong> del costo de la canasta. Ni siquiera el salario mínimo más alto (construcción y financieros, C$13,848.23) alcanza a cubrir el costo diario completo de la canasta básica una vez descontados impuestos y aportes al INSS.</p>
+      <h2>Evolución reciente del salario mínimo</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Período</th><th style="padding:10px;text-align:left;">Sector comercio (C$/mes)</th><th style="padding:10px;text-align:left;">Sector agropecuario (C$/mes)</th><th style="padding:10px;text-align:left;">Incremento</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Mar 2023 - Feb 2024</td><td style="padding:10px;text-align:left;">9,780.00</td><td style="padding:10px;text-align:left;">5,330.00</td><td style="padding:10px;text-align:left;">+8%</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Mar 2024 - Feb 2025</td><td style="padding:10px;text-align:left;">10,494.00</td><td style="padding:10px;text-align:left;">5,730.00</td><td style="padding:10px;text-align:left;">+7.3%</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Mar 2025 - Feb 2026</td><td style="padding:10px;text-align:left;">10,913.54</td><td style="padding:10px;text-align:left;">5,950.02</td><td style="padding:10px;text-align:left;">+4%</td></tr><tr style="background:#f9fafb;"><td style="padding:10px;text-align:left;">Mar 2026 - Feb 2027</td><td style="padding:10px;text-align:left;">11,350.08</td><td style="padding:10px;text-align:left;">6,188.02</td><td style="padding:10px;text-align:left;">+4%</td></tr></tbody></table>
       <h2>¿Qué pasa si un empleador paga menos?</h2>
-      <p>Pagar por debajo del salario mínimo constituye una infracción laboral sancionable. El trabajador puede presentar una denuncia en las delegaciones departamentales del MITRAB o a través de la línea gratuita de atención del ministerio. Es recomendable llevar copia del contrato, recibos de pago y cualquier documento que acredite la relación laboral.</p>
-      
-      <h2>Salario mínimo vs salario promedio</h2>
-      <p>El salario mínimo es el piso legal que debe recibir un trabajador formal. En sectores formales, el ingreso promedio puede superar los C$ 12,000 mensuales dependiendo del rubro y la experiencia. Sin embargo, la informalidad laboral sigue siendo elevada en Nicaragua, por lo que muchos trabajadores no están cubiertos por esta normativa.</p>
-      
-      <h2>Preguntas frecuentes</h2>
-      <h3>¿Cuál es el salario mínimo mensual en Nicaragua 2026?</h3>
-      <p>Para el sector de servicios, industria y comercio, el salario mínimo mensual es de C$ 8,179.43. El sector agropecuario tiene un mínimo de C$ 7,185.71 mensuales.</p>
-      <h3>¿Se aplica el salario mínimo a trabajadores informales?</h3>
-      <p>El salario mínimo aplica a relaciones laborales formales. El MITRAB realiza inspecciones para promover el cumplimiento, pero la protección depende de que exista un contrato o relación laboral reconocida.</p>
-      <h3>¿Cuándo se actualiza el salario mínimo?</h3>
-      <p>El Consejo Nacional del Salario Mínimo se reúne generalmente a finales de año para definir los ajustes que entran en vigencia en enero del año siguiente.</p>
-      
-      <h2>Fuentes consultadas</h2>
-      <p>Información basada en datos del Ministerio del Trabajo (MITRAB), publicaciones en La Gaceta y reportes económicos del Banco Central de Nicaragua. Los montos deben verificarse con el MITRAB para confirmar el valor oficial vigente.</p>
+      <p>Pagar por debajo del salario mínimo constituye una infracción laboral sancionable. El trabajador puede presentar una denuncia en las delegaciones departamentales del MITRAB. Es recomendable llevar copia del contrato, recibos de pago y cualquier documento que acredite la relación laboral. Si fue despedido después del 1 de marzo de 2026, su liquidación debe calcularse con el nuevo salario mínimo 2026, no con el del período anterior; si le calcularon con el monto viejo, tiene derecho a reclamar la diferencia.</p>
     `,
     faqs: [
-      { question: '¿Cuál es el salario mínimo mensual en Nicaragua 2026?', answer: 'Para servicios, industria y comercio es de C$ 8,179.43 mensuales (C$ 327.18 diarios). El sector agropecuario tiene el mínimo más bajo: C$ 7,185.71 mensuales.' },
-      { question: '¿Se aplica a trabajadores informales?', answer: 'El salario mínimo solo aplica a relaciones laborales formales. El MITRAB ha intensificado inspecciones en sectores informales.' },
-      { question: '¿Cuándo se actualiza?', answer: 'El Consejo Nacional del Salario Mínimo se reúne anualmente, generalmente en diciembre-enero, para fijar los valores del año siguiente.' },
+      { question: '¿Cuál es el salario mínimo mensual en Nicaragua 2026?', answer: 'Varía por sector: desde C$6,188.02 (agropecuario) hasta C$13,848.23 (construcción, financieros y seguros). El promedio simple entre los 9 sectores es de C$9,314.' },
+      { question: '¿Desde cuándo rige el salario mínimo 2026?', answer: 'Desde el 1 de marzo de 2026, de forma retroactiva, y estará vigente hasta el 28 de febrero de 2027.' },
+      { question: '¿El salario mínimo en zona franca es diferente?', answer: 'Sí. Zona franca se rige por un acuerdo propio desde octubre de 2022, con un ajuste de 6.7% para 2026, distinto al 4% del resto de sectores.' },
+      { question: '¿El salario del sector agropecuario incluye alimentación?', answer: 'Sí. El empleador debe proveer alimentación además del salario de C$6,188.02. Si no lo hace, debe pagar el equivalente en dinero.' },
+      { question: '¿Se aplica el salario mínimo a trabajadores informales?', answer: 'El salario mínimo aplica a relaciones laborales formales. La protección depende de que exista un contrato o relación laboral reconocida.' }
     ],
   },
   {
@@ -489,64 +401,30 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-03-01',
-    updatedDate: '2026-06-17',
+    updatedDate: '2026-07-30',
     content: `
-      <p>El costo de vida en Nicaragua es considerado uno de los más bajos de Centroamérica, aunque presenta diferencias importantes entre Managua y las provincias. Esta guía detalla un presupuesto mensual estimado para una persona sola y una familia de cuatro miembros, con rangos que dependen del estilo de vida, ubicación y servicios contratados.</p>
-      
+      <blockquote><h3>Qué cambió desde la última actualización (17 de junio de 2026)</h3><ul><li>Datos oficiales del INIDE muestran que la <strong>canasta básica subió de forma sostenida</strong> durante 2026: de C$20,821.68 en diciembre de 2025 a <strong>C$21,372.90 en mayo de 2026</strong> (dato oficial más reciente disponible), un incremento de C$551.22 en cinco meses.</li><li>Casi el <strong>93% de ese aumento</strong> se concentró en alimentos.</li><li>El salario mínimo promedio (C$9,314) cubre menos de la mitad de la canasta básica; ni siquiera el salario mínimo más alto la cubre por completo.</li><li>El propio cálculo del INIDE asigna solo <strong>C$900 mensuales</strong> de alquiler dentro de la canasta básica, una cifra muy por debajo de los precios reales de alquiler que reportamos en esta guía.</li></ul></blockquote>
+      <p>El costo de vida en Nicaragua sigue siendo uno de los más bajos de Centroamérica, pero la brecha entre lo que cuesta vivir y lo que gana un trabajador promedio se ha ampliado durante 2026. Esta guía combina el presupuesto mensual estimado con los datos oficiales más recientes del Instituto Nacional de Información de Desarrollo (INIDE) sobre la canasta básica.</p>
+      <h2>La canasta básica en 2026: evolución mes a mes</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Mes</th><th style="padding:10px;text-align:left;">Costo total canasta básica (C$)</th><th style="padding:10px;text-align:left;">Componente alimentos (C$)</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Diciembre 2025</td><td style="padding:10px;text-align:left;">20,821.68</td><td style="padding:10px;text-align:left;">14,817.46</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Enero 2026</td><td style="padding:10px;text-align:left;">21,249.74</td><td style="padding:10px;text-align:left;">15,233.82</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Febrero 2026</td><td style="padding:10px;text-align:left;">21,164.00</td><td style="padding:10px;text-align:left;">—</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Abril 2026</td><td style="padding:10px;text-align:left;">21,245.69</td><td style="padding:10px;text-align:left;">15,207.41</td></tr><tr style=""><td style="padding:10px;text-align:left;">Mayo 2026</td><td style="padding:10px;text-align:left;">21,372.90</td><td style="padding:10px;text-align:left;">15,328.35</td></tr></tbody></table>
+      <p>Para cubrir el costo total de la canasta básica se necesitan alrededor de C$705 diarios, lo que equivale a más de tres salarios mínimos promedio. Incluso el salario mínimo más alto (construcción y financieros, C$13,848.23 mensuales) solo cubre cerca del 65% de la canasta, una vez descontados impuestos y aportes al INSS.</p>
       <h2>Presupuesto mensual: persona sola</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Rubro</th><th style="padding:10px;text-align:right;">Managua (C$)</th><th style="padding:10px;text-align:right;">Provincia (C$)</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Alquiler (apartamento 1 hab)</td><td style="padding:10px;text-align:right;">8,000 - 15,000</td><td style="padding:10px;text-align:right;">4,000 - 8,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Alimentación</td><td style="padding:10px;text-align:right;">6,000 - 10,000</td><td style="padding:10px;text-align:right;">4,500 - 7,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Transporte (bus + taxi ocasional)</td><td style="padding:10px;text-align:right;">1,500 - 3,000</td><td style="padding:10px;text-align:right;">1,000 - 2,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Servicios (luz, agua, internet)</td><td style="padding:10px;text-align:right;">2,500 - 4,500</td><td style="padding:10px;text-align:right;">1,500 - 3,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Celular</td><td style="padding:10px;text-align:right;">500 - 1,200</td><td style="padding:10px;text-align:right;">500 - 1,000</td></tr>
-          <tr style="background:#fef3c7;"><td style="padding:10px;font-weight:700;">TOTAL ESTIMADO</td><td style="padding:10px;text-align:right;font-weight:700;">18,500 - 33,700</td><td style="padding:10px;text-align:right;font-weight:700;">11,500 - 21,000</td></tr>
-        </tbody>
-      </table>
-      
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Rubro</th><th style="padding:10px;text-align:left;">Managua (C$)</th><th style="padding:10px;text-align:left;">Provincia (C$)</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Alquiler (apartamento 1 hab)</td><td style="padding:10px;text-align:left;">8,000 - 15,000</td><td style="padding:10px;text-align:left;">4,000 - 8,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Alimentación</td><td style="padding:10px;text-align:left;">6,000 - 10,000</td><td style="padding:10px;text-align:left;">4,500 - 7,000</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Transporte (bus + taxi ocasional)</td><td style="padding:10px;text-align:left;">1,500 - 3,000</td><td style="padding:10px;text-align:left;">1,000 - 2,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Servicios (luz, agua, internet)</td><td style="padding:10px;text-align:left;">2,500 - 4,500</td><td style="padding:10px;text-align:left;">1,500 - 3,000</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Celular</td><td style="padding:10px;text-align:left;">500 - 1,200</td><td style="padding:10px;text-align:left;">500 - 1,000</td></tr><tr style="background:#fef3c7;"><td style="padding:10px;text-align:left;"><strong>TOTAL ESTIMADO</strong></td><td style="padding:10px;text-align:left;"><strong>18,500 - 33,700</strong></td><td style="padding:10px;text-align:left;"><strong>11,500 - 21,000</strong></td></tr></tbody></table>
       <h2>Presupuesto mensual: familia de 4</h2>
-      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-        <thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Rubro</th><th style="padding:10px;text-align:right;">Managua (C$)</th><th style="padding:10px;text-align:right;">Provincia (C$)</th></tr></thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Alquiler (casa 3 hab)</td><td style="padding:10px;text-align:right;">18,000 - 35,000</td><td style="padding:10px;text-align:right;">8,000 - 18,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Alimentación</td><td style="padding:10px;text-align:right;">18,000 - 28,000</td><td style="padding:10px;text-align:right;">12,000 - 20,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Transporte</td><td style="padding:10px;text-align:right;">4,000 - 7,000</td><td style="padding:10px;text-align:right;">2,500 - 5,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Servicios</td><td style="padding:10px;text-align:right;">4,500 - 8,000</td><td style="padding:10px;text-align:right;">3,000 - 5,500</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Educación (colegio privado)</td><td style="padding:10px;text-align:right;">6,000 - 15,000</td><td style="padding:10px;text-align:right;">3,000 - 8,000</td></tr>
-          <tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Salud (seguro privado)</td><td style="padding:10px;text-align:right;">3,000 - 8,000</td><td style="padding:10px;text-align:right;">2,000 - 5,000</td></tr>
-          <tr style="background:#fef3c7;"><td style="padding:10px;font-weight:700;">TOTAL ESTIMADO</td><td style="padding:10px;text-align:right;font-weight:700;">53,500 - 101,000</td><td style="padding:10px;text-align:right;font-weight:700;">30,500 - 61,500</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: los valores son estimaciones basadas en costos habituales reportados por usuarios y fuentes locales. Los montos reales varían según zona, proveedor y hábitos de consumo.</em></p>
-      
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Rubro</th><th style="padding:10px;text-align:left;">Managua (C$)</th><th style="padding:10px;text-align:left;">Provincia (C$)</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Alquiler (casa 3 hab)</td><td style="padding:10px;text-align:left;">18,000 - 35,000</td><td style="padding:10px;text-align:left;">8,000 - 18,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Alimentación</td><td style="padding:10px;text-align:left;">18,000 - 28,000</td><td style="padding:10px;text-align:left;">12,000 - 20,000</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Transporte</td><td style="padding:10px;text-align:left;">4,000 - 7,000</td><td style="padding:10px;text-align:left;">2,500 - 5,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Servicios</td><td style="padding:10px;text-align:left;">4,500 - 8,000</td><td style="padding:10px;text-align:left;">3,000 - 5,500</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Educación (colegio privado)</td><td style="padding:10px;text-align:left;">6,000 - 15,000</td><td style="padding:10px;text-align:left;">3,000 - 8,000</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Salud (seguro privado)</td><td style="padding:10px;text-align:left;">3,000 - 8,000</td><td style="padding:10px;text-align:left;">2,000 - 5,000</td></tr><tr style="background:#fef3c7;"><td style="padding:10px;text-align:left;"><strong>TOTAL ESTIMADO</strong></td><td style="padding:10px;text-align:left;"><strong>53,500 - 101,000</strong></td><td style="padding:10px;text-align:left;"><strong>30,500 - 61,500</strong></td></tr></tbody></table>
+      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: los valores de esta tabla son estimaciones de mercado (alquiler, alimentación fuera de la canasta oficial, servicios, educación y salud), distintas de la canasta básica del INIDE, que mide solo 53 productos básicos con supuestos fijos (por ejemplo, C$900 de alquiler mensual, una cifra muy por debajo del mercado real en Managua).</em></p>
+      <h2>¿Por qué la canasta básica oficial "no cuadra" con el costo real de vivir?</h2>
+      <p>La canasta básica del INIDE es un índice técnico pensado para medir 53 productos esenciales, no un presupuesto de vida completo. Por eso asigna solo C$900 mensuales al rubro de alquiler, muy por debajo de lo que cuesta arrendar en la práctica (ver tabla de presupuesto arriba). Esto explica por qué es común escuchar que "la canasta básica no refleja la realidad": técnicamente mide una canasta de subsistencia, no el costo de vida completo de un hogar urbano.</p>
       <h2>Comparativa con otros países centroamericanos</h2>
-      <p>Según índices de costo de vida, Nicaragua suele ubicarse por debajo de Costa Rica, Panamá y Guatemala en gastos de alojamiento y alimentación. Los alquileres en Managua son comparables a los de ciudades como Tegucigalpa, mientras que los productos agrícolas locales tienden a ser más económicos.</p>
-      
+      <p>Nicaragua suele ubicarse por debajo de Costa Rica, Panamá y Guatemala en gastos de alojamiento y alimentación. Los alquileres en Managua son comparables a los de ciudades como Tegucigalpa, mientras que los productos agrícolas locales tienden a ser más económicos.</p>
       <h2>Consejos para reducir gastos</h2>
-      <ul>
-        <li>Compre frutas y verduras en mercados municipales en lugar de supermercados</li>
-        <li>Use buses en lugar de taxis privados para trayectos cotidianos</li>
-        <li>Contrate planes combinados de internet y telefonía según el uso real</li>
-        <li>Considere zonas aledañas a Managua si busca menores costos de alquiler</li>
-      </ul>
-      
-      <h2>Preguntas frecuentes</h2>
-      <h3>¿Cuánto necesita ganar una persona sola para vivir en Managua?</h3>
-      <p>Con un ingreso de C$ 20,000 a C$ 25,000 mensuales, una persona sola puede cubrir alquiler modesto, alimentación, transporte y servicios básicos en Managua.</p>
-      <h3>¿Es más barato vivir en provincias?</h3>
-      <p>Sí. Los alquileres y algunos servicios suelen ser más económicos fuera de Managua, aunque la disponibilidad de empleo formal puede ser menor.</p>
-      <h3>¿Cuánto cuesta la canasta básica alimentaria?</h3>
-      <p>La canasta básica alimentaria para una familia promedio se estima entre C$ 12,000 y C$ 15,000 mensuales, según informes del INSS y el Banco Central de Nicaragua.</p>
-      
-      <h2>Fuentes consultadas</h2>
-      <p>Información basada en datos del Instituto Nicaragüense de Seguridad Social (INSS), reportes del Banco Central de Nicaragua (BCN) y sondeos de costos de vida locales. Los montos son estimaciones referenciales y deben ajustarse a la realidad particular de cada hogar.</p>
+      <ul><li>Compre frutas y verduras en mercados municipales en lugar de supermercados</li><li>Use buses en lugar de taxis privados para trayectos cotidianos</li><li>Contrate planes combinados de internet y telefonía según el uso real</li><li>Considere zonas aledañas a Managua si busca menores costos de alquiler</li></ul>
     `,
     faqs: [
-      { question: '¿Cuánto necesita ganar una persona sola para vivir bien en Nicaragua?', answer: 'Con C$ 20,000-25,000 mensuales una persona sola puede vivir cómodamente en Managua. En provincias, con C$ 15,000 es suficiente.' },
-      { question: '¿Es caro vivir en Managua comparado con otras ciudades?', answer: 'Managua es la ciudad más cara de Nicaragua, pero sigue siendo económica comparada con San José (Costa Rica) o Ciudad de Guatemala.' },
-      { question: '¿Cuánto cuesta la canasta básica en Nicaragua 2026?', answer: 'La canasta básica alimentaria para una familia de 4 personas ronda los C$ 12,000-15,000 mensuales según el INSS y el BCN.' },
+      { question: '¿Cuánto cuesta la canasta básica en Nicaragua en 2026?', answer: 'Según el último dato oficial confirmado del INIDE, C$21,372.90 en mayo de 2026, con una tendencia sostenida al alza desde diciembre de 2025.' },
+      { question: '¿Cuánto necesita ganar una persona sola para vivir en Managua?', answer: 'Con un ingreso de C$20,000 a C$25,000 mensuales, una persona sola puede cubrir alquiler modesto, alimentación, transporte y servicios básicos en Managua.' },
+      { question: '¿El salario mínimo alcanza para cubrir la canasta básica?', answer: 'No. Ni siquiera el salario mínimo más alto (C$13,848.23) cubre el costo total de la canasta básica una vez descontados impuestos y aportes al INSS.' },
+      { question: '¿Es más barato vivir en provincias?', answer: 'Sí. Los alquileres y algunos servicios suelen ser más económicos fuera de Managua, aunque la disponibilidad de empleo formal puede ser menor.' }
     ],
   },
   {
@@ -558,7 +436,8 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-02-15',
     updatedDate: '2026-06-17',
-    content: `<h2>Mejores playas de Nicaragua 2026</h2><p>Nicaragua cuenta con casi 300 kilómetros de costa en el Pacífico y más de 450 kilómetros en el Caribe. Este territorio ofrece playas para surfistas, familias, buceadores y viajeros que buscan destinos poco masificados. Esta guía resume las principales playas del país, cómo llegar, costos aproximados y recomendaciones de seguridad.</p><h2>Principales playas del Pacífico nicaragüense</h2><p>La costa del Pacífico concentra la mayoría de destinos accesibles desde Managua y es conocida por sus atardeceres, oleaje para surf y ambiente relajado.</p><ul><li><strong>San Juan del Sur:</strong> Bahía turística con restaurantes, hospedajes, pesca deportiva y actividades acuáticas. Ubicada a unos 140 km de Managua.</li><li><strong>Playa Maderas:</strong> Playa de surf a 15 minutos de San Juan del Sur, con oleaje para distintos niveles y ambiente tranquilo.</li><li><strong>Playa Popoyo:</strong> Reconocida por sus olas de tubo, es una de las playas favoritas de surfistas experimentados. Se encuentra cerca de Tola, a unos 130 km de Managua.</li><li><strong>Las Peñitas (León):</strong> Playa cercana a la ciudad de León, ideal para familias y surfistas principiantes.</li><li><strong>Playa El Coco:</strong> Playa familiar a pocos minutos de San Juan del Sur, con oleaje suave y poco concurrida.</li><li><strong>Playa La Boquita (Carazo):</strong> Frecuentada por familias locales, ofrece pescado fresco y ambiente auténtico a poco más de una hora de Managua.</li></ul><h2>Playas del Caribe nicaragüense</h2><p>El Caribe de Nicaragua, con menor desarrollo turístico, destaca por aguas cristalinas, arrecifes y cultura afrocaribeña.</p><ul><li><strong>Corn Island:</strong> Archipiélago con playas de arena blanca, buceo, snorkel y gastronomía caribeña. Se accede por vuelo desde Managua o lancha desde Bluefields.</li><li><strong>Little Corn Island:</strong> Isla pequeña sin vehículos, ideal para desconectar. Requiere lancha desde Corn Island.</li></ul><h2>Comparativa de costos estimados por día</h2><table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Destino</th><th style="padding:10px;text-align:right;">Diario USD (aprox.)</th><th style="padding:10px;text-align:center;">Perfil</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">San Juan del Sur</td><td style="padding:10px;text-align:right;">40 - 80</td><td style="padding:10px;text-align:center;">Turístico</td></tr><tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Corn Island</td><td style="padding:10px;text-align:right;">60 - 100</td><td style="padding:10px;text-align:center;">Turístico / Caribe</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Popoyo / Maderas</td><td style="padding:10px;text-align:right;">20 - 50</td><td style="padding:10px;text-align:center;">Surf</td></tr><tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Las Peñitas / El Coco</td><td style="padding:10px;text-align:right;">15 - 40</td><td style="padding:10px;text-align:center;">Familiar</td></tr><tr><td style="padding:10px;">La Boquita</td><td style="padding:10px;text-align:right;">10 - 20</td><td style="padding:10px;text-align:center;">Local</td></tr></tbody></table><p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: los costos son estimaciones referenciales que incluyen alimentación básica, transporte local y hospedaje económico. Los precios varían según temporada y tipo de servicio.</em></p><h2>Recomendaciones de seguridad</h2><ul><li>No deje objetos de valor desatendidos en la playa.</li><li>Respete las señales de banderas de seguridad: rojo indica peligro y amarillo precaución.</li><li>Consulte a locales sobre corrientes marinas antes de nadar, especialmente en el Caribe.</li><li>Use protector solar, sombrero y hidratación constante por el clima tropical.</li></ul><h2>Preguntas frecuentes</h2><h3>¿Cuál es la mejor playa para surf en Nicaragua?</h3><p>Playa Popoyo y Playa Maderas son las más reconocidas por sus condiciones de surf. Popoyo es ideal para surfistas experimentados, mientras que Maderas ofrece olas para diferentes niveles.</p><h3>¿Cómo llegar a Corn Island?</h3><p>Se puede llegar en vuelo desde Managua (aproximadamente 1h 20min) o en lancha desde Bluefields (aproximadamente 6 horas).</p><h3>¿Cuándo es la mejor época para visitar las playas?</h3><p>La temporada de noviembre a abril es la más seca y soleada, ideal para la costa del Pacífico. Para el Caribe, los meses de febrero a mayo suelen tener menos lluvia.</p><h2>Fuentes consultadas</h2><p>Información basada en datos del Instituto Nicaragüense de Turismo (INTUR), reportes de operadores turísticos locales y guías de viaje reconocidas. Los costos son estimaciones referenciales y pueden variar según temporada.</p>`,faqs: [
+    content: `<h2>Mejores playas de Nicaragua 2026</h2><p>Nicaragua cuenta con casi 300 kilómetros de costa en el Pacífico y más de 450 kilómetros en el Caribe. Este territorio ofrece playas para surfistas, familias, buceadores y viajeros que buscan destinos poco masificados. Esta guía resume las principales playas del país, cómo llegar, costos aproximados y recomendaciones de seguridad.</p><h2>Principales playas del Pacífico nicaragüense</h2><p>La costa del Pacífico concentra la mayoría de destinos accesibles desde Managua y es conocida por sus atardeceres, oleaje para surf y ambiente relajado.</p><ul><li><strong>San Juan del Sur:</strong> Bahía turística con restaurantes, hospedajes, pesca deportiva y actividades acuáticas. Ubicada a unos 140 km de Managua.</li><li><strong>Playa Maderas:</strong> Playa de surf a 15 minutos de San Juan del Sur, con oleaje para distintos niveles y ambiente tranquilo.</li><li><strong>Playa Popoyo:</strong> Reconocida por sus olas de tubo, es una de las playas favoritas de surfistas experimentados. Se encuentra cerca de Tola, a unos 130 km de Managua.</li><li><strong>Las Peñitas (León):</strong> Playa cercana a la ciudad de León, ideal para familias y surfistas principiantes.</li><li><strong>Playa El Coco:</strong> Playa familiar a pocos minutos de San Juan del Sur, con oleaje suave y poco concurrida.</li><li><strong>Playa La Boquita (Carazo):</strong> Frecuentada por familias locales, ofrece pescado fresco y ambiente auténtico a poco más de una hora de Managua.</li></ul><h2>Playas del Caribe nicaragüense</h2><p>El Caribe de Nicaragua, con menor desarrollo turístico, destaca por aguas cristalinas, arrecifes y cultura afrocaribeña.</p><ul><li><strong>Corn Island:</strong> Archipiélago con playas de arena blanca, buceo, snorkel y gastronomía caribeña. Se accede por vuelo desde Managua o lancha desde Bluefields.</li><li><strong>Little Corn Island:</strong> Isla pequeña sin vehículos, ideal para desconectar. Requiere lancha desde Corn Island.</li></ul><h2>Comparativa de costos estimados por día</h2><table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Destino</th><th style="padding:10px;text-align:right;">Diario USD (aprox.)</th><th style="padding:10px;text-align:center;">Perfil</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">San Juan del Sur</td><td style="padding:10px;text-align:right;">40 - 80</td><td style="padding:10px;text-align:center;">Turístico</td></tr><tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Corn Island</td><td style="padding:10px;text-align:right;">60 - 100</td><td style="padding:10px;text-align:center;">Turístico / Caribe</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Popoyo / Maderas</td><td style="padding:10px;text-align:right;">20 - 50</td><td style="padding:10px;text-align:center;">Surf</td></tr><tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Las Peñitas / El Coco</td><td style="padding:10px;text-align:right;">15 - 40</td><td style="padding:10px;text-align:center;">Familiar</td></tr><tr><td style="padding:10px;">La Boquita</td><td style="padding:10px;text-align:right;">10 - 20</td><td style="padding:10px;text-align:center;">Local</td></tr></tbody></table><p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: los costos son estimaciones referenciales que incluyen alimentación básica, transporte local y hospedaje económico. Los precios varían según temporada y tipo de servicio.</em></p><h2>Recomendaciones de seguridad</h2><ul><li>No deje objetos de valor desatendidos en la playa.</li><li>Respete las señales de banderas de seguridad: rojo indica peligro y amarillo precaución.</li><li>Consulte a locales sobre corrientes marinas antes de nadar, especialmente en el Caribe.</li><li>Use protector solar, sombrero y hidratación constante por el clima tropical.</li></ul><h2>Preguntas frecuentes</h2><h3>¿Cuál es la mejor playa para surf en Nicaragua?</h3><p>Playa Popoyo y Playa Maderas son las más reconocidas por sus condiciones de surf. Popoyo es ideal para surfistas experimentados, mientras que Maderas ofrece olas para diferentes niveles.</p><h3>¿Cómo llegar a Corn Island?</h3><p>Se puede llegar en vuelo desde Managua (aproximadamente 1h 20min) o en lancha desde Bluefields (aproximadamente 6 horas).</p><h3>¿Cuándo es la mejor época para visitar las playas?</h3><p>La temporada de noviembre a abril es la más seca y soleada, ideal para la costa del Pacífico. Para el Caribe, los meses de febrero a mayo suelen tener menos lluvia.</p><h2>Fuentes consultadas</h2><p>Información basada en datos del Instituto Nicaragüense de Turismo (INTUR), reportes de operadores turísticos locales y guías de viaje reconocidas. Los costos son estimaciones referenciales y pueden variar según temporada.</p>`,
+    faqs: [
       { question: '¿Cuál es la mejor playa para surf en Nicaragua?', answer: 'Popoyo y Playa Maderas son las mejores para surf. Popoyo tiene olas de tubo para expertos. Maderas es ideal para intermedios.' },
       { question: '¿Es seguro viajar a Corn Island?', answer: 'Sí. Corn Island es seguro para turistas. Se recomienda precaución estándar como en cualquier destino turístico.' },
       { question: '¿Cuánto cuesta un viaje de 3 días a San Juan del Sur?', answer: 'Aproximadamente $150-300 USD por persona incluyendo transporte, hospedaje medio y comidas.' },
@@ -572,12 +451,30 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-01-01',
-    updatedDate: '2026-06-17',
-    content: `<h2>Tipo de cambio dólar a córdoba Nicaragua 2026</h2><p>El tipo de cambio en Nicaragua es administrado por el Banco Central de Nicaragua (BCN), que publica diariamente un tipo de cambio de referencia. Bancos, casas de cambio y otros agentes aplican spreads sobre esa referencia. Esta guía explica cómo funciona el mercado cambiario, dónde cambiar divisas y qué factores afectan el precio del dólar.</p><h2>Tipo de cambio de referencia 2026</h2><table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Mercado</th><th style="padding:10px;text-align:right;">Compra (C$/USD)</th><th style="padding:10px;text-align:right;">Venta (C$/USD)</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">BCN (referencia)</td><td style="padding:10px;text-align:right;">36.50</td><td style="padding:10px;text-align:right;">36.65</td></tr><tr style="border-bottom:1px solid #e5e7eb;background:#f9fafb;"><td style="padding:10px;">Bancos comerciales</td><td style="padding:10px;text-align:right;">36.20 - 36.40</td><td style="padding:10px;text-align:right;">36.70 - 36.90</td></tr><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;">Casas de cambio</td><td style="padding:10px;text-align:right;">36.00 - 36.30</td><td style="padding:10px;text-align:right;">36.80 - 37.00</td></tr><tr><td style="padding:10px;">Mercado informal</td><td style="padding:10px;text-align:right;">36.00 - 36.20</td><td style="padding:10px;text-align:right;">37.00 - 37.20</td></tr></tbody></table><p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: valores referenciales basados en información del BCN y el mercado cambiario local. Los tipos de cambio bancarios varían según la entidad. Verifique con su banco.</em></p><h2>¿Cómo se determina el tipo de cambio en Nicaragua?</h2><p>El BCN establece un tipo de cambio de referencia diario basado en la oferta y demanda de divisas. El sistema de bandas cambiarias permite fluctuaciones controladas dentro de un rango. Nicaragua no tiene una moneda de libre flotación; el BCN interviene para mantener la estabilidad cambiaria.</p><h2>Dónde cambiar dólares en Nicaragua</h2><ul><li><strong>Bancos comerciales:</strong> Entidades como Banpro, BAC y Lafise Bancentro ofrecen tasas competitivas para montos grandes. Requieren identificación.</li><li><strong>Casas de cambio:</strong> Concentradas en la zona bancaria de Managua y el Mercado Oriental. Operan con mayor flexibilidad de horarios pero con spreads más amplios.</li><li><strong>Remesas:</strong> Servicios como Western Union, MoneyGram y Ria aplican un tipo de cambio corporativo, generalmente menor que el bancario.</li><li><strong>Tarjetas de crédito y débito:</strong> Los bancos aplican el tipo de cambio de las redes Visa o Mastercard más una comisión internacional.</li></ul><h2>Consejos para obtener mejor tipo de cambio</h2><ul><li>Cambie montos grandes en bancos para obtener mejores tasas.</li><li>Evite cambiar en aeropuertos y hoteles, donde los spreads suelen ser más altos.</li><li>Compare tasas entre al menos dos bancos o casas de cambio.</li><li>Considere transferencias bancarias para montos elevados en lugar de efectivo.</li></ul><h2>Histórico y tendencias</h2><p>El córdoba se ha depreciado de manera gradual frente al dólar durante la última década. En 2020 el tipo de cambio de referencia era cercano a C$ 34.50 por dólar; en 2026 ronda C$ 36.65. Las proyecciones indican que podría continuar una depreciación moderada, sujeta a la política del BCN y las condiciones macroeconómicas.</p><h2>Preguntas frecuentes</h2><h3>¿A cuánto está el dólar en Nicaragua hoy?</h3><p>El tipo de cambio de referencia del BCN es aproximadamente C$ 36.65 por USD 1.00. Los bancos compran entre C$ 36.20-36.40 y venden entre C$ 36.70-36.90.</p><h3>¿Dónde es mejor cambiar dólares en Nicaragua?</h3><p>Los bancos comerciales suelen ofrecer mejores tasas para montos grandes. Las casas de cambio son más ágiles pero con spreads mayores.</p><h3>¿Se puede usar dólares en Nicaragua?</h3><p>Sí, el dólar es ampliamente aceptado en hoteles, restaurantes turísticos y comercios grandes. En mercados, transporte público y negocios pequeños se prefiere el córdoba.</p><h2>Fuentes consultadas</h2><p>Información basada en datos del Banco Central de Nicaragua (BCN), reportes del Fondo Monetario Internacional (FMI) y prácticas del mercado cambiario local. Los tipos de cambio comerciales varían; consulte directamente a su banco o casa de cambio.</p>`,
+    updatedDate: '2026-07-30',
+    content: `
+      <blockquote><h3>Qué cambió desde la última actualización (17 de junio de 2026)</h3><ul><li>El BCN <strong>eliminó el deslizamiento cambiario</strong> (la depreciación gradual y programada del córdoba) para todo 2026: la tasa de deslizamiento es <strong>0% anual</strong>.</li><li>Como resultado, el tipo de cambio oficial está <strong>fijo en C$36.6243 por USD 1.00 durante todo el año 2026</strong>, del 1 de enero al 31 de diciembre.</li><li>Esto es un cambio de fondo frente al sistema de "minidevaluaciones" diarias que Nicaragua usó por años.</li></ul></blockquote>
+      <p>Desde 2026, el Banco Central de Nicaragua (BCN) cambió la forma en que administra el tipo de cambio. Antes, el córdoba se depreciaba de forma gradual y diaria frente al dólar mediante un mecanismo de "deslizamiento" o minidevaluación programada. El BCN anunció que, para todo el año 2026, esa tasa de deslizamiento se mantiene en <strong>0% anual</strong>, lo que significa que el tipo de cambio oficial es fijo durante los doce meses del año.</p>
+      <h2>Tipo de cambio oficial 2026</h2>
+      <p><strong>C$ 36.6243 por USD 1.00</strong>, vigente sin variación desde el 1 de enero hasta el 31 de diciembre de 2026, según lo publicado por el BCN.</p>
+      <p>Este es el cambio más importante en la política cambiaria nicaragüense en años recientes: el país pasa de una devaluación gradual y predecible a una tasa fija por todo el año. Según el BCN, la decisión responde al objetivo de anclar expectativas y preservar el poder adquisitivo de la población en un contexto de crecimiento económico sostenido.</p>
+      <h2>Tipo de cambio en el mercado (referencial, julio 2026)</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Mercado</th><th style="padding:10px;text-align:left;">Compra (C$/USD)</th><th style="padding:10px;text-align:left;">Venta (C$/USD)</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">BCN (oficial, fijo todo 2026)</td><td style="padding:10px;text-align:left;">36.6243</td><td style="padding:10px;text-align:left;">36.6243</td></tr><tr style="background:#f9fafb;"><td style="padding:10px;text-align:left;">Bancos comerciales y casas de cambio (Managua)</td><td style="padding:10px;text-align:left;">~36.20 - 36.40</td><td style="padding:10px;text-align:left;">~36.60 - 36.90</td></tr></tbody></table>
+      <p style="font-size:0.9rem;color:var(--gray-500);"><em>Nota: aunque el tipo de cambio oficial del BCN es fijo, bancos y casas de cambio siguen aplicando su propio spread (diferencia entre compra y venta) sobre esa referencia. A finales de julio de 2026, la venta promedio en Managua rondaba los C$36.64 por dólar. Verifique la tasa exacta con su banco, ya que puede variar levemente día a día según la entidad.</em></p>
+      <h2>¿Cómo se determina el tipo de cambio en Nicaragua en 2026?</h2>
+      <p>El BCN fija el tipo de cambio oficial de referencia, y para 2026 decidió mantener la tasa de deslizamiento en 0%, es decir, sin devaluación programada durante todo el año. Bancos, casas de cambio y otros agentes aplican sus propios márgenes (spreads) sobre esa referencia oficial, por lo que el precio final que usted paga o recibe varía ligeramente según dónde cambie.</p>
+      <h2>Dónde cambiar dólares en Nicaragua</h2>
+      <ul><li><strong>Bancos comerciales:</strong> Banpro, BAC y Lafise Bancentro ofrecen tasas competitivas para montos grandes. Requieren identificación.</li><li><strong>Casas de cambio:</strong> concentradas en la zona bancaria de Managua y el Mercado Oriental. Mayor flexibilidad de horarios pero spreads más amplios.</li><li><strong>Remesas:</strong> Western Union, MoneyGram y Ria aplican un tipo de cambio corporativo, generalmente menor que el bancario.</li><li><strong>Tarjetas de crédito y débito:</strong> los bancos aplican el tipo de cambio de las redes Visa o Mastercard más una comisión internacional.</li></ul>
+      <h2>Consejos para obtener mejor tipo de cambio</h2>
+      <ul><li>Cambie montos grandes en bancos para obtener mejores tasas.</li><li>Evite cambiar en aeropuertos y hoteles, donde los spreads suelen ser más altos.</li><li>Compare tasas entre al menos dos bancos o casas de cambio.</li><li>Considere transferencias bancarias para montos elevados en lugar de efectivo.</li></ul>
+      <h2>Histórico y tendencias</h2>
+      <p>El córdoba se depreció de forma gradual frente al dólar durante más de una década, pasando de cerca de C$34.50 en 2020 a C$36.6243 en 2026. Con la decisión del BCN de fijar la tasa de deslizamiento en 0% para todo 2026, el tipo de cambio oficial no debería moverse durante el resto del año, salvo un cambio de política.</p>
+    `,
     faqs: [
-      { question: '¿A cuánto está el dólar en Nicaragua hoy?', answer: 'El tipo de cambio referencia del BCN es C$ 36.65 por USD 1.00. Los bancos compran entre C$ 36.20-36.40 y venden entre C$ 36.70-36.90.' },
-      { question: '¿Dónde es mejor cambiar dólares en Nicaragua?', answer: 'Los bancos (Banpro, BAC, Lafise) ofrecen las mejores tasas para montos grandes. Las casas de cambio son más rápidas pero con spreads mayores.' },
-      { question: '¿Se puede usar dólares en Nicaragua?', answer: 'Sí, el dólar es ampliamente aceptado en hoteles, restaurantes turísticos y comercios grandes. Sin embargo, en mercados y transporte público solo se aceptan córdobas.' },
+      { question: '¿A cuánto está el dólar en Nicaragua hoy?', answer: 'El tipo de cambio oficial del BCN es fijo en C$36.6243 por USD 1.00 durante todo 2026. En bancos y casas de cambio, la venta ronda los C$36.60-36.90.' },
+      { question: '¿Por qué el tipo de cambio ya no sube cada día como antes?', answer: 'Porque el BCN fijó la tasa de deslizamiento cambiario en 0% para 2026: eliminó, por ahora, la depreciación diaria programada que se aplicaba en años anteriores.' },
+      { question: '¿Dónde es mejor cambiar dólares en Nicaragua?', answer: 'Los bancos comerciales (Banpro, BAC, Lafise) suelen ofrecer mejores tasas para montos grandes. Las casas de cambio son más ágiles pero con spreads mayores.' },
+      { question: '¿Se puede usar dólares en Nicaragua?', answer: 'Sí, el dólar es ampliamente aceptado en hoteles, restaurantes turísticos y comercios grandes. En mercados y transporte público se prefiere el córdoba.' }
     ],
   },
   {
@@ -795,7 +692,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       { question: '¿Qué sectores generan más empleo en Nicaragua?', answer: 'La agricultura emplea alrededor del 30% de la población activa. El comercio informal, la construcción y el turismo también son importantes generadores de empleo.' },
       { question: '¿Cuánto representan las remesas en la economía nicaragüense?', answer: 'Las remesas representan más del 15% del PIB de Nicaragua, siendo una de las fuentes de divisas más importantes del país.' },
     ],
-  },
+  }
 ];
 
 export function getEvergreenBySlug(slug: string): EvergreenArticle | undefined {
