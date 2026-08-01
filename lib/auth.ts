@@ -4,7 +4,12 @@ import { ZodError } from 'zod';
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 export function isAdminRequest(request: Request): boolean {
-  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const url = new URL(request.url);
+  const token =
+    request.headers.get('x-admin-token') ||
+    request.headers.get('x-admin-key') ||
+    url.searchParams.get('token') ||
+    '';
   return ADMIN_API_KEY.length > 0 && token === ADMIN_API_KEY;
 }
 
