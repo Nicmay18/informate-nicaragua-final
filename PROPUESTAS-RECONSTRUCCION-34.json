@@ -1,0 +1,716 @@
+[
+  {
+    "slug": "panama-deporta-a-20-nicaraguenses-por-infracciones",
+    "titulo_actual": "Panamá deporta a 20 nicaragüenses por infracciones migratori",
+    "problema_detectado": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
+    "titulo_actual": "Investigaciones por afectación en barrio Old Bank Bluefields",
+    "problema_detectado": "falta de contexto y consecuencias; ausencia de datos verificables",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto y consecuencias; ausencia de datos verificables",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "ambulancia-minsa-arrastrada-por-rio-en-ayapal-jinotega",
+    "titulo_actual": "Ambulancia MINSA, arrastrada por río en Ayapal, Jinotega",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "capturan-a-dos-por-crimen-de-doctora-nicaraguense-en-guatemala",
+    "titulo_actual": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "declaración o fuente atribuida"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "capturan-a-pinolero-por-llevarse-a-nina-de-13-anos",
+    "titulo_actual": "Capturan a pinolero por llevarse a niña de 13 años",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "consecuencias para la región o migración"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "carreteras-del-pais-dejan-un-fin-de-semana-con-varios-accidentes",
+    "titulo_actual": "Carreteras del país dejan un fin de semana con varios accidentes",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
+    "titulo_actual": "Chinandega estrena 75 viviendas con servicios completos",
+    "problema_detectado": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "consecuencias del hecho"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "colapso-en-construccion-cobra-vida-de-nicaraguense-en-ee-uu",
+    "titulo_actual": "Colapso en construcción cobra vida de nicaragüense en EE. UU.",
+    "problema_detectado": "lenguaje emocional; falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "declaración o fuente atribuida"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "lenguaje emocional; falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "costa-rica-detiene-a-palestino-con-vinculos-a-hamas",
+    "titulo_actual": "Costa Rica detiene a palestino con vínculos a Hamás",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "desaparecen-cuatro-marinos-tras-zarpar-de-corn-island",
+    "titulo_actual": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+    "problema_detectado": "Ningún problema crítico detectado",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "Ningún problema crítico detectado",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "dos-hombres-mueren-por-descargas-electricas-en-managua",
+    "titulo_actual": "Dos hombres resultan afectados por descargas eléctricas en…",
+    "problema_detectado": "lenguaje emocional; falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "lenguaje emocional; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "el-ritual-que-parte-la-piel-y-mueve-a-miles-en-masaya",
+    "titulo_actual": "El ritual que parte la piel y mueve a miles en Masaya",
+    "problema_detectado": "Ningún problema crítico detectado",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "declaración o fuente atribuida"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "Ningún problema crítico detectado",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "fallo-judicial-reabre-debate-sobre-la-defensa-de-una-madre",
+    "titulo_actual": "Fallo judicial reabre debate sobre la defensa de una madre.",
+    "problema_detectado": "falta de contexto; ausencia de datos verificables",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto; ausencia de datos verificables",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "julieta-venegas-presenta-tierra-de-esperanza-rumbo-al-mundial-2026",
+    "titulo_actual": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "ninguna; nota lista"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "kfc-apuesta-por-carretera-a-masaya-para-expandirse-en-nicaragua",
+    "titulo_actual": "KFC abre operaciones en Carretera a Masaya, Managua",
+    "problema_detectado": "Ningún problema crítico detectado",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "ninguna; nota lista"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "Ningún problema crítico detectado",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
+    "titulo_actual": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "consecuencias del hecho"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
+    "titulo_actual": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "ninguna; nota lista"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "nicaraguense-sigue-desaparecida-tras-terremotos-en-venezuela",
+    "titulo_actual": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "consecuencias para la región o migración"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "seis-policias-mueren-en-operativo-antidrogas-en",
+    "titulo_actual": "Cinco agentes fallecen en operativo en Honduras",
+    "problema_detectado": "lenguaje emocional; falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "consecuencias para la región o migración"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "lenguaje emocional; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "venezuela-164-fallecidos-y-30-mil-desaparecidos-tras-sismos",
+    "titulo_actual": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+    "problema_detectado": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "venezuela-replicas-continuan-con-920-victimas-y-miles-sin-rastro",
+    "titulo_actual": "Venezuela: réplicas continúan con 920 víctimas y miles sin rastro",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+    "titulo_actual": "Un afectado y un personas afectado en accidente laboral en…",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua",
+    "titulo_actual": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "dos-perdidas-reabren-llamado-a-cuidar-la-salud-emocional",
+    "titulo_actual": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+    "problema_detectado": "lenguaje emocional; falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "lenguaje emocional; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "dos-sismos-en-39-segundos-sacuden-venezuela-y-caracas",
+    "titulo_actual": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "fiscalia-acusa-a-madre-y-padrastro-por-muerte-de-nino",
+    "titulo_actual": "Fiscalía acusa a madre y padrastro por muerte de niño",
+    "problema_detectado": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "conectores IA/repetitivos; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "guia-de-senalizacion-vial-en-nicaragua-lineas-y-multas-ley-431",
+    "titulo_actual": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+    "problema_detectado": "conectores IA/repetitivos; falta de contexto",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "declaración o fuente atribuida"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "conectores IA/repetitivos; falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "lluvias-vientos-y-rayos-dejan-danos-y-dos-fallecidos",
+    "titulo_actual": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "soldador-de-casa-blanca-sufrio-descarga-electrica-durante-trabajo",
+    "titulo_actual": "Soldador de Casa Blanca sufrió descarga eléctrica durante tr",
+    "problema_detectado": "Ningún problema crítico detectado",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "Ningún problema crítico detectado",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "terremoto-de-7-1-deja-muertos-desaparecidos-y-caos-en-japon",
+    "titulo_actual": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
+    "problema_detectado": "conectores IA/repetitivos; faltan fuentes atribuidas",
+    "valor_actual": "B) Útil pero incompleto",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Impacto ciudadano",
+      "Antecedentes",
+      "Datos oficiales",
+      "Explicación práctica",
+      "explicación de por qué importa a Nicaragua"
+    ],
+    "datos_necesarios": [
+      "Dato oficial o institucional",
+      "Antecedente verificable",
+      "Cifra de impacto"
+    ],
+    "riesgo": "conectores IA/repetitivos; faltan fuentes atribuidas",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "8-motociclistas-fallecen-en-accidentes-este-fin-de-semana",
+    "titulo_actual": "8 motociclistas fallecen en accidentes este fin de semana",
+    "problema_detectado": "falta de contexto",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "incendio-destruye-vivienda-en-monsenor-lezcano-y-deja-un-herido",
+    "titulo_actual": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido.",
+    "problema_detectado": "falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "colapsa-vivienda-ancestral-en-monimbo-masaya-familia-de-7-ilesa",
+    "titulo_actual": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+    "problema_detectado": "falta de consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "falta de consecuencias",
+    "prioridad": "Alta"
+  },
+  {
+    "slug": "victima-de-golpiza-en-chichigalpa-enfrenta-otro-proceso-judicial",
+    "titulo_actual": "Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial",
+    "problema_detectado": "lenguaje emocional; falta de contexto y consecuencias",
+    "valor_actual": "C) Superficial",
+    "valor_objetivo": "A) Con valor propio",
+    "secciones_a_agregar": [
+      "Cronología confirmada del hecho",
+      "Actuación de autoridades",
+      "Investigación en curso",
+      "Contexto social",
+      "Marco legal o prevención cuando corresponda"
+    ],
+    "datos_necesarios": [
+      "Declaración o posición de autoridad",
+      "Cronología verificable",
+      "Marco legal aplicable"
+    ],
+    "riesgo": "lenguaje emocional; falta de contexto y consecuencias",
+    "prioridad": "Alta"
+  }
+]
