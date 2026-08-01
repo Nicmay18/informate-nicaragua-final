@@ -33,6 +33,9 @@ import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { runReaderJourney } from '@/lib/meni/reader-journey';
 import { runUtilityGate } from './utility-gate';
 import { buildDiagnostico } from './diagnostico';
+import { analyzeUtilidad } from '@/lib/meni/utilidad';
+import { analyzeProfundidad } from '@/lib/meni/profundidad';
+import { analyzeEEAT } from '@/lib/meni/eeat';
 import { verifyEditorialDecisions } from './verification';
 import { computeRanking, analyzeSaturation } from '@/lib/meni/editor-jefe/ranking';
 import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tracker';
@@ -254,6 +257,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
         { readerLearning, editorialContribution },
         editorialDna,
         input.evaluacion,
+        input,
       )
     : calcularScoreEjecutivo(
         acciones,
@@ -539,16 +543,17 @@ function calcularScoreEjecutivoV2(
   bloquear: boolean,
   respuestas: { readerLearning: string; editorialContribution: string },
   editorialDna: EditorialDnaResult,
-  evaluacion?: EvaluacionEditorial,
+  evaluacion: EvaluacionEditorial | undefined,
+  input: EditorialBrainInput,
 ): { score: number; puntosPerdidos: PuntoPerdido[] } {
   // 1. Base con penalizaciones V1. No se vuelven a duplicar.
   const base = calcularScoreEjecutivo(acciones, puntosCategoria, bloquear, respuestas);
 
-  // 2. Dimensiones editoriales ya calculadas por MENI.
-  const utilidad = editorialDna.selloNI.utilidad;
-  const profundidad = editorialDna.selloNI.explica;
+  // 2. Dimensiones editoriales con analizadores V3 para utilidad, profundidad y EEAT.
+  const utilidad = analyzeUtilidad(input, evaluacion);
+  const profundidad = analyzeProfundidad(input, evaluacion);
   const originalidad = editorialDna.selloNI.originalidad;
-  const eeat = evaluacion?.eeat?.score ?? 0;
+  const eeat = evaluacion ? analyzeEEAT(evaluacion).score : 0;
   const aportePropio = evaluacion?.evidence?.originality?.tieneAportePropio ? 100 : 0;
   const adnNI = editorialDna.adnNI;
 
