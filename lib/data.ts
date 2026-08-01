@@ -200,32 +200,40 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   return _cachedGetByCategory(categoria, validatedCount);
 }
 
+const _cachedGetMasLeidas = unstable_cache(
+  async (count: number) => {
+    try {
+      const { Timestamp } = await import('firebase-admin/firestore');
+      const noticias = await getNews(100);
+      if (noticias.length === 0) return [];
+
+      const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+      const cutoffMs7 = cutoff7.toDate().getTime();
+
+      const withViews = noticias
+        .filter((n) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
+        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
+
+      if (withViews.length >= count) return withViews.slice(0, count);
+
+      const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
+      const cutoffMs3 = cutoff3.toDate().getTime();
+      const recent3 = noticias.filter((n) => new Date(n.fecha).getTime() >= cutoffMs3);
+      if (recent3.length >= count) return recent3.slice(0, count);
+
+      return noticias.slice(0, count);
+    } catch (err) {
+      logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
+    }
+    return [];
+  },
+  ['mas-leidas'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_MAS_LEIDAS_COUNT);
-  try {
-    const { Timestamp } = await import('firebase-admin/firestore');
-    const noticias = await getNews(100);
-    if (noticias.length === 0) return [];
-
-    const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-    const cutoffMs7 = cutoff7.toDate().getTime();
-
-    const withViews = noticias
-      .filter((n) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
-      .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
-
-    if (withViews.length >= validatedCount) return withViews.slice(0, validatedCount);
-
-    const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
-    const cutoffMs3 = cutoff3.toDate().getTime();
-    const recent3 = noticias.filter((n) => new Date(n.fecha).getTime() >= cutoffMs3);
-    if (recent3.length >= validatedCount) return recent3.slice(0, validatedCount);
-
-    return noticias.slice(0, validatedCount);
-  } catch (err) {
-    logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
-  }
-  return [];
+  return _cachedGetMasLeidas(validatedCount);
 }
 
 const SLUG_RE = /^[a-zA-Z0-9_\-\u00C0-\u017F]+$/;
@@ -235,70 +243,78 @@ function isValidSlug(slug: string): boolean {
   return typeof slug === 'string' && slug.length <= SLUG_MAX_LEN && SLUG_RE.test(slug);
 }
 
+const _cachedGetBySlug = unstable_cache(
+  async (slug: string) => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+
+      let snap = await adminDb
+        .collection('noticias')
+        .where('slug', '==', slug)
+        .limit(1)
+        .get();
+
+      if (snap.empty) {
+        const slugSinSufijo = slug.replace(/-[a-z0-9]{6,}$/i, '');
+        if (slugSinSufijo !== slug && slugSinSufijo.length >= 3) {
+          logger.info('[data.ts] Fallback slug sin sufijo:', slug, '→', slugSinSufijo);
+          snap = await adminDb
+            .collection('noticias')
+            .where('slug', '==', slugSinSufijo)
+            .limit(1)
+            .get();
+        }
+      }
+
+      if (!snap.empty) {
+        const doc = snap.docs[0];
+        const data = doc.data() as FirestoreNoticiaData;
+        const docSlug = data.slug || doc.id;
+        const titulo = normalizeEditorialTitle(capitalizeFirst(data.titulo || ''));
+        const contenido = data.contenido || '';
+        if (!docSlug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
+          logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
+          return null;
+        }
+        return {
+          id: doc.id,
+          slug: docSlug,
+          titulo,
+          resumen: data.resumen || '',
+          contenido,
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.fechaActualizacion),
+          autor: data.autor,
+          autorFoto: data.autorFoto,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+          tags: data.tags,
+          pieFoto: data.pieFoto,
+          puntosClave: data.puntosClave,
+          metaDescription: data.metaDescription || data.metaDescripcion || '',
+          keywords: data.keywords || '',
+          estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
+          noindex: !!data.noindex,
+        };
+      }
+    } catch (err) {
+      logger.error('[data.ts] getNewsBySlug error:', err instanceof Error ? err.message : String(err));
+    }
+    return null;
+  },
+  ['noticia-slug'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
   if (!isValidSlug(slug)) {
     logger.warn('[data.ts] Slug rechazado por validación:', slug);
     return null;
   }
-  try {
-    const { adminDb } = await import('./firebase-admin');
-
-    let snap = await adminDb
-      .collection('noticias')
-      .where('slug', '==', slug)
-      .limit(1)
-      .get();
-
-    if (snap.empty) {
-      const slugSinSufijo = slug.replace(/-[a-z0-9]{6,}$/i, '');
-      if (slugSinSufijo !== slug && slugSinSufijo.length >= 3) {
-        logger.info('[data.ts] Fallback slug sin sufijo:', slug, '→', slugSinSufijo);
-        snap = await adminDb
-          .collection('noticias')
-          .where('slug', '==', slugSinSufijo)
-          .limit(1)
-          .get();
-      }
-    }
-
-    if (!snap.empty) {
-      const doc = snap.docs[0];
-      const data = doc.data() as FirestoreNoticiaData;
-      const slug = data.slug || doc.id;
-      const titulo = normalizeEditorialTitle(capitalizeFirst(data.titulo || ''));
-      const contenido = data.contenido || '';
-      if (!slug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
-        logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
-        return null;
-      }
-      return {
-        id: doc.id,
-        slug,
-        titulo,
-        resumen: data.resumen || '',
-        contenido,
-        categoria: data.categoria || 'Actualidad',
-        imagen: normalizeImage(data.imagen || ''),
-        fecha: safeDateString(data.fecha),
-        fechaActualizacion: safeDateString(data.fechaActualizacion),
-        autor: data.autor,
-        autorFoto: data.autorFoto,
-        destacada: data.destacada,
-        vistas: data.vistas,
-        palabras: data.palabras,
-        tags: data.tags,
-        pieFoto: data.pieFoto,
-        puntosClave: data.puntosClave,
-        metaDescription: data.metaDescription || data.metaDescripcion || '',
-        keywords: data.keywords || '',
-        estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
-        noindex: !!data.noindex,
-      };
-    }
-  } catch (err) {
-    logger.error('[data.ts] getNewsBySlug error:', err instanceof Error ? err.message : String(err));
-  }
-  return null;
+  return _cachedGetBySlug(slug);
 }
 
 export async function getAllSlugs(): Promise<string[]> {
@@ -323,31 +339,13 @@ export async function getAllSlugs(): Promise<string[]> {
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
   const validatedCount = validateCount(count, 3);
   try {
-    const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .where('categoria', '==', categoria)
-      .orderBy('fecha', 'desc')
-      .select(...LIST_FIELDS)
-      .limit(validatedCount + 1)
-      .get();
-
-    return snap.docs
-      .map(mapDocToNoticia)
-      .filter((n) => n.slug !== excludeSlug)
+    const all = await getNews(30);
+    return all
+      .filter((n) => n.categoria === categoria && n.slug !== excludeSlug)
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, validatedCount);
   } catch (err) {
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
-    try {
-      const all = await getNews(30);
-      return all
-        .filter((n) => n.categoria === categoria && n.slug !== excludeSlug)
-        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-        .slice(0, validatedCount);
-    } catch (fallbackErr) {
-      logger.error('[data.ts] getRelatedNews fallback error:', fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr));
-    }
   }
   return [];
 }
