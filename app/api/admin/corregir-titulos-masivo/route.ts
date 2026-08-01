@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { isAdminRequest, unauthorized, badRequest } from '@/lib/auth';
 import { CorregirTitulosMasivoSchema } from '@/lib/dtos';
+import { normalizarTitulo } from '@/lib/meni/titulo';
 import type { Noticia } from '@/lib/types';
 
 const MAX_LIMIT = 300;
@@ -142,7 +143,7 @@ function aplicarReglas(titulo: string): string {
       break;
     }
   }
-  return resultado.replace(/\s+/g, ' ').replace(/\.$/, '').trim();
+  return normalizarTitulo(resultado);
 }
 
 function limpiarSlug(slug: string): string {

@@ -5,6 +5,7 @@ export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp, Firestore } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
+import { normalizarTitulo } from '@/lib/meni/titulo';
 
 export const dynamic = 'force-dynamic';
 
@@ -156,8 +157,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
+    const tituloLimpio = normalizarTitulo(titulo);
+
     const db = getAdminDb();
-    const slug = await ensureUniqueSlug(titulo, async (s) => {
+    const slug = await ensureUniqueSlug(tituloLimpio, async (s) => {
       const existing = await db.collection('noticias').where('slug', '==', s).limit(1).get();
       return !existing.empty;
     });
@@ -165,7 +168,7 @@ export async function POST(request: NextRequest) {
     const relatedLinks = await getRelatedLinks(db, categoria, docRef.id);
     await docRef.set({
       id: docRef.id,
-      titulo,
+      titulo: tituloLimpio,
       resumen,
       contenido,
       categoria,

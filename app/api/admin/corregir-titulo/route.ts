@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { isAdminRequest, unauthorized, badRequest } from '@/lib/auth';
 import { CorregirTituloSchema } from '@/lib/dtos';
+import { normalizarTitulo } from '@/lib/meni/titulo';
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     const { id, titulo, slug } = parsed.data;
-    const tituloLimpio = titulo.trim();
+    const tituloLimpio = normalizarTitulo(titulo);
 
     const db = getAdminDb();
     const docRef = db.collection('noticias').doc(id);
