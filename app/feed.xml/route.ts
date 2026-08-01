@@ -1,5 +1,6 @@
 ﻿import { adminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
+import { normalizeEditorialTitle } from '@/lib/formateo';
 
 export const revalidate = 86400;
 
@@ -39,7 +40,7 @@ async function fetchFeedArticlesRaw() {
     const imgRaw = (d.imagen || '') as string;
     const imgUrl = imgRaw.startsWith('http') ? imgRaw : imgRaw ? `https://nicaraguainformate.com${imgRaw}` : '';
     return {
-      title: d.titulo as string,
+      title: normalizeEditorialTitle(d.titulo as string),
       slug: d.slug as string,
       description: (d.resumen || d.titulo) as string,
       contenido: (d.contenido || '') as string,

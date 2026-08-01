@@ -1,5 +1,6 @@
 ﻿import { getNews } from '@/lib/data';
 import { unstable_cache } from 'next/cache';
+import { normalizeEditorialTitle } from '@/lib/formateo';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -59,7 +60,7 @@ ${articles.map((article) => {
         <news:language>${publicationLanguage}</news:language>
       </news:publication>
       <news:publication_date>${publicationDate}</news:publication_date>
-      <news:title>${escapeXml(article.titulo)}</news:title>
+      <news:title>${escapeXml(normalizeEditorialTitle(article.titulo))}</news:title>
       <news:keywords>${escapeXml(article.categoria)}</news:keywords>
     </news:news>
   </url>`;

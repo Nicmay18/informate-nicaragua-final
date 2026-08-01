@@ -22,6 +22,7 @@ const FOOTER_COLS = [
     { label: 'Deportes', href: '/categoria/deportes' },
   ]},
   { title: 'Legal', links: [
+    { label: 'Metodología Editorial', href: '/metodologia-editorial' },
     { label: 'Sobre Nosotros', href: '/nosotros' },
     { label: 'Política de Privacidad', href: '/privacidad' },
     { label: 'Política de Cookies', href: '/cookies' },

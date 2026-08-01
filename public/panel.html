@@ -282,7 +282,7 @@
     .news-item:hover { background: var(--gray-50); }
     .news-thumb { width: 72px; height: 54px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; border: 1px solid var(--gray-200); }
     .news-content { flex: 1; min-width: 0; }
-    .news-title { font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+    .news-title { font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: normal; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
     .news-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--gray-500); }
     .news-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: var(--radius-full); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
     .badge-sucesos { background: var(--danger-light); color: #991b1b; }
@@ -394,7 +394,7 @@
       content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%;
       transform: translateX(-50%) translateY(-6px); padding: 4px 10px;
       background: var(--gray-900); color: white; font-size: 11px; font-weight: 500;
-      border-radius: var(--radius); white-space: nowrap; opacity: 0; pointer-events: none;
+      border-radius: var(--radius); white-space: normal; opacity: 0; pointer-events: none;
       transition: var(--transition); z-index: 1000;
     }
     [data-tooltip]:hover::after { opacity: 1; transform: translateX(-50%) translateY(-2px); }
@@ -560,7 +560,7 @@
           <strong>Falta autenticación admin</strong> — Las herramientas de correcciones masivas y distribución no funcionarán hasta que se active.
           Cerrá sesión y volvé a entrar para reconectar. Si el problema persiste, revisá que las variables <code>ADMIN_API_KEY</code> y <code>ADMIN_EMAILS</code> estén configuradas en Vercel.
         </div>
-        <button onclick="fetchAdminToken()" class="btn btn-sm" style="background:#dc2626; color:#fff; border:none; padding:6px 12px; font-size:12px; cursor:pointer; white-space:nowrap;">Reintentar</button>
+        <button onclick="fetchAdminToken()" class="btn btn-sm" style="background:#dc2626; color:#fff; border:none; padding:6px 12px; font-size:12px; cursor:pointer; white-space:normal;">Reintentar</button>
       </div>
 
       <!-- DASHBOARD -->
@@ -770,7 +770,7 @@
                   <label class="form-label" style="font-size: 12px;">URL directa o CDN:</label>
                   <div style="display: flex; gap: 8px;">
                     <input type="url" class="form-input" id="imagenUrl" placeholder="https://..." oninput="actualizarEstadoImagen(); actualizarPieFotoDesdeAutor();" onchange="actualizarPreview(); actualizarPieFotoDesdeAutor();" style="font-size: 13px;">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="buscarImagenUnsplash()" style="white-space: nowrap;"><i class="fas fa-search"></i> Stock</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="buscarImagenUnsplash()" style="white-space: normal;"><i class="fas fa-search"></i> Stock</button>
                   </div>
                   <div id="estadoImagen" style="margin-top: 6px; font-size: 12px; display: none;"></div>
                   <div id="unsplashResults" style="display: none; margin-top: 12px;"></div>
@@ -938,7 +938,7 @@
                   <span id="shareEmoji" style="font-size:26px; line-height:1;"></span>
                   <div>
                     <h3 style="margin:0; font-size:15px; font-weight:700; color:#16a34a;">✅ Publicada — Lista para redes sociales</h3>
-                    <p id="shareTituloHeader" style="margin:2px 0 0; font-size:12px; color:#6b7280; max-width:420px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></p>
+                    <p id="shareTituloHeader" style="margin:2px 0 0; font-size:12px; color:#6b7280; max-width:420px; white-space:normal; overflow:hidden; text-overflow:ellipsis;"></p>
                   </div>
                 </div>
                 <button type="button" onclick="document.getElementById('panelCompartirManual').style.display='none'" style="background:none; border:1px solid #e5e7eb; border-radius:6px; padding:6px 12px; cursor:pointer; color:#6b7280; font-size:13px;">✕ Cerrar</button>
@@ -972,7 +972,7 @@
                     <p style="margin:0; font-size:12px; font-weight:600; color:#0369a1;">🔄 ¿Facebook muestra foto vieja?</p>
                     <p style="margin:2px 0 0; font-size:11px; color:#0ea5e9;">Invalida el caché para que Facebook scrapee la imagen correcta.</p>
                   </div>
-                  <button type="button" onclick="invalidarCacheFacebook()" style="padding:8px 16px; background:#0ea5e9; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; white-space:nowrap;">🔄 Invalidar caché</button>
+                  <button type="button" onclick="invalidarCacheFacebook()" style="padding:8px 16px; background:#0ea5e9; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; white-space:normal;">🔄 Invalidar caché</button>
                 </div>
               </div>
               <div id="tabRedes_whatsapp" style="display:none;">
@@ -4322,9 +4322,10 @@ sin texto ni marcas de agua, composición periodística"
             // Título
             const titleDiv = document.createElement('div');
             titleDiv.className = 'news-title';
-            titleDiv.style.cssText = 'font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px;';
-            titleDiv.textContent = (n.titulo || '(Sin título)');
-            titleDiv.title = (n.titulo || '(Sin título)');
+            titleDiv.style.cssText = 'font-weight: 600; color: var(--gray-900); margin-bottom: 4px; white-space: normal; overflow: hidden; text-overflow: ellipsis; font-size: 14px;';
+            const tituloLimpio = (n.titulo || '(Sin título)').replace(/\\s*-\\s*Managua\\s*$/i, '').replace(/\\s*-\\s*[A-Z]\\s*$/i, '').trim();
+            titleDiv.textContent = tituloLimpio;
+            titleDiv.title = tituloLimpio;
             content.appendChild(titleDiv);
             // Meta
             const metaDiv = document.createElement('div');
@@ -5008,7 +5009,7 @@ sin texto ni marcas de agua, composición periodística"
           html += `
             <div style="padding:14px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:white;">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                <div style="font-weight:700;font-size:13px;color:var(--gray-800);max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${n.titulo}</div>
+                <div style="font-weight:700;font-size:13px;color:var(--gray-800);max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:normal;">${n.titulo}</div>
                 <div style="font-weight:800;font-size:16px;color:${color};">${n.porcentaje}%</div>
               </div>
               <div style="font-size:11px;color:var(--gray-500);margin-bottom:10px;">[${n.categoria}] · ${n.palabras} pal. · ${n.total}/100 pts</div>
@@ -5318,7 +5319,7 @@ window.batchRestore = async function() {
               const fechaStr = n.fecha ? new Date(n.fecha).toLocaleDateString('es-NI') : '—';
               return `<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f8fafc; border-radius:8px;">
                 <div style="flex:1; min-width:0;">
-                  <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
+                  <div style="font-weight:600; white-space:normal; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
                   <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${fechaStr}</div>
                 </div>
                 <button type="button" class="btn btn-primary btn-sm" onclick="distribuirPendiente('${n.slug}')" title="Distribuir ahora"><i class="fas fa-paper-plane"></i></button>
@@ -5355,7 +5356,7 @@ window.batchRestore = async function() {
             <div style="display:flex; align-items:center; gap:10px; padding:8px; background:#f8fafc; border-radius:8px;">
               <span style="font-weight:800; color: var(--primary); min-width:20px;">${i + 1}</span>
               <div style="flex:1; min-width:0;">
-                <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
+                <div style="font-weight:600; white-space:normal; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
                 <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${n.vistas?.toLocaleString() || 0} vistas</div>
               </div>
               ${n.distribuida ? '<span style="font-size:11px; color:var(--success); font-weight:600;">✓</span>' : '<span style="font-size:11px; color:var(--warning);">○</span>'}
@@ -5369,10 +5370,10 @@ window.batchRestore = async function() {
           distDiv.innerHTML = data.ultimasDistribuciones.map(d => `
             <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f8fafc; border-radius:8px;">
               <div style="flex:1; min-width:0;">
-                <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${d.titulo}</div>
+                <div style="font-weight:600; white-space:normal; overflow:hidden; text-overflow:ellipsis;">${d.titulo}</div>
                 <div style="font-size:11px; color: var(--gray-500);">${d.canales?.join(', ') || ''}</div>
               </div>
-              <span style="font-size:11px; color: var(--gray-400); white-space:nowrap;">${new Date(d.fecha).toLocaleDateString('es-NI')}</span>
+              <span style="font-size:11px; color: var(--gray-400); white-space:normal;">${new Date(d.fecha).toLocaleDateString('es-NI')}</span>
             </div>
           `).join('');
         }
@@ -5550,7 +5551,7 @@ window.batchRestore = async function() {
               <div style="display:flex; align-items:center; gap:10px; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px;">
                 <span style="font-weight:800; color: var(--primary); min-width:20px;">${i + 1}</span>
                 <div style="flex:1; min-width:0;">
-                  <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
+                  <div style="font-weight:600; white-space:normal; overflow:hidden; text-overflow:ellipsis;">${n.titulo}</div>
                   <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${n.vistas?.toLocaleString() || 0} vistas</div>
                 </div>
                 ${n.distribuida ? '<span style="font-size:11px; color:var(--success); font-weight:600;">✓</span>' : '<span style="font-size:11px; color:var(--warning);">○</span>'}
@@ -5628,10 +5629,10 @@ window.batchRestore = async function() {
               return `
                 <div style="display:flex; align-items:center; gap:10px; padding:10px; background:#f8fafc; border-radius:8px; margin-bottom:8px; border-left: 3px solid ${detectadoColor};">
                   <div style="flex:1; min-width:0;">
-                    <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px;">${n.titulo}</div>
+                    <div style="font-weight:600; white-space:normal; overflow:hidden; text-overflow:ellipsis; font-size:13px;">${n.titulo}</div>
                     <div style="font-size:11px; color: var(--gray-500);">${n.categoria} · ${n.vistas?.toLocaleString() || 0} vistas · ${fechaStr}</div>
                   </div>
-                  <span style="font-size:11px; font-weight:600; color:${detectadoColor}; background:${detectadoColor}15; padding:3px 8px; border-radius:12px; white-space:nowrap;">${n.detectadoPor}</span>
+                  <span style="font-size:11px; font-weight:600; color:${detectadoColor}; background:${detectadoColor}15; padding:3px 8px; border-radius:12px; white-space:normal;">${n.detectadoPor}</span>
                 </div>
               `;
             }).join('');
@@ -6451,7 +6452,7 @@ VERIFICACIÓN FINAL
           <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
             <div style="font-size:16px;font-weight:800;color:var(--gray-300);width:20px;">${i+1}</div>
             <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
+              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
               <div style="font-size:11px;color:var(--gray-500);">${n.vistas.toLocaleString()} vistas en 24h · ${totalVistas.toLocaleString()} totales</div>
             </div>
             <div style="padding:4px 8px;background:var(--primary-50);color:var(--primary-700);border-radius:6px;font-size:11px;font-weight:700;">+${n.vistas} hoy</div>
@@ -6477,7 +6478,7 @@ VERIFICACIÓN FINAL
                 <i class="${icon}"></i>
               </div>
               <div style="flex:1;min-width:0;">
-                <div style="font-size:12px;font-weight:600;color:var(--gray-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ev.titulo || ev.slug}</div>
+                <div style="font-size:12px;font-weight:600;color:var(--gray-800);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${ev.titulo || ev.slug}</div>
                 <div style="font-size:10px;color:var(--gray-500);">Desde ${ev.source.toUpperCase()} · ${time}</div>
               </div>
             </div>
@@ -6522,7 +6523,7 @@ VERIFICACIÓN FINAL
           <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
             <div style="width:28px;height:28px;border-radius:50%;background:${i===0?'#f59e0b':i===1?'#94a3b8':i===2?'#b45309':'var(--gray-200)'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">${i+1}</div>
             <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
+              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
               <div style="font-size:11px;color:var(--gray-500);">${n.categoria} • ${n.vistas.toLocaleString()} vistas</div>
             </div>
           </div>
@@ -6554,7 +6555,7 @@ VERIFICACIÓN FINAL
             <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
               <div style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;"></div>
               <div style="flex:1;min-width:0;">
-                <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
+                <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
                 <div style="font-size:11px;color:var(--gray-500);">${f} • ${n.vistas.toLocaleString()} vistas</div>
               </div>
             </div>
@@ -6610,7 +6611,7 @@ VERIFICACIÓN FINAL
         lista.innerHTML = noticiasEnPeligro.map(n => `
           <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--gray-100);" data-id="${n.id}">
             <div style="flex: 1; min-width: 0;">
-              <div style="font-weight: 600; font-size: 13px; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <div style="font-weight: 600; font-size: 13px; color: var(--gray-900); white-space: normal; overflow: hidden; text-overflow: ellipsis;">
                 ${n.titulo || '(Sin título)'}
               </div>
               <div style="font-size: 11px; color: var(--gray-500); margin-top: 2px;">
@@ -6620,7 +6621,7 @@ VERIFICACIÓN FINAL
                 ${n.transiciones_ia > 0 ? ` • <span style="color: var(--warning);">${n.transiciones_ia} IA</span>` : ''}
               </div>
             </div>
-            <button class="btn btn-sm" onclick="corregirNoticiaIndividual('${n.id}')" style="background: var(--primary-600); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap;">
+            <button class="btn btn-sm" onclick="corregirNoticiaIndividual('${n.id}')" style="background: var(--primary-600); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: normal;">
               <i class="fas fa-wrench"></i> Corregir
             </button>
           </div>
@@ -7752,7 +7753,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-link" style="margin-right:6px;color:#d97706;"></i>Links Internos</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">' + (data.linksInternos || 0) + '% con links. Meta: 100%.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:normal;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
           html += '</div>';
         }
 
@@ -7761,7 +7762,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-bold" style="margin-right:6px;color:#d97706;"></i>Negritas (Strong)</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">Promedio: ' + (data.promedioStrong || 0) + '/15. Meta: 15+ por noticia.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:normal;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
           html += '</div>';
         }
 
@@ -7771,7 +7772,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#7f1d1d;"><i class="fas fa-file-alt" style="margin-right:6px;color:#dc2626;"></i>Thin Content</p>';
           html += '<p style="margin:0;font-size:12px;color:#991b1b;">' + (data.thinContent?.count || 0) + ' artículos con &lt;350 palabras. Esto bloquea AdSense y penaliza SEO.</p></div>';
-          html += '<button class="btn btn-primary" id="btnExpandirThin" onclick="ejecutarExpandirThinContent()" style="white-space:nowrap;flex-shrink:0;background:#dc2626;border-color:#dc2626;"><i class="fas fa-expand"></i> Expandir Thin Content</button>';
+          html += '<button class="btn btn-primary" id="btnExpandirThin" onclick="ejecutarExpandirThinContent()" style="white-space:normal;flex-shrink:0;background:#dc2626;border-color:#dc2626;"><i class="fas fa-expand"></i> Expandir Thin Content</button>';
           html += '</div>';
           if (data.thinContent?.detalles && data.thinContent.detalles.length > 0) {
             html += '<div style="margin-top:8px;padding:8px 12px;background:#fff;border-radius:8px;font-size:12px;">';
@@ -7842,7 +7843,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;">';
           html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">';
           html += '<p style="margin:0;font-size:13px;font-weight:600;color:#78350f;line-height:1.4;">' + p + '</p>';
-          html += '<span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;">' + match.impacto + '</span></div>';
+          html += '<span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:normal;flex-shrink:0;">' + match.impacto + '</span></div>';
           html += '<p style="margin:8px 0 0;font-size:12px;color:#92400e;line-height:1.5;"><i class="fas fa-arrow-right" style="margin-right:6px;color:#d97706;"></i><strong>Acción:</strong> ' + match.accion + '</p>';
           html += '</div></div>';
         });
@@ -8222,14 +8223,14 @@ VERIFICACIÓN FINAL
             const esKeep = idx === 0;
             html += `<div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; margin-bottom:6px; background:${esKeep ? '#dcfce7' : '#fff'}; border:1px solid ${esKeep ? '#86efac' : '#fecaca'};">`;
             html += `<div style="flex:1; min-width:0;">`;
-            html += `<div style="font-size:13px; font-weight:600; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${it.titulo}</div>`;
-            html += `<div style="font-size:11px; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">/${it.slug}${it.sufijo ? ' <span style="color:#dc2626;">(sufijo aleatorio)</span>' : ''}</div>`;
+            html += `<div style="font-size:13px; font-weight:600; color:#111827; white-space:normal; overflow:hidden; text-overflow:ellipsis;">${it.titulo}</div>`;
+            html += `<div style="font-size:11px; color:#6b7280; white-space:normal; overflow:hidden; text-overflow:ellipsis;">/${it.slug}${it.sufijo ? ' <span style="color:#dc2626;">(sufijo aleatorio)</span>' : ''}</div>`;
             html += `<div style="font-size:11px; color:#9333ea; font-weight:600;">${it.vistas} vistas</div>`;
             html += `</div>`;
             if (esKeep) {
-              html += `<span style="background:#16a34a; color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; white-space:nowrap;"><i class="fas fa-check"></i> CONSERVAR</span>`;
+              html += `<span style="background:#16a34a; color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; white-space:normal;"><i class="fas fa-check"></i> CONSERVAR</span>`;
             } else {
-              html += `<button onclick="eliminarDuplicado('${it.id}', this)" style="background:#dc2626; color:#fff; border:none; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; cursor:pointer; white-space:nowrap;"><i class="fas fa-trash"></i> Borrar</button>`;
+              html += `<button onclick="eliminarDuplicado('${it.id}', this)" style="background:#dc2626; color:#fff; border:none; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; cursor:pointer; white-space:normal;"><i class="fas fa-trash"></i> Borrar</button>`;
             }
             html += `<a href="https://nicaraguainformate.com/noticias/${it.slug}" target="_blank" rel="noopener" style="color:#6b7280; font-size:13px; padding:0 4px;" title="Ver noticia"><i class="fas fa-external-link-alt"></i></a>`;
             html += `</div>`;

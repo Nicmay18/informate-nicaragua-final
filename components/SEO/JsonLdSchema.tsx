@@ -9,6 +9,7 @@
  */
 
 import type { Noticia } from '@/lib/types';
+import { getCspNonce } from '@/lib/nonce';
 
 // ─── Helpers de sanitización robusta ───
 
@@ -37,7 +38,8 @@ interface JsonLdSchemaProps {
 
 // ─── Componente ───
 
-export default function JsonLdSchema({ article, url, readingTime: _readingTime = 1 }: JsonLdSchemaProps) {
+export default async function JsonLdSchema({ article, url, readingTime: _readingTime = 1 }: JsonLdSchemaProps) {
+  const nonce = await getCspNonce();
   const BASE = 'https://nicaraguainformate.com';
 
   // Keywords del artículo
@@ -219,6 +221,7 @@ export default function JsonLdSchema({ article, url, readingTime: _readingTime =
         <script
           key={idx}
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}

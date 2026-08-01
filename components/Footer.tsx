@@ -102,6 +102,7 @@ export default function Footer() {
           <ul className="ni-footer__links">
             <li><NoPrefetchLink href="/nosotros">Quiénes somos</NoPrefetchLink></li>
             <li><NoPrefetchLink href="/contacto">Contacto</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/metodologia-editorial">Metodología Editorial</NoPrefetchLink></li>
             <li><NoPrefetchLink href="/politica-editorial">Política Editorial</NoPrefetchLink></li>
             <li><NoPrefetchLink href="/publicidad">Publicidad</NoPrefetchLink></li>
           </ul>

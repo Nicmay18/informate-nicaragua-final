@@ -117,7 +117,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
   }
 
   const hero = dist.heroNoticias[0];
-  const heroImg = hero ? getHeroImageUrl(hero.imagen, 800) : FALLBACK_IMAGE;
+  const heroImg = hero ? getHeroImageUrl(hero.imagen, 1200) : FALLBACK_IMAGE;
 
   return (
     <div className="rd-home">
@@ -161,7 +161,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
                   alt={hero.titulo}
                   fill
                   priority
-                  sizes="(max-width: 880px) 100vw, 65vw"
+                  sizes="(max-width: 1200px) 100vw, 1200px"
                   style={{ objectFit: 'cover' }}
                 />
                 {hero.pieFoto && <span className="rd-photo-credit">{hero.pieFoto}</span>}

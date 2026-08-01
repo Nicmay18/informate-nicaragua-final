@@ -6,12 +6,13 @@ import type { Metadata } from 'next';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
+import { getCspNonce } from '@/lib/nonce';
 
 // ============================================================================
-// ISR: Home regenerado cada 1 minuto para que noticias nuevas aparezcan rápido.
+// ISR: Home regenerado cada 5 minutos para que noticias nuevas aparezcan rápido.
 // Reducción de consumo: ~99% menos lecturas vs force-dynamic.
 // ============================================================================
-export const revalidate = 1; // 1 segundo para máxima frescura
+export const revalidate = 300; // 5 minutos para un medio de noticias
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
@@ -87,11 +88,14 @@ export default async function HomePage() {
       }
     : null;
 
+  const nonce = await getCspNonce();
+
   return (
     <>
       {homeItemList && (
         <script
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}

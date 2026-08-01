@@ -1,4 +1,5 @@
-﻿import type { Metadata, Viewport } from 'next';
+﻿/* eslint-disable @next/next/no-page-custom-font */
+import type { Metadata, Viewport } from 'next';
 import { Inter, Merriweather } from 'next/font/google';
 // import localFont from 'next/font/local'; // Descomenta cuando agregues los archivos .woff2
 import './styles/globals.css';
@@ -19,6 +20,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
 import { criticalCss } from '@/lib/critical-css';
+import { getCspNonce } from '@/lib/nonce';
 import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: true });
@@ -133,7 +135,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const nonce = await getCspNonce();
   return (
     <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
       <head>
@@ -156,13 +159,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
-        <style dangerouslySetInnerHTML={{ __html: criticalCss }} />
+        <style nonce={nonce} dangerouslySetInnerHTML={{ __html: criticalCss }} />
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit */}
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         <link rel="alternate" type="application/feed+json" title="JSON Feed Nicaragua Informate" href="https://nicaraguainformate.com/feed.json" />
         {/* JSON-LD escapado para prevenir cierre prematuro de script */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildOrganizationJsonLdEnhanced()) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
+        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildOrganizationJsonLdEnhanced()) }} />
+        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       </head>
       <body suppressHydrationWarning className="ni-body">
         <a href="#main-content" className="skip-to-content">Saltar al contenido principal</a>

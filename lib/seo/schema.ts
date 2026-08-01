@@ -5,6 +5,8 @@
 
 import type { Noticia } from '../types';
 import { AUTHORS } from '../authors';
+import { normalizeEditorialTitle } from '../formateo';
+import { getHeroImageUrl } from '../image-utils';
 
 /** Ensure image URLs are absolute for Google Rich Snippets */
 function toAbsoluteUrl(url?: string): string {
@@ -39,12 +41,12 @@ export function buildNewsArticleJsonLdEnhanced(
   const authorUrl = knownAuthor?.slug
     ? `https://nicaraguainformate.com/autor/${knownAuthor.slug}`
     : 'https://nicaraguainformate.com/nosotros';
-  const absoluteImageUrl = toAbsoluteUrl(article.imagen);
+  const absoluteImageUrl = toAbsoluteUrl(getHeroImageUrl(article.imagen, 1200) || article.imagen);
 
   return {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    headline: article.titulo,
+    headline: normalizeEditorialTitle(article.titulo),
     description: article.resumen,
     image: [
       // Variante nativa / landscape (16:9 aprox)
@@ -274,7 +276,7 @@ export function buildBreadcrumbJsonLdEnhanced(
 
   if (slug && articleTitle) {
     items.push({
-      name: articleTitle,
+      name: normalizeEditorialTitle(articleTitle),
       item: `${baseUrl}/noticias/${slug}`,
     });
   }

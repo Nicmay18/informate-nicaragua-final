@@ -1,6 +1,6 @@
 import { type Noticia, FALLBACK_IMAGE } from './types';
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
-import { capitalizeFirst } from './formateo';
+import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
 
@@ -110,7 +110,7 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
   return {
     id: d.id,
     slug: data.slug || d.id,
-    titulo: capitalizeFirst(data.titulo || ''),
+    titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
     resumen: data.resumen || '',
     contenido: data.contenido,
     categoria: data.categoria || 'Actualidad',
@@ -171,7 +171,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 const _cachedGetNews = unstable_cache(
   async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
   ['noticias-list'],
-  { revalidate: 1, tags: ['noticias'] }
+  { revalidate: 300, tags: ['noticias'] } // 5 minutos para noticias nuevas sin saturar Firebase
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -192,7 +192,7 @@ const _cachedGetByCategory = unstable_cache(
     }
   },
   ['noticias-cat'],
-  { revalidate: 60, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] } // 1 hora, las categorías cambian poco
 );
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -265,7 +265,7 @@ export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
       const doc = snap.docs[0];
       const data = doc.data() as FirestoreNoticiaData;
       const slug = data.slug || doc.id;
-      const titulo = capitalizeFirst(data.titulo || '');
+      const titulo = normalizeEditorialTitle(capitalizeFirst(data.titulo || ''));
       const contenido = data.contenido || '';
       if (!slug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
         logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });

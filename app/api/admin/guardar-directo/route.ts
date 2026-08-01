@@ -4,6 +4,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
+import { normalizeEditorialTitle } from '@/lib/formateo';
 
 export const maxDuration = 30;
 
@@ -75,7 +76,8 @@ export async function POST(request: NextRequest) {
     const meni = await runMeniAsync(noticiaInput, { db, skipEditorBrain: true });
 
     // Generar metadata si falta
-    const finalTitulo = meni.articulo?.titulo || titulo.trim();
+    // El usuario edita el título; no lo reemplazamos por el título generado por MENI
+    const finalTitulo = normalizeEditorialTitle(titulo.trim());
     const finalContenido = meni.articulo?.contenido || contenido.trim();
     const finalResumen = meni.articulo?.resumen || resumen?.trim() || meni.seo.metaDescripcion;
     const finalSlug = body.slug || meni.articulo?.slug || '';

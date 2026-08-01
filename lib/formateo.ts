@@ -163,3 +163,12 @@ export function capitalizeFirst(str: string): string {
   if (!str || str.length === 0) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+/** Limpia sufijos indeseados que el panel le agrega a los títulos */
+export function normalizeEditorialTitle(title: string): string {
+  if (!title) return title;
+  return title
+    .replace(/\s*-\s*Managua\s*$/i, '')
+    .replace(/\s*-\s*[A-Z]\s*$/i, '')
+    .trim();
+}

@@ -10,11 +10,13 @@ import {
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
+import { normalizeEditorialTitle } from '@/lib/formateo';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { logger } from '@/lib/logger';
+import { getCspNonce } from '@/lib/nonce';
 import { unstable_cache } from 'next/cache';
 
-export const revalidate = 3600;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
@@ -37,7 +39,7 @@ function toNoticiaTipo(value: string): NoticiaTipo {
 const getCachedNewsBySlug = unstable_cache(
   async (slug: string) => getNewsBySlug(slug),
   ['noticia-by-slug'],
-  { revalidate: 3600, tags: ['noticias'] }
+  { revalidate: 300, tags: ['noticias'] }
 );
 
 const getCachedRelated = unstable_cache(
@@ -95,7 +97,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     const shouldNoindex = !!noticia.noindex;
-    const socialTitle = noticia.titulo || finalTitle;
+    const socialTitle = normalizeEditorialTitle(noticia.titulo) || finalTitle;
 
     const absoluteImage = noticia.imagen
       ? (noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`)
@@ -186,12 +188,14 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
 
   const faqSchema = generarFaqSchema(noticia.contenido || '', noticia.resumen);
 
+  const nonce = await getCspNonce();
+
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
       {faqSchema && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
+        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
       )}
       <ArticlePage noticia={noticia} related={related} />
     </>
