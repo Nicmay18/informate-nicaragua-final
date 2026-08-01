@@ -18,7 +18,6 @@ const eslintConfig = [
       'node_modules/**',
       '**/*.js',
       'revisadas/**',
-      'scripts/archive/**',
       'temp/**',
     ],
   },
