@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -24,7 +25,7 @@ function initFirebase() {
 async function main() {
   const db = initFirebase();
   // Buscar noticias con "incendio" y "oriental" o "emanuel"
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const docs = [];
   snap.forEach(d => docs.push({ id: d.id, ...d.data() }));
 

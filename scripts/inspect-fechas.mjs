@@ -3,6 +3,7 @@
  */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,7 +15,7 @@ initializeApp({ credential: cert(serviceAccount) });
 const db = getFirestore();
 
 async function inspect() {
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(5).get();
+  const snap = await getCachedNoticias(db);
   
   snap.docs.forEach((doc, i) => {
     const data = doc.data();
@@ -32,7 +33,7 @@ async function inspect() {
 
   // También ver uno sin orderBy
   console.log('\n=== Sin orderBy ===');
-  const snap2 = await db.collection('noticias').get();
+  const snap2 = await getCachedNoticias(db);
   let count = 0;
   snap2.docs.forEach(doc => {
     const fecha = doc.data().fecha;

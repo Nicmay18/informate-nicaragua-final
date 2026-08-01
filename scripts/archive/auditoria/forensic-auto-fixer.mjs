@@ -6,6 +6,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 
 config({ path: './.env.local' });
@@ -64,7 +65,7 @@ async function fixForensic() {
 
   // 2 y 3. Meta Descripciones y H2 automáticos
   console.log('\n2 y 3. Analizando resto de noticias para Meta Desc y H2...');
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   let metaFixed = 0;
   let h2Fixed = 0;
 

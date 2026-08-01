@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
@@ -38,7 +39,7 @@ async function main() {
     process.exit(1);
   }
   
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const doc = snap.docs.find(d => {
     const t = d.data().titulo || '';
     return t.includes('Xilo') && t.includes('nadaba');

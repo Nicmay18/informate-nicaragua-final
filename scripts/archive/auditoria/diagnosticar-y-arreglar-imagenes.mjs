@@ -8,6 +8,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
 
@@ -58,7 +59,7 @@ async function main() {
   console.log('  DIAGNÓSTICO Y ARREGLO DE IMÁGENES' + (DRY_RUN ? ' [DRY-RUN]' : ''));
   console.log('══════════════════════════════════════════════════════════\n');
 
-  const snap = await db.collection('noticias').limit(2000).get();
+  const snap = await getCachedNoticias(db);
   console.log(`Total noticias: ${snap.size}\n`);
 
   let conImagen = 0;

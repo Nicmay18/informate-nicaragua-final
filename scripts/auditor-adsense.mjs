@@ -14,6 +14,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { writeFileSync, mkdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -128,7 +129,7 @@ function estado(bool) {
 async function auditar() {
   console.log('🔍 AUDITOR ADSENSE — Evaluando noticias en Firestore...\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const resultados = [];
 
   for (const doc of snapshot.docs) {

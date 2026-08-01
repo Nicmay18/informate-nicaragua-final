@@ -9,6 +9,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -48,7 +49,7 @@ async function main() {
   initializeApp({ credential: cert(serviceAccount), projectId: serviceAccount.project_id });
   const db = getFirestore();
 
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   console.log(`📊 Total de noticias en Firestore: ${snapshot.size}\n`);
 
   const thinArticles = [];

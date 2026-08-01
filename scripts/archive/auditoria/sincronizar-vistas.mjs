@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(
@@ -12,7 +13,7 @@ async function main() {
   console.log('🔄 Sincronizando vistas de colección views → noticias.vistas\n');
 
   const viewsSnap = await db.collection('views').get();
-  const noticiasSnap = await db.collection('noticias').get();
+  const noticiasSnap = await getCachedNoticias(db);
 
   // Crear mapa slug → vistas de views
   const viewsMap = new Map();

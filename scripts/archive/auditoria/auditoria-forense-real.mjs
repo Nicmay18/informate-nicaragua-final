@@ -5,6 +5,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
 
@@ -72,7 +73,7 @@ function analizar8Criterios(n) {
 
 async function main() {
   console.log('🕵️‍♂️ INICIANDO AUDITORÍA FORENSE DE DATOS...\n');
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const total = snap.size;
   console.log(`Analizando ${total} documentos...\n`);
 

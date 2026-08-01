@@ -11,6 +11,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { config } from 'dotenv';
@@ -120,7 +121,7 @@ function generarTituloOptimizado(tituloOriginal, categoria, lead) {
 async function generarPropuestas() {
   console.log('🔧 Generando propuestas de títulos optimizados...\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const propuestas = [];
 
   for (const doc of snapshot.docs) {

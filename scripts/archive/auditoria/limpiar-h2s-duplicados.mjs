@@ -5,6 +5,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(
@@ -101,7 +102,7 @@ async function limpiarNoticia(docId) {
 
 async function main() {
   // Buscar TODAS las noticias, no solo las publicadas
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   const afectadas = [];
   
   for (const doc of snapshot.docs) {

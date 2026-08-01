@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -111,7 +112,7 @@ async function findRelatedNoticia(db, categoria, excludeId, fechaLimite) {
 async function main() {
   console.log('Conectando a Firestore...');
   
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   console.log(`Total noticias: ${snapshot.size}\n`);
   
   const noticiasSinLinks = [];

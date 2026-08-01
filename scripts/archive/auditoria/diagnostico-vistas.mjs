@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(
@@ -22,7 +23,7 @@ async function main() {
   console.log('Total count en views:', totalViewsCount);
 
   // 2. Verificar campo vistas en noticias
-  const noticiasSnap = await db.collection('noticias').get();
+  const noticiasSnap = await getCachedNoticias(db);
   console.log('\nNoticias totales:', noticiasSnap.size);
 
   let conVistas = 0;

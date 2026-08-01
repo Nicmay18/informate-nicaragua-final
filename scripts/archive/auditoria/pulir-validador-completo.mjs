@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -125,7 +126,7 @@ function limpiarContenidoORO(contenido) {
 
 async function main() {
   const db = initFirebase();
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   
   // IDs o títulos exactos de las 19 noticias que el usuario pasó
   const notasAProcesar = [

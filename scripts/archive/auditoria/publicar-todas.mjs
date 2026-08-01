@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 function initFirebase() {
@@ -19,7 +20,7 @@ function initFirebase() {
 
 const db = initFirebase();
 // Obtener TODAS y filtrar las que no son 'publicado'
-const snap = await db.collection('noticias').get();
+const snap = await getCachedNoticias(db);
 const sinPublicar = [];
 snap.forEach(d => {
   const est = d.data().estado;

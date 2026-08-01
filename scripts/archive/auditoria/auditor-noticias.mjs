@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { writeFileSync, readFileSync } from 'fs';
 
 // ═══════════════════════════════════════════════════════════════
@@ -234,7 +235,7 @@ function auditarNoticia(texto, titulo = 'Sin título') {
 
 async function main() {
   console.log('🔍 Cargando noticias desde Firebase...');
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   console.log(`📰 Encontradas ${snapshot.size} noticias\n`);
 
   const resultados = [];

@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -33,7 +34,7 @@ async function main() {
   console.log(`Rango: ${INICIO.slice(0,10)} → ${HOY.slice(0,10)}`);
   console.log('==========================================\n');
 
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   const candidatas = [];
   const conNoindexAhora = [];
   const antesDel12Jun = [];

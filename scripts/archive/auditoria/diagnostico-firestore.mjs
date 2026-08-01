@@ -10,6 +10,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -40,7 +41,7 @@ function contarPalabras(texto) {
 async function diagnosticar() {
   console.log('🔍 Escaneando noticias en Firestore...\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const noticias = [];
 
   for (const doc of snapshot.docs) {

@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 
@@ -28,7 +29,7 @@ function initDb() {
 const db = initDb();
 
 async function main() {
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   
   let bonanzaFirestore = null;
   let bonanzaId = null;

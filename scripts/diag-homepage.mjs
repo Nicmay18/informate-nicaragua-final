@@ -4,6 +4,7 @@
  */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -71,7 +72,7 @@ async function main() {
 
   // 2. Contar noticias SIN fecha (field missing o null)
   console.log('\n\n--- Noticias sin campo fecha ---');
-  const allSnap = await db.collection('noticias').limit(500).get();
+  const allSnap = await getCachedNoticias(db);
   let sinFecha = 0;
   let sinFechaActualizacion = 0;
   let borradores = 0;

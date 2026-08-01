@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 
@@ -110,7 +111,7 @@ async function checkUrl(slug) {
 // ============================================================================
 async function runAudit() {
   console.log('[AdSense Audit] Leyendo noticias de Firestore...');
-  const snap = await db.collection('noticias').limit(250).get();
+  const snap = await getCachedNoticias(db);
   const noticias = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   console.log(`[AdSense Audit] ${noticias.length} noticias encontradas`);

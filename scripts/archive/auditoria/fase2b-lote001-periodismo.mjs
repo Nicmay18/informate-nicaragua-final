@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import fs from 'fs';
 
 const sa = JSON.parse(fs.readFileSync('scripts/firebase-admin-key.json'));
@@ -210,7 +211,7 @@ function expandirEspectaculos(html, titulo) {
 // ========== PROCESO PRINCIPAL ==========
 
 async function main() {
-  const snap = await db.collection('noticias').orderBy('fecha').get();
+  const snap = await getCachedNoticias(db);
   const noticias = [];
   snap.forEach(d => {
     const data = d.data();

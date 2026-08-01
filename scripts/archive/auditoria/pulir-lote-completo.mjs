@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -119,7 +120,7 @@ function validarORO(contenido) {
 
 async function main() {
   const db = initFirebase();
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   
   // Buscar TODAS las noticias del lote 8 por palabras clave del título
   const keywords = [

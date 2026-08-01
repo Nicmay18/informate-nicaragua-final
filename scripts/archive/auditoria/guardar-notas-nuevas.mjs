@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { writeFileSync, readFileSync } from 'fs';
 
@@ -29,7 +30,7 @@ const db = initDb();
 
 async function main() {
   const backup = JSON.parse(readFileSync('e:/PROYECTO/informate-nicaragua-final/firestore-current-backup-1781106719360.json', 'utf8'));
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   
   const notasNuevas = [];
   

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 function initFirebase() {
@@ -31,7 +32,7 @@ const snap = await db.collection('noticias')
 
 if (snap.empty) {
   // Buscar por título
-  const snap2 = await db.collection('noticias').get();
+  const snap2 = await getCachedNoticias(db);
   let found = null;
   snap2.forEach(d => {
     const t = d.data().titulo || '';

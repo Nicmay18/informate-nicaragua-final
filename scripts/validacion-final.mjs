@@ -7,6 +7,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -34,7 +35,7 @@ async function main() {
   initializeApp({ credential: cert(serviceAccount) });
   const db = getFirestore();
 
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   const docs = snapshot.docs.map((d) => ({ id: d.id, data: d.data() }));
 
   // 1. Thin content (<400 palabras)

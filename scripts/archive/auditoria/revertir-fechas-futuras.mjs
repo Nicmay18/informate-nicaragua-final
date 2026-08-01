@@ -3,6 +3,7 @@
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -141,7 +142,7 @@ function corregirFechas(contenido, titulo) {
 
 async function main() {
   const db = initFirebase();
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
 
   let corregidas = 0;
   let sinCambios = 0;

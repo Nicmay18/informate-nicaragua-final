@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(
@@ -9,7 +10,7 @@ initializeApp({ credential: cert(serviceAccount) });
 const db = getFirestore();
 
 async function verificar() {
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   let conH2Dup = 0;
   let total = 0;
   

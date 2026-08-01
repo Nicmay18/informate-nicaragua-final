@@ -4,6 +4,7 @@
  */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -21,7 +22,7 @@ const db = getFirestore();
 async function main() {
   console.log('\n=== MIGRACIÓN: fechaActualizacion faltante ===\n');
 
-  const snap = await db.collection('noticias').limit(500).get();
+  const snap = await getCachedNoticias(db);
   const sinFechaAct = [];
 
   snap.docs.forEach(d => {

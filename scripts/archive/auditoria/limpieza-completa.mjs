@@ -4,6 +4,7 @@
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -114,7 +115,7 @@ async function main() {
   const db = initFirebase();
   
   // Obtener TODAS las noticias (sin limit)
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snap = await getCachedNoticias(db);
   console.log(`Total noticias encontradas: ${snap.docs.length}\n`);
 
   let modificadas = 0;

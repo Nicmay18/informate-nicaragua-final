@@ -3,6 +3,7 @@
  */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,7 +16,7 @@ initializeApp({ credential: cert(serviceAccount) });
 const db = getFirestore();
 
 async function diag() {
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(15).get();
+  const snap = await getCachedNoticias(db);
   
   console.log('Últimas 15 noticias (orderBy fecha desc):\n');
   
@@ -44,7 +45,7 @@ async function diag() {
 
   // También buscar sin orderBy para ver si hay documentos que orderBy excluye
   console.log('\n--- Sin orderBy (primeros 5) ---');
-  const snap2 = await db.collection('noticias').limit(5).get();
+  const snap2 = await getCachedNoticias(db);
   snap2.docs.forEach((doc, i) => {
     const data = doc.data();
     const fecha = data.fecha;
@@ -58,7 +59,7 @@ async function diag() {
 
   // Contar tipos de fecha
   console.log('\n--- Distribución de tipos de fecha ---');
-  const allSnap = await db.collection('noticias').get();
+  const allSnap = await getCachedNoticias(db);
   const tipos = {};
   allSnap.docs.forEach(doc => {
     const fecha = doc.data().fecha;

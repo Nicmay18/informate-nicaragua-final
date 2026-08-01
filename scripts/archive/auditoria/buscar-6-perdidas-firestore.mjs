@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 
 config({ path: 'e:/PROYECTO/informate-nicaragua-final/.env.local' });
@@ -40,7 +41,7 @@ async function main() {
   console.log('  BÚSQUEDA DE 6 NOTICIAS PERDIDAS EN FIRESTORE');
   console.log('══════════════════════════════════════════════════════════════════\n');
 
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const todas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   console.log(`Total noticias en Firestore: ${todas.length}\n`);

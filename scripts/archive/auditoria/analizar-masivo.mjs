@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(
@@ -36,7 +37,7 @@ async function analizarNoticia(data) {
 }
 
 async function main() {
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   const noticias = [];
   for (const doc of snapshot.docs) {
     noticias.push({ id: doc.id, data: doc.data() });

@@ -11,6 +11,7 @@
  */
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -24,7 +25,7 @@ const db = getFirestore();
 async function fixFechas() {
   console.log('🔍 Escaneando todas las noticias...\n');
   
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   
   const toFix = [];
   const alreadyOk = [];
@@ -135,7 +136,7 @@ async function fixFechas() {
   console.log(`  📊 Total procesados: ${toFix.length + nullFechas.length}`);
   
   console.log('\n🔍 Verificando...');
-  const verifySnap = await db.collection('noticias').orderBy('fecha', 'desc').limit(5).get();
+  const verifySnap = await getCachedNoticias(db);
   console.log('Últimas 5 noticias después del fix:');
   verifySnap.docs.forEach((doc, i) => {
     const data = doc.data();

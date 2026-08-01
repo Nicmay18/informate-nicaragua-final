@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 
@@ -33,7 +34,7 @@ async function main() {
   
   console.log('Noticias en DeepSeek resultados:', resultados.length);
   
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   let restauradas = 0;
   let sinContenidoDeepSeek = 0;
   

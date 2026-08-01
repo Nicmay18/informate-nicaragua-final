@@ -6,6 +6,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { config } from 'dotenv';
@@ -67,7 +68,7 @@ function detectarTransicionesIA(texto) {
 async function generarResumen() {
   console.log('📋 GENERANDO RESUMEN DIARIO DE TAREAS...\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const noticias = [];
 
   for (const doc of snapshot.docs) {

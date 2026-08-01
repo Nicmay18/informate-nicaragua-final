@@ -5,6 +5,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 function getAdminApp() {
@@ -94,7 +95,7 @@ function calcularScore(noticia) {
 async function main() {
   console.log('🔍 Buscando noticias en peligro...\n');
   
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const noticias = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
   
   const analizadas = noticias.map(n => {

@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import fs from 'fs';
 
 const sa = JSON.parse(fs.readFileSync('scripts/firebase-admin-key.json'));
@@ -121,7 +122,7 @@ function limpiarRelleno(html) {
 }
 
 (async () => {
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snap = await getCachedNoticias(db);
 
   // BACKUP antes de modificar (NO sobreescribir el original si ya existe)
   const backupFile = `backup-pre-limpieza-${new Date().toISOString().split('T')[0]}.json`;

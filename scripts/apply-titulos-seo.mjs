@@ -7,6 +7,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { config } from 'dotenv';
@@ -90,7 +91,7 @@ async function main() {
     }
   }
 
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const docs = snap.docs.map(doc => ({ ref: doc.ref, data: doc.data() }));
 
   let actualizados = 0;

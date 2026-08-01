@@ -62,11 +62,10 @@ const evaluarSEO: Evaluator = (ev) => {
       .slice(0, 5);
     if (autoKeywords.length > 0) {
       signals.push(`${autoKeywords.length} keywords auto-generadas del título`);
-    } else {
-      warnings.push('No se definieron keywords');
-      tracer.sub(2, warnings[warnings.length - 1], 'FALTAN_KEYWORDS');
-      recommendations.push('Definir palabras clave relevantes para la nota');
     }
+    warnings.push('No se definieron keywords');
+    tracer.sub(2, warnings[warnings.length - 1], 'FALTAN_KEYWORDS');
+    recommendations.push('Definir palabras clave relevantes para la nota');
   }
 
   return {

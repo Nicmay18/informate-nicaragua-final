@@ -5,6 +5,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 
 config({ path: './.env.local' });
@@ -32,7 +33,7 @@ const db = initDb();
 
 async function unifyLevels() {
   console.log('🧹 UNIFICANDO NIVELES EN FIRESTORE...\n');
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   let count = 0;
 
   for (const doc of snap.docs) {

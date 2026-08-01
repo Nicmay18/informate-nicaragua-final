@@ -4,6 +4,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 config({ path: './.env.local' });
 
@@ -24,7 +25,7 @@ async function main() {
   const db = initDb();
   console.log('🔍 VERIFICANDO FORMATO DE FECHAS\n');
   
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(10).get();
+  const snap = await getCachedNoticias(db);
   
   for (const doc of snap.docs) {
     const d = doc.data();

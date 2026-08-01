@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 
 const serviceAccount = JSON.parse(readFileSync('g:\\\\RESPALDO\\\\informate-nicaragua-final\\\\informate-instant-nicaragua-firebase-adminsdk-fbsvc-44df69aec9.json', 'utf8'));
@@ -8,7 +9,7 @@ initializeApp({ credential: cert(serviceAccount), projectId: serviceAccount.proj
 const db = getFirestore();
 
 async function main() {
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(250).get();
+  const snap = await getCachedNoticias(db);
   const criticas = [];
   
   snap.forEach(doc => {

@@ -9,6 +9,7 @@ import { initializeApp, cert, getApps } from 'firebase-admin/app';
 
 dotenv.config({ path: '.env.local' });
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -143,7 +144,7 @@ function analizarNoticia(n) {
 async function main() {
   console.log('🔍 Iniciando diagnóstico AdSense Forense...');
   const db = initFirebase();
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const docs = [];
   snap.forEach(d => docs.push({ id: d.id, ...d.data() }));
 

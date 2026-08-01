@@ -9,6 +9,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore, WriteBatch } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { createInterface } from 'readline';
@@ -128,7 +129,7 @@ async function main() {
   console.log('🔧 LIMPIAR TÍTULOS — Modo preview (dry-run)\n');
   console.log('Rango objetivo: 55-65 caracteres\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const cambios = [];
 
   for (const doc of snapshot.docs) {

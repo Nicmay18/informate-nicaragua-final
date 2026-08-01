@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -56,7 +57,7 @@ async function main() {
   console.log('   17 de octubre → 13 de junio');
 
   // 2. Buscar otras noticias con fechas futuras (julio-diciembre 2026 cuando estamos en junio)
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
   let fechasRaras = 0;
 
   snapshot.forEach(d => {

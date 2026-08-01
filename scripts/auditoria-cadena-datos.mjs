@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -18,7 +19,7 @@ async function main() {
   console.log('AUDITORÍA FORENSE — Cadena de datos');
   console.log('==========================================\n');
 
-  const snapshot = await db.collection('noticias').get();
+  const snapshot = await getCachedNoticias(db);
 
   // ── FUENTE DE VERDAD ──
   let conMetaDescription = 0;

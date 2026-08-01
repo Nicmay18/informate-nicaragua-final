@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -25,7 +26,7 @@ function clasificarProblema(titulo) {
 
 async function main() {
   console.log('🔍 Extrayendo títulos problemáticos de Firestore...\n');
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snapshot = await getCachedNoticias(db);
   const problematicos = [];
   const total = snapshot.size;
 

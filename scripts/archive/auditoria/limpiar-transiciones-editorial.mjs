@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import fs from 'fs';
 
 const sa = JSON.parse(fs.readFileSync('scripts/firebase-admin-key.json'));
@@ -87,7 +88,7 @@ function limpiarEditorial(html) {
 }
 
 (async () => {
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').get();
+  const snap = await getCachedNoticias(db);
 
   let modificadas = 0;
   for (const doc of snap.docs) {

@@ -4,6 +4,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 config({ path: './.env.local' });
 
@@ -26,7 +27,7 @@ async function main() {
   
   // Obtenemos las últimas 50 noticias por orden de Firestore (sin sort por fecha)
   // O mejor, intentamos ordenar por fechaActualizacion si existe
-  const snap = await db.collection('noticias').limit(100).get();
+  const snap = await getCachedNoticias(db);
   
   console.log(`Analizando ${snap.size} documentos...\n`);
   

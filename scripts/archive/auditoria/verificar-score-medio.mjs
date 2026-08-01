@@ -1,5 +1,6 @@
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -16,7 +17,7 @@ function initFirebase() {
 
 async function main() {
   const db = initFirebase();
-  const snap = await db.collection('noticias').limit(200).get();
+  const snap = await getCachedNoticias(db);
   
   let bajas = 0;
   for (const doc of snap.docs) {

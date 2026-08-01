@@ -14,6 +14,7 @@
  */
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 
@@ -70,7 +71,7 @@ async function main() {
 
   // 1. Cargar Firestore
   console.log('Cargando noticias de Firestore...');
-  const snap = await db.collection('noticias').limit(2000).get();
+  const snap = await getCachedNoticias(db);
   const firestoreDocs = snap.docs.map(doc => ({
     firestoreId: doc.id,
     slug: doc.data().slug,

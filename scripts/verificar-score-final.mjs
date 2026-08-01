@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -9,7 +10,7 @@ const sa = JSON.parse(readFileSync(join(__dirname, '..', '..', 'informate-instan
 initializeApp({ credential: cert(sa) });
 const db = getFirestore();
 
-const snap = await db.collection('noticias').get();
+const snap = await getCachedNoticias(db);
 const total = snap.size;
 let conLinks = 0, conFuentes = 0, titulosOpt = 0, metaOpt = 0;
 

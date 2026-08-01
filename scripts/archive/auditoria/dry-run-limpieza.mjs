@@ -5,6 +5,7 @@
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -110,7 +111,7 @@ async function main() {
   console.log('🔍 DRY-RUN: Simulando limpieza de noticias (SIN modificar Firestore)\n');
 
   const db = initFirebase();
-  const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
+  const snap = await getCachedNoticias(db);
 
   let modificadas = 0;
   let cambiosTitulo = 0;

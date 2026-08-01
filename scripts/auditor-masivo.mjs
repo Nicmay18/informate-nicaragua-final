@@ -6,6 +6,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { writeFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { config } from 'dotenv';
@@ -143,7 +144,7 @@ async function main() {
   console.log(`  MODO: ${DRY_RUN ? 'DRY-RUN (solo lectura)' : 'APLICAR CORRECCIONES'}`);
   console.log('═══════════════════════════════════════════════════════════════\n');
 
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').limit(500).get();
+  const snapshot = await getCachedNoticias(db);
   console.log(`📡 ${snapshot.docs.length} noticias encontradas\n`);
 
   const resultados = [];

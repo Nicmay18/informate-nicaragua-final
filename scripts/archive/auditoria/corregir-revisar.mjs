@@ -3,6 +3,7 @@
 
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import { readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -128,7 +129,7 @@ async function main() {
   let notasRevisar = reporte.revisar || [];
 
   if (notasRevisar.length === 0) {
-    const snapshot = await db.collection('noticias').get();
+    const snapshot = await getCachedNoticias(db);
     snapshot.forEach(doc => {
       notasRevisar.push({ id: doc.id, ...doc.data() });
     });

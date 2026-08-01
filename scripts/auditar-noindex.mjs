@@ -7,6 +7,7 @@
 
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { readFileSync, existsSync } from 'fs';
 
 function getServiceAccount() {
@@ -26,7 +27,7 @@ async function main() {
   initializeApp({ credential: cert(sa), projectId: sa.project_id });
   const db = getFirestore();
 
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   console.log(`Total noticias: ${snap.size}\n`);
 
   const noindexList = [];

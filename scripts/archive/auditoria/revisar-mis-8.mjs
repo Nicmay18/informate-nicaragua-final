@@ -1,5 +1,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../../../lib/db/cached-firestore.mjs';
 import fs from 'fs';
 const sa = JSON.parse(fs.readFileSync('scripts/firebase-admin-key.json'));
 initializeApp({ credential: cert(sa) });
@@ -50,7 +51,7 @@ const TITULOS = [
 ];
 
 (async () => {
-  const snap = await db.collection('noticias').get();
+  const snap = await getCachedNoticias(db);
   const encontradas = [];
   snap.forEach(d => {
     const data = d.data();

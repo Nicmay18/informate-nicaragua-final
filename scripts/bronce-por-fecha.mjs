@@ -5,6 +5,7 @@
 
 import { initializeApp, cert, getApps, getApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
@@ -74,7 +75,7 @@ function analizarNoticia(d) {
 }
 
 async function main() {
-  const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').limit(500).get();
+  const snapshot = await getCachedNoticias(db);
 
   // Fechas límite
   const hoy = new Date();
