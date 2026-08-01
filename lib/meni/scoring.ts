@@ -2,6 +2,13 @@ import type { MeniPrioridad, MeniCategoria } from './types';
 
 export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '90');
 
+// MENI Score V2 — desactivado por defecto. Puede cambiarse en runtime con setUseMeniScoreV2().
+export let USE_MENI_SCORE_V2 = false;
+
+export function setUseMeniScoreV2(value: boolean): void {
+  USE_MENI_SCORE_V2 = value;
+}
+
 export function computePriority(veredicto: string): MeniPrioridad {
   switch (veredicto) {
     case 'cobertura_especial':

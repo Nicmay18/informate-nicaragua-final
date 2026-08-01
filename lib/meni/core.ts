@@ -82,6 +82,15 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   logMeni('Editorial tier detected', { tier, descripcion: thresholds.descripcion });
 
   // ═══════════════════════════════════════════════════════════
+  // 2. ANÁLISIS TÉCNICO — previo al Editorial Brain para alimentar MENI Score V2
+  // SEO, EEAT, Discover, AdSense, Forense = datos de respaldo
+  // ═══════════════════════════════════════════════════════════
+  const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
+  const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
+  const categoria = normalizeCategory(rawCategory);
+  const modulo = getModule(rawCategory);
+
+  // ═══════════════════════════════════════════════════════════
   // 1. EDITORIAL BRAIN — la única fuente de verdad
   // Todo deriva de aquí: score, aprobado, estado, diagnostico, riesgo
   // ═══════════════════════════════════════════════════════════
@@ -90,20 +99,12 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     fuente: input.contenido,
     categoriaSugerida: input.categoria,
     tierThresholds: thresholds,
+    evaluacion,
     ...(editorJefe?.editorPatterns ? { editorPatterns: editorJefe.editorPatterns } : {}),
     ...(editorJefe?.portadaData ? { portadaData: editorJefe.portadaData } : {}),
     ...(editorJefe?.knowledgeQuery ? { knowledgeQuery: editorJefe.knowledgeQuery } : {}),
   });
   const editorialDna = editorialDecision.editorialDna;
-
-  // ═══════════════════════════════════════════════════════════
-  // 2. ANÁLISIS TÉCNICO — secundario, no gobierna aprobación
-  // SEO, EEAT, Discover, AdSense, Forense = datos de respaldo
-  // ═══════════════════════════════════════════════════════════
-  const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
-  const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
-  const categoria = normalizeCategory(rawCategory);
-  const modulo = getModule(rawCategory);
 
   const seo = analyzeSEO(evaluacion, input);
   const forense = analyzeForensic(evaluacion);

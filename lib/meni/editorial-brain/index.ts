@@ -13,6 +13,8 @@
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
+import { USE_MENI_SCORE_V2 } from '@/lib/meni/scoring';
+import type { EvaluacionEditorial } from '@/lib/editorial';
 import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
@@ -25,6 +27,7 @@ import { runReaderRetentionEngine } from './reader-retention-engine';
 import { runStoryCompletenessEngine } from './story-completeness-engine';
 import { runIntelligenceEngine } from '@/lib/meni/intelligence';
 import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
+import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import { runStoryPlanner } from '@/lib/meni/story-planner';
 import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { runReaderJourney } from '@/lib/meni/reader-journey';
@@ -243,12 +246,21 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   const textoCategoria = [input.titulo, input.contenido, input.resumen].filter(Boolean).join(' ');
   const evaluacionCategoria = calcularEvaluacionCategoria(categoriaForPatterns, textoCategoria);
 
-  const { score, puntosPerdidos } = calcularScoreEjecutivo(
-    acciones,
-    evaluacionCategoria.puntosPerdidos,
-    editorialDna.bloquear || tieneProblemasGraves,
-    { readerLearning, editorialContribution },
-  );
+  const { score, puntosPerdidos } = USE_MENI_SCORE_V2
+    ? calcularScoreEjecutivoV2(
+        acciones,
+        evaluacionCategoria.puntosPerdidos,
+        editorialDna.bloquear || tieneProblemasGraves,
+        { readerLearning, editorialContribution },
+        editorialDna,
+        input.evaluacion,
+      )
+    : calcularScoreEjecutivo(
+        acciones,
+        evaluacionCategoria.puntosPerdidos,
+        editorialDna.bloquear || tieneProblemasGraves,
+        { readerLearning, editorialContribution },
+      );
   const minScore = input.tierThresholds?.minAdnNI ?? 60;
 
   // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
@@ -520,6 +532,53 @@ function calcularEvaluacionCategoria(
 }
 
 export type { EditorialDecision, EditorialBrainInput, EvaluacionCategoria, LlmInstructions, PuntoPerdido } from './types';
+
+function calcularScoreEjecutivoV2(
+  acciones: string[],
+  puntosCategoria: PuntoPerdido[],
+  bloquear: boolean,
+  respuestas: { readerLearning: string; editorialContribution: string },
+  editorialDna: EditorialDnaResult,
+  evaluacion?: EvaluacionEditorial,
+): { score: number; puntosPerdidos: PuntoPerdido[] } {
+  // 1. Base con penalizaciones V1. No se vuelven a duplicar.
+  const base = calcularScoreEjecutivo(acciones, puntosCategoria, bloquear, respuestas);
+
+  // 2. Dimensiones editoriales ya calculadas por MENI.
+  const utilidad = editorialDna.selloNI.utilidad;
+  const profundidad = editorialDna.selloNI.explica;
+  const originalidad = editorialDna.selloNI.originalidad;
+  const eeat = evaluacion?.eeat?.score ?? 0;
+  const aportePropio = evaluacion?.evidence?.originality?.tieneAportePropio ? 100 : 0;
+  const adnNI = editorialDna.adnNI;
+
+  // 3. Pesos internos documentados. Los puntos perdidos ya están en base.score.
+  const W_UTILIDAD = 0.10;
+  const W_PROFUNDIDAD = 0.15;
+  const W_ORIGINALIDAD = 0.15;
+  const W_EEAT = 0.15;
+  const W_APORTE = 0.10;
+  const W_ADN = 0.35;
+  const totalDim = W_UTILIDAD + W_PROFUNDIDAD + W_ORIGINALIDAD + W_EEAT + W_APORTE + W_ADN;
+
+  const valorEditorial =
+    (utilidad * W_UTILIDAD +
+      profundidad * W_PROFUNDIDAD +
+      originalidad * W_ORIGINALIDAD +
+      eeat * W_EEAT +
+      aportePropio * W_APORTE +
+      adnNI * W_ADN) /
+    totalDim;
+
+  // 4. Blend: 40% base (penalizaciones) + 60% valor editorial.
+  const PESO_BASE = 0.40;
+  const PESO_VALOR = 0.60;
+  let score = Math.round(base.score * PESO_BASE + valorEditorial * PESO_VALOR);
+  if (bloquear) score = Math.min(score, 74);
+  score = Math.max(0, Math.min(100, score));
+
+  return { score, puntosPerdidos: base.puntosPerdidos };
+}
 
 function calcularScoreEjecutivo(
   acciones: string[],

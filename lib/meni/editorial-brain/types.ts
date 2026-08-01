@@ -14,6 +14,7 @@ import type { StoryPlan } from '@/lib/meni/story-planner/types';
 import type { AntiClickbaitResult } from '@/lib/meni/anti-clickbait/types';
 import type { ReaderJourneyResult } from '@/lib/meni/reader-journey/types';
 import type { KnowledgeQueryResult } from '@/lib/meni/knowledge-base/types';
+import type { EvaluacionEditorial } from '@/lib/editorial';
 
 /** Contexto de conocimiento histórico (desde editor-brain async) */
 export interface KnowledgeContext {
@@ -34,6 +35,8 @@ export type EditorialBrainInput = NoticiaInput & {
   categoriaSugerida?: string;
   tierThresholds?: TierThresholds;
   knowledgeContext?: KnowledgeContext;
+  // Evaluación técnica del motor editorial. Opcional; requerida para MENI Score V2.
+  evaluacion?: EvaluacionEditorial;
   // Editor Jefe — Fase 1: patrones aprendidos del editor humano
   editorPatterns?: EditorPattern[];
   // Editor Jefe — Fase 2: datos de portada para saturación
