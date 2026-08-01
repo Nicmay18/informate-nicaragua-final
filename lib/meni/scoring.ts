@@ -9,6 +9,21 @@ export function setUseMeniScoreV2(value: boolean): void {
   USE_MENI_SCORE_V2 = value;
 }
 
+// Pesos internos de MENI Score V2. Suman 1.0.
+export const MENI_V2_WEIGHTS = {
+  utilidad: 0.10,
+  profundidad: 0.20,
+  originalidad: 0.20,
+  eeat: 0.20,
+  aportePropio: 0.05,
+  adnNI: 0.25,
+} as const;
+
+export const MENI_V2_BLEND = {
+  base: 0.50,
+  valor: 0.50,
+};
+
 export function computePriority(veredicto: string): MeniPrioridad {
   switch (veredicto) {
     case 'cobertura_especial':

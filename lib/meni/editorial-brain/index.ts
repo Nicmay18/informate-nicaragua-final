@@ -13,7 +13,7 @@
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
-import { USE_MENI_SCORE_V2 } from '@/lib/meni/scoring';
+import { USE_MENI_SCORE_V2, MENI_V2_WEIGHTS, MENI_V2_BLEND } from '@/lib/meni/scoring';
 import type { EvaluacionEditorial } from '@/lib/editorial';
 import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
@@ -552,28 +552,21 @@ function calcularScoreEjecutivoV2(
   const aportePropio = evaluacion?.evidence?.originality?.tieneAportePropio ? 100 : 0;
   const adnNI = editorialDna.adnNI;
 
-  // 3. Pesos internos documentados. Los puntos perdidos ya están en base.score.
-  const W_UTILIDAD = 0.10;
-  const W_PROFUNDIDAD = 0.15;
-  const W_ORIGINALIDAD = 0.15;
-  const W_EEAT = 0.15;
-  const W_APORTE = 0.10;
-  const W_ADN = 0.35;
-  const totalDim = W_UTILIDAD + W_PROFUNDIDAD + W_ORIGINALIDAD + W_EEAT + W_APORTE + W_ADN;
+  // 3. Pesos centralizados en lib/meni/scoring.ts. Los puntos perdidos ya están en base.score.
+  const w = MENI_V2_WEIGHTS;
+  const totalDim = w.utilidad + w.profundidad + w.originalidad + w.eeat + w.aportePropio + w.adnNI;
 
   const valorEditorial =
-    (utilidad * W_UTILIDAD +
-      profundidad * W_PROFUNDIDAD +
-      originalidad * W_ORIGINALIDAD +
-      eeat * W_EEAT +
-      aportePropio * W_APORTE +
-      adnNI * W_ADN) /
+    (utilidad * w.utilidad +
+      profundidad * w.profundidad +
+      originalidad * w.originalidad +
+      eeat * w.eeat +
+      aportePropio * w.aportePropio +
+      adnNI * w.adnNI) /
     totalDim;
 
-  // 4. Blend: 40% base (penalizaciones) + 60% valor editorial.
-  const PESO_BASE = 0.40;
-  const PESO_VALOR = 0.60;
-  let score = Math.round(base.score * PESO_BASE + valorEditorial * PESO_VALOR);
+  // 4. Blend base/valor centralizado.
+  let score = Math.round(base.score * MENI_V2_BLEND.base + valorEditorial * MENI_V2_BLEND.valor);
   if (bloquear) score = Math.min(score, 74);
   score = Math.max(0, Math.min(100, score));
 
