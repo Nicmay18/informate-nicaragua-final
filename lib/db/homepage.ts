@@ -99,7 +99,7 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 }
 
 export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
-  const all = await getNews(200);
+  const all = await getNews(100);
   return all
     .filter((n) => (n.vistas ?? 0) >= 1)
     .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0))
