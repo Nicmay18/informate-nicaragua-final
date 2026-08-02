@@ -16,7 +16,7 @@ interface SidebarRedesignProps {
 }
 
 export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
-  const lecturas = diversifyNoticias(masLeidas, 5, 2);
+  const lecturas = diversifyNoticias(masLeidas, 5, 1);
 
   function timeAgo(dateString?: string) {
     const d = dateString ? new Date(dateString) : new Date();

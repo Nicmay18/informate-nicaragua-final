@@ -195,9 +195,6 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         {/* CONTENT GRID */}
         <div className="rd-content-grid">
           <div className="rd-main-col">
-            {(masLeidas.length ? masLeidas : populares).length > 0 && (
-              <SectionGrid titulo="📌 Lo más leído" slug="noticias" noticias={(masLeidas.length ? masLeidas : populares).slice(0, 3)} reverse={false} />
-            )}
             {dist.recientes.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={dist.recientes} reverse={false} />}
             {dist.nacionales.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
             {dist.internacionales.length >= 1 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
