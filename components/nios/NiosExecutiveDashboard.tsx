@@ -138,12 +138,16 @@ function StarRating({ value, max = 5 }: { value: number; max?: number }) {
 }
 
 function PriorityCard({ p }: { p: Priority }) {
+  const accent = p.stars === 5 ? '#e11d48' : p.stars === 4 ? '#ea580c' : '#0284c7';
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--ni-bg)] p-5 shadow-sm">
+    <div
+      className="rounded-2xl border border-[var(--border)] bg-[var(--ni-bg)] p-5 shadow-sm"
+      style={{ borderTop: `3px solid ${accent}` }}
+    >
       <div className="flex items-center gap-2 mb-3">
         <span
           className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-          style={{ background: p.stars === 5 ? '#fee2e2' : '#ffedd5', color: p.stars === 5 ? '#dc2626' : '#c2410c' }}
+          style={{ background: `${accent}14`, color: accent }}
         >
           {p.label}
         </span>
@@ -203,8 +207,11 @@ function CategoryBar({ item }: { item: CategoryMapItem }) {
       </div>
       <div className="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
         <div
-          className="h-full rounded-full"
-          style={{ width: `${item.bar}%`, background: levelColor(item.level) }}
+          className="h-full rounded-full transition-all"
+          style={{
+            width: `${item.bar}%`,
+            background: `linear-gradient(90deg, ${levelColor(item.level)}bb, ${levelColor(item.level)})`,
+          }}
         />
       </div>
       <div className="text-[10px] text-[var(--text-secondary)] mt-1">
@@ -327,8 +334,12 @@ function DistributionCard({ c }: { c: DistributionChannel }) {
 function Section({ title, icon: Icon, children }: { title: string; icon?: IconComponent; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <div className="flex items-center gap-2 mb-4">
-        {Icon && <Icon size={20} className="text-[var(--primary)]" />}
+      <div className="flex items-center gap-2.5 mb-4">
+        {Icon && (
+          <span className="grid place-items-center w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm shadow-blue-500/30">
+            <Icon size={17} />
+          </span>
+        )}
         <h2 className="text-lg font-bold text-[var(--text-primary)]">{title}</h2>
       </div>
       {children}
@@ -377,31 +388,28 @@ export function NiosExecutiveDashboard({ daily }: { daily: DailyEditorReport }) 
   ] as const;
 
   return (
-    <div className="max-w-[1400px] mx-auto px-5 py-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] mb-1">
-            NIOS Executive Dashboard
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            {daily.date} · {daily.publishedCount} noticias publicadas · {e.status === 'ok' ? 'Datos completos' : 'Datos parciales'}
+    <div className="nios-shell">
+      <div className="sticky top-0 z-20 -mx-6 px-6 py-3 mb-7 bg-white/80 backdrop-blur border-b border-[var(--border)] rounded-b-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)]">
+            {daily.date} · {e.status === 'ok' ? 'Datos completos' : 'Datos parciales'}
           </p>
-        </div>
-        <div className="flex gap-2">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
-                tab === t.id
-                  ? 'bg-[var(--primary)] text-white border-[var(--primary)]'
-                  : 'bg-[var(--ni-bg)] text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--primary)]'
-              }`}
-            >
-              <t.icon size={16} />
-              <span className="hidden sm:inline">{t.label}</span>
-            </button>
-          ))}
+          <div className="flex flex-wrap gap-2">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                  tab === t.id
+                    ? 'bg-[var(--primary)] text-white border-transparent'
+                    : 'bg-white text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--primary)] hover:text-[var(--primary)]'
+                }`}
+              >
+                <t.icon size={16} />
+                <span className="hidden sm:inline">{t.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -460,7 +468,7 @@ export function NiosExecutiveDashboard({ daily }: { daily: DailyEditorReport }) 
           </Section>
 
           <Section title="CEO Report" icon={Award}>
-            <div className="rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[var(--ni-bg)] to-slate-50 p-8 shadow-sm">
+            <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-indigo-50 to-white p-8 shadow-sm">
               <div className="max-w-3xl">
                 <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4">{e.ceo.headline}</h3>
                 <div className="text-5xl font-extrabold mb-6" style={{ color: e.scores.health >= 80 ? '#16a34a' : e.scores.health >= 60 ? '#ca8a04' : '#dc2626' }}>

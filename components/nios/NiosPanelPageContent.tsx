@@ -25,16 +25,31 @@ export default async function NiosPanelPageContent() {
   const [report, daily] = await Promise.all([getNiosReport(), getDailyEditorReport()]);
 
   return (
-    <main className="nios" style={{ padding: '32px 20px', maxWidth: 1080, margin: '0 auto' }}>
-      <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: 6 }}>
-        <Brain size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 10 }} />
-        Nicaragua Informate Operating System
-      </h1>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: 24 }}>
-        Generado: {formatDate(report.generatedAt)} · Estado: {report.status === 'ok' ? 'ok' : 'parcial'}
-      </p>
+    <main className="nios">
+      <header className="nios-hero">
+        <div className="nios-hero-top">
+          <span className="nios-hero-icon">
+            <Brain size={28} />
+          </span>
+          <div>
+            <h1>Nicaragua Informate Operating System</h1>
+            <p className="nios-hero-sub">Inteligencia editorial, SEO y negocio en un solo tablero</p>
+          </div>
+        </div>
+        <div className="nios-hero-chips">
+          <span className="nios-chip">
+            <span className={`nios-chip-dot${report.status === 'ok' ? '' : ' is-warn'}`} />
+            {report.status === 'ok' ? 'Sistema operativo' : 'Datos parciales'}
+          </span>
+          <span className="nios-chip">Actualizado {formatDate(report.generatedAt)}</span>
+          <span className="nios-chip">{daily.publishedCount} noticias publicadas</span>
+          <span className="nios-chip">{Object.keys(report.modules).length} módulos activos</span>
+        </div>
+      </header>
 
       <NiosExecutiveDashboard daily={daily} />
+
+      <div className="nios-shell">
       <NiosV4Dashboard v4={daily.v4} />
       <NiosV3Dashboard v3={daily.v3} />
 
@@ -77,10 +92,11 @@ export default async function NiosPanelPageContent() {
       </div>
 
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 16 }}>Módulos de inteligencia</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, marginBottom: 32 }}>
+      <div className="nios-module-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, marginBottom: 32 }}>
         {Object.values(report.modules).map((mod) => (
           <ModuleCard key={mod.module} mod={mod} />
         ))}
+      </div>
       </div>
     </main>
   );

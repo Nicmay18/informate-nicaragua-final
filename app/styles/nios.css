@@ -1,4 +1,6 @@
-/* NIOS Dashboard — variables y resets de tipografía */
+/* ============================================================
+   NIOS — Sistema de diseño del panel de inteligencia editorial
+   ============================================================ */
 
 :root {
   --ni-bg: #ffffff;
@@ -10,10 +12,267 @@
   --info: #0ea5e9;
 }
 
+.nios {
+  /* Paleta propia del dashboard (sobrescribe la institucional oscura) */
+  --primary: #2563eb;
+  --primary-strong: #1d4ed8;
+  --primary-soft: #eff6ff;
+  --border: #e2e8f0;
+  --ni-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --danger: #e11d48;
+  --success: #059669;
+  --warning: #d97706;
+  --info: #0284c7;
+
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 56px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--text-primary);
+  background:
+    radial-gradient(1200px 400px at 12% -10%, #dbeafe 0%, transparent 60%),
+    radial-gradient(900px 380px at 88% -5%, #e0e7ff 0%, transparent 55%),
+    #f6f8fc;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
 .nios h1,
 .nios h2,
-.nios h3 {
+.nios h3,
+.nios h4 {
   margin: 0;
-  font-family: var(--font-sans);
-  line-height: 1.25;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+
+.nios-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 32px 30px;
+  color: #f8fafc;
+  background: linear-gradient(120deg, #0b1120 0%, #172554 48%, #1e3a8a 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.nios-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(520px 220px at 88% 0%, rgba(59, 130, 246, 0.38) 0%, transparent 70%),
+    radial-gradient(420px 200px at 8% 110%, rgba(20, 184, 166, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.nios-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nios-hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.nios-hero-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.45);
+  color: #93c5fd;
+}
+
+.nios-hero h1 {
+  color: #ffffff;
+  font-size: clamp(1.5rem, 2.4vw, 2.05rem);
+  font-weight: 800;
+}
+
+.nios-hero-sub {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.nios-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.nios-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+}
+
+.nios-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.22);
+}
+
+.nios-chip-dot.is-warn {
+  background: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.22);
+}
+
+/* ── Contenedor y secciones ─────────────────────────────── */
+
+.nios-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 24px 0;
+}
+
+.nios section {
+  margin-bottom: 30px;
+}
+
+.nios section > div:first-child > h2,
+.nios section h2 {
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Barra de acento a la izquierda del título de sección */
+.nios section > div:first-child {
+  position: relative;
+}
+
+.nios section > div:first-child::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3b82f6, #6366f1);
+}
+
+/* ── Tarjetas ───────────────────────────────────────────── */
+
+.nios .rounded-2xl,
+.nios-card {
+  border-radius: 16px;
+}
+
+.nios [class*='bg-[var(--ni-bg)]'] {
+  background: #ffffff;
+  border-color: var(--border);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -18px rgba(15, 23, 42, 0.3);
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+
+.nios [class*='bg-[var(--ni-bg)]']:hover {
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), 0 18px 38px -22px rgba(37, 99, 235, 0.45);
+  border-color: #c7d2fe;
+  transform: translateY(-1px);
+}
+
+/* ── Botones ────────────────────────────────────────────── */
+
+.nios button:not([class*='rounded-full']),
+.nios a[class*='bg-[var(--primary)]'] {
+  font-family: inherit;
+}
+
+.nios [class*='bg-[var(--primary)]'] {
+  background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  box-shadow: 0 8px 20px -10px rgba(37, 99, 235, 0.75);
+}
+
+.nios [class*='bg-[var(--primary)]']:hover {
+  background-image: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+  box-shadow: 0 12px 26px -10px rgba(37, 99, 235, 0.85);
+}
+
+.nios [class*='bg-[var(--primary)]']:disabled {
+  background-image: none;
+  background-color: #cbd5e1;
+  box-shadow: none;
+}
+
+/* ── Cajas heredadas (estilos inline) ───────────────────── */
+
+.nios-legacy section,
+.nios-legacy > div > div {
+  background: #ffffff;
+}
+
+.nios-module-grid > div {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nios-module-grid > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px -24px rgba(15, 23, 42, 0.45);
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+
+.nios ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.nios ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nios ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.nios ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: content-box;
+}
+
+@media (max-width: 640px) {
+  .nios-hero {
+    padding: 24px 18px;
+  }
+
+  .nios-shell {
+    padding: 20px 16px 0;
+  }
+
+  .nios section > div:first-child::before {
+    display: none;
+  }
 }
