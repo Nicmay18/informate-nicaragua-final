@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { hasWeakMetaDescription, hasWeakKeywords } from '@/lib/seo/effective';
 
 export interface EditorialScore {
   total: number;
@@ -15,7 +16,7 @@ export function calculateEditorialScore(
   const total = published.length || 1;
 
   function withMeta(n: Noticia) {
-    return !!(n.metaDescription || '').trim() && n.metaDescription!.length <= 160;
+    return !hasWeakMetaDescription(n);
   }
   function hasAuthor(n: Noticia) {
     return !!n.autor?.trim();
@@ -24,7 +25,7 @@ export function calculateEditorialScore(
     return !!n.imagen && !n.imagen.includes('logo');
   }
   function hasKeywords(n: Noticia) {
-    return !!(n.keywords || '').trim() || (n.tags && n.tags.length > 0);
+    return !hasWeakKeywords(n);
   }
 
   const contentScore = Math.round((published.filter((n) => (n.palabras || 0) >= 200 && (n.palabras || 0) <= 1000).length / total) * 100);

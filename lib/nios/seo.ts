@@ -2,16 +2,7 @@ import { getNews } from '@/lib/data';
 import type { Noticia } from '@/lib/types';
 import type { NiosModuleReport, NiosRecommendation } from './types';
 import { daysAgo, rec, sortByPriority, trackError } from './utils';
-
-function metaOk(n: Noticia): boolean {
-  const desc = (n.metaDescription || '').trim();
-  return desc.length >= 80 && desc.length <= 160;
-}
-
-function keywordsOk(n: Noticia): boolean {
-  const kw = (n.keywords || '').trim();
-  return kw.length >= 10;
-}
+import { hasWeakMetaDescription, hasWeakKeywords } from '@/lib/seo/effective';
 
 export async function runSeoIntelligence(): Promise<NiosModuleReport> {
   try {
@@ -24,8 +15,8 @@ export async function runSeoIntelligence(): Promise<NiosModuleReport> {
     const avgViews = Math.round(noticias.reduce((s, n) => s + (n.vistas || 0), 0) / total) || 0;
     const lowTraffic = noticias.filter((n) => (n.vistas || 0) < Math.max(avgViews * 0.3, 1) && daysAgo(n.fecha) < 30);
     const stale = noticias.filter((n) => daysAgo(n.fechaActualizacion || n.fecha) > 90 && (n.vistas || 0) > avgViews);
-    const noMeta = noticias.filter((n) => !metaOk(n));
-    const noKeywords = noticias.filter((n) => !keywordsOk(n));
+    const noMeta = noticias.filter(hasWeakMetaDescription);
+    const noKeywords = noticias.filter(hasWeakKeywords);
     const possibleCannibalization = noticias
       .filter((n) => n.keywords)
       .reduce<Record<string, Noticia[]>>((acc, n) => {

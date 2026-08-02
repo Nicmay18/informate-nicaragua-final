@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { resolveEffectiveSeo } from '@/lib/seo/effective';
 
 export interface SeoIssue {
   id: string;
@@ -30,21 +31,21 @@ export function runSeoCleanup(noticias: Noticia[]): SeoCleanupReport {
       });
     }
 
-    const meta = n.metaDescription || '';
-    if (!meta.trim()) {
+    const { description } = resolveEffectiveSeo(n);
+    if (!description.trim()) {
       issues.push({
         id: `seo-meta-missing-${n.slug}`,
         slug: n.slug,
         title: n.titulo,
         issue: 'meta_vacia',
       });
-    } else if (meta.length > 160) {
+    } else if (description.length > 160) {
       issues.push({
         id: `seo-meta-long-${n.slug}`,
         slug: n.slug,
         title: n.titulo,
         issue: 'meta_larga',
-        value: meta.length,
+        value: description.length,
       });
     }
 
@@ -63,14 +64,6 @@ export function runSeoCleanup(noticias: Noticia[]): SeoCleanupReport {
         slug: n.slug,
         title: n.titulo,
         issue: 'sin_imagen',
-      });
-    } else if (!n.pieFoto || !n.pieFoto.trim()) {
-      // pieFoto actúa como texto alternativo descriptivo
-      issues.push({
-        id: `seo-alt-${n.slug}`,
-        slug: n.slug,
-        title: n.titulo,
-        issue: 'sin_alt',
       });
     }
   }

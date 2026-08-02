@@ -4,6 +4,7 @@ import type { CategoryHealth } from './category-health';
 import type { NiosOpportunity } from './opportunity-radar';
 import type { SeoCleanupReport } from './seo-cleanup';
 import type { BusinessSignal } from './business-signals';
+import { hasWeakMetaDescription, hasWeakKeywords } from '@/lib/seo/effective';
 
 export interface Kpi {
   id: string;
@@ -218,8 +219,8 @@ export function buildExecutiveDashboard(
   const guidesPending = Math.max(0, evergreenCandidates.length - guides.length);
 
   const withoutImage = published.filter((n) => !n.imagen || n.imagen.includes('logo') || n.imagen === '/logo.webp').length;
-  const withoutMeta = published.filter((n) => !(n.metaDescription || '').trim()).length;
-  const withoutKeyword = published.filter((n) => !(n.keywords || '').trim() && (!n.tags || n.tags.length === 0)).length;
+  const withoutMeta = published.filter(hasWeakMetaDescription).length;
+  const withoutKeyword = published.filter(hasWeakKeywords).length;
   // Scores
   const lowHealth = Object.values(categoryHealth).filter((h) => h.level === 'bajo').length;
   const mediumHealth = Object.values(categoryHealth).filter((h) => h.level === 'medio').length;
@@ -285,7 +286,7 @@ export function buildExecutiveDashboard(
   const priorities: Priority[] = [];
 
   // 1. Fix meta
-  const firstMissingMeta = published.find((n) => !(n.metaDescription || '').trim());
+  const firstMissingMeta = published.find(hasWeakMetaDescription);
   if (firstMissingMeta && withoutMeta > 0) {
     priorities.push({
       id: 'p-meta',
@@ -293,7 +294,7 @@ export function buildExecutiveDashboard(
       label: 'URGENTE',
       title: 'Corregir meta description',
       target: firstMissingMeta.titulo.slice(0, 55),
-      impact: `Afecta ${withoutMeta} noticia${withoutMeta === 1 ? '' : 's'} con metas vacías. Evita pérdida de CTR en búsquedas.`,
+      impact: `Afecta ${withoutMeta} noticia${withoutMeta === 1 ? '' : 's'} con meta fuera del rango 80-160 caracteres. Evita pérdida de CTR en búsquedas.`,
       action: 'Revisar ahora',
       href: `/admin/news/${firstMissingMeta.id}`,
     });
@@ -377,11 +378,10 @@ export function buildExecutiveDashboard(
 
   function auditArticle(n: Noticia): ArticleAudit {
     const missing: string[] = [];
-    if (!n.metaDescription?.trim()) missing.push('meta');
-    if (!n.keywords?.trim() && (!n.tags || n.tags.length === 0)) missing.push('keywords');
+    if (hasWeakMetaDescription(n)) missing.push('meta');
+    if (hasWeakKeywords(n)) missing.push('keywords');
     if (!n.autor?.trim()) missing.push('autor');
     if (!n.imagen || n.imagen.includes('logo')) missing.push('imagen');
-    if (!n.pieFoto?.trim()) missing.push('alt');
     if (n.titulo.length > 60) missing.push('título largo');
 
     let status: ArticleAudit['status'] = 'excellent';

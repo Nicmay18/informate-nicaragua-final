@@ -9,7 +9,7 @@ import {
   generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
-import { generateMetaDescription, generateKeywords, generateImageAlt } from '@/lib/seo/meta';
+import { resolveEffectiveSeo } from '@/lib/seo/effective';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { logger } from '@/lib/logger';
@@ -84,16 +84,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 57) + '…';
     }
 
-    const rawDescription = noticia.resumen?.trim()
-      || noticia.metaDescription?.trim()
-      || generateMetaDescription(noticia);
-    let description = rawDescription;
-    if (description.length > 160) {
-      const cutAt = description.lastIndexOf(' ', 157);
-      description = cutAt > 0 ? description.slice(0, cutAt) + '…' : description.slice(0, 157) + '…';
-    }
-    const keywords = noticia.keywords?.trim() || generateKeywords(noticia);
-    const imageAlt = generateImageAlt(noticia);
+    const { description, keywords, imageAlt } = resolveEffectiveSeo(noticia);
     const authorName = noticia.autor || 'Redacción Nicaragua Informate';
 
     const shouldNoindex = !!noticia.noindex;
