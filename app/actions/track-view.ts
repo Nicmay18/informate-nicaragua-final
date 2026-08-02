@@ -35,7 +35,7 @@ export async function trackViewAction(slug: string, referrer?: string, utmSource
     const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent);
 
     return { ok: true, views: result };
-  } catch (err: any) {
-    return { ok: false, error: err?.message || 'Unknown error' };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Unknown error' };
   }
 }
