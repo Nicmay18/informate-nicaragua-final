@@ -7,6 +7,7 @@ import { runOpportunityRadar, type NiosOpportunity } from './opportunity-radar';
 import { runSeoCleanup, type SeoCleanupReport } from './seo-cleanup';
 import { getContentMixRecommendation, type ContentMixDay } from './content-mix';
 import { runBusinessSignals, type BusinessSignal } from './business-signals';
+import { buildExecutiveDashboard, type ExecutiveDashboard } from './executive-report';
 import { logger } from '@/lib/logger';
 
 export interface DailyEditorReport {
@@ -24,6 +25,7 @@ export interface DailyEditorReport {
   weeklyMix: ContentMixDay[];
   mixRationale: string[];
   businessSignals: BusinessSignal[];
+  executive: ExecutiveDashboard;
   errors?: string[];
 }
 
@@ -84,6 +86,16 @@ export async function getDailyEditorReport(
 
   const now = new Date();
 
+  const executive = buildExecutiveDashboard(
+    noticias,
+    guides,
+    health,
+    opportunities,
+    seo,
+    businessSignals,
+    errors
+  );
+
   return {
     generatedAt: now.toISOString(),
     date: now.toLocaleDateString('es-NI', { dateStyle: 'long' }),
@@ -99,6 +111,7 @@ export async function getDailyEditorReport(
     weeklyMix: mix,
     mixRationale: rationale,
     businessSignals,
+    executive,
     errors: errors.length ? errors : undefined,
   };
 }
