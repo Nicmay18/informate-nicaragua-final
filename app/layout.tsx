@@ -7,6 +7,8 @@ import './styles/components.css';
 import './styles/responsive.css';
 import './styles/clock-widget.css';
 import './pro-design.css';
+import './styles/tailwind.css';
+import './styles/nios.css';
 import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,

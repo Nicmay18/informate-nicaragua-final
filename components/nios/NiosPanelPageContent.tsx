@@ -25,7 +25,7 @@ export default async function NiosPanelPageContent() {
   const [report, daily] = await Promise.all([getNiosReport(), getDailyEditorReport()]);
 
   return (
-    <main style={{ padding: '32px 20px', maxWidth: 1080, margin: '0 auto' }}>
+    <main className="nios" style={{ padding: '32px 20px', maxWidth: 1080, margin: '0 auto' }}>
       <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: 6 }}>
         <Brain size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 10 }} />
         Nicaragua Informate Operating System

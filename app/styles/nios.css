@@ -1,0 +1,19 @@
+/* NIOS Dashboard — variables y resets de tipografía */
+
+:root {
+  --ni-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --info: #0ea5e9;
+}
+
+.nios h1,
+.nios h2,
+.nios h3 {
+  margin: 0;
+  font-family: var(--font-sans);
+  line-height: 1.25;
+}

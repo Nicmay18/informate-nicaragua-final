@@ -526,8 +526,8 @@
             <li class="nav-item"><a class="nav-link" href="/admin/crecimiento" target="_blank"><i class="fas fa-rocket" style="color: var(--success);"></i><span>Crecimiento</span><span class="nav-badge" style="background: var(--success); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/admin/editor"><i class="fas fa-pen-nib" style="color: var(--success);"></i><span>Editor IA</span><span class="nav-badge" style="background: var(--success); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" href="/admin/meni"><i class="fas fa-brain" style="color: var(--info);"></i><span>MENI Diagnóstico</span><span class="nav-badge" style="background: var(--gray-500); color: white;">Técnico</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/panel/nios"><i class="fas fa-network-wired" style="color: var(--warning);"></i><span>NIOS</span><span class="nav-badge" style="background: var(--warning); color: white;">NUEVO</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/panel/entities"><i class="fas fa-project-diagram" style="color: var(--success);"></i><span>Entidades</span><span class="nav-badge" style="background: var(--success); color: white;">NUEVO</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('nios-tab', this)"><i class="fas fa-network-wired" style="color: var(--warning);"></i><span>NIOS</span><span class="nav-badge" style="background: var(--warning); color: white;">NUEVO</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('entities-tab', this)"><i class="fas fa-project-diagram" style="color: var(--success);"></i><span>Entidades</span><span class="nav-badge" style="background: var(--success); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('agente-tab', this)"><i class="fas fa-robot" style="color: var(--warning);"></i><span>Agente IA</span><span class="nav-badge" style="background: var(--warning); color: white;">AUTO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('guias-tab', this)"><i class="fas fa-book"></i><span>Guías Editoriales</span></a></li>
           </ul>
@@ -1917,6 +1917,16 @@ sin texto ni marcas de agua, composición periodística"
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- NIOS — Nicaragua Informate Operating System -->
+      <div id="nios-tab" class="tab-content">
+        <iframe src="/panel/nios" title="NIOS" style="width: 100%; height: calc(100vh - 90px); border: none; display: block;" loading="lazy"></iframe>
+      </div>
+
+      <!-- ENTITIES — Knowledge Graph -->
+      <div id="entities-tab" class="tab-content">
+        <iframe src="/panel/entities" title="Entidades" style="width: 100%; height: calc(100vh - 90px); border: none; display: block;" loading="lazy"></iframe>
       </div>
 
     </main>

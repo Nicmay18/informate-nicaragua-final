@@ -9,7 +9,7 @@ export default async function EntitiesPageContent() {
   const graph = buildKnowledgeGraph(noticias, guides);
 
   return (
-    <main style={{ padding: '32px 20px', maxWidth: 1200, margin: '0 auto' }}>
+    <main className="nios" style={{ padding: '32px 20px', maxWidth: 1200, margin: '0 auto' }}>
       <h1 style={{ fontSize: '1.9rem', fontWeight: 800, marginBottom: 6 }}>
         Knowledge Graph — Entidades
       </h1>
