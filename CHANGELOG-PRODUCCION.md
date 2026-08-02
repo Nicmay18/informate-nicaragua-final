@@ -1,44 +1,32 @@
-# CHANGELOG — MISIÓN FINAL PRODUCCIÓN
+# Nicaragua Informate v1.0.0 — Release Candidate Validation
 
 ## Estado de la entrega
 
 - `npm run build`: ✅ EXITO
-- `npx tsc --noEmit`: ✅ EXITO (dentro de `npm run test:merge`)
+- `npx tsc --noEmit`: ✅ EXITO
 - `npm run test:merge`: ✅ 71/71 tests OK, 0 warnings
-- `npm run lint`: ✅ OK
-- `npm run test:all`: no ejecutado — requiere entorno con Playwright
-- Lighthouse: no ejecutado — requiere Chrome/entorno de escritorio
+- `npm run lint`: ✅ OK (dentro de `test:merge`)
+- `npm run test:all`: ❌ FALLIDO — faltan navegadores Playwright instalados
+- Lighthouse: ❌ NO EJECUTADO — no hay Chrome/Edge disponible en el entorno
 
-## Commits realizados en esta misión
+## Estado final
 
-| Hash | Mensaje | Módulo |
-|---|---|---|
-| `07866be` | `fix(code): mejora calidad general` | calidad |
-| `2eed1ed` | `perf(css): optimiza estilos` | css |
-| `98fd01c` | `perf(core): mejora rendimiento general` | performance |
-| `6948646` | `fix(seo): corrige errores tecnicos SEO` | seo |
-| `aae6a88` | `perf(home): mejora portada y carga inicial` | homepage |
-| `2fb07de` | `perf(firebase): optimiza lecturas y cache` | firebase |
-| `3f7c1fa` | `perf(router): optimiza rutas y renderizado` | router |
-| `527308e` | `refactor(ui): mejora componentes y rendimiento` | components |
+**REQUIERE CORRECCIÓN**
 
-## Archivos modificados / eliminados
+Build, TypeScript y `test:merge` son estables. Sin embargo, `test:all` y Lighthouse no se pudieron completar por limitaciones del entorno de validación (faltan navegadores). No se realizaron cambios de código.
 
-- **Modificados** (`components`):
-  - `components/NewsCard.tsx` (memo + useMemo tiempos relativos)
-  - `components/Header.tsx` (memo)
-- **Modificados** (`app/router/layout`):
-  - `app/layout.tsx` (Suspense alrededor de CookieBanner)
-  - `app/page.tsx` (40 noticias en portada vs 80)
-- **Modificados** (`firebase/db`):
-  - `lib/db/homepage.ts` (100 noticias para tendencias vs 200)
-- **Modificados** (`seo`):
-  - `app/sitemap.ts` (exporta `safeDate`)
-  - `app/news-sitemap.xml/route.ts` (`safeDate`, filtro toxic/archivado, logger)
-- **Modificados** (`css`):
-  - `app/styles/clock-widget.css` (elimina keyframe duplicado)
-- **Modificados** (`calidad`):
-  - `app/actions/track-view.ts` (catch tipado unknown)
+## Resumen de pruebas
+
+### Pasaron
+
+- `npm run build`
+- `npx tsc --noEmit`
+- `npm run test:merge` (71/71 tests, 0 warnings)
+
+### Pendientes / bloqueados
+
+- `npm run test:all` — requiere `npx playwright install` y un test e2e con aserción inválida: `tests/e2e/homepage.spec.ts` line 41 `expect(page.url()).not.toContain('/')` siempre falla
+- Lighthouse Home/Artículo Mobile/Desktop — requiere Chrome/Edge
 
 ## MENI V3.2
 
