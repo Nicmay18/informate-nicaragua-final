@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Noticia } from '@/lib/types';
+import type { EvergreenArticle } from '@/lib/evergreen';
 import { tiempoLectura } from '@/lib/formateo';
 import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
@@ -14,13 +15,13 @@ interface HomePageProProps {
   noticias: Noticia[];
   masLeidas?: Noticia[];
   populares?: Noticia[];
+  contenidoUtil?: EvergreenArticle[];
   isNoticiasPage?: boolean;
 }
 
 function distribuirNoticias(noticias: Noticia[]) {
-  const sorted = [...noticias].sort((a, b) =>
-    new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-  );
+  // Las noticias ya llegan rankeadas por Home Ranking Engine (freshness + MENI + tendencia).
+  const sorted = noticias;
   const usados = new Set<string>();
 
   const take = (lista: Noticia[], n: number) => {
@@ -35,36 +36,23 @@ function distribuirNoticias(noticias: Noticia[]) {
     return resultado;
   };
 
-  const disponibles = () => sorted.filter(n => !usados.has(n.id));
-  const porCategoria = (cat: string) => disponibles().filter(n => n.categoria === cat);
-  // Portada: una nacional, un suceso, una internacional y variedad
-  const portadaMeta: Noticia[] = [];
-  const portadaCategorias = ['Nacionales', 'Sucesos', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
-  for (const cat of portadaCategorias) {
-    if (portadaMeta.length >= 5) break;
-    const elegida = porCategoria(cat).find(n => !usados.has(n.id));
-    if (elegida) { portadaMeta.push(elegida); usados.add(elegida.id); }
-  }
-  // Completar si faltan
-  while (portadaMeta.length < 5) {
-    const siguiente = disponibles().find(n => !usados.has(n.id));
-    if (!siguiente) break;
-    portadaMeta.push(siguiente);
-    usados.add(siguiente.id);
-  }
+  const heroNoticias = sorted[0] ? [sorted[0]] : [];
+  if (sorted[0]) usados.add(sorted[0].id);
 
-  const heroNoticias = portadaMeta.slice(0, 1);
-  const enPortada = portadaMeta.slice(1, 5);
+  const enPortada = take(sorted.slice(1), 4);
 
-  // Última hora: las 3 más recientes disponibles, sin excluir categoría
-  const breaking = take(disponibles().slice(0, 5), 3);
+  // Última hora: las 3 noticias con mayor ranking (pueden ser muy recientes o muy calientes)
+  const breaking = sorted.slice(0, 3);
 
   const seccion = (cat: string, min = 1) => {
-    const items = take(porCategoria(cat), 3);
+    const items = take(
+      sorted.filter(n => n.categoria === cat && !usados.has(n.id)),
+      3
+    );
     return items.length >= min ? items : [];
   };
 
-  const recientes = take(disponibles(), 3);
+  const recientes = take(sorted.slice(1), 3);
 
   return {
     heroNoticias,
@@ -81,7 +69,7 @@ function distribuirNoticias(noticias: Noticia[]) {
   };
 }
 
-export default function HomePagePro({ noticias, masLeidas = [], populares = [], isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
+export default function HomePagePro({ noticias, masLeidas = [], populares = [], contenidoUtil = [], isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
     if (!nodes.length) return;
@@ -204,6 +192,9 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         {/* CONTENT GRID */}
         <div className="rd-content-grid">
           <div className="rd-main-col">
+            {(masLeidas.length ? masLeidas : populares).length > 0 && (
+              <SectionGrid titulo="📌 Lo más leído" slug="noticias" noticias={(masLeidas.length ? masLeidas : populares).slice(0, 3)} reverse={false} />
+            )}
             {dist.recientes.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={dist.recientes} reverse={false} />}
             {dist.nacionales.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
             {dist.internacionales.length >= 1 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
@@ -211,6 +202,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
             {dist.espectaculos.length >= 1 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
             {dist.tecnologia.length >= 1 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
             {dist.sucesos.length >= 1 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
+            {contenidoUtil.length > 0 && <SectionGuia titulo="📚 Contenido útil" guias={contenidoUtil} />}
           </div>
 
           <aside className="rd-rail">
@@ -219,6 +211,31 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         </div>
       </div>
     </div>
+  );
+}
+
+function SectionGuia({ titulo, guias }: { titulo: string; guias: EvergreenArticle[] }) {
+  return (
+    <section className="rd-section" data-reveal>
+      <div className="rd-section-head">
+        <h2>{titulo}</h2>
+        <Link href="/guia">Ver más →</Link>
+      </div>
+      <div
+        className="rd-story-grid"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
+      >
+        {guias.map((g) => (
+          <article key={g.slug} className="rd-portada-item" style={{ padding: 20 }}>
+            <span className="rd-eyebrow">{g.category}</span>
+            <h3>
+              <Link href={`/guia/${g.slug}`}>{g.title}</Link>
+            </h3>
+            <p style={{ color: 'var(--rd-muted)', fontSize: '0.95rem', marginTop: 8 }}>{g.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 

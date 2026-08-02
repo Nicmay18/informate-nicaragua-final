@@ -1,7 +1,10 @@
 import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
+import { rankNoticias } from '@/lib/home-ranking';
+import { getAllEvergreen } from '@/lib/evergreen';
 import type { Noticia } from '@/lib/types';
+import type { EvergreenArticle } from '@/lib/evergreen';
 import type { Metadata } from 'next';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
@@ -61,13 +64,19 @@ export default async function HomePage() {
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];
   let populares: Noticia[] = [];
+  let contenidoUtil: EvergreenArticle[] = [];
 
   try {
-    [noticias, masLeidas, populares] = await Promise.all([
+    const [latest, trending, popular, evergreen] = await Promise.all([
       getLatestNews(40),
       getTrendingNews(5),
       getPopularNews(5),
+      Promise.resolve(getAllEvergreen().slice(0, 3)),
     ]);
+    noticias = rankNoticias(latest);
+    masLeidas = trending;
+    populares = popular;
+    contenidoUtil = evergreen;
   } catch (error) {
     logger.error('[HomePage] Error:', error);
   }
@@ -99,7 +108,7 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} contenidoUtil={contenidoUtil} />
     </>
   );
 }
