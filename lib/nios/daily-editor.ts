@@ -9,6 +9,7 @@ import { getContentMixRecommendation, type ContentMixDay } from './content-mix';
 import { runBusinessSignals, type BusinessSignal } from './business-signals';
 import { buildExecutiveDashboard, type ExecutiveDashboard } from './executive-report';
 import { buildV3Report, type NiosV3Report } from './v3-report';
+import { buildV4Report, type NiosV4Report } from './v4-report';
 import { logger } from '@/lib/logger';
 
 export interface DailyEditorReport {
@@ -28,6 +29,7 @@ export interface DailyEditorReport {
   businessSignals: BusinessSignal[];
   executive: ExecutiveDashboard;
   v3: NiosV3Report;
+  v4: NiosV4Report;
   errors?: string[];
 }
 
@@ -99,6 +101,7 @@ export async function getDailyEditorReport(
   );
 
   const v3 = buildV3Report(noticias, guides, errors);
+  const v4 = buildV4Report(noticias, guides, errors);
 
   return {
     generatedAt: now.toISOString(),
@@ -117,6 +120,7 @@ export async function getDailyEditorReport(
     businessSignals,
     executive,
     v3,
+    v4,
     errors: errors.length ? errors : undefined,
   };
 }

@@ -3,6 +3,7 @@ import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@
 import { getDailyEditorReport } from '@/lib/nios/daily-editor';
 import { NiosExecutiveDashboard } from '@/components/nios/NiosExecutiveDashboard';
 import { NiosV3Dashboard } from '@/components/nios/NiosV3Dashboard';
+import { NiosV4Dashboard } from '@/components/nios/NiosV4Dashboard';
 import { Brain, AlertTriangle, CheckCircle, Clock, Lightbulb, Target, Shield, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export default async function NiosPanelPage() {
       </p>
 
       <NiosExecutiveDashboard daily={daily} />
+      <NiosV4Dashboard v4={daily.v4} />
       <NiosV3Dashboard v3={daily.v3} />
 
       {report.errors && report.errors.length > 0 && (
