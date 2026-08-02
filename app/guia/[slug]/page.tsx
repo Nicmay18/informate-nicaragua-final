@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getEvergreenBySlug, getAllEvergreen } from '@/lib/evergreen';
 import AuthorCard from '@/components/AuthorCard';
 import { getCspNonce } from '@/lib/nonce';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 export async function generateStaticParams() {
   const articles = getAllEvergreen();
@@ -100,10 +101,10 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
       {/* Schema.org Article */}
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(buildArticleJsonLd(article)) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildArticleJsonLd(article) as Record<string, unknown>) }} />
       
       {/* Schema.org FAQPage */}
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFAQJsonLd(article.faqs)) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildFAQJsonLd(article.faqs) as Record<string, unknown>) }} />
 
       {/* Breadcrumbs */}
       <nav className="ni-breadcrumbs" aria-label="Miga de pan">

@@ -7,6 +7,7 @@ import {
   CalendarDays, ExternalLink, Rss, Share2,
 } from 'lucide-react';
 import { formatDateShortES } from '@/lib/formateo';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 interface Articulo {
   id: string;
@@ -89,7 +90,7 @@ export default function AuthorProfile({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(personJsonLd as Record<string, unknown>) }}
       />
 
       {/* Hero Card */}

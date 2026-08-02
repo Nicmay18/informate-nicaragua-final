@@ -7,6 +7,7 @@ import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
 import type { MeniAutonomousResult } from '@/lib/meni/editor-autonomo/types';
 import { categoryToSlug } from '@/lib/types';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -300,7 +301,7 @@ export default function EditorPage() {
                 <p><strong>Meta:</strong> {optimizado.metaDescripcion}</p>
                 <p><strong>Slug:</strong> {optimizado.slug}</p>
                 <p><strong>Tags:</strong> {optimizado.tags.join(', ')}</p>
-                <div className="prose prose-invert max-w-none text-sm" dangerouslySetInnerHTML={{ __html: optimizado.articuloCompleto }} />
+                <div className="prose prose-invert max-w-none text-sm" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(optimizado.articuloCompleto) }} />
               </div>
               <div className="flex gap-3">
                 <button

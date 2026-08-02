@@ -10,6 +10,7 @@
 
 import type { Noticia } from '@/lib/types';
 import { getCspNonce } from '@/lib/nonce';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 // ─── Helpers de sanitización robusta ───
 
@@ -222,7 +223,7 @@ export default async function JsonLdSchema({ article, url, readingTime: _reading
           key={idx}
           type="application/ld+json"
           nonce={nonce}
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: escapeJsonLd(schema as Record<string, unknown>) }}
         />
       ))}
     </>
