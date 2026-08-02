@@ -338,17 +338,9 @@
   flex: none;
   min-width: 0;
   width: max-content;
-  animation: rd-marquee 35s linear infinite;
-  will-change: transform;
+  overflow-x: auto;
 }
-.rd-breaking:hover .rd-breaking-list,
-.rd-breaking:focus-within .rd-breaking-list {
-  animation-play-state: paused;
-}
-@keyframes rd-marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.3333%); }
-}
+/* Lista de Última hora renderizada una sola vez, sin duplicar contenido HTML. */
 .rd-breaking-item {
   display: inline-flex;
   align-items: center;
@@ -518,8 +510,7 @@
   .rd-breaking-list {
     gap: 24px;
     font-size: 12px;
-    overflow: visible;
-    animation-duration: 22s;
+    overflow-x: auto;
   }
   .rd-breaking-dot {
     width: 3px;

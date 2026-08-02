@@ -1,12 +1,14 @@
-import type { Noticia } from '@/lib/types';
+import { isLutoNews, type Noticia } from '@/lib/types';
 
+// Pesos orientativos: Nacionales 40%, Deportes 15%, Internacionales 15%,
+// Sucesos 15%, Tecnología 10%, Espectáculos 5%.
 const CATEGORY_BOOST: Record<string, number> = {
-  Nacionales: 1.0,
-  Sucesos: 0.55,
-  Deportes: 0.70,
-  Internacionales: 0.65,
-  Tecnología: 0.55,
-  Espectáculos: 0.50,
+  Nacionales: 1.00,
+  Sucesos: 0.65,
+  Deportes: 0.85,
+  Internacionales: 0.80,
+  Tecnología: 0.70,
+  Espectáculos: 0.35,
 };
 
 const NATIONAL_KEYWORDS = [
@@ -47,11 +49,12 @@ const NATIONAL_KEYWORDS = [
 ];
 
 const WEIGHTS = {
-  national: 0.30,
-  meni: 0.25,
-  freshness: 0.20,
-  reader: 0.15,
-  category: 0.10,
+  actualidad: 0.20,
+  interesPublico: 0.20,
+  calidadMeni: 0.25,
+  categoriaEstrategica: 0.20,
+  potencialSeo: 0.10,
+  diversidadEditorial: 0.05,
 };
 
 function hoursSince(dateString: string): number {
@@ -70,32 +73,50 @@ function nationalBoost(noticia: Noticia): number {
   return Math.min(1, hits / 4);
 }
 
+function seoBoost(noticia: Noticia): number {
+  let s = 0;
+  if (noticia.metaDescription?.trim()) s += 0.5;
+  if (noticia.keywords?.trim()) s += 0.3;
+  if (noticia.tags && noticia.tags.length > 0) s += 0.2;
+  return Math.min(1, s);
+}
+
+function interesPublico(noticia: Noticia): number {
+  const national = nationalBoost(noticia);
+  const views = noticia.vistas ?? 0;
+  const readerInterest = normalizeScore(Math.log(views + 1), Math.log(2000));
+  return (national + readerInterest) / 2;
+}
+
 function scoreNoticia(noticia: Noticia): number {
   const h = hoursSince(noticia.fechaActualizacion || noticia.fechaPublicacion || noticia.fecha);
 
-  const freshness = Math.max(0, 1 - h / 12);
+  const actualidad = Math.max(0, 1 - h / 12);
 
-  const meniScore = normalizeScore(noticia.scoreCalidad ?? 70, 100);
+  const calidadMeni = normalizeScore(noticia.scoreCalidad ?? 70, 100);
 
-  const views = noticia.vistas ?? 0;
-  const readerInterest = normalizeScore(Math.log(views + 1), Math.log(2000));
+  const categoriaEstrategica = CATEGORY_BOOST[noticia.categoria] ?? 0.50;
 
-  const category = CATEGORY_BOOST[noticia.categoria] ?? 0.50;
+  const potencialSeo = seoBoost(noticia);
 
-  const national = nationalBoost(noticia);
+  const interes = interesPublico(noticia);
 
-  return (
-    national * WEIGHTS.national +
-    meniScore * WEIGHTS.meni +
-    freshness * WEIGHTS.freshness +
-    readerInterest * WEIGHTS.reader +
-    category * WEIGHTS.category
-  );
+  // Penaliza levemente noticias de luto en rankings de portada sin eliminarlas.
+  const lutoPenalty = isLutoNews(noticia) ? 0.08 : 0;
+
+  const score =
+    actualidad * WEIGHTS.actualidad +
+    interes * WEIGHTS.interesPublico +
+    calidadMeni * WEIGHTS.calidadMeni +
+    categoriaEstrategica * WEIGHTS.categoriaEstrategica +
+    potencialSeo * WEIGHTS.potencialSeo;
+
+  return Math.max(0, score - lutoPenalty);
 }
 
-// Aplica tope de categoría: máximo 30% del top 10 (3 noticias) por categoría.
+// Aplica tope de categoría: máximo 40% del top 10 (4 noticias) por categoría.
 // Evita que Sucesos u otra categoría viral domine la portada.
-function applyCategoryCap(ranked: Noticia[], topN = 10, maxPerCategory = 3): Noticia[] {
+function applyCategoryCap(ranked: Noticia[], topN = 10, maxPerCategory = 4): Noticia[] {
   const top: Noticia[] = [];
   const overflow: Noticia[] = [];
   const counts: Record<string, number> = {};
@@ -127,6 +148,26 @@ export function rankNoticias(noticias: Noticia[]): Noticia[] {
 }
 
 export function selectDestacada(noticias: Noticia[]): Noticia | null {
+  if (noticias.length === 0) return null;
+
   const ranked = rankNoticias(noticias);
-  return ranked[0] ?? null;
+  const candidates = ranked.slice(0, 10);
+
+  const scored = candidates.map((n) => {
+    let s = 0;
+    const h = hoursSince(n.fechaActualizacion || n.fechaPublicacion || n.fecha);
+    const actualidad = Math.max(0, 1 - h / 12);
+
+    s += actualidad * 2;
+    s += normalizeScore(n.scoreCalidad ?? 70, 100) * 3;
+    if (['Nacionales', 'Tecnología', 'Deportes', 'Internacionales'].includes(n.categoria)) s += 2;
+    if (['Sucesos', 'Espectáculos'].includes(n.categoria)) s -= 2;
+    if (isLutoNews(n)) s -= 6;
+    if ((n.vistas ?? 0) >= 50) s += 1;
+    if (n.metaDescription?.trim() && n.keywords?.trim()) s += 0.5;
+    return { n, s };
+  });
+
+  scored.sort((a, b) => b.s - a.s);
+  return scored[0]?.n ?? ranked[0] ?? null;
 }

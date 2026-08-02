@@ -4,6 +4,7 @@ import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepag
 import { rankNoticias } from '@/lib/home-ranking';
 import { getAllEvergreen } from '@/lib/evergreen';
 import { diversifyNoticias, diversifyEvergreen } from '@/lib/diversify';
+import { checkHomeDiversity } from '@/lib/home-balance';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import type { Metadata } from 'next';
@@ -78,6 +79,11 @@ export default async function HomePage() {
     masLeidas = diversifyNoticias(trending, 5, 2);
     populares = diversifyNoticias(popular, 5, 2);
     contenidoUtil = diversifyEvergreen(evergreen, 4);
+
+    const homeHealth = checkHomeDiversity(noticias.slice(0, 30));
+    if (!homeHealth.balanced) {
+      logger.warn('[HomePage] Home Diversity Check:', homeHealth.alerts.join(' | '));
+    }
   } catch (error) {
     logger.error('[HomePage] Error:', error);
   }

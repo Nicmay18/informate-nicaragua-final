@@ -11,6 +11,8 @@ import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import { RelativeTime, FullRelativeTime } from '@/components/ClientTime';
 import SidebarRedesign from '@/components/pro/SidebarRedesign';
+import { selectHero, diversifyChronological, deduplicateById } from '@/lib/home-balance';
+import { diversifyNoticias } from '@/lib/diversify';
 
 interface HomePageProProps {
   noticias: Noticia[];
@@ -21,8 +23,8 @@ interface HomePageProProps {
 }
 
 function distribuirNoticias(noticias: Noticia[]) {
-  // Las noticias ya llegan rankeadas por Home Ranking Engine (freshness + MENI + tendencia).
-  const sorted = noticias;
+  // Las noticias ya llegan rankeadas por Home Ranking Engine.
+  const sorted = deduplicateById(noticias);
   const usados = new Set<string>();
 
   const take = (lista: Noticia[], n: number) => {
@@ -37,25 +39,28 @@ function distribuirNoticias(noticias: Noticia[]) {
     return resultado;
   };
 
-  const heroNoticias = sorted[0] ? [sorted[0]] : [];
-  if (sorted[0]) usados.add(sorted[0].id);
+  const hero = selectHero(sorted);
+  const heroNoticias = hero ? [hero] : [];
+  if (hero) usados.add(hero.id);
 
-  const enPortada = take(sorted.slice(1), 4);
+  // En portada: 4 noticias, máximo 1 por categoría para forzar diversidad.
+  const enPortada = diversifyNoticias(sorted.filter((n) => !usados.has(n.id)), 4, 1);
+  enPortada.forEach((n) => usados.add(n.id));
 
-  // Última hora: las 5 noticias más recientes en orden cronológico
-  const breaking = [...noticias]
-    .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-    .slice(0, 5);
+  // Última hora: 5 más recientes, máximo 2 de Sucesos, sin repetir héroe.
+  const breaking = diversifyChronological(sorted, 5, 2, usados);
+
+  // Últimas noticias: 3 noticias, máximo 1 por categoría (40%).
+  const recientes = diversifyNoticias(sorted.filter((n) => !usados.has(n.id)), 3, 1);
+  recientes.forEach((n) => usados.add(n.id));
 
   const seccion = (cat: string, limit: number, min = 1) => {
     const items = take(
-      sorted.filter(n => n.categoria === cat && !usados.has(n.id)),
+      sorted.filter((n) => n.categoria === cat && !usados.has(n.id)),
       limit
     );
     return items.length >= min ? items : [];
   };
-
-  const recientes = take(sorted.slice(1), 3);
 
   return {
     heroNoticias,
@@ -125,8 +130,8 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
           <div className="rd-breaking__inner">
             <span className="rd-breaking-tag"><span className="rd-dot" />Última hora</span>
             <div className="rd-breaking-list">
-              {[...dist.breaking, ...dist.breaking, ...dist.breaking].map((n, idx) => (
-                <Link key={`${n.id}-${idx}`} href={`/noticias/${n.slug}`} className="rd-breaking-item">
+              {dist.breaking.map((n) => (
+                <Link key={n.id} href={`/noticias/${n.slug}`} className="rd-breaking-item">
                   <span className="rd-breaking-dot" aria-hidden="true" />
                   <span className="rd-breaking-title">{n.titulo}</span>
                 </Link>

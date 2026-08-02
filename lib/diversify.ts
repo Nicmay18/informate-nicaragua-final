@@ -1,6 +1,17 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 
+const STRATEGIC_EVERGREEN_CATEGORIES = [
+  'Economía',
+  'Trámites',
+  'Migración',
+  'Turismo',
+  'Servicios',
+  'Costos',
+  'Calendarios',
+  'Deportes',
+];
+
 export function diversifyNoticias(noticias: Noticia[], limit = 5, maxPerCategory = 2): Noticia[] {
   const result: Noticia[] = [];
   const counts: Record<string, number> = {};
@@ -24,10 +35,17 @@ export function diversifyNoticias(noticias: Noticia[], limit = 5, maxPerCategory
 }
 
 export function diversifyEvergreen(guias: EvergreenArticle[], limit = 4): EvergreenArticle[] {
+  const priority = new Set(STRATEGIC_EVERGREEN_CATEGORIES);
+  const sorted = [...guias].sort((a, b) => {
+    const pa = priority.has(a.category) ? 1 : 0;
+    const pb = priority.has(b.category) ? 1 : 0;
+    return pb - pa;
+  });
+
   const result: EvergreenArticle[] = [];
   const usedCats = new Set<string>();
 
-  for (const g of guias) {
+  for (const g of sorted) {
     if (!usedCats.has(g.category)) {
       result.push(g);
       usedCats.add(g.category);
@@ -36,7 +54,7 @@ export function diversifyEvergreen(guias: EvergreenArticle[], limit = 4): Evergr
   }
 
   // Rellenar si no alcanza
-  for (const g of guias) {
+  for (const g of sorted) {
     if (result.length >= limit) break;
     if (!result.includes(g)) result.push(g);
   }
