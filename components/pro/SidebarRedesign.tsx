@@ -4,7 +4,7 @@ import { Flame } from 'lucide-react';
 import { diversifyNoticias } from '@/lib/diversify';
 import type { Noticia } from '@/lib/types';
 
-import GuiaUtilWidget from '@/components/pro/GuiaUtilWidget';
+import CategoriasSidebar from '@/components/pro/CategoriasSidebar';
 
 const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false });
 const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false });
@@ -79,13 +79,8 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
         </div>
       )}
 
-      {/* Guías útiles */}
-      <div className="rd-panel" style={{ overflow: 'hidden' }}>
-        <div className="rd-panel-head">Guías útiles</div>
-        <div style={{ padding: '0 16px 14px' }}>
-          <GuiaUtilWidget />
-        </div>
-      </div>
+      {/* Secciones del sitio */}
+      <CategoriasSidebar />
 
       <div style={{ background: 'var(--rd-accent-soft)', border: '1px solid #B9DAD6', borderRadius: 'var(--rd-radius)', padding: 20 }}>
         <h3 style={{ fontFamily: 'var(--rd-serif)', fontSize: 17, margin: '0 0 6px' }}>Boletín matutino</h3>
