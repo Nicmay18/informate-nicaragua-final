@@ -7,7 +7,7 @@ const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
 );
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { RelativeTime } from '@/components/ClientTime';
 
 const CATEGORIES = [
@@ -26,7 +26,7 @@ const NAV_LINKS = [
 
 type MiniNoticia = { id: string; slug: string; titulo: string; fecha?: string };
 
-export default function Header() {
+function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -216,3 +216,5 @@ export default function Header() {
     </>
   );
 }
+
+export default memo(Header);
