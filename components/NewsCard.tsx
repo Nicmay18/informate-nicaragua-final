@@ -1,5 +1,6 @@
 // File: components/NewsCard.tsx
 import Link from 'next/link';
+import { memo, useMemo } from 'react';
 
 const NoPrefetchLink = (props: React.ComponentProps<typeof Link>) => (
   <Link {...props} prefetch={false} />
@@ -24,8 +25,9 @@ function safeTimeAgo(dateInput: unknown): string {
   }
 }
 
-export default function NewsCard({ noticia }: NewsCardProps) {
-  const timeAgo = safeTimeAgo(noticia.fecha);
+function NewsCard({ noticia }: NewsCardProps) {
+  const timeAgo = useMemo(() => safeTimeAgo(noticia.fecha), [noticia.fecha]);
+  const updatedAgo = useMemo(() => safeTimeAgo(noticia.fechaActualizacion), [noticia.fechaActualizacion]);
 
   return (
     <NoPrefetchLink href={`/noticias/${noticia.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -77,7 +79,7 @@ export default function NewsCard({ noticia }: NewsCardProps) {
             </time>
             {noticia.fechaActualizacion && (
               <time className="news-card-updated" dateTime={noticia.fechaActualizacion} suppressHydrationWarning style={{ fontSize:12, color:'#991b1b', fontWeight: 500, whiteSpace:'nowrap' }}>
-                Actualizado {safeTimeAgo(noticia.fechaActualizacion)}
+                Actualizado {updatedAgo}
               </time>
             )}
             {noticia.autor && (
@@ -89,3 +91,5 @@ export default function NewsCard({ noticia }: NewsCardProps) {
     </NoPrefetchLink>
   );
 }
+
+export default memo(NewsCard);
