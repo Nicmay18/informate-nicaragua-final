@@ -182,7 +182,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer />
           </div>
         </div>
-        <CookieBanner />
+        <Suspense fallback={null}>
+          <CookieBanner />
+        </Suspense>
         <ConsentScript />
         <Suspense fallback={null}>
           <DeferredAnalytics />
