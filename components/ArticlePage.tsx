@@ -72,8 +72,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           setViews(result.views);
           sessionStorage.setItem(sessionKey, 'true');
         }
-      } catch (err: any) {
-        console.error('[views] Tracking failed:', err?.message || err);
+      } catch (err) {
+        console.error('[views] Tracking failed:', err instanceof Error ? err.message : String(err));
       }
     };
 
@@ -83,32 +83,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const category = getCategory(noticia.categoria);
   const url = `${SITE_CONFIG.url}/noticias/${noticia.slug}`;
 
-  const jsonLd = useMemo(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: noticia.titulo,
-    description: noticia.resumen || noticia.metaDescription || '',
-    image: noticia.imagen ? [noticia.imagen] : [],
-    datePublished: noticia.fecha,
-    dateModified: noticia.fechaActualizacion || noticia.fecha,
-    author: {
-      '@type': 'Person',
-      name: noticia.autor || 'Redacción Nicaragua Informate',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Nicaragua Informate',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SITE_CONFIG.url}/logo.webp`,
-      },
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': url,
-    },
-    url,
-  }), [noticia, url]);
 
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
   const vistas = fmtViews(views);
@@ -211,11 +185,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
       <ReadingProgress />
       <ShareBar url={url} title={noticia.titulo} variant="floating" />
 
-      <script
-        key="article-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
 
       <article className="article-page" itemScope itemType="https://schema.org/NewsArticle">
         {/* Breadcrumb */}
@@ -232,7 +201,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         <span style={badgeStyle} itemProp="articleSection">{category.name}</span>
 
         {/* Title */}
-        <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: 'clamp(1.85rem, 5.2vw, 3.2rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.16, margin: '0 0 20px', textWrap: 'balance', letterSpacing: '-0.3px' }} itemProp="headline">
+        <h1 className="article-headline" style={{ fontFamily: "'Merriweather', serif", fontSize: 'clamp(1.85rem, 5.2vw, 3.2rem)', fontWeight: 900, color: '#0f172a', lineHeight: 1.16, margin: '0 0 20px', textWrap: 'balance', letterSpacing: '-0.3px' }} itemProp="headline">
           {noticia.titulo}
         </h1>
 
