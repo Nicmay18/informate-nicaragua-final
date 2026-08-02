@@ -41,13 +41,15 @@ function distribuirNoticias(noticias: Noticia[]) {
 
   const enPortada = take(sorted.slice(1), 4);
 
-  // Última hora: las 3 noticias con mayor ranking (pueden ser muy recientes o muy calientes)
-  const breaking = sorted.slice(0, 3);
+  // Última hora: las 5 noticias más recientes en orden cronológico
+  const breaking = [...noticias]
+    .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    .slice(0, 5);
 
-  const seccion = (cat: string, min = 1) => {
+  const seccion = (cat: string, limit: number, min = 1) => {
     const items = take(
       sorted.filter(n => n.categoria === cat && !usados.has(n.id)),
-      3
+      limit
     );
     return items.length >= min ? items : [];
   };
@@ -59,12 +61,12 @@ function distribuirNoticias(noticias: Noticia[]) {
     enPortada,
     breaking,
     recientes,
-    nacionales: seccion('Nacionales'),
-    sucesos: seccion('Sucesos'),
-    deportes: seccion('Deportes'),
-    internacionales: seccion('Internacionales'),
-    tecnologia: seccion('Tecnología'),
-    espectaculos: seccion('Espectáculos'),
+    nacionales: seccion('Nacionales', 6),
+    sucesos: seccion('Sucesos', 3),
+    deportes: seccion('Deportes', 4),
+    internacionales: seccion('Internacionales', 3),
+    tecnologia: seccion('Tecnología', 2),
+    espectaculos: seccion('Espectáculos', 2),
     excluidos: new Set(usados),
   };
 }
@@ -240,7 +242,7 @@ function SectionGuia({ titulo, guias }: { titulo: string; guias: EvergreenArticl
 }
 
 function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug: string; noticias: Noticia[]; reverse: boolean }) {
-  const [principal, ...secundarias] = noticias.slice(0, 3);
+  const [principal, ...secundarias] = noticias;
   const principalImg = getResponsiveImageUrl(principal.imagen, 700);
 
   return (

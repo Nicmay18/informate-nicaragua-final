@@ -2,11 +2,11 @@ import type { Noticia } from '@/lib/types';
 
 const CATEGORY_BOOST: Record<string, number> = {
   Nacionales: 1.0,
-  Sucesos: 0.95,
+  Sucesos: 0.55,
   Deportes: 0.70,
-  Internacionales: 0.75,
-  Tecnología: 0.60,
-  Espectáculos: 0.55,
+  Internacionales: 0.65,
+  Tecnología: 0.55,
+  Espectáculos: 0.50,
 };
 
 const NATIONAL_KEYWORDS = [
@@ -14,7 +14,6 @@ const NATIONAL_KEYWORDS = [
   'managua',
   'gobierno',
   'sandino',
-  'ortega',
   'administración',
   'ministerio',
   'alcalde',
@@ -25,20 +24,34 @@ const NATIONAL_KEYWORDS = [
   'pensiones',
   'salud',
   'educación',
-  'inseguridad',
-  'accidente',
-  'sismo',
-  'volcán',
-  'huracán',
+  'caribe',
+  'pacífico',
+  'infraestructura',
+  'economía',
+  'inversión',
+  'exportación',
+  'pib',
+  'banco central',
+  'alcaldía',
+  'asamblea',
+  'ley',
+  'decreto',
+  'proyecto',
+  'carretera',
+  'puente',
+  'turismo',
+  'agricultura',
+  'café',
+  'energía',
+  'presidente',
 ];
 
 const WEIGHTS = {
-  freshness: 0.25,
+  national: 0.30,
   meni: 0.25,
-  reader: 0.20,
-  trend: 0.15,
+  freshness: 0.20,
+  reader: 0.15,
   category: 0.10,
-  national: 0.05,
 };
 
 function hoursSince(dateString: string): number {
@@ -54,7 +67,7 @@ function normalizeScore(value: number, max: number): number {
 function nationalBoost(noticia: Noticia): number {
   const text = `${noticia.titulo} ${noticia.resumen} ${noticia.contenido || ''}`.toLowerCase();
   const hits = NATIONAL_KEYWORDS.reduce((acc, kw) => (text.includes(kw) ? acc + 1 : acc), 0);
-  return Math.min(1, hits / 3);
+  return Math.min(1, hits / 4);
 }
 
 function scoreNoticia(noticia: Noticia): number {
@@ -67,27 +80,50 @@ function scoreNoticia(noticia: Noticia): number {
   const views = noticia.vistas ?? 0;
   const readerInterest = normalizeScore(Math.log(views + 1), Math.log(2000));
 
-  const trend = normalizeScore(views / (h + 1), 30);
-
   const category = CATEGORY_BOOST[noticia.categoria] ?? 0.50;
 
   const national = nationalBoost(noticia);
 
   return (
-    freshness * WEIGHTS.freshness +
+    national * WEIGHTS.national +
     meniScore * WEIGHTS.meni +
+    freshness * WEIGHTS.freshness +
     readerInterest * WEIGHTS.reader +
-    trend * WEIGHTS.trend +
-    category * WEIGHTS.category +
-    national * WEIGHTS.national
+    category * WEIGHTS.category
   );
 }
 
+// Aplica tope de categoría: máximo 30% del top 10 (3 noticias) por categoría.
+// Evita que Sucesos u otra categoría viral domine la portada.
+function applyCategoryCap(ranked: Noticia[], topN = 10, maxPerCategory = 3): Noticia[] {
+  const top: Noticia[] = [];
+  const overflow: Noticia[] = [];
+  const counts: Record<string, number> = {};
+
+  for (const n of ranked) {
+    if (top.length < topN) {
+      counts[n.categoria] = (counts[n.categoria] || 0) + 1;
+      if (counts[n.categoria] <= maxPerCategory) {
+        top.push(n);
+      } else {
+        counts[n.categoria]--;
+        overflow.push(n);
+      }
+    } else {
+      overflow.push(n);
+    }
+  }
+
+  return [...top, ...overflow];
+}
+
 export function rankNoticias(noticias: Noticia[]): Noticia[] {
-  return [...noticias]
+  const ranked = [...noticias]
     .map((n) => ({ n, score: scoreNoticia(n) }))
     .sort((a, b) => b.score - a.score)
     .map(({ n }) => n);
+
+  return applyCategoryCap(ranked);
 }
 
 export function selectDestacada(noticias: Noticia[]): Noticia | null {
