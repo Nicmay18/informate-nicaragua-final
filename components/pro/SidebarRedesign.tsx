@@ -79,6 +79,33 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
         </div>
       )}
 
+      {/* Centro de información útil */}
+      <div className="rd-panel" style={{ background: '#0f172a', color: '#fff' }}>
+        <div className="rd-panel-head" style={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>
+          Nicaragua Informate Útil
+        </div>
+        <div style={{ padding: '0 16px 16px' }}>
+          <p style={{ fontSize: 13, lineHeight: 1.45, margin: '0 0 12px', color: '#DCE3E9' }}>
+            Trámites, economía, vida diaria y turismo. Información práctica para el día a día.
+          </p>
+          <Link
+            href="/util"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#fff',
+              textDecoration: 'none',
+              borderBottom: '1px solid rgba(255,255,255,0.4)',
+            }}
+          >
+            Ver todo
+          </Link>
+        </div>
+      </div>
+
       {/* Secciones del sitio */}
       <CategoriasSidebar />
 

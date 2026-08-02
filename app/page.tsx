@@ -5,6 +5,7 @@ import { rankNoticias } from '@/lib/home-ranking';
 import { getAllEvergreen } from '@/lib/evergreen';
 import { diversifyNoticias, diversifyEvergreen } from '@/lib/diversify';
 import { checkHomeDiversity } from '@/lib/home-balance';
+import { checkBrandHealth } from '@/lib/brand-health';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import type { Metadata } from 'next';
@@ -83,6 +84,12 @@ export default async function HomePage() {
     const homeHealth = checkHomeDiversity(noticias.slice(0, 30));
     if (!homeHealth.balanced) {
       logger.warn('[HomePage] Home Diversity Check:', homeHealth.alerts.join(' | '));
+    }
+
+    const brandHealth = checkBrandHealth(noticias.slice(0, 10));
+    const critical = brandHealth.filter((a) => a.level !== 'ok');
+    if (critical.length > 0) {
+      logger.warn('[HomePage] Brand Health:', critical.map((a) => a.message).join(' | '));
     }
   } catch (error) {
     logger.error('[HomePage] Error:', error);

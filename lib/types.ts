@@ -2,6 +2,15 @@
  * Interface principal para noticias/artículos del sistema
  * @description Representa una noticia completa con todos sus campos
  */
+export type ArticleType = 'noticia' | 'explicador' | 'guia' | 'analisis';
+
+export interface ExplainerFields {
+  contexto?: string;
+  antecedentes?: string;
+  conceptosClave?: string[];
+  faq?: Array<{ pregunta: string; respuesta: string }>;
+}
+
 export interface Noticia {
   id: string;
   slug: string;
@@ -29,6 +38,8 @@ export interface Noticia {
   scoreCalidad?: number;
   noindex?: boolean;
   related_links?: Array<{ url: string; anchor: string; type: string }>;
+  articleType?: ArticleType;
+  explainer?: ExplainerFields;
 }
 
 /**

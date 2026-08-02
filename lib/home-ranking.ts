@@ -114,9 +114,9 @@ function scoreNoticia(noticia: Noticia): number {
   return Math.max(0, score - lutoPenalty);
 }
 
-// Aplica tope de categoría: máximo 40% del top 10 (4 noticias) por categoría.
+// Aplica tope de categoría: máximo 30% del top 10 (3 noticias) por categoría.
 // Evita que Sucesos u otra categoría viral domine la portada.
-function applyCategoryCap(ranked: Noticia[], topN = 10, maxPerCategory = 4): Noticia[] {
+function applyCategoryCap(ranked: Noticia[], topN = 10, maxPerCategory = 3): Noticia[] {
   const top: Noticia[] = [];
   const overflow: Noticia[] = [];
   const counts: Record<string, number> = {};
