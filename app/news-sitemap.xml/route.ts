@@ -1,6 +1,9 @@
 ﻿import { getNews } from '@/lib/data';
 import { unstable_cache } from 'next/cache';
 import { normalizeEditorialTitle } from '@/lib/formateo';
+import { isToxicSlug } from '@/lib/seo-toxic';
+import { safeDate } from '@/app/sitemap';
+import { logger } from '@/lib/logger';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -21,8 +24,8 @@ async function fetchNewsSitemapRaw() {
   const articles = await getNews(100);
   return articles
     .filter((a) => {
-      const d = new Date(a.fecha);
-      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs;
+      const d = safeDate(a.fecha);
+      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs && !isToxicSlug(a.slug) && a.estado !== 'borrador' && a.estado !== 'archivado';
     })
     .map((a) => ({
       slug: a.slug,
@@ -46,8 +49,8 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${articles.map((article) => {
-  const d = new Date(article.fecha as string);
-  const publicationDate = !isNaN(d.getTime()) ? d.toISOString() : new Date().toISOString();
+  const articleDate = safeDate(article.fecha);
+  const publicationDate = !isNaN(articleDate.getTime()) ? articleDate.toISOString() : new Date().toISOString();
   const publicationName = 'Nicaragua Informate';
   const publicationLanguage = 'es';
   
@@ -74,7 +77,7 @@ ${articles.map((article) => {
       },
     });
   } catch (error) {
-    console.error('[News Sitemap] Error:', error);
+    logger.error('[News Sitemap] Error:', error);
     
     // Fallback: sitemap vacío si hay error
     const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>

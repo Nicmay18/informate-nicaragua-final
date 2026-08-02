@@ -16,7 +16,7 @@ const cachedGetNews = unstable_cache(
   { revalidate: 3600, tags: ['sitemap-news'] }
 );
 
-function safeDate(value: unknown): Date {
+export function safeDate(value: unknown): Date {
   if (!value) return new Date();
   if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
     try {
