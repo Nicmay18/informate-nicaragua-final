@@ -145,6 +145,14 @@ export function middleware(request: NextRequest) {
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
   response.headers.delete('X-Powered-By');
 
+  if (pathname.startsWith('/panel/') && pathname !== '/panel') {
+    response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+    const relaxedCsp = cspDirectives.map((d) =>
+      d.startsWith('frame-ancestors') ? "frame-ancestors 'self'" : d
+    );
+    response.headers.set('Content-Security-Policy', relaxedCsp.join('; '));
+  }
+
   const isCrawler = ALLOWED_CRAWLERS.some((bot) => ua.includes(bot));
   if (isCrawler && (pathname.startsWith('/noticias/') || pathname.startsWith('/categoria/'))) {
     response.headers.set(
