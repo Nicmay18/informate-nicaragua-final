@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getGrowthMetrics } from '@/lib/growth';
-import { BarChart3, Eye, Users, Newspaper, Activity, TrendingUp } from 'lucide-react';
+import { BarChart3, Eye, Newspaper, Activity, TrendingUp, AlertTriangle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: { absolute: 'Growth Dashboard | Admin' },
@@ -19,11 +19,25 @@ export default async function GrowthDashboardPage() {
         Métricas de visitas, contenido, fuentes de tráfico y artículos más leídos.
       </p>
 
+      {metrics.errors.length > 0 && (
+        <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '14px 16px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <AlertTriangle size={20} style={{ color: 'var(--danger)', flexShrink: 0, marginTop: 2 }} />
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--danger)', marginBottom: 4, fontSize: '0.95rem' }}>Errores de consulta</div>
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+              {metrics.errors.map((e) => (
+                <li key={e}>{e}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 32 }}>
-        <StatBox icon={<Newspaper size={20} />} label="Noticias publicadas" value={metrics.totalNews} />
         <StatBox icon={<Eye size={20} />} label="Vistas totales" value={metrics.totalViews.toLocaleString('es-NI')} />
-        <StatBox icon={<Activity size={20} />} label="Visitas recientes" value={metrics.recentVisits} />
-        <StatBox icon={<Users size={20} />} label="Fuentes de tráfico" value={Object.keys(metrics.trafficSources).length} />
+        <StatBox icon={<Newspaper size={20} />} label="Noticias activas" value={metrics.totalNews} />
+        <StatBox icon={<Activity size={20} />} label="Vistas promedio" value={metrics.avgViews.toLocaleString('es-NI')} />
+        <StatBox icon={<TrendingUp size={20} />} label="Noticia más leída" value={metrics.mostRead ? `${metrics.mostRead.titulo.slice(0, 18)}…` : '—'} detail={metrics.mostRead ? `${metrics.mostRead.vistas} vistas` : undefined} />
       </div>
 
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 16 }}>
@@ -60,11 +74,12 @@ export default async function GrowthDashboardPage() {
   );
 }
 
-function StatBox({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) {
+function StatBox({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: string | number; detail?: string }) {
   return (
     <div style={{ border: '1px solid var(--border)', borderRadius: 14, padding: 18, background: 'var(--ni-bg)' }}>
       <div style={{ color: 'var(--accent)', marginBottom: 8 }}>{icon}</div>
       <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{value}</div>
+      {detail && <div style={{ color: 'var(--rd-accent)', fontSize: '0.85rem', fontWeight: 600 }}>{detail}</div>}
       <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{label}</div>
     </div>
   );
