@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@/lib/nios';
 import { getDailyEditorReport } from '@/lib/nios/daily-editor';
 import { NiosExecutiveDashboard } from '@/components/nios/NiosExecutiveDashboard';
+import { NiosV3Dashboard } from '@/components/nios/NiosV3Dashboard';
 import { Brain, AlertTriangle, CheckCircle, Clock, Lightbulb, Target, Shield, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default async function NiosPanelPage() {
       </p>
 
       <NiosExecutiveDashboard daily={daily} />
+      <NiosV3Dashboard v3={daily.v3} />
 
       {report.errors && report.errors.length > 0 && (
         <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '14px 16px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
