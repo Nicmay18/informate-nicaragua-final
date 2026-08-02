@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@/lib/nios';
+import { getDailyEditorReport } from '@/lib/nios/daily-editor';
+import { DailyEditorPanel } from '@/components/nios/DailyEditorPanel';
 import { Brain, AlertTriangle, CheckCircle, Clock, Lightbulb, Target, Shield, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -23,7 +25,7 @@ function formatDate(iso: string): string {
 }
 
 export default async function NiosPanelPage() {
-  const report = await getNiosReport();
+  const [report, daily] = await Promise.all([getNiosReport(), getDailyEditorReport()]);
 
   return (
     <main style={{ padding: '32px 20px', maxWidth: 1080, margin: '0 auto' }}>
@@ -34,6 +36,8 @@ export default async function NiosPanelPage() {
       <p style={{ color: 'var(--text-secondary)', marginBottom: 24 }}>
         Generado: {formatDate(report.generatedAt)} · Estado: {report.status === 'ok' ? 'ok' : 'parcial'}
       </p>
+
+      <DailyEditorPanel daily={daily} />
 
       {report.errors && report.errors.length > 0 && (
         <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '14px 16px', marginBottom: 24, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
