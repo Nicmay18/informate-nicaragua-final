@@ -64,7 +64,7 @@ export default async function HomePage() {
 
   try {
     [noticias, masLeidas, populares] = await Promise.all([
-      getLatestNews(80),
+      getLatestNews(40),
       getTrendingNews(5),
       getPopularNews(5),
     ]);
