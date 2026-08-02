@@ -3,32 +3,21 @@
 ## Estado de la entrega
 
 - `npm run build`: ✅ EXITO
-- `npx tsc --noEmit`: ✅ EXITO
-- `npx vitest run`: ✅ 71/71 tests OK
+- `npx tsc --noEmit`: ✅ EXITO (dentro de `npm run test:merge`)
+- `npm run test:merge`: ✅ 71/71 tests OK, 0 warnings
 - `npm run lint`: ✅ OK
+- Lighthouse: no ejecutado — requiere Chrome/entorno de escritorio
 
 ## Commits realizados en esta misión
 
 | Hash | Mensaje | Módulo |
 |---|---|---|
-| `e6f54c5` | `refactor(components): elimina componentes huérfanos duplicados (HomePageRedesign, Sidebar, SidebarPro, ImageSkeleton, LutoImage)` | components |
-| `3d96934` | `feat(app): agrega loading.tsx para streaming entre rutas` | app |
-| `bb0192f` | `fix(seo): agrega canonical global a layout` | seo |
+| `b475d87` | `fix(article): corrige schema Speakable, elimina JSON-LD duplicado y mejora tipado` | article |
 
 ## Archivos modificados / eliminados
 
-- **Eliminados** (`components`):
-  - `components/HomePageRedesign.tsx`
-  - `components/Sidebar.tsx`
-  - `components/pro/SidebarPro.tsx`
-  - `components/ImageSkeleton.tsx`
-  - `components/LutoImage.tsx`
-
-- **Agregados** (`app`):
-  - `app/loading.tsx`
-
-- **Modificados** (`seo`):
-  - `app/layout.tsx` (canonical global)
+- **Modificados** (`components`):
+  - `components/ArticlePage.tsx` (clase `article-headline` para `Speakable`, JSON-LD duplicado eliminado, catch tipado `unknown`)
 
 ## MENI V3.2
 
