@@ -1,19 +1,29 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { Flame } from 'lucide-react';
+import { diversifyNoticias } from '@/lib/diversify';
 import type { Noticia } from '@/lib/types';
+
+import GuiaUtilWidget from '@/components/pro/GuiaUtilWidget';
 
 const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false });
 const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false });
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
 const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false });
-const GuiaUtilWidget = dynamic(() => import('@/components/pro/GuiaUtilWidget'), { ssr: false });
 
 interface SidebarRedesignProps {
   masLeidas: Noticia[];
 }
 
 export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
-  const lecturas = masLeidas.slice(0, 5);
+  const lecturas = diversifyNoticias(masLeidas, 5, 2);
+
+  function timeAgo(dateString?: string) {
+    const d = dateString ? new Date(dateString) : new Date();
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (Number.isNaN(days) || days < 0) return '';
+    return days === 0 ? 'hoy' : `hace ${days} d`;
+  }
 
   return (
     <>
@@ -45,15 +55,23 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
 
       {lecturas.length > 0 && (
         <div className="rd-panel">
-          <div className="rd-panel-head">Más leídas</div>
-          <ol style={{ listStyle: 'none', margin: 0, padding: '6px 16px 10px' }}>
+          <div className="rd-panel-head" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Flame size={18} /> Lo más leído
+          </div>
+          <ol style={{ listStyle: 'none', margin: 0, padding: '0 16px 14px' }}>
             {lecturas.map((n, i) => (
-              <li key={n.id} style={{ display: 'flex', gap: 12, padding: '12px 0', borderBottom: i < lecturas.length - 1 ? '1px solid var(--rd-line)' : 'none', alignItems: 'baseline' }}>
-                <span style={{ fontFamily: 'var(--rd-serif)', fontWeight: 700, fontSize: 19, color: 'var(--rd-accent)', flex: 'none', width: 20 }}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+              <li key={n.id} style={{ padding: '12px 0', borderBottom: i < lecturas.length - 1 ? '1px solid var(--rd-line)' : 'none' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                  <span style={{ fontFamily: 'var(--rd-serif)', fontWeight: 800, fontSize: 20, color: 'var(--rd-accent)', lineHeight: 1 }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--rd-accent)', background: 'var(--rd-accent-soft)', padding: '3px 8px', borderRadius: 999 }}>
+                    {n.categoria}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--rd-muted)' }}>{timeAgo(n.fecha)}</span>
+                </div>
                 <h4 style={{ fontFamily: 'var(--rd-serif)', fontSize: 14.5, lineHeight: 1.35, fontWeight: 600, margin: 0 }}>
-                  <Link href={`/noticias/${n.slug}`}>{n.titulo}</Link>
+                  <Link href={`/noticias/${n.slug}`} style={{ color: 'var(--rd-ink)', textDecoration: 'none' }}>{n.titulo}</Link>
                 </h4>
               </li>
             ))}

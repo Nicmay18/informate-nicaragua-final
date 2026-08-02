@@ -3,6 +3,7 @@ import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import { rankNoticias } from '@/lib/home-ranking';
 import { getAllEvergreen } from '@/lib/evergreen';
+import { diversifyNoticias, diversifyEvergreen } from '@/lib/diversify';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import type { Metadata } from 'next';
@@ -69,14 +70,14 @@ export default async function HomePage() {
   try {
     const [latest, trending, popular, evergreen] = await Promise.all([
       getLatestNews(40),
-      getTrendingNews(5),
-      getPopularNews(5),
-      Promise.resolve(getAllEvergreen().slice(0, 3)),
+      getTrendingNews(20),
+      getPopularNews(20),
+      Promise.resolve(getAllEvergreen()),
     ]);
     noticias = rankNoticias(latest);
-    masLeidas = trending;
-    populares = popular;
-    contenidoUtil = evergreen;
+    masLeidas = diversifyNoticias(trending, 5, 2);
+    populares = diversifyNoticias(popular, 5, 2);
+    contenidoUtil = diversifyEvergreen(evergreen, 4);
   } catch (error) {
     logger.error('[HomePage] Error:', error);
   }

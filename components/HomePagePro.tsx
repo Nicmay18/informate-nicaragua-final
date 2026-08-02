@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { BookOpen, ArrowRight } from 'lucide-react';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { tiempoLectura } from '@/lib/formateo';
@@ -220,20 +221,57 @@ function SectionGuia({ titulo, guias }: { titulo: string; guias: EvergreenArticl
   return (
     <section className="rd-section" data-reveal>
       <div className="rd-section-head">
-        <h2>{titulo}</h2>
-        <Link href="/guia">Ver más →</Link>
+        <h2>
+          <BookOpen size={22} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} />
+          {titulo}
+        </h2>
+        <Link href="/guia" style={{ color: 'var(--rd-accent)', fontWeight: 600, fontSize: '0.9rem' }}>Ver más →</Link>
       </div>
       <div
         className="rd-story-grid"
-        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}
       >
         {guias.map((g) => (
-          <article key={g.slug} className="rd-portada-item" style={{ padding: 20 }}>
-            <span className="rd-eyebrow">{g.category}</span>
-            <h3>
-              <Link href={`/guia/${g.slug}`}>{g.title}</Link>
+          <article
+            key={g.slug}
+            style={{
+              background: 'var(--ni-bg)',
+              border: '1px solid var(--ni-border)',
+              borderLeft: '4px solid var(--rd-accent)',
+              borderRadius: 12,
+              padding: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+            }}
+          >
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                color: 'var(--rd-accent)',
+                background: 'var(--rd-accent-soft)',
+                padding: '3px 8px',
+                borderRadius: 999,
+                width: 'fit-content',
+              }}
+            >
+              {g.category}
+            </span>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.35, margin: 0 }}>
+              <Link href={`/guia/${g.slug}`} style={{ color: 'var(--rd-ink)', textDecoration: 'none' }}>
+                {g.title}
+              </Link>
             </h3>
-            <p style={{ color: 'var(--rd-muted)', fontSize: '0.95rem', marginTop: 8 }}>{g.description}</p>
+            <p style={{ color: 'var(--rd-muted)', fontSize: '0.95rem', margin: 0, lineHeight: 1.5, flex: 1 }}>{g.description}</p>
+            <Link
+              href={`/guia/${g.slug}`}
+              style={{ color: 'var(--rd-accent)', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+            >
+              Leer guía <ArrowRight size={14} />
+            </Link>
           </article>
         ))}
       </div>
