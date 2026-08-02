@@ -19,6 +19,33 @@ Copiá `.env.example` a `.env.local` y completá los valores reales.
 - `scripts/` → Utilidades, migraciones, backups, auditorías
 - `public/` → Assets estáticos e imágenes
 
+## 🧠 NIOS Daily Editor
+
+Módulos en `lib/nios/`:
+
+| Módulo | Archivo | Función |
+|---|---|---|
+| Daily Editor | `lib/nios/daily-editor.ts` | Orquesta el reporte diario |
+| Category Health Radar | `lib/nios/category-health.ts` | Salud por categoría a 7 y 30 días |
+| Opportunity Radar | `lib/nios/opportunity-radar.ts` | Oportunidades de guías, categorías débiles y noticias |
+| SEO Cleanup Radar | `lib/nios/seo-cleanup.ts` | Títulos largos, metas, autores, imágenes sin alt |
+| Content Mix Recommender | `lib/nios/content-mix.ts` | Plan semanal de contenido equilibrado |
+| Business Opportunity Signals | `lib/nios/business-signals.ts` | Categorías con potencial comercial |
+
+Dashboard: `app/admin/nios/page.tsx` + `components/nios/DailyEditorPanel.tsx`
+Reporte: `NIOS_DAILY_EDITOR_REPORT.md`
+
+## 🧊 Producto v1.1 — Congelado para operación
+
+Documentación de operación y crecimiento:
+
+- `NICARAGUA_INFORMATE_OPERATING_MANUAL_2026.md` — Manual diario
+- `EDITOR_DAILY_CHECKLIST.md` — Checklist del editor
+- `GROWTH_PLAN_90_DAYS.md` — Plan de crecimiento 90 días
+- `FINAL_CODE_HEALTH_REPORT.md` — Salud del código
+- `FINAL_FREEZE_REPORT.md` — Estado PRODUCTION READY
+- `FINAL_PRODUCTION_READINESS.md` — Versión v1.1 Production Ready
+
 ## 🐛 Fixes aplicados (Jun 2026)
 
 Ver `INFORME_FORENSE.md` para detalle completo de la auditoría forense.
