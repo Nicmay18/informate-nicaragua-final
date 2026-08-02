@@ -3253,8 +3253,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .ni-info-box li{margin-bottom:8px;font-size:1rem}
 
 /* Imágenes dentro del artículo */
-.ni-article__body figure{margin:32px -20px}
-.ni-article__body figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:0}
+.ni-article__body img,
+.ni-article__body figure img{max-width:100%;height:auto;display:block;border-radius:8px}
+.ni-article__body figure{margin:32px 0;text-align:center}
 .ni-article__body figcaption{padding:12px 20px 0;font-size:0.8rem;color:var(--ni-text-light);text-align:center}
 
 /* Tags */
