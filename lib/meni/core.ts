@@ -31,6 +31,10 @@ import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
 import { getPerfilEditorial } from '@/lib/meni/editorial-profiles';
 import { buildEditorialReason } from '@/lib/meni/editorial-reason';
+import { detectContentProfile, type MeniContentProfile } from '@/lib/meni/profile-detector';
+import { computeInputHash } from '@/lib/meni/hash';
+import { computeContextScore } from '@/lib/meni/contextualiza';
+import { filterRecommendations } from '@/lib/meni/recommendation-filter';
 import type { ActiveAdjustments } from '@/lib/meni/learning-engine/learning-adapter';
 
 export interface MeniRunOptions {
@@ -46,9 +50,38 @@ export interface MeniRunOptions {
   };
 }
 
-function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe']): MeniResult {
+const MIN_PROFILE_CONFIDENCE = 0.25;
+
+const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
+  sucesos: 'Sucesos',
+  violencia_genero: 'Sucesos',
+  nacionales: 'Nacionales',
+  politica: 'Política',
+  economia: 'Economía',
+  salud: 'Salud',
+  deportes: 'Deportes',
+  cultura: 'Cultura',
+  tecnologia: 'Tecnología',
+  internacional: 'Internacionales',
+};
+
+function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe'], now = new Date()): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
+
+  // ── FASE 2 + 3: perfil y trazabilidad ─────────────────────────────
+  const articleHash = computeInputHash(input);
+  const contentProfile = detectContentProfile(input.titulo, input.contenido, input.resumen);
+  const perfilIdentificado = contentProfile.profile_confidence >= MIN_PROFILE_CONFIDENCE;
+  const profileCategoria = perfilIdentificado
+    ? normalizeCategory(PROFILE_TO_CATEGORIA[contentProfile.profile_detected])
+    : normalizeCategory(input.categoria || 'General');
+  logMeni('Content profile detected', {
+    profile: contentProfile.profile_detected,
+    confidence: contentProfile.profile_confidence,
+    perfilIdentificado,
+    profileCategoria,
+  });
 
   // Detectar tier editorial (FLASH, NOTICIA, REPORTAJE, INVESTIGACION)
   const tier: EditorialTier = detectTier({
@@ -59,8 +92,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   let thresholds = { ...TIER_THRESHOLDS[tier] };
 
   // Aplicar criterios del perfil editorial según tipo_noticia_detectada
-  const perfilCategoria = normalizeCategory(input.categoria || 'General');
-  const perfil = getPerfilEditorial(perfilCategoria, input.contenido);
+  const perfil = getPerfilEditorial(profileCategoria, input.contenido);
   thresholds = {
     ...thresholds,
     exigeServiceValue: perfil.bloqueaPorServicio,
@@ -86,8 +118,8 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // SEO, EEAT, Discover, AdSense, Forense = datos de respaldo
   // ═══════════════════════════════════════════════════════════
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
-  const rawCategory = evaluacion.evidence.category || input.categoria || 'general';
-  const categoria = normalizeCategory(rawCategory);
+  const rawCategory = evaluacion.evidence.category || profileCategoria || 'general';
+  const categoria = profileCategoria;
   const modulo = getModule(rawCategory);
 
   // ═══════════════════════════════════════════════════════════
@@ -96,8 +128,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // ═══════════════════════════════════════════════════════════
   const editorialDecision = runEditorialBrain({
     ...input,
+    categoria: profileCategoria,
+    categoriaSugerida: profileCategoria,
     fuente: input.contenido,
-    categoriaSugerida: input.categoria,
     tierThresholds: thresholds,
     evaluacion,
     ...(editorJefe?.editorPatterns ? { editorPatterns: editorJefe.editorPatterns } : {}),
@@ -145,6 +178,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     },
   });
 
+  // Deterministic timestamp: same input must produce same evaluationTimestamp
+  qualityGate.timestamp = now.toISOString();
+
   const palabrasTexto = textoPlano.split(/\s+/).filter(Boolean).length;
 
   // Quality Gate: solo bloquear por issues técnicos/factuales que el
@@ -178,6 +214,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     advertencias: editorialDecision.acciones,
   };
 
+  // ── FASE 4 + 5: Explicabilidad y veredicto único ──
+  const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen);
+  const finalEditorialScore = scoreFinal;
+  const estadoFinal = aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR';
+
   // Recomendaciones derivadas de EditorialDecision.acciones
   const recomendacionesFinal: MeniRecomendacion[] = !aprobadoFinal
     ? editorialDecision.acciones.map((a) => ({
@@ -186,6 +227,15 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
         mensaje: a,
       }))
     : [];
+
+  // ── FASE 6: Recomendaciones dinámicas por perfil ──
+  const recomendacionesContextuales = filterRecommendations(
+    recomendacionesFinal,
+    contentProfile.profile_detected,
+    input.titulo,
+    input.contenido,
+    input.resumen,
+  );
 
   // Construir razón editorial explicativa
   const editorialReason = buildEditorialReason({
@@ -224,6 +274,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   return {
     version: '2.0',
+    meniVersion: '2.1-calibration',
     estado: 'Activo',
     categoria,
     modulo: modulo.nombre,
@@ -238,10 +289,13 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     auditoria,
     diagnostico,
     scoreFinal,
+    finalEditorialScore,
+    estadoFinal,
     aprobado: aprobadoFinal,
     calificacion,
     puntosPerdidos: editorialDecision.puntosPerdidos,
     recomendaciones: recomendacionesFinal,
+    recomendacionesContextuales,
     // Estado Editorial — veredicto periodístico del editor
     estadoEditorial: editorialDecision.estadoEditorial,
     recomendacionEditorial: editorialDecision.recomendacionEditorial,
@@ -281,20 +335,28 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     editorialDna,
     editorialTier: tier,
     editorialReason,
+    articleHash,
+    evaluationTimestamp: now.toISOString(),
+    profile_used: contentProfile.profile_detected,
+    profile_confidence: contentProfile.profile_confidence,
+    matched_keywords: contentProfile.matched_keywords,
+    matched_entities: contentProfile.matched_entities,
+    contextScore,
   };
 }
 
 export function runMeni(input: NoticiaInput, options?: MeniRunOptions): MeniResult {
   let currentInput = input;
   logMeni('=== runMeni (auto-correct wrapper) start ===', input.titulo);
-  let result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe);
+  const now = new Date();
+  let result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
   let autoCorrections: AutoCorrection[] = [];
   if (!result.aprobado) {
     const corrected = autoCorrectNoticia(currentInput, result);
     if (corrected.corrections.length > 0) {
       autoCorrections = corrected.corrections;
       currentInput = corrected.input;
-      result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe);
+      result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
     }
   }
   logMeni('=== runMeni (auto-correct wrapper) end ===', {

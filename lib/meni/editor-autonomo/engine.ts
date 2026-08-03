@@ -331,7 +331,8 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.4,
+      // FASE 3 (calibración): configuración determinística. Mismo input = mismo resultado.
+      temperature: 0,
       max_tokens: 6000,
     }),
   });

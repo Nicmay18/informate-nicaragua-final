@@ -11,6 +11,8 @@ import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import type { EditorialTier } from '@/lib/meni/editorial-tiers';
 import type { EditorialReason } from '@/lib/meni/editorial-reason';
 import type { EstadoEditorial, RecomendacionEditorial, DiagnosticoEditorial as DiagnosticoEditorialNI } from '@/lib/meni/editorial-brain/types';
+import type { ContextScore } from '@/lib/meni/contextualiza';
+import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 
 export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
@@ -113,6 +115,7 @@ export type MeniBlockingIssue = RevisionEditorJefe;
 
 export interface MeniResult {
   version: '2.0';
+  meniVersion: string;
   estado: 'Activo';
   categoria: MeniCategoria;
   modulo: string;
@@ -127,10 +130,20 @@ export interface MeniResult {
   auditoria: MeniAuditoria;
   diagnostico: string;
   scoreFinal: number;
+  finalEditorialScore: number;
+  estadoFinal: 'APROBADO' | 'MEJORAR' | 'NO_PUBLICAR';
   aprobado: boolean;
   calificacion: string;
   puntosPerdidos?: { concepto: string; puntos: number }[];
   recomendaciones: MeniRecomendacion[];
+  recomendacionesContextuales?: MeniRecomendacion[];
+  articleHash: string;
+  evaluationTimestamp: string;
+  profile_used?: MeniContentProfile;
+  profile_confidence?: number;
+  matched_keywords?: string[];
+  matched_entities?: string[];
+  contextScore?: ContextScore;
   // Estado Editorial — veredicto periodístico
   estadoEditorial?: EstadoEditorial;
   recomendacionEditorial?: RecomendacionEditorial;
