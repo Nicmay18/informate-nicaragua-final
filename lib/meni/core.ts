@@ -276,7 +276,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   return {
     version: '2.0',
-    meniVersion: '2.1-calibration',
+    meniVersion: '2.1.1-prod',
     estado: 'Activo',
     categoria,
     modulo: modulo.nombre,

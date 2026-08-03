@@ -84,5 +84,5 @@ El sistema está congelado con:
 
 ---
 
-**Commit final:** `POR COMMITEAR`  
+**Commit final:** `624c4f15`  
 **Tag:** `v2.1.1-prod`
