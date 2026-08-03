@@ -125,6 +125,20 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
           <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, maxWidth: 700, marginBottom: 24 }}>
             {author.bio}
           </p>
+          {author.experience && (
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.7)', marginBottom: 12 }}>
+              <strong>Experiencia:</strong> {author.experience}
+            </p>
+          )}
+          {author.coverageAreas && author.coverageAreas.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 24 }}>
+              {author.coverageAreas.map((area) => (
+                <span key={area} style={{ background: 'rgba(255,255,255,0.15)', padding: '6px 14px', borderRadius: 999, fontSize: '0.85rem', color: '#fff' }}>
+                  {area}
+                </span>
+              ))}
+            </div>
+          )}
           {author.social && (
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
               {author.social.twitter && (

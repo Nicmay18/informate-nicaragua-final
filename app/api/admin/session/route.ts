@@ -46,11 +46,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'ADMIN_API_KEY no configurado en servidor' }, { status: 500 });
     }
 
-    return NextResponse.json({
+    const cookieOptions = [
+      `admin_session=${encodeURIComponent(apiKey)}`,
+      'HttpOnly',
+      'SameSite=Strict',
+      'Path=/',
+      'Max-Age=86400',
+      process.env.NODE_ENV === 'production' ? 'Secure' : '',
+    ]
+      .filter(Boolean)
+      .join('; ');
+
+    const response = NextResponse.json({
       success: true,
       token: apiKey,
       email: decoded.email,
     });
+    response.headers.set('Set-Cookie', cookieOptions);
+    return response;
   } catch (err: any) {
     console.error('[session] Error:', err.message);
     return NextResponse.json(

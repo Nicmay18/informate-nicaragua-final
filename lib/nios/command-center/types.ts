@@ -178,7 +178,24 @@ export interface OpportunityHunter {
   items: HuntedOpportunity[];
 }
 
-/* ── 9. Business Health ─────────────────────────────────── */
+/* ── 9. Authority Health ───────────────────────────────── */
+
+export interface AuthorityPillar {
+  id: string;
+  label: string;
+  score: number;
+  weight: number;
+  note: string;
+}
+
+export interface AuthorityHealth {
+  score: number;
+  pillars: AuthorityPillar[];
+  verdict: string;
+  nextMilestone: string;
+}
+
+/* ── 10. Business Health ─────────────────────────────────── */
 
 export interface BusinessPillar {
   id: string;
@@ -211,6 +228,7 @@ export interface BusinessCommandCenter {
   home: HomeQuality;
   distribution: DistributionCommand;
   hunter: OpportunityHunter;
+  authority: AuthorityHealth;
   business: BusinessHealth;
   errors?: string[];
 }

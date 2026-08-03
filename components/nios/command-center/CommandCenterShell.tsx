@@ -12,12 +12,14 @@ import {
   Send,
   Radar,
   AlertTriangle,
+  Award,
 } from 'lucide-react';
 import type { BusinessCommandCenter } from '@/lib/nios/command-center';
 import { OverviewPanel, BalancePanel, TrustPanel, RevenuePanel } from './StrategyPanels';
 import { WarRoomPanel, HomePanel, DistributionPanel, HunterPanel } from './OperationsPanels';
+import AuthorityPanel from './AuthorityPanel';
 
-type TabId = 'overview' | 'balance' | 'trust' | 'revenue' | 'warroom' | 'home' | 'distribution' | 'hunter';
+type TabId = 'overview' | 'balance' | 'trust' | 'revenue' | 'warroom' | 'home' | 'distribution' | 'hunter' | 'authority';
 
 export default function CommandCenterShell({ cc }: { cc: BusinessCommandCenter }) {
   const [tab, setTab] = useState<TabId>('overview');
@@ -33,6 +35,7 @@ export default function CommandCenterShell({ cc }: { cc: BusinessCommandCenter }
     { id: 'home', label: 'Portada', icon: LayoutTemplate, badge: cc.home.violations.length || undefined },
     { id: 'distribution', label: 'Distribución', icon: Send },
     { id: 'hunter', label: 'Oportunidades', icon: Radar, badge: cc.hunter.uncovered || undefined },
+    { id: 'authority', label: 'Authority', icon: Award },
   ];
 
   return (
@@ -92,6 +95,7 @@ export default function CommandCenterShell({ cc }: { cc: BusinessCommandCenter }
         {tab === 'home' && <HomePanel home={cc.home} />}
         {tab === 'distribution' && <DistributionPanel distribution={cc.distribution} />}
         {tab === 'hunter' && <HunterPanel hunter={cc.hunter} />}
+        {tab === 'authority' && <AuthorityPanel authority={cc.authority} />}
       </div>
     </main>
   );

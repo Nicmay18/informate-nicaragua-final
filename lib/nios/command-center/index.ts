@@ -20,6 +20,7 @@ import { buildDistributionCommand } from './distribution-command';
 import { buildOpportunityHunter } from './opportunity-hunter';
 import { buildBusinessHealth } from './business-health';
 import { buildCeoDecisions } from './ceo-decisions';
+import { buildAuthorityHealth } from './authority-health';
 import type { BusinessCommandCenter } from './types';
 
 export * from './types';
@@ -31,6 +32,7 @@ export { buildHomeQuality } from './home-quality';
 export { buildDistributionCommand } from './distribution-command';
 export { buildOpportunityHunter } from './opportunity-hunter';
 export { buildBusinessHealth } from './business-health';
+export { buildAuthorityHealth } from './authority-health';
 export { buildCeoDecisions } from './ceo-decisions';
 
 /**
@@ -52,6 +54,7 @@ export function buildCommandCenter(
   const distribution = buildDistributionCommand(noticias, now.getTime());
   const hunter = buildOpportunityHunter(noticias, guides);
   const warRoom = buildContentWarRoom(noticias, balance, now);
+  const authority = buildAuthorityHealth(noticias);
   const business = buildBusinessHealth(noticias, guides, balance, trust, revenue, now.getTime());
 
   const decisions = buildCeoDecisions({ balance, trust, revenue, home, distribution, hunter, business });
@@ -69,6 +72,7 @@ export function buildCommandCenter(
     home,
     distribution,
     hunter,
+    authority,
     business,
     errors: errors.length ? errors : undefined,
   };

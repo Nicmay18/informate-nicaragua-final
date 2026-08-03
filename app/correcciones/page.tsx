@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LegalPageShell from '@/components/LegalPageShell';
 import { AlertCircle, Mail, Clock, FileText, CheckCircle } from 'lucide-react';
+import { getPublicCorrections } from '@/lib/correcciones';
+import { formatDateES } from '@/lib/formateo';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Política de Correcciones',
@@ -9,7 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://nicaraguainformate.com/correcciones' },
 };
 
-export default function CorreccionesPage() {
+export default async function CorreccionesPage() {
+  const correcciones = await getPublicCorrections(50);
   return (
     <LegalPageShell title="Política de Correcciones">
       <div style={{ background: 'rgba(140,29,24,0.08)', borderLeft: '4px solid #8c1d18', padding: '0.75rem 1.25rem', borderRadius: '0 0.5rem 0.5rem 0', marginBottom: '2rem', color: '#8c1d18', fontSize: '0.85rem' }}>
@@ -139,9 +144,34 @@ export default function CorreccionesPage() {
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
         10. Registro público de correcciones
       </h2>
-      <p style={{ color: '#475569', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Llevamos un registro interno de todas las correcciones publicadas con fecha, motivo y persona responsable de la verificación. Estamos trabajando en una sección pública donde nuestros lectores podrán consultar el historial de correcciones del medio en tiempo real, como práctica de transparencia frente a la audiencia.
-      </p>
+      {correcciones.length === 0 ? (
+        <p style={{ color: '#475569', marginBottom: '1.25rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
+          No hay correcciones publicadas en este momento. Este registro se actualiza en tiempo real cuando el equipo editorial publica una corrección.
+        </p>
+      ) : (
+        <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '1.5rem' }}>
+          {correcciones.map((c) => (
+            <div key={c.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 8, fontSize: 13, color: '#64748b' }}>
+                <time dateTime={c.fecha}>{formatDateES(c.fecha)}</time>
+                <span style={{ color: '#c41e3a', fontWeight: 600 }}>{c.campo}</span>
+              </div>
+              {c.articulo ? (
+                <h3 style={{ margin: '0 0 8px', fontSize: '1rem', fontWeight: 700 }}>
+                  <Link href={`/noticias/${c.articulo.slug}`} style={{ textDecoration: 'none', color: '#0f172a' }}>
+                    {c.articulo.titulo}
+                  </Link>
+                </h3>
+              ) : (
+                <h3 style={{ margin: '0 0 8px', fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>Artículo no disponible</h3>
+              )}
+              <p style={{ margin: 0, color: '#475569', fontSize: '0.9rem', lineHeight: 1.55 }}>
+                <strong>Cambio:</strong> {c.cambio}. <strong>Motivo:</strong> {c.motivo}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
         11. Alcance de esta política

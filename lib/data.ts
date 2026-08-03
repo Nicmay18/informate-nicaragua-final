@@ -35,6 +35,8 @@ export const LIST_FIELDS = [
   'metaDescripcion',
   'tags',
   'palabras',
+  'fuente',
+  'fuentesComplementarias',
 ] as const;
 
 function normalizeImage(imagen: string): string {
@@ -129,6 +131,10 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     keywords: data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || '',
     estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
     noindex: !!data.noindex,
+    fuente: data.fuente,
+    fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
+      ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
+      : undefined,
   };
 }
 
@@ -298,6 +304,10 @@ const _cachedGetBySlug = unstable_cache(
           keywords: data.keywords || '',
           estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
           noindex: !!data.noindex,
+          fuente: data.fuente,
+          fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
+            ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
+            : undefined,
         };
       }
     } catch (err) {

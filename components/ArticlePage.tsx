@@ -309,6 +309,38 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </div>
         )}
 
+        {/* Fuentes declaradas */}
+        {(noticia.fuente || (noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0)) && (
+          <div
+            style={{
+              margin: '28px 0',
+              padding: '16px 20px',
+              backgroundColor: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              borderRadius: 12,
+            }}
+          >
+            <h3 style={{ margin: '0 0 12px', fontSize: 14, fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Fuentes
+            </h3>
+            {noticia.fuente && (
+              <p style={{ margin: '0 0 8px', fontSize: 14, color: '#475569' }}>
+                <strong>Fuente principal:</strong> {noticia.fuente}
+              </p>
+            )}
+            {noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0 && (
+              <div style={{ fontSize: 14, color: '#475569' }}>
+                <strong>Fuentes complementarias:</strong>
+                <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
+                  {noticia.fuentesComplementarias.map((f, i) => (
+                    <li key={i} style={{ marginBottom: 4 }}>{f}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Audio — lazy-loaded, no bloquea LCP */}
         <Suspense fallback={null}>
           <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />

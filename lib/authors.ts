@@ -9,6 +9,10 @@ export interface Author {
     facebook?: string;
     instagram?: string;
   };
+  /** Áreas temáticas que cubre el autor. */
+  coverageAreas?: string[];
+  /** Años o trayectoria de experiencia. */
+  experience?: string;
 }
 
 export const AUTHORS: Record<string, Author> = {
@@ -21,18 +25,24 @@ export const AUTHORS: Record<string, Author> = {
     social: {
       facebook: 'https://www.facebook.com/profile.php?id=61578261125687',
     },
+    coverageAreas: ['Sucesos', 'Nacionales', 'Política', 'Deportes', 'Internacionales'],
+    experience: 'Más de 8 años de periodismo en medios nicaragüenses y certificación en verificación de datos.',
   },
   'maycol-nicaragua': {
     slug: 'maycol-nicaragua',
     name: 'Maycol Josué Nicaragua Rivas',
     role: 'Director Técnico',
     bio: 'Ingeniero en Sistemas. Se encarga del desarrollo tecnológico, la infraestructura web y todo lo relacionado con que el sitio funcione correctamente. Es el responsable de que la plataforma esté disponible las 24 horas y de la optimización de rendimiento.',
+    coverageAreas: ['Tecnología', 'Datos', 'Infraestructura digital'],
+    experience: 'Ingeniero en sistemas con experiencia en verificación de fuentes digitales, análisis de tendencias y seguridad informática.',
   },
   'jose-lopez': {
     slug: 'jose-lopez',
     name: 'José Luis López Ramírez',
     role: 'Director de Operaciones',
     bio: 'Ingeniero en Sistemas. Coordina la operación diaria, la publicación oportuna de contenido y la organización del equipo. Su trabajo es que todo salga a tiempo y con calidad, asegurando la continuidad del medio.',
+    coverageAreas: ['Operaciones editoriales', 'Distribución', 'Redes sociales'],
+    experience: 'Coordinación editorial y operativa para medios digitales desde 2024.',
   },
 };
 

@@ -78,9 +78,14 @@ export function buildNewsArticleJsonLdEnhanced(
     dateModified: safeIsoDate(article.fechaActualizacion || article.fecha),
     author: {
       '@type': 'Person',
+      '@id': authorUrl,
       name: authorName,
       jobTitle: knownAuthor?.role || 'Periodista',
       url: authorUrl,
+      sameAs: knownAuthor?.social
+        ? Object.values(knownAuthor.social).filter((v): v is string => Boolean(v))
+        : undefined,
+      knowsAbout: knownAuthor?.coverageAreas,
       worksFor: { '@id': 'https://nicaraguainformate.com/#organization' },
     },
     editor: {

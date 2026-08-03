@@ -40,6 +40,10 @@ export interface Noticia {
   related_links?: Array<{ url: string; anchor: string; type: string }>;
   articleType?: ArticleType;
   explainer?: ExplainerFields;
+  /** Fuente principal declarada del artículo. */
+  fuente?: string;
+  /** Fuentes complementarias declaradas del artículo. */
+  fuentesComplementarias?: string[];
 }
 
 /**
