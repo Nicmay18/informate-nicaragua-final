@@ -116,11 +116,30 @@ service cloud.firestore {
     }
     match /traffic_log/{docId} {
       allow read: if request.auth != null;
-      allow write: if true;
+      allow create, update: if request.auth != null
+          && request.resource.data.keys().hasOnly(['path','timestamp','userAgent','referrer'])
+          && request.resource.data.path is string
+          && request.resource.data.path.size() > 0
+          && request.resource.data.path.size() < 500
+          && request.resource.data.timestamp is timestamp
+          && (request.resource.data.keys().hasAll(['userAgent']) ? (request.resource.data.userAgent is string && request.resource.data.userAgent.size() < 500) : true)
+          && (request.resource.data.keys().hasAll(['referrer']) ? (request.resource.data.referrer is string && request.resource.data.referrer.size() < 1000) : true);
+      allow delete: if false;
     }
     match /analytics_traffic/{docId} {
       allow read: if request.auth != null;
-      allow write: if true;
+      allow create, update: if request.auth != null
+          && request.resource.data.keys().hasOnly(['event','value','timestamp','path'])
+          && request.resource.data.event is string
+          && request.resource.data.event.size() > 0
+          && request.resource.data.event.size() < 100
+          && request.resource.data.value is number
+          && request.resource.data.value >= 0
+          && request.resource.data.timestamp is timestamp
+          && request.resource.data.path is string
+          && request.resource.data.path.size() > 0
+          && request.resource.data.path.size() < 500;
+      allow delete: if false;
     }
     match /distribuciones/{docId} {
       allow read, write: if request.auth != null;

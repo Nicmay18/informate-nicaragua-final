@@ -63,6 +63,8 @@ const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   cultura: 'Cultura',
   tecnologia: 'Tecnología',
   internacional: 'Internacionales',
+  educacion: 'Educación',
+  ambiente: 'Ambiente',
 };
 
 function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe'], now = new Date()): MeniResult {
@@ -215,7 +217,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   };
 
   // ── FASE 4 + 5: Explicabilidad y veredicto único ──
-  const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen);
+  const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen, contentProfile.profile_detected);
   const finalEditorialScore = scoreFinal;
   const estadoFinal = aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR';
 

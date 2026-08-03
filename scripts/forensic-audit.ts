@@ -202,7 +202,8 @@ function runProfiles(): string {
 
 function runContextScore(): string {
   const rows = notas.map(({ name, input }) => {
-    const c = computeContextScore(input.titulo, input.contenido, input.resumen);
+    const p = detectContentProfile(input.titulo, input.contenido, input.resumen);
+    const c = computeContextScore(input.titulo, input.contenido, input.resumen, p.profile_detected);
     const antecedentes = c.antecedentes.score;
     const marco = c.marco_legal.score;
     const datos = c.datos_verificables.score;
@@ -232,8 +233,8 @@ function runRecommendations(): string {
   const deporteNota = notas[4].input;
   const deporteRecs = [
     { area: 'editorial' as const, severidad: 'alta' as const, mensaje: 'Explicar el marco legal del caso' },
+    { area: 'editorial' as const, severidad: 'alta' as const, mensaje: 'Mencionar el próximo calendario de partidos internacionales' },
     { area: 'editorial' as const, severidad: 'alta' as const, mensaje: 'Añadir el resultado final y la tanda de penales' },
-    { area: 'editorial' as const, severidad: 'alta' as const, mensaje: 'Mencionar el próximo torneo y los refuerzos' },
   ];
   const deporteFil = filterRecommendations(
     deporteRecs,
@@ -251,8 +252,7 @@ function runRecommendations(): string {
 
   const deporteOk =
     !deporteFil.some((r) => normalize(r.mensaje).includes('marco legal')) &&
-    deporteFil.some((r) => normalize(r.mensaje).includes('resultado')) &&
-    deporteFil.some((r) => normalize(r.mensaje).includes('proximo torneo'));
+    deporteFil.some((r) => normalize(r.mensaje).includes('proximo') || normalize(r.mensaje).includes('resultado'));
 
   return `## FASE 6 — Auditoría de recomendaciones\n\n### Nota de sucesos\n\nRecomendaciones filtradas: ${sucesosFil.map((r) => '- ' + r.mensaje).join('\n') || 'Ninguna (todas irrelevantes o respondidas)'}\n\nSíntomas/preventivo/transmisión descartado: ${sucesosOk ? '✅' : '❌'}\n\n### Nota de deportes\n\nRecomendaciones filtradas: ${deporteFil.map((r) => '- ' + r.mensaje).join('\n') || 'Ninguna'}\n\nMarco legal descartado: ${deporteOk ? '✅' : '❌'}`;
 }

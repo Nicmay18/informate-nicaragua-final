@@ -1,8 +1,14 @@
+import type { MeniContentProfile } from './profile-detector';
+
 /**
  * MENI Contextualiza — Auditoría explicable
  * ===========================================
  * Descompone la dimensión "contextualiza" del Sello NI en submétricas
  * con score, evidencia encontrada y evidencia faltante.
+ * 
+ * Pesos por perfil: ajustan la importancia de cada submétrica según el
+ * tipo de contenido, sin cambiar la estructura ni el score histórico
+ * cuando no se proporciona perfil.
  */
 
 export interface ContextSubscore {
@@ -29,6 +35,74 @@ interface ContextDetector {
   maximo: number;
   pesoPorMatch: number;
 }
+
+const PROFILE_CONTEXT_WEIGHTS: Partial<Record<MeniContentProfile, Partial<Record<keyof ContextScore, number>>>> = {
+  sucesos: {
+    antecedentes: 1.2,
+    marco_legal: 1.2,
+    datos_verificables: 1.2,
+    instituciones: 1.2,
+    fuentes: 1.2,
+  },
+  violencia_genero: {
+    antecedentes: 1.2,
+    marco_legal: 1.5,
+    instituciones: 1.2,
+    fuentes: 1.2,
+  },
+  economia: {
+    datos_verificables: 1.5,
+    impacto_social: 1.5,
+    instituciones: 1.2,
+    contexto_geografico: 1.0,
+  },
+  salud: {
+    datos_verificables: 1.5,
+    impacto_social: 1.2,
+    contexto_geografico: 1.0,
+  },
+  deportes: {
+    marco_legal: 0,
+    instituciones: 0.2,
+    datos_verificables: 1.2,
+    contexto_temporal: 1.2,
+    contexto_geografico: 1.0,
+    impacto_social: 1.0,
+  },
+  cultura: {
+    antecedentes: 1.2,
+    contexto_temporal: 1.2,
+    impacto_social: 1.0,
+  },
+  tecnologia: {
+    datos_verificables: 1.2,
+    impacto_social: 1.2,
+    instituciones: 1.0,
+  },
+  politica: {
+    marco_legal: 1.5,
+    instituciones: 1.2,
+    datos_verificables: 1.2,
+    antecedentes: 1.2,
+  },
+  nacionales: {
+    instituciones: 1.2,
+    marco_legal: 1.0,
+    datos_verificables: 1.0,
+  },
+  educacion: {
+    marco_legal: 1.0,
+    instituciones: 1.2,
+    datos_verificables: 1.0,
+    impacto_social: 1.0,
+  },
+  ambiente: {
+    antecedentes: 1.0,
+    datos_verificables: 1.2,
+    impacto_social: 1.5,
+    contexto_geografico: 1.2,
+  },
+};
 
 const DETECTORS: ContextDetector[] = [
   {
@@ -88,13 +162,21 @@ function normalize(text: string): string {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-export function computeContextScore(titulo: string, contenido: string, resumen?: string): ContextScore {
+export function computeContextScore(
+  titulo: string,
+  contenido: string,
+  resumen?: string,
+  perfil?: MeniContentProfile,
+): ContextScore {
   const fullText = normalize(`${titulo || ''} ${contenido || ''} ${resumen || ''}`);
   const result = {} as ContextScore;
+  const weights = perfil ? (PROFILE_CONTEXT_WEIGHTS[perfil] || {}) : {};
 
   for (const detector of DETECTORS) {
     const encontrado: string[] = [];
     let raw = 0;
+    const weight = weights[detector.name] ?? 1;
+    const effectivePeso = detector.pesoPorMatch * weight;
     for (const signal of detector.signals) {
       const norm = normalize(signal);
       const isPhrase = norm.includes(' ');
@@ -104,7 +186,7 @@ export function computeContextScore(titulo: string, contenido: string, resumen?:
       const matches = fullText.match(pattern) || [];
       if (matches.length > 0) {
         encontrado.push(signal);
-        raw += matches.length * detector.pesoPorMatch;
+        raw += matches.length * effectivePeso;
       }
     }
     const score = Math.min(detector.maximo, raw);

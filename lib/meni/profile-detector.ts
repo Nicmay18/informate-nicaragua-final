@@ -15,7 +15,9 @@ export type MeniContentProfile =
   | 'deportes'
   | 'cultura'
   | 'tecnologia'
-  | 'internacional';
+  | 'internacional'
+  | 'educacion'
+  | 'ambiente';
 
 export interface ProfileSignal {
   keyword: string;
@@ -153,6 +155,51 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'país', weight: 0.5 },
     { keyword: 'mundo', weight: 0.8 },
   ],
+  educacion: [
+    { keyword: 'educación', weight: 2 },
+    { keyword: 'educacion', weight: 2 },
+    { keyword: 'escuela', weight: 1.5 },
+    { keyword: 'colegio', weight: 1.5 },
+    { keyword: 'universidad', weight: 1.5 },
+    { keyword: 'estudiantes', weight: 1 },
+    { keyword: 'estudiante', weight: 1 },
+    { keyword: 'docentes', weight: 1.5 },
+    { keyword: 'docente', weight: 1.5 },
+    { keyword: 'matrícula', weight: 1.5 },
+    { keyword: 'matricula', weight: 1.5 },
+    { keyword: 'becas', weight: 1.5 },
+    { keyword: 'mined', weight: 1.2 },
+    { keyword: 'minedu', weight: 1.2 },
+    { keyword: 'aulas', weight: 1 },
+    { keyword: 'aula', weight: 1 },
+    { keyword: 'calendario escolar', weight: 1.5 },
+    { keyword: 'currículo', weight: 1.5 },
+    { keyword: 'curriculo', weight: 1.5 },
+    { keyword: 'educativa', weight: 2 },
+    { keyword: 'educativo', weight: 2 },
+  ],
+  ambiente: [
+    { keyword: 'cambio climático', weight: 2 },
+    { keyword: 'cambio climatico', weight: 2 },
+    { keyword: 'clima', weight: 1.5 },
+    { keyword: 'contaminación', weight: 1.5 },
+    { keyword: 'contaminacion', weight: 1.5 },
+    { keyword: 'bosque', weight: 1.5 },
+    { keyword: 'bosques', weight: 1.5 },
+    { keyword: 'ecosistema', weight: 1.5 },
+    { keyword: 'ecosistemas', weight: 1.5 },
+    { keyword: 'sequía', weight: 1.5 },
+    { keyword: 'sequia', weight: 1.5 },
+    { keyword: 'lluvia', weight: 1.2 },
+    { keyword: 'lluvias', weight: 1.2 },
+    { keyword: 'biodiversidad', weight: 1.5 },
+    { keyword: 'medio ambiente', weight: 2 },
+    { keyword: 'medioambiente', weight: 2 },
+    { keyword: 'agricultura', weight: 1.5 },
+    { keyword: 'agricultores', weight: 1.5 },
+    { keyword: 'cosecha', weight: 1 },
+    { keyword: 'producción', weight: 1 },
+  ],
 };
 
 function normalize(text: string): string {
@@ -205,6 +252,13 @@ export function detectContentProfile(
   // Si hay señales de salud y no es brote clínico, reducir confusión con sucesos.
   if (scores.salud > 0 && scores.sucesos > 0) {
     scores.salud += 1;
+  }
+  // Perfiles específicos ganan sobre genéricos cuando hay señales propias.
+  if (scores.educacion > 0 && scores.nacionales > 0) {
+    scores.educacion += 2;
+  }
+  if (scores.ambiente > 0 && (scores.sucesos > 0 || scores.nacionales > 0)) {
+    scores.ambiente += 2;
   }
 
   const entries = Object.entries(scores) as [MeniContentProfile, number][];

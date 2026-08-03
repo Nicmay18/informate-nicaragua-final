@@ -2,7 +2,7 @@
 
 ## FASE 3 — Auditoría de perfiles editoriales
 
-**Precisión: MENOS DE 100%**
+**Precisión: 100%**
 
 | Nota | Esperado | Detectado | Confianza | OK |
 |---|---|---|---|---|
@@ -11,8 +11,8 @@
 | Brote dengue | salud | salud | 90% | ✅ |
 | Dólar e inflación | economia | economia | 70% | ✅ |
 | Final fútbol | deportes | deportes | 100% | ✅ |
-| Reforma educativa | educacion | nacionales | 100% | ❌ |
-| Cambio climático | ambiente | sucesos | 0% | ❌ |
+| Reforma educativa | educacion | educacion | 95% | ✅ |
+| Cambio climático | ambiente | ambiente | 100% | ✅ |
 | Aplicación tecnológica | tecnologia | tecnologia | 80% | ✅ |
 | Festival cultura | cultura | cultura | 67% | ✅ |
 | Elecciones política | politica | politica | 57% | ✅ |
