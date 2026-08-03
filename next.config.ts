@@ -247,6 +247,41 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/admin/growth',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/admin/crecimiento',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/admin/meni-dashboard',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/admin/knowledge-center',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/admin/entities',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/panel/nios',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
+        source: '/panel/entities',
+        destination: '/admin/nios',
+        permanent: false,
+      },
+      {
         source: '/wp-admin/:path*',
         destination: '/',
         permanent: false,

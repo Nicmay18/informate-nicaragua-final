@@ -20,7 +20,9 @@ import { buildDistributionCommand } from './distribution-command';
 import { buildOpportunityHunter } from './opportunity-hunter';
 import { buildBusinessHealth } from './business-health';
 import { buildCeoDecisions } from './ceo-decisions';
+import { buildCeoView } from './ceo-view';
 import { buildAuthorityHealth } from './authority-health';
+import { syncRecommendations, getCeoMemory } from '@/lib/nios/ceo-memory';
 import type { BusinessCommandCenter } from './types';
 
 export * from './types';
@@ -43,7 +45,8 @@ export function buildCommandCenter(
   noticias: Noticia[],
   guides: EvergreenArticle[],
   errors: string[] = [],
-  now = new Date()
+  now = new Date(),
+  pendingCount = 0,
 ): BusinessCommandCenter {
   const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
 
@@ -58,6 +61,22 @@ export function buildCommandCenter(
   const business = buildBusinessHealth(noticias, guides, balance, trust, revenue, now.getTime());
 
   const decisions = buildCeoDecisions({ balance, trust, revenue, home, distribution, hunter, business });
+  const ceo = buildCeoView({
+    generatedAt: now.toISOString(),
+    date: now.toLocaleDateString('es-NI', { dateStyle: 'long' }),
+    status: errors.length ? 'partial' : 'ok',
+    analyzed: published.length,
+    decisions,
+    balance,
+    trust,
+    revenue,
+    warRoom,
+    home,
+    distribution,
+    hunter,
+    authority,
+    business,
+  }, pendingCount);
 
   return {
     generatedAt: now.toISOString(),
@@ -74,6 +93,7 @@ export function buildCommandCenter(
     hunter,
     authority,
     business,
+    ceo,
     errors: errors.length ? errors : undefined,
   };
 }
@@ -98,5 +118,21 @@ export async function getCommandCenter(): Promise<BusinessCommandCenter> {
     errors.push('No se pudieron cargar las guías evergreen.');
   }
 
-  return buildCommandCenter(noticias, guides, errors);
+  const cc = buildCommandCenter(noticias, guides, errors);
+
+  // CEO Mode: persistir recomendaciones activas y leer memoria operativa.
+  try {
+    const recommendations = cc.ceo?.cards.map((c) => ({
+      id: `ceo-${c.kind}-${c.headline}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 80),
+      action: c.action,
+      source: c.source,
+    })) ?? [];
+    await syncRecommendations(recommendations);
+    const memory = await getCeoMemory();
+    const pendingCount = memory.pending.length;
+    return buildCommandCenter(noticias, guides, errors, new Date(), pendingCount);
+  } catch (err) {
+    logger.error('[command-center] Error sincronizando CEO memory:', err);
+    return cc;
+  }
 }

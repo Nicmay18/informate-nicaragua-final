@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import { getCommandCenter } from '@/lib/nios/command-center';
-import CommandCenterShell from '@/components/nios/command-center/CommandCenterShell';
+import NiosCeoShell from '@/components/nios/NiosCeoShell';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: { absolute: 'NIOS Business Command Center | Nicaragua Informate' },
+  title: { absolute: 'NIOS CEO | Nicaragua Informate' },
   robots: { index: false, follow: false },
 };
 
 export default async function AdminNiosPage() {
   const cc = await getCommandCenter();
-  return <CommandCenterShell cc={cc} />;
+  return <NiosCeoShell cc={cc} />;
 }

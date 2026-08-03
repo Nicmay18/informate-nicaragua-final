@@ -213,6 +213,64 @@ export interface BusinessHealth {
   nextMilestone: string;
 }
 
+/* ── CEO Mode ───────────────────────────────────────────── */
+
+export type CeoCardKind = 'reparar' | 'crecer' | 'google' | 'negocio' | 'marca';
+
+export interface CeoCard {
+  kind: CeoCardKind;
+  headline: string;
+  what: string;
+  why: string;
+  ifNot: string;
+  action: string;
+  source: string;
+  severity: Severity;
+  href?: string;
+  count?: number;
+}
+
+export interface MediaHealthPillar {
+  id: string;
+  label: string;
+  score: number;
+  weight: number;
+  status: 'green' | 'yellow' | 'red';
+}
+
+export interface MediaHealth {
+  score: number;
+  level: 'excelente' | 'buena' | 'regular' | 'deficiente';
+  pillars: MediaHealthPillar[];
+}
+
+export interface CeoBriefing {
+  greeting: string;
+  state: string;
+  bestYesterday?: string;
+  biggestRisk: string;
+  biggestOpportunity: string;
+  absolutePriority: string;
+}
+
+export interface CeoChecklistItem {
+  id: string;
+  label: string;
+  source: string;
+  completed: boolean;
+}
+
+export interface NiosCeoView {
+  briefing: CeoBriefing;
+  mediaHealth: MediaHealth;
+  cards: CeoCard[];
+  checklist: CeoChecklistItem[];
+  memory: {
+    pending: number;
+    message: string;
+  };
+}
+
 /* ── Reporte agregado ───────────────────────────────────── */
 
 export interface BusinessCommandCenter {
@@ -230,5 +288,6 @@ export interface BusinessCommandCenter {
   hunter: OpportunityHunter;
   authority: AuthorityHealth;
   business: BusinessHealth;
+  ceo?: NiosCeoView;
   errors?: string[];
 }
