@@ -260,6 +260,69 @@ export interface CeoChecklistItem {
   completed: boolean;
 }
 
+/* ── NIOS v5 Editor en Jefe IA ─────────────────────────── */
+
+export interface EditorJefePriority {
+  label: string;
+  action: string;
+  source: string;
+  severity: Severity;
+}
+
+export interface EditorJefeOpportunity {
+  titulo: string;
+  explicacion: string;
+  accion: string;
+}
+
+export interface EditorJefeArticle {
+  titulo: string;
+  slug: string;
+  explicacion: string;
+}
+
+export interface EditorJefeAdvertiserSimulation {
+  marca: string;
+  categoria: string;
+  patrocinio: string;
+  explicacion: string;
+}
+
+export interface EditorJefeAbandoned {
+  categoria: string;
+  ultimos7: number;
+  ultimos30: number;
+  ultimos90: number;
+  explicacion: string;
+}
+
+export interface EditorJefeSalud {
+  estado: 'Excelente' | 'Buena' | 'Regular' | 'Crítica';
+  explicacion: string;
+}
+
+export interface EditorJefeView {
+  salud: EditorJefeSalud;
+  prioridades: EditorJefePriority[];
+  noPublicar: {
+    razon: string;
+    compensar: string;
+  };
+  oportunidadPerdida: EditorJefeOpportunity;
+  googleVeredicto: {
+    conclusion: string;
+    problemas: string[];
+    fortalezas: string[];
+  };
+  anunciante: {
+    simulaciones: EditorJefeAdvertiserSimulation[];
+  };
+  noticiaAGuia: EditorJefeArticle;
+  categoriaAbandonada: EditorJefeAbandoned;
+  actualizar: EditorJefeArticle;
+  merecePortada: EditorJefeArticle;
+}
+
 export interface NiosCeoView {
   briefing: CeoBriefing;
   mediaHealth: MediaHealth;
@@ -269,6 +332,7 @@ export interface NiosCeoView {
     pending: number;
     message: string;
   };
+  editorJefe: EditorJefeView;
 }
 
 /* ── Reporte agregado ───────────────────────────────────── */

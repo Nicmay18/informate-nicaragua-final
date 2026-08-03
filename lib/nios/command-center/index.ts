@@ -61,22 +61,28 @@ export function buildCommandCenter(
   const business = buildBusinessHealth(noticias, guides, balance, trust, revenue, now.getTime());
 
   const decisions = buildCeoDecisions({ balance, trust, revenue, home, distribution, hunter, business });
-  const ceo = buildCeoView({
-    generatedAt: now.toISOString(),
-    date: now.toLocaleDateString('es-NI', { dateStyle: 'long' }),
-    status: errors.length ? 'partial' : 'ok',
-    analyzed: published.length,
-    decisions,
-    balance,
-    trust,
-    revenue,
-    warRoom,
-    home,
-    distribution,
-    hunter,
-    authority,
-    business,
-  }, pendingCount);
+  const ceo = buildCeoView(
+    {
+      generatedAt: now.toISOString(),
+      date: now.toLocaleDateString('es-NI', { dateStyle: 'long' }),
+      status: errors.length ? 'partial' : 'ok',
+      analyzed: published.length,
+      decisions,
+      balance,
+      trust,
+      revenue,
+      warRoom,
+      home,
+      distribution,
+      hunter,
+      authority,
+      business,
+    },
+    noticias,
+    guides,
+    now,
+    pendingCount,
+  );
 
   return {
     generatedAt: now.toISOString(),

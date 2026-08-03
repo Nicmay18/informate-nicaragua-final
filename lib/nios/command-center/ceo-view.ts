@@ -3,11 +3,16 @@
  * No crea motores. Solo lee y traduce lo que ya existe a decisiones de una sola pantalla.
  */
 
+import { CATEGORIES } from '@/lib/types';
+import type { Noticia } from '@/lib/types';
+import type { EvergreenArticle } from '@/lib/evergreen';
 import type {
   BusinessCommandCenter,
   CeoBriefing,
   CeoCard,
   CeoChecklistItem,
+  EditorJefeView,
+  GoogleTrust,
   MediaHealth,
   NiosCeoView,
 } from './types';
@@ -257,14 +262,268 @@ export function buildCeoChecklist(cards: CeoCard[]): CeoChecklistItem[] {
   }));
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function publishedNoticias(noticias: Noticia[]): Noticia[] {
+  return noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+}
+
+function parsePubTime(n: Noticia): number {
+  return new Date(n.fechaPublicacion || n.fecha).getTime() || 0;
+}
+
+function lastUpdateTime(n: Noticia): number {
+  return new Date(n.fechaActualizacion || n.fechaPublicacion || n.fecha).getTime() || 0;
+}
+
+function findNoticiaForGuide(
+  noticias: Noticia[],
+  topic: string,
+  category?: string,
+): Noticia | undefined {
+  const t = topic.toLowerCase();
+  const matches = noticias.filter((n) => {
+    const hay = `${n.titulo} ${n.resumen} ${n.keywords || ''} ${(n.tags || []).join(' ')}`.toLowerCase();
+    return hay.includes(t) || (category && n.categoria.toLowerCase() === category.toLowerCase());
+  });
+  matches.sort((a, b) => parsePubTime(b) - parsePubTime(a));
+  return matches[0] || noticias[0];
+}
+
+export function buildEditorJefeView(
+  cc: BusinessCommandCenter,
+  noticias: Noticia[],
+  guides: EvergreenArticle[],
+  now: Date,
+): EditorJefeView {
+  const mediaHealth = buildMediaHealth(cc);
+  const nowTs = now.getTime();
+
+  // 1. Salud del medio
+  const saludMap: Record<MediaHealth['level'], EditorJefeView['salud']['estado']> = {
+    excelente: 'Excelente',
+    buena: 'Buena',
+    regular: 'Regular',
+    deficiente: 'Crítica',
+  };
+  const weakests = [...mediaHealth.pillars].sort((a, b) => a.score - b.score);
+  const weakest = weakests[0];
+  const salud: EditorJefeView['salud'] = {
+    estado: saludMap[mediaHealth.level],
+    explicacion: `El medio está ${mediaHealth.level === 'excelente' ? 'en su mejor momento' : 'con riesgo real'} porque el cuello de botella está en ${weakest.label.toLowerCase()}: ${weakest.status === 'red' ? 'el sistema está fallando' : 'hay margen de mejora'}. ${cc.home.verdict}`,
+  };
+
+  // 2. Máximo cinco prioridades
+  const cards = buildCeoCards(cc);
+  const prioridades = cards.slice(0, 5).map((c) => ({
+    label: c.headline,
+    action: c.action,
+    source: c.source,
+    severity: c.severity,
+  }));
+
+  // 3. Qué NO publicar hoy
+  const excedidas = cc.balance.categories.filter((c) => c.status === 'excedido').sort((a, b) => b.share - a.share);
+  const noPublicar: EditorJefeView['noPublicar'] = (() => {
+    const culpable = excedidas[0] || cc.balance.categories.sort((a, b) => b.share - a.share)[0];
+    const alternativa = cc.balance.categories.find((c) => c.status === 'deficitario') || cc.balance.categories.sort((a, b) => a.share - b.share)[0];
+    if (!culpable || !alternativa) {
+      return {
+        razon: 'Hoy no hay una categoría claramente saturada. Mantén la mezcla editorial equilibrada.',
+        compensar: 'Sigue el plan de contenido del día.',
+      };
+    }
+    return {
+      razon: `Hoy ${culpable.category} representa ${Math.round(culpable.share)}% del archivo y del Home. No publiques otro ${culpable.category}; ya dominas el día.`,
+      compensar: `Publica ${alternativa.category}. El medio necesita más ${alternativa.category} para no verse como un tabloide de ${culpable.category.toLowerCase()}.`,
+    };
+  })();
+
+  // 4. Oportunidad perdida
+  const oportunidadPerdida: EditorJefeView['oportunidadPerdida'] = (() => {
+    const topCoveredGap = cc.hunter.items.find((i) => !i.covered && i.commercialValue === 'alto');
+    const anyGap = topCoveredGap || cc.hunter.items.find((i) => !i.covered);
+    const overCategory = excedidas[0];
+    if (overCategory) {
+      const p = publishedNoticias(noticias).filter((n) => n.categoria === overCategory.category);
+      const guideExists = guides.some((g) => g.title.toLowerCase().includes(overCategory.category.toLowerCase()));
+      if (p.length >= 3 && !guideExists) {
+        return {
+          titulo: `Has publicado ${p.length} notas de ${overCategory.category}, pero no existe la guía definitiva.`,
+          explicacion: `La categoría con exceso hoy es la prueba de que hay interés sostenido. Sin embargo, nunca convertiste ese interés en un activo permanente.`,
+          accion: `Crea una guía ancla sobre el tema más repetido en ${overCategory.category} y enlázala desde esas ${p.length} notas.`,
+        };
+      }
+    }
+    if (anyGap) {
+      const p = publishedNoticias(noticias).filter((n) => {
+        const hay = `${n.titulo} ${n.resumen} ${n.keywords || ''}`.toLowerCase();
+        return hay.includes(anyGap.topic.toLowerCase());
+      });
+      return {
+        titulo: `Has hablado de "${anyGap.topic}" ${p.length || 'varias'} veces y nunca existe la guía definitiva.`,
+        explicacion: anyGap.rationale,
+        accion: anyGap.action,
+      };
+    }
+    return {
+      titulo: 'No se detecta una oportunidad obvia hoy.',
+      explicacion: 'El archivo cubre bien la demanda conocida. El siguiente paso es ampliar categorías deficitarias.',
+      accion: 'Revisar la guía comercial del próximo trimestre.',
+    };
+  })();
+
+  // 5. Veredicto de Google
+  const googleProblemas = [
+    ...cc.trust.googleSees.weaknesses,
+    ...cc.home.violations,
+    ...cc.balance.alerts,
+  ].slice(0, 4);
+  const googleFortalezas = cc.trust.googleSees.strengths.slice(0, 2);
+  const googleMap: Record<GoogleTrust['level'], string> = {
+    sólido: 've autoridad clara',
+    'en construcción': 've un medio en construcción',
+    frágil: 'no ve suficiente autoridad',
+  };
+  const googleVeredicto: EditorJefeView['googleVeredicto'] = {
+    conclusion: `Google ${googleMap[cc.trust.level]}. ${cc.trust.googleSees.nextActions[0] || 'Mantener la disciplina actual.'}`,
+    problemas: googleProblemas.length > 0 ? googleProblemas : ['No se detectan problemas críticos hoy.'],
+    fortalezas: googleFortalezas.length > 0 ? googleFortalezas : ['El medio mantiene señales de autoridad.'],
+  };
+
+  // 6. Simulación de anunciantes
+  const anuncianteBrands = ['Claro', 'Banco LAFISE', 'Universidad'];
+  const anuncianteKeywords: Record<string, string[]> = {
+    Claro: ['tecnología', 'telecom', 'móvil', 'internet', 'datos'],
+    'Banco LAFISE': ['negocios', 'finanzas', 'economía', 'empresas', 'banca'],
+    Universidad: ['educación', 'salud', 'empleo', 'universidad', 'formación'],
+  };
+  const simulaciones: EditorJefeView['anunciante']['simulaciones'] = anuncianteBrands.map((marca) => {
+    const keywords = anuncianteKeywords[marca];
+    const match = cc.revenue.opportunities.find((o) => keywords.some((k) => o.category.toLowerCase().includes(k))) || cc.revenue.opportunities[0];
+    const fallbackCategory = cc.balance.categories.find((c) => c.status === 'deficitario')?.category || cc.balance.categories[0]?.category || 'Nacionales';
+    const category = match?.category || fallbackCategory;
+    const patrocinio = match?.nextStep || `Patrocinar la sección ${category}`;
+    const explicacion = match?.rationale
+      ? `Si hoy entrara ${marca}, pagaría por estar en ${category}: ${match.rationale}`
+      : `Si hoy entrara ${marca}, pagaría por estar en ${category} porque es un espacio de marca con demanda sin vender.`;
+    return { marca, categoria: category, patrocinio, explicacion };
+  });
+
+  // 7. Nota que merece convertirse en guía
+  const noticiaAGuia: EditorJefeView['noticiaAGuia'] = (() => {
+    const topGap = cc.hunter.items.find((i) => !i.covered && i.commercialValue === 'alto') || cc.hunter.items.find((i) => !i.covered);
+    const n = topGap
+      ? findNoticiaForGuide(publishedNoticias(noticias), topGap.topic, excedidas[0]?.category)
+      : publishedNoticias(noticias)[0];
+    if (!n) {
+      return { titulo: 'No hay noticias publicadas', slug: '', explicacion: 'El archivo está vacío. Publica la primera pieza para empezar a construir guías.' };
+    }
+    return {
+      titulo: n.titulo,
+      slug: n.slug,
+      explicacion: `Esta noticia de ${n.categoria} tiene el tema y la profundidad para convertirse en la guía permanente que el medio no tiene. Actualizarla a evergreen generaría autoridad sostenida.`,
+    };
+  })();
+
+  // 8. Categoría abandonada
+  const categoriaAbandonada: EditorJefeView['categoriaAbandonada'] = (() => {
+    const allCategoryNames = CATEGORIES.map((c) => c.name);
+    const stats = allCategoryNames.map((cat) => {
+      const pub = publishedNoticias(noticias);
+      const c7 = pub.filter((n) => n.categoria === cat && nowTs - parsePubTime(n) <= 7 * DAY_MS).length;
+      const c30 = pub.filter((n) => n.categoria === cat && nowTs - parsePubTime(n) <= 30 * DAY_MS).length;
+      const c90 = pub.filter((n) => n.categoria === cat && nowTs - parsePubTime(n) <= 90 * DAY_MS).length;
+      return { categoria: cat, ultimos7: c7, ultimos30: c30, ultimos90: c90 };
+    });
+    const worst = stats.sort((a, b) => (a.ultimos7 - b.ultimos7) || (a.ultimos30 - b.ultimos30) || (a.ultimos90 - b.ultimos90))[0];
+    return {
+      ...worst,
+      explicacion: worst.ultimos7 === 0
+        ? `La categoría ${worst.categoria} no ha publicado nada en una semana. Acumula ${worst.ultimos30} en 30 días y ${worst.ultimos90} en 90. Está perdiendo relevancia.`
+        : `${worst.categoria} es la categoría con menos ritmo: ${worst.ultimos7} en 7 días, ${worst.ultimos30} en 30 y ${worst.ultimos90} en 90.`,
+    };
+  })();
+
+  // 9. Artículo a actualizar
+  const actualizar: EditorJefeView['actualizar'] = (() => {
+    const pub = publishedNoticias(noticias)
+      .filter((n) => !n.noindex && nowTs - lastUpdateTime(n) > 30 * DAY_MS)
+      .sort((a, b) => ((b.vistas ?? 0) - (a.vistas ?? 0)) || parsePubTime(b) - parsePubTime(a));
+    const topGap = cc.hunter.items.find((i) => !i.covered);
+    const relevant = topGap
+      ? pub.find((n) => {
+          const hay = `${n.titulo} ${n.resumen} ${n.keywords || ''}`.toLowerCase();
+          return hay.includes(topGap.topic.toLowerCase());
+        }) || pub[0]
+      : pub[0];
+    const n = relevant || publishedNoticias(noticias)[0];
+    if (!n) {
+      return { titulo: 'No hay noticias para actualizar', slug: '', explicacion: 'El archivo no tiene piezas publicadas.' };
+    }
+    const days = Math.max(0, Math.floor((nowTs - lastUpdateTime(n)) / DAY_MS));
+    return {
+      titulo: n.titulo,
+      slug: n.slug,
+      explicacion: `Sigue siendo relevante para ${n.categoria}. La última actualización fue hace ${days} días. Una versión fresca recuperaría tráfico de búsqueda.`,
+    };
+  })();
+
+  // 10. Nota que merece portada
+  const merecePortada: EditorJefeView['merecePortada'] = (() => {
+    const plan = cc.distribution.plans[0];
+    if (plan) {
+      return {
+        titulo: plan.title,
+        slug: plan.slug,
+        explicacion: `${plan.reason}. Tiene utilidad, interés y autoridad para ser la cara de hoy.`,
+      };
+    }
+    const slot = cc.home.brandSlots.find((s) => s.onBrand);
+    if (slot) {
+      return {
+        titulo: slot.title,
+        slug: slot.slug,
+        explicacion: `${slot.note}. Es la pieza que mejor representa la marca en portada.`,
+      };
+    }
+    const n = publishedNoticias(noticias).filter((x) => x.categoria !== 'Sucesos')[0] || publishedNoticias(noticias)[0];
+    if (!n) {
+      return { titulo: 'No hay noticias para portada', slug: '', explicacion: 'El archivo está vacío.' };
+    }
+    return {
+      titulo: n.titulo,
+      slug: n.slug,
+      explicacion: `Destacar esta noticia de ${n.categoria} equilibraría la portada y aprovecharía el interés actual.`,
+    };
+  })();
+
+  return {
+    salud,
+    prioridades,
+    noPublicar,
+    oportunidadPerdida,
+    googleVeredicto,
+    anunciante: { simulaciones },
+    noticiaAGuia,
+    categoriaAbandonada,
+    actualizar,
+    merecePortada,
+  };
+}
+
 export function buildCeoView(
   cc: BusinessCommandCenter,
+  noticias: Noticia[],
+  guides: EvergreenArticle[],
+  now = new Date(),
   pendingCount = 0,
 ): NiosCeoView {
   const briefing = buildCeoBriefing(cc);
   const mediaHealth = buildMediaHealth(cc);
   const cards = buildCeoCards(cc);
   const checklist = buildCeoChecklist(cards);
+  const editorJefe = buildEditorJefeView(cc, noticias, guides, now);
 
   const memoryMessage = pendingCount > 0
     ? `Hay ${pendingCount} tarea${pendingCount === 1 ? '' : 's'} pendiente${pendingCount === 1 ? '' : 's'} de días anteriores.`
@@ -276,5 +535,6 @@ export function buildCeoView(
     cards,
     checklist,
     memory: { pending: pendingCount, message: memoryMessage },
+    editorJefe,
   };
 }
