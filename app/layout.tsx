@@ -9,6 +9,7 @@ import './styles/clock-widget.css';
 import './pro-design.css';
 import './styles/tailwind.css';
 import './styles/nios.css';
+import './styles/command-center.css';
 import {
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
