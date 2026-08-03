@@ -73,7 +73,7 @@ export async function ingestArticle(
   input: IngestArticleInput,
 ): Promise<IngestResult> {
   const extracted = extractEntities(input.title, input.content, input.category);
-  const newEntities = buildKnowledgeEntities(extracted, input.date);
+  const newEntities = buildKnowledgeEntities(extracted, input.date, input.category);
   const newRelations = buildRelations(extracted, input.articleId, input.date);
   const newTimelineEntries = buildTimelineEntries(
     extracted,
@@ -95,10 +95,14 @@ export async function ingestArticle(
     const snap = await ref.get();
     if (snap.exists) {
       const existing = snap.data() as unknown as KnowledgeEntity;
+      const cats = new Set([...(existing.categoriasRelacionadas || []), ...(input.category && input.category !== 'General' ? [input.category] : [])]);
+      const kws = new Set([...(existing.keywords || []), ...entity.keywords]);
       await ref.update({
         articleCount: (existing.articleCount || 0) + 1,
         lastSeen: input.date > existing.lastSeen ? input.date : existing.lastSeen,
         firstSeen: input.date < existing.firstSeen ? input.date : existing.firstSeen,
+        categoriasRelacionadas: [...cats],
+        keywords: [...kws].slice(0, 20),
       });
       entitiesUpdated++;
     } else {

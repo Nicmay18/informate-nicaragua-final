@@ -9,7 +9,23 @@ export type EntityType =
   | 'persona'
   | 'lugar'
   | 'institucion'
+  | 'empresa'
+  | 'hospital'
+  | 'ciudad'
+  | 'departamento'
+  | 'ministerio'
   | 'evento'
+  | 'equipo'
+  | 'organizacion'
+  | 'programa'
+  | 'ley'
+  | 'proyecto'
+  | 'infraestructura'
+  | 'universidad'
+  | 'volcan'
+  | 'rio'
+  | 'carretera'
+  | 'festival'
   | 'tema'
   | 'categoria';
 
@@ -25,12 +41,16 @@ export type RelationType =
 export interface KnowledgeEntity {
   id: string;            // slug normalizado: tipo:nombre
   name: string;          // nombre legible: "Volcán Telica"
+  slug: string;          // URL slug: "volcan-telica"
   type: EntityType;
   normalizedName: string; // para matching: "volcantelica"
   description?: string;   // descripción automática
   articleCount: number;   // cuántas noticias lo mencionan
   firstSeen: string;      // ISO date de primera mención
   lastSeen: string;       // ISO date de última mención
+  keywords: string[];     // palabras clave asociadas
+  image?: string;         // imagen si existe
+  categoriasRelacionadas: string[]; // categorías donde aparece
   metadata: Record<string, unknown>; // datos extra (municipios, sigla, etc.)
 }
 

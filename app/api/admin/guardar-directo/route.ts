@@ -159,7 +159,16 @@ export async function POST(request: NextRequest) {
 
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
     let articleDocId = id;
-    updateData.related_links = await getRelatedLinks(db, (categoria as string) || 'General', articleDocId || '');
+    // Related Knowledge — relacionados por entidades compartidas, fallback a categoría
+    try {
+      const { generateRelatedLinks } = await import('@/lib/meni/knowledge-base/related-knowledge');
+      const entityLinks = await generateRelatedLinks(db, articleDocId || '', finalTitulo, finalContenido, (categoria as string) || 'General');
+      updateData.related_links = entityLinks.length >= 2
+        ? entityLinks
+        : await getRelatedLinks(db, (categoria as string) || 'General', articleDocId || '');
+    } catch {
+      updateData.related_links = await getRelatedLinks(db, (categoria as string) || 'General', articleDocId || '');
+    }
     if (id) {
       await db.collection('noticias').doc(id).update(updateData);
     } else {
