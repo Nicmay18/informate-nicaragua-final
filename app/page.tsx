@@ -2,12 +2,10 @@ import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
 import { rankNoticias } from '@/lib/home-ranking';
-import { getAllEvergreen } from '@/lib/evergreen';
-import { diversifyNoticias, diversifyEvergreen } from '@/lib/diversify';
+import { diversifyNoticias } from '@/lib/diversify';
 import { checkHomeDiversity } from '@/lib/home-balance';
 import { checkBrandHealth } from '@/lib/brand-health';
 import type { Noticia } from '@/lib/types';
-import type { EvergreenArticle } from '@/lib/evergreen';
 import type { Metadata } from 'next';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
@@ -15,10 +13,9 @@ import { escapeJsonLd } from '@/lib/jsonld';
 import { getCspNonce } from '@/lib/nonce';
 
 // ============================================================================
-// ISR: Home regenerado cada 5 minutos para que noticias nuevas aparezcan rápido.
-// Reducción de consumo: ~99% menos lecturas vs force-dynamic.
+// ISR: Home regenerado cada 1 minuto para reflejar noticias nuevas de inmediato.
 // ============================================================================
-export const revalidate = 300; // 5 minutos para un medio de noticias
+export const revalidate = 60;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
@@ -67,19 +64,16 @@ export default async function HomePage() {
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];
   let populares: Noticia[] = [];
-  let contenidoUtil: EvergreenArticle[] = [];
 
   try {
-    const [latest, trending, popular, evergreen] = await Promise.all([
+    const [latest, trending, popular] = await Promise.all([
       getLatestNews(40),
       getTrendingNews(20),
       getPopularNews(20),
-      Promise.resolve(getAllEvergreen()),
     ]);
     noticias = rankNoticias(latest);
     masLeidas = diversifyNoticias(trending, 5, 2);
     populares = diversifyNoticias(popular, 5, 2);
-    contenidoUtil = diversifyEvergreen(evergreen, 4);
 
     const homeHealth = checkHomeDiversity(noticias.slice(0, 30));
     if (!homeHealth.balanced) {
@@ -122,7 +116,7 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} contenidoUtil={contenidoUtil} />
+      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
     </>
   );
 }

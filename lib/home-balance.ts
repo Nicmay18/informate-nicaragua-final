@@ -1,7 +1,5 @@
-import type { Noticia } from '@/lib/types';
-import { isLutoNews } from '@/lib/types';
+import { isLutoNews, type Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
-import { rankNoticias } from '@/lib/home-ranking';
 
 export interface HomeHealthReport {
   categories: Record<string, { count: number; share: number }>;
@@ -32,36 +30,14 @@ const STRATEGIC_EVERGREEN_CATEGORIES = [
   'Deportes',
 ];
 
-const HERO_STRATEGIC_BONUS = ['Nacionales', 'Tecnología', 'Internacionales', 'Deportes'];
-const HERO_STRATEGIC_PENALTY = ['Sucesos', 'Espectáculos'];
-
-function hoursSince(dateString: string): number {
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return Infinity;
-  return (Date.now() - date.getTime()) / 36e5;
-}
-
 export function selectHero(noticias: Noticia[]): Noticia | null {
   if (noticias.length === 0) return null;
-  const ranked = rankNoticias(noticias);
-  const candidates = ranked.slice(0, 10);
-
-  const scored = candidates.map((n) => {
-    let s = 0;
-    const h = hoursSince(n.fechaActualizacion || n.fechaPublicacion || n.fecha);
-    const freshness = Math.max(0, 1 - h / 12);
-    s += freshness * 2;
-    s += (n.scoreCalidad ?? 70) / 100 * 3;
-    if (HERO_STRATEGIC_BONUS.includes(n.categoria)) s += 2;
-    if (HERO_STRATEGIC_PENALTY.includes(n.categoria)) s -= 2;
-    if (isLutoNews(n)) s -= 6;
-    if ((n.vistas ?? 0) >= 50) s += 1;
-    if (n.metaDescription?.trim() && n.keywords?.trim()) s += 0.5;
-    return { n, s };
-  });
-
-  scored.sort((a, b) => b.s - a.s);
-  return scored[0]?.n ?? ranked[0] ?? null;
+  // Elegir la noticia MÁS RECIENTE para el hero, priorizando no-luto e imagen.
+  const byDate = [...noticias].sort(
+    (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+  );
+  const nonLuto = byDate.find((n) => !isLutoNews(n));
+  return nonLuto ?? byDate[0];
 }
 
 export function diversifyChronological(

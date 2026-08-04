@@ -119,7 +119,7 @@ export default async function NosotrosPage() {
         <div key={p.name} className="sidebar-widget" style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', gap: 18, alignItems: 'flex-start', flexWrap: 'wrap' }}>
             {p.photo ? (
-              <img src={p.photo} alt={p.name} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--accent)' }} />
+              <img src={p.photo} alt={p.name} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top center', flexShrink: 0, border: '2px solid var(--accent)' }} />
             ) : (
               <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--primary-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 22, flexShrink: 0 }}>
                 {p.initials}

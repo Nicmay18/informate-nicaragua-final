@@ -109,8 +109,8 @@ export default function AuthorProfile({
       >
         <div
           style={{
-            width: 140,
-            height: 140,
+            width: 96,
+            height: 96,
             borderRadius: '50%',
             overflow: 'hidden',
             flexShrink: 0,
@@ -121,7 +121,7 @@ export default function AuthorProfile({
             placeItems: 'center',
             color: '#fff',
             fontWeight: 800,
-            fontSize: 52,
+            fontSize: 38,
           }}
         >
           {photo ? (
@@ -129,8 +129,8 @@ export default function AuthorProfile({
               src={photo}
               alt={name}
               fill
-              style={{ objectFit: 'cover' }}
-              sizes="140px"
+              style={{ objectFit: 'cover', objectPosition: 'top center' }}
+              sizes="96px"
               priority
             />
           ) : (
