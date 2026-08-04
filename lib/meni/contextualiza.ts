@@ -107,19 +107,33 @@ const PROFILE_CONTEXT_WEIGHTS: Partial<Record<MeniContentProfile, Partial<Record
 const DETECTORS: ContextDetector[] = [
   {
     name: 'antecedentes',
-    signals: ['anteriormente', 'previamente', 'ya había', 'históricamente', 'en el pasado', 'no es la primera', 'pasado'],
+    signals: [
+      'anteriormente', 'previamente', 'ya había', 'históricamente', 'en el pasado',
+      'no es la primera', 'pasado', 'se suma a', 'otros eventos', 'registrados en',
+      'últimos meses', 'últimas semanas', 'casos anteriores', 'no es el primer',
+      'antecedente', 'antecedentes', 'precedentes', 'ciclo', 'patrón de',
+    ],
     maximo: 20,
     pesoPorMatch: 10,
   },
   {
     name: 'marco_legal',
-    signals: ['ley 779', 'ley 144', 'código penal', 'ley de', 'resolución', 'decreto', 'normativa', 'regulación'],
+    signals: [
+      'ley 779', 'ley 144', 'código penal', 'ley de', 'resolución', 'decreto',
+      'normativa', 'regulación', 'ley', 'delito', 'femicidio', 'tipificación',
+      'sanción', 'penal', 'código', 'artículo', 'norma', 'jurídico', 'legal',
+      'procedimiento', 'investigación judicial',
+    ],
     maximo: 20,
     pesoPorMatch: 10,
   },
   {
     name: 'datos_verificables',
-    signals: ['según', 'de acuerdo con', 'según datos de', 'cifras', 'estadísticas', 'reportó', 'informó'],
+    signals: [
+      'según', 'de acuerdo con', 'según datos de', 'cifras', 'estadísticas',
+      'reportó', 'informó', 'años', 'edad', 'número de', 'cantidad de',
+      'se reportaron', 'registró', 'hubo', 'más de', 'menos de',
+    ],
     maximo: 20,
     pesoPorMatch: 10,
   },
@@ -131,25 +145,43 @@ const DETECTORS: ContextDetector[] = [
   },
   {
     name: 'contexto_geografico',
-    signals: ['municipio', 'departamento', 'barrio', 'comunidad', 'carretera', 'km', 'lugar', 'zona', 'sector'],
+    signals: [
+      'municipio', 'departamento', 'barrio', 'comunidad', 'carretera', 'km',
+      'lugar', 'zona', 'sector', 'región', 'localidad', 'municipio de',
+      'departamento de',
+    ],
     maximo: 10,
     pesoPorMatch: 5,
   },
   {
     name: 'instituciones',
-    signals: ['policía nacional', 'minsa', 'mined', 'marena', 'ineter', 'fiscalía', 'alcaldía', 'asamblea nacional', 'gobierno'],
+    signals: [
+      'policía nacional', 'minsa', 'mined', 'marena', 'ineter', 'fiscalía',
+      'alcaldía', 'asamblea nacional', 'gobierno', 'autoridades', 'ministerio',
+      'delegación', 'comisaría',
+    ],
     maximo: 15,
     pesoPorMatch: 7.5,
   },
   {
     name: 'impacto_social',
-    signals: ['afecta', 'impacto', 'para la población', 'comunidad', 'ciudadanos', 'familias', 'consecuencia'],
+    signals: [
+      'afecta', 'impacto', 'para la población', 'comunidad', 'ciudadanos',
+      'familias', 'consecuencia', 'menores', 'deja', 'familiares', 'familia',
+      'hijos', 'víctimas', 'población', 'afectados', 'afecta a',
+      'consecuencias', 'repercusiones',
+    ],
     maximo: 15,
     pesoPorMatch: 7.5,
   },
   {
     name: 'fuentes',
-    signals: ['fuente', 'fuentes', 'declaró', 'indicó', 'señaló', 'según versiones', 'versiones preliminares'],
+    signals: [
+      'fuente', 'fuentes', 'declaró', 'indicó', 'señaló', 'según versiones',
+      'versiones preliminares', 'indicaron', 'confirmaron', 'confirmó',
+      'señalaron', 'declararon', 'manifestaron', 'sostuvieron', 'sostuvo',
+      'aclaró', 'explicó', 'dijo',
+    ],
     maximo: 20,
     pesoPorMatch: 10,
   },
@@ -159,7 +191,8 @@ function normalize(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/<[^>]+>/g, ' ');
 }
 
 export function computeContextScore(
