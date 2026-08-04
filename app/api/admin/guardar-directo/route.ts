@@ -13,17 +13,29 @@ function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
   return 'FORENSE';
 }
 
+const CATEGORIA_SLUG_FALLBACK: Record<string, string> = {
+  'Sucesos': 'sucesos', 'Nacionales': 'nacionales', 'Deportes': 'deportes',
+  'Internacionales': 'internacionales', 'Tecnología': 'tecnologia', 'Espectáculos': 'espectaculos',
+  'Cultura': 'cultura', 'Economía': 'economia', 'Salud': 'salud',
+  'Judicial': 'judicial', 'Infraestructura': 'infraestructura', 'General': 'nacionales',
+};
+
 async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: string) {
+  const catSlug = CATEGORIA_SLUG_FALLBACK[categoriaLinks] || 'nacionales';
+  const links: Array<{ url: string; anchor: string; type: string }> = [
+    { url: `/categoria/${catSlug}`, anchor: `Noticias de ${catSlug}`, type: 'categoria' },
+  ];
   try {
     const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
-    return snap.docs.filter((d: any) => d.id !== excludeId).slice(0, 3).map((d: any) => {
+    const related = snap.docs.filter((d: any) => d.id !== excludeId).slice(0, 2).map((d: any) => {
       const data = d.data();
       return { url: `/noticias/${data.slug || d.id}`, anchor: (data.titulo || 'Leer mas').substring(0, 70), type: 'relacionada' };
     });
+    links.push(...related);
   } catch (e) {
     console.warn('[guardar-directo] getRelatedLinks error:', e);
-    return [];
   }
+  return links;
 }
 
 function verificarAuth(request: NextRequest): boolean {

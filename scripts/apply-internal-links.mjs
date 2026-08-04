@@ -1,17 +1,24 @@
+import { config } from 'dotenv';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getCachedNoticias } from '../lib/db/cached-firestore.mjs';
-import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: '.env.local' });
 
-const serviceAccount = JSON.parse(
-  readFileSync(join(__dirname, '..', '..', 'informate-instant-nicaragua-c7bc9eb4f553.json'), 'utf8')
-);
+const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+let credential;
+if (b64 && b64.trim().length > 10) {
+  const sa = JSON.parse(Buffer.from(b64, 'base64').toString('utf8'));
+  credential = cert(sa);
+} else {
+  credential = cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  });
+}
 
-initializeApp({ credential: cert(serviceAccount) });
+initializeApp({ credential });
 const db = getFirestore();
 
 const CATEGORIA_SLUG = {
@@ -72,7 +79,8 @@ async function main() {
   const noticiasSinLinks = [];
   for (const d of snapshot.docs) {
     const data = d.data();
-    if (!hasInternalLinks(data.contenido || '')) {
+    const tieneRelatedLinks = data.related_links && Array.isArray(data.related_links) && data.related_links.length > 0;
+    if (!hasInternalLinks(data.contenido || '') && !tieneRelatedLinks) {
       noticiasSinLinks.push({ id: d.id, slug: data.slug || d.id, titulo: data.titulo || '', categoria: data.categoria || 'General', resumen: data.resumen || '', contenido: data.contenido || '', fecha: data.fecha || '' });
     }
   }

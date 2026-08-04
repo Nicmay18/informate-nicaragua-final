@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 
 // ── CONFIGURACION UNIFICADA ──
 const RELLENO = ["consternada","consternado","conmoción","conmocionó","último adiós","perdió la batalla","fatal desenlace","cristiana sepultura","honras fúnebres","enlutó","enluta","consternación","ambiente de dolor","salir del asombro","familiares lamentan","lamentan la pérdida","comunidad consternada","hecho conmocionó","profundo dolor","profunda tristeza","vida truncada","jóven promesa","joven promesa","incomprensible","indignante","irresponsable","brindan apoyo","organizaciones brindan","darán el último","recibirá cristiana","perdió la vida"];
@@ -52,7 +53,11 @@ function auditarNoticia(html: string, titulo: string) {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return unauthorized();
+  }
+
   const db = getAdminDb();
   const snapshot = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
 
