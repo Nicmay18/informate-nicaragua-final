@@ -17,6 +17,7 @@ import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
 import ArticleFaq from './ArticleFaq';
+import SupportMedium from './editorial/SupportMedium';
 import type { Noticia } from '@/lib/types';
 import { AUTHORS } from '@/lib/authors';
 import '@/app/article-page.css';
@@ -87,6 +88,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
   const vistas = fmtViews(views);
   const tags = useMemo(() => [noticia.categoria, ...extractPoints(noticia.titulo, 3)], [noticia.categoria, noticia.titulo]);
+
+  const wordCount = useMemo(() => {
+    const text = (noticia.contenido || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    return text ? text.split(' ').filter(w => w.length > 0).length : 0;
+  }, [noticia.contenido]);
 
   const autorData = useMemo(
     () => Object.values(AUTHORS).find((a) => a.name === noticia.autor?.trim()),
@@ -410,36 +416,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </footer>
         )}
 
-        {/* Donacion PayPal — barra discreta que no interrumpe la lectura */}
-        <div style={{ marginTop: 32, padding: '14px 18px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 14, color: '#475569', flex: 1, minWidth: 200 }}>
-            <strong style={{ color: '#1e293b' }}>Apoyá nuestro periodismo.</strong> Tu aporte mantiene viva la cobertura de Nicaragua.
-          </span>
-          <a
-            href="https://paypal.me/NicaraguaInformate"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              color: '#fff',
-              backgroundColor: '#0070ba',
-              padding: '9px 18px',
-              borderRadius: 8,
-              fontWeight: 600,
-              textDecoration: 'none',
-              fontSize: 14,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.566 6.082-8.558 6.082H9.63l-1.496 9.478h2.79c.457 0 .85-.334.922-.788l.04-.19.73-4.627.047-.255a.933.933 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.025-.13.048-.26.066-.39a5.65 5.65 0 0 0-.04-1.722c-.01-.065-.02-.13-.032-.194a3.506 3.506 0 0 0-.108-.313z"/>
-            </svg>
-            Donar
-          </a>
-        </div>
-
         {/* Share */}
         <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #e5e5e5' }}>
           <ShareBar url={url} title={noticia.titulo} variant="chips" />
@@ -506,6 +482,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               })}
             </div>
           </aside>
+        )}
+
+        {/* Apoyo al medio — después de relacionadas, antes de footer */}
+        {wordCount >= 500 && (
+          <SupportMedium slug={noticia.slug} />
         )}
 
         {/* Volver al inicio */}
