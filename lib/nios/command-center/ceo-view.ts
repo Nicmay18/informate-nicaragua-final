@@ -57,12 +57,27 @@ export function buildMediaHealth(cc: BusinessCommandCenter): MediaHealth {
   ];
 
   const score = clampScore(pillars.reduce((s, p) => s + p.score * p.weight, 0));
-  let level: MediaHealth['level'] = 'deficiente';
-  if (score >= 85) level = 'excelente';
-  else if (score >= 70) level = 'buena';
-  else if (score >= 55) level = 'regular';
+  let level: MediaHealth['level'] = 'critico';
+  if (score >= 90) level = 'excelente';
+  else if (score >= 75) level = 'saludable';
+  else if (score >= 60) level = 'observacion';
+  else if (score >= 45) level = 'comprometido';
+  else if (score >= 30) level = 'grave';
 
-  return { score, level, pillars };
+  const weakest = [...pillars].sort((a, b) => a.score - b.score)[0];
+  const diagnostico = score >= 90
+    ? `El medio opera en condiciones óptimas. Todos los pilares están en verde. El punto más bajo es ${weakest.label} (${weakest.score}/100), dentro de rango saludable.`
+    : score >= 75
+      ? `El medio está saludable. El pilar más débil es ${weakest.label} (${weakest.score}/100). No hay riesgos críticos, pero conviene reforzar ese eje.`
+      : score >= 60
+        ? `El medio está en observación. ${weakest.label} (${weakest.score}/100) es el cuello de botella. Si no se atiende, puede degradar la salud general.`
+        : score >= 45
+          ? `El medio está comprometido. ${weakest.label} (${weakest.score}/100) arrastra el sistema. Se requiere intervención directa en este eje.`
+          : score >= 30
+            ? `El medio está en estado grave. ${weakest.label} (${weakest.score}/100) está fallando. Sin corrección urgente, el medio no puede operar como empresa.`
+            : `El medio está en estado crítico. Múltiples pilares fallan simultáneamente. Se requiere intervención inmediata.`;
+
+  return { score, level, pillars, diagnostico };
 }
 
 export function buildCeoBriefing(cc: BusinessCommandCenter): CeoBriefing {
@@ -302,15 +317,15 @@ export function buildEditorJefeView(
   // 1. Salud del medio
   const saludMap: Record<MediaHealth['level'], EditorJefeView['salud']['estado']> = {
     excelente: 'Excelente',
-    buena: 'Buena',
-    regular: 'Regular',
-    deficiente: 'Crítica',
+    saludable: 'Saludable',
+    observacion: 'En observación',
+    comprometido: 'Comprometido',
+    grave: 'Grave',
+    critico: 'Crítico',
   };
-  const weakests = [...mediaHealth.pillars].sort((a, b) => a.score - b.score);
-  const weakest = weakests[0];
   const salud: EditorJefeView['salud'] = {
     estado: saludMap[mediaHealth.level],
-    explicacion: `El medio está ${mediaHealth.level === 'excelente' ? 'en su mejor momento' : 'con riesgo real'} porque el cuello de botella está en ${weakest.label.toLowerCase()}: ${weakest.status === 'red' ? 'el sistema está fallando' : 'hay margen de mejora'}. ${cc.home.verdict}`,
+    explicacion: mediaHealth.diagnostico,
   };
 
   // 2. Máximo cinco prioridades
@@ -498,6 +513,23 @@ export function buildEditorJefeView(
     };
   })();
 
+  const lectorNuevo: EditorJefeView['lectorNuevo'] = {
+    primeraImpresion: cc.home.verdict,
+    entenderia: cc.brandGuardian.googleEntenderia
+      ? 'Un lector nuevo entendería que este es un medio nacional serio con cobertura diversa.'
+      : `Un lector nuevo vería ${cc.home.dominantCategory ?? 'una categoría'} dominando la portada y no entendería qué tipo de medio es este.`,
+  };
+
+  const quePasaraSiNoHagoNada: string = (() => {
+    const risks: string[] = [];
+    if (cc.brandGuardian.pareceTabloide) risks.push('la portada seguirá comunicando nota roja y no periodismo nacional');
+    if (cc.brandGuardian.excesoSucesos) risks.push('Sucesos seguirá erosionando la identidad editorial');
+    if (cc.trust.score < 60) risks.push('Google no elevará el medio en búsqueda ni Discover');
+    if (cc.business.score < 50) risks.push('el medio no generará ingresos');
+    if (risks.length === 0) return 'Si no haces nada hoy, el medio se mantendrá estable. No hay riesgos críticos.';
+    return `Si no haces nada hoy, ${risks.join(', ')}. El crecimiento se estancará.`;
+  })();
+
   return {
     salud,
     prioridades,
@@ -509,6 +541,8 @@ export function buildEditorJefeView(
     categoriaAbandonada,
     actualizar,
     merecePortada,
+    lectorNuevo,
+    quePasaraSiNoHagoNada,
   };
 }
 
@@ -536,5 +570,8 @@ export function buildCeoView(
     checklist,
     memory: { pending: pendingCount, message: memoryMessage },
     editorJefe,
+    brandGuardian: cc.brandGuardian,
+    eeat: cc.eeat,
+    businessIntel: cc.businessIntel,
   };
 }

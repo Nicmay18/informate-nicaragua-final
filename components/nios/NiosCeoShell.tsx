@@ -4,9 +4,11 @@ import type { BusinessCommandCenter } from '@/lib/nios/command-center';
 
 const STATUS_COLOR: Record<string, string> = {
   Excelente: 'text-emerald-600',
-  Buena: 'text-blue-600',
-  Regular: 'text-amber-600',
-  Crítica: 'text-rose-600',
+  Saludable: 'text-blue-600',
+  'En observación': 'text-amber-600',
+  Comprometido: 'text-orange-600',
+  Grave: 'text-red-600',
+  Crítico: 'text-rose-700',
 };
 
 export default function NiosCeoShell({ cc }: { cc: BusinessCommandCenter }) {
@@ -29,6 +31,75 @@ export default function NiosCeoShell({ cc }: { cc: BusinessCommandCenter }) {
           <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-6">¿Está sano el medio?</h2>
           <div className={`text-5xl md:text-7xl font-bold mb-4 ${STATUS_COLOR[e.salud.estado]}`}>{e.salud.estado}</div>
           <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-3xl">{e.salud.explicacion}</p>
+        </section>
+
+        <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">Brand Guardian</h2>
+          <p className="text-lg text-slate-800 mb-4">{cc.brandGuardian.diagnostico}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className={`w-3 h-3 rounded-full ${cc.brandGuardian.representaMarca ? 'bg-emerald-500' : 'bg-red-500'}`} />
+              <span>Representa marca</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`w-3 h-3 rounded-full ${cc.brandGuardian.pareceTabloide ? 'bg-red-500' : 'bg-emerald-500'}`} />
+              <span>Parece tabloide</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`w-3 h-3 rounded-full ${cc.brandGuardian.equilibrioEditorial ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+              <span>Equilibrio editorial</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`w-3 h-3 rounded-full ${cc.brandGuardian.googleEntenderia ? 'bg-emerald-500' : 'bg-red-500'}`} />
+              <span>Google entendería</span>
+            </div>
+          </div>
+          {cc.brandGuardian.categoriaNecesitaCrecer && (
+            <p className="text-sm text-slate-500 mt-4">Categoría que necesita crecer: <strong>{cc.brandGuardian.categoriaNecesitaCrecer}</strong></p>
+          )}
+        </section>
+
+        <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">EEAT Engine — Score: {cc.eeat.score}/100 ({cc.eeat.level})</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {cc.eeat.indicators.map((ind) => (
+              <div key={ind.id} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50">
+                <span className={`flex-none w-5 h-5 rounded-full mt-0.5 ${ind.cumple ? 'bg-emerald-500' : ind.noAplica ? 'bg-slate-300' : 'bg-amber-500'}`} />
+                <div className="min-w-0">
+                  <div className="font-semibold text-slate-800 text-sm">{ind.label} — {ind.score}/100</div>
+                  <div className="text-xs text-slate-500">{ind.explicacion}</div>
+                  {!ind.cumple && !ind.noAplica && (
+                    <div className="text-xs text-amber-600 mt-1">Acción: {ind.accion}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">Business Intelligence</h2>
+          <p className="text-slate-700 mb-4">{cc.businessIntel.diagnostico}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              cc.businessIntel.ingresosActuales,
+              cc.businessIntel.metaMensual,
+              cc.businessIntel.inventarioDisponible,
+              cc.businessIntel.inventarioVendido,
+              cc.businessIntel.patrociniosActivos,
+              cc.businessIntel.categoriasPatrocinables,
+              cc.businessIntel.valorInventario,
+              cc.businessIntel.oportunidades,
+              cc.businessIntel.riesgos,
+              cc.businessIntel.ingresosPotenciales,
+            ].map((m) => (
+              <div key={m.id} className="p-3 rounded-xl bg-slate-50">
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{m.label}</div>
+                <div className={`text-lg font-bold ${m.disponible ? 'text-slate-900' : 'text-slate-400'}`}>{m.value}</div>
+                <div className="text-xs text-slate-500 mt-1">{m.explicacion}</div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-200">
@@ -130,6 +201,17 @@ export default function NiosCeoShell({ cc }: { cc: BusinessCommandCenter }) {
             <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">¿Qué artículo merece portada?</h2>
             <p className="text-2xl font-semibold text-slate-900 mb-2">{e.merecePortada.titulo}</p>
             <p className="text-slate-600">{e.merecePortada.explicacion}</p>
+          </section>
+
+          <section className="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">¿Qué pensaría un lector nuevo?</h2>
+            <p className="text-xl font-medium text-slate-900 mb-2">{e.lectorNuevo.primeraImpresion}</p>
+            <p className="text-slate-600">{e.lectorNuevo.entenderia}</p>
+          </section>
+
+          <section className="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">¿Qué pasará si no hago nada?</h2>
+            <p className="text-xl font-medium text-slate-700">{e.quePasaraSiNoHagoNada}</p>
           </section>
         </div>
       </div>

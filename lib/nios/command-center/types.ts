@@ -240,8 +240,9 @@ export interface MediaHealthPillar {
 
 export interface MediaHealth {
   score: number;
-  level: 'excelente' | 'buena' | 'regular' | 'deficiente';
+  level: 'excelente' | 'saludable' | 'observacion' | 'comprometido' | 'grave' | 'critico';
   pillars: MediaHealthPillar[];
+  diagnostico: string;
 }
 
 export interface CeoBriefing {
@@ -297,7 +298,7 @@ export interface EditorJefeAbandoned {
 }
 
 export interface EditorJefeSalud {
-  estado: 'Excelente' | 'Buena' | 'Regular' | 'Crítica';
+  estado: 'Excelente' | 'Saludable' | 'En observación' | 'Comprometido' | 'Grave' | 'Crítico';
   explicacion: string;
 }
 
@@ -321,6 +322,66 @@ export interface EditorJefeView {
   categoriaAbandonada: EditorJefeAbandoned;
   actualizar: EditorJefeArticle;
   merecePortada: EditorJefeArticle;
+  lectorNuevo: {
+    primeraImpresion: string;
+    entenderia: string;
+  };
+  quePasaraSiNoHagoNada: string;
+}
+
+export interface BrandGuardianVerdict {
+  representaMarca: boolean;
+  pareceTabloide: boolean;
+  excesoSucesos: boolean;
+  equilibrioEditorial: boolean;
+  googleEntenderia: boolean;
+  categoriaDomina: string | null;
+  categoriaDesaparecida: string | null;
+  categoriaNecesitaCrecer: string | null;
+  noticiaNoEnHero: string | null;
+  noticiaMereceHero: string | null;
+  diagnostico: string;
+}
+
+export interface EeatIndicator {
+  id: string;
+  label: string;
+  score: number;
+  cumple: boolean;
+  noAplica: boolean;
+  explicacion: string;
+  impacto: string;
+  accion: string;
+}
+
+export interface EeatEngine {
+  score: number;
+  level: 'excepcional' | 'sólido' | 'en construcción' | 'frágil';
+  indicators: EeatIndicator[];
+  faltan: string[];
+  nextAction: string;
+}
+
+export interface BusinessMetric {
+  id: string;
+  label: string;
+  value: string;
+  disponible: boolean;
+  explicacion: string;
+}
+
+export interface BusinessIntelligence {
+  ingresosActuales: BusinessMetric;
+  metaMensual: BusinessMetric;
+  inventarioDisponible: BusinessMetric;
+  inventarioVendido: BusinessMetric;
+  patrociniosActivos: BusinessMetric;
+  categoriasPatrocinables: BusinessMetric;
+  valorInventario: BusinessMetric;
+  oportunidades: BusinessMetric;
+  riesgos: BusinessMetric;
+  ingresosPotenciales: BusinessMetric;
+  diagnostico: string;
 }
 
 export interface NiosCeoView {
@@ -333,6 +394,9 @@ export interface NiosCeoView {
     message: string;
   };
   editorJefe: EditorJefeView;
+  brandGuardian: BrandGuardianVerdict;
+  eeat: EeatEngine;
+  businessIntel: BusinessIntelligence;
 }
 
 /* ── Reporte agregado ───────────────────────────────────── */
@@ -352,6 +416,9 @@ export interface BusinessCommandCenter {
   hunter: OpportunityHunter;
   authority: AuthorityHealth;
   business: BusinessHealth;
+  brandGuardian: BrandGuardianVerdict;
+  eeat: EeatEngine;
+  businessIntel: BusinessIntelligence;
   ceo?: NiosCeoView;
   errors?: string[];
 }

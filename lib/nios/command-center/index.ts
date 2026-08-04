@@ -22,6 +22,9 @@ import { buildBusinessHealth } from './business-health';
 import { buildCeoDecisions } from './ceo-decisions';
 import { buildCeoView } from './ceo-view';
 import { buildAuthorityHealth } from './authority-health';
+import { buildBrandGuardian } from './brand-guardian';
+import { buildEeatEngine } from './eeat-engine';
+import { buildBusinessIntelligence } from './business-intelligence';
 import { syncRecommendations, getCeoMemory } from '@/lib/nios/ceo-memory';
 import type { BusinessCommandCenter } from './types';
 
@@ -36,6 +39,9 @@ export { buildOpportunityHunter } from './opportunity-hunter';
 export { buildBusinessHealth } from './business-health';
 export { buildAuthorityHealth } from './authority-health';
 export { buildCeoDecisions } from './ceo-decisions';
+export { buildBrandGuardian } from './brand-guardian';
+export { buildEeatEngine } from './eeat-engine';
+export { buildBusinessIntelligence } from './business-intelligence';
 
 /**
  * Construye el centro de mando a partir de datos ya cargados.
@@ -59,6 +65,9 @@ export function buildCommandCenter(
   const warRoom = buildContentWarRoom(noticias, balance, now);
   const authority = buildAuthorityHealth(noticias);
   const business = buildBusinessHealth(noticias, guides, balance, trust, revenue, now.getTime());
+  const brandGuardian = buildBrandGuardian(noticias, balance, home);
+  const eeat = buildEeatEngine(noticias, guides, now.getTime());
+  const businessIntel = buildBusinessIntelligence(noticias, guides, revenue);
 
   const decisions = buildCeoDecisions({ balance, trust, revenue, home, distribution, hunter, business });
   const ceo = buildCeoView(
@@ -77,6 +86,9 @@ export function buildCommandCenter(
       hunter,
       authority,
       business,
+      brandGuardian,
+      eeat,
+      businessIntel,
     },
     noticias,
     guides,
@@ -99,6 +111,9 @@ export function buildCommandCenter(
     hunter,
     authority,
     business,
+    brandGuardian,
+    eeat,
+    businessIntel,
     ceo,
     errors: errors.length ? errors : undefined,
   };
