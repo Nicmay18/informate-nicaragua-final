@@ -5,9 +5,12 @@
 
 import { google } from 'googleapis';
 import { logger } from './logger';
+import { adminDb } from './firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
 
 const SCOPES = ['https://www.googleapis.com/auth/indexing'];
 const INDEXING_ENDPOINT = 'https://indexing.googleapis.com/v3/urlNotifications:publish';
+const DEDUP_HOURS = 24;
 
 async function getAccessToken(): Promise<string | null> {
   try {
@@ -31,6 +34,41 @@ async function getAccessToken(): Promise<string | null> {
   } catch (err) {
     logger.error('[google-indexing] Error obteniendo token:', err);
     return null;
+  }
+}
+
+/**
+ * Verifica si la URL ya fue notificada en las últimas N horas para evitar duplicados.
+ */
+async function isRecentlyNotified(url: string): Promise<boolean> {
+  try {
+    const cutoff = new Date(Date.now() - DEDUP_HOURS * 60 * 60 * 1000);
+    const snap = await adminDb
+      .collection('indexing_log')
+      .where('url', '==', url)
+      .where('timestamp', '>=', cutoff)
+      .limit(1)
+      .get();
+    return !snap.empty;
+  } catch (err) {
+    logger.warn('[google-indexing] Error consultando dedup:', err);
+    return false; // En caso de fallo, permitir el envío
+  }
+}
+
+/**
+ * Registra el envío de notificación en Firestore para deduplicación futura.
+ */
+async function logIndexing(url: string, status: 'success' | 'failed', error?: string): Promise<void> {
+  try {
+    await adminDb.collection('indexing_log').add({
+      url,
+      status,
+      error: error || null,
+      timestamp: Timestamp.now(),
+    });
+  } catch (err) {
+    logger.warn('[google-indexing] Error guardando log:', err);
   }
 }
 
@@ -74,6 +112,57 @@ export async function notifyGoogleIndexing(url: string): Promise<boolean> {
   } catch (err) {
     logger.error('[google-indexing] Error enviando notificación:', err);
     return false;
+  }
+}
+
+/**
+ * Notifica a Google con deduplicación y registro de logs.
+ * Ideal para ser llamada desde el flujo editorial de publicación.
+ */
+export async function notifyGoogleIndexingDeduped(url: string): Promise<{ ok: boolean; status: 'sent' | 'duplicate' | 'error' | 'skipped' }> {
+  try {
+    const recently = await isRecentlyNotified(url);
+    if (recently) {
+      logger.info('[google-indexing] URL ya notificada recientemente:', url);
+      return { ok: true, status: 'duplicate' };
+    }
+
+    const token = await getAccessToken();
+    if (!token) {
+      logger.warn('[google-indexing] No se pudo obtener token, saltando notificación');
+      return { ok: false, status: 'skipped' };
+    }
+
+    const res = await fetch(INDEXING_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        url,
+        type: 'URL_UPDATED',
+      }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      if (res.status === 429) {
+        logger.warn('[google-indexing] Cuota excedida para:', url);
+      } else {
+        logger.error(`[google-indexing] Error HTTP ${res.status}: ${text}`);
+      }
+      await logIndexing(url, 'failed', text);
+      return { ok: false, status: 'error' };
+    }
+
+    logger.info('[google-indexing] Notificación enviada para:', url);
+    await logIndexing(url, 'success');
+    return { ok: true, status: 'sent' };
+  } catch (err) {
+    logger.error('[google-indexing] Error enviando notificación:', err);
+    await logIndexing(url, 'failed', err instanceof Error ? err.message : String(err));
+    return { ok: false, status: 'error' };
   }
 }
 

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || '';
-  return !!ADMIN_API_KEY && key === ADMIN_API_KEY;
+  return verifyAdminToken(request.headers.get('x-admin-token'));
 }
 
 const GUIAS = [

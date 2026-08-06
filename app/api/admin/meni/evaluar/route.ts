@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runMeni, runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
@@ -6,13 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 export const maxDuration = 30;
 
 function verificarAuth(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token');
-  const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
-  if (!validToken) {
-    console.warn('[meni/evaluar] ADMIN_API_KEY no configurada');
-    return false;
-  }
-  return token === validToken;
+  return verifyAdminOrCleanupToken(request.headers.get('x-admin-token'));
 }
 
 export async function POST(request: NextRequest) {

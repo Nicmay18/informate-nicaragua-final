@@ -18,6 +18,22 @@
       ]
     },
     {
+      "collectionGroup": "noticias",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "categoria", "order": "ASCENDING" },
+        { "fieldPath": "estado", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "noticias",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "vistas", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "newsletter_subscribers",
       "queryScope": "COLLECTION",
       "fields": [
@@ -31,6 +47,46 @@
       "fields": [
         { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "sentAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "kb_entities",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "slug" },
+        { "fieldPath": "articleCount", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "kb_timeline",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "entityId" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "kb_relations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sourceId" },
+        { "fieldPath": "strength", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "kb_relations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "targetId" },
+        { "fieldPath": "strength", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "indexing_log",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "url" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
       ]
     }
   ],

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import {
   runLearningCycle,
@@ -12,9 +13,7 @@ export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
-  return !!expected && key === expected;
+  return verifyAdminOrCleanupToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 /**

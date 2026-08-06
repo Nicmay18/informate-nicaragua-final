@@ -9,7 +9,7 @@ const SITE_URL = 'https://nicaraguainformate.com';
 
 // Google News Sitemap: solo noticias de las últimas 48 horas
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245
-export const revalidate = 86400; // Regenerar cada 24h
+export const revalidate = 1800; // Regenerar cada 30 min — noticias frescas
 
 function escapeXml(str: string): string {
   return String(str || '')
@@ -20,7 +20,7 @@ function escapeXml(str: string): string {
 }
 
 async function fetchNewsSitemapRaw() {
-  const cutoffMs = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 días — Google News procesa <2 días, pero incluir más evita vacíos
+  const cutoffMs = Date.now() - 48 * 60 * 60 * 1000; // 48 horas — Google News sitemap spec
   const articles = await getNews(100);
   return articles
     .filter((a) => {
@@ -50,7 +50,10 @@ export async function GET() {
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${articles.map((article) => {
   const articleDate = safeDate(article.fecha);
-  const publicationDate = !isNaN(articleDate.getTime()) ? articleDate.toISOString() : new Date().toISOString();
+  // ISO 8601 con timezone para Google News
+  const publicationDate = !isNaN(articleDate.getTime())
+    ? articleDate.toLocaleString('sv-SE', { timeZone: 'America/Managua' }).replace(' ', 'T') + '-06:00'
+    : new Date().toISOString();
   const publicationName = 'Nicaragua Informate';
   const publicationLanguage = 'es';
   
@@ -64,6 +67,7 @@ ${articles.map((article) => {
       </news:publication>
       <news:publication_date>${publicationDate}</news:publication_date>
       <news:title>${escapeXml(normalizeEditorialTitle(article.titulo))}</news:title>
+      <news:access>Public</news:access>
       <news:keywords>${escapeXml(article.categoria)}</news:keywords>
     </news:news>
   </url>`;

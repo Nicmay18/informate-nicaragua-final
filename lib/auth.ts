@@ -1,16 +1,59 @@
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
+/**
+ * Constant-time string comparison to prevent timing attacks.
+ * Works in both Node.js and Edge runtimes.
+ */
+export function timingSafeCompare(a: string, b: string): boolean {
+  if (!a || !b) return false;
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
+/**
+ * Verify a token against one or more valid secrets using timing-safe comparison.
+ */
+function verifyAgainstSecrets(token: string | null | undefined, secrets: string[]): boolean {
+  if (!token || secrets.length === 0) return false;
+  let matched = false;
+  for (const secret of secrets) {
+    if (timingSafeCompare(token, secret)) matched = true;
+  }
+  return matched;
+}
+
+/**
+ * Verify admin token against ADMIN_API_KEY only.
+ */
+export function verifyAdminToken(token: string | null | undefined): boolean {
+  return verifyAgainstSecrets(token, [process.env.ADMIN_API_KEY].filter(Boolean) as string[]);
+}
+
+/**
+ * Verify admin token against ADMIN_API_KEY or CRON_SECRET.
+ */
+export function verifyAdminOrCronToken(token: string | null | undefined): boolean {
+  return verifyAgainstSecrets(token, [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[]);
+}
+
+/**
+ * Verify admin token against ADMIN_API_KEY or TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR.
+ */
+export function verifyAdminOrCleanupToken(token: string | null | undefined): boolean {
+  return verifyAgainstSecrets(token, [process.env.ADMIN_API_KEY, process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR].filter(Boolean) as string[]);
+}
 
 export function isAdminRequest(request: Request): boolean {
-  const url = new URL(request.url);
   const token =
     request.headers.get('x-admin-token') ||
     request.headers.get('x-admin-key') ||
-    url.searchParams.get('token') ||
     '';
-  return ADMIN_API_KEY.length > 0 && token === ADMIN_API_KEY;
+  return verifyAdminToken(token);
 }
 
 export function unauthorized(): NextResponse {

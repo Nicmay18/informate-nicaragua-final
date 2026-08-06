@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isToxicSlug } from './lib/seo-toxic';
+import { timingSafeCompare } from './lib/auth';
 
 function generateNonce(): string {
   const arr = new Uint8Array(16);
@@ -71,8 +72,8 @@ export function middleware(request: NextRequest) {
     const validAdminKey = process.env.ADMIN_API_KEY || '';
     const validCronSecret = process.env.CRON_SECRET || '';
 
-    const isValidAdmin = validAdminKey && adminToken === validAdminKey;
-    const isValidCron = validCronSecret && cronSecret === validCronSecret;
+    const isValidAdmin = validAdminKey.length > 0 && timingSafeCompare(adminToken, validAdminKey);
+    const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
 
     if (!isValidAdmin && !isValidCron) {
       return NextResponse.json(
@@ -154,7 +155,15 @@ export function middleware(request: NextRequest) {
   }
 
   const isCrawler = ALLOWED_CRAWLERS.some((bot) => ua.includes(bot));
-  if (isCrawler && (pathname.startsWith('/noticias/') || pathname.startsWith('/categoria/'))) {
+  if (isCrawler && (pathname.startsWith('/noticias/') || pathname.startsWith('/categoria/') || pathname.startsWith('/entidad/') || pathname.startsWith('/tema/'))) {
+    response.headers.set(
+      'Cache-Control',
+      'public, s-maxage=3600, stale-while-revalidate=86400'
+    );
+    return response;
+  }
+
+  if (pathname.startsWith('/entidad/') || pathname.startsWith('/tema/')) {
     response.headers.set(
       'Cache-Control',
       'public, s-maxage=3600, stale-while-revalidate=86400'

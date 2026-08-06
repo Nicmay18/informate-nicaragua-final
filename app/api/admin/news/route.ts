@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
+import { notifyGoogleIndexingDeduped } from '@/lib/google-indexing';
 
 export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -10,9 +12,7 @@ import { normalizarTitulo } from '@/lib/meni/titulo';
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY;
-  return !!expected && key === expected;
+  return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 export async function GET(request: NextRequest) {
@@ -210,7 +210,14 @@ export async function POST(request: NextRequest) {
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
-    return NextResponse.json({ success: true, id: docRef.id, slug });
+    // Notificar a Google Indexing API cuando la noticia se publica
+    let googleIndexing: { ok: boolean; status: 'sent' | 'duplicate' | 'error' | 'skipped' } = { ok: false, status: 'skipped' };
+    if (publicado !== false) {
+      const articleUrl = `https://nicaraguainformate.com/noticias/${slug}`;
+      googleIndexing = await notifyGoogleIndexingDeduped(articleUrl);
+    }
+
+    return NextResponse.json({ success: true, id: docRef.id, slug, googleIndexing: googleIndexing.status });
   } catch (err) {
     console.error('[admin/news POST]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });

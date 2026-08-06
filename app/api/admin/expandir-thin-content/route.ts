@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
 
@@ -8,13 +9,7 @@ import { calcularScoreEditorial } from '@/utils/scoring';
 // =============================================================================
 
 function verificarAuth(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-  const validTokens = [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[];
-  if (validTokens.length === 0) {
-    console.warn('[expandir] Ni ADMIN_API_KEY ni CRON_SECRET configurados');
-    return false;
-  }
-  return validTokens.includes(token);
+  return verifyAdminOrCronToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 function stripHtml(html: string): string {

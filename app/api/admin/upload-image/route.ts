@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { verifyAdminToken } from '@/lib/auth';
 export const maxDuration = 30;
 
 /**
@@ -15,9 +16,7 @@ export const maxDuration = 30;
  *   - repo?: string (default: desde GITHUB_REPO)
  */
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY;
-  return !!expected && key === expected;
+  return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 export async function POST(request: NextRequest) {

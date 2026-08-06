@@ -3,6 +3,7 @@ import { getNews } from '@/lib/data';
 import { isToxicSlug } from '@/lib/seo-toxic';
 import { getAllAuthors } from '@/lib/authors';
 import { getAllEvergreen } from '@/lib/evergreen';
+import { getAllTemaSlugs } from '@/lib/topics';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
 
@@ -14,6 +15,21 @@ const cachedGetNews = unstable_cache(
   async () => getNews(500),
   ['sitemap-news'],
   { revalidate: 3600, tags: ['sitemap-news'] }
+);
+
+const cachedGetEntitySlugs = unstable_cache(
+  async () => {
+    try {
+      const { getAdminDb } = await import('@/lib/firebase-admin');
+      const db = getAdminDb();
+      const snap = await db.collection('kb_entities').select('slug').limit(500).get();
+      return snap.docs.map((d) => d.data().slug).filter(Boolean) as string[];
+    } catch {
+      return [];
+    }
+  },
+  ['sitemap-entities'],
+  { revalidate: 3600, tags: ['sitemap-entities'] }
 );
 
 export function safeDate(value: unknown): Date {
@@ -47,6 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/categoria/tecnologia`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/categoria/espectaculos`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/guia`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/entidad`, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/nosotros`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/contacto`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/publicidad`, changeFrequency: 'monthly', priority: 0.4 },
@@ -69,6 +86,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: safeDate(article.updatedDate),
     changeFrequency: 'monthly',
     priority: 0.6,
+  }));
+
+  const temaSlugs = getAllTemaSlugs();
+  const temaUrls: MetadataRoute.Sitemap = temaSlugs.map((slug) => ({
+    url: `${baseUrl}/tema/${slug}`,
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  }));
+
+  const entitySlugs = await cachedGetEntitySlugs();
+  const entityUrls: MetadataRoute.Sitemap = entitySlugs.map((slug) => ({
+    url: `${baseUrl}/entidad/${slug}`,
+    changeFrequency: 'weekly',
+    priority: 0.4,
   }));
 
   try {
@@ -103,9 +134,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...articleUrls];
+    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...articleUrls];
   } catch (error) {
     logger.error('[Sitemap] Error fetching articles:', error);
-    return [...staticUrls, ...authorUrls, ...evergreenUrls];
+    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls];
   }
 }

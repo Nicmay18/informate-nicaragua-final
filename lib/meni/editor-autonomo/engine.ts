@@ -307,7 +307,6 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
       razonamientoEditorial: decision.razonamiento,
       correccionesAplicadas: [],
       recomendaciones: decision.acciones,
-      evaluacion: {} as any,
       qualityGatePre,
       editorBrain: brain,
       editorialVerification: undefined,
@@ -370,8 +369,8 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     departamento: '',
     promptImagenIA: getString('promptImagenIA'),
     copyFacebook: instr.copyFacebook,
-    copyWhatsApp: `${instr.tituloSEO} https://informate.ni/noticias/${instr.slug}`,
-    copyTelegram: `${instr.tituloSEO}\n\n${getString('bajada')}\n\nhttps://informate.ni/noticias/${instr.slug}`,
+    copyWhatsApp: `${instr.tituloSEO} https://nicaraguainformate.com/noticias/${instr.slug}`,
+    copyTelegram: `${instr.tituloSEO}\n\n${getString('bajada')}\n\nhttps://nicaraguainformate.com/noticias/${instr.slug}`,
     jsonLd: '',
     checklistEeatDiscover: `EEAT: autor visible, fuentes atribuidas. Discover: título sin clickbait.`,
     diagnosticoEditorial: decision.mensajeEditor,
@@ -387,7 +386,6 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     razonamientoEditorial: decision.razonamiento,
     correccionesAplicadas: decision.acciones,
     recomendaciones: decision.acciones,
-    evaluacion: {} as any,
     _provider: 'groq+editorial-brain',
     editorialDecision: buildDecisionFlat(decision),
   };
@@ -480,7 +478,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     generated.riesgoEditorial = qualityGatePost.bloqueado ? 'ROJO' : decisionRiesgoToRiesgo(decision.riesgoEditorial);
     generated.riesgoTecnico = qualityGatePost.bloqueado ? 'ALTO' : qualityGatePost.issues.length > 0 ? 'MEDIO' : 'BAJO';
   } catch (e) {
-    generated.evaluacion = {} as any;
+    generated.evaluacion = undefined;
     generated._error = `Evaluación local falló: ${e instanceof Error ? e.message : String(e)}`;
     generated.aprobado = false;
   }

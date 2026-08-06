@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
 
 export const maxDuration = 30;
@@ -7,9 +8,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY;
-  return !!expected && key === expected;
+  return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

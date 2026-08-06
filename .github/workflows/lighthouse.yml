@@ -49,7 +49,7 @@ jobs:
         if: always()
         with:
           name: lighthouse-reports
-          path: ./lighthouse-results/
+          path: ./lighthouse-reports/
 
       - name: Comment PR
         uses: actions/github-script@v7
@@ -58,7 +58,7 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const manifestPath = path.join(process.cwd(), 'lighthouse-results', 'manifest.json');
+            const manifestPath = path.join(process.cwd(), 'lighthouse-reports', 'manifest.json');
             if (!fs.existsSync(manifestPath)) return;
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
             const results = manifest.map(r => ({
