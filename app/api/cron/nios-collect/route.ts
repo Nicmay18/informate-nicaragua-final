@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runNIOSPipeline, NIOS_CONFIG } from '@/lib/nios/intelligence/orchestrator';
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -20,6 +19,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getAdminDb();
+    const { runNIOSPipeline, NIOS_CONFIG } = await import('@/lib/nios/intelligence/orchestrator');
     const result = await runNIOSPipeline(db, NIOS_CONFIG);
 
     return NextResponse.json({

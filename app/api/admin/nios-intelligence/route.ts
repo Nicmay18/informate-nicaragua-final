@@ -1,19 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { getLatestSnapshot, getHistoricalSnapshots } from '@/lib/nios/intelligence/store';
-import { buildGoogleIntelligenceDashboard } from '@/lib/nios/intelligence/dashboard';
-import { generateGoogleTrustReport } from '@/lib/nios/intelligence/google-trust';
-import { generateAdSenseRecoveryReport } from '@/lib/nios/intelligence/adsense-recovery';
-import { generateWeeklyReport } from '@/lib/nios/intelligence/weekly-report';
-import { getLearningPatterns, summarizeLearningPatterns } from '@/lib/nios/intelligence/google-feedback';
-import { generateContentRecoveryReport } from '@/lib/nios/intelligence/content-recovery';
-import { generateAdSenseRecoveryFullReport } from '@/lib/nios/intelligence/adsense-recovery-report';
-import { generateContentOpportunityReport } from '@/lib/nios/intelligence/opportunity-engine';
-import { generateCategoryIntelligence } from '@/lib/nios/intelligence/category-intelligence';
-import { generateContentMixReport } from '@/lib/nios/intelligence/content-mix-intelligence';
-import { generateArticleUpdateReport } from '@/lib/nios/intelligence/update-engine';
-import { generateEditorCEOReport } from '@/lib/nios/intelligence/editor-ceo-report';
-import { generateMeniLearningFeedback } from '@/lib/nios/intelligence/meni-learning';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -54,6 +40,7 @@ export async function GET(request: NextRequest) {
     const db = getAdminDb();
 
     if (action === 'history') {
+      const { getHistoricalSnapshots } = await import('@/lib/nios/intelligence/store');
       const days = parseInt(searchParams.get('days') || '30', 10);
       const snapshots = await getHistoricalSnapshots(db, days);
       return NextResponse.json({
@@ -80,6 +67,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    const { getLatestSnapshot } = await import('@/lib/nios/intelligence/store');
     const latest = await getLatestSnapshot(db);
 
     if (!latest) {
@@ -107,6 +95,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'trust') {
+      const { generateGoogleTrustReport } = await import('@/lib/nios/intelligence/google-trust');
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -118,6 +107,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'adsense-recovery') {
+      const [{ generateGoogleTrustReport }, { generateAdSenseRecoveryReport }] = await Promise.all([
+        import('@/lib/nios/intelligence/google-trust'),
+        import('@/lib/nios/intelligence/adsense-recovery'),
+      ]);
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -132,6 +125,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'weekly') {
+      const [{ generateGoogleTrustReport }, { generateWeeklyReport }] = await Promise.all([
+        import('@/lib/nios/intelligence/google-trust'),
+        import('@/lib/nios/intelligence/weekly-report'),
+      ]);
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -146,6 +143,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'learning-patterns') {
+      const { getLearningPatterns, summarizeLearningPatterns } = await import('@/lib/nios/intelligence/google-feedback');
       const patterns = await getLearningPatterns(db);
       const summary = summarizeLearningPatterns(patterns);
       return NextResponse.json({
@@ -157,6 +155,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'recovery') {
+      const { generateGoogleTrustReport } = await import('@/lib/nios/intelligence/google-trust');
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -166,6 +165,7 @@ export async function GET(request: NextRequest) {
           trustMap.set(a.slug, { googleTrustScore: a.googleTrustScore, risk: a.risk });
         }
       }
+      const { generateContentRecoveryReport } = await import('@/lib/nios/intelligence/content-recovery');
       const contentRecovery = latest.articlesFused && trust
         ? generateContentRecoveryReport(latest.articlesFused, trustMap)
         : null;
@@ -177,6 +177,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'adsense-report') {
+      const { generateAdSenseRecoveryFullReport } = await import('@/lib/nios/intelligence/adsense-recovery-report');
       const report = latest.articlesFused
         ? await generateAdSenseRecoveryFullReport(
             latest.articlesFused,
@@ -191,6 +192,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'opportunity') {
+      const { generateContentOpportunityReport } = await import('@/lib/nios/intelligence/opportunity-engine');
       const report = latest.articlesFused && latest.gsc
         ? generateContentOpportunityReport(latest.articlesFused, latest.gsc)
         : null;
@@ -198,6 +200,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'category-intelligence') {
+      const [{ generateGoogleTrustReport }, { generateCategoryIntelligence }] = await Promise.all([
+        import('@/lib/nios/intelligence/google-trust'),
+        import('@/lib/nios/intelligence/category-intelligence'),
+      ]);
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -208,6 +214,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'content-mix') {
+      const [{ generateGoogleTrustReport }, { generateContentMixReport }] = await Promise.all([
+        import('@/lib/nios/intelligence/google-trust'),
+        import('@/lib/nios/intelligence/content-mix-intelligence'),
+      ]);
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -218,6 +228,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'update-engine') {
+      const { generateArticleUpdateReport } = await import('@/lib/nios/intelligence/update-engine');
       const report = latest.articlesFused
         ? generateArticleUpdateReport(latest.articlesFused)
         : null;
@@ -225,6 +236,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'meni-learning') {
+      const { generateMeniLearningFeedback } = await import('@/lib/nios/intelligence/meni-learning');
       const report = latest.articlesFused
         ? await generateMeniLearningFeedback(db, latest.articlesFused)
         : null;
@@ -232,6 +244,15 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'editor-strategy') {
+      const [
+        { generateGoogleTrustReport },
+        { generateMeniLearningFeedback },
+        { generateEditorCEOReport },
+      ] = await Promise.all([
+        import('@/lib/nios/intelligence/google-trust'),
+        import('@/lib/nios/intelligence/meni-learning'),
+        import('@/lib/nios/intelligence/editor-ceo-report'),
+      ]);
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
@@ -245,6 +266,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Dashboard completo
+    const [
+      { buildGoogleIntelligenceDashboard },
+      { generateGoogleTrustReport },
+    ] = await Promise.all([
+      import('@/lib/nios/intelligence/dashboard'),
+      import('@/lib/nios/intelligence/google-trust'),
+    ]);
     const dashboard = buildGoogleIntelligenceDashboard(
       latest.articlesFused || [],
       latest.gsc,

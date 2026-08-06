@@ -9,7 +9,6 @@
  * - Service Account con acceso a GSC (mismo Firebase SA)
  */
 
-import { google } from 'googleapis';
 import { logger } from '@/lib/logger';
 import type {
   GSCSnapshot,
@@ -19,7 +18,7 @@ import type {
   GSCDeviceRow,
 } from './types';
 
-function getAuthClient() {
+async function getAuthClient() {
   const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
 
@@ -27,14 +26,13 @@ function getAuthClient() {
     throw new Error('[gsc-collector] Credenciales de Firebase no configuradas');
   }
 
+  const { google } = await import('googleapis');
   return new google.auth.JWT({
     email: clientEmail,
     key: privateKey,
     scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
   });
 }
-
-const searchconsole = google.searchconsole('v1');
 
 interface GSCRawRow {
   keys: string[];
@@ -54,6 +52,8 @@ async function runQuery(
   rowLimit = 1000,
 ): Promise<GSCRawRow[]> {
   try {
+    const { google } = await import('googleapis');
+    const searchconsole = google.searchconsole('v1');
     const res = await searchconsole.searchanalytics.query({
       auth,
       siteUrl,
@@ -84,7 +84,7 @@ export async function collectGSC(
   siteUrl: string,
   daysToCollect = 28,
 ): Promise<GSCSnapshot | null> {
-  const auth = getAuthClient();
+  const auth = await getAuthClient();
   const endDate = formatDate(new Date());
   const startDateRaw = new Date(Date.now() - daysToCollect * 24 * 60 * 60 * 1000);
   const startDate = formatDate(startDateRaw);
@@ -157,6 +157,8 @@ export async function collectGSC(
 
   for (const url of topPageUrls) {
     try {
+      const { google } = await import('googleapis');
+      const searchconsole = google.searchconsole('v1');
       const res = await searchconsole.searchanalytics.query({
         auth,
         siteUrl,
@@ -249,6 +251,8 @@ async function runQueryWithFilter(
   filterValue: string,
 ): Promise<GSCRawRow[]> {
   try {
+    const { google } = await import('googleapis');
+    const searchconsole = google.searchconsole('v1');
     const res = await searchconsole.searchanalytics.query({
       auth,
       siteUrl,

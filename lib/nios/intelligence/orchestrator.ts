@@ -18,27 +18,6 @@
 
 import type { Firestore } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
-import { collectGSC } from './gsc-collector';
-import { collectGA4 } from './ga4-collector';
-import { loadNoticiasFromFirestore, mergeArticleData } from './data-merger';
-import { generateRecommendations } from './editorial-rules';
-import { generateComplianceReport } from './compliance';
-import { generateReadinessReport } from './readiness';
-import { buildGoogleIntelligenceDashboard } from './dashboard';
-import { generateGoogleTrustReport } from './google-trust';
-import { generateAdSenseRecoveryReport } from './adsense-recovery';
-import { generateLearningPatterns, saveLearningPatterns } from './google-feedback';
-import { generateWeeklyReport } from './weekly-report';
-import { generateContentRecoveryReport } from './content-recovery';
-import { generateAdSenseRecoveryFullReport } from './adsense-recovery-report';
-import { generateImprovementRecommendations } from './content-improvement';
-import { generateContentOpportunityReport } from './opportunity-engine';
-import { generateCategoryIntelligence } from './category-intelligence';
-import { generateContentMixReport } from './content-mix-intelligence';
-import { generateArticleUpdateReport } from './update-engine';
-import { generateEditorCEOReport } from './editor-ceo-report';
-import { generateMeniLearningFeedback } from './meni-learning';
-import { saveDailySnapshot } from './store';
 import type { DailySnapshot, NIOSConfig, GoogleIntelligenceDashboard, NIOSWeeklyReport } from './types';
 import type { Noticia } from '@/lib/types';
 
@@ -85,6 +64,52 @@ export async function runNIOSPipeline(
 ): Promise<NIOSRunResult> {
   const errors: string[] = [];
   const now = new Date().toISOString();
+
+  const [
+    { collectGSC },
+    { collectGA4 },
+    { loadNoticiasFromFirestore, mergeArticleData },
+    { generateRecommendations },
+    { generateComplianceReport },
+    { generateReadinessReport },
+    { buildGoogleIntelligenceDashboard },
+    { generateGoogleTrustReport },
+    { generateAdSenseRecoveryReport },
+    { generateLearningPatterns, saveLearningPatterns },
+    { generateWeeklyReport },
+    { generateContentRecoveryReport },
+    { generateAdSenseRecoveryFullReport },
+    { generateImprovementRecommendations },
+    { generateContentOpportunityReport },
+    { generateCategoryIntelligence },
+    { generateContentMixReport },
+    { generateArticleUpdateReport },
+    { generateEditorCEOReport },
+    { generateMeniLearningFeedback },
+    { saveDailySnapshot },
+  ] = await Promise.all([
+    import('./gsc-collector'),
+    import('./ga4-collector'),
+    import('./data-merger'),
+    import('./editorial-rules'),
+    import('./compliance'),
+    import('./readiness'),
+    import('./dashboard'),
+    import('./google-trust'),
+    import('./adsense-recovery'),
+    import('./google-feedback'),
+    import('./weekly-report'),
+    import('./content-recovery'),
+    import('./adsense-recovery-report'),
+    import('./content-improvement'),
+    import('./opportunity-engine'),
+    import('./category-intelligence'),
+    import('./content-mix-intelligence'),
+    import('./update-engine'),
+    import('./editor-ceo-report'),
+    import('./meni-learning'),
+    import('./store'),
+  ] as const);
 
   logger.info('[nios-orchestrator] Starting NIOS Intelligence Pipeline...');
 

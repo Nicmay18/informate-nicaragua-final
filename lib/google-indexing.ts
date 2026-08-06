@@ -3,7 +3,6 @@
  * Usa el mismo service account de Firebase Admin
  */
 
-import { google } from 'googleapis';
 import { logger } from './logger';
 import { adminDb } from './firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
@@ -23,6 +22,7 @@ async function getAccessToken(): Promise<string | null> {
       return null;
     }
 
+    const { google } = await import('googleapis');
     const jwtClient = new google.auth.JWT({
       email: clientEmail,
       key: privateKey,

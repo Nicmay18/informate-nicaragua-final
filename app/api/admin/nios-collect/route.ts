@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runNIOSPipeline, NIOS_CONFIG } from '@/lib/nios/intelligence/orchestrator';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -26,6 +25,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json().catch(() => ({}));
+    const { NIOS_CONFIG } = await import('@/lib/nios/intelligence/orchestrator');
     const config = {
       ...NIOS_CONFIG,
       siteUrl: body.siteUrl || NIOS_CONFIG.siteUrl,
@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
     };
 
     const db = getAdminDb();
+    const { runNIOSPipeline } = await import('@/lib/nios/intelligence/orchestrator');
     const result = await runNIOSPipeline(db, config);
 
     return NextResponse.json({
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getAdminDb();
+    const { NIOS_CONFIG } = await import('@/lib/nios/intelligence/orchestrator');
     const { getHistoricalDataDays, getLatestSnapshot } = await import('@/lib/nios/intelligence/store');
 
     const [days, latest] = await Promise.all([

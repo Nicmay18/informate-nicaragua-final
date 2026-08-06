@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { google } from 'googleapis';
 
 const INDEXNOW_KEY = process.env.INDEXNOW_KEY;
 const DOMAIN = 'nicaraguainformate.com';
@@ -79,6 +78,7 @@ async function submitGoogleIndexing(url: string): Promise<{ success: boolean; me
     const credentialsJson = Buffer.from(base64Credentials, 'base64').toString('utf-8');
     const credentials = JSON.parse(credentialsJson);
 
+    const { google } = await import('googleapis');
     const auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/indexing'],
