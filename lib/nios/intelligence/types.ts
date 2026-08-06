@@ -281,6 +281,12 @@ export interface DailySnapshot {
   learningPatterns: GoogleLearningPattern[];
   contentRecovery: ContentRecoveryReport | null;
   adSenseRecoveryFullReport: AdSenseRecoveryFullReport | null;
+  contentOpportunity: ContentOpportunityReport | null;
+  categoryIntelligence: CategoryIntelligenceReport | null;
+  contentMix: ContentMixReport | null;
+  articleUpdate: ArticleUpdateReport | null;
+  editorCEOReport: EditorCEOReport | null;
+  meniLearning: MeniLearningFeedback | null;
 }
 
 // ─── FASE 2: Google Trust & AdSense Recovery ─────────────────
@@ -528,6 +534,149 @@ export interface AdSenseRecoveryFullReport {
   trustCheck: AdSenseTrustCheck;
   contentRecovery: ContentRecoveryReport;
   improvements: ImprovementRecommendation[];
+  summary: string;
+}
+
+// ─── FASE 3: Editorial Growth Intelligence Engine ──────────────
+
+// FASE 3.1: Content Opportunity Engine
+export interface QueryOpportunity {
+  query: string;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  position: number;
+  opportunityType: 'low_ctr_high_impressions' | 'position_5_to_20' | 'growing_keyword' | 'zero_clicks';
+  recommendation: string;
+  relatedArticleSlug: string | null;
+  relatedArticleTitle: string | null;
+  evidence: NIOSEvidence[];
+}
+
+export interface ContentOpportunityReport {
+  generatedAt: string;
+  totalQueries: number;
+  opportunities: QueryOpportunity[];
+  topOpportunities: QueryOpportunity[];
+  summary: string;
+}
+
+// FASE 3.2: Category Intelligence
+export interface CategoryIntelligenceRow {
+  categoria: string;
+  articleCount: number;
+  googleImpressions: number;
+  googleClicks: number;
+  avgCtr: number;
+  avgPosition: number;
+  googleTrafficPct: number;
+  socialTrafficPct: number;
+  avgEngagementTimeSec: number;
+  avgMeniScore: number;
+  avgTrustScore: number;
+  rpmPotential: 'alto' | 'medio' | 'bajo';
+  opportunity: 'aumentar' | 'mantener' | 'limitar';
+  reasoning: string;
+  evidence: NIOSEvidence[];
+}
+
+export interface CategoryIntelligenceReport {
+  generatedAt: string;
+  categories: CategoryIntelligenceRow[];
+  increaseCategories: CategoryIntelligenceRow[];
+  limitCategories: CategoryIntelligenceRow[];
+  summary: string;
+}
+
+// FASE 3.3: Content Mix Optimizer
+export interface ContentMixRecommendation {
+  tipo: string;
+  cantidad: number;
+  categoria: string;
+  razon: string;
+  evidence: NIOSEvidence[];
+}
+
+export interface ContentMixReport {
+  generatedAt: string;
+  weekStart: string;
+  weekEnd: string;
+  recommendations: ContentMixRecommendation[];
+  totalArticles: number;
+  summary: string;
+}
+
+// FASE 3.4: Article Update Intelligence
+export interface ArticleUpdateCandidate {
+  slug: string;
+  titulo: string;
+  categoria: string;
+  url: string;
+  gscImpressions: number;
+  gscClicks: number;
+  gscCtr: number;
+  gscPosition: number;
+  daysSincePublication: number;
+  scoreMeni: number;
+  updateReason: 'declining_position' | 'outdated_content' | 'low_ctr_good_position' | 'freshness_boost';
+  reason: string;
+  recommendedAction: string;
+  expectedImpact: 'alto' | 'medio' | 'bajo';
+  evidence: NIOSEvidence[];
+}
+
+export interface ArticleUpdateReport {
+  generatedAt: string;
+  totalCandidates: number;
+  candidates: ArticleUpdateCandidate[];
+  topPriority: ArticleUpdateCandidate[];
+  summary: string;
+}
+
+// FASE 3.5: Editor CEO Report
+export interface EditorCEOReport {
+  generatedAt: string;
+  periodStart: string;
+  periodEnd: string;
+  hasData: boolean;
+  whatWorked: { slug: string; titulo: string; categoria: string; metric: string; value: string; evidence: NIOSEvidence[] }[];
+  whatFailed: { slug: string; titulo: string; categoria: string; metric: string; value: string; evidence: NIOSEvidence[] }[];
+  whatToRepeat: { action: string; reasoning: string; evidence: NIOSEvidence[] }[];
+  whatToStop: { action: string; reasoning: string; evidence: NIOSEvidence[] }[];
+  topicOpportunities: QueryOpportunity[];
+  articlesToUpdate: ArticleUpdateCandidate[];
+  categoryIntelligence: CategoryIntelligenceRow[];
+  contentMix: ContentMixRecommendation[];
+  meniLearning: MeniLearningFeedback | null;
+  summary: string;
+}
+
+// FASE 3.6: Aprendizaje MENI
+export interface MeniLearningEntry {
+  slug: string;
+  titulo: string;
+  categoria: string;
+  meniScoreAtPublish: number;
+  meniScoreCurrent: number;
+  gscImpressions30d: number;
+  gscClicks30d: number;
+  gscCtr30d: number;
+  gscPosition30d: number;
+  ga4Users30d: number;
+  ga4AvgEngagementTimeSec30d: number;
+  daysSincePublish: number;
+  verdict: 'meni_acertada' | 'meni_sobreestima' | 'meni_subestima' | 'datos_insuficientes';
+  conclusion: string;
+  evidence: NIOSEvidence[];
+}
+
+export interface MeniLearningFeedback {
+  generatedAt: string;
+  hasHistoricalData: boolean;
+  totalEntries: number;
+  entries: MeniLearningEntry[];
+  rulesCorrect: { rule: string; count: number; examples: string[] }[];
+  rulesIncorrect: { rule: string; count: number; examples: string[] }[];
   summary: string;
 }
 

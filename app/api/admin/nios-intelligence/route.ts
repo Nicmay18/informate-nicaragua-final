@@ -8,6 +8,12 @@ import { generateWeeklyReport } from '@/lib/nios/intelligence/weekly-report';
 import { getLearningPatterns, summarizeLearningPatterns } from '@/lib/nios/intelligence/google-feedback';
 import { generateContentRecoveryReport } from '@/lib/nios/intelligence/content-recovery';
 import { generateAdSenseRecoveryFullReport } from '@/lib/nios/intelligence/adsense-recovery-report';
+import { generateContentOpportunityReport } from '@/lib/nios/intelligence/opportunity-engine';
+import { generateCategoryIntelligence } from '@/lib/nios/intelligence/category-intelligence';
+import { generateContentMixReport } from '@/lib/nios/intelligence/content-mix-intelligence';
+import { generateArticleUpdateReport } from '@/lib/nios/intelligence/update-engine';
+import { generateEditorCEOReport } from '@/lib/nios/intelligence/editor-ceo-report';
+import { generateMeniLearningFeedback } from '@/lib/nios/intelligence/meni-learning';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -29,6 +35,12 @@ function isAuthorized(request: NextRequest): boolean {
  * ?action=learning-patterns — Google Learning Patterns
  * ?action=recovery — Content Recovery Queue
  * ?action=adsense-report — AdSense Recovery Full Report
+ * ?action=opportunity — Content Opportunity Engine
+ * ?action=category-intelligence — Category Intelligence
+ * ?action=content-mix — Content Mix Optimizer
+ * ?action=update-engine — Article Update Intelligence
+ * ?action=editor-strategy — Editor CEO Report
+ * ?action=meni-learning — Aprendizaje MENI
  * ?action=history — Snapshots históricos
  */
 export async function GET(request: NextRequest) {
@@ -61,6 +73,9 @@ export async function GET(request: NextRequest) {
           recoveryGreenPct: s.contentRecovery?.greenPct || 0,
           recoveryRedPct: s.contentRecovery?.redPct || 0,
           adSenseTrustScore: s.adSenseRecoveryFullReport?.trustCheck.adSenseTrustScore || 0,
+          opportunityCount: s.contentOpportunity?.opportunities.length || 0,
+          editorCEOGenerated: !!s.editorCEOReport,
+          meniLearningGenerated: !!s.meniLearning,
         })),
       });
     }
@@ -173,6 +188,60 @@ export async function GET(request: NextRequest) {
         date: latest.date,
         report,
       });
+    }
+
+    if (action === 'opportunity') {
+      const report = latest.articlesFused && latest.gsc
+        ? generateContentOpportunityReport(latest.articlesFused, latest.gsc)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
+    }
+
+    if (action === 'category-intelligence') {
+      const trust = latest.articlesFused
+        ? generateGoogleTrustReport(latest.articlesFused)
+        : null;
+      const report = latest.articlesFused
+        ? generateCategoryIntelligence(latest.articlesFused, latest.gsc, latest.ga4, trust)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
+    }
+
+    if (action === 'content-mix') {
+      const trust = latest.articlesFused
+        ? generateGoogleTrustReport(latest.articlesFused)
+        : null;
+      const report = latest.articlesFused
+        ? generateContentMixReport(latest.articlesFused, latest.gsc, latest.ga4, trust)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
+    }
+
+    if (action === 'update-engine') {
+      const report = latest.articlesFused
+        ? generateArticleUpdateReport(latest.articlesFused)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
+    }
+
+    if (action === 'meni-learning') {
+      const report = latest.articlesFused
+        ? await generateMeniLearningFeedback(db, latest.articlesFused)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
+    }
+
+    if (action === 'editor-strategy') {
+      const trust = latest.articlesFused
+        ? generateGoogleTrustReport(latest.articlesFused)
+        : null;
+      const meniLearning = latest.articlesFused
+        ? await generateMeniLearningFeedback(db, latest.articlesFused)
+        : null;
+      const report = latest.articlesFused && trust
+        ? generateEditorCEOReport(latest.articlesFused, latest.gsc, latest.ga4, trust, meniLearning)
+        : null;
+      return NextResponse.json({ success: true, date: latest.date, report });
     }
 
     // Dashboard completo

@@ -20,6 +20,12 @@ export { generateContentRecoveryReport, calculateRecoveryScore } from './content
 export { generateAdSenseTrustCheck } from './adsense-trust-check';
 export { generateImprovementRecommendations } from './content-improvement';
 export { generateAdSenseRecoveryFullReport } from './adsense-recovery-report';
+export { generateContentOpportunityReport } from './opportunity-engine';
+export { generateCategoryIntelligence } from './category-intelligence';
+export { generateContentMixReport } from './content-mix-intelligence';
+export { generateArticleUpdateReport } from './update-engine';
+export { generateEditorCEOReport } from './editor-ceo-report';
+export { generateMeniLearningFeedback } from './meni-learning';
 export { saveDailySnapshot, getLatestSnapshot, getHistoricalSnapshots, getSnapshotByDate, getHistoricalDataDays } from './store';
 export { runNIOSPipeline, NIOS_CONFIG } from './orchestrator';
 export type { NIOSRunResult } from './orchestrator';

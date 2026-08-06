@@ -32,6 +32,12 @@ import { generateWeeklyReport } from './weekly-report';
 import { generateContentRecoveryReport } from './content-recovery';
 import { generateAdSenseRecoveryFullReport } from './adsense-recovery-report';
 import { generateImprovementRecommendations } from './content-improvement';
+import { generateContentOpportunityReport } from './opportunity-engine';
+import { generateCategoryIntelligence } from './category-intelligence';
+import { generateContentMixReport } from './content-mix-intelligence';
+import { generateArticleUpdateReport } from './update-engine';
+import { generateEditorCEOReport } from './editor-ceo-report';
+import { generateMeniLearningFeedback } from './meni-learning';
 import { saveDailySnapshot } from './store';
 import type { DailySnapshot, NIOSConfig, GoogleIntelligenceDashboard, NIOSWeeklyReport } from './types';
 import type { Noticia } from '@/lib/types';
@@ -60,6 +66,12 @@ export interface NIOSRunResult {
   contentRecoveryGenerated: boolean;
   adSenseRecoveryFullReportGenerated: boolean;
   improvementsGenerated: number;
+  contentOpportunityGenerated: boolean;
+  categoryIntelligenceGenerated: boolean;
+  contentMixGenerated: boolean;
+  articleUpdateGenerated: boolean;
+  editorCEOReportGenerated: boolean;
+  meniLearningGenerated: boolean;
   errors: string[];
   summary: string;
 }
@@ -168,11 +180,35 @@ export async function runNIOSPipeline(
     sourceTraffic,
   );
 
-  // 15. Build dashboard
+  // 15. FASE 3.1: Content Opportunity Engine
+  const contentOpportunity = generateContentOpportunityReport(articles, gsc);
+
+  // 16. FASE 3.2: Category Intelligence
+  const categoryIntelligence = generateCategoryIntelligence(articles, gsc, ga4, trust);
+
+  // 17. FASE 3.3: Content Mix Optimizer
+  const contentMix = generateContentMixReport(articles, gsc, ga4, trust);
+
+  // 18. FASE 3.4: Article Update Intelligence
+  const articleUpdate = generateArticleUpdateReport(articles);
+
+  // 19. FASE 3.6: Aprendizaje MENI
+  let meniLearning = null;
+  try {
+    meniLearning = await generateMeniLearningFeedback(db, articles);
+  } catch (err) {
+    errors.push(`MeniLearning: ${err instanceof Error ? err.message : String(err)}`);
+    logger.error('[nios-orchestrator] MeniLearning failed:', err);
+  }
+
+  // 20. FASE 3.5: Editor CEO Report
+  const editorCEOReport = generateEditorCEOReport(articles, gsc, ga4, trust, meniLearning);
+
+  // 21. Build dashboard
   const _dashboard: GoogleIntelligenceDashboard = buildGoogleIntelligenceDashboard(articles, gsc, ga4, recommendations);
   void _dashboard;
 
-  // 16. Save daily snapshot
+  // 22. Save daily snapshot
   const snapshot: Omit<DailySnapshot, 'date'> = {
     collectedAt: now,
     gsc,
@@ -185,6 +221,12 @@ export async function runNIOSPipeline(
     learningPatterns,
     contentRecovery,
     adSenseRecoveryFullReport,
+    contentOpportunity,
+    categoryIntelligence,
+    contentMix,
+    articleUpdate,
+    editorCEOReport,
+    meniLearning,
   };
 
   try {
@@ -215,6 +257,12 @@ export async function runNIOSPipeline(
     contentRecoveryGenerated: !!contentRecovery,
     adSenseRecoveryFullReportGenerated: !!adSenseRecoveryFullReport,
     improvementsGenerated: improvements.length,
+    contentOpportunityGenerated: !!contentOpportunity,
+    categoryIntelligenceGenerated: !!categoryIntelligence,
+    contentMixGenerated: !!contentMix,
+    articleUpdateGenerated: !!articleUpdate,
+    editorCEOReportGenerated: !!editorCEOReport,
+    meniLearningGenerated: !!meniLearning,
     errors,
     summary,
   };
