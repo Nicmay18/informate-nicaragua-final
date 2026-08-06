@@ -1,6 +1,5 @@
-﻿/* eslint-disable @next/next/no-page-custom-font */
-import type { Metadata, Viewport } from 'next';
-import { Inter, Merriweather } from 'next/font/google';
+﻿import type { Metadata, Viewport } from 'next';
+import { Inter, Merriweather, Spectral, IBM_Plex_Mono } from 'next/font/google';
 // import localFont from 'next/font/local'; // Descomenta cuando agregues los archivos .woff2
 import './styles/globals.css';
 import './styles/components.css';
@@ -22,12 +21,15 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
+import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { criticalCss } from '@/lib/critical-css';
 import { getCspNonce } from '@/lib/nonce';
 import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: true });
 const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap', preload: false });
+const spectral = Spectral({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-spectral', display: 'swap', preload: false });
+const ibmPlexMono = IBM_Plex_Mono({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-ibm-plex-mono', display: 'swap', preload: false });
 
 /* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───
  * 1. Descarga Inter y Merriweather como .woff2
@@ -118,9 +120,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://nicaraguainformate.com',
-    languages: {
-      'x-default': 'https://nicaraguainformate.com',
-    },
     types: {
       'application/rss+xml': 'https://nicaraguainformate.com/feed.xml',
     },
@@ -142,25 +141,20 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const nonce = await getCspNonce();
   return (
-    <html lang="es-NI" className={`${inter.variable} ${merriweather.variable}`} suppressHydrationWarning>
+    <html lang="es-NI" className={`${inter.variable} ${merriweather.variable} ${spectral.variable} ${ibmPlexMono.variable}`} suppressHydrationWarning>
       <head>
         {/* Google Analytics 4 — carga diferida tras interaccion del usuario (no bloquea LCP) */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        {/* Fuentes del rediseño de portada */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-        {/* AdSense script base — las unidades reales se inyectan vía AdsenseUnit */}
+        {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit — no duplicar en head */}
+        {/* Monetag — zone 11065476 (quge5.com) para diversificación de revenue */}
         <script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838"
-          crossOrigin="anonymous"
+          dangerouslySetInnerHTML={{
+            __html: `(function(q,u,e,s,t,o,y){q['Quge5Object']=t;q[t]=q[t]||function(){(q[t].q=q[t].q||[]).push(arguments)},q[t].l=1*new Date();o=u.createElement(e),y=u.getElementsByTagName(e)[0];o.async=1;o.src=s;y.parentNode.insertBefore(o,y)})(window,document,'script','https://quge5.com/11065476.js','quge5');`,
+          }}
         />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style nonce={nonce} dangerouslySetInnerHTML={{ __html: criticalCss }} />
@@ -193,6 +187,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <DeferredAnalytics />
         </Suspense>
         <ThemeScript />
+        <WebVitalsReporter />
       </body>
     </html>
   );

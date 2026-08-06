@@ -68,16 +68,24 @@ export async function loadEntityPage(
   }
 
   const allRelations = [...relations, ...reverseRelations];
+  const relatedEntityIdArr = Array.from(relatedEntityIds);
+
+  // Batch read all related entities in a single call (fixes N+1)
+  const relatedDocs = await db.getAll(
+    ...relatedEntityIdArr.map((id) => db.collection('kb_entities').doc(id))
+  );
+
   const relatedEntities: Array<{
     entity: KnowledgeEntity;
     relation: string;
     strength: number;
   }> = [];
 
-  for (const id of relatedEntityIds) {
-    const entSnap = await db.collection('kb_entities').doc(id).get();
-    if (!entSnap.exists) continue;
-    const ent = entSnap.data() as unknown as KnowledgeEntity;
+  for (let i = 0; i < relatedEntityIdArr.length; i++) {
+    const doc = relatedDocs[i];
+    if (!doc.exists) continue;
+    const ent = doc.data() as unknown as KnowledgeEntity;
+    const id = relatedEntityIdArr[i];
     const rel = allRelations.find(
       (r) =>
         (r.sourceId === entity.id && r.targetId === id) ||
@@ -114,6 +122,27 @@ export async function listAllEntities(
     .get();
 
   return snap.docs.map((d) => d.data() as unknown as KnowledgeEntity);
+}
+
+export async function listEntitiesPaginated(
+  db: Firestore,
+  page: number,
+  pageSize: number,
+): Promise<KnowledgeEntity[]> {
+  const offset = (page - 1) * pageSize;
+  const snap = await db
+    .collection('kb_entities')
+    .orderBy('articleCount', 'desc')
+    .offset(offset)
+    .limit(pageSize)
+    .get();
+
+  return snap.docs.map((d) => d.data() as unknown as KnowledgeEntity);
+}
+
+export async function getEntityCount(db: Firestore): Promise<number> {
+  const snap = await db.collection('kb_entities').count().get();
+  return snap.data().count;
 }
 
 /**

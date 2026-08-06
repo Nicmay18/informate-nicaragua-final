@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
-import HomePagePro from '@/components/HomePagePro';
-import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
+import { getNewsPaginated, getNewsCount, getMasLeidas, PAGE_SIZE } from '@/lib/data';
 import { categoryToSlug, slugToCategory } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
+import PaginationWrapper from '@/components/PaginationWrapper';
+import HomePagePro from '@/components/HomePagePro';
 
-// ISR: regenera cada 24h para reducir consumo de funciones y lecturas
 export const dynamicParams = true;
-export const revalidate = 86400;
+export const revalidate = 300;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -20,20 +20,18 @@ function smartTruncate(str: string, maxLen = 155): string {
   return lastSpace > 0 ? trimmed.slice(0, lastSpace) + '…' : trimmed + '…';
 }
 
-export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string }> }): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string; page?: string }> }): Promise<Metadata> {
   const params = await searchParams;
-  const cat = params.cat || 'Todas';
-  const canonical = cat !== 'Todas' ? `${SITE_URL}/noticias?cat=${encodeURIComponent(cat)}` : `${SITE_URL}/noticias`;
+  const pageNum = parseInt(params.page || '1', 10) || 1;
+  const canonical = pageNum > 1
+    ? `${SITE_URL}/noticias?page=${pageNum}`
+    : `${SITE_URL}/noticias`;
 
-  const rawTitle = cat !== 'Todas' ? `${cat} - Noticias` : 'Todas las Noticias';
-  const title = rawTitle.length > 60 ? rawTitle.slice(0, 57) + '…' : rawTitle;
+  const rawTitle = 'Todas las Noticias';
+  const title = pageNum > 1 ? `${rawTitle} — Página ${pageNum}` : rawTitle;
+  const description = smartTruncate('Últimas noticias de Nicaragua. Cobertura nacional e internacional verificada desde Managua.');
 
-  const rawDesc = cat !== 'Todas'
-    ? `Últimas noticias de ${cat} en Nicaragua. Cobertura periodística verificada desde Managua.`
-    : 'Últimas noticias de Nicaragua. Cobertura nacional e internacional verificada desde Managua.';
-  const description = smartTruncate(rawDesc);
-
-  return {
+  const meta: Metadata = {
     title,
     description,
     alternates: { canonical },
@@ -53,9 +51,15 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
       images: [`${SITE_URL}/logo.webp`],
     },
   };
+
+  if (pageNum > 1) {
+    meta.robots = { index: false, follow: true };
+  }
+
+  return meta;
 }
 
-export default async function NoticiasPage({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
+export default async function NoticiasPage({ searchParams }: { searchParams: Promise<{ cat?: string; page?: string }> }) {
   const params = await searchParams;
 
   if (params.cat) {
@@ -68,18 +72,23 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
     notFound();
   }
 
-  const cat = 'Todas';
+  const page = Math.max(1, parseInt(params.page || '1', 10) || 1);
 
   let noticias: Noticia[] = [];
   let masLeidas: Noticia[] = [];
+  let totalCount = 0;
   try {
-    [noticias, masLeidas] = await Promise.all([
-      cat !== 'Todas' ? getNewsByCategory(cat, 50) : getNews(50),
+    [noticias, masLeidas, totalCount] = await Promise.all([
+      getNewsPaginated(page, PAGE_SIZE),
       getMasLeidas(),
+      getNewsCount(),
     ]);
   } catch (error) {
     console.error('[NoticiasPage] Error:', error);
   }
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   return (
     <>
@@ -88,7 +97,13 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         <span className="ni-breadcrumbs__sep">/</span>
         <span>Todas las noticias</span>
       </nav>
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} isNoticiasPage={true} />
+      <PaginationWrapper
+        basePath="/noticias"
+        currentPage={currentPage}
+        totalPages={totalPages}
+      >
+        <HomePagePro noticias={noticias} masLeidas={masLeidas} isNoticiasPage={true} />
+      </PaginationWrapper>
     </>
   );
 }

@@ -3,6 +3,7 @@ import { type Noticia } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
 import { getNews, getMasLeidas } from '@/lib/data';
+import { incrementView } from '@/lib/view-counter';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -69,9 +70,7 @@ export async function incrementViewsBySlug(
     const data = docSnap.data() || {};
     const currentViews = data.vistas || 0;
 
-    await docRef.update({
-      vistas: FieldValue.increment(1),
-    });
+    incrementView(docRef.id, docRef);
 
     try {
       await db.collection('traffic_log').add({

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 export const revalidate = 0;
 export const maxDuration = 30;
 
 function verificarAuth(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-  const validTokens = [process.env.ADMIN_API_KEY, process.env.CRON_SECRET].filter(Boolean) as string[];
-  return validTokens.length > 0 && validTokens.includes(token);
+  return verifyAdminOrCronToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 interface EnrichRequest {

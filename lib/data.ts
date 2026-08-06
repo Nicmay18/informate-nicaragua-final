@@ -150,12 +150,13 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb
       .collection('noticias')
+      .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
       .select(...fields)
       .limit(limit)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter(n => n.estado !== 'borrador' && n.estado !== 'archivado');
+    const noticias = snap.docs.map(mapDocToNoticia);
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -188,17 +189,24 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
 const _cachedGetByCategory = unstable_cache(
   async (categoria: string, count: number) => {
     try {
-      // Leemos noticias ya publicadas y filtramos por categoría en memoria
-      // para evitar depender de índices compuestos en Firestore.
-      const noticias = await fetchNoticiasList([...LIST_FIELDS], MAX_COUNT);
-      return noticias.filter(n => n.categoria === categoria).slice(0, count);
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .where('categoria', '==', categoria)
+        .orderBy('fecha', 'desc')
+        .limit(count)
+        .select(...LIST_FIELDS)
+        .get();
+
+      return snap.docs.map(mapDocToNoticia);
     } catch (err) {
       logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
       return [];
     }
   },
   ['noticias-cat'],
-  { revalidate: 3600, tags: ['noticias'] } // 1 hora, las categorías cambian poco
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -209,29 +217,20 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
 const _cachedGetMasLeidas = unstable_cache(
   async (count: number) => {
     try {
-      const { Timestamp } = await import('firebase-admin/firestore');
-      const noticias = await getNews(100);
-      if (noticias.length === 0) return [];
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('vistas', '>', 0)
+        .orderBy('vistas', 'desc')
+        .limit(count)
+        .select(...LIST_FIELDS)
+        .get();
 
-      const cutoff7 = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-      const cutoffMs7 = cutoff7.toDate().getTime();
-
-      const withViews = noticias
-        .filter((n) => new Date(n.fecha).getTime() >= cutoffMs7 && (n.vistas ?? 0) >= 1)
-        .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0));
-
-      if (withViews.length >= count) return withViews.slice(0, count);
-
-      const cutoff3 = Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000));
-      const cutoffMs3 = cutoff3.toDate().getTime();
-      const recent3 = noticias.filter((n) => new Date(n.fecha).getTime() >= cutoffMs3);
-      if (recent3.length >= count) return recent3.slice(0, count);
-
-      return noticias.slice(0, count);
+      return snap.docs.map(mapDocToNoticia);
     } catch (err) {
       logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
+      return [];
     }
-    return [];
   },
   ['mas-leidas'],
   { revalidate: 300, tags: ['noticias'] }
@@ -349,13 +348,158 @@ export async function getAllSlugs(): Promise<string[]> {
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
   const validatedCount = validateCount(count, 3);
   try {
-    const all = await getNews(30);
-    return all
-      .filter((n) => n.categoria === categoria && n.slug !== excludeSlug)
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(0, validatedCount);
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('categoria', '==', categoria)
+      .where('estado', '==', 'publicado')
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount + 5)
+      .get();
+
+    return snap.docs
+      .map((doc: any) => {
+        const data = doc.data();
+        const slug = data.slug || doc.id;
+        if (slug === excludeSlug) return null;
+        return {
+          id: doc.id,
+          slug,
+          titulo: data.titulo || '',
+          resumen: data.resumen || '',
+          contenido: data.contenido || '',
+          categoria: data.categoria || 'Actualidad',
+          imagen: normalizeImage(data.imagen || ''),
+          fecha: safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.fechaActualizacion),
+          autor: data.autor,
+          autorFoto: data.autorFoto,
+          destacada: data.destacada,
+          vistas: data.vistas,
+          palabras: data.palabras,
+          tags: data.tags,
+          estado: data.estado || 'publicado',
+          noindex: !!data.noindex,
+        } as Noticia;
+      })
+      .filter(Boolean) as Noticia[];
   } catch (err) {
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
+    // Fallback al método anterior si el índice no existe
+    try {
+      const all = await getNews(30);
+      return all
+        .filter((n) => n.categoria === categoria && n.slug !== excludeSlug)
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .slice(0, validatedCount);
+    } catch {
+      return [];
+    }
   }
-  return [];
+}
+
+export const PAGE_SIZE = 12;
+
+const _cachedGetNewsPaginated = unstable_cache(
+  async (page: number, pageSize: number) => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const offset = (page - 1) * pageSize;
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .orderBy('fecha', 'desc')
+        .select(...LIST_FIELDS)
+        .offset(offset)
+        .limit(pageSize)
+        .get();
+
+      return snap.docs.map(mapDocToNoticia);
+    } catch (err) {
+      logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  },
+  ['noticias-paginated'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
+  return _cachedGetNewsPaginated(Math.max(1, page), pageSize);
+}
+
+const _cachedGetNewsCount = unstable_cache(
+  async () => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .count()
+        .get();
+      return snap.data().count;
+    } catch (err) {
+      logger.error('[data.ts] getNewsCount error:', err instanceof Error ? err.message : String(err));
+      return 0;
+    }
+  },
+  ['noticias-count'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getNewsCount(): Promise<number> {
+  return _cachedGetNewsCount();
+}
+
+const _cachedGetCategoryPaginated = unstable_cache(
+  async (categoria: string, page: number, pageSize: number) => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const offset = (page - 1) * pageSize;
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .where('categoria', '==', categoria)
+        .orderBy('fecha', 'desc')
+        .select(...LIST_FIELDS)
+        .offset(offset)
+        .limit(pageSize)
+        .get();
+
+      return snap.docs.map(mapDocToNoticia);
+    } catch (err) {
+      logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  },
+  ['noticias-cat-paginated'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
+
+export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
+  return _cachedGetCategoryPaginated(categoria, Math.max(1, page), pageSize);
+}
+
+const _cachedGetCategoryCount = unstable_cache(
+  async (categoria: string) => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .where('categoria', '==', categoria)
+        .count()
+        .get();
+      return snap.data().count;
+    } catch (err) {
+      logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err instanceof Error ? err.message : String(err));
+      return 0;
+    }
+  },
+  ['noticias-cat-count'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
+
+export async function getCategoryCount(categoria: string): Promise<number> {
+  return _cachedGetCategoryCount(categoria);
 }

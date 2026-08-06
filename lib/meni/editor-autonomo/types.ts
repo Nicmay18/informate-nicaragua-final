@@ -38,7 +38,7 @@ export interface MeniAutonomousResult {
   razonamientoEditorial: { punto: string; positivo: boolean }[];
   correccionesAplicadas: string[];
   recomendaciones: string[];
-  evaluacion: MeniResult;
+  evaluacion?: MeniResult;
   qualityGatePre?: QualityGateResult;
   qualityGatePost?: QualityGateResult;
   editorBrain?: EditorBrainResult;

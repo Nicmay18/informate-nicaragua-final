@@ -1,11 +1,9 @@
 import { getAdminDb } from '@/lib/firebase-admin';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
-
-const CRON_SECRET = process.env.CRON_SECRET || '';
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 // Palabras que hacen una noticia INTRÍNSECAMENTE no aprobable por AdSense
 const PALABRAS_IRREPARABLES = [
@@ -249,16 +247,10 @@ function limpiarTitulo(titulo: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization') || '';
-    const secretFromHeader = authHeader.replace('Bearer ', '').trim();
-    const { searchParams } = new URL(request.url);
-    const secretFromQuery = searchParams.get('secret') || '';
-    const providedSecret = secretFromHeader || secretFromQuery;
-
-    const validSecrets = [CRON_SECRET, ADMIN_API_KEY].filter(Boolean);
-    if (!providedSecret || (validSecrets.length > 0 && !validSecrets.includes(providedSecret))) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
-    }
+    const token = request.headers.get('authorization')?.replace('Bearer ', '').trim() || request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
+  if (!verifyAdminOrCronToken(token)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
 
     const db = getAdminDb();
     const body = await request.json().catch(() => ({}));

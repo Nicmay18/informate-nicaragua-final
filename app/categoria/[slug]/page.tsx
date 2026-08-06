@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import CategoryPagePro from '@/components/CategoryPagePro';
-import { getNewsByCategory } from '@/lib/data';
+import PaginationWrapper from '@/components/PaginationWrapper';
+import { getCategoryPaginated, getCategoryCount, PAGE_SIZE } from '@/lib/data';
 import { slugToCategory, categoryToSlug } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 
@@ -100,16 +101,29 @@ export default async function CategoriaPage({
   }
 
   let noticias: Noticia[] = [];
+  let totalCount = 0;
   try {
-    noticias = await getNewsByCategory(catName, 200);
+    [noticias, totalCount] = await Promise.all([
+      getCategoryPaginated(catName, page, PAGE_SIZE),
+      getCategoryCount(catName),
+    ]);
   } catch (error) {
     console.error('[CategoriaPage] Error:', error);
     notFound();
   }
 
-  if (noticias.length === 0) notFound();
+  if (noticias.length === 0 && page === 1) notFound();
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   return (
-    <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} page={page} />
+    <PaginationWrapper
+      basePath={`/categoria/${slugLower}`}
+      currentPage={currentPage}
+      totalPages={totalPages}
+    >
+      <CategoryPagePro noticias={noticias} categoryName={catName} categorySlug={slugLower} page={currentPage} />
+    </PaginationWrapper>
   );
 }

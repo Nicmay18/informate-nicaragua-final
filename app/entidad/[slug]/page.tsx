@@ -4,7 +4,6 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { loadEntityPage, generateEntitySchema } from '@/lib/meni/knowledge-base/entity-page';
 import EntityPageClient from '@/components/knowledge-graph/EntityPageClient';
 
-export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 export async function generateMetadata({

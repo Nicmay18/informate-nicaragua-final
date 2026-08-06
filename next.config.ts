@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
   trailingSlash: false,
@@ -15,6 +16,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns', 'firebase'],
     scrollRestoration: true,
+    webVitalsAttribution: ['CLS', 'LCP', 'INP', 'FCP', 'TTFB'],
   },
   images: {
     unoptimized: false,
@@ -402,6 +404,7 @@ const nextConfig: NextConfig = {
         source: '/noticias/:slug*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' },
+          { key: 'Last-Modified', value: 'Tue, 04 Aug 2026 00:00:00 GMT' },
         ],
       },
       {
@@ -414,4 +417,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  widenClientFileUpload: true,
+  tunnelRoute: '/monitoring',
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+});

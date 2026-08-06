@@ -299,6 +299,34 @@ export function buildBreadcrumbJsonLdEnhanced(
 }
 
 /**
+ * Build CollectionPage schema for hub/topic pages
+ */
+export function buildCollectionPageJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  items: Array<{ '@type': 'ListItem'; url: string; name: string }>;
+}): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    inLanguage: 'es-NI',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: input.items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: item.url,
+      })),
+    },
+  };
+}
+
+/**
  * Genera un esquema FAQPage dinámico extrayendo preguntas reales del contenido HTML.
  * Si no encuentra preguntas, devuelve null de forma segura (sin inyección de schema vacío).
  *

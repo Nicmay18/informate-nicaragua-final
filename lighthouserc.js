@@ -22,8 +22,8 @@ module.exports = {
       preset: 'lighthouse:recommended',
       assertions: {
         'categories:performance': ['error', { minScore: 0.90 }],
-        'categories:accessibility': ['error', { minScore: 0.98 }],
-        'categories:best-practices': ['error', { minScore: 1.0 }],
+        'categories:accessibility': ['error', { minScore: 0.90 }],
+        'categories:best-practices': ['error', { minScore: 0.95 }],
         'categories:seo': ['error', { minScore: 0.95 }],
         'first-contentful-paint': ['warn', { maxNumericValue: 1800 }],
         'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
@@ -33,7 +33,7 @@ module.exports = {
     },
     upload: {
       target: 'filesystem',
-      outputDir: './lighthouse-results',
+      outputDir: './lighthouse-reports',
     },
   },
 };

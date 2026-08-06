@@ -18,8 +18,8 @@ export default function Error({
         </div>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm text-red-700 font-mono">
-            {error.message || 'Error desconocido'}
+          <p className="text-sm text-red-700">
+            Ha ocurrido un error inesperado en el servidor.
           </p>
           {error.digest && (
             <p className="text-xs text-red-600 mt-2">Error ID: {error.digest}</p>

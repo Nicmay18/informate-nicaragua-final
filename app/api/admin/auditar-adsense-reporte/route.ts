@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 function verificarAuth(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token');
-  const validToken = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
-  if (!validToken) {
-    console.warn('[auditar] Ni ADMIN_API_KEY ni TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR configurados');
-    return false;
-  }
-  return token === validToken;
+  return verifyAdminOrCleanupToken(request.headers.get('x-admin-token'));
 }
 
 function stripHtml(html: string): string {

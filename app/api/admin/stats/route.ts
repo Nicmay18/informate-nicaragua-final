@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 
 function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY;
-  return !!expected && key === expected;
+  return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 export async function GET(request: NextRequest) {

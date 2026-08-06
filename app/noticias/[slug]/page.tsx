@@ -1,6 +1,6 @@
 import '@/app/articulo.css';
 import ArticlePage from '@/components/ArticlePage';
-import { getNewsBySlug, getRelatedNews } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews, getNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -13,10 +13,13 @@ import {
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { resolveEffectiveSeo } from '@/lib/seo/effective';
 import { normalizeEditorialTitle } from '@/lib/formateo';
+import { getHeroImageUrl } from '@/lib/image-utils';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { logger } from '@/lib/logger';
 import { getCspNonce } from '@/lib/nonce';
 import { unstable_cache } from 'next/cache';
+import { generateInternalLinks } from '@/lib/internal-linking-engine';
+import type { RelatedLink } from '@/lib/article-links';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -93,7 +96,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const socialTitle = normalizeEditorialTitle(noticia.titulo) || finalTitle;
 
     const absoluteImage = noticia.imagen
-      ? (noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`)
+      ? getHeroImageUrl(noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`, 1200)
       : 'https://nicaraguainformate.com/logo.webp';
 
     return {
@@ -172,6 +175,24 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     related = [];
   }
 
+  // Si la noticia tiene related_links en Firestore, usarlos; si no, generar con motor
+  let internalLinks: RelatedLink[] = [];
+  if (noticia.related_links && noticia.related_links.length > 0) {
+    internalLinks = noticia.related_links;
+  } else {
+    try {
+      const allNews = await getNews(50);
+      internalLinks = await generateInternalLinks(noticia, allNews);
+    } catch (error) {
+      logger.error('Error generando enlaces internos:', error);
+    }
+  }
+
+  // Pasar internalLinks al ArticlePage via related_links del noticia
+  const noticiaWithLinks = internalLinks.length > 0
+    ? { ...noticia, related_links: internalLinks }
+    : noticia;
+
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
   const wordCount = noticia.contenido
@@ -192,7 +213,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       {faqSchema && (
         <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
       )}
-      <ArticlePage noticia={noticia} related={related} />
+      <ArticlePage noticia={noticiaWithLinks} related={related} />
     </>
   );
 }
