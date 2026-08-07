@@ -40,6 +40,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       date: string;
       report: { totalDuration: number; modules: { name: string; durationMs: number; status: string }[]; firestore: { reads: number; writes: number }; healthSignals: string[]; errors: string[] };
       health: { score: number; level: string; warnings: string[]; breakdown: Record<string, number> };
+      trafficMigration: { dailySource: string; fallbackReads: number; migrationHealth: number } | null;
       savedAt: string;
     };
 
@@ -57,6 +58,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         totalDuration: data.report.totalDuration,
         health: data.health,
         firestore: data.report.firestore,
+        trafficMigration: data.trafficMigration,
         slowestModules,
         failedModules,
         healthSignals: data.report.healthSignals,

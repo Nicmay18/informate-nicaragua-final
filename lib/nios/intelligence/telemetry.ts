@@ -7,6 +7,7 @@
 
 import { logger } from '@/lib/logger';
 import type { Firestore } from 'firebase-admin/firestore';
+import type { TrafficMigrationStatus } from '@/lib/analytics/traffic-reader';
 import type { NiosExecutionReport } from './performance-report';
 import type { NiosHealthScore } from './health-score';
 
@@ -16,11 +17,12 @@ export interface NiosTelemetryDocument {
   date: string;
   report: NiosExecutionReport;
   health: NiosHealthScore;
+  trafficMigration: TrafficMigrationStatus;
   savedAt: string;
 }
 
 /**
- * Guarda el Execution Report y Health Score en Firestore.
+ * Guarda el Execution Report, Health Score y Traffic Migration en Firestore.
  * Nunca sobrescribe datos históricos.
  */
 export async function saveTelemetry(
@@ -28,6 +30,7 @@ export async function saveTelemetry(
   date: string,
   report: NiosExecutionReport,
   health: NiosHealthScore,
+  trafficMigration: TrafficMigrationStatus,
 ): Promise<void> {
   try {
     const docRef = db.collection(TELEMETRY_COLLECTION).doc(date);
@@ -41,6 +44,7 @@ export async function saveTelemetry(
       date,
       report,
       health,
+      trafficMigration,
       savedAt: new Date().toISOString(),
     };
 

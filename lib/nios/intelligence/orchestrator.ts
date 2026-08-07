@@ -32,6 +32,7 @@ import type {
 } from './types';
 import type { Noticia } from '@/lib/types';
 import { generateTrafficPerformance, type TrafficPerformance } from '@/lib/analytics/traffic-aggregator';
+import { getTrafficMigrationStatus } from '@/lib/analytics/traffic-reader';
 import { measureAsync, measureSync, saveTelemetry } from './telemetry';
 import { buildExecutionReport } from './performance-report';
 import { calculateHealthScore } from './health-score';
@@ -619,9 +620,10 @@ export async function runNIOSPipeline(
 
   const trafficLogHasTTL = process.env.NIOS_TRAFFIC_LOG_TTL === '1';
   const health = calculateHealthScore(report, trafficLogHasTTL);
+  const trafficMigration = await getTrafficMigrationStatus(db);
 
   try {
-    await saveTelemetry(db, date, report, health);
+    await saveTelemetry(db, date, report, health, trafficMigration);
   } catch (err) {
     logger.error('[nios-orchestrator] Telemetry save failed:', err);
     // Telemetry falla no rompe el pipeline

@@ -1,5 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -57,21 +58,19 @@ export async function GET(request: NextRequest) {
     }
 
     // ─── 3. TRÁFICO POR FUENTE (últimas 24h) ───
-    const trafficSnap = await db
-      .collection('traffic_log')
-      .where('timestamp', '>=', hace24h)
-      .orderBy('timestamp', 'desc')
-      .limit(500)
-      .get();
+    const today = ahora.toISOString().split('T')[0];
+    const trafficRead = await getTrafficForDate(db, today, 500);
 
     const fuentes: Record<string, { visits: number; articulos: Set<string> }> = {};
-    for (const doc of trafficSnap.docs) {
-      const d = doc.data();
-      const source = detectarFuente(d.referrer, d.utmSource);
-      if (!fuentes[source]) fuentes[source] = { visits: 0, articulos: new Set() };
-      fuentes[source].visits++;
-      if (d.slug) fuentes[source].articulos.add(d.slug);
+    for (const article of trafficRead.articles) {
+      for (const [source, views] of Object.entries(article.sources)) {
+        if (!fuentes[source]) fuentes[source] = { visits: 0, articulos: new Set() };
+        fuentes[source].visits += views;
+        fuentes[source].articulos.add(article.slug);
+      }
     }
+
+    const visitas24h = trafficRead.views;
 
     // ─── 4. DISTRIBUCIONES RECIENTES ───
     const distSnap = await db
@@ -261,7 +260,7 @@ export async function GET(request: NextRequest) {
 
       // Tráfico
       fuentes: fuentesOrdenadas,
-      visitas24h: trafficSnap.size,
+      visitas24h,
 
       // Top
       topNoticias,
@@ -302,16 +301,4 @@ function parseFirestoreDate(val: any): Date | null {
   if (val.seconds && typeof val.seconds === 'number') return new Date(val.seconds * 1000);
   const d = new Date(val);
   return isNaN(d.getTime()) ? null : d;
-}
-
-function detectarFuente(referrer?: string, utmSource?: string): string {
-  if (utmSource) return utmSource.toLowerCase().trim();
-  if (!referrer) return 'directo';
-  const r = referrer.toLowerCase();
-  if (r.includes('facebook') || r.includes('fb.')) return 'facebook';
-  if (r.includes('t.me') || r.includes('telegram')) return 'telegram';
-  if (r.includes('whatsapp')) return 'whatsapp';
-  if (r.includes('twitter') || r.includes('x.com') || r.includes('t.co')) return 'twitter';
-  if (r.includes('google')) return 'google';
-  return 'otro';
 }

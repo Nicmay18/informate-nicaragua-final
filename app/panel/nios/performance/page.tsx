@@ -25,6 +25,7 @@ interface TelemetryData {
   totalDuration: number;
   health: TelemetryHealth;
   firestore: { reads: number; writes: number };
+  trafficMigration?: { dailySource: string; fallbackReads: number; migrationHealth: number };
   slowestModules: TelemetryModule[];
   failedModules: TelemetryModule[];
   healthSignals: string[];
@@ -143,6 +144,28 @@ export default async function NiosPerformancePage() {
               <li key={i}>{w}</li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {data.trafficMigration && (
+        <section className="mb-8 rounded border p-4 bg-white">
+          <h2 className="text-lg font-semibold mb-3">Migración de tráfico</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Fuente</span>
+              <div className="font-medium">{data.trafficMigration.dailySource}</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Fallback reads</span>
+              <div className="font-medium">{data.trafficMigration.fallbackReads}</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Health</span>
+              <div className={`font-medium ${data.trafficMigration.migrationHealth === 100 ? 'text-green-600' : 'text-amber-600'}`}>
+                {data.trafficMigration.migrationHealth}%
+              </div>
+            </div>
+          </div>
         </section>
       )}
 
