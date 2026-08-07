@@ -1,3 +1,4 @@
+import { incrementTrafficDaily } from '@/lib/analytics/traffic-aggregator';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { type Noticia } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
@@ -10,6 +11,14 @@ const SLUG_MAX_LEN = 200;
 
 function isValidSlug(slug: string): boolean {
   return typeof slug === 'string' && slug.length <= SLUG_MAX_LEN && SLUG_RE.test(slug);
+}
+
+function detectarDispositivo(userAgent?: string): 'mobile' | 'desktop' | 'tablet' | 'unknown' {
+  const ua = (userAgent || '').toLowerCase();
+  if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone')) return 'mobile';
+  if (ua.includes('tablet') || ua.includes('ipad')) return 'tablet';
+  if (ua.includes('mac') || ua.includes('windows') || ua.includes('linux')) return 'desktop';
+  return 'unknown';
 }
 
 function detectarFuente(referrer?: string, utmSource?: string, userAgent?: string): string {
@@ -82,6 +91,9 @@ export async function incrementViewsBySlug(
         source: detectarFuente(referrer, utmSource, userAgent),
         timestamp: FieldValue.serverTimestamp(),
       });
+
+      const device = detectarDispositivo(userAgent);
+      await incrementTrafficDaily(db, slug, detectarFuente(referrer, utmSource, userAgent), device);
     } catch (trafficErr) {
       logger.warn('[homepage.ts] No se pudo registrar traffic_log:', trafficErr instanceof Error ? trafficErr.message : String(trafficErr));
     }

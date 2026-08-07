@@ -1,4 +1,4 @@
-import { collection, getDocs, type Firestore } from 'firebase/firestore';
+import { collection, getDocs, query, limit, type Firestore } from 'firebase/firestore';
 
 /**
  * Genera shingles (n-grams) de palabras normalizadas
@@ -58,7 +58,9 @@ export async function detectarDuplicado(
 ): Promise<ResultadoDuplicado> {
   const shinglesNuevo = generarShingles(contenidoNuevo + ' ' + tituloNuevo, 5);
 
-  const snapshot = await getDocs(collection(db, 'noticias'));
+  const snapshot = await getDocs(
+    query(collection(db, 'noticias'), limit(2000))
+  );
   const coincidencias: ResultadoDuplicado['coincidencias'] = [];
 
   for (const doc of snapshot.docs) {
@@ -105,7 +107,11 @@ export async function detectarDuplicadoAdmin(
 ): Promise<ResultadoDuplicado> {
   const shinglesNuevo = generarShingles(contenidoNuevo + ' ' + tituloNuevo, 5);
 
-  const snapshot = await dbAdmin.collection('noticias').get();
+  const snapshot = await dbAdmin
+    .collection('noticias')
+    .select('titulo', 'contenido', 'slug', 'estado')
+    .limit(2000)
+    .get();
   const coincidencias: ResultadoDuplicado['coincidencias'] = [];
 
   for (const doc of snapshot.docs) {

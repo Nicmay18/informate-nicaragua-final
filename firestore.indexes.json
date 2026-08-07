@@ -21,15 +21,6 @@
       "collectionGroup": "noticias",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "categoria", "order": "ASCENDING" },
-        { "fieldPath": "estado", "order": "ASCENDING" },
-        { "fieldPath": "fecha", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "noticias",
-      "queryScope": "COLLECTION",
-      "fields": [
         { "fieldPath": "vistas", "order": "DESCENDING" }
       ]
     },
@@ -87,6 +78,37 @@
       "fields": [
         { "fieldPath": "url" },
         { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "nios_daily_snapshots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "traffic_log",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "google_learning_patterns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pattern", "order": "ASCENDING" },
+        { "fieldPath": "generatedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "editor_corrections",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "campo", "order": "ASCENDING" },
+        { "fieldPath": "categoria", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
       ]
     }
   ],

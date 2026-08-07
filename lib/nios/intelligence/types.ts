@@ -287,6 +287,7 @@ export interface DailySnapshot {
   articleUpdate: ArticleUpdateReport | null;
   editorCEOReport: EditorCEOReport | null;
   meniLearning: MeniLearningFeedback | null;
+  trafficPerformance: TrafficPerformance | null;
 }
 
 // ─── FASE 2: Google Trust & AdSense Recovery ─────────────────
@@ -678,6 +679,22 @@ export interface MeniLearningFeedback {
   rulesCorrect: { rule: string; count: number; examples: string[] }[];
   rulesIncorrect: { rule: string; count: number; examples: string[] }[];
   summary: string;
+}
+
+// ─── FASE 3.7: Traffic Intelligence ────────────────────────────
+
+export interface TrafficPerformanceArticle {
+  slug: string;
+  views: number;
+  sources: Record<string, number>;
+}
+
+export interface TrafficPerformance {
+  generatedAt: string;
+  topArticles: TrafficPerformanceArticle[];
+  topSources: Record<string, number>;
+  dailyGrowth: Record<string, number>;
+  weeklyTrend: Record<string, number>;
 }
 
 // ─── Config ────────────────────────────────────────────────────

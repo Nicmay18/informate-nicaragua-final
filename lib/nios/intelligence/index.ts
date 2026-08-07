@@ -28,4 +28,10 @@ export { generateEditorCEOReport } from './editor-ceo-report';
 export { generateMeniLearningFeedback } from './meni-learning';
 export { saveDailySnapshot, getLatestSnapshot, getHistoricalSnapshots, getSnapshotByDate, getHistoricalDataDays } from './store';
 export { runNIOSPipeline, NIOS_CONFIG } from './orchestrator';
-export type { NIOSRunResult } from './orchestrator';
+export { measureAsync, measureSync, saveTelemetry } from './telemetry';
+export { buildExecutionReport } from './performance-report';
+export { calculateHealthScore } from './health-score';
+export type { TelemetryMetric } from './telemetry';
+export type { NiosExecutionReport, ModuleMetric, FirestoreMetrics } from './performance-report';
+export type { NiosHealthScore, HealthLevel } from './health-score';
+
