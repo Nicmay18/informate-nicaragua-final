@@ -16,7 +16,6 @@ import {
 import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
-import DeferredAnalytics from '@/components/DeferredAnalytics';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -148,6 +147,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        {/* Google Analytics 4 — gtag.js */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"></script>
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-W1B5J61WEP');
+            `,
+          }}
+        />
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit — no duplicar en head */}
         {/* Monetag — zone 11065476 (quge5.com) para diversificación de revenue */}
         <script
@@ -183,9 +195,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <CookieBanner />
         </Suspense>
         <ConsentScript />
-        <Suspense fallback={null}>
-          <DeferredAnalytics />
-        </Suspense>
         <ThemeScript />
         <WebVitalsReporter />
       </body>

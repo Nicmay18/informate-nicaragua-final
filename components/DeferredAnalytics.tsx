@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-const GA_ID = 'G-W1BJ61WEP';
+const GA_ID = 'G-W1B5J61WEP';
 
 function loadGAScript(): Promise<void> {
   return new Promise((resolve) => {
