@@ -11,17 +11,33 @@ export const dynamic = 'force-dynamic';
  */
 function isAuthorized(request: NextRequest): boolean {
   const expectedCron = process.env.CRON_SECRET;
+  const auth = request.headers.get('authorization');
   const cronSecret = request.headers.get('x-cron-secret');
+  const cronAuthToken = request.headers.get('x-vercel-cron-auth-token');
   const vercelCron = request.headers.get('x-vercel-cron');
+  const vercelSchedule = request.headers.get('x-vercel-cron-schedule');
   const userAgent = request.headers.get('user-agent') || '';
   const token = new URL(request.url).searchParams.get('token');
 
-  // Vercel Cron envía su propio header / user-agent
-  if (vercelCron === '1' || userAgent.toLowerCase().includes('vercel')) return true;
-  // Si no hay CRON_SECRET configurado, acepta cualquier invocación (modo legacy)
+  // Si no hay CRON_SECRET configurado, acepta cualquier invocación (modo legacy / local)
   if (!expectedCron) return true;
-  // CRON_SECRET por header o query
-  return cronSecret === expectedCron || token === expectedCron;
+
+  // Vercel Cron envía Authorization: Bearer <CRON_SECRET>
+  // y headers adicionales de verificación. Soportamos varias formas:
+  // 1. Header Authorization Bearer
+  // 2. Header x-cron-secret
+  // 3. Query ?token=
+  // 4. Señales de Vercel cron (usadas como respaldo)
+  const isBearer = auth === `Bearer ${expectedCron}`;
+  const isHeader = !!cronSecret && cronSecret === expectedCron;
+  const isQuery = !!token && token === expectedCron;
+  const isVercelCron =
+    vercelCron === '1' ||
+    !!vercelSchedule ||
+    !!cronAuthToken ||
+    userAgent.toLowerCase().includes('vercel');
+
+  return isBearer || isHeader || isQuery || isVercelCron;
 }
 
 export async function GET(request: NextRequest) {

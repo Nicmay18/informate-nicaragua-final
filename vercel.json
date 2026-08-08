@@ -8,6 +8,9 @@
     "app/api/admin/meni/generar/route.ts": {
       "maxDuration": 60
     },
+    "app/api/cron/nios-collect/route.ts": {
+      "maxDuration": 60
+    },
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
