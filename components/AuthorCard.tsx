@@ -66,28 +66,30 @@ export default function AuthorCard({
 
   const wrapperStyle: React.CSSProperties = {
     display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
+    flexDirection: 'column',
+    alignItems: 'center',
     gap: 16,
-    padding: 20,
+    padding: '24px 20px',
     backgroundColor: '#f9fafb',
-    borderRadius: 12,
+    borderRadius: 16,
     border: '1px solid #e5e5e5',
+    textAlign: 'center',
   };
 
   const avatarImgStyle: React.CSSProperties = {
     position: 'relative',
-    width: 64,
-    height: 64,
+    width: 88,
+    height: 88,
     borderRadius: '50%',
     overflow: 'hidden',
     flexShrink: 0,
-    border: '2px solid #e5e5e5',
+    border: '3px solid #fff',
+    boxShadow: '0 0 0 2px #991b1b, 0 4px 12px rgba(0,0,0,0.12)',
   };
 
   const avatarFallbackStyle: React.CSSProperties = {
-    width: 64,
-    height: 64,
+    width: 88,
+    height: 88,
     borderRadius: '50%',
     backgroundColor: '#991b1b',
     display: 'flex',
@@ -95,62 +97,79 @@ export default function AuthorCard({
     justifyContent: 'center',
     color: '#fff',
     fontWeight: 700,
-    fontSize: 20,
+    fontSize: 28,
     flexShrink: 0,
+    border: '3px solid #fff',
+    boxShadow: '0 0 0 2px #991b1b, 0 4px 12px rgba(0,0,0,0.12)',
   };
 
   const infoStyle: React.CSSProperties = {
-    flex: 1,
-    minWidth: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    maxWidth: '100%',
   };
 
   const nameStyle: React.CSSProperties = {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 700,
     color: '#111827',
     textDecoration: 'none',
+    textAlign: 'center',
   };
 
   const roleStyle: React.CSSProperties = {
-    fontSize: 14,
+    fontSize: 13,
     color: '#991b1b',
     fontWeight: 600,
-    margin: '2px 0 0',
+    margin: '4px 0 0',
+    textAlign: 'center',
+    letterSpacing: '0.02em',
+    textTransform: 'uppercase',
   };
 
   const bioStyle: React.CSSProperties = {
     fontSize: 14,
     color: '#4b5563',
     lineHeight: 1.6,
-    margin: '8px 0 0',
+    margin: '10px 0 0',
+    textAlign: 'center',
+    maxWidth: 560,
   };
 
   const dateStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 12,
-    marginTop: 12,
+    marginTop: 14,
     fontSize: 12,
     color: '#6b7280',
+    textAlign: 'center',
   };
 
   const linkStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
     fontSize: 14,
     fontWeight: 600,
     color: '#991b1b',
     textDecoration: 'none',
     marginTop: 12,
+    padding: '6px 14px',
+    borderRadius: 9999,
+    backgroundColor: '#fff',
+    border: '1px solid #e5e5e5',
   };
 
   return (
     <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`} itemScope itemType="https://schema.org/Person">
       {hasPhoto ? (
         <div style={avatarImgStyle} itemProp="image">
-          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="64px" />
+          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="88px" priority />
         </div>
       ) : (
         <div style={avatarFallbackStyle}>
@@ -159,7 +178,7 @@ export default function AuthorCard({
       )}
 
       <div style={infoStyle}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
           {hasSlug ? (
             <Link href={`/autor/${finalSlug}`} style={nameStyle} rel="author" itemProp="name url">
               {displayName}
