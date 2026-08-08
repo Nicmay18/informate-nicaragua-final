@@ -178,7 +178,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 const _cachedGetNews = unstable_cache(
   async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
   ['noticias-list'],
-  { revalidate: 300, tags: ['noticias'] } // 5 minutos para noticias nuevas sin saturar Firebase
+  { revalidate: 60, tags: ['noticias', 'latest-news', 'trending-news'] }
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -233,7 +233,7 @@ const _cachedGetMasLeidas = unstable_cache(
     }
   },
   ['mas-leidas'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 60, tags: ['noticias', 'popular-news'] }
 );
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
