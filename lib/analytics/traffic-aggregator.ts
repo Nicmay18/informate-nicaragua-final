@@ -202,7 +202,7 @@ export async function generateTrafficPerformance(
       dayTotal += s.views;
       const entry = merged[slug] || { slug, views: 0, sources: {} };
       entry.views += s.views;
-      for (const [k, v] of Object.entries(s.sources)) {
+      for (const [k, v] of Object.entries(s.sources || {})) {
         entry.sources[k] = (entry.sources[k] || 0) + v;
         topSources[k] = (topSources[k] || 0) + v;
       }

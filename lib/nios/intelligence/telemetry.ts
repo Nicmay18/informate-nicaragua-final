@@ -48,7 +48,9 @@ export async function saveTelemetry(
       savedAt: new Date().toISOString(),
     };
 
-    await docRef.set(payload);
+    // Limpiar undefined recursivamente (Firestore no los permite)
+    const clean = (v: unknown) => JSON.parse(JSON.stringify(v));
+    await docRef.set(clean(payload));
     logger.info(`[nios-telemetry] Saved telemetry for ${date}`);
   } catch (err) {
     logger.error('[nios-telemetry] Failed to save telemetry:', err);

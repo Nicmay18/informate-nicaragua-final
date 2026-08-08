@@ -9,11 +9,11 @@ import { logger } from './logger';
 
 // ─── SCHEMAS DE VALIDACIÓN ──────────────────────────────────────
 
-const FirebaseSchema = z.object({
+const FirebaseBaseSchema = z.object({
   // Firestore Admin SDK (backend)
-  FIREBASE_PROJECT_ID: z.string().min(1, 'Missing FIREBASE_PROJECT_ID'),
-  FIREBASE_CLIENT_EMAIL: z.string().email('Invalid FIREBASE_CLIENT_EMAIL'),
-  FIREBASE_PRIVATE_KEY: z.string().min(100, 'FIREBASE_PRIVATE_KEY too short'),
+  FIREBASE_PROJECT_ID: z.string().optional(),
+  FIREBASE_CLIENT_EMAIL: z.string().optional(),
+  FIREBASE_PRIVATE_KEY: z.string().optional(),
   FIREBASE_SERVICE_ACCOUNT_BASE64: z.string().optional(),
 
   // Firestore Client SDK (frontend) — opcional pero recomendado
@@ -46,9 +46,16 @@ const NextjsSchema = z.object({
 });
 
 const FullSchema = z.object({
-  ...FirebaseSchema.shape,
+  ...FirebaseBaseSchema.shape,
   ...ThirdPartySchema.shape,
   ...NextjsSchema.shape,
+}).superRefine((data, ctx) => {
+  const hasBase64 = data.FIREBASE_SERVICE_ACCOUNT_BASE64 && data.FIREBASE_SERVICE_ACCOUNT_BASE64.length > 10;
+  if (!hasBase64) {
+    if (!data.FIREBASE_PROJECT_ID) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['FIREBASE_PROJECT_ID'], message: 'Missing FIREBASE_PROJECT_ID' });
+    if (!data.FIREBASE_CLIENT_EMAIL || !data.FIREBASE_CLIENT_EMAIL.includes('@')) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['FIREBASE_CLIENT_EMAIL'], message: 'Invalid FIREBASE_CLIENT_EMAIL' });
+    if (!data.FIREBASE_PRIVATE_KEY || data.FIREBASE_PRIVATE_KEY.length < 100) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['FIREBASE_PRIVATE_KEY'], message: 'FIREBASE_PRIVATE_KEY too short' });
+  }
 });
 
 type EnvVars = z.infer<typeof FullSchema>;

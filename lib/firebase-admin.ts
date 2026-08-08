@@ -1,7 +1,7 @@
 import { initializeApp, getApps, cert, getApp, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 import { getAuth, type Auth } from 'firebase-admin/auth';
-import { validateEnv, requireEnv } from './env';
+import { validateEnv } from './env';
 import { logger } from './logger';
 
 function getAdminApp(): App {
@@ -15,15 +15,15 @@ function getAdminApp(): App {
   }
 
   const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  const projectId = requireEnv('FIREBASE_PROJECT_ID');
-  const clientEmail = requireEnv('FIREBASE_CLIENT_EMAIL');
-  const privateKeyRaw = requireEnv('FIREBASE_PRIVATE_KEY');
+  const projectId = process.env.FIREBASE_PROJECT_ID || '';
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY || '';
 
   logger.debug('[firebase-admin] env check:', {
     hasBase64: !!b64,
     base64Length: b64?.length || 0,
     projectIdLength: projectId.length,
-    clientEmailPattern: clientEmail.split('@')[0] + '@***',
+    clientEmailPattern: clientEmail ? clientEmail.split('@')[0] + '@***' : 'none',
     privateKeyLength: privateKeyRaw.length,
   });
 

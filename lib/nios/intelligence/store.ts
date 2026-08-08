@@ -66,21 +66,21 @@ export async function saveDailySnapshot(
   const articlesCount = articles.length;
 
   // Separar reportes para subcolección
-  const reportsInline: Record<string, unknown> = {};
   const reportsToSave: Array<{ key: string; data: unknown }> = [];
 
   for (const key of REPORT_KEYS) {
     const reportData = (snapshot as Record<string, unknown>)[key];
     if (reportData !== null && reportData !== undefined) {
-      reportsInline[key] = reportData;
       reportsToSave.push({ key, data: reportData });
     }
   }
 
-  // Documento principal: metadata + datos ligeros + reportes inline
-  // articlesFused se incluye inline para backward compatibility (dual-write)
-  // Cuando articlesCount > 400, se omite inline para no exceder 1MB
-  const inlinePayload: Record<string, unknown> = {
+  // Limpiar undefined recursivamente (Firestore no los permite)
+  const clean = (v: unknown) => JSON.parse(JSON.stringify(v));
+
+  // Documento principal: metadata + datos ligeros
+  // Los reportes grandes se guardan en subcolección para no exceder 1MB
+  const inlinePayload: Record<string, unknown> = clean({
     date,
     collectedAt: snapshot.collectedAt,
     gsc: snapshot.gsc,
@@ -88,12 +88,13 @@ export async function saveDailySnapshot(
     recommendations: snapshot.recommendations,
     learningPatterns: snapshot.learningPatterns,
     articlesCount,
-    ...reportsInline,
-  };
+  });
 
-  // Dual-write: incluir articlesFused inline solo si es seguro (<400 art)
-  if (articlesCount <= 400) {
-    inlinePayload.articlesFused = articles;
+  // Dual-write: incluir articlesFused inline solo si cabe seguro en 1MB
+  const articlesJsonSize = JSON.stringify(clean(articles)).length;
+  const maxArticlesInline = 50;
+  if (articlesCount <= maxArticlesInline && articlesJsonSize < 300_000) {
+    inlinePayload.articlesFused = clean(articles);
   }
 
   await docRef.set(inlinePayload);
@@ -104,7 +105,7 @@ export async function saveDailySnapshot(
     for (const article of articles) {
       const slug = article.slug || Math.random().toString(36).slice(2);
       const articleRef = docRef.collection(ARTICLES_SUBCOLLECTION).doc(slug);
-      articlesBatch.set(articleRef, article);
+      articlesBatch.set(articleRef, clean(article));
     }
     await articlesBatch.commit();
     logger.info(`[nios-store] Saved ${articles.length} articles to subcollection for ${date}`);
@@ -115,7 +116,7 @@ export async function saveDailySnapshot(
     const reportsBatch = db.batch();
     for (const { key, data } of reportsToSave) {
       const reportRef = docRef.collection(REPORTS_SUBCOLLECTION).doc(key);
-      reportsBatch.set(reportRef, { key, data });
+      reportsBatch.set(reportRef, clean({ key, data }));
     }
     await reportsBatch.commit();
     logger.info(`[nios-store] Saved ${reportsToSave.length} reports to subcollection for ${date}`);

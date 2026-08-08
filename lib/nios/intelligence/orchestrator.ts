@@ -620,7 +620,12 @@ export async function runNIOSPipeline(
 
   const trafficLogHasTTL = process.env.NIOS_TRAFFIC_LOG_TTL === '1';
   const health = calculateHealthScore(report, trafficLogHasTTL);
-  const trafficMigration = await getTrafficMigrationStatus(db);
+  let trafficMigration: any = { dailyGenerated: false, fallbackReads: 0, migrationHealth: 0 };
+  try {
+    trafficMigration = await getTrafficMigrationStatus(db);
+  } catch (err) {
+    logger.warn('[nios-orchestrator] getTrafficMigrationStatus failed (expected outside Next.js):', err);
+  }
 
   try {
     await saveTelemetry(db, date, report, health, trafficMigration);
