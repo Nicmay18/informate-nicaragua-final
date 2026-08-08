@@ -8,6 +8,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp, Firestore } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 import { normalizarTitulo } from '@/lib/meni/titulo';
+import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
 
 export const dynamic = 'force-dynamic';
 
@@ -165,6 +166,9 @@ export async function POST(request: NextRequest) {
       return !existing.empty;
     });
     const docRef = db.collection('noticias').doc();
+    const { fuente, fuentesComplementarias } = extractFuente(contenido, resumen);
+    const puntosClave = extractPuntosClave(contenido, 4);
+    const autorFoto = getAutorFoto(autor);
     const relatedLinks = await getRelatedLinks(db, categoria, docRef.id);
     await docRef.set({
       id: docRef.id,
@@ -175,6 +179,7 @@ export async function POST(request: NextRequest) {
       imagen: imagen || '',
       slug,
       autor: autor || 'Nicaragua Informate',
+      autorFoto,
       destacada: !!destacada,
       vistas: 0,
       fecha: Timestamp.now(),
@@ -183,6 +188,9 @@ export async function POST(request: NextRequest) {
       nivel: 'FORENSE',
       nivelScore: 0,
       nivelFecha: new Date().toISOString(),
+      puntosClave,
+      fuente: fuente || 'Redacción Nicaragua Informate',
+      fuentesComplementarias,
       related_links: relatedLinks,
     });
 

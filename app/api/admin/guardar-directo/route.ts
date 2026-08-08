@@ -6,6 +6,7 @@ import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { normalizeEditorialTitle } from '@/lib/formateo';
+import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
 
 export const maxDuration = 30;
 
@@ -123,12 +124,23 @@ export async function POST(request: NextRequest) {
     // Contar palabras usando el contenido corregido por MENI
     const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
 
+    // Extraer señales EEAT: puntos clave, fuente(s) y foto del autor
+    const { fuente, fuentesComplementarias } = extractFuente(finalContenido, finalResumen);
+    const finalPuntosClave = body.puntosClave?.length ? body.puntosClave : extractPuntosClave(finalContenido, 4);
+    const finalFuente = body.fuente || fuente || 'Redacción Nicaragua Informate';
+    const finalFuentesComplementarias = body.fuentesComplementarias?.length ? body.fuentesComplementarias : fuentesComplementarias;
+    const finalAutorFoto = body.autorFoto || getAutorFoto(body.autor);
+
     // Datos a actualizar
     const updateData: Record<string, unknown> = {
       titulo: finalTitulo,
       contenido: finalContenido,
       fechaActualizacion: new Date(),
       palabras,
+      puntosClave: finalPuntosClave,
+      fuente: finalFuente,
+      fuentesComplementarias: finalFuentesComplementarias,
+      autorFoto: finalAutorFoto,
       publicado,
       estado: publicado ? 'publicado' : 'borrador',
       scoreMeni: meni.scoreFinal,
