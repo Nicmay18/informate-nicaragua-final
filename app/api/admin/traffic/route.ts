@@ -11,16 +11,30 @@ function verificarAuth(request: NextRequest): boolean {
 
 export async function GET(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 });
   }
   try {
     const db = getAdminDb();
     const today = new Date().toISOString().split('T')[0];
     const read = await getTrafficForDate(db, today, 10);
 
+    // Buscar títulos reales para los artículos top
+    const topSlugs = read.articles.map((a) => a.slug);
+    const titleMap = new Map<string, string>();
+    if (topSlugs.length > 0) {
+      const noticiasSnap = await db
+        .collection('noticias')
+        .where('slug', 'in', topSlugs)
+        .get();
+      for (const doc of noticiasSnap.docs) {
+        const data = doc.data();
+        if (data.slug) titleMap.set(data.slug, data.titulo || data.title || data.slug);
+      }
+    }
+
     const topPaginas = read.articles.map((a) => ({
       slug: a.slug,
-      titulo: a.slug,
+      titulo: titleMap.get(a.slug) || a.slug,
       vistas: a.views,
     }));
 
@@ -31,11 +45,30 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Últimas visitas registradas en traffic_log (últimas 24h)
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const recentSnap = await db
+      .collection('traffic_log')
+      .where('timestamp', '>=', since)
+      .orderBy('timestamp', 'desc')
+      .limit(20)
+      .get();
+
+    const ultimosEventos = recentSnap.docs.map((d) => {
+      const data = d.data();
+      return {
+        slug: data.slug || '',
+        titulo: data.titulo || data.slug || '',
+        source: data.source || 'directo',
+        timestamp: data.timestamp?.toDate ? data.timestamp.toDate().toISOString() : data.timestamp || new Date().toISOString(),
+      };
+    });
+
     const stats = {
       vistas24h: read.views,
       fuentes: sources,
       topPaginas,
-      ultimosEventos: [],
+      ultimosEventos,
       source: read.source,
       migrationHealth: read.migrationHealth,
     };
@@ -48,6 +81,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[API Traffic] Error:', error);
-    return NextResponse.json({ error: 'Error al obtener tráfico' }, { status: 500 });
+    return NextResponse.json({ ok: false, error: 'Error al obtener tráfico' }, { status: 500 });
   }
 }
