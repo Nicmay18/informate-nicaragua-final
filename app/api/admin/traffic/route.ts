@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import { aggregateTrafficFromLog } from '@/lib/analytics/traffic-aggregator';
 import { logger } from '@/lib/logger';
 
 export const revalidate = 0;
@@ -44,6 +45,16 @@ export async function GET(request: NextRequest) {
     for (const article of read.articles) {
       for (const [source, views] of Object.entries(article.sources || {})) {
         sources[source] = (sources[source] || 0) + (typeof views === 'number' ? views : 0);
+      }
+    }
+
+    // Si traffic_daily no trae fuentes, recalcular desde traffic_log
+    if (Object.keys(sources).length === 0) {
+      const logSummary = await aggregateTrafficFromLog(db, today);
+      for (const summary of Object.values(logSummary)) {
+        for (const [source, views] of Object.entries(summary.sources || {})) {
+          sources[source] = (sources[source] || 0) + (typeof views === 'number' ? views : 0);
+        }
       }
     }
 
