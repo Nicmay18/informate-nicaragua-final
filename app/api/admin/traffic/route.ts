@@ -84,7 +84,8 @@ export async function GET(request: NextRequest) {
       headers: { 'Cache-Control': 'no-store, must-revalidate' }
     });
   } catch (error) {
-    logger.error('[admin/traffic] exception', { error: error instanceof Error ? error.message : String(error) });
-    return NextResponse.json({ ok: false, error: 'Error al obtener tráfico' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    logger.error('[admin/traffic] exception', { error: msg });
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
 }

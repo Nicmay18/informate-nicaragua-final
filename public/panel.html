@@ -6453,8 +6453,10 @@ VERIFICACIÓN FINAL
           fetch('/api/admin/traffic', { cache: 'no-store', headers: { 'x-admin-token': adminToken } }),
           getNoticiasCache().catch(() => [])
         ]);
-        const data = await resp.json();
-        
+        const text = await resp.text();
+        if (!resp.ok) throw new Error(text);
+        const data = JSON.parse(text);
+
         if (!data.ok) throw new Error(data.error || 'Error desconocido');
         
         const stats = data.stats;
