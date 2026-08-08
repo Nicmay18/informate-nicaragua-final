@@ -26,15 +26,6 @@ export interface TrafficMigrationStatus {
 
 const TRAFFIC_DAILY = 'traffic_daily';
 
-const getCachedTrafficForDate = (db: Firestore, date: string, topN = 100) =>
-  unstable_cache(
-    async () => {
-      return fetchTrafficForDate(db, date, topN);
-    },
-    ['traffic-for-date', date, topN.toString()],
-    { revalidate: 300, tags: ['traffic-data'] },
-  );
-
 /**
  * Lee tráfico del día objetivo sin cache.
  */
@@ -105,8 +96,7 @@ export async function getTrafficForDate(
   date: string,
   topN = 100,
 ): Promise<TrafficReadResult> {
-  const cached = getCachedTrafficForDate(db, date, topN);
-  return cached();
+  return fetchTrafficForDate(db, date, topN);
 }
 
 /**
