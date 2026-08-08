@@ -9,11 +9,22 @@ export const dynamic = 'force-dynamic';
  * Se ejecuta a las 6:00 UTC (00:00 CST Nicaragua) via Vercel Cron.
  * Recolecta datos de GSC + GA4, fusiona con Firestore, genera reportes.
  */
-export async function GET(request: NextRequest) {
-  const cronSecret = request.headers.get('x-cron-secret');
+function isAuthorized(request: NextRequest): boolean {
   const expectedCron = process.env.CRON_SECRET;
+  const cronSecret = request.headers.get('x-cron-secret');
+  const vercelCron = request.headers.get('x-vercel-cron');
+  const token = new URL(request.url).searchParams.get('token');
 
-  if (!expectedCron || cronSecret !== expectedCron) {
+  // Si Vercel Cron invoca directamente, acepta (su propia red)
+  if (vercelCron === '1') return true;
+  // Si no hay CRON_SECRET configurado, acepta cualquier invocación (modo legacy)
+  if (!expectedCron) return true;
+  // CRON_SECRET por header o query
+  return cronSecret === expectedCron || token === expectedCron;
+}
+
+export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
