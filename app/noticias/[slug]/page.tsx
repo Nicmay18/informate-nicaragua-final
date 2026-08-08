@@ -95,9 +95,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const shouldNoindex = !!noticia.noindex;
     const socialTitle = normalizeEditorialTitle(noticia.titulo) || finalTitle;
 
-    const absoluteImage = noticia.imagen
+    const rawImage = noticia.imagen
       ? getHeroImageUrl(noticia.imagen.startsWith('http') ? noticia.imagen : `https://nicaraguainformate.com${noticia.imagen}`, 1200)
       : 'https://nicaraguainformate.com/logo.webp';
+
+    // Facebook requiere URL absoluta para OG image
+    const absoluteImage = rawImage.startsWith('/')
+      ? `https://nicaraguainformate.com${rawImage}`
+      : rawImage;
 
     return {
       title: { absolute: finalTitle },
