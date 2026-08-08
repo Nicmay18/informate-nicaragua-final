@@ -12,22 +12,6 @@ export interface GrowthMetrics {
   errors: string[];
 }
 
-async function safeCountNews(): Promise<number> {
-  try {
-    const snap = await adminDb.collection('noticias').count().get();
-    return snap.data().count;
-  } catch (err) {
-    logger.warn('[growth] count() de noticias falló, intentando get():', err instanceof Error ? err.message : String(err));
-    try {
-      const snap = await adminDb.collection('noticias').select().limit(2000).get();
-      return snap.size;
-    } catch (err2) {
-      logger.error('[growth] No se pudo contar noticias:', err2 instanceof Error ? err2.message : String(err2));
-      return 0;
-    }
-  }
-}
-
 async function safeGetNewsData(): Promise<{
   docs: { slug: string; titulo: string; vistas: number }[];
   error?: string;
@@ -103,8 +87,7 @@ async function safeGetTrafficMetrics(): Promise<{
 export async function getGrowthMetrics(): Promise<GrowthMetrics> {
   const errors: string[] = [];
 
-  const [totalNews, newsData, traffic] = await Promise.all([
-    safeCountNews(),
+  const [newsData, traffic] = await Promise.all([
     safeGetNewsData(),
     safeGetTrafficMetrics(),
   ]);
@@ -113,6 +96,7 @@ export async function getGrowthMetrics(): Promise<GrowthMetrics> {
   if (traffic.error) errors.push(`traffic_log: ${traffic.error}`);
 
   const docs = newsData.docs;
+  const totalNews = docs.length;
   const totalViews = docs.reduce((acc, n) => acc + n.vistas, 0);
   const avgViews = totalNews > 0 ? Math.round(totalViews / totalNews) : 0;
 

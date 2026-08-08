@@ -17,7 +17,10 @@ function loadGAScript(): Promise<void> {
       (window as any).gaLoaded = true;
       resolve();
     };
-    script.onerror = () => resolve();
+    script.onerror = () => {
+      (window as any).gaLoaded = false;
+      resolve();
+    };
     document.head.appendChild(script);
   });
 }
@@ -26,6 +29,13 @@ function initGA() {
   const win = window as any;
   win.dataLayer = win.dataLayer || [];
   win.gtag = function gtag(...args: any[]) { win.dataLayer.push(args); };
+  // Default granted for Nicaragua / non-EEA. ConsentScript downgrades to denied if user explicitly rejects.
+  win.gtag('consent', 'default', {
+    analytics_storage: 'granted',
+    ad_storage: 'granted',
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+  });
   win.gtag('js', new Date());
   win.gtag('config', GA_ID, {
     page_title: document.title,
@@ -39,35 +49,22 @@ export default function DeferredAnalytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Cargar GA cuando el navegador esté idle (no bloquea LCP/FCP)
-    const schedule = (typeof window !== 'undefined' && (window as any).requestIdleCallback)
-      ? (window as any).requestIdleCallback
-      : (cb: () => void) => setTimeout(cb, 2000);
-
-    const handle = schedule(async () => {
-      await loadGAScript();
-      initGA();
-    });
-
-    return () => {
-      if (typeof window !== 'undefined' && (window as any).cancelIdleCallback) {
-        (window as any).cancelIdleCallback(handle);
-      } else {
-        clearTimeout(handle);
-      }
-    };
+    if (typeof window === 'undefined') return;
+    initGA();
+    loadGAScript();
   }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const win = window as any;
-    if (typeof win.gtag !== 'function') return;
     const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
-    win.gtag('event', 'page_view', {
-      page_path: url,
-      page_location: window.location.href,
-      page_title: document.title,
-    });
+    if (typeof win.gtag === 'function') {
+      win.gtag('event', 'page_view', {
+        page_path: url,
+        page_location: window.location.href,
+        page_title: document.title,
+      });
+    }
   }, [pathname, searchParams]);
 
   return null;

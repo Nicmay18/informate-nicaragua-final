@@ -175,43 +175,29 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
   }
 }
 
-const _cachedGetNews = unstable_cache(
-  async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
-  ['noticias-list'],
-  { revalidate: 60, tags: ['noticias', 'latest-news', 'trending-news'] }
-);
-
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  return _cachedGetNews(validatedCount);
+  return fetchNoticiasList([...LIST_FIELDS], validatedCount);
 }
-
-const _cachedGetByCategory = unstable_cache(
-  async (categoria: string, count: number) => {
-    try {
-      const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
-        .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .where('categoria', '==', categoria)
-        .orderBy('fecha', 'desc')
-        .limit(count)
-        .select(...LIST_FIELDS)
-        .get();
-
-      return snap.docs.map(mapDocToNoticia);
-    } catch (err) {
-      logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
-      return [];
-    }
-  },
-  ['noticias-cat'],
-  { revalidate: 3600, tags: ['noticias'] }
-);
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  return _cachedGetByCategory(categoria, validatedCount);
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const snap = await adminDb
+      .collection('noticias')
+      .where('estado', '==', 'publicado')
+      .where('categoria', '==', categoria)
+      .orderBy('fecha', 'desc')
+      .limit(validatedCount)
+      .select(...LIST_FIELDS)
+      .get();
+
+    return snap.docs.map(mapDocToNoticia);
+  } catch (err) {
+    logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
+    return [];
+  }
 }
 
 const _cachedGetMasLeidas = unstable_cache(
@@ -400,106 +386,103 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
 export const PAGE_SIZE = 12;
 
-const _cachedGetNewsPaginated = unstable_cache(
-  async (page: number, pageSize: number) => {
-    try {
-      const { adminDb } = await import('./firebase-admin');
-      const offset = (page - 1) * pageSize;
-      const snap = await adminDb
-        .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .orderBy('fecha', 'desc')
-        .select(...LIST_FIELDS)
-        .offset(offset)
-        .limit(pageSize)
-        .get();
-
-      return snap.docs.map(mapDocToNoticia);
-    } catch (err) {
-      logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
-      return [];
-    }
-  },
-  ['noticias-paginated'],
-  { revalidate: 300, tags: ['noticias'] }
-);
-
 export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
-  return _cachedGetNewsPaginated(Math.max(1, page), pageSize);
-}
+  const validatedPage = Math.max(1, page);
+  const validatedPageSize = Math.max(1, pageSize);
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const offset = (validatedPage - 1) * validatedPageSize;
+    const snap = await adminDb
+      .collection('noticias')
+      .where('estado', '==', 'publicado')
+      .orderBy('fecha', 'desc')
+      .select(...LIST_FIELDS)
+      .offset(offset)
+      .limit(validatedPageSize)
+      .get();
 
-const _cachedGetNewsCount = unstable_cache(
-  async () => {
-    try {
-      const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
-        .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .count()
-        .get();
-      return snap.data().count;
-    } catch (err) {
-      logger.error('[data.ts] getNewsCount error:', err instanceof Error ? err.message : String(err));
-      return 0;
-    }
-  },
-  ['noticias-count'],
-  { revalidate: 300, tags: ['noticias'] }
-);
+    return snap.docs.map(mapDocToNoticia);
+  } catch (err) {
+    logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
+    return [];
+  }
+}
 
 export async function getNewsCount(): Promise<number> {
-  return _cachedGetNewsCount();
-}
-
-const _cachedGetCategoryPaginated = unstable_cache(
-  async (categoria: string, page: number, pageSize: number) => {
-    try {
-      const { adminDb } = await import('./firebase-admin');
-      const offset = (page - 1) * pageSize;
-      const snap = await adminDb
-        .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .where('categoria', '==', categoria)
-        .orderBy('fecha', 'desc')
-        .select(...LIST_FIELDS)
-        .offset(offset)
-        .limit(pageSize)
-        .get();
-
-      return snap.docs.map(mapDocToNoticia);
-    } catch (err) {
-      logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
-      return [];
-    }
-  },
-  ['noticias-cat-paginated'],
-  { revalidate: 3600, tags: ['noticias'] }
-);
-
-export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
-  return _cachedGetCategoryPaginated(categoria, Math.max(1, page), pageSize);
-}
-
-const _cachedGetCategoryCount = unstable_cache(
-  async (categoria: string) => {
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const countSnap = await adminDb
+      .collection('noticias')
+      .where('estado', '==', 'publicado')
+      .count()
+      .get();
+    return countSnap.data().count;
+  } catch (err) {
+    logger.warn('[data.ts] getNewsCount count() falló, usando get():', err instanceof Error ? err.message : String(err));
     try {
       const { adminDb } = await import('./firebase-admin');
       const snap = await adminDb
         .collection('noticias')
         .where('estado', '==', 'publicado')
-        .where('categoria', '==', categoria)
-        .count()
+        .select()
+        .limit(5000)
         .get();
-      return snap.data().count;
-    } catch (err) {
-      logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err instanceof Error ? err.message : String(err));
+      return snap.size;
+    } catch (err2) {
+      logger.error('[data.ts] getNewsCount error:', err2 instanceof Error ? err2.message : String(err2));
       return 0;
     }
-  },
-  ['noticias-cat-count'],
-  { revalidate: 3600, tags: ['noticias'] }
-);
+  }
+}
+
+export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
+  const validatedPage = Math.max(1, page);
+  const validatedPageSize = Math.max(1, pageSize);
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const offset = (validatedPage - 1) * validatedPageSize;
+    const snap = await adminDb
+      .collection('noticias')
+      .where('estado', '==', 'publicado')
+      .where('categoria', '==', categoria)
+      .orderBy('fecha', 'desc')
+      .select(...LIST_FIELDS)
+      .offset(offset)
+      .limit(validatedPageSize)
+      .get();
+
+    return snap.docs.map(mapDocToNoticia);
+  } catch (err) {
+    logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
+    return [];
+  }
+}
 
 export async function getCategoryCount(categoria: string): Promise<number> {
-  return _cachedGetCategoryCount(categoria);
+  try {
+    const { adminDb } = await import('./firebase-admin');
+    const countSnap = await adminDb
+      .collection('noticias')
+      .where('estado', '==', 'publicado')
+      .where('categoria', '==', categoria)
+      .count()
+      .get();
+    return countSnap.data().count;
+  } catch (err) {
+    logger.warn(`[data.ts] getCategoryCount count() falló para ${categoria}, usando get():`, err instanceof Error ? err.message : String(err));
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .where('categoria', '==', categoria)
+        .select()
+        .limit(5000)
+        .get();
+      return snap.size;
+    } catch (err2) {
+      logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err2 instanceof Error ? err2.message : String(err2));
+      return 0;
+    }
+  }
 }
