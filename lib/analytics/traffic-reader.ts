@@ -53,14 +53,16 @@ async function fetchTrafficForDate(
       }
     }
   } catch (err) {
-    logger.warn('[traffic-reader] Failed to read traffic_daily:', err);
+    logger.error('[traffic-reader] Failed to read traffic_daily:', err);
   }
 
   const hasDaily = Object.keys(dailySummary).length > 0;
+  logger.error('[traffic-reader] fetchTrafficForDate', { date, hasDaily, dailyCount: Object.keys(dailySummary).length });
 
   if (hasDaily) {
     const articles = Object.values(dailySummary).sort((a, b) => b.views - a.views);
     const views = articles.reduce((sum, a) => sum + a.views, 0);
+    logger.error('[traffic-reader] returning traffic_daily', { date, views, articleCount: articles.length });
     return {
       source: 'traffic_daily',
       views,
@@ -75,6 +77,7 @@ async function fetchTrafficForDate(
   const fallbackSummary = await aggregateTrafficFromLog(db, date, 5000);
   const articles = Object.values(fallbackSummary).sort((a, b) => b.views - a.views);
   const views = articles.reduce((sum, a) => sum + a.views, 0);
+  logger.error('[traffic-reader] fallback traffic_log', { date, views, articleCount: articles.length });
 
   return {
     source: 'traffic_log_fallback',

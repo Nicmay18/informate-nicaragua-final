@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import { logger } from '@/lib/logger';
 
 export const revalidate = 0;
 
@@ -17,6 +18,7 @@ export async function GET(request: NextRequest) {
     const db = getAdminDb();
     const today = new Date().toISOString().split('T')[0];
     const read = await getTrafficForDate(db, today, 10);
+    logger.error('[admin/traffic] getTrafficForDate', { today, articleCount: read.articles.length, views: read.views, source: read.source });
 
     // Buscar títulos reales para los artículos top
     const topSlugs = read.articles.map((a) => a.slug);
@@ -73,6 +75,8 @@ export async function GET(request: NextRequest) {
       migrationHealth: read.migrationHealth,
     };
 
+    logger.error('[admin/traffic] response', { vistas24h: stats.vistas24h, topN: topPaginas.length, eventN: ultimosEventos.length, source: stats.source });
+
     return NextResponse.json({
       ok: true,
       stats,
@@ -80,7 +84,7 @@ export async function GET(request: NextRequest) {
       headers: { 'Cache-Control': 'no-store, must-revalidate' }
     });
   } catch (error) {
-    console.error('[API Traffic] Error:', error);
+    logger.error('[admin/traffic] exception', { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ ok: false, error: 'Error al obtener tráfico' }, { status: 500 });
   }
 }

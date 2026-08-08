@@ -6509,6 +6509,9 @@ VERIFICACIÓN FINAL
         showToast('Tráfico actualizado en tiempo real', 'success');
       } catch (e) {
         console.error('Error cargando tráfico:', e);
+        const msg = e && e.message ? e.message : String(e);
+        if (topEl) topEl.innerHTML = `<p style="color:#f87171;text-align:center;padding:20px">Error: ${msg}</p>`;
+        if (ultimosEl) ultimosEl.innerHTML = `<p style="color:#f87171;text-align:center;padding:20px">Error: ${msg}</p>`;
         showToast('No hay datos de tráfico aún', 'info');
       }
     };
