@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
 
     const sources: Record<string, number> = {};
     for (const article of read.articles) {
-      for (const [source, views] of Object.entries(article.sources)) {
-        sources[source] = (sources[source] || 0) + views;
+      for (const [source, views] of Object.entries(article.sources || {})) {
+        sources[source] = (sources[source] || 0) + (typeof views === 'number' ? views : 0);
       }
     }
 
