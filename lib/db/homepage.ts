@@ -55,7 +55,7 @@ export async function incrementViewsBySlug(
   userAgent?: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
-    logger.warn('[homepage.ts] Slug rechazado por validación:', slug);
+    logger.error('[homepage.ts] Slug rechazado por validación:', slug);
     return null;
   }
 
@@ -71,7 +71,10 @@ export async function incrementViewsBySlug(
         .where('slug', '==', slug)
         .limit(1)
         .get();
-      if (snap.empty) return null;
+      if (snap.empty) {
+        logger.error('[homepage.ts] Noticia no encontrada por slug:', slug);
+        return null;
+      }
       docRef = snap.docs[0].ref;
       docSnap = snap.docs[0];
     }

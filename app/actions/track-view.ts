@@ -30,10 +30,15 @@ export async function trackViewAction(slug: string, referrer?: string, utmSource
     const rateKey = `${ip}:${slug}`;
 
     if (isRateLimited(rateKey)) {
+      logger.error('[track-view] Rate limited:', { ip, slug, rateKey });
       return { ok: true, views: null, rateLimited: true };
     }
 
     const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent);
+
+    if (result === null) {
+      logger.error('[track-view] incrementViewsBySlug returned null:', { ip, slug });
+    }
 
     return { ok: true, views: result };
   } catch (err) {
