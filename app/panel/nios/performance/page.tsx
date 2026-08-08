@@ -32,6 +32,37 @@ interface TelemetryData {
   errors: string[];
 }
 
+interface ReliabilityData {
+  date: string;
+  reliabilityScore: number;
+  pipeline: {
+    success: boolean;
+    durationMs: number;
+    failedModules: string[];
+    weeklyTrend: string;
+  };
+  trafficMigration: {
+    health: number;
+    fallbackReads: number;
+    trafficDailyCoverage: number;
+  };
+  firestore: {
+    estimatedReads: number;
+    estimatedWrites: number;
+    collectionGrowth: string;
+  };
+  warnings: string[];
+}
+
+interface NiosAlertData {
+  date: string;
+  severity: 'critical' | 'warning' | 'info';
+  category: string;
+  message: string;
+  resolved: boolean;
+  createdAt: string;
+}
+
 function levelColor(level: string): string {
   switch (level) {
     case 'EXCELENTE': return 'bg-green-100 text-green-800';
@@ -61,8 +92,33 @@ const getTelemetry = unstable_cache(async (): Promise<TelemetryData | null> => {
   }
 }, ['nios-telemetry-latest'], { revalidate: 300, tags: ['nios-telemetry'] });
 
+const getReliability = unstable_cache(async (): Promise<ReliabilityData | null> => {
+  try {
+    const db = getAdminDb();
+    const { buildReliabilitySnapshot } = await import('@/lib/nios/intelligence/reliability-monitor');
+    const snapshot = await buildReliabilitySnapshot(db, 7);
+    return snapshot as unknown as ReliabilityData;
+  } catch {
+    return null;
+  }
+}, ['nios-reliability-latest'], { revalidate: 300, tags: ['nios-telemetry'] });
+
+const getActiveAlerts = unstable_cache(async (): Promise<NiosAlertData[]> => {
+  try {
+    const db = getAdminDb();
+    const { getActiveAlerts: fetchAlerts } = await import('@/lib/nios/intelligence/alerts');
+    return await fetchAlerts(db, 7) as unknown as NiosAlertData[];
+  } catch {
+    return [];
+  }
+}, ['nios-alerts-active'], { revalidate: 300, tags: ['nios-telemetry'] });
+
 export default async function NiosPerformancePage() {
-  const data = await getTelemetry();
+  const [data, reliability, alerts] = await Promise.all([
+    getTelemetry(),
+    getReliability(),
+    getActiveAlerts(),
+  ]);
 
   if (!data) {
     return (
@@ -166,6 +222,60 @@ export default async function NiosPerformancePage() {
               </div>
             </div>
           </div>
+        </section>
+      )}
+
+      {reliability && (
+        <section className="mb-8 rounded border p-4 bg-gray-50">
+          <h2 className="text-lg font-semibold mb-3">Production Status</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Reliability Score</span>
+              <div className={`text-2xl font-bold ${reliability.reliabilityScore >= 90 ? 'text-green-600' : reliability.reliabilityScore >= 80 ? 'text-amber-600' : 'text-red-600'}`}>
+                {reliability.reliabilityScore}
+              </div>
+            </div>
+            <div>
+              <span className="text-gray-500">Tendencia 7d</span>
+              <div className="font-medium capitalize">{reliability.pipeline.weeklyTrend}</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Última ejecución</span>
+              <div className="font-medium">{reliability.pipeline.success ? '✓ OK' : '✗ Falló'}</div>
+              <div className="text-xs text-gray-500">{reliability.date}</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Traffic daily coverage</span>
+              <div className={`font-medium ${reliability.trafficMigration.trafficDailyCoverage >= 95 ? 'text-green-600' : 'text-amber-600'}`}>
+                {reliability.trafficMigration.trafficDailyCoverage}%
+              </div>
+            </div>
+          </div>
+          {reliability.warnings.length > 0 && (
+            <div className="mt-3">
+              <span className="text-xs font-medium text-gray-500 uppercase">Reliability warnings</span>
+              <ul className="list-disc pl-5 text-sm text-amber-700 mt-1">
+                {reliability.warnings.map((w, i) => (
+                  <li key={i}>{w}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      )}
+
+      {alerts.length > 0 && (
+        <section className="mb-8 rounded border p-4 bg-red-50">
+          <h2 className="text-lg font-semibold mb-3 text-red-800">Alertas activas ({alerts.length})</h2>
+          <ul className="space-y-2">
+            {alerts.map((a, i) => (
+              <li key={i} className={`text-sm p-2 rounded ${a.severity === 'critical' ? 'bg-red-100 text-red-800' : a.severity === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
+                <span className="font-medium uppercase text-xs">[{a.severity}] {a.category}</span>
+                <div>{a.message}</div>
+                <div className="text-xs opacity-60">{new Date(a.createdAt).toLocaleString('es-NI')}</div>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

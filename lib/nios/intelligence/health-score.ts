@@ -18,6 +18,8 @@ export interface NiosHealthScore {
     reliability: number;
     scalability: number;
   };
+  healthScoreVersion?: string;
+  extendedSignals?: HealthScoreExtendedSignals;
 }
 
 export function calculateHealthScore(
@@ -98,4 +100,57 @@ export function calculateHealthScore(
   else level = 'REQUIERE INTERVENCIÓN';
 
   return { score, level, warnings, breakdown: { performance, firestore, reliability, scalability } };
+}
+
+// ─────────────────────────────────────────────────────────────
+// v1.1 Extended Signals — augments v1.0 without changing formula
+// ─────────────────────────────────────────────────────────────
+
+export interface HealthScoreExtendedSignals {
+  reliabilityUptime: number;
+  errorsLast7Days: number;
+  trafficDailyPercentage: number;
+  trafficFallback: number;
+  firestoreCostTrend: 'decreasing' | 'stable' | 'increasing';
+}
+
+export interface NiosHealthScoreV11 extends NiosHealthScore {
+  healthScoreVersion: '1.1';
+  extendedSignals: HealthScoreExtendedSignals;
+}
+
+/**
+ * Calculates health score v1.1 — wraps v1.0 and adds extended signals.
+ * Does NOT modify the original formula.
+ */
+export function calculateHealthScoreV11(
+  report: NiosExecutionReport,
+  trafficLogHasTTL: boolean,
+  extendedSignals: HealthScoreExtendedSignals,
+): NiosHealthScoreV11 {
+  const base = calculateHealthScore(report, trafficLogHasTTL);
+  const warnings = [...base.warnings];
+
+  if (extendedSignals.reliabilityUptime < 99) {
+    warnings.push(`Pipeline uptime 7d: ${extendedSignals.reliabilityUptime.toFixed(1)}% (meta >99%)`);
+  }
+  if (extendedSignals.errorsLast7Days > 0) {
+    warnings.push(`Errores en últimos 7 días: ${extendedSignals.errorsLast7Days}`);
+  }
+  if (extendedSignals.trafficDailyPercentage < 95) {
+    warnings.push(`traffic_daily coverage: ${extendedSignals.trafficDailyPercentage}% (meta >95%)`);
+  }
+  if (extendedSignals.trafficFallback > 0) {
+    warnings.push(`Traffic fallback activo: ${extendedSignals.trafficFallback} reads`);
+  }
+  if (extendedSignals.firestoreCostTrend === 'increasing') {
+    warnings.push('Tendencia de costos Firestore: aumentando');
+  }
+
+  return {
+    ...base,
+    healthScoreVersion: '1.1',
+    extendedSignals,
+    warnings,
+  };
 }
