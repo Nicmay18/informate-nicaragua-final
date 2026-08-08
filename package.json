@@ -25,7 +25,7 @@
     "scripts:organize": "node scripts/cli.js organize",
     "meni:sync": "node scripts/meni-prebuild.mjs",
     "prebuild": "node scripts/meni-prebuild.mjs",
-    "prepare": "git config core.hooksPath .githooks"
+    "prepare": "node -e \"try { require('child_process').execSync('git config core.hooksPath .githooks', { stdio: 'ignore' }); } catch (e) {}\""
   },
   "dependencies": {
     "@google-analytics/data": "^7.0.0",
