@@ -95,7 +95,7 @@ export async function incrementViewsBySlug(
       const device = detectarDispositivo(userAgent);
       await incrementTrafficDaily(db, slug, detectarFuente(referrer, utmSource, userAgent), device);
     } catch (trafficErr) {
-      logger.warn('[homepage.ts] No se pudo registrar traffic_log:', trafficErr instanceof Error ? trafficErr.message : String(trafficErr));
+      logger.error('[homepage.ts] No se pudo registrar traffic_log:', trafficErr);
     }
 
     return currentViews + 1;

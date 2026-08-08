@@ -2,6 +2,7 @@
 
 import { incrementViewsBySlug } from '@/lib/db/homepage';
 import { headers } from 'next/headers';
+import { logger } from '@/lib/logger';
 
 // Rate limiting simple en memoria (producción: usar Redis/Vercel KV)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -36,6 +37,8 @@ export async function trackViewAction(slug: string, referrer?: string, utmSource
 
     return { ok: true, views: result };
   } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : 'Unknown error' };
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    logger.error('[track-view] Server action failed:', err);
+    return { ok: false, error: message };
   }
 }
