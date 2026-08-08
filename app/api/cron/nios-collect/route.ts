@@ -13,10 +13,11 @@ function isAuthorized(request: NextRequest): boolean {
   const expectedCron = process.env.CRON_SECRET;
   const cronSecret = request.headers.get('x-cron-secret');
   const vercelCron = request.headers.get('x-vercel-cron');
+  const userAgent = request.headers.get('user-agent') || '';
   const token = new URL(request.url).searchParams.get('token');
 
-  // Si Vercel Cron invoca directamente, acepta (su propia red)
-  if (vercelCron === '1') return true;
+  // Vercel Cron envía su propio header / user-agent
+  if (vercelCron === '1' || userAgent.toLowerCase().includes('vercel')) return true;
   // Si no hay CRON_SECRET configurado, acepta cualquier invocación (modo legacy)
   if (!expectedCron) return true;
   // CRON_SECRET por header o query
