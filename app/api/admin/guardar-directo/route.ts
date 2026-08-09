@@ -10,7 +10,8 @@ import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-help
 
 export const maxDuration = 30;
 
-function mapMeniScoreToNivel(score: number, aprobado: boolean): string {
+function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
+  if (score === null || !Number.isFinite(score)) return 'NO EVALUADA';
   if (!aprobado || score < 85) return 'RECHAZADO';
   return 'FORENSE';
 }

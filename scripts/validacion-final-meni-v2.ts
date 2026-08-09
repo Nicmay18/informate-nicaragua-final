@@ -235,9 +235,9 @@ async function evaluarNoticias(noticias: NoticiaInput[]): Promise<ResultadoNotic
     resultados.push({
       slug: noticias[i].slug || noticias[i].titulo,
       categoria: noticias[i].categoria || 'General',
-      v1: v1[i].scoreFinal,
-      v2: r2.scoreFinal,
-      delta: r2.scoreFinal - v1[i].scoreFinal,
+      v1: v1[i]?.scoreFinal ?? 0,
+      v2: r2.scoreFinal ?? 0,
+      delta: (r2.scoreFinal ?? 0) - (v1[i]?.scoreFinal ?? 0),
       utilidad: dna?.selloNI?.utilidad ?? 0,
       profundidad: dna?.selloNI?.explica ?? 0,
       originalidad: dna?.selloNI?.originalidad ?? 0,

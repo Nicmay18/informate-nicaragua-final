@@ -100,7 +100,7 @@ async function main() {
       `DESPUÉS score=${despues.scoreFinal} utilidad=${getUtilidad(despues)} profundidad=${getProfundidad(despues)} originalidad=${getOriginalidad(despues)} EEAT=${getEeat(despues)}`,
     );
 
-    const delta = despues.scoreFinal - antes.scoreFinal;
+    const delta = (despues.scoreFinal ?? 0) - (antes.scoreFinal ?? 0);
     mejoras.push(delta);
     utilidades.push(getUtilidad(despues));
     profundidades.push(getProfundidad(despues));

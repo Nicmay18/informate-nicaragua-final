@@ -144,7 +144,7 @@ function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
 
 export function buildMeniDiagnostics(opts: {
   qualityGate?: QualityGateResult;
-  scoreFinal: number;
+  scoreFinal: number | null;
   aprobado: boolean;
   editorialDna?: EditorialDnaResult;
 }): { blockingIssues: MeniBlockingIssue[]; warnings: MeniBlockingIssue[] } {
@@ -209,7 +209,7 @@ export function buildMeniDiagnostics(opts: {
     }
   }
 
-  if (!opts.aprobado && opts.scoreFinal < MIN_APPROVED_SCORE && blockingIssues.length === 0) {
+  if (!opts.aprobado && typeof opts.scoreFinal === 'number' && opts.scoreFinal < MIN_APPROVED_SCORE && blockingIssues.length === 0) {
     blockingIssues.push({
       code: 'MENI_SCORE_THRESHOLD',
       module: 'meni-core',

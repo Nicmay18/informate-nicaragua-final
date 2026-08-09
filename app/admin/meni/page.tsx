@@ -156,15 +156,28 @@ export default function MeniPage() {
                 <div className={`rounded-2xl p-6 shadow border-l-4 ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'bg-green-50 border-green-500' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'bg-amber-50 border-amber-500' : 'bg-red-50 border-red-500'}`}>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-slate-800">Veredicto del Editor Jefe</h2>
-                    <span className="text-xs font-semibold text-slate-500">Score: {result.scoreFinal} · {result.calificacion}</span>
+                    <span className="text-xs font-semibold text-slate-500">
+                      {result.score_status === 'INVALID'
+                        ? `Score: N/A · ${result.calificacion}`
+                        : `Score: ${result.scoreFinal} · ${result.calificacion}`}
+                    </span>
                   </div>
                   <div className="flex items-center gap-4 mb-6">
-                    <div className={`text-4xl font-black ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'text-green-700' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'text-amber-700' : 'text-red-700'}`}>
-                      {result.editorialDecision.veredictoEjecutivo.publicar}
-                    </div>
-                    <div className="text-lg text-slate-700">
-                      {result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'Se publica' : result.editorialDecision.veredictoEjecutivo.publicar === 'NO' ? 'No se publica' : 'Mejorar antes de publicar'}
-                    </div>
+                    {result.score_status === 'INVALID' ? (
+                      <>
+                        <div className="text-4xl font-black text-red-700">NO EVALUADA</div>
+                        <div className="text-lg text-slate-700">Error de evaluación</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={`text-4xl font-black ${result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'text-green-700' : result.editorialDecision.veredictoEjecutivo.publicar === 'MEJORAR' ? 'text-amber-700' : 'text-red-700'}`}>
+                          {result.editorialDecision.veredictoEjecutivo.publicar}
+                        </div>
+                        <div className="text-lg text-slate-700">
+                          {result.editorialDecision.veredictoEjecutivo.publicar === 'SI' ? 'Se publica' : result.editorialDecision.veredictoEjecutivo.publicar === 'NO' ? 'No se publica' : 'Mejorar antes de publicar'}
+                        </div>
+                      </>
+                    )}
                   </div>
                   <p className="text-slate-700 mb-4 leading-relaxed">{result.editorialDecision.veredictoEjecutivo.respuestaEjecutiva}</p>
 
@@ -570,7 +583,9 @@ export default function MeniPage() {
                   <h2 className="mb-4 text-lg font-semibold">APORTE AL LECTOR</h2>
                   <div className="mb-4 rounded-lg bg-indigo-50 p-4 text-center">
                     <p className="text-2xl font-bold text-indigo-700 tracking-widest">
-                      {Array.from({ length: Math.max(1, Math.min(5, Math.round(result.scoreFinal / 20))) }).map(() => '★').join('')}
+                      {typeof result.scoreFinal === 'number'
+                        ? Array.from({ length: Math.max(1, Math.min(5, Math.round(result.scoreFinal / 20))) }).map(() => '★').join('')
+                        : '—'}
                     </p>
                   </div>
                   <p className="text-sm text-slate-700 leading-relaxed mb-4">
@@ -634,7 +649,7 @@ export default function MeniPage() {
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                       <div className="rounded-lg bg-white p-3 text-center">
                         <p className="text-xs text-slate-500">Score</p>
-                        <p className="text-xl font-bold">{result.scoreFinal}</p>
+                        <p className="text-xl font-bold">{typeof result.scoreFinal === 'number' ? result.scoreFinal : 'N/A'}</p>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
                         <p className="text-xs text-slate-500">Categoría</p>

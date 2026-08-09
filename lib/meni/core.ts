@@ -69,6 +69,33 @@ const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   gastronomia: 'Cultura',
 };
 
+function findInvalidScoreSource(editorialDecision: any, editorialDna: any): string {
+  const checks: { path: string; value: unknown }[] = [
+    { path: 'editorialDecision.score', value: editorialDecision?.score },
+    { path: 'editorialDna.adnNI', value: editorialDna?.adnNI },
+    { path: 'editorialDna.exclusividad.score', value: editorialDna?.exclusividad?.score },
+    { path: 'editorialDna.wow.score', value: editorialDna?.wow?.score },
+    { path: 'editorialDna.selloNI.contextualiza', value: editorialDna?.selloNI?.contextualiza },
+    { path: 'editorialDna.selloNI.explica', value: editorialDna?.selloNI?.explica },
+    { path: 'editorialDna.selloNI.servicio', value: editorialDna?.selloNI?.servicio },
+    { path: 'editorialDna.selloNI.originalidad', value: editorialDna?.selloNI?.originalidad },
+  ];
+  for (const { path, value } of checks) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) {
+      return `Score inválido detectado en ${path}`;
+    }
+  }
+  if (Array.isArray(editorialDecision?.puntosPerdidos)) {
+    for (let i = 0; i < editorialDecision.puntosPerdidos.length; i++) {
+      const p = editorialDecision.puntosPerdidos[i];
+      if (typeof p?.puntos !== 'number' || !Number.isFinite(p.puntos)) {
+        return `Punto perdido inválido en índice ${i}: ${p?.concepto ?? '?'}`;
+      }
+    }
+  }
+  return 'Fuente desconocida';
+}
+
 function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe'], now = new Date()): MeniResult {
   const t0 = Date.now();
   logMeni('=== runMeni start ===', input.titulo);
@@ -200,28 +227,49 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // 4. DERIVAR TODO DE EDITORIAL DECISION
   // No hay scores paralelos. El ADN NI es el score final.
   // ═══════════════════════════════════════════════════════════
-  const scoreFinal = editorialDecision.score;
-  const aprobadoFinal = scoreFinal >= MIN_APPROVED_SCORE
+  const rawScore = editorialDecision.score;
+  const scoreIsValid = typeof rawScore === 'number' && Number.isFinite(rawScore);
+  const scoreFinal: number | null = scoreIsValid ? Math.max(0, Math.min(100, rawScore)) : null;
+  const finalEditorialScore: number | null = scoreFinal;
+  const invalidScoreSource = scoreIsValid ? undefined : findInvalidScoreSource(editorialDecision, editorialDna);
+  const score_status: MeniResult['score_status'] = scoreIsValid ? 'VALID' : 'INVALID';
+  const score: number | null = scoreFinal;
+
+  const aprobadoFinal = scoreIsValid
+    && scoreFinal! >= MIN_APPROVED_SCORE
     && !editorialDecision.bloquear
     && !tierQualityGateBloqueado
     && !adnTranscripcionBloquear;
 
-  const calificacion = scoreToGrade(scoreFinal);
+  const calificacion = scoreIsValid ? scoreToGrade(scoreFinal!) : 'ERROR DE EVALUACIÓN';
   const prioridad = computePriority(evaluacion.veredicto);
-  const diagnostico = editorialDecision.mensajeEditor;
+  const diagnostico = scoreIsValid ? editorialDecision.mensajeEditor : 'MENI no pudo calcular el score correctamente.';
 
   // Riesgo derivado del EditorialDecision, no de pipelineV4
-  const riesgoEditorial: MeniRiesgoEditorial = {
-    nivel: editorialDecision.riesgoEditorial === 'BAJO' ? 'VERDE'
-      : editorialDecision.riesgoEditorial === 'MEDIO' ? 'AMARILLO' : 'ROJO',
-    motivo: editorialDecision.motivoPrincipal,
-    advertencias: editorialDecision.acciones,
-  };
+  const riesgoEditorial: MeniRiesgoEditorial = scoreIsValid
+    ? {
+        nivel: editorialDecision.riesgoEditorial === 'BAJO' ? 'VERDE'
+          : editorialDecision.riesgoEditorial === 'MEDIO' ? 'AMARILLO' : 'ROJO',
+        motivo: editorialDecision.motivoPrincipal,
+        advertencias: editorialDecision.acciones,
+      }
+    : {
+        nivel: 'ROJO',
+        motivo: 'Score no calculable',
+        advertencias: ['MENI no pudo calcular el score correctamente.'],
+      };
 
   // ── FASE 4 + 5: Explicabilidad y veredicto único ──
   const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen, contentProfile.profile_detected);
-  const finalEditorialScore = scoreFinal;
-  const estadoFinal = aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR';
+  const estadoFinal: MeniResult['estadoFinal'] = scoreIsValid
+    ? (aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR')
+    : 'EVALUATION_ERROR';
+  const verdict: MeniResult['verdict'] = scoreIsValid
+    ? (aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR')
+    : 'EVALUATION_ERROR';
+  const publication_decision: MeniResult['publication_decision'] = scoreIsValid
+    ? (aprobadoFinal ? 'APROBADO' : 'NO_PUBLICAR')
+    : 'NOT_EVALUATED';
 
   // Recomendaciones derivadas de EditorialDecision.acciones
   const recomendacionesFinal: MeniRecomendacion[] = !aprobadoFinal
@@ -297,6 +345,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     estadoFinal,
     aprobado: aprobadoFinal,
     calificacion,
+    score_status,
+    score,
+    verdict,
+    publication_decision,
+    invalidScoreSource,
     puntosPerdidos: editorialDecision.puntosPerdidos,
     recomendaciones: recomendacionesContextuales,
     recomendacionesContextuales,
@@ -355,7 +408,7 @@ export function runMeni(input: NoticiaInput, options?: MeniRunOptions): MeniResu
   const now = new Date();
   let result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
   let autoCorrections: AutoCorrection[] = [];
-  if (!result.aprobado) {
+  if (!result.aprobado && result.score_status !== 'INVALID') {
     const corrected = autoCorrectNoticia(currentInput, result);
     if (corrected.corrections.length > 0) {
       autoCorrections = corrected.corrections;

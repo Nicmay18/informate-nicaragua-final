@@ -134,9 +134,9 @@ async function main() {
     const puntos = (r2.puntosPerdidos || []).reduce((s, p) => s + p.puntos, 0);
     const f: AnalisisFila = {
       slug: (items[i].input.slug || items[i].input.titulo).toString(),
-      v1: r1.scoreFinal,
-      v2: r2.scoreFinal,
-      delta: r2.scoreFinal - r1.scoreFinal,
+      v1: r1.scoreFinal ?? 0,
+      v2: r2.scoreFinal ?? 0,
+      delta: (r2.scoreFinal ?? 0) - (r1.scoreFinal ?? 0),
       utilidad: dna.selloNI.utilidad,
       profundidad: dna.selloNI.explica,
       originalidad: dna.selloNI.originalidad,
