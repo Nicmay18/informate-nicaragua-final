@@ -298,7 +298,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     aprobado: aprobadoFinal,
     calificacion,
     puntosPerdidos: editorialDecision.puntosPerdidos,
-    recomendaciones: recomendacionesFinal,
+    recomendaciones: recomendacionesContextuales,
     recomendacionesContextuales,
     // Estado Editorial — veredicto periodístico del editor
     estadoEditorial: editorialDecision.estadoEditorial,

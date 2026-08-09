@@ -300,6 +300,10 @@ export function detectContentProfile(
   if (scores.ambiente > 0 && (scores.sucesos > 0 || scores.nacionales > 0)) {
     scores.ambiente += 2;
   }
+  // Una nota de turismo solo debe marcar salud si hay señales epidemiológicas claras.
+  if (scores.turismo > 0 && scores.salud > 0 && scores.salud <= 2) {
+    scores.turismo += 2;
+  }
 
   const entries = Object.entries(scores) as [MeniContentProfile, number][];
   const sorted = entries.sort((a, b) => b[1] - a[1]);
