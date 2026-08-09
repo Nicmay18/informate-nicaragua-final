@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { ResultadoEditorial } from '@/lib/editorial';
+import type { MeniResult } from '@/lib/meni/types';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 
 interface Props {
@@ -22,87 +22,13 @@ interface Props {
 }
 
 const publicarLabel: Record<string, string> = {
-  cobertura_especial: 'COBERTURA ESPECIAL',
-  portada: 'PORTADA',
-  publicar_destacado: 'PUBLICAR DESTACADO',
-  publicar_estandar: 'PUBLICAR ESTÁNDAR',
-  publicar_breve: 'PUBLICAR BREVE',
-  no_publicar: 'NO PUBLICAR',
+  APROBADO: 'APROBADO',
+  NO_PUBLICAR: 'NO PUBLICAR',
+  NOT_EVALUATED: 'NO EVALUADA',
 };
-
-const estrellas: Record<string, string> = {
-  cobertura_especial: '★★★★★',
-  portada: '★★★★★',
-  publicar_destacado: '★★★★☆',
-  publicar_estandar: '★★★☆☆',
-  publicar_breve: '★★☆☆☆',
-  no_publicar: '★☆☆☆☆',
-};
-
-function getConfianza(r: ResultadoEditorial): { porcentaje: number; bases: string[] } {
-  const bases: string[] = [];
-  if (r.evidence.sources.documentoOficial) bases.push('Fuente oficial');
-  if (r.evidence.sources.numeroFuentes >= 2) bases.push('Múltiples fuentes');
-  if (r.evidence.context.contextoHistorico) bases.push('Contexto histórico');
-  if (r.evidence.context.contextoInstitucional) bases.push('Contexto institucional');
-  if (r.evidence.evidence.esNotaVerificable) bases.push('Evidencia verificable');
-  if (r.evidence.utility.preguntasRespondidas.length > 0) bases.push('Utilidad demostrada');
-  if (r.evidence.originality.tieneAportePropio) bases.push('Aporte propio');
-  if (r.evidence.eeat.tieneCitasEstructuradas) bases.push('Citas estructuradas');
-  if (r.evidence.forense.nivelRiesgo === 'Bajo') bases.push('Riesgo forense bajo');
-  return { porcentaje: r.scoreFinal, bases: bases.slice(0, 6) };
-}
-
-function getRazones(r: ResultadoEditorial): string[] {
-  const raz: string[] = [];
-  const d = r.evidence.evidence.datosConcretos;
-  const partes: string[] = [];
-  if (d.fechas > 0) partes.push(`${d.fechas} fecha(s)`);
-  if (d.cifras > 0) partes.push(`${d.cifras} cifra(s)`);
-  if (d.lugares > 0) partes.push(`${d.lugares} lugar(es)`);
-  if (d.nombres > 0) partes.push(`${d.nombres} nombre(s) propio(s)`);
-  if (partes.length > 0) raz.push(`Incluye ${partes.join(', ')}`);
-
-  if (r.evidence.sources.fuentesIdentificadas.length > 0) {
-    raz.push(`Fuentes: ${r.evidence.sources.fuentesIdentificadas.join(', ')}`);
-  }
-  if (r.evidence.eeat.autor) raz.push(`Autor identificado: ${r.evidence.eeat.autor}`);
-  if (r.evidence.originality.aportePropioItems.length > 0) {
-    raz.push(`Aporte propio: ${r.evidence.originality.aportePropioItems.join(', ')}`);
-  }
-  if (r.evidence.context.contextoHistorico) raz.push('Incluye contexto histórico');
-  if (r.evidence.context.contextoInstitucional) raz.push('Incluye contexto institucional');
-  if (r.evidence.context.patronesEncontrados.length > 0) {
-    raz.push(`Contexto: ${r.evidence.context.patronesEncontrados.join(', ')}`);
-  }
-  if (r.evidence.chronology.tieneCronologia) {
-    raz.push(`Cronología con ${r.evidence.chronology.fechasMencionadas.length} fecha(s) mencionada(s)`);
-  }
-  if (r.evidence.utility.preguntasRespondidas.length > 0) {
-    raz.push(`Responde: ${r.evidence.utility.preguntasRespondidas.join(', ')}`);
-  }
-  if (r.evidence.seo.keywords.length > 0) {
-    raz.push(`SEO: ${r.evidence.seo.keywords.slice(0, 4).join(', ')}`);
-  }
-  if (r.evidence.discover.tieneImagen) raz.push('Imagen destacada presente');
-  if (r.evidence.eeat.fuentesDetectadas.length > 0) {
-    raz.push(`Fuentes detectadas en texto: ${r.evidence.eeat.fuentesDetectadas.join(', ')}`);
-  }
-  return raz.slice(0, 8);
-}
-
-function getMejoras(r: ResultadoEditorial): string[] {
-  const mejoras: string[] = [];
-  for (const item of r.explainability) {
-    const texto = item.motivo ? `${item.regla}: ${item.motivo}` : item.regla;
-    if (!mejoras.includes(texto)) mejoras.push(texto);
-    if (mejoras.length >= 6) break;
-  }
-  return mejoras;
-}
 
 export default function AnalizadorPanel({ noticia }: Props) {
-  const [resultado, setResultado] = useState<ResultadoEditorial | null>(null);
+  const [resultado, setResultado] = useState<MeniResult | null>(null);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,16 +38,16 @@ export default function AnalizadorPanel({ noticia }: Props) {
     setResultado(null);
     try {
       const token = getAdminToken();
-      const res = await fetch('/api/admin/analizar-v4', {
+      const res = await fetch('/api/admin/meni/evaluar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
-        body: JSON.stringify(noticia),
+        body: JSON.stringify({ ...noticia, checkDuplicates: false }),
       });
       if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
       const data = await res.json();
-      const v4 = data._v4 as ResultadoEditorial | undefined;
-      if (!v4) throw new Error('No se recibió resultado');
-      setResultado(v4);
+      const meni = data.result as MeniResult | undefined;
+      if (!meni) throw new Error('No se recibió resultado de MENI');
+      setResultado(meni);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error desconocido');
     } finally {
@@ -151,60 +77,71 @@ export default function AnalizadorPanel({ noticia }: Props) {
     );
   }
 
-  const publicar = publicarLabel[resultado.veredicto] ?? resultado.veredicto;
-  const confianza = getConfianza(resultado);
-  const razones = getRazones(resultado);
-  const mejoras = getMejoras(resultado);
+  const puntuacion = typeof resultado.scoreFinal === 'number' ? `${resultado.scoreFinal} / 100` : 'N/A';
+  const veredicto = resultado.verdict ?? resultado.estadoFinal ?? '—';
+  const publicar = publicarLabel[resultado.publication_decision ?? resultado.estadoFinal ?? ''] ?? veredicto;
+  const scoreInvalido = resultado.score_status === 'INVALID';
 
   return (
     <div className="max-w-2xl mx-auto p-6 text-gray-100 space-y-8">
       <h2 className="text-2xl font-bold text-white border-b border-gray-700 pb-2">Editor IA</h2>
 
       <div className="space-y-2">
-        <Fila label="Puntuación" value={`${resultado.scoreFinal} / 100`} />
-        <Fila label="Veredicto" value={estrellas[resultado.veredicto] ?? '—'} />
+        <Fila label="Puntuación" value={puntuacion} />
+        <Fila label="Veredicto" value={veredicto} />
         <Fila label="Publicar" value={publicar} />
-        <Fila label="Categoría" value={resultado.evidence.category} />
+        <Fila label="Categoría" value={resultado.categoria} />
+        {resultado.score_status && <Fila label="Estado score" value={resultado.score_status} />}
       </div>
 
-      <div className="p-4 rounded bg-gray-800/50 border border-gray-700">
-        <p className="text-sm text-gray-400">Confianza</p>
-        <p className="text-3xl font-bold text-white">{confianza.porcentaje}%</p>
-        <p className="text-xs text-gray-400 mt-1">Basada en:</p>
-        <ul className="flex flex-wrap gap-2 mt-2">
-          {confianza.bases.map((b, i) => (
-            <li key={i} className="px-2 py-1 rounded bg-green-900/40 text-green-200 text-xs">✓ {b}</li>
-          ))}
-          {confianza.bases.length === 0 && <li className="text-xs text-gray-500">Sin indicadores de confianza destacados</li>}
-        </ul>
-      </div>
+      {scoreInvalido && resultado.invalidScoreSource && (
+        <div className="p-4 rounded bg-red-900/30 border border-red-700">
+          <p className="text-sm text-red-200 font-semibold">Score no calculable</p>
+          <p className="text-xs text-red-300 mt-1">{resultado.invalidScoreSource}</p>
+        </div>
+      )}
 
-      <section>
-        <h3 className="text-lg font-semibold text-white mb-3">¿Por qué?</h3>
-        <ul className="space-y-2">
-          {razones.map((r, i) => (
-            <li key={i} className="flex items-start gap-2 text-green-300"><span>✓</span><span>{r}</span></li>
-          ))}
-          {razones.length === 0 && <li className="text-gray-400">No se encontraron razones destacadas.</li>}
-        </ul>
-      </section>
+      {resultado.diagnostico && (
+        <div className="p-4 rounded bg-gray-800/50 border border-gray-700">
+          <p className="text-sm text-gray-400">Diagnóstico</p>
+          <p className="text-sm text-gray-200 mt-1">{resultado.diagnostico}</p>
+        </div>
+      )}
 
-      <section>
-        <h3 className="text-lg font-semibold text-white mb-3">Puede mejorar</h3>
-        <ul className="space-y-2">
-          {mejoras.map((m, i) => (
-            <li key={i} className="flex items-start gap-2 text-yellow-200"><span>•</span><span>{m}</span></li>
-          ))}
-          {mejoras.length === 0 && <li className="text-gray-400">No hay sugerencias adicionales.</li>}
-        </ul>
-      </section>
-
-      {resultado.sugerencias.length > 0 && (
+      {resultado.recomendaciones.length > 0 && (
         <section>
-          <h3 className="text-lg font-semibold text-white mb-3">Sugerencias de estilo (opcionales)</h3>
+          <h3 className="text-lg font-semibold text-white mb-3">Recomendaciones</h3>
           <ul className="space-y-2">
-            {resultado.sugerencias.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-blue-200"><span>•</span><span>{s}</span></li>
+            {resultado.recomendaciones.map((r, i) => (
+              <li key={i} className="flex items-start gap-2 text-yellow-200"><span>•</span><span>{r.mensaje}</span></li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {resultado.blockingIssues && resultado.blockingIssues.length > 0 && (
+        <section>
+          <h3 className="text-lg font-semibold text-red-300 mb-3">Bloqueantes</h3>
+          <ul className="space-y-2">
+            {resultado.blockingIssues.map((b, i) => (
+              <li key={i} className="p-3 rounded bg-red-900/30 border border-red-700 text-sm text-red-100">
+                <strong>{b.code}</strong>: {b.title}
+                <p className="text-xs text-red-200 mt-1">{b.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {resultado.warnings && resultado.warnings.length > 0 && (
+        <section>
+          <h3 className="text-lg font-semibold text-amber-300 mb-3">Advertencias</h3>
+          <ul className="space-y-2">
+            {resultado.warnings.map((w, i) => (
+              <li key={i} className="p-3 rounded bg-amber-900/30 border border-amber-700 text-sm text-amber-100">
+                <strong>{w.code}</strong>: {w.title}
+                <p className="text-xs text-amber-200 mt-1">{w.description}</p>
+              </li>
             ))}
           </ul>
         </section>
