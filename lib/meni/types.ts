@@ -64,11 +64,19 @@ export interface MeniAdSense {
   advertencias: string[];
 }
 
+export interface MeniForenseEvidencia {
+  tipo: string;
+  estado: 'OK' | 'FALTANTE' | 'NO_APLICA';
+  mensaje: string;
+}
+
 export interface MeniForense {
   score: number;
   nivel: MeniRiesgo;
   adjetivosEmocionales: string[];
   riesgosLegales: string[];
+  recomendaciones: MeniRecomendacion[];
+  evidencias: MeniForenseEvidencia[];
 }
 
 export interface MeniRiesgoEditorial {

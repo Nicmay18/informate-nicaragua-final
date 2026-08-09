@@ -171,7 +171,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const editorialDna = editorialDecision.editorialDna;
 
   const seo = analyzeSEO(evaluacion, input);
-  const forense = analyzeForensic(evaluacion);
+  const forense = analyzeForensic(evaluacion, input, contentProfile);
   const eeat = analyzeEEAT(evaluacion);
   const discover = analyzeDiscover(evaluacion);
   const adsense = analyzeAdSense(evaluacion);
