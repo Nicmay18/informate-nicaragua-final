@@ -3635,11 +3635,30 @@ sin texto ni marcas de agua, composición periodística"
 
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      let adminToken = localStorage.getItem('admin_api_key') || '';
+      if (!adminToken) {
+        await fetchAdminToken();
+        adminToken = localStorage.getItem('admin_api_key') || '';
+      }
       const resp = await fetch('/api/admin/news', {
         headers: { 'x-admin-token': adminToken },
         cache: 'no-store'
       });
+      if (resp.status === 401) {
+        localStorage.removeItem('admin_api_key');
+        await fetchAdminToken();
+        adminToken = localStorage.getItem('admin_api_key') || '';
+        const resp2 = await fetch('/api/admin/news', {
+          headers: { 'x-admin-token': adminToken },
+          cache: 'no-store'
+        });
+        if (!resp2.ok) throw new Error('Error cargando noticias: ' + resp2.status);
+        const data2 = await resp2.json();
+        const arr2 = data2.news || [];
+        _panelCache = arr2;
+        _panelCacheTime = Date.now();
+        return arr2;
+      }
       if (!resp.ok) throw new Error('Error cargando noticias: ' + resp.status);
       const data = await resp.json();
       const arr = data.news || [];
