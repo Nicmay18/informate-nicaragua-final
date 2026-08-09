@@ -98,7 +98,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     () => Object.values(AUTHORS).find((a) => a.name === noticia.autor?.trim()),
     [noticia.autor]
   );
-  const authorPhoto = autorData?.photo || noticia.autorFoto;
+  const rawAuthorPhoto = autorData?.photo || noticia.autorFoto;
+  const authorPhoto = rawAuthorPhoto && !rawAuthorPhoto.toLowerCase().includes('logo') ? rawAuthorPhoto : undefined;
 
   const pieDeFoto = noticia.pieFoto?.trim()
     ? noticia.pieFoto

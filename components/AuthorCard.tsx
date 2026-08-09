@@ -57,7 +57,8 @@ export default function AuthorCard({
   const displayRole = autorData?.role || role?.trim() || DEFAULT_AUTHOR.role;
   const displayBio = autorData?.bio || bio?.trim() || DEFAULT_AUTHOR.bio;
   
-  const finalPhoto = isKeyling ? '/keyling-rivera.jpg' : photo;
+  const rawPhoto = isKeyling ? '/keyling-rivera.jpg' : photo;
+  const finalPhoto = rawPhoto && !rawPhoto.toLowerCase().includes('logo') ? rawPhoto : undefined;
   const finalSlug = autorData?.slug || slug;
 
   const hasPhoto = finalPhoto && finalPhoto.trim().length > 0;
