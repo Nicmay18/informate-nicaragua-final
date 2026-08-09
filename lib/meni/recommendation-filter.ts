@@ -52,6 +52,8 @@ function appliesToProfile(mensaje: string, profile: MeniContentProfile): boolean
     internacional: [],
     educacion: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     ambiente: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
+    turismo: ['sintoma', 'como se transmite', 'marco legal', 'quien gana', 'quien pierde'],
+    gastronomia: ['sintoma', 'como se transmite', 'marco legal'],
   };
 
   const forbidden = profileStopwords[profile] || [];

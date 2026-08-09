@@ -17,7 +17,9 @@ export type MeniContentProfile =
   | 'tecnologia'
   | 'internacional'
   | 'educacion'
-  | 'ambiente';
+  | 'ambiente'
+  | 'turismo'
+  | 'gastronomia';
 
 export interface ProfileSignal {
   keyword: string;
@@ -135,6 +137,44 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'concierto', weight: 1.5 },
     { keyword: 'teatro', weight: 1.5 },
     { keyword: 'exposición', weight: 1 },
+    { keyword: 'gastronomia', weight: 1.5 },
+    { keyword: 'gastronomía', weight: 1.5 },
+    { keyword: 'gastronomico', weight: 1.5 },
+    { keyword: 'gastronómico', weight: 1.5 },
+    { keyword: 'tradicion', weight: 1.2 },
+    { keyword: 'patrimonio', weight: 1.2 },
+    { keyword: 'comida tipica', weight: 1.2 },
+  ],
+  turismo: [
+    { keyword: 'turismo', weight: 1.5 },
+    { keyword: 'mirador', weight: 1.5 },
+    { keyword: 'mirador de', weight: 1.5 },
+    { keyword: 'lugar turistico', weight: 1.5 },
+    { keyword: 'destino turistico', weight: 1.5 },
+    { keyword: 'como llegar', weight: 1.2 },
+    { keyword: 'horarios', weight: 1.2 },
+    { keyword: 'precios', weight: 1 },
+    { keyword: 'atractivo', weight: 1.2 },
+    { keyword: 'reserva natural', weight: 1.5 },
+    { keyword: 'playa', weight: 1.2 },
+    { keyword: 'volcan', weight: 1.2 },
+    { keyword: 'catarina', weight: 1.5 },
+    { keyword: 'guia turistica', weight: 1.5 },
+    { keyword: 'isla', weight: 1.2 },
+    { keyword: 'laguna', weight: 1.2 },
+    { keyword: 'sendero', weight: 1.2 },
+    { keyword: 'hotel', weight: 0.8 },
+  ],
+  gastronomia: [
+    { keyword: 'gastronomia', weight: 1.5 },
+    { keyword: 'gastronomía', weight: 1.5 },
+    { keyword: 'platillo', weight: 1.5 },
+    { keyword: 'comida tipica', weight: 1.5 },
+    { keyword: 'receta', weight: 1.5 },
+    { keyword: 'ingredientes', weight: 1.5 },
+    { keyword: 'restaurante', weight: 1 },
+    { keyword: 'sabor', weight: 1.2 },
+    { keyword: 'tradicion', weight: 1.2 },
   ],
   tecnologia: [
     { keyword: 'tecnología', weight: 1.5 },

@@ -278,6 +278,51 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
       nivel10: ['Checklist descargable.', 'Video tutorial.'],
     },
   },
+
+  Cultura: {
+    requiredEvidence: {
+      'qué actividad': /\b(?:festival|fiesta|celebraci[oó]n|tradici[oó]n|patrimonio|obra|teatro|danza|literatura|poes[ií]a|artesan[ií]a|gastronom[ií]a|ritual|manifestaci[oó]n|exposici[oó]n|galer[ií]a|museo|comida\s+t[ií]pica|platillo)\b/i,
+      'quién o qué grupo': /\b(?:artista|artesano|escritor|poeta|m[uú]sico|bailar[ií]n|colectivo|comunidad|familia|organizador|protagonista)\b/i,
+      'dónde y cuándo': /\b(?:municipio|departamento|barrio|comunidad|plaza|iglesia|centro\s+cultural|galer[ií]a|museo|teatro|ciudad|Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Carazo|Rivas|\d{1,2}\s+de\s+\w+|s[aá]bado|domingo|viernes)\b/i,
+      'significado o historia': /\b(?:significa|significado|historia|origen|patrimonio|identidad|reconocimiento|valor\s+cultural|relevancia|impacto\s+cultural|ancestral|generaciones)\b/i,
+      'cómo asistir o participar': /\b(?:c[oó]mo\s+asistir|c[oó]mo\s+participar|entrada|acceso|horario|ubicaci[oó]n|lugar|cu[aá]nto\s+cuesta|gratuito|gratis)\b/i,
+    },
+    requiredContext: {
+      tipo: 'contexto histórico o identitario',
+      patrones: [/\b(?:historia|origen|patrimonio|ancestral|colonial|prehisp[aá]nico|tradici[oó]n|generaciones|identidad)\b/i],
+    },
+    requiredUtility: { preguntas: ['qué actividad', 'quién o qué grupo', 'dónde y cuándo', 'significado o historia', 'cómo asistir o participar'] },
+    forbiddenQuestions: ['qué fenómeno', 'qué hacer o recomendaciones según perfil clima', 'contexto climático', 'cuánto subió o bajó', 'impacto en presupuesto familiar'],
+    forbiddenRecommendations: ['inventar especialistas', 'inventar estadísticas'],
+    sugerenciasBase: {
+      oportunidades: ['Incluir qué actividad es, su significado y quién participa.', 'Mencionar lugar, fecha y cómo asistir.', 'Conectar con identidad nicaragüense.'],
+      convertirReferencia: ['Contextualizar historia del evento o tradición.', 'Citar a protagonistas o artesanos.', 'Explicar relevancia territorial.'],
+      nivel10: ['Galería del evento.', 'Crónica del proceso creativo o tradicional.'],
+    },
+  },
+
+  Turismo: {
+    requiredEvidence: {
+      'destino o atractivo': /\b(?:mirador|mirador\s+de|catarina|volc[aá]n|isla|playa|reserva|parque|laguna|laguna\s+de|cerro|museo|centro\s+hist[oó]rico|catedral|iglesia|mercado|malec[oó]n|puerto|ruta\s+tur[ií]stica|destino\s+tur[ií]stico)\b/i,
+      'ubicación': /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Carazo|Rivas|Boaco|Chontales|Nueva\s+Segovia|Madriz|R[ií]o\s+San\s+Juan|RACCS|RACCN|municipio|departamento|comunidad|barrio|km\s+\d+)\b/i,
+      'cómo llegar o acceso': /\b(?:c[oó]mo\s+llegar|direcci[oó]n|desde|carretera|ruta|entrada|acceso|se\s+llega|llegar)\b/i,
+      'horarios o condiciones': /\b(?:horario|hora|abre|cierra|lunes\s+a\s+domingo|todos\s+los\s+dias|de\s+\d+\s+a\s+\d+|condici[oó]n|recomendaci[oó]n\s+de\s+visita)\b/i,
+      'precios o costos': /\b(?:C?\$[\d.,]+|\d+\s*(?:c[oó]rdobas?|d[oó]lares?)|precio|costo|entrada|boleto|tarifa|gratuito|gratis)\b/i,
+      'actividades o servicios': /\b(?:actividad|actividades|qu[eé]\s+hacer|qu[eé]\s+ver|atractivo|tour|recorrido|senderismo|caminata|nadar|observaci[oó]n|avistamiento|degustaci[oó]n|restaurante|cafeter[ií]a|baño|estacionamiento|gu[ií]a)\b/i,
+    },
+    requiredContext: {
+      tipo: 'historia o atractivo del destino',
+      patrones: [/\b(?:historia|tradici[oó]n|patrimonio|cultura|naturaleza|panorama|vista|origen|fundado|siglo)\b/i],
+    },
+    requiredUtility: { preguntas: ['destino o atractivo', 'ubicación', 'cómo llegar o acceso', 'horarios o condiciones', 'precios o costos', 'actividades o servicios'] },
+    forbiddenQuestions: ['qué fenómeno', 'cuánto subió o bajó', 'impacto en presupuesto familiar', 'qué institución interviene'],
+    forbiddenRecommendations: ['invertir sin verificar', 'comprar paquete no confirmado'],
+    sugerenciasBase: {
+      oportunidades: ['Incluir ubicación exacta y cómo llegar.', 'Verificar horarios y precios actuales.', 'Mencionar servicios disponibles.'],
+      convertirReferencia: ['Agregar recomendaciones prácticas para el visitante.', 'Incluir advertencias sobre condiciones de acceso.', 'Citar la fuente de precios y horarios.'],
+      nivel10: ['Mapa de acceso.', 'Checklist para el visitante.'],
+    },
+  },
 };
 
 export function getCategoryProfileFields(categoria: string): ProfileFields | null {

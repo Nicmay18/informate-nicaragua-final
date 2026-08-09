@@ -12,6 +12,7 @@ import { politicaProfile } from './politica';
 import { saludProfile } from './salud';
 import { educacionProfile } from './educacion';
 import { culturaProfile } from './cultura';
+import { turismoProfile } from './turismo';
 import { medioAmbienteProfile } from './medio-ambiente';
 import { defaultProfile } from './default';
 
@@ -36,6 +37,7 @@ const PROFILES: Record<string, CategoryProfile> = {
   'Educacion': educacionProfile,
   'Educación': educacionProfile,
   'Cultura': culturaProfile,
+  'Turismo': turismoProfile,
   'MedioAmbiente': medioAmbienteProfile,
   'Medio Ambiente': medioAmbienteProfile,
 };
@@ -54,6 +56,7 @@ export function getCategoryProfile(categoria: string | undefined): CategoryProfi
   if (/tecno|gadget|app|software|ia/i.test(normalized)) return tecnologiaProfile;
   if (/espectac|cine|musica|concierto/i.test(normalized)) return espectaculosProfile;
   if (/cultur|art|patrimonio|galeria/i.test(normalized)) return culturaProfile;
+  if (/turismo|mirador|viaje|destino|guias?|lugar\s+turistico/i.test(normalized)) return turismoProfile;
   if (/internac|mundial|global|onu|eeuu/i.test(normalized)) return internacionalesProfile;
   if (/econom|finanza|precio|salario|inflacion/i.test(normalized)) return economiaProfile;
   if (/polit|gobierno|asamblea/i.test(normalized)) return politicaProfile;

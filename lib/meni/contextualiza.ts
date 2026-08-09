@@ -102,6 +102,19 @@ const PROFILE_CONTEXT_WEIGHTS: Partial<Record<MeniContentProfile, Partial<Record
     impacto_social: 1.5,
     contexto_geografico: 1.2,
   },
+  turismo: {
+    contexto_geografico: 1.5,
+    datos_verificables: 1.2,
+    impacto_social: 0.8,
+    antecedentes: 1.0,
+    fuentes: 1.2,
+  },
+  gastronomia: {
+    antecedentes: 1.2,
+    contexto_temporal: 1.0,
+    impacto_social: 0.8,
+    fuentes: 1.0,
+  },
 };
 
 const DETECTORS: ContextDetector[] = [

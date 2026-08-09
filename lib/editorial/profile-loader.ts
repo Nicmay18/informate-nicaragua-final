@@ -17,6 +17,8 @@ import { profileDeportes } from './profiles/deportes';
 import { profileSalud } from './profiles/salud';
 import { profileServicio } from './profiles/servicio';
 import { profileEspectaculos } from './profiles/espectaculos';
+import { profileCultura } from './profiles/cultura';
+import { profileTurismo } from './profiles/turismo';
 
 const REGISTRY: Record<string, EditorialProfile> = {
   'Sucesos': profileSucesos,
@@ -30,6 +32,8 @@ const REGISTRY: Record<string, EditorialProfile> = {
   'Salud': profileSalud,
   'Servicio': profileServicio,
   'Espectáculos': profileEspectaculos,
+  'Cultura': profileCultura,
+  'Turismo': profileTurismo,
 };
 
 export function loadProfile(categoria: string): EditorialProfile {

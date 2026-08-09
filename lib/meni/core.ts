@@ -65,6 +65,8 @@ const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   internacional: 'Internacionales',
   educacion: 'Educación',
   ambiente: 'Ambiente',
+  turismo: 'Turismo',
+  gastronomia: 'Cultura',
 };
 
 function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments, editorJefe?: MeniRunOptions['editorJefe'], now = new Date()): MeniResult {

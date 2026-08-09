@@ -28,9 +28,16 @@ function detectarRespuestasFaltantes(texto: string, preguntas: ReaderQuestionsDe
   return faltantes;
 }
 
-function detectarContextoFaltante(texto: string): string[] {
+function perfilEs(contexto: string | undefined, perfiles: Set<string>): boolean {
+  const c = (contexto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return perfiles.has(c);
+}
+
+function detectarContextoFaltante(texto: string, categoria?: string): string[] {
   const t = texto.toLowerCase();
   const faltantes: string[] = [];
+  const esTurismoOcio = perfilEs(categoria, new Set(['turismo', 'cultura', 'espectaculos', 'espectáculos', 'deportes']));
+
   if (/accidente|choque/i.test(t) && !/velocidad|causa|imprudencia|vía/i.test(t)) {
     faltantes.push('Causa probable del accidente');
   }
@@ -40,7 +47,8 @@ function detectarContextoFaltante(texto: string): string[] {
   if (/detención|captura/i.test(t) && !/cargo|delito|proceso|judicial/i.test(t)) {
     faltantes.push('Cargos y proceso legal');
   }
-  if (/precio|inflación|salario/i.test(t) && !/porcentaje|cantidad|córdoba|dólar/i.test(t)) {
+  // REGLA 2.1.1: no exigir cifras de variación a notas que no son de economia
+  if (!esTurismoOcio && /precio|inflación|salario/i.test(t) && !/porcentaje|cantidad|córdoba|dólar/i.test(t)) {
     faltantes.push('Cifras concretas del cambio económico');
   }
   if (/salud|dengue|covid/i.test(t) && !/síntoma|prevención|contagio/i.test(t)) {
@@ -76,7 +84,7 @@ export function runStoryCompletenessEngine(
   const respuestasFaltantes = readerQuestions
     ? detectarRespuestasFaltantes(texto, readerQuestions)
     : [];
-  const contextoFaltante = detectarContextoFaltante(texto);
+  const contextoFaltante = detectarContextoFaltante(texto, input.categoria);
   const dudasPendientes = detectarDudasPendientes(texto);
 
   const totalFaltantes = respuestasFaltantes.length + contextoFaltante.length + dudasPendientes.length;
