@@ -5,7 +5,6 @@
  * No recalcula motores. No modifica MENI, Editorial Engine, noticias, ni NIOS.
  */
 
-import { unstable_cache } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getLatestSnapshot, getHistoricalSnapshots } from './intelligence/store';
 import { buildGoogleIntelligenceDashboard } from './intelligence/dashboard';
@@ -132,12 +131,6 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
   };
 };
 
-const getExecutiveData = unstable_cache(
-  buildExecutiveData,
-  ['nios-executive-center'],
-  { revalidate: 300, tags: ['nios-snapshot', 'nios-telemetry'] },
-);
-
 export async function getNiosExecutiveData(): Promise<NiosExecutiveData> {
-  return getExecutiveData();
+  return buildExecutiveData();
 }
