@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Verificar si el autor tiene artículos para decidir indexación
   let allNews: Awaited<ReturnType<typeof getNews>> = [];
   try {
-    allNews = await getNews(100);
+    allNews = await getNews(500);
   } catch {
     allNews = [];
   }
@@ -84,7 +84,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
   // Obtener artículos de este autor
   let allNews: Awaited<ReturnType<typeof getNews>> = [];
   try {
-    allNews = await getNews(100);
+    allNews = await getNews(500);
   } catch {
     allNews = [];
   }

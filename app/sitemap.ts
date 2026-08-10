@@ -74,7 +74,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const authors = getAllAuthors();
-  let authorUrls: MetadataRoute.Sitemap = [];
+  const authorUrls: MetadataRoute.Sitemap = authors.map((author) => ({
+    url: `${baseUrl}/autor/${author.slug}`,
+    changeFrequency: 'monthly',
+    priority: 0.3,
+  }));
 
   const evergreen = getAllEvergreen();
   const evergreenUrls: MetadataRoute.Sitemap = evergreen.map((article) => ({
@@ -106,14 +110,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (article.estado === 'borrador' || article.estado === 'archivado') return false;
       return true;
     });
-
-    authorUrls = authors
-      .filter((author) => cleanArticles.some((article) => article.autor === author.name))
-      .map((author) => ({
-        url: `${baseUrl}/autor/${author.slug}`,
-        changeFrequency: 'monthly',
-        priority: 0.3,
-      }));
 
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = safeDate(article.fecha);
