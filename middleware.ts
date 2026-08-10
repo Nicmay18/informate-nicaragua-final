@@ -101,6 +101,7 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
     response.headers.set('CDN-Cache-Control', 'no-store');
     response.headers.set('Pragma', 'no-cache');
+    // No aplicar CSP a panel.html para permitir scripts de Firebase
     return response;
   }
 
