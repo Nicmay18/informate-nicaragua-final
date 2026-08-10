@@ -3549,7 +3549,9 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('userAvatar').textContent = email[0].toUpperCase();
       cargarDatosIniciales();
       verificarConexiones();
-      checkAdminAuthBanner();
+      // Ocultar banner mientras se obtiene el token; solo mostrar si fetch falla
+      const banner = document.getElementById('adminAuthBanner');
+      if (banner) banner.style.display = 'none';
       // Auto-fetch admin API key después de login (sin que el usuario tenga que pegarla)
       fetchAdminToken().then(() => checkAdminAuthBanner());
     }
