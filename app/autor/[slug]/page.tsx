@@ -86,7 +86,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
   try {
     allNews = await getNews(100);
   } catch {
-    notFound();
+    allNews = [];
   }
   const authorArticles = allNews.filter((n) => n.autor === author.name);
 
