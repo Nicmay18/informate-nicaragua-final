@@ -116,7 +116,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
               alt={author.name}
               width={120}
               height={120}
-              style={{ borderRadius: '50%', border: '4px solid var(--accent)', marginBottom: 20, objectFit: 'cover', objectPosition: '50% 25%' }}
+              style={{ borderRadius: '50%', border: '4px solid var(--accent)', marginBottom: 20, objectFit: 'contain' }}
             />
           ) : (
             <div style={{ width: 120, height: 120, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--primary-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 36, marginBottom: 20 }}>

@@ -176,7 +176,7 @@ export default function AuthorCard({
     <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`} itemScope itemType="https://schema.org/Person">
       {hasPhoto ? (
         <div style={avatarImgStyle} itemProp="image">
-          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover', objectPosition: '50% 25%' }} sizes="88px" priority />
+          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'contain' }} sizes="88px" priority />
         </div>
       ) : (
         <div style={avatarFallbackStyle}>
