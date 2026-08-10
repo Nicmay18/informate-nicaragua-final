@@ -161,13 +161,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit — no duplicar en head */}
-        {/* Monetag — zone 11065476 (quge5.com) para diversificación de revenue */}
-        <script
-          async
-          dangerouslySetInnerHTML={{
-            __html: `(function(q,u,e,s,t,o,y){q['Quge5Object']=t;q[t]=q[t]||function(){(q[t].q=q[t].q||[]).push(arguments)},q[t].l=1*new Date();o=u.createElement(e),y=u.getElementsByTagName(e)[0];o.async=1;o.src=s;y.parentNode.insertBefore(o,y)})(window,document,'script','https://quge5.com/11065476.js','quge5');`,
-          }}
-        />
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style nonce={nonce} dangerouslySetInnerHTML={{ __html: criticalCss }} />
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit */}
