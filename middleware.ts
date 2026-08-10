@@ -120,7 +120,7 @@ export function middleware(request: NextRequest) {
 
   const cspDirectives = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://static.cloudflareinsights.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://cdn.onesignal.com https://api.onesignal.com https://*.onesignal.com",
+    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.gstatic.com https://cdnjs.cloudflare.com https://apis.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://static.cloudflareinsights.com https://*.adtrafficquality.google https://fundingchoicesmessages.google.com https://cdn.onesignal.com https://api.onesignal.com https://*.onesignal.com https://quge5.com",
     "img-src 'self' data: blob: https:",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://onesignal.com https://*.onesignal.com",
     "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com",
