@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'profile',
       images: author.photo
         ? [{ url: `https://nicaraguainformate.com${author.photo}`, width: 400, height: 400, alt: author.name }]
-        : [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+        : undefined,
     },
   };
 }
@@ -66,6 +66,13 @@ function buildPersonJsonLd(author: Author) {
   };
 }
 
+function getAuthorInitials(name: string): string {
+  const parts = name.split(/\s+/).filter(Boolean);
+  const first = parts[0]?.[0] || '';
+  const last = parts[parts.length - 1]?.[0] || '';
+  return `${first}${last}`.toUpperCase() || 'R';
+}
+
 export default async function AuthorPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const author = getAuthorBySlug(slug);
@@ -84,10 +91,10 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
   const authorArticles = allNews.filter((n) => n.autor === author.name);
 
   const nonce = await getCspNonce();
+  const initials = getAuthorInitials(author.name);
 
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
-      {/* Schema.org Person */}
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(author)) }} />
 
       {/* Breadcrumb */}
@@ -109,11 +116,11 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
               alt={author.name}
               width={120}
               height={120}
-              style={{ borderRadius: '50%', border: '4px solid var(--accent)', marginBottom: 20 }}
+              style={{ borderRadius: '50%', border: '4px solid var(--accent)', marginBottom: 20, objectFit: 'cover', objectPosition: 'top center' }}
             />
           ) : (
             <div style={{ width: 120, height: 120, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--primary-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 36, marginBottom: 20 }}>
-              {author.name.split(' ').map(n => n[0]).join('')}
+              {initials}
             </div>
           )}
           <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 900, marginBottom: 12, color: 'white' }}>

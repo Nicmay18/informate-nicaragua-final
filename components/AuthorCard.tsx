@@ -65,6 +65,12 @@ export default function AuthorCard({
   const hasSlug = finalSlug && finalSlug.trim().length > 0;
   const isUpdated = Boolean(updatedDate && updatedDate !== publishedDate);
 
+  const nameParts = displayName.split(/\s+/).filter(Boolean);
+  const authorInitials = [nameParts[0]?.[0], nameParts[nameParts.length - 1]?.[0]]
+    .filter(Boolean)
+    .join('')
+    .toUpperCase();
+
   const wrapperStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -170,11 +176,11 @@ export default function AuthorCard({
     <aside style={wrapperStyle} aria-label={`Información del autor: ${displayName}`} itemScope itemType="https://schema.org/Person">
       {hasPhoto ? (
         <div style={avatarImgStyle} itemProp="image">
-          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover' }} sizes="88px" priority />
+          <Image src={finalPhoto!} alt={displayName} fill style={{ objectFit: 'cover', objectPosition: 'top center' }} sizes="88px" priority />
         </div>
       ) : (
         <div style={avatarFallbackStyle}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+          {authorInitials || 'R'}
         </div>
       )}
 
