@@ -3,6 +3,7 @@ import { verifyAdminToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
 
 export const maxDuration = 30;
+export const dynamic = 'force-dynamic';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
