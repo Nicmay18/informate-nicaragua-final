@@ -6,6 +6,9 @@ export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import type { NoticiaInput } from '@/lib/meni';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
@@ -23,34 +26,94 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ success: false, error: 'Noticia no encontrada' }, { status: 404 });
     }
 
-    const updateData: Record<string, unknown> = {};
-    const allowed = ['titulo', 'resumen', 'contenido', 'categoria', 'imagen', 'autor', 'destacada', 'publicado'];
-    for (const key of allowed) {
-      if (body[key] !== undefined) {
-        if (key === 'destacada' || key === 'publicado') {
-          updateData[key] = !!body[key];
-        } else {
-          updateData[key] = body[key];
+    // ── Provenance gate: si se cambia contenido o título, requerir MENI ──
+    const contentChanged = body.contenido !== undefined || body.titulo !== undefined;
+    const tryingToPublish = body.publicado === true;
+    const alreadyApproved = snap.data()?.aprobadoMeni === true;
+
+    if (contentChanged) {
+      // Re-evaluar con MENI canónico
+      const existingData = snap.data()!;
+      const noticiaInput: NoticiaInput = {
+        id,
+        titulo: body.titulo ? body.titulo.trim() : existingData.titulo || '',
+        contenido: body.contenido ? sanitizeArticleHtml(body.contenido.trim()) : existingData.contenido || '',
+        resumen: body.resumen ? body.resumen.trim() : existingData.resumen || '',
+        categoria: body.categoria || existingData.categoria || 'General',
+        autor: body.autor || existingData.autor || '',
+        fecha: existingData.fecha?.toDate ? existingData.fecha.toDate().toISOString() : new Date().toISOString(),
+        imagen: body.imagen || existingData.imagen || undefined,
+        slug: existingData.slug || '',
+      };
+
+      const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+
+      if (!meniOk) {
+        const first = meni.blockingIssues?.[0];
+        return NextResponse.json({
+          success: false,
+          error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI tras edición',
+          code: first?.code || 'MENI_NOT_APPROVED',
+          blockingIssues: meni.blockingIssues || [],
+          scoreFinal: meni.scoreFinal,
+        }, { status: 400 });
+      }
+
+      // Merge MENI update data with metadata-only fields
+      const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado', 'categoria', 'resumen'];
+      const updateData: Record<string, unknown> = { ...meniUpdateData };
+      for (const key of metadataAllowed) {
+        if (body[key] !== undefined) {
+          if (key === 'destacada' || key === 'publicado') {
+            updateData[key] = !!body[key];
+          } else {
+            updateData[key] = body[key];
+          }
         }
       }
-    }
-    // Helper: verifica si un slug ya existe en OTRA noticia (excluye la actual)
-    const slugExists = async (candidate: string): Promise<boolean> => {
-      const q = await db.collection('noticias').where('slug', '==', candidate).limit(1).get();
-      return !q.empty && q.docs[0].id !== id;
-    };
+      if (body.titulo) updateData.titulo = body.titulo;
+      if (body.contenido) updateData.contenido = sanitizeArticleHtml(body.contenido);
 
-    // Solo regenerar slug si el título cambió explícitamente y no hay slug fijo
-    if (body.titulo && body.regenerateSlug === true && !body.slug) {
-      updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
-    }
-    // Si la noticia no tiene slug (migración), generarlo ahora
-    if (!snap.data()?.slug && body.titulo) {
-      updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
-    }
-    updateData.fechaActualizacion = Timestamp.now();
+      // Helper: verifica si un slug ya existe en OTRA noticia (excluye la actual)
+      const slugExists = async (candidate: string): Promise<boolean> => {
+        const q = await db.collection('noticias').where('slug', '==', candidate).limit(1).get();
+        return !q.empty && q.docs[0].id !== id;
+      };
 
-    await ref.update(updateData);
+      if (body.titulo && body.regenerateSlug === true && !body.slug) {
+        updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
+      }
+      if (!snap.data()?.slug && body.titulo) {
+        updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
+      }
+      updateData.fechaActualizacion = Timestamp.now();
+
+      await ref.update(updateData);
+    } else {
+      // Solo metadata cambios — permitir sin MENI, pero bloquear publicar si no aprobado
+      if (tryingToPublish && !alreadyApproved) {
+        return NextResponse.json({
+          success: false,
+          error: 'No se puede publicar una noticia que no ha sido aprobada por MENI',
+          code: 'MENI_NOT_APPROVED',
+        }, { status: 400 });
+      }
+
+      const updateData: Record<string, unknown> = {};
+      const allowed = ['categoria', 'imagen', 'autor', 'destacada', 'publicado'];
+      for (const key of allowed) {
+        if (body[key] !== undefined) {
+          if (key === 'destacada' || key === 'publicado') {
+            updateData[key] = !!body[key];
+          } else {
+            updateData[key] = body[key];
+          }
+        }
+      }
+      updateData.fechaActualizacion = Timestamp.now();
+
+      await ref.update(updateData);
+    }
 
     revalidateTag('noticias');
     revalidateTag('latest-news');

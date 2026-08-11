@@ -6,6 +6,7 @@ import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gat
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
@@ -361,7 +362,7 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   const generated: MeniAutonomousResult = {
     tituloSEO: instr.tituloSEO,
     bajada: getString('bajada'),
-    articuloCompleto: getString('articuloCompleto'),
+    articuloCompleto: sanitizeArticleHtml(getString('articuloCompleto')),
     metaDescripcion: instr.metaDescripcion,
     slug: instr.slug,
     tags: instr.keywords,

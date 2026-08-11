@@ -50,7 +50,7 @@ export interface MeniRunOptions {
   };
 }
 
-const MIN_PROFILE_CONFIDENCE = 0.25;
+const MIN_PROFILE_CONFIDENCE = 0.40;
 
 const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   sucesos: 'Sucesos',

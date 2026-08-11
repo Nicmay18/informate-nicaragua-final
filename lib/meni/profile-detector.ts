@@ -47,6 +47,16 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'heridos', weight: 1 },
     { keyword: 'bomberos', weight: 1 },
     { keyword: 'rescate', weight: 0.8 },
+    { keyword: 'captura', weight: 1.5 },
+    { keyword: 'orden de captura', weight: 1.5 },
+    { keyword: 'contrabando', weight: 1.5 },
+    { keyword: 'extradicion', weight: 1.2 },
+    { keyword: 'notificacion roja', weight: 1.2 },
+    { keyword: 'interpol', weight: 1 },
+    { keyword: 'procesado', weight: 1 },
+    { keyword: 'procesada', weight: 1 },
+    { keyword: 'imputado', weight: 1 },
+    { keyword: 'imputada', weight: 1 },
   ],
   violencia_genero: [
     { keyword: 'femicidio', weight: 2 },
@@ -154,14 +164,12 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'como llegar', weight: 1.2 },
     { keyword: 'horarios', weight: 1.2 },
     { keyword: 'precios', weight: 1 },
-    { keyword: 'atractivo', weight: 1.2 },
+    { keyword: 'atractivo turistico', weight: 1.5 },
     { keyword: 'reserva natural', weight: 1.5 },
     { keyword: 'playa', weight: 1.2 },
-    { keyword: 'volcan', weight: 1.2 },
     { keyword: 'catarina', weight: 1.5 },
     { keyword: 'guia turistica', weight: 1.5 },
     { keyword: 'isla', weight: 1.2 },
-    { keyword: 'laguna', weight: 1.2 },
     { keyword: 'sendero', weight: 1.2 },
     { keyword: 'hotel', weight: 0.8 },
   ],
@@ -194,6 +202,23 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'europa', weight: 1 },
     { keyword: 'país', weight: 0.5 },
     { keyword: 'mundo', weight: 0.8 },
+    { keyword: 'honduras', weight: 1.5 },
+    { keyword: 'el salvador', weight: 1.5 },
+    { keyword: 'guatemala', weight: 1.5 },
+    { keyword: 'costa rica', weight: 1.5 },
+    { keyword: 'panama', weight: 1.5 },
+    { keyword: 'interpol', weight: 1.5 },
+    { keyword: 'extradicion', weight: 1.5 },
+    { keyword: 'deportacion', weight: 1.2 },
+    { keyword: 'notificacion roja', weight: 1.5 },
+    { keyword: 'orden de captura', weight: 1.2 },
+    { keyword: 'china', weight: 1 },
+    { keyword: 'rusia', weight: 1 },
+    { keyword: 'ucrania', weight: 1 },
+    { keyword: 'mexico', weight: 1 },
+    { keyword: 'colombia', weight: 1 },
+    { keyword: 'argentina', weight: 1 },
+    { keyword: 'brasil', weight: 1 },
   ],
   educacion: [
     { keyword: 'educación', weight: 2 },
@@ -239,6 +264,21 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'agricultores', weight: 1.5 },
     { keyword: 'cosecha', weight: 1 },
     { keyword: 'producción', weight: 1 },
+    { keyword: 'volcan', weight: 1.5 },
+    { keyword: 'volcán', weight: 1.5 },
+    { keyword: 'ceniza', weight: 1.5 },
+    { keyword: 'emision', weight: 1.5 },
+    { keyword: 'emisión', weight: 1.5 },
+    { keyword: 'actividad volcanica', weight: 2 },
+    { keyword: 'actividad volcánica', weight: 2 },
+    { keyword: 'ineter', weight: 1.5 },
+    { keyword: 'sismo', weight: 1.5 },
+    { keyword: 'terremoto', weight: 1.5 },
+    { keyword: 'erupcion', weight: 1.5 },
+    { keyword: 'erupción', weight: 1.5 },
+    { keyword: 'gases', weight: 1 },
+    { keyword: 'comupred', weight: 1.2 },
+    { keyword: 'sinapred', weight: 1.2 },
   ],
 };
 
@@ -300,10 +340,7 @@ export function detectContentProfile(
   if (scores.ambiente > 0 && (scores.sucesos > 0 || scores.nacionales > 0)) {
     scores.ambiente += 2;
   }
-  // Una nota de turismo solo debe marcar salud si hay señales epidemiológicas claras.
-  if (scores.turismo > 0 && scores.salud > 0 && scores.salud <= 2) {
-    scores.turismo += 2;
-  }
+  // (Removed unconditional turismo +2 boost — turismo must win on its own signals)
 
   const entries = Object.entries(scores) as [MeniContentProfile, number][];
   const sorted = entries.sort((a, b) => b[1] - a[1]);

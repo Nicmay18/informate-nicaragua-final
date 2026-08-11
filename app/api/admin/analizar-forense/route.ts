@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     };
 
     const resultado = mapV4ToV3(evaluate(noticia));
-    return NextResponse.json({ success: true, analisis: resultado });
+    return NextResponse.json({ success: true, analisis: resultado, diagnostic_only: true });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         : 0,
     };
 
-    return NextResponse.json({ success: true, stats, noticias: resultados });
+    return NextResponse.json({ success: true, stats, noticias: resultados, diagnostic_only: true });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

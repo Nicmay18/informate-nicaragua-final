@@ -1,8 +1,10 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slug';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import type { NoticiaInput } from '@/lib/meni';
 
-export const maxDuration = 15;
+export const maxDuration = 30;
 
 function countWords(text: string): number {
   return text.trim().split(/\s+/).filter((w) => w.length > 0).length;
@@ -55,10 +57,34 @@ export async function POST(request: NextRequest) {
     }
 
     const finalSlug = slug;
+    const now = new Date();
+
+    // MENI canónico — toda nota nueva debe pasar por la cadena editorial
+    const noticiaInput: NoticiaInput = {
+      titulo: titulo.trim(),
+      contenido: contenido.trim(),
+      resumen: resumen?.trim() || '',
+      categoria: categoria || 'General',
+      autor: autor || 'Redacción Nicaragua Informate',
+      fecha: now.toISOString(),
+      slug: finalSlug,
+    };
+
+    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
+
+    if (!meniOk) {
+      const first = meni.blockingIssues?.[0];
+      return NextResponse.json({
+        error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
+        code: first?.code || 'MENI_NOT_APPROVED',
+        blockingIssues: meni.blockingIssues || [],
+        scoreFinal: meni.scoreFinal,
+      }, { status: 400 });
+    }
 
     const articleRef = adminDb.collection('noticias').doc();
-    const now = new Date();
     await articleRef.set({
+      ...meniUpdateData,
       titulo,
       slug: finalSlug,
       contenido,

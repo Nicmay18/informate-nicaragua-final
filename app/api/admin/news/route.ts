@@ -8,7 +8,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp, Firestore } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 import { normalizarTitulo } from '@/lib/meni/titulo';
-import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import type { NoticiaInput } from '@/lib/meni';
 
 export const dynamic = 'force-dynamic';
 
@@ -166,11 +167,37 @@ export async function POST(request: NextRequest) {
       return !existing.empty;
     });
     const docRef = db.collection('noticias').doc();
-    const { fuente, fuentesComplementarias } = extractFuente(contenido, resumen);
-    const puntosClave = extractPuntosClave(contenido, 4);
-    const autorFoto = getAutorFoto(autor);
+
+    // MENI canónico — toda nota nueva debe pasar por la cadena editorial
+    const noticiaInput: NoticiaInput = {
+      titulo: tituloLimpio,
+      contenido: contenido.trim(),
+      resumen: resumen?.trim() || '',
+      categoria: categoria || 'General',
+      autor: autor || 'Nicaragua Informate',
+      fecha: new Date().toISOString(),
+      imagen: imagen || undefined,
+      slug,
+    };
+
+    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+
+    if (!meniOk) {
+      const first = meni.blockingIssues?.[0];
+      return NextResponse.json({
+        success: false,
+        error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
+        code: first?.code || 'MENI_NOT_APPROVED',
+        blockingIssues: meni.blockingIssues || [],
+        scoreFinal: meni.scoreFinal,
+        calificacion: meni.calificacion,
+        diagnostico: meni.diagnostico,
+      }, { status: 400 });
+    }
+
     const relatedLinks = await getRelatedLinks(db, categoria, docRef.id);
     await docRef.set({
+      ...meniUpdateData,
       id: docRef.id,
       titulo: tituloLimpio,
       resumen,
@@ -179,18 +206,11 @@ export async function POST(request: NextRequest) {
       imagen: imagen || '',
       slug,
       autor: autor || 'Nicaragua Informate',
-      autorFoto,
       destacada: !!destacada,
       vistas: 0,
       fecha: Timestamp.now(),
       publicado: publicado !== false,
       estado: publicado !== false ? 'publicado' : 'borrador',
-      nivel: 'FORENSE',
-      nivelScore: 0,
-      nivelFecha: new Date().toISOString(),
-      puntosClave,
-      fuente: fuente || 'Redacción Nicaragua Informate',
-      fuentesComplementarias,
       related_links: relatedLinks,
     });
 

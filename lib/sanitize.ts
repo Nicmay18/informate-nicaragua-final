@@ -9,7 +9,7 @@ const ALLOWED_TAGS = [
 ];
 
 const ALLOWED_ATTR = [
-  'src', 'href', 'alt', 'title', 'class', 'id', 'target', 'rel',
+  'src', 'href', 'alt', 'title', 'class', 'target', 'rel',
   'width', 'height', 'loading', 'srcset', 'sizes',
   'controls', 'preload', 'autoplay', 'muted', 'loop', 'playsinline', 'poster',
   'frameborder', 'allow', 'allowfullscreen', 'scrolling',

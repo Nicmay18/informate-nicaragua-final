@@ -2,19 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
-import { stripHtml } from '@/lib/meni/utils/helpers';
 import { normalizeEditorialTitle } from '@/lib/formateo';
-import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export const maxDuration = 30;
-
-function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
-  if (score === null || !Number.isFinite(score)) return 'NO EVALUADA';
-  if (!aprobado || score < 85) return 'RECHAZADO';
-  return 'FORENSE';
-}
 
 const CATEGORIA_SLUG_FALLBACK: Record<string, string> = {
   'Sucesos': 'sucesos', 'Nacionales': 'nacionales', 'Deportes': 'deportes',
@@ -66,7 +59,7 @@ export async function POST(request: NextRequest) {
     const noticiaInput: NoticiaInput = {
       id: id || undefined,
       titulo: titulo.trim(),
-      contenido: contenido.trim(),
+      contenido: sanitizeArticleHtml(contenido.trim()),
       resumen: resumen?.trim() || '',
       categoria: categoria || 'General',
       departamento: departamento || '',
@@ -79,13 +72,10 @@ export async function POST(request: NextRequest) {
       palabrasClave: body.palabrasClave || [],
     };
 
-    // MENI + analizador de duplicados trabajando juntos
-    // skipEditorBrain: el Editor Brain es para evaluación/contexto previo al LLM,
-    // no para el guardado. Evita timeouts innecesarios al publicar.
-    const meni = await runMeniAsync(noticiaInput, { db, skipEditorBrain: true });
+    // MENI canónico via guardarConMeni — única autoridad editorial
+    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
 
     // Generar metadata si falta
-    // El usuario edita el título; no lo reemplazamos por el título generado por MENI
     const finalTitulo = normalizeEditorialTitle(titulo.trim());
     const finalContenido = meni.articulo?.contenido || contenido.trim();
     const finalResumen = meni.articulo?.resumen || resumen?.trim() || meni.seo.metaDescripcion;
@@ -97,7 +87,7 @@ export async function POST(request: NextRequest) {
     const metaGenerada = finalResumen.length >= 120 ? finalResumen : meni.seo.metaDescripcion;
 
     // BLOQUEO si no pasa filtros criticos
-    if (!meni.aprobado) {
+    if (!meniOk) {
       const first = meni.blockingIssues?.[0];
       return NextResponse.json({
         error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
@@ -122,38 +112,14 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Contar palabras usando el contenido corregido por MENI
-    const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
-
-    // Extraer señales EEAT: puntos clave, fuente(s) y foto del autor
-    const { fuente, fuentesComplementarias } = extractFuente(finalContenido, finalResumen);
-    const finalPuntosClave = body.puntosClave?.length ? body.puntosClave : extractPuntosClave(finalContenido, 4);
-    const finalFuente = body.fuente || fuente || 'Redacción Nicaragua Informate';
-    const finalFuentesComplementarias = body.fuentesComplementarias?.length ? body.fuentesComplementarias : fuentesComplementarias;
-    const finalAutorFoto = body.autorFoto || getAutorFoto(body.autor);
-
-    // Datos a actualizar
+    // Datos a actualizar — merge de campos MENI del wrapper + campos del route
     const updateData: Record<string, unknown> = {
+      ...meniUpdateData,
       titulo: finalTitulo,
       contenido: finalContenido,
       fechaActualizacion: new Date(),
-      palabras,
-      puntosClave: finalPuntosClave,
-      fuente: finalFuente,
-      fuentesComplementarias: finalFuentesComplementarias,
-      autorFoto: finalAutorFoto,
       publicado,
       estado: publicado ? 'publicado' : 'borrador',
-      scoreMeni: meni.scoreFinal,
-      aprobadoMeni: meni.aprobado,
-      calificacionMeni: meni.calificacion,
-      nivel: mapMeniScoreToNivel(meni.scoreFinal, meni.aprobado),
-      recomendacionesMeni: meni.recomendaciones.map((r: any) => `${r.area}: ${r.mensaje}`),
-      nivelScore: meni.scoreFinal,
-      nivelFecha: new Date().toISOString(),
-      diagnosticoMeni: meni.diagnostico,
-      editorialTier: meni.editorialTier,
-      editorialReason: meni.editorialReason,
     };
 
     // CRÍTICO: Establecer fecha de publicación si no existe
@@ -174,9 +140,6 @@ export async function POST(request: NextRequest) {
         ? finalPalabrasClave.join(', ')
         : String(finalPalabrasClave);
     }
-    if (body.scoreMeni !== undefined) updateData.scoreMeni = body.scoreMeni;
-    if (body.aprobadoMeni !== undefined) updateData.aprobadoMeni = body.aprobadoMeni;
-
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
     let articleDocId = id;
     // Related Knowledge — relacionados por entidades compartidas, fallback a categoría
@@ -336,8 +299,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       id: articleDocId,
-      palabras,
-      mensaje: `Noticia actualizada directamente. ${palabras} palabras.`,
+      palabras: meniUpdateData.palabras,
+      mensaje: `Noticia actualizada directamente. ${meniUpdateData.palabras} palabras.`,
       meni: {
         scoreFinal: meni.scoreFinal,
         aprobado: meni.aprobado,
