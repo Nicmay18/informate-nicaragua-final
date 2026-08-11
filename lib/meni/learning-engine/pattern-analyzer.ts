@@ -27,7 +27,7 @@ export function analyzeCategoryPerformance(articles: ArticleMetrics[]): Category
     .map(([categoria, list]) => {
       const vistasTotales = list.reduce((s, a) => s + a.vistas, 0);
       const sorted = [...list].sort((a, b) => b.vistas - a.vistas);
-      const scores = list.filter((a) => a.scoreMeni > 0);
+      const scores = list.filter((a) => a.scoreMeni !== null && a.scoreMeni > 0);
       const aprobados = list.filter((a) => a.aprobadoMeni);
 
       return {
@@ -41,7 +41,7 @@ export function analyzeCategoryPerformance(articles: ArticleMetrics[]): Category
         peorArticulo: sorted[sorted.length - 1]
           ? { titulo: sorted[sorted.length - 1].titulo, vistas: sorted[sorted.length - 1].vistas }
           : null,
-        scorePromedio: scores.length > 0 ? Math.round(scores.reduce((s, a) => s + a.scoreMeni, 0) / scores.length) : 0,
+        scorePromedio: scores.length > 0 ? Math.round(scores.reduce((s, a) => s + (a.scoreMeni ?? 0), 0) / scores.length) : 0,
         tasaAprobacion: list.length > 0 ? Math.round((aprobados.length / list.length) * 100) : 0,
       };
     })
@@ -142,9 +142,9 @@ export function analyzeCorrelations(articles: ArticleMetrics[]): Correlation[] {
   }
 
   // Correlación: score MENI vs vistas
-  const withScore = withViews.filter((a) => a.scoreMeni > 0);
+  const withScore = withViews.filter((a) => a.scoreMeni !== null && a.scoreMeni > 0);
   if (withScore.length >= 5) {
-    const scores = withScore.map((a) => a.scoreMeni);
+    const scores = withScore.map((a) => a.scoreMeni as number);
     const scoreViews = withScore.map((a) => a.vistas);
     const corrScore = pearsonCorrelation(scores, scoreViews);
     correlations.push({
@@ -250,10 +250,10 @@ export function analyzeCorrelations(articles: ArticleMetrics[]): Correlation[] {
   }
 
   // ─── Tasa de retención vs score MENI ───
-  const withRetention = articles.filter((a) => a.tasaRetencion != null && a.tasaRetencion > 0 && a.scoreMeni > 0);
+  const withRetention = articles.filter((a) => a.tasaRetencion != null && a.tasaRetencion > 0 && a.scoreMeni !== null && a.scoreMeni > 0);
   if (withRetention.length >= 5) {
     const retention = withRetention.map((a) => a.tasaRetencion!);
-    const scores = withRetention.map((a) => a.scoreMeni);
+    const scores = withRetention.map((a) => a.scoreMeni as number);
     const corrRetention = pearsonCorrelation(scores, retention);
     correlations.push({
       feature: 'retencion_vs_score',

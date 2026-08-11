@@ -439,8 +439,8 @@ function ArticleTable({ articles }: { articles: ArticleFusion[] }) {
               <td style={{ textAlign: 'right', padding: '0.5rem', color: a.gscPosition > 20 ? '#ef4444' : a.gscPosition < 5 ? '#22c55e' : '#64748b' }}>
                 {a.gscPosition.toFixed(1)}
               </td>
-              <td style={{ textAlign: 'right', padding: '0.5rem', fontWeight: 600, color: a.scoreMeni >= 90 ? '#22c55e' : a.scoreMeni < 80 ? '#ef4444' : '#f59e0b' }}>
-                {a.scoreMeni || '-'}
+              <td style={{ textAlign: 'right', padding: '0.5rem', fontWeight: 600, color: a.scoreMeni !== null ? (a.scoreMeni >= 90 ? '#22c55e' : a.scoreMeni < 80 ? '#ef4444' : '#f59e0b') : '#64748b' }}>
+                {a.scoreMeni ?? '-'}
               </td>
               <td style={{ textAlign: 'right', padding: '0.5rem' }}>{a.ga4Users.toLocaleString()}</td>
             </tr>

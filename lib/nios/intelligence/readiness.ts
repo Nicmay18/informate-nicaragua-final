@@ -44,7 +44,7 @@ function evalProfundidad(article: ArticleFusion): boolean {
  * Evalúa originalidad: MENI score alto sugiere contenido no duplicado.
  */
 function evalOriginalidad(article: ArticleFusion): boolean {
-  return article.scoreMeni >= 85;
+  return article.scoreMeni !== null && article.scoreMeni >= 85;
 }
 
 /**
@@ -86,7 +86,7 @@ function evalAutoridad(article: ArticleFusion): boolean {
  * Evalúa EEAT: score MENI + impresiones de Google.
  */
 function evalEeat(article: ArticleFusion): boolean {
-  return article.scoreMeni >= 90 && article.gscImpressions > 0;
+  return article.scoreMeni !== null && article.scoreMeni >= 90 && article.gscImpressions > 0;
 }
 
 /**
@@ -102,7 +102,7 @@ function evalActualizado(article: ArticleFusion): boolean {
  * Evalúa duplicidad: score MENI alto sugiere no duplicado.
  */
 function evalDuplicidad(article: ArticleFusion): boolean {
-  return article.scoreMeni >= 80;
+  return article.scoreMeni !== null && article.scoreMeni >= 80;
 }
 
 /**
@@ -193,9 +193,9 @@ export function generateReadinessReport(
 
   // Google ignored with high MENI
   const googleIgnoredWithHighMeni = readinessArticles
-    .filter(a => a.gscImpressions === 0 && a.scoreMeni >= 90)
+    .filter(a => a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90)
     .map(a => ({ slug: a.slug, titulo: a.titulo, scoreMeni: a.scoreMeni, gscImpressions: a.gscImpressions }))
-    .sort((a, b) => b.scoreMeni - a.scoreMeni)
+    .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 20);
 
   // Summary

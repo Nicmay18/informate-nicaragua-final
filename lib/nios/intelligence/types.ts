@@ -115,7 +115,7 @@ export interface ArticleFusion {
   autor: string;
   fechaPublicacion: string;
   palabras: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   tags: string[];
   relatedLinksCount: number;
   // GSC
@@ -166,7 +166,7 @@ export interface ComplianceVerdict {
   slug: string;
   titulo: string;
   categoria: string;
-  scoreMeni: number;
+  scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
   googleVerdict: 'google_values' | 'google_ignores' | 'no_data';
@@ -196,7 +196,7 @@ export interface AdSenseReadinessArticle {
   slug: string;
   titulo: string;
   categoria: string;
-  scoreMeni: number;
+  scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
   // Dimensiones de calidad
@@ -225,7 +225,7 @@ export interface AdSenseReadinessReport {
   averageReadinessScore: number;
   articles: AdSenseReadinessArticle[];
   topIssues: { issue: string; count: number }[];
-  googleIgnoredWithHighMeni: { slug: string; titulo: string; scoreMeni: number; gscImpressions: number }[];
+  googleIgnoredWithHighMeni: { slug: string; titulo: string; scoreMeni: number | null; gscImpressions: number }[];
   summary: string;
 }
 
@@ -259,7 +259,7 @@ export interface GoogleIntelligenceDashboard {
   // URLs que nunca reciben impresiones
   zeroImpressionUrls: { slug: string; titulo: string; fecha: string }[];
   // URLs que Google ignora (impresiones < 10 en 28 días)
-  googleIgnoredUrls: { slug: string; titulo: string; scoreMeni: number }[];
+  googleIgnoredUrls: { slug: string; titulo: string; scoreMeni: number | null }[];
   // Recomendaciones
   recommendations: NIOSRecommendation[];
   // Fuentes de tráfico GA4
@@ -299,7 +299,7 @@ export interface GoogleTrustArticle {
   autor: string;
   fechaPublicacion: string;
   palabras: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
   gscCtr: number;
@@ -344,7 +344,7 @@ export interface ThinContentArticle {
   titulo: string;
   categoria: string;
   palabras: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   gscImpressions: number;
   reasons: string[];
 }
@@ -370,7 +370,7 @@ export interface GoogleLearningPattern {
   slug: string;
   titulo: string;
   categoria: string;
-  scoreMeni: number;
+  scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
   gscCtr: number;
@@ -404,7 +404,7 @@ export interface ContentUpdateCandidate {
   gscCtr: number;
   ga4Users: number;
   ga4AvgEngagementTimeSec: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   reason: string;
   expectedImpact: 'alto' | 'medio' | 'bajo';
 }
@@ -440,7 +440,7 @@ export interface RecoveryArticle {
   titulo: string;
   categoria: string;
   url: string;
-  scoreMeni: number;
+  scoreMeni: number | null;
   googleTrustScore: number;
   gscImpressions: number;
   gscClicks: number;
@@ -618,7 +618,7 @@ export interface ArticleUpdateCandidate {
   gscCtr: number;
   gscPosition: number;
   daysSincePublication: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   updateReason: 'declining_position' | 'outdated_content' | 'low_ctr_good_position' | 'freshness_boost';
   reason: string;
   recommendedAction: string;
@@ -657,8 +657,8 @@ export interface MeniLearningEntry {
   slug: string;
   titulo: string;
   categoria: string;
-  meniScoreAtPublish: number;
-  meniScoreCurrent: number;
+  meniScoreAtPublish: number | null;
+  meniScoreCurrent: number | null;
   gscImpressions30d: number;
   gscClicks30d: number;
   gscCtr30d: number;

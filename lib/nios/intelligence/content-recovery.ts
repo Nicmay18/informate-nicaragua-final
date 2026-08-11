@@ -31,7 +31,7 @@ function articleEvidence(article: ArticleFusion, now: string): NIOSEvidence[] {
       api: 'Firestore',
       dateRange: 'Actual',
       metric: 'scoreMeni',
-      value: article.scoreMeni,
+      value: article.scoreMeni ?? 'N/D',
       collectedAt: now,
     },
     {
@@ -72,7 +72,7 @@ function determineMainProblem(a: RecoveryArticle): string {
   if (a.gscImpressions === 0) problems.push('Sin impresiones Google');
   if (a.gscImpressions > 0 && a.gscCtr < 1) problems.push('CTR bajo, posible problema de título o snippet');
   if (a.ga4AvgEngagementTimeSec < 60 && a.ga4Users > 0) problems.push('Engagement bajo, posible falla de intención de búsqueda');
-  if (a.scoreMeni >= 90 && a.gscImpressions < 100) problems.push('MENI alto pero Google no encuentra demanda');
+  if (a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions < 100) problems.push('MENI alto pero Google no encuentra demanda');
 
   if (problems.length === 0) return 'Contenido saludable';
   return problems[0];
@@ -91,7 +91,7 @@ function determineRecommendedAction(a: RecoveryArticle): string {
     return 'Añadir firma de autor y biografía mínima.';
   }
 
-  if (a.gscImpressions === 0 && a.scoreMeni >= 90) {
+  if (a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90) {
     return 'Reescribir título SEO y mejorar intención de búsqueda; reforzar enlaces internos.';
   }
 
@@ -107,7 +107,7 @@ function determineRecommendedAction(a: RecoveryArticle): string {
     return 'Revisar estructura: agregar subtítulos, FAQ y contexto inmediato en la introducción.';
   }
 
-  if (a.scoreMeni < 70) {
+  if (a.scoreMeni !== null && a.scoreMeni < 70) {
     return 'Revisar calidad editorial: profundidad, fuentes, originalidad y contexto.';
   }
 
@@ -165,10 +165,10 @@ function scoreUserValue(article: ArticleFusion): number {
 
 function scoreEditorialQuality(article: ArticleFusion): number {
   let score = 0;
-  if (article.scoreMeni >= 90) score += 20;
-  else if (article.scoreMeni >= 80) score += 15;
-  else if (article.scoreMeni >= 70) score += 10;
-  else if (article.scoreMeni >= 60) score += 5;
+  if (article.scoreMeni !== null && article.scoreMeni >= 90) score += 20;
+  else if (article.scoreMeni !== null && article.scoreMeni >= 80) score += 15;
+  else if (article.scoreMeni !== null && article.scoreMeni >= 70) score += 10;
+  else if (article.scoreMeni !== null && article.scoreMeni >= 60) score += 5;
 
   if (article.palabras >= 800) score += 15;
   else if (article.palabras >= 500) score += 12;
@@ -199,7 +199,7 @@ function scoreEEAT(article: ArticleFusion): number {
 function scoreAdSenseValue(article: ArticleFusion): number {
   let score = 0;
   if (article.palabras >= 400 && article.gscImpressions > 0) score += 15;
-  if (article.scoreMeni >= 70) score += 10;
+  if (article.scoreMeni !== null && article.scoreMeni >= 70) score += 10;
   if (article.palabras >= 600) score += 10;
   if (article.gscClicks > 0) score += 5;
   if (article.ga4AvgEngagementTimeSec >= 90) score += 5;

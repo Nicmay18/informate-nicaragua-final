@@ -117,8 +117,9 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
   const newsImpressions = gsc?.googleNews?.reduce((s, r) => s + r.impressions, 0) ?? 0;
   const newsClicks = gsc?.googleNews?.reduce((s, r) => s + r.clicks, 0) ?? 0;
 
-  const meniAvg = snapshot?.articlesFused?.length
-    ? Math.round(snapshot.articlesFused.reduce((s, a) => s + a.scoreMeni, 0) / snapshot.articlesFused.length)
+  const meniScores = snapshot?.articlesFused?.map(a => a.scoreMeni).filter((s): s is number => s !== null) ?? [];
+  const meniAvg = meniScores.length > 0
+    ? Math.round(meniScores.reduce((s, v) => s + v, 0) / meniScores.length)
     : null;
   const trustAvg = trust?.averageGoogleTrustScore ? Math.round(trust.averageGoogleTrustScore) : null;
 

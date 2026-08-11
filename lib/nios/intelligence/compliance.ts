@@ -72,7 +72,7 @@ export function generateComplianceReport(
   for (const article of articles) {
     const hasGsc = article.hasGscData && article.gscImpressions > 0;
     const impressions = article.gscImpressions;
-    const scoreMeni = article.scoreMeni;
+    const scoreMeni = article.scoreMeni ?? null;
 
     let googleVerdict: ComplianceVerdict['googleVerdict'];
     let meniVsGoogleGap: ComplianceVerdict['meniVsGoogleGap'];
@@ -80,7 +80,7 @@ export function generateComplianceReport(
     const evidenceList: NIOSEvidence[] = [];
 
     evidenceList.push(
-      evidence('MENI', 'scoreCalidad', 'Publicación', 'Score MENI', scoreMeni),
+      evidence('MENI', 'scoreCalidad', 'Publicación', 'Score MENI', scoreMeni ?? 'N/D'),
     );
 
     if (!hasGsc || impressions === 0) {
@@ -89,10 +89,10 @@ export function generateComplianceReport(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 0),
       );
 
-      if (scoreMeni >= 90) {
+      if (scoreMeni !== null && scoreMeni >= 90) {
         meniVsGoogleGap = 'meni_overestimates';
         explanation = `MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones en los últimos 28 días. Google NO considera útil esta nota. MENI está sobreestimando el valor de este contenido.`;
-      } else if (scoreMeni > 0) {
+      } else if (scoreMeni !== null && scoreMeni > 0) {
         meniVsGoogleGap = 'no_data';
         explanation = `MENI otorga ${scoreMeni} puntos. Google Search Console no registra impresiones. No hay datos suficientes para determinar si Google valora esta nota.`;
       } else {
@@ -105,12 +105,12 @@ export function generateComplianceReport(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', impressions),
       );
 
-      if (scoreMeni >= 90) {
+      if (scoreMeni !== null && scoreMeni >= 90) {
         meniVsGoogleGap = 'meni_overestimates';
         explanation = `MENI otorga ${scoreMeni} puntos, pero Google Search Console solo registra ${impressions} impresiones en 28 días. Google prácticamente ignora esta nota. MENI está sobreestimando.`;
       } else {
         meniVsGoogleGap = 'no_data';
-        explanation = `MENI: ${scoreMeni}. Google: ${impressions} impresiones. Datos insuficientes para una conclusión firme.`;
+        explanation = `MENI: ${scoreMeni ?? 'N/D'}. Google: ${impressions} impresiones. Datos insuficientes para una conclusión firme.`;
       }
     } else {
       googleVerdict = 'google_values';
@@ -120,15 +120,15 @@ export function generateComplianceReport(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Posición media', article.gscPosition),
       );
 
-      if (scoreMeni < 85 && impressions > 1000) {
+      if (scoreMeni !== null && scoreMeni < 85 && impressions > 1000) {
         meniVsGoogleGap = 'meni_underestimates';
         explanation = `MENI otorga solo ${scoreMeni} puntos, pero Google Search Console registra ${impressions.toLocaleString()} impresiones y ${article.gscClicks} clics. Google SÍ encontró valor en este contenido. MENI está subestimando.`;
-      } else if (scoreMeni >= 90 && impressions > 1000) {
+      } else if (scoreMeni !== null && scoreMeni >= 90 && impressions > 1000) {
         meniVsGoogleGap = 'aligned';
         explanation = `MENI otorga ${scoreMeni} puntos y Google Search Console registra ${impressions.toLocaleString()} impresiones. MENI y Google están alineados: este contenido tiene valor real.`;
       } else {
         meniVsGoogleGap = 'aligned';
-        explanation = `MENI: ${scoreMeni}. Google: ${impressions} impresiones. Hay datos de Google pero el volumen es moderado.`;
+        explanation = `MENI: ${scoreMeni ?? 'N/D'}. Google: ${impressions} impresiones. Hay datos de Google pero el volumen es moderado.`;
       }
     }
 
@@ -156,8 +156,8 @@ export function generateComplianceReport(
 
   // Top ignored (MENI alto pero Google ignora)
   const topIgnored = verdicts
-    .filter(v => v.googleVerdict === 'google_ignores' && v.scoreMeni >= 85)
-    .sort((a, b) => b.scoreMeni - a.scoreMeni)
+    .filter(v => v.googleVerdict === 'google_ignores' && v.scoreMeni !== null && v.scoreMeni >= 85)
+    .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 20);
 
   // Top valued (Google muestra impresiones)

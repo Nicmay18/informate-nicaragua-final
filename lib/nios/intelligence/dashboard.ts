@@ -111,7 +111,7 @@ export function buildGoogleIntelligenceDashboard(
   const googleIgnoredUrls = articles
     .filter(a => a.hasGscData && a.gscImpressions < 10)
     .map(a => ({ slug: a.slug, titulo: a.titulo, scoreMeni: a.scoreMeni }))
-    .sort((a, b) => b.scoreMeni - a.scoreMeni)
+    .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 50);
 
   // Notas que perdieron posiciones (posición > 20 con impresiones altas)

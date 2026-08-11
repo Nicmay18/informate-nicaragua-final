@@ -28,12 +28,12 @@ function classifyLearningPattern(article: ArticleFusion): {
   confidence: GoogleLearningPattern['confidence'];
   conclusion: string;
 } {
-  const scoreMeni = article.scoreMeni;
+  const scoreMeni = article.scoreMeni ?? null;
   const impressions = article.gscImpressions;
   const clicks = article.gscClicks;
 
   // MENI correcto: score alto + Google muestra tráfico
-  if (scoreMeni >= 85 && impressions >= 500 && (clicks > 0 || article.gscCtr > 1)) {
+  if (scoreMeni !== null && scoreMeni >= 85 && impressions >= 500 && (clicks > 0 || article.gscCtr > 1)) {
     return {
       pattern: 'meni_correct',
       confidence: impressions >= 1000 ? 'high' : 'medium',
@@ -42,7 +42,7 @@ function classifyLearningPattern(article: ArticleFusion): {
   }
 
   // MENI sobreestima: score alto + Google ignora
-  if (scoreMeni >= 90 && impressions === 0) {
+  if (scoreMeni !== null && scoreMeni >= 90 && impressions === 0) {
     return {
       pattern: 'meni_overestimates',
       confidence: 'high',
@@ -50,7 +50,7 @@ function classifyLearningPattern(article: ArticleFusion): {
     };
   }
 
-  if (scoreMeni >= 85 && impressions < 10) {
+  if (scoreMeni !== null && scoreMeni >= 85 && impressions < 10) {
     return {
       pattern: 'meni_overestimates',
       confidence: 'medium',
@@ -59,7 +59,7 @@ function classifyLearningPattern(article: ArticleFusion): {
   }
 
   // MENI subestima: score bajo/medio + Google valora
-  if (scoreMeni < 80 && impressions >= 1000) {
+  if (scoreMeni !== null && scoreMeni < 80 && impressions >= 1000) {
     return {
       pattern: 'meni_underestimates',
       confidence: impressions >= 5000 ? 'high' : 'medium',
@@ -71,7 +71,7 @@ function classifyLearningPattern(article: ArticleFusion): {
   return {
     pattern: 'insufficient_data',
     confidence: impressions === 0 ? 'low' : 'medium',
-    conclusion: `MENI: ${scoreMeni}, Google: ${impressions} impresiones. No hay suficiente evidencia para determinar la calibración.`,
+    conclusion: `MENI: ${scoreMeni ?? 'N/D'}, Google: ${impressions} impresiones. No hay suficiente evidencia para determinar la calibración.`,
   };
 }
 

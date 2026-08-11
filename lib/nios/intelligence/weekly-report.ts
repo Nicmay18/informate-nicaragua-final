@@ -47,8 +47,9 @@ function analyzeCategoryOpportunities(articles: ArticleFusion[]): CategoryOpport
     const totalImpressionsForPosition = list.reduce((s, a) => s + a.gscImpressions, 0) || 1;
     const avgPosition = list.reduce((s, a) => s + a.gscPosition * a.gscImpressions, 0) / totalImpressionsForPosition;
     const avgCtr = totalImpressions > 0 ? Number(((totalClicks / totalImpressions) * 100).toFixed(2)) : 0;
-    const avgMeni = list.length > 0
-      ? Math.round(list.reduce((s, a) => s + a.scoreMeni, 0) / list.length)
+    const meniScores = list.map(a => a.scoreMeni).filter((s): s is number => s !== null);
+    const avgMeni = meniScores.length > 0
+      ? Math.round(meniScores.reduce((s, v) => s + v, 0) / meniScores.length)
       : 0;
 
     // Lógica de oportunidad basada en datos reales
@@ -234,7 +235,7 @@ export function generateWeeklyReport(
   // 2. Contenido que Google ignora
   const ignoredByGoogle = [...articles]
     .filter(a => a.gscImpressions === 0)
-    .sort((a, b) => b.scoreMeni - a.scoreMeni)
+    .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 30);
 
   // 3. Categorías con oportunidad

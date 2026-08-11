@@ -94,7 +94,7 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
 
   for (const a of articles) {
     // MENI alto pero Google ignora
-    if (a.scoreMeni >= 80 && a.gscImpressions === 0) {
+    if (a.scoreMeni !== null && a.scoreMeni >= 80 && a.gscImpressions === 0) {
       failed.push({
         slug: a.slug,
         titulo: a.titulo,
@@ -102,7 +102,7 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
         metric: 'MENI alto pero Google no muestra',
         value: `MENI ${a.scoreMeni}, 0 impresiones`,
         evidence: [
-          makeEvidence('MENI', 'scoreMeni', `MENI de "${a.titulo}"`, a.scoreMeni),
+          makeEvidence('MENI', 'scoreMeni', `MENI de "${a.titulo}"`, a.scoreMeni ?? 'N/D'),
           makeEvidence('Google Search Console', 'searchanalytics.query', `Impresiones de "${a.titulo}"`, 0),
         ],
       });

@@ -14,7 +14,7 @@ export interface ArticleMetrics {
   autor: string;
   vistas: number;
   palabras: number;
-  scoreMeni: number;
+  scoreMeni: number | null;
   aprobadoMeni: boolean;
   fecha: string;
   fechaPublicacion: string;

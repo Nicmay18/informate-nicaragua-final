@@ -76,7 +76,7 @@ export async function runLearningCycle(
   const sorted = [...articles].sort((a, b) => b.vistas - a.vistas);
   const topPerformers = sorted.slice(0, 10);
   const underperformers = sorted
-    .filter((a) => a.scoreMeni > 70 && a.vistas < 2)
+    .filter((a) => a.scoreMeni !== null && a.scoreMeni > 70 && a.vistas < 2)
     .slice(0, 10);
 
   const result: LearningCycleResult = {

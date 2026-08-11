@@ -69,7 +69,7 @@ export async function collectArticleMetrics(
       autor: d.autor || '',
       vistas,
       palabras: typeof d.palabras === 'number' ? d.palabras : 0,
-      scoreMeni: typeof d.scoreMeni === 'number' ? d.scoreMeni : (typeof d.scoreCalidad === 'number' ? d.scoreCalidad : 0),
+      scoreMeni: typeof d.scoreMeni === 'number' ? d.scoreMeni : (typeof d.scoreCalidad === 'number' ? d.scoreCalidad : null),
       aprobadoMeni: d.aprobadoMeni ?? true,
       fecha: fecha.toISOString(),
       fechaPublicacion: fecha.toISOString(),

@@ -131,7 +131,7 @@ export async function generateAdSenseRecoveryFullReport(
   for (const a of contentRecovery.articles) {
     const curr = byCategory.get(a.categoria) || { categoria: a.categoria, sumTrust: 0, sumMeni: 0, count: 0, red: 0 };
     curr.sumTrust += a.googleTrustScore;
-    curr.sumMeni += a.scoreMeni;
+    curr.sumMeni += a.scoreMeni ?? 0;
     curr.count += 1;
     if (a.status === 'red') curr.red += 1;
     byCategory.set(a.categoria, curr);

@@ -141,7 +141,7 @@ function detectThinContent(article: ArticleFusion): { isThin: boolean; flags: st
     flags.push('Sin autor visible');
   }
 
-  if (article.palabras >= 200 && article.gscImpressions === 0 && article.scoreMeni < 80) {
+  if (article.palabras >= 200 && article.gscImpressions === 0 && article.scoreMeni !== null && article.scoreMeni < 80) {
     flags.push('Poca información nueva: score MENI bajo y 0 impresiones');
   }
 
@@ -153,7 +153,7 @@ function detectThinContent(article: ArticleFusion): { isThin: boolean; flags: st
  */
 function detectDuplicateRisk(article: ArticleFusion): boolean {
   if (article.palabras < 200 && article.gscImpressions === 0) return true;
-  if (article.palabras > 0 && article.scoreMeni < 60) return true;
+  if (article.palabras > 0 && article.scoreMeni !== null && article.scoreMeni < 60) return true;
   return false;
 }
 
@@ -250,8 +250,8 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
   const withoutAuthor = trustArticles.filter(a => !a.hasAutor).length;
   const withoutSources = trustArticles.filter(a => !a.hasFuente).length;
   const lowGoogle = trustArticles.filter(a => a.gscImpressions < 10 && a.palabras > 200).length;
-  const highMeniZeroImpressions = trustArticles.filter(a => a.scoreMeni >= 90 && a.gscImpressions === 0).length;
-  const lowMeniHighImpressions = trustArticles.filter(a => a.scoreMeni < 80 && a.gscImpressions > 1000).length;
+  const highMeniZeroImpressions = trustArticles.filter(a => a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions === 0).length;
+  const lowMeniHighImpressions = trustArticles.filter(a => a.scoreMeni !== null && a.scoreMeni < 80 && a.gscImpressions > 1000).length;
 
   // Top artículos que bloquean AdSense (alto riesgo)
   const topBlocked = [...trustArticles]

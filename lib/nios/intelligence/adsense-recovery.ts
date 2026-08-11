@@ -54,7 +54,7 @@ export function generateAdSenseRecoveryReport(
   const withContext = articles.filter(a => a.tags.length >= 2).length;
   const withSources = articles.filter(a => a.palabras > 200).length; // proxy: contenido con profundidad
   const useful = articles.filter(a => a.palabras >= 400 || a.gscImpressions > 0).length;
-  const original = articles.filter(a => a.scoreMeni >= 70 && a.palabras >= 300).length;
+  const original = articles.filter(a => a.scoreMeni !== null && a.scoreMeni >= 70 && a.palabras >= 300).length;
 
   const contentAuthorPct = Math.round((withAuthor / articles.length) * 100);
   const contentContextPct = Math.round((withContext / articles.length) * 100);
@@ -91,7 +91,7 @@ export function generateAdSenseRecoveryReport(
     .filter(a =>
       (!a.hasAutor) ||
       (a.isThin && a.gscImpressions === 0) ||
-      (a.scoreMeni >= 90 && a.gscImpressions === 0)
+      (a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions === 0)
     )
     .slice(0, 20);
 

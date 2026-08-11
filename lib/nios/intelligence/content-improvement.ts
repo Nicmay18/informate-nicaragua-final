@@ -39,7 +39,7 @@ export function generateImprovementRecommendations(
 
   for (const article of articles) {
     // 1. MENI > 90 pero GSC < 100 impresiones
-    if (article.scoreMeni > 90 && article.gscImpressions < 100) {
+    if (article.scoreMeni !== null && article.scoreMeni > 90 && article.gscImpressions < 100) {
       if (addIfNotExists(recs, article.slug, 'high-meni-low-google')) {
         recs.push({
           id: `improve-${article.slug}-high-meni-low-google`,
@@ -51,7 +51,7 @@ export function generateImprovementRecommendations(
           recommendedAction:
             'Google no está encontrando suficiente demanda. Revisar título, intención de búsqueda y enlaces internos.',
           evidence: [
-            evidence('MENI', 'scoreMeni', article.scoreMeni, now),
+            evidence('MENI', 'scoreMeni', article.scoreMeni ?? 'N/D', now),
             evidence('Google Search Console', 'gscImpressions', article.gscImpressions, now),
           ],
           priority: 'high',

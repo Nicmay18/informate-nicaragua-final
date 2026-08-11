@@ -104,7 +104,7 @@ function scoreContentQuality(
     };
   }
 
-  const original = articles.filter(a => a.scoreMeni >= 70 && a.palabras >= 300).length;
+  const original = articles.filter(a => a.scoreMeni !== null && a.scoreMeni >= 70 && a.palabras >= 300).length;
   const depth = articles.filter(a => a.palabras >= 600).length;
   const context = articles.filter(a => a.tags.length >= 2 && a.relatedLinksCount >= 1).length;
   const sources = articles.filter(a => a.palabras > 300).length;

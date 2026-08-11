@@ -205,3 +205,225 @@ describe('NIOS Weekly Report', () => {
     expect(weekly.summary).toContain('Datos insuficientes');
   });
 });
+
+// ─── PATCH scoreMeni null vs 0 — Tests forenses ───────────────────
+// Verifica que scoreMeni null (MENI no disponible) NO sea tratado como 0.
+// Verifica que scoreMeni 0 (score real cero) SÍ active flags como antes.
+
+describe('PATCH: scoreMeni null vs 0 — Thin Content', () => {
+  it('scoreMeni=null: NO debe activar flag "score MENI bajo" en thin content', () => {
+    const articles = [mockArticle({
+      slug: 'no-meni',
+      scoreMeni: null,
+      palabras: 300,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).not.toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+  });
+
+  it('scoreMeni=0 (real cero): SÍ debe activar flag "score MENI bajo" en thin content', () => {
+    const articles = [mockArticle({
+      slug: 'real-zero',
+      scoreMeni: 0,
+      palabras: 300,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+  });
+
+  it('scoreMeni=40 (real bajo): SÍ debe activar flag "score MENI bajo" en thin content', () => {
+    const articles = [mockArticle({
+      slug: 'low-meni',
+      scoreMeni: 40,
+      palabras: 300,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+  });
+
+  it('scoreMeni=95 (real alto): NO debe activar flag "score MENI bajo"', () => {
+    const articles = [mockArticle({
+      slug: 'high-meni',
+      scoreMeni: 95,
+      palabras: 300,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).not.toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+  });
+});
+
+describe('PATCH: scoreMeni null vs 0 — Duplicate Risk', () => {
+  it('scoreMeni=null: NO debe activar duplicateRisk', () => {
+    const articles = [mockArticle({
+      slug: 'no-meni-dup',
+      scoreMeni: null,
+      palabras: 500,
+      gscImpressions: 100,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articles[0].isDuplicateRisk).toBe(false);
+  });
+
+  it('scoreMeni=0 (real cero): SÍ debe activar duplicateRisk', () => {
+    const articles = [mockArticle({
+      slug: 'real-zero-dup',
+      scoreMeni: 0,
+      palabras: 500,
+      gscImpressions: 100,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articles[0].isDuplicateRisk).toBe(true);
+  });
+
+  it('scoreMeni=40 (real bajo): SÍ debe activar duplicateRisk', () => {
+    const articles = [mockArticle({
+      slug: 'low-meni-dup',
+      scoreMeni: 40,
+      palabras: 500,
+      gscImpressions: 100,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articles[0].isDuplicateRisk).toBe(true);
+  });
+
+  it('scoreMeni=95 (real alto): NO debe activar duplicateRisk', () => {
+    const articles = [mockArticle({
+      slug: 'high-meni-dup',
+      scoreMeni: 95,
+      palabras: 500,
+      gscImpressions: 100,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articles[0].isDuplicateRisk).toBe(false);
+  });
+});
+
+describe('PATCH: scoreMeni null vs 0 — Google Feedback Loop', () => {
+  it('scoreMeni=null: pattern debe ser insufficient_data', () => {
+    const articles = [mockArticle({
+      scoreMeni: null,
+      gscImpressions: 0,
+      gscClicks: 0,
+      gscCtr: 0,
+    })];
+    const gsc = mockGSC();
+    const patterns = generateLearningPatterns(articles, gsc);
+    expect(patterns[0].pattern).toBe('insufficient_data');
+  });
+
+  it('scoreMeni=null con impresiones altas: pattern debe ser insufficient_data (no meni_underestimates)', () => {
+    const articles = [mockArticle({
+      scoreMeni: null,
+      gscImpressions: 5000,
+      gscClicks: 200,
+      gscCtr: 4,
+    })];
+    const gsc = mockGSC();
+    const patterns = generateLearningPatterns(articles, gsc);
+    expect(patterns[0].pattern).toBe('insufficient_data');
+  });
+});
+
+describe('PATCH: scoreMeni null vs 0 — Artículo 500+ palabras sin MENI', () => {
+  it('Artículo largo sin MENI: NO debe ser thin por scoreMeni', () => {
+    const articles = [mockArticle({
+      slug: 'long-no-meni',
+      scoreMeni: null,
+      palabras: 600,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 3,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).not.toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+    expect(report.articles[0].isDuplicateRisk).toBe(false);
+  });
+
+  it('Artículo corto sin MENI: NO debe ser thin por scoreMeni (pero puede ser thin por palabras)', () => {
+    const articles = [mockArticle({
+      slug: 'short-no-meni',
+      scoreMeni: null,
+      palabras: 250,
+      gscImpressions: 0,
+      tags: ['tag1', 'tag2'],
+      relatedLinksCount: 2,
+      autor: 'Autor',
+    })];
+    const report = generateGoogleTrustReport(articles);
+    const thinFlags = report.articles[0].thinContentFlags;
+    expect(thinFlags).not.toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+    expect(report.articles[0].isDuplicateRisk).toBe(false);
+  });
+});
+
+describe('PATCH: scoreMeni null vs 0 — Estadísticas del reporte', () => {
+  it('articlesHighMeniZeroImpressions: null NO cuenta como high MENI', () => {
+    const articles = [mockArticle({
+      scoreMeni: null,
+      gscImpressions: 0,
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articlesHighMeniZeroImpressions).toBe(0);
+  });
+
+  it('articlesHighMeniZeroImpressions: score 95 con 0 impresiones SÍ cuenta', () => {
+    const articles = [mockArticle({
+      scoreMeni: 95,
+      gscImpressions: 0,
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articlesHighMeniZeroImpressions).toBe(1);
+  });
+
+  it('articlesLowMeniHighImpressions: null NO cuenta como low MENI', () => {
+    const articles = [mockArticle({
+      scoreMeni: null,
+      gscImpressions: 2000,
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articlesLowMeniHighImpressions).toBe(0);
+  });
+
+  it('articlesLowMeniHighImpressions: score 40 con impresiones altas SÍ cuenta', () => {
+    const articles = [mockArticle({
+      scoreMeni: 40,
+      gscImpressions: 2000,
+    })];
+    const report = generateGoogleTrustReport(articles);
+    expect(report.articlesLowMeniHighImpressions).toBe(1);
+  });
+});

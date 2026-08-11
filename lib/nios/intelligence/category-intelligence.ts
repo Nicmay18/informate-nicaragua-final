@@ -129,7 +129,8 @@ export function generateCategoryIntelligence(
     const impressionsForPosition = catImpressions || 1;
     const avgPosition = list.reduce((s, a) => s + a.gscPosition * a.gscImpressions, 0) / impressionsForPosition;
     const avgCtr = catImpressions > 0 ? Number(((catClicks / catImpressions) * 100).toFixed(2)) : 0;
-    const avgMeni = list.length > 0 ? Math.round(list.reduce((s, a) => s + a.scoreMeni, 0) / list.length) : 0;
+    const meniScores = list.map(a => a.scoreMeni).filter((s): s is number => s !== null);
+    const avgMeni = meniScores.length > 0 ? Math.round(meniScores.reduce((s, v) => s + v, 0) / meniScores.length) : 0;
     const avgTrust = list.length > 0
       ? Math.round(list.reduce((s, a) => s + (trustMap.get(a.slug) || 0), 0) / list.length)
       : 0;

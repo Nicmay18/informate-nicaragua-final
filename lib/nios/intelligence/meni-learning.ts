@@ -58,6 +58,7 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
   conclusion: string;
 } {
   const { scoreMeni, gscImpressions, gscClicks, gscCtr, gscPosition } = article;
+  const sm = scoreMeni ?? null;
 
   // Necesita al menos 30 días para evaluar
   if (days < 30) {
@@ -68,26 +69,26 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
   }
 
   // MENI acertada: score alto + Google muestra tráfico
-  if (scoreMeni >= 80 && gscImpressions >= 500 && (gscClicks > 0 || gscCtr > 1)) {
+  if (sm !== null && sm >= 80 && gscImpressions >= 500 && (gscClicks > 0 || gscCtr > 1)) {
     return {
       verdict: 'meni_acertada',
-      conclusion: `MENI ${scoreMeni} → Google ${gscImpressions} impresiones, ${gscClicks} clics, posición ${gscPosition.toFixed(1)}. MENI evaluó correctamente el valor del contenido.`,
+      conclusion: `MENI ${sm} → Google ${gscImpressions} impresiones, ${gscClicks} clics, posición ${gscPosition.toFixed(1)}. MENI evaluó correctamente el valor del contenido.`,
     };
   }
 
   // MENI sobreestima: score alto + Google ignora
-  if (scoreMeni >= 85 && gscImpressions < 10) {
+  if (sm !== null && sm >= 85 && gscImpressions < 10) {
     return {
       verdict: 'meni_sobreestima',
-      conclusion: `MENI ${scoreMeni} pero Google solo ${gscImpressions} impresiones en ${days} días. MENI sobreestima este contenido. Posible problema: SEO técnico, intención de búsqueda, o calidad real menor a la evaluada.`,
+      conclusion: `MENI ${sm} pero Google solo ${gscImpressions} impresiones en ${days} días. MENI sobreestima este contenido. Posible problema: SEO técnico, intención de búsqueda, o calidad real menor a la evaluada.`,
     };
   }
 
   // MENI subestima: score bajo/medio + Google valora
-  if (scoreMeni < 75 && gscImpressions >= 1000) {
+  if (sm !== null && sm < 75 && gscImpressions >= 1000) {
     return {
       verdict: 'meni_subestima',
-      conclusion: `MENI ${scoreMeni} pero Google ${gscImpressions} impresiones y ${gscClicks} clics. MENI subestima este contenido. El modelo debe aprender de este caso.`,
+      conclusion: `MENI ${sm} pero Google ${gscImpressions} impresiones y ${gscClicks} clics. MENI subestima este contenido. El modelo debe aprender de este caso.`,
     };
   }
 
@@ -95,13 +96,13 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
   if (gscImpressions === 0) {
     return {
       verdict: 'datos_insuficientes',
-      conclusion: `MENI ${scoreMeni}, 0 impresiones en ${days} días. No hay suficiente evidencia de Google para evaluar.`,
+      conclusion: `MENI ${sm ?? 'N/D'}, 0 impresiones en ${days} días. No hay suficiente evidencia de Google para evaluar.`,
     };
   }
 
   return {
     verdict: 'datos_insuficientes',
-    conclusion: `MENI ${scoreMeni}, Google ${gscImpressions} impresiones. No hay suficiente evidencia para determinar la calibración.`,
+    conclusion: `MENI ${sm ?? 'N/D'}, Google ${gscImpressions} impresiones. No hay suficiente evidencia para determinar la calibración.`,
   };
 }
 
@@ -198,7 +199,7 @@ export async function generateMeniLearningFeedback(
     const { verdict, conclusion } = classifyMeniVerdict(article, days);
 
     const evidence: NIOSEvidence[] = [
-      makeEvidence('MENI', 'scoreMeni', `Score MENI al publicar`, article.scoreMeni),
+      makeEvidence('MENI', 'scoreMeni', `Score MENI al publicar`, article.scoreMeni ?? 'N/D'),
       makeEvidence('Google Search Console', 'searchanalytics.query', `Impresiones 30d`, article.gscImpressions),
       makeEvidence('Google Search Console', 'searchanalytics.query', `Clics 30d`, article.gscClicks),
       makeEvidence('Google Search Console', 'searchanalytics.query', `CTR 30d`, `${article.gscCtr}%`),
