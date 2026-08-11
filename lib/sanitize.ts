@@ -1,5 +1,44 @@
-import DOMPurify from 'isomorphic-dompurify';
 import { escapeJsonLd } from './jsonld';
+
+// Lazy-load isomorphic-dompurify to prevent jsdom from evaluating during build time.
+// jsdom tries to read browser/default-stylesheet.css via fs at module load,
+// which fails in Vercel's build environment (ENOENT error).
+let _DOMPurify: typeof import('isomorphic-dompurify')['default'] | null = null;
+let _hooksRegistered = false;
+
+function getDOMPurify() {
+  if (!_DOMPurify) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('isomorphic-dompurify');
+    _DOMPurify = mod.default || mod;
+  }
+  if (!_hooksRegistered) {
+    _hooksRegistered = true;
+    _DOMPurify!.addHook('uponSanitizeAttribute', (currentNode: any, data: any) => {
+      const { attrName, attrValue } = data;
+      if (attrName === 'href' || attrName === 'src') {
+        if (!isAllowedUrl(attrValue)) {
+          data.keepAttr = false;
+        }
+      }
+      if (currentNode.nodeName === 'IFRAME' && attrName === 'src' && !isAllowedIframeUrl(attrValue)) {
+        data.keepAttr = false;
+      }
+    });
+
+    _DOMPurify!.addHook('afterSanitizeAttributes', (currentNode: any) => {
+      if (currentNode.nodeName === 'A') {
+        const a = currentNode as unknown as Element;
+        const href = a.getAttribute('href') || '';
+        if (/^https?:\/\//i.test(href) && !href.startsWith('https://nicaraguainformate.com')) {
+          a.setAttribute('target', '_blank');
+          a.setAttribute('rel', 'noopener noreferrer nofollow');
+        }
+      }
+    });
+  }
+  return _DOMPurify!;
+}
 
 const ALLOWED_TAGS = [
   'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'h2', 'h3', 'h4',
@@ -43,29 +82,6 @@ const isAllowedIframeUrl = (url: string): boolean => {
   }
 };
 
-DOMPurify.addHook('uponSanitizeAttribute', (currentNode, data) => {
-  const { attrName, attrValue } = data;
-  if (attrName === 'href' || attrName === 'src') {
-    if (!isAllowedUrl(attrValue)) {
-      data.keepAttr = false;
-    }
-  }
-  if (currentNode.nodeName === 'IFRAME' && attrName === 'src' && !isAllowedIframeUrl(attrValue)) {
-    data.keepAttr = false;
-  }
-});
-
-DOMPurify.addHook('afterSanitizeAttributes', (currentNode) => {
-  if (currentNode.nodeName === 'A') {
-    const a = currentNode as unknown as Element;
-    const href = a.getAttribute('href') || '';
-    if (/^https?:\/\//i.test(href) && !href.startsWith('https://nicaraguainformate.com')) {
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener noreferrer nofollow');
-    }
-  }
-});
-
 const SANITIZE_CONFIG = {
   ALLOWED_TAGS,
   ALLOWED_ATTR,
@@ -83,6 +99,7 @@ const SANITIZE_CONFIG = {
  */
 export function sanitizeArticleHtml(dirty: string | undefined | null): string {
   if (!dirty) return '';
+  const DOMPurify = getDOMPurify();
   return DOMPurify.sanitize(String(dirty), SANITIZE_CONFIG);
 }
 

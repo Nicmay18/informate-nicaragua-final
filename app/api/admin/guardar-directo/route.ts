@@ -8,7 +8,6 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export const maxDuration = 30;
-export const dynamic = 'force-dynamic';
 
 const CATEGORIA_SLUG_FALLBACK: Record<string, string> = {
   'Sucesos': 'sucesos', 'Nacionales': 'nacionales', 'Deportes': 'deportes',

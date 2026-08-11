@@ -3,7 +3,6 @@ import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { generarArticuloAutonomo } from '@/lib/meni/editor-autonomo/engine';
 
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
 
 function verificarAuth(request: NextRequest): boolean {
   return verifyAdminOrCleanupToken(request.headers.get('x-admin-token'));
