@@ -197,6 +197,8 @@ auditoria-*.txt
 !app/indexnow-key.txt/route.ts
 !public/indexnow-key.txt
 procesar-salvable.js
+triage-extracted.json
+scripts/extract-triage.cjs
 
 .vercel
 
