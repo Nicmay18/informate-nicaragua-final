@@ -62,7 +62,7 @@ export function middleware(request: NextRequest) {
   const ua = request.headers.get('user-agent') || '';
 
   if (pathname.startsWith('/api/admin/')) {
-    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config'];
+    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config', '/api/admin/phase15-1-auto-fix'];
     if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
       return NextResponse.next();
     }
