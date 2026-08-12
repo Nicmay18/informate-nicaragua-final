@@ -6,7 +6,7 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 120;
+export const maxDuration = 60;
 
 const AUTO_FIX_IDS = [
   'CMo0EIdKF9E5CYTJj8H9',
