@@ -1,0 +1,57 @@
+[
+  {
+    "id": "7k2ncDzIhlS00WN4ktzR",
+    "campo": "titulo",
+    "valorAnterior": "Carreteras dejan dos fallecidos y varios accidentes.",
+    "valorNuevo": "Carreteras dejan dos fallecidos y varios accidentes",
+    "motivo": "titulo_termina_con_punto — estándar SEO: títulos no llevan punto final",
+    "editor": "forensic-audit-fase7",
+    "meniAntes": 100,
+    "meniDespues": "PENDIENTE_REEVALUACION",
+    "timestamp": "2026-08-12T03:36:19.001Z"
+  },
+  {
+    "id": "8sTBWTNIOJGIYfDN062O",
+    "campo": "titulo",
+    "valorAnterior": "Mirador de Catarina: precios, horarios y qué hacer.",
+    "valorNuevo": "Mirador de Catarina: precios, horarios y qué hacer",
+    "motivo": "titulo_termina_con_punto — estándar SEO: títulos no llevan punto final",
+    "editor": "forensic-audit-fase7",
+    "meniAntes": 94,
+    "meniDespues": "PENDIENTE_REEVALUACION",
+    "timestamp": "2026-08-12T03:36:19.167Z"
+  },
+  {
+    "id": "Pf0VvjOfwZNm7BnQpncl",
+    "campo": "titulo",
+    "valorAnterior": "Agosto comienza con tres accidentes y 4 fallecidos.",
+    "valorNuevo": "Agosto comienza con tres accidentes y 4 fallecidos",
+    "motivo": "titulo_termina_con_punto — estándar SEO: títulos no llevan punto final",
+    "editor": "forensic-audit-fase7",
+    "meniAntes": 100,
+    "meniDespues": "PENDIENTE_REEVALUACION",
+    "timestamp": "2026-08-12T03:36:19.337Z"
+  },
+  {
+    "id": "hSohwt9sC0cfwiXEITLg",
+    "campo": "titulo",
+    "valorAnterior": "Arrancó la Feria Ganadera Agostina 2026 en Managua.",
+    "valorNuevo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+    "motivo": "titulo_termina_con_punto — estándar SEO: títulos no llevan punto final",
+    "editor": "forensic-audit-fase7",
+    "meniAntes": 88,
+    "meniDespues": "PENDIENTE_REEVALUACION",
+    "timestamp": "2026-08-12T03:36:19.539Z"
+  },
+  {
+    "id": "zLt9Pxu2BPivxT6PIYTY",
+    "campo": "titulo",
+    "valorAnterior": "Falcon 9 de SpaceX impactará la Luna este miércole.",
+    "valorNuevo": "Falcon 9 de SpaceX impactará la Luna este miércole",
+    "motivo": "titulo_termina_con_punto — estándar SEO: títulos no llevan punto final",
+    "editor": "forensic-audit-fase7",
+    "meniAntes": 98,
+    "meniDespues": "PENDIENTE_REEVALUACION",
+    "timestamp": "2026-08-12T03:36:19.711Z"
+  }
+]
