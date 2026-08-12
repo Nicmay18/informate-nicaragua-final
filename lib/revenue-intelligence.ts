@@ -22,7 +22,7 @@ const COMMERCIAL_DOMAINS: Record<string, string[]> = {
 
 export function detectRevenueOpportunities(noticias: Noticia[]): RevenueOpportunity[] {
   return noticias
-    .filter((n) => (n.vistas ?? 0) >= 80 || (n.scoreCalidad ?? 70) >= 85)
+    .filter((n) => (n.vistas ?? 0) >= 80 || (n.scoreMeni ?? 70) >= 85)
     .map((n) => {
       const text = `${n.titulo} ${n.resumen} ${n.contenido || ''}`.toLowerCase();
       const evergreenish = /cómo|guía|pasos|requisitos|costo|dólar|salario|pasaporte|apostilla|turismo|migración/i.test(text);

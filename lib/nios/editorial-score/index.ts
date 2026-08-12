@@ -31,7 +31,7 @@ export function calculateEditorialScore(
   const contentScore = Math.round((published.filter((n) => (n.palabras || 0) >= 200 && (n.palabras || 0) <= 1000).length / total) * 100);
   const seoScore = Math.round((published.filter((n) => withMeta(n) && hasKeywords(n) && n.titulo.length <= 60).length / total) * 100);
   const googleScore = Math.round((published.filter((n) => hasImage(n) && hasAuthor(n) && Array.isArray(n.puntosClave) && n.puntosClave.length > 0).length / total) * 100);
-  const eeatsScore = Math.round(((published.filter(hasAuthor).length + published.filter((n) => n.scoreCalidad && n.scoreCalidad >= 70).length + published.filter((n) => n.autorFoto).length) / (total * 3)) * 100);
+  const eeatsScore = Math.round(((published.filter(hasAuthor).length + published.filter((n) => n.scoreMeni && n.scoreMeni >= 70).length + published.filter((n) => n.autorFoto).length) / (total * 3)) * 100);
   const distributionScore = Math.min(100, Math.round(((published.length > 0 ? 60 : 0) + (guides.length * 5))));
   const trustScore = Math.round((published.filter((n) => !n.noindex && n.autor).length / total) * 100);
   const utilityScore = Math.round((published.filter((n) => (n.palabras || 0) >= 200 || n.articleType === 'guia' || n.articleType === 'explicador').length / total) * 100);

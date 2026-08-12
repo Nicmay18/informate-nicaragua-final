@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { defaultRateLimiter } from '@/lib/rate-limit';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 function cleanContent(content: string): string {
   let cleaned = content;
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
       const cleanedContent = cleanContent(content);
 
       if (cleanedContent !== content) {
-        await db.doc(`noticias/${docSnap.id}`).update({ contenido: cleanedContent });
+        await db.doc(`noticias/${docSnap.id}`).update({ contenido: sanitizeArticleHtml(cleanedContent), scoreMeni: null, aprobadoMeni: false });
         count++;
         cleaned.push(data.titulo?.substring(0, 60) || docSnap.id);
       }

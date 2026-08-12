@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 // =============================================================================
 // ENDPOINT: Reparación AdSense con DeepSeek (alternativa barata a Gemini)
@@ -171,8 +172,10 @@ export async function POST(request: NextRequest) {
 
       if (!dryRun) {
         batch.update(docRef, {
-          contenido: nuevoContenido,
+          contenido: sanitizeArticleHtml(nuevoContenido),
           palabras: palabrasDespues,
+          scoreMeni: null,
+          aprobadoMeni: false,
           reparadoPorAgente: true,
           reparadoParaAdSense: true,
           ultimaActualizacionAutomatica: new Date(),

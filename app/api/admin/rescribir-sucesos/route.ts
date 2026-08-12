@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -181,8 +182,10 @@ export async function POST(request: NextRequest) {
         // Actualizar en Firestore
         await doc.ref.update({
           titulo: reescrita.titulo,
-          contenido: reescrita.contenido,
+          contenido: sanitizeArticleHtml(reescrita.contenido),
           resumen: reescrita.resumen,
+          scoreMeni: null,
+          aprobadoMeni: false,
           _rescrita: true,
           _fechaRescritura: new Date().toISOString(),
         });

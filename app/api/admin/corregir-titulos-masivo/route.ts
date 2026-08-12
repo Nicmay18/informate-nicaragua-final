@@ -202,7 +202,7 @@ export async function POST(request: Request) {
     const fallos: string[] = [];
 
     await runInBatches(cambios, BATCH_SIZE, async (c) => {
-      const updateData: Record<string, string> = {};
+      const updateData: Record<string, string | null | boolean> = { scoreMeni: null, aprobadoMeni: false };
       if (c.tituloNuevo) updateData.titulo = c.tituloNuevo;
       if (c.slugNuevo) updateData.slug = c.slugNuevo;
 

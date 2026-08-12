@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { revalidatePath } from 'next/cache';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 const expansiones: Record<string, string> = {
   'nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial':
@@ -41,7 +42,7 @@ export async function POST() {
       }
 
       const nuevoContenido = contenido + '\n' + parrafo;
-      await db.doc(`noticias/${docSnap.id}`).update({ contenido: nuevoContenido });
+      await db.doc(`noticias/${docSnap.id}`).update({ contenido: sanitizeArticleHtml(nuevoContenido), scoreMeni: null, aprobadoMeni: false });
       updated++;
       results.push(`OK: ${slug}`);
 

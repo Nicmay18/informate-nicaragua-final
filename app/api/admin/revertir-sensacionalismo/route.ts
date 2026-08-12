@@ -43,7 +43,7 @@ export async function POST() {
     let revertidas = 0;
     for (const c of cambios) {
       try {
-        await db.collection('noticias').doc(c.id).update({ titulo: c.tituloNuevo });
+        await db.collection('noticias').doc(c.id).update({ titulo: c.tituloNuevo, scoreMeni: null, aprobadoMeni: false });
         revertidas++;
       } catch (e) {
         console.error(`Error revirtiendo ${c.id}:`, e);

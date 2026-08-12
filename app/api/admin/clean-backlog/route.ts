@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 // =============================================================================
 // DICCIONARIO DE SANITIZACION EDITORIAL (Tono institucional/seguro AdSense)
@@ -173,8 +174,10 @@ export async function POST(request: NextRequest) {
           batch.update(docRef, {
             titulo: tituloSanitizado,
             resumen: resumenSanitizado,
-            contenido: contenidoOptimizado,
+            contenido: sanitizeArticleHtml(contenidoOptimizado),
             scoreCalidad: nuevoScore,
+            scoreMeni: null,
+            aprobadoMeni: false,
             ultimaActualizacionAutomatica: new Date(),
           });
           batchOps++;

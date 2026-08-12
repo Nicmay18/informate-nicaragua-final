@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -73,7 +74,9 @@ export async function POST(request: NextRequest) {
       const nuevoContenido = contenido + bloque;
 
       await docRef.update({
-        contenido: nuevoContenido,
+        contenido: sanitizeArticleHtml(nuevoContenido),
+        scoreMeni: null,
+        aprobadoMeni: false,
         fechaActualizacion: new Date(),
       });
 
@@ -130,7 +133,9 @@ export async function POST(request: NextRequest) {
           const bloque = `\n\n<h3>También te puede interesar</h3>\n<ul>\n${links}\n</ul>`;
 
           await db.collection('noticias').doc(doc.id).update({
-            contenido: contenido + bloque,
+            contenido: sanitizeArticleHtml(contenido + bloque),
+            scoreMeni: null,
+            aprobadoMeni: false,
             fechaActualizacion: new Date(),
           });
 

@@ -13,7 +13,7 @@ function importanceScore(noticia: Noticia): number {
   let s = 0;
   if (noticia.categoria === 'Nacionales' || noticia.categoria === 'Sucesos') s += 3;
   if (noticia.vistas && noticia.vistas > 100) s += 2;
-  if (noticia.scoreCalidad && noticia.scoreCalidad >= 90) s += 2;
+  if (noticia.scoreMeni && noticia.scoreMeni >= 90) s += 2;
   if (noticia.puntosClave && noticia.puntosClave.length > 0) s += 1;
   return s;
 }

@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -289,8 +290,10 @@ export async function POST(request: NextRequest) {
       if (cambios.length > 0) {
         await doc.ref.update({
           titulo: nuevoTitulo,
-          contenido: nuevoContenido,
+          contenido: sanitizeArticleHtml(nuevoContenido),
           resumen: nuevoResumen,
+          scoreMeni: null,
+          aprobadoMeni: false,
           _contenidoLimpiado: true,
           _fechaLimpieza: new Date().toISOString(),
         });

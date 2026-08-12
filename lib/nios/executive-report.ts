@@ -241,7 +241,7 @@ export function buildExecutiveDashboard(
   );
 
   const withAutor = published.filter((n) => n.autor?.trim()).length;
-  const withScore = published.filter((n) => typeof n.scoreCalidad === 'number' && n.scoreCalidad >= 70).length;
+  const withScore = published.filter((n) => typeof n.scoreMeni === 'number' && n.scoreMeni >= 70).length;
   const withKeyPoints = published.filter((n) => Array.isArray(n.puntosClave) && n.puntosClave.length > 0).length;
   const total = published.length || 1;
   const eeatsScore = Math.round(((withAutor + withScore + withKeyPoints) / (total * 3)) * 100);
@@ -386,7 +386,7 @@ export function buildExecutiveDashboard(
 
     let status: ArticleAudit['status'] = 'excellent';
     let reason = 'Cumple todos los criterios editoriales.';
-    const score = n.scoreCalidad;
+    const score = n.scoreMeni;
     if (missing.includes('imagen') || missing.includes('autor') || n.titulo.length > 80 || (typeof score === 'number' && score < 60)) {
       status = 'critical';
       reason = 'Faltan elementos esenciales: imagen, autor o título muy largo.';

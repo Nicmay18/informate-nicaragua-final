@@ -36,6 +36,13 @@ export interface Noticia {
   metaDescription?: string;
   keywords?: string;
   scoreCalidad?: number;
+  scoreMeni?: number | null;
+  aprobadoMeni?: boolean;
+  calificacionMeni?: string;
+  diagnosticoMeni?: string;
+  nivel?: string;
+  nivelScore?: number;
+  editorialTier?: string;
   noindex?: boolean;
   related_links?: Array<{ url: string; anchor: string; type: string }>;
   articleType?: ArticleType;

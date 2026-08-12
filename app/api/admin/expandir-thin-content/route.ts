@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 // =============================================================================
 // ENDPOINT: Expansión de Thin Content con Gemini
@@ -194,8 +195,10 @@ export async function POST(request: NextRequest) {
 
       if (!dryRun) {
         batch.update(docRef, {
-          contenido: nuevoContenido,
+          contenido: sanitizeArticleHtml(nuevoContenido),
           scoreCalidad: scoreDespues,
+          scoreMeni: null,
+          aprobadoMeni: false,
           reparadoPorAgente: true,
           ultimaActualizacionAutomatica: new Date(),
         });

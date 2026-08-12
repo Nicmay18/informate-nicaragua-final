@@ -80,7 +80,7 @@ export function generateComplianceReport(
     const evidenceList: NIOSEvidence[] = [];
 
     evidenceList.push(
-      evidence('MENI', 'scoreCalidad', 'Publicación', 'Score MENI', scoreMeni ?? 'N/D'),
+      evidence('MENI', 'scoreMeni', 'Publicación', 'Score MENI', scoreMeni ?? 'N/D'),
     );
 
     if (!hasGsc || impressions === 0) {

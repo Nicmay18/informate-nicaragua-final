@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Noticia no encontrada' }, { status: 404 });
     }
 
-    const updateData: Record<string, string> = { titulo: tituloLimpio };
+    const updateData: Record<string, string | null | boolean> = { titulo: tituloLimpio, scoreMeni: null, aprobadoMeni: false };
     if (slug) updateData.slug = slug.trim();
 
     await docRef.update(updateData);

@@ -166,7 +166,7 @@ export async function generateInternalLinks(
     }
 
     // 7. Score de calidad: +1 si >= 90
-    if (candidate.scoreCalidad && candidate.scoreCalidad >= 90) {
+    if (candidate.scoreMeni && candidate.scoreMeni >= 90) {
       score += 1;
       reasons.push('alta calidad editorial');
     }

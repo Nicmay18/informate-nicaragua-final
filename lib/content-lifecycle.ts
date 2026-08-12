@@ -21,7 +21,7 @@ function ageInDays(noticia: Noticia): number {
 export function classifyContentLifecycle(noticia: Noticia, viewsWindow7 = 0): LifecycleProfile {
   const age = ageInDays(noticia);
   const views = noticia.vistas ?? 0;
-  const quality = noticia.scoreCalidad ?? 70;
+  const quality = noticia.scoreMeni ?? 70;
   const evergreenKeywords = ['guía', 'cómo', 'pasos', 'requisitos', 'costo', 'salario', 'dólar', 'clima', 'calendario', 'pasaporte', 'apostilla', 'record policial'];
 
   // Calidad alta acelera la clasificación de estable/evergreen.

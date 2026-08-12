@@ -130,7 +130,7 @@ export function runContentIntelligence(noticias: Noticia[], guides: EvergreenArt
       score += Math.min(30, (n.vistas || 0) / 10);
       if (n.imagen && !n.imagen.includes('logo')) score += 10;
       if (n.puntosClave && n.puntosClave.length > 0) score += 10;
-      if (n.scoreCalidad && n.scoreCalidad >= 85) score += 20;
+      if (n.scoreMeni && n.scoreMeni >= 85) score += 20;
       return { slug: n.slug, title: n.titulo, score, reason: 'Mayor equilibrio de categoría, calidad e imagen.' };
     })
     .sort((a, b) => b.score - a.score)

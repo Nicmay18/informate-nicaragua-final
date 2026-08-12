@@ -183,7 +183,7 @@ export function generateRecommendations(
         description: `Google Search Console no registra impresiones para esta URL en los últimos ${daysToCollect} días. MENI score: ${article.scoreMeni}. Se recomienda verificar indexación, sitemap, y robots.txt.`,
         evidence: [
           evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 0),
-          evidence('MENI', 'scoreCalidad', 'Publicación', 'Score MENI', article.scoreMeni ?? 'N/D'),
+          evidence('MENI', 'scoreMeni', 'Publicación', 'Score MENI', article.scoreMeni ?? 'N/D'),
         ],
         confidence: 'high',
         createdAt: now,

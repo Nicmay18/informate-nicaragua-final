@@ -179,7 +179,7 @@ async function computeDashboardMetrics() {
       const valorWords = (contenido.match(/\b(policía|bomberos|hospital|salud|prevención|consejo|recomendación|dato|estadística|estudio|investigación|experto|especialista|fuente|teléfono|contacto|emergencia)\b/gi) || []).length;
       totalValorWords += valorWords;
 
-      const sm = typeof data.scoreMeni === 'number' ? data.scoreMeni : (typeof data.scoreCalidad === 'number' ? data.scoreCalidad : null);
+      const sm = typeof data.scoreMeni === 'number' ? data.scoreMeni : null;
       if (sm !== null) {
         meniScoreSum += sm;
         meniConScore++;

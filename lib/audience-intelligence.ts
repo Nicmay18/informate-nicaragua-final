@@ -21,7 +21,7 @@ export function analyzeAudience(noticias: Noticia[]): AudienceSegment[] {
   for (const n of noticias) {
     const age = daysSince(n.fechaActualizacion || n.fechaPublicacion || n.fecha);
     const views = n.vistas ?? 0;
-    const quality = n.scoreCalidad ?? 70;
+    const quality = n.scoreMeni ?? 70;
     const evergreenish = /cómo|qué es|guía|pasos|requisitos|costo|salario|dólar|calendario|clima/i.test(
       `${n.titulo} ${n.resumen}`
     );

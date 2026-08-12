@@ -21,6 +21,9 @@ import { adminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import { extractEntities } from '@/utils/meta';
 import type { Noticia } from '@/lib/types';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
+import type { NoticiaInput } from '@/lib/meni';
 
 export const maxDuration = 30;
 
@@ -129,27 +132,61 @@ function generateSlugFromTitle(titulo: string): string {
 async function saveToFirestore(
   article: ExternalArticle,
   estado: 'publicado' | 'borrador'
-): Promise<{ id: string; slug: string }> {
+): Promise<{ id: string; slug: string; meniBlocked?: boolean; meniScore?: number | null }> {
   const slug = generateSlugFromTitle(article.titulo);
+  const sanitizedContenido = sanitizeArticleHtml(article.contenido);
 
   // Extraer entidades para keywords
-  const entities = extractEntities(article.titulo, article.contenido);
+  const entities = extractEntities(article.titulo, sanitizedContenido);
   const keywords = [article.categoria, ...entities].slice(0, 12);
 
-  // Calcular palabras
-  const palabras = article.contenido
-    .replace(/<[^>]+>/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .filter((w) => w.length > 0).length;
+  // MENI canónico — toda nota nueva debe pasar por la cadena editorial
+  const noticiaInput: NoticiaInput = {
+    titulo: article.titulo,
+    contenido: sanitizedContenido,
+    resumen: article.resumen || '',
+    categoria: article.categoria || 'General',
+    autor: article.autor || 'Redacción Nicaragua Informate',
+    fecha: new Date().toISOString(),
+    slug,
+  };
 
+  const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
+
+  if (!meniOk) {
+    // Si MENI rechaza, guardar como borrador con diagnóstico pero sin scoreMeni
+    const now = new Date().toISOString();
+    const noticiaData: Omit<Noticia, 'id'> = {
+      slug,
+      titulo: article.titulo,
+      resumen: article.resumen,
+      contenido: sanitizedContenido,
+      categoria: article.categoria,
+      imagen: article.imagen || '/logo.webp',
+      fecha: now,
+      fechaActualizacion: now,
+      autor: article.autor || 'Redacción Nicaragua Informate',
+      estado: 'borrador',
+      tags: article.tags || [article.categoria],
+      keywords: keywords.join(', '),
+      palabras: sanitizedContenido.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter((w) => w.length > 0).length,
+      vistas: 0,
+      destacada: false,
+      diagnosticoMeni: meni.diagnostico,
+    };
+    await adminDb.collection('noticias').doc(slug).set({ ...noticiaData, id: slug });
+    return { id: slug, slug, meniBlocked: true, meniScore: meni.scoreFinal };
+  }
+
+  // Guardar con datos MENI auténticos
   const now = new Date().toISOString();
-
-  const noticiaData: Omit<Noticia, 'id'> = {
+  const noticiaData: Record<string, unknown> = {
+    ...meniUpdateData,
+    id: slug,
     slug,
     titulo: article.titulo,
     resumen: article.resumen,
-    contenido: article.contenido,
+    contenido: sanitizedContenido,
     categoria: article.categoria,
     imagen: article.imagen || '/logo.webp',
     fecha: now,
@@ -158,15 +195,13 @@ async function saveToFirestore(
     estado,
     tags: article.tags || [article.categoria],
     keywords: keywords.join(', '),
-    palabras,
     vistas: 0,
     destacada: false,
   };
 
-  // Usar slug como ID del documento para lecturas O(1) en vez de query costosa
   await adminDb.collection('noticias').doc(slug).set(noticiaData);
 
-  return { id: slug, slug };
+  return { id: slug, slug, meniScore: meni.scoreFinal };
 }
 
 // ─── Route Handler Principal ───
@@ -212,14 +247,18 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Guardar en Firestore
-    const created: { id: string; slug: string; titulo: string; estado: string }[] = [];
+    const created: { id: string; slug: string; titulo: string; estado: string; meniBlocked?: boolean; meniScore?: number | null }[] = [];
+    const published: typeof created = [];
     for (const article of processedArticles) {
       const result = await saveToFirestore(article, estado);
-      created.push({ ...result, titulo: article.titulo, estado });
+      const entry = { ...result, titulo: article.titulo, estado: result.meniBlocked ? 'borrador' : estado };
+      created.push(entry);
+      if (!result.meniBlocked) published.push(entry);
     }
 
     // 6. Revalidar caché si se publicó
-    if (estado === 'publicado' && created.length > 0) {
+    const revalidateList = estado === 'publicado' ? published : [];
+    if (revalidateList.length > 0) {
       try {
         const { revalidatePath } = await import('next/cache');
         revalidatePath('/');
@@ -235,7 +274,7 @@ export async function POST(request: NextRequest) {
 
       // Notificar a Google Indexing API para cada noticia publicada (no bloquea)
       import('@/lib/google-indexing').then(({ notifyGoogleBulk }) => {
-        const urls = created.map(c => `https://nicaraguainformate.com/noticias/${c.slug}`);
+        const urls = revalidateList.map(c => `https://nicaraguainformate.com/noticias/${c.slug}`);
         notifyGoogleBulk(urls).catch(() => {});
       }).catch(() => {});
     }
