@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-12T03:47:02.053Z",
+  "timestamp": "2026-08-12T03:55:29.987Z",
   "total": 281,
   "conScoreMeni": 281,
   "sinScoreMeni": 0,
@@ -20,7 +20,7 @@
   "htmlArtifacts": 0,
   "scoreEqualsNivelScore": 281,
   "scoreFromCalidad": 0,
-  "thinCount": 17,
+  "thinCount": 18,
   "scoreBuckets": {
     "0-49": 0,
     "50-69": 1,
@@ -543,7 +543,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:23:34.690Z"
+      "nivelFecha": "2026-08-12T03:54:21.147Z"
     },
     {
       "id": "7aOBbeIDRKR06tnYfklr",
@@ -1083,7 +1083,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:24:28.592Z"
+      "nivelFecha": "2026-08-12T03:54:23.355Z"
     },
     {
       "id": "CnHlW2RyUcpwlJBKeFug",
@@ -1173,7 +1173,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:24:37.347Z"
+      "nivelFecha": "2026-08-12T03:54:25.389Z"
     },
     {
       "id": "DabSeh90gN6BreMLkDow",
@@ -1569,7 +1569,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:25:17.036Z"
+      "nivelFecha": "2026-08-12T03:54:27.510Z"
     },
     {
       "id": "IFvH1F0YUbgz55E853jj",
@@ -1664,9 +1664,9 @@
     {
       "id": "JOfOW7uTxkgDSIezo7Wn",
       "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
-      "titulo": "Capturan acusado de agredir a un hombre en Rivas, Nicaragua",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
       "categoria": "Sucesos",
-      "palabrasReales": 2205,
+      "palabrasReales": 2201,
       "scoreMeni": 84,
       "aprobadoMeni": false,
       "calificacionMeni": "MEJORAR",
@@ -1677,7 +1677,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:25:27.764Z"
+      "nivelFecha": "2026-08-12T03:54:29.656Z"
     },
     {
       "id": "JbGRXcj7AiJNPvQRcneT",
@@ -2242,7 +2242,7 @@
       "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
       "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
       "categoria": "Nacionales",
-      "palabrasReales": 488,
+      "palabrasReales": 484,
       "scoreMeni": 88,
       "aprobadoMeni": false,
       "calificacionMeni": "MEJORAR",
@@ -2253,7 +2253,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:26:24.800Z"
+      "nivelFecha": "2026-08-12T03:54:31.763Z"
     },
     {
       "id": "QiOIqxhjT67BS2D4saW5",
@@ -2392,12 +2392,12 @@
       "calificacionMeni": "NO PUBLICAR",
       "nivel": "RECHAZADO",
       "nivelScore": 78,
-      "editorialTier": "REPORTAJE",
+      "editorialTier": "INVESTIGACION",
       "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:26:39.321Z"
+      "nivelFecha": "2026-08-12T03:54:33.906Z"
     },
     {
       "id": "SG87LjFIgCWnd6g8EKDq",
@@ -2739,7 +2739,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:27:13.578Z"
+      "nivelFecha": "2026-08-12T03:54:36.127Z"
     },
     {
       "id": "ZK1mbMdVBgdisJq1mn9u",
@@ -3052,7 +3052,7 @@
       "slug": "venezuela-164-fallecidos-y-30-mil-desaparecidos-tras-sismos",
       "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
       "categoria": "Internacionales",
-      "palabrasReales": 452,
+      "palabrasReales": 448,
       "scoreMeni": 88,
       "aprobadoMeni": false,
       "calificacionMeni": "MEJORAR",
@@ -3063,7 +3063,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:27:45.343Z"
+      "nivelFecha": "2026-08-12T03:54:38.180Z"
     },
     {
       "id": "e2xuC463KZm7pAubu9Rl",
@@ -3387,7 +3387,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:37:40.548Z"
+      "nivelFecha": "2026-08-12T03:54:40.264Z"
     },
     {
       "id": "hqg5C3kyCql4FZl3OWfB",
@@ -3423,14 +3423,14 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:28:21.550Z"
+      "nivelFecha": "2026-08-12T03:54:42.286Z"
     },
     {
       "id": "i88RK0Ulgkkzyq6YV4Um",
       "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
       "titulo": "Chinandega estrena 75 viviendas con servicios completos",
       "categoria": "Nacionales",
-      "palabrasReales": 401,
+      "palabrasReales": 397,
       "scoreMeni": 88,
       "aprobadoMeni": false,
       "calificacionMeni": "MEJORAR",
@@ -3441,7 +3441,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:28:23.367Z"
+      "nivelFecha": "2026-08-12T03:54:44.353Z"
     },
     {
       "id": "i9duvDflEon1d6yAhT0W",
@@ -4431,14 +4431,14 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:30:00.963Z"
+      "nivelFecha": "2026-08-12T03:54:46.410Z"
     },
     {
       "id": "tnX05ykqVT6WiYVflSii",
       "slug": "beisbol-infantil-nicaragua-viaja-a-puerto-rico-y",
       "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
       "categoria": "Deportes",
-      "palabrasReales": 633,
+      "palabrasReales": 629,
       "scoreMeni": 74,
       "aprobadoMeni": false,
       "calificacionMeni": "NO PUBLICAR",
@@ -4449,7 +4449,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:30:02.692Z"
+      "nivelFecha": "2026-08-12T03:54:48.452Z"
     },
     {
       "id": "tuK9ZveBwJom7dhByyNx",
@@ -4719,7 +4719,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:30:29.555Z"
+      "nivelFecha": "2026-08-12T03:54:50.489Z"
     },
     {
       "id": "wjXUjGNw3hVreNQPoByu",
@@ -4899,7 +4899,7 @@
       "publicado": false,
       "scoreCalidad": null,
       "htmlArtifacts": [],
-      "nivelFecha": "2026-08-12T03:30:47.369Z"
+      "nivelFecha": "2026-08-12T03:54:52.571Z"
     },
     {
       "id": "yVuoBkFOUU3OTJTMgv5l",
