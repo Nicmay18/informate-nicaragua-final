@@ -7,6 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
+export const fetchCache = 'force-no-store';
 
 const AUTO_FIX_IDS = [
   'CMo0EIdKF9E5CYTJj8H9',
