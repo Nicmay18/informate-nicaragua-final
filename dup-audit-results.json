@@ -1,0 +1,260 @@
+{
+  "total": 3,
+  "cases": [
+    {
+      "originalId": "CMo0EIdKF9E5CYTJj8H9",
+      "originalMeta": {
+        "id": "CMo0EIdKF9E5CYTJj8H9",
+        "titulo": "Economía de Nicaragua: crece 6% en remesas",
+        "slug": "economia-de-nicaragua-crece-6-y-alcanza-record-en-remesas",
+        "resumen": "Nicaragua lidera la expansión en Centroamérica con un 6% de crecimiento en el IMAE y US$2.056,7 millones en remesas durante los primeros cinco meses de.",
+        "categoria": "Nacionales",
+        "autor": "Maycol Josué Nicaragua Rivas",
+        "fecha": {
+          "_seconds": 1781568790,
+          "_nanoseconds": 144000000
+        },
+        "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/economia-de-nicaragua-crecimiento-del-6--1781568378021.webp",
+        "scoreMeni": 84,
+        "aprobadoMeni": false,
+        "calificacionMeni": "MEJORAR",
+        "nivel": "RECHAZADO",
+        "nivelScore": 84,
+        "editorialTier": "REPORTAJE",
+        "publicado": false,
+        "estado": "publicado",
+        "palabras": 582,
+        "tags": [
+          "crecimiento",
+          "remesas",
+          "millones",
+          "imae",
+          "expansion",
+          "marzo",
+          "actividad",
+          "centroamerica",
+          "economica",
+          "febrero",
+          "flujo",
+          "primeros"
+        ],
+        "keywords": "crecimiento, remesas, millones, imae, expansion, marzo, actividad, centroamerica, economica, febrero, flujo, primeros",
+        "related_links": [
+          {
+            "url": "/categoria/nacionales",
+            "anchor": "Noticias de Nacionales",
+            "type": "categoria"
+          },
+          {
+            "url": "/buscar?q=managua",
+            "anchor": "Managua",
+            "type": "etiqueta"
+          },
+          {
+            "url": "/noticias/minsa-vacuna-contra-la-rabia-a-1-75-millones-de-perros",
+            "anchor": "MINSA vacuna contra la rabia a",
+            "type": "relacionada"
+          },
+          {
+            "url": "/noticias/arranco-la-feria-ganadera-agostina-2026-en-managua",
+            "anchor": "Arrancó la Feria Ganadera Agostina 2026",
+            "type": "relacionada"
+          }
+        ],
+        "cambiosRealizados": [
+          {
+            "fase": "15.1",
+            "tipo": "auto_fix",
+            "fixes": [
+              "titulo: \"Economía de Nicaragua: dispara récord: crece 6% en remesas\" → \"Economía de Nicaragua: crece 6% en remesas\"",
+              "entidades_html: limpiadas"
+            ],
+            "scoreAnterior": 84,
+            "scoreNuevo": 84,
+            "aprobadoAnterior": false,
+            "aprobadoNuevo": false,
+            "fecha": "2026-08-12T19:16:44.226Z",
+            "motivo": "AUTO_FIX: corrección técnica objetiva, re-evaluado por MENI (no aprobado)"
+          }
+        ],
+        "scoreCalidad": null,
+        "diagnosticoMeni": "Duplicado detectado (99% de similitud). Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "recomendacionesMeni": [
+          "editorial: Responder: Cual es el dato o medida?; Quien lo anuncio?",
+          "editorial: Contexto: Cifras concretas del cambio económico",
+          "editorial: Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        ],
+        "puntosClave": [
+          "Economía de Nicaragua : crecimiento del 6% y récord en remesas El Índice Mensual de Actividad Económica (IMAE) registró un crecimiento acumulado del 6% durante el primer trimestre de 2026.",
+          "Según datos oficiales del Banco Central de Nicaragua (BCN) , este desempeño responde a la actividad sostenida en los sectores de minería, construcción y comercio a nivel nacional.",
+          "En paralelo, el flujo de divisas por concepto de remesas familiares alcanzó los US$2.056,7 millones entre enero y mayo, consolidándose como un pilar estratégico para la estabilidad financiera de miles de hogares nicaragüenses y un motor clave para la liquidez interna.",
+          "El reciente informe de la Comisión Económica para América Latina y el Caribe (Cepal) proyecta que el país liderará la región con una tasa de crecimiento del 4,5%, superando el promedio estimado del 3,9% para el bloque de Centroamérica y República Dominicana."
+        ],
+        "fuente": "Redacción Nicaragua Informate",
+        "autorFoto": "/logo.webp",
+        "contenidoLength": 4543,
+        "contenidoPalabras": 582,
+        "contenidoFirst200": "Economía de Nicaragua : crecimiento del 6% y récord en remesas El Índice Mensual de Actividad Económica (IMAE) registró un crecimiento acumulado del 6% durante el primer trimestre de 2026. Según datos",
+        "contenidoHash": "RWNvbm9tw61hIGRlIE5pY2FyYWd1YSA6IGNyZWNpbWllbnRvIG"
+      },
+      "duplicateDetection": {
+        "esDuplicado": false,
+        "similitud": 0,
+        "umbral": 35,
+        "shinglesNuevos": 401,
+        "coincidencias": []
+      },
+      "duplicateDetails": []
+    },
+    {
+      "originalId": "FLbXd6XRrTl5TCdTkNYT",
+      "originalMeta": {
+        "id": "FLbXd6XRrTl5TCdTkNYT",
+        "titulo": "Nicaragua en Santo Domingo 2026: medallas, béisbol y retos",
+        "slug": "nicaragua-en-santo-domingo-2026-medallas-beisbol-y-retos",
+        "resumen": "Nicaragua continúa su participación en los XXV Juegos Centroamericanos y del Caribe Santo Domingo 2026 con una delegación nacional integrada por 204 per...",
+        "categoria": "Deportes",
+        "autor": "Maycol Josué Nicaragua Rivas",
+        "fecha": "2026-07-31T23:02:38.666Z",
+        "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/nicaragua-busca-hacer-historia-en-santo--1785537099848.webp",
+        "scoreMeni": 100,
+        "aprobadoMeni": false,
+        "calificacionMeni": "PUBLICABLE ORO",
+        "nivel": "RECHAZADO",
+        "nivelScore": 100,
+        "editorialTier": "INVESTIGACION",
+        "publicado": true,
+        "estado": "publicado",
+        "palabras": 865,
+        "tags": [],
+        "keywords": "",
+        "related_links": [
+          {
+            "url": "/categoria/deportes",
+            "anchor": "Noticias de deportes",
+            "type": "categoria"
+          },
+          {
+            "url": "/noticias/nicaraguense-de-jinotepe-se-corona-campeon-de-espana-en-sanda",
+            "anchor": "Nicaragüense de Jinotepe se corona campeón",
+            "type": "relacionada"
+          }
+        ],
+        "cambiosRealizados": [
+          {
+            "fase": "15.1",
+            "tipo": "auto_fix",
+            "fixes": [
+              "p_vacios_anidados: eliminados",
+              "wrappers_tecnicos: limpiados"
+            ],
+            "scoreAnterior": 100,
+            "scoreNuevo": 100,
+            "aprobadoAnterior": true,
+            "aprobadoNuevo": false,
+            "fecha": "2026-08-12T19:16:45.773Z",
+            "motivo": "AUTO_FIX: corrección técnica objetiva, re-evaluado por MENI (no aprobado)"
+          }
+        ],
+        "scoreCalidad": null,
+        "diagnosticoMeni": "Duplicado detectado (100% de similitud). Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "recomendacionesMeni": [],
+        "puntosClave": [
+          "Nicaragua continúa su participación en los XXV Juegos Centroamericanos y del Caribe Santo Domingo 2026 con una delegación nacional integrada por 204 personas y presencia en 21 disciplinas deportivas.",
+          "La representación nicaragüense participa bajo la coordinación del Comité Olímpico Nicaragüense (CON) , con acompañamiento del Instituto Nicaragüense de Deportes (IND) y las federaciones deportivas nacionales responsables de la preparación técnica de los atletas.",
+          "Delegación nicaragüense en Santo Domingo 2026 Nicaragua participa en los Juegos Centroamericanos y del Caribe Santo Domingo 2026 con una delegación conformada por: 148 atletas 35 entrenadores 19 delegados 2 oficiales En total, son 204 integrantes que representan al país en una de las competencias deportivas más importantes de la región.",
+          "🥉 Aldo Blanco - Taekwondo El atleta nicaragüense consiguió el tercer lugar en combate masculino categoría -63 kilogramos."
+        ],
+        "fuente": "Redacción Nicaragua Informate",
+        "autorFoto": "/logo.webp",
+        "contenidoLength": 7297,
+        "contenidoPalabras": 865,
+        "contenidoFirst200": "Nicaragua continúa su participación en los XXV Juegos Centroamericanos y del Caribe Santo Domingo 2026 con una delegación nacional integrada por 204 personas y presencia en 21 disciplinas deportivas. ",
+        "contenidoHash": "TmljYXJhZ3VhIGNvbnRpbsO6YSBzdSBwYXJ0aWNpcGFjacOzbi"
+      },
+      "duplicateDetection": {
+        "esDuplicado": false,
+        "similitud": 0,
+        "umbral": 35,
+        "shinglesNuevos": 627,
+        "coincidencias": []
+      },
+      "duplicateDetails": []
+    },
+    {
+      "originalId": "lzsto5T2q85IgrVkqlA2",
+      "originalMeta": {
+        "id": "lzsto5T2q85IgrVkqlA2",
+        "titulo": "Pokémon dona 100 millones de yenes tras terremoto en Japón",
+        "slug": "pokemon-dona-100-millones-de-yenes-tras-terremoto-en-japon",
+        "resumen": "The Pokémon Company anunció una donación de 100 millones de yenes para apoyar a las comunidades afectadas por el terremoto registrado en la prefectura d...",
+        "categoria": "Espectáculos",
+        "autor": "José Luis López Ramírez",
+        "fecha": "2026-07-31T23:33:47.554Z",
+        "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/pokemon-dona-100-millones-de-yenes-tras--1785540496509.webp",
+        "scoreMeni": 98,
+        "aprobadoMeni": false,
+        "calificacionMeni": "PUBLICABLE ORO",
+        "nivel": "RECHAZADO",
+        "nivelScore": 98,
+        "editorialTier": "INVESTIGACION",
+        "publicado": true,
+        "estado": "publicado",
+        "palabras": 676,
+        "tags": [],
+        "keywords": "",
+        "related_links": [
+          {
+            "url": "/categoria/espectaculos",
+            "anchor": "Noticias de espectaculos",
+            "type": "categoria"
+          },
+          {
+            "url": "/noticias/rayo-mcqueen-y-19-personajes-llegan-con-exhibicion-a-managua",
+            "anchor": "Rayo McQueen y 19 personajes llegan",
+            "type": "relacionada"
+          }
+        ],
+        "cambiosRealizados": [
+          {
+            "fase": "15.1",
+            "tipo": "auto_fix",
+            "fixes": [
+              "p_vacios_anidados: eliminados",
+              "wrappers_tecnicos: limpiados"
+            ],
+            "scoreAnterior": 98,
+            "scoreNuevo": 98,
+            "aprobadoAnterior": true,
+            "aprobadoNuevo": false,
+            "fecha": "2026-08-12T19:16:47.043Z",
+            "motivo": "AUTO_FIX: corrección técnica objetiva, re-evaluado por MENI (no aprobado)"
+          }
+        ],
+        "scoreCalidad": null,
+        "diagnosticoMeni": "Duplicado detectado (100% de similitud). Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+        "recomendacionesMeni": [],
+        "puntosClave": [
+          "The Pokémon Company anunció una donación de 100 millones de yenes para apoyar a las comunidades afectadas por el terremoto registrado en la prefectura de Kumamoto, Japón, una región con la que la franquicia mantiene una relación especial desde hace varios años.",
+          "La compañía informó que los recursos serán canalizados a través del Gobierno de la Prefectura de Kumamoto , la Cruz Roja Japonesa y otras organizaciones dedicadas a brindar asistencia a las personas afectadas por el desastre.",
+          "Una donación para apoyar a las familias afectadas El aporte económico de 100 millones de yenes busca contribuir con los esfuerzos de recuperación después del terremoto que afectó el sur de Japón.",
+          "The Pokémon Company expresó su solidaridad con los habitantes de Kumamoto y agradeció el trabajo realizado por equipos de emergencia, autoridades locales y organizaciones que participan en la respuesta."
+        ],
+        "fuente": "Redacción Nicaragua Informate",
+        "autorFoto": "/logo.webp",
+        "contenidoLength": 4961,
+        "contenidoPalabras": 676,
+        "contenidoFirst200": "The Pokémon Company anunció una donación de 100 millones de yenes para apoyar a las comunidades afectadas por el terremoto registrado en la prefectura de Kumamoto, Japón, una región con la que la fran",
+        "contenidoHash": "VGhlIFBva8OpbW9uIENvbXBhbnkgYW51bmNpw7MgdW5hIGRvbm"
+      },
+      "duplicateDetection": {
+        "esDuplicado": false,
+        "similitud": 0,
+        "umbral": 35,
+        "shinglesNuevos": 505,
+        "coincidencias": []
+      },
+      "duplicateDetails": []
+    }
+  ]
+}

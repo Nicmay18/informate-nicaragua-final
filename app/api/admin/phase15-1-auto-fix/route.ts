@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import type { NoticiaInput } from '@/lib/meni';
 
 export const dynamic = 'force-dynamic';
@@ -109,8 +110,18 @@ export async function GET() {
     let meniResult: any = null;
     let saved = false;
     let saveError: string | null = null;
+    let debugDupCheck: any = null;
 
     try {
+      // Debug: run duplicate detection directly to compare with guardarConMeni result
+      debugDupCheck = await detectarDuplicadoAdmin(
+        db,
+        contenidoNuevo,
+        tituloNuevo,
+        0.35,
+        id
+      );
+
       const { ok: meniOk, meni, updateData } = await guardarConMeni(noticiaInput, db);
 
       meniResult = {
@@ -186,6 +197,13 @@ export async function GET() {
 
     results.push({
       id,
+      inputIdPassed: (noticiaInput as any).id,
+      debugDupCheck: debugDupCheck ? {
+        esDuplicado: debugDupCheck.esDuplicado,
+        similitud: debugDupCheck.similitud,
+        coincidenciasCount: debugDupCheck.coincidencias?.length || 0,
+      } : null,
+      meniDuplicado: meniResult ? null : null, // will be filled below
       tituloBefore: tituloOriginal,
       tituloAfter: tituloNuevo,
       tituloChanged: tituloNuevo !== tituloOriginal,
