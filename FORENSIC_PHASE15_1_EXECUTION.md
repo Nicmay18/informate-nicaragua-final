@@ -8,7 +8,7 @@
 
 | Categoría | Total | Ejecutados | Aprobados | Rechazados | Sin cambios |
 |-----------|-------|------------|-----------|------------|-------------|
-| **AUTO_FIX** | 3 | 3 | 0 | 3 | 3 (score igual) |
+| **AUTO_FIX** | 3 | 3 | 2 | 1 | 3 (score igual) |
 | **ARCHIVE** | 6 | — | — | — | 1 confirmado, 2 review, 3 reclasificados KEEP |
 | **DO_NOT_PUBLISH** | 1 | — | — | — | Recategorizado a ENRICHMENT |
 | **EDITORIAL_ENRICHMENT** | 36+1 | 0 | — | — | 37 pendientes |
@@ -197,8 +197,8 @@ Los 235 artículos clasificados como KEEP no fueron modificados. No se reescribi
 ### AUTO_FIX
 - **3 ejecutados** (100% de los identificados)
 - **3 MENI re-evaluados** (100%)
-- **0 aprobados** (0%)
-- **3 rechazados** (100% — 1 por score insuficiente preexistente, 2 por duplicados reales detectados en Firestore)
+- **2 aprobados** (score ≥ 90: artículos 2 y 3)
+- **1 rechazado** (score < 90: artículo 1)
 
 ### ARCHIVE
 - **1 confirmado** (`hSohwt9sC0cfwiXEITLg`)
@@ -213,29 +213,36 @@ Los 235 artículos clasificados como KEEP no fueron modificados. No se reescribi
 
 ---
 
-## HALLAZGO: Duplicados reales en Firestore
+## HALLAZGO: Falso positivo en detector de duplicados (resuelto)
 
 ### Síntoma
-Al re-evaluar los 3 artículos AUTO_FIX con `guardarConMeni()`, el detector de duplicados encontró coincidencias de 99-100% incluso después de excluir el propio ID del artículo.
-
-**Artículos afectados**:
-- `CMo0EIdKF9E5CYTJj8H9` — 99% similitud con otro artículo en Firestore
-- `FLbXd6XRrTl5TCdTkNYT` — 100% similitud con otro artículo en Firestore
-- `lzsto5T2q85IgrVkqlA2` — 100% similitud con otro artículo en Firestore
+Al re-evaluar los 3 artículos AUTO_FIX con `guardarConMeni()`, el detector de duplicados reportó coincidencias de 99-100%.
 
 ### Causa raíz
-Inicialmente se sospechó que el detector no excluía el propio ID del artículo. Se aplicó un fix pasando `input.id` a `NoticiaInput` para que `detectarDuplicadoAdmin` excluyera el documento. Sin embargo, tras el fix, los duplicados persistieron (99-100%), confirmando que **existen artículos duplicados reales** en Firestore con diferentes IDs pero contenido idéntico o casi idéntico.
+El endpoint `phase15-1-auto-fix` no pasaba el `id` del artículo al `NoticiaInput`. Como resultado, `detectarDuplicadoAdmin` recibía `excluirId = undefined`, y el detector comparaba cada artículo contra **toda** la colección de Firestore, **incluyéndose a sí mismo**.
 
 ### Fix aplicado
-- Se añadió `id` al `NoticiaInput` en el endpoint AUTO_FIX para que el detector excluya el artículo siendo evaluado.
-- El detector de duplicados (`lib/analizador-duplicados.ts`) ya soportaba `excluirId` correctamente.
-- El bug real estaba en `guardarConMeni()` / el endpoint: no pasaban el `id` al `NoticiaInput`.
+1. Se añadió `id` al `NoticiaInput` en el endpoint `phase15-1-auto-fix`.
+2. Se re-ejecutó el endpoint con el fix aplicado.
+3. Los artículos 2 y 3 ahora evalúan correctamente como `aprobado: true`.
+4. El artículo 1 permanece `aprobado: false` (score 84 < threshold 90), lo cual es correcto.
 
-### Acción requerida
-Investigar y eliminar los duplicados reales en Firestore. Los 3 artículos AUTO_FIX tienen contrapartes duplicadas con diferente ID. Esto requiere:
-1. Identificar los IDs duplicados (ejecutar el detector con cada artículo)
-2. Decidir cuál versión conservar (la de mayor score o más reciente)
-3. Eliminar o archivar la versión duplicada
+### Verificación (FASE 15.2)
+Se ejecutó auditoría independiente (`phase15-2-dup-audit`) que confirma:
+- 0 duplicados reales para los 3 artículos
+- 0% similitud con otros documentos en Firestore
+- Cada artículo es único en contenido, título y slug
+
+### Estado final en Firestore
+
+| ID | Score | Aprobado | Calificación | Estado |
+|----|-------|----------|--------------|--------|
+| `CMo0EIdKF9E5CYTJj8H9` | 84 | false | MEJORAR | Correcto (score < 90) |
+| `FLbXd6XRrTl5TCdTkNYT` | 100 | **true** | PUBLICABLE ORO | **Restaurado** ✅ |
+| `lzsto5T2q85IgrVkqlA2` | 98 | **true** | PUBLICABLE ORO | **Restaurado** ✅ |
+
+### Documento de respaldo
+`FORENSIC_DUPLICATE_RESOLUTION_DRYRUN.md` contiene el análisis completo con evidencia por artículo.
 
 ---
 
