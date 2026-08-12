@@ -93,6 +93,7 @@ export async function GET() {
 
     // Run guardarConMeni with fixed content
     const noticiaInput: NoticiaInput = {
+      id,
       titulo: tituloNuevo,
       resumen: data.resumen || '',
       contenido: contenidoNuevo,
