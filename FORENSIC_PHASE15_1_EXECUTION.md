@@ -198,7 +198,7 @@ Los 235 artículos clasificados como KEEP no fueron modificados. No se reescribi
 - **3 ejecutados** (100% de los identificados)
 - **3 MENI re-evaluados** (100%)
 - **0 aprobados** (0%)
-- **3 rechazados** (100% — 1 por score insuficiente preexistente, 2 por bug en detector de duplicados)
+- **3 rechazados** (100% — 1 por score insuficiente preexistente, 2 por duplicados reales detectados en Firestore)
 
 ### ARCHIVE
 - **1 confirmado** (`hSohwt9sC0cfwiXEITLg`)
@@ -213,19 +213,29 @@ Los 235 artículos clasificados como KEEP no fueron modificados. No se reescribi
 
 ---
 
-## BUG CRÍTICO DETECTADO
+## HALLAZGO: Duplicados reales en Firestore
 
-### Detector de duplicados bloquea re-evaluación
-
-**Síntoma**: Al re-evaluar un artículo existente con `guardarConMeni()`, el detector de duplicados encuentra el artículo como duplicado de sí mismo (100% similitud), bloqueando la aprobación.
+### Síntoma
+Al re-evaluar los 3 artículos AUTO_FIX con `guardarConMeni()`, el detector de duplicados encontró coincidencias de 99-100% incluso después de excluir el propio ID del artículo.
 
 **Artículos afectados**:
-- `FLbXd6XRrTl5TCdTkNYT` (score 100, aprobado → no aprobado)
-- `lzsto5T2q85IgrVkqlA2` (score 98, aprobado → no aprobado)
+- `CMo0EIdKF9E5CYTJj8H9` — 99% similitud con otro artículo en Firestore
+- `FLbXd6XRrTl5TCdTkNYT` — 100% similitud con otro artículo en Firestore
+- `lzsto5T2q85IgrVkqlA2` — 100% similitud con otro artículo en Firestore
 
-**Causa probable**: `lib/analizador-duplicados` no excluye el ID del artículo que se está evaluando de la búsqueda de duplicados.
+### Causa raíz
+Inicialmente se sospechó que el detector no excluía el propio ID del artículo. Se aplicó un fix pasando `input.id` a `NoticiaInput` para que `detectarDuplicadoAdmin` excluyera el documento. Sin embargo, tras el fix, los duplicados persistieron (99-100%), confirmando que **existen artículos duplicados reales** en Firestore con diferentes IDs pero contenido idéntico o casi idéntico.
 
-**Recomendación**: Fix urgente en el detector de duplicados para excluir el propio ID del artículo. Esto afecta cualquier re-evaluación futura con MENI.
+### Fix aplicado
+- Se añadió `id` al `NoticiaInput` en el endpoint AUTO_FIX para que el detector excluya el artículo siendo evaluado.
+- El detector de duplicados (`lib/analizador-duplicados.ts`) ya soportaba `excluirId` correctamente.
+- El bug real estaba en `guardarConMeni()` / el endpoint: no pasaban el `id` al `NoticiaInput`.
+
+### Acción requerida
+Investigar y eliminar los duplicados reales en Firestore. Los 3 artículos AUTO_FIX tienen contrapartes duplicadas con diferente ID. Esto requiere:
+1. Identificar los IDs duplicados (ejecutar el detector con cada artículo)
+2. Decidir cuál versión conservar (la de mayor score o más reciente)
+3. Eliminar o archivar la versión duplicada
 
 ---
 
