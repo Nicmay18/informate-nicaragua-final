@@ -1,0 +1,282 @@
+id|titulo|scoreMeni|aprobadoMeni|fecha|categoria|perfil|palabras|classification|motivo|accion|blockingIssues
+023LnrGSslRkXP9djUAW|"Mundial 2030: por qué habrá partidos en Sudamérica y Europa"|94|true|2026-07-14|Deportes|B|613|KEEP|aprobado_y_correcto|conservar|
+02DsJjI62kA1rFKe0nWS|"Luchó diez días por su vida y falleció tras ataque de expareja"|100|true|2026-07-22|Sucesos|B|506|KEEP|aprobado_y_correcto|conservar|
+096760aFi8gk8aUBtkFR|"Carreteras del país dejan un fin de semana con varios accidentes"|96|true|2026-07-06|Sucesos|B|562|KEEP|aprobado_con_issues_menores: dateline|conservar|
+0gGqzH1RBUeVTGHWkuvl|"Cinco afectados en accidentes viales en Managua y regiones"|92|true|2026-05-25|Sucesos|B|439|KEEP|aprobado_y_correcto|conservar|
+0s9rnylrsRqwYjjUqUfk|"Managua inicia sus fiestas 2026 con programa y asuetos"|94|true|2026-07-22|Nacionales|C|636|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+0tmiH8fXJTVXNmiM0W5U|"Cuatro nicaragüenses resultan afectados en Costa Rica, El…"|94|true|2026-05-21|Internacionales|B|642|KEEP|aprobado_y_correcto|conservar|
+12vpZYJonwqLUyW1rlpl|"Capturan en Estelí a nicaragüense requerido por caso en EE. UU"|98|true|2026-07-18|Sucesos|A|558|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+19NRSSTtv9xlGQ31x9gV|"Baile de los Chinegros mantiene vivo un ritual de 400 años"|100|true|2026-07-24|Nacionales|B|578|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+1HmobwfngxeXoUofqosD|"Primeros bebés del Día de las Madres nacen en hospitales de…"|92|false|2026-05-30|Nacionales|B|572|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+1K4jCiU5mT9xr4pyE0vr|"Adolescente muere atropellado por taxi frente a COTRAN Norte"|100|true||Sucesos|B|527|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+22ZHhDUSpI6CrpwIYkZ9|"Samsung lanza One UI 9 y Android 17: lista de dispositivos"|94|true|2026-05-22|Tecnología|A|655|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+28a2yKj9NN9k4au0xJ6q|"Nicaraguense resulta afectado en accidente laboral en Wisconsin"|96|true|2026-06-13|Internacionales|B|721|KEEP|aprobado_y_correcto|conservar|
+2GBQwgf7i4i2LJsvIhhP|"Santo Domingo de Guzmán inicia sus fiestas con tradición y fe"|98|true|2026-08-01|Nacionales|B|1007|KEEP|aprobado_y_correcto|conservar|
+2JtGQ8X981oq4giKYxQo|"Nicaragua debuta en súper ronda con la mira en Lima 2027"|98|true||Deportes|B|406|ARCHIVE|JUEGOS_SANTO_DOMINGO_FINALIZADOS|archivar|
+2LRMqTFV3a6XPkdfoEjh|"Dos hombres pierden la vida en incidentes nocturnos en el norte"|100|true|2026-06-28|Sucesos|B|507|KEEP|aprobado_y_correcto|conservar|
+2rM20SDlcas77huhJYiV|"Café nicaragüense alcanza récord mundial y abre nuevos retos"|90|true|2026-07-23|Nacionales|B|483|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+36WzKkoqnN6ITtamp2BY|"Documentos para tramitar el récord policial en Nicaragua"|96|true|2026-05-21|Nacionales|B|612|KEEP|aprobado_y_correcto|conservar|
+3A0WKJhlDKATpXuyEIPq|"Noruega vuelve a octavos del Mundial tras 28 años de ausencia"|100|true|2026-06-30|Deportes|B|398|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+3QOwSPvAOLwPxqFV532h|"Prueba de IA obliga a OpenAI a reforzar su seguridad digital"|90|true|2026-07-22|Tecnología|B|431|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+3Zg8Q6OaaXEut0fA81CH|"Cuatro víctimas deja accidentalidad vial entre sábado y domingo"|100|true|2026-06-28|Sucesos|B|674|KEEP|aprobado_y_correcto|conservar|
+3p9PHUH5WeJIGlMFVrLn|"Chile declara Estado de Catástrofe en Coquimbo y Huasco"|94|true|2026-07-20|Internacionales|C|532|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+3qYRcThYdkrzWJRDSfhy|"Fallece la actriz venezolana Gabriela Fleritt tras sismo"|94|true|2026-06-29|Espectáculos|B|361|KEEP|aprobado_y_correcto|conservar|
+4G7Uq0yDZgiHpGyB5GSS|"La Resurrección de Cristo se estrena en el Día de la Ascensión"|96|true||Espectáculos|B|883|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+5JyYmiQUFmH29eqxGFuC|"NASA registra bola de fuego que cruzó seis estados de EE.UU"|92|true|2026-06-18|Internacionales|C|944|KEEP|aprobado_y_correcto|conservar|
+5ygMPBWB8ukF4W5m7uoG|"Investigaciones por afectación en barrio Old Bank Bluefields"|100|true|2026-06-24|Sucesos|A|2039|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|
+6G4rPNMwq7InAlhlpTCH|"Nicaragüense muere en Costa Rica tras choque y fuga vial"|92|true|2026-07-21|Internacionales|B|597|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+6MlyKI1pvd5zmaQ7oILa|"Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial"|96|true|2026-07-23|Sucesos|B|466|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+7XzL7aTqVYBpTNKgSPxQ|"Puerto Corinto lidera llegada de 11 buques a Nicaragua"|88|false|2026-07-23|Nacionales|C|500|EDITORIAL_ENRICHMENT|rechazado_score_88_sin_mejoras_automaticas|intervencion_editorial_manual|
+7aOBbeIDRKR06tnYfklr|"Accidente con rastra deja una joven fallecida en Managua"|100|true|2026-07-18|Sucesos|A|557|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+7h9NNZjCshVbyytxVXBP|"Pronóstico semanal: Temperaturas y lluvias en Nicaragua"|92|true|2026-06-15|Nacionales|B|617|KEEP|aprobado_y_correcto|conservar|
+7k2ncDzIhlS00WN4ktzR|"Carreteras dejan dos fallecidos y varios accidentes"|100|true|2026-07-31|Sucesos|B|530|KEEP|aprobado_y_correcto|conservar|
+81UQk1YkWPpF7BzIdaDo|"Dos nicaragüenses resultan afectados en accidentes ocurridos en…"|92|true|2026-06-04|Internacionales|B|641|KEEP|aprobado_y_correcto|conservar|
+8DPnNJNClx3kn4oJi2me|"Identifican a lesionados en choque frente al Hospital del Niño"|100|true|2026-06-30|Sucesos|B|510|KEEP|aprobado_y_correcto|conservar|
+8NaG866DTKEaUCHkivrd|"Tres afectados en hechos viales este viernes en Managua y Granada"|90|true|2026-06-26|Sucesos|B|418|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+8dMcsIcw7T7tuT8NLGEP|"Bus accidentado en Boaco deja 42 lesionados bajo atención médica"|100|true|2026-06-30|Sucesos|B|427|KEEP|aprobado_y_correcto|conservar|
+8eSX6XxOPVJbh9ILZ5ZS|"Arquitectura C++ y Direct3D para diagnóstico de sistemas PC"|98|true|2026-05-24|Tecnología|A|666|KEEP|aprobado_con_issues_menores: em_tags,p_vacios_anidados|conservar|
+8mQmm7YZXwUAnICl6tnv|"Robo de caja fuerte con $14,000 en Quilalí termina con un…"|100|true|2026-06-28|Sucesos|B|427|KEEP|aprobado_y_correcto|conservar|
+8p1gDsWo0i41nsJH4QTo|"Soldador de Casa Blanca sufrió descarga eléctrica durante trabajo"|100|true||Sucesos|A|535|KEEP|aprobado_y_correcto|conservar|
+8rgPZMc8nFJWiAbW7pgj|"Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio"|96|true|2026-07-20|Sucesos|B|388|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+8sTBWTNIOJGIYfDN062O|"Mirador de Catarina: precios, horarios y qué hacer"|94|true||Nacionales|B|963|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+9FIr4GZXnyXqJ6M1Hnw6|"Volcán Telica expulsa gases y ceniza con columnas de 200 metros"|96|true||Nacionales|C|654|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+9bOstbZ0xJWu92Z1FqBX|"Servicios policiales de Plaza El Sol tienen nueva ubicación"|96|true||Nacionales|B|696|KEEP|aprobado_y_correcto|conservar|
+9c0bOgvhw4oxPOgy3gvl|"Madrid gestiona logística masiva durante encuentro religioso"|90|true|2026-06-07|Internacionales|B|659|KEEP|aprobado_con_issues_menores: em_tags,p_vacios_anidados|conservar|
+9gLUPHxK05lGgwNE1URy|"KFC Nicaragua 2026: Apertura en Managua, menú confirmado"|94|true|2026-05-16|Nacionales|B|705|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+9xCHaZO7JEwhyRpdHHJY|"Dos hombres resultan afectados por descargas eléctricas en…"|100|true|2026-06-02|Sucesos|B|734|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+ASk1oDEiDQXOAlP3JYAT|"Sandboarding en Cerro Negro conquista redes y atrae turistas a…"|96|true|2026-05-24|Nacionales|B|798|KEEP|aprobado_y_correcto|conservar|
+AWqrtVA03l9qMReNApx6|"Nicaragua impulsa talento digital, IA y expansión del 5G"|92|true|2026-06-18|Tecnología|B|562|KEEP|aprobado_y_correcto|conservar|
+AnlD4hQhJdAwroEaMvlx|"Panamá deporta a 20 nicaragüenses por infracciones migratoria"|96|true|2026-08-01|Internacionales|C|564|KEEP|aprobado_y_correcto|conservar|
+AoP9lWscit6xRvpPwJ6N|"De Arjona a Aventura: conciertos anunciados para Nicaragua"|92|true|2026-06-10|Nacionales|B|699|ARCHIVE|EVENTO_ANUNCIADO_YA_PASO|archivar|
+AsS8nr5I1Sn8F0H27O2n|"Metal Sonic se integra oficialmente a la película Sonic 4"|94|true|2026-05-15|Espectáculos|A|1266|KEEP|aprobado_y_correcto|conservar|
+BAcOCY6ZJ7XpDdzfRUZ1|"Accidentes dejan un fallecido y varios lesionados en Nicaragua"|96|true|2026-07-19|Sucesos|D|476|KEEP|aprobado_con_issues_menores: em_tags,p_vacios_anidados|conservar|
+BU0PX0EqHO5ewLCH7Coo|"Un afectado y un personas afectado en accidente laboral en…"|94|true|2026-05-28|Sucesos|B|364|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+BthZmiHrAOsU61f6cowu|"Mar de fondo anega viviendas y negocios en La Boquita"|94|true|2026-06-17|Nacionales|C|597|KEEP|aprobado_y_correcto|conservar|
+C1UJ83ospxOXOtNGLwgr|"Cuatro obreros afectados en accidentes laborales en Nicaragua"|94|true|2026-05-30|Sucesos|B|447|KEEP|aprobado_y_correcto|conservar|
+C4AHevj8Y9WKSw6UlMqA|"Evento de IA buscan revolucionar innovación en Nicaragua y…"|94|true|2026-06-16|Tecnología|B|632|KEEP|aprobado_y_correcto|conservar|
+C5ygeEIQwpMLLlU747up|"Seis miembros de una familia mueren en incendio en Honduras"|90|true||Internacionales|B|441|KEEP|aprobado_y_correcto|conservar|
+C6Q405XAouocDIs02qKy|"Cinco equipos dominan la lucha por el liderato del Pomares"|90|true|2026-07-07|Deportes|A|738|KEEP|aprobado_y_correcto|conservar|
+CMo0EIdKF9E5CYTJj8H9|"Economía de Nicaragua: dispara récord: crece 6% en remesas"|84|false|2026-06-16|Nacionales|B|582|AUTO_FIX|corregible_tecnico: titulo_doble_dospuntos,entidades_html|aplicar_fix_tecnico_y_reevaluar|
+CnHlW2RyUcpwlJBKeFug|"Guía de señalización vial en Nicaragua: Líneas y multas Ley 431"|100|true|2026-07-12|Nacionales|B|501|KEEP|aprobado_y_correcto|conservar|
+CyV2dxk6PD7dXEUneJfi|"Nicaragua tendrá presencia en la final del Mundial gracias a FIFA"|92|true|2026-07-18|Deportes|B|711|KEEP|aprobado_y_correcto|conservar|
+CypRypZIGLckqywkZq8X|"Nicaragüense sigue desaparecida tras terremotos en Venezuela"|74|false|2026-06-30|Internacionales|B|435|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+D310EXZbS4v6j8rsMCRB|"Nicaragua y Costa Rica refuerzan lucha contra la malaria"|96|true|2026-07-07|Nacionales|B|469|KEEP|aprobado_y_correcto|conservar|
+D7y1TWAyXq7SaNMirIjB|"Dos nicaragüenses fallecen en el extranjero en casos distintos"|80|false|2026-07-23|Internacionales|B|388|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+DabSeh90gN6BreMLkDow|"Una falla cambió el rumbo de un viaje familiar en Chontales"|100|true|2026-07-03|Sucesos|B|600|KEEP|aprobado_y_correcto|conservar|
+Dll52HugAZbEwPfOA9SL|"Semáforos solares y radares modernizan vías de Nicaragua"|92|true|2026-07-02|Nacionales|B|569|KEEP|aprobado_y_correcto|conservar|
+EDvI8A7DAwrDFuBf3f18|"Capturan a dos por crimen de doctora nicaragüense en Guatemala"|100|true|2026-07-01|Internacionales|B|427|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+EFBlqTZDTyDbFC4PRZ0c|"Tres ataques de pitbull en Nicaragua dejan tres afectados"|100|true|2026-06-18|Sucesos|B|2313|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+EK8pDgblNpScPCoGCgab|"Bebé de un año sufre quemaduras en Diriá, Granada"|98|true|2026-06-30|Sucesos|B|520|KEEP|aprobado_y_correcto|conservar|
+EcKTeqT7kLcFElUX3DM2|"Dueño de semovientes paga C$769 mil por muerte en Jalapa"|78|false|2026-07-04|Sucesos|B|377|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+EnQeMjUfvgWY5xmRSfy5|"Motos, alcohol y madrugada: 6 accidentes en Nicaragua"|100|true||Sucesos|A|1130|KEEP|aprobado_y_correcto|conservar|
+EyR39NNAk2XXXTSjhA9g|"8 motociclistas fallecen en accidentes este fin de semana"|100|true|2026-06-29|Sucesos|B|428|KEEP|aprobado_y_correcto|conservar|
+F4UddilPobcIjIkZ1e55|"Escolta de ULTRAVAL enfrenta juicio por robo en Managua"|78|false|2026-05-19|Sucesos|A|718|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+FF8yCcM33HysEtaG3ehp|"Tres accidentes en Nicaragua dejan un motociclista muerto"|100|true||Sucesos|B|850|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+FLbXd6XRrTl5TCdTkNYT|"Nicaragua en Santo Domingo 2026: medallas, béisbol y retos"|100|true||Deportes|A|865|AUTO_FIX|contaminacion_html: wrappers_tecnicos|limpiar_html_y_conservar|
+FpUdWXERRhgbU6ZD7bKI|"Fuertes lluvias provocan inundaciones y suspenden tráfico en…"|96|true|2026-05-29|Nacionales|B|764|KEEP|aprobado_y_correcto|conservar|
+FsMXE1Jn8Qw9HNNYGgqF|"IA agéntica lidera cambios tecnológicos globales en 2026"|98|true|2026-06-18|Tecnología|B|1025|KEEP|aprobado_y_correcto|conservar|
+GDIEammzYioBq5JrRsLd|"Tatiana Guzmán hace historia en Mundial FIFA 2026 con VAR"|96|true|2026-06-23|Deportes|B|573|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|
+GHbdyeiCzH7Jk0i5RVPA|"Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán"|74|false|2026-06-30|Deportes|B|385|EDITORIAL_ENRICHMENT|rechazado_score_74_sin_mejoras_automaticas|intervencion_editorial_manual|
+H25VVBdDntQpmy13uxdP|"Incendio destruye vivienda en Monseñor Lezcano y deja un herido"|70|false|2026-06-28|Sucesos|B|379|EDITORIAL_ENRICHMENT|rechazado_score_70_sin_mejoras_automaticas|intervencion_editorial_manual|
+HBaAK77yqswYn3uCf7al|"Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital"|92|true|2026-05-27|Espectáculos|B|948|KEEP|aprobado_y_correcto|conservar|
+HDs899RFlczkxeNhhaez|"Adiós a la voz mexicana detrás de Toy Story y Harry Potter"|92|true||Espectáculos|B|617|KEEP|aprobado_y_correcto|conservar|
+HOr2RLJb6pWN03jZvoYD|"Padre muere tras rescatar a su hijo del mar en Poneloya"|100|true|2026-07-21|Sucesos|B|446|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+HxsDqbeHSSO2MRyl1Cpu|"Accidente grave en Masaya en Villa Bosco — Nicaragua Informate"|100|true|2026-06-15|Sucesos|A|728|KEEP|aprobado_con_issues_menores: em_tags,p_vacios_anidados|conservar|
+HyUcJbnUzefWCcape0UQ|"Siete nicaragüenses fallecen en el extranjero en julio 2026"|92|true|2026-07-20|Internacionales|B|534|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+IFFjvOi1HTG0oeiIuIBo|"Costa Rica detiene a palestino con vínculos a Hamás"|88|false|2026-06-24|Internacionales|B|455|EDITORIAL_ENRICHMENT|rechazado_score_88_sin_mejoras_automaticas|intervencion_editorial_manual|
+IFvH1F0YUbgz55E853jj|"Comercios esperan alta actividad por Día de las Madres en…"|90|true|2026-05-24|Nacionales|B|806|KEEP|aprobado_y_correcto|conservar|
+IYS7dABZahKOHwdnjfJr|"Residencial Las Madres entrega 575 viviendas en Managua"|94|true|2026-05-30|Nacionales|B|449|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+Ilzcy77tyF8oFNPytokN|"Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua"|74|false|2026-06-21|Deportes|C|409|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+J1ZUf7ZxMxaUjb64rkXj|"Cinco accidentes de tránsito dejan tres fallecido y varios herido"|100|true|2026-07-17|Sucesos|A|799|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+JIRE98QbwrecUId3edcA|"Muere trabajador tras ataque de un perro en Managua"|98|true||Sucesos|B|567|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+JOfOW7uTxkgDSIezo7Wn|"Capturan acusado de agredir a un hombre en Rivas"|84|false|2026-06-23|Sucesos|B|2201|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+JbGRXcj7AiJNPvQRcneT|"Capturan a autores de doble crimen en San Ramón, Matagalpa"|84|false|2026-07-22|Sucesos|B|523|EDITORIAL_ENRICHMENT|rechazado_score_84_sin_mejoras_automaticas|intervencion_editorial_manual|
+JcB6a4mamtg6yjtcXp9c|"Nicaragüense resulta afectado tras incidente armado en Guanacaste"|90|true|2026-06-21|Internacionales|B|486|KEEP|aprobado_y_correcto|conservar|
+Jjk9syTstGMlEeQerkQ6|"Varios accidentes de tránsito dejan fallecidos en Nicaragua"|100|true||Sucesos|A|728|KEEP|aprobado_y_correcto|conservar|
+JtTY1tfzHmkOVNJjCZJX|"Comerciante resulta afectado tras altercado en terminal de Rosita"|100|true|2026-06-13|Sucesos|A|831|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+JvTqSDHGA4EEZnlE6BPi|"Messi iguala récord histórico de 16 goles en Mundiales"|100|true|2026-06-17|Deportes|B|731|KEEP|aprobado_y_correcto|conservar|
+JyiBCf438iHQhSn1rkpO|"Migrante de Madriz muere en EE.UU.; familia pide ayuda"|92|true||Internacionales|B|730|KEEP|aprobado_y_correcto|conservar|
+K7IuhDsETCHWq8BaltgK|"Agenda cultural: Eventos en Managua del 20 al 30 de junio"|96|true|2026-06-21|Espectáculos|B|778|KEEP|aprobado_y_correcto|conservar|
+KAe7bOjRVf1k4w7It5q4|"Volcán Telica expulsa ceniza y mantiene vigilancia activa"|94|true|2026-07-24|Nacionales|B|395|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+KDsFrw5UitY7JGQ9uOPq|"Ataque armado en Costa Rica deja sin vida a migrante rivense"|92|true|2026-07-05|Internacionales|B|357|KEEP|aprobado_con_issues_menores: dateline|conservar|
+KXMHQ85cLbSZpXMx3eQm|"Turismo en Nicaragua crece 11% en primer trimestre de 2026"|92|true|2026-05-16|Nacionales|B|625|KEEP|aprobado_y_correcto|conservar|
+KqbSciGsztV7VDFB7XFC|"Stanling Orozco conserva triple corona del Pomares 2026"|98|true|2026-06-19|Deportes|B|1005|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+M5Ivl0fqvyOivSZMuNLY|"Nicaragua tendrá dos árbitros en el Mundial 2026"|94|true|2026-06-09|Deportes|B|610|KEEP|aprobado_y_correcto|conservar|
+M9tek6rwIxTjSEbbI71k|"NASA cuestiona límite de tormentas solares con estudio en Nature"|90|true|2026-07-20|Tecnología|B|672|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+M9vj4XiOdmMrLwreHlff|"Depresión tropical Three-E se forma frente a Nicaragua"|100|true|2026-06-08|Nacionales|B|673|KEEP|aprobado_y_correcto|conservar|
+MkbCQPde18VTVKlSgHLn|"Nicaragua reporta menos casos de dengue, malaria e influenza"|98|true|2026-07-23|Nacionales|B|413|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+NA6PqCReq06PdIMSICEe|"Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa"|86|false|2026-06-24|Sucesos|B|2196|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+NTa3Gb797l9FINZ2E7RU|"Fin de semana deja ocho afectados en accidentes viales"|100|true|2026-06-08|Sucesos|B|737|KEEP|aprobado_y_correcto|conservar|
+NZkwSINrmCZO4rKOetqz|"Investigan ataque en El Riguero que hirió a niño de 10 año"|100|true||Sucesos|A|1014|KEEP|aprobado_y_correcto|conservar|
+NbYNNfBGD7X4LVVMjzYo|"Vientos intensos prolongan corte de energía en Corn Island"|92|true|2026-06-21|Nacionales|B|1145|KEEP|aprobado_y_correcto|conservar|
+Neue7Ft2XeQybdX7xKTk|"El ritual que parte la piel y mueve a miles en Masaya"|98|true|2026-06-24|Nacionales|B|639|KEEP|aprobado_con_issues_menores: dateline|conservar|
+Ng7C24qqQcb5s0ZIueVm|"Tres fallecidos y un lesionado dejan accidentes en el país"|100|true|2026-08-01|Sucesos|B|538|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+NgEysmaqCnykHx2uFm1L|"Toro embiste a hombre durante Tope de Toros en Granada"|100|true||Sucesos|B|708|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+NsHuiNgmIpEWcaQM37pj|"Dos muertos y tres heridos dejan accidentes en Nicaragua"|100|true||Sucesos|B|821|KEEP|aprobado_y_correcto|conservar|
+OYZgpG1z1Arb5HacLNnp|"Muere joven baleado en barrio México; investigan el ataque"|100|true||Sucesos|B|447|KEEP|aprobado_y_correcto|conservar|
+P4KRYKddOPHB2Nu0uya5|"Familia afectada tras volcamiento de camión en Matagalpa"|100|true|2026-06-24|Sucesos|A|572|KEEP|aprobado_con_issues_menores: dateline|conservar|
+PAMrJttL66Oxg1eavIXS|"Lionel Messi establece récord de 18 goles en Copas del Mundo"|98|true|2026-06-22|Deportes|A|472|KEEP|aprobado_y_correcto|conservar|
+PDYIbuv1snYYNDK54EBN|"Sismo de 7.4 sacude Colombia y deja daños y heridos"|98|true||Internacionales|C|815|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+PNJr8KWo2Gy1TCjuF9jq|"Oleaje daña embarcaciones y afecta turismo en Rivas"|94|true|2026-06-09|Nacionales|B|590|KEEP|aprobado_y_correcto|conservar|
+PaUNyoHJ6rvNucj2Yqs0|"Selección de béisbol es recibida con honores en Managua"|96|true||Deportes|B|660|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+Pf0VvjOfwZNm7BnQpncl|"Agosto comienza con tres accidentes y 4 fallecidos"|100|true||Sucesos|B|958|KEEP|aprobado_y_correcto|conservar|
+PiXjB5ugRBQxjWXIvyuF|"Portugal elimina a Croacia y el Mundial se despide de Modrić"|94|true|2026-07-03|Deportes|B|373|KEEP|aprobado_y_correcto|conservar|
+Q19zidw5UoSjUlR1r9JP|"Nicaragua abastece el 47% de lácteos que consume El Salvador"|88|false|2026-06-25|Nacionales|B|484|EDITORIAL_ENRICHMENT|rechazado_score_88_sin_mejoras_automaticas|intervencion_editorial_manual|
+QiOIqxhjT67BS2D4saW5|"Mundial 2026: sorpresas, favoritos y cómo se vive en Nicaragua"|100|true|2026-06-28|Deportes|B|460|KEEP|aprobado_y_correcto|conservar|
+QqQzUkztp81QAcSfXvS8|"Panamá retorna a 24 nicaragüenses; 8 fueron expulsados"|92|true|2026-06-18|Internacionales|B|644|KEEP|aprobado_y_correcto|conservar|
+R2zQFsmjsu0NvFRU7tDa|"Tres Leches nicaragüense gana reconocimiento internacional"|98|true|2026-06-07|Nacionales|B|630|KEEP|aprobado_y_correcto|conservar|
+RCjqgw3ea2K6cZHXmbRV|"Tres personas resultan afectados en accidentes de motocicleta…"|100|true|2026-05-31|Sucesos|B|796|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+RRo9U6gI1hRINap3egQS|"Condenan a 25 años al asesino de “La Reina Mengueña” en Chontales"|100|true||Sucesos|A|453|KEEP|aprobado_y_correcto|conservar|
+RbCTjiEE7RrHLN80j7K9|"Festival internacional en Managua: horario, países y actividades"|96|true||Nacionales|B|358|KEEP|aprobado_y_correcto|conservar|
+S8jrH6rYwBEuwzpBDw82|"Inicia construcción del Hospital Oriental Lesbia Carrasquilla"|94|true|2026-07-16|Nacionales|A|662|KEEP|aprobado_y_correcto|conservar|
+SD09P4KU8vq4Mq1Vidzz|"Capturan a sujeto por robo de US$30 mil en Jalapa"|78|false|2026-06-20|Sucesos|A|744|EDITORIAL_ENRICHMENT|rechazado_score_78_sin_mejoras_automaticas|intervencion_editorial_manual|
+SG87LjFIgCWnd6g8EKDq|"Nicaragua invertirá $13.9 millones en 49 camiones de bombero"|76|false||Nacionales|B|545|EDITORIAL_ENRICHMENT|rechazado_score_76_sin_mejoras_automaticas|intervencion_editorial_manual|
+Sef2LpxsEcnjg7sf0f3U|"Nicaragua vence a Cuba y jugará la final por el oro ante Panamá"|100|true|2026-08-06|Deportes|B|724|KEEP|aprobado_y_correcto|conservar|
+TYBT2pcviA6IH8AsoE4P|"Dos motociclistas mueren en menos de 12 horas en la Nueva a León"|96|true||Sucesos|B|725|KEEP|aprobado_y_correcto|conservar|
+TwKzSdGWnzIYeAW801nD|"Juez deja libre a nicaragüense investigada por muerte de su…"|92|true|2026-06-06|Internacionales|B|623|KEEP|aprobado_y_correcto|conservar|
+U3K2REamwdCUoxFRermC|"Bluefields celebra el Palo de Mayo con música y tradición…"|98|true|2026-05-24|Nacionales|B|735|KEEP|aprobado_y_correcto|conservar|
+Urfp4nwfKtnSM5Nxe3ZD|"Hospital Bertha Calderón ejecuta con éxito cirugía fetal"|98|true|2026-05-15|Nacionales|A|1014|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+V1GsdHFZ0SdE2KAimfzx|"Béisbol internacional: Nicaragua se alista para retos de 2026"|94|true|2026-05-27|Deportes|A|671|KEEP|aprobado_y_correcto|conservar|
+VAQWaSecbeFlCuK8KCgG|"Bus de Jalapa colisiona con cisterna en Tipitapa"|100|true|2026-06-06|Sucesos|A|725|KEEP|aprobado_y_correcto|conservar|
+VW3uBFbDCb6RR3KCiJ18|"España, Francia y Argentina son favoritas al Mundial 2026"|74|false|2026-06-09|Deportes|B|743|EDITORIAL_ENRICHMENT|rechazado_score_74_sin_mejoras_automaticas|intervencion_editorial_manual|
+W9E5MwLZvezRaSi3meqX|"Accidente en Potosí deja dos vidas perdidas en una colisión vial"|100|true|2026-07-23|Sucesos|B|553|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+WNZ8XRJLMOhR4ilO7Jfp|"Nicaragua: primera autopista de peaje de su historia"|92|true|2026-07-02|Nacionales|A|640|KEEP|aprobado_y_correcto|conservar|
+WR9ixdDXutGgVpZ9awuQ|"Terremotos en Venezuela: cifra de fallecidos sube a 2,954"|94|true|2026-07-05|Internacionales|B|436|KEEP|aprobado_y_correcto|conservar|
+WT8kWgsAuYm7VnymG07L|"Wilfrido Vargas llega a Nicaragua para su concierto en Managua"|96|true||Espectáculos|B|644|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+WthoTeyDQn3v3a0vBrQA|"Muere Jorge Messi, padre y representante de Lionel Messi"|96|true||Espectáculos|B|702|KEEP|aprobado_y_correcto|conservar|
+XK3mXDYi2mYHqzUMCvCl|"MAG presenta semillas de frijol resistentes a la sequía"|96|true||Nacionales|B|663|KEEP|aprobado_y_correcto|conservar|
+Xt18bdt10Mt6CIloPKSu|"Hallan sin vida a dos personas en distintos puntos de Rivas"|100|true|2026-07-02|Sucesos|B|369|KEEP|aprobado_y_correcto|conservar|
+YL1gXYMW4zHEo42cJzbY|"Nicaragüenses acumulan C$291 mil millones en depósitos"|94|true|2026-06-09|Nacionales|B|551|KEEP|aprobado_y_correcto|conservar|
+Yf7Njww3czR9w7xMsrUo|"Resumen Mundial 2026: Resultados en Atlanta y victoria alemana"|98|true|2026-06-15|Deportes|B|596|KEEP|aprobado_y_correcto|conservar|
+ZJpLrlTrusn5Jex8WQgQ|"Después de años prófugo, captura de El Diablo abre interrogante"|78|false|2026-07-24|Internacionales|B|435|EDITORIAL_ENRICHMENT|rechazado_score_78_sin_mejoras_automaticas|intervencion_editorial_manual|
+ZK1mbMdVBgdisJq1mn9u|"IA médica en 2026: diagnósticos más certeros que médicos"|94|true|2026-06-24|Tecnología|B|481|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+Zu389gS3tQxY0EYfXrE9|"España gana Mundial 2026 y es recibida con honores en Madrid"|96|true|2026-07-20|Deportes|A|488|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+ZvMD6TcBmXDFWHQxEykD|"Copa 2026: Alemania y Países Bajos fuera; Brasil y Canadá avanzan"|98|true|2026-06-30|Deportes|B|402|KEEP|aprobado_y_correcto|conservar|
+a43EAAR543PNuVXni2v3|"Bertha Calderón estrena equipos de diagnóstico avanzado"|92|true|2026-06-25|Nacionales|B|493|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|
+aDUNDXKB5AaqwW6SfyaG|"COMUPRED monitorea crecida del río Tuma en Mulukukú"|92|true|2026-07-11|Nacionales|A|703|KEEP|aprobado_y_correcto|conservar|
+aII0C6kduAshiZAk16Wc|"Amanda Miguel ofrece concierto internacional en Managua"|98|true|2026-06-14|Espectáculos|B|610|KEEP|aprobado_y_correcto|conservar|
+aXtBaU598FRn27J0X2nD|"Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo"|92|true|2026-07-20|Nacionales|B|631|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+alp8j7Y2UGGLK10hA47o|"Brigada médica realiza cirugía cardíacas gratuitas en hospital…"|98|true|2026-05-28|Nacionales|B|767|KEEP|aprobado_y_correcto|conservar|
+b3hBxRnUrftHjFulYE3L|"El Indio Viejo: historia del plato típico de Nicaragua"|100|true|2026-08-04|Nacionales|B|983|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+bNTteIqTORrl2X7opjvG|"Madrugada trágica en Matagalpa tras presunto robo de ganado"|100|true|2026-07-20|Sucesos|B|599|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+cIBrfo4r0oesTQCSH85x|"Parque de la Familia en Estelí reabre tras millonaria inversión"|98|true|2026-06-28|Nacionales|B|494|KEEP|aprobado_y_correcto|conservar|
+caTDwZUGxZmjwicrEukK|"Basura en cauces de Managua eleva riesgo de inundaciones"|96|true||Nacionales|B|416|KEEP|aprobado_y_correcto|conservar|
+ckgtTyw5JZx2lMhWYdiL|"Rayo McQueen y 19 personajes llegan con exhibición a Managua"|90|true||Espectáculos|B|972|KEEP|aprobado_y_correcto|conservar|
+cr3ixiMYdzUXKAO6kzqD|"Yoltamal: el tamal de maíz tierno que identifica a Nicaragua"|100|true||Nacionales|B|810|KEEP|aprobado_y_correcto|conservar|
+dJXd3qsmEK8AY4p0ctko|"Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua"|94|true|2026-07-15|Deportes|A|453|KEEP|aprobado_y_correcto|conservar|
+dcr6j4wJetnGNY80e6sZ|"Así Nicaragua conectó por tierra el Caribe con el Pacífico"|92|true||Nacionales|B|1298|KEEP|aprobado_y_correcto|conservar|
+djn1DLmztxyOXwfSQsbx|"ICE detiene a dos nicaragüenses en operativos en EE. UU"|92|true|2026-07-20|Internacionales|C|460|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+e0QJyxs1azyZahzs8VuN|"Venezuela: 164 afectados y 30 mil desaparecidos tras sismos"|88|false|2026-06-25|Internacionales|B|448|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+e2xuC463KZm7pAubu9Rl|"Nicaragua conquista el IHF Trophy de Balonmano en C.A"|88|false|2026-06-16|Deportes|B|602|EDITORIAL_ENRICHMENT|rechazado_score_88_sin_mejoras_automaticas|intervencion_editorial_manual|
+eHwPppvuoey1DpRCh7cc|"México, EE. UU. y Países Bajos clasifican al Mundial 2026"|96|true|2026-06-21|Deportes|B|692|KEEP|aprobado_y_correcto|conservar|
+eigKQMFdjSfB8N7Fypgk|"Mbappé, a un gol de igualar el récord mundialista de Messi"|94|true|2026-06-23|Deportes|B|370|KEEP|aprobado_y_correcto|conservar|
+esccFviANcjLiHp4UnsQ|"Mineros avanza de ronda y deja en disputa el último boleto"|96|true|2026-07-23|Deportes|B|601|KEEP|aprobado_y_correcto|conservar|
+fBzmMNWyqUTrffFr49g6|"Accidentes dejan varios afectados en Managua, León y Bilwi"|100|true|2026-06-19|Sucesos|A|496|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+fIgt55qqhg6ysMQHEsl4|"Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…"|92|true|2026-05-30|Deportes|B|747|KEEP|aprobado_y_correcto|conservar|
+fO5Xwap5b2F1zefVhs47|"Ercilia Arellano gana festival gastronómico en San Carlos"|98|true||Nacionales|B|755|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+gAp6N4fO4sAjnssvaROp|"Nicaragua anuncia 8va Feria Nacional de la Vivienda"|100|true|2026-08-04|Nacionales|B|1206|KEEP|aprobado_y_correcto|conservar|
+gQKFK5z94pfaHGi2J1Wc|"Cinco motociclistas mueren en distintos puntos de Nicaragua"|100|true||Sucesos|C|1287|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+gXTkMry6uueR9BxXcTdF|"Dos afectados tras naufragio de panga en Krukira"|100|true|2026-05-29|Sucesos|A|719|KEEP|aprobado_con_issues_menores: p_vacios_anidados,entidades_html|conservar|
+gYezxCEUx17WQHH3SCqI|"Producción de leche alcanza 146.4 millones en Nicaragua"|94|true|2026-06-18|Nacionales|B|457|KEEP|aprobado_y_correcto|conservar|
+gaCpaA49whA70rqyWBow|"Modernizan aeropuerto de Bluefields con inversión de US$10…"|92|true|2026-05-23|Nacionales|A|771|KEEP|aprobado_y_correcto|conservar|
+glOmX2RSOpciUxHR0y3n|"Nicaragüense de Jinotepe se corona campeón de España en Sanda"|90|true|2026-08-01|Deportes|B|775|KEEP|aprobado_y_correcto|conservar|
+h12a1BuHFk4hNO1MP0xQ|"Volcán de Fuego: evacuaciones y alerta roja en Guatemala"|98|true||Internacionales|B|653|KEEP|aprobado_y_correcto|conservar|
+h6jcqzPLhz8UrpaGP7xq|"Mundial 2026: Cabo Verde sorprende España y empata Portugal"|94|true|2026-06-18|Deportes|B|460|KEEP|aprobado_y_correcto|conservar|
+hD0W8NnvJ2aLN2F2O44R|"Hallan sin vida a adulto mayor desaparecido en Madriz"|100|true||Sucesos|B|648|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+hRxkEYbG8tOislbLn2gF|"Lluvias socavan cauce en Managua y ponen viviendas en riesgo"|96|true||Nacionales|B|819|KEEP|aprobado_y_correcto|conservar|
+hSohwt9sC0cfwiXEITLg|"Arrancó la Feria Ganadera Agostina 2026 en Managua"|88|false||Nacionales|B|563|ARCHIVE|FERIA_GANADERA_FINALIZADA|archivar|
+hqg5C3kyCql4FZl3OWfB|"Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…"|100|true|2026-06-28|Nacionales|B|881|KEEP|aprobado_y_correcto|conservar|
+hscMxXK16XKKq84yY1P6|"Accidentes en Nicaragua dejan un fallecido y varios heridos"|86|false|2026-07-24|Sucesos|D|418|EDITORIAL_ENRICHMENT|rechazado_score_86_sin_mejoras_automaticas|intervencion_editorial_manual|
+i88RK0Ulgkkzyq6YV4Um|"Chinandega estrena 75 viviendas con servicios completos"|88|false|2026-07-06|Nacionales|B|397|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+i9duvDflEon1d6yAhT0W|"Joven fallece en accidente de tránsito en carretera a Masaya"|100|true|2026-07-20|Sucesos|A|475|KEEP|aprobado_y_correcto|conservar|
+ic2YGP8NQAc6r3VMvy9K|"Venezuela: réplicas continúan con 920 víctimas y miles sin rastro"|88|false|2026-06-28|Internacionales|C|463|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+ii6aCymgfcyPAKaAjaPg|"Nicaragua gana plata tras caer ante Panamá en la final de béisbol"|94|true||Deportes|B|543|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+iowQzBgiwSPPXCC4EsJD|"Cómo sacar y apostillar récord policial de Nicaragua"|96|true|2026-05-15|Nacionales|B|685|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+j1ia8jehVS0NtKgsV1GS|"Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón"|94|true||Internacionales|B|559|KEEP|aprobado_y_correcto|conservar|
+jD6WppRVoR20CuzBeJbq|"NASA usará avión científico para analizar eclipse solar de 2026"|96|true||Tecnología|B|662|KEEP|aprobado_y_correcto|conservar|
+jIPhozTQrWC0dkqVykK4|"Déficit de lluvias por El Niño afecta al Corredor Seco"|94|true|2026-05-27|Nacionales|B|636|KEEP|aprobado_y_correcto|conservar|
+jYenFFPiEXMMhsvKeTL3|"España regulariza a más de un millón de extranjeros"|96|true|2026-08-01|Internacionales|B|536|KEEP|aprobado_y_correcto|conservar|
+kDIcgG5qs3ZgQCUeSapZ|"Una fiesta de cumpleaños terminó con dos muertos en Wiwilí"|98|true||Sucesos|B|508|KEEP|aprobado_y_correcto|conservar|
+kJZTSfqmUGHJKA8SFaE8|"Julieta Venegas interpreta himno cultural del Mundial 2026"|88|false|2026-05-30|Internacionales|B|375|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+kR3waCnxVDfMfVCV8sAH|"Nicaragua gana oro en relevos mixtos 4x100 en Managua"|88|false|2026-06-07|Deportes|B|618|EDITORIAL_ENRICHMENT|rechazado_score_88_sin_mejoras_automaticas|intervencion_editorial_manual|
+ksmI7JomnHgJB6NKcA71|"Yadel reúne a más de 30 mil personas en Managua"|94|true|2026-05-30|Espectáculos|B|503|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+ku8tzMdLM3030JgD5B8K|"Mirador San Francisco de Asís dinamiza turismo en Carretera Norte"|92|true|2026-05-15|Nacionales|A|1296|KEEP|aprobado_y_correcto|conservar|
+l9sGpdiU3xbEDxDXYBWb|"Inaugurarán segunda etapa del Centro Oncológico Nacional"|98|true|2026-07-31|Nacionales|B|433|KEEP|aprobado_y_correcto|conservar|
+lzsto5T2q85IgrVkqlA2|"Pokémon dona 100 millones de yenes tras terremoto en Japón"|98|true||Espectáculos|C|676|AUTO_FIX|contaminacion_html: wrappers_tecnicos|limpiar_html_y_conservar|
+m9tFCwmKN6OPR5tY2Kgk|"Hospital Vélez Paiz realiza 32 procedimientos cardíacos"|96|true||Nacionales|C|698|KEEP|aprobado_y_correcto|conservar|
+mEy2ueESYxJq3pH6hQJf|"Miles de familias disfrutan el Tope de Toros en Granada"|100|true||Nacionales|B|712|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+mnOKSoFSHJBxuosmF3Tw|"Nicaragua abre ante Colombia en Santo Domingo 2026"|90|true|2026-07-02|Deportes|B|505|ARCHIVE|JUEGOS_SANTO_DOMINGO_FINALIZADOS|archivar|
+mpU9oJImLDYi8lWhziII|"Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua"|100|true|2026-05-30|Nacionales|A|975|KEEP|aprobado_y_correcto|conservar|
+n0qOx4zq7JyVP4gFwEwW|"Conductor ebrio invade carril y motociclista pierde la vida"|100|true|2026-07-03|Sucesos|A|458|KEEP|aprobado_y_correcto|conservar|
+n2Buq4aBhvnrXUcTlwuD|"Capturan a pinolero por llevarse a niña de 13 años"|88|false|2026-07-01|Internacionales|B|360|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+n64la9Hnrkp0sENv0z5U|"Dos pérdidas reabren llamado a cuidar la salud emocional"|94|true|2026-07-02|Sucesos|B|545|KEEP|aprobado_y_correcto|conservar|
+ngAKEUkSVkZ6OlfQCQtb|"Desaparecen cuatro marinos tras zarpar de Corn Island"|96|true|2026-07-15|Sucesos|A|939|KEEP|aprobado_y_correcto|conservar|
+nyF9rfm2AkQACTQPzFAn|"Con 204 representantes, Nicaragua va por nuevas medallas"|92|true|2026-07-21|Deportes|B|592|ARCHIVE|JUEGOS_SANTO_DOMINGO_FINALIZADOS|archivar|
+o0Hd8UJZe7IhZN2zwj2g|"Ébola avanza en Congo mientras violencia frena respuesta médica"|100|true|2026-05-22|Internacionales|B|780|KEEP|aprobado_y_correcto|conservar|
+o6W17EHiyx17VgcpbB5N|"Doctora nicaragüense resulta afectado en ataque armado en…"|94|true|2026-06-17|Internacionales|B|776|KEEP|aprobado_y_correcto|conservar|
+o9Q6D0tRNWJ3cDs3nYLm|"En 48 horas, agosto ya suma 8 fallecidos en accidentes"|100|true||Sucesos|B|1222|KEEP|aprobado_y_correcto|conservar|
+odPH8kyPelb1S1TjnuPX|"Costanera agiliza transporte y abre playas antes aisladas"|94|true|2026-06-29|Nacionales|B|625|KEEP|aprobado_y_correcto|conservar|
+ofPopYZtZAK0eb0L5rPB|"TikTok supera 1,44 millones de usuarios en Nicaragua"|94|true|2026-05-27|Nacionales|B|647|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+ow2keC5R8XdLGzu5xKZa|"Cuba sufre séptimo apagón nacional en menos de 24 horas"|96|true||Internacionales|A|886|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+p9HqVWGCq6WbcUnPBwrn|"Multiestadio Stanley Cayasso: así avanzan sus bases en Managua"|92|true|2026-07-26|Deportes|B|595|KEEP|aprobado_y_correcto|conservar|
+p9YSf3lXdbJITSQClziV|"Spider-Man: Un Nuevo Día rompe récords en su estreno mundial"|94|true||Espectáculos|B|1177|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+pMXu8KvKsz9gJzg0U9bf|"Béisbol sigue siendo deporte favorito de nicaragüenses en 2026"|92|true|2026-05-21|Deportes|B|862|KEEP|aprobado_y_correcto|conservar|
+pVqVbFDgxmZAPOwoE5NM|"Santo Domingo se despide de Managua y regresa a Las Sierritas"|92|true||Nacionales|B|938|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+phUuAtrQ4H3qV4heuZlH|"Dos afectados en accidentes de motocicleta en Nicaragua"|100|true|2026-06-13|Sucesos|A|880|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+pmRNzGHrkOSSpSMWYg5J|"Buscan a hombre acusado de herir de bala a niña en Rivas"|100|true||Sucesos|B|496|KEEP|aprobado_y_correcto|conservar|
+q3QgspnxFL9buTcqe9Pm|"85 familias de Nagarote recibirán viviendas este 22 de mayo"|92|true|2026-05-19|Nacionales|B|780|KEEP|aprobado_y_correcto|conservar|
+qAcmF4MWTiLsTACCG8v5|"Agresión a mujer en Nindirí activa investigación bajo la Ley 779"|78|false|2026-07-14|Sucesos|B|527|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+qT9tAbCyVpicX7HmoaD0|"Nueva Guinea busca respuestas por muerte de joven de 18 años"|80|false|2026-07-14|Sucesos|B|473|EDITORIAL_ENRICHMENT|rechazado_score_80_sin_mejoras_automaticas|intervencion_editorial_manual|
+qhlHd01R4IC9TDdMx0re|"Gobierno declara feriado nacional el 30 de mayo en Nicaragua"|90|true|2026-05-23|Nacionales|B|659|KEEP|aprobado_y_correcto|conservar|
+qkurWkzG1J2bG01EVVru|"Camioneta impacta dos motos en Managua y deja tres lesionados"|100|true|2026-06-28|Sucesos|B|475|KEEP|aprobado_y_correcto|conservar|
+rFGNmTRKwi9QSc1VCddH|"Santo Domingo de Guzmán llega a Managua: recorrido y detalles"|98|true||Nacionales|C|1154|KEEP|aprobado_y_correcto|conservar|
+rpCDcQ8KMAzB8nzZfNfM|"Dos sismos en 39 segundos sacuden Venezuela y Caracas"|96|true|2026-06-25|Internacionales|B|494|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|
+rqFwODFrM33STTastGnc|"Asesinan a pedradas a hombre durante un robo en Managua"|96|true||Sucesos|B|973|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+s3JrANBvskSO61lPqPrv|"KFC busca a 50 fans para inaugurar su primer local en Nicaragua"|92|true|2026-07-18|Nacionales|B|406|ARCHIVE|KFC_INAUGURACION_YA_REALIZADA|archivar|
+s63hd29g5KZ42Zlhqsls|"Nicaragua gana dos platas y rompe récord en Santo Domingo 2026"|96|true||Deportes|B|1090|KEEP|aprobado_y_correcto|conservar|
+s9ERxCh1sMwJtlbrPPMJ|"Kimi AI acelera la carrera mundial por la inteligencia artificial"|94|true|2026-07-23|Tecnología|C|565|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+sH5OCUULzSvZFhRcHXzb|"Cinco agentes fallecen en operativo en Honduras"|88|false|2026-05-21|Internacionales|B|608|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+sULCr0Y90B43ZpuoK2pJ|"Hombre muere tras resultar herido en el barrio 18 de Mayo"|100|true||Sucesos|B|521|KEEP|aprobado_y_correcto|conservar|
+sgysqhqcvwAMBJZSxNVL|"Dos trabajadores fallecen tras descargas eléctricas en Nicaragua"|94|true|2026-06-20|Sucesos|B|410|KEEP|aprobado_y_correcto|conservar|
+slZp2GH5RHNd5hKNtZb4|"De Bluefields a Managua: 3 fallecidos en accidentes viales"|100|true||Sucesos|B|659|KEEP|aprobado_y_correcto|conservar|
+spoz8oqZQ8Wer7c1GSXp|"Estudiante de 13 años resulta afectado tras golpe en escuela de…"|94|true|2026-06-17|Sucesos|A|753|KEEP|aprobado_y_correcto|conservar|
+t6oFNMA4EGC4hOS3IqvE|"Güegüense y Agüizotes preservan tradición de Nicaragua"|98|true|2026-06-17|Nacionales|B|641|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+tYX2ZtXwUXg07CHI0ONj|"Fiscalía acusa a madre y padrastro por muerte de niño"|74|false|2026-07-10|Sucesos|B|467|EDITORIAL_ENRICHMENT|rechazado_score_74_sin_mejoras_automaticas|intervencion_editorial_manual|
+tlIXmTYnv4hIajXOQiup|"Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico"|82|false|2026-06-22|Internacionales|B|470|EDITORIAL_ENRICHMENT|rechazado_score_82_sin_mejoras_automaticas|intervencion_editorial_manual|
+tnX05ykqVT6WiYVflSii|"Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador"|74|false|2026-06-23|Deportes|B|629|EDITORIAL_ENRICHMENT|rechazado_score_74_sin_mejoras_automaticas|intervencion_editorial_manual|
+tuK9ZveBwJom7dhByyNx|"El ""Oro Verde"": cómo la palma africana transforma el Caribe"|98|true||Nacionales|A|966|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+u0Lgb7PgJ9XVT67Za5Ov|"KFC abre operaciones en Carretera a Masaya, Managua"|92|true|2026-05-27|Nacionales|B|559|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+u61mgNNEpC2vKvMa1fqZ|"Nicaragua reduce mortalidad materna e infantil en 2025"|98|true|2026-06-18|Nacionales|B|1125|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+uGw77z0gVCHmBW0gcQLd|"Nicaragüense muere en accidente laboral en España durante poda"|98|true|2026-08-07|Internacionales|B|610|KEEP|aprobado_y_correcto|conservar|
+uJ076MyMZhQIJYTa1qOW|"Nicaragüense José Salgado resulta afectado en asalto en Austin"|76|false|2026-06-18|Internacionales|C|402|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+uPjLwgsghbgVfRVtelh4|"Hallan sin vida a profesor desaparecido en cementerio de Boaco"|100|true|2026-07-30|Sucesos|B|486|KEEP|aprobado_y_correcto|conservar|
+v0gwsceiaZQeNSLPHmee|"Nicaragüenses resultan afectados en hechos graves registrados…"|90|true|2026-05-23|Internacionales|C|632|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+v6CAoeoIGpCRNQhBanXz|"MINSA vacuna contra la rabia a 1.75 millones de perros"|98|true||Nacionales|B|529|KEEP|aprobado_y_correcto|conservar|
+vDDkaxmQZVTtxhFi2Cy9|"Juzgado de Masaya dicta prision preventiva por caso penal"|98|true|2026-06-13|Sucesos|A|772|KEEP|aprobado_y_correcto|conservar|
+vXJ22LObIbnd5WKA3VDE|"Cabo Verde recibe como héroes a sus ""Tiburones Azules"""|94|true|2026-07-05|Deportes|B|498|KEEP|aprobado_y_correcto|conservar|
+vvWJAwyV8adECw3IGqdy|"Netflix, Max y Disney+ dominan streaming en Nicaragua"|88|false|2026-05-27|Tecnología|B|649|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+w5XzTjYCWTJRDX9NIPng|"Dos personas fallecen en accidentes en Matagalpa y Wiwilí"|100|true|2026-06-22|Sucesos|B|2139|KEEP|aprobado_y_correcto|conservar|
+wEp7yZu7N154jf3CcWrk|"Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales"|100|true|2026-07-18|Sucesos|B|515|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+whZtPKLBjDEcFUzZrkXv|"Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18"|94|true|2026-05-16|Nacionales|B|709|KEEP|aprobado_y_correcto|conservar|
+wiHS5gvNy7U6tORXAhEU|"Colapso en construcción cobra vida de nicaragüense en EE. UU"|80|false|2026-07-22|Internacionales|B|404|EDITORIAL_ENRICHMENT|rechazado_score_80_sin_mejoras_automaticas|intervencion_editorial_manual|
+wjXUjGNw3hVreNQPoByu|"Sismos en Venezuela: cifra de afectados sube a 589"|96|true|2026-06-26|Internacionales|B|368|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+xQPCJelRULHFWey1KUH6|"Más allá del cráter: los senderos del Volcán Masaya"|94|true|2026-07-21|Nacionales|B|476|KEEP|aprobado_y_correcto|conservar|
+xaEUqIpn5aFqjar7b4nv|"Mundial 2026 rompe récord de expulsiones en fase inicial"|90|true|2026-06-19|Deportes|A|822|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+xpVY9kQlBKSmeLpHwswz|"Revista británica destaca cirugías fetales en Nicaragua"|96|true||Nacionales|B|577|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+y251TlGDTa5BVIM18QGE|"Turistas extranjeros comparten sus viajes en Nicaragua"|90|true|2026-05-30|Nacionales|A|678|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+y8gWejnBZDoLhgYaRWlP|"Perros robóticos reforzarán seguridad en centro FIFA"|92|true|2026-06-06|Tecnología|B|633|KEEP|aprobado_y_correcto|conservar|
+yAxGbreJ4sa3sd2iT6XI|"Megahospitales transformarán la atención médica en Nicaragua"|90|true|2026-05-27|Nacionales|B|773|KEEP|aprobado_y_correcto|conservar|
+yBv7VNBe546PGd0a0glv|"El caso que estremeció Tipitapa entra a una nueva etapa judicial"|92|true|2026-07-24|Sucesos|C|462|KEEP|aprobado_con_issues_menores: em_tags|conservar|
+yJUWd9Sy8L6qck3mNZ0O|"Fallo judicial reabre debate sobre la defensa de una madre"|94|true|2026-07-07|Sucesos|B|581|KEEP|aprobado_y_correcto|conservar|
+yUMAJwJQ1yMJTSb2cdkP|"México, Brasil y Argentina avanzan en el Mundial 2026"|86|false|2026-06-25|Deportes|B|546|EDITORIAL_ENRICHMENT|necesita_enriquecimiento: falta_explicacion_relevancia|intervencion_editorial_manual|
+yVuoBkFOUU3OTJTMgv5l|"Puente Wawa Boom: 255 metros que unieron el Caribe Norte"|96|true|2026-06-24|Nacionales|B|508|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|
+ye0lMTaRlB1eXJibvfoO|"Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10"|90|true|2026-06-22|Nacionales|C|505|KEEP|aprobado_y_correcto|conservar|
+ynJTnxFm5fa6LL8CSGk0|"Tope de Toros 2026 en Granada: fecha, ruta y qué esperar"|100|true||Nacionales|A|864|KEEP|aprobado_y_correcto|conservar|
+yo3uA9Pd7mf7k44dTLOX|"Argentina supera a Suiza y va contra Inglaterra en semis"|98|true|2026-07-12|Deportes|B|436|KEEP|aprobado_y_correcto|conservar|
+yuResjlVGzNzgH5L6SOn|"Nicaragua suma 165 MW de energía renovable y baterías eléctricas"|92|true|2026-06-18|Nacionales|C|469|KEEP|aprobado_con_issues_menores: entidades_html|conservar|
+yv0VPARoIc5axq0rWC3f|"Ambulancia MINSA, arrastrada por río en Ayapal, Jinotega"|98|true|2026-06-22|Sucesos|B|673|KEEP|aprobado_y_correcto|conservar|
+yys8SiF01IpoXTkoaqXo|"Esteliana resulta afectado afectada en playa de San Sebastián,…"|98|true|2026-06-25|Internacionales|B|476|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+zDcmowDI8lVo6Is7n2ad|"Investigan hallazgo de dos cuerpos y desaparición por lluvias"|94|true|2026-07-12|Sucesos|B|464|KEEP|aprobado_y_correcto|conservar|
+zLt9Pxu2BPivxT6PIYTY|"Falcon 9 de SpaceX impactará la Luna este miércole"|98|true||Tecnología|B|975|KEEP|aprobado_con_issues_menores: p_vacios_anidados|conservar|
+zkdDsejAb5hLCpCaEbMR|"Nuevo complejo en Masaya reúne Bomberos y Migración"|64|false|2026-07-07|Nacionales|B|403|DO_NOT_PUBLISH|score_64_insuficiente|archivar_low_editorial_value|
+zvtl853c7EgGqBCOkbZN|"Tramos 2 y 3 de Pista Héroes avanzan 60% en drenaje"|92|true|2026-06-25|Nacionales|B|546|KEEP|aprobado_con_issues_menores: p_vacios_anidados,dateline|conservar|

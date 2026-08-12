@@ -1,0 +1,5009 @@
+{
+  "summary": {
+    "KEEP": 235,
+    "AUTO_FIX": 3,
+    "EDITORIAL_ENRICHMENT": 36,
+    "ARCHIVE": 6,
+    "DUPLICATE": 0,
+    "DO_NOT_PUBLISH": 1
+  },
+  "duplicates": [],
+  "obsolete": [
+    {
+      "id": "2JtGQ8X981oq4giKYxQo",
+      "titulo": "Nicaragua debuta en súper ronda con la mira en Lima 2027",
+      "scoreMeni": 98,
+      "reason": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "categoria": "Deportes",
+      "fecha": ""
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "scoreMeni": 92,
+      "reason": "EVENTO_ANUNCIADO_YA_PASO",
+      "categoria": "Nacionales",
+      "fecha": "2026-06-10T17:01:00.000Z"
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "scoreMeni": 88,
+      "reason": "FERIA_GANADERA_FINALIZADA",
+      "categoria": "Nacionales",
+      "fecha": ""
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "titulo": "Nicaragua abre ante Colombia en Santo Domingo 2026",
+      "scoreMeni": 90,
+      "reason": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "categoria": "Deportes",
+      "fecha": "2026-07-02T14:35:15.090Z"
+    },
+    {
+      "id": "nyF9rfm2AkQACTQPzFAn",
+      "titulo": "Con 204 representantes, Nicaragua va por nuevas medallas",
+      "scoreMeni": 92,
+      "reason": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "categoria": "Deportes",
+      "fecha": "2026-07-21T22:36:16.735Z"
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "titulo": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "scoreMeni": 92,
+      "reason": "KFC_INAUGURACION_YA_REALIZADA",
+      "categoria": "Nacionales",
+      "fecha": "2026-07-18T22:50:19.317Z"
+    }
+  ],
+  "classified": [
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "titulo": "Mundial 2030: por qué habrá partidos en Sudamérica y Europa",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-14T22:12:10.742Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 613,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "02DsJjI62kA1rFKe0nWS",
+      "titulo": "Luchó diez días por su vida y falleció tras ataque de expareja",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-22T15:45:54.095Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 506,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "096760aFi8gk8aUBtkFR",
+      "titulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-06T21:49:34.683Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 562,
+      "motivo": "aprobado_con_issues_menores: dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "titulo": "Cinco afectados en accidentes viales en Managua y regiones",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-25T22:23:55.010Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 439,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "0s9rnylrsRqwYjjUqUfk",
+      "titulo": "Managua inicia sus fiestas 2026 con programa y asuetos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-22T22:23:15.115Z",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 636,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "titulo": "Cuatro nicaragüenses resultan afectados en Costa Rica, El…",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-21T20:36:26.199Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 642,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "12vpZYJonwqLUyW1rlpl",
+      "titulo": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-18T12:57:40.455Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 558,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "19NRSSTtv9xlGQ31x9gV",
+      "titulo": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-24T15:52:31.398Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 578,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…",
+      "scoreMeni": 92,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-30T16:51:44.016Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 572,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "1K4jCiU5mT9xr4pyE0vr",
+      "titulo": "Adolescente muere atropellado por taxi frente a COTRAN Norte",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 527,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "titulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-22T14:53:20.583Z",
+      "categoria": "Tecnología",
+      "perfil": "A",
+      "palabras": 655,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "28a2yKj9NN9k4au0xJ6q",
+      "titulo": "Nicaraguense resulta afectado en accidente laboral en Wisconsin",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-13T23:00:00.000Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 721,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "2GBQwgf7i4i2LJsvIhhP",
+      "titulo": "Santo Domingo de Guzmán inicia sus fiestas con tradición y fe",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-01T02:08:06.690Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 1007,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "2JtGQ8X981oq4giKYxQo",
+      "titulo": "Nicaragua debuta en súper ronda con la mira en Lima 2027",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 406,
+      "motivo": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "2LRMqTFV3a6XPkdfoEjh",
+      "titulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T19:59:26.206Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 507,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "2rM20SDlcas77huhJYiV",
+      "titulo": "Café nicaragüense alcanza récord mundial y abre nuevos retos",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T23:14:12.537Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 483,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "titulo": "Documentos para tramitar el récord policial en Nicaragua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-21T19:07:13.034Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 612,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "3A0WKJhlDKATpXuyEIPq",
+      "titulo": "Noruega vuelve a octavos del Mundial tras 28 años de ausencia",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-30T21:55:27.023Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 398,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "3QOwSPvAOLwPxqFV532h",
+      "titulo": "Prueba de IA obliga a OpenAI a reforzar su seguridad digital",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-22T21:43:19.225Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 431,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "3Zg8Q6OaaXEut0fA81CH",
+      "titulo": "Cuatro víctimas deja accidentalidad vial entre sábado y domingo",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T15:10:29.223Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 674,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "3p9PHUH5WeJIGlMFVrLn",
+      "titulo": "Chile declara Estado de Catástrofe en Coquimbo y Huasco",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T22:42:04.476Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 532,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "3qYRcThYdkrzWJRDSfhy",
+      "titulo": "Fallece la actriz venezolana Gabriela Fleritt tras sismo",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-29T21:43:03.251Z",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 361,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "4G7Uq0yDZgiHpGyB5GSS",
+      "titulo": "La Resurrección de Cristo se estrena en el Día de la Ascensión",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 883,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "5JyYmiQUFmH29eqxGFuC",
+      "titulo": "NASA registra bola de fuego que cruzó seis estados de EE.UU",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T23:00:50.770Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 944,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "5ygMPBWB8ukF4W5m7uoG",
+      "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-24T18:18:09.444Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 2039,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "6G4rPNMwq7InAlhlpTCH",
+      "titulo": "Nicaragüense muere en Costa Rica tras choque y fuga vial",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-21T23:07:33.316Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 597,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "6MlyKI1pvd5zmaQ7oILa",
+      "titulo": "Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T15:39:45.730Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 466,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-23T16:20:48.492Z",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 500,
+      "motivo": "rechazado_score_88_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "7aOBbeIDRKR06tnYfklr",
+      "titulo": "Accidente con rastra deja una joven fallecida en Managua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-18T22:10:41.039Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 557,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "7h9NNZjCshVbyytxVXBP",
+      "titulo": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-15T21:32:26.648Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 617,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "7k2ncDzIhlS00WN4ktzR",
+      "titulo": "Carreteras dejan dos fallecidos y varios accidentes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-31T05:09:14.239Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 530,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-04T05:38:30.502Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 641,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "8DPnNJNClx3kn4oJi2me",
+      "titulo": "Identifican a lesionados en choque frente al Hospital del Niño",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-30T02:37:48.299Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 510,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "8NaG866DTKEaUCHkivrd",
+      "titulo": "Tres afectados en hechos viales este viernes en Managua y Granada",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-26T22:59:08.424Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 418,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "8dMcsIcw7T7tuT8NLGEP",
+      "titulo": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-30T04:10:59.124Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 427,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "titulo": "Arquitectura C++ y Direct3D para diagnóstico de sistemas PC",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-24T18:01:56.330Z",
+      "categoria": "Tecnología",
+      "perfil": "A",
+      "palabras": 666,
+      "motivo": "aprobado_con_issues_menores: em_tags,p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags",
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "8mQmm7YZXwUAnICl6tnv",
+      "titulo": "Robo de caja fuerte con $14,000 en Quilalí termina con un…",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T05:27:31.574Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 427,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "8p1gDsWo0i41nsJH4QTo",
+      "titulo": "Soldador de Casa Blanca sufrió descarga eléctrica durante trabajo",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 535,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "8rgPZMc8nFJWiAbW7pgj",
+      "titulo": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T19:43:51.224Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 388,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "8sTBWTNIOJGIYfDN062O",
+      "titulo": "Mirador de Catarina: precios, horarios y qué hacer",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 963,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "9FIr4GZXnyXqJ6M1Hnw6",
+      "titulo": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 654,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "9bOstbZ0xJWu92Z1FqBX",
+      "titulo": "Servicios policiales de Plaza El Sol tienen nueva ubicación",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 696,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "titulo": "Madrid gestiona logística masiva durante encuentro religioso",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-07T01:37:25.842Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 659,
+      "motivo": "aprobado_con_issues_menores: em_tags,p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags",
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-16T18:28:52.027Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 705,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en…",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-02T03:50:19.898Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 734,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas a…",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-24T03:11:04.645Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 798,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "AWqrtVA03l9qMReNApx6",
+      "titulo": "Nicaragua impulsa talento digital, IA y expansión del 5G",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T20:44:01.145Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 562,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "AnlD4hQhJdAwroEaMvlx",
+      "titulo": "Panamá deporta a 20 nicaragüenses por infracciones migratoria",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-01T05:59:39.621Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 564,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-10T17:01:00.000Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 699,
+      "motivo": "EVENTO_ANUNCIADO_YA_PASO",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-15T22:02:08.201Z",
+      "categoria": "Espectáculos",
+      "perfil": "A",
+      "palabras": 1266,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "BAcOCY6ZJ7XpDdzfRUZ1",
+      "titulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-19T03:03:07.235Z",
+      "categoria": "Sucesos",
+      "perfil": "D",
+      "palabras": 476,
+      "motivo": "aprobado_con_issues_menores: em_tags,p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags",
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "titulo": "Un afectado y un personas afectado en accidente laboral en…",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-28T21:49:43.624Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 364,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "BthZmiHrAOsU61f6cowu",
+      "titulo": "Mar de fondo anega viviendas y negocios en La Boquita",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-17T23:58:04.564Z",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 597,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T05:35:10.496Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 447,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "C4AHevj8Y9WKSw6UlMqA",
+      "titulo": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-16T20:31:44.328Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 632,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "C5ygeEIQwpMLLlU747up",
+      "titulo": "Seis miembros de una familia mueren en incendio en Honduras",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 441,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "C6Q405XAouocDIs02qKy",
+      "titulo": "Cinco equipos dominan la lucha por el liderato del Pomares",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-07T21:14:12.703Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 738,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: dispara récord: crece 6% en remesas",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-16T00:13:10.144Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 582,
+      "motivo": "corregible_tecnico: titulo_doble_dospuntos,entidades_html",
+      "accion": "aplicar_fix_tecnico_y_reevaluar",
+      "classification": "AUTO_FIX",
+      "blockingIssues": [],
+      "autoFixes": [
+        "titulo_doble_dospuntos",
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "CnHlW2RyUcpwlJBKeFug",
+      "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-12T17:58:51.961Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 501,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "CyV2dxk6PD7dXEUneJfi",
+      "titulo": "Nicaragua tendrá presencia en la final del Mundial gracias a FIFA",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-18T05:19:04.941Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 711,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-30T20:36:54.734Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 435,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "D310EXZbS4v6j8rsMCRB",
+      "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-07T19:57:14.593Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 469,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-23T22:01:21.869Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 388,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "DabSeh90gN6BreMLkDow",
+      "titulo": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-03T00:24:21.802Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 600,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "Dll52HugAZbEwPfOA9SL",
+      "titulo": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-02T04:09:20.629Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 569,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "EDvI8A7DAwrDFuBf3f18",
+      "titulo": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-01T22:51:10.256Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 427,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "EFBlqTZDTyDbFC4PRZ0c",
+      "titulo": "Tres ataques de pitbull en Nicaragua dejan tres afectados",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T04:24:44.038Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 2313,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "EK8pDgblNpScPCoGCgab",
+      "titulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-30T17:20:57.818Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 520,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-04T16:35:38.966Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 377,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "EnQeMjUfvgWY5xmRSfy5",
+      "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 1130,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "EyR39NNAk2XXXTSjhA9g",
+      "titulo": "8 motociclistas fallecen en accidentes este fin de semana",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-29T20:44:04.961Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 428,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-19T17:59:13.011Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 718,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "FF8yCcM33HysEtaG3ehp",
+      "titulo": "Tres accidentes en Nicaragua dejan un motociclista muerto",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 850,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "FLbXd6XRrTl5TCdTkNYT",
+      "titulo": "Nicaragua en Santo Domingo 2026: medallas, béisbol y retos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 865,
+      "motivo": "contaminacion_html: wrappers_tecnicos",
+      "accion": "limpiar_html_y_conservar",
+      "classification": "AUTO_FIX",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "wrappers_tecnicos"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-29T16:20:07.912Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 764,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "FsMXE1Jn8Qw9HNNYGgqF",
+      "titulo": "IA agéntica lidera cambios tecnológicos globales en 2026",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T22:00:45.222Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 1025,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "GDIEammzYioBq5JrRsLd",
+      "titulo": "Tatiana Guzmán hace historia en Mundial FIFA 2026 con VAR",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-23T15:11:54.395Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 573,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-30T21:21:11.059Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 385,
+      "motivo": "rechazado_score_74_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "scoreMeni": 70,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-28T20:33:43.042Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 379,
+      "motivo": "rechazado_score_70_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "titulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T16:18:21.960Z",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 948,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "HDs899RFlczkxeNhhaez",
+      "titulo": "Adiós a la voz mexicana detrás de Toy Story y Harry Potter",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 617,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "HOr2RLJb6pWN03jZvoYD",
+      "titulo": "Padre muere tras rescatar a su hijo del mar en Poneloya",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-21T15:08:48.033Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 446,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "HxsDqbeHSSO2MRyl1Cpu",
+      "titulo": "Accidente grave en Masaya en Villa Bosco — Nicaragua Informate",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-15T11:21:00.000Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 728,
+      "motivo": "aprobado_con_issues_menores: em_tags,p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags",
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "HyUcJbnUzefWCcape0UQ",
+      "titulo": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T20:10:25.884Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 534,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-24T19:23:08.352Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 455,
+      "motivo": "rechazado_score_88_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "titulo": "Comercios esperan alta actividad por Día de las Madres en…",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-24T18:48:43.226Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 806,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T22:25:35.002Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 449,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-21T20:42:51.036Z",
+      "categoria": "Deportes",
+      "perfil": "C",
+      "palabras": 409,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [
+        "wrappers_tecnicos"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "J1ZUf7ZxMxaUjb64rkXj",
+      "titulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-17T17:20:09.754Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 799,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "JIRE98QbwrecUId3edcA",
+      "titulo": "Muere trabajador tras ataque de un perro en Managua",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 567,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-23T16:36:45.210Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 2201,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-22T00:10:36.002Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 523,
+      "motivo": "rechazado_score_84_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "JcB6a4mamtg6yjtcXp9c",
+      "titulo": "Nicaragüense resulta afectado tras incidente armado en Guanacaste",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-21T14:53:09.435Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 486,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "Jjk9syTstGMlEeQerkQ6",
+      "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 728,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "JtTY1tfzHmkOVNJjCZJX",
+      "titulo": "Comerciante resulta afectado tras altercado en terminal de Rosita",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-13T23:08:00.000Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 831,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "JvTqSDHGA4EEZnlE6BPi",
+      "titulo": "Messi iguala récord histórico de 16 goles en Mundiales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-17T04:47:48.918Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 731,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "JyiBCf438iHQhSn1rkpO",
+      "titulo": "Migrante de Madriz muere en EE.UU.; familia pide ayuda",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 730,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "K7IuhDsETCHWq8BaltgK",
+      "titulo": "Agenda cultural: Eventos en Managua del 20 al 30 de junio",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-21T02:30:38.051Z",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 778,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "KAe7bOjRVf1k4w7It5q4",
+      "titulo": "Volcán Telica expulsa ceniza y mantiene vigilancia activa",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-24T22:37:09.101Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 395,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "KDsFrw5UitY7JGQ9uOPq",
+      "titulo": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-05T15:01:31.502Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 357,
+      "motivo": "aprobado_con_issues_menores: dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "titulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-16T16:42:09.691Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 625,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "KqbSciGsztV7VDFB7XFC",
+      "titulo": "Stanling Orozco conserva triple corona del Pomares 2026",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-19T16:09:53.784Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 1005,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "M5Ivl0fqvyOivSZMuNLY",
+      "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-09T22:12:48.694Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 610,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "M9tek6rwIxTjSEbbI71k",
+      "titulo": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T23:12:21.845Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 672,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "M9vj4XiOdmMrLwreHlff",
+      "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-08T17:49:25.927Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 673,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "MkbCQPde18VTVKlSgHLn",
+      "titulo": "Nicaragua reporta menos casos de dengue, malaria e influenza",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T23:50:56.116Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 413,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-24T15:37:37.892Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 2196,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "NTa3Gb797l9FINZ2E7RU",
+      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-08T16:50:22.159Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 737,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "NZkwSINrmCZO4rKOetqz",
+      "titulo": "Investigan ataque en El Riguero que hirió a niño de 10 año",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 1014,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "NbYNNfBGD7X4LVVMjzYo",
+      "titulo": "Vientos intensos prolongan corte de energía en Corn Island",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-21T23:02:26.522Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 1145,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "Neue7Ft2XeQybdX7xKTk",
+      "titulo": "El ritual que parte la piel y mueve a miles en Masaya",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-24T14:51:52.633Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 639,
+      "motivo": "aprobado_con_issues_menores: dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "Ng7C24qqQcb5s0ZIueVm",
+      "titulo": "Tres fallecidos y un lesionado dejan accidentes en el país",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-01T04:52:33.219Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 538,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "NgEysmaqCnykHx2uFm1L",
+      "titulo": "Toro embiste a hombre durante Tope de Toros en Granada",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 708,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "NsHuiNgmIpEWcaQM37pj",
+      "titulo": "Dos muertos y tres heridos dejan accidentes en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 821,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "OYZgpG1z1Arb5HacLNnp",
+      "titulo": "Muere joven baleado en barrio México; investigan el ataque",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 447,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "P4KRYKddOPHB2Nu0uya5",
+      "titulo": "Familia afectada tras volcamiento de camión en Matagalpa",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-24T00:59:00.892Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 572,
+      "motivo": "aprobado_con_issues_menores: dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "PAMrJttL66Oxg1eavIXS",
+      "titulo": "Lionel Messi establece récord de 18 goles en Copas del Mundo",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-22T19:28:05.471Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 472,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "PDYIbuv1snYYNDK54EBN",
+      "titulo": "Sismo de 7.4 sacude Colombia y deja daños y heridos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 815,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "PNJr8KWo2Gy1TCjuF9jq",
+      "titulo": "Oleaje daña embarcaciones y afecta turismo en Rivas",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-09T21:14:16.345Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 590,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "PaUNyoHJ6rvNucj2Yqs0",
+      "titulo": "Selección de béisbol es recibida con honores en Managua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 660,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "Pf0VvjOfwZNm7BnQpncl",
+      "titulo": "Agosto comienza con tres accidentes y 4 fallecidos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 958,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "PiXjB5ugRBQxjWXIvyuF",
+      "titulo": "Portugal elimina a Croacia y el Mundial se despide de Modrić",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-03T22:06:17.036Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 373,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T20:06:48.141Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 484,
+      "motivo": "rechazado_score_88_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "QiOIqxhjT67BS2D4saW5",
+      "titulo": "Mundial 2026: sorpresas, favoritos y cómo se vive en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T16:08:11.511Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 460,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "QqQzUkztp81QAcSfXvS8",
+      "titulo": "Panamá retorna a 24 nicaragüenses; 8 fueron expulsados",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T01:56:14.666Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 644,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "R2zQFsmjsu0NvFRU7tDa",
+      "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-07T03:18:43.519Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 630,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "titulo": "Tres personas resultan afectados en accidentes de motocicleta…",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-31T17:21:48.303Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 796,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "RRo9U6gI1hRINap3egQS",
+      "titulo": "Condenan a 25 años al asesino de “La Reina Mengueña” en Chontales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 453,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "RbCTjiEE7RrHLN80j7K9",
+      "titulo": "Festival internacional en Managua: horario, países y actividades",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 358,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "S8jrH6rYwBEuwzpBDw82",
+      "titulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-16T04:19:00.122Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 662,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-20T23:43:35.233Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 744,
+      "motivo": "rechazado_score_78_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 545,
+      "motivo": "rechazado_score_76_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "Sef2LpxsEcnjg7sf0f3U",
+      "titulo": "Nicaragua vence a Cuba y jugará la final por el oro ante Panamá",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-06T23:48:40.473Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 724,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "TYBT2pcviA6IH8AsoE4P",
+      "titulo": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 725,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "titulo": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-06T03:43:13.118Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 623,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "titulo": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-24T18:13:41.190Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 735,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-15T21:38:05.068Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 1014,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "titulo": "Béisbol internacional: Nicaragua se alista para retos de 2026",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T18:28:15.661Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 671,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "VAQWaSecbeFlCuK8KCgG",
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-06T16:00:06.438Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 725,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-09T21:37:51.166Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 743,
+      "motivo": "rechazado_score_74_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "W9E5MwLZvezRaSi3meqX",
+      "titulo": "Accidente en Potosí deja dos vidas perdidas en una colisión vial",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T15:03:39.470Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 553,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "WNZ8XRJLMOhR4ilO7Jfp",
+      "titulo": "Nicaragua: primera autopista de peaje de su historia",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-02T18:34:30.564Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 640,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "WR9ixdDXutGgVpZ9awuQ",
+      "titulo": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-05T17:38:35.838Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 436,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "WT8kWgsAuYm7VnymG07L",
+      "titulo": "Wilfrido Vargas llega a Nicaragua para su concierto en Managua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 644,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "WthoTeyDQn3v3a0vBrQA",
+      "titulo": "Muere Jorge Messi, padre y representante de Lionel Messi",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 702,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "XK3mXDYi2mYHqzUMCvCl",
+      "titulo": "MAG presenta semillas de frijol resistentes a la sequía",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 663,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "Xt18bdt10Mt6CIloPKSu",
+      "titulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-02T21:13:49.466Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 369,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "titulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-09T23:50:34.119Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 551,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "Yf7Njww3czR9w7xMsrUo",
+      "titulo": "Resumen Mundial 2026: Resultados en Atlanta y victoria alemana",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-15T22:45:36.719Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 596,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-24T14:51:32.537Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 435,
+      "motivo": "rechazado_score_78_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "ZK1mbMdVBgdisJq1mn9u",
+      "titulo": "IA médica en 2026: diagnósticos más certeros que médicos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-24T20:57:05.156Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 481,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "Zu389gS3tQxY0EYfXrE9",
+      "titulo": "España gana Mundial 2026 y es recibida con honores en Madrid",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T17:37:20.664Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 488,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ZvMD6TcBmXDFWHQxEykD",
+      "titulo": "Copa 2026: Alemania y Países Bajos fuera; Brasil y Canadá avanzan",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-30T05:32:12.986Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 402,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "a43EAAR543PNuVXni2v3",
+      "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-25T20:39:17.348Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 493,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "aDUNDXKB5AaqwW6SfyaG",
+      "titulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-11T21:23:00.492Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 703,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "aII0C6kduAshiZAk16Wc",
+      "titulo": "Amanda Miguel ofrece concierto internacional en Managua",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-14T00:51:00.000Z",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 610,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "aXtBaU598FRn27J0X2nD",
+      "titulo": "Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T18:38:59.247Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 631,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "titulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospital…",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-28T20:44:02.706Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 767,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "b3hBxRnUrftHjFulYE3L",
+      "titulo": "El Indio Viejo: historia del plato típico de Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-04T22:19:02.352Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 983,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "bNTteIqTORrl2X7opjvG",
+      "titulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T19:05:18.470Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 599,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "cIBrfo4r0oesTQCSH85x",
+      "titulo": "Parque de la Familia en Estelí reabre tras millonaria inversión",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T16:39:05.552Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 494,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "caTDwZUGxZmjwicrEukK",
+      "titulo": "Basura en cauces de Managua eleva riesgo de inundaciones",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 416,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ckgtTyw5JZx2lMhWYdiL",
+      "titulo": "Rayo McQueen y 19 personajes llegan con exhibición a Managua",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 972,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "cr3ixiMYdzUXKAO6kzqD",
+      "titulo": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 810,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "dJXd3qsmEK8AY4p0ctko",
+      "titulo": "Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-15T02:38:00.771Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 453,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "dcr6j4wJetnGNY80e6sZ",
+      "titulo": "Así Nicaragua conectó por tierra el Caribe con el Pacífico",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 1298,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "djn1DLmztxyOXwfSQsbx",
+      "titulo": "ICE detiene a dos nicaragüenses en operativos en EE. UU",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T23:35:36.778Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 460,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T18:10:53.905Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 448,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-16T19:34:15.509Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 602,
+      "motivo": "rechazado_score_88_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "eHwPppvuoey1DpRCh7cc",
+      "titulo": "México, EE. UU. y Países Bajos clasifican al Mundial 2026",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-21T01:27:58.782Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 692,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "eigKQMFdjSfB8N7Fypgk",
+      "titulo": "Mbappé, a un gol de igualar el récord mundialista de Messi",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-23T03:26:29.881Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 370,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "esccFviANcjLiHp4UnsQ",
+      "titulo": "Mineros avanza de ronda y deja en disputa el último boleto",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T21:23:25.764Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 601,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "fBzmMNWyqUTrffFr49g6",
+      "titulo": "Accidentes dejan varios afectados en Managua, León y Bilwi",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-19T20:57:01.124Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 496,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T05:58:09.853Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 747,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "fO5Xwap5b2F1zefVhs47",
+      "titulo": "Ercilia Arellano gana festival gastronómico en San Carlos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 755,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "gAp6N4fO4sAjnssvaROp",
+      "titulo": "Nicaragua anuncia 8va Feria Nacional de la Vivienda",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-04T22:16:54.084Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 1206,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "gQKFK5z94pfaHGi2J1Wc",
+      "titulo": "Cinco motociclistas mueren en distintos puntos de Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "C",
+      "palabras": 1287,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "titulo": "Dos afectados tras naufragio de panga en Krukira",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-29T17:29:21.711Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 719,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "gYezxCEUx17WQHH3SCqI",
+      "titulo": "Producción de leche alcanza 146.4 millones en Nicaragua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T19:05:04.880Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 457,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-23T16:53:19.853Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 771,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "glOmX2RSOpciUxHR0y3n",
+      "titulo": "Nicaragüense de Jinotepe se corona campeón de España en Sanda",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-01T05:59:07.042Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 775,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "h12a1BuHFk4hNO1MP0xQ",
+      "titulo": "Volcán de Fuego: evacuaciones y alerta roja en Guatemala",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 653,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "h6jcqzPLhz8UrpaGP7xq",
+      "titulo": "Mundial 2026: Cabo Verde sorprende España y empata Portugal",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T02:45:04.286Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 460,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "hD0W8NnvJ2aLN2F2O44R",
+      "titulo": "Hallan sin vida a adulto mayor desaparecido en Madriz",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 648,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "hRxkEYbG8tOislbLn2gF",
+      "titulo": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 819,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 563,
+      "motivo": "FERIA_GANADERA_FINALIZADA",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "hqg5C3kyCql4FZl3OWfB",
+      "titulo": "Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T02:31:52.352Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 881,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-24T16:59:34.663Z",
+      "categoria": "Sucesos",
+      "perfil": "D",
+      "palabras": 418,
+      "motivo": "rechazado_score_86_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-06T20:51:00.333Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 397,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "i9duvDflEon1d6yAhT0W",
+      "titulo": "Joven fallece en accidente de tránsito en carretera a Masaya",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-20T16:45:00.170Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 475,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: réplicas continúan con 920 víctimas y miles sin rastro",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-28T01:06:12.635Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 463,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ii6aCymgfcyPAKaAjaPg",
+      "titulo": "Nicaragua gana plata tras caer ante Panamá en la final de béisbol",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 543,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-15T20:04:55.917Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 685,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "j1ia8jehVS0NtKgsV1GS",
+      "titulo": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 559,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "jD6WppRVoR20CuzBeJbq",
+      "titulo": "NASA usará avión científico para analizar eclipse solar de 2026",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 662,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T15:32:51.191Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 636,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "jYenFFPiEXMMhsvKeTL3",
+      "titulo": "España regulariza a más de un millón de extranjeros",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-01T04:09:07.171Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 536,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "kDIcgG5qs3ZgQCUeSapZ",
+      "titulo": "Una fiesta de cumpleaños terminó con dos muertos en Wiwilí",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 508,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-30T03:21:38.937Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 375,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-07T02:22:07.535Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 618,
+      "motivo": "rechazado_score_88_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "titulo": "Yadel reúne a más de 30 mil personas en Managua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T02:06:08.428Z",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 503,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-15T21:17:29.722Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 1296,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "l9sGpdiU3xbEDxDXYBWb",
+      "titulo": "Inaugurarán segunda etapa del Centro Oncológico Nacional",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-31T02:19:27.436Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 433,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "lzsto5T2q85IgrVkqlA2",
+      "titulo": "Pokémon dona 100 millones de yenes tras terremoto en Japón",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "C",
+      "palabras": 676,
+      "motivo": "contaminacion_html: wrappers_tecnicos",
+      "accion": "limpiar_html_y_conservar",
+      "classification": "AUTO_FIX",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "wrappers_tecnicos"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "m9tFCwmKN6OPR5tY2Kgk",
+      "titulo": "Hospital Vélez Paiz realiza 32 procedimientos cardíacos",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 698,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "mEy2ueESYxJq3pH6hQJf",
+      "titulo": "Miles de familias disfrutan el Tope de Toros en Granada",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 712,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "titulo": "Nicaragua abre ante Colombia en Santo Domingo 2026",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-02T14:35:15.090Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 505,
+      "motivo": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T06:30:20.540Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 975,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "n0qOx4zq7JyVP4gFwEwW",
+      "titulo": "Conductor ebrio invade carril y motociclista pierde la vida",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-03T16:43:48.677Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 458,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-01T23:44:18.535Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 360,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "n64la9Hnrkp0sENv0z5U",
+      "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-02T02:54:34.555Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 545,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "ngAKEUkSVkZ6OlfQCQtb",
+      "titulo": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-15T02:14:33.293Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 939,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "nyF9rfm2AkQACTQPzFAn",
+      "titulo": "Con 204 representantes, Nicaragua va por nuevas medallas",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-21T22:36:16.735Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 592,
+      "motivo": "JUEGOS_SANTO_DOMINGO_FINALIZADOS",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-22T14:32:00.021Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 780,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "o6W17EHiyx17VgcpbB5N",
+      "titulo": "Doctora nicaragüense resulta afectado en ataque armado en…",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-17T23:37:48.085Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 776,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "o9Q6D0tRNWJ3cDs3nYLm",
+      "titulo": "En 48 horas, agosto ya suma 8 fallecidos en accidentes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 1222,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "odPH8kyPelb1S1TjnuPX",
+      "titulo": "Costanera agiliza transporte y abre playas antes aisladas",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-29T23:08:33.965Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 625,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T04:51:14.165Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 647,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ow2keC5R8XdLGzu5xKZa",
+      "titulo": "Cuba sufre séptimo apagón nacional en menos de 24 horas",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Internacionales",
+      "perfil": "A",
+      "palabras": 886,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "p9HqVWGCq6WbcUnPBwrn",
+      "titulo": "Multiestadio Stanley Cayasso: así avanzan sus bases en Managua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-26T23:34:04.379Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 595,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "p9YSf3lXdbJITSQClziV",
+      "titulo": "Spider-Man: Un Nuevo Día rompe récords en su estreno mundial",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Espectáculos",
+      "perfil": "B",
+      "palabras": 1177,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-21T21:39:48.916Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 862,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "pVqVbFDgxmZAPOwoE5NM",
+      "titulo": "Santo Domingo se despide de Managua y regresa a Las Sierritas",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 938,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "phUuAtrQ4H3qV4heuZlH",
+      "titulo": "Dos afectados en accidentes de motocicleta en Nicaragua",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-13T23:29:00.000Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 880,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "pmRNzGHrkOSSpSMWYg5J",
+      "titulo": "Buscan a hombre acusado de herir de bala a niña en Rivas",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 496,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "titulo": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-19T18:07:16.884Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 780,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-14T06:31:05.219Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 527,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-14T01:28:33.892Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 473,
+      "motivo": "rechazado_score_80_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-23T17:11:13.027Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 659,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "qkurWkzG1J2bG01EVVru",
+      "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-28T17:30:38.622Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 475,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "rFGNmTRKwi9QSc1VCddH",
+      "titulo": "Santo Domingo de Guzmán llega a Managua: recorrido y detalles",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 1154,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "rpCDcQ8KMAzB8nzZfNfM",
+      "titulo": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-25T02:15:09.338Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 494,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "rqFwODFrM33STTastGnc",
+      "titulo": "Asesinan a pedradas a hombre durante un robo en Managua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 973,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "titulo": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-18T22:50:19.317Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 406,
+      "motivo": "KFC_INAUGURACION_YA_REALIZADA",
+      "accion": "archivar",
+      "classification": "ARCHIVE",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags",
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "s63hd29g5KZ42Zlhqsls",
+      "titulo": "Nicaragua gana dos platas y rompe récord en Santo Domingo 2026",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 1090,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "s9ERxCh1sMwJtlbrPPMJ",
+      "titulo": "Kimi AI acelera la carrera mundial por la inteligencia artificial",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-23T20:29:54.753Z",
+      "categoria": "Tecnología",
+      "perfil": "C",
+      "palabras": 565,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-21T21:02:13.222Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 608,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "sULCr0Y90B43ZpuoK2pJ",
+      "titulo": "Hombre muere tras resultar herido en el barrio 18 de Mayo",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 521,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "sgysqhqcvwAMBJZSxNVL",
+      "titulo": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-20T03:58:26.539Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 410,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "slZp2GH5RHNd5hKNtZb4",
+      "titulo": "De Bluefields a Managua: 3 fallecidos en accidentes viales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 659,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "spoz8oqZQ8Wer7c1GSXp",
+      "titulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-17T03:41:08.494Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 753,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "t6oFNMA4EGC4hOS3IqvE",
+      "titulo": "Güegüense y Agüizotes preservan tradición de Nicaragua",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-17T17:20:43.359Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 641,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-10T23:32:02.311Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 467,
+      "motivo": "rechazado_score_74_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "scoreMeni": 82,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-22T21:08:48.307Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 470,
+      "motivo": "rechazado_score_82_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-23T21:10:12.226Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 629,
+      "motivo": "rechazado_score_74_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "tuK9ZveBwJom7dhByyNx",
+      "titulo": "El \"Oro Verde\": cómo la palma africana transforma el Caribe",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 966,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T16:39:55.266Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 559,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "u61mgNNEpC2vKvMa1fqZ",
+      "titulo": "Nicaragua reduce mortalidad materna e infantil en 2025",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T23:47:17.644Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 1125,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "uGw77z0gVCHmBW0gcQLd",
+      "titulo": "Nicaragüense muere en accidente laboral en España durante poda",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-08-07T03:02:23.315Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 610,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-18T18:46:45.728Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 402,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "uPjLwgsghbgVfRVtelh4",
+      "titulo": "Hallan sin vida a profesor desaparecido en cementerio de Boaco",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-30T04:41:08.924Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 486,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-23T21:44:19.929Z",
+      "categoria": "Internacionales",
+      "perfil": "C",
+      "palabras": 632,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "v6CAoeoIGpCRNQhBanXz",
+      "titulo": "MINSA vacuna contra la rabia a 1.75 millones de perros",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 529,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "vDDkaxmQZVTtxhFi2Cy9",
+      "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-13T22:39:00.000Z",
+      "categoria": "Sucesos",
+      "perfil": "A",
+      "palabras": 772,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "vXJ22LObIbnd5WKA3VDE",
+      "titulo": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-05T18:18:04.761Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 498,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-27T05:20:04.403Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 649,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "w5XzTjYCWTJRDX9NIPng",
+      "titulo": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-22T15:59:01.082Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 2139,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "wEp7yZu7N154jf3CcWrk",
+      "titulo": "Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-18T20:48:35.776Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 515,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado",
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "titulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-16T17:20:58.253Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 709,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-22T16:27:55.261Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 404,
+      "motivo": "rechazado_score_80_sin_mejoras_automaticas",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "wjXUjGNw3hVreNQPoByu",
+      "titulo": "Sismos en Venezuela: cifra de afectados sube a 589",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-26T16:42:06.640Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 368,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "xQPCJelRULHFWey1KUH6",
+      "titulo": "Más allá del cráter: los senderos del Volcán Masaya",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-21T23:41:20.955Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 476,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "xaEUqIpn5aFqjar7b4nv",
+      "titulo": "Mundial 2026 rompe récord de expulsiones en fase inicial",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-19T20:36:45.239Z",
+      "categoria": "Deportes",
+      "perfil": "A",
+      "palabras": 822,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "xpVY9kQlBKSmeLpHwswz",
+      "titulo": "Revista británica destaca cirugías fetales en Nicaragua",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 577,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-30T20:43:15.389Z",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 678,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "y8gWejnBZDoLhgYaRWlP",
+      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-06T16:20:01.924Z",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 633,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "titulo": "Megahospitales transformarán la atención médica en Nicaragua",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-05-27T17:59:52.497Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 773,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "yBv7VNBe546PGd0a0glv",
+      "titulo": "El caso que estremeció Tipitapa entra a una nueva etapa judicial",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-24T14:10:41.400Z",
+      "categoria": "Sucesos",
+      "perfil": "C",
+      "palabras": 462,
+      "motivo": "aprobado_con_issues_menores: em_tags",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "em_tags"
+      ],
+      "contextNeeds": [
+        "formato_comunicado"
+      ]
+    },
+    {
+      "id": "yJUWd9Sy8L6qck3mNZ0O",
+      "titulo": "Fallo judicial reabre debate sobre la defensa de una madre",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-07T19:15:56.137Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 581,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T23:19:29.304Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 546,
+      "motivo": "necesita_enriquecimiento: falta_explicacion_relevancia",
+      "accion": "intervencion_editorial_manual",
+      "classification": "EDITORIAL_ENRICHMENT",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "yVuoBkFOUU3OTJTMgv5l",
+      "titulo": "Puente Wawa Boom: 255 metros que unieron el Caribe Norte",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-24T19:02:46.989Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 508,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "ye0lMTaRlB1eXJibvfoO",
+      "titulo": "Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-22T18:12:29.764Z",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 505,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "ynJTnxFm5fa6LL8CSGk0",
+      "titulo": "Tope de Toros 2026 en Granada: fecha, ruta y qué esperar",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Nacionales",
+      "perfil": "A",
+      "palabras": 864,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": []
+    },
+    {
+      "id": "yo3uA9Pd7mf7k44dTLOX",
+      "titulo": "Argentina supera a Suiza y va contra Inglaterra en semis",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-12T05:02:48.001Z",
+      "categoria": "Deportes",
+      "perfil": "B",
+      "palabras": 436,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "yuResjlVGzNzgH5L6SOn",
+      "titulo": "Nicaragua suma 165 MW de energía renovable y baterías eléctricas",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-18T16:32:25.953Z",
+      "categoria": "Nacionales",
+      "perfil": "C",
+      "palabras": 469,
+      "motivo": "aprobado_con_issues_menores: entidades_html",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "entidades_html"
+      ],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "yv0VPARoIc5axq0rWC3f",
+      "titulo": "Ambulancia MINSA, arrastrada por río en Ayapal, Jinotega",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-22T20:11:17.293Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 673,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "yys8SiF01IpoXTkoaqXo",
+      "titulo": "Esteliana resulta afectado afectada en playa de San Sebastián,…",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-25T22:37:41.129Z",
+      "categoria": "Internacionales",
+      "perfil": "B",
+      "palabras": 476,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "zDcmowDI8lVo6Is7n2ad",
+      "titulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "fecha": "2026-07-12T03:47:34.152Z",
+      "categoria": "Sucesos",
+      "perfil": "B",
+      "palabras": 464,
+      "motivo": "aprobado_y_correcto",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "zLt9Pxu2BPivxT6PIYTY",
+      "titulo": "Falcon 9 de SpaceX impactará la Luna este miércole",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "fecha": "",
+      "categoria": "Tecnología",
+      "perfil": "B",
+      "palabras": 975,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados"
+      ],
+      "contextNeeds": []
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "scoreMeni": 64,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-07T23:18:41.431Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 403,
+      "motivo": "score_64_insuficiente",
+      "accion": "archivar_low_editorial_value",
+      "classification": "DO_NOT_PUBLISH",
+      "blockingIssues": [],
+      "autoFixes": [],
+      "contextNeeds": [
+        "falta_explicacion_relevancia"
+      ]
+    },
+    {
+      "id": "zvtl853c7EgGqBCOkbZN",
+      "titulo": "Tramos 2 y 3 de Pista Héroes avanzan 60% en drenaje",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "fecha": "2026-06-25T21:55:05.519Z",
+      "categoria": "Nacionales",
+      "perfil": "B",
+      "palabras": 546,
+      "motivo": "aprobado_con_issues_menores: p_vacios_anidados,dateline",
+      "accion": "conservar",
+      "classification": "KEEP",
+      "blockingIssues": [],
+      "autoFixes": [
+        "p_vacios_anidados",
+        "dateline"
+      ],
+      "contextNeeds": []
+    }
+  ]
+}
