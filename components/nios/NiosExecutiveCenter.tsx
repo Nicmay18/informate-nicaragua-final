@@ -462,7 +462,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <Metric label="Patrones totales" value={number(learningPatterns.length)} status="ok" />
                     <Metric label="MENI correcto" value={number(learningPatterns.filter((p) => p.pattern === 'meni_correct').length)} status="ok" />
-                    <Metric label="MENI sobreestima" value={number(learningPatterns.filter((p) => p.pattern === 'meni_overestimates').length)} status="warning" />
+                    <Metric label="Brecha MENI-GSC (hipótesis)" value={number(learningPatterns.filter((p) => p.pattern === 'meni_gsc_gap_hypothesis').length)} status="warning" />
                     <Metric label="MENI subestima" value={number(learningPatterns.filter((p) => p.pattern === 'meni_underestimates').length)} status="warning" />
                   </div>
                   <p className="text-xs text-slate-500">Observación: no se ajusta automáticamente MENI. Los patrones son de solo lectura.</p>

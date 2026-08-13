@@ -114,10 +114,19 @@ export async function getLatestNews(limitCount: number = 30): Promise<Noticia[]>
 
 export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]> {
   const all = await getNews(100);
-  return all
-    .filter((n) => (n.vistas ?? 0) >= 1)
-    .sort((a, b) => (b.vistas ?? 0) - (a.vistas ?? 0))
-    .slice(0, limitCount);
+  // Combinar frescura + vistas: una nota nueva con 0 vistas puede aparecer
+  // si es reciente. Una nota vieja con muchas vistas también, pero no domina.
+  const now = Date.now();
+  const scored = all
+    .map((n) => {
+      const h = (now - new Date(n.fecha).getTime()) / 36e5;
+      const frescura = Math.max(0, 1 - h / 48); // decae a 0 en 48h
+      const vistasNorm = Math.min(1, Math.log((n.vistas ?? 0) + 1) / Math.log(500));
+      const score = frescura * 0.6 + vistasNorm * 0.4;
+      return { n, score };
+    })
+    .sort((a, b) => b.score - a.score);
+  return scored.slice(0, limitCount).map((s) => s.n);
 }
 
 export async function getPopularNews(limitCount: number = 5): Promise<Noticia[]> {

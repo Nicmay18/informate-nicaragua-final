@@ -1,0 +1,1235 @@
+{
+  "id": "zkdDsejAb5hLCpCaEbMR",
+  "data": {
+    "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+    "categoria": "Nacionales",
+    "departamento": "Managua",
+    "dateline": "MANAGUA / NICARAGUA",
+    "resumen": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de 422 mil habitantes.",
+    "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/nuevo-complejo-en-masaya-reune-bomberos--1783465505078.webp",
+    "pieFoto": "Unidades de Bomberos Unidos y oficinas de servicios migratorios integradas en el nuevo complejo departamental. La infraestructura está diseñada para fortalecer los protocolos de seguridad ciudadana y agilizar los trámites de la población local. Foto: Cortesía Masaya en Victorias / Redacción:Keyling Rivera M. / Nicaragua Informate",
+    "autor": "Keyling Elieth Rivera Muñoz",
+    "destacada": true,
+    "slug": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+    "fecha": {
+      "_seconds": 1783466321,
+      "_nanoseconds": 431000000
+    },
+    "fechaDistribucion": "2026-07-07T23:18:45.647Z",
+    "distribuida": true,
+    "contenido": "<p><strong>Masaya</strong> cuenta con un nuevo <strong>complejo</strong> de atención ciudadana que <strong>reúne</strong> en una misma infraestructura los servicios de <strong>Bomberos</strong> Unidos, Migración y Extranjería, según información oficial del Ministerio del Interior de Nicaragua. La instalación está ubicada en la rotonda San Jerónimo, 300 metros al este, y lleva el nombre de Gonzalo Alfredo Martínez Zambrana.</p>\n\n<p>El <strong>complejo</strong> incorpora áreas administrativas, oficinas para atención migratoria y una nueva estación bomberil equipada para brindar cobertura en los nueve municipios del departamento. Con esta integración, la población deja de tener que trasladarse a oficinas separadas de Migración y <strong>Bomberos</strong>, dos servicios que antes operaban en puntos distintos de la ciudad.</p>\n\n<h2>Nueva estación bomberil aumenta la capacidad de respuesta</h2>\n\n<p>La nueva estación de <strong>Bomberos</strong> Unidos está diseñada para reforzar la atención ante incendios, accidentes y otras situaciones que requieran intervención especializada. Cuenta con dos unidades bomberiles: un camión con capacidad para 2 mil galones de agua y otro vehículo con capacidad para 500 galones.</p>\n\n<p>La unidad operativa estará conformada por <strong>11 efectivos permanentes</strong> encargados de atender las emergencias que se presenten dentro del departamento, personal que se suma a la cobertura bomberil ya existente en <strong>Masaya</strong>.</p>\n\n<h2>Una infraestructura para más de 422 mil habitantes</h2>\n\n<p>El <strong>complejo</strong> tendrá cobertura para una población superior a los <strong>422 mil habitantes</strong> del departamento de <strong>Masaya</strong>, distribuidos en sus nueve municipios: <strong>Masaya</strong>, Nindirí, Tisma, La Concepción, Masatepe, Nandasmo, Catarina, San Juan de Oriente y Niquinohomo.</p>\n\n<h2>Trámites migratorios y de <strong>bomberos</strong> en un mismo punto</h2>\n\n<p>La concentración de <strong>Bomberos</strong> Unidos, Migración y Extranjería en una sola sede responde a un modelo que el Ministerio del Interior ha replicado en otros departamentos del país, con el objetivo de reducir el tiempo que los ciudadanos invierten en trasladarse entre oficinas para completar trámites como pasaportes o cédulas de residencia, junto con la atención de emergencias.</p>\n\n<h2>Resumen técnico del proyecto</h2>\n\n<p>El <strong>complejo</strong> se ubica en la rotonda San Jerónimo, 300 metros al este de <strong>Masaya</strong>, e integra bajo un mismo techo a <strong>Bomberos</strong> Unidos, Migración y Extranjería. Lleva el nombre de Gonzalo Alfredo Martínez Zambrana y su cobertura abarca los nueve municipios del departamento, con una población beneficiada de más de 422 mil habitantes. El equipamiento bomberil incluye dos unidades un camión de 2 mil galones y otro de 500 galones operadas por 11 efectivos permanentes, según datos divulgados por el Ministerio del Interior de Nicaragua durante la presentación oficial del proyecto.</p>",
+    "tipoNotaEditorial": "Política",
+    "puntuacion": 100,
+    "analisisEditorial": {
+      "aprobado": true,
+      "nivel": "FORENSE",
+      "puntuacion": 100,
+      "palabrasSensiblesDetectadas": [],
+      "cierreGenerico": false,
+      "filtros": {
+        "oro": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Extension adecuada",
+              "estado": "PASS",
+              "mensaje": "425 palabras. Extensión adecuada con datos verificables.",
+              "valorActual": 425,
+              "valorEsperado": ">=250 con datos verificables"
+            },
+            {
+              "nombre": "Lead informativo",
+              "estado": "PASS",
+              "mensaje": "Lead de 50 palabras. Ideal: 35-50.",
+              "valorActual": 50,
+              "valorEsperado": "35-50"
+            },
+            {
+              "nombre": "Relleno emocional",
+              "estado": "PASS",
+              "mensaje": "Ningun adjetivo emocional detectado.",
+              "valorActual": 0,
+              "valorEsperado": 0
+            },
+            {
+              "nombre": "Transiciones IA",
+              "estado": "PASS",
+              "mensaje": "0 detectadas.",
+              "valorActual": 0,
+              "valorEsperado": 0
+            },
+            {
+              "nombre": "Fuentes atribuidas",
+              "estado": "PASS",
+              "mensaje": "Fuentes detectadas: testigos, familiares, medios o citas.",
+              "valorActual": 0,
+              "valorEsperado": ">=0"
+            },
+            {
+              "nombre": "Estructura (h2)",
+              "estado": "PASS",
+              "mensaje": "4 subtítulos. Nota breve verificable: subtítulos opcionales.",
+              "valorActual": 4,
+              "valorEsperado": ">=0 (opcional para notas breves)"
+            },
+            {
+              "nombre": "Negritas (strong)",
+              "estado": "PASS",
+              "mensaje": "18 datos clave resaltados.",
+              "valorActual": 18,
+              "valorEsperado": ">=1"
+            }
+          ]
+        },
+        "adsense": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Origen — aporte propio",
+              "estado": "PASS",
+              "mensaje": "Atribución a fuente con nombre o cargo."
+            },
+            {
+              "nombre": "Fuente real identificable",
+              "estado": "PASS",
+              "mensaje": "12 nombre(s) propio(s), 14 institución(es) citada(s)."
+            },
+            {
+              "nombre": "Extensión justificada — dato por párrafo",
+              "estado": "PASS",
+              "mensaje": "Cada párrafo aporta al menos un dato concreto."
+            },
+            {
+              "nombre": "Sin datos inventados",
+              "estado": "PASS",
+              "mensaje": "Sin indicios de datos inventados."
+            },
+            {
+              "nombre": "Thin content",
+              "estado": "PASS",
+              "mensaje": "425 palabras con datos concretos. Contenido sustancial.",
+              "valorActual": 425,
+              "valorEsperado": ">=250 con datos"
+            },
+            {
+              "nombre": "Clickbait",
+              "estado": "PASS",
+              "mensaje": "Titulo descriptivo sin clickbait."
+            },
+            {
+              "nombre": "Valor anadido original",
+              "estado": "PASS",
+              "mensaje": "Ratio de unicidad: 46.4%.",
+              "valorActual": "46.4%",
+              "valorEsperado": ">=40%"
+            }
+          ]
+        },
+        "discover": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Imagen destacada",
+              "estado": "PASS",
+              "mensaje": "Imagen presente. Verificar manualmente >=1200px de ancho."
+            },
+            {
+              "nombre": "Titulo Discover-friendly",
+              "estado": "PASS",
+              "mensaje": "Titulo descriptivo."
+            },
+            {
+              "nombre": "Senal de frescura",
+              "estado": "PASS",
+              "mensaje": "datePublished presente. Noticia indexada correctamente."
+            }
+          ]
+        },
+        "news": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Schema NewsArticle",
+              "estado": "PASS",
+              "mensaje": "Verificar que schema.ts incluya: author, publisher, dateModified."
+            },
+            {
+              "nombre": "Autor verificado",
+              "estado": "PASS",
+              "mensaje": "Autor: Keyling Elieth Rivera Muñoz"
+            },
+            {
+              "nombre": "Fechas visibles",
+              "estado": "PASS",
+              "mensaje": "datePublished presente."
+            },
+            {
+              "nombre": "Categoria News",
+              "estado": "PASS",
+              "mensaje": "Categoria: Nacionales"
+            }
+          ]
+        },
+        "seo": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Titulo SEO 50-70 chars",
+              "estado": "PASS",
+              "mensaje": "51 caracteres. Ideal: 50-70.",
+              "valorActual": 51,
+              "valorEsperado": "50-70"
+            },
+            {
+              "nombre": "Meta description 120-180 chars",
+              "estado": "PASS",
+              "mensaje": "169 caracteres. Ideal: 120-180.",
+              "valorActual": 169,
+              "valorEsperado": "120-180"
+            },
+            {
+              "nombre": "Slug SEO",
+              "estado": "PASS",
+              "mensaje": "Slug generado automaticamente: nuevo-complejo-en-masaya-reune-bomberos-y-migracion."
+            },
+            {
+              "nombre": "Keywords LSI",
+              "estado": "PASS",
+              "mensaje": "Sugeridas: nicaragua, infraestructura, nuevo, complejo, masaya",
+              "valorActual": 8,
+              "valorEsperado": ">=1"
+            }
+          ]
+        },
+        "eeat": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Autor identificable",
+              "estado": "PASS",
+              "mensaje": "Autor: Keyling Elieth Rivera Muñoz"
+            },
+            {
+              "nombre": "Fuentes realistas (Nicaragua)",
+              "estado": "PASS",
+              "mensaje": "Fuentes detectadas: testigos, familiares, medios o citas."
+            },
+            {
+              "nombre": "EEAT Nicaragua — Instituciones",
+              "estado": "PASS",
+              "mensaje": "Sin atribuciones falsas a instituciones estatales."
+            }
+          ]
+        },
+        "valorEditorial": {
+          "aprobado": true,
+          "puntuacion": 100,
+          "checks": [
+            {
+              "nombre": "Origen — aporte propio",
+              "estado": "PASS",
+              "mensaje": "Atribución a fuente con nombre o cargo."
+            },
+            {
+              "nombre": "Fuente real identificable",
+              "estado": "PASS",
+              "mensaje": "12 nombre(s) propio(s), 14 institución(es) citada(s)."
+            },
+            {
+              "nombre": "Extensión justificada — dato por párrafo",
+              "estado": "PASS",
+              "mensaje": "Cada párrafo aporta al menos un dato concreto."
+            },
+            {
+              "nombre": "Sin datos inventados",
+              "estado": "PASS",
+              "mensaje": "Sin indicios de datos inventados."
+            }
+          ]
+        }
+      },
+      "accionesRequeridas": [],
+      "metadataSugerida": {
+        "tituloOptimizado": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+        "metaDescription": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de 422 mil habitantes.",
+        "keywordsLSI": [
+          "nicaragua",
+          "infraestructura",
+          "nuevo",
+          "complejo",
+          "masaya",
+          "reune",
+          "bomberos",
+          "migracion"
+        ],
+        "h2Sugeridos": [
+          "Informacion principal"
+        ]
+      },
+      "reporteVPR": {
+        "tipoNota": "Política",
+        "tipoArticulo": "Noticia",
+        "razonamientoTipo": "Nota informativa sin marcadores de formato especial.",
+        "puntuacion": 65,
+        "puntuacionMaxima": 100,
+        "veredicto": "★★★★ Competitiva",
+        "criterios": [
+          {
+            "nombre": "Fuente identificada",
+            "puntuacion": 25,
+            "maximo": 25,
+            "justificacion": "Fuente oficial o medio identificado.",
+            "estrellas": "★★★★★"
+          },
+          {
+            "nombre": "Documento oficial",
+            "puntuacion": 8,
+            "maximo": 25,
+            "justificacion": "Sin documento oficial identificado.",
+            "estrellas": "★★☆☆☆"
+          },
+          {
+            "nombre": "Fuentes independientes",
+            "puntuacion": 25,
+            "maximo": 25,
+            "justificacion": "Dos o más fuentes independientes.",
+            "estrellas": "★★★★★"
+          },
+          {
+            "nombre": "Trabajo de campo verificable",
+            "puntuacion": 25,
+            "maximo": 25,
+            "justificacion": "Evidencia verificable (fuente, documento, audiovisual o testimonio publicado).",
+            "estrellas": "★★★★★"
+          },
+          {
+            "nombre": "Datos concretos",
+            "puntuacion": 25,
+            "maximo": 25,
+            "justificacion": "Fechas, cifras o cantidades verificables.",
+            "estrellas": "★★★★★"
+          },
+          {
+            "nombre": "Contexto",
+            "puntuacion": 0,
+            "maximo": 25,
+            "justificacion": "Contexto insuficiente.",
+            "estrellas": "★☆☆☆☆"
+          },
+          {
+            "nombre": "Utilidad",
+            "puntuacion": 14,
+            "maximo": 25,
+            "justificacion": "Aporta utilidad al lector.",
+            "estrellas": "★★★☆☆"
+          },
+          {
+            "nombre": "Originalidad",
+            "puntuacion": 14,
+            "maximo": 25,
+            "justificacion": "Aporte editorial propio.",
+            "estrellas": "★★★☆☆"
+          }
+        ],
+        "porQueExiste": "La nota merece existir porque el Editor Jefe V2 decide publicarla con la evidencia disponible.",
+        "aporteOriginal": "Se detecta aporte editorial propio o verificación del medio.",
+        "razonReferenciaSiNo": "Sí",
+        "razonamientoReferencia": "La nota aporta evidencia verificable y el Editor Jefe V2 decide publicarla. Evidencia parcial: publicar estándar. Evidencia promedio 67%. Tipo Noticia.",
+        "oportunidadesEditoriales": [
+          {
+            "texto": "Mencionar el marco legal, decreto o normativa aplicable si es información pública.",
+            "impacto": "Contexto jurídico.",
+            "tiempo": "15-30 min",
+            "dificultad": "Media",
+            "beneficio": "Eleva rigor."
+          },
+          {
+            "texto": "Cuantificar o caracterizar a los beneficiarios o afectados cuando existan datos públicos.",
+            "impacto": "Alcance real.",
+            "tiempo": "10-20 min",
+            "dificultad": "Baja",
+            "beneficio": "Mejora relevancia."
+          },
+          {
+            "texto": "Si la noticia implica un tr[áa]mite, aclarar pasos, plazos o dónde acudir.",
+            "impacto": "Servicio ciudadano.",
+            "tiempo": "15-30 min",
+            "dificultad": "Media",
+            "beneficio": "Valor pr[áa]ctico."
+          }
+        ],
+        "investigacionAdicional": "Mencionar el marco legal, decreto o normativa aplicable si es información pública.",
+        "preguntaSinResponder": "¿Qué información pública adicional fortalecería esta nota?",
+        "datoEnriquecedor": "Cuantificar o caracterizar a los beneficiarios o afectados cuando existan datos públicos.",
+        "comoConvertirReferencia": [
+          {
+            "texto": "Obtener el comunicado oficial o datos de la institución responsable.",
+            "impacto": "Documento verificable.",
+            "tiempo": "30-60 min",
+            "dificultad": "Media",
+            "beneficio": "Referencia documentada."
+          },
+          {
+            "texto": "Comparar con políticas o hechos anteriores del mismo organismo.",
+            "impacto": "Contexto histórico.",
+            "tiempo": "1-2 días",
+            "dificultad": "Media",
+            "beneficio": "Relevancia nacional."
+          },
+          {
+            "texto": "Actualizar cuando la institución publique nuevos datos o resoluciones.",
+            "impacto": "Vigencia.",
+            "tiempo": "10-20 min",
+            "dificultad": "Baja",
+            "beneficio": "Mantiene la pieza útil."
+          }
+        ],
+        "detectorNicaraguaInformate": "Aporte propio detectado",
+        "detectorFacebook": "Evaluado por el motor editorial V2",
+        "detectorGoogle": "Evaluado por el motor editorial V2",
+        "detectorEEATReal": "Cumple estándar EEAT mínimo",
+        "principioRector": "Nicaragua Informate evalúa cada nota con la información pública disponible al cierre editorial. No se exige trabajo de campo presencial, entrevistas exclusivas ni acceso institucional como condición para publicar. El trabajo periodístico se considera suficiente cuando existe evidencia verificable: fuente oficial, medio nacional identificado, documento, video, fotografía o testimonio publicado por una fuente reconocible.",
+        "preguntaFinal": "¿Con la información pública disponible, esta nota está bien construida y resulta útil para el lector de Nicaragua Informate?",
+        "nivel7_5_evidenciaAporte": [
+          {
+            "tipo": "antecedente",
+            "snippet": "con una población beneficiada de más de 422 mil habitantes. El equipamiento bomberil incluye dos unidades un camión de 2 mil galones y otro de 500 galones operadas por 11 efectivos permanentes, según datos divulgados por"
+          }
+        ],
+        "nivel8_impactoLector": "La nota aporta utilidad práctica o clarifica el impacto para el lector.",
+        "nivel9_preguntasSinRespuesta": [
+          "¿Qué datos públicos adicionales fortalecerían la nota?",
+          "¿Existe un antecedente reciente que contextualice el hecho?",
+          "¿Qué institución podría actualizar la información oficialmente?",
+          "¿Cómo afecta esto directamente al lector?"
+        ],
+        "nivel10_oportunidades": [
+          {
+            "texto": "An[áa]lisis del impacto de la medida con datos oficiales y testimonios identificados.",
+            "impacto": "An[áa]lisis de fondo.",
+            "tiempo": "2-4 días",
+            "dificultad": "Alta",
+            "beneficio": "Autoridad editorial."
+          },
+          {
+            "texto": "Guía pr[áa]ctica de tr[áa]mites o derechos afectados.",
+            "impacto": "Evergreen de servicio.",
+            "tiempo": "1 día",
+            "dificultad": "Baja",
+            "beneficio": "Tr[áa]fico sostenido."
+          }
+        ],
+        "nivelEvidencia": [
+          {
+            "criterio": "Fuente oficial identificada",
+            "detectado": "Sí",
+            "puntaje": 3,
+            "maximo": 3
+          },
+          {
+            "criterio": "Documento oficial identificado",
+            "detectado": "No",
+            "puntaje": 0,
+            "maximo": 3
+          },
+          {
+            "criterio": "Dos o más fuentes independientes",
+            "detectado": "Sí",
+            "puntaje": 3,
+            "maximo": 3
+          },
+          {
+            "criterio": "Trabajo de campo verificable",
+            "detectado": "Sí",
+            "puntaje": 3,
+            "maximo": 3
+          },
+          {
+            "criterio": "Datos concretos",
+            "detectado": "Sí",
+            "puntaje": 3,
+            "maximo": 3
+          },
+          {
+            "criterio": "Contexto legal / institucional",
+            "detectado": "No",
+            "puntaje": 0,
+            "maximo": 3
+          }
+        ],
+        "factibilidad": "Baja",
+        "tiempoReferencia": "Inmediato",
+        "retornoEditorial": "MEDIO",
+        "retornoExplicacion": "Retorno editorial moderado; conviene actualizar con datos públicos.",
+        "prioridadEditorial": "Secundaria",
+        "valorParaLector": "La nota entrega información útil o aclara el impacto del hecho.",
+        "decisionPortada": "Publicar estándar",
+        "explicacionPortada": "Nota en contexto Nicaragüense. Se evalúa con el estándar de información verificable disponible. Publicar con el estándar habitual.",
+        "perfilVertical": {
+          "vertical": "Nacionales",
+          "criterios": [
+            "Buscar impacto ciudadano.",
+            "Identificar instituciones involucradas.",
+            "Aportar servicio: pasos, plazos o derechos.",
+            "Incluir contexto y antecedentes.",
+            "Mencionar marco legal cuando aplique."
+          ],
+          "evidenciaAceptada": [
+            "Instituciones nacionales",
+            "Comunicados oficiales",
+            "Datos públicos",
+            "Voceros identificados",
+            "Medios nacionales reconocidos",
+            "Documentos públicos"
+          ],
+          "utilidad": [
+            "entender impacto",
+            "conocer trámites",
+            "defender derechos",
+            "tomar decisiones"
+          ],
+          "contexto": [
+            "institución responsable",
+            "historial de la política",
+            "afectados directos"
+          ],
+          "preguntas": [
+            "¿Qué institución está involucrada?",
+            "¿Cómo afecta al ciudadano común?",
+            "¿Hay un marco legal o decreto aplicable?",
+            "¿Cuáles son los pasos a seguir?",
+            "¿Existen antecedentes similares?"
+          ],
+          "benchmark": [
+            "Confidencial",
+            "La Prensa",
+            "100% Noticias"
+          ],
+          "ee": [
+            "Dominio del contexto institucional nicaragüense.",
+            "Autoridad: citar fuentes oficiales por nombre.",
+            "Confianza: explicar impacto real en el lector."
+          ]
+        },
+        "discoverRazon": "Tiene algunos atributos, pero necesita más originalidad o servicio para destacar.",
+        "descubreProbabilidad": "MEDIA",
+        "porQueCompartible": "No se detecta un motivo de ayuda claro; la nota necesita utilidad o verificación.",
+        "compartibleSiNo": "No",
+        "categoriaFacebook": "Utilidad",
+        "razonFacebook": "Evaluado por el motor editorial V2",
+        "produccionNicaraguaInformate": [],
+        "riesgoLegal": {
+          "nivel": "Bajo",
+          "explicacion": "No se detectan riesgos legales evidentes."
+        },
+        "firmaDirector": "Director Editorial V2 — Publicar estándar",
+        "auditoriaInterna": {
+          "aprobado": true,
+          "observaciones": [
+            "Fase 0: nota tipo Nacionales. Nivel de riesgo Bajo.",
+            "Fase 1 Triage — ¿Existe noticia? No se detecta un relato de hecho claro.",
+            "Fase 1 Triage — ¿Existe contexto? No se detecta explicación de causas o antecedentes.",
+            "Fase 1 Triage — ¿Existe proceso? No se detecta descripción de seguimiento o consecuencias.",
+            "Fase 6 Cirugía estructural: faltan elementos; revisar lead, cronología, contexto, proceso, consecuencias, servicio o seguimiento.",
+            "No se detecta una razón objetiva para preferir esta versión sobre otros medios."
+          ],
+          "ajustesRealizados": []
+        },
+        "diferenciadorNI": {
+          "elementosDetectados": [
+            "Agregó explicación legal o normativa",
+            "Incluyó datos concretos verificables"
+          ],
+          "puntuacion": 50,
+          "resumen": "Aporte editorial detectado: Agregó explicación legal o normativa; Incluyó datos concretos verificables."
+        },
+        "valorAgregado": [
+          "Agregó explicación legal o normativa",
+          "Incluyó datos concretos verificables"
+        ]
+      },
+      "reporteForenseV1": {
+        "version": "1.0",
+        "rol": "auditoria",
+        "observaciones": [
+          "Fase 0: nota tipo Nacionales. Nivel de riesgo Bajo.",
+          "Fase 1 Triage — ¿Existe noticia? No se detecta un relato de hecho claro.",
+          "Fase 1 Triage — ¿Existe contexto? No se detecta explicación de causas o antecedentes.",
+          "Fase 1 Triage — ¿Existe proceso? No se detecta descripción de seguimiento o consecuencias.",
+          "Fase 6 Cirugía estructural: faltan elementos; revisar lead, cronología, contexto, proceso, consecuencias, servicio o seguimiento.",
+          "No se detecta una razón objetiva para preferir esta versión sobre otros medios."
+        ],
+        "advertencias": [],
+        "hallazgos": [],
+        "fase0_identificacion": {
+          "tipoNota": "Nacionales",
+          "nivelRiesgo": "Bajo",
+          "observacion": "Fase 0: nota tipo Nacionales. Nivel de riesgo Bajo."
+        },
+        "fase1_triage": {
+          "items": [
+            {
+              "pregunta": "¿Existe noticia?",
+              "respuesta": "No",
+              "observacion": "No se detecta un relato de hecho claro."
+            },
+            {
+              "pregunta": "¿Existe interés público?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe actualidad?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe evidencia?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe fuente?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe dato verificable?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe utilidad?",
+              "respuesta": "Sí",
+              "observacion": null
+            },
+            {
+              "pregunta": "¿Existe contexto?",
+              "respuesta": "No",
+              "observacion": "No se detecta explicación de causas o antecedentes."
+            },
+            {
+              "pregunta": "¿Existe proceso?",
+              "respuesta": "Sí",
+              "observacion": null
+            }
+          ],
+          "observaciones": [
+            "Fase 1 Triage — ¿Existe noticia? No se detecta un relato de hecho claro.",
+            "Fase 1 Triage — ¿Existe contexto? No se detecta explicación de causas o antecedentes.",
+            "Fase 1 Triage — ¿Existe proceso? No se detecta descripción de seguimiento o consecuencias."
+          ]
+        },
+        "fase2_autopsiaDocumental": {
+          "extracciones": [
+            {
+              "tipo": "Nombres propios",
+              "valores": [
+                "Bomberos Unidos",
+                "San Jerónimo",
+                "Gonzalo Alfredo Martínez Zambrana",
+                "La Concepción",
+                "San Juan"
+              ]
+            },
+            {
+              "tipo": "Lugares",
+              "valores": [
+                "Masaya",
+                "departamento"
+              ]
+            },
+            {
+              "tipo": "Instituciones",
+              "valores": [
+                "Bomberos",
+                "bomberos"
+              ]
+            },
+            {
+              "tipo": "Cifras",
+              "valores": [
+                "300",
+                " 2",
+                " 500",
+                " 11",
+                " 422"
+              ]
+            }
+          ]
+        },
+        "fase3_necropsiaEvidencia": {
+          "oraciones": [
+            {
+              "texto": "Masaya cuenta con un nuevo complejo de atención ciudadana que reúne en una misma infraestructura los servicios de Bomberos Unidos, Migración y Extranjería, según información oficial del Ministerio del Interior de Nicaragua",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "La instalación está ubicada en la rotonda San Jerónimo, 300 metros al este, y lleva el nombre de Gonzalo Alfredo Martínez Zambrana",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "El complejo incorpora áreas administrativas, oficinas para atención migratoria y una nueva estación bomberil equipada para brindar cobertura en los nueve municipios del departamento",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Con esta integración, la población deja de tener que trasladarse a oficinas separadas de Migración y Bomberos , dos servicios que antes operaban en puntos distintos de la ciudad",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Nueva estación bomberil aumenta la capacidad de respuesta La nueva estación de Bomberos Unidos está diseñada para reforzar la atención ante incendios, accidentes y otras situaciones que requieran intervención especializada",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Cuenta con dos unidades bomberiles: un camión con capacidad para 2 mil galones de agua y otro vehículo con capacidad para 500 galones",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "La unidad operativa estará conformada por 11 efectivos permanentes encargados de atender las emergencias que se presenten dentro del departamento, personal que se suma a la cobertura bomberil ya existente en Masaya",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Una infraestructura para más de 422 mil habitantes El complejo tendrá cobertura para una población superior a los 422 mil habitantes del departamento de Masaya , distribuidos en sus nueve municipios: Masaya , Nindirí, Tisma, La Concepción, Masatepe, Nandasmo, Catarina, San Juan de Oriente y Niquinohomo",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Trámites migratorios y de bomberos en un mismo punto La concentración de Bomberos Unidos, Migración y Extranjería en una sola sede responde a un modelo que el Ministerio del Interior ha replicado en otros departamentos del país, con el objetivo de reducir el tiempo que los ciudadanos invierten en trasladarse entre oficinas para completar trámites como pasaportes o cédulas de residencia, junto con la atención de emergencias",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Resumen técnico del proyecto El complejo se ubica en la rotonda San Jerónimo, 300 metros al este de Masaya , e integra bajo un mismo techo a Bomberos Unidos, Migración y Extranjería",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "Lleva el nombre de Gonzalo Alfredo Martínez Zambrana y su cobertura abarca los nueve municipios del departamento, con una población beneficiada de más de 422 mil habitantes",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "El equipamiento bomberil incluye dos unidades un camión de 2 mil galones y otro de 500 galones operadas por 11 efectivos permanentes, según datos divulgados por el Ministerio del Interior de Nicaragua durante la presentación oficial del proyecto",
+              "origen": "SEMIOFICIAL"
+            },
+            {
+              "texto": "[H2] [H2] [H2] [H2] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG] [STRONG]",
+              "origen": "SEMIOFICIAL"
+            }
+          ],
+          "conteo": {
+            "OFICIAL": 0,
+            "SEMIOFICIAL": 13,
+            "TESTIGO": 0,
+            "REDES": 0,
+            "PERIODÍSTICO": 0,
+            "DOCUMENTAL": 0,
+            "FORENSE": 0,
+            "SIN ORIGEN": 0
+          }
+        },
+        "fase4_cadenaCustodia": {
+          "parrafos": [
+            {
+              "parrafo": "Masaya cuenta con un nuevo complejo de atención ciudadana que reúne en una misma infraestructura los servicios de Bomberos Unidos, Migración y Extranjería, según información oficial del Ministerio del",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": false,
+              "motivo": null
+            },
+            {
+              "parrafo": "El complejo incorpora áreas administrativas, oficinas para atención migratoria y una nueva estación bomberil equipada para brindar cobertura en los nueve municipios del departamento. Con esta integrac",
+              "quien": "No",
+              "como": "No",
+              "donde": "Sí",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": true,
+              "motivo": "Párrafo sin atribución ni fuente identificable."
+            },
+            {
+              "parrafo": "Nueva estación bomberil aumenta la capacidad de respuesta",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": false,
+              "motivo": null
+            },
+            {
+              "parrafo": "La nueva estación de Bomberos Unidos está diseñada para reforzar la atención ante incendios, accidentes y otras situaciones que requieran intervención especializada. Cuenta con dos unidades bomberiles",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": true,
+              "motivo": "Párrafo sin atribución ni fuente identificable."
+            },
+            {
+              "parrafo": "La unidad operativa estará conformada por 11 efectivos permanentes encargados de atender las emergencias que se presenten dentro del departamento, personal que se suma a la cobertura bomberil ya exist",
+              "quien": "No",
+              "como": "No",
+              "donde": "Sí",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": true,
+              "motivo": "Párrafo sin atribución ni fuente identificable."
+            },
+            {
+              "parrafo": "Una infraestructura para más de 422 mil habitantes",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": false,
+              "motivo": null
+            },
+            {
+              "parrafo": "El complejo tendrá cobertura para una población superior a los 422 mil habitantes del departamento de Masaya , distribuidos en sus nueve municipios: Masaya , Nindirí, Tisma, La Concepción, Masatepe, N",
+              "quien": "No",
+              "como": "No",
+              "donde": "Sí",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": true,
+              "motivo": "Párrafo sin atribución ni fuente identificable."
+            },
+            {
+              "parrafo": "Trámites migratorios y de bomberos en un mismo punto",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": false,
+              "motivo": null
+            },
+            {
+              "parrafo": "La concentración de Bomberos Unidos, Migración y Extranjería en una sola sede responde a un modelo que el Ministerio del Interior ha replicado en otros departamentos del país, con el objetivo de reduc",
+              "quien": "No",
+              "como": "No",
+              "donde": "No",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": true,
+              "motivo": "Párrafo sin atribución ni fuente identificable."
+            },
+            {
+              "parrafo": "El complejo se ubica en la rotonda San Jerónimo, 300 metros al este de Masaya , e integra bajo un mismo techo a Bomberos Unidos, Migración y Extranjería. Lleva el nombre de Gonzalo Alfredo Martínez Za",
+              "quien": "No",
+              "como": "No",
+              "donde": "Sí",
+              "verificable": "No",
+              "tieneFuente": "No",
+              "marcaRoja": false,
+              "motivo": null
+            }
+          ],
+          "observaciones": [
+            "Fase 4 Cadena de custodia: Párrafo sin atribución ni fuente identificable.",
+            "Fase 4 Cadena de custodia: Párrafo sin atribución ni fuente identificable.",
+            "Fase 4 Cadena de custodia: Párrafo sin atribución ni fuente identificable.",
+            "Fase 4 Cadena de custodia: Párrafo sin atribución ni fuente identificable.",
+            "Fase 4 Cadena de custodia: Párrafo sin atribución ni fuente identificable."
+          ]
+        },
+        "fase5_detectorContaminacion": {
+          "hallazgos": [],
+          "observaciones": []
+        },
+        "fase6_cirugiaEstructural": {
+          "elementos": {
+            "lead": {
+              "presente": true,
+              "evaluacion": "Lead detectado"
+            },
+            "cronologia": {
+              "presente": false,
+              "evaluacion": "Cronología en construcción"
+            },
+            "contexto": {
+              "presente": false,
+              "evaluacion": "Contexto presente"
+            },
+            "proceso": {
+              "presente": false,
+              "evaluacion": "Proceso detectado"
+            },
+            "consecuencias": {
+              "presente": false,
+              "evaluacion": "Consecuencias presentes"
+            },
+            "servicio": {
+              "presente": false,
+              "evaluacion": "Servicio al lector detectado"
+            },
+            "seguimiento": {
+              "presente": false,
+              "evaluacion": "Seguimiento futuro detectado"
+            }
+          },
+          "observaciones": [
+            "Fase 6 Cirugía estructural: faltan elementos; revisar lead, cronología, contexto, proceso, consecuencias, servicio o seguimiento."
+          ]
+        },
+        "fase7_controlHemorragia": {
+          "parrafos": [
+            {
+              "parrafo": "Masaya cuenta con un nuevo complejo de atención ciudadana que reúne en una misma infraestructura los servicios de Bomberos Unidos, Migración y Extranjería, según información oficial del Ministerio del",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "El complejo incorpora áreas administrativas, oficinas para atención migratoria y una nueva estación bomberil equipada para brindar cobertura en los nueve municipios del departamento. Con esta integrac",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "Nueva estación bomberil aumenta la capacidad de respuesta",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "La nueva estación de Bomberos Unidos está diseñada para reforzar la atención ante incendios, accidentes y otras situaciones que requieran intervención especializada. Cuenta con dos unidades bomberiles",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "La unidad operativa estará conformada por 11 efectivos permanentes encargados de atender las emergencias que se presenten dentro del departamento, personal que se suma a la cobertura bomberil ya exist",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "Una infraestructura para más de 422 mil habitantes",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "El complejo tendrá cobertura para una población superior a los 422 mil habitantes del departamento de Masaya , distribuidos en sus nueve municipios: Masaya , Nindirí, Tisma, La Concepción, Masatepe, N",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "Trámites migratorios y de bomberos en un mismo punto",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "La concentración de Bomberos Unidos, Migración y Extranjería en una sola sede responde a un modelo que el Ministerio del Interior ha replicado en otros departamentos del país, con el objetivo de reduc",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            },
+            {
+              "parrafo": "El complejo se ubica en la rotonda San Jerónimo, 300 metros al este de Masaya , e integra bajo un mismo techo a Bomberos Unidos, Migración y Extranjería. Lleva el nombre de Gonzalo Alfredo Martínez Za",
+              "aportaDatoNuevo": true,
+              "accion": "mantener",
+              "motivo": "Aporta información nueva."
+            }
+          ],
+          "observaciones": []
+        },
+        "fase8_tomografiaSEO": {
+          "checks": [
+            {
+              "elemento": "Título 50-70 caracteres",
+              "estado": "PASS",
+              "valorActual": "51",
+              "valorEsperado": "50-70",
+              "recomendacion": "Ajustar longitud del título."
+            },
+            {
+              "elemento": "Meta description 120-180 caracteres",
+              "estado": "PASS",
+              "valorActual": "169",
+              "valorEsperado": "120-180",
+              "recomendacion": "Ajustar meta descripción."
+            },
+            {
+              "elemento": "Slug canónico",
+              "estado": "PASS",
+              "valorActual": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+              "recomendacion": "Usar slug en minúsculas con guiones."
+            },
+            {
+              "elemento": "Imagen destacada",
+              "estado": "PASS",
+              "recomendacion": "Incluir imagen destacada."
+            },
+            {
+              "elemento": "Palabras clave",
+              "estado": "WARN",
+              "recomendacion": "Definir palabras clave principales."
+            }
+          ]
+        },
+        "fase9_resonanciaEEAT": {
+          "checks": [
+            {
+              "criterio": "Autor identificado",
+              "presente": true,
+              "evidencia": "Keyling Elieth Rivera Muñoz"
+            },
+            {
+              "criterio": "Fuente identificada",
+              "presente": true,
+              "evidencia": "Detectada en texto"
+            },
+            {
+              "criterio": "Documento o dato oficial",
+              "presente": false
+            },
+            {
+              "criterio": "Institución mencionada",
+              "presente": true
+            },
+            {
+              "criterio": "Proceso descrito",
+              "presente": false
+            },
+            {
+              "criterio": "Contexto aportado",
+              "presente": false
+            },
+            {
+              "criterio": "Verificación visible",
+              "presente": false
+            },
+            {
+              "criterio": "Valor agregado / comparación",
+              "presente": false
+            },
+            {
+              "criterio": "Utilidad práctica",
+              "presente": false
+            }
+          ]
+        },
+        "fase10_forenseLegal": {
+          "riesgos": [],
+          "observaciones": []
+        },
+        "fase11_forenseAdsense": {
+          "palabras": [],
+          "observaciones": []
+        },
+        "fase12_forenseFacebook": {
+          "motivos": [
+            "Cercanía geográfica / identidad local.",
+            "Identidad local."
+          ],
+          "riesgos": [],
+          "observaciones": []
+        },
+        "fase13_forenseDiscover": {
+          "probabilidad": "MEDIA",
+          "justificacion": "Tiene algunos atributos, pero le falta aporte propio, utilidad o contexto para destacar en Discover.",
+          "faltantes": [
+            "aporte propio",
+            "contexto institucional"
+          ]
+        },
+        "fase14_forenseUtilidad": {
+          "items": [
+            {
+              "pregunta": "¿Qué aprende el lector?",
+              "respuesta": "Sí"
+            },
+            {
+              "pregunta": "¿Qué decisión puede tomar?",
+              "respuesta": "No"
+            },
+            {
+              "pregunta": "¿Qué comprende mejor?",
+              "respuesta": "No"
+            },
+            {
+              "pregunta": "¿Qué derecho conoce?",
+              "respuesta": "No"
+            },
+            {
+              "pregunta": "¿Qué proceso entiende?",
+              "respuesta": "No"
+            },
+            {
+              "pregunta": "¿Qué institución descubre?",
+              "respuesta": "Sí"
+            }
+          ],
+          "ganancias": [
+            "Qué aprende el lector",
+            "Qué institución descubre"
+          ]
+        },
+        "fase15_forenseDiferenciador": {
+          "evidencia": [
+            "evidencia verificable reconocida por el Editor Jefe"
+          ],
+          "observacion": "El Editor Jefe detectó evidencia verificable (fuente, documento, testimonio o campo) que fundamenta el aporte propio."
+        },
+        "fase16_forensePortada": {
+          "observacion": "La clasificación de portada es competencia exclusiva del Editor Jefe V2; la Constitución Forense solo registra señales de relevancia."
+        },
+        "fase17_forenseFacebookProbabilidad": {
+          "probabilidad": "MEDIA",
+          "motivos": [
+            "Cercanía geográfica / identidad local.",
+            "Identidad local."
+          ],
+          "riesgos": []
+        },
+        "fase18_forenseGoogle": {
+          "observacion": "Falta diferenciador o señales EEAT suficientes para competir en Google."
+        }
+      }
+    },
+    "fechaAnalisis": {
+      "_seconds": 1784082759,
+      "_nanoseconds": 671000000
+    },
+    "accionesRequeridas": [],
+    "tipoNotaForense": "Nacionales",
+    "metaDescripcion": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de...",
+    "metaDescription": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de...",
+    "keywords": "bomberos, masaya, complejo, migracion, unidos, capacidad, interior, ministerio, nueva, atencion, atender, bomberil",
+    "tags": [
+      "bomberos",
+      "masaya",
+      "complejo",
+      "migracion",
+      "unidos",
+      "capacidad",
+      "interior",
+      "ministerio",
+      "nueva",
+      "atencion",
+      "atender",
+      "bomberil"
+    ],
+    "updatedAt": {
+      "_seconds": 1785114573,
+      "_nanoseconds": 912000000
+    },
+    "palabrasClave": [
+      "bomberos",
+      "masaya",
+      "complejo",
+      "migracion",
+      "unidos",
+      "capacidad",
+      "interior",
+      "ministerio",
+      "nueva",
+      "atencion",
+      "atender",
+      "bomberil"
+    ],
+    "related_links": [
+      {
+        "url": "/categoria/nacionales",
+        "anchor": "Noticias de nacionales",
+        "type": "categoria"
+      },
+      {
+        "url": "/buscar?q=masaya",
+        "anchor": "Masaya",
+        "type": "etiqueta"
+      },
+      {
+        "url": "/noticias/minsa-vacuna-contra-la-rabia-a-1-75-millones-de-perros",
+        "anchor": "MINSA vacuna contra la rabia a",
+        "type": "relacionada"
+      }
+    ],
+    "fuentesComplementarias": [],
+    "fuente": "Redacción Nicaragua Informate",
+    "fechaActualizacion": {
+      "_seconds": 1786205716,
+      "_nanoseconds": 786000000
+    },
+    "puntosClave": [
+      "Masaya cuenta con un nuevo complejo de atención ciudadana que reúne en una misma infraestructura los servicios de Bomberos Unidos, Migración y Extranjería, según información oficial del Ministerio del Interior de Nicaragua.",
+      "La instalación está ubicada en la rotonda San Jerónimo, 300 metros al este, y lleva el nombre de Gonzalo Alfredo Martínez Zambrana.",
+      "Nueva estación bomberil aumenta la capacidad de respuesta La nueva estación de Bomberos Unidos está diseñada para reforzar la atención ante incendios, accidentes y otras situaciones que requieran intervención especializada.",
+      "Cuenta con dos unidades bomberiles: un camión con capacidad para 2 mil galones de agua y otro vehículo con capacidad para 500 galones."
+    ],
+    "autorFoto": "/keyling-rivera.jpg",
+    "vistas": 29,
+    "calificacionMeni": "NO PUBLICAR",
+    "editorialTier": "REPORTAJE",
+    "recomendacionesMeni": [
+      "editorial: Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Como afecta a la comunidad?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?",
+      "editorial: Contexto: Causa probable del accidente",
+      "editorial: Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+    ],
+    "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "editorialReason": {
+      "aprobado": false,
+      "tier": "REPORTAJE",
+      "resumen": "Esta nota fue rechazada como REPORTAJE (Sucesos).  Puntos de mejora: faltan antecedentes y contexto sobre el tema.",
+      "puntosPositivos": [
+        "aporta valor diferencial que otros medios no incluyen (exclusividad: 97%)",
+        "el lector aprende algo nuevo (WOW index: 75.6%)",
+        "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+        "sello editorial Nicaragua Informate sólido (83%)",
+        "extensión adecuada (403 palabras, mínimo 400)"
+      ],
+      "puntosMejora": [
+        "faltan antecedentes y contexto sobre el tema"
+      ],
+      "bloqueadores": []
+    },
+    "scoreMeni": 64,
+    "palabras": 403,
+    "aprobadoMeni": false,
+    "nivelScore": 64,
+    "nivel": "RECHAZADO",
+    "nivelFecha": "2026-08-12T03:31:05.415Z",
+    "publicado": false,
+    "estado": "borrador",
+    "cambiosRealizados": [
+      {
+        "fase": "PHASE18",
+        "fecha": "2026-08-13T03:55:35.577Z",
+        "accion": "BLOQUEO_P0",
+        "campo": "estado",
+        "antes": "publicado",
+        "despues": "borrador",
+        "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción",
+        "actor": "forensic-phase18-script"
+      },
+      {
+        "fase": "PHASE18",
+        "fecha": "2026-08-13T03:55:35.577Z",
+        "accion": "UNIFICACION_P1B",
+        "campo": "publicado+aprobado",
+        "antes": {
+          "publicado": false,
+          "aprobado": true
+        },
+        "despues": {
+          "publicado": false,
+          "aprobado": null
+        },
+        "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado",
+        "actor": "forensic-phase18-script"
+      }
+    ]
+  }
+}

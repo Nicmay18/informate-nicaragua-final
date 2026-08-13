@@ -1,7 +1,6 @@
 import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
 import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
-import { rankNoticias } from '@/lib/home-ranking';
 import { diversifyNoticias } from '@/lib/diversify';
 import { checkHomeDiversity } from '@/lib/home-balance';
 import { checkBrandHealth } from '@/lib/brand-health';
@@ -71,7 +70,9 @@ export default async function HomePage() {
       getTrendingNews(20),
       getPopularNews(20),
     ]);
-    noticias = rankNoticias(latest);
+    // HomePagePro ya ordena por fecha desc (cronológico) internamente.
+    // No reordenar por score aquí — la frescura es la prioridad de la portada.
+    noticias = latest;
     masLeidas = diversifyNoticias(trending, 5, 2);
     populares = diversifyNoticias(popular, 5, 2);
 

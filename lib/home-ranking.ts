@@ -93,7 +93,9 @@ function scoreNoticia(noticia: Noticia): number {
 
   const actualidad = Math.max(0, 1 - h / 12);
 
-  const calidadMeni = normalizeScore(noticia.scoreMeni ?? 70, 100);
+  // Sin fallback: si scoreMeni es null, la nota no fue evaluada por MENI
+  // y no debe recibir puntaje de calidad. Score 0 = sin evaluación.
+  const calidadMeni = normalizeScore(noticia.scoreMeni ?? 0, 100);
 
   const categoriaEstrategica = CATEGORY_BOOST[noticia.categoria] ?? 0.50;
 
@@ -159,7 +161,7 @@ export function selectDestacada(noticias: Noticia[]): Noticia | null {
     const actualidad = Math.max(0, 1 - h / 12);
 
     s += actualidad * 2;
-    s += normalizeScore(n.scoreMeni ?? 70, 100) * 3;
+    s += normalizeScore(n.scoreMeni ?? 0, 100) * 3;
     if (['Nacionales', 'Tecnología', 'Deportes', 'Internacionales'].includes(n.categoria)) s += 2;
     if (['Sucesos', 'Espectáculos'].includes(n.categoria)) s -= 2;
     if (isLutoNews(n)) s -= 6;

@@ -84,14 +84,14 @@ export function generateComplianceReport(
     );
 
     if (!hasGsc || impressions === 0) {
-      googleVerdict = 'google_ignores';
+      googleVerdict = 'low_gsc_visibility';
       evidenceList.push(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 0),
       );
 
       if (scoreMeni !== null && scoreMeni >= 90) {
-        meniVsGoogleGap = 'meni_overestimates';
-        explanation = `MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones en los últimos 28 días. Google NO considera útil esta nota. MENI está sobreestimando el valor de este contenido.`;
+        meniVsGoogleGap = 'meni_gsc_gap_hypothesis';
+        explanation = `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones en los últimos 28 días. Esto NO significa que Google "rechace" el contenido. Puede deberse a: indexación pendiente, baja demanda de búsqueda, o ausencia de conexión GSC. No se puede concluir que MENI sobreestime sin más evidencia.`;
       } else if (scoreMeni !== null && scoreMeni > 0) {
         meniVsGoogleGap = 'no_data';
         explanation = `MENI otorga ${scoreMeni} puntos. Google Search Console no registra impresiones. No hay datos suficientes para determinar si Google valora esta nota.`;
@@ -100,14 +100,14 @@ export function generateComplianceReport(
         explanation = `Sin score MENI y sin impresiones en Google Search Console. No hay datos suficientes.`;
       }
     } else if (impressions < 10) {
-      googleVerdict = 'google_ignores';
+      googleVerdict = 'low_gsc_visibility';
       evidenceList.push(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', impressions),
       );
 
       if (scoreMeni !== null && scoreMeni >= 90) {
-        meniVsGoogleGap = 'meni_overestimates';
-        explanation = `MENI otorga ${scoreMeni} puntos, pero Google Search Console solo registra ${impressions} impresiones en 28 días. Google prácticamente ignora esta nota. MENI está sobreestimando.`;
+        meniVsGoogleGap = 'meni_gsc_gap_hypothesis';
+        explanation = `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero Google Search Console solo registra ${impressions} impresiones en 28 días. Esto NO significa que Google "ignore" la nota. El volumen es insuficiente para una conclusión firme.`;
       } else {
         meniVsGoogleGap = 'no_data';
         explanation = `MENI: ${scoreMeni ?? 'N/D'}. Google: ${impressions} impresiones. Datos insuficientes para una conclusión firme.`;
@@ -148,15 +148,15 @@ export function generateComplianceReport(
 
   // Estadísticas
   const articlesWithGscData = verdicts.filter(v => v.googleVerdict !== 'no_data' && v.gscImpressions > 0).length;
-  const articlesGoogleIgnores = verdicts.filter(v => v.googleVerdict === 'google_ignores').length;
+  const articlesLowVisibility = verdicts.filter(v => v.googleVerdict === 'low_gsc_visibility').length;
   const articlesGoogleValues = verdicts.filter(v => v.googleVerdict === 'google_values').length;
-  const meniOverestimates = verdicts.filter(v => v.meniVsGoogleGap === 'meni_overestimates').length;
+  const meniGscGapHypothesis = verdicts.filter(v => v.meniVsGoogleGap === 'meni_gsc_gap_hypothesis').length;
   const meniUnderestimates = verdicts.filter(v => v.meniVsGoogleGap === 'meni_underestimates').length;
   const alignedCount = verdicts.filter(v => v.meniVsGoogleGap === 'aligned').length;
 
-  // Top ignored (MENI alto pero Google ignora)
+  // Top low GSC visibility (MENI alto pero GSC sin impresiones — hipótesis, no conclusión)
   const topIgnored = verdicts
-    .filter(v => v.googleVerdict === 'google_ignores' && v.scoreMeni !== null && v.scoreMeni >= 85)
+    .filter(v => v.googleVerdict === 'low_gsc_visibility' && v.scoreMeni !== null && v.scoreMeni >= 85)
     .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 20);
 
@@ -166,26 +166,25 @@ export function generateComplianceReport(
     .sort((a, b) => b.gscImpressions - a.gscImpressions)
     .slice(0, 20);
 
-  // Resumen
-  const pctIgnored = verdicts.length > 0 ? Math.round((articlesGoogleIgnores / verdicts.length) * 100) : 0;
-  const pctOverestimates = verdicts.length > 0 ? Math.round((meniOverestimates / verdicts.length) * 100) : 0;
+  // Resumen: sin afirmaciones de "Google ignora"; solo datos GSC + hipótesis interna
+  const pctLowVisibility = verdicts.length > 0 ? Math.round((articlesLowVisibility / verdicts.length) * 100) : 0;
 
   let summary: string;
-  if (articlesGoogleIgnores > articlesGoogleValues) {
-    summary = `Google Search Console indica que ${pctIgnored}% de los artículos analizados no reciben impresiones. ${meniOverestimates} artículos con score MENI ≥ 85 son ignorados por Google (${pctOverestimates}% del total). Esto sugiere que MENI está calificando contenido que Google considera de poco valor. Recomendación: revisar los criterios de MENI para alinearlos con lo que Google realmente valora.`;
-  } else if (articlesGoogleValues > articlesGoogleIgnores) {
-    summary = `Google Search Console indica que ${articlesGoogleValues} artículos reciben impresiones orgánicas. ${alignedCount} artículos están alineados entre MENI y Google. ${meniUnderestimates} artículos son subestimados por MENI pero valorados por Google.`;
+  if (articlesGoogleValues > articlesLowVisibility) {
+    summary = `Google Search Console registra impresiones para ${articlesGoogleValues} artículos. ${alignedCount} artículos muestran alineación MENI-GSC. ${meniGscGapHypothesis} artículos con score MENI alto tienen 0 impresiones en GSC, lo cual es una HIPÓTESIS INTERNA (puede deberse a indexación pendiente, demanda de búsqueda o ausencia de datos).`;
+  } else if (articlesLowVisibility > 0) {
+    summary = `Google Search Console registra baja visibilidad para ${pctLowVisibility}% de los artículos analizados. ${meniGscGapHypothesis} artículos con score MENI alto no tienen impresiones, lo cual es una HIPÓTESIS INTERNA — no se puede concluir que Google "ignore" el contenido sin más evidencia.`;
   } else {
-    summary = `Google Search Console muestra datos mixtos. ${articlesGoogleIgnores} artículos ignorados, ${articlesGoogleValues} artículos con impresiones. Se necesitan más datos para una conclusión firme.`;
+    summary = 'Sin datos suficientes de Google Search Console para emitir conclusiones.';
   }
 
   return {
     generatedAt: now,
     totalArticles: verdicts.length,
     articlesWithGscData,
-    articlesGoogleIgnores,
+    articlesGoogleIgnores: articlesLowVisibility,
     articlesGoogleValues,
-    meniOverestimates,
+    meniOverestimates: meniGscGapHypothesis,
     meniUnderestimates,
     alignedCount,
     verdicts,

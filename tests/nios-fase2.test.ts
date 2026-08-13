@@ -140,12 +140,12 @@ describe('Google Feedback Loop', () => {
     expect(patterns[0].conclusion).toContain('MENI está correctamente calibrado');
   });
 
-  it('should detect MENI overestimates', () => {
+  it('should detect MENI-GSC gap hypothesis', () => {
     const articles = [mockArticle({ scoreMeni: 95, gscImpressions: 0, gscClicks: 0, gscCtr: 0 })];
     const gsc = mockGSC();
     const patterns = generateLearningPatterns(articles, gsc);
 
-    expect(patterns[0].pattern).toBe('meni_overestimates');
+    expect(patterns[0].pattern).toBe('meni_gsc_gap_hypothesis');
     expect(patterns[0].conclusion).toContain('0 impresiones');
   });
 
@@ -161,7 +161,7 @@ describe('Google Feedback Loop', () => {
   it('should summarize patterns', () => {
     const patterns = [
       { pattern: 'meni_correct' } as any,
-      { pattern: 'meni_overestimates' } as any,
+      { pattern: 'meni_gsc_gap_hypothesis' } as any,
       { pattern: 'meni_underestimates' } as any,
       { pattern: 'insufficient_data' } as any,
     ];

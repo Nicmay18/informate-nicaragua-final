@@ -1,0 +1,2119 @@
+{
+  "timestamp": "2026-08-13T04:23:24.237Z",
+  "total": 38,
+  "resumenStats": {
+    "ENRICH": 33,
+    "REWRITE": 4,
+    "ARCHIVE": 1,
+    "HUMAN_REVIEW": 0
+  },
+  "propuestas": [
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nicaragua atendió 11 buques internacionales del 13 al 19 de julio. Puerto Corinto recibió ocho embarcaciones para fortalecer el comercio exterior.",
+        "contenidoResumen": "La Empresa Portuaria Nacional (EPN) informó que Nicaragua atendió 11 buques internacionales durante la semana del 13 al 19 de julio de 2026 , operaciones que fortalecieron las actividades de importaci",
+        "palabras": 500
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: crece 6% en remesas",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 84 puntos, insuficiente para aprobar.",
+          "currentValue": 84,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Cual es el dato o medida?; Quien lo anuncio?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Contexto: Cifras concretas del cambio económico"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua",
+        "Instituto Nicaragüense de Turismo (INTUR)",
+        "Cámara de Turismo de Nicaragua (CANATUR)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nicaragua lidera la expansión en Centroamérica con un 6% de crecimiento en el IMAE y US$2.056,7 millones en remesas durante los primeros cinco meses de.",
+        "contenidoResumen": "Economía de Nicaragua : crecimiento del 6% y récord en remesas El Índice Mensual de Actividad Económica (IMAE) registró un crecimiento acumulado del 6% durante el primer trimestre de 2026. Según datos",
+        "palabras": 582
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 74 puntos, insuficiente para aprobar.",
+          "currentValue": 74,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La nicaragüense Reyna Isabel Balladares y su esposo permanecen desaparecidos desde el 24 de junio tras los terremotos que afectaron La Guaira, Venezuela.",
+        "contenidoResumen": "La nicaragüense Reyna Isabel Balladares Chavarría , de 38 años, y su esposo, Carlos Alexander Gutiérrez Olivares , no han sido localizados desde el pasado 24 de junio, cuando los terremotos sacudieron",
+        "palabras": 435
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 80 puntos, insuficiente para aprobar.",
+          "currentValue": 80,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Un joven de Estelí murió en California y un matagalpino falleció tras su ruta migratoria. Ambos casos dejan preguntas pendientes para sus familias.",
+        "contenidoResumen": "Dos familias nicaragüenses atraviesan momentos difíciles luego de conocer el fallecimiento de sus seres queridos en el extranjero, en hechos ocurridos en diferentes circunstancias y fechas. Los casos ",
+        "palabras": 388
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 78 puntos, insuficiente para aprobar.",
+          "currentValue": 78,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Como afecta a la comunidad?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua",
+        "Instituto Nicaragüense de Turismo (INTUR)",
+        "Cámara de Turismo de Nicaragua (CANATUR)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Un juez condenó al dueño de tres semovientes a pagar más de 769 mil córdobas por la muerte de un motociclista y lesiones a otro en Jalapa, Nueva Segovia",
+        "contenidoResumen": "El propietario de tres semovientes que invadieron una carretera en Jalapa , Nueva Segovia , fue condenado a pagar una indemnización de más de 769 mil córdobas ,equivalentes a unos 21 mil 300 dólares p",
+        "palabras": 377
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 78 puntos, insuficiente para aprobar.",
+          "currentValue": 78,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Contexto: Causa probable del accidente"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua",
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Adrián José Obando Munguía enfrenta juicio oral en Managua por el presunto robo de 13 mil 400 córdobas y 2 mil 980 dólares. La persona afectada es la.",
+        "contenidoResumen": "Hechos principales Adrián José Obando Munguía enfrenta un juicio oral y público en Managua acusado por el presunto robo de 13 mil 400 córdobas y 2 mil 980 dólares pertenecientes a la empresa de trasla",
+        "palabras": 718
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "EDITORIAL_DNA_TRANSCRIPCION",
+          "module": "editorial-dna",
+          "severity": "BLOCKER",
+          "title": "Riesgo de transcripción de la fuente",
+          "description": "Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.",
+          "currentValue": "67%",
+          "expectedValue": "≥ 90%",
+          "howToFix": "Parafraseá la fuente. Sumá análisis propio, contexto y explicación.",
+          "field": "contenido"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Cual fue el resultado?; Quienes jugaron?; Donde y cuando fue?; Que significa este resultado?; Como queda la tabla?; Hubo figuras destacadas?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "REWRITE",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes",
+        "Ministerio de Educación (MINED)",
+        "Universidad Nacional Autónoma de Nicaragua (UNAN)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La árbitro nicaragüense Tatiana Guzmán anuló el gol de Alemania en el Mundial 2026 y recibirá la Orden Campeón del Pueblo pese a las críticas alemanas.",
+        "contenidoResumen": "La árbitro nicaragüense Tatiana Auxiliadora Guzmán Arguello , de 38 años, se convirtió en el nombre más mencionado del Mundial 2026 tras anular desde el VAR el gol que habría clasificado a Alemania es",
+        "palabras": 385
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Reescribir párrafo por párrafo aportando análisis propio"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 70,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 70 puntos, insuficiente para aprobar.",
+          "currentValue": 70,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Como afecta a la comunidad?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ardió y dónde; Si hay víctimas o pérdidas; Cómo fue controlado"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Un incendio consumió por completo una vivienda en el barrio Monseñor Lezcano, Managua, el sábado 27 de junio. El hijo del propietario resultó con.",
+        "contenidoResumen": "Una vivienda ubicada en el barrio Monseñor Lezcano , distrito II de Managua, fue consumida por un incendio registrado la tarde del sábado 27 de junio . La estructura, edificada en su mayoría con mader",
+        "palabras": 379
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué decisión se tomó; Cómo le afecta directamente; Desde cuándo aplica"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La DIS de Costa Rica detuvo este lunes a un ciudadano palestino de apellido Abuawad en Desamparados, Alajuela, por presuntos vínculos con el grupo Hamás.",
+        "contenidoResumen": "SAN JOSÉ / COSTA RICA — La Dirección de Inteligencia y Seguridad Nacional de Costa Rica detuvo este lunes 22 de junio a un ciudadano palestino identificado con el apellido Abuawad, por presuntos víncu",
+        "palabras": 455
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "EDITORIAL_DNA_TRANSCRIPCION",
+          "module": "editorial-dna",
+          "severity": "BLOCKER",
+          "title": "Riesgo de transcripción de la fuente",
+          "description": "Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.",
+          "currentValue": "67%",
+          "expectedValue": "≥ 90%",
+          "howToFix": "Parafraseá la fuente. Sumá análisis propio, contexto y explicación.",
+          "field": "contenido"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que cambia?; A quien beneficia?; Que institucion interviene?; Que sigue ahora?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "REWRITE",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Más de 140 pilotos compitieron en la 4ta fecha del Campeonato Nacional de 1/4 de Milla en Pista Villa Sol, Managua. Éxito en seguridad y técnica deportiva.",
+        "contenidoResumen": "La cuarta fecha del Campeonato Nacional de Motociclismo y Automovilismo se efectuó este domingo 21 de junio en la Pista Villa Sol, Managua . El registro oficial cuantificó la participación de 140 pilo",
+        "palabras": 412
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Reescribir párrafo por párrafo aportando análisis propio"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "categoria": "Sucesos",
+      "perfil": "INVESTIGACION",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 84 puntos, insuficiente para aprobar.",
+          "currentValue": 84,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ardió y dónde; Si hay víctimas o pérdidas; Cómo fue controlado"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Juan C. Aguilar Obando, 46, fue capturado en Costa Rica el 08 de junio y entregado a Nicaragua; es investigado por rociar gasolina, prender fuego a M.",
+        "contenidoResumen": "Juan Carlos Aguilar Obando, 46, fue localizado y puesto a disposición de las autoridades nicaragüenses tras su captura en Costa Rica el 8 de junio; enfrenta investigaciones por presuntamente rociar ga",
+        "palabras": 626
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 84 puntos, insuficiente para aprobar.",
+          "currentValue": 84,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió, sin detalles morbosos; Si hay detenidos o investigación abierta"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Policía Nacional capturó a tres de los cuatro implicados en la muerte de un padre y su hijo en una finca de San Ramón, Matagalpa.",
+        "contenidoResumen": "La Policía Nacional presentó este martes a los presuntos autores de la muerte de Antonio Godínez Arista, de 66 años, y su hijo Eugenio Godínez Mendoza, de 35 años, ocurrida en la comunidad Mina Verde ",
+        "palabras": 523
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 86 puntos, insuficiente para aprobar.",
+          "currentValue": 86,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Siete personas resultaron ilesas tras el colapso de su vivienda ancestral en Monimbó. Bomberos Unidos, Policía Nacional, Alcaldía y COMUPRED atendieron la.",
+        "contenidoResumen": "MONIMBÓ / MASAYA — Siete miembros de una misma familia, entre ellos dos adultos mayores, resultaron ilesos tras el colapso parcial de su vivienda de estructura ancestral la noche de este martes en la ",
+        "palabras": 2196
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nicaragua exportó US$170 millones en lácteos a El Salvador en 2025, cubriendo el 47% de sus importaciones. El quesillo nicaragüense es clave hasta en las.",
+        "contenidoResumen": "Nicaragua se consolidó en 2025 como el principal proveedor de productos lácteos de El Salvador, abasteciendo el 47% de sus importaciones con exportaciones que superaron los US$170 millones , según dat",
+        "palabras": 484
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "categoria": "Sucesos",
+      "perfil": "INVESTIGACION",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 78 puntos, insuficiente para aprobar.",
+          "currentValue": 78,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Policía capturó a un hombre señalado por el robo de más de US$30 mil en una tienda de Jalapa, Nueva Segovia. Parte del dinero fue recuperada durante el.",
+        "contenidoResumen": "La Policía Nacional capturó a Henry Gadiel Velásquez , de 30 años de edad, señalado como el presunto autor del robo de más de 30 mil dólares ocurrido en una tienda de la ciudad de Jalapa , departament",
+        "palabras": 744
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 76 puntos, insuficiente para aprobar.",
+          "currentValue": 76,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Como afecta a la comunidad?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Contexto: Causa probable del accidente"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incend...",
+        "contenidoResumen": "La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incendios , una inversión que busca fortalecer la capa",
+        "palabras": 545
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "categoria": "Deportes",
+      "perfil": "INVESTIGACION",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "EDITORIAL_DNA_TRANSCRIPCION",
+          "module": "editorial-dna",
+          "severity": "BLOCKER",
+          "title": "Riesgo de transcripción de la fuente",
+          "description": "Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.",
+          "currentValue": "67%",
+          "expectedValue": "≥ 90%",
+          "howToFix": "Parafraseá la fuente. Sumá análisis propio, contexto y explicación.",
+          "field": "contenido"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "REWRITE",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "España, Francia y Argentina encabezan los pronósticos antes del Mundial 2026, que inicia este 11 de junio con un formato histórico de 48 selecciones.",
+        "contenidoResumen": "Modelos estadísticos y analítica de datos en el arranque de la Copa del Mundo Las proyecciones ejecutadas por superordenadores de análisis estadístico y modelos avanzados de inteligencia artificial co",
+        "palabras": 743
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Reescribir párrafo por párrafo aportando análisis propio"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 78 puntos, insuficiente para aprobar.",
+          "currentValue": 78,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Como afecta a la comunidad?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cantidad fue decomisada y qué representa; Dónde y cómo ocurrió el operativo; Si hay detenidos y su situación legal"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Alejandro Arias Monge fue capturado en Sarapiquí tras años de búsqueda. El operativo inicia una nueva etapa judicial para uno de los casos más relevantes.",
+        "contenidoResumen": "La captura de Alejandro Arias Monge , conocido como alias \"El Diablo\" , abre una nueva etapa en uno de los casos de crimen organizado que más atención ha generado en Costa Rica durante los últimos año",
+        "palabras": 435
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "El doble sismo del 24 de junio en Venezuela dejó 164 afectados y más de 30 mil personas sin contacto. Delcy Rodríguez declaró emergencia nacional y creó.",
+        "contenidoResumen": "El balance oficial del doble sismo que sacudió Venezuela el 24 de junio asciende a 164 afectados y 971 afectados , según confirmó la presidenta encargada Delcy Rodríguez , mientras más de 30,600 perso",
+        "palabras": 448
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Las selecciones sub-20 y sub-18 de Nicaragua conquistan el IHF Trophy Centroamérica en El Salvador y se consolidan como los nuevos referentes del.",
+        "contenidoResumen": "Las selecciones juveniles de Nicaragua conquistaron los títulos de las categorías sub-20 y sub-18 del IHF Trophy – Zona Centroamérica , torneo disputado en El Salvador entre el 9 y el 13 de junio de 2",
+        "palabras": 602
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué decisión se tomó; Cómo le afecta directamente; Desde cuándo aplica"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Feria Ganadera Agostina Internacional de Managua 2026 abrió oficialmente sus puertas y continúa consolidándose como uno de los eventos más importante...",
+        "contenidoResumen": "La Feria Ganadera Agostina Internacional de Managua 2026 abrió oficialmente sus puertas y continúa consolidándose como uno de los eventos más importantes para el desarrollo económico y productivo del ",
+        "palabras": 563
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 86 puntos, insuficiente para aprobar.",
+          "currentValue": 86,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que cambia?; A quien beneficia?; Que institucion interviene?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Varios accidentes registrados en Nicaragua dejaron una persona fallecida y lesionados. Los casos involucraron motocicletas, camiones y peatones",
+        "contenidoResumen": "Una serie de accidentes registrados en distintos puntos de Nicaragua durante las últimas horas dejó una persona fallecida y varios lesionados, en hechos que involucraron motocicletas, vehículos pesado",
+        "palabras": 418
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Chinandega estrena 75 viviendas con servicios completos en nuevo complejo habitacional del INVUR.",
+        "contenidoResumen": "Setenta y cinco familias recibirán este jueves las llaves de sus nuevas viviendas en la urbanización Nuevas Victorias Germán Pomares, construida por el INVUR en Chinandega como parte de una etapa de 3",
+        "palabras": 350
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: 920 víctimas y miles sin rastro tras sismos",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué decisión se tomó; Cómo le afecta directamente; Desde cuándo aplica"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nuevos sismos se registran este sábado en Venezuela, tres días después del doblete de 7,2 y 7,5 que dejó más de 920 víctimas y 50.000 desaparecidos en La.",
+        "contenidoResumen": "Venezuela continúa bajo actividad sísmica este sábado 27 de junio, con réplicas percibidas en Caracas y zonas costeras del país, mientras los equipos de rescate mantienen operaciones en el estado de L",
+        "palabras": 463
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán",
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua",
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "El gobierno de la Ciudad de México eligió a Julieta Venegas para interpretar la canción cultural del Mundial 2026. No es el himno oficial FIFA.",
+        "contenidoResumen": "Julieta Venegas no le canta al fútbol. Le canta a México . El gobierno de la Ciudad de México la eligió para interpretar \"Tierra de Esperanza\", la canción que sonará en las Fan Zones durante el Mundia",
+        "palabras": 378
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que cambia?; Que institucion interviene?; Que sigue ahora?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nicaragua obtuvo la medalla de oro en los relevos mixtos 4x100 metros del Campeonato Centroamericano Mayor de Atletismo realizado en Managua.",
+        "contenidoResumen": "Nicaragua obtuvo la medalla de oro en la prueba de relevos mixtos 4x100 metros del Campeonato Centroamericano Mayor de Atletismo, realizado en Managua . El triunfo fue celebrado por la afición y repre",
+        "palabras": 618
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo por trasladar ilegalmente a una menor nicaragüense de 13 años con engaños.",
+        "contenidoResumen": "La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo , de 30 años y nacionalidad nicaragüense, tras cruzar ilegalmente a ese país con una adolescente nicaragüense de 13 años, iden",
+        "palabras": 360
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 78 puntos, insuficiente para aprobar.",
+          "currentValue": 78,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Brenda López sufrió lesiones graves en Nindirí. El sospechoso fue detenido y el caso pasa a la Policía Nacional bajo la Ley contra la Violencia hacia las Mujeres.",
+        "contenidoResumen": "Una mujer identificada preliminarmente como Brenda López (registrada también en reportes locales bajo el nombre de Brenda Baltodano), de entre 40 y 45 años de edad, resultó con lesiones de gravedad tr",
+        "palabras": 527
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 80 puntos, insuficiente para aprobar.",
+          "currentValue": 80,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Como afecta a la comunidad?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Policía Nacional mantiene detenido a un hombre de 38 años mientras investiga la muerte de una joven de 18 años hallada en la laguna Las Vegas, en Nueva Guinea.",
+        "contenidoResumen": "La Policía Nacional investiga la muerte de María Vanesa González Rodríguez, de 18 años, cuyo cuerpo fue encontrado la mañana del domingo 12 de julio en la laguna Las Vegas, ubicada en el municipio de ",
+        "palabras": 473
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "categoria": "Internacionales",
+      "perfil": "INVESTIGACION",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "La Secretaría de Seguridad de Honduras intervino la DIPAMPCO tras el fallecimiento de cinco uniformados en una operación en Cortés.",
+        "contenidoResumen": "Intervienen unidad élite DIPAMPCO tras deceso de uniformados en Cortés Una comitiva de la Secretaría de Seguridad ordenó la inmediata intervención administrativa y operativa de la Dirección Policial A",
+        "palabras": 608
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "categoria": "Sucesos",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 74 puntos, insuficiente para aprobar.",
+          "currentValue": 74,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Ministerio de Salud (MINSA)",
+        "Hospital Bertha Calderón / Hospital Alemán"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "El niño, de 3 años y con síndrome de Down, murió por golpes en Tipitapa; su madre y padrastro enfrentan cargos por maltrato",
+        "contenidoResumen": "Un niño de 3 años, identificado con las iniciales G.A.R., murió la noche del 8 de julio en Tipitapa, tras ser ingresado a un hospital del municipio cerca de las 9:00 p.m. sin signos vitales. La Fiscal",
+        "palabras": 467
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 82,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 82 puntos, insuficiente para aprobar.",
+          "currentValue": 82,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ardió y dónde; Si hay víctimas o pérdidas; Cómo fue controlado"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Alcaldía de Managua / ALMA",
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Nicaragüense de 38 años murió en ataque armado en Canóvanas, Puerto Rico. Policía y CIC investigan hecho con 86 casquillos de bala en la escena del crimen.",
+        "contenidoResumen": "Nicaragüense muere en ataque en Canóvanas , Puerto Rico Bluefields / Canóvanas, Puerto Rico. La nicaragüense Doneth Garth Durán , de 38 años, originaria de Bluefields, Caribe Sur de Nicaragua, murió t",
+        "palabras": 470
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "EDITORIAL_DNA_TRANSCRIPCION",
+          "module": "editorial-dna",
+          "severity": "BLOCKER",
+          "title": "Riesgo de transcripción de la fuente",
+          "description": "Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.",
+          "currentValue": "67%",
+          "expectedValue": "≥ 90%",
+          "howToFix": "Parafraseá la fuente. Sumá análisis propio, contexto y explicación.",
+          "field": "contenido"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Quienes jugaron?; Donde y cuando fue?; Como queda la tabla?; Cual es el proximo partido?; Hubo figuras destacadas?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "REWRITE",
+      "riesgo": "ALTO (puede requerir ARCHIVE)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes",
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Doce peloteros de 9-10 años parten a Puerto Rico y 17 de 15-16 años a Ecuador para competir en torneos latinoamericanos de béisbol este junio y julio.",
+        "contenidoResumen": "La seleccion de beisbol categoria Minor , integrada por 12 atletas de 9 y 10 años , viajo este fin de semana a Loiza, Puerto Rico , para competir en la Serie Latinoamericana y del Caribe de Pequenas L",
+        "palabras": 629
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Reescribir párrafo por párrafo aportando análisis propio"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 76 puntos, insuficiente para aprobar.",
+          "currentValue": 76,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Contexto: Causa probable del accidente"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Policía Nacional de Nicaragua",
+        "Fiscalía General de la República",
+        "INETER (Instituto Nicaragüense de Estudios Territoriales)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "El nicaragüense José Salgado Amador, de 28 años, fue gravemente afectado durante un asalto en Austin, Texas, cuando trabajaba como mecánico en un.",
+        "contenidoResumen": "José Salgado Amador, un nicaragüense de 28 años originario de la comunidad Pueblo Viejo, municipio de Matagalpa, fue gravemente afectado la noche del lunes 15 de junio de 2026 en Austin , Texas, Estad",
+        "palabras": 402
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "categoria": "Tecnología",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 88 puntos, insuficiente para aprobar.",
+          "currentValue": 88,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Quien lo anuncio?; Como afecta precios o salarios?; Que significa para el bolsillo?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué cambió y cuánto; Por qué cambió; Cómo afecta su presupuesto familiar"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Banco Central de Nicaragua",
+        "Banco Mundial datos Nicaragua",
+        "Ministerio de Educación (MINED)",
+        "Universidad Nacional Autónoma de Nicaragua (UNAN)"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Analizamos el mercado de streaming en Nicaragua: Netflix, Disney+ y Max lideran el consumo digital en jóvenes de 18 a 34 años frente a desafíos de.",
+        "contenidoResumen": "Netflix , Max y Disney + dominan streaming en Nicaragua La industria del entretenimiento digital en Nicaragua ha consolidado un mercado donde la preferencia por plataformas globales define el consumo ",
+        "palabras": 649
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "categoria": "Internacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 80 puntos, insuficiente para aprobar.",
+          "currentValue": 80,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que falta por conocer?; Como afecta a la comunidad?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Jesús Manuel Fuentes Rayo, originario de La Trinidad, Estelí, falleció en Minneapolis luego del colapso de una estructura de madera durante su jornada laboral.",
+        "contenidoResumen": "Jesús Manuel Fuentes Rayo , originario del municipio de La Trinidad, Estelí , falleció el martes 21 de julio de 2026 en Minneapolis, Estados Unidos , luego de que colapsara una estructura de madera qu",
+        "palabras": 404
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "categoria": "Deportes",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "calificacion": "MEJORAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 86 puntos, insuficiente para aprobar.",
+          "currentValue": 86,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Por que importa en Nicaragua?; Como repercute?; Cual es el contexto?; Que antecedentes existen?; Por que esta noticia merece publicarse aqui?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió en el exterior; Contexto internacional necesario"
+        }
+      ],
+      "accionPropuesta": "ENRICH",
+      "riesgo": "BAJO-MEDIO",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "FIFA",
+        "CONCACAF",
+        "Federación Nicaragüense del deporte respectivo",
+        "El Nuevo Diario / La Prensa Deportes"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "México cerró con puntaje perfecto, Sudáfrica eliminó a Corea del Sur y Brasil goleó a Escocia. Trece equipos ya están en la ronda de 32 del Mundial 2026.",
+        "contenidoResumen": "ESTADOS UNIDOS / MUNDIAL 2026 — La fase de grupos del Mundial FIFA 2026 entra en su recta final con 13 equipos clasificados a la ronda de 32, entre ellos México con puntaje perfecto, Brasil con doblet",
+        "palabras": 546
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "categoria": "Nacionales",
+      "perfil": "REPORTAJE",
+      "scoreMeni": 64,
+      "aprobadoMeni": false,
+      "calificacion": "NO PUBLICAR",
+      "blockingIssues": [
+        {
+          "code": "MENI_SCORE_THRESHOLD",
+          "module": "meni-core",
+          "severity": "BLOCKER",
+          "title": "Score final por debajo del umbral",
+          "description": "La nota obtuvo 64 puntos, insuficiente para aprobar.",
+          "currentValue": 64,
+          "expectedValue": "≥ 90",
+          "howToFix": "Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.",
+          "field": "general"
+        }
+      ],
+      "recomendaciones": [
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Como afecta a la comunidad?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Contexto: Causa probable del accidente"
+        },
+        {
+          "area": "editorial",
+          "severidad": "alta",
+          "mensaje": "Explicar: Qué ocurrió exactamente y dónde; Causas probables del accidente; Antecedentes de accidentes en ese punto"
+        }
+      ],
+      "accionPropuesta": "ARCHIVE",
+      "riesgo": "BAJO (se preserva el original)",
+      "ejeFaltante": "valor periodístico",
+      "fuentesSugeridas": [
+        "Dirección General de Migración y Extranjería",
+        "Consulados de Nicaragua en el exterior"
+      ],
+      "scoreEsperado": "DESCONOCIDO_HASTA_EJECUTAR",
+      "antes": {
+        "resumenOriginal": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de 422 mil habitantes.",
+        "contenidoResumen": "Masaya cuenta con un nuevo complejo de atención ciudadana que reúne en una misma infraestructura los servicios de Bomberos Unidos, Migración y Extranjería, según información oficial del Ministerio del",
+        "palabras": 403
+      },
+      "propuesta": {
+        "resumen": null,
+        "contenidoAgregar": "Agregar valor periodístico verificable usando las fuentes sugeridas. No inventar cifras, nombres ni fechas.",
+        "estructura": "Ampliar la nota con 1-3 párrafos de contexto y explicación"
+      },
+      "notas": "Score esperado desconocido. Se re-evaluará con MENI tras la modificación."
+    }
+  ]
+}

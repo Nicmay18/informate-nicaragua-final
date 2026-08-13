@@ -13,14 +13,14 @@ export async function runDistributionIntelligence(): Promise<NiosModuleReport> {
         slug: n.slug,
         titulo: n.titulo,
         categoria: n.categoria,
-        score: n.scoreMeni || 0,
+        score: n.scoreMeni ?? 0,
         vistas: n.vistas || 0,
         messages: generateDistribution(n),
       }));
 
     const highValue = candidates.filter((n) => n.score >= 90 || n.categoria === 'Nacionales' || n.vistas >= 50);
     const withoutDistribution = noticias.filter(
-      (n) => (n.scoreMeni || 0) >= 80 && (n.vistas || 0) >= 10 && !shouldDistribute(n)
+      (n) => (n.scoreMeni ?? 0) >= 80 && (n.vistas ?? 0) >= 10 && !shouldDistribute(n)
     ).slice(0, 3);
 
     const recommendations: NiosRecommendation[] = [];

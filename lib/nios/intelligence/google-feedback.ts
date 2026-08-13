@@ -41,20 +41,20 @@ function classifyLearningPattern(article: ArticleFusion): {
     };
   }
 
-  // MENI sobreestima: score alto + Google ignora
+  // MENI alto + GSC 0 impresiones: hipótesis interna, NO conclusión de Google
   if (scoreMeni !== null && scoreMeni >= 90 && impressions === 0) {
     return {
-      pattern: 'meni_overestimates',
-      confidence: 'high',
-      conclusion: `MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones. Google no encuentra valor suficiente en esta nota. MENI está sobreestimando.`,
+      pattern: 'meni_gsc_gap_hypothesis',
+      confidence: 'low',
+      conclusion: `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero GSC registra 0 impresiones. Esto NO significa que Google "rechace" la nota. Puede deberse a indexación pendiente, baja demanda de búsqueda o falta de datos. No se puede concluir que MENI sobreestime.`,
     };
   }
 
   if (scoreMeni !== null && scoreMeni >= 85 && impressions < 10) {
     return {
-      pattern: 'meni_overestimates',
-      confidence: 'medium',
-      conclusion: `MENI otorga ${scoreMeni} puntos, pero Google Search Console solo registra ${impressions} impresiones. MENI probablemente sobreestima.`,
+      pattern: 'meni_gsc_gap_hypothesis',
+      confidence: 'low',
+      conclusion: `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero GSC solo registra ${impressions} impresiones. El volumen es insuficiente para afirmar que Google ignora el contenido.`,
     };
   }
 
@@ -161,7 +161,7 @@ export function summarizeLearningPatterns(patterns: GoogleLearningPattern[]): {
   return {
     total: patterns.length,
     meniCorrect: patterns.filter(p => p.pattern === 'meni_correct').length,
-    meniOverestimates: patterns.filter(p => p.pattern === 'meni_overestimates').length,
+    meniOverestimates: patterns.filter(p => p.pattern === 'meni_gsc_gap_hypothesis').length,
     meniUnderestimates: patterns.filter(p => p.pattern === 'meni_underestimates').length,
     insufficient: patterns.filter(p => p.pattern === 'insufficient_data').length,
   };

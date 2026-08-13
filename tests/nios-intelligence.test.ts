@@ -342,8 +342,8 @@ describe('Compliance Intelligence', () => {
     expect(report.totalArticles).toBe(1);
     expect(report.articlesGoogleIgnores).toBe(1);
     expect(report.meniOverestimates).toBe(1);
-    expect(report.verdicts[0].googleVerdict).toBe('google_ignores');
-    expect(report.verdicts[0].meniVsGoogleGap).toBe('meni_overestimates');
+    expect(report.verdicts[0].googleVerdict).toBe('low_gsc_visibility');
+    expect(report.verdicts[0].meniVsGoogleGap).toBe('meni_gsc_gap_hypothesis');
     expect(report.verdicts[0].explanation).toContain('MENI otorga 95');
     expect(report.verdicts[0].explanation).toContain('0 impresiones');
   });

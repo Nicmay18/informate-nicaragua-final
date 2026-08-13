@@ -169,8 +169,8 @@ export interface ComplianceVerdict {
   scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
-  googleVerdict: 'google_values' | 'google_ignores' | 'no_data';
-  meniVsGoogleGap: 'meni_overestimates' | 'meni_underestimates' | 'aligned' | 'no_data';
+  googleVerdict: 'google_values' | 'low_gsc_visibility' | 'no_data';
+  meniVsGoogleGap: 'meni_gsc_gap_hypothesis' | 'meni_underestimates' | 'aligned' | 'no_data';
   explanation: string;
   evidence: NIOSEvidence[];
 }
@@ -375,7 +375,7 @@ export interface GoogleLearningPattern {
   gscClicks: number;
   gscCtr: number;
   gscPosition: number;
-  pattern: 'meni_correct' | 'meni_overestimates' | 'meni_underestimates' | 'insufficient_data';
+  pattern: 'meni_correct' | 'meni_gsc_gap_hypothesis' | 'meni_underestimates' | 'insufficient_data';
   confidence: 'high' | 'medium' | 'low';
   conclusion: string;
   generatedAt: string;

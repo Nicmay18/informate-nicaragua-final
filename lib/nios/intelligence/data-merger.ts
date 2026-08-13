@@ -166,7 +166,8 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
       autor: d.autor || '',
       palabras: d.palabras || 0,
       scoreMeni: d.scoreMeni ?? null,
-      scoreCalidad: d.scoreCalidad ?? undefined,
+      // scoreCalidad eliminado: NIOS solo consume scoreMeni.
+      // Sin MENI → scoreMeni null → NO EVALUADO. No hay fallback.
       tags: d.tags || [],
       related_links: d.related_links || [],
       estado: d.estado || 'publicado',
