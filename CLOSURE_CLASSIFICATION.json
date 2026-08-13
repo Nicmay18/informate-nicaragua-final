@@ -1,0 +1,5840 @@
+{
+  "timestamp": "2026-08-13T21:32:46.159Z",
+  "total": 287,
+  "summary": {
+    "KEEP": 263,
+    "TECHNICAL_FIX": 8,
+    "ARCHIVE": 2,
+    "REWRITE": 14
+  },
+  "classifications": [
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "titulo": "Mundial 2030: por qué habrá partidos en Sudamérica y Europa",
+      "slug": "mundial-2030-por-que-habra-partidos-en-sudamerica-y-europa",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 613,
+      "fecha": {
+        "_seconds": 1784067130,
+        "_nanoseconds": 742000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "02DsJjI62kA1rFKe0nWS",
+      "titulo": "Luchó diez días por su vida y falleció tras ataque de expareja",
+      "slug": "lucho-diez-dias-por-su-vida-y-fallecio-tras-ataque-de-expareja",
+      "categoria": "Sucesos",
+      "perfil": "violencia_genero",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 506,
+      "fecha": {
+        "_seconds": 1784735154,
+        "_nanoseconds": 95000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "096760aFi8gk8aUBtkFR",
+      "titulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "slug": "carreteras-del-pais-dejan-un-fin-de-semana-con-varios-accidentes",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 562,
+      "fecha": {
+        "_seconds": 1783374574,
+        "_nanoseconds": 683000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "titulo": "Cinco afectados en accidentes viales en Managua y regiones",
+      "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 439,
+      "fecha": {
+        "_seconds": 1779747835,
+        "_nanoseconds": 10000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "0s9rnylrsRqwYjjUqUfk",
+      "titulo": "Managua inicia sus fiestas 2026 con programa y asuetos",
+      "slug": "managua-inicia-sus-fiestas-2026-con-programa-y-asuetos",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 636,
+      "fecha": {
+        "_seconds": 1784758995,
+        "_nanoseconds": 115000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "titulo": "Cuatro nicaragüenses resultan afectados en Costa Rica, El…",
+      "slug": "cuatro-nicaraguenses-mueren-en-el-exterior-en-menos-de-una",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 642,
+      "fecha": {
+        "_seconds": 1779395786,
+        "_nanoseconds": 199000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "12vpZYJonwqLUyW1rlpl",
+      "titulo": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU",
+      "slug": "capturan-en-esteli-a-nicaraguense-requerido-por-caso-en-ee-uu",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 558,
+      "fecha": {
+        "_seconds": 1784379460,
+        "_nanoseconds": 455000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "19NRSSTtv9xlGQ31x9gV",
+      "titulo": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+      "slug": "baile-de-los-chinegros-mantiene-vivo-un-ritual-de-400-anos",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 578,
+      "fecha": {
+        "_seconds": 1784908351,
+        "_nanoseconds": 398000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de Managua",
+      "slug": "primeros-bebes-del-dia-de-las-madres-nacen-en-managua-y-rivas",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 572,
+      "fecha": {
+        "_seconds": 1780159904,
+        "_nanoseconds": 16000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "1K4jCiU5mT9xr4pyE0vr",
+      "titulo": "Adolescente muere atropellado por taxi frente a COTRAN Norte",
+      "slug": "adolescente-muere-atropellado-por-taxi-frente-a-cotran-norte",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 527,
+      "fecha": "2026-08-08T02:19:11.432Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "titulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+      "slug": "samsung-revela-que-galaxy-recibiran-android-17",
+      "categoria": "Tecnología",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 655,
+      "fecha": {
+        "_seconds": 1779461600,
+        "_nanoseconds": 583000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "28a2yKj9NN9k4au0xJ6q",
+      "titulo": "Nicaraguense resulta afectado en accidente laboral en Wisconsin",
+      "slug": "nicaraguense-fallece-en-accidente-laboral-en-wisconsin",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 721,
+      "fecha": {
+        "_seconds": 1781391600,
+        "_nanoseconds": 0
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "2GBQwgf7i4i2LJsvIhhP",
+      "titulo": "Santo Domingo de Guzmán inicia sus fiestas con tradición y fe",
+      "slug": "santo-domingo-de-guzman-inicia-sus-fiestas-con-tradicion-y-fe",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1007,
+      "fecha": {
+        "_seconds": 1785550086,
+        "_nanoseconds": 690000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "2JtGQ8X981oq4giKYxQo",
+      "titulo": "Nicaragua debuta en súper ronda con la mira en Lima 2027",
+      "slug": "nicaragua-debuta-en-super-ronda-con-la-mira-en-lima-2027",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 406,
+      "fecha": "2026-08-04T05:05:24.465Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "2LRMqTFV3a6XPkdfoEjh",
+      "titulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "slug": "dos-hombres-pierden-la-vida-en-incidentes-nocturnos-en-el-norte",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 507,
+      "fecha": {
+        "_seconds": 1782676766,
+        "_nanoseconds": 206000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "2rM20SDlcas77huhJYiV",
+      "titulo": "Café nicaragüense alcanza récord mundial y abre nuevos retos",
+      "slug": "cafe-nicaraguense-alcanza-record-mundial-y-abre-nuevos-retos",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 483,
+      "fecha": {
+        "_seconds": 1784848452,
+        "_nanoseconds": 537000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "titulo": "Documentos para tramitar el récord policial en Nicaragua",
+      "slug": "como-anular-el-record-policial-en-nicaragua-en-2026",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 612,
+      "fecha": {
+        "_seconds": 1779390433,
+        "_nanoseconds": 34000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3A0WKJhlDKATpXuyEIPq",
+      "titulo": "Noruega vuelve a octavos del Mundial tras 28 años de ausencia",
+      "slug": "noruega-vuelve-a-octavos-del-mundial-tras-28-anos-de",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 398,
+      "fecha": {
+        "_seconds": 1782856527,
+        "_nanoseconds": 23000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3QOwSPvAOLwPxqFV532h",
+      "titulo": "Prueba de IA obliga a OpenAI a reforzar su seguridad digital",
+      "slug": "prueba-de-ia-obliga-a-openai-a-reforzar-su-seguridad-digital",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 431,
+      "fecha": {
+        "_seconds": 1784756599,
+        "_nanoseconds": 225000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3YLvxaAGi5bhcSjJ2XsP",
+      "titulo": "Nicaragua celebra a la Virgen de la Asunción este 14 de agosto",
+      "slug": "nicaragua-celebra-a-la-virgen-de-la-asuncion-este-14-de-agosto",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1166,
+      "fecha": "2026-08-12T21:57:06.838Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3Zg8Q6OaaXEut0fA81CH",
+      "titulo": "Cuatro víctimas deja accidentalidad vial entre sábado y domingo",
+      "slug": "cuatro-victimas-deja-accidentalidad-vial-entre-sabado-y-domingo",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 674,
+      "fecha": {
+        "_seconds": 1782659429,
+        "_nanoseconds": 223000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3p9PHUH5WeJIGlMFVrLn",
+      "titulo": "Chile declara Estado de Catástrofe en Coquimbo y Huasco",
+      "slug": "chile-declara-estado-de-catastrofe-en-coquimbo-y-huasco",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 532,
+      "fecha": {
+        "_seconds": 1784587324,
+        "_nanoseconds": 476000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "3qYRcThYdkrzWJRDSfhy",
+      "titulo": "Fallece la actriz venezolana Gabriela Fleritt tras sismo",
+      "slug": "fallece-la-actriz-venezolana-gabriela-fleritt-tras-sismo",
+      "categoria": "Espectáculos",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 361,
+      "fecha": {
+        "_seconds": 1782769383,
+        "_nanoseconds": 251000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "4G7Uq0yDZgiHpGyB5GSS",
+      "titulo": "La Resurrección de Cristo se estrena en el Día de la Ascensión",
+      "slug": "la-resurreccion-de-cristo-se-estrena-en-el-dia-de-la-ascension",
+      "categoria": "Espectáculos",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 883,
+      "fecha": "2026-08-09T20:00:38.798Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "5JyYmiQUFmH29eqxGFuC",
+      "titulo": "NASA registra bola de fuego que cruzó seis estados de EE.UU",
+      "slug": "nasa-registra-bola-de-fuego-que-cruzo-seis-estados-de-ee-uu",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 944,
+      "fecha": {
+        "_seconds": 1781823650,
+        "_nanoseconds": 770000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "5ygMPBWB8ukF4W5m7uoG",
+      "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
+      "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 2039,
+      "fecha": {
+        "_seconds": 1782325089,
+        "_nanoseconds": 444000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "6G4rPNMwq7InAlhlpTCH",
+      "titulo": "Nicaragüense muere en Costa Rica tras choque y fuga vial",
+      "slug": "nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 597,
+      "fecha": {
+        "_seconds": 1784675253,
+        "_nanoseconds": 316000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "6MlyKI1pvd5zmaQ7oILa",
+      "titulo": "Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial",
+      "slug": "victima-de-golpiza-en-chichigalpa-enfrenta-otro-proceso-judicial",
+      "categoria": "Sucesos",
+      "perfil": "educacion",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 466,
+      "fecha": {
+        "_seconds": 1784821185,
+        "_nanoseconds": 730000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "slug": "puerto-corinto-lidera-llegada-de-11-buques-a-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 500,
+      "fecha": {
+        "_seconds": 1784823648,
+        "_nanoseconds": 492000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "7aOBbeIDRKR06tnYfklr",
+      "titulo": "Accidente con rastra deja una joven fallecida en Managua",
+      "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 557,
+      "fecha": {
+        "_seconds": 1784412641,
+        "_nanoseconds": 39000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "7h9NNZjCshVbyytxVXBP",
+      "titulo": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+      "slug": "pronostico-semanal-temperaturas-y-lluvias-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 617,
+      "fecha": {
+        "_seconds": 1781559146,
+        "_nanoseconds": 648000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "7k2ncDzIhlS00WN4ktzR",
+      "titulo": "Carreteras dejan dos fallecidos y varios accidentes",
+      "slug": "carreteras-dejan-dos-fallecidos-y-varios-accidentes",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 530,
+      "fecha": {
+        "_seconds": 1785474554,
+        "_nanoseconds": 239000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
+      "slug": "dos-nicaraguenses-fallecen-en-accidentes-ocurridos-en-honduras-y-miami",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 641,
+      "fecha": {
+        "_seconds": 1780551510,
+        "_nanoseconds": 502000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8DPnNJNClx3kn4oJi2me",
+      "titulo": "Identifican a lesionados en choque frente al Hospital del Niño",
+      "slug": "identifican-a-lesionados-en-choque-frente-al-hospital-del-nino",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 510,
+      "fecha": {
+        "_seconds": 1782787068,
+        "_nanoseconds": 299000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8NaG866DTKEaUCHkivrd",
+      "titulo": "Tres afectados en hechos viales este viernes en Managua y Granada",
+      "slug": "tres-fallecidos-en-hechos-viales-este-viernes-en-managua-y-granada",
+      "categoria": "Sucesos",
+      "perfil": "deportes",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 418,
+      "fecha": {
+        "_seconds": 1782514748,
+        "_nanoseconds": 424000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8dMcsIcw7T7tuT8NLGEP",
+      "titulo": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
+      "slug": "bus-accidentado-en-boaco-deja-42-lesionados-bajo-atencion-medica",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 427,
+      "fecha": {
+        "_seconds": 1782792659,
+        "_nanoseconds": 124000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "titulo": "Arquitectura C++ y Direct3D para diagnóstico de sistemas PC",
+      "slug": "taskslinger-la-alternativa-rapida-al-administrador-de-tareas",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 666,
+      "fecha": {
+        "_seconds": 1779645716,
+        "_nanoseconds": 330000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8mQmm7YZXwUAnICl6tnv",
+      "titulo": "Robo de caja fuerte con $14,000 en Quilalí termina con un…",
+      "slug": "robo-de-caja-fuerte-con-14-000-en-quilali-termina-con-un-detenido",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 427,
+      "fecha": {
+        "_seconds": 1782624451,
+        "_nanoseconds": 574000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8p1gDsWo0i41nsJH4QTo",
+      "titulo": "Soldador de Casa Blanca sufrió descarga eléctrica durante trabajo",
+      "slug": "soldador-de-casa-blanca-sufrio-descarga-electrica-durante-trabajo",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 535,
+      "fecha": "2026-07-30T00:15:10.790Z",
+      "classification": "ARCHIVE",
+      "reasons": [
+        "Preview pasado"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8rgPZMc8nFJWiAbW7pgj",
+      "titulo": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "slug": "joven-de-masaya-fallece-en-la-laguna-de-apoyo-este-20-de-julio",
+      "categoria": "Sucesos",
+      "perfil": "turismo",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 388,
+      "fecha": {
+        "_seconds": 1784576631,
+        "_nanoseconds": 224000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "8sTBWTNIOJGIYfDN062O",
+      "titulo": "Mirador de Catarina: precios, horarios y qué hacer",
+      "slug": "mirador-de-catarina-precios-horarios-y-que-hacer",
+      "categoria": "Nacionales",
+      "perfil": "turismo",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 963,
+      "fecha": "2026-08-09T02:58:24.668Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "9FIr4GZXnyXqJ6M1Hnw6",
+      "titulo": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
+      "slug": "volcan-telica-expulsa-gases-y-ceniza-con-columnas-de-200-metros",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 654,
+      "fecha": "2026-08-11T01:00:13.580Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "9bOstbZ0xJWu92Z1FqBX",
+      "titulo": "Servicios policiales de Plaza El Sol tienen nueva ubicación",
+      "slug": "servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicacion",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 696,
+      "fecha": "2026-08-07T02:06:01.797Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "titulo": "Madrid gestiona logística masiva durante encuentro religioso",
+      "slug": "medio-millon-participa-en-vigilia-del-papa-en-madrid",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 659,
+      "fecha": {
+        "_seconds": 1780796245,
+        "_nanoseconds": 842000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+      "slug": "kfc-nicaragua-2026-apertura-en-managua-menu",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 705,
+      "fecha": {
+        "_seconds": 1778956132,
+        "_nanoseconds": 27000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en…",
+      "slug": "dos-hombres-mueren-por-descargas-electricas-en-managua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 734,
+      "fecha": {
+        "_seconds": 1780372219,
+        "_nanoseconds": 898000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas a…",
+      "slug": "sandboarding-en-cerro-negro-conquista-redes-y-atrae-turistas-a-leon",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 798,
+      "fecha": {
+        "_seconds": 1779592264,
+        "_nanoseconds": 645000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "AWqrtVA03l9qMReNApx6",
+      "titulo": "Nicaragua impulsa talento digital, IA y expansión del 5G",
+      "slug": "nicaragua-impulsa-talento-digital-ia-y-expansion-del-5g",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 562,
+      "fecha": {
+        "_seconds": 1781815441,
+        "_nanoseconds": 145000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "AnlD4hQhJdAwroEaMvlx",
+      "titulo": "Panamá deporta a 20 nicaragüenses por infracciones migratoria",
+      "slug": "panama-deporta-a-20-nicaraguenses-por",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 564,
+      "fecha": {
+        "_seconds": 1785563979,
+        "_nanoseconds": 621000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "slug": "de-arjona-a-aventura-conciertos-anunciados-para-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 699,
+      "fecha": {
+        "_seconds": 1781110860,
+        "_nanoseconds": 0
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4",
+      "slug": "metal-sonic-se-integra-oficialmente-a-la-pelicula-sonic-4",
+      "categoria": "Espectáculos",
+      "perfil": "tecnologia",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1266,
+      "fecha": {
+        "_seconds": 1778882528,
+        "_nanoseconds": 201000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "BAcOCY6ZJ7XpDdzfRUZ1",
+      "titulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "slug": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 476,
+      "fecha": {
+        "_seconds": 1784430187,
+        "_nanoseconds": 235000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "titulo": "Un afectado y un personas afectado en accidente laboral en…",
+      "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 364,
+      "fecha": {
+        "_seconds": 1780004983,
+        "_nanoseconds": 624000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "BthZmiHrAOsU61f6cowu",
+      "titulo": "Mar de fondo anega viviendas y negocios en La Boquita",
+      "slug": "mar-de-fondo-anega-viviendas-y-negocios-en-la-boquita",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 597,
+      "fecha": {
+        "_seconds": 1781740684,
+        "_nanoseconds": 564000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 447,
+      "fecha": {
+        "_seconds": 1780119310,
+        "_nanoseconds": 496000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "C4AHevj8Y9WKSw6UlMqA",
+      "titulo": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+      "slug": "nicaragua-festival-ia-y-hackathon-impulsan-la-innovacion",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 632,
+      "fecha": {
+        "_seconds": 1781641904,
+        "_nanoseconds": 328000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "C5ygeEIQwpMLLlU747up",
+      "titulo": "Seis miembros de una familia mueren en incendio en Honduras",
+      "slug": "seis-miembros-de-una-familia-mueren-en-incendio-en-honduras",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 441,
+      "fecha": "2026-07-30T13:55:40.537Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "C6Q405XAouocDIs02qKy",
+      "titulo": "Cinco equipos dominan la lucha por el liderato del Pomares",
+      "slug": "cinco-equipos-dominan-la-lucha-por-el-liderato-del-pomares",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 738,
+      "fecha": {
+        "_seconds": 1783458852,
+        "_nanoseconds": 703000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: crece 6% en remesas",
+      "slug": "economia-de-nicaragua-crece-6-y-alcanza-record-en-remesas",
+      "categoria": "Nacionales",
+      "perfil": "economia",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 582,
+      "fecha": {
+        "_seconds": 1781568790,
+        "_nanoseconds": 144000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "CnHlW2RyUcpwlJBKeFug",
+      "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "slug": "guia-de-senalizacion-vial-en-nicaragua-lineas-y-multas-ley-431",
+      "categoria": "Nacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 501,
+      "fecha": {
+        "_seconds": 1783879131,
+        "_nanoseconds": 961000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "CyV2dxk6PD7dXEUneJfi",
+      "titulo": "Nicaragua tendrá presencia en la final del Mundial gracias a FIFA",
+      "slug": "nicaragua-tendra-presencia-en-la-final-del-mundial-gracias-a-fifa",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 711,
+      "fecha": {
+        "_seconds": 1784351944,
+        "_nanoseconds": 941000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "slug": "nicaraguense-sigue-desaparecida-tras-terremotos-en-venezuela",
+      "categoria": "Internacionales",
+      "perfil": "violencia_genero",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 435,
+      "fecha": {
+        "_seconds": 1782851814,
+        "_nanoseconds": 734000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "D310EXZbS4v6j8rsMCRB",
+      "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "slug": "nicaragua-y-costa-rica-refuerzan-lucha-contra-la-malaria",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 469,
+      "fecha": {
+        "_seconds": 1783454234,
+        "_nanoseconds": 593000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "slug": "dos-nicaraguenses-fallecen-en-el-extranjero-en-casos-distintos",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 388,
+      "fecha": {
+        "_seconds": 1784844081,
+        "_nanoseconds": 869000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "DabSeh90gN6BreMLkDow",
+      "titulo": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "slug": "una-falla-cambio-el-rumbo-de-un-viaje-familiar-en",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 600,
+      "fecha": {
+        "_seconds": 1783038261,
+        "_nanoseconds": 802000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Dll52HugAZbEwPfOA9SL",
+      "titulo": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "slug": "semaforos-solares-y-radares-modernizan-vias-de-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 569,
+      "fecha": {
+        "_seconds": 1782965360,
+        "_nanoseconds": 629000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EDvI8A7DAwrDFuBf3f18",
+      "titulo": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "slug": "capturan-a-dos-por-crimen-de-doctora-nicaraguense-en-guatemala",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 427,
+      "fecha": {
+        "_seconds": 1782946270,
+        "_nanoseconds": 256000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EFBlqTZDTyDbFC4PRZ0c",
+      "titulo": "Tres ataques de pitbull en Nicaragua dejan tres afectados",
+      "slug": "tres-ataques-de-pitbull-en-nicaragua-dejan-tres-lesionados",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 2313,
+      "fecha": {
+        "_seconds": 1781756684,
+        "_nanoseconds": 38000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EK8pDgblNpScPCoGCgab",
+      "titulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "slug": "bebe-sufre-quemaduras-con-agua-caliente-en-diria",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 520,
+      "fecha": {
+        "_seconds": 1782840057,
+        "_nanoseconds": 818000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "slug": "dueno-de-semovientes-paga-c-769-mil-por-muerte-en-jalapa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 377,
+      "fecha": {
+        "_seconds": 1783182938,
+        "_nanoseconds": 966000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EnQeMjUfvgWY5xmRSfy5",
+      "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
+      "slug": "motos-alcohol-y-madrugada-6-accidentes-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1130,
+      "fecha": "2026-08-05T20:37:54.013Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "EyR39NNAk2XXXTSjhA9g",
+      "titulo": "8 motociclistas fallecen en accidentes este fin de semana",
+      "slug": "8-motociclistas-fallecen-en-accidentes-este-fin-de-semana",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 428,
+      "fecha": {
+        "_seconds": 1782765844,
+        "_nanoseconds": 961000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "slug": "escolta-de-ultraval-enfrenta-juicio-por-robo-en",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 718,
+      "fecha": {
+        "_seconds": 1779213553,
+        "_nanoseconds": 11000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "FF8yCcM33HysEtaG3ehp",
+      "titulo": "Tres accidentes en Nicaragua dejan un motociclista muerto",
+      "slug": "tres-accidentes-en-nicaragua-dejan-un-motociclista-muerto",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 850,
+      "fecha": "2026-08-08T18:47:16.052Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "FLbXd6XRrTl5TCdTkNYT",
+      "titulo": "Nicaragua en Santo Domingo 2026: medallas, béisbol y retos",
+      "slug": "nicaragua-en-santo-domingo-2026-medallas-beisbol-y-retos",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 865,
+      "fecha": "2026-07-31T23:02:38.666Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "slug": "fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 764,
+      "fecha": {
+        "_seconds": 1780071607,
+        "_nanoseconds": 912000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "FsMXE1Jn8Qw9HNNYGgqF",
+      "titulo": "IA agéntica lidera cambios tecnológicos globales en 2026",
+      "slug": "tecnologia-global-ia-agentica-lidera-cambios-en-2026",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1025,
+      "fecha": {
+        "_seconds": 1781820045,
+        "_nanoseconds": 222000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "GDIEammzYioBq5JrRsLd",
+      "titulo": "Tatiana Guzmán hace historia en Mundial FIFA 2026 con VAR",
+      "slug": "tatiana-guzman-hace-historia-en-mundial-fifa-2026-con-var",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 573,
+      "fecha": {
+        "_seconds": 1782227514,
+        "_nanoseconds": 395000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "slug": "polemica-en-el-mundial-no-frena-reconocimiento-a-tatiana",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 385,
+      "fecha": {
+        "_seconds": 1782854471,
+        "_nanoseconds": 59000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "slug": "incendio-destruye-vivienda-en-monsenor-lezcano-y-deja-un-herido",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 70,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 379,
+      "fecha": {
+        "_seconds": 1782678823,
+        "_nanoseconds": 42000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "titulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital",
+      "slug": "toy-story-5-llegara-a-nicaragua-con-woody-y-buzz-en-la-era-digital",
+      "categoria": "Espectáculos",
+      "perfil": "tecnologia",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 948,
+      "fecha": {
+        "_seconds": 1779898701,
+        "_nanoseconds": 960000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "HDs899RFlczkxeNhhaez",
+      "titulo": "Adiós a la voz mexicana detrás de Toy Story y Harry Potter",
+      "slug": "adios-a-la-voz-mexicana-detras-de-toy-story-y-harry-potter",
+      "categoria": "Espectáculos",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 617,
+      "fecha": "2026-08-04T23:22:03.621Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "HOr2RLJb6pWN03jZvoYD",
+      "titulo": "Padre muere tras rescatar a su hijo del mar en Poneloya",
+      "slug": "padre-muere-tras-rescatar-a-su-hijo-del-mar-en-poneloya",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 446,
+      "fecha": {
+        "_seconds": 1784646528,
+        "_nanoseconds": 33000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "HxsDqbeHSSO2MRyl1Cpu",
+      "titulo": "Accidente grave en Masaya en Villa Bosco — Nicaragua Informate",
+      "slug": "masaya-analisis-del-fatal-accidente-vial-en-villa-bosco",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 728,
+      "fecha": {
+        "_seconds": 1781522460,
+        "_nanoseconds": 0
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p",
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "HyUcJbnUzefWCcape0UQ",
+      "titulo": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "slug": "siete-nicaraguenses-fallecen-en-el-extranjero-en-julio-2026",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 534,
+      "fecha": {
+        "_seconds": 1784578225,
+        "_nanoseconds": 884000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "I8JtiJqCugne39Q0GrZk",
+      "titulo": "Nicaragua produce 10.3 millones de aguacates en 2026",
+      "slug": "nicaragua-produce-10-3-millones-de-aguacates-en-2026",
+      "categoria": "Nacionales",
+      "perfil": "",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1055,
+      "fecha": "2026-08-13T20:27:06.290Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "slug": "costa-rica-detiene-a-palestino-con-vinculos-a-hamas",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 455,
+      "fecha": {
+        "_seconds": 1782328988,
+        "_nanoseconds": 352000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "titulo": "Comercios esperan alta actividad por Día de las Madres en…",
+      "slug": "comercios-esperan-alta-actividad-por-dia-de-las-madres-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 806,
+      "fecha": {
+        "_seconds": 1779648523,
+        "_nanoseconds": 226000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "slug": "residencial-las-madres-inaugura-575-viviendas-para-familias-en-managua",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 449,
+      "fecha": {
+        "_seconds": 1780179935,
+        "_nanoseconds": 2000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "slug": "campeonato-de-1-4-de-milla-adrenalina-y-tecnica-en-managua",
+      "categoria": "Deportes",
+      "perfil": "nacionales",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 412,
+      "fecha": {
+        "_seconds": 1782074571,
+        "_nanoseconds": 36000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "J1ZUf7ZxMxaUjb64rkXj",
+      "titulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "slug": "cinco-accidentes-de-transito-dejan-tres-fallecido-y-varios-herido",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 799,
+      "fecha": {
+        "_seconds": 1784308809,
+        "_nanoseconds": 754000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JIRE98QbwrecUId3edcA",
+      "titulo": "Muere trabajador tras ataque de un perro en Managua",
+      "slug": "muere-trabajador-tras-ataque-de-un-perro-en-managua",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 567,
+      "fecha": "2026-07-27T21:45:51.565Z",
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 626,
+      "fecha": {
+        "_seconds": 1782232605,
+        "_nanoseconds": 210000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p",
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "slug": "capturan-a-autores-de-doble-crimen-en-san-ramon-matagalpa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 523,
+      "fecha": {
+        "_seconds": 1784679036,
+        "_nanoseconds": 2000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JcB6a4mamtg6yjtcXp9c",
+      "titulo": "Nicaragüense resulta afectado tras incidente armado en Guanacaste",
+      "slug": "nicaraguense-fallece-tras-incidente-armado-en-guanacaste",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 486,
+      "fecha": {
+        "_seconds": 1782053589,
+        "_nanoseconds": 435000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Jjk9syTstGMlEeQerkQ6",
+      "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
+      "slug": "varios-accidentes-de-transito-dejan-fallecidos-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 728,
+      "fecha": "2026-07-30T02:40:32.700Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JtTY1tfzHmkOVNJjCZJX",
+      "titulo": "Comerciante resulta afectado tras altercado en terminal de Rosita",
+      "slug": "comerciante-fallece-tras-altercado-en-terminal-de-rosita",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 831,
+      "fecha": {
+        "_seconds": 1781392080,
+        "_nanoseconds": 0
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JvTqSDHGA4EEZnlE6BPi",
+      "titulo": "Messi iguala récord histórico de 16 goles en Mundiales",
+      "slug": "messi-iguala-record-historico-de-16-goles-en-mundiales",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 731,
+      "fecha": {
+        "_seconds": 1781671668,
+        "_nanoseconds": 918000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "JyiBCf438iHQhSn1rkpO",
+      "titulo": "Migrante de Madriz muere en EE.UU.; familia pide ayuda",
+      "slug": "migrante-de-madriz-muere-en-ee-uu-familia-pide-ayuda",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 730,
+      "fecha": "2026-08-08T04:37:22.327Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "K7IuhDsETCHWq8BaltgK",
+      "titulo": "Agenda cultural: Eventos en Managua del 20 al 30 de junio",
+      "slug": "agenda-cultural-eventos-en-managua-del-20-al-30-de-junio",
+      "categoria": "Espectáculos",
+      "perfil": "cultura",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 778,
+      "fecha": {
+        "_seconds": 1782009038,
+        "_nanoseconds": 51000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "KAe7bOjRVf1k4w7It5q4",
+      "titulo": "Volcán Telica expulsa ceniza y mantiene vigilancia activa",
+      "slug": "volcan-telica-expulsa-ceniza-y-mantiene-vigilancia-activa",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 395,
+      "fecha": {
+        "_seconds": 1784932629,
+        "_nanoseconds": 101000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "KDsFrw5UitY7JGQ9uOPq",
+      "titulo": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "slug": "ataque-armado-en-costa-rica-deja-sin-vida-a-migrante-rivense",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 357,
+      "fecha": {
+        "_seconds": 1783263691,
+        "_nanoseconds": 502000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "titulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+      "slug": "turismo-en-nicaragua-crece-11-en-primer-trimestre-de-2026-segun-intur",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 625,
+      "fecha": {
+        "_seconds": 1778949729,
+        "_nanoseconds": 691000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "KqbSciGsztV7VDFB7XFC",
+      "titulo": "Stanling Orozco conserva triple corona del Pomares 2026",
+      "slug": "stanling-orozco-conserva-triple-corona-del-pomares-2026",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1005,
+      "fecha": {
+        "_seconds": 1781885393,
+        "_nanoseconds": 784000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "M5Ivl0fqvyOivSZMuNLY",
+      "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+      "slug": "nicaragua-tendra-dos-arbitros-en-el-mundial-2026",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 610,
+      "fecha": {
+        "_seconds": 1781043168,
+        "_nanoseconds": 694000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "M9tek6rwIxTjSEbbI71k",
+      "titulo": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "slug": "nasa-cuestiona-limite-de-tormentas-solares-con-estudio-en",
+      "categoria": "Tecnología",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 672,
+      "fecha": {
+        "_seconds": 1784589141,
+        "_nanoseconds": 845000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "M9vj4XiOdmMrLwreHlff",
+      "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+      "slug": "depresion-tropical-three-e-se-forma-frente-a-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 673,
+      "fecha": {
+        "_seconds": 1780940965,
+        "_nanoseconds": 927000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "MkbCQPde18VTVKlSgHLn",
+      "titulo": "Nicaragua reporta menos casos de dengue, malaria e influenza",
+      "slug": "nicaragua-reporta-menos-casos-de-dengue-malaria-e-influenza",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 413,
+      "fecha": {
+        "_seconds": 1784850656,
+        "_nanoseconds": 116000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "slug": "colapsa-vivienda-ancestral-en-monimbo-masaya-familia-de-7-ilesa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 2196,
+      "fecha": {
+        "_seconds": 1782315457,
+        "_nanoseconds": 892000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NTa3Gb797l9FINZ2E7RU",
+      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
+      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 737,
+      "fecha": {
+        "_seconds": 1780937422,
+        "_nanoseconds": 159000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NZkwSINrmCZO4rKOetqz",
+      "titulo": "Investigan ataque en El Riguero que hirió a niño de 10 año",
+      "slug": "investigan-ataque-en-el-riguero-que-hirio-a-nino-de-10-ano",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1014,
+      "fecha": "2026-07-28T22:32:34.686Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NbYNNfBGD7X4LVVMjzYo",
+      "titulo": "Vientos intensos prolongan corte de energía en Corn Island",
+      "slug": "vientos-intensos-prolongan-corte-de-energia-en-corn-island",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1145,
+      "fecha": {
+        "_seconds": 1782082946,
+        "_nanoseconds": 522000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Neue7Ft2XeQybdX7xKTk",
+      "titulo": "El ritual que parte la piel y mueve a miles en Masaya",
+      "slug": "el-ritual-que-parte-la-piel-y-mueve-a-miles-en-masaya",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 639,
+      "fecha": {
+        "_seconds": 1782312712,
+        "_nanoseconds": 633000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Ng7C24qqQcb5s0ZIueVm",
+      "titulo": "Tres fallecidos y un lesionado dejan accidentes en el país",
+      "slug": "tres-fallecidos-y-un-lesionado-dejan-accidentes-en-el-pais",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 538,
+      "fecha": {
+        "_seconds": 1785559953,
+        "_nanoseconds": 219000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NgEysmaqCnykHx2uFm1L",
+      "titulo": "Toro embiste a hombre durante Tope de Toros en Granada",
+      "slug": "toro-embiste-a-hombre-durante-tope-de-toros-en-granada",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 708,
+      "fecha": "2026-08-10T15:11:46.727Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "NsHuiNgmIpEWcaQM37pj",
+      "titulo": "Dos muertos y tres heridos dejan accidentes en Nicaragua",
+      "slug": "dos-muertos-y-tres-heridos-dejan-accidentes-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 821,
+      "fecha": "2026-08-09T17:43:53.108Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "OYZgpG1z1Arb5HacLNnp",
+      "titulo": "Muere joven baleado en barrio México; investigan el ataque",
+      "slug": "muere-joven-baleado-en-barrio-mexico-investigan-el-ataque",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 447,
+      "fecha": "2026-07-29T23:00:26.040Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "P4KRYKddOPHB2Nu0uya5",
+      "titulo": "Familia afectada tras volcamiento de camión en Matagalpa",
+      "slug": "familia-lesionada-tras-volcamiento-de-camion-en-matagalpa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 572,
+      "fecha": {
+        "_seconds": 1782262740,
+        "_nanoseconds": 892000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "PAMrJttL66Oxg1eavIXS",
+      "titulo": "Lionel Messi establece récord de 18 goles en Copas del Mundo",
+      "slug": "lionel-messi-establece-record-de-18-goles-en-copas-del-mundo",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 472,
+      "fecha": {
+        "_seconds": 1782156485,
+        "_nanoseconds": 471000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "PDYIbuv1snYYNDK54EBN",
+      "titulo": "Sismo de 7.4 sacude Colombia y deja daños y heridos",
+      "slug": "sismo-de-7-4-sacude-colombia-y-deja-danos-y-heridos",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 815,
+      "fecha": "2026-08-10T14:39:00.551Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "PNJr8KWo2Gy1TCjuF9jq",
+      "titulo": "Oleaje daña embarcaciones y afecta turismo en Rivas",
+      "slug": "oleaje-dana-embarcaciones-y-afecta-turismo-en-rivas",
+      "categoria": "Nacionales",
+      "perfil": "turismo",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 590,
+      "fecha": {
+        "_seconds": 1781039656,
+        "_nanoseconds": 345000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "PaUNyoHJ6rvNucj2Yqs0",
+      "titulo": "Selección de béisbol es recibida con honores en Managua",
+      "slug": "seleccion-de-beisbol-es-recibida-con-honores-en-managua",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 660,
+      "fecha": "2026-08-09T21:24:00.957Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Pf0VvjOfwZNm7BnQpncl",
+      "titulo": "Agosto comienza con tres accidentes y 4 fallecidos",
+      "slug": "agosto-comienza-con-tres-accidentes-y-4-fallecidos",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 958,
+      "fecha": "2026-08-01T22:42:58.915Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "PiXjB5ugRBQxjWXIvyuF",
+      "titulo": "Portugal elimina a Croacia y el Mundial se despide de Modrić",
+      "slug": "portugal-elimina-a-croacia-y-el-mundial-se-despide-de",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 373,
+      "fecha": {
+        "_seconds": 1783116377,
+        "_nanoseconds": 36000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 484,
+      "fecha": {
+        "_seconds": 1782418008,
+        "_nanoseconds": 141000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "QiOIqxhjT67BS2D4saW5",
+      "titulo": "Mundial 2026: sorpresas, favoritos y cómo se vive en Nicaragua",
+      "slug": "mundial-2026-sorpresas-favoritos-y-como-se-vive-en-nicaragua",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 460,
+      "fecha": {
+        "_seconds": 1782662891,
+        "_nanoseconds": 511000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "QqQzUkztp81QAcSfXvS8",
+      "titulo": "Panamá retorna a 24 nicaragüenses; 8 fueron expulsados",
+      "slug": "panama-retorna-a-24-nicaraguenses-8-fueron-expulsados",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 644,
+      "fecha": {
+        "_seconds": 1781747774,
+        "_nanoseconds": 666000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "R2zQFsmjsu0NvFRU7tDa",
+      "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
+      "slug": "tres-leches-nicaraguense-gana-reconocimiento-internacional",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 630,
+      "fecha": {
+        "_seconds": 1780802323,
+        "_nanoseconds": 519000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "titulo": "Tres personas resultan afectados en accidentes de motocicleta…",
+      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 796,
+      "fecha": {
+        "_seconds": 1780248108,
+        "_nanoseconds": 303000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "RJU7TDSHj4mI4IP0Pgn8",
+      "titulo": "Galaxy Z Flip8 ya está en Nicaragua: qué cambia y cuánto cuesta.",
+      "slug": "galaxy-z-flip8-ya-esta-en-nicaragua-que-cambia-y-cuanto-cuesta",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1187,
+      "fecha": "2026-08-12T18:28:22.160Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "RRo9U6gI1hRINap3egQS",
+      "titulo": "Condenan a 25 años al asesino de “La Reina Mengueña” en Chontales",
+      "slug": "condenan-a-25-anos-al-asesino-de-la-reina-menguena-en-chontales",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 453,
+      "fecha": "2026-08-07T02:34:43.487Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "RbCTjiEE7RrHLN80j7K9",
+      "titulo": "Festival internacional en Managua: horario, países y actividades",
+      "slug": "festival-internacional-en-managua-horario-paises-y-actividades",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 358,
+      "fecha": "2026-08-07T04:14:33.346Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "S8jrH6rYwBEuwzpBDw82",
+      "titulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
+      "slug": "inicia-construccion-del-hospital-oriental-lesbia-carrasquilla",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 662,
+      "fecha": {
+        "_seconds": 1784175540,
+        "_nanoseconds": 122000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "slug": "capturan-a-senalado-por-robo-de-mas-de-us-30-mil-en-jalapa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 744,
+      "fecha": {
+        "_seconds": 1781999015,
+        "_nanoseconds": 233000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
+      "categoria": "Nacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 545,
+      "fecha": "2026-07-28T23:45:34.543Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Sef2LpxsEcnjg7sf0f3U",
+      "titulo": "Nicaragua vence a Cuba y jugará la final por el oro ante Panamá",
+      "slug": "nicaragua-vence-a-cuba-y-jugara-la-final-por-el-oro-ante",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 724,
+      "fecha": {
+        "_seconds": 1786060120,
+        "_nanoseconds": 473000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "T1beggQC5fYRGjEo1Szn",
+      "titulo": "Nicaragua inicia este fin de semana sus desfiles patrios 2026",
+      "slug": "nicaragua-inicia-este-fin-de-semana-sus-desfiles-patrios-2026",
+      "categoria": "Nacionales",
+      "perfil": "educacion",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1113,
+      "fecha": "2026-08-12T23:30:29.307Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "TYBT2pcviA6IH8AsoE4P",
+      "titulo": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
+      "slug": "dos-motociclistas-mueren-en-menos-de-12-horas-en-la-nueva-a-leon",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 725,
+      "fecha": "2026-08-06T17:32:06.171Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "titulo": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "slug": "juez-deja-libre-a-nicaraguense-investigada-por-muerte-de-su-hermana",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 623,
+      "fecha": {
+        "_seconds": 1780717393,
+        "_nanoseconds": 118000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "titulo": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "slug": "bluefields-celebra-el-palo-de-mayo-con-musica-y-tradicion-caribena",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 735,
+      "fecha": {
+        "_seconds": 1779646421,
+        "_nanoseconds": 190000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "slug": "hospital-bertha-calderon-ejecuta-con-exito-cirugia-fetal",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1014,
+      "fecha": {
+        "_seconds": 1778881085,
+        "_nanoseconds": 68000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "titulo": "Béisbol internacional: Nicaragua se alista para retos de 2026",
+      "slug": "nicaragua-vivira-un-2026-historico-en-beisbol-con-mundial-sub-23-y-jjcc",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 671,
+      "fecha": {
+        "_seconds": 1779906495,
+        "_nanoseconds": 661000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "VAQWaSecbeFlCuK8KCgG",
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "slug": "bus-de-jalapa-colisiona-con-cisterna-en-tipitapa",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 725,
+      "fecha": {
+        "_seconds": 1780761606,
+        "_nanoseconds": 438000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "slug": "espana-francia-y-argentina-llegan-como-favoritas-al-mundial-2026",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 743,
+      "fecha": {
+        "_seconds": 1781041071,
+        "_nanoseconds": 166000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "W9E5MwLZvezRaSi3meqX",
+      "titulo": "Accidente en Potosí deja dos vidas perdidas en una colisión vial",
+      "slug": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 553,
+      "fecha": {
+        "_seconds": 1784819019,
+        "_nanoseconds": 470000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "WNZ8XRJLMOhR4ilO7Jfp",
+      "titulo": "Nicaragua: primera autopista de peaje de su historia",
+      "slug": "nicaragua-primera-autopista-de-peaje-de-su",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 640,
+      "fecha": {
+        "_seconds": 1783017270,
+        "_nanoseconds": 564000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "WR9ixdDXutGgVpZ9awuQ",
+      "titulo": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954",
+      "slug": "terremotos-en-venezuela-cifra-de-fallecidos-sube-a-2-954",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 436,
+      "fecha": {
+        "_seconds": 1783273115,
+        "_nanoseconds": 838000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "WT8kWgsAuYm7VnymG07L",
+      "titulo": "Wilfrido Vargas llega a Nicaragua para su concierto en Managua",
+      "slug": "wilfrido-vargas-llega-a-nicaragua-para-su-concierto-en-managua",
+      "categoria": "Espectáculos",
+      "perfil": "cultura",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 644,
+      "fecha": "2026-08-08T14:57:59.560Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "WthoTeyDQn3v3a0vBrQA",
+      "titulo": "Muere Jorge Messi, padre y representante de Lionel Messi",
+      "slug": "muere-jorge-messi-padre-y-representante-de-lionel-messi",
+      "categoria": "Espectáculos",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 702,
+      "fecha": "2026-08-08T14:24:59.773Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "XK3mXDYi2mYHqzUMCvCl",
+      "titulo": "MAG presenta semillas de frijol resistentes a la sequía",
+      "slug": "mag-presenta-semillas-de-frijol-resistentes-a-la-sequia",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 663,
+      "fecha": "2026-08-08T03:58:35.869Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Xt18bdt10Mt6CIloPKSu",
+      "titulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "slug": "hallan-sin-vida-a-dos-personas-en-distintos-puntos-de-rivas",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 369,
+      "fecha": {
+        "_seconds": 1783026829,
+        "_nanoseconds": 466000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "titulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "slug": "nicaraguenses-acumulan-c-291-mil-millones-en-depositos",
+      "categoria": "Nacionales",
+      "perfil": "educacion",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 551,
+      "fecha": {
+        "_seconds": 1781049034,
+        "_nanoseconds": 119000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Yf7Njww3czR9w7xMsrUo",
+      "titulo": "Resumen Mundial 2026: Resultados en Atlanta y victoria alemana",
+      "slug": "resumen-mundial-2026-sorpresas-en-atlanta-y-goleada-alemana",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 596,
+      "fecha": {
+        "_seconds": 1781563536,
+        "_nanoseconds": 719000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "slug": "despues-de-anos-profugo-captura-de-el-diablo-abre-interrogante",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 435,
+      "fecha": {
+        "_seconds": 1784904692,
+        "_nanoseconds": 537000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ZK1mbMdVBgdisJq1mn9u",
+      "titulo": "IA médica en 2026: diagnósticos más certeros que médicos",
+      "slug": "ia-medica-en-2026-diagnosticos-mas-certeros-que-medicos",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 481,
+      "fecha": {
+        "_seconds": 1782334625,
+        "_nanoseconds": 156000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "Zu389gS3tQxY0EYfXrE9",
+      "titulo": "España gana Mundial 2026 y es recibida con honores en Madrid",
+      "slug": "espana-gana-mundial-2026-y-es-recibida-con-honores-en-madrid",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 488,
+      "fecha": {
+        "_seconds": 1784569040,
+        "_nanoseconds": 664000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ZvMD6TcBmXDFWHQxEykD",
+      "titulo": "Copa 2026: Alemania y Países Bajos fuera; Brasil y Canadá avanzan",
+      "slug": "copa-2026-alemania-y-paises-bajos-fuera-brasil-y-canada-avanzan",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 402,
+      "fecha": {
+        "_seconds": 1782797532,
+        "_nanoseconds": 986000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "a43EAAR543PNuVXni2v3",
+      "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "slug": "bertha-calderon-estrena-equipos-de-diagnostico-avanzado",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 493,
+      "fecha": {
+        "_seconds": 1782419957,
+        "_nanoseconds": 348000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "aDUNDXKB5AaqwW6SfyaG",
+      "titulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
+      "slug": "comupred-monitorea-crecida-del-rio-tuma-en-mulukuku",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 703,
+      "fecha": {
+        "_seconds": 1783804980,
+        "_nanoseconds": 492000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "aII0C6kduAshiZAk16Wc",
+      "titulo": "Amanda Miguel ofrece concierto internacional en Managua",
+      "slug": "amanda-miguel-ofrece-concierto-internacional-en-managua",
+      "categoria": "Espectáculos",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 610,
+      "fecha": {
+        "_seconds": 1781398260,
+        "_nanoseconds": 0
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "aXtBaU598FRn27J0X2nD",
+      "titulo": "Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo",
+      "slug": "nueva-terminal-de-buses-en-managua-reemplaza-a-casimiro-sotelo",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 631,
+      "fecha": {
+        "_seconds": 1784572739,
+        "_nanoseconds": 247000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "titulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospital…",
+      "slug": "brigada-medica-realiza-cirugia-cardiacas-gratuitas-en-hospital-de-leon",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 767,
+      "fecha": {
+        "_seconds": 1780001042,
+        "_nanoseconds": 706000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "b3hBxRnUrftHjFulYE3L",
+      "titulo": "El Indio Viejo: historia del plato típico de Nicaragua",
+      "slug": "el-indio-viejo-historia-del-plato-tipico-de",
+      "categoria": "Nacionales",
+      "perfil": "gastronomia",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 983,
+      "fecha": {
+        "_seconds": 1785881942,
+        "_nanoseconds": 352000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "bNTteIqTORrl2X7opjvG",
+      "titulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "slug": "madrugada-tragica-en-matagalpa-tras-presunto-robo-de",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 599,
+      "fecha": {
+        "_seconds": 1784574318,
+        "_nanoseconds": 470000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "cIBrfo4r0oesTQCSH85x",
+      "titulo": "Parque de la Familia en Estelí reabre tras millonaria inversión",
+      "slug": "parque-de-la-familia-en-esteli-reabre-tras-millonaria-inversion",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 494,
+      "fecha": {
+        "_seconds": 1782664745,
+        "_nanoseconds": 552000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "caTDwZUGxZmjwicrEukK",
+      "titulo": "Basura en cauces de Managua eleva riesgo de inundaciones",
+      "slug": "basura-en-cauces-de-managua-eleva-riesgo-de-inundaciones",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 416,
+      "fecha": "2026-08-06T23:37:38.158Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ckgtTyw5JZx2lMhWYdiL",
+      "titulo": "Rayo McQueen y 19 personajes llegan con exhibición a Managua",
+      "slug": "rayo-mcqueen-y-19-personajes-llegan-con-exhibicion-a-managua",
+      "categoria": "Espectáculos",
+      "perfil": "nacionales",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 972,
+      "fecha": "2026-07-29T02:54:12.102Z",
+      "classification": "ARCHIVE",
+      "reasons": [
+        "Preview pasado"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "cr3ixiMYdzUXKAO6kzqD",
+      "titulo": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
+      "slug": "yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "gastronomia",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 810,
+      "fecha": "2026-08-06T23:03:44.126Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "dJXd3qsmEK8AY4p0ctko",
+      "titulo": "Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua",
+      "slug": "elisha-hodgson-hace-historia-en-el-arbitraje-fiba-por-nicaragua",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 453,
+      "fecha": {
+        "_seconds": 1784083080,
+        "_nanoseconds": 771000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "dcr6j4wJetnGNY80e6sZ",
+      "titulo": "Así Nicaragua conectó por tierra el Caribe con el Pacífico",
+      "slug": "asi-nicaragua-conecto-por-tierra-el-caribe-con-el-pacifico",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1298,
+      "fecha": "2026-08-02T00:46:43.996Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "djn1DLmztxyOXwfSQsbx",
+      "titulo": "ICE detiene a dos nicaragüenses en operativos en EE. UU",
+      "slug": "ice-detiene-a-dos-nicaraguenses-en-operativos-en-ee-uu",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 460,
+      "fecha": {
+        "_seconds": 1784590536,
+        "_nanoseconds": 778000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "slug": "venezuela-164-fallecidos-y-30-mil-desaparecidos-tras-sismos",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 448,
+      "fecha": {
+        "_seconds": 1782411053,
+        "_nanoseconds": 905000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "slug": "nicaragua-domina-el-ihf-trophy-de-balonmano-en-centroamerica",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 602,
+      "fecha": {
+        "_seconds": 1781638455,
+        "_nanoseconds": 509000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "eHwPppvuoey1DpRCh7cc",
+      "titulo": "México, EE. UU. y Países Bajos clasifican al Mundial 2026",
+      "slug": "mexico-ee-uu-y-paises-bajos-clasifican-al-mundial-2026",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 692,
+      "fecha": {
+        "_seconds": 1782005278,
+        "_nanoseconds": 782000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "eigKQMFdjSfB8N7Fypgk",
+      "titulo": "Mbappé, a un gol de igualar el récord mundialista de Messi",
+      "slug": "mbappe-a-un-gol-de-igualar-el-record-mundialista-de-messi",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 370,
+      "fecha": {
+        "_seconds": 1782185189,
+        "_nanoseconds": 881000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "esccFviANcjLiHp4UnsQ",
+      "titulo": "Mineros avanza de ronda y deja en disputa el último boleto",
+      "slug": "mineros-avanza-de-ronda-y-deja-en-disputa-el-ultimo-boleto",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 601,
+      "fecha": {
+        "_seconds": 1784841805,
+        "_nanoseconds": 764000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "fBzmMNWyqUTrffFr49g6",
+      "titulo": "Accidentes dejan varios afectados en Managua, León y Bilwi",
+      "slug": "accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 496,
+      "fecha": {
+        "_seconds": 1781902621,
+        "_nanoseconds": 124000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…",
+      "slug": "joao-fonseca-remonta-dos-sets-y-elimina-a-djokovic-en-roland-garros",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 747,
+      "fecha": {
+        "_seconds": 1780120689,
+        "_nanoseconds": 853000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "fO5Xwap5b2F1zefVhs47",
+      "titulo": "Ercilia Arellano gana festival gastronómico en San Carlos",
+      "slug": "ercilia-arellano-gana-festival-gastronomico-en-san-carlos",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 755,
+      "fecha": "2026-08-09T02:11:59.830Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gAp6N4fO4sAjnssvaROp",
+      "titulo": "Nicaragua anuncia 8va Feria Nacional de la Vivienda",
+      "slug": "nicaragua-anuncia-8va-feria-nacional-de-la",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1206,
+      "fecha": {
+        "_seconds": 1785881814,
+        "_nanoseconds": 84000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gPkIsIZoh7pYHLSmQMe5",
+      "titulo": "Nicaragüense de León buscada por Interpol es entregada a Honduras",
+      "slug": "nicaraguense-de-leon-buscada-por-interpol-es-entregada-a-honduras",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 693,
+      "fecha": "2026-08-12T16:40:03.033Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gQKFK5z94pfaHGi2J1Wc",
+      "titulo": "Cinco motociclistas mueren en distintos puntos de Nicaragua",
+      "slug": "cinco-motociclistas-mueren-en-distintos-puntos-de-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1287,
+      "fecha": "2026-08-10T16:43:20.016Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "titulo": "Dos afectados tras naufragio de panga en Krukira",
+      "slug": "naufragio-en-caribe-norte-deja-mujer-muerta-y-dos-ninos-desaparecidos",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 719,
+      "fecha": {
+        "_seconds": 1780075761,
+        "_nanoseconds": 711000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gYezxCEUx17WQHH3SCqI",
+      "titulo": "Producción de leche alcanza 146.4 millones en Nicaragua",
+      "slug": "produccion-de-leche-alcanza-146-4-millones-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 457,
+      "fecha": {
+        "_seconds": 1781809504,
+        "_nanoseconds": 880000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+      "slug": "modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 771,
+      "fecha": {
+        "_seconds": 1779555199,
+        "_nanoseconds": 853000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "glOmX2RSOpciUxHR0y3n",
+      "titulo": "Nicaragüense de Jinotepe se corona campeón de España en Sanda",
+      "slug": "nicaraguense-de-jinotepe-se-corona-campeon-de-espana-en-sanda",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 775,
+      "fecha": {
+        "_seconds": 1785563947,
+        "_nanoseconds": 42000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "h12a1BuHFk4hNO1MP0xQ",
+      "titulo": "Volcán de Fuego: evacuaciones y alerta roja en Guatemala",
+      "slug": "volcan-de-fuego-evacuaciones-y-alerta-roja-en-guatemala",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 653,
+      "fecha": "2026-08-04T22:38:13.616Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "h6jcqzPLhz8UrpaGP7xq",
+      "titulo": "Mundial 2026: Cabo Verde sorprende España y empata Portugal",
+      "slug": "mundial-2026-cabo-verde-sorprende-espana-y-empata-portugal",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 460,
+      "fecha": {
+        "_seconds": 1781750704,
+        "_nanoseconds": 286000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "hD0W8NnvJ2aLN2F2O44R",
+      "titulo": "Hallan sin vida a adulto mayor desaparecido en Madriz",
+      "slug": "hallan-sin-vida-a-adulto-mayor-desaparecido-en-madriz",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 648,
+      "fecha": "2026-08-09T01:14:02.467Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "hRxkEYbG8tOislbLn2gF",
+      "titulo": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
+      "slug": "lluvias-socavan-cauce-en-managua-y-ponen-viviendas-en-riesgo",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 819,
+      "fecha": "2026-08-06T03:25:17.616Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "slug": "arranco-la-feria-ganadera-agostina-2026-en-managua",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 563,
+      "fecha": "2026-08-03T19:07:10.801Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "hqg5C3kyCql4FZl3OWfB",
+      "titulo": "Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…",
+      "slug": "rosita-nicaragua-lagunas-turismo-cultura",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 881,
+      "fecha": {
+        "_seconds": 1782613912,
+        "_nanoseconds": 352000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "slug": "accidentes-en-nicaragua-dejan-un-fallecido-y-varios-heridos",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 418,
+      "fecha": {
+        "_seconds": 1784912374,
+        "_nanoseconds": 663000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 350,
+      "fecha": {
+        "_seconds": 1783371060,
+        "_nanoseconds": 333000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "i9duvDflEon1d6yAhT0W",
+      "titulo": "Joven fallece en accidente de tránsito en carretera a Masaya",
+      "slug": "joven-muere-en-accidente-de-transito-en-carretera-a",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 475,
+      "fecha": {
+        "_seconds": 1784565900,
+        "_nanoseconds": 170000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: 920 víctimas y miles sin rastro tras sismos",
+      "slug": "venezuela-replicas-continuan-con-920-victimas-y-miles-sin-rastro",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 463,
+      "fecha": {
+        "_seconds": 1782608772,
+        "_nanoseconds": 635000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ii6aCymgfcyPAKaAjaPg",
+      "titulo": "Nicaragua gana plata tras caer ante Panamá en la final de béisbol",
+      "slug": "nicaragua-gana-plata-tras-caer-ante-panama-en-la-final-de-beisbol",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 543,
+      "fecha": "2026-08-08T03:31:36.082Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
+      "slug": "como-sacar-y-apostillar-record-policial-de",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 685,
+      "fecha": {
+        "_seconds": 1778875495,
+        "_nanoseconds": 917000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "j1ia8jehVS0NtKgsV1GS",
+      "titulo": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
+      "slug": "terremoto-de-7-1-deja-muertos-desaparecidos-y-caos-en-japon",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 559,
+      "fecha": "2026-07-28T23:21:45.961Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "jD6WppRVoR20CuzBeJbq",
+      "titulo": "NASA usará avión científico para analizar eclipse solar de 2026",
+      "slug": "nasa-usara-avion-cientifico-para-analizar-eclipse-solar-de-2026",
+      "categoria": "Tecnología",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 662,
+      "fecha": "2026-08-07T03:29:00.203Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+      "slug": "disminucion-de-lluvias-afecta-cultivos-y-reservas-de-agua-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 636,
+      "fecha": {
+        "_seconds": 1779895971,
+        "_nanoseconds": 191000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "jYenFFPiEXMMhsvKeTL3",
+      "titulo": "España regulariza a más de un millón de extranjeros",
+      "slug": "espana-regulariza-a-mas-de-un-millon-de",
+      "categoria": "Internacionales",
+      "perfil": "economia",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 536,
+      "fecha": {
+        "_seconds": 1785557347,
+        "_nanoseconds": 171000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "kDIcgG5qs3ZgQCUeSapZ",
+      "titulo": "Una fiesta de cumpleaños terminó con dos muertos en Wiwilí",
+      "slug": "una-fiesta-de-cumpleanos-termino-con-dos-muertos-en-wiwili",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 508,
+      "fecha": "2026-08-04T19:06:58.701Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "slug": "julieta-venegas-presenta-tierra-de-esperanza-rumbo-al-mundial-2026",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 378,
+      "fecha": {
+        "_seconds": 1780111298,
+        "_nanoseconds": 937000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "slug": "nicaragua-gana-oro-en-relevos-mixtos-4x100-en-managua",
+      "categoria": "Deportes",
+      "perfil": "nacionales",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 618,
+      "fecha": {
+        "_seconds": 1780798927,
+        "_nanoseconds": 535000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "titulo": "Yadel reúne a más de 30 mil personas en Managua",
+      "slug": "yadel-y-camerata-bach-fusionan-regueton-y-cultura-en-managua",
+      "categoria": "Espectáculos",
+      "perfil": "cultura",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 503,
+      "fecha": {
+        "_seconds": 1780106768,
+        "_nanoseconds": 428000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "slug": "mirador-san-francisco-de-asis-dinamiza-turismo-en-carretera-norte",
+      "categoria": "Nacionales",
+      "perfil": "turismo",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1296,
+      "fecha": {
+        "_seconds": 1778879849,
+        "_nanoseconds": 722000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "l9sGpdiU3xbEDxDXYBWb",
+      "titulo": "Inaugurarán segunda etapa del Centro Oncológico Nacional",
+      "slug": "inauguraran-segunda-etapa-del-centro-oncologico",
+      "categoria": "Nacionales",
+      "perfil": "tecnologia",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 433,
+      "fecha": {
+        "_seconds": 1785464367,
+        "_nanoseconds": 436000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "lzsto5T2q85IgrVkqlA2",
+      "titulo": "Pokémon dona 100 millones de yenes tras terremoto en Japón",
+      "slug": "pokemon-dona-100-millones-de-yenes-tras-terremoto-en-japon",
+      "categoria": "Espectáculos",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 676,
+      "fecha": "2026-07-31T23:33:47.554Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "m9tFCwmKN6OPR5tY2Kgk",
+      "titulo": "Hospital Vélez Paiz realiza 32 procedimientos cardíacos",
+      "slug": "hospital-velez-paiz-realiza-32-procedimientos-cardiacos",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 698,
+      "fecha": "2026-08-08T13:53:54.006Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "mEy2ueESYxJq3pH6hQJf",
+      "titulo": "Miles de familias disfrutan el Tope de Toros en Granada",
+      "slug": "miles-de-familias-disfrutan-el-tope-de-toros-en-granada",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 712,
+      "fecha": "2026-08-09T22:08:17.108Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "titulo": "Nicaragua abre ante Colombia en Santo Domingo 2026",
+      "slug": "nicaragua-abre-ante-colombia-en-santo-domingo-2026",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 505,
+      "fecha": {
+        "_seconds": 1783002915,
+        "_nanoseconds": 90000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "slug": "las-enfermedades-mas-comunes-en-nicaragua-y-como-prevenirlas",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 975,
+      "fecha": {
+        "_seconds": 1780122620,
+        "_nanoseconds": 540000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "n0qOx4zq7JyVP4gFwEwW",
+      "titulo": "Conductor ebrio invade carril y motociclista pierde la vida",
+      "slug": "conductor-ebrio-invade-carril-y-motociclista-pierde-la-vida",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 458,
+      "fecha": {
+        "_seconds": 1783097028,
+        "_nanoseconds": 677000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "slug": "capturan-a-pinolero-por-llevarse-a-nina-de-13-anos",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 360,
+      "fecha": {
+        "_seconds": 1782949458,
+        "_nanoseconds": 535000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "n64la9Hnrkp0sENv0z5U",
+      "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "slug": "dos-perdidas-reabren-llamado-a-cuidar-la-salud-emocional",
+      "categoria": "Sucesos",
+      "perfil": "educacion",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 545,
+      "fecha": {
+        "_seconds": 1782960874,
+        "_nanoseconds": 555000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ngAKEUkSVkZ6OlfQCQtb",
+      "titulo": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+      "slug": "desaparecen-cuatro-marinos-tras-zarpar-de-corn-island",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 939,
+      "fecha": {
+        "_seconds": 1784081673,
+        "_nanoseconds": 293000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "nyF9rfm2AkQACTQPzFAn",
+      "titulo": "Con 204 representantes, Nicaragua va por nuevas medallas",
+      "slug": "con-204-representantes-nicaragua-va-por-nuevas-medallas",
+      "categoria": "Deportes",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 592,
+      "fecha": {
+        "_seconds": 1784673376,
+        "_nanoseconds": 735000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "slug": "ebola-avanza-en-congo-mientras-violencia-frena-respuesta-medica",
+      "categoria": "Internacionales",
+      "perfil": "salud",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 780,
+      "fecha": {
+        "_seconds": 1779460320,
+        "_nanoseconds": 21000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "o6W17EHiyx17VgcpbB5N",
+      "titulo": "Doctora nicaragüense resulta afectado en ataque armado en…",
+      "slug": "doctora-nicaraguense-muere-en-ataque-armado-en-poptun-peten",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 776,
+      "fecha": {
+        "_seconds": 1781739468,
+        "_nanoseconds": 85000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "o9Q6D0tRNWJ3cDs3nYLm",
+      "titulo": "En 48 horas, agosto ya suma 8 fallecidos en accidentes",
+      "slug": "en-48-horas-agosto-ya-suma-8-fallecidos-en-accidentes",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1222,
+      "fecha": "2026-08-02T16:12:03.439Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "odPH8kyPelb1S1TjnuPX",
+      "titulo": "Costanera agiliza transporte y abre playas antes aisladas",
+      "slug": "costanera-agiliza-transporte-y-abre-playas-antes",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 625,
+      "fecha": {
+        "_seconds": 1782774513,
+        "_nanoseconds": 965000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+      "slug": "tiktok-bajo-la-lupa-por-efectos-en-jovenes-nicaraguenses",
+      "categoria": "Nacionales",
+      "perfil": "tecnologia",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 647,
+      "fecha": {
+        "_seconds": 1779857474,
+        "_nanoseconds": 165000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ow2keC5R8XdLGzu5xKZa",
+      "titulo": "Cuba sufre séptimo apagón nacional en menos de 24 horas",
+      "slug": "cuba-sufre-septimo-apagon-nacional-en-menos-de-24-horas",
+      "categoria": "Internacionales",
+      "perfil": "turismo",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 886,
+      "fecha": "2026-08-04T04:22:52.396Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "p9HqVWGCq6WbcUnPBwrn",
+      "titulo": "Multiestadio Stanley Cayasso: así avanzan sus bases en Managua",
+      "slug": "multiestadio-stanley-cayasso-asi-avanzan-sus-bases-en-managua",
+      "categoria": "Deportes",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 595,
+      "fecha": {
+        "_seconds": 1785108844,
+        "_nanoseconds": 379000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "p9YSf3lXdbJITSQClziV",
+      "titulo": "Spider-Man: Un Nuevo Día rompe récords en su estreno mundial",
+      "slug": "spider-man-un-nuevo-dia-rompe-records-en-su-estreno-mundial",
+      "categoria": "Espectáculos",
+      "perfil": "internacional",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1177,
+      "fecha": "2026-08-09T00:49:01.294Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "slug": "beisbol-sigue-siendo-el-deporte-favorito-de-los-nicaraguenses-en-2026",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 862,
+      "fecha": {
+        "_seconds": 1779399588,
+        "_nanoseconds": 916000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "pVqVbFDgxmZAPOwoE5NM",
+      "titulo": "Santo Domingo se despide de Managua y regresa a Las Sierritas",
+      "slug": "santo-domingo-se-despide-de-managua-y-regresa-a-las-sierritas",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 938,
+      "fecha": "2026-08-10T23:29:14.031Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "phUuAtrQ4H3qV4heuZlH",
+      "titulo": "Dos afectados en accidentes de motocicleta en Nicaragua",
+      "slug": "dos-fallecidos-en-accidentes-de-motocicleta-en-nicaragua",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 880,
+      "fecha": {
+        "_seconds": 1781393340,
+        "_nanoseconds": 0
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "pmRNzGHrkOSSpSMWYg5J",
+      "titulo": "Buscan a hombre acusado de herir de bala a niña en Rivas",
+      "slug": "buscan-a-hombre-acusado-de-herir-de-bala-a-nina-en-rivas",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 496,
+      "fecha": "2026-07-30T22:13:15.712Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "titulo": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 780,
+      "fecha": {
+        "_seconds": 1779214036,
+        "_nanoseconds": 884000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "slug": "agresion-a-mujer-en-nindiri-activa-investigacion-bajo-la-ley-779",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 527,
+      "fecha": {
+        "_seconds": 1784010665,
+        "_nanoseconds": 219000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "slug": "nueva-guinea-busca-respuestas-por-muerte-de-joven-de-18-anos",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 473,
+      "fecha": {
+        "_seconds": 1783992513,
+        "_nanoseconds": 892000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
+      "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 659,
+      "fecha": {
+        "_seconds": 1779556273,
+        "_nanoseconds": 27000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "qkurWkzG1J2bG01EVVru",
+      "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "slug": "camioneta-impacta-dos-motos-en-managua-y-deja-tres-lesionados",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 475,
+      "fecha": {
+        "_seconds": 1782667838,
+        "_nanoseconds": 622000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "rFGNmTRKwi9QSc1VCddH",
+      "titulo": "Santo Domingo de Guzmán llega a Managua: recorrido y detalles",
+      "slug": "santo-domingo-de-guzman-llega-a-managua-recorrido-y-detalles",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1154,
+      "fecha": "2026-08-01T23:34:51.070Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "rpCDcQ8KMAzB8nzZfNfM",
+      "titulo": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
+      "slug": "dos-sismos-en-39-segundos-sacuden-venezuela-y-caracas",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 494,
+      "fecha": {
+        "_seconds": 1782353709,
+        "_nanoseconds": 338000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "rqFwODFrM33STTastGnc",
+      "titulo": "Asesinan a pedradas a hombre durante un robo en Managua",
+      "slug": "asesinan-a-pedradas-a-hombre-durante-un-robo-en-managua",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 973,
+      "fecha": "2026-08-10T22:46:21.237Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "titulo": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "slug": "kfc-busca-a-50-fans-para-inaugurar-su-primer-local-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "gastronomia",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 406,
+      "fecha": {
+        "_seconds": 1784415019,
+        "_nanoseconds": 317000000
+      },
+      "classification": "TECHNICAL_FIX",
+      "reasons": [
+        "HTML: empty_p"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "s63hd29g5KZ42Zlhqsls",
+      "titulo": "Nicaragua gana dos platas y rompe récord en Santo Domingo 2026",
+      "slug": "nicaragua-gana-dos-platas-y-rompe-record-en-santo-domingo-2026",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1090,
+      "fecha": "2026-08-06T02:42:32.901Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "s9ERxCh1sMwJtlbrPPMJ",
+      "titulo": "Kimi AI acelera la carrera mundial por la inteligencia artificial",
+      "slug": "kimi-ai-acelera-la-carrera-mundial-por-la-inteligencia-artificial",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 565,
+      "fecha": {
+        "_seconds": 1784838594,
+        "_nanoseconds": 753000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "slug": "seis-policias-mueren-en-operativo-antidrogas-en",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 608,
+      "fecha": {
+        "_seconds": 1779397333,
+        "_nanoseconds": 222000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "sULCr0Y90B43ZpuoK2pJ",
+      "titulo": "Hombre muere tras resultar herido en el barrio 18 de Mayo",
+      "slug": "hombre-muere-tras-resultar-herido-en-el-barrio-18-de-mayo",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 521,
+      "fecha": "2026-08-09T20:45:33.621Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "sgysqhqcvwAMBJZSxNVL",
+      "titulo": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+      "slug": "lluvias-vientos-y-rayos-dejan-danos-y-dos-fallecidos",
+      "categoria": "Sucesos",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 410,
+      "fecha": {
+        "_seconds": 1781927906,
+        "_nanoseconds": 539000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "slZp2GH5RHNd5hKNtZb4",
+      "titulo": "De Bluefields a Managua: 3 fallecidos en accidentes viales",
+      "slug": "de-bluefields-a-managua-3-fallecidos-en-accidentes-viales",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 659,
+      "fecha": "2026-08-04T03:04:59.181Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "spoz8oqZQ8Wer7c1GSXp",
+      "titulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "slug": "estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
+      "categoria": "Sucesos",
+      "perfil": "educacion",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 753,
+      "fecha": {
+        "_seconds": 1781667668,
+        "_nanoseconds": 494000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "t6oFNMA4EGC4hOS3IqvE",
+      "titulo": "Güegüense y Agüizotes preservan tradición de Nicaragua",
+      "slug": "gueguense-y-aguizotes-preservan-tradicion-de-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 641,
+      "fecha": {
+        "_seconds": 1781716843,
+        "_nanoseconds": 359000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "slug": "fiscalia-acusa-a-madre-y-padrastro-por-muerte-de-nino",
+      "categoria": "Sucesos",
+      "perfil": "violencia_genero",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 467,
+      "fecha": {
+        "_seconds": 1783726322,
+        "_nanoseconds": 311000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 82,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 470,
+      "fecha": {
+        "_seconds": 1782162528,
+        "_nanoseconds": 307000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "slug": "beisbol-infantil-nicaragua-viaja-a-puerto-rico-y",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 629,
+      "fecha": {
+        "_seconds": 1782249012,
+        "_nanoseconds": 226000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "tuK9ZveBwJom7dhByyNx",
+      "titulo": "El \"Oro Verde\": cómo la palma africana transforma el Caribe",
+      "slug": "el-oro-verde-como-la-palma-africana-transforma-el-caribe",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 966,
+      "fecha": "2026-08-02T15:19:24.114Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+      "slug": "kfc-apuesta-por-carretera-a-masaya-para-expandirse-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 559,
+      "fecha": {
+        "_seconds": 1779899995,
+        "_nanoseconds": 266000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "u61mgNNEpC2vKvMa1fqZ",
+      "titulo": "Nicaragua reduce mortalidad materna e infantil en 2025",
+      "slug": "nicaragua-reduce-mortalidad-materna-e-infantil-en-2025",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 1125,
+      "fecha": {
+        "_seconds": 1781826437,
+        "_nanoseconds": 644000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "uGw77z0gVCHmBW0gcQLd",
+      "titulo": "Nicaragüense muere en accidente laboral en España durante poda",
+      "slug": "nicaraguense-muere-en-accidente-laboral-en-espana-durante-poda",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 610,
+      "fecha": {
+        "_seconds": 1786071743,
+        "_nanoseconds": 315000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "slug": "nicaraguense-jose-salgado-muere-en-asalto-en-austin",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 402,
+      "fecha": {
+        "_seconds": 1781808405,
+        "_nanoseconds": 728000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "uPjLwgsghbgVfRVtelh4",
+      "titulo": "Hallan sin vida a profesor desaparecido en cementerio de Boaco",
+      "slug": "hallan-sin-vida-a-profesor-desaparecido-en-cementerio-de-boaco",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 486,
+      "fecha": {
+        "_seconds": 1785386468,
+        "_nanoseconds": 924000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "slug": "nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica",
+      "categoria": "Internacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 632,
+      "fecha": {
+        "_seconds": 1779572659,
+        "_nanoseconds": 929000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "v6CAoeoIGpCRNQhBanXz",
+      "titulo": "MINSA vacuna contra la rabia a 1.75 millones de perros",
+      "slug": "minsa-vacuna-contra-la-rabia-a-1-75-millones-de-perros",
+      "categoria": "Nacionales",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 529,
+      "fecha": "2026-08-04T03:33:59.046Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "vDDkaxmQZVTtxhFi2Cy9",
+      "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
+      "slug": "juzgado-de-masaya-dicta-prision-preventiva-por-caso-penal",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 772,
+      "fecha": {
+        "_seconds": 1781390340,
+        "_nanoseconds": 0
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "vXJ22LObIbnd5WKA3VDE",
+      "titulo": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
+      "slug": "cabo-verde-recibe-como-heroes-a-sus-tiburones-azules",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 498,
+      "fecha": {
+        "_seconds": 1783275484,
+        "_nanoseconds": 761000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "slug": "streaming-en-nicaragua-jovenes-dominan-plataformas-digitales",
+      "categoria": "Tecnología",
+      "perfil": "economia",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 649,
+      "fecha": {
+        "_seconds": 1779859204,
+        "_nanoseconds": 403000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "w5XzTjYCWTJRDX9NIPng",
+      "titulo": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "slug": "dos-fallecidos-en-accidentes-ocurridos-en-matagalpa-y-wiwili",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 2139,
+      "fecha": {
+        "_seconds": 1782143941,
+        "_nanoseconds": 82000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "wEp7yZu7N154jf3CcWrk",
+      "titulo": "Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales",
+      "slug": "dos-hermanos-fallecen-por-sumersion-en-rio-de-acoyapa-chontales",
+      "categoria": "Sucesos",
+      "perfil": "sucesos",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 515,
+      "fecha": {
+        "_seconds": 1784407715,
+        "_nanoseconds": 776000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "titulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18",
+      "slug": "inauguraran-hospital-pediatrico-las-segovias-en-esteli-este-18-de-mayo",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 709,
+      "fecha": {
+        "_seconds": 1778952058,
+        "_nanoseconds": 253000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "slug": "colapso-en-construccion-cobra-vida-de-nicaraguense-en-ee-uu",
+      "categoria": "Internacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 404,
+      "fecha": {
+        "_seconds": 1784737675,
+        "_nanoseconds": 261000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "wjXUjGNw3hVreNQPoByu",
+      "titulo": "Sismos en Venezuela: cifra de afectados sube a 589",
+      "slug": "sismos-en-venezuela-cifra-de-fallecidos-sube-a-589",
+      "categoria": "Internacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 368,
+      "fecha": {
+        "_seconds": 1782492126,
+        "_nanoseconds": 640000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "xQPCJelRULHFWey1KUH6",
+      "titulo": "Más allá del cráter: los senderos del Volcán Masaya",
+      "slug": "mas-alla-del-crater-los-senderos-del-volcan",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 476,
+      "fecha": {
+        "_seconds": 1784677280,
+        "_nanoseconds": 955000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "xaEUqIpn5aFqjar7b4nv",
+      "titulo": "Mundial 2026 rompe récord de expulsiones en fase inicial",
+      "slug": "mundial-2026-rompe-record-de-expulsiones-en-fase-inicial",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 822,
+      "fecha": {
+        "_seconds": 1781901405,
+        "_nanoseconds": 239000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "xpVY9kQlBKSmeLpHwswz",
+      "titulo": "Revista británica destaca cirugías fetales en Nicaragua",
+      "slug": "revista-britanica-destaca-cirugias-fetales-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 577,
+      "fecha": "2026-08-02T20:39:58.198Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua",
+      "slug": "turistas-extranjeros-viralizan-a-nicaragua-por-sus-paisajes-y-costos",
+      "categoria": "Nacionales",
+      "perfil": "internacional",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 678,
+      "fecha": {
+        "_seconds": 1780173795,
+        "_nanoseconds": 389000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "y8gWejnBZDoLhgYaRWlP",
+      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
+      "slug": "perros-roboticos-reforzaran-seguridad-en-centro-fifa",
+      "categoria": "Tecnología",
+      "perfil": "tecnologia",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 633,
+      "fecha": {
+        "_seconds": 1780762801,
+        "_nanoseconds": 924000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "titulo": "Megahospitales transformarán la atención médica en Nicaragua",
+      "slug": "megahospitales-transformaran-la-atencion-medica-en-nicaragua",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 773,
+      "fecha": {
+        "_seconds": 1779904792,
+        "_nanoseconds": 497000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yBv7VNBe546PGd0a0glv",
+      "titulo": "El caso que estremeció Tipitapa entra a una nueva etapa judicial",
+      "slug": "el-caso-que-estremecio-tipitapa-entra-a-una-nueva-etapa-judicial",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 462,
+      "fecha": {
+        "_seconds": 1784902241,
+        "_nanoseconds": 400000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yJUWd9Sy8L6qck3mNZ0O",
+      "titulo": "Fallo judicial reabre debate sobre la defensa de una madre",
+      "slug": "fallo-judicial-reabre-debate-sobre-la-defensa-de-una-madre",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 581,
+      "fecha": {
+        "_seconds": 1783451756,
+        "_nanoseconds": 137000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yP1IkivhMPeNsq1oXh8F",
+      "titulo": "Condenan a seis años a hombre por envenenar baho en Managua",
+      "slug": "condenan-a-seis-anos-a-hombre-por-envenenar-baho-en-managua",
+      "categoria": "Sucesos",
+      "perfil": "ambiente",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 591,
+      "fecha": "2026-08-12T20:49:25.539Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "slug": "mexico-brasil-y-argentina-avanzan-en-el-mundial-2026",
+      "categoria": "Deportes",
+      "perfil": "internacional",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 546,
+      "fecha": {
+        "_seconds": 1782429569,
+        "_nanoseconds": 304000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yVuoBkFOUU3OTJTMgv5l",
+      "titulo": "Puente Wawa Boom: 255 metros que unieron el Caribe Norte",
+      "slug": "puente-wawa-boom-255-metros-que-unieron-el-caribe-norte",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 96,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 508,
+      "fecha": {
+        "_seconds": 1782327766,
+        "_nanoseconds": 989000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ye0lMTaRlB1eXJibvfoO",
+      "titulo": "Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10",
+      "slug": "vias-bloqueadas-en-siuna-y-mulukuku-ante-onda-tropical-10",
+      "categoria": "Nacionales",
+      "perfil": "ambiente",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 505,
+      "fecha": {
+        "_seconds": 1782151949,
+        "_nanoseconds": 764000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "ynJTnxFm5fa6LL8CSGk0",
+      "titulo": "Tope de Toros 2026 en Granada: fecha, ruta y qué esperar",
+      "slug": "tope-de-toros-2026-en-granada-fecha-ruta-y-que-esperar",
+      "categoria": "Nacionales",
+      "perfil": "cultura",
+      "scoreMeni": 100,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 864,
+      "fecha": "2026-08-05T21:28:06.756Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yo3uA9Pd7mf7k44dTLOX",
+      "titulo": "Argentina supera a Suiza y va contra Inglaterra en semis",
+      "slug": "argentina-supera-a-suiza-y-va-contra-inglaterra-en-semis",
+      "categoria": "Deportes",
+      "perfil": "deportes",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 436,
+      "fecha": {
+        "_seconds": 1783832568,
+        "_nanoseconds": 1000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yuResjlVGzNzgH5L6SOn",
+      "titulo": "Nicaragua suma 165 MW de energía renovable y baterías eléctricas",
+      "slug": "nicaragua-suma-165-mw-renovables-y-baterias-electricas",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 469,
+      "fecha": {
+        "_seconds": 1781800345,
+        "_nanoseconds": 953000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yv0VPARoIc5axq0rWC3f",
+      "titulo": "Ambulancia MINSA, arrastrada por río en Ayapal, Jinotega",
+      "slug": "ambulancia-minsa-arrastrada-por-rio-en-ayapal-jinotega",
+      "categoria": "Sucesos",
+      "perfil": "salud",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 673,
+      "fecha": {
+        "_seconds": 1782159077,
+        "_nanoseconds": 293000000
+      },
+      "classification": "REWRITE",
+      "reasons": [
+        "Transcripción"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "yys8SiF01IpoXTkoaqXo",
+      "titulo": "Esteliana resulta afectado afectada en playa de San Sebastián,…",
+      "slug": "esteliana-fallece-ahogada-en-playa-de-san-sebastian-espana",
+      "categoria": "Internacionales",
+      "perfil": "turismo",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 476,
+      "fecha": {
+        "_seconds": 1782427061,
+        "_nanoseconds": 129000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "zDcmowDI8lVo6Is7n2ad",
+      "titulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "slug": "investigan-hallazgo-de-dos-cuerpos-y-desaparicion-por-lluvias",
+      "categoria": "Sucesos",
+      "perfil": "nacionales",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 464,
+      "fecha": {
+        "_seconds": 1783828054,
+        "_nanoseconds": 152000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "zLt9Pxu2BPivxT6PIYTY",
+      "titulo": "Falcon 9 de SpaceX impactará la Luna este miércole",
+      "slug": "falcon-9-de-spacex-impactara-la-luna-este-miercole",
+      "categoria": "Tecnología",
+      "perfil": "internacional",
+      "scoreMeni": 98,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 975,
+      "fecha": "2026-08-04T23:56:58.798Z",
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "slug": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+      "categoria": "Nacionales",
+      "perfil": "sucesos",
+      "scoreMeni": 64,
+      "aprobadoMeni": false,
+      "publicado": false,
+      "estado": "archivado",
+      "palabras": 403,
+      "fecha": {
+        "_seconds": 1783466321,
+        "_nanoseconds": 431000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    },
+    {
+      "id": "zvtl853c7EgGqBCOkbZN",
+      "titulo": "Tramos 2 y 3 de Pista Héroes avanzan 60% en drenaje",
+      "slug": "tramos-2-y-3-de-pista-heroes-avanzan-60-en-drenaje",
+      "categoria": "Nacionales",
+      "perfil": "nacionales",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "publicado": true,
+      "estado": "publicado",
+      "palabras": 546,
+      "fecha": {
+        "_seconds": 1782424505,
+        "_nanoseconds": 519000000
+      },
+      "classification": "KEEP",
+      "reasons": [
+        "OK"
+      ],
+      "duplicateOf": null
+    }
+  ]
+}

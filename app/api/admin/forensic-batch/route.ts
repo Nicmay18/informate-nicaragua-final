@@ -15,11 +15,24 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { action, ids, dryRun = true } = body || {};
 
-    if (!action || !Array.isArray(ids) || ids.length === 0) {
-      return NextResponse.json({ error: 'action e ids son requeridos' }, { status: 400 });
+    if (!action) {
+      return NextResponse.json({ error: 'action es requerido' }, { status: 400 });
+    }
+    if (action !== 'list-all' && (!Array.isArray(ids) || ids.length === 0)) {
+      return NextResponse.json({ error: 'ids son requeridos para esta acción' }, { status: 400 });
     }
 
     const db = getAdminDb();
+
+    if (action === 'list-all') {
+      const allSnap = await db.collection('noticias').select('id').limit(500).get();
+      return NextResponse.json({
+        action: 'list-all',
+        total: allSnap.size,
+        ids: allSnap.docs.map(d => d.id),
+      });
+    }
+
     const results: any[] = [];
     let writes = 0;
 
@@ -116,6 +129,98 @@ export async function POST(request: Request) {
               scoreFromCalidad: data.scoreCalidad ? true : false,
             }
           });
+          break;
+        }
+
+        case 'full-query': {
+          results.push({
+            id,
+            status: 'OK',
+            data: {
+              titulo: data.titulo || '',
+              slug: data.slug || id,
+              resumen: data.resumen || '',
+              contenido: (data.contenido || '').substring(0, 8000),
+              categoria: data.categoria || '',
+              perfil: data.perfil || '',
+              scoreMeni: data.scoreMeni ?? null,
+              aprobadoMeni: data.aprobadoMeni ?? false,
+              calificacionMeni: data.calificacionMeni || '',
+              diagnosticoMeni: data.diagnosticoMeni || '',
+              publicado: data.publicado ?? false,
+              estado: data.estado || '',
+              archived: data.archived ?? false,
+              palabras: data.palabras || data.contenidoPalabras || 0,
+              fecha: data.fecha || null,
+              autor: data.autor || '',
+              fuente: data.fuente || '',
+              noindex: data.noindex ?? false,
+              scoreCalidad: data.scoreCalidad ?? null,
+              provenance: data.cambiosRealizados?.length > 0 || !!data.meniProvenance,
+            }
+          });
+          break;
+        }
+
+        case 'fix-content': {
+          const updates = body.updates || {};
+          const fields: Record<string, unknown> = {};
+          if (updates.titulo !== undefined && updates.titulo !== data.titulo) fields.titulo = updates.titulo;
+          if (updates.resumen !== undefined && updates.resumen !== data.resumen) fields.resumen = updates.resumen;
+          if (updates.contenido !== undefined && updates.contenido !== data.contenido) fields.contenido = updates.contenido;
+          if (updates.categoria !== undefined && updates.categoria !== data.categoria) fields.categoria = updates.categoria;
+          if (Object.keys(fields).length === 0) {
+            results.push({ id, status: 'NO_CHANGES' });
+            break;
+          }
+          fields.updatedAt = new Date().toISOString();
+          fields.cambiosRealizados = [
+            ...(data.cambiosRealizados || []),
+            {
+              fase: 'CLOSURE',
+              fecha: new Date().toISOString(),
+              motivo: updates.motivo || 'Forensic closure: fix-content',
+              actor: 'forensic-closure',
+              estadoAnterior: {
+                titulo: data.titulo || '',
+                resumen: data.resumen || '',
+              },
+            }
+          ];
+          if (!dryRun) {
+            await ref.update(fields);
+          }
+          writes++;
+          results.push({ id, status: 'CONTENT_FIXED', fields: Object.keys(fields), dryRun });
+          break;
+        }
+
+        case 'set-estado': {
+          const nuevoEstado = body.estado || '';
+          const nuevoPublicado = body.publicado ?? false;
+          if (data.estado === nuevoEstado && data.publicado === nuevoPublicado) {
+            results.push({ id, status: 'NO_CHANGE' });
+            break;
+          }
+          if (!dryRun) {
+            await ref.update({
+              estado: nuevoEstado,
+              publicado: nuevoPublicado,
+              archived: nuevoEstado === 'archivado',
+              updatedAt: new Date().toISOString(),
+              cambiosRealizados: [
+                ...(data.cambiosRealizados || []),
+                {
+                  fase: 'CLOSURE',
+                  fecha: new Date().toISOString(),
+                  motivo: `Forensic closure: estado ${data.estado}->${nuevoEstado}, publicado ${data.publicado}->${nuevoPublicado}`,
+                  actor: 'forensic-closure',
+                }
+              ]
+            });
+          }
+          writes++;
+          results.push({ id, status: 'ESTADO_SET', estado: nuevoEstado, publicado: nuevoPublicado, dryRun });
           break;
         }
 
