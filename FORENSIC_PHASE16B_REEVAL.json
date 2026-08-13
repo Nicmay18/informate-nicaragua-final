@@ -1,0 +1,521 @@
+{
+  "timestamp": "2026-08-13T04:06:13.361Z",
+  "total": 39,
+  "aprobados": 1,
+  "rechazados": 38,
+  "errores": 0,
+  "mejoraron": 0,
+  "empeoraron": 0,
+  "iguales": 39,
+  "causas": {
+    "MENI_SCORE_THRESHOLD": 34,
+    "EDITORIAL_DNA_TRANSCRIPCION": 4
+  },
+  "resultados": [
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de Managua",
+      "scoreBefore": 92,
+      "scoreAfter": 92,
+      "aprobadoBefore": false,
+      "aprobadoAfter": true,
+      "blockingCodes": [],
+      "calificacion": "PUBLICABLE",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: crece 6% en remesas",
+      "scoreBefore": 84,
+      "scoreAfter": 84,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "scoreBefore": 80,
+      "scoreAfter": 80,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "scoreBefore": 78,
+      "scoreAfter": 78,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "scoreBefore": 78,
+      "scoreAfter": 78,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "EDITORIAL_DNA_TRANSCRIPCION"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "scoreBefore": 70,
+      "scoreAfter": 70,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "EDITORIAL_DNA_TRANSCRIPCION"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "scoreBefore": 84,
+      "scoreAfter": 84,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "INVESTIGACION"
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "scoreBefore": 84,
+      "scoreAfter": 84,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "scoreBefore": 86,
+      "scoreAfter": 86,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "scoreBefore": 78,
+      "scoreAfter": 78,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "INVESTIGACION"
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "scoreBefore": 76,
+      "scoreAfter": 76,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "EDITORIAL_DNA_TRANSCRIPCION"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "INVESTIGACION"
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "scoreBefore": 78,
+      "scoreAfter": 78,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "scoreBefore": 86,
+      "scoreAfter": 86,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: 920 víctimas y miles sin rastro tras sismos",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "scoreBefore": 78,
+      "scoreAfter": 78,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "scoreBefore": 80,
+      "scoreAfter": 80,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "INVESTIGACION"
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "scoreBefore": 82,
+      "scoreAfter": 82,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "scoreBefore": 74,
+      "scoreAfter": 74,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "EDITORIAL_DNA_TRANSCRIPCION"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "scoreBefore": 76,
+      "scoreAfter": 76,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "scoreBefore": 88,
+      "scoreAfter": 88,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "scoreBefore": 80,
+      "scoreAfter": 80,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "scoreBefore": 86,
+      "scoreAfter": 86,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "MEJORAR",
+      "editorialTier": "REPORTAJE"
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "scoreBefore": 64,
+      "scoreAfter": 64,
+      "aprobadoBefore": false,
+      "aprobadoAfter": false,
+      "blockingCodes": [
+        "MENI_SCORE_THRESHOLD"
+      ],
+      "calificacion": "NO PUBLICAR",
+      "editorialTier": "REPORTAJE"
+    }
+  ]
+}

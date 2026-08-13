@@ -1,0 +1,470 @@
+{
+  "timestamp": "2026-08-13T03:51:05.210Z",
+  "total": 286,
+  "nivelForenseAprobadoFalse": 0,
+  "scoreMeniDistintoNivelScore": 0,
+  "conCampoScore": 45,
+  "scoreDistintoScoreMeni": 45,
+  "aprobadoTrueAprobadoMeniFalse": 31,
+  "aprobadoFalseAprobadoMeniTrue": 0,
+  "inconsistencias": [
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 92,
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…"
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 84,
+      "titulo": "Economía de Nicaragua: crece 6% en remesas"
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela"
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 78,
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 78,
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua"
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guz"
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 70,
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un her"
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás"
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua"
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 84,
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas"
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 86,
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 "
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador"
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 78,
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa"
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026"
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos"
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A"
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos"
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Venezuela: réplicas continúan con 920 víctimas y miles sin r"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026"
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua"
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años"
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 78,
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley"
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 80,
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Cinco agentes fallecen en operativo en Honduras"
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño"
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 82,
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto"
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 74,
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador"
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 76,
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Aust"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 88,
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua"
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 86,
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026"
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "tipo": "aprobado_true_per_aprobadoMeni_false",
+      "scoreMeni": 64,
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración"
+    }
+  ],
+  "conScore": [
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Cinco afectados en accidentes viales en Managua y regiones"
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Cuatro nicaragüenses resultan afectados en Costa Rica, El…"
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…"
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos"
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "score": 95,
+      "scoreMeni": 96,
+      "titulo": "Documentos para tramitar el récord policial en Nicaragua"
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos"
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "score": 95,
+      "scoreMeni": 98,
+      "titulo": "Arquitectura C++ y Direct3D para diagnóstico de sistemas PC"
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado"
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "score": 95,
+      "scoreMeni": 100,
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en…"
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "score": 95,
+      "scoreMeni": 96,
+      "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas"
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4"
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Un afectado y un personas afectado en accidente laboral en…"
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragu"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "score": 95,
+      "scoreMeni": 78,
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua"
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "score": 95,
+      "scoreMeni": 96,
+      "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en"
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era dig"
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "score": 95,
+      "scoreMeni": 90,
+      "titulo": "Comercios esperan alta actividad por Día de las Madres en…"
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Residencial Las Madres entrega 575 viviendas en Managua"
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026"
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "score": 95,
+      "scoreMeni": 100,
+      "titulo": "Tres personas resultan afectados en accidentes de motociclet"
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "score": 95,
+      "scoreMeni": 98,
+      "titulo": "Bluefields celebra el Palo de Mayo con música y tradición…"
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "score": 95,
+      "scoreMeni": 98,
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal"
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Béisbol internacional: Nicaragua se alista para retos de 202"
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "score": 95,
+      "scoreMeni": 98,
+      "titulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospit"
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland"
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "score": 95,
+      "scoreMeni": 100,
+      "titulo": "Dos afectados tras naufragio de panga en Krukira"
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10…"
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "score": 95,
+      "scoreMeni": 96,
+      "titulo": "Cómo sacar y apostillar récord policial de Nicaragua"
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "score": 95,
+      "scoreMeni": 88,
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026"
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Yadel reúne a más de 30 mil personas en Managua"
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera "
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "score": 95,
+      "scoreMeni": 100,
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicarag"
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "score": 95,
+      "scoreMeni": 100,
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta méd"
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua"
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 20"
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "85 familias de Nagarote recibirán viviendas este 22 de mayo"
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "score": 95,
+      "scoreMeni": 90,
+      "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "score": 95,
+      "scoreMeni": 88,
+      "titulo": "Cinco agentes fallecen en operativo en Honduras"
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "score": 95,
+      "scoreMeni": 92,
+      "titulo": "KFC abre operaciones en Carretera a Masaya, Managua"
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "score": 95,
+      "scoreMeni": 90,
+      "titulo": "Nicaragüenses resultan afectados en hechos graves registrado"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "score": 95,
+      "scoreMeni": 88,
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua"
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "score": 95,
+      "scoreMeni": 94,
+      "titulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este "
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "score": 95,
+      "scoreMeni": 90,
+      "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua"
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "score": 95,
+      "scoreMeni": 90,
+      "titulo": "Megahospitales transformarán la atención médica en Nicaragua"
+    }
+  ]
+}

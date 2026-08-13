@@ -1,0 +1,5169 @@
+{
+  "fase": "PHASE18",
+  "timestamp": "2026-08-13T03:55:35.577Z",
+  "actor": "forensic-phase18-script",
+  "operaciones": [
+    {
+      "nombre": "P0_BLOQUEO",
+      "objetivo": 39,
+      "writes": 39,
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "nombre": "P1A_LIMPIEZA_SCORE",
+      "objetivo": 45,
+      "writes": 45,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "nombre": "P1B_UNIFICACION",
+      "objetivo": 286,
+      "writes": 286,
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    }
+  ],
+  "verificacion": {
+    "estadoPublicado": 247,
+    "estadoBorrador": 39,
+    "conScore": 0,
+    "conAprobado": 0,
+    "publicadoTrue": 247,
+    "publicadoFalse": 39
+  },
+  "bloquearIds": [
+    "1HmobwfngxeXoUofqosD",
+    "7XzL7aTqVYBpTNKgSPxQ",
+    "CMo0EIdKF9E5CYTJj8H9",
+    "CypRypZIGLckqywkZq8X",
+    "D7y1TWAyXq7SaNMirIjB",
+    "EcKTeqT7kLcFElUX3DM2",
+    "F4UddilPobcIjIkZ1e55",
+    "GHbdyeiCzH7Jk0i5RVPA",
+    "H25VVBdDntQpmy13uxdP",
+    "IFFjvOi1HTG0oeiIuIBo",
+    "Ilzcy77tyF8oFNPytokN",
+    "JOfOW7uTxkgDSIezo7Wn",
+    "JbGRXcj7AiJNPvQRcneT",
+    "NA6PqCReq06PdIMSICEe",
+    "Q19zidw5UoSjUlR1r9JP",
+    "SD09P4KU8vq4Mq1Vidzz",
+    "SG87LjFIgCWnd6g8EKDq",
+    "VW3uBFbDCb6RR3KCiJ18",
+    "ZJpLrlTrusn5Jex8WQgQ",
+    "e0QJyxs1azyZahzs8VuN",
+    "e2xuC463KZm7pAubu9Rl",
+    "hSohwt9sC0cfwiXEITLg",
+    "hscMxXK16XKKq84yY1P6",
+    "i88RK0Ulgkkzyq6YV4Um",
+    "ic2YGP8NQAc6r3VMvy9K",
+    "kJZTSfqmUGHJKA8SFaE8",
+    "kR3waCnxVDfMfVCV8sAH",
+    "n2Buq4aBhvnrXUcTlwuD",
+    "qAcmF4MWTiLsTACCG8v5",
+    "qT9tAbCyVpicX7HmoaD0",
+    "sH5OCUULzSvZFhRcHXzb",
+    "tYX2ZtXwUXg07CHI0ONj",
+    "tlIXmTYnv4hIajXOQiup",
+    "tnX05ykqVT6WiYVflSii",
+    "uJ076MyMZhQIJYTa1qOW",
+    "vvWJAwyV8adECw3IGqdy",
+    "wiHS5gvNy7U6tORXAhEU",
+    "yUMAJwJQ1yMJTSb2cdkP",
+    "zkdDsejAb5hLCpCaEbMR"
+  ],
+  "scoreIds": [
+    "0gGqzH1RBUeVTGHWkuvl",
+    "0tmiH8fXJTVXNmiM0W5U",
+    "1HmobwfngxeXoUofqosD",
+    "22ZHhDUSpI6CrpwIYkZ9",
+    "36WzKkoqnN6ITtamp2BY",
+    "81UQk1YkWPpF7BzIdaDo",
+    "8eSX6XxOPVJbh9ILZ5ZS",
+    "9gLUPHxK05lGgwNE1URy",
+    "9xCHaZO7JEwhyRpdHHJY",
+    "ASk1oDEiDQXOAlP3JYAT",
+    "AsS8nr5I1Sn8F0H27O2n",
+    "BU0PX0EqHO5ewLCH7Coo",
+    "C1UJ83ospxOXOtNGLwgr",
+    "F4UddilPobcIjIkZ1e55",
+    "FpUdWXERRhgbU6ZD7bKI",
+    "HBaAK77yqswYn3uCf7al",
+    "IFvH1F0YUbgz55E853jj",
+    "IYS7dABZahKOHwdnjfJr",
+    "KXMHQ85cLbSZpXMx3eQm",
+    "RCjqgw3ea2K6cZHXmbRV",
+    "U3K2REamwdCUoxFRermC",
+    "Urfp4nwfKtnSM5Nxe3ZD",
+    "V1GsdHFZ0SdE2KAimfzx",
+    "alp8j7Y2UGGLK10hA47o",
+    "fIgt55qqhg6ysMQHEsl4",
+    "gXTkMry6uueR9BxXcTdF",
+    "gaCpaA49whA70rqyWBow",
+    "iowQzBgiwSPPXCC4EsJD",
+    "jIPhozTQrWC0dkqVykK4",
+    "kJZTSfqmUGHJKA8SFaE8",
+    "ksmI7JomnHgJB6NKcA71",
+    "ku8tzMdLM3030JgD5B8K",
+    "mpU9oJImLDYi8lWhziII",
+    "o0Hd8UJZe7IhZN2zwj2g",
+    "ofPopYZtZAK0eb0L5rPB",
+    "pMXu8KvKsz9gJzg0U9bf",
+    "q3QgspnxFL9buTcqe9Pm",
+    "qhlHd01R4IC9TDdMx0re",
+    "sH5OCUULzSvZFhRcHXzb",
+    "u0Lgb7PgJ9XVT67Za5Ov",
+    "v0gwsceiaZQeNSLPHmee",
+    "vvWJAwyV8adECw3IGqdy",
+    "whZtPKLBjDEcFUzZrkXv",
+    "y251TlGDTa5BVIM18QGE",
+    "yAxGbreJ4sa3sd2iT6XI"
+  ],
+  "executionLog": [
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "fase": "PHASE18",
+      "accion": "BLOQUEO_P0",
+      "campo": "estado",
+      "antes": "publicado",
+      "despues": "borrador",
+      "motivo": "Bloqueo de artículos rechazados por MENI (aprobadoMeni=false) que estaban visibles en producción"
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "fase": "PHASE18",
+      "accion": "LIMPIEZA_P1A",
+      "campo": "score",
+      "antes": 95,
+      "despues": null,
+      "motivo": "Eliminación de campo residual `score` (valor 95 fijo) distinto de scoreMeni"
+    },
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "02DsJjI62kA1rFKe0nWS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "096760aFi8gk8aUBtkFR",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "0s9rnylrsRqwYjjUqUfk",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "12vpZYJonwqLUyW1rlpl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "19NRSSTtv9xlGQ31x9gV",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "1K4jCiU5mT9xr4pyE0vr",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "28a2yKj9NN9k4au0xJ6q",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "2GBQwgf7i4i2LJsvIhhP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "2JtGQ8X981oq4giKYxQo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "2LRMqTFV3a6XPkdfoEjh",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "2rM20SDlcas77huhJYiV",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3A0WKJhlDKATpXuyEIPq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3QOwSPvAOLwPxqFV532h",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3YLvxaAGi5bhcSjJ2XsP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3Zg8Q6OaaXEut0fA81CH",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3p9PHUH5WeJIGlMFVrLn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "3qYRcThYdkrzWJRDSfhy",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "4G7Uq0yDZgiHpGyB5GSS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "5JyYmiQUFmH29eqxGFuC",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "5ygMPBWB8ukF4W5m7uoG",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "6G4rPNMwq7InAlhlpTCH",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "6MlyKI1pvd5zmaQ7oILa",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "7aOBbeIDRKR06tnYfklr",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "7h9NNZjCshVbyytxVXBP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "7k2ncDzIhlS00WN4ktzR",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8DPnNJNClx3kn4oJi2me",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8NaG866DTKEaUCHkivrd",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8dMcsIcw7T7tuT8NLGEP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8mQmm7YZXwUAnICl6tnv",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8p1gDsWo0i41nsJH4QTo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8rgPZMc8nFJWiAbW7pgj",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "8sTBWTNIOJGIYfDN062O",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "9FIr4GZXnyXqJ6M1Hnw6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "9bOstbZ0xJWu92Z1FqBX",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "AWqrtVA03l9qMReNApx6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "AnlD4hQhJdAwroEaMvlx",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "BAcOCY6ZJ7XpDdzfRUZ1",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "BthZmiHrAOsU61f6cowu",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "C4AHevj8Y9WKSw6UlMqA",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "C5ygeEIQwpMLLlU747up",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "C6Q405XAouocDIs02qKy",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "CnHlW2RyUcpwlJBKeFug",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "CyV2dxk6PD7dXEUneJfi",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "D310EXZbS4v6j8rsMCRB",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "DabSeh90gN6BreMLkDow",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Dll52HugAZbEwPfOA9SL",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EDvI8A7DAwrDFuBf3f18",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EFBlqTZDTyDbFC4PRZ0c",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EK8pDgblNpScPCoGCgab",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EnQeMjUfvgWY5xmRSfy5",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "EyR39NNAk2XXXTSjhA9g",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "FF8yCcM33HysEtaG3ehp",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "FLbXd6XRrTl5TCdTkNYT",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "FsMXE1Jn8Qw9HNNYGgqF",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "GDIEammzYioBq5JrRsLd",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "HDs899RFlczkxeNhhaez",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "HOr2RLJb6pWN03jZvoYD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "HxsDqbeHSSO2MRyl1Cpu",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "HyUcJbnUzefWCcape0UQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "J1ZUf7ZxMxaUjb64rkXj",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JIRE98QbwrecUId3edcA",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JcB6a4mamtg6yjtcXp9c",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Jjk9syTstGMlEeQerkQ6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JtTY1tfzHmkOVNJjCZJX",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JvTqSDHGA4EEZnlE6BPi",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "JyiBCf438iHQhSn1rkpO",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "K7IuhDsETCHWq8BaltgK",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "KAe7bOjRVf1k4w7It5q4",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "KDsFrw5UitY7JGQ9uOPq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "KqbSciGsztV7VDFB7XFC",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "M5Ivl0fqvyOivSZMuNLY",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "M9tek6rwIxTjSEbbI71k",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "M9vj4XiOdmMrLwreHlff",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "MkbCQPde18VTVKlSgHLn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NTa3Gb797l9FINZ2E7RU",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NZkwSINrmCZO4rKOetqz",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NbYNNfBGD7X4LVVMjzYo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Neue7Ft2XeQybdX7xKTk",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Ng7C24qqQcb5s0ZIueVm",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NgEysmaqCnykHx2uFm1L",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "NsHuiNgmIpEWcaQM37pj",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "OYZgpG1z1Arb5HacLNnp",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "P4KRYKddOPHB2Nu0uya5",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "PAMrJttL66Oxg1eavIXS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "PDYIbuv1snYYNDK54EBN",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "PNJr8KWo2Gy1TCjuF9jq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "PaUNyoHJ6rvNucj2Yqs0",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Pf0VvjOfwZNm7BnQpncl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "PiXjB5ugRBQxjWXIvyuF",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "QiOIqxhjT67BS2D4saW5",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "QqQzUkztp81QAcSfXvS8",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "R2zQFsmjsu0NvFRU7tDa",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "RJU7TDSHj4mI4IP0Pgn8",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "RRo9U6gI1hRINap3egQS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "RbCTjiEE7RrHLN80j7K9",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "S8jrH6rYwBEuwzpBDw82",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Sef2LpxsEcnjg7sf0f3U",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "T1beggQC5fYRGjEo1Szn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "TYBT2pcviA6IH8AsoE4P",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "VAQWaSecbeFlCuK8KCgG",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "W9E5MwLZvezRaSi3meqX",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "WNZ8XRJLMOhR4ilO7Jfp",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "WR9ixdDXutGgVpZ9awuQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "WT8kWgsAuYm7VnymG07L",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "WthoTeyDQn3v3a0vBrQA",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "XK3mXDYi2mYHqzUMCvCl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Xt18bdt10Mt6CIloPKSu",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Yf7Njww3czR9w7xMsrUo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ZK1mbMdVBgdisJq1mn9u",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "Zu389gS3tQxY0EYfXrE9",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ZvMD6TcBmXDFWHQxEykD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "a43EAAR543PNuVXni2v3",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "aDUNDXKB5AaqwW6SfyaG",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "aII0C6kduAshiZAk16Wc",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "aXtBaU598FRn27J0X2nD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "b3hBxRnUrftHjFulYE3L",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "bNTteIqTORrl2X7opjvG",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "cIBrfo4r0oesTQCSH85x",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "caTDwZUGxZmjwicrEukK",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ckgtTyw5JZx2lMhWYdiL",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "cr3ixiMYdzUXKAO6kzqD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "dJXd3qsmEK8AY4p0ctko",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "dcr6j4wJetnGNY80e6sZ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "djn1DLmztxyOXwfSQsbx",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "eHwPppvuoey1DpRCh7cc",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "eigKQMFdjSfB8N7Fypgk",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "esccFviANcjLiHp4UnsQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "fBzmMNWyqUTrffFr49g6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "fO5Xwap5b2F1zefVhs47",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gAp6N4fO4sAjnssvaROp",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gPkIsIZoh7pYHLSmQMe5",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gQKFK5z94pfaHGi2J1Wc",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gYezxCEUx17WQHH3SCqI",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "glOmX2RSOpciUxHR0y3n",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "h12a1BuHFk4hNO1MP0xQ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "h6jcqzPLhz8UrpaGP7xq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "hD0W8NnvJ2aLN2F2O44R",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "hRxkEYbG8tOislbLn2gF",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "hqg5C3kyCql4FZl3OWfB",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "i9duvDflEon1d6yAhT0W",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ii6aCymgfcyPAKaAjaPg",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "j1ia8jehVS0NtKgsV1GS",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "jD6WppRVoR20CuzBeJbq",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "jYenFFPiEXMMhsvKeTL3",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "kDIcgG5qs3ZgQCUeSapZ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "l9sGpdiU3xbEDxDXYBWb",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "lzsto5T2q85IgrVkqlA2",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "m9tFCwmKN6OPR5tY2Kgk",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "mEy2ueESYxJq3pH6hQJf",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "n0qOx4zq7JyVP4gFwEwW",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "n64la9Hnrkp0sENv0z5U",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ngAKEUkSVkZ6OlfQCQtb",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "nyF9rfm2AkQACTQPzFAn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "o6W17EHiyx17VgcpbB5N",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "o9Q6D0tRNWJ3cDs3nYLm",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "odPH8kyPelb1S1TjnuPX",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ow2keC5R8XdLGzu5xKZa",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "p9HqVWGCq6WbcUnPBwrn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "p9YSf3lXdbJITSQClziV",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "pVqVbFDgxmZAPOwoE5NM",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "phUuAtrQ4H3qV4heuZlH",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "pmRNzGHrkOSSpSMWYg5J",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "qkurWkzG1J2bG01EVVru",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "rFGNmTRKwi9QSc1VCddH",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "rpCDcQ8KMAzB8nzZfNfM",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "rqFwODFrM33STTastGnc",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "s63hd29g5KZ42Zlhqsls",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "s9ERxCh1sMwJtlbrPPMJ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "sULCr0Y90B43ZpuoK2pJ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "sgysqhqcvwAMBJZSxNVL",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "slZp2GH5RHNd5hKNtZb4",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "spoz8oqZQ8Wer7c1GSXp",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "t6oFNMA4EGC4hOS3IqvE",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "tuK9ZveBwJom7dhByyNx",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "u61mgNNEpC2vKvMa1fqZ",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "uGw77z0gVCHmBW0gcQLd",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "uPjLwgsghbgVfRVtelh4",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "v6CAoeoIGpCRNQhBanXz",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "vDDkaxmQZVTtxhFi2Cy9",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "vXJ22LObIbnd5WKA3VDE",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "w5XzTjYCWTJRDX9NIPng",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "wEp7yZu7N154jf3CcWrk",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "wjXUjGNw3hVreNQPoByu",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "xQPCJelRULHFWey1KUH6",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "xaEUqIpn5aFqjar7b4nv",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "xpVY9kQlBKSmeLpHwswz",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "y8gWejnBZDoLhgYaRWlP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yBv7VNBe546PGd0a0glv",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yJUWd9Sy8L6qck3mNZ0O",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yP1IkivhMPeNsq1oXh8F",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yVuoBkFOUU3OTJTMgv5l",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ye0lMTaRlB1eXJibvfoO",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "ynJTnxFm5fa6LL8CSGk0",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yo3uA9Pd7mf7k44dTLOX",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yuResjlVGzNzgH5L6SOn",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yv0VPARoIc5axq0rWC3f",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "yys8SiF01IpoXTkoaqXo",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "zDcmowDI8lVo6Is7n2ad",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "zLt9Pxu2BPivxT6PIYTY",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": false,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": false,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    },
+    {
+      "id": "zvtl853c7EgGqBCOkbZN",
+      "fase": "PHASE18",
+      "accion": "UNIFICACION_P1B",
+      "campo": "publicado+aprobado",
+      "antes": {
+        "publicado": null,
+        "aprobado": true
+      },
+      "despues": {
+        "publicado": true,
+        "aprobado": null
+      },
+      "motivo": "Unificación de campos redundantes: publicado derivado de estado+aprobadoMeni, eliminación de aprobado"
+    }
+  ]
+}

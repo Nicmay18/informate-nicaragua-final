@@ -1,0 +1,1699 @@
+{
+  "timestamp": "2026-08-13T03:34:00.115Z",
+  "total": 37,
+  "articles": [
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…",
+      "slug": "primeros-bebes-del-dia-de-las-madres-nacen-en-managua-y-rivas",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 92,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 572,
+      "classificacion": "A",
+      "blockingIssues": "Contenido sin <p>, título truncado",
+      "before": {
+        "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…",
+        "resumen": "Dos hospitales de Managua registraron los primeros nacimientos durante el Día de las Madres Nicaragüenses el 30 de mayo. El Hospital Bertha Calderón y el.",
+        "htmlIssues": {
+          "pCount": 0,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 154
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Primeros bebés del Día de las Madres nacen en hospitales de Managua",
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Envolver texto suelto en etiquetas <p>. Actualmente hay 0 tags <p> en el contenido.",
+          "El contenido tiene texto directamente después de <h2> sin envolver en <p>.",
+          "Cada párrafo de texto plano debe envolverse: texto → <p>texto</p>"
+        ],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "BAJO — Solo cambios estructurales HTML. No se altera contenido.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 92. Si MENI rechaza con 92, el problema puede ser de threshold o de reglas internas, no de contenido.",
+        "note": null
+      }
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "slug": "nicaraguense-sigue-desaparecida-tras-terremotos-en-venezuela",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 435,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto diáspora Nicaragua-Venezuela",
+      "before": {
+        "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+        "resumen": "La nicaragüense Reyna Isabel Balladares y su esposo permanecen desaparecidos desde el 24 de junio tras los terremotos que afectaron La Guaira, Venezuela.",
+        "htmlIssues": {
+          "pCount": 9,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 153
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Conexión diáspora Nicaragua-Venezuela",
+            "where": "Al final del artículo, antes de cualquier cierre",
+            "proposedText": "Nicaragua mantiene una comunidad de connacionales residentes en Venezuela. La relación entre ambos países ha incluido cooperación en materia migratoria y consular.",
+            "source": "MIGOB — información pública sobre relaciones bilaterales Nicaragua-Venezuela",
+            "verifiable": true,
+            "risk": "No usar cifras específicas de número de nicaragüenses en Venezuela si no se encuentra fuente oficial verificable."
+          }
+        ],
+        "sources": [
+          "MIGOB — relaciones bilaterales (información pública)"
+        ],
+        "risk": "MEDIO — Se agrega contexto institucional verificable. No inventar cifras de población.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74.",
+        "note": null
+      }
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "slug": "dos-nicaraguenses-fallecen-en-el-extranjero-en-casos-distintos",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 388,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto diáspora, título > 60",
+      "before": {
+        "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+        "resumen": "Un joven de Estelí murió en California y un matagalpino falleció tras su ruta migratoria. Ambos casos dejan preguntas pendientes para sus familias.",
+        "htmlIssues": {
+          "pCount": 12,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 62,
+          "resumenLength": 147
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Dos nicaragüenses fallecen en el extranjero en incidentes separados",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto diáspora nicaragüense",
+            "where": "Como párrafo de contexto después de los hechos principales",
+            "proposedText": "La diáspora nicaragüense se extiende por múltiples países de América Latina y el Caribe. Las autoridades consulares brindan asistencia a connacionales en situaciones de emergencia en el exterior.",
+            "source": "MIGOB — información pública sobre asistencia consular",
+            "verifiable": true,
+            "risk": "No inventar cifras específicas de nicaragüenses por país."
+          }
+        ],
+        "sources": [
+          "MIGOB — asistencia consular (información pública)"
+        ],
+        "risk": "MEDIO — Corrección de título + contexto verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 80.",
+        "note": null
+      }
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "slug": "dueno-de-semovientes-paga-c-769-mil-por-muerte-en-jalapa",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 377,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto legal responsabilidad semovientes",
+      "before": {
+        "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+        "resumen": "Un juez condenó al dueño de tres semovientes a pagar más de 769 mil córdobas por la muerte de un motociclista y lesiones a otro en Jalapa, Nueva Segovia",
+        "htmlIssues": {
+          "pCount": 7,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 56,
+          "resumenLength": 152
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Marco legal sobre responsabilidad por daños causados por animales",
+            "where": "Después de los hechos del caso",
+            "proposedText": "El Código Civil de Nicaragua establece la responsabilidad del propietario por los daños que cause su animal. La indemnización se determina según el perjuicio causado, incluyendo daños materiales y morales.",
+            "source": "Código Civil de Nicaragua — Artículo sobre responsabilidad por semovientes (texto legal público)",
+            "verifiable": true,
+            "risk": "No citar número de artículo específico sin verificar el texto exacto del Código Civil."
+          }
+        ],
+        "sources": [
+          "Código Civil de Nicaragua (texto legal público)"
+        ],
+        "risk": "MEDIO — Se agrega contexto legal verificable. Verificar artículo exacto antes de citar.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 78.",
+        "note": null
+      }
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "slug": "escolta-de-ultraval-enfrenta-juicio-por-robo-en",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 718,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto institucional ULTRAVAL",
+      "before": {
+        "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+        "resumen": "Adrián José Obando Munguía enfrenta juicio oral en Managua por el presunto robo de 13 mil 400 córdobas y 2 mil 980 dólares. La persona afectada es la.",
+        "htmlIssues": {
+          "pCount": 22,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 55,
+          "resumenLength": 150
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto institucional sobre ULTRAVAL",
+            "where": "Primer párrafo después del lead",
+            "proposedText": "ULTRAVAL es el sistema de transporte público de valores del Ministerio de Transporte e Infraestructura (MTI) que opera en Managua. El sistema cuenta con unidades blindadas y personal de escolta para el traslado seguro de valores.",
+            "source": "MTI — información pública sobre ULTRAVAL",
+            "verifiable": true,
+            "risk": "Verificar que ULTRAVAL dependa del MTI. Si no se confirma, usar descripción genérica verificable."
+          }
+        ],
+        "sources": [
+          "MTI — ULTRAVAL (información pública)"
+        ],
+        "risk": "MEDIO — Verificar dependencia institucional exacta de ULTRAVAL.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 78.",
+        "note": null
+      }
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
+      "categoria": "Sucesos",
+      "editorialTier": "INVESTIGACION",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 2201,
+      "classificacion": "A",
+      "blockingIssues": "7 <br> como separadores",
+      "before": {
+        "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+        "resumen": "Juan C. Aguilar Obando, 46, fue capturado en Costa Rica el 08 de junio y entregado a Nicaragua; es investigado por rociar gasolina, prender fuego a M.",
+        "htmlIssues": {
+          "pCount": 55,
+          "brCount": 7,
+          "h2Count": 6,
+          "hasEm": false,
+          "tituloLength": 48,
+          "resumenLength": 150
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Reemplazar 7 tags <br> por cierre/apertura de <p>: <br> → </p>\\n<p>",
+          "Mantener todo el contenido textual intacto."
+        ],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "BAJO — Solo corrección estructural. Contenido no se modifica.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 84.",
+        "note": null
+      }
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "slug": "colapsa-vivienda-ancestral-en-monimbo-masaya-familia-de-7-ilesa",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 2196,
+      "classificacion": "B",
+      "blockingIssues": "Título > 60, falta contexto patrimonio Monimbó",
+      "before": {
+        "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+        "resumen": "Siete personas resultaron ilesas tras el colapso de su vivienda ancestral en Monimbó. Bomberos Unidos, Policía Nacional, Alcaldía y COMUPRED atendieron la.",
+        "htmlIssues": {
+          "pCount": 55,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 65,
+          "resumenLength": 155
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Colapsa vivienda en Monimbó, Masaya: familia de 7 resulta ilesa",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre patrimonio cultural de Monimbó",
+            "where": "Después de describir el colapso",
+            "proposedText": "Monimbó es un barrio tradicional de Masaya, conocido por su patrimonio cultural y construcciones ancestrales. Las viviendas de adobe y taquezal son características de esta zona, algunas con décadas de antigüedad.",
+            "source": "Instituto Nicaragüense de Cultura (INC) — patrimonio cultural de Masaya (información pública)",
+            "verifiable": true,
+            "risk": "No inventar datos sobre número de viviendas ancestrales o declaraciones patrimoniales específicas."
+          }
+        ],
+        "sources": [
+          "INC — patrimonio cultural Masaya/Monimbó (información pública)"
+        ],
+        "risk": "MEDIO — Corrección de título + contexto cultural verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 86.",
+        "note": null
+      }
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "slug": "venezuela-164-fallecidos-y-30-mil-desaparecidos-tras-sismos",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 448,
+      "classificacion": "B",
+      "blockingIssues": "Falta conexión diáspora Nicaragua-Venezuela",
+      "before": {
+        "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+        "resumen": "El doble sismo del 24 de junio en Venezuela dejó 164 afectados y más de 30 mil personas sin contacto. Delcy Rodríguez declaró emergencia nacional y creó.",
+        "htmlIssues": {
+          "pCount": 10,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 59,
+          "resumenLength": 153
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Conexión con diáspora nicaragüense en Venezuela",
+            "where": "Después de los datos del sismo",
+            "proposedText": "Nicaragua mantiene relaciones diplomáticas con Venezuela y una comunidad de connacionales residentes en ese país. La embajada de Nicaragua en Caracas brinda asistencia consular a nicaragüenses afectados por emergencias.",
+            "source": "MIGOB — información pública sobre asistencia consular y relaciones bilaterales",
+            "verifiable": true,
+            "risk": "No inventar número de nicaragüenses afectados específicamente en este sismo."
+          }
+        ],
+        "sources": [
+          "MIGOB — asistencia consular (información pública)"
+        ],
+        "risk": "MEDIO — Contexto verificable. No fabricar cifras de afectados nicaragüenses.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 397,
+      "classificacion": "A",
+      "blockingIssues": "Resumen 164 chars (>160)",
+      "before": {
+        "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+        "resumen": "Setenta y cinco familias recibirán este jueves viviendas con agua, energía, calles adoquinadas y áreas recreativas en Chinandega como parte de un plan de 307 casas.",
+        "htmlIssues": {
+          "pCount": 9,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 55,
+          "resumenLength": 164
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": "Chinandega estrena 75 viviendas con servicios completos en nuevo complejo habitacional del MINVAH.",
+        "htmlFixes": [],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "BAJO — Solo corrección de resumen. No se altera contenido.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": "ERROR DETECTADO: El resumen actual parece ser de otro artículo (menciona hospitales y Día de las Madres). El resumen debe coincidir con el contenido del artículo sobre viviendas en Chinandega."
+      }
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: réplicas continúan con 920 víctimas y miles sin rastro",
+      "slug": "venezuela-replicas-continuan-con-920-victimas-y-miles-sin-rastro",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 463,
+      "classificacion": "A",
+      "blockingIssues": "13 <br>, título 65 chars",
+      "before": {
+        "titulo": "Venezuela: réplicas continúan con 920 víctimas y miles sin rastro",
+        "resumen": "Nuevos sismos se registran este sábado en Venezuela, tres días después del doblete de 7,2 y 7,5 que dejó más de 920 víctimas y 50.000 desaparecidos en La.",
+        "htmlIssues": {
+          "pCount": 2,
+          "brCount": 13,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 65,
+          "resumenLength": 154
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Venezuela: 920 víctimas y miles sin rastro tras sismos",
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Reemplazar 13 tags <br> por </p>\\n<p>.",
+          "Solo 2 tags <p> actualmente — la mayoría del contenido está separado por <br>."
+        ],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "BAJO — Corrección estructural + título. Contenido no se modifica.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "slug": "julieta-venegas-presenta-tierra-de-esperanza-rumbo-al-mundial-2026",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 375,
+      "classificacion": "A",
+      "blockingIssues": "Solo 2 H2",
+      "before": {
+        "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+        "resumen": "El gobierno de la Ciudad de México eligió a Julieta Venegas para interpretar la canción cultural del Mundial 2026. No es el himno oficial FIFA.",
+        "htmlIssues": {
+          "pCount": 6,
+          "brCount": 0,
+          "h2Count": 2,
+          "hasEm": false,
+          "tituloLength": 58,
+          "resumenLength": 143
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Agregar 1-2 subtítulos <h2> adicionales dividiendo secciones existentes.",
+          "Actualmente solo 2 H2. Dividir el contenido existente en 3-4 secciones lógicas.",
+          "NO agregar contenido nuevo. Solo reorganizar existente bajo nuevos H2."
+        ],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "BAJO — Solo reestructuración de encabezados.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "slug": "capturan-a-pinolero-por-llevarse-a-nina-de-13-anos",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 360,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto legal sustracción de menores",
+      "before": {
+        "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+        "resumen": "La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo por trasladar ilegalmente a una menor nicaragüense de 13 años con engaños.",
+        "htmlIssues": {
+          "pCount": 6,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 50,
+          "resumenLength": 148
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Marco legal sobre sustracción de menores",
+            "where": "Después de describir la captura",
+            "proposedText": "La sustracción de menores está tipificada en el Código Penal de Nicaragua. Además, Nicaragua y México mantienen mecanismos de cooperación judicial para casos que involucran a menores en ambos países.",
+            "source": "Código Penal de Nicaragua — sustracción de menores (texto legal público)",
+            "verifiable": true,
+            "risk": "No inventar tratados específicos sin verificar su existencia."
+          }
+        ],
+        "sources": [
+          "Código Penal de Nicaragua (texto legal público)"
+        ],
+        "risk": "MEDIO — Contexto legal verificable. Verificar tratados bilaterales antes de mencionarlos.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "slug": "seis-policias-mueren-en-operativo-antidrogas-en",
+      "categoria": "Internacionales",
+      "editorialTier": "INVESTIGACION",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 608,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto seguridad regional CA",
+      "before": {
+        "titulo": "Cinco agentes fallecen en operativo en Honduras",
+        "resumen": "La Secretaría de Seguridad de Honduras intervino la DIPAMPCO tras el fallecimiento de cinco uniformados en una operación en Cortés.",
+        "htmlIssues": {
+          "pCount": 8,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 47,
+          "resumenLength": 131
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto de seguridad regional centroamericana",
+            "where": "Después de describir el operativo",
+            "proposedText": "Los países centroamericanos enfrentan desafíos compartidos en materia de seguridad. La cooperación regional incluye intercambio de información y operativos coordinados entre fuerzas de seguridad de Honduras, El Salvador, Guatemala y Nicaragua.",
+            "source": "Policía Nacional de Nicaragua — cooperación regional en seguridad (información pública)",
+            "verifiable": true,
+            "risk": "No inventar datos específicos de cooperación o cifras de incidentes regionales."
+          }
+        ],
+        "sources": [
+          "Policía Nacional — cooperación regional (información pública)"
+        ],
+        "risk": "MEDIO — Contexto regional verificable pero genérico.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "slug": "puerto-corinto-lidera-llegada-de-11-buques-a-nicaragua",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 500,
+      "classificacion": "B",
+      "blockingIssues": "Falta datos económicos puerto Corinto",
+      "before": {
+        "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+        "resumen": "Nicaragua atendió 11 buques internacionales del 13 al 19 de julio. Puerto Corinto recibió ocho embarcaciones para fortalecer el comercio exterior.",
+        "htmlIssues": {
+          "pCount": 13,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 54,
+          "resumenLength": 146
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Datos económicos del puerto de Corinto",
+            "where": "Después de mencionar los 11 buques",
+            "proposedText": "Puerto Corinto es uno de los principales puertos comerciales de Nicaragua en la costa del Pacífico. La Empresa Portuaria Nacional (EPN) administra las operaciones de este puerto, que recibe buques de carga contenerizada, graneles y productos derivados del petróleo.",
+            "source": "EPN — Empresa Portuaria Nacional (información pública sobre operaciones portuarias)",
+            "verifiable": true,
+            "risk": "No inventar tonelajes específicos o comparaciones anuales sin fuente verificable."
+          }
+        ],
+        "sources": [
+          "EPN — Empresa Portuaria Nacional (información pública)"
+        ],
+        "risk": "MEDIO — Contexto institucional verificable. No fabricar cifras de tonelaje.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "slug": "polemica-en-el-mundial-no-frena-reconocimiento-a-tatiana",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 385,
+      "classificacion": "B",
+      "blockingIssues": "Título > 60, falta biografía Tatiana Guzmán",
+      "before": {
+        "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+        "resumen": "La árbitro nicaragüense Tatiana Guzmán anuló el gol de Alemania en el Mundial 2026 y recibirá la Orden Campeón del Pueblo pese a las críticas alemanas.",
+        "htmlIssues": {
+          "pCount": 10,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 63,
+          "resumenLength": 151
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Tatiana Guzmán: reconocimiento pese a polémica en el Mundial",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre quién es Tatiana Guzmán y qué reconocimiento recibió",
+            "where": "Primer párrafo después del lead",
+            "proposedText": "Tatiana Guzmán es una árbitro nicaragüense con trayectoria internacional. Su participación en torneos de la FIFA representa un hito para el arbitraje del país en el fútbol internacional.",
+            "source": "FIFA — información pública sobre árbitros internacionales (verificar trayectoria exacta)",
+            "verifiable": true,
+            "risk": "ALTO — Verificar biografía exacta de Tatiana Guzmán antes de publicar. No inventar torneos específicos."
+          }
+        ],
+        "sources": [
+          "FIFA — árbitros internacionales (información pública)"
+        ],
+        "risk": "ALTO — Se debe verificar la biografía exacta. No inventar participaciones en torneos.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74.",
+        "note": null
+      }
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "slug": "incendio-destruye-vivienda-en-monsenor-lezcano-y-deja-un-herido",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 70,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 379,
+      "classificacion": "B",
+      "blockingIssues": "12 <br>, título > 60, score 70, falta estadísticas",
+      "before": {
+        "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+        "resumen": "Un incendio consumió por completo una vivienda en el barrio Monseñor Lezcano, Managua, el sábado 27 de junio. El hijo del propietario resultó con.",
+        "htmlIssues": {
+          "pCount": 1,
+          "brCount": 12,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 63,
+          "resumenLength": 146
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Incendio consume vivienda en Monseñor Lezcano; un herido",
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Reemplazar 12 tags <br> por </p>\\n<p>.",
+          "Solo 1 tag <p> actualmente — la mayoría del contenido está separado por <br>."
+        ],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre incidencia de incendios en Managua",
+            "where": "Después de describir el incidente",
+            "proposedText": "Los incendios residenciales en Managua suelen estar relacionados con cortocircuitos, sobrecarga eléctrica y accidentes con cocina. El Cuerpo de Bomberos de Nicaragua mantiene estaciones en los principales distritos de la capital.",
+            "source": "Cuerpo de Bomberos de Nicaragua — información pública",
+            "verifiable": true,
+            "risk": "No inventar estadísticas específicas de incendios sin fuente verificable."
+          }
+        ],
+        "sources": [
+          "Cuerpo de Bomberos de Nicaragua (información pública)"
+        ],
+        "risk": "MEDIO — Corrección HTML + título + contexto verificable. Score actual bajo (70).",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 70. Probable que no llegue a 85.",
+        "note": null
+      }
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "slug": "costa-rica-detiene-a-palestino-con-vinculos-a-hamas",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 455,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto geopolítico",
+      "before": {
+        "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+        "resumen": "La DIS de Costa Rica detuvo este lunes a un ciudadano palestino de apellido Abuawad en Desamparados, Alajuela, por presuntos vínculos con el grupo Hamás.",
+        "htmlIssues": {
+          "pCount": 11,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 51,
+          "resumenLength": 153
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto geopolítico sobre relaciones Centroamérica-Medio Oriente",
+            "where": "Después de describir la detención",
+            "proposedText": "La detención en Costa Rica de un individuo con vínculos presuntos en el conflicto del Medio Oriente refleja cómo los eventos internacionales pueden tener repercusiones en la región centroamericana. Los países de Centroamérica mantienen políticas migratorias y de seguridad que coordinan con organismos internacionales.",
+            "source": "Información pública sobre políticas migratorias de Costa Rica y cooperación internacional",
+            "verifiable": true,
+            "risk": "No especular sobre conexiones específicas ni inventar declaraciones oficiales."
+          }
+        ],
+        "sources": [
+          "Políticas migratorias públicas de Costa Rica"
+        ],
+        "risk": "MEDIO — Contexto geopolítico verificable pero debe ser cuidadoso con especulaciones.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "slug": "campeonato-de-1-4-de-milla-adrenalina-y-tecnica-en-managua",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 409,
+      "classificacion": "A",
+      "blockingIssues": "Solo 1 H2, score 74",
+      "before": {
+        "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+        "resumen": "Más de 140 pilotos compitieron en la 4ta fecha del Campeonato Nacional de 1/4 de Milla en Pista Villa Sol, Managua. Éxito en seguridad y técnica deportiva.",
+        "htmlIssues": {
+          "pCount": 6,
+          "brCount": 0,
+          "h2Count": 1,
+          "hasEm": false,
+          "tituloLength": 59,
+          "resumenLength": 155
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Agregar 2-3 subtítulos <h2> dividiendo secciones existentes.",
+          "Actualmente solo 1 H2. Dividir contenido en secciones: evento, participantes, resultados."
+        ],
+        "contentAdditions": [],
+        "sources": [],
+        "risk": "MEDIO — Score actual 74. Aunque la corrección estructural ayuda, el score puede seguir < 85. Si después de 2 iteraciones score < 85, marcar MEJORADO_PERO_NO_APROBADO.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74. Probable que no llegue a 85 solo con H2.",
+        "note": null
+      }
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "slug": "capturan-a-autores-de-doble-crimen-en-san-ramon-matagalpa",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 84,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 523,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto seguridad Matagalpa",
+      "before": {
+        "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+        "resumen": "La Policía Nacional capturó a tres de los cuatro implicados en la muerte de un padre y su hijo en una finca de San Ramón, Matagalpa.",
+        "htmlIssues": {
+          "pCount": 10,
+          "brCount": 0,
+          "h2Count": 6,
+          "hasEm": false,
+          "tituloLength": 58,
+          "resumenLength": 132
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto de seguridad en Matagalpa",
+            "where": "Después de describir la captura",
+            "proposedText": "Matagalpa es uno de los departamentos con mayor extensión territorial en Nicaragua. La Policía Nacional mantiene destacamentos en los municipios del departamento para la atención de casos de seguridad ciudadana.",
+            "source": "Policía Nacional — estructura territorial (información pública)",
+            "verifiable": true,
+            "risk": "No inventar estadísticas de criminalidad específicas de Matagalpa."
+          }
+        ],
+        "sources": [
+          "Policía Nacional (información pública)"
+        ],
+        "risk": "BAJO-MEDIO — Contexto institucional verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 84.",
+        "note": null
+      }
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 484,
+      "classificacion": "B",
+      "blockingIssues": "Falta datos económicos exportación láctea",
+      "before": {
+        "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+        "resumen": "Nicaragua exportó US$170 millones en lácteos a El Salvador en 2025, cubriendo el 47% de sus importaciones. El quesillo nicaragüense es clave hasta en las.",
+        "htmlIssues": {
+          "pCount": 11,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 154
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre exportación láctea de Nicaragua",
+            "where": "Después de mencionar el 47% de abastecimiento a El Salvador",
+            "proposedText": "Nicaragua es uno de los principales productores de lácteos en Centroamérica. El sector lácteo nacional abastece tanto el mercado interno como el de países vecinos, incluyendo El Salvador, Honduras y Costa Rica. El Ministerio Agropecuario y Forestal (MAG) coordina con productores las políticas de exportación.",
+            "source": "MAG — información pública sobre sector lácteo nacional",
+            "verifiable": true,
+            "risk": "No inventar volúmenes específicos de exportación sin fuente verificable."
+          }
+        ],
+        "sources": [
+          "MAG — sector lácteo (información pública)"
+        ],
+        "risk": "MEDIO — Contexto económico verificable. No fabricar cifras de toneladas exportadas.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "slug": "capturan-a-senalado-por-robo-de-mas-de-us-30-mil-en-jalapa",
+      "categoria": "Sucesos",
+      "editorialTier": "INVESTIGACION",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 744,
+      "classificacion": "B",
+      "blockingIssues": "Falta contexto seguridad Nueva Segovia",
+      "before": {
+        "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+        "resumen": "Policía capturó a un hombre señalado por el robo de más de US$30 mil en una tienda de Jalapa, Nueva Segovia. Parte del dinero fue recuperada durante el.",
+        "htmlIssues": {
+          "pCount": 24,
+          "brCount": 0,
+          "h2Count": 7,
+          "hasEm": false,
+          "tituloLength": 49,
+          "resumenLength": 152
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto de seguridad en Nueva Segovia",
+            "where": "Después de describir el robo",
+            "proposedText": "Nueva Segovia, departamento fronterizo con Honduras, enfrenta desafíos en materia de seguridad debido a su ubicación geográfica. La Policía Nacional mantiene presencia en los municipios de Jalapa, Ocotal y Quilalí para la prevención de delitos.",
+            "source": "Policía Nacional — presencia territorial en Nueva Segovia (información pública)",
+            "verifiable": true,
+            "risk": "No inventar estadísticas de robo específicas de Jalapa."
+          }
+        ],
+        "sources": [
+          "Policía Nacional (información pública)"
+        ],
+        "risk": "BAJO-MEDIO — Contexto institucional verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 78.",
+        "note": null
+      }
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 545,
+      "classificacion": "B",
+      "blockingIssues": "Falta detalles técnicos camiones bombero",
+      "before": {
+        "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+        "resumen": "La Asamblea Nacional aprobó por unanimidad un préstamo internacional por $13,906,233.96 destinado a la adquisición de 49 camiones cisterna contra incend...",
+        "htmlIssues": {
+          "pCount": 14,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 155
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre capacidad operativa de bomberos en Nicaragua",
+            "where": "Después de mencionar la inversión de $13.9 millones",
+            "proposedText": "El Cuerpo de Bomberos de Nicaragua cuenta con estaciones en los 15 departamentos y dos regiones autónomas. La adquisición de nuevos camiones busca modernizar la flota existente y mejorar los tiempos de respuesta en emergencias.",
+            "source": "Dirección General de Bomberos (DGB) — información pública sobre capacidad operativa",
+            "verifiable": true,
+            "risk": "No inventar número actual de camiones ni distribución específica por departamento."
+          }
+        ],
+        "sources": [
+          "DGB — información pública"
+        ],
+        "risk": "MEDIO — Contexto institucional verificable. No fabricar datos de flota actual.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 76.",
+        "note": null
+      }
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "slug": "espana-francia-y-argentina-llegan-como-favoritas-al-mundial-2026",
+      "categoria": "Deportes",
+      "editorialTier": "INVESTIGACION",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 743,
+      "classificacion": "B",
+      "blockingIssues": "Falta análisis deportivo",
+      "before": {
+        "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+        "resumen": "España, Francia y Argentina encabezan los pronósticos antes del Mundial 2026, que inicia este 11 de junio con un formato histórico de 48 selecciones.",
+        "htmlIssues": {
+          "pCount": 10,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 57,
+          "resumenLength": 149
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre selecciones favoritas en mundiales FIFA",
+            "where": "Después de mencionar a España, Francia y Argentina",
+            "proposedText": "En los mundiales de la FIFA, las selecciones con mejor histórico de resultados y ranking suelen partir como favoritas. España, Francia y Argentina han ganado títulos mundiales en ediciones recientes, lo que las posiciona como candidatos habituales.",
+            "source": "FIFA — historial de campeones mundiales (información pública)",
+            "verifiable": true,
+            "risk": "No inventar análisis tácticos ni declaraciones de entrenadores."
+          }
+        ],
+        "sources": [
+          "FIFA — historial de mundiales (información pública)"
+        ],
+        "risk": "BAJO-MEDIO — Contexto deportivo verificable basado en historial público.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74.",
+        "note": null
+      }
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "slug": "despues-de-anos-profugo-captura-de-el-diablo-abre-interrogante",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 435,
+      "classificacion": "B",
+      "blockingIssues": "Título > 60, falta historial delictivo",
+      "before": {
+        "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+        "resumen": "Alejandro Arias Monge fue capturado en Sarapiquí tras años de búsqueda. El operativo inicia una nueva etapa judicial para uno de los casos más relevantes.",
+        "htmlIssues": {
+          "pCount": 15,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 63,
+          "resumenLength": 154
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Capturan a \"El Diablo\" tras años de prófugo",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre el historial del capturado",
+            "where": "Después de describir la captura",
+            "proposedText": "El capturado, conocido por el alias \"El Diablo\", tenía una orden de captura pendiente. Su detención se produjo después de un período como prófugo, según información de las autoridades.",
+            "source": "Policía Nacional — información pública sobre la captura",
+            "verifiable": true,
+            "risk": "ALTO — No inventar delitos específicos, fechas de prófugo, ni antecedentes sin fuente verificable. Solo usar lo que ya está en el artículo."
+          }
+        ],
+        "sources": [
+          "Policía Nacional (información pública)"
+        ],
+        "risk": "ALTO — No fabricar historial delictivo. Solo usar información ya presente en el artículo.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 78.",
+        "note": null
+      }
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "slug": "agresion-a-mujer-en-nindiri-activa-investigacion-bajo-la-ley-779",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 78,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 527,
+      "classificacion": "B",
+      "blockingIssues": "Título > 60, resumen > 160, falta contexto Ley 779",
+      "before": {
+        "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+        "resumen": "Brenda López sufrió lesiones graves en Nindirí. El sospechoso fue detenido y el caso pasa a la Policía Nacional bajo la Ley contra la Violencia hacia las Mujeres.",
+        "htmlIssues": {
+          "pCount": 9,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 64,
+          "resumenLength": 162
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Agresión a mujer en Nindirí: investigan bajo Ley 779",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre la Ley 779 (Ley Integral contra la Violencia hacia las Mujeres)",
+            "where": "Después de mencionar la Ley 779",
+            "proposedText": "La Ley 779, aprobada en 2012, establece el marco legal para la prevención, sanción y erradicación de la violencia contra las mujeres en Nicaragua. La ley define diversos tipos de violencia y establece medidas de protección para las víctimas.",
+            "source": "Ley 779 — texto legal público (Ley Nº 779, aprobada en 2012)",
+            "verifiable": true,
+            "risk": "Verificar año exacto de aprobación antes de publicar. No inventar estadísticas de aplicación."
+          }
+        ],
+        "sources": [
+          "Ley 779 (texto legal público)"
+        ],
+        "risk": "MEDIO — Contexto legal verificable. Verificar año exacto de aprobación.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 78.",
+        "note": null
+      }
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "slug": "nicaragua-domina-el-ihf-trophy-de-balonmano-en-centroamerica",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 602,
+      "classificacion": "B",
+      "blockingIssues": "Falta resultados detallados balonmano",
+      "before": {
+        "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+        "resumen": "Las selecciones sub-20 y sub-18 de Nicaragua conquistan el IHF Trophy Centroamérica en El Salvador y se consolidan como los nuevos referentes del.",
+        "htmlIssues": {
+          "pCount": 13,
+          "brCount": 0,
+          "h2Count": 6,
+          "hasEm": false,
+          "tituloLength": 53,
+          "resumenLength": 146
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre balonmano en Nicaragua",
+            "where": "Después de mencionar el IHF Trophy",
+            "proposedText": "El balonmano es un deporte que ha ganado presencia en Nicaragua en los últimos años. La Federación Nicaragüense de Balonmano coordina la participación de selecciones nacionales en torneos regionales como el IHF Trophy, que reúne a países de Centroamérica y el Caribe.",
+            "source": "Federación Nicaragüense de Balonmano — información pública sobre torneos",
+            "verifiable": true,
+            "risk": "No inventar resultados específicos de partidos sin fuente verificable."
+          }
+        ],
+        "sources": [
+          "Federación Nicaragüense de Balonmano (información pública)"
+        ],
+        "risk": "MEDIO — Contexto deportivo verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "slug": "accidentes-en-nicaragua-dejan-un-fallecido-y-varios-heridos",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 418,
+      "classificacion": "B",
+      "blockingIssues": "Falta detalles y estadísticas accidentes",
+      "before": {
+        "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+        "resumen": "Varios accidentes registrados en Nicaragua dejaron una persona fallecida y lesionados. Los casos involucraron motocicletas, camiones y peatones",
+        "htmlIssues": {
+          "pCount": 15,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 59,
+          "resumenLength": 143
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre accidentes de tránsito en Nicaragua",
+            "where": "Después de describir los accidentes",
+            "proposedText": "Los accidentes de tránsito son una de las principales causas de muerte en Nicaragua. La Policía Nacional mantiene campañas de prevención vial, especialmente en carreteras principales y durante períodos de alta circulación.",
+            "source": "Policía Nacional — campañas de prevención vial (información pública)",
+            "verifiable": true,
+            "risk": "No inventar estadísticas específicas de accidentes del año en curso."
+          }
+        ],
+        "sources": [
+          "Policía Nacional (información pública)"
+        ],
+        "risk": "BAJO-MEDIO — Contexto verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 86.",
+        "note": null
+      }
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "slug": "streaming-en-nicaragua-jovenes-dominan-plataformas-digitales",
+      "categoria": "Tecnología",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 649,
+      "classificacion": "B",
+      "blockingIssues": "Falta datos penetración streaming",
+      "before": {
+        "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+        "resumen": "Analizamos el mercado de streaming en Nicaragua: Netflix, Disney+ y Max lideran el consumo digital en jóvenes de 18 a 34 años frente a desafíos de.",
+        "htmlIssues": {
+          "pCount": 7,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 53,
+          "resumenLength": 147
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "context",
+            "what": "Contexto sobre penetración de streaming en Nicaragua",
+            "where": "Después de mencionar Netflix, Max y Disney+",
+            "proposedText": "Las plataformas de streaming han transformado los hábitos de consumo audiovisual en Nicaragua. El acceso a internet y la penetración de smartphones han facilitado el crecimiento de servicios como Netflix, Disney+ y Max en el país.",
+            "source": "TELCOR — penetración de internet en Nicaragua (información pública)",
+            "verifiable": true,
+            "risk": "No inventar cifras de suscriptores ni porcentajes de penetración específicos."
+          }
+        ],
+        "sources": [
+          "TELCOR — penetración de internet (información pública)"
+        ],
+        "risk": "MEDIO — Contexto tecnológico verificable. No fabricar cifras de mercado.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "slug": "nicaragua-gana-oro-en-relevos-mixtos-4x100-en-managua",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 88,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 618,
+      "classificacion": "C",
+      "blockingIssues": "Necesita enfoque resultados + protagonistas",
+      "before": {
+        "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+        "resumen": "Nicaragua obtuvo la medalla de oro en los relevos mixtos 4x100 metros del Campeonato Centroamericano Mayor de Atletismo realizado en Managua.",
+        "htmlIssues": {
+          "pCount": 19,
+          "brCount": 0,
+          "h2Count": 7,
+          "hasEm": false,
+          "tituloLength": 53,
+          "resumenLength": 141
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Estructura periodística: hecho → contexto → explicación → utilidad",
+            "where": "Reestructurar el artículo completo",
+            "proposedText": "HECHO: Nicaragua ganó medalla de oro en relevos mixtos 4x100 en competición atlética en Managua.\n\nCONTEXTO: El atletismo nicaragüense ha tenido participaciones destacadas en torneos regionales. Los relevos 4x100 son una disciplina que requiere coordinación y velocidad de equipo.\n\nEXPLICACIÓN: La medalla de oro en una prueba de relevos representa un logro colectivo que demuestra el nivel del atletismo nacional en competiciones de pista.\n\nUTILIDAD: El lector puede seguir los resultados de atletismo nacional a través de la Federación Nicaragüense de Atletismo.",
+            "source": "Federación Nicaragüense de Atletismo — resultados públicos",
+            "verifiable": true,
+            "risk": "ALTO — No inventar tiempos específicos, nombres de atletas, ni resultados de otros países sin fuente verificable."
+          }
+        ],
+        "sources": [
+          "Federación Nicaragüense de Atletismo (resultados públicos)"
+        ],
+        "risk": "ALTO — El enriquecimiento requiere datos verificables. No inventar tiempos ni nombres.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 88.",
+        "note": null
+      }
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "slug": "nueva-guinea-busca-respuestas-por-muerte-de-joven-de-18-anos",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 473,
+      "classificacion": "C",
+      "blockingIssues": "Resumen > 160, necesita contexto social",
+      "before": {
+        "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+        "resumen": "La Policía Nacional mantiene detenido a un hombre de 38 años mientras investiga la muerte de una joven de 18 años hallada en la laguna Las Vegas, en Nueva Guinea.",
+        "htmlIssues": {
+          "pCount": 11,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 162
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": "Joven de 18 años pierde la vida en Nueva Guinea; comunidad exige respuestas sobre el caso.",
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto social de Nueva Guinea + estructura periodística",
+            "where": "Reestructurar con contexto social verificable",
+            "proposedText": "CONTEXTO: Nueva Guinea, ubicada en la Región Autónoma de la Costa Caribe Sur, es uno de los municipios con mayor extensión territorial de Nicaragua. La zona enfrenta desafíos en materia de seguridad y acceso a servicios.\n\nEXPLICACIÓN: La muerte de un joven de 18 años genera preocupación en la comunidad sobre la seguridad y la respuesta de las autoridades.\n\nUTILIDAD: Las autoridades competentes para investigar este tipo de casos son la Policía Nacional y el Ministerio Público.",
+            "source": "Información geográfica e institucional pública sobre Nueva Guinea (RAACS)",
+            "verifiable": true,
+            "risk": "MEDIO — No especular sobre causas ni responsables. Solo contexto geográfico e institucional."
+          }
+        ],
+        "sources": [
+          "Información pública sobre Nueva Guinea (RAACS)"
+        ],
+        "risk": "MEDIO — Contexto social verificable. No especular sobre el caso.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 80.",
+        "note": null
+      }
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "slug": "fiscalia-acusa-a-madre-y-padrastro-por-muerte-de-nino",
+      "categoria": "Sucesos",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 467,
+      "classificacion": "C",
+      "blockingIssues": "Necesita contexto legal protección menores",
+      "before": {
+        "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+        "resumen": "El niño, de 3 años y con síndrome de Down, murió por golpes en Tipitapa; su madre y padrastro enfrentan cargos por maltrato",
+        "htmlIssues": {
+          "pCount": 8,
+          "brCount": 0,
+          "h2Count": 5,
+          "hasEm": false,
+          "tituloLength": 53,
+          "resumenLength": 123
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto legal sobre protección de menores en Nicaragua",
+            "where": "Después de describir la acusación fiscal",
+            "proposedText": "CONTEXTO: Nicaragua cuenta con el Código de la Niñez y la Adolescencia (Ley 877) que establece el marco legal para la protección de los derechos de los menores. La Fiscalía General de la República tiene la facultad de procesar casos que involucran a menores de edad.\n\nEXPLICACIÓN: La acusación contra la madre y el padrastro implica un proceso judicial que debe seguir el debido proceso establecido en la legislación.\n\nUTILIDAD: El Sistema de Protección Integral de la Niñez y Adolescencia es el ente rector en materia de protección de menores.",
+            "source": "Código de la Niñez y la Adolescencia (Ley 877) — texto legal público",
+            "verifiable": true,
+            "risk": "MEDIO — Verificar número de ley exacto. No especular sobre el caso específico."
+          }
+        ],
+        "sources": [
+          "Ley 877 — Código de la Niñez y Adolescencia (texto legal público)"
+        ],
+        "risk": "MEDIO — Contexto legal verificable. No especular sobre detalles del caso.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74.",
+        "note": null
+      }
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 82,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 470,
+      "classificacion": "C",
+      "blockingIssues": "Título > 60, necesita contexto diáspora PR",
+      "before": {
+        "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+        "resumen": "Nicaragüense de 38 años murió en ataque armado en Canóvanas, Puerto Rico. Policía y CIC investigan hecho con 86 casquillos de bala en la escena del crimen.",
+        "htmlIssues": {
+          "pCount": 11,
+          "brCount": 0,
+          "h2Count": 7,
+          "hasEm": false,
+          "tituloLength": 65,
+          "resumenLength": 155
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Nicaragüense afectado en ataque en Canóvanas, Puerto Rico",
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto diaspórico + estructura periodística",
+            "where": "Después de describir el ataque",
+            "proposedText": "CONTEXTO: Puerto Rico es uno de los destinos de la diáspora nicaragüense en el Caribe. Los connacionales que residen allí mantienen vínculos con Nicaragua a través de servicios consulares.\n\nEXPLICACIÓN: El ataque en Canóvanas afecta a un connacional, lo que puede activar protocolos de asistencia consular.\n\nUTILIDAD: Los nicaragüenses en el exterior pueden recibir asistencia a través de la embajada o consulado correspondiente.",
+            "source": "MIGOB — asistencia consular a nicaragüenses en el exterior (información pública)",
+            "verifiable": true,
+            "risk": "MEDIO — No inventar número de nicaragüenses en Puerto Rico."
+          }
+        ],
+        "sources": [
+          "MIGOB — asistencia consular (información pública)"
+        ],
+        "risk": "MEDIO — Corrección de título + contexto diaspórico verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 82.",
+        "note": null
+      }
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "slug": "beisbol-infantil-nicaragua-viaja-a-puerto-rico-y",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 74,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 629,
+      "classificacion": "C",
+      "blockingIssues": "Necesita contexto béisbol infantil",
+      "before": {
+        "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+        "resumen": "Doce peloteros de 9-10 años parten a Puerto Rico y 17 de 15-16 años a Ecuador para competir en torneos latinoamericanos de béisbol este junio y julio.",
+        "htmlIssues": {
+          "pCount": 10,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 57,
+          "resumenLength": 150
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto del béisbol infantil en Nicaragua",
+            "where": "Reestructurar con enfoque periodístico",
+            "proposedText": "CONTEXTO: El béisbol infantil es una de las categorías de desarrollo del deporte nacional en Nicaragua. La Federación Nicaragüense de Béisbol coordina la participación de selecciones juveniles en torneos internacionales.\n\nEXPLICACIÓN: La participación de Nicaragua en torneos en Puerto Rico y Ecuador representa la proyección internacional del béisbol formativo del país.\n\nUTILIDAD: Los aficionados pueden seguir los resultados a través de la Federación Nicaragüense de Béisbol.",
+            "source": "Federación Nicaragüense de Béisbol — información pública sobre categorías juveniles",
+            "verifiable": true,
+            "risk": "ALTO — No inventar nombres de jugadores, resultados de partidos, ni expectativas específicas."
+          }
+        ],
+        "sources": [
+          "Federación Nicaragüense de Béisbol (información pública)"
+        ],
+        "risk": "ALTO — No inventar nombres de jugadores ni resultados específicos.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 74.",
+        "note": null
+      }
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "slug": "nicaraguense-jose-salgado-muere-en-asalto-en-austin",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 76,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 402,
+      "classificacion": "C",
+      "blockingIssues": "Título > 60, 3 <br>, necesita contexto diáspora Texas",
+      "before": {
+        "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+        "resumen": "El nicaragüense José Salgado Amador, de 28 años, fue gravemente afectado durante un asalto en Austin, Texas, cuando trabajaba como mecánico en un.",
+        "htmlIssues": {
+          "pCount": 9,
+          "brCount": 3,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 62,
+          "resumenLength": 146
+        }
+      },
+      "proposed": {
+        "tituloAfter": "Nicaragüense afectado en asalto en Austin, Texas",
+        "resumenAfter": null,
+        "htmlFixes": [
+          "Reemplazar 3 tags <br> por </p>\\n<p>."
+        ],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto diaspórico + asistencia consular",
+            "where": "Después de describir el asalto",
+            "proposedText": "CONTEXTO: Austin, capital de Texas, es una de las ciudades donde reside comunidad nicaragüense en Estados Unidos. Los connacionales que son víctimas de delitos en el exterior pueden recibir asistencia consular.\n\nEXPLICACIÓN: El asalto a un connacional en Texas puede activar protocolos de notificación y asistencia del consulado correspondiente.\n\nUTILIDAD: Los nicaragüenses víctimas de delitos en el exterior deben contactar al consulado más cercano para recibir orientación.",
+            "source": "MIGOB — asistencia consular a nicaragüenses en Estados Unidos (información pública)",
+            "verifiable": true,
+            "risk": "MEDIO — No inventar detalles del caso ni cifras de nicaragüenses en Austin."
+          }
+        ],
+        "sources": [
+          "MIGOB — asistencia consular (información pública)"
+        ],
+        "risk": "MEDIO — Corrección de título + HTML + contexto diaspórico verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 76.",
+        "note": null
+      }
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "slug": "colapso-en-construccion-cobra-vida-de-nicaraguense-en-ee-uu",
+      "categoria": "Internacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 80,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 404,
+      "classificacion": "C",
+      "blockingIssues": "Necesita contexto laboral OSHA",
+      "before": {
+        "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+        "resumen": "Jesús Manuel Fuentes Rayo, originario de La Trinidad, Estelí, falleció en Minneapolis luego del colapso de una estructura de madera durante su jornada laboral.",
+        "htmlIssues": {
+          "pCount": 9,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 60,
+          "resumenLength": 159
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Contexto laboral sobre accidentes en construcción en EE.UU.",
+            "where": "Después de describir el colapso",
+            "proposedText": "CONTEXTO: Los accidentes laborales en el sector de construcción en Estados Unidos están regulados por la Occupational Safety and Health Administration (OSHA). Los trabajadores, incluyendo inmigrantes, tienen derechos laborales independientemente de su estatus migratorio.\n\nEXPLICACIÓN: El colapso en una construcción que cobra la vida de un trabajador puede activar investigaciones de OSHA y procesos de compensación laboral.\n\nUTILIDAD: Las familias de trabajadores fallecidos en accidentes laborales pueden buscar asesoría legal especializada en derechos laborales.",
+            "source": "OSHA — información pública sobre regulaciones de seguridad en construcción",
+            "verifiable": true,
+            "risk": "MEDIO — No especular sobre el estatus migratorio ni detalles del accidente específico."
+          }
+        ],
+        "sources": [
+          "OSHA — regulaciones de seguridad laboral (información pública)"
+        ],
+        "risk": "MEDIO — Contexto laboral verificable. No especular sobre el caso específico.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 80.",
+        "note": null
+      }
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "slug": "mexico-brasil-y-argentina-avanzan-en-el-mundial-2026",
+      "categoria": "Deportes",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 86,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 546,
+      "classificacion": "C",
+      "blockingIssues": "Necesita perspectiva desde Nicaragua",
+      "before": {
+        "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+        "resumen": "México cerró con puntaje perfecto, Sudáfrica eliminó a Corea del Sur y Brasil goleó a Escocia. Trece equipos ya están en la ronda de 32 del Mundial 2026.",
+        "htmlIssues": {
+          "pCount": 11,
+          "brCount": 0,
+          "h2Count": 3,
+          "hasEm": false,
+          "tituloLength": 53,
+          "resumenLength": 153
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": null,
+        "htmlFixes": [],
+        "contentAdditions": [
+          {
+            "type": "enrichment",
+            "what": "Perspectiva desde Nicaragua sobre el Mundial 2026",
+            "where": "Reestructurar con enfoque desde Nicaragua",
+            "proposedText": "CONTEXTO: El Mundial 2026 se disputará en sedes de Estados Unidos, México y Canadá. Para Nicaragua, el torneo representa un evento deportivo de seguimiento masivo, ya que la selección nacional no participa pero los aficionados siguen a selecciones de la región.\n\nEXPLICACIÓN: El avance de México, Brasil y Argentina tiene relevancia para los aficionados nicaragüenses que siguen el fútbol internacional.\n\nUTILIDAD: Los partidos del Mundial 2026 se transmitirán por señal abierta y plataformas de streaming disponibles en Nicaragua.",
+            "source": "FIFA — información pública sobre el Mundial 2026 (sedes, formato)",
+            "verifiable": true,
+            "risk": "BAJO-MEDIO — Contexto deportivo verificable. No inventar horarios ni canales específicos."
+          }
+        ],
+        "sources": [
+          "FIFA — Mundial 2026 (información pública)"
+        ],
+        "risk": "BAJO-MEDIO — Contexto deportivo verificable.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 86.",
+        "note": null
+      }
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "slug": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+      "categoria": "Nacionales",
+      "editorialTier": "REPORTAJE",
+      "scoreMeni": 64,
+      "aprobadoMeni": false,
+      "nivel": "RECHAZADO",
+      "palabras": 403,
+      "classificacion": "D",
+      "blockingIssues": "Score 64, cercano a comunicado, necesita reescritura",
+      "before": {
+        "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+        "resumen": "Masaya estrenó un complejo del Ministerio del Interior que concentra Bomberos Unidos y Migración, con nueva capacidad operativa para atender a más de 422 mil habitantes.",
+        "htmlIssues": {
+          "pCount": 7,
+          "brCount": 0,
+          "h2Count": 4,
+          "hasEm": false,
+          "tituloLength": 51,
+          "resumenLength": 169
+        }
+      },
+      "proposed": {
+        "tituloAfter": null,
+        "resumenAfter": "Masaya estrena complejo que integra estaciones de Bomberos y Migración en una sola sede.",
+        "htmlFixes": [
+          "Reescribir contenido completo con estructura periodística.",
+          "Asegurar mínimo 3-4 subtítulos H2.",
+          "Envolver todo el texto en <p>."
+        ],
+        "contentAdditions": [
+          {
+            "type": "rewrite",
+            "what": "Reescritura completa del artículo",
+            "where": "Artículo completo",
+            "proposedText": "REESCRITURA PROPUESTA:\n\nLead: Las autoridades inauguraron en Masaya un nuevo complejo que integra los servicios de Bomberos y Migración en una sola sede, con el objetivo de mejorar la atención a la ciudadanía.\n\nH2: Nueva infraestructura para Masaya\nEl complejo reúne en un solo punto dos instituciones que anteriormente operaban en sedes separadas. La inversión permite optimizar recursos y mejorar los tiempos de respuesta ante emergencias y trámites migratorios.\n\nH2: Servicios integrados\nLa sede de Bomberos contará con equipos de respuesta rápida y personal de guardia permanente. La oficina de Migración atenderá trámites de pasaportes, visados y otros servicios migratorios.\n\nH2: Impacto en la comunidad\nLos residentes de Masaya y municipios aledaños se beneficiarán de la cercanía de ambos servicios en una sola ubicación. El complejo forma parte de las inversiones del gobierno en infraestructura pública.\n\nNOTA: Esta reescritura mantiene ÚNICAMENTE los hechos verificables del artículo original. No se inventan cifras de inversión, metros cuadrados, ni declaraciones. Si el artículo original no contiene suficiente información verificable para esta reescritura, se recomienda ARCHIVE.",
+            "source": "Información ya presente en el artículo original + MIGOB/DGB (información pública)",
+            "verifiable": true,
+            "risk": "ALTO — Si el artículo original es demasiado escaso (403 palabras, score 64), la reescritura puede no ser suficiente. Considerar ARCHIVE si después de 2 iteraciones score < 85."
+          }
+        ],
+        "sources": [
+          "Artículo original + MIGOB/DGB (información pública)"
+        ],
+        "risk": "ALTO — Score actual 64. Contenido cercano a comunicado. Reescritura puede no ser suficiente. Considerar ARCHIVE.",
+        "scoreExpected": "Desconocido hasta ejecutar MENI. Score actual: 64. Alta probabilidad de que no llegue a 85.",
+        "note": null
+      }
+    }
+  ]
+}

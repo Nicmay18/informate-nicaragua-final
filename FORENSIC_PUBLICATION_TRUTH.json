@@ -1,0 +1,434 @@
+{
+  "timestamp": "2026-08-13T03:52:19.410Z",
+  "total": 286,
+  "dist": {
+    "estado": {
+      "publicado": 286
+    },
+    "publicado": {
+      "true": 133,
+      "false": 41,
+      "null": 112
+    },
+    "aprobado": {
+      "true": 167,
+      "false": 0,
+      "null": 119
+    },
+    "aprobadoMeni": {
+      "true": 247,
+      "false": 39,
+      "null": 0
+    },
+    "conScore": 45,
+    "sinScore": 241
+  },
+  "publicadosPeroRechazadosMeni": [
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de…",
+      "scoreMeni": 92,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-30T16:51:44.016Z"
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-23T16:20:48.492Z"
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: crece 6% en remesas",
+      "scoreMeni": 84,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-16T00:13:10.144Z"
+    },
+    {
+      "id": "CypRypZIGLckqywkZq8X",
+      "titulo": "Nicaragüense sigue desaparecida tras terremotos en Venezuela",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-30T20:36:54.734Z"
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "scoreMeni": 80,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-23T22:01:21.869Z"
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "scoreMeni": 78,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-04T16:35:38.966Z"
+    },
+    {
+      "id": "F4UddilPobcIjIkZ1e55",
+      "titulo": "Escolta de ULTRAVAL enfrenta juicio por robo en Managua",
+      "scoreMeni": 78,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-19T17:59:13.011Z"
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-30T21:21:11.059Z"
+    },
+    {
+      "id": "H25VVBdDntQpmy13uxdP",
+      "titulo": "Incendio destruye vivienda en Monseñor Lezcano y deja un herido",
+      "scoreMeni": 70,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-28T20:33:43.042Z"
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-24T19:23:08.352Z"
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-21T20:42:51.036Z"
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "scoreMeni": 84,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-23T16:36:45.210Z"
+    },
+    {
+      "id": "JbGRXcj7AiJNPvQRcneT",
+      "titulo": "Capturan a autores de doble crimen en San Ramón, Matagalpa",
+      "scoreMeni": 84,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-22T00:10:36.002Z"
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "scoreMeni": 86,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-24T15:37:37.892Z"
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T20:06:48.141Z"
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "scoreMeni": 78,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-20T23:43:35.233Z"
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "scoreMeni": 76,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": null
+    },
+    {
+      "id": "VW3uBFbDCb6RR3KCiJ18",
+      "titulo": "España, Francia y Argentina son favoritas al Mundial 2026",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-09T21:37:51.166Z"
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "scoreMeni": 78,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-24T14:51:32.537Z"
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T18:10:53.905Z"
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-16T19:34:15.509Z"
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": null
+    },
+    {
+      "id": "hscMxXK16XKKq84yY1P6",
+      "titulo": "Accidentes en Nicaragua dejan un fallecido y varios heridos",
+      "scoreMeni": 86,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-24T16:59:34.663Z"
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-06T20:51:00.333Z"
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: réplicas continúan con 920 víctimas y miles sin rastro",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-28T01:06:12.635Z"
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-30T03:21:38.937Z"
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-07T02:22:07.535Z"
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-01T23:44:18.535Z"
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "scoreMeni": 78,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-14T06:31:05.219Z"
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "scoreMeni": 80,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-14T01:28:33.892Z"
+    },
+    {
+      "id": "sH5OCUULzSvZFhRcHXzb",
+      "titulo": "Cinco agentes fallecen en operativo en Honduras",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-21T21:02:13.222Z"
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-10T23:32:02.311Z"
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "scoreMeni": 82,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-22T21:08:48.307Z"
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "scoreMeni": 74,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-23T21:10:12.226Z"
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "scoreMeni": 76,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-18T18:46:45.728Z"
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "scoreMeni": 88,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-05-27T05:20:04.403Z"
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "scoreMeni": 80,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-22T16:27:55.261Z"
+    },
+    {
+      "id": "yUMAJwJQ1yMJTSb2cdkP",
+      "titulo": "México, Brasil y Argentina avanzan en el Mundial 2026",
+      "scoreMeni": 86,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-06-25T23:19:29.304Z"
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "scoreMeni": 64,
+      "estado": "publicado",
+      "publicado": false,
+      "aprobado": true,
+      "aprobadoMeni": false,
+      "fecha": "2026-07-07T23:18:41.431Z"
+    }
+  ],
+  "publicadosPeroRechazadosMeniBajoScore": [
+    "CMo0EIdKF9E5CYTJj8H9",
+    "CypRypZIGLckqywkZq8X",
+    "D7y1TWAyXq7SaNMirIjB",
+    "EcKTeqT7kLcFElUX3DM2",
+    "F4UddilPobcIjIkZ1e55",
+    "GHbdyeiCzH7Jk0i5RVPA",
+    "H25VVBdDntQpmy13uxdP",
+    "Ilzcy77tyF8oFNPytokN",
+    "JOfOW7uTxkgDSIezo7Wn",
+    "JbGRXcj7AiJNPvQRcneT",
+    "SD09P4KU8vq4Mq1Vidzz",
+    "SG87LjFIgCWnd6g8EKDq",
+    "VW3uBFbDCb6RR3KCiJ18",
+    "ZJpLrlTrusn5Jex8WQgQ",
+    "qAcmF4MWTiLsTACCG8v5",
+    "qT9tAbCyVpicX7HmoaD0",
+    "tYX2ZtXwUXg07CHI0ONj",
+    "tlIXmTYnv4hIajXOQiup",
+    "tnX05ykqVT6WiYVflSii",
+    "uJ076MyMZhQIJYTa1qOW",
+    "wiHS5gvNy7U6tORXAhEU",
+    "zkdDsejAb5hLCpCaEbMR"
+  ]
+}
