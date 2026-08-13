@@ -20,6 +20,7 @@ export interface Noticia {
   excerpt?: string;
   featuredImage?: string;
   categoria: string;
+  perfil?: string;
   imagen: string;
   fecha: string;
   fechaPublicacion?: string;
