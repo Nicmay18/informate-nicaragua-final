@@ -47,45 +47,45 @@
 
 ### Tabla maestra de 37 artículos
 
-| # | ID | Título | Score | Aprob. | Pal. | H2 | P | BR | Issues estructurales | Clasif. |
-|---|-----|--------|-------|--------|------|----|---|----|---------------------|---------|
-| 1 | `1HmobwfngxeXoUofqosD` | Primeros bebés del Día de las Madres nacen en hospitales de… | 92 | false | 572 | 3 | 0 | 0 | NO_P_TAGS | A |
-| 2 | `CypRypZIGLckqywkZq8X` | Nicaragüense sigue desaparecida tras terremotos en Venezuela | 74 | false | 435 | 4 | — | 0 | — | B |
-| 3 | `D7y1TWAyXq7SaNMirIjB` | Dos nicaragüenses fallecen en el extranjero en casos distintos | 80 | false | 388 | 4 | — | 0 | LONG_TITLE(62) | B |
-| 4 | `EcKTeqT7kLcFElUX3DM2` | Dueño de semovientes paga C$769 mil por muerte en Jalapa | 78 | false | 377 | 3 | — | 0 | — | B |
-| 5 | `F4UddilPobcIjIkZ1e55` | Escolta de ULTRAVAL enfrenta juicio por robo en Managua | 78 | false | 718 | 5 | — | 0 | — | B |
-| 6 | `JOfOW7uTxkgDSIezo7Wn` | Capturan acusado de agredir a un hombre en Rivas | 84 | false | 2201 | 6 | — | 7 | BR_SPAM | A |
-| 7 | `NA6PqCReq06PdIMSICEe` | Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa | 86 | false | 2196 | 5 | — | 0 | LONG_TITLE(65) | B |
-| 8 | `e0QJyxs1azyZahzs8VuN` | Venezuela: 164 afectados y 30 mil desaparecidos tras sismos | 88 | false | 448 | 3 | — | 0 | — | B |
-| 9 | `i88RK0Ulgkkzyq6YV4Um` | Chinandega estrena 75 viviendas con servicios completos | 88 | false | 397 | 3 | 9 | 0 | LONG_RESUMEN(164) | A |
-| 10 | `ic2YGP8NQAc6r3VMvy9K` | Venezuela: réplicas continúan con 920 víctimas y miles sin rastro | 88 | false | 463 | 4 | 2 | 13 | BR_SPAM, LONG_TITLE(65) | A |
-| 11 | `kJZTSfqmUGHJKA8SFaE8` | Julieta Venegas interpreta himno cultural del Mundial 2026 | 88 | false | 375 | 2 | 6 | 0 | FEW_H2(2) | A |
-| 12 | `n2Buq4aBhvnrXUcTlwuD` | Capturan a pinolero por llevarse a niña de 13 años | 88 | false | 360 | 3 | 6 | 0 | — | B |
-| 13 | `sH5OCUULzSvZFhRcHXzb` | Cinco agentes fallecen en operativo en Honduras | 88 | false | 608 | 3 | 8 | 0 | — | B |
-| 14 | `7XzL7aTqVYBpTNKgSPxQ` | Puerto Corinto lidera llegada de 11 buques a Nicaragua | 88 | false | 500 | 4 | 13 | 0 | — | B |
-| 15 | `GHbdyeiCzH7Jk0i5RVPA` | Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán | 74 | false | 385 | 3 | 10 | 0 | LONG_TITLE(63) | B |
-| 16 | `H25VVBdDntQpmy13uxdP` | Incendio destruye vivienda en Monseñor Lezcano y deja un herido | 70 | false | 379 | 4 | 1 | 12 | BR_SPAM, LONG_TITLE(63) | B |
-| 17 | `IFFjvOi1HTG0oeiIuIBo` | Costa Rica detiene a palestino con vínculos a Hamás | 88 | false | 455 | 3 | 11 | 0 | — | B |
-| 18 | `Ilzcy77tyF8oFNPytokN` | Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua | 74 | false | 409 | 1 | 6 | 0 | FEW_H2(1) | B |
-| 19 | `JbGRXcj7AiJNPvQRcneT` | Capturan a autores de doble crimen en San Ramón, Matagalpa | 84 | false | 523 | 6 | 10 | 0 | — | B |
-| 20 | `Q19zidw5UoSjUlR1r9JP` | Nicaragua abastece el 47% de lácteos que consume El Salvador | 88 | false | 484 | 3 | 11 | 0 | — | B |
-| 21 | `SD09P4KU8vq4Mq1Vidzz` | Capturan a sujeto por robo de US$30 mil en Jalapa | 78 | false | 744 | 7 | 24 | 0 | — | B |
-| 22 | `SG87LjFIgCWnd6g8EKDq` | Nicaragua invertirá $13.9 millones en 49 camiones de bombero | 76 | false | 545 | 5 | 14 | 0 | — | B |
-| 23 | `VW3uBFbDCb6RR3KCiJ18` | España, Francia y Argentina son favoritas al Mundial 2026 | 74 | false | 743 | 3 | 10 | 0 | — | B |
-| 24 | `ZJpLrlTrusn5Jex8WQgQ` | Después de años prófugo, captura de El Diablo abre interrogante | 78 | false | 435 | 5 | 15 | 0 | LONG_TITLE(63) | B |
-| 25 | `qAcmF4MWTiLsTACCG8v5` | Agresión a mujer en Nindirí activa investigación bajo la Ley 779 | 78 | false | 527 | 4 | 9 | 0 | LONG_TITLE(64), LONG_RESUMEN(162) | B |
-| 26 | `e2xuC463KZm7pAubu9Rl` | Nicaragua conquista el IHF Trophy de Balonmano en C.A | 88 | false | 602 | 6 | 13 | 0 | — | B |
-| 27 | `hscMxXK16XKKq84yY1P6` | Accidentes en Nicaragua dejan un fallecido y varios heridos | 86 | false | 418 | 5 | 15 | 0 | — | B |
-| 28 | `vvWJAwyV8adECw3IGqdy` | Netflix, Max y Disney+ dominan streaming en Nicaragua | 88 | false | 649 | 4 | 7 | 0 | — | B |
-| 29 | `kR3waCnxVDfMfVCV8sAH` | Nicaragua gana oro en relevos mixtos 4x100 en Managua | 88 | false | 618 | 7 | 19 | 0 | — | C |
-| 30 | `qT9tAbCyVpicX7HmoaD0` | Nueva Guinea busca respuestas por muerte de joven de 18 años | 80 | false | 473 | 5 | 11 | 0 | LONG_RESUMEN(162) | C |
-| 31 | `tYX2ZtXwUXg07CHI0ONj` | Fiscalía acusa a madre y padrastro por muerte de niño | 74 | false | 467 | 5 | 8 | 0 | — | C |
-| 32 | `tlIXmTYnv4hIajXOQiup` | Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico | 82 | false | 470 | 7 | 11 | 0 | LONG_TITLE(65) | C |
-| 33 | `tnX05ykqVT6WiYVflSii` | Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador | 74 | false | 629 | 4 | 10 | 0 | — | C |
-| 34 | `uJ076MyMZhQIJYTa1qOW` | Nicaragüense José Salgado resulta afectado en asalto en Austin | 76 | false | 402 | 4 | 9 | 3 | LONG_TITLE(62) | C |
-| 35 | `wiHS5gvNy7U6tORXAhEU` | Colapso en construcción cobra vida de nicaragüense en EE. UU | 80 | false | 404 | 3 | 9 | 0 | — | C |
-| 36 | `yUMAJwJQ1yMJTSb2cdkP` | México, Brasil y Argentina avanzan en el Mundial 2026 | 86 | false | 546 | 3 | 11 | 0 | — | C |
-| 37 | `zkdDsejAb5hLCpCaEbMR` | Nuevo complejo en Masaya reúne Bomberos y Migración | 64 | false | 403 | 4 | 7 | 0 | LONG_RESUMEN(169) | D |
+| # | ID | Título | Score | Aprob. | Perfil | Categoría | Pal. | Blocking issues (MENI) | Originalidad | Contexto | Explicación | Valor | Utilidad | Acción | Clasif. |
+|---|-----|--------|-------|--------|--------|-----------|------|----------------------|-------------|----------|-------------|-------|----------|--------|---------|
+| 1 | `1HmobwfngxeXoUofqosD` | Primeros bebés del Día de las Madres nacen en hospitales de… | 92 | false | REPORTAJE | Nacionales | 572 | Falta: qué cambia, qué institución interviene, qué sigue | Propia | Datos MINSA | Cobertura de hecho | Alta | Información para madres | Envolver en `<p>`, corregir título | A |
+| 2 | `CypRypZIGLckqywkZq8X` | Nicaragüense sigue desaparecida tras terremotos en Venezuela | 74 | false | REPORTAJE | Internacionales | 435 | Falta: qué investiga, qué falta conocer, contexto | Propia | Sin conexión diáspora | Hecho verificable | Alta | Connacionales en Venezuela | Agregar contexto diáspora | B |
+| 3 | `D7y1TWAyXq7SaNMirIjB` | Dos nicaragüenses fallecen en el extranjero en casos distintos | 80 | false | REPORTAJE | Internacionales | 388 | Falta: utilidad para lector, contexto | Propia | Sin contexto diáspora | Hecho verificable | Media | Connacionales en exterior | Corregir título + contexto diáspora | B |
+| 4 | `EcKTeqT7kLcFElUX3DM2` | Dueño de semovientes paga C$769 mil por muerte en Jalapa | 78 | false | REPORTAJE | Sucesos | 377 | Falta: qué falta conocer, antecedentes | Propia | Sin marco legal | Hecho verificable | Media | Precedente legal | Agregar contexto legal (Código Civil) | B |
+| 5 | `F4UddilPobcIjIkZ1e55` | Escolta de ULTRAVAL enfrenta juicio por robo en Managua | 78 | false | REPORTAJE | Sucesos | 718 | Falta: qué falta conocer, utilidad | Propia | Sin contexto ULTRAVAL | Hecho verificable | Media | Impacto en transporte | Agregar contexto institucional ULTRAVAL | B |
+| 6 | `JOfOW7uTxkgDSIezo7Wn` | Capturan acusado de agredir a un hombre en Rivas | 84 | false | INVESTIGACION | Sucesos | 2201 | Falta: utilidad para lector | Propia | Sin contexto seguridad | Detallado | Media | Seguridad local | Reemplazar `<br>` por `<p>` | A |
+| 7 | `NA6PqCReq06PdIMSICEe` | Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa | 86 | false | REPORTAJE | Sucesos | 2196 | Falta: antecedentes, contexto | Propia | Sin patrimonio Monimbó | Detallado | Alta | Patrimonio cultural | Corregir título + contexto patrimonio | B |
+| 8 | `e0QJyxs1azyZahzs8VuN` | Venezuela: 164 afectados y 30 mil desaparecidos tras sismos | 88 | false | REPORTAJE | Internacionales | 448 | Falta: por qué importa en Nicaragua | Propia | Sin conexión diáspora | Hecho verificable | Alta | Connacionales en Venezuela | Agregar conexión diáspora | B |
+| 9 | `i88RK0Ulgkkzyq6YV4Um` | Chinandega estrena 75 viviendas con servicios completos | 88 | false | REPORTAJE | Nacionales | 397 | Falta: qué cambia, qué sigue | Propia | Sin contexto programa | Hecho verificable | Media | Vivienda social | Acortar resumen | A |
+| 10 | `ic2YGP8NQAc6r3VMvy9K` | Venezuela: réplicas continúan con 920 víctimas y miles sin rastro | 88 | false | REPORTAJE | Internacionales | 463 | Falta: por qué importa en Nicaragua | Propia | Sin conexión diáspora | Hecho verificable | Alta | Connacionales en Venezuela | Reemplazar `<br>` + corregir título | A |
+| 11 | `kJZTSfqmUGHJKA8SFaE8` | Julieta Venegas interpreta himno cultural del Mundial 2026 | 88 | false | REPORTAJE | Internacionales | 375 | Falta: por qué importa en Nicaragua | Propia | Sin contexto cultural | Hecho verificable | Baja | Cultura | Agregar H2 adicionales | A |
+| 12 | `n2Buq4aBhvnrXUcTlwuD` | Capturan a pinolero por llevarse a niña de 13 años | 88 | false | REPORTAJE | Internacionales | 360 | Falta: contexto, antecedentes | Propia | Sin marco legal | Hecho verificable | Alta | Protección de menores | Agregar contexto legal (sustracción) | B |
+| 13 | `sH5OCUULzSvZFhRcHXzb` | Cinco agentes fallecen en operativo en Honduras | 88 | false | INVESTIGACION | Internacionales | 608 | Falta: contexto, antecedentes | Propia | Sin contexto regional | Hecho verificable | Alta | Seguridad regional | Agregar contexto seguridad CA | B |
+| 14 | `7XzL7aTqVYBpTNKgSPxQ` | Puerto Corinto lidera llegada de 11 buques a Nicaragua | 88 | false | REPORTAJE | Nacionales | 500 | Falta: contexto, antecedentes | Propia | Sin datos económicos | Hecho verificable | Media | Economía portuaria | Agregar datos cuantitativos EPN | B |
+| 15 | `GHbdyeiCzH7Jk0i5RVPA` | Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán | 74 | false | REPORTAJE | Deportes | 385 | Falta: resultado, contexto, significado | Propia | Sin biografía | Hecho verificable | Media | Deportes Nicaragua | Corregir título + biografía + contexto | B |
+| 16 | `H25VVBdDntQpmy13uxdP` | Incendio destruye vivienda en Monseñor Lezcano y deja un herido | 70 | false | REPORTAJE | Sucesos | 379 | Falta: qué investiga, qué falta | Propia | Sin estadísticas incendios | Hecho verificable | Media | Seguridad ciudadana | Reemplazar `<br>` + título + contexto | B |
+| 17 | `IFFjvOi1HTG0oeiIuIBo` | Costa Rica detiene a palestino con vínculos a Hamás | 88 | false | REPORTAJE | Internacionales | 455 | Falta: por qué importa en Nicaragua | Propia | Sin contexto geopolítico | Hecho verificable | Media | Seguridad regional | Agregar contexto geopolítico | B |
+| 18 | `Ilzcy77tyF8oFNPytokN` | Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua | 74 | false | REPORTAJE | Deportes | 409 | Falta: qué cambia, a quién beneficia | Propia | Sin contexto deportivo | Superficial | Baja | Deportes motor | Agregar H2 + contexto deportivo | A |
+| 19 | `JbGRXcj7AiJNPvQRcneT` | Capturan a autores de doble crimen en San Ramón, Matagalpa | 84 | false | REPORTAJE | Sucesos | 523 | Falta: antecedentes, información adicional | Propia | Sin contexto seguridad | Hecho verificable | Media | Seguridad Matagalpa | Agregar contexto seguridad regional | B |
+| 20 | `Q19zidw5UoSjUlR1r9JP` | Nicaragua abastece el 47% de lácteos que consume El Salvador | 88 | false | REPORTAJE | Nacionales | 484 | Falta: contexto, antecedentes | Propia | Sin datos económicos | Hecho verificable | Alta | Economía láctea | Agregar datos MAG exportación | B |
+| 21 | `SD09P4KU8vq4Mq1Vidzz` | Capturan a sujeto por robo de US$30 mil en Jalapa | 78 | false | INVESTIGACION | Sucesos | 744 | Falta: antecedentes, información adicional | Propia | Sin contexto seguridad | Detallado | Media | Seguridad Nueva Segovia | Agregar contexto seguridad regional | B |
+| 22 | `SG87LjFIgCWnd6g8EKDq` | Nicaragua invertirá $13.9 millones en 49 camiones de bombero | 76 | false | REPORTAJE | Nacionales | 545 | Falta: qué investiga, qué falta | Propia | Sin detalles técnicos | Hecho verificable | Alta | Seguridad ciudadana | Agregar contexto capacidad DGB | B |
+| 23 | `VW3uBFbDCb6RR3KCiJ18` | España, Francia y Argentina son favoritas al Mundial 2026 | 74 | false | INVESTIGACION | Deportes | 743 | Falta: contexto, antecedentes | Propia | Sin análisis deportivo | Superficial | Baja | Deportes | Agregar análisis FIFA | B |
+| 24 | `ZJpLrlTrusn5Jex8WQgQ` | Después de años prófugo, captura de El Diablo abre interrogante | 78 | false | REPORTAJE | Internacionales | 435 | Falta: cómo afecta comunidad, utilidad | Propia | Sin historial delictivo | Hecho verificable | Media | Seguridad ciudadana | Corregir título + historial delictivo | B |
+| 25 | `qAcmF4MWTiLsTACCG8v5` | Agresión a mujer en Nindirí activa investigación bajo la Ley 779 | 78 | false | REPORTAJE | Sucesos | 527 | Falta: antecedentes, información adicional | Propia | Sin contexto Ley 779 | Hecho verificable | Alta | Violencia de género | Corregir título + resumen + contexto Ley 779 | B |
+| 26 | `e2xuC463KZm7pAubu9Rl` | Nicaragua conquista el IHF Trophy de Balonmano en C.A | 88 | false | REPORTAJE | Deportes | 602 | Falta: contexto, antecedentes | Propia | Sin resultados detallados | Hecho verificable | Alta | Deportes Nicaragua | Agregar resultados + contexto balonmano | B |
+| 27 | `hscMxXK16XKKq84yY1P6` | Accidentes en Nicaragua dejan un fallecido y varios heridos | 86 | false | REPORTAJE | Sucesos | 418 | Falta: qué cambia, a quién beneficia | Propia | Sin estadísticas | Hecho verificable | Media | Seguridad vial | Agregar detalles + estadísticas | B |
+| 28 | `vvWJAwyV8adECw3IGqdy` | Netflix, Max y Disney+ dominan streaming en Nicaragua | 88 | false | REPORTAJE | Tecnología | 649 | Falta: cómo afecta precios, qué significa | Propia | Sin datos penetración | Hecho verificable | Alta | Consumo tecnología | Agregar datos penetración streaming | B |
+| 29 | `kR3waCnxVDfMfVCV8sAH` | Nicaragua gana oro en relevos mixtos 4x100 en Managua | 88 | false | REPORTAJE | Deportes | 618 | Falta: qué cambia, qué sigue | Propia | Sin contexto atlético | Resultado deportivo | Alta | Deportes Nicaragua | Enriquecer con resultados + tiempos | C |
+| 30 | `qT9tAbCyVpicX7HmoaD0` | Nueva Guinea busca respuestas por muerte de joven de 18 años | 80 | false | REPORTAJE | Sucesos | 473 | Falta: qué falta, cómo afecta comunidad | Propia | Sin contexto social | Hecho verificable | Alta | Seguridad Nueva Guinea | Acortar resumen + contexto social | C |
+| 31 | `tYX2ZtXwUXg07CHI0ONj` | Fiscalía acusa a madre y padrastro por muerte de niño | 74 | false | REPORTAJE | Sucesos | 467 | Falta: qué investiga, antecedentes | Propia | Sin contexto legal | Hecho verificable | Alta | Protección de menores | Agregar contexto Ley 877 Niñez | C |
+| 32 | `tlIXmTYnv4hIajXOQiup` | Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico | 82 | false | REPORTAJE | Internacionales | 470 | Falta: qué falta, utilidad lector | Propia | Sin contexto diaspórico | Hecho verificable | Media | Connacionales en PR | Corregir título + contexto diáspora | C |
+| 33 | `tnX05ykqVT6WiYVflSii` | Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador | 74 | false | REPORTAJE | Deportes | 629 | Falta: quiénes jugaron, cómo queda tabla | Propia | Sin contexto deportivo | Superficial | Media | Deportes infantil | Enriquecer con jugadores + expectativas | C |
+| 34 | `uJ076MyMZhQIJYTa1qOW` | Nicaragüense José Salgado resulta afectado en asalto en Austin | 76 | false | REPORTAJE | Internacionales | 402 | Falta: qué falta, utilidad lector | Propia | Sin contexto diaspórico | Hecho verificable | Media | Connacionales en Texas | Corregir título + `<br>` + contexto | C |
+| 35 | `wiHS5gvNy7U6tORXAhEU` | Colapso en construcción cobra vida de nicaragüense en EE. UU | 80 | false | REPORTAJE | Internacionales | 404 | Falta: qué falta, cómo afecta comunidad | Propia | Sin contexto laboral | Hecho verificable | Media | Connacionales en EE.UU. | Agregar contexto laboral OSHA | C |
+| 36 | `yUMAJwJQ1yMJTSb2cdkP` | México, Brasil y Argentina avanzan en el Mundial 2026 | 86 | false | REPORTAJE | Deportes | 546 | Falta: por qué importa en Nicaragua | Propia | Sin perspectiva NI | Hecho verificable | Baja | Deportes | Enriquecer con análisis desde NI | C |
+| 37 | `zkdDsejAb5hLCpCaEbMR` | Nuevo complejo en Masaya reúne Bomberos y Migración | 64 | false | REPORTAJE | Nacionales | 403 | Falta: qué investiga, qué falta, utilidad | Propia | Cercano a comunicado | Superficial | Baja | Información institucional | Reescribir con identidad NI | D |
 
 ---
 
