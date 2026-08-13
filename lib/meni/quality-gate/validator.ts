@@ -59,7 +59,11 @@ export function extractEntities(textoPlano: string): EntityMap {
 
 function extraerEdadesPorPersona(texto: string): Map<string, Set<string>> {
   const map = new Map<string, Set<string>>();
-  const nameAgePattern = /([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})[^.!?\d]{0,80}(\d{1,3})\s*años/gi;
+  // Case-sensitive (sin flag i): los nombres propios en español SIEMPRE empiezan
+  // con mayúscula. Con flag i, frases como "Su madre" eran capturadas como nombres
+  // de persona, causando falsos positivos de contradicción cuando dos madres
+  // distintas tenían edades distintas.
+  const nameAgePattern = /([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})[^.!?\d]{0,80}(\d{1,3})\s*años/g;
   const matches = Array.from(texto.matchAll(nameAgePattern));
   for (const m of matches) {
     const nombre = m[1].trim();
