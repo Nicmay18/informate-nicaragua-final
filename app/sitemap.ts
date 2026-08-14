@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getNews } from '@/lib/data';
+import { shouldIndexArticle } from '@/lib/editorial/canonical';
 import { isToxicSlug } from '@/lib/seo-toxic';
 import { getAllAuthors } from '@/lib/authors';
 import { getAllEvergreen } from '@/lib/evergreen';
@@ -107,7 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const cleanArticles = articles.filter(article => {
       if (isToxicSlug(article.slug)) return false;
-      if (article.estado === 'borrador' || article.estado === 'archivado') return false;
+      if (!shouldIndexArticle(article)) return false;
       return true;
     });
 

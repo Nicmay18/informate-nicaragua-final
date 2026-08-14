@@ -146,6 +146,36 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'entrenamiento', weight: 1.2 },
     { keyword: 'deportivo', weight: 1.5 },
     { keyword: 'deportiva', weight: 1.5 },
+    { keyword: 'prospecto', weight: 1.5 },
+    { keyword: 'bono', weight: 1.2 },
+    { keyword: 'beisbol', weight: 2 },
+    { keyword: 'beisbolista', weight: 1.5 },
+    { keyword: 'pelota', weight: 1 },
+    { keyword: 'mlb', weight: 2 },
+    { keyword: 'grandes ligas', weight: 2 },
+    { keyword: 'catcher', weight: 1.5 },
+    { keyword: 'pitcher', weight: 1.5 },
+    { keyword: 'lanzador', weight: 1.5 },
+    { keyword: 'bateador', weight: 1.5 },
+    { keyword: 'jardinero', weight: 1.5 },
+    { keyword: 'jonron', weight: 1.5 },
+    { keyword: 'jonrón', weight: 1.5 },
+    { keyword: 'cuadrangular', weight: 1.5 },
+    { keyword: 'doble', weight: 1 },
+    { keyword: 'triple', weight: 1 },
+    { keyword: 'hits', weight: 1 },
+    { keyword: 'debut', weight: 1.2 },
+    { keyword: 'equipo', weight: 0.8 },
+    { keyword: 'liga', weight: 0.8 },
+    { keyword: 'club', weight: 1 },
+    { keyword: 'campeonato', weight: 1.2 },
+    { keyword: 'firmo', weight: 1 },
+    { keyword: 'firmó', weight: 1.2 },
+    { keyword: 'contrato', weight: 1.2 },
+    { keyword: 'acordado', weight: 1 },
+    { keyword: 'mets', weight: 1.5 },
+    { keyword: 'yankees', weight: 1.5 },
+    { keyword: 'dodgers', weight: 1.5 },
   ],
   cultura: [
     { keyword: 'arte', weight: 1 },
@@ -418,7 +448,20 @@ export function detectContentProfile(
   }
   // Deportes gana sobre internacional cuando hay señales deportivas claras
   if (scores.deportes > 0 && scores.internacional > 0) {
-    scores.deportes += 3;
+    scores.deportes += 5;
+  }
+
+  // Si hay señales de firma/prospecto deportivo (bono, MLB, contrato de beisbol),
+  // reducir el peso de internacional para evitar que un equipo extranjero gane.
+  const strongSportsSignals = new Set([
+    'prospecto', 'bono', 'beisbol', 'beisbolista', 'mlb', 'grandes ligas',
+    'catcher', 'pitcher', 'lanzador', 'bateador', 'jardinero', 'jonron', 'jonrón',
+    'cuadrangular', 'doble', 'triple', 'hits', 'debut', 'mets', 'yankees', 'dodgers',
+    'campeonato', 'contrato', 'firmo', 'firmó',
+  ]);
+  const hasStrongSports = allMatched.some((kw) => strongSportsSignals.has(kw));
+  if (hasStrongSports && scores.internacional > 0) {
+    scores.internacional = Math.max(0, scores.internacional - 2);
   }
   // Nacionales gana sobre internacional cuando la noticia es sobre Nicaragua
   if (scores.nacionales > 0 && scores.internacional > 0) {

@@ -48,14 +48,13 @@ function appliesToProfile(mensaje: string, profile: MeniContentProfile): boolean
     salud: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     deportes: ['sintoma', 'como se transmite', 'marco legal'],
     cultura: ['sintoma', 'como se transmite'],
-    espectaculos: ['sintoma', 'como se transmite', 'marco legal', 'fallecido', 'accidente'],
+    espectaculos: ['sintoma', 'como se transmite', 'marco legal', 'accidente', 'trafico', 'investigacion policial'],
     tecnologia: ['sintoma', 'como se transmite'],
     internacional: [],
     educacion: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     ambiente: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     turismo: ['sintoma', 'como se transmite', 'marco legal', 'quien gana', 'quien pierde', 'salud', 'prevencion', 'vacuna', 'enfermedad', 'hospital', 'medico', 'brote', 'epidemia', 'contagio'],
     gastronomia: ['sintoma', 'como se transmite', 'marco legal'],
-    espectaculos: ['sintoma', 'como se transmite', 'marco legal', 'brote', 'epidemia', 'contagio'],
   };
 
   const forbidden = profileStopwords[profile] || [];

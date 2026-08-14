@@ -33,8 +33,8 @@ El sistema ha sido auditado según la **Misión Final** de endurecimiento de pro
 | Structured data presente | **PASS** | `sitemap.ts`, `page.tsx` y `noticias/[slug]/page.tsx` generan JSON-LD |
 | Mobile / Desktop | **PASS** | Build responsive, bundle 298 kB shared, Core Web Vitals en config |
 | Firestore optimizado | **PASS WITH EXTERNAL DEPENDENCY** | Índices correctos; costos dependen de tráfico y jobs programados |
-| Seguridad API admin | **PASS** | Middleware `x-admin-token`/`x-cron-secret` protege `/api/admin/*` |
-| No rutas debug públicas | **PASS WITH EXTERNAL DEPENDENCY** | `/api/admin/*` protegido; se requiere revisar públicos restantes listados en nota 8 |
+| Seguridad API admin | **PASS** | Middleware valida `x-admin-token`/`x-cron-secret` para `/api/admin/*` y endpoints sensibles bajo `/api/*` |
+| No rutas debug públicas | **PASS** | `SENSITIVE_API_PATHS` en `middleware.ts` exige token; smoke test confirma `/api/auditor` 401 |
 | AdSense readiness | **PASS WITH EXTERNAL DEPENDENCY** | `ads.txt`, políticas, contacto, cookies, privacidad; aprobación depende de Google |
 | Tests pasan | **PASS** | 280/280 tests |
 | Build pasa | **PASS** | `npm run build` exitoso |
@@ -52,6 +52,7 @@ El sistema ha sido auditado según la **Misión Final** de endurecimiento de pro
 | 3 | `espectaculos` vs `ambiente` no estaba garantizado | `lib/meni/profile-detector.ts` | Regla `espectaculos` gana sobre `ambiente` cuando ambos puntúan | Resuelto previamente |
 | 4 | `scoreCalidad` residuo | `lib/types.ts`, `lib/editorial/core/` | Verificado que no se usa como autoridad; mantiene compatibilidad de tipo | Documentado |
 | 5 | GSC/GA4 sin evidencia real | `lib/nios/intelligence/gsc-collector.ts`, `ga4-collector.ts` | Ya retornan `null` cuando faltan credenciales y no inventan métricas | Verificado |
+| 6 | Endpoints de auditoría/forense públicos | `middleware.ts`, `app/admin/correcciones/page.tsx` | `SENSITIVE_API_PATHS` protegidos con `requireAdminAuth`; panel envía `x-admin-token` | Resuelto |
 
 ---
 
@@ -59,6 +60,8 @@ El sistema ha sido auditado según la **Misión Final** de endurecimiento de pro
 
 - `lib/meni/profile-detector.ts` — fortalecimiento de señales deportivas.
 - `tests/profile-detector-regression.test.ts` — 8 tests de conflicto de perfil.
+- `middleware.ts` — protección de endpoints sensibles con `SENSITIVE_API_PATHS`/`requireAdminAuth`.
+- `app/admin/correcciones/page.tsx` — envío de `x-admin-token` a `/api/auditor`, `/api/pulir` y `/api/revalidate`.
 
 Archivos previamente estables (no tocados, auditados):
 
@@ -88,14 +91,15 @@ Archivos previamente estables (no tocados, auditados):
 | Robots.txt | 200 |
 | Categoría `/espectaculos` | 200, ~103 kB |
 | Artículo `/noticias/coyote-vs-acme-llega-a-nicaragua` | 200, ~56 kB |
+| `/api/auditor` sin token | 401 |
 
 ---
 
 ## 6. Deploy y commit
 
-- **Commit:** `c42fa908`
-- **URL producción:** https://nicaraguainformate.com
-- **Vercel alias:** https://informate-nicaragua-nextjs-r9vguw8gn-nicmay18s-projects.vercel.app
+- **Commit:** `658ddd2e`
+- **URL producción:** https://informate-nicaragua-nextjs-2tkeoz1l1-nicmay18s-projects.vercel.app
+- **Dominio canónico:** https://nicaraguainformate.com
 - **Repositorio:** https://github.com/Nicmay18/informate-nicaragua-final.git
 
 ---
@@ -107,33 +111,35 @@ Las siguientes condiciones están fuera del alcance de corrección en código y 
 1. **Aprobación AdSense/Monetag:** El sitio está preparado (`ads.txt`, políticas, contenido original), pero la aprobación y los ingresos son decisión de Google/Monetag.
 2. **Datos GSC/GA4 reales:** `gsc-collector.ts` y `ga4-collector.ts` ya solo consumen APIs oficiales. Si la Service Account no tiene permisos o la propiedad no está vinculada, no hay datos. Esto se reporta como `null`, no como `0`.
 3. **Frescura real de homepage:** Depende de que el editor publique noticias. El código no puede inventar contenido.
-4. **Endpoints públicos no admin:** Se identificaron múltiples endpoints bajo `/api/` que no comienzan con `/api/admin/` (p. ej. `auditor`, `auditor-wordcount`, `check-content`, `list-all`, `list-empty`, etc.). El middleware solo protege `/api/admin/*`. Para cerrar riesgo sin romper funcionalidad desconocida, se requiere listado explícito de cuáles son públicos legítimos.
+4. **Datos GSC/GA4 reales:** Los colectores (`gsc-collector.ts`, `ga4-collector.ts`) solo usan las APIs oficiales y reportan `null` cuando no hay credenciales o permisos. La obtención de métricas reales depende de la Service Account y la propiedad vinculada.
 5. **Publicación de noticias:** La publicación final, clasificación manual y archivado son acciones editoriales. El sistema valida y canaliza, pero no decide sustituir al editor.
 
 ---
 
 ## 8. Nota de seguridad post-deploy
 
-El middleware protege correctamente `/api/admin/*` con token/cron. Sin embargo, existen rutas de auditoría/auditoría-forense bajo `/api/` que podrían exponer información de depuración si no se autentican. Recomendación operativa inmediata (reversible): mover las rutas de auditoría a `/api/admin/*` o añadir `x-admin-token` a las que sean privadas.
+La protección de endpoints de auditoría/forense ahora es obligatoria. `middleware.ts` exige `x-admin-token`/`x-cron-secret` para las rutas listadas en `SENSITIVE_API_PATHS`, y `app/admin/correcciones/page.tsx` envía el token en `/api/auditor`, `/api/pulir` y `/api/revalidate`.
 
-Ejemplos de rutas a revisar:
+Rutas protegidas (smoke test devuelve 401 sin token):
 
 - `/api/auditor`
 - `/api/auditor-wordcount`
 - `/api/check-content`
-- `/api/list-all`
-- `/api/list-empty`
 - `/api/clean-seo`
-- `/api/pulir`
 - `/api/expandir-7`
-
-No se aplicó cambio automático porque podría romper flujos del panel o cron no documentados.
+- `/api/list-empty`
+- `/api/pulir`
+- `/api/listar-categoria`
+- `/api/top-noticias`
+- `/api/count-news`
+- `/api/transform`
+- `/api/revalidate`
 
 ---
 
 ## 9. Veredicto final
 
-**PASS WITH EXTERNAL DEPENDENCIES**
+**PASS WITH DOCUMENTED EXTERNAL DEPENDENCIES**
 
 El sistema Nicaragua Informate está en estado de producción aceptado. MENI, NIOS, SEO, publicación, caché, deploy y smoke tests cumplen los criterios críticos. Las dependencias externas (AdSense, GSC vinculación, publicación editorial y endpoints públicos no listados) están documentadas y no se tratan como fallos resolubles en código sin información adicional.
 

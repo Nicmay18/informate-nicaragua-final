@@ -85,7 +85,11 @@ export default function CorreccionesPage() {
     (async () => {
       try {
         setAuditorLoading(true);
-        const resp = await fetch('/api/auditor', { cache: 'no-store' });
+        const auditorToken = getAdminToken();
+        const resp = await fetch('/api/auditor', {
+          cache: 'no-store',
+          headers: { 'x-admin-token': auditorToken },
+        });
         const data = await resp.json();
         const peligros = Array.isArray(data) 
           ? data.filter((item: AuditorItem) => item?.nivel?.includes('PELIGRO')) 
@@ -134,9 +138,10 @@ export default function CorreccionesPage() {
   async function revalidateArticle(article: NewsDoc) {
     const categorySlug = categoryToSlug(article.categoria || 'General');
     const articleSlug = article.slug || '';
+    const revalToken = getAdminToken();
     await fetch('/api/revalidate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-admin-token': revalToken },
       body: JSON.stringify({ path: '/', categorySlug, articleSlug }),
     });
   }
@@ -144,7 +149,11 @@ export default function CorreccionesPage() {
   // Re-auditar noticia después de aplicar fix
   async function reauditNoticia(slug: string): Promise<{score: number; nivel: string; palabras: number} | null> {
     try {
-      const resp = await fetch(`/api/auditor?slug=${encodeURIComponent(slug)}&recheck=true`, { cache: 'no-store' });
+      const recheckToken = getAdminToken();
+      const resp = await fetch(`/api/auditor?slug=${encodeURIComponent(slug)}&recheck=true`, {
+        cache: 'no-store',
+        headers: { 'x-admin-token': recheckToken },
+      });
       if (!resp.ok) return null;
       const data = await resp.json();
       if (Array.isArray(data) && data.length > 0) {
@@ -165,9 +174,10 @@ export default function CorreccionesPage() {
       }
 
       // Llamar a la API de pulir para mejorar el contenido
+      const pulirToken = getAdminToken();
       const pulirResp = await fetch('/api/pulir', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': pulirToken },
         body: JSON.stringify({
           titulo: article.titulo || '',
           contenido: article.contenido || '',

@@ -57,6 +57,44 @@ function goneResponse(): NextResponse {
 
 const BLOCKED_API_PATHS = ['/api/audio', '/api/view', '/api/views'];
 
+// Endpoints de diagnóstico/forense que no deben ser públicos
+const SENSITIVE_API_PATHS = [
+  '/api/auditor',
+  '/api/auditor-wordcount',
+  '/api/check-content',
+  '/api/clean-seo',
+  '/api/expandir-7',
+  '/api/list-empty',
+  '/api/pulir',
+  '/api/listar-categoria',
+  '/api/top-noticias',
+  '/api/count-news',
+  '/api/transform',
+  '/api/revalidate',
+];
+
+function isSensitiveApiPath(pathname: string): boolean {
+  return SENSITIVE_API_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+function requireAdminAuth(request: NextRequest): NextResponse | null {
+  const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const cronSecret = request.headers.get('x-cron-secret') || '';
+  const validAdminKey = process.env.ADMIN_API_KEY || '';
+  const validCronSecret = process.env.CRON_SECRET || '';
+
+  const isValidAdmin = validAdminKey.length > 0 && timingSafeCompare(adminToken, validAdminKey);
+  const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
+
+  if (!isValidAdmin && !isValidCron) {
+    return NextResponse.json(
+      { error: 'Unauthorized', code: 'INVALID_AUTH' },
+      { status: 401 }
+    );
+  }
+  return null;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ua = request.headers.get('user-agent') || '';
@@ -67,20 +105,8 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
-    const cronSecret = request.headers.get('x-cron-secret') || '';
-    const validAdminKey = process.env.ADMIN_API_KEY || '';
-    const validCronSecret = process.env.CRON_SECRET || '';
-
-    const isValidAdmin = validAdminKey.length > 0 && timingSafeCompare(adminToken, validAdminKey);
-    const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
-
-    if (!isValidAdmin && !isValidCron) {
-      return NextResponse.json(
-        { error: 'Unauthorized', code: 'INVALID_AUTH' },
-        { status: 401 }
-      );
-    }
+    const unauthorized = requireAdminAuth(request);
+    if (unauthorized) return unauthorized;
 
     const response = NextResponse.next();
     response.headers.set('X-RateLimit-Limit', '60');
@@ -90,6 +116,11 @@ export function middleware(request: NextRequest) {
 
   if (BLOCKED_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     return new NextResponse(null, { status: 404 });
+  }
+
+  if (isSensitiveApiPath(pathname)) {
+    const unauthorized = requireAdminAuth(request);
+    if (unauthorized) return unauthorized;
   }
 
   if (BLOCKED_BOTS.some((bot) => ua.includes(bot))) {

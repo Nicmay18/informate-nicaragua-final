@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { isToxicSlug } from '@/lib/seo-toxic';
 import { safeDate } from '@/app/sitemap';
+import { shouldIndexArticle } from '@/lib/editorial/canonical';
 import { logger } from '@/lib/logger';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -25,7 +26,7 @@ async function fetchNewsSitemapRaw() {
   return articles
     .filter((a) => {
       const d = safeDate(a.fecha);
-      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs && !isToxicSlug(a.slug) && a.estado !== 'borrador' && a.estado !== 'archivado';
+      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs && !isToxicSlug(a.slug) && shouldIndexArticle(a);
     })
     .map((a) => ({
       slug: a.slug,

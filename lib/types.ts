@@ -85,7 +85,21 @@ export type Article = Noticia;
 /**
  * Categorías válidas para noticias
  */
-export type Category = 'Nacionales' | 'Sucesos' | 'Internacionales' | 'Tecnología' | 'Deportes' | 'Espectáculos';
+export type Category =
+  | 'Nacionales'
+  | 'Sucesos'
+  | 'Internacionales'
+  | 'Tecnología'
+  | 'Deportes'
+  | 'Espectáculos'
+  | 'Cultura'
+  | 'Economía'
+  | 'Salud'
+  | 'Ambiente'
+  | 'Turismo'
+  | 'Educación'
+  | 'Gastronomía'
+  | 'Política';
 
 /**
  * Configuración de categorías con colores e iconos
@@ -98,6 +112,14 @@ export const CATEGORIES = [
   { name: 'Tecnología', color: '#0ea5e9', icon: 'Cpu' },
   { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
   { name: 'Espectáculos', color: '#ec4899', icon: 'Star' },
+  { name: 'Cultura', color: '#a855f7', icon: 'Palette' },
+  { name: 'Economía', color: '#0d9488', icon: 'TrendingUp' },
+  { name: 'Salud', color: '#2563eb', icon: 'Heart' },
+  { name: 'Ambiente', color: '#65a30d', icon: 'TreePine' },
+  { name: 'Turismo', color: '#ea580c', icon: 'Plane' },
+  { name: 'Educación', color: '#f59e0b', icon: 'GraduationCap' },
+  { name: 'Gastronomía', color: '#db2777', icon: 'ChefHat' },
+  { name: 'Política', color: '#475569', icon: 'Landmark' },
 ] as const;
 
 /**
@@ -127,7 +149,7 @@ export const FALLBACK_IMAGE = '/logo.webp';
  * @returns true si la categoría es válida
  */
 export function isValidCategory(category: string): category is Category {
-  return CATEGORIES.some(cat => cat.name === category);
+  return CATEGORIES.some(cat => cat.name.toLowerCase() === category.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
 }
 
 /** Convierte nombre de categoría a slug URL (sin tildes, minúsculas) */
@@ -152,7 +174,14 @@ export function slugToCategory(slug: string): Category | null {
     tecnologia: 'Tecnología',
     deportes: 'Deportes',
     espectaculos: 'Espectáculos',
-    cultura: 'Espectáculos',
+    cultura: 'Cultura',
+    economia: 'Economía',
+    salud: 'Salud',
+    ambiente: 'Ambiente',
+    turismo: 'Turismo',
+    educacion: 'Educación',
+    gastronomia: 'Gastronomía',
+    politica: 'Política',
   };
   return map[slug] || null;
 }

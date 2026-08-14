@@ -165,4 +165,14 @@ describe('MENI Profile Detector — Regression Tests', () => {
     );
     expect(result.profile_detected).toBe('tecnologia');
   });
+
+  it('Conflicto 9: prospecto de beisbol firma con equipo de MLB → deportes (NOT internacional)', () => {
+    const result = detectContentProfile(
+      'Josh Dixon habría acordado US$1.4 millones con los Mets',
+      'El joven prospecto nicaragüense Josh Dixon, originario de Corn Island y de 15 años, habría alcanzado un acuerdo por un bono de US$1.4 millones con los Mets de Nueva York. El beisbolista firmó su contrato con el equipo de las Grandes Ligas.',
+      'Prospecto nicaragüense firma bono con los Mets de Nueva York',
+    );
+    expect(result.profile_detected).toBe('deportes');
+    expect(result.profile_detected).not.toBe('internacional');
+  });
 });

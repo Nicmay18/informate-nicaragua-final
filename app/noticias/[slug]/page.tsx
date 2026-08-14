@@ -3,6 +3,7 @@ import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import { isPublicArticle } from '@/lib/editorial/canonical';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -166,7 +167,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
-  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || noticia.estado === 'borrador' || noticia.estado === 'archivado') return notFound();
+  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || !isPublicArticle(noticia)) return notFound();
 
   if (noticia.slug && noticia.slug !== slug) {
     permanentRedirect(`/noticias/${noticia.slug}`);

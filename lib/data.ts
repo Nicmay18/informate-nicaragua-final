@@ -3,6 +3,7 @@ import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
+import { getEditorialDecision, isPublicArticle, resolveCanonicalCategoria } from './editorial/canonical';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -118,7 +119,7 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
     resumen: data.resumen || '',
     contenido: data.contenido,
-    categoria: data.categoria || 'Actualidad',
+    categoria: resolveCanonicalCategoria(data.perfil, data.categoria),
     perfil: data.perfil || '',
     imagen: normalizeImage(data.imagen || ''),
     fecha: safeDateString(data.fecha),
@@ -146,17 +147,11 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
 }
 
 /**
+ * @deprecated Use isPublicArticle from lib/editorial/canonical.
  * Filtro canónico de artículos aptos para portada/listados.
- * Regla: aprobadoMeni === true AND publicado === true AND estado !== 'borrador' AND archived !== true
  */
 export function isPublicNews(data: Partial<Noticia>): boolean {
-  return (
-    data.aprobadoMeni === true &&
-    data.publicado !== false &&
-    data.archived !== true &&
-    data.estado !== 'borrador' &&
-    data.estado !== 'archivado'
-  );
+  return isPublicArticle(data);
 }
 
 export function invalidateFirestoreCache() {
@@ -305,13 +300,14 @@ const _cachedGetBySlug = unstable_cache(
           logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
           return null;
         }
-        return {
+        const noticia: Noticia = {
           id: doc.id,
           slug: docSlug,
           titulo,
           resumen: data.resumen || '',
           contenido,
-          categoria: data.categoria || 'Actualidad',
+          categoria: resolveCanonicalCategoria(data.perfil, data.categoria),
+          perfil: data.perfil || '',
           imagen: normalizeImage(data.imagen || ''),
           fecha: safeDateString(data.fecha),
           fechaActualizacion: safeDateString(data.fechaActualizacion),
@@ -326,12 +322,20 @@ const _cachedGetBySlug = unstable_cache(
           metaDescription: data.metaDescription || data.metaDescripcion || '',
           keywords: data.keywords || '',
           estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
+          publicado: data.publicado,
+          aprobadoMeni: data.aprobadoMeni,
+          archived: data.archived,
           noindex: !!data.noindex,
           fuente: data.fuente,
           fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
             ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
             : undefined,
         };
+        if (!isPublicArticle(noticia)) {
+          logger.warn('[data.ts] Noticia no apta para publicación según MENI:', { slug: docSlug, razon: getEditorialDecision(noticia).razon });
+          return null;
+        }
+        return noticia;
       }
     } catch (err) {
       logger.error('[data.ts] getNewsBySlug error:', err instanceof Error ? err.message : String(err));
@@ -356,13 +360,24 @@ export async function getAllSlugs(): Promise<string[]> {
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
-      .select('slug')
+      .select('slug', 'aprobadoMeni', 'publicado', 'archived', 'estado', 'noindex', 'perfil', 'categoria')
       .limit(2000)
       .get();
 
     return snap.docs
-      .map((d: any) => d.data().slug)
-      .filter(Boolean);
+      .map((d: any) => {
+        const data = d.data() as FirestoreNoticiaData;
+        const article: Partial<Noticia> = {
+          slug: data.slug,
+          aprobadoMeni: data.aprobadoMeni,
+          publicado: data.publicado,
+          archived: data.archived,
+          estado: data.estado,
+          noindex: data.noindex,
+        };
+        return isPublicArticle(article) ? data.slug : null;
+      })
+      .filter(Boolean) as string[];
   } catch (err) {
     logger.error('[data.ts] getAllSlugs error:', err instanceof Error ? err.message : String(err));
     return [];

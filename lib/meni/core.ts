@@ -68,7 +68,6 @@ const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   ambiente: 'Ambiente',
   turismo: 'Turismo',
   gastronomia: 'Cultura',
-  espectaculos: 'Espectáculos',
 };
 
 function findInvalidScoreSource(editorialDecision: any, editorialDna: any): string {
