@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
         publicado: data.publicado !== false,
         puntosClave: data.puntosClave || [],
         palabras: data.palabras || 0,
-        nivel: data.nivel || null,
+        nivel: data.nivel || 'SIN NIVEL',
         nivelScore: data.nivelScore || 0,
         departamento: data.departamento || '',
         keywords: data.keywords || '',
