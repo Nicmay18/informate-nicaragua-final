@@ -1,9 +1,9 @@
 import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
-import { getLatestNews, getTrendingNews, getPopularNews } from '@/lib/db/homepage';
-import { diversifyNoticias } from '@/lib/diversify';
+import { getHomePageData } from '@/lib/db/homepage';
 import { checkHomeDiversity } from '@/lib/home-balance';
 import { checkBrandHealth } from '@/lib/brand-health';
+import type { HomePageData } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
 import { logger } from '@/lib/logger';
@@ -60,28 +60,25 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  let noticias: Noticia[] = [];
-  let masLeidas: Noticia[] = [];
-  let populares: Noticia[] = [];
+  let data: HomePageData | null = null;
 
   try {
-    const [latest, trending, popular] = await Promise.all([
-      getLatestNews(40),
-      getTrendingNews(20),
-      getPopularNews(20),
-    ]);
-    // HomePagePro ya ordena por fecha desc (cronológico) internamente.
-    // No reordenar por score aquí — la frescura es la prioridad de la portada.
-    noticias = latest;
-    masLeidas = diversifyNoticias(trending, 5, 2);
-    populares = diversifyNoticias(popular, 5, 2);
+    data = await getHomePageData();
 
-    const homeHealth = checkHomeDiversity(noticias.slice(0, 30));
+    const allVisible = [
+      ...(data.hero ? [data.hero] : []),
+      ...data.ultimas,
+      ...data.enPortada,
+      ...data.breaking,
+      ...Object.values(data.porCategoria).flat(),
+    ];
+
+    const homeHealth = checkHomeDiversity(allVisible.slice(0, 30));
     if (!homeHealth.balanced) {
       logger.warn('[HomePage] Home Diversity Check:', homeHealth.alerts.join(' | '));
     }
 
-    const brandHealth = checkBrandHealth(noticias.slice(0, 10));
+    const brandHealth = checkBrandHealth(allVisible.slice(0, 10));
     const critical = brandHealth.filter((a) => a.level !== 'ok');
     if (critical.length > 0) {
       logger.warn('[HomePage] Brand Health:', critical.map((a) => a.message).join(' | '));
@@ -91,7 +88,7 @@ export default async function HomePage() {
   }
 
   // Top 6 noticias para structured data (Google puede mostrarlas en rich snippets / Top Stories)
-  const topStories = noticias.slice(0, 6);
+  const topStories: Noticia[] = data ? [data.hero, ...data.ultimas].filter((n): n is Noticia => n !== null).slice(0, 6) : [];
   const homeItemList = topStories.length > 0
     ? {
         '@context': 'https://schema.org',
@@ -117,7 +114,7 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      <HomePagePro noticias={noticias} masLeidas={masLeidas} populares={populares} />
+      {data ? <HomePagePro data={data} /> : <HomePagePro data={{ hero: null, ultimas: [], enPortada: [], breaking: [], porCategoria: {}, masLeidas: [] }} />}
     </>
   );
 }

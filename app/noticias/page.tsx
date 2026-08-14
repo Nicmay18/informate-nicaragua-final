@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { getNewsPaginated, getNewsCount, getMasLeidas, PAGE_SIZE } from '@/lib/data';
 import { categoryToSlug, slugToCategory } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
+import type { HomePageData } from '@/lib/db/homepage';
 import PaginationWrapper from '@/components/PaginationWrapper';
 import HomePagePro from '@/components/HomePagePro';
 
@@ -90,6 +91,16 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
 
+  const [hero, ...rest] = noticias;
+  const homeData: HomePageData = {
+    hero: hero ?? null,
+    ultimas: rest,
+    enPortada: [],
+    breaking: [],
+    porCategoria: {},
+    masLeidas,
+  };
+
   return (
     <>
       <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 20px 0' }}>
@@ -102,7 +113,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         currentPage={currentPage}
         totalPages={totalPages}
       >
-        <HomePagePro noticias={noticias} masLeidas={masLeidas} isNoticiasPage={true} />
+        <HomePagePro data={homeData} />
       </PaginationWrapper>
     </>
   );

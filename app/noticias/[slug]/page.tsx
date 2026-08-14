@@ -1,6 +1,6 @@
 import '@/app/articulo.css';
 import ArticlePage from '@/components/ArticlePage';
-import { getNewsBySlug, getRelatedNews, getNews } from '@/lib/data';
+import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
@@ -18,7 +18,6 @@ import { escapeJsonLd } from '@/lib/jsonld';
 import { logger } from '@/lib/logger';
 import { getCspNonce } from '@/lib/nonce';
 import { unstable_cache } from 'next/cache';
-import { generateInternalLinks } from '@/lib/internal-linking-engine';
 import type { RelatedLink } from '@/lib/article-links';
 
 export const revalidate = 300;
@@ -180,17 +179,17 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     related = [];
   }
 
-  // Si la noticia tiene related_links en Firestore, usarlos; si no, generar con motor
+  // Si la noticia tiene related_links en Firestore, usarlos; si no, derivar de related (ya cargado)
+  // Evita una consulta adicional getNews(50) + generateInternalLinks en cada render.
   let internalLinks: RelatedLink[] = [];
   if (noticia.related_links && noticia.related_links.length > 0) {
     internalLinks = noticia.related_links;
-  } else {
-    try {
-      const allNews = await getNews(50);
-      internalLinks = await generateInternalLinks(noticia, allNews);
-    } catch (error) {
-      logger.error('Error generando enlaces internos:', error);
-    }
+  } else if (related.length > 0) {
+    internalLinks = related.slice(0, 5).map((r) => ({
+      url: `/noticias/${r.slug}`,
+      anchor: r.titulo,
+      type: 'related',
+    }));
   }
 
   // Pasar internalLinks al ArticlePage via related_links del noticia

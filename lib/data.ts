@@ -9,7 +9,7 @@ const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
 
 type FirestoreNoticiaData = Partial<Noticia> & {
-  publicado?: boolean;
+  archived?: boolean;
   palabrasClave?: string[];
   metaDescripcion?: string;
 };
@@ -26,6 +26,8 @@ export const LIST_FIELDS = [
   'vistas',
   'estado',
   'publicado',
+  'aprobadoMeni',
+  'archived',
   'noindex',
   'autor',
   'autorFoto',
@@ -132,12 +134,29 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     metaDescription: data.metaDescription || data.metaDescripcion || '',
     keywords: data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || '',
     estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
+    publicado: data.publicado,
+    aprobadoMeni: data.aprobadoMeni,
+    archived: data.archived,
     noindex: !!data.noindex,
     fuente: data.fuente,
     fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
       ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
       : undefined,
   };
+}
+
+/**
+ * Filtro canónico de artículos aptos para portada/listados.
+ * Regla: aprobadoMeni === true AND publicado === true AND estado !== 'borrador' AND archived !== true
+ */
+export function isPublicNews(data: Partial<Noticia>): boolean {
+  return (
+    data.aprobadoMeni === true &&
+    data.publicado !== false &&
+    data.archived !== true &&
+    data.estado !== 'borrador' &&
+    data.estado !== 'archivado'
+  );
 }
 
 export function invalidateFirestoreCache() {
@@ -158,7 +177,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
       .limit(limit)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia);
+    const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -195,7 +214,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .select(...LIST_FIELDS)
       .get();
 
-    return snap.docs.map(mapDocToNoticia);
+    return snap.docs.map(mapDocToNoticia).filter(isPublicNews);
   } catch (err) {
     logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
@@ -214,7 +233,7 @@ const _cachedGetMasLeidas = unstable_cache(
         .select(...LIST_FIELDS)
         .get();
 
-      return snap.docs.map(mapDocToNoticia);
+      return snap.docs.map(mapDocToNoticia).filter(isPublicNews);
     } catch (err) {
       logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
       return [];

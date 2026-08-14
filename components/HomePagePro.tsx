@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Noticia } from '@/lib/types';
@@ -9,74 +9,17 @@ import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import { RelativeTime, FullRelativeTime } from '@/components/ClientTime';
 import SidebarRedesign from '@/components/pro/SidebarRedesign';
-import { selectHero, diversifyChronological, deduplicateById } from '@/lib/home-balance';
-import { diversifyNoticias } from '@/lib/diversify';
+import type { HomePageData } from '@/lib/db/homepage';
 
 interface HomePageProProps {
-  noticias: Noticia[];
-  masLeidas?: Noticia[];
-  populares?: Noticia[];
-  isNoticiasPage?: boolean;
+  data: HomePageData;
 }
 
-function distribuirNoticias(noticias: Noticia[]) {
-  // Orden cronológico para que la portada muestre siempre lo más reciente.
-  const byDate = deduplicateById(
-    [...noticias].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-  );
-  const usados = new Set<string>();
-
-  const take = (lista: Noticia[], n: number) => {
-    const resultado: Noticia[] = [];
-    for (const item of lista) {
-      if (resultado.length >= n) break;
-      if (!usados.has(item.id)) {
-        usados.add(item.id);
-        resultado.push(item);
-      }
-    }
-    return resultado;
-  };
-
-  const hero = selectHero(byDate);
-  const heroNoticias = hero ? [hero] : [];
-  if (hero) usados.add(hero.id);
-
-  // En portada: 4 noticias, máximo 1 por categoría para forzar diversidad.
-  const enPortada = diversifyNoticias(byDate.filter((n) => !usados.has(n.id)), 4, 1);
-  enPortada.forEach((n) => usados.add(n.id));
-
-  // Última hora: 5 más recientes, máximo 2 de Sucesos, sin repetir héroe.
-  const breaking = diversifyChronological(byDate, 5, 2, usados);
-
-  // Últimas noticias: 3 noticias, máximo 1 por categoría (40%).
-  const recientes = diversifyNoticias(byDate.filter((n) => !usados.has(n.id)), 3, 1);
-  recientes.forEach((n) => usados.add(n.id));
-
-  const seccion = (cat: string, limit: number, min = 1) => {
-    const items = take(
-      byDate.filter((n) => n.categoria === cat && !usados.has(n.id)),
-      limit
-    );
-    return items.length >= min ? items : [];
-  };
-
-  return {
-    heroNoticias,
-    enPortada,
-    breaking,
-    recientes,
-    nacionales: seccion('Nacionales', 6),
-    sucesos: seccion('Sucesos', 3),
-    deportes: seccion('Deportes', 4),
-    internacionales: seccion('Internacionales', 3),
-    tecnologia: seccion('Tecnología', 2),
-    espectaculos: seccion('Espectáculos', 2),
-    excluidos: new Set(usados),
-  };
+function sortByDate(noticias: Noticia[]): Noticia[] {
+  return [...noticias].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 }
 
-export default function HomePagePro({ noticias, masLeidas = [], populares = [], isNoticiasPage: _isNoticiasPage }: HomePageProProps) {
+export default function HomePagePro({ data }: HomePageProProps) {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
     if (!nodes.length) return;
@@ -97,9 +40,16 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
     return () => observer.disconnect();
   }, []);
 
-  const dist = useMemo(() => distribuirNoticias(noticias), [noticias]);
+  const { hero, ultimas, enPortada, breaking, porCategoria, masLeidas } = data;
 
-  if (noticias.length === 0) {
+  const visibleCount =
+    (hero ? 1 : 0) +
+    ultimas.length +
+    enPortada.length +
+    breaking.length +
+    Object.values(porCategoria).flat().length;
+
+  if (visibleCount === 0) {
     return (
       <div className="rd-home">
         <div className="rd-home__container">
@@ -118,18 +68,17 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
     );
   }
 
-  const hero = dist.heroNoticias[0];
   const heroImg = hero ? getHeroImageUrl(hero.imagen, 1200) : FALLBACK_IMAGE;
 
   return (
     <div className="rd-home">
       {/* Breaking bar */}
-      {dist.breaking.length > 0 && (
+      {breaking.length > 0 && (
         <div className="rd-breaking" role="marquee" aria-label="Última hora">
           <div className="rd-breaking__inner">
             <span className="rd-breaking-tag"><span className="rd-dot" />Última hora</span>
             <div className="rd-breaking-list">
-              {dist.breaking.map((n) => (
+              {breaking.map((n) => (
                 <Link key={n.id} href={`/noticias/${n.slug}`} className="rd-breaking-item">
                   <span className="rd-breaking-dot" aria-hidden="true" />
                   <span className="rd-breaking-title">{n.titulo}</span>
@@ -183,7 +132,7 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
 
             <aside className="rd-en-portada">
               <div className="rd-rail-title">En portada</div>
-              {dist.enPortada.map((n) => (
+              {enPortada.map((n) => (
                 <div key={n.id} className="rd-portada-item">
                   <span className={`rd-eyebrow ${n.categoria === 'Sucesos' ? 'is-sucesos' : ''} ${n.categoria === 'Deportes' ? 'is-deportes' : ''}`}>
                     {n.categoria}
@@ -199,17 +148,17 @@ export default function HomePagePro({ noticias, masLeidas = [], populares = [], 
         {/* CONTENT GRID */}
         <div className="rd-content-grid">
           <div className="rd-main-col">
-            {dist.recientes.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={dist.recientes} reverse={false} />}
-            {dist.nacionales.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={dist.nacionales} reverse={false} />}
-            {dist.internacionales.length >= 1 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={dist.internacionales} reverse={false} />}
-            {dist.deportes.length >= 1 && <SectionGrid titulo="Deportes" slug="deportes" noticias={dist.deportes} reverse={false} />}
-            {dist.espectaculos.length >= 1 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={dist.espectaculos} reverse={false} />}
-            {dist.tecnologia.length >= 1 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={dist.tecnologia} reverse={false} />}
-            {dist.sucesos.length >= 1 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={dist.sucesos} reverse={true} />}
+            {ultimas.length > 0 && <SectionGrid titulo="Últimas noticias" slug="noticias" noticias={ultimas} reverse={false} />}
+            {porCategoria.Nacionales?.length >= 1 && <SectionGrid titulo="Nacionales" slug="nacionales" noticias={sortByDate(porCategoria.Nacionales)} reverse={false} />}
+            {porCategoria.Internacionales?.length >= 1 && <SectionGrid titulo="Internacionales" slug="internacionales" noticias={sortByDate(porCategoria.Internacionales)} reverse={false} />}
+            {porCategoria.Deportes?.length >= 1 && <SectionGrid titulo="Deportes" slug="deportes" noticias={sortByDate(porCategoria.Deportes)} reverse={false} />}
+            {porCategoria.Espectáculos?.length >= 1 && <SectionGrid titulo="Espectáculos" slug="espectaculos" noticias={sortByDate(porCategoria.Espectáculos)} reverse={false} />}
+            {porCategoria.Tecnología?.length >= 1 && <SectionGrid titulo="Tecnología" slug="tecnologia" noticias={sortByDate(porCategoria.Tecnología)} reverse={false} />}
+            {porCategoria.Sucesos?.length >= 1 && <SectionGrid titulo="Sucesos" slug="sucesos" noticias={sortByDate(porCategoria.Sucesos)} reverse={true} />}
           </div>
 
           <aside className="rd-rail">
-            <SidebarRedesign masLeidas={masLeidas.length ? masLeidas : populares} />
+            <SidebarRedesign masLeidas={masLeidas.length ? masLeidas : []} />
           </aside>
         </div>
       </div>
@@ -265,4 +214,3 @@ function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug
     </section>
   );
 }
-
