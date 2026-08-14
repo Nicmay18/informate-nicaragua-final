@@ -19,7 +19,8 @@ export type MeniContentProfile =
   | 'educacion'
   | 'ambiente'
   | 'turismo'
-  | 'gastronomia';
+  | 'gastronomia'
+  | 'espectaculos';
 
 export interface ProfileSignal {
   keyword: string;
@@ -184,6 +185,58 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'sabor', weight: 1.2 },
     { keyword: 'tradicion', weight: 1.2 },
   ],
+  espectaculos: [
+    { keyword: 'cine', weight: 2 },
+    { keyword: 'pelicula', weight: 2 },
+    { keyword: 'película', weight: 2 },
+    { keyword: 'estreno', weight: 2 },
+    { keyword: 'actor', weight: 1.5 },
+    { keyword: 'actriz', weight: 1.5 },
+    { keyword: 'director', weight: 1.5 },
+    { keyword: 'productor', weight: 1.5 },
+    { keyword: 'hollywood', weight: 2 },
+    { keyword: 'warner bros', weight: 2 },
+    { keyword: 'warner', weight: 1.5 },
+    { keyword: 'disney', weight: 2 },
+    { keyword: 'pixar', weight: 2 },
+    { keyword: 'marvel', weight: 2 },
+    { keyword: 'trailer', weight: 1.5 },
+    { keyword: 'tráiler', weight: 1.5 },
+    { keyword: 'personaje', weight: 1 },
+    { keyword: 'personajes', weight: 1 },
+    { keyword: 'concierto', weight: 2 },
+    { keyword: 'musica', weight: 1.5 },
+    { keyword: 'música', weight: 1.5 },
+    { keyword: 'cantante', weight: 1.5 },
+    { keyword: 'banda', weight: 1.2 },
+    { keyword: 'artista', weight: 1.2 },
+    { keyword: 'teatro', weight: 1.5 },
+    { keyword: 'telenovela', weight: 2 },
+    { keyword: 'streaming', weight: 1.5 },
+    { keyword: 'netflix', weight: 2 },
+    { keyword: 'spotify', weight: 1.5 },
+    { keyword: 'grammy', weight: 2 },
+    { keyword: 'premio', weight: 1 },
+    { keyword: 'farandula', weight: 2 },
+    { keyword: 'farándula', weight: 2 },
+    { keyword: 'celebridad', weight: 1.5 },
+    { keyword: 'festival', weight: 1 },
+    { keyword: 'show', weight: 1.2 },
+    { keyword: 'espectaculo', weight: 2 },
+    { keyword: 'espectáculo', weight: 2 },
+    { keyword: 'entretenimiento', weight: 2 },
+    { keyword: 'comedia', weight: 1.5 },
+    { keyword: 'humorista', weight: 1.5 },
+    { keyword: 'bailarin', weight: 1.5 },
+    { keyword: 'bailarín', weight: 1.5 },
+    { keyword: 'documental', weight: 1.5 },
+    { keyword: 'taquilla', weight: 1.5 },
+    { keyword: 'cartelera', weight: 1.5 },
+    { keyword: 'animacion', weight: 1.5 },
+    { keyword: 'animación', weight: 1.5 },
+    { keyword: 'doblaje', weight: 1.5 },
+    { keyword: 'frase', weight: 0.5 },
+  ],
   tecnologia: [
     { keyword: 'tecnología', weight: 1.5 },
     { keyword: 'tecnologia', weight: 1.5 },
@@ -263,7 +316,8 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'agricultura', weight: 1.5 },
     { keyword: 'agricultores', weight: 1.5 },
     { keyword: 'cosecha', weight: 1 },
-    { keyword: 'producción', weight: 1 },
+    { keyword: 'producción agrícola', weight: 1.5 },
+    { keyword: 'produccion agricola', weight: 1.5 },
     { keyword: 'volcan', weight: 1.5 },
     { keyword: 'volcán', weight: 1.5 },
     { keyword: 'ceniza', weight: 1.5 },
@@ -337,8 +391,18 @@ export function detectContentProfile(
   if (scores.educacion > 0 && scores.nacionales > 0) {
     scores.educacion += 2;
   }
-  if (scores.ambiente > 0 && (scores.sucesos > 0 || scores.nacionales > 0)) {
-    scores.ambiente += 2;
+  // Espectáculos debe ganar sobre ambiente cuando hay señales de entretenimiento
+  if (scores.espectaculos > 0 && scores.ambiente > 0) {
+    scores.espectaculos += 3;
+    scores.ambiente *= 0.5;
+  }
+  // Espectáculos debe ganar sobre cultura cuando hay señales de cine/TV
+  if (scores.espectaculos > 0 && scores.cultura > 0) {
+    scores.espectaculos += 1.5;
+  }
+  // Solo boost ambiente si tiene señales fuertes propias (no por coincidencia con sucesos)
+  if (scores.ambiente >= 3 && (scores.sucesos > 0 || scores.nacionales > 0)) {
+    scores.ambiente += 1;
   }
   // (Removed unconditional turismo +2 boost — turismo must win on its own signals)
 

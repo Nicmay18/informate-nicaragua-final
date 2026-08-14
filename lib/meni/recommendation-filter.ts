@@ -54,6 +54,7 @@ function appliesToProfile(mensaje: string, profile: MeniContentProfile): boolean
     ambiente: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     turismo: ['sintoma', 'como se transmite', 'marco legal', 'quien gana', 'quien pierde', 'salud', 'prevencion', 'vacuna', 'enfermedad', 'hospital', 'medico', 'brote', 'epidemia', 'contagio'],
     gastronomia: ['sintoma', 'como se transmite', 'marco legal'],
+    espectaculos: ['sintoma', 'como se transmite', 'marco legal', 'brote', 'epidemia', 'contagio'],
   };
 
   const forbidden = profileStopwords[profile] || [];
