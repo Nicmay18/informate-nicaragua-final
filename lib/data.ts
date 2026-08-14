@@ -169,12 +169,15 @@ export function invalidateFirestoreCache() {
 async function fetchNoticiasList(fields: string[], limit: number): Promise<Noticia[]> {
   try {
     const { adminDb } = await import('./firebase-admin');
+    // Traer más de lo necesario porque isPublicNews filtra post-query
+    // (aprobadoMeni y archived no se filtran en Firestore por compatibilidad de índices)
+    const fetchLimit = Math.min(limit * 3, 200);
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
       .select(...fields)
-      .limit(limit)
+      .limit(fetchLimit)
       .get();
 
     const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
@@ -187,9 +190,10 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
       }
     }
     // Ordenar por fecha descendente después de deduplicar (Map puede alterar el orden de Firestore)
-    return Array.from(unique.values()).sort((a, b) =>
+    const sorted = Array.from(unique.values()).sort((a, b) =>
       new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
     );
+    return sorted.slice(0, limit);
   } catch (err) {
     logger.error('[data.ts] fetchNoticiasList error:', err instanceof Error ? err.message : String(err));
     return [];
@@ -205,16 +209,28 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
   try {
     const { adminDb } = await import('./firebase-admin');
+    const fetchLimit = Math.min(validatedCount * 3, 200);
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
       .where('categoria', '==', categoria)
       .orderBy('fecha', 'desc')
-      .limit(validatedCount)
+      .limit(fetchLimit)
       .select(...LIST_FIELDS)
       .get();
 
-    return snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+    const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+    // Deduplicar por slug
+    const unique = new Map<string, Noticia>();
+    for (const n of noticias) {
+      const existing = unique.get(n.slug);
+      if (!existing || new Date(n.fecha).getTime() > new Date(existing.fecha).getTime()) {
+        unique.set(n.slug, n);
+      }
+    }
+    return Array.from(unique.values()).sort((a, b) =>
+      new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+    ).slice(0, validatedCount);
   } catch (err) {
     logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
@@ -225,15 +241,16 @@ const _cachedGetMasLeidas = unstable_cache(
   async (count: number) => {
     try {
       const { adminDb } = await import('./firebase-admin');
+      const fetchLimit = Math.min(count * 3, 100);
       const snap = await adminDb
         .collection('noticias')
         .where('vistas', '>', 0)
         .orderBy('vistas', 'desc')
-        .limit(count)
+        .limit(fetchLimit)
         .select(...LIST_FIELDS)
         .get();
 
-      return snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+      return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, count);
     } catch (err) {
       logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
       return [];
@@ -361,7 +378,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .where('categoria', '==', categoria)
       .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
-      .limit(validatedCount + 5)
+      .limit(validatedCount + 10)
       .get();
 
     return snap.docs
@@ -387,9 +404,13 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           tags: data.tags,
           estado: data.estado || 'publicado',
           noindex: !!data.noindex,
+          aprobadoMeni: data.aprobadoMeni,
+          publicado: data.publicado,
+          archived: data.archived,
         } as Noticia;
       })
-      .filter(Boolean) as Noticia[];
+      .filter((n): n is Noticia => n !== null && isPublicNews(n))
+      .slice(0, validatedCount);
   } catch (err) {
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
     // Fallback al método anterior si el índice no existe
@@ -413,16 +434,18 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
   try {
     const { adminDb } = await import('./firebase-admin');
     const offset = (validatedPage - 1) * validatedPageSize;
+    // Traer más para compensar el filtro isPublicNews
+    const fetchLimit = Math.min(validatedPageSize * 3, 100);
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
       .orderBy('fecha', 'desc')
       .select(...LIST_FIELDS)
       .offset(offset)
-      .limit(validatedPageSize)
+      .limit(fetchLimit)
       .get();
 
-    return snap.docs.map(mapDocToNoticia);
+    return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, validatedPageSize);
   } catch (err) {
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
     return [];
@@ -462,6 +485,7 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
   try {
     const { adminDb } = await import('./firebase-admin');
     const offset = (validatedPage - 1) * validatedPageSize;
+    const fetchLimit = Math.min(validatedPageSize * 3, 100);
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
@@ -469,10 +493,10 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
       .orderBy('fecha', 'desc')
       .select(...LIST_FIELDS)
       .offset(offset)
-      .limit(validatedPageSize)
+      .limit(fetchLimit)
       .get();
 
-    return snap.docs.map(mapDocToNoticia);
+    return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, validatedPageSize);
   } catch (err) {
     logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
