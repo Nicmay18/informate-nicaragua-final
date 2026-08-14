@@ -408,6 +408,14 @@ export function detectContentProfile(
   if (scores.espectaculos > 0 && scores.ambiente > 0) {
     scores.ambiente = Math.max(0, scores.ambiente - scores.espectaculos);
   }
+  // Deportes gana sobre internacional cuando hay señales deportivas claras
+  if (scores.deportes > 0 && scores.internacional > 0) {
+    scores.deportes += 3;
+  }
+  // Nacionales gana sobre internacional cuando la noticia es sobre Nicaragua
+  if (scores.nacionales > 0 && scores.internacional > 0) {
+    scores.nacionales += 2;
+  }
   // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)
   // No por palabras genéricas como "producción" o "clima" (ya eliminadas de las señales)
 
