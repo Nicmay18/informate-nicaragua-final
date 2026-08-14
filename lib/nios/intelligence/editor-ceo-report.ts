@@ -93,13 +93,13 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
   const failed: EditorCEOReport['whatFailed'] = [];
 
   for (const a of articles) {
-    // MENI alto pero Google ignora
+    // MENI alto pero GSC sin datos (hipótesis, no conclusión)
     if (a.scoreMeni !== null && a.scoreMeni >= 80 && a.gscImpressions === 0) {
       failed.push({
         slug: a.slug,
         titulo: a.titulo,
         categoria: a.categoria,
-        metric: 'MENI alto pero Google no muestra',
+        metric: 'MENI alto pero GSC no registra datos',
         value: `MENI ${a.scoreMeni}, 0 impresiones`,
         evidence: [
           makeEvidence('MENI', 'scoreMeni', `MENI de "${a.titulo}"`, a.scoreMeni ?? 'N/D'),

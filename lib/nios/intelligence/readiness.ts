@@ -205,7 +205,7 @@ export function generateReadinessReport(
   } else {
     const pctReady = Math.round((readyArticles / readinessArticles.length) * 100);
     const pctCritical = Math.round((criticalArticles / readinessArticles.length) * 100);
-    summary = `${pctReady}% de los artículos cumplen con readiness ≥ 80%. ${pctCritical}% están en estado crítico (score < 50%). Promedio de readiness: ${averageReadinessScore}/100. ${googleIgnoredWithHighMeni.length} artículos con MENI ≥ 90 son ignorados por Google (0 impresiones). Issue más común: ${topIssues[0]?.issue || 'N/A'} (${topIssues[0]?.count || 0} artículos).`;
+    summary = `${pctReady}% de los artículos cumplen con readiness ≥ 80%. ${pctCritical}% están en estado crítico (score < 50%). Promedio de readiness: ${averageReadinessScore}/100. ${googleIgnoredWithHighMeni.length} artículos con MENI ≥ 90 sin datos de GSC (posibles causas: indexación pendiente, falta de demanda, datos insuficientes). Issue más común: ${topIssues[0]?.issue || 'N/A'} (${topIssues[0]?.count || 0} artículos).`;
   }
 
   return {

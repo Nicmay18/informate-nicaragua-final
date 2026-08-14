@@ -265,7 +265,7 @@ describe('Editorial Rules', () => {
     const gsc = mockGSC();
     const recs = generateRecommendations(articles, gsc, null, 28);
 
-    const seoRec = recs.find(r => r.type === 'seo' && r.severity === 'critical');
+    const seoRec = recs.find(r => r.type === 'seo' && r.severity === 'warning');
     expect(seoRec).toBeDefined();
     expect(seoRec!.description).toContain('Google Search Console');
     expect(seoRec!.description).toContain('no registra impresiones');

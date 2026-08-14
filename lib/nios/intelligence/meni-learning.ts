@@ -76,11 +76,11 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
     };
   }
 
-  // MENI sobreestima: score alto + Google ignora
+  // MENI posible sobreestimación: score alto + GSC sin datos
   if (sm !== null && sm >= 85 && gscImpressions < 10) {
     return {
-      verdict: 'meni_sobreestima',
-      conclusion: `MENI ${sm} pero Google solo ${gscImpressions} impresiones en ${days} días. MENI sobreestima este contenido. Posible problema: SEO técnico, intención de búsqueda, o calidad real menor a la evaluada.`,
+      verdict: 'meni_sobreestima_hipotesis',
+      conclusion: `MENI ${sm} pero GSC solo ${gscImpressions} impresiones en ${days} días. HIPÓTESIS: MENI podría sobreestimar, o el contenido podría no estar indexado, no tener demanda, o ser muy reciente. Se requiere verificación manual.`,
     };
   }
 

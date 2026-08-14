@@ -53,7 +53,7 @@ export function buildGoogleIntelligenceDashboard(
       positionLosers: [],
       positionGainers: [],
       zeroImpressionUrls: [],
-      googleIgnoredUrls: [],
+      lowGscDataUrls: [],
       recommendations: [],
       trafficSources: ga4?.sources || [],
     };
@@ -107,8 +107,8 @@ export function buildGoogleIntelligenceDashboard(
     .map(a => ({ slug: a.slug, titulo: a.titulo, fecha: a.fechaPublicacion }))
     .slice(0, 50);
 
-  // URLs que Google ignora (< 10 impresiones en 28 días)
-  const googleIgnoredUrls = articles
+  // URLs con datos insuficientes de GSC (< 10 impresiones en 28 días)
+  const lowGscDataUrls = articles
     .filter(a => a.hasGscData && a.gscImpressions < 10)
     .map(a => ({ slug: a.slug, titulo: a.titulo, scoreMeni: a.scoreMeni }))
     .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
@@ -146,7 +146,7 @@ export function buildGoogleIntelligenceDashboard(
     positionLosers,
     positionGainers,
     zeroImpressionUrls,
-    googleIgnoredUrls,
+    lowGscDataUrls,
     recommendations,
     trafficSources: ga4?.sources || [],
   };
