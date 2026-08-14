@@ -1050,6 +1050,7 @@
             </select>
             <button class="btn btn-secondary btn-sm" onclick="asignarNivelesFaltantes()" title="Analiza y guarda el nivel de calidad de las notas que aún no lo tienen"><i class="fas fa-wand-magic-sparkles"></i> Asignar niveles</button>
             <input type="text" id="searchNoticias" placeholder="Buscar título, ID, autor..." onkeydown="if(event.key==='Enter')window.buscarNoticias(this.value)" style="padding: 8px 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 13px; width: 220px;">
+            <button class="btn btn-secondary btn-sm" onclick="invalidatePanelCache(); cargarNoticias(window.categoriaActiva || 'todas');" title="Recargar la lista de noticias desde Firestore"><i class="fas fa-sync-alt"></i> Refrescar</button>
           </div>
         </div>
         <div style="padding: 8px 16px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; gap: 8px; align-items: center; font-size: 12px;">
@@ -3596,7 +3597,7 @@ sin texto ni marcas de agua, composición periodística"
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       if (navElement) navElement.classList.add('active');
-      if (tabId === 'noticias-tab') cargarNoticias(window.categoriaActiva);
+      if (tabId === 'noticias-tab') { invalidatePanelCache(); cargarNoticias(window.categoriaActiva || 'todas'); }
       if (tabId === 'dashboard-tab') cargarEstadisticas();
       if (tabId === 'categorias-tab') cargarResumenCategorias();
       if (tabId === 'analytics-tab') {
@@ -3631,7 +3632,7 @@ sin texto ni marcas de agua, composición periodística"
 
     let _panelCache = null;
     let _panelCacheTime = 0;
-    const _PANEL_CACHE_TTL = 30000; // 30 segundos
+    const _PANEL_CACHE_TTL = 5000; // 5 segundos — antes era 30s y causaba que notas nuevas no aparecieran
 
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
@@ -4278,9 +4279,6 @@ sin texto ni marcas de agua, composición periodística"
           }
         }
         limpiarFormulario();
-        invalidatePanelCache();
-        await cargarUltimasNoticias();
-        await cargarEstadisticas();
         if (window.recargarSelectEvaluador) {
           await window.recargarSelectEvaluador(false);
         }
@@ -4307,6 +4305,14 @@ sin texto ni marcas de agua, composición periodística"
       } catch (error) {
         showToast('Error: ' + error.message, 'error');
       } finally {
+        // CRÍTICO: Siempre invalidar el cache del panel, incluso si algo falló
+        // después de guardar. Si la nota se guardó en Firestore pero el pipeline
+        // falló, el panel debe poder encontrarla para editarla.
+        invalidatePanelCache();
+        // Recargar la lista de noticias del tab "Noticias" por si estaba abierto
+        try { await cargarNoticias(window.categoriaActiva || 'todas'); } catch (e) { /* noop */ }
+        try { await cargarUltimasNoticias(); } catch (e) { /* noop */ }
+        try { await cargarEstadisticas(); } catch (e) { /* noop */ }
         // Liberar candado anti doble-envío y reactivar botón
         window.__publicando = false;
         if (btnGuardar) btnGuardar.disabled = false;
@@ -4452,9 +4458,15 @@ sin texto ni marcas de agua, composición periodística"
       } catch (error) { showToast('Error cargando noticias', 'error'); }
     };
 
-    window.buscarNoticias = function(query) {
+    window.buscarNoticias = async function(query) {
       const container = document.getElementById('listaNoticiasCompleta');
       if (!container) return;
+      // Si no hay items renderizados o hay muy pocos, forzar recarga desde API
+      const existingItems = container.querySelectorAll('.news-item');
+      if (existingItems.length === 0) {
+        invalidatePanelCache();
+        await cargarNoticias(window.categoriaActiva || 'todas');
+      }
       const items = container.querySelectorAll('.news-item');
       const q = query.toLowerCase().trim();
       const nivelFiltro = (document.getElementById('filtroNivel')?.value || '').toUpperCase();

@@ -188,7 +188,7 @@ describe('NIOS Weekly Report', () => {
 
     expect(weekly.hasData).toBe(true);
     expect(weekly.topPerforming.length).toBeGreaterThan(0);
-    expect(weekly.ignoredByGoogle.length).toBeGreaterThan(0);
+    expect(weekly.noGscData.length).toBeGreaterThan(0);
     expect(weekly.categoryOpportunities.length).toBeGreaterThan(0);
     expect(weekly.productionRecommendations.length).toBeGreaterThan(0);
     expect(weekly.updateCandidates.length).toBeGreaterThan(0);

@@ -78,6 +78,9 @@ export function normalizeCategory(raw: string): MeniCategoria {
     salud: 'Salud',
     educacion: 'Educación',
     educativa: 'Educación',
+    ambiente: 'Ambiente',
+    ambiental: 'Ambiente',
+    medioambiente: 'Ambiente',
     serviciopublico: 'General',
     utilidad: 'General',
   };

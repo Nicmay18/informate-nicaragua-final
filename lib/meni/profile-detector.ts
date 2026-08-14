@@ -14,13 +14,13 @@ export type MeniContentProfile =
   | 'salud'
   | 'deportes'
   | 'cultura'
+  | 'espectaculos'
   | 'tecnologia'
   | 'internacional'
   | 'educacion'
   | 'ambiente'
   | 'turismo'
-  | 'gastronomia'
-  | 'espectaculos';
+  | 'gastronomia';
 
 export interface ProfileSignal {
   keyword: string;
@@ -156,6 +156,69 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'patrimonio', weight: 1.2 },
     { keyword: 'comida tipica', weight: 1.2 },
   ],
+  espectaculos: [
+    { keyword: 'cine', weight: 2 },
+    { keyword: 'pelicula', weight: 2 },
+    { keyword: 'película', weight: 2 },
+    { keyword: 'estreno', weight: 2 },
+    { keyword: 'estrenar', weight: 1.5 },
+    { keyword: 'actor', weight: 1.5 },
+    { keyword: 'actriz', weight: 1.5 },
+    { keyword: 'director', weight: 1.5 },
+    { keyword: 'hollywood', weight: 2 },
+    { keyword: 'warner', weight: 1.5 },
+    { keyword: 'disney', weight: 1.5 },
+    { keyword: 'marvel', weight: 1.5 },
+    { keyword: 'dc comics', weight: 1.5 },
+    { keyword: 'trailer', weight: 1.5 },
+    { keyword: 'tráiler', weight: 1.5 },
+    { keyword: 'taquilla', weight: 1.5 },
+    { keyword: 'serie', weight: 1.2 },
+    { keyword: 'streaming', weight: 1.5 },
+    { keyword: 'netflix', weight: 1.5 },
+    { keyword: 'amazon prime', weight: 1.5 },
+    { keyword: 'hbo', weight: 1.5 },
+    { keyword: 'personaje', weight: 1 },
+    { keyword: 'protagonista', weight: 1.5 },
+    { keyword: 'elenco', weight: 1.2 },
+    { keyword: 'reparto', weight: 1.2 },
+    { keyword: 'secuela', weight: 1.5 },
+    { keyword: 'precuela', weight: 1.5 },
+    { keyword: 'remake', weight: 1.5 },
+    { keyword: 'animacion', weight: 1.5 },
+    { keyword: 'animación', weight: 1.5 },
+    { keyword: 'documental', weight: 1.2 },
+    { keyword: 'festival de cine', weight: 2 },
+    { keyword: 'premio oscar', weight: 2 },
+    { keyword: 'oscar', weight: 1.5 },
+    { keyword: 'goya', weight: 1.5 },
+    { keyword: 'grammy', weight: 1.5 },
+    { keyword: 'premios', weight: 1 },
+    { keyword: 'celebridad', weight: 1.5 },
+    { keyword: 'famoso', weight: 1 },
+    { keyword: 'famosa', weight: 1 },
+    { keyword: 'show', weight: 1 },
+    { keyword: 'espectaculo', weight: 1.5 },
+    { keyword: 'espectáculo', weight: 1.5 },
+    { keyword: 'entretenimiento', weight: 1.5 },
+    { keyword: 'comedia', weight: 1.5 },
+    { keyword: 'drama', weight: 1 },
+    { keyword: 'accion', weight: 1 },
+    { keyword: 'acción', weight: 1 },
+    { keyword: 'ficcion', weight: 1 },
+    { keyword: 'ficción', weight: 1 },
+    { keyword: 'superheroe', weight: 1.5 },
+    { keyword: 'superhéroe', weight: 1.5 },
+    { keyword: 'villano', weight: 1.2 },
+    { keyword: 'looney tunes', weight: 2 },
+    { keyword: 'cartoon', weight: 1.5 },
+    { keyword: 'waza', weight: 1.5 },
+    { keyword: 'videojuego', weight: 1.5 },
+    { keyword: 'consola', weight: 1.5 },
+    { keyword: 'playstation', weight: 1.5 },
+    { keyword: 'xbox', weight: 1.5 },
+    { keyword: 'nintendo', weight: 1.5 },
+  ],
   turismo: [
     { keyword: 'turismo', weight: 1.5 },
     { keyword: 'mirador', weight: 1.5 },
@@ -184,58 +247,6 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'restaurante', weight: 1 },
     { keyword: 'sabor', weight: 1.2 },
     { keyword: 'tradicion', weight: 1.2 },
-  ],
-  espectaculos: [
-    { keyword: 'cine', weight: 2 },
-    { keyword: 'pelicula', weight: 2 },
-    { keyword: 'película', weight: 2 },
-    { keyword: 'estreno', weight: 2 },
-    { keyword: 'actor', weight: 1.5 },
-    { keyword: 'actriz', weight: 1.5 },
-    { keyword: 'director', weight: 1.5 },
-    { keyword: 'productor', weight: 1.5 },
-    { keyword: 'hollywood', weight: 2 },
-    { keyword: 'warner bros', weight: 2 },
-    { keyword: 'warner', weight: 1.5 },
-    { keyword: 'disney', weight: 2 },
-    { keyword: 'pixar', weight: 2 },
-    { keyword: 'marvel', weight: 2 },
-    { keyword: 'trailer', weight: 1.5 },
-    { keyword: 'tráiler', weight: 1.5 },
-    { keyword: 'personaje', weight: 1 },
-    { keyword: 'personajes', weight: 1 },
-    { keyword: 'concierto', weight: 2 },
-    { keyword: 'musica', weight: 1.5 },
-    { keyword: 'música', weight: 1.5 },
-    { keyword: 'cantante', weight: 1.5 },
-    { keyword: 'banda', weight: 1.2 },
-    { keyword: 'artista', weight: 1.2 },
-    { keyword: 'teatro', weight: 1.5 },
-    { keyword: 'telenovela', weight: 2 },
-    { keyword: 'streaming', weight: 1.5 },
-    { keyword: 'netflix', weight: 2 },
-    { keyword: 'spotify', weight: 1.5 },
-    { keyword: 'grammy', weight: 2 },
-    { keyword: 'premio', weight: 1 },
-    { keyword: 'farandula', weight: 2 },
-    { keyword: 'farándula', weight: 2 },
-    { keyword: 'celebridad', weight: 1.5 },
-    { keyword: 'festival', weight: 1 },
-    { keyword: 'show', weight: 1.2 },
-    { keyword: 'espectaculo', weight: 2 },
-    { keyword: 'espectáculo', weight: 2 },
-    { keyword: 'entretenimiento', weight: 2 },
-    { keyword: 'comedia', weight: 1.5 },
-    { keyword: 'humorista', weight: 1.5 },
-    { keyword: 'bailarin', weight: 1.5 },
-    { keyword: 'bailarín', weight: 1.5 },
-    { keyword: 'documental', weight: 1.5 },
-    { keyword: 'taquilla', weight: 1.5 },
-    { keyword: 'cartelera', weight: 1.5 },
-    { keyword: 'animacion', weight: 1.5 },
-    { keyword: 'animación', weight: 1.5 },
-    { keyword: 'doblaje', weight: 1.5 },
-    { keyword: 'frase', weight: 0.5 },
   ],
   tecnologia: [
     { keyword: 'tecnología', weight: 1.5 },
@@ -299,7 +310,6 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
   ambiente: [
     { keyword: 'cambio climático', weight: 2 },
     { keyword: 'cambio climatico', weight: 2 },
-    { keyword: 'clima', weight: 1.5 },
     { keyword: 'contaminación', weight: 1.5 },
     { keyword: 'contaminacion', weight: 1.5 },
     { keyword: 'bosque', weight: 1.5 },
@@ -316,13 +326,11 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'agricultura', weight: 1.5 },
     { keyword: 'agricultores', weight: 1.5 },
     { keyword: 'cosecha', weight: 1 },
-    { keyword: 'producción agrícola', weight: 1.5 },
-    { keyword: 'produccion agricola', weight: 1.5 },
     { keyword: 'volcan', weight: 1.5 },
     { keyword: 'volcán', weight: 1.5 },
     { keyword: 'ceniza', weight: 1.5 },
-    { keyword: 'emision', weight: 1.5 },
-    { keyword: 'emisión', weight: 1.5 },
+    { keyword: 'emision volcanica', weight: 2 },
+    { keyword: 'emisión volcánica', weight: 2 },
     { keyword: 'actividad volcanica', weight: 2 },
     { keyword: 'actividad volcánica', weight: 2 },
     { keyword: 'ineter', weight: 1.5 },
@@ -330,7 +338,8 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'terremoto', weight: 1.5 },
     { keyword: 'erupcion', weight: 1.5 },
     { keyword: 'erupción', weight: 1.5 },
-    { keyword: 'gases', weight: 1 },
+    { keyword: 'gases volcanicos', weight: 2 },
+    { keyword: 'gases volcánicos', weight: 2 },
     { keyword: 'comupred', weight: 1.2 },
     { keyword: 'sinapred', weight: 1.2 },
   ],
@@ -391,20 +400,24 @@ export function detectContentProfile(
   if (scores.educacion > 0 && scores.nacionales > 0) {
     scores.educacion += 2;
   }
-  // Espectáculos debe ganar sobre ambiente cuando hay señales de entretenimiento
-  if (scores.espectaculos > 0 && scores.ambiente > 0) {
-    scores.espectaculos += 3;
-    scores.ambiente *= 0.5;
-  }
-  // Espectáculos debe ganar sobre cultura cuando hay señales de cine/TV
+  // Espectáculos gana sobre cultura cuando hay señales propias de cine/TV
   if (scores.espectaculos > 0 && scores.cultura > 0) {
-    scores.espectaculos += 1.5;
+    scores.espectaculos += 2;
   }
-  // Solo boost ambiente si tiene señales fuertes propias (no por coincidencia con sucesos)
-  if (scores.ambiente >= 3 && (scores.sucesos > 0 || scores.nacionales > 0)) {
-    scores.ambiente += 1;
+  // Espectáculos NO debe ser ambiente: si ambos puntúan, espectáculos gana
+  if (scores.espectaculos > 0 && scores.ambiente > 0) {
+    scores.ambiente = Math.max(0, scores.ambiente - scores.espectaculos);
   }
-  // (Removed unconditional turismo +2 boost — turismo must win on its own signals)
+  // Deportes gana sobre internacional cuando hay señales deportivas claras
+  if (scores.deportes > 0 && scores.internacional > 0) {
+    scores.deportes += 3;
+  }
+  // Nacionales gana sobre internacional cuando la noticia es sobre Nicaragua
+  if (scores.nacionales > 0 && scores.internacional > 0) {
+    scores.nacionales += 2;
+  }
+  // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)
+  // No por palabras genéricas como "producción" o "clima" (ya eliminadas de las señales)
 
   const entries = Object.entries(scores) as [MeniContentProfile, number][];
   const sorted = entries.sort((a, b) => b[1] - a[1]);

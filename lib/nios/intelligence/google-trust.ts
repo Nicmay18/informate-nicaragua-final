@@ -181,7 +181,7 @@ function calculateGoogleTrustScore(
   else if (thinFlags.length >= 2) score -= 10;
   else if (thinFlags.length >= 1) score -= 5;
 
-  // Penalización por 0 impresiones (Google ignora el contenido)
+  // Penalización por 0 impresiones (GSC sin datos, no conclusión de rechazo)
   if (contentValueScore === 0) score -= 10;
 
   score = Math.max(0, Math.min(100, score));
@@ -265,7 +265,7 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
     summary = 'No hay artículos suficientes para emitir una recomendación.';
   } else {
     const pctHigh = Math.round((highRisk / totalArticles) * 100);
-    summary = `Google Trust Audit: ${totalArticles} artículos analizados. Promedio Google Trust Score: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content, ${highMeniZeroImpressions} artículos con MENI ≥90 son ignorados por Google, ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`;
+    summary = `Google Trust Audit: ${totalArticles} artículos analizados. Promedio Internal Trust Estimate: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content. ${highMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`;
   }
 
   return {

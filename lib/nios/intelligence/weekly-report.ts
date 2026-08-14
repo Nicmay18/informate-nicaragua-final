@@ -215,7 +215,7 @@ export function generateWeeklyReport(
       periodEnd,
       hasData: false,
       topPerforming: [],
-      ignoredByGoogle: [],
+      noGscData: [],
       categoryOpportunities: [],
       productionRecommendations: [],
       updateCandidates: [],
@@ -232,8 +232,8 @@ export function generateWeeklyReport(
     .sort((a, b) => b.gscImpressions - a.gscImpressions)
     .slice(0, 20);
 
-  // 2. Contenido que Google ignora
-  const ignoredByGoogle = [...articles]
+  // 2. Contenido sin datos de GSC (no conclusión de rechazo)
+  const noGscData = [...articles]
     .filter(a => a.gscImpressions === 0)
     .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 30);
@@ -253,7 +253,7 @@ export function generateWeeklyReport(
   // Summary
   const topCat = categoryOpportunities[0];
   const summary = topCat
-    ? `Reporte semanal: ${topPerforming.length} artículos funcionando en Google. ${ignoredByGoogle.length} artículos ignorados. Categoría con mayor oportunidad: ${topCat.categoria} (${topCat.googleImpressions.toLocaleString()} impresiones). ${adsenseBlockers.length} URLs bloqueando AdSense. Prioridad: optimizar lo existente, no publicar más.`
+    ? `Reporte semanal: ${topPerforming.length} artículos con tráfico real en GSC. ${noGscData.length} artículos sin datos de GSC. Categoría con mayor oportunidad: ${topCat.categoria} (${topCat.googleImpressions.toLocaleString()} impresiones). ${adsenseBlockers.length} URLs bloqueando AdSense. Prioridad: optimizar lo existente, no publicar más.`
     : 'Reporte semanal generado. Datos insuficientes para identificar oportunidades claras.';
 
   return {
@@ -262,7 +262,7 @@ export function generateWeeklyReport(
     periodEnd,
     hasData: true,
     topPerforming,
-    ignoredByGoogle,
+    noGscData,
     categoryOpportunities,
     productionRecommendations,
     updateCandidates,

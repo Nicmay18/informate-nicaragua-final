@@ -28,6 +28,8 @@ export type MeniCategoria =
   | 'Política'
   | 'Salud'
   | 'Educación'
+  | 'Ambiente'
+  | 'Turismo'
   | 'General';
 
 export type MeniPrioridad = 'PORTADA' | 'ALTA' | 'MEDIA' | 'BAJA';

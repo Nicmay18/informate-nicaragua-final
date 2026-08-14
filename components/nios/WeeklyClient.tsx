@@ -68,12 +68,12 @@ export default function WeeklyClient({
         )}
       </Section>
 
-      {/* 2. Contenido ignorado */}
-      <Section title="2. ¿Qué contenido Google ignora?">
-        {weekly.ignoredByGoogle.length === 0 ? (
-          <p style={{ color: '#16a34a' }}>No hay contenido ignorado por Google.</p>
+      {/* 2. Contenido sin datos de GSC */}
+      <Section title="2. ¿Qué contenido no tiene datos de GSC?">
+        {weekly.noGscData.length === 0 ? (
+          <p style={{ color: '#16a34a' }}>Todo el contenido tiene datos de GSC.</p>
         ) : (
-          <ArticleTable articles={weekly.ignoredByGoogle} />
+          <ArticleTable articles={weekly.noGscData} />
         )}
       </Section>
 

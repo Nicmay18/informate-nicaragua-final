@@ -171,15 +171,15 @@ export function generateRecommendations(
       }
     }
 
-    // ─── Regla 6: URL con 0 impresiones → Google la ignora ───
+    // ─── Regla 6: URL con 0 impresiones → verificar indexación, no concluir ignorancia ───
     if (!article.hasGscData && article.scoreMeni !== null && article.scoreMeni > 0) {
       recommendations.push({
-        id: makeId('google_ignore', article.slug),
+        id: makeId('gsc_no_data', article.slug),
         articleSlug: article.slug,
         articleTitle: article.titulo,
         type: 'seo',
-        severity: 'critical',
-        title: 'Google no muestra esta URL',
+        severity: 'warning',
+        title: 'GSC no registra tráfico para esta URL',
         description: `Google Search Console no registra impresiones para esta URL en los últimos ${daysToCollect} días. MENI score: ${article.scoreMeni}. Se recomienda verificar indexación, sitemap, y robots.txt.`,
         evidence: [
           evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 0),

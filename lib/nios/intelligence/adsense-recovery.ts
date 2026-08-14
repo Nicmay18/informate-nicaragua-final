@@ -149,8 +149,8 @@ export function generateAdSenseRecoveryReport(
       articleTitle: 'Sitio',
       type: 'originality',
       severity: 'warning',
-      title: 'MENI sobreestima contenido ignorado por Google',
-      description: `${trust.articlesHighMeniZeroImpressions} artículos con MENI ≥90 no reciben impresiones de Google. MENI necesita calibrarse con señales reales de Google.`,
+      title: 'MENI alto sin datos de GSC: hipótesis de calibración',
+      description: `${trust.articlesHighMeniZeroImpressions} artículos con MENI ≥90 no reciben impresiones de Google (posibles causas: indexación pendiente, falta de demanda, contenido reciente o datos insuficientes). MENI necesita calibrarse con señales reales de Google.`,
       evidence: [{
         source: 'Google Search Console',
         api: 'searchanalytics.query',
@@ -164,7 +164,7 @@ export function generateAdSenseRecoveryReport(
     });
   }
 
-  const summary = `AdSense Recovery: Nivel de riesgo ${riskLevel.toUpperCase()}. Contenido original ${contentOriginalityPct}%, con autor ${contentAuthorPct}%, con contexto ${contentContextPct}%, con profundidad ${contentSourcesPct}%, útil ${contentUsefulPct}%. ${trust.thinContentCount} artículos thin content. ${trust.articlesHighMeniZeroImpressions} artículos con MENI ≥90 ignorados por Google. ${topRiskUrls.length} URLs de alto riesgo identificadas. No borrar automáticamente: revisar manualmente.`;
+  const summary = `AdSense Recovery: Nivel de riesgo ${riskLevel.toUpperCase()}. Contenido original ${contentOriginalityPct}%, con autor ${contentAuthorPct}%, con contexto ${contentContextPct}%, con profundidad ${contentSourcesPct}%, útil ${contentUsefulPct}%. ${trust.thinContentCount} artículos thin content. ${trust.articlesHighMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${topRiskUrls.length} URLs de alto riesgo identificadas. No borrar automáticamente: revisar manualmente.`;
 
   return {
     generatedAt: now,

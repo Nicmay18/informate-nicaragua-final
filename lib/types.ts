@@ -32,6 +32,8 @@ export interface Noticia {
   palabras?: number;
   tags?: string[];
   estado: 'publicado' | 'borrador' | 'archivado';
+  publicado?: boolean;
+  archived?: boolean;
   pieFoto?: string;
   puntosClave?: string[];
   metaDescription?: string;

@@ -3,8 +3,9 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { type Noticia } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
-import { getNews, getMasLeidas } from '@/lib/data';
+import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView } from '@/lib/view-counter';
+import { CATEGORIES, isLutoNews } from '@/lib/types';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -131,4 +132,76 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
 
 export async function getPopularNews(limitCount: number = 5): Promise<Noticia[]> {
   return getMasLeidas(limitCount);
+}
+
+export interface HomePageData {
+  hero: Noticia | null;
+  ultimas: Noticia[];
+  enPortada: Noticia[];
+  breaking: Noticia[];
+  porCategoria: Record<string, Noticia[]>;
+  masLeidas: Noticia[];
+}
+
+const SECTION_LIMITS: Record<string, number> = {
+  Nacionales: 6,
+  Sucesos: 3,
+  Internacionales: 3,
+  Deportes: 4,
+  Tecnología: 2,
+  Espectáculos: 2,
+};
+
+/**
+ * Construye el homepage consultando cada sección por categoría directamente.
+ * Evita que noticias viejas aparezcan cuando existen más recientes en esa categoría.
+ */
+export async function getHomePageData(): Promise<HomePageData> {
+  const categoryNames = CATEGORIES.map(c => c.name);
+  const [latest, masLeidas, ...categoryResults] = await Promise.all([
+    getNews(20),
+    getMasLeidas(5),
+    ...categoryNames.map(name => getNewsByCategory(name, 10)),
+  ]);
+
+  const porCategoria: Record<string, Noticia[]> = {};
+  categoryNames.forEach((name, i) => { porCategoria[name] = categoryResults[i] ?? []; });
+
+  const used = new Set<string>();
+
+  // HERO: noticia aprobada/publicada más reciente, no luto, con imagen preferible
+  const heroCandidates = latest;
+  const hero = heroCandidates.find(n => !isLutoNews(n)) ?? heroCandidates[0] ?? null;
+  if (hero) used.add(hero.id);
+
+  // ÚLTIMAS NOTICIAS: 15 más recientes excluyendo hero
+  const ultimas = latest.filter(n => !used.has(n.id)).slice(0, 15);
+  ultimas.forEach(n => used.add(n.id));
+
+  // EN PORTADA: 4 más recientes, máximo 1 por categoría
+  const enPortadaRaw = latest.filter(n => !used.has(n.id));
+  const enPortada = enPortadaRaw.slice(0, 8).filter((n, i, arr) => arr.findIndex(x => x.categoria === n.categoria) === i).slice(0, 4);
+  enPortada.forEach(n => used.add(n.id));
+
+  // ÚLTIMA HORA: 5 más recientes, máximo 2 Sucesos
+  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 20);
+  const breaking: Noticia[] = [];
+  const catCounts: Record<string, number> = {};
+  for (const n of breakingRaw) {
+    if (breaking.length >= 5) break;
+    catCounts[n.categoria] = (catCounts[n.categoria] || 0) + 1;
+    if (catCounts[n.categoria] <= 2 || n.categoria !== 'Sucesos') {
+      breaking.push(n);
+      used.add(n.id);
+    }
+  }
+
+  // SECCIONES POR CATEGORÍA: tomar de consulta directa por categoría, excluyendo usados
+  categoryNames.forEach(name => {
+    const limit = SECTION_LIMITS[name] ?? 4;
+    porCategoria[name] = (porCategoria[name] || []).filter(n => !used.has(n.id)).slice(0, limit);
+    porCategoria[name].forEach(n => used.add(n.id));
+  });
+
+  return { hero, ultimas, enPortada, breaking, porCategoria, masLeidas };
 }

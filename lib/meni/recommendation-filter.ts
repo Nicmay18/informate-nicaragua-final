@@ -48,6 +48,7 @@ function appliesToProfile(mensaje: string, profile: MeniContentProfile): boolean
     salud: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],
     deportes: ['sintoma', 'como se transmite', 'marco legal'],
     cultura: ['sintoma', 'como se transmite'],
+    espectaculos: ['sintoma', 'como se transmite', 'marco legal', 'fallecido', 'accidente'],
     tecnologia: ['sintoma', 'como se transmite'],
     internacional: [],
     educacion: ['fallecido', 'accidente', 'trafico', 'investigacion policial'],

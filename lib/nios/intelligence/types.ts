@@ -258,8 +258,8 @@ export interface GoogleIntelligenceDashboard {
   positionGainers: { slug: string; titulo: string; position: number; impressions: number }[];
   // URLs que nunca reciben impresiones
   zeroImpressionUrls: { slug: string; titulo: string; fecha: string }[];
-  // URLs que Google ignora (impresiones < 10 en 28 días)
-  googleIgnoredUrls: { slug: string; titulo: string; scoreMeni: number | null }[];
+  // URLs con bajo volumen de GSC (impresiones < 10 en 28 días) — no concluye rechazo de Google
+  lowGscDataUrls: { slug: string; titulo: string; scoreMeni: number | null }[];
   // Recomendaciones
   recommendations: NIOSRecommendation[];
   // Fuentes de tráfico GA4
@@ -414,10 +414,10 @@ export interface NIOSWeeklyReport {
   periodStart: string;
   periodEnd: string;
   hasData: boolean;
-  // 1. Contenido funcionando en Google
+  // 1. Contenido con datos reales en GSC
   topPerforming: ArticleFusion[];
-  // 2. Contenido que Google ignora
-  ignoredByGoogle: ArticleFusion[];
+  // 2. Contenido sin datos suficientes en GSC
+  noGscData: ArticleFusion[];
   // 3. Categorías con oportunidad
   categoryOpportunities: CategoryOpportunity[];
   // 4. Qué producir la próxima semana
@@ -666,7 +666,7 @@ export interface MeniLearningEntry {
   ga4Users30d: number;
   ga4AvgEngagementTimeSec30d: number;
   daysSincePublish: number;
-  verdict: 'meni_acertada' | 'meni_sobreestima' | 'meni_subestima' | 'datos_insuficientes';
+  verdict: 'meni_acertada' | 'meni_sobreestima' | 'meni_sobreestima_hipotesis' | 'meni_subestima' | 'datos_insuficientes';
   conclusion: string;
   evidence: NIOSEvidence[];
 }
