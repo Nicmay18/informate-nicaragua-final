@@ -1,7 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { verifyAdminToken } from '@/lib/auth';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  if (!verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'))) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const db = getAdminDb();
     const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(300).get();

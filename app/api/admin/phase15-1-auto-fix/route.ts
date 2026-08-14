@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { verifyAdminToken } from '@/lib/auth';
 import type { NoticiaInput } from '@/lib/meni';
 
 export const dynamic = 'force-dynamic';
@@ -36,7 +37,10 @@ function fixDoubleColons(titulo: string): string {
   return titulo.replace(/:\s*[^:]+:\s*/, ': ');
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'))) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const db = getAdminDb();
   const results: any[] = [];
 

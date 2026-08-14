@@ -14,6 +14,7 @@ export type MeniContentProfile =
   | 'salud'
   | 'deportes'
   | 'cultura'
+  | 'espectaculos'
   | 'tecnologia'
   | 'internacional'
   | 'educacion'
@@ -155,6 +156,69 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'patrimonio', weight: 1.2 },
     { keyword: 'comida tipica', weight: 1.2 },
   ],
+  espectaculos: [
+    { keyword: 'cine', weight: 2 },
+    { keyword: 'pelicula', weight: 2 },
+    { keyword: 'película', weight: 2 },
+    { keyword: 'estreno', weight: 2 },
+    { keyword: 'estrenar', weight: 1.5 },
+    { keyword: 'actor', weight: 1.5 },
+    { keyword: 'actriz', weight: 1.5 },
+    { keyword: 'director', weight: 1.5 },
+    { keyword: 'hollywood', weight: 2 },
+    { keyword: 'warner', weight: 1.5 },
+    { keyword: 'disney', weight: 1.5 },
+    { keyword: 'marvel', weight: 1.5 },
+    { keyword: 'dc comics', weight: 1.5 },
+    { keyword: 'trailer', weight: 1.5 },
+    { keyword: 'tráiler', weight: 1.5 },
+    { keyword: 'taquilla', weight: 1.5 },
+    { keyword: 'serie', weight: 1.2 },
+    { keyword: 'streaming', weight: 1.5 },
+    { keyword: 'netflix', weight: 1.5 },
+    { keyword: 'amazon prime', weight: 1.5 },
+    { keyword: 'hbo', weight: 1.5 },
+    { keyword: 'personaje', weight: 1 },
+    { keyword: 'protagonista', weight: 1.5 },
+    { keyword: 'elenco', weight: 1.2 },
+    { keyword: 'reparto', weight: 1.2 },
+    { keyword: 'secuela', weight: 1.5 },
+    { keyword: 'precuela', weight: 1.5 },
+    { keyword: 'remake', weight: 1.5 },
+    { keyword: 'animacion', weight: 1.5 },
+    { keyword: 'animación', weight: 1.5 },
+    { keyword: 'documental', weight: 1.2 },
+    { keyword: 'festival de cine', weight: 2 },
+    { keyword: 'premio oscar', weight: 2 },
+    { keyword: 'oscar', weight: 1.5 },
+    { keyword: 'goya', weight: 1.5 },
+    { keyword: 'grammy', weight: 1.5 },
+    { keyword: 'premios', weight: 1 },
+    { keyword: 'celebridad', weight: 1.5 },
+    { keyword: 'famoso', weight: 1 },
+    { keyword: 'famosa', weight: 1 },
+    { keyword: 'show', weight: 1 },
+    { keyword: 'espectaculo', weight: 1.5 },
+    { keyword: 'espectáculo', weight: 1.5 },
+    { keyword: 'entretenimiento', weight: 1.5 },
+    { keyword: 'comedia', weight: 1.5 },
+    { keyword: 'drama', weight: 1 },
+    { keyword: 'accion', weight: 1 },
+    { keyword: 'acción', weight: 1 },
+    { keyword: 'ficcion', weight: 1 },
+    { keyword: 'ficción', weight: 1 },
+    { keyword: 'superheroe', weight: 1.5 },
+    { keyword: 'superhéroe', weight: 1.5 },
+    { keyword: 'villano', weight: 1.2 },
+    { keyword: 'looney tunes', weight: 2 },
+    { keyword: 'cartoon', weight: 1.5 },
+    { keyword: 'waza', weight: 1.5 },
+    { keyword: 'videojuego', weight: 1.5 },
+    { keyword: 'consola', weight: 1.5 },
+    { keyword: 'playstation', weight: 1.5 },
+    { keyword: 'xbox', weight: 1.5 },
+    { keyword: 'nintendo', weight: 1.5 },
+  ],
   turismo: [
     { keyword: 'turismo', weight: 1.5 },
     { keyword: 'mirador', weight: 1.5 },
@@ -246,7 +310,6 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
   ambiente: [
     { keyword: 'cambio climático', weight: 2 },
     { keyword: 'cambio climatico', weight: 2 },
-    { keyword: 'clima', weight: 1.5 },
     { keyword: 'contaminación', weight: 1.5 },
     { keyword: 'contaminacion', weight: 1.5 },
     { keyword: 'bosque', weight: 1.5 },
@@ -263,12 +326,11 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'agricultura', weight: 1.5 },
     { keyword: 'agricultores', weight: 1.5 },
     { keyword: 'cosecha', weight: 1 },
-    { keyword: 'producción', weight: 1 },
     { keyword: 'volcan', weight: 1.5 },
     { keyword: 'volcán', weight: 1.5 },
     { keyword: 'ceniza', weight: 1.5 },
-    { keyword: 'emision', weight: 1.5 },
-    { keyword: 'emisión', weight: 1.5 },
+    { keyword: 'emision volcanica', weight: 2 },
+    { keyword: 'emisión volcánica', weight: 2 },
     { keyword: 'actividad volcanica', weight: 2 },
     { keyword: 'actividad volcánica', weight: 2 },
     { keyword: 'ineter', weight: 1.5 },
@@ -276,7 +338,8 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'terremoto', weight: 1.5 },
     { keyword: 'erupcion', weight: 1.5 },
     { keyword: 'erupción', weight: 1.5 },
-    { keyword: 'gases', weight: 1 },
+    { keyword: 'gases volcanicos', weight: 2 },
+    { keyword: 'gases volcánicos', weight: 2 },
     { keyword: 'comupred', weight: 1.2 },
     { keyword: 'sinapred', weight: 1.2 },
   ],
@@ -337,10 +400,16 @@ export function detectContentProfile(
   if (scores.educacion > 0 && scores.nacionales > 0) {
     scores.educacion += 2;
   }
-  if (scores.ambiente > 0 && (scores.sucesos > 0 || scores.nacionales > 0)) {
-    scores.ambiente += 2;
+  // Espectáculos gana sobre cultura cuando hay señales propias de cine/TV
+  if (scores.espectaculos > 0 && scores.cultura > 0) {
+    scores.espectaculos += 2;
   }
-  // (Removed unconditional turismo +2 boost — turismo must win on its own signals)
+  // Espectáculos NO debe ser ambiente: si ambos puntúan, espectáculos gana
+  if (scores.espectaculos > 0 && scores.ambiente > 0) {
+    scores.ambiente = Math.max(0, scores.ambiente - scores.espectaculos);
+  }
+  // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)
+  // No por palabras genéricas como "producción" o "clima" (ya eliminadas de las señales)
 
   const entries = Object.entries(scores) as [MeniContentProfile, number][];
   const sorted = entries.sort((a, b) => b[1] - a[1]);

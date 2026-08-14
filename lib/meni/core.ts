@@ -61,6 +61,7 @@ const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
   salud: 'Salud',
   deportes: 'Deportes',
   cultura: 'Cultura',
+  espectaculos: 'Espectáculos',
   tecnologia: 'Tecnología',
   internacional: 'Internacionales',
   educacion: 'Educación',

@@ -12,6 +12,8 @@ const ANGULOS: Record<MeniCategoria, string[]> = {
   Política: ['Análisis de actores', 'Cronología', 'Implicaciones legales'],
   Salud: ['Recomendaciones oficiales', 'Datos epidemiológicos', 'Dónde acudir'],
   Educación: ['Afectación a estudiantes', 'Cronograma', 'Alternativas'],
+  Ambiente: ['Qué fenómeno ocurrió', 'Cómo afecta a la población', 'Qué hacer'],
+  Turismo: ['Qué encontrarás', 'Precios y horarios', 'Cómo llegar'],
   General: ['Explicación del hecho', 'Contexto necesario', 'Qué sigue'],
 };
 
