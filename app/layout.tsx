@@ -1,4 +1,5 @@
 ﻿import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Inter, Merriweather, Spectral, IBM_Plex_Mono } from 'next/font/google';
 // import localFont from 'next/font/local'; // Descomenta cuando agregues los archivos .woff2
 import './styles/globals.css';
@@ -148,8 +149,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         {/* Google Analytics 4 — gtag.js */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"></script>
-        <script
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"
+          nonce={nonce}
+        />
+        <Script
+          id="ga4-init"
+          strategy="afterInteractive"
           nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `
