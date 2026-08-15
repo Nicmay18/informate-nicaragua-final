@@ -521,7 +521,10 @@ export function detectContentProfile(
     scores.nacionales += 2;
   }
   // Sismo/terremoto/tsunami en un país extranjero → Internacionales gana sobre Ambiente
-  const naturalDisasterWords = new Set(['sismo', 'terremoto', 'tsunami', 'terremotos', 'sismos', 'tsunamis']);
+  const naturalDisasterWords = new Set([
+    'sismo', 'terremoto', 'tsunami', 'terremotos', 'sismos', 'tsunamis',
+    'volcan', 'volcán', 'erupcion', 'erupción', 'ceniza',
+  ]);
   const hasNaturalDisaster = allMatched.some(kw => naturalDisasterWords.has(kw));
   const foreignCountries = new Set(['indonesia', 'japon', 'japón', 'india', 'filipinas', 'china', 'rusia', 'ucrania', 'mexico', 'colombia', 'argentina', 'brasil', 'eeuu', 'estados unidos', 'europa', 'honduras', 'el salvador', 'guatemala', 'costa rica', 'panama']);
   const hasForeignCountry = allMatched.some(kw => foreignCountries.has(kw));

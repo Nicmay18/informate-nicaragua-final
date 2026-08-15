@@ -13,6 +13,9 @@ type FirestoreNoticiaData = Partial<Noticia> & {
   archived?: boolean;
   palabrasClave?: string[];
   metaDescripcion?: string;
+  publishedAt?: any;
+  dateModified?: any;
+  fechaPublicacion?: any;
 };
 
 export const LIST_FIELDS = [

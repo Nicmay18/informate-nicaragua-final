@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 
 // =============================================================================
 // ENDPOINT: Reparación AdSense con GROQ — 100% GRATIS, no pide tarjeta
@@ -115,6 +116,12 @@ export async function POST(request: NextRequest) {
     const slugTarget = body.slug || null;
 
     const adminDb = getAdminDb();
+    // Cost guard: verificar limite antes de gastar tokens de IA
+    const guard = await canCallLLM(adminDb);
+    if (!guard.allowed) {
+      return NextResponse.json({ error: `Cost guard activo: ${guard.reason}` }, { status: 429 });
+    }
+
 
     let snapshot;
     if (slugTarget) {
@@ -166,6 +173,7 @@ export async function POST(request: NextRequest) {
             contenidoActual,
             data.resumen || ''
           );
+          await recordCall(adminDb);
         } catch (err: any) {
           console.error(`[adsense-repair-groq] Error para ${doc.id}:`, err.message);
           resultados.push({

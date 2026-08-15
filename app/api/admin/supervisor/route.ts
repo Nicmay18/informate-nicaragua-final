@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
     const health = await checkMediumHealth(db);
 
     // 2. Cost guard
-    const costGuard = await canCallLLM(db);
+    const costGuardResult = await canCallLLM(db);
+    const costGuard = costGuardResult.status;
 
     // 3. Homepage audit
     let homepage = null;

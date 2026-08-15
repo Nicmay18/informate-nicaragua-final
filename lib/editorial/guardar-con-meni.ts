@@ -4,7 +4,6 @@ import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
 import { resolvePublicCategory } from './canonical';
-import { buildEditorialDecision } from './decision';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
@@ -18,6 +17,11 @@ export function mapMeniScoreToNivel(score: number | null, aprobado: boolean): st
 export interface GuardarConMeniResult {
   ok: boolean;
   meni: MeniResult;
+  /** Decision del Supervisor Editorial — autoridad superior sobre MENI.
+   *  NUNCA debe ignorarse. Si supervisorApproved === false, la publicacion
+   *  debe bloquearse con 400 SUPERVISOR_BLOCKED. */
+  supervisor: SupervisorDecision;
+  supervisorApproved: boolean;
   updateData: Record<string, unknown>;
 }
 
@@ -32,7 +36,16 @@ export async function guardarConMeni(
   });
 
   if (!meni.aprobado) {
-    return { ok: false, meni, updateData: {} };
+    // MENI rechazo antes de que el Supervisor evaluara. Construimos una decision
+    // minima del Supervisor que refleja que MENI ya bloqueo.
+    const supervisorBlock = makeEditorialDecision({
+      titulo: input.titulo,
+      contenido: input.contenido || '',
+      resumen: input.resumen,
+      scoreMeni: meni.scoreFinal ?? undefined,
+      aprobadoMeni: false,
+    });
+    return { ok: false, meni, supervisor: supervisorBlock, supervisorApproved: false, updateData: {} };
   }
 
   const finalContenido = meni.articulo?.contenido || input.contenido || '';
@@ -41,7 +54,7 @@ export async function guardarConMeni(
   const puntosClave = extractPuntosClave(finalContenido, 4);
   const autorFoto = getAutorFoto(input.autor || '');
 
-  // Perfil y categoría pública canónica — una sola fuente de verdad
+  // Perfil y categoria publica canonica — una sola fuente de verdad
   const detectedProfile = detectContentProfile(input.titulo, finalContenido, input.resumen || '');
   const canonicalCategoria = resolvePublicCategory({
     titulo: input.titulo,
@@ -59,26 +72,20 @@ export async function guardarConMeni(
     categoria: canonicalCategoria,
     perfil: detectedProfile.profile_detected,
     imagen: input.imagen,
-    scoreMeni: meni.scoreFinal,
+    scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
     research: input.research,
     story: input.story,
   });
   const supervisorApproved = !supervisor.issues.some(i => i.severity === 'CRITICAL');
 
-  // Decisión editorial canónica — una sola fuente de verdad (REGLA 17)
-  const canonicalEditorialDecision = buildEditorialDecision({
-    publicCategory: canonicalCategoria,
-    profileInternal: detectedProfile.profile_detected,
-    scoreMeni: meni.scoreFinal,
-    aprobadoMeni: meni.aprobado,
-    research: input.research,
-    story: input.story,
-    reason: meni.editorialReason?.principal ?? meni.diagnostico ?? '',
-  });
+  // REGLA 14: Una sola decision editorial canonica — el Supervisor.
+  // buildEditorialDecision (decision.ts) fue eliminado del flujo porque
+  // producia una segunda decision paralela que nadie respetaba.
+  // El Supervisor es la unica autoridad. MENI es subordinado.
 
   const updateData: Record<string, unknown> = {
-    scoreMeni: meni.scoreFinal,
+    scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
     calificacionMeni: meni.calificacion,
     nivel: mapMeniScoreToNivel(meni.scoreFinal, meni.aprobado),
@@ -93,10 +100,9 @@ export async function guardarConMeni(
     categoria: canonicalCategoria,
     palabras,
     puntosClave,
-    fuente: fuente || 'Redacción Nicaragua Informate',
+    fuente: fuente || 'Redaccion Nicaragua Informate',
     fuentesComplementarias,
     autorFoto,
-    canonicalEditorialDecision,
     publicCategory: canonicalCategoria,
     profileInternal: detectedProfile.profile_detected,
     research: input.research,

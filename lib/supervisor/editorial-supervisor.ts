@@ -76,7 +76,11 @@ export function evaluateRawTitle(titulo: string): {
   if (!hasTime) issues.push('cuándo ocurrió');
   if (titulo.length < 30) issues.push('elemento distintivo (el título es demasiado breve)');
 
-  const needsInvestigation = isGeneric || tooShort || issues.length >= 2;
+  // Solo requerir investigacion si el titulo es verdaderamente generico,
+  // demasiado corto, o le faltan 3+ datos periodisticos.
+  // Faltan 2 datos es normal en titulos validos (ej: anuncio de gobierno
+  // sin hora exacta ni lugar especifico).
+  const needsInvestigation = isGeneric || tooShort || issues.length >= 3;
 
   let suggestedAngle: string | null = null;
   if (isGeneric && /hallan\s+cuerpo|encuentran\s+(cuerpo|muerto|sin vida)/i.test(titulo)) {
@@ -118,24 +122,48 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   const timestamp = new Date().toISOString();
 
   // ── 2.1 Título genérico ──────────────────────────────────────
+  // REGLA: evaluateRawTitle es un gate PRE-REDACCION. Si el articulo ya
+  // tiene contenido, research o story, el titulo se evalua como WARNING
+  // (no bloquea publicacion). Solo bloquea si no hay nada mas que el titulo.
   const titleEval = evaluateRawTitle(ctx.titulo);
+  const hasContent = ctx.contenido && ctx.contenido.trim().length > 100;
+  const hasResearch = !!ctx.research;
+  const hasStory = !!ctx.story;
+  const meniCleared = ctx.aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 70;
+  const isPreDraft = !hasContent && !hasResearch && !hasStory && !meniCleared;
+
   if (titleEval.needsInvestigation) {
-    issues.push({
-      severity: 'IMPORTANT',
-      domain: 'TITULO',
-      problem: `Título genérico: "${ctx.titulo}"`,
-      impact: 'No identifica elementos periodísticos clave',
-      cause: 'El periodista introdujo un titular sin datos suficientes',
-      action: `Investigar antes de redactar. Faltan: ${titleEval.missingData.join(', ')}`,
-      autoFixable: false,
-    });
-    actions.push({
-      type: 'RESEARCH_WEB',
-      description: 'Investigar fuentes reales antes de redactar',
-      priority: 'IMMEDIATE',
-      execution: 'AUTO',
-      handler: 'runResearch',
-    });
+    if (isPreDraft) {
+      // Fase pre-redaccion: bloquear, necesitamos investigar antes de redactar
+      issues.push({
+        severity: 'IMPORTANT',
+        domain: 'TITULO',
+        problem: `Título genérico: "${ctx.titulo}"`,
+        impact: 'No identifica elementos periodísticos clave',
+        cause: 'El periodista introdujo un titular sin datos suficientes',
+        action: `Investigar antes de redactar. Faltan: ${titleEval.missingData.join(', ')}`,
+        autoFixable: false,
+      });
+      actions.push({
+        type: 'RESEARCH_WEB',
+        description: 'Investigar fuentes reales antes de redactar',
+        priority: 'IMMEDIATE',
+        execution: 'AUTO',
+        handler: 'runResearch',
+      });
+    } else {
+      // Fase post-redaccion: el titulo es debil pero ya hay contenido.
+      // Marcar como WARNING para que el editor lo corrija, no bloquear.
+      issues.push({
+        severity: 'WARNING',
+        domain: 'TITULO',
+        problem: `Título podría ser más específico: "${ctx.titulo}"`,
+        impact: 'El título no identifica todos los elementos periodísticos clave',
+        cause: `Faltan: ${titleEval.missingData.join(', ')}`,
+        action: 'Considerar enriquecer el título con datos del contenido',
+        autoFixable: false,
+      });
+    }
   }
 
   // ── 2.2 Investigación insuficiente o conflictos ──────────────
@@ -176,7 +204,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       });
     }
 
-    // CASO CRÍTICO: Interpol — información desactualizada
+    // CASO CRÍTICO: Interpol — información desactualizada que cambia el foco
     if (ctx.research.hasNewInformation && ctx.research.changesOriginalFocus) {
       issues.push({
         severity: 'CRITICAL',
@@ -185,6 +213,18 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
         impact: 'Publicar la versión original sería desinformar',
         cause: ctx.research.newInformationSummary || 'Nueva información detectada',
         action: 'Actualizar el artículo antes de publicar, o archivar la versión original',
+        autoFixable: false,
+      });
+    } else if (ctx.research.hasNewInformation && !ctx.research.changesOriginalFocus) {
+      // Informacion complementaria: no cambia el foco pero debe registrarse
+      // como aviso de actualizacion para que el editor la considere.
+      issues.push({
+        severity: 'WARNING',
+        domain: 'ACTUALIZACION',
+        problem: 'Existe información nueva complementaria',
+        impact: 'El artículo podría estar incompleto si no se incorpora',
+        cause: ctx.research.newInformationSummary || 'Nueva información detectada',
+        action: 'Considerar incorporar la nueva información antes de publicar',
         autoFixable: false,
       });
     }

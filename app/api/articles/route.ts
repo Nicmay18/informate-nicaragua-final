@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const finalSlug = slug;
     const now = new Date();
 
-    // MENI canónico — toda nota nueva debe pasar por la cadena editorial
+    // MENI canonico — toda nota nueva debe pasar por la cadena editorial
     const noticiaInput: NoticiaInput = {
       titulo: titulo.trim(),
       contenido: contenido.trim(),
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       slug: finalSlug,
     };
 
-    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
@@ -82,30 +82,90 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
+    // BLOQUEO del Supervisor Editorial — MENI no es el jefe
+    if (!supervisorApproved) {
+      const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
+      const first = criticalIssues[0];
+      return NextResponse.json({
+        error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
+        code: 'SUPERVISOR_BLOCKED',
+        supervisor: {
+          decisionId: supervisor.decisionId,
+          verdict: supervisor.verdict,
+          confidence: supervisor.confidence,
+          reason: supervisor.reason,
+          issues: supervisor.issues,
+          actions: supervisor.actions,
+        },
+        critical: criticalIssues,
+        warnings: supervisor.issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+      }, { status: 400 });
+    }
+
     const articleRef = adminDb.collection('noticias').doc();
+    const finalCategoria = (meniUpdateData.categoria as string) || categoria || 'General';
     await articleRef.set({
       ...meniUpdateData,
       titulo,
       slug: finalSlug,
       contenido,
       resumen: resumen || '',
-      categoria: categoria || 'General',
+      categoria: finalCategoria,
       imagen: imagen || '',
       autor: autor || 'Redacción Nicaragua Informate',
-      autorRol: categoria === 'Deportes' ? 'Redacción Deportiva' : 'Nicaragua Informate',
+      autorRol: finalCategoria === 'Deportes' ? 'Redacción Deportiva' : 'Nicaragua Informate',
       fecha: now,
       fechaActualizacion: now,
+      publishedAt: now,
+      dateModified: now,
       vistas: 0,
       publicado: true,
+      estado: 'publicado',
       premium: premium === true,
     });
 
-    // Ping IndexNow en background (no bloquea la respuesta)
-    fetch(`${request.nextUrl.origin}/api/indexnow`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug: finalSlug }),
-    }).catch(() => {});
+    const articleId = articleRef.id;
+
+    // REGLA: Usar el publication-pipeline canonico en lugar de fetch sueltos.
+    // El pipeline ejecuta Telegram + Facebook + IndexNow + Push + social copy.
+    try {
+      const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
+      // No bloquea la respuesta: corre en background
+      runPublicationPipeline({
+        db: adminDb,
+        articleId,
+        slug: finalSlug,
+        titulo,
+        resumen: resumen || '',
+        contenido,
+        categoria: finalCategoria,
+        imagen: imagen || undefined,
+        autor: autor || 'Redacción Nicaragua Informate',
+        story: body.story,
+      }).catch((e) => console.warn('[articles] publication-pipeline error (non-blocking):', e));
+    } catch (e) {
+      console.warn('[articles] No se pudo importar publication-pipeline:', e);
+    }
+
+    // REGLA: Toda noticia publicada entra en WATCH automaticamente.
+    try {
+      const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
+      runWatchCycle(
+        {
+          id: articleId,
+          titulo,
+          contenido,
+          resumen: resumen || '',
+          categoria: finalCategoria,
+          fecha: now.toISOString(),
+        },
+        { db: adminDb }
+      )
+        .then((watchResult) => persistWatchResult(adminDb, articleId, watchResult))
+        .catch((e) => console.warn('[articles] WATCH init error (non-blocking):', e));
+    } catch (e) {
+      console.warn('[articles] No se pudo importar news-watch:', e);
+    }
 
     // Invalidar cache en memoria para que lecturas futuras vean la nueva noticia
     try {
@@ -121,7 +181,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      id: articleRef.id,
+      id: articleId,
       slug: finalSlug,
       wordCount,
       url: `https://nicaraguainformate.com/noticias/${finalSlug}`,

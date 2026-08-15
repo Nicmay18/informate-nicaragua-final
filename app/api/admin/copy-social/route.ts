@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 
 // =============================================================================
 // ENDPOINT: Generador de copy para redes sociales con IA (Groq - GRATIS)
@@ -152,7 +153,14 @@ export async function POST(request: NextRequest) {
     }
 
     const texto = resumen || contenido;
+  // Cost guard: verificar limite antes de gastar tokens de IA
+  const guard = await canCallLLM();
+  if (!guard.allowed) {
+    return NextResponse.json({ error: `Cost guard activo: ${guard.reason}` }, { status: 429 });
+  }
+
     const iaCopy = await generarCopyGroq(titulo, texto, categoria, url);
+    await recordCall();
     const copy = iaCopy || fallbackCopy(titulo, stripHtml(texto), categoria, url);
 
     return NextResponse.json({

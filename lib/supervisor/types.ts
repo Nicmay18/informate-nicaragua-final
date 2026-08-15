@@ -12,8 +12,6 @@
 import type { ResearchResult } from '@/lib/research/types';
 import type { StoryProposal } from '@/lib/editorial/story-editor/types';
 import type { WatchResult, UpdateDetected } from '@/lib/news-watch/types';
-import type { PublicCategory } from '@/lib/types';
-import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 
 // ═══════════════════════════════════════════════════════════════
 // CICLO DE VIDA DE UNA NOTICIA

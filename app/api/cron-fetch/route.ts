@@ -2,18 +2,18 @@
  * MÓDULO 1: Pipeline Editorial con IA — Nicaragua Informate
  * Route Handler protegido por token secreto para automatización de contenido.
  *
+ * REGLA 18: simulateExternalFeed fue eliminado. Publicar contenido ficticio
+ * hardcodeado viola la integridad editorial. Este endpoint ahora requiere
+ * un feed real (RSS/API) proporcionado via body.articles o via una fuente
+ * configurada. Si no hay articles reales, retorna 400.
+ *
  * Funcionalidad:
  *   1. Recibe petición con x-cron-secret válido
- *   2. Simula consumo de feed externo (Deportes/Tecnología)
+ *   2. Requiere articles reales en el body (feed externo real) o via NIOS
  *   3. Usa Gemini API para traducir y dar tono periodístico profesional
  *   4. Extrae entidades y keywords vía meta.ts
- *   5. Guarda en Firestore como 'borrador' o 'publicado'
- *
- * Requiere:
- *   npm install @google/genai
- *   Variables de entorno:
- *     GEMINI_API_KEY=...
- *     CRON_SECRET_TOKEN=...
+ *   5. Pasa por guardarConMeni + Supervisor Editorial
+ *   6. Guarda en Firestore como 'borrador' o 'publicado'
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -24,6 +24,7 @@ import type { Noticia } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import type { NoticiaInput } from '@/lib/meni';
+import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 
 export const maxDuration = 30;
 
@@ -40,21 +41,8 @@ interface ExternalArticle {
   imagen?: string;
   autor?: string;
   tags?: string[];
-}
-
-// ─── Simulación de feed externo (reemplazar por fetch real a RSS/API) ───
-function simulateExternalFeed(): ExternalArticle[] {
-  return [
-    {
-      titulo: 'Nueva tecnología de inteligencia artificial revoluciona la agricultura en América Central',
-      resumen: 'Investigadores de la Universidad Nacional Agraria han desarrollado un sistema basado en IA para optimizar el riego en cultivos de café y maíz en la región del Pacífico Nicaragüense.',
-      contenido: '<p>El proyecto piloto, financiado por la cooperación internacional, ha demostrado una reducción del 35% en el consumo de agua durante la primera cosecha de prueba realizada en Jinotega y Matagalpa.</p><p>Los agricultores locales reportan mejores rendimientos con menor inversión en insumos hídricos.</p>',
-      categoria: 'Tecnología',
-      imagen: '/images/agricultura-ia-nicaragua.webp',
-      autor: 'Redacción Tecnología',
-      tags: ['inteligencia artificial', 'agricultura', 'innovación'],
-    },
-  ];
+  fuente?: string;
+  url?: string;
 }
 
 // ─── Gemini: reescritura periodística ───
@@ -63,8 +51,9 @@ async function rewriteWithGemini(raw: ExternalArticle): Promise<ExternalArticle>
     throw new Error('GEMINI_API_KEY no configurada');
   }
 
-  // webpackIgnore evita que Next.js bundlee este módulo en build time
-  // Se resuelve en runtime del servidor cuando la dependencia esté instalada
+  // Cost guard: registrar la llamada antes de ejecutarla
+  await recordCall(adminDb);
+
   const { GoogleGenAI } = await import(/* webpackIgnore: true */ '@google/genai');
   const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
@@ -100,7 +89,6 @@ Responde ÚNICAMENTE en formato JSON válido con estas claves:
 
   const text = response.text?.trim() || '';
 
-  // Extraer JSON de la respuesta (Gemini a veces envuelve en markdown)
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     throw new Error('Gemini no retornó JSON válido');
@@ -136,7 +124,6 @@ async function saveToFirestore(
   const slug = generateSlugFromTitle(article.titulo);
   const sanitizedContenido = sanitizeArticleHtml(article.contenido);
 
-  // Extraer entidades para keywords
   const entities = extractEntities(article.titulo, sanitizedContenido);
   const keywords = [article.categoria, ...entities].slice(0, 12);
 
@@ -151,7 +138,7 @@ async function saveToFirestore(
     slug,
   };
 
-  const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
+  const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
 
   if (!meniOk) {
     // Si MENI rechaza, guardar como borrador con diagnóstico pero sin scoreMeni
@@ -178,6 +165,15 @@ async function saveToFirestore(
     return { id: slug, slug, meniBlocked: true, meniScore: meni.scoreFinal };
   }
 
+  // BLOQUEO del Supervisor Editorial — MENI no es el jefe
+  if (!supervisorApproved) {
+    const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
+    const first = criticalIssues[0];
+    throw new Error(
+      first ? `[SUPERVISOR][${first.domain}] ${first.problem}` : 'Supervisor Editorial bloqueo la publicacion'
+    );
+  }
+
   // Guardar con datos MENI auténticos
   const now = new Date().toISOString();
   const noticiaData: Record<string, unknown> = {
@@ -197,6 +193,8 @@ async function saveToFirestore(
     keywords: keywords.join(', '),
     vistas: 0,
     destacada: false,
+    fuente: article.fuente || 'cron-fetch',
+    fuenteUrl: article.url || null,
   };
 
   await adminDb.collection('noticias').doc(slug).set(noticiaData);
@@ -221,22 +219,48 @@ export async function POST(request: NextRequest) {
     const {
       estado = 'borrador',
       usarGemini = true,
-    } = body as { estado?: 'publicado' | 'borrador'; usarGemini?: boolean };
+      articles,
+    } = body as { estado?: 'publicado' | 'borrador'; usarGemini?: boolean; articles?: ExternalArticle[] };
 
     if (!['publicado', 'borrador'].includes(estado)) {
       return NextResponse.json({ error: "estado debe ser 'publicado' o 'borrador'" }, { status: 400 });
     }
 
-    // 3. Consumir feed externo (simulado)
-    const rawArticles = simulateExternalFeed();
+    // REGLA 18: No más simulateExternalFeed. Se requieren articles reales.
+    if (!articles || !Array.isArray(articles) || articles.length === 0) {
+      return NextResponse.json({
+        ok: false,
+        error: 'No se proporcionaron articles reales. simulateExternalFeed fue eliminado (REGLA 18).',
+        hint: 'Envia { "articles": [{ "titulo": "...", "contenido": "...", "categoria": "..." }] } en el body, o conecta un feed RSS real.',
+      }, { status: 400 });
+    }
 
-    if (rawArticles.length === 0) {
-      return NextResponse.json({ ok: true, message: 'No hay artículos nuevos del feed', created: [] });
+    // Validar que cada article tiene los campos mínimos
+    for (const a of articles) {
+      if (!a.titulo || !a.contenido) {
+        return NextResponse.json({
+          ok: false,
+          error: 'Cada article debe tener al menos titulo y contenido.',
+          invalidArticle: a,
+        }, { status: 400 });
+      }
+    }
+
+    // 3. Cost guard: verificar limite antes de procesar con IA
+    if (usarGemini && GEMINI_API_KEY) {
+      const guard = await canCallLLM(adminDb);
+      if (!guard.allowed) {
+        return NextResponse.json({
+          ok: false,
+          error: `Cost guard activo: ${guard.reason}`,
+          hint: 'Se puede reintentar mas tarde o desactivar usarGemini para usar el contenido original sin reescritura.',
+        }, { status: 429 });
+      }
     }
 
     // 4. Procesar con Gemini si está habilitado
     const processedArticles: ExternalArticle[] = [];
-    for (const raw of rawArticles) {
+    for (const raw of articles) {
       try {
         const processed = usarGemini && GEMINI_API_KEY ? await rewriteWithGemini(raw) : raw;
         processedArticles.push(processed);
@@ -266,13 +290,11 @@ export async function POST(request: NextRequest) {
       } catch (revErr) {
         logger.warn('[cron-fetch] No se pudo revalidar caché:', revErr);
       }
-      // Invalidar cache en memoria de Firestore para que lecturas futuras vean la nueva noticia
       try {
         const { invalidateFirestoreCache } = await import('@/lib/data');
         invalidateFirestoreCache();
       } catch (e) { /* noop */ }
 
-      // Notificar a Google Indexing API para cada noticia publicada (no bloquea)
       import('@/lib/google-indexing').then(({ notifyGoogleBulk }) => {
         const urls = revalidateList.map(c => `https://nicaraguainformate.com/noticias/${c.slug}`);
         notifyGoogleBulk(urls).catch(() => {});
@@ -285,9 +307,9 @@ export async function POST(request: NextRequest) {
       created,
     });
   } catch (error) {
-    logger.error('[cron-fetch] Error crítico:', error);
+    logger.error('[cron-fetch] Error:', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor', detail: error instanceof Error ? error.message : String(error) },
+      { error: error instanceof Error ? error.message : 'Error interno' },
       { status: 500 }
     );
   }

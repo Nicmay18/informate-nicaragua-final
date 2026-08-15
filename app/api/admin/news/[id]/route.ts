@@ -26,13 +26,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ success: false, error: 'Noticia no encontrada' }, { status: 404 });
     }
 
-    // ── Provenance gate: si se cambia contenido o título, requerir MENI ──
+    // Provenance gate: si se cambia contenido o titulo, requerir MENI + Supervisor
     const contentChanged = body.contenido !== undefined || body.titulo !== undefined;
     const tryingToPublish = body.publicado === true;
     const alreadyApproved = snap.data()?.aprobadoMeni === true;
 
     if (contentChanged) {
-      // Re-evaluar con MENI canónico
+      // Re-evaluar con MENI canonico
       const existingData = snap.data()!;
       const noticiaInput: NoticiaInput = {
         id,
@@ -46,21 +46,42 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         slug: existingData.slug || '',
       };
 
-      const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+      const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
 
       if (!meniOk) {
         const first = meni.blockingIssues?.[0];
         return NextResponse.json({
           success: false,
-          error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI tras edición',
+          error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI tras edicion',
           code: first?.code || 'MENI_NOT_APPROVED',
           blockingIssues: meni.blockingIssues || [],
           scoreFinal: meni.scoreFinal,
         }, { status: 400 });
       }
 
+      // BLOQUEO del Supervisor Editorial — MENI no es el jefe
+      if (!supervisorApproved) {
+        const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
+        const first = criticalIssues[0];
+        return NextResponse.json({
+          success: false,
+          error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
+          code: 'SUPERVISOR_BLOCKED',
+          supervisor: {
+            decisionId: supervisor.decisionId,
+            verdict: supervisor.verdict,
+            confidence: supervisor.confidence,
+            reason: supervisor.reason,
+            issues: supervisor.issues,
+            actions: supervisor.actions,
+          },
+          critical: criticalIssues,
+          warnings: supervisor.issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+        }, { status: 400 });
+      }
+
       // Merge MENI update data with metadata-only fields
-      // La categoría siempre viene del cálculo canónico de MENI, no del body
+      // La categoria siempre viene del calculo canonico de MENI, no del body
       const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado', 'resumen'];
       const updateData: Record<string, unknown> = { ...meniUpdateData };
       for (const key of metadataAllowed) {
@@ -101,7 +122,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
 
       const updateData: Record<string, unknown> = {};
-      // Solo metadata que no altera la categoría canónica
+      // Solo metadata que no altera la categoria canonica
       const allowed = ['imagen', 'autor', 'destacada', 'publicado'];
       for (const key of allowed) {
         if (body[key] !== undefined) {
@@ -152,14 +173,112 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const ref = db.collection('noticias').doc(id);
     const before = await ref.get();
     const existedBefore = before.exists;
-    const slugBefore = before.data()?.slug || null;
+    const beforeData = before.data() || {};
+    const slugBefore = beforeData.slug || null;
 
+    // REGLA 17: No borrar noticias publicadas sin control.
+    // - DRAFT: puede eliminarse fisicamente
+    // - PUBLISHED: soft-delete (archivar + snapshot + auditoria)
+    // - ARCHIVED/CORRECTION: conservar trazabilidad
+    const estado = beforeData.estado || (beforeData.publicado ? 'publicado' : 'borrador');
+    const wasPublished = beforeData.publicado === true || estado === 'publicado';
+    const forceHardDelete = request.headers.get('x-force-hard-delete') === 'true';
+
+    if (wasPublished && !forceHardDelete) {
+      // Soft-delete: archivar, NO eliminar fisicamente
+      const snapshot = {
+        titulo: beforeData.titulo || '',
+        slug: slugBefore,
+        contenido: beforeData.contenido || '',
+        resumen: beforeData.resumen || '',
+        categoria: beforeData.categoria || '',
+        autor: beforeData.autor || '',
+        fecha: beforeData.fecha || null,
+        publishedAt: beforeData.publishedAt || null,
+        scoreMeni: beforeData.scoreMeni ?? null,
+        aprobadoMeni: beforeData.aprobadoMeni ?? null,
+        supervisorDecision: beforeData.supervisorDecision || null,
+      };
+
+      await ref.update({
+        estado: 'archivado',
+        archived: true,
+        publicado: false,
+        noindex: true,
+        deletedAt: new Date(),
+        deletedBy: request.headers.get('x-admin-token') ? 'admin' : 'system',
+        deleteReason: 'soft-delete por DELETE admin/news/[id]',
+        deleteSnapshot: snapshot,
+        dateModified: new Date(),
+      });
+
+      // Registrar en auditoria de eliminaciones
+      try {
+        await db.collection('deletion_audit').add({
+          articleId: id,
+          action: 'SOFT_DELETE',
+          titulo: beforeData.titulo || '',
+          slug: slugBefore,
+          estadoBefore: estado,
+          deletedAt: new Date().toISOString(),
+          deletedBy: request.headers.get('x-admin-token') ? 'admin' : 'system',
+          reason: 'DELETE admin/news/[id] — noticia publicada archivada',
+          snapshot,
+        });
+      } catch (e) {
+        console.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
+      }
+
+      try {
+        const { invalidateFirestoreCache } = await import('@/lib/data');
+        invalidateFirestoreCache();
+      } catch (e) { /* noop */ }
+
+      revalidateTag('latest-news');
+      revalidateTag('trending-news');
+      revalidateTag('news-sitemap');
+      revalidateTag('sitemap-news');
+      revalidatePath('/');
+      revalidatePath('/noticias');
+      if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
+
+      return NextResponse.json({
+        success: true,
+        action: 'SOFT_DELETE',
+        existedBefore,
+        estadoBefore: estado,
+        slug: slugBefore,
+        id,
+        message: 'Noticia archivada (soft-delete). URL conservada. Snapshot guardado en deletion_audit.',
+      });
+    }
+
+    // Hard delete solo para borradores o si se fuerza explicitamente
     await ref.delete();
-
     const after = await ref.get();
     const existsAfter = after.exists;
 
-    // Invalidar cache en memoria de Firestore
+    try {
+      await db.collection('deletion_audit').add({
+        articleId: id,
+        action: 'HARD_DELETE',
+        titulo: beforeData.titulo || '',
+        slug: slugBefore,
+        estadoBefore: estado,
+        deletedAt: new Date().toISOString(),
+        deletedBy: request.headers.get('x-admin-token') ? 'admin' : 'system',
+        reason: forceHardDelete ? 'Hard delete forzado por header x-force-hard-delete' : `Estado ${estado} — eliminacion fisica permitida`,
+        snapshot: {
+          titulo: beforeData.titulo || '',
+          slug: slugBefore,
+          contenido: beforeData.contenido || '',
+          categoria: beforeData.categoria || '',
+        },
+      });
+    } catch (e) {
+      console.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
+    }
+
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');
       invalidateFirestoreCache();
@@ -175,6 +294,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return NextResponse.json({
       success: !existsAfter,
+      action: 'HARD_DELETE',
       existedBefore,
       existsAfter,
       slug: slugBefore,

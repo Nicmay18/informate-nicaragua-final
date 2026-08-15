@@ -12,20 +12,6 @@ import type { Firestore } from 'firebase-admin/firestore';
 
 const MODEL_VERSION = 'research-agent-v1.1-web';
 
-/** Control de costo: contador simple en memoria. En producción usar Firestore. */
-let hourlyCallCount = 0;
-let hourlyResetAt = Date.now();
-
-function checkCostLimit(): boolean {
-  const now = Date.now();
-  if (now - hourlyResetAt > 3600000) {
-    hourlyCallCount = 0;
-    hourlyResetAt = now;
-  }
-  hourlyCallCount++;
-  return hourlyCallCount <= MAX_RESEARCH_CALLS_PER_HOUR;
-}
-
 /**
  * Consulta el Knowledge Base local para contexto adicional.
  * Reutiliza la infraestructura existente.
@@ -102,7 +88,6 @@ Responde ÚNICAMENTE en JSON con esta estructura exacta:
 }`;
 }
 
-const MAX_RESEARCH_CALLS_PER_HOUR = parseInt(process.env.MAX_RESEARCH_CALLS_PER_HOUR || '100', 10);
 
 function buildFallbackResult(input: ResearchInput, error: string): ResearchResult {
   const now = new Date().toISOString();

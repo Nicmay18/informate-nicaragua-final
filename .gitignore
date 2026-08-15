@@ -41,6 +41,9 @@ out/
 fb-key-base64.txt
 firebase.json.local
 
+# Vercel local env dump (puede contener secrets)
+vercel-env.txt
+
 # Logs
 logs
 *.log

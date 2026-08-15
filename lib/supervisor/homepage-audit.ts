@@ -34,7 +34,6 @@ async function loadHomepageArticles(db: Firestore, limit = 30): Promise<Array<{
       .limit(limit * 2)
       .get();
 
-    const now = Date.now();
     return snap.docs
       .map(d => ({ id: d.id, ...d.data() } as any))
       .filter(a => {

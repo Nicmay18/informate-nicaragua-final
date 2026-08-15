@@ -5,7 +5,7 @@ import { notifyGoogleIndexingDeduped } from '@/lib/google-indexing';
 
 export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
-import { Timestamp, Firestore } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 import { normalizarTitulo } from '@/lib/meni/titulo';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
@@ -93,19 +93,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function getTelegramConfig(db: Firestore) {
-  try {
-    const snap = await db.collection('config').doc('admin').get();
-    const data = snap.data() || {};
-    return {
-      token: data.telegram?.token || process.env.TG_TOKEN || '',
-      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
-    };
-  } catch {
-    return { token: process.env.TG_TOKEN || '', chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || '' };
-  }
-}
-
 async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: string) {
   try {
     const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
@@ -119,41 +106,11 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
   }
 }
 
-async function notifyTelegram(titulo: string, resumen: string, slug: string, categoria: string, imagen: string, customToken?: string, customChat?: string) {
-  const token = customToken || process.env.TG_TOKEN;
-  const chatId = customChat || process.env.TG_CHAT;
-  if (!token || !chatId) return;
-  const url = `https://nicaraguainformate.com/noticias/${slug}/?utm_source=telegram`;
-  const catEmojis: Record<string, string> = {
-    Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍',
-    Espectáculos: '🎬', Tecnología: '💻',
-  };
-  const emoji = catEmojis[categoria] || '📰';
-  const text = `${emoji} *${titulo}*\n\n${resumen}\n\n🔗 [Leer noticia completa](${url})`;
-  try {
-    if (imagen) {
-      await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, photo: imagen, caption: text, parse_mode: 'Markdown' }),
-      });
-    } else {
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown', disable_web_page_preview: false }),
-      });
-    }
-  } catch (e) {
-    console.error('[Telegram notify]', e);
-  }
-}
-
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const body = await request.json();
-    const { titulo, resumen, contenido, categoria, imagen, autor, destacada, publicado, notificarTelegram } = body;
+    const { titulo, resumen, contenido, categoria, imagen, autor, destacada, publicado } = body;
 
     if (!titulo || !resumen || !contenido || !categoria) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
@@ -168,7 +125,7 @@ export async function POST(request: NextRequest) {
     });
     const docRef = db.collection('noticias').doc();
 
-    // MENI canónico — toda nota nueva debe pasar por la cadena editorial
+    // MENI canonico — toda nota nueva debe pasar por la cadena editorial
     const noticiaInput: NoticiaInput = {
       titulo: tituloLimpio,
       contenido: contenido.trim(),
@@ -180,7 +137,7 @@ export async function POST(request: NextRequest) {
       slug,
     };
 
-    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
@@ -192,6 +149,27 @@ export async function POST(request: NextRequest) {
         scoreFinal: meni.scoreFinal,
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
+      }, { status: 400 });
+    }
+
+    // BLOQUEO del Supervisor Editorial — MENI no es el jefe
+    if (!supervisorApproved) {
+      const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
+      const first = criticalIssues[0];
+      return NextResponse.json({
+        success: false,
+        error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
+        code: 'SUPERVISOR_BLOCKED',
+        supervisor: {
+          decisionId: supervisor.decisionId,
+          verdict: supervisor.verdict,
+          confidence: supervisor.confidence,
+          reason: supervisor.reason,
+          issues: supervisor.issues,
+          actions: supervisor.actions,
+        },
+        critical: criticalIssues,
+        warnings: supervisor.issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
       }, { status: 400 });
     }
 
@@ -216,9 +194,45 @@ export async function POST(request: NextRequest) {
       related_links: relatedLinks,
     });
 
-    if (notificarTelegram !== false && publicado !== false) {
-      const tgConfig = await getTelegramConfig(db);
-      await notifyTelegram(titulo, resumen, slug, finalCategoria, imagen || '', body.telegramToken || tgConfig.token, body.telegramChat || tgConfig.chatId);
+    if (publicado !== false) {
+      // REGLA: Usar el publication-pipeline canonico, no notifyTelegram inline.
+      // El pipeline ejecuta Telegram + Facebook + IndexNow + Push + social copy.
+      try {
+        const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
+        await runPublicationPipeline({
+          db,
+          articleId: docRef.id,
+          slug,
+          titulo: tituloLimpio,
+          resumen: resumen || '',
+          contenido,
+          categoria: finalCategoria,
+          imagen: imagen || undefined,
+          autor: autor || 'Nicaragua Informate',
+          story: body.story,
+        });
+      } catch (e) {
+        console.warn('[admin/news POST] publication-pipeline error (non-blocking):', e);
+      }
+
+      // REGLA: Toda noticia publicada entra en WATCH automaticamente.
+      try {
+        const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
+        const watchResult = await runWatchCycle(
+          {
+            id: docRef.id,
+            titulo: tituloLimpio,
+            contenido,
+            resumen: resumen || '',
+            categoria: finalCategoria,
+            fecha: new Date().toISOString(),
+          },
+          { db }
+        );
+        await persistWatchResult(db, docRef.id, watchResult);
+      } catch (e) {
+        console.warn('[admin/news POST] WATCH init error (non-blocking):', e);
+      }
     }
 
     revalidateTag('noticias');
@@ -227,7 +241,7 @@ export async function POST(request: NextRequest) {
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
 
-    // Invalidar cache en memoria de Firestore (CRÍTICO: evita esperar 5 min)
+    // Invalidar cache en memoria de Firestore (CRITICO: evita esperar 5 min)
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');
       invalidateFirestoreCache();
