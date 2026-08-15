@@ -98,7 +98,7 @@
   {
     "slug": "comupred-monitorea-crecida-del-rio-tuma-en-mulukuku",
     "titulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
-    "categoria": "Clima",
+    "categoria": "Nacionales",
     "tipoContenido": "REPORTAJE",
     "input": {
       "titulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
@@ -115,14 +115,14 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 99.4,
+      "scoreFinal": 95.8,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 96,
         "EEAT": 100,
         "DISCOVER": 100,
         "ADSENSE": 100,
-        "VALOR_EDITORIAL": 100,
+        "VALOR_EDITORIAL": 88,
         "FORENSE": 100
       }
     }
@@ -162,7 +162,7 @@
   {
     "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
     "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
-    "categoria": "Salud",
+    "categoria": "Sucesos",
     "tipoContenido": "INVESTIGACION",
     "input": {
       "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
@@ -179,14 +179,14 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97,
+      "scoreFinal": 98.8,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 98,
         "EEAT": 100,
         "DISCOVER": 100,
         "ADSENSE": 100,
-        "VALOR_EDITORIAL": 91,
+        "VALOR_EDITORIAL": 97,
         "FORENSE": 100
       }
     }
@@ -290,7 +290,7 @@
   {
     "slug": "inicia-construccion-del-hospital-oriental-lesbia-carrasquilla",
     "titulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
-    "categoria": "Salud",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
@@ -386,7 +386,7 @@
   {
     "slug": "guia-de-senalizacion-vial-en-nicaragua-lineas-y-multas-ley-431",
     "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
-    "categoria": "Política",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
@@ -514,7 +514,7 @@
   {
     "slug": "nicaragua-y-costa-rica-refuerzan-lucha-contra-la-malaria",
     "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
-    "categoria": "Salud",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
@@ -834,7 +834,7 @@
   {
     "slug": "bertha-calderon-estrena-equipos-de-diagnostico-avanzado",
     "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
-    "categoria": "Salud",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
@@ -866,7 +866,7 @@
   {
     "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
     "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
-    "categoria": "Economía",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
@@ -930,7 +930,7 @@
   {
     "slug": "puente-wawa-boom-255-metros-que-unieron-el-caribe-norte",
     "titulo": "Puente Wawa Boom: 255 metros que unieron el Caribe Norte",
-    "categoria": "Clima",
+    "categoria": "Nacionales",
     "tipoContenido": "NOTICIA",
     "input": {
       "titulo": "Puente Wawa Boom: 255 metros que unieron el Caribe Norte",

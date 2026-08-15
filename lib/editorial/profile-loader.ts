@@ -1,39 +1,25 @@
 /**
- * ProfileLoader V4 — REGLA 6
+ * ProfileLoader V5 — REGLA 2
  * ==========================
- * Carga el perfil declarativo según la categoría detectada.
- * Nueva categoría = nuevo archivo en profiles/. No se toca este loader ni el engine.
+ * Carga el perfil declarativo según la categoría PÚBLICA detectada.
+ * Solo 6 categorías públicas. Perfiles internos no acceden aquí.
  */
 
 import type { EditorialProfile } from './types';
 import { profileSucesos } from './profiles/sucesos';
 import { profileNacionales } from './profiles/nacionales';
 import { profileInternacionales } from './profiles/internacionales';
-import { profileClima } from './profiles/clima';
-import { profileEconomia } from './profiles/economia';
-import { profilePolitica } from './profiles/politica';
 import { profileTecnologia } from './profiles/tecnologia';
 import { profileDeportes } from './profiles/deportes';
-import { profileSalud } from './profiles/salud';
-import { profileServicio } from './profiles/servicio';
 import { profileEspectaculos } from './profiles/espectaculos';
-import { profileCultura } from './profiles/cultura';
-import { profileTurismo } from './profiles/turismo';
 
 const REGISTRY: Record<string, EditorialProfile> = {
   'Sucesos': profileSucesos,
   'Nacionales': profileNacionales,
   'Internacionales': profileInternacionales,
-  'Clima': profileClima,
-  'Economía': profileEconomia,
-  'Política': profilePolitica,
   'Tecnología': profileTecnologia,
   'Deportes': profileDeportes,
-  'Salud': profileSalud,
-  'Servicio': profileServicio,
   'Espectáculos': profileEspectaculos,
-  'Cultura': profileCultura,
-  'Turismo': profileTurismo,
 };
 
 export function loadProfile(categoria: string): EditorialProfile {
