@@ -13,8 +13,19 @@ import type { EditorialReason } from '@/lib/meni/editorial-reason';
 import type { EstadoEditorial, RecomendacionEditorial, DiagnosticoEditorial as DiagnosticoEditorialNI } from '@/lib/meni/editorial-brain/types';
 import type { ContextScore } from '@/lib/meni/contextualiza';
 import type { MeniContentProfile } from '@/lib/meni/profile-detector';
+import type { EditorialDecision } from '@/lib/editorial/decision';
 
-export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
+import type { ResearchResult } from '@/lib/research/types';
+import type { StoryProposal } from '@/lib/editorial/story-editor';
+
+export type NoticiaInput = EditorialNoticiaInput & {
+  id?: string;
+  departamento?: string;
+  /** Resultado de research previo para decisión editorial canónica */
+  research?: ResearchResult;
+  /** Propuesta del story editor previo a MENI */
+  story?: StoryProposal;
+};
 
 /**
  * REGLA 2: MENI solo opera sobre categorías públicas válidas (6).
@@ -180,6 +191,8 @@ export interface MeniResult {
   editorialTier?: EditorialTier;
   editorialReason?: EditorialReason;
   editorialDecision?: EditorialDecisionFlat;
+  /** Decisión editorial canónica — una sola fuente de verdad (REGLA 17) */
+  canonicalEditorialDecision?: EditorialDecision;
 }
 
 export interface EditorialDecisionFlat {

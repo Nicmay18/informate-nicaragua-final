@@ -4,6 +4,7 @@ import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
 import { resolvePublicCategory } from './canonical';
+import { buildEditorialDecision } from './decision';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
 
 export function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
@@ -48,6 +49,17 @@ export async function guardarConMeni(
     perfil: detectedProfile.profile_detected,
   });
 
+  // Decisión editorial canónica — una sola fuente de verdad (REGLA 17)
+  const canonicalEditorialDecision = buildEditorialDecision({
+    publicCategory: canonicalCategoria,
+    profileInternal: detectedProfile.profile_detected,
+    scoreMeni: meni.scoreFinal,
+    aprobadoMeni: meni.aprobado,
+    research: input.research,
+    story: input.story,
+    reason: meni.editorialReason?.principal ?? meni.diagnostico ?? '',
+  });
+
   const updateData: Record<string, unknown> = {
     scoreMeni: meni.scoreFinal,
     aprobadoMeni: meni.aprobado,
@@ -67,6 +79,11 @@ export async function guardarConMeni(
     fuente: fuente || 'Redacción Nicaragua Informate',
     fuentesComplementarias,
     autorFoto,
+    canonicalEditorialDecision,
+    publicCategory: canonicalCategoria,
+    profileInternal: detectedProfile.profile_detected,
+    research: input.research,
+    story: input.story,
   };
 
   return { ok: true, meni, updateData };

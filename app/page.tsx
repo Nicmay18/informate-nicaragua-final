@@ -34,16 +34,21 @@ const OG_DESC =
   'Portal de noticias líder de Nicaragua con cobertura verificada desde Managua y Estelí. Nacionales, sucesos, espectáculos, tecnología y deportes.';
 
 export const metadata: Metadata = {
-  title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
+    template: '%s | Nicaragua Informate',
+  },
   description: smartTruncate(META_DESC),
+  keywords: ['Nicaragua', 'noticias Nicaragua', 'Managua', 'sucesos', 'nacionales', 'internacionales', 'deportes', 'tecnología', 'espectáculos'],
   openGraph: {
     type: 'website',
     locale: 'es_NI',
-    url: SITE_URL,
+    url: '/',
     siteName: 'Nicaragua Informate',
     title: 'Nicaragua Informate — Noticias de Nicaragua en tiempo real',
     description: smartTruncate(OG_DESC),
-    images: [{ url: OG_IMAGE, width: 512, height: 512, alt: 'Nicaragua Informate' }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'Nicaragua Informate' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -54,8 +59,24 @@ export const metadata: Metadata = {
     images: [OG_IMAGE],
   },
   alternates: {
-    canonical: SITE_URL,
-    languages: { 'x-default': SITE_URL },
+    canonical: '/',
+    languages: { 'x-default': '/' },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    title: 'Nicaragua Informate',
+    statusBarStyle: 'default',
   },
 };
 

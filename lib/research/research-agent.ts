@@ -6,11 +6,25 @@
  * No inventa datos. No inventa fuentes.
  */
 
-import { callLLM, extractJson, isLLMAvailable } from './llm-client';
+import { callLLMWithWebSearch, extractJson, isLLMAvailable } from './llm-client';
 import type { ResearchInput, ResearchResult, ResearchSource, ResearchFact, ResearchConflict, MissingInformation } from './types';
 import type { Firestore } from 'firebase-admin/firestore';
 
-const MODEL_VERSION = 'research-agent-v1.0';
+const MODEL_VERSION = 'research-agent-v1.1-web';
+
+/** Control de costo: contador simple en memoria. En producción usar Firestore. */
+let hourlyCallCount = 0;
+let hourlyResetAt = Date.now();
+
+function checkCostLimit(): boolean {
+  const now = Date.now();
+  if (now - hourlyResetAt > 3600000) {
+    hourlyCallCount = 0;
+    hourlyResetAt = now;
+  }
+  hourlyCallCount++;
+  return hourlyCallCount <= MAX_RESEARCH_CALLS_PER_HOUR;
+}
 
 /**
  * Consulta el Knowledge Base local para contexto adicional.
@@ -88,6 +102,8 @@ Responde ÚNICAMENTE en JSON con esta estructura exacta:
 }`;
 }
 
+const MAX_RESEARCH_CALLS_PER_HOUR = parseInt(process.env.MAX_RESEARCH_CALLS_PER_HOUR || '100', 10);
+
 function buildFallbackResult(input: ResearchInput, error: string): ResearchResult {
   const now = new Date().toISOString();
   return {
@@ -114,7 +130,7 @@ function buildFallbackResult(input: ResearchInput, error: string): ResearchResul
 
 export async function runResearch(
   input: ResearchInput,
-  options?: { db?: Firestore }
+  options?: { db?: Firestore; skipCostLimit?: boolean }
 ): Promise<ResearchResult> {
   const startedAt = new Date().toISOString();
   const isWatch = !!input.existingArticle;
@@ -125,8 +141,12 @@ export async function runResearch(
     return buildFallbackResult(input, 'GEMINI_API_KEY no configurada');
   }
 
+  if (!options?.skipCostLimit && !checkCostLimit()) {
+    return buildFallbackResult(input, `Límite de costo excedido (${MAX_RESEARCH_CALLS_PER_HOUR} investigaciones/hora)`);
+  }
+
   const prompt = buildResearchPrompt(input, knowledgeContext, isWatch);
-  const response = await callLLM(prompt, 4000);
+  const response = await callLLMWithWebSearch(prompt, { maxTokens: 4000, searchThreshold: 0.7 });
 
   if (!response.ok || !response.text) {
     return buildFallbackResult(input, response.error || 'LLM sin respuesta');
@@ -146,8 +166,26 @@ export async function runResearch(
     rawInput: input.titulo,
     summary: parsed.summary || '',
     factsFound: (parsed.factsFound || []).map(normalizeFact),
-    sourcesChecked: (parsed.sourcesChecked || []).map(normalizeSource),
-    sourcesAccepted: (parsed.sourcesChecked || []).filter(s => s.level === 'PRIMARY' || s.level === 'MEDIA').map(normalizeSource),
+    sourcesChecked: [
+      ...((parsed.sourcesChecked || []).map(normalizeSource)),
+      ...(response.sources || []).map(s => ({
+        name: s.title,
+        level: 'MEDIA' as const,
+        url: s.url,
+        snippet: s.snippet,
+        date: s.retrievedAt,
+      })),
+    ],
+    sourcesAccepted: [
+      ...((parsed.sourcesChecked || []).filter(s => s.level === 'PRIMARY' || s.level === 'MEDIA').map(normalizeSource)),
+      ...(response.sources || []).map(s => ({
+        name: s.title,
+        level: 'MEDIA' as const,
+        url: s.url,
+        snippet: s.snippet,
+        date: s.retrievedAt,
+      })),
+    ],
     sourcesRejected: [],
     conflictsFound: (parsed.conflictsFound || []).map(normalizeConflict),
     missingInformation: (parsed.missingInformation || []).map(normalizeMissing),

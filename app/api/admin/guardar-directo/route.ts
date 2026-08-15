@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
@@ -22,7 +23,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
     { url: `/categoria/${catSlug}`, anchor: `Noticias de ${catSlug}`, type: 'categoria' },
   ];
   try {
-    const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
+    const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).where('publicado', '==', true).orderBy('fecha', 'desc').limit(4).get();
     const related = snap.docs.filter((d: any) => d.id !== excludeId).slice(0, 2).map((d: any) => {
       const data = d.data();
       return { url: `/noticias/${data.slug || d.id}`, anchor: (data.titulo || 'Leer mas').substring(0, 70), type: 'relacionada' };
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { id, titulo, contenido, resumen, categoria, departamento, imagen, publicado = true } = body;
+    const { id, titulo, contenido, resumen, categoria, departamento, imagen, publicado = true, research, story } = body;
 
     if (!titulo || !contenido) {
       return NextResponse.json({ error: 'Faltan campos obligatorios: titulo, contenido' }, { status: 400 });
@@ -117,6 +118,8 @@ export async function POST(request: NextRequest) {
       ...meniUpdateData,
       titulo: finalTitulo,
       contenido: finalContenido,
+      categoria: meniUpdateData.categoria, // CAUSA RAÍZ: categoría canónica de MENI, nunca del body
+      perfil: meniUpdateData.perfil,        // perfil interno canónico
       fechaActualizacion: new Date(),
       publicado,
       estado: publicado ? 'publicado' : 'borrador',
@@ -126,8 +129,37 @@ export async function POST(request: NextRequest) {
     // Usar fecha del body si se proporciona, o fechaActualizacion
     updateData.fecha = body.fecha || new Date();
 
+    // CAUSA RAÍZ: timestamps canónicos para ordenamiento consistente (igual que news/route.ts)
+    // Solo setear publishedAt la primera vez que se publica; dateModified siempre se actualiza.
+    if (publicado) {
+      if (!id) {
+        updateData.publishedAt = Timestamp.now();
+      } else {
+        // Preservar publishedAt existente; solo setear si no estaba publicado antes
+        try {
+          const existing = await db.collection('noticias').doc(id).get();
+          const existingData = existing.data() || {};
+          if (!existingData.publishedAt && (existingData.publicado !== true)) {
+            updateData.publishedAt = Timestamp.now();
+          } else if (existingData.publishedAt) {
+            updateData.publishedAt = existingData.publishedAt;
+          }
+        } catch {
+          updateData.publishedAt = Timestamp.now();
+        }
+      }
+      updateData.dateModified = Timestamp.now();
+    }
+
+    // Persistir research/story provenientes del Research Agent / Story Builder
+    if (research && typeof research === 'object') {
+      updateData.research = research;
+    }
+    if (story && typeof story === 'object') {
+      updateData.story = story;
+    }
+
     if (finalResumen !== undefined) updateData.resumen = finalResumen;
-    if (categoria !== undefined) updateData.categoria = categoria;
     if (departamento !== undefined) updateData.departamento = departamento;
     if (imagen !== undefined) updateData.imagen = imagen;
     if (finalSlug !== undefined) updateData.slug = finalSlug;
@@ -192,7 +224,7 @@ export async function POST(request: NextRequest) {
           title: finalTitulo,
           content: finalContenido,
           slug: finalSlug,
-          category: categoria || 'General',
+          category: (updateData.categoria as string) || 'Nacionales',
           departamento: departamento || '',
           date: (body.fecha as string) || new Date().toISOString(),
           author: body.autor || '',

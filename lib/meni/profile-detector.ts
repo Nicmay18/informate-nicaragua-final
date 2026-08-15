@@ -525,9 +525,9 @@ export function detectContentProfile(
   const hasNaturalDisaster = allMatched.some(kw => naturalDisasterWords.has(kw));
   const foreignCountries = new Set(['indonesia', 'japon', 'japón', 'india', 'filipinas', 'china', 'rusia', 'ucrania', 'mexico', 'colombia', 'argentina', 'brasil', 'eeuu', 'estados unidos', 'europa', 'honduras', 'el salvador', 'guatemala', 'costa rica', 'panama']);
   const hasForeignCountry = allMatched.some(kw => foreignCountries.has(kw));
-  if (hasNaturalDisaster && hasForeignCountry && scores.ambiente > 0 && scores.internacional > 0) {
-    scores.internacional += 4;
-    scores.ambiente = Math.max(0, scores.ambiente - 2);
+  if (hasNaturalDisaster && hasForeignCountry) {
+    scores.internacional += 10;
+    scores.ambiente = 0;
   }
 
   // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)

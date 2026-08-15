@@ -3,7 +3,7 @@ import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
-import { getEditorialDecision, isPublicArticle, resolveCanonicalCategoria } from './editorial/canonical';
+import { getEditorialDecision, isPublicArticle, resolvePublicCategory } from './editorial/canonical';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -119,11 +119,17 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
     resumen: data.resumen || '',
     contenido: data.contenido,
-    categoria: resolveCanonicalCategoria(data.perfil, data.categoria),
+    categoria: resolvePublicCategory({
+    perfil: data.perfil,
+    categoria: data.categoria,
+    titulo: data.titulo || '',
+    contenido: data.contenido || '',
+    resumen: data.resumen || '',
+  }),
     perfil: data.perfil || '',
     imagen: normalizeImage(data.imagen || ''),
-    fecha: safeDateString(data.fecha),
-    fechaActualizacion: safeDateString(data.fechaActualizacion),
+    fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
+    fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
     autor: data.autor,
     autorFoto: data.autorFoto,
     destacada: data.destacada,
@@ -322,11 +328,17 @@ const _cachedGetBySlug = unstable_cache(
           titulo,
           resumen: data.resumen || '',
           contenido,
-          categoria: resolveCanonicalCategoria(data.perfil, data.categoria),
+          categoria: resolvePublicCategory({
+    perfil: data.perfil,
+    categoria: data.categoria,
+    titulo: data.titulo || '',
+    contenido: data.contenido || '',
+    resumen: data.resumen || '',
+  }),
           perfil: data.perfil || '',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: safeDateString(data.fecha),
-          fechaActualizacion: safeDateString(data.fechaActualizacion),
+          fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
@@ -425,8 +437,8 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           contenido: data.contenido || '',
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || ''),
-          fecha: safeDateString(data.fecha),
-          fechaActualizacion: safeDateString(data.fechaActualizacion),
+          fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
+          fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
           autor: data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,

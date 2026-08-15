@@ -209,6 +209,8 @@ export async function POST(request: NextRequest) {
       destacada: !!destacada,
       vistas: 0,
       fecha: Timestamp.now(),
+      publishedAt: Timestamp.now(),
+      dateModified: Timestamp.now(),
       publicado: publicado !== false,
       estado: publicado !== false ? 'publicado' : 'borrador',
       related_links: relatedLinks,

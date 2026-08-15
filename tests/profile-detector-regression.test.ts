@@ -175,4 +175,25 @@ describe('MENI Profile Detector — Regression Tests', () => {
     expect(result.profile_detected).toBe('deportes');
     expect(result.profile_detected).not.toBe('internacional');
   });
+
+  it('BUG REGLA 37: Sismo de 7.7 en Indonesia → internacional (NOT ambiente)', () => {
+    const result = detectContentProfile(
+      'Sismo de 7.7 sacude Indonesia y deja al menos dos muertos',
+      'Un sismo de magnitud 7.7 dejó al menos dos muertos y daños en viviendas en la isla de Flores, Indonesia. La BMKG emitió y luego canceló una alerta de tsunami.',
+      'Sismo en Indonesia deja muertos y daños',
+    );
+    expect(result.profile_detected).toBe('internacional');
+    expect(result.profile_detected).not.toBe('ambiente');
+  });
+
+  it('BUG REGLA 37: Volcán Telica en Nicaragua → ambiente (no Internacional)', () => {
+    const result = detectContentProfile(
+      'Volcán Telica expulsa gases y ceniza en Nicaragua',
+      'El volcán Telica registró actividad volcánica con emisión de gases y ceniza. El INETER monitorea la actividad eruptiva del cráter. La ceniza afecta a comunidades cercanas al volcán.',
+      'Volcán nicaragüense presenta actividad eruptiva',
+    );
+    expect(result.profile_detected).toBe('ambiente');
+    expect(result.profile_detected).not.toBe('internacional');
+  });
+
 });

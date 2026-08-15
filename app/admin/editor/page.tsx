@@ -6,6 +6,8 @@ import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
 import type { MeniAutonomousResult } from '@/lib/meni/editor-autonomo/types';
+import type { ResearchResult } from '@/lib/research';
+import type { StoryProposal } from '@/lib/editorial/story-editor';
 import { categoryToSlug } from '@/lib/types';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 
@@ -63,8 +65,12 @@ export default function EditorPage() {
 
   const [resultado, setResultado] = useState<MeniResult | null>(null);
   const [optimizado, setOptimizado] = useState<MeniAutonomousResult | null>(null);
+  const [research, setResearch] = useState<ResearchResult | null>(null);
+  const [story, setStory] = useState<StoryProposal | null>(null);
   const [evaluando, setEvaluando] = useState(false);
   const [optimizando, setOptimizando] = useState(false);
+  const [investigando, setInvestigando] = useState(false);
+  const [generandoStory, setGenerandoStory] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -119,6 +125,77 @@ export default function EditorPage() {
     }, 600);
     return () => clearTimeout(t);
   }, [news, evaluar]);
+
+  const investigar = async () => {
+    if (!news.titulo.trim() || !news.contenido.trim()) return;
+    setInvestigando(true);
+    setError(null);
+    setMensaje(null);
+    setResearch(null);
+    setStory(null);
+    try {
+      const token = getAdminToken();
+      const res = await fetch('/api/admin/research', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({
+          titulo: news.titulo,
+          resumen: news.resumen,
+          contenido: news.contenido,
+          categoria: news.categoria,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      setResearch(data.research as ResearchResult);
+      setMensaje(`Investigación completada. ${data.research.sourcesChecked.length} fuentes consultadas.`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error en investigación');
+    } finally {
+      setInvestigando(false);
+    }
+  };
+
+  const generarPropuesta = async () => {
+    if (!research) return;
+    setGenerandoStory(true);
+    setError(null);
+    try {
+      const token = getAdminToken();
+      const res = await fetch('/api/admin/story', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({
+          research,
+          rawInput: {
+            titulo: news.titulo,
+            resumen: news.resumen,
+            contenido: news.contenido,
+            categoria: news.categoria,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      setStory(data.proposal as StoryProposal);
+      setMensaje(`Propuesta editorial: ${data.proposal.verdict}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error al generar propuesta');
+    } finally {
+      setGenerandoStory(false);
+    }
+  };
+
+  const aplicarPropuesta = () => {
+    if (!story) return;
+    setNews((prev) => ({
+      ...prev,
+      titulo: story.suggestedTitle,
+      contenido: story.suggestedBody,
+      resumen: story.suggestedSummary,
+    }));
+    setMensaje('Propuesta aplicada. MENI se reevaluará.');
+  };
 
   const optimizar = async () => {
     if (!news.titulo.trim() || !news.contenido.trim()) return;
@@ -291,6 +368,84 @@ export default function EditorPage() {
 
             <Input label="Resumen / Meta descripción" value={news.resumen} onChange={(v) => update('resumen', v)} />
             <Input label="Imagen destacada (URL)" value={news.imagen} onChange={(v) => update('imagen', v)} />
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={investigar}
+                disabled={investigando}
+                className="px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 disabled:opacity-50 text-white text-sm font-semibold transition"
+              >
+                {investigando ? 'Investigando...' : '🔎 Investigar'}
+              </button>
+              <button
+                onClick={generarPropuesta}
+                disabled={generandoStory || !research}
+                className="px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 disabled:opacity-50 text-white text-sm font-semibold transition"
+              >
+                {generandoStory ? 'Generando...' : '🧠 Generar propuesta'}
+              </button>
+              {story && (
+                <button
+                  onClick={aplicarPropuesta}
+                  className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-semibold transition"
+                >
+                  Aplicar propuesta
+                </button>
+              )}
+            </div>
+
+            {research && (
+              <div className="space-y-3 text-sm border border-slate-700 rounded-lg p-4 bg-slate-800/50">
+                <p className="font-semibold text-cyan-300">🔎 Investigación</p>
+                <p className="text-slate-300">{research.summary}</p>
+                {research.sourcesChecked.length > 0 && (
+                  <div>
+                    <p className="text-slate-400 text-xs">Fuentes consultadas:</p>
+                    <ul className="space-y-1">
+                      {research.sourcesChecked.slice(0, 8).map((s, i) => (
+                        <li key={i} className="text-slate-300">
+                          {s.url ? (
+                            <a href={s.url} target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">{s.name}</a>
+                          ) : s.name}
+                          <span className="text-slate-500 ml-2 text-xs">{s.level}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {research.conflictsFound.length > 0 && (
+                  <div className="rounded bg-red-900/20 p-3 border border-red-500/30">
+                    <p className="text-red-300 font-semibold">⚠️ Conflictos detectados</p>
+                    {research.conflictsFound.map((c, i) => (
+                      <p key={i} className="text-slate-300 mt-1">{c.topic}: {c.versionA.claim} vs {c.versionB.claim}</p>
+                    ))}
+                  </div>
+                )}
+                {research.missingInformation.length > 0 && (
+                  <div className="rounded bg-yellow-900/20 p-3 border border-yellow-500/30">
+                    <p className="text-yellow-300 font-semibold">Información faltante</p>
+                    <ul className="list-disc pl-4 text-slate-300 space-y-1">
+                      {research.missingInformation.map((m, i) => (
+                        <li key={i}>{m.question} <span className="text-slate-500">({m.importance})</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {research.hasNewInformation && (
+                  <p className="text-cyan-300">✨ Nueva información relevante: {research.newInformationSummary}</p>
+                )}
+              </div>
+            )}
+
+            {story && (
+              <div className="space-y-3 text-sm border border-slate-700 rounded-lg p-4 bg-slate-800/50">
+                <p className="font-semibold text-purple-300">🧠 Propuesta editorial: {story.verdict}</p>
+                <p className="text-slate-300"><strong>Enfoque:</strong> {story.focusAngle}</p>
+                <p className="text-slate-300"><strong>Titular:</strong> {story.suggestedTitle}</p>
+                <p className="text-slate-300"><strong>Resumen:</strong> {story.suggestedSummary}</p>
+                <p className="text-slate-300"><strong>Contexto:</strong> {story.context}</p>
+              </div>
+            )}
           </div>
 
           {optimizado && (
