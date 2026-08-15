@@ -144,10 +144,10 @@ export interface HomePageData {
 }
 
 const SECTION_LIMITS: Record<string, number> = {
-  Nacionales: 6,
+  Nacionales: 4,
   Sucesos: 3,
   Internacionales: 3,
-  Deportes: 4,
+  Deportes: 3,
   Tecnología: 2,
   Espectáculos: 2,
 };
@@ -159,9 +159,9 @@ const SECTION_LIMITS: Record<string, number> = {
 export async function getHomePageData(): Promise<HomePageData> {
   const categoryNames = CATEGORIES.map(c => c.name);
   const [latest, masLeidas, ...categoryResults] = await Promise.all([
-    getNews(20),
+    getNews(15),
     getMasLeidas(5),
-    ...categoryNames.map(name => getNewsByCategory(name, 10)),
+    ...categoryNames.map(name => getNewsByCategory(name, 8)),
   ]);
 
   const porCategoria: Record<string, Noticia[]> = {};
@@ -174,21 +174,21 @@ export async function getHomePageData(): Promise<HomePageData> {
   const hero = heroCandidates.find(n => !isLutoNews(n)) ?? heroCandidates[0] ?? null;
   if (hero) used.add(hero.id);
 
-  // ÚLTIMAS NOTICIAS: 15 más recientes excluyendo hero
-  const ultimas = latest.filter(n => !used.has(n.id)).slice(0, 15);
+  // ÚLTIMAS NOTICIAS: 10 más recientes excluyendo hero
+  const ultimas = latest.filter(n => !used.has(n.id)).slice(0, 10);
   ultimas.forEach(n => used.add(n.id));
 
-  // EN PORTADA: 4 más recientes, máximo 1 por categoría
+  // EN PORTADA: 3 más recientes, máximo 1 por categoría
   const enPortadaRaw = latest.filter(n => !used.has(n.id));
-  const enPortada = enPortadaRaw.slice(0, 8).filter((n, i, arr) => arr.findIndex(x => x.categoria === n.categoria) === i).slice(0, 4);
+  const enPortada = enPortadaRaw.slice(0, 6).filter((n, i, arr) => arr.findIndex(x => x.categoria === n.categoria) === i).slice(0, 3);
   enPortada.forEach(n => used.add(n.id));
 
-  // ÚLTIMA HORA: 5 más recientes, máximo 2 Sucesos
-  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 20);
+  // ÚLTIMA HORA: 4 más recientes, máximo 2 Sucesos
+  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 15);
   const breaking: Noticia[] = [];
   const catCounts: Record<string, number> = {};
   for (const n of breakingRaw) {
-    if (breaking.length >= 5) break;
+    if (breaking.length >= 4) break;
     catCounts[n.categoria] = (catCounts[n.categoria] || 0) + 1;
     if (catCounts[n.categoria] <= 2 || n.categoria !== 'Sucesos') {
       breaking.push(n);
