@@ -2,7 +2,7 @@
  * Cron: Supervisor Watch Cycle
  * =============================
  * Ejecuta vigilancia automática sobre noticias publicadas.
- * Configurar en Vercel cron como: 0 */2 * * * (cada 2 horas)
+ * Configurar en Vercel cron como: 0 0-23/2 * * * (cada 2 horas)
  *
  * El supervisor:
  * 1. Vigila noticias BREAKING/DEVELOPING

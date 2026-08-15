@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     };
 
     // MENI canónico via guardarConMeni — única autoridad editorial
-    const { ok: meniOk, meni, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
 
     // Generar metadata si falta
     const finalTitulo = normalizeEditorialTitle(titulo.trim());
@@ -113,9 +113,32 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
+    // BLOQUEO del Agente Supervisor Editorial Permanente
+    if (!supervisorApproved) {
+      const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
+      const first = criticalIssues[0];
+      return NextResponse.json({
+        error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
+        code: 'SUPERVISOR_BLOCKED',
+        supervisor: {
+          decisionId: supervisor.decisionId,
+          verdict: supervisor.verdict,
+          confidence: supervisor.confidence,
+          reason: supervisor.reason,
+          issues: supervisor.issues,
+          actions: supervisor.actions,
+        },
+        critical: criticalIssues,
+        warnings: supervisor.issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+      }, { status: 400 });
+    }
+
     // Datos a actualizar — merge de campos MENI del wrapper + campos del route
     const updateData: Record<string, unknown> = {
       ...meniUpdateData,
+      supervisorDecision: supervisor,
+      supervisorApproved,
+      editorialState: supervisor.resultingState,
       titulo: finalTitulo,
       contenido: finalContenido,
       categoria: meniUpdateData.categoria, // CAUSA RAÍZ: categoría canónica de MENI, nunca del body
@@ -196,6 +219,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Invalidar cachés afectadas
+    // WATCH automatico - noticia viva
+    if (publicado) {
+      try {
+        const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
+        const watchResult = await runWatchCycle(
+          {
+            id: articleDocId!,
+            titulo: finalTitulo,
+            contenido: finalContenido,
+            resumen: finalResumen || '',
+            categoria: (meniUpdateData.categoria as string) || 'Nacionales',
+            fecha: (updateData.fecha as any)?.toDate ? (updateData.fecha as any).toDate().toISOString() : new Date().toISOString(),
+            perfil: (meniUpdateData.perfil as string),
+          },
+          { db }
+        );
+        await persistWatchResult(db, articleDocId!, watchResult);
+      } catch (watchError) {
+        console.warn('[guardar-directo] Watch start failed (non-blocking):', watchError);
+      }
+    }
+
     revalidateTag('noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');
@@ -309,6 +354,7 @@ export async function POST(request: NextRequest) {
       try {
         const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
         pipelineResult = await runPublicationPipeline({
+          story: story as any,
           db,
           articleId: articleDocId!,
           slug: finalSlug,

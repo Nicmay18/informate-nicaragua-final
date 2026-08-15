@@ -23,6 +23,7 @@ export interface PipelineInput {
   imagenRedes?: string;
   autor?: string;
   departamento?: string;
+  story?: any;
   veredictoEjecutivo?: {
     publicar: string;
     confianza: number;
@@ -161,7 +162,10 @@ async function sendFacebook(input: PipelineInput): Promise<{ ok: boolean; error?
     }
     if (!contexto) contexto = texto.substring(0, 140);
 
-    const mensaje = `${emoji} ${input.titulo}\n\n${contexto}...\n\n👉 ${url}\n\n#NicaraguaInformate`;
+    const socialFromStory = input.story?.distribution?.social;
+  const mensaje = socialFromStory
+    ? `${emoji} ${socialFromStory}\n\n👉 ${url}\n\n#NicaraguaInformate`
+    : `${emoji} ${input.titulo}\n\n${contexto}...\n\n👉 ${url}\n\n#NicaraguaInformate`;
 
     const res = await fetch(`https://graph.facebook.com/v18.0/${pageId}/feed`, {
       method: 'POST',

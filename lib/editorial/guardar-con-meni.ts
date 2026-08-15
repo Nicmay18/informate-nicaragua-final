@@ -6,6 +6,8 @@ import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-help
 import { resolvePublicCategory } from './canonical';
 import { buildEditorialDecision } from './decision';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
+import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
+import type { SupervisorDecision } from '@/lib/supervisor/types';
 
 export function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
   if (score === null || !Number.isFinite(score)) return 'NO EVALUADA';
@@ -49,6 +51,21 @@ export async function guardarConMeni(
     perfil: detectedProfile.profile_detected,
   });
 
+  // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
+  const supervisor = makeEditorialDecision({
+    titulo: input.titulo,
+    contenido: finalContenido,
+    resumen: input.resumen,
+    categoria: canonicalCategoria,
+    perfil: detectedProfile.profile_detected,
+    imagen: input.imagen,
+    scoreMeni: meni.scoreFinal,
+    aprobadoMeni: meni.aprobado,
+    research: input.research,
+    story: input.story,
+  });
+  const supervisorApproved = !supervisor.issues.some(i => i.severity === 'CRITICAL');
+
   // Decisión editorial canónica — una sola fuente de verdad (REGLA 17)
   const canonicalEditorialDecision = buildEditorialDecision({
     publicCategory: canonicalCategoria,
@@ -86,5 +103,5 @@ export async function guardarConMeni(
     story: input.story,
   };
 
-  return { ok: true, meni, updateData };
+  return { ok: true, meni, supervisor, supervisorApproved, updateData };
 }

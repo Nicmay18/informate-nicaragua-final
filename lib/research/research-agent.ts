@@ -141,8 +141,14 @@ export async function runResearch(
     return buildFallbackResult(input, 'GEMINI_API_KEY no configurada');
   }
 
-  if (!options?.skipCostLimit && !checkCostLimit()) {
-    return buildFallbackResult(input, `Límite de costo excedido (${MAX_RESEARCH_CALLS_PER_HOUR} investigaciones/hora)`);
+  if (!options?.skipCostLimit) {
+    const { canCallLLM, recordCall } = await import('@/lib/supervisor/cost-guard');
+    const { allowed, reason } = await canCallLLM(options?.db);
+    if (!allowed) {
+      return buildFallbackResult(input, `Límite de costo excedido: ${reason || 'presupuesto IA agotado'}`);
+    }
+    // Registrar la llamada DESPUES de confirmar que se va a ejecutar
+    await recordCall(options?.db);
   }
 
   const prompt = buildResearchPrompt(input, knowledgeContext, isWatch);
