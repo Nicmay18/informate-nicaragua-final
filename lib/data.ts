@@ -204,7 +204,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
   try {
     const { adminDb } = await import('./firebase-admin');
-    const fetchLimit = Math.min(validatedCount * 3, 200);
+    const fetchLimit = Math.min(validatedCount * 2, 100);
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
@@ -236,12 +236,12 @@ const _cachedGetMasLeidas = unstable_cache(
   async (count: number) => {
     try {
       const { adminDb } = await import('./firebase-admin');
-      // Traer pool amplio para filtrar por ventana temporal en memoria
+      // Traer pool para filtrar por ventana temporal en memoria
       const snap = await adminDb
         .collection('noticias')
         .where('vistas', '>', 0)
         .orderBy('vistas', 'desc')
-        .limit(200)
+        .limit(120)
         .select(...LIST_FIELDS)
         .get();
 
