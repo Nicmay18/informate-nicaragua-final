@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 function tiempoCorto(fecha?: string): string {
   if (!fecha) return '';
@@ -13,11 +13,22 @@ function tiempoCorto(fecha?: string): string {
   return `hace ${d} d`;
 }
 
+function tiempoCompleto(fecha?: string): string {
+  if (!fecha) return '';
+  try {
+    const diff = Date.now() - new Date(fecha).getTime();
+    const d = Math.floor(diff / 86400000);
+    if (d < 1) return 'hoy';
+    if (d === 1) return 'ayer';
+    return `hace ${d} d`;
+  } catch {
+    return '';
+  }
+}
+
 export function RelativeTime({ date, className }: { date?: string; className?: string }) {
-  const [texto, setTexto] = useState<string>(() => {
-    if (typeof window === 'undefined') return '';
-    return tiempoCorto(date);
-  });
+  const inicial = useMemo(() => tiempoCorto(date), [date]);
+  const [texto, setTexto] = useState(inicial);
 
   useEffect(() => {
     setTexto(tiempoCorto(date));
@@ -26,36 +37,19 @@ export function RelativeTime({ date, className }: { date?: string; className?: s
   }, [date]);
 
   if (!texto) return null;
-  return <time dateTime={date} className={className}>{texto}</time>;
+  return <time dateTime={date} className={className} suppressHydrationWarning>{texto}</time>;
 }
 
 export function FullRelativeTime({ date, className }: { date?: string; className?: string }) {
-  const [texto, setTexto] = useState<string>(() => {
-    if (typeof window === 'undefined') return '';
-    try {
-      const diff = Date.now() - new Date(date || '').getTime();
-      const d = Math.floor(diff / 86400000);
-      if (d < 1) return 'hoy';
-      if (d === 1) return 'ayer';
-      return `hace ${d} d`;
-    } catch {
-      return '';
-    }
-  });
+  const inicial = useMemo(() => tiempoCompleto(date), [date]);
+  const [texto, setTexto] = useState(inicial);
 
   useEffect(() => {
-    try {
-      const diff = Date.now() - new Date(date || '').getTime();
-      const d = Math.floor(diff / 86400000);
-      let t = 'hoy';
-      if (d === 1) t = 'ayer';
-      else if (d > 1) t = `hace ${d} d`;
-      setTexto(t);
-    } catch {
-      setTexto('');
-    }
+    setTexto(tiempoCompleto(date));
+    const id = setInterval(() => setTexto(tiempoCompleto(date)), 86400000);
+    return () => clearInterval(id);
   }, [date]);
 
   if (!texto) return null;
-  return <time dateTime={date} className={className}>{texto}</time>;
+  return <time dateTime={date} className={className} suppressHydrationWarning>{texto}</time>;
 }
