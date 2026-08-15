@@ -85,6 +85,12 @@ export async function guardarConMeni(
   // El Supervisor es la unica autoridad. MENI es subordinado.
 
   const updateData: Record<string, unknown> = {
+    // Decisión editorial canónica: el Supervisor es la única fuente de verdad.
+    // Toda noticia persistida lleva consigo su decisión, aprobación y estado.
+    supervisorDecision: supervisor,
+    supervisorApproved,
+    editorialState: supervisor.resultingState,
+    // Datos de MENI (subordinado al Supervisor)
     scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
     calificacionMeni: meni.calificacion,
