@@ -111,6 +111,12 @@ describe('REGLA 3 — Casos de regresión obligatorios', () => {
       descripcion: 'Evento en EE.UU. = Internacionales',
     },
     {
+      titulo: 'Sismo de 7.7 sacude Indonesia y deja al menos dos muertos',
+      contenido: 'Un sismo de magnitud 7.7 dejó al menos dos muertos y daños en viviendas en la isla de Flores, Indonesia. La BMKG emitió y luego canceló una alerta de tsunami.',
+      expected: 'Internacionales',
+      descripcion: 'Sismo en país extranjero = Internacionales, NO Ambiente',
+    },
+    {
       titulo: 'Samsung lanza One UI 9 y Android 17',
       contenido: 'Samsung presentó oficialmente One UI 9 basada en Android 17 con nuevas funciones para sus dispositivos Galaxy.',
       expected: 'Tecnología',

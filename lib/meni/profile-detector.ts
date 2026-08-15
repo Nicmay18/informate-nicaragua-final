@@ -365,6 +365,15 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'colombia', weight: 1 },
     { keyword: 'argentina', weight: 1 },
     { keyword: 'brasil', weight: 1 },
+    { keyword: 'indonesia', weight: 1.5 },
+    { keyword: 'japon', weight: 1.5 },
+    { keyword: 'japón', weight: 1.5 },
+    { keyword: 'india', weight: 1.5 },
+    { keyword: 'filipinas', weight: 1.5 },
+    { keyword: 'flores', weight: 1 },
+    { keyword: 'sismo', weight: 0.5 },
+    { keyword: 'terremoto', weight: 0.5 },
+    { keyword: 'tsunami', weight: 0.5 },
   ],
   educacion: [
     { keyword: 'educación', weight: 2 },
@@ -511,6 +520,16 @@ export function detectContentProfile(
   if (scores.nacionales > 0 && scores.internacional > 0) {
     scores.nacionales += 2;
   }
+  // Sismo/terremoto/tsunami en un país extranjero → Internacionales gana sobre Ambiente
+  const naturalDisasterWords = new Set(['sismo', 'terremoto', 'tsunami', 'terremotos', 'sismos', 'tsunamis']);
+  const hasNaturalDisaster = allMatched.some(kw => naturalDisasterWords.has(kw));
+  const foreignCountries = new Set(['indonesia', 'japon', 'japón', 'india', 'filipinas', 'china', 'rusia', 'ucrania', 'mexico', 'colombia', 'argentina', 'brasil', 'eeuu', 'estados unidos', 'europa', 'honduras', 'el salvador', 'guatemala', 'costa rica', 'panama']);
+  const hasForeignCountry = allMatched.some(kw => foreignCountries.has(kw));
+  if (hasNaturalDisaster && hasForeignCountry && scores.ambiente > 0 && scores.internacional > 0) {
+    scores.internacional += 4;
+    scores.ambiente = Math.max(0, scores.ambiente - 2);
+  }
+
   // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)
   // No por palabras genéricas como "producción" o "clima" (ya eliminadas de las señales)
 
