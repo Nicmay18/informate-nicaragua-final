@@ -282,3 +282,41 @@ No aparecen nuevos bloqueadores P0 o P1.
 - UX Lead
 - Auditor Financiero Cloud
 - Auditor Técnico Independiente
+
+---
+
+## Actualización 2026-08-15 — Cirugía Forense Final (Fases)
+
+### Fases completadas en esta sesión
+
+1. **Fase 1: Decisión canónica del Supervisor en persistencia**
+   - `lib/editorial/guardar-con-meni.ts` ahora incluye `supervisorDecision`, `supervisorApproved` y `editorialState` en el payload de `updateData`.
+   - Toda ruta que use `guardarConMeni` persiste la decisión editorial canónica sin depender de que cada `route` lo agregue manualmente.
+   - MENI sigue siendo subordinado a la decisión del Supervisor.
+
+2. **Fase 5: Control de costos en llamadas Groq**
+   - `lib/meni/publication-pipeline.ts` ahora consulta `canCallLLM()` y registra la llamada con `recordCall()` antes de generar el copy social con Groq.
+   - `lib/meni/editor-autonomo/engine.ts` ahora consulta `canCallLLM()` y registra la llamada con `recordCall()` antes de redactar con Groq.
+   - Si el presupuesto está agotado, el editor autónomo arroja error controlado y el social copy cae a plantilla.
+
+3. **Fase 2: Verificación de WATCH post-publicación**
+   - El motor `lib/news-watch/watch-engine.ts` ya existe y las rutas `app/api/admin/news/route.ts`, `app/api/admin/guardar-directo/route.ts` y `app/api/articles/route.ts` ya ejecutan `runWatchCycle()` + `persistWatchResult()` al publicar.
+   - No se requirió cambios arquitectónicos; el WATCH ya está operativo.
+
+4. **Fase 3: Supervisor en la homepage**
+   - `app/page.tsx` ahora ejecuta `auditHomepage()` del Agente Supervisor en cada regeneración ISR.
+   - Problemas críticos/importantes se loguean como `error`; advertencias/optimizaciones como `warn`.
+   - El Supervisor actúa como Editor Jefe de portada sin alterar el renderizado.
+
+### Validación ejecutada
+
+- `tsc --noEmit`: 0 errores
+- `npx vitest run`: todos los tests pasan
+- `npm run build`: exitoso (111 páginas estáticas generadas)
+- `MENI v3.0 prebuild`: 770 nodos, 82 huérfanos, 80 riesgo alto (observaciones P2; no bloquean build)
+
+### Próximas fases sugeridas
+
+- **Fase 4:** Auditar publicación real en Telegram/Facebook/WhatsApp y garantizar generación social que no copie el titular.
+- **Fase 6:** Conectar el ciclo de vida editorial real en el admin (`MENI Dashboard` / `admin/meni`) para que el editor vea `editorialState` y `supervisorDecision`.
+- **Fase 7:** Resolver `home-v2` duplicado en contexto del editor (nota: archivos `app/home-v2/page.tsx` y `components/pro/HomePageV2.tsx` no existen en disco; validar si se deben limpiar referencias en el workspace).
