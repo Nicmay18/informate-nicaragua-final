@@ -27,9 +27,6 @@ export const dynamicParams = true;
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [
   'Tecnología',
   'Sucesos',
-  'Salud',
-  'Infraestructura',
-  'Judicial',
   'Nacionales',
   'Deportes',
   'Internacionales',
