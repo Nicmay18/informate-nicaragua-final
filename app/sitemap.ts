@@ -13,7 +13,7 @@ export const revalidate = 3600;
 const baseUrl = 'https://nicaraguainformate.com';
 
 const cachedGetNews = unstable_cache(
-  async () => getNews(500),
+  async () => getNews(200),
   ['sitemap-news'],
   { revalidate: 3600, tags: ['sitemap-news'] }
 );
