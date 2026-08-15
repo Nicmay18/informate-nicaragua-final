@@ -236,16 +236,32 @@ const _cachedGetMasLeidas = unstable_cache(
   async (count: number) => {
     try {
       const { adminDb } = await import('./firebase-admin');
-      const fetchLimit = Math.min(count * 3, 100);
+      // Traer pool amplio para filtrar por ventana temporal en memoria
       const snap = await adminDb
         .collection('noticias')
         .where('vistas', '>', 0)
         .orderBy('vistas', 'desc')
-        .limit(fetchLimit)
+        .limit(200)
         .select(...LIST_FIELDS)
         .get();
 
-      return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, count);
+      const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+
+      const now = Date.now();
+      const withinDays = (n: Noticia, days: number) => {
+        const t = new Date(n.fecha).getTime();
+        return !isNaN(t) && (now - t) <= days * 24 * 60 * 60 * 1000;
+      };
+
+      // REGLA 7: Most Read con ventana temporal.
+      // Preferencia: 7 días > 30 días > 90 días > histórico.
+      for (const days of [7, 30, 90, 3650]) {
+        const recientes = noticias.filter(n => withinDays(n, days));
+        if (recientes.length >= count) {
+          return recientes.slice(0, count);
+        }
+      }
+      return noticias.slice(0, count);
     } catch (err) {
       logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
       return [];
