@@ -83,7 +83,34 @@ export interface Autor {
 export type Article = Noticia;
 
 /**
- * Categorías válidas para noticias
+ * Categorías PÚBLICAS válidas — única taxonomía que puede aparecer en UI, menú, metadata, JSON-LD
+ * REGLA 2: Solo estas 6 categorías existen públicamente
+ */
+export type PublicCategory =
+  | 'Nacionales'
+  | 'Sucesos'
+  | 'Internacionales'
+  | 'Deportes'
+  | 'Espectáculos'
+  | 'Tecnología';
+
+export const PUBLIC_CATEGORIES: PublicCategory[] = [
+  'Nacionales',
+  'Sucesos',
+  'Internacionales',
+  'Deportes',
+  'Espectáculos',
+  'Tecnología',
+];
+
+export function isPublicCategory(cat: string | undefined | null): cat is PublicCategory {
+  if (!cat) return false;
+  return PUBLIC_CATEGORIES.includes(cat as PublicCategory);
+}
+
+/**
+ * @deprecated Usar PublicCategory. Category mantenida por compatibilidad pero
+ * solo las 6 categorías públicas son válidas para render.
  */
 export type Category =
   | 'Nacionales'
@@ -102,8 +129,8 @@ export type Category =
   | 'Política';
 
 /**
- * Configuración de categorías con colores e iconos
- * @description Fuente única de verdad para datos de categorías
+ * Configuración de categorías PÚBLICAS con colores e iconos
+ * @description Fuente única de verdad para datos de categorías públicas
  */
 export const CATEGORIES = [
   { name: 'Nacionales', color: '#1d4ed8', icon: 'Flag' },
@@ -112,14 +139,6 @@ export const CATEGORIES = [
   { name: 'Tecnología', color: '#0ea5e9', icon: 'Cpu' },
   { name: 'Deportes', color: '#16a34a', icon: 'Trophy' },
   { name: 'Espectáculos', color: '#ec4899', icon: 'Star' },
-  { name: 'Cultura', color: '#a855f7', icon: 'Palette' },
-  { name: 'Economía', color: '#0d9488', icon: 'TrendingUp' },
-  { name: 'Salud', color: '#2563eb', icon: 'Heart' },
-  { name: 'Ambiente', color: '#65a30d', icon: 'TreePine' },
-  { name: 'Turismo', color: '#ea580c', icon: 'Plane' },
-  { name: 'Educación', color: '#f59e0b', icon: 'GraduationCap' },
-  { name: 'Gastronomía', color: '#db2777', icon: 'ChefHat' },
-  { name: 'Política', color: '#475569', icon: 'Landmark' },
 ] as const;
 
 /**

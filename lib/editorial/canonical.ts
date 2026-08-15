@@ -1,4 +1,5 @@
-import type { Noticia } from '@/lib/types';
+import type { Noticia, PublicCategory } from '@/lib/types';
+import { isPublicCategory } from '@/lib/types';
 import { detectContentProfile, type MeniContentProfile } from '@/lib/meni/profile-detector';
 import { logger } from '@/lib/logger';
 
@@ -42,29 +43,87 @@ export function shouldIndexArticle(article: Partial<Noticia>): boolean {
   return decision.indexar;
 }
 
-const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
+/**
+ * Mapeo de perfil interno → categoría pública canónica
+ * REGLA 2: Solo 6 categorías públicas existen. Los perfiles internos
+ * (salud, ambiente, cultura, etc.) se mapean a una de las 6.
+ */
+const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCategory> = {
   sucesos: 'Sucesos',
   violencia_genero: 'Sucesos',
   nacionales: 'Nacionales',
-  politica: 'Política',
-  economia: 'Economía',
-  salud: 'Salud',
+  politica: 'Nacionales',
+  economia: 'Nacionales',
+  salud: 'Nacionales',
   deportes: 'Deportes',
-  cultura: 'Cultura',
+  cultura: 'Nacionales',
   espectaculos: 'Espectáculos',
   tecnologia: 'Tecnología',
   internacional: 'Internacionales',
-  educacion: 'Educación',
-  ambiente: 'Ambiente',
-  turismo: 'Turismo',
-  gastronomia: 'Cultura',
+  educacion: 'Nacionales',
+  ambiente: 'Nacionales',
+  turismo: 'Nacionales',
+  gastronomia: 'Nacionales',
 };
 
-export function resolveCanonicalCategoria(perfil: string | undefined, categoria: string | undefined): string {
-  const known = perfil && PROFILE_TO_CATEGORIA[perfil as MeniContentProfile];
-  if (known) return known;
-  if (categoria && categoria.trim()) return categoria.trim();
-  return 'General';
+/**
+ * resolvePublicCategory — FUNCIÓN CANÓNICA ÚNICA
+ * Todo el sistema debe usar esta función para obtener la categoría pública.
+ * REGLA 5: perfil interno NUNCA escapa a la capa pública.
+ */
+export function resolvePublicCategory(article: Partial<Noticia>): PublicCategory {
+  // 1. Si el artículo ya tiene una categoría pública válida, usarla
+  if (article.categoria && isPublicCategory(article.categoria)) {
+    return article.categoria;
+  }
+
+  // 2. Si tiene perfil interno, mapearlo a categoría pública
+  if (article.perfil && PROFILE_TO_PUBLIC_CATEGORY[article.perfil as MeniContentProfile]) {
+    return PROFILE_TO_PUBLIC_CATEGORY[article.perfil as MeniContentProfile];
+  }
+
+  // 3. Detectar perfil del texto y mapearlo
+  try {
+    const detected = detectContentProfile(
+      article.titulo || '',
+      article.contenido || '',
+      article.resumen || ''
+    );
+    const mapped = PROFILE_TO_PUBLIC_CATEGORY[detected.profile_detected];
+    if (mapped) return mapped;
+  } catch (e) {
+    logger.warn('[resolvePublicCategory] Error en detección:', e);
+  }
+
+  // 4. Fallback: si tiene categoria pero no es pública, intentar mapeo manual
+  if (article.categoria) {
+    const catMap: Record<string, PublicCategory> = {
+      'Cultura': 'Nacionales',
+      'Economía': 'Nacionales',
+      'Salud': 'Nacionales',
+      'Ambiente': 'Nacionales',
+      'Turismo': 'Nacionales',
+      'Educación': 'Nacionales',
+      'Gastronomía': 'Nacionales',
+      'Política': 'Nacionales',
+      'General': 'Nacionales',
+    };
+    if (catMap[article.categoria]) return catMap[article.categoria];
+  }
+
+  // 5. Último recurso
+  return 'Nacionales';
+}
+
+/**
+ * @deprecated Usar resolvePublicCategory
+ */
+export function resolveCanonicalCategoria(perfil: string | undefined, categoria: string | undefined): PublicCategory {
+  if (perfil && PROFILE_TO_PUBLIC_CATEGORY[perfil as MeniContentProfile]) {
+    return PROFILE_TO_PUBLIC_CATEGORY[perfil as MeniContentProfile];
+  }
+  if (categoria && isPublicCategory(categoria)) return categoria;
+  return 'Nacionales';
 }
 
 export function resolveCanonicalProfile(
@@ -73,7 +132,7 @@ export function resolveCanonicalProfile(
   resumen: string,
   perfil?: string | null
 ): MeniContentProfile {
-  if (perfil && PROFILE_TO_CATEGORIA[perfil as MeniContentProfile]) {
+  if (perfil && PROFILE_TO_PUBLIC_CATEGORY[perfil as MeniContentProfile]) {
     return perfil as MeniContentProfile;
   }
   try {

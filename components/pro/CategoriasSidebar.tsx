@@ -17,8 +17,6 @@ const CATEGORIAS = [
   'Deportes',
   'Tecnología',
   'Espectáculos',
-  'Cultura',
-  'Economía',
 ];
 
 export default function CategoriasSidebar() {
