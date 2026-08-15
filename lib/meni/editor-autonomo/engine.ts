@@ -4,6 +4,7 @@ import { runEditorialBrain, verifyEditorialDecisions } from '@/lib/meni/editoria
 import type { EditorialDecision } from '@/lib/meni/editorial-brain/types';
 import { runQualityGate, appendQualityGateHistory } from '@/lib/meni/quality-gate';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
@@ -318,6 +319,13 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   }
 
   const userPrompt = buildUserPrompt(input, decision);
+
+  // Cost Guard: evitar llamar a Groq si se excedió el presupuesto
+  const { allowed, reason } = await canCallLLM(db);
+  if (!allowed) {
+    throw new Error(`Cost Guard: ${reason || 'presupuesto IA agotado'}`);
+  }
+  await recordCall(db);
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',

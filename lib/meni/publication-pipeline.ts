@@ -10,6 +10,8 @@
  */
 
 import type { Firestore } from 'firebase-admin/firestore';
+import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
+import { logger } from '@/lib/logger';
 
 export interface PipelineInput {
   db: Firestore;
@@ -245,11 +247,16 @@ async function generateSocialCopy(input: PipelineInput): Promise<{ facebook: str
   const emoji = EMOJI_CAT[input.categoria] || '📰';
   const texto = stripHtml(input.resumen || input.contenido);
 
-  // Intentar IA (Groq) si hay API key
+  // Intentar IA (Groq) si hay API key y el presupuesto lo permite
   const apiKey = process.env.GROQ_API_KEY;
   if (apiKey) {
     try {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const { allowed, reason } = await canCallLLM(input.db);
+      if (!allowed) {
+        logger.warn('[publication-pipeline] Cost guard bloqueó social copy:', reason);
+      } else {
+        await recordCall(input.db);
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
@@ -276,6 +283,7 @@ async function generateSocialCopy(input: PipelineInput): Promise<{ facebook: str
           const waCopy = `${emoji} *${input.titulo}*\n\n${texto.substring(0, 120)}...\n\n🔗 ${url}\n\n#NicaraguaInformate`;
           return { facebook: fbCopy, whatsapp: waCopy, source: 'ia' };
         }
+      }
       }
     } catch { /* fallback */ }
   }
