@@ -3,6 +3,8 @@ import HomePagePro from '@/components/HomePagePro';
 import { getHomePageData } from '@/lib/db/homepage';
 import { checkHomeDiversity } from '@/lib/home-balance';
 import { checkBrandHealth } from '@/lib/brand-health';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { auditHomepage } from '@/lib/supervisor';
 import type { HomePageData } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
@@ -103,6 +105,24 @@ export default async function HomePage() {
     const critical = brandHealth.filter((a) => a.level !== 'ok');
     if (critical.length > 0) {
       logger.warn('[HomePage] Brand Health:', critical.map((a) => a.message).join(' | '));
+    }
+
+    // Supervisor editorial de la homepage (Editor Jefe de portada)
+    try {
+      const db = getAdminDb();
+      const audit = await auditHomepage(db);
+      if (audit.issues.length > 0) {
+        const criticalIssues = audit.issues.filter(i => i.severity === 'CRITICAL' || i.severity === 'IMPORTANT');
+        const warnings = audit.issues.filter(i => i.severity === 'WARNING' || i.severity === 'OPTIMIZATION');
+        if (criticalIssues.length > 0) {
+          logger.error('[Supervisor Homepage] Problemas editoriales críticos:', criticalIssues.map(i => `[${i.domain}] ${i.problem}`).join(' | '));
+        }
+        if (warnings.length > 0) {
+          logger.warn('[Supervisor Homepage] Advertencias:', warnings.map(i => `[${i.domain}] ${i.problem}`).join(' | '));
+        }
+      }
+    } catch (auditErr) {
+      logger.warn('[HomePage] No se pudo auditar homepage con el Supervisor:', auditErr);
     }
   } catch (error) {
     logger.error('[HomePage] Error:', error);
