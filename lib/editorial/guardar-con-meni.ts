@@ -3,6 +3,8 @@ import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
+import { resolvePublicCategory } from './canonical';
+import { detectContentProfile } from '@/lib/meni/profile-detector';
 
 export function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
   if (score === null || !Number.isFinite(score)) return 'NO EVALUADA';
@@ -36,6 +38,16 @@ export async function guardarConMeni(
   const puntosClave = extractPuntosClave(finalContenido, 4);
   const autorFoto = getAutorFoto(input.autor || '');
 
+  // Perfil y categoría pública canónica — una sola fuente de verdad
+  const detectedProfile = detectContentProfile(input.titulo, finalContenido, input.resumen || '');
+  const canonicalCategoria = resolvePublicCategory({
+    titulo: input.titulo,
+    contenido: finalContenido,
+    resumen: input.resumen,
+    categoria: meni.categoria,
+    perfil: detectedProfile.profile_detected,
+  });
+
   const updateData: Record<string, unknown> = {
     scoreMeni: meni.scoreFinal,
     aprobadoMeni: meni.aprobado,
@@ -47,6 +59,9 @@ export async function guardarConMeni(
     diagnosticoMeni: meni.diagnostico,
     editorialTier: meni.editorialTier,
     editorialReason: meni.editorialReason,
+    perfil: detectedProfile.profile_detected,
+    profile_confidence: detectedProfile.profile_confidence,
+    categoria: canonicalCategoria,
     palabras,
     puntosClave,
     fuente: fuente || 'Redacción Nicaragua Informate',

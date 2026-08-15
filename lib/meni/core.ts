@@ -31,7 +31,7 @@ import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
 import { getPerfilEditorial } from '@/lib/meni/editorial-profiles';
 import { buildEditorialReason } from '@/lib/meni/editorial-reason';
-import { detectContentProfile, type MeniContentProfile } from '@/lib/meni/profile-detector';
+import { detectContentProfile } from '@/lib/meni/profile-detector';
 import { computeInputHash } from '@/lib/meni/hash';
 import { computeContextScore } from '@/lib/meni/contextualiza';
 import { filterRecommendations } from '@/lib/meni/recommendation-filter';
@@ -50,25 +50,9 @@ export interface MeniRunOptions {
   };
 }
 
-const MIN_PROFILE_CONFIDENCE = 0.40;
+import { PROFILE_TO_PUBLIC_CATEGORY } from '@/lib/editorial/canonical';
 
-const PROFILE_TO_CATEGORIA: Record<MeniContentProfile, string> = {
-  sucesos: 'Sucesos',
-  violencia_genero: 'Sucesos',
-  nacionales: 'Nacionales',
-  politica: 'Política',
-  economia: 'Economía',
-  salud: 'Salud',
-  deportes: 'Deportes',
-  cultura: 'Cultura',
-  espectaculos: 'Espectáculos',
-  tecnologia: 'Tecnología',
-  internacional: 'Internacionales',
-  educacion: 'Educación',
-  ambiente: 'Ambiente',
-  turismo: 'Turismo',
-  gastronomia: 'Cultura',
-};
+const MIN_PROFILE_CONFIDENCE = 0.40;
 
 function findInvalidScoreSource(editorialDecision: any, editorialDna: any): string {
   const checks: { path: string; value: unknown }[] = [
@@ -106,7 +90,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const contentProfile = detectContentProfile(input.titulo, input.contenido, input.resumen);
   const perfilIdentificado = contentProfile.profile_confidence >= MIN_PROFILE_CONFIDENCE;
   const profileCategoria = perfilIdentificado
-    ? normalizeCategory(PROFILE_TO_CATEGORIA[contentProfile.profile_detected])
+    ? PROFILE_TO_PUBLIC_CATEGORY[contentProfile.profile_detected]
     : normalizeCategory(input.categoria || 'General');
   logMeni('Content profile detected', {
     profile: contentProfile.profile_detected,

@@ -47,8 +47,9 @@ export function shouldIndexArticle(article: Partial<Noticia>): boolean {
  * Mapeo de perfil interno → categoría pública canónica
  * REGLA 2: Solo 6 categorías públicas existen. Los perfiles internos
  * (salud, ambiente, cultura, etc.) se mapean a una de las 6.
+ * Fuente única de verdad exportada para toda la plataforma.
  */
-const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCategory> = {
+export const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCategory> = {
   sucesos: 'Sucesos',
   violencia_genero: 'Sucesos',
   nacionales: 'Nacionales',

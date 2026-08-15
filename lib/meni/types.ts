@@ -16,20 +16,17 @@ import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 
 export type NoticiaInput = EditorialNoticiaInput & { id?: string; departamento?: string };
 
+/**
+ * REGLA 2: MENI solo opera sobre categorías públicas válidas (6).
+ * Perfiles internos se mapean antes de llegar aquí vía PROFILE_TO_PUBLIC_CATEGORY.
+ */
 export type MeniCategoria =
   | 'Sucesos'
   | 'Nacionales'
   | 'Internacionales'
   | 'Deportes'
   | 'Tecnología'
-  | 'Economía'
-  | 'Cultura'
   | 'Espectáculos'
-  | 'Política'
-  | 'Salud'
-  | 'Educación'
-  | 'Ambiente'
-  | 'Turismo'
   | 'General';
 
 export type MeniPrioridad = 'PORTADA' | 'ALTA' | 'MEDIA' | 'BAJA';

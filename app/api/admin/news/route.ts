@@ -126,7 +126,7 @@ async function notifyTelegram(titulo: string, resumen: string, slug: string, cat
   const url = `https://nicaraguainformate.com/noticias/${slug}/?utm_source=telegram`;
   const catEmojis: Record<string, string> = {
     Sucesos: '🚨', Nacionales: '🇳🇮', Deportes: '⚽', Internacionales: '🌍',
-    Espectáculos: '🎬', Tecnología: '💻', Economía: '📈', Cultura: '🎭',
+    Espectáculos: '🎬', Tecnología: '💻',
   };
   const emoji = catEmojis[categoria] || '📰';
   const text = `${emoji} *${titulo}*\n\n${resumen}\n\n🔗 [Leer noticia completa](${url})`;
