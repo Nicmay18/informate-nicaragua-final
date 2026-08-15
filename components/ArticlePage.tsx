@@ -87,7 +87,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
   const vistas = fmtViews(views);
-  const tags = useMemo(() => [noticia.categoria, ...extractPoints(noticia.titulo, 3)], [noticia.categoria, noticia.titulo]);
+  const tags = useMemo(() => [category.name, ...extractPoints(noticia.titulo, 3)], [category.name, noticia.titulo]);
 
   const wordCount = useMemo(() => {
     const text = (noticia.contenido || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -354,7 +354,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </Suspense>
 
         {/* 3 Puntos Clave */}
-        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={noticia.categoria} puntosClave={noticia.puntosClave} />
+        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={category.name} puntosClave={noticia.puntosClave} />
 
         {/* AdSense 300x250 — inline entre contenido superior y cuerpo */}
         <Suspense fallback={null}>
