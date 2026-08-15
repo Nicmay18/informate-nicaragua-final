@@ -195,14 +195,14 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const relatedLinks = await getRelatedLinks(db, categoria, docRef.id);
+    const finalCategoria = (meniUpdateData.categoria as string) || 'Nacionales';
+    const relatedLinks = await getRelatedLinks(db, finalCategoria, docRef.id);
     await docRef.set({
       ...meniUpdateData,
       id: docRef.id,
       titulo: tituloLimpio,
       resumen,
       contenido,
-      categoria,
       imagen: imagen || '',
       slug,
       autor: autor || 'Nicaragua Informate',
@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
 
     if (notificarTelegram !== false && publicado !== false) {
       const tgConfig = await getTelegramConfig(db);
-      await notifyTelegram(titulo, resumen, slug, categoria, imagen || '', body.telegramToken || tgConfig.token, body.telegramChat || tgConfig.chatId);
+      await notifyTelegram(titulo, resumen, slug, finalCategoria, imagen || '', body.telegramToken || tgConfig.token, body.telegramChat || tgConfig.chatId);
     }
 
     revalidateTag('noticias');

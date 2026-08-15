@@ -60,7 +60,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
 
       // Merge MENI update data with metadata-only fields
-      const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado', 'categoria', 'resumen'];
+      // La categoría siempre viene del cálculo canónico de MENI, no del body
+      const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado', 'resumen'];
       const updateData: Record<string, unknown> = { ...meniUpdateData };
       for (const key of metadataAllowed) {
         if (body[key] !== undefined) {
@@ -100,7 +101,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
 
       const updateData: Record<string, unknown> = {};
-      const allowed = ['categoria', 'imagen', 'autor', 'destacada', 'publicado'];
+      // Solo metadata que no altera la categoría canónica
+      const allowed = ['imagen', 'autor', 'destacada', 'publicado'];
       for (const key of allowed) {
         if (body[key] !== undefined) {
           if (key === 'destacada' || key === 'publicado') {
