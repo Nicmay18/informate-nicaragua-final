@@ -8,7 +8,7 @@
 
 ## RESUMEN EJECUTIVO
 
-Se ejecuta la reingeniería fase por fase. Fases 1-4 cerradas con entregables documentados, probados y commiteados. Fase 5 en progreso.
+Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de tests. Fases 3-4 entregadas. Fase 5 en progreso.
 
 ---
 

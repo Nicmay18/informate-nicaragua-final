@@ -1,14 +1,11 @@
-docs(forensic): PASS Fase 1 y Fase 2
+feat(contracts): Fase 2 — canonical data contracts module + tests
 
-- FORENSIC_ARCHITECTURE.md: estado PASS, evidencia de tests.
-- DATA_CONTRACTS.md: estado PASS, corrige NoticiaInput (extiende EditorialNoticiaInput,
-  no es duplicacion), anade contrato canónico de TrafficEvent/JourneyEvent.
-
-Evidencia:
-- tests/supervisor.test.ts: 29/29 PASS
-- tests/adversarial-scoring-audit.test.ts: 10/10 PASS
-- tests/observability.test.ts: 4/4 PASS
-- npm run type-check: tsc noEmit PASS
+- lib/contracts/index.ts: single public surface for Noticia, NoticiaInput,
+  MeniResult, SupervisorDecision, ArticleFusion, GSC/GA4 snapshots,
+  DailySnapshot, RecoveryArticle and JourneyEvent.
+- tests/data-contracts.test.ts: 5/5 PASS validating null semantics,
+  Supervisor final authority, GSC explicit zero vs null, and no PII.
+- tsc --noEmit PASS.
 
 Generated with [Devin](https://cli.devin.ai/docs)
 
