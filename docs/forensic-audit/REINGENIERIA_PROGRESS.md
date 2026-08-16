@@ -82,10 +82,20 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 
 ---
 
-## FASES 6-10 — PENDIENTES
+## FASE 6 — GOOGLE SEARCH CONSOLE ✅ PASS
 
-* Fase 6: GSC verification
-* Fase 7: GA4 verification
+* `docs/forensic-audit/GOOGLE_INTEGRATION.md` creado.
+* Conectividad GSC verificada: `sc-domain:nicaraguainformate.com` con permiso `siteOwner`.
+* `NIOS_SITE_URL` debería usar `sc-domain:nicaraguainformate.com` en lugar del URL prefix.
+
+## FASE 7 — GOOGLE ANALYTICS 4 🚫 BLOCKED
+
+* `GA4_PROPERTY_ID=525672447` devuelve 404.
+* `Google Analytics Admin API` no está habilitada en GCP project `24988088146`.
+* Bloqueador documentado en `GOOGLE_INTEGRATION.md` con acción correctiva.
+
+## FASES 8-10 — PENDIENTES
+
 * Fase 8: NIOS rebuild (data → normalization → observation → derivation → diagnostic → decision support)
 * Fase 9+: thin content, duplication, ADN, schema, indexación, contenido existente
 * Fase final: testing, quality gate, documentación final
@@ -94,15 +104,15 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 
 ## BLOQUEADORES ACTUALES
 
-1. **Acceso a Firebase Console / Vercel Dashboard** — No se puede verificar TTL, índices, deployment logs sin credenciales del propietario.
-2. **Credenciales GSC/GA4** — No se puede verificar conectividad real sin `.env` o service account.
+1. **Google Analytics Admin API** — Debe habilitarse en GCP project `24988088146` y confirmar/corregir `NIOS_GA4_PROPERTY_ID`.
+2. **Acceso a Firebase Console / Vercel Dashboard** — No se puede verificar TTL, índices, deployment logs sin credenciales del propietario.
 3. **Datos de producción** — No se puede auditar `traffic_log`, `noticias` sin acceso a Firestore.
 
 ---
 
 ## PRÓXIMA ACCIÓN
 
-Cerrar Fase 5 con `VERCEL_ARCHITECTURE.md` + optimización de homepage/ISR, luego continuar secuencialmente.
+Habilitar **Google Analytics Admin API** en GCP, corregir `NIOS_GA4_PROPERTY_ID` si es necesario, y re-verificar GA4.
 
 ---
 
