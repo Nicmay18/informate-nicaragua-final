@@ -459,7 +459,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     reason,
     confidence,
     scoreOverride,
-    scoreOverrideReason,
+    ...(scoreOverride ? { scoreOverrideReason } : {}),
     issues,
     actions,
     resultingState,
