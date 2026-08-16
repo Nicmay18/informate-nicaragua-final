@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
 
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,9 @@ export const maxDuration = 60;
  * Requiere autenticación admin.
  */
 export async function POST(request: Request) {
+  if (!isAdminRequest(request)) {
+    return unauthorized();
+  }
   try {
     const body = await request.json();
     const { action, ids, dryRun = true } = body || {};

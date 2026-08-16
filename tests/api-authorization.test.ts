@@ -57,9 +57,19 @@ vi.mock('@/lib/editorial', () => ({
 
 const auditorRoute = await import('@/app/api/auditor/route');
 const auditorWordcountRoute = await import('@/app/api/auditor-wordcount/route');
+const forensicBatchRoute = await import('@/app/api/admin/forensic-batch/route');
+const adminConfigRoute = await import('@/app/api/admin/config/route');
 
 function makeRequest(headers: Record<string, string> = {}): Request {
   return new Request('https://nicaraguainformate.com/api/auditor', { headers });
+}
+
+function makePostRequest(url: string, body: unknown, headers: Record<string, string> = {}): Request {
+  return new Request(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: JSON.stringify(body),
+  });
 }
 
 describe('API Authorization — /api/auditor', () => {
@@ -121,5 +131,55 @@ describe('API Authorization — /api/auditor-wordcount', () => {
     expect(res.status).toBe(200);
     const json = await res.json();
     expect(json.success).toBe(true);
+  });
+});
+
+describe('API Authorization — /api/admin/forensic-batch (F-003: escritura sin auth)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('rechaza POST sin token (401) — no permite escritura anónima en Firestore', async () => {
+    isAdminRequestMock.mockReturnValue(false);
+    const req = makePostRequest('https://nicaraguainformate.com/api/admin/forensic-batch', {
+      action: 'archive',
+      ids: ['noticia-1'],
+      dryRun: false,
+    });
+    const res = await forensicBatchRoute.POST(req as any);
+    expect(res.status).toBe(401);
+  });
+
+  it('rechaza POST con token incorrecto (401)', async () => {
+    isAdminRequestMock.mockReturnValue(false);
+    const req = makePostRequest(
+      'https://nicaraguainformate.com/api/admin/forensic-batch',
+      { action: 'list-all' },
+      { 'x-admin-token': 'wrong-key' }
+    );
+    const res = await forensicBatchRoute.POST(req as any);
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('API Authorization — /api/admin/config (F-004: exposición de secretos)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('rechaza GET sin token (401) — ya no expone tokens de GitHub/Telegram anónimamente', async () => {
+    isAdminRequestMock.mockReturnValue(false);
+    const req = new Request('https://nicaraguainformate.com/api/admin/config');
+    const res = await adminConfigRoute.GET(req as any);
+    expect(res.status).toBe(401);
+  });
+
+  it('rechaza POST sin token (401)', async () => {
+    isAdminRequestMock.mockReturnValue(false);
+    const req = makePostRequest('https://nicaraguainformate.com/api/admin/config', {
+      github: { token: 'malicious' },
+    });
+    const res = await adminConfigRoute.POST(req as any);
+    expect(res.status).toBe(401);
   });
 });

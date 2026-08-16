@@ -9,7 +9,7 @@ import type { JourneyEvent, ObservabilityBatch } from './types';
 const BATCH_SIZE = 10;
 const FLUSH_INTERVAL_MS = 5000;
 
-let memoryQueue: JourneyEvent[] = [];
+const memoryQueue: JourneyEvent[] = [];
 let batchInterval: ReturnType<typeof setInterval> | null = null;
 
 export interface ObservabilityStore {

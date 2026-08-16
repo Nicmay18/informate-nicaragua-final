@@ -1,44 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 
-function isAuthorized(request: NextRequest): boolean {
-  const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const expected = process.env.ADMIN_API_KEY;
-  if (!expected) return false;
-  return key === expected;
-}
-
-export async function GET() {
-  // GET sin auth: el panel ya está protegido por Firebase Auth
-  // Devuelve config de Vercel para conexión automática
+export async function GET(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return unauthorized();
+  }
   try {
     const db = getAdminDb();
     const docRef = db.collection('config').doc('admin');
     const snap = await docRef.get();
-    
     const data = snap.data() || {};
-    
-    // Fallback a variables de entorno de Vercel si no hay config en Firestore
+
+    const hasGithub = !!(data.github?.token || process.env.github_token || process.env.GITHUB_TOKEN);
+    const hasTelegram = !!(data.telegram?.token || process.env.TG_TOKEN || process.env.tg_token);
+    const hasRevalidate = !!(data.revalidate?.secret || process.env.REVALIDATE_SECRET);
+    const hasElevenlabs = !!process.env.ELEVENLABS_API_KEY;
+
     const config = {
       github: {
-        token: data.github?.token || process.env.github_token || '',
+        configured: hasGithub,
         owner: data.github?.owner || process.env.GITHUB_OWNER || 'Nicmay18',
         repo: data.github?.repo || process.env.GITHUB_REPO || 'informate-nicaragua-final',
         path: data.github?.path || process.env.GITHUB_PATH || 'public/images/',
       },
       telegram: {
-        token: data.telegram?.token || process.env.TG_TOKEN || process.env.tg_token || '',
+        configured: hasTelegram,
         chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || process.env.tg_chat || '',
       },
       revalidate: {
-        secret: data.revalidate?.secret || process.env.REVALIDATE_SECRET || '',
+        configured: hasRevalidate,
       },
       elevenlabs: {
-        configured: !!process.env.ELEVENLABS_API_KEY,
+        configured: hasElevenlabs,
         voiceId: data.elevenlabs?.voiceId || process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM',
       },
     };
-    
+
     return NextResponse.json({ success: true, config: config });
   } catch (err) {
     console.error('[admin/config GET]', err);
@@ -47,7 +45,9 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!isAdminRequest(request)) {
+    return unauthorized();
+  }
   try {
     const body = await request.json();
     const { github, telegram } = body;
