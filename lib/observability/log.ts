@@ -97,7 +97,13 @@ export function buildJourneyEvent(input: {
 
 export async function persistEvent(store: ObservabilityStore, event: JourneyEvent): Promise<{ id?: string }> {
   try {
-    const { id } = await store.collection('nios_telemetry').add({ ...event, _writtenAt: new Date().toISOString() });
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days TTL
+    const { id } = await store.collection('nios_telemetry').add({
+      ...event,
+      _writtenAt: now.toISOString(),
+      expiresAt,
+    });
     return { id: typeof id === 'string' ? id : undefined };
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown';
@@ -124,7 +130,13 @@ export async function flushQueue(): Promise<void> {
 
 export async function logAuditTrail(batch: ObservabilityBatch, store: ObservabilityStore): Promise<{ id?: string }> {
   try {
-    const { id } = await store.collection('nios_audit_trail').add({ ...batch, _writtenAt: new Date().toISOString() });
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString(); // 90 days TTL for audit
+    const { id } = await store.collection('nios_audit_trail').add({
+      ...batch,
+      _writtenAt: now.toISOString(),
+      expiresAt,
+    });
     return { id: typeof id === 'string' ? id : undefined };
   } catch (err) {
     logger.error('[observability] failed to persist audit trail:', err);
