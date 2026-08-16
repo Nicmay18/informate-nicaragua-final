@@ -111,23 +111,35 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 * Eliminar duplicaciones entre `business-brain`, `command-center`, `copilot`, `mission-engine`.
 * Implementar tests de pipeline NIOS.
 
-## FASES 9-10 — PENDIENTES
+## FASE 9 — THIN CONTENT / DUPLICACIÓN ✅ PASS (first-pass)
 
-* Fase 9: thin content, duplication, ADN, schema, indexación, contenido existente.
-* Fase 10: testing final, quality gate, documentación final.
+**Entregables:**
+
+* `docs/forensic-audit/CONTENT_AUDIT.md` con auditoría de muestra en Firestore.
+* 291 noticias muestreadas: 0 thin content (<100 / <300 palabras), 0 slugs duplicados, 0 títulos duplicados exactos.
+* `traffic_log` legible y accesible.
+
+**Limitaciones:**
+
+* Muestra de 500 artículos más recientes. No se audita todo el histórico.
+* No se verificó schema / indexación en esta pasada.
+
+## FASE 10 — TESTING / QUALITY GATE / DOCS 🔄 IN PROGRESS
+
+* Pendiente: reporte final, quality gate, cierre de documentación.
 
 ---
 
 ## BLOQUEADORES ACTUALES
 
-1. **Datos de producción** — No se puede auditar `traffic_log`, `noticias`, thin content, etc. sin acceso a Firestore real o dump exportado.
-2. **Acceso a Firebase Console / Vercel Dashboard** — No se puede verificar TTL, índices, deployment logs sin credenciales del propietario.
+1. **Auditoría completa de contenido histórico** — Muestra de 500 artículos limitada. Total de noticias desconocido.
+2. **Acceso a Firebase Console / Vercel Dashboard** — No se puede verificar TTL, índices, deployment logs sin acceso directo.
 
 ---
 
 ## PRÓXIMA ACCIÓN
 
-Continuar NIOS rebuild: consolidar capa `core/` y tests, luego auditar contenido thin/duplicación.
+Cerrar Fase 10: resumen ejecutivo, quality gate, documentación final y commit final.
 
 ---
 
