@@ -1,11 +1,14 @@
-docs(firebase): Fase 4 - arquitectura Firestore y reglas NIOS
+docs(forensic): PASS Fase 1 y Fase 2
 
-- Actualiza firestore.rules con nios_telemetry, nios_audit_trail,
-  nios_daily_snapshots y nios_alerts.
-- Entrega docs/forensic-audit/FIREBASE_ARCHITECTURE.md con colecciones,
-  riesgos y acciones recomendadas.
-- Entrega docs/forensic-audit/REINGENIERIA_PROGRESS.md con estado de
-  Fases 1-5.
+- FORENSIC_ARCHITECTURE.md: estado PASS, evidencia de tests.
+- DATA_CONTRACTS.md: estado PASS, corrige NoticiaInput (extiende EditorialNoticiaInput,
+  no es duplicacion), anade contrato canónico de TrafficEvent/JourneyEvent.
+
+Evidencia:
+- tests/supervisor.test.ts: 29/29 PASS
+- tests/adversarial-scoring-audit.test.ts: 10/10 PASS
+- tests/observability.test.ts: 4/4 PASS
+- npm run type-check: tsc noEmit PASS
 
 Generated with [Devin](https://cli.devin.ai/docs)
 

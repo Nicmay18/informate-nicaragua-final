@@ -4,7 +4,7 @@
 >
 > Fecha: 2026-08-15
 >
-> Estado: First-pass contracts. Derived from actual TypeScript types found in the repository.
+> Estado: PASS — Contracts frozen and verified against code. tsc noEmit PASS. Observability 4/4 PASS.
 
 ---
 
@@ -59,7 +59,7 @@
 
 ### 2.2 `NoticiaInput` — Editorial input
 
-**Authority:** `lib/editorial/types.ts` claims to be the single V4 source (`lib/meni/types.ts` still has `NoticiaInput` too — duplication).
+**Authority:** `lib/editorial/types.ts` is the canonical V4 source. `lib/meni/types.ts` extends it (`NoticiaInput = EditorialNoticiaInput & { ... }`) with MENI-only fields (`id`, `departamento`, `research`, `story`). No duplication: it is composition.
 
 | Field | Type | Nullable | Source | Authority |
 |-------|------|----------|--------|-----------|
@@ -250,27 +250,28 @@
 
 ---
 
-### 2.10 `TrafficEvent` — Pending contract
+### 2.10 `TrafficEvent` — `JourneyEvent`
 
-**Status:** NO `TrafficEvent` interface found in the repository. Traffic is handled via `lib/analytics/traffic-reader.ts`, `traffic-aggregator.ts`, and Firestore `traffic_log`. This contract must be created in Fase 3 (Observability First) and then referenced here.
+**Authority:** `lib/observability/types.ts` (canonical implementation from Fase 3).
 
-**Required contract:**
+| Field | Type | Nullable | Meaning |
+|-------|------|----------|---------|
+| `id` | `string` | yes | Firestore document id |
+| `sessionId` | `string` | no | Anonymous session token |
+| `type` | `JourneyEventType` | no | `SESSION_START`, `PAGE_VIEW`, `ARTICLE_VIEW`, `SEARCH`, `INTERNAL_NAVIGATION`, `OUTBOUND_CLICK`, `ENGAGEMENT`, `SCROLL_50`, `SCROLL_90`, `ERROR`, `SESSION_END` |
+| `timestamp` | `string` | no | ISO 8601 |
+| `path` | `string` | no | URL path |
+| `articleSlug` | `string` | yes | Article slug if applicable |
+| `referrer` | `string` | yes | Sanitized referrer host/path |
+| `source` | `TrafficSource` | no | `direct`, `organic`, `social`, `referral`, `search`, `unknown` |
+| `device` | `DeviceCategory` | no | `mobile`, `desktop`, `tablet`, `unknown` |
+| `browser` | `string` | yes | Browser family only (no full UA) |
+| `country` | `string` | yes | Country code if available |
+| `durationMs` | `number` | yes | Event duration |
+| `metadata` | `Record<string, unknown>` | yes | Extra event context |
+| `dataStatus` | `DataStatus` | no | `UNKNOWN`, `DATA_AVAILABLE`, `DATA_EMPTY`, `ERROR` |
 
-```text
-TrafficEvent {
-  id: string
-  sessionId: string | null
-  type: 'PAGE_VIEW' | 'ARTICLE_VIEW' | 'SEARCH' | 'INTERNAL_NAVIGATION' | 'OUTBOUND_CLICK' | 'ENGAGEMENT' | 'ERROR' | 'SESSION_END'
-  path: string
-  articleSlug?: string
-  referrer?: string
-  source?: string
-  deviceCategory?: 'mobile' | 'desktop' | 'tablet'
-  timestamp: string
-  durationMs?: number
-  metadata?: Record<string, unknown>
-}
-```
+**Rule:** No PII. Full user agent is never stored.
 
 ---
 

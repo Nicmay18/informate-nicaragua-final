@@ -4,7 +4,7 @@
 >
 > Fecha: 2026-08-15
 >
-> Estado: IN PROGRESS / First-pass inventory. This document reflects the architecture actually found in the repository, not an idealized version.
+> Estado: PASS — First-pass inventory closed. Evidence: supervisor tests (29/29 PASS), adversarial anti-bypass audit (10/10 PASS), observability tests (4/4 PASS), tsc noEmit PASS.
 
 ---
 
