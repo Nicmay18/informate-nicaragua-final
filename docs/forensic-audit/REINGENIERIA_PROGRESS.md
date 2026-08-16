@@ -66,21 +66,19 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 
 ---
 
-## FASE 5 — VERCEL / NEXT.JS 🔄 IN PROGRESS
+## FASE 5 — VERCEL / NEXT.JS ✅ PASS (first-pass)
 
-**Foco actual:**
+**Entregables:**
 
-* Auditar `app/page.tsx`, `lib/data.ts`, `HomePagePro.tsx`, `ArticlePage.tsx`.
-* ISR `revalidate = 60` en homepage.
-* Cache de `traffic-performance` con `unstable_cache`.
-* Posibles optimizaciones de bundle, imágenes, fuentes.
+* `docs/forensic-audit/VERCEL_ARCHITECTURE.md` con auditoría de `next.config.ts`, `vercel.json`, crons, redirects, imágenes, riesgos.
+* Revisión de `Footer.tsx` y `OptimizedImage.tsx` como componentes cliente/servidor.
 
 **Pendiente:**
 
-* `VERCEL_ARCHITECTURE.md`
 * Medir bundle con `@next/bundle-analyzer`.
-* Revisar `next.config.*` e ISR por ruta.
-* Optimizar imágenes (`OptimizedImage.tsx`).
+* Revisar ISR por ruta más allá de homepage.
+* Auditoría de `lib/image-loader.ts`.
+* Añadir headers de seguridad si no existen en middleware/layout.
 
 ---
 
