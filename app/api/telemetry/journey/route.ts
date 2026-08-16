@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { buildJourneyEvent, persistEvent } from '@/lib/observability/log';
 import type { JourneyEvent, JourneyEventType } from '@/lib/observability/types';
+import { RateLimiter } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
+
+const journeyLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 60, cleanupThreshold: 500 });
 
 const ALLOWED_METADATA_KEYS = [
   'query',
@@ -41,6 +44,19 @@ const VALID_EVENT_TYPES: JourneyEventType[] = [
 ];
 
 export async function POST(request: NextRequest) {
+  const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const limit = journeyLimiter.check(clientIp);
+  if (!limit.allowed) {
+    return NextResponse.json({ ok: false, error: 'Too many requests' }, {
+      status: 429,
+      headers: {
+        'X-RateLimit-Limit': '60',
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset': new Date(limit.resetAt).toISOString(),
+      },
+    });
+  }
+
   try {
     const body = await request.json().catch(() => ({}));
     const rawType = typeof body.type === 'string' ? body.type : 'PAGE_VIEW';
