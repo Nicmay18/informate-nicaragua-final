@@ -217,12 +217,21 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Parsear configuración del body
-    const body = await request.json().catch(() => ({}));
-    const {
-      estado = 'borrador',
-      usarGemini = true,
-      articles,
-    } = body as { estado?: 'publicado' | 'borrador'; usarGemini?: boolean; articles?: ExternalArticle[] };
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Body JSON inválido' }, { status: 400 });
+    }
+
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Body debe ser un objeto' }, { status: 400 });
+    }
+
+    const raw = body as Record<string, unknown>;
+    const estado = raw.estado === 'publicado' ? 'publicado' : 'borrador';
+    const usarGemini = raw.usarGemini !== false;
+    const articles = Array.isArray(raw.articles) ? raw.articles : undefined;
 
     if (!['publicado', 'borrador'].includes(estado)) {
       return NextResponse.json({ error: "estado debe ser 'publicado' o 'borrador'" }, { status: 400 });
