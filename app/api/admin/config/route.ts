@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
       },
       telegram: {
         configured: hasTelegram,
-        chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || process.env.tg_chat || '',
       },
       revalidate: {
         configured: hasRevalidate,
