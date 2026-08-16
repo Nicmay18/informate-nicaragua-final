@@ -184,8 +184,9 @@ describe('Supervisor — Casos 6-7: Watch y actualización', () => {
       categoria: 'Nacionales',
       perfil: 'nacionales',
       imagen: 'https://example.com/imagen.jpg',
-      scoreMeni: 85,
+      scoreMeni: 92,
       aprobadoMeni: true,
+      recomendacionMeni: 'publicar',
     };
     const decision = makeEditorialDecision(ctx);
     expect(decision.verdict).toBe('PUBLICAR');
@@ -297,8 +298,9 @@ describe('Supervisor — Casos 9-10: Timestamps canónicos', () => {
       publishedAt: new Date(Date.now() - 3600000).toISOString(),
       dateModified: new Date().toISOString(),
       imagen: 'https://example.com/img.jpg',
-      scoreMeni: 88,
+      scoreMeni: 92,
       aprobadoMeni: true,
+      recomendacionMeni: 'publicar',
     };
     const decision = makeEditorialDecision(ctx);
     expect(decision.verdict).toBe('PUBLICAR');

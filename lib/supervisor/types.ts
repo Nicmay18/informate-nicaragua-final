@@ -12,6 +12,7 @@
 import type { ResearchResult } from '@/lib/research/types';
 import type { StoryProposal } from '@/lib/editorial/story-editor/types';
 import type { WatchResult, UpdateDetected } from '@/lib/news-watch/types';
+import type { RecomendacionEditorial } from '@/lib/meni/editorial-brain/types';
 
 // ═══════════════════════════════════════════════════════════════
 // CICLO DE VIDA DE UNA NOTICIA
@@ -101,7 +102,8 @@ export type IssueDomain =
   | 'ABANDONO'
   | 'COSTO'
   | 'SEGURIDAD'
-  | 'INFRAESTRUCTURA';
+  | 'INFRAESTRUCTURA'
+  | 'INVARIANTE';
 
 export interface SupervisorIssue {
   severity: IssueSeverity;
@@ -170,6 +172,16 @@ export interface ArticleContext {
   editorialTier?: string;
   scoreMeni?: number;
   aprobadoMeni?: boolean;
+  recomendacionMeni?: RecomendacionEditorial;
+  /** Dimensiones editoriales de MENI — Supervisor evalúa valor periodístico */
+  adnNI?: number;
+  exclusividad?: number;
+  wow?: number;
+  eeat?: number;
+  aportePropio?: boolean;
+  utilidad?: number;
+  originalidad?: number;
+  profundidad?: number;
   /** Resultado de investigación si existe */
   research?: ResearchResult;
   /** Propuesta del Story Editor si existe */

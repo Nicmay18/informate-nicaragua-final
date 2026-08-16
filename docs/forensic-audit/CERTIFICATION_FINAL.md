@@ -320,3 +320,57 @@ No aparecen nuevos bloqueadores P0 o P1.
 - **Fase 4:** Auditar publicación real en Telegram/Facebook/WhatsApp y garantizar generación social que no copie el titular.
 - **Fase 6:** Conectar el ciclo de vida editorial real en el admin (`MENI Dashboard` / `admin/meni`) para que el editor vea `editorialState` y `supervisorDecision`.
 - **Fase 7:** Resolver `home-v2` duplicado en contexto del editor (nota: archivos `app/home-v2/page.tsx` y `components/pro/HomePageV2.tsx` no existen en disco; validar si se deben limpiar referencias en el workspace).
+
+---
+
+## Actualización 2026-08-14 — Cirugía Anti-Bypass del Supervisor Editorial
+
+### Hallazgo forense
+
+La auditoría adversarial (12 casos de prueba) detectó un bypass arquitectónico en `makeEditorialDecision` (`lib/supervisor/editorial-supervisor.ts`):
+
+1. **Default inseguro (fail-open):** `aprobadoMeni` defaulteaba a `true` cuando no se aportaba `ctx.aprobadoMeni` ni `ctx.scoreMeni`. El Supervisor abría la puerta a `PUBLICAR` sin evidencia positiva de aprobación de MENI.
+
+2. **Bypass del gate de publicación:** La rama `verdict = 'PUBLICAR'` (línea 393 original) solo requería `hasHighValue` (valor periodístico >= 75). No verificaba explícitamente `aprobadoMeni === true && recomendacionMeni === 'publicar' && scoreMeni >= 90`. Esto permitía:
+   - **CASO6:** Noticia rutinaria con score 92 → `PUBLICAR` sin valor periodístico real.
+   - **CASO10:** Artículo con valor periodístico alto pero MENI pidiendo `MEJORAR` → `PUBLICAR` directo, ignorando a MENI.
+   - **CASO11:** Título genérico ("Nicaragua toma importante decisión") con score 90 → `PUBLICAR`.
+
+### Cirugía aplicada
+
+**Archivo:** `lib/supervisor/editorial-supervisor.ts`
+
+1. **Principio fail-closed (líneas 132-137):** `aprobadoMeni` ahora solo es `true` con evidencia positiva explícita (`ctx.aprobadoMeni === true` o `scoreMeni >= 90` cuando `aprobadoMeni` es undefined). Sin evidencia, se asume `false`.
+
+2. **Gate de invariante explícito (líneas 391-410):** La rama `verdict = 'PUBLICAR'` ahora requiere `hasHighValue && meniCleared` (donde `meniCleared = aprobadoMeni === true && recomendacionMeni === 'publicar' && scoreMeni >= 90`). Si `hasHighValue && !meniCleared`, degrada a `REVISION_HUMANA` (no bypass).
+
+3. **Red de seguridad auditable (líneas 412-426):** Guard final que, si por cualquier refactor futuro se llegara a `verdict === 'PUBLICAR'` sin `meniCleared`, degrada a `REVISION_HUMANA` y emite un issue `CRITICAL` con dominio `INVARIANTE` — evidencia auditable de que el guard actuó.
+
+**Archivo:** `lib/supervisor/types.ts`
+- Agregado `'INVARIANTE'` al tipo `IssueDomain` para soportar el guard auditable.
+
+**Archivo:** `lib/editorial/guardar-con-meni.ts`
+- `supervisorApproved` ahora se deriva estrictamente de `supervisor.verdict === 'PUBLICAR'`. `PUBLICAR_CON_CAMBIOS`, `REVISION_HUMANA`, `MEJORAR` no son aprobaciones automáticas.
+
+### Validación ejecutada
+
+- `tsc --noEmit`: 0 errores
+- `npx vitest run tests/adversarial-scoring-audit.test.ts`: 10/10 tests pasan
+  - Invariante PUBLICAR requiere `aprobadoMeni === true`
+  - Invariante PUBLICAR requiere `recomendacionMeni === 'publicar'`
+  - Invariante PUBLICAR requiere `scoreMeni >= 90`
+  - Fail-closed: sin `aprobadoMeni` ni `scoreMeni`, NO se asume aprobado
+  - CASO6/8/10/11 del informe forense: ninguno logra `PUBLICAR` directo
+  - Caso positivo: `meniCleared + hasHighValue` → `PUBLICAR`/`READY`
+  - Red de seguridad: guard final auditable con dominio `INVARIANTE`
+- `npx vitest run` regresión (supervisor + editorial-invariants + editorial-decision + adversarial-scoring-audit): 44/44 tests pasan
+- `npm run build`: exitoso (111 páginas estáticas generadas, 2.9min)
+
+### Tests corregidos
+
+- `tests/supervisor.test.ts` Caso 6: `scoreMeni` 85→92, agregado `recomendacionMeni: 'publicar'`. El test anterior codificaba el bypass (score < 90 esperando `PUBLICAR`) como correcto.
+- `tests/supervisor.test.ts` Caso 10: `scoreMeni` 88→92, agregado `recomendacionMeni: 'publicar'`. Mismo motivo.
+
+### Estado final
+
+El bypass arquitectónico está cerrado. `verdict === 'PUBLICAR'` es ahora matemáticamente imposible sin `meniCleared === true`. El Supervisor Editorial es la autoridad final y MENI es subordinado — pero el Supervisor no puede ignorar a MENI para abrir la puerta de publicación.

@@ -129,7 +129,13 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   const hasContent = ctx.contenido && ctx.contenido.trim().length > 100;
   const hasResearch = !!ctx.research;
   const hasStory = !!ctx.story;
-  const meniCleared = ctx.aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 70;
+  // PRINCIPIO FAIL-CLOSED: si no se aporta la decisión de MENI explícitamente,
+  // asumimos NO aprobado. El Supervisor nunca debe abrir la puerta a una
+  // publicación sin evidencia positiva de aprobación de MENI.
+  const aprobadoMeni = ctx.aprobadoMeni === true
+    || (ctx.aprobadoMeni === undefined && ctx.scoreMeni !== undefined && ctx.scoreMeni >= 90);
+  const recomendacionMeni = ctx.recomendacionMeni ?? (aprobadoMeni ? 'publicar' : 'mejorar');
+  const meniCleared = aprobadoMeni === true && recomendacionMeni === 'publicar' && (ctx.scoreMeni ?? 0) >= 90;
   const isPreDraft = !hasContent && !hasResearch && !hasStory && !meniCleared;
 
   if (titleEval.needsInvestigation) {
@@ -327,7 +333,23 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     });
   }
 
-  // ── 2.7 Veredicto final ──────────────────────────────────────
+  // ── 2.7 Valor periodístico y veredicto final ────────────────
+  // El Supervisor evalúa dimensiones editoriales INDEPENDIENTEMENTE del score.
+  // Un score técnico alto no oculta un valor periodístico bajo.
+  const aporteScore = ctx.aportePropio === true ? 100 : (ctx.aportePropio === false ? 0 : undefined);
+  const editorialDimensions = [
+    ctx.adnNI,
+    ctx.exclusividad,
+    ctx.wow,
+    ctx.eeat,
+    aporteScore,
+  ].filter((v): v is number => typeof v === 'number' && !Number.isNaN(v));
+  const journalisticValue = editorialDimensions.length > 0
+    ? Math.round(editorialDimensions.reduce((a, b) => a + b, 0) / editorialDimensions.length)
+    : (ctx.scoreMeni ?? 100);
+  const hasHighValue = journalisticValue >= 75;
+  const hasExceptionalValue = journalisticValue >= 85;
+
   let verdict: SupervisorVerdict;
   let resultingState: ArticleLifecycleState;
 
@@ -359,9 +381,50 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       verdict = 'PUBLICAR_CON_CAMBIOS';
       resultingState = 'EDITORIAL_REVIEW';
     }
-  } else {
+  } else if (!meniCleared && !hasExceptionalValue) {
+    // MENI no recomienda publicar y el valor periodístico no es excepcional.
+    verdict = recomendacionMeni === 'revisar' ? 'REVISION_HUMANA' : 'PUBLICAR_CON_CAMBIOS';
+    resultingState = 'EDITORIAL_REVIEW';
+  } else if (recomendacionMeni !== 'publicar' && !hasExceptionalValue) {
+    verdict = 'REVISION_HUMANA';
+    resultingState = 'EDITORIAL_REVIEW';
+  } else if (recomendacionMeni !== 'publicar' && hasExceptionalValue) {
+    // MENI recomienda revisar, pero el valor periodístico es alto.
+    // Se permite publicar con cambios menores. NUNCA PUBLICAR directo.
+    verdict = 'PUBLICAR_CON_CAMBIOS';
+    resultingState = 'EDITORIAL_REVIEW';
+  } else if (hasHighValue && meniCleared) {
+    // GATE DE INVARIANTE: PUBLICAR directo solo si MENI aprobó Y recomendó publicar
+    // Y el score >= 90 Y el valor periodístico es alto. Sin meniCleared, jamás PUBLICAR.
     verdict = 'PUBLICAR';
     resultingState = 'READY';
+  } else if (hasHighValue && !meniCleared) {
+    // Valor periodístico alto pero MENI no cleared — no bypass.
+    // El editor humano decide; nunca auto-publicar.
+    verdict = 'REVISION_HUMANA';
+    resultingState = 'EDITORIAL_REVIEW';
+  } else {
+    verdict = 'PUBLICAR_CON_CAMBIOS';
+    resultingState = 'EDITORIAL_REVIEW';
+  }
+
+  // ── 2.7b INVARIANTE FINAL DE PUBLICACIÓN ─────────────────────
+  // Cirugía anti-bypass: por construcción las ramas anteriores ya impiden
+  // llegar a PUBLICAR sin meniCleared, pero este guard es la red de seguridad
+  // explícita y auditable. Si por cualquier refactor futuro se llegara a
+  // verdict === 'PUBLICAR' sin meniCleared, se degrada a REVISION_HUMANA.
+  if (verdict === 'PUBLICAR' && !meniCleared) {
+    verdict = 'REVISION_HUMANA';
+    resultingState = 'EDITORIAL_REVIEW';
+    issues.push({
+      severity: 'CRITICAL',
+      domain: 'INVARIANTE',
+      problem: 'Invariante de publicación violada: PUBLICAR sin meniCleared',
+      impact: 'Se evitó un bypass del gate editorial',
+      cause: 'Refactor futuro podría intentar PUBLICAR sin aprobación de MENI',
+      action: 'Revisar la rama que produjo PUBLICAR — requiere meniCleared=true',
+      autoFixable: false,
+    });
   }
 
   // ── 2.8 Confianza ────────────────────────────────────────────

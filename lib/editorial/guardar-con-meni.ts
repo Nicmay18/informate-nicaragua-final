@@ -8,6 +8,34 @@ import { detectContentProfile } from '@/lib/meni/profile-detector';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
 
+/**
+ * Elimina recursivamente valores `undefined` de cualquier estructura
+ * antes de escribir en Firestore. Firestore rechaza `undefined` con
+ * error: "Cannot use undefined as a Firestore value".
+ * Preserva instancias de Date, Timestamp, Buffer y otros tipos no-JSON.
+ */
+export function sanitizeForFirestore<T = unknown>(value: T): T | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null as unknown as T;
+  if (typeof value !== 'object') return value;
+  if (Array.isArray(value)) {
+    return value
+      .map(sanitizeForFirestore)
+      .filter((v): v is NonNullable<typeof v> => v !== undefined) as unknown as T;
+  }
+  if (value instanceof Date) return value;
+  if (typeof (value as { toDate?: unknown }).toDate === 'function') return value;
+  const obj = value as Record<string, unknown>;
+  const cleaned: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    const sv = sanitizeForFirestore(v);
+    if (sv !== undefined) {
+      cleaned[k] = sv;
+    }
+  }
+  return cleaned as T;
+}
+
 export function mapMeniScoreToNivel(score: number | null, aprobado: boolean): string {
   if (score === null || !Number.isFinite(score)) return 'NO EVALUADA';
   if (!aprobado || score < 85) return 'RECHAZADO';
@@ -35,19 +63,6 @@ export async function guardarConMeni(
     skipEditorBrain: options?.skipEditorBrain ?? true,
   });
 
-  if (!meni.aprobado) {
-    // MENI rechazo antes de que el Supervisor evaluara. Construimos una decision
-    // minima del Supervisor que refleja que MENI ya bloqueo.
-    const supervisorBlock = makeEditorialDecision({
-      titulo: input.titulo,
-      contenido: input.contenido || '',
-      resumen: input.resumen,
-      scoreMeni: meni.scoreFinal ?? undefined,
-      aprobadoMeni: false,
-    });
-    return { ok: false, meni, supervisor: supervisorBlock, supervisorApproved: false, updateData: {} };
-  }
-
   const finalContenido = meni.articulo?.contenido || input.contenido || '';
   const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
   const { fuente, fuentesComplementarias } = extractFuente(finalContenido, input.resumen || '');
@@ -65,6 +80,9 @@ export async function guardarConMeni(
   });
 
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
+  // MENI evalúa. El Supervisor decide. El Supervisor puede decir NO aunque MENI diga sí,
+  // y puede decir PUBLICAR_CON_CAMBIOS aunque MENI pida revisar, si el valor periodístico
+  // justifica una excepción.
   const supervisor = makeEditorialDecision({
     titulo: input.titulo,
     contenido: finalContenido,
@@ -74,10 +92,20 @@ export async function guardarConMeni(
     imagen: input.imagen,
     scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
+    recomendacionMeni: meni.recomendacionEditorial ?? undefined,
+    adnNI: meni.editorialDna?.adnNI,
+    exclusividad: meni.editorialDna?.exclusividad?.score,
+    wow: meni.editorialDna?.wow?.score,
+    eeat: meni.eeat?.score,
+    aportePropio: meni.valorEditorial?.aportePropio,
     research: input.research,
     story: input.story,
   });
-  const supervisorApproved = !supervisor.issues.some(i => i.severity === 'CRITICAL');
+
+  // El Supervisor es la autoridad final: solo PUBLICAR con estado READY puede avanzar.
+  // PUBLICAR_CON_CAMBIOS, REVISION_HUMANA, MEJORAR no son aprobaciones automáticas.
+  const supervisorApproved = supervisor.verdict === 'PUBLICAR';
+  const ok = supervisorApproved;
 
   // REGLA 14: Una sola decision editorial canonica — el Supervisor.
   // buildEditorialDecision (decision.ts) fue eliminado del flujo porque
@@ -115,5 +143,9 @@ export async function guardarConMeni(
     story: input.story,
   };
 
-  return { ok: true, meni, supervisor, supervisorApproved, updateData };
+  // Sanitizar para Firestore: nunca enviar `undefined` (ni plano ni anidado).
+  // Esto cubre fields como canonicalEditorialDecision.research, supervisorDecision.scoreOverrideReason, etc.
+  const cleanUpdateData = sanitizeForFirestore(updateData) as Record<string, unknown>;
+
+  return { ok, meni, supervisor, supervisorApproved, updateData: cleanUpdateData };
 }

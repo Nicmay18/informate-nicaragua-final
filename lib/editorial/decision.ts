@@ -80,8 +80,6 @@ export function buildEditorialDecision(params: {
     decisionId: `dec_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
     timestamp: new Date().toISOString(),
     state,
-    research: params.research,
-    story: params.story,
     publicCategory: params.publicCategory,
     profileInternal: params.profileInternal,
     scoreMeni: params.scoreMeni,
@@ -90,6 +88,9 @@ export function buildEditorialDecision(params: {
     reason: params.reason || params.story?.reason || params.research?.reason || '',
     sourceOfTruth: params.research && params.story ? 'research+story+meni' : 'meni_only',
     modelVersion: DECISION_MODEL_VERSION,
+    // Evitamos almacenar undefined en Firestore
+    ...(params.research !== undefined ? { research: params.research } : {}),
+    ...(params.story !== undefined ? { story: params.story } : {}),
   };
 }
 
