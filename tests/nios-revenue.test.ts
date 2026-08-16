@@ -45,7 +45,7 @@ describe('NIOS v2 Revenue & Monetization Engine (Bloque 4)', () => {
 
       const result = auditArticleForAdSense(article);
       expect(result.status).toBe('TECHNICAL_DEFECT');
-      expect(result.issues.some(i => i.includes('imagen'))).toBe(true);
+      expect(result.issues.some((i: string) => i.includes('imagen'))).toBe(true);
     });
 
     it('flags NEEDS_EDITORIAL_ENRICHMENT when missing verifiable source', () => {
@@ -62,7 +62,7 @@ describe('NIOS v2 Revenue & Monetization Engine (Bloque 4)', () => {
 
       const result = auditArticleForAdSense(article);
       expect(result.status).toBe('NEEDS_EDITORIAL_ENRICHMENT');
-      expect(result.issues.some(i => i.includes('fuente'))).toBe(true);
+      expect(result.issues.some((i: string) => i.includes('fuente'))).toBe(true);
     });
 
     it('flags POLICY_REVIEW_REQUIRED for sensitive terminology', () => {
