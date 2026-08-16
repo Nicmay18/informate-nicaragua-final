@@ -95,25 +95,39 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 * `properties.runReport` devolvió datos (1 fila, métrica `activeUsers`).
 * GSC y GA4 conectados con la Firebase service account.
 
-## FASES 8-10 — PENDIENTES
+## FASE 8 — NIOS REBUILD 🔄 IN PROGRESS
 
-* Fase 8: NIOS rebuild (data → normalization → observation → derivation → diagnostic → decision support)
-* Fase 9+: thin content, duplication, ADN, schema, indexación, contenido existente
-* Fase final: testing, quality gate, documentación final
+**Entregables first-pass:**
+
+* `docs/forensic-audit/NIOS_ARCHITECTURE.md` con arquitectura objetivo de 6 capas (data → normalization → observation → derivation → diagnostic → decision support).
+* Mapa de módulos `lib/nios/` y `lib/analytics/`.
+* Reglas de integridad para GSC/GA4/artículos.
+* Propuesta de refactor a `lib/nios/core/`.
+
+**Pendiente:**
+
+* Consolidar `lib/nios/intelligence/orchestrator.ts` como scheduler canónico.
+* Migrar `lib/analytics/traffic-*` a `lib/nios/collectors/traffic/`.
+* Eliminar duplicaciones entre `business-brain`, `command-center`, `copilot`, `mission-engine`.
+* Implementar tests de pipeline NIOS.
+
+## FASES 9-10 — PENDIENTES
+
+* Fase 9: thin content, duplication, ADN, schema, indexación, contenido existente.
+* Fase 10: testing final, quality gate, documentación final.
 
 ---
 
 ## BLOQUEADORES ACTUALES
 
-1. **Google Analytics Admin API** — Debe habilitarse en GCP project `24988088146` y confirmar/corregir `NIOS_GA4_PROPERTY_ID`.
+1. **Datos de producción** — No se puede auditar `traffic_log`, `noticias`, thin content, etc. sin acceso a Firestore real o dump exportado.
 2. **Acceso a Firebase Console / Vercel Dashboard** — No se puede verificar TTL, índices, deployment logs sin credenciales del propietario.
-3. **Datos de producción** — No se puede auditar `traffic_log`, `noticias` sin acceso a Firestore.
 
 ---
 
 ## PRÓXIMA ACCIÓN
 
-Habilitar **Google Analytics Admin API** en GCP, corregir `NIOS_GA4_PROPERTY_ID` si es necesario, y re-verificar GA4.
+Continuar NIOS rebuild: consolidar capa `core/` y tests, luego auditar contenido thin/duplicación.
 
 ---
 
