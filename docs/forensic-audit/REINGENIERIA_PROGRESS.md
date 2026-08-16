@@ -88,11 +88,12 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 * Conectividad GSC verificada: `sc-domain:nicaraguainformate.com` con permiso `siteOwner`.
 * `NIOS_SITE_URL` debería usar `sc-domain:nicaraguainformate.com` en lugar del URL prefix.
 
-## FASE 7 — GOOGLE ANALYTICS 4 🚫 BLOCKED
+## FASE 7 — GOOGLE ANALYTICS 4 ✅ PASS
 
-* `GA4_PROPERTY_ID=525672447` devuelve 404.
-* `Google Analytics Admin API` no está habilitada en GCP project `24988088146`.
-* Bloqueador documentado en `GOOGLE_INTEGRATION.md` con acción correctiva.
+* `GOOGLE_INTEGRATION.md` actualizado con verificación real.
+* `accountSummaries.list` encontró `properties/525672447` (`informate-instant-nicaragua`).
+* `properties.runReport` devolvió datos (1 fila, métrica `activeUsers`).
+* GSC y GA4 conectados con la Firebase service account.
 
 ## FASES 8-10 — PENDIENTES
 
