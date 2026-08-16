@@ -59,10 +59,10 @@ function inferDevice(userAgent?: string): JourneyEvent['device'] {
 function inferBrowser(userAgent?: string): JourneyEvent['browser'] | undefined {
   if (!userAgent) return undefined;
   const ua = userAgent.toLowerCase();
-  if (/chrome/.test(ua)) return 'chrome';
-  if (/safari/.test(ua) && !/chrome/.test(ua)) return 'safari';
-  if (/firefox/.test(ua)) return 'firefox';
   if (/edg/.test(ua)) return 'edge';
+  if (/chrome|crios/.test(ua)) return 'chrome';
+  if (/firefox|fxios/.test(ua)) return 'firefox';
+  if (/safari|applewebkit/.test(ua)) return 'safari';
   return 'other';
 }
 

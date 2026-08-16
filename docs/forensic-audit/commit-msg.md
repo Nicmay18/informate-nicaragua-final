@@ -1,13 +1,13 @@
-feat(foundation): Bloque 1 - purga de endpoints obsoletos y politica TTL
+feat(observability): Bloque 2 - Journey Tracking y observabilidad sin PII
 
-- Elimina 12 endpoints obsoletos/deuda tecnica en app/api/admin/:
-  - phase15-1-auto-fix, phase15-2-dup-audit, phase16-inventory
-  - adsense-repair, adsense-repair-groq, adsense-repair-deepseek
-  - quitar-emocional-simple, limpiar-emocional, limpiar-palabras-sensibles
-  - rescribir-sucesos, revertir-sensacionalismo, expandir-thin-content
-- lib/observability/log.ts: anade metadata expiresAt a eventos (30d) y
-  audit logs (90d) para politica TTL de Firestore sin fuga de costos.
-- Verificacion: tsc --noEmit 0 errores, vitest 38/38 PASS.
+- components/JourneyTracker.tsx: cliente ligero que registra navegacion,
+  recirculacion, busquedas y sesiones anonimas en sessionStorage (30min idle).
+- app/layout.tsx: integra JourneyTracker dentro de Suspense para SSR seguro.
+- app/api/telemetry/journey/route.ts: endpoint de ingesta tolerante a fallos
+  con sanitizacion estricta (sin IP, sin email, referrers limpios).
+- lib/observability/log.ts: detector robusto de navegadores y dispositivos.
+- tests/journey-tracking.test.ts: 4/4 tests verificando privacidad y TTL (30d).
+- Suite total: 42/42 tests PASS, tsc --noEmit 0 errores.
 
 Generated with [Devin](https://cli.devin.ai/docs)
 

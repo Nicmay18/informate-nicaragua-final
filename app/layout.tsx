@@ -21,6 +21,7 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeScript from '@/components/ThemeScript';
+import JourneyTracker from '@/components/JourneyTracker';
 import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { criticalCss } from '@/lib/critical-css';
 import { getCspNonce } from '@/lib/nonce';
@@ -196,6 +197,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </Suspense>
         <ConsentScript />
         <ThemeScript />
+        <Suspense fallback={null}>
+          <JourneyTracker />
+        </Suspense>
         <WebVitalsReporter />
       </body>
     </html>
