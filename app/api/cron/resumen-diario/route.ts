@@ -1,10 +1,9 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
-
-const CRON_SECRET = process.env.CRON_SECRET || '';
 
 interface Noticia {
   id?: string;
@@ -86,9 +85,8 @@ export async function GET(request: Request) {
 
   // Auth: Vercel cron manda Authorization: Bearer <CRON_SECRET>; el panel manda ?secret=
   const authHeader = request.headers.get('authorization') || '';
-  const okBearer = CRON_SECRET && authHeader === `Bearer ${CRON_SECRET}`;
-  const okParam = !CRON_SECRET || secret === CRON_SECRET || secret === 'manual-run';
-  if (!okBearer && !okParam) {
+  const bearer = authHeader.replace(/^Bearer\s+/i, '');
+  if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

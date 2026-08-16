@@ -25,12 +25,12 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import type { NoticiaInput } from '@/lib/meni';
 import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
 
 // ─── Configuración ───
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const CRON_SECRET = process.env.CRON_SECRET_TOKEN || '';
 
 // ─── Tipos ───
 interface ExternalArticle {
@@ -207,7 +207,9 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Verificar token secreto
     const secretHeader = request.headers.get('x-cron-secret');
-    if (!CRON_SECRET || secretHeader !== CRON_SECRET) {
+    const authHeader = request.headers.get('authorization') || '';
+    const bearer = authHeader.replace(/^Bearer\s+/i, '');
+    if (!verifyAdminOrCronToken(secretHeader) && !verifyAdminOrCronToken(bearer)) {
       return NextResponse.json(
         { error: 'Unauthorized: token inválido o no configurado' },
         { status: 401 }

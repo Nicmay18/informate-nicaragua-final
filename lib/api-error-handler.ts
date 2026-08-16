@@ -12,6 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from './auth';
 
 type RouteHandler = (request: NextRequest) => Promise<NextResponse>;
 
@@ -65,10 +66,9 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
  */
 export function withCronSecret(handler: RouteHandler): RouteHandler {
   return async (request: NextRequest): Promise<NextResponse> => {
-    const secret = process.env.CRON_SECRET_TOKEN;
     const headerSecret = request.headers.get('x-cron-secret');
 
-    if (!secret || headerSecret !== secret) {
+    if (!verifyAdminOrCronToken(headerSecret)) {
       return NextResponse.json(
         { error: 'Unauthorized: token inválido o no configurado' },
         { status: 401 }

@@ -15,6 +15,7 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runSupervisorWatchCycle, checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
 import { logger } from '@/lib/logger';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -23,9 +24,8 @@ export async function GET(request: Request) {
   // Auth por CRON_SECRET (query param o header)
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
-  const CRON_SECRET = process.env.CRON_SECRET || '';
 
-  if (CRON_SECRET && secret !== CRON_SECRET) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

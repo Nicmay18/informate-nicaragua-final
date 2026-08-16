@@ -1,9 +1,8 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
-
-const CRON_SECRET = process.env.CRON_SECRET || '';
 
 interface Noticia {
   id?: string;
@@ -183,9 +182,7 @@ async function dispatchCanal(
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  // Permitir secret manual del panel, o el CRON_SECRET configurado
-  const ALLOWED_SECRETS = [CRON_SECRET, 'manual-run', 'dev'].filter(Boolean);
-  if (CRON_SECRET && !ALLOWED_SECRETS.includes(secret || '')) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

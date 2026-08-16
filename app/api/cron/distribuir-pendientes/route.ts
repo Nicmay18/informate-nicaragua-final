@@ -1,16 +1,15 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-const CRON_SECRET = process.env.CRON_SECRET || '';
-
 export async function GET(request: Request) {
-  // Protección básica por query param
+  // Protección por query param
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  if (CRON_SECRET && secret !== CRON_SECRET) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

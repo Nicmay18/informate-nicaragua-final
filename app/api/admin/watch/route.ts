@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { verifyAdminOrCronToken, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runWatchCycle, persistWatchResult, determineFrequency } from '@/lib/news-watch';
 
@@ -8,7 +8,9 @@ export const maxDuration = 30;
 function isAuthorized(request: NextRequest): boolean {
   const auth = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
   const cronSecret = request.headers.get('x-cron-secret');
-  if (cronSecret && cronSecret === process.env.CRON_SECRET) return true;
+  const authHeader = request.headers.get('authorization') || '';
+  const bearer = authHeader.replace(/^Bearer\s+/i, '');
+  if (verifyAdminOrCronToken(cronSecret) || verifyAdminOrCronToken(bearer)) return true;
   return verifyAdminOrCleanupToken(auth);
 }
 

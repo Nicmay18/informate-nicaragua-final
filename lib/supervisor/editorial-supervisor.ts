@@ -553,7 +553,7 @@ export async function checkMediumHealth(db: Firestore): Promise<MediumHealth> {
     geminiConfigured: !!process.env.GEMINI_API_KEY,
     telegramConfigured: !!process.env.TG_TOKEN && !!process.env.TG_CHAT_ID,
     facebookConfigured: !!process.env.FB_PAGE_TOKEN && !!process.env.FB_PAGE_ID,
-    cronActive: !!process.env.CRON_SECRET,
+    cronActive: !!(process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET),
     costGuardActive: true,
   };
 
@@ -657,7 +657,7 @@ export async function checkMediumHealth(db: Firestore): Promise<MediumHealth> {
         problem: 'CRON_SECRET no configurado',
         impact: 'Cron jobs no pueden autenticarse',
         cause: 'Variable de entorno faltante',
-        action: 'Configurar CRON_SECRET en Vercel',
+        action: 'Configurar CRON_SECRET_TOKEN (o CRON_SECRET) en Vercel',
         autoFixable: false,
       });
     }

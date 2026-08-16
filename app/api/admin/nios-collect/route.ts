@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { verifyAdminOrCronToken, verifyAdminOrCleanupToken } from '@/lib/auth';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -7,11 +8,10 @@ export const dynamic = 'force-dynamic';
 function isAuthorized(request: NextRequest): boolean {
   const key = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
   const cronSecret = request.headers.get('x-cron-secret');
-  const expected = process.env.ADMIN_API_KEY || process.env.TOKEN_DE_LIMPIEZA_DE_ADMINISTRADOR;
-  const expectedCron = process.env.CRON_SECRET;
-  if (expected && key === expected) return true;
-  if (expectedCron && cronSecret === expectedCron) return true;
-  return false;
+  const authHeader = request.headers.get('authorization') || '';
+  const bearer = authHeader.replace(/^Bearer\s+/i, '');
+  if (verifyAdminOrCronToken(cronSecret) || verifyAdminOrCronToken(bearer)) return true;
+  return verifyAdminOrCleanupToken(key);
 }
 
 /**

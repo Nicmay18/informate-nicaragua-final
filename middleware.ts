@@ -81,7 +81,7 @@ function requireAdminAuth(request: NextRequest): NextResponse | null {
   const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
   const cronSecret = request.headers.get('x-cron-secret') || '';
   const validAdminKey = process.env.ADMIN_API_KEY || '';
-  const validCronSecret = process.env.CRON_SECRET || '';
+  const validCronSecret = process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET || '';
 
   const isValidAdmin = validAdminKey.length > 0 && timingSafeCompare(adminToken, validAdminKey);
   const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);

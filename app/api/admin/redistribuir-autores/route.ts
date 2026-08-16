@@ -1,20 +1,19 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
-const CRON_SECRET = process.env.CRON_SECRET || '';
 
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization') || '';
-    const secretFromHeader = authHeader.replace('Bearer ', '').trim();
+    const secretFromHeader = authHeader.replace(/^Bearer\s+/i, '');
     const { searchParams } = new URL(request.url);
-    const secretFromQuery = searchParams.get('secret') || '';
+    const secretFromQuery = searchParams.get('secret');
     const providedSecret = secretFromHeader || secretFromQuery;
 
-    const ALLOWED_SECRETS = [CRON_SECRET, 'manual-run', 'dev'].filter(Boolean);
-    if (!providedSecret || (CRON_SECRET && !ALLOWED_SECRETS.includes(providedSecret))) {
+    if (!verifyAdminOrCronToken(providedSecret)) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 

@@ -2,14 +2,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
     // ========== NOTICIAS ==========
     match /noticias/{noticiaId} {
       // Lectura pública
       allow get, list: if true;
 
-      // Usuarios autenticados pueden crear/editar
+      // Solo administradores pueden crear/editar/eliminar
       // (El acceso está controlado por Firebase Auth + ADMIN_EMAILS en el servidor)
-      allow create: if request.auth != null
+      allow create: if isAdmin()
           && request.resource.data.keys().hasAll(['titulo','contenido','categoria','fecha'])
           && request.resource.data.titulo is string
           && request.resource.data.titulo.size() > 0
@@ -17,11 +21,11 @@ service cloud.firestore {
           && request.resource.data.contenido is string
           && request.resource.data.contenido.size() <= 50000;
 
-      allow update: if request.auth != null
+      allow update: if isAdmin()
           && (!('titulo' in request.resource.data) || (request.resource.data.titulo is string && request.resource.data.titulo.size() > 0 && request.resource.data.titulo.size() <= 200))
           && (!('contenido' in request.resource.data) || (request.resource.data.contenido is string && request.resource.data.contenido.size() <= 50000));
 
-      allow delete: if request.auth != null;
+      allow delete: if isAdmin();
     }
 
     // ========== NEWSLETTER ==========
@@ -49,16 +53,16 @@ service cloud.firestore {
 
     // ========== ADMIN ONLY ==========
     match /newsletter_campaigns/{campaignId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /newsletter_sponsors/{sponsorId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /sponsored_campaigns/{campaignId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /analytics/{docId} {
-      allow read: if request.auth != null;
+      allow read: if isAdmin();
       allow write: if false;
     }
 
@@ -75,48 +79,48 @@ service cloud.firestore {
     // ========== CONFIGURACIÓN ==========
     match /config/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
     match /configuracion/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
 
     // ========== MENI v6.0 COLECCIONES ==========
     // Knowledge Base, Learning Engine, Seguimiento, Portada Intel
     match /kb_entities/{entityId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /kb_relations/{relationId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /kb_timelines/{timelineId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /learning_cycles/{cycleId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /learning_config/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /seguimiento_cases/{caseId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /seguimiento_updates/{updateId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /portada_intel/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /portada_intel_config/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /portada_config/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /traffic_log/{docId} {
-      allow read: if request.auth != null;
-      allow create, update: if request.auth != null
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
           && request.resource.data.keys().hasOnly(['path','timestamp','userAgent','referrer'])
           && request.resource.data.path is string
           && request.resource.data.path.size() > 0
@@ -127,8 +131,8 @@ service cloud.firestore {
       allow delete: if false;
     }
     match /analytics_traffic/{docId} {
-      allow read: if request.auth != null;
-      allow create, update: if request.auth != null
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
           && request.resource.data.keys().hasOnly(['event','value','timestamp','path'])
           && request.resource.data.event is string
           && request.resource.data.event.size() > 0
@@ -142,24 +146,24 @@ service cloud.firestore {
       allow delete: if false;
     }
     match /distribuciones/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /reportes_crecimiento/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
 
     // ========== NIOS / OBSERVABILITY (Fase 3) ==========
     match /nios_telemetry/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /nios_audit_trail/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /nios_daily_snapshots/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
     match /nios_alerts/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
   }
 }
