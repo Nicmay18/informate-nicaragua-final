@@ -23,7 +23,6 @@
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
     "audit": "node scripts/audit-costs.mjs",
     "scripts:organize": "node scripts/cli.js organize",
-    "meni:sync": "node scripts/meni-prebuild.mjs",
     "prepare": "node -e \"try { require('child_process').execSync('git config core.hooksPath .githooks', { stdio: 'ignore' }); } catch (e) {}\""
   },
   "dependencies": {
