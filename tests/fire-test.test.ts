@@ -86,7 +86,7 @@ describe('Prueba de fuego — Noticia real atravesando el flujo', () => {
         resumen: NOTICIA_REAL.resumen,
         categoria: NOTICIA_REAL.categoria,
         imagen: NOTICIA_REAL.imagen,
-        scoreMeni: 88,
+        scoreMeni: 92,
         aprobadoMeni: true,
       };
       const decision = makeEditorialDecision(ctx);
@@ -111,7 +111,7 @@ describe('Prueba de fuego — Noticia real atravesando el flujo', () => {
         resumen: NOTICIA_REAL.resumen,
         categoria: NOTICIA_REAL.categoria,
         imagen: NOTICIA_REAL.imagen,
-        scoreMeni: 88,
+        scoreMeni: 92,
         aprobadoMeni: true,
       });
       console.log('[Etapa 4] Gate approved:', gate.approved);
@@ -272,7 +272,7 @@ describe('Prueba de fuego — Noticia real atravesando el flujo', () => {
         resumen: NOTICIA_REAL.resumen,
         categoria: NOTICIA_REAL.categoria,
         imagen: '',
-        scoreMeni: 85,
+        scoreMeni: 92,
         aprobadoMeni: true,
       };
       const decision = makeEditorialDecision(ctx);
@@ -301,7 +301,7 @@ describe('Prueba de fuego — Noticia real atravesando el flujo', () => {
         resumen: NOTICIA_REAL.resumen,
         categoria: cat,
         imagen: NOTICIA_REAL.imagen,
-        scoreMeni: 88,
+        scoreMeni: 92,
         aprobadoMeni: true,
       });
       const gate = assertSupervisorApprovesCreation({
@@ -310,7 +310,7 @@ describe('Prueba de fuego — Noticia real atravesando el flujo', () => {
         resumen: NOTICIA_REAL.resumen,
         categoria: cat,
         imagen: NOTICIA_REAL.imagen,
-        scoreMeni: 88,
+        scoreMeni: 92,
         aprobadoMeni: true,
       });
 

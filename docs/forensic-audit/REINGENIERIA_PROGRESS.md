@@ -95,21 +95,24 @@ Se ejecuta la reingeniería fase por fase. Fases 1 y 2 cerradas con evidencia de
 * `properties.runReport` devolvió datos (1 fila, métrica `activeUsers`).
 * GSC y GA4 conectados con la Firebase service account.
 
-## FASE 8 — NIOS REBUILD 🔄 IN PROGRESS
+## FASE 8 — NIOS REBUILD & CORE RE-ENGINEERING ✅ PASS (Bloques 1, 2, 3)
 
-**Entregables first-pass:**
+**Bloque 1: Foundation & Cleanup**
+* Purga de endpoints huérfanos/obsoletos bajo `app/api/admin/`.
+* Política TTL en `lib/observability/log.ts` y auditoría de retención de Firestore.
 
-* `docs/forensic-audit/NIOS_ARCHITECTURE.md` con arquitectura objetivo de 6 capas (data → normalization → observation → derivation → diagnostic → decision support).
-* Mapa de módulos `lib/nios/` y `lib/analytics/`.
-* Reglas de integridad para GSC/GA4/artículos.
-* Propuesta de refactor a `lib/nios/core/`.
+**Bloque 2: Observability & Journey Tracking**
+* Ingestion no-PII via `JourneyTracker` y `/api/telemetry/journey`.
+* Sanitización de referrers y deduplicación de eventos.
+* Tests de navegación e integración (`tests/journey-tracking.test.ts`).
 
-**Pendiente:**
+**Bloque 3: NIOS v2 Intelligence Core**
+* **Collectors GSC & GA4 (`lib/nios/collectors/`):** Estados de conexión limpios (`CONNECTED_WITH_DATA`, `CONNECTED_NO_DATA`, `NOT_CONFIGURED`, `ACCESS_DENIED`, `API_ERROR`). Cero coerción de `null` a 0.
+* **Content Lifecycle Tracker (`lib/nios/lifecycle/tracker.ts`):** Evaluación de sustancia editorial sin falsos semáforos rojos (`EDITORIALLY_COMPLETE`, `SHORT_USEFUL`, `THIN_CANDIDATE`, `THIN_CONFIRMED`). Seguimiento de etapas de vida (1h, 24h, 7d, 30d, 60d+).
+* **Growth Intelligence (`lib/nios/growth/opportunities.ts`):** Detección de oportunidades reales de CTR en Google top 10, queries en "strike zone" (posiciones 6-15), y artículos de alto engagement sin recirculación interna.
+* **Test Suite (`tests/nios-v2-core.test.ts`):** 8/8 tests pasando, validación estricta de TypeScript (`tsc --noEmit`).
 
-* Consolidar `lib/nios/intelligence/orchestrator.ts` como scheduler canónico.
-* Migrar `lib/analytics/traffic-*` a `lib/nios/collectors/traffic/`.
-* Eliminar duplicaciones entre `business-brain`, `command-center`, `copilot`, `mission-engine`.
-* Implementar tests de pipeline NIOS.
+---
 
 ## FASE 9 — THIN CONTENT / DUPLICACIÓN ✅ PASS (first-pass)
 
