@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { isAdminRequest, unauthorized, badRequest } from '@/lib/auth';
+
+function isString(v: unknown): v is string {
+  return typeof v === 'string';
+}
+
+function validateStringField(value: unknown, fallback: string, max = 500): string {
+  const s = isString(value) ? value.trim() : fallback;
+  return s.slice(0, max);
+}
 
 export async function GET(request: NextRequest) {
   if (!isAdminRequest(request)) {
@@ -47,35 +56,51 @@ export async function POST(request: NextRequest) {
   if (!isAdminRequest(request)) {
     return unauthorized();
   }
+
+  let body: unknown;
   try {
-    const body = await request.json();
-    const { github, telegram } = body;
-    
+    body = await request.json();
+  } catch {
+    return badRequest('Body inválido');
+  }
+
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return badRequest('Body inválido');
+  }
+
+  const { github, telegram } = body as Record<string, unknown>;
+  const updateData: Record<string, unknown> = {};
+
+  if (github !== undefined) {
+    if (!github || typeof github !== 'object' || Array.isArray(github)) {
+      return badRequest('github debe ser un objeto');
+    }
+    const g = github as Record<string, unknown>;
+    updateData.github = {
+      token: validateStringField(g.token, '', 1000),
+      owner: validateStringField(g.owner, 'Nicmay18', 120),
+      repo: validateStringField(g.repo, 'informate-images', 120),
+      path: validateStringField(g.path, 'images/', 200),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  if (telegram !== undefined) {
+    if (!telegram || typeof telegram !== 'object' || Array.isArray(telegram)) {
+      return badRequest('telegram debe ser un objeto');
+    }
+    const t = telegram as Record<string, unknown>;
+    updateData.telegram = {
+      token: validateStringField(t.token, '', 200),
+      chatId: validateStringField(t.chatId, '', 100),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
+  try {
     const db = getAdminDb();
     const docRef = db.collection('config').doc('admin');
-    
-    const updateData: Record<string, any> = {};
-    
-    if (github) {
-      updateData.github = {
-        token: github.token || '',
-        owner: github.owner || 'Nicmay18',
-        repo: github.repo || 'informate-images',
-        path: github.path || 'images/',
-        updatedAt: new Date().toISOString(),
-      };
-    }
-    
-    if (telegram) {
-      updateData.telegram = {
-        token: telegram.token || '',
-        chatId: telegram.chatId || '',
-        updatedAt: new Date().toISOString(),
-      };
-    }
-    
     await docRef.set(updateData, { merge: true });
-    
     return NextResponse.json({ success: true, message: 'Configuración guardada' });
   } catch (err) {
     console.error('[admin/config POST]', err);
