@@ -50,8 +50,8 @@ function windowOrHost(): string {
 function inferDevice(userAgent?: string): JourneyEvent['device'] {
   if (!userAgent) return 'unknown';
   const ua = userAgent.toLowerCase();
-  if (/mobile|android|iphone|ipad/.test(ua)) return 'mobile';
   if (/tablet|ipad/.test(ua)) return 'tablet';
+  if (/mobile|android|iphone/.test(ua)) return 'mobile';
   if (/windows|macintosh|linux/.test(ua)) return 'desktop';
   return 'unknown';
 }
@@ -112,20 +112,24 @@ export async function persistEvent(store: ObservabilityStore, event: JourneyEven
   }
 }
 
-export function queueEvent(event: JourneyEvent): void {
+export function queueEvent(store: ObservabilityStore, event: JourneyEvent): void {
   memoryQueue.push(event);
   if (memoryQueue.length >= BATCH_SIZE) {
-    void flushQueue();
+    void flushQueue(store);
   } else if (!batchInterval) {
-    batchInterval = setInterval(() => void flushQueue(), FLUSH_INTERVAL_MS);
+    batchInterval = setInterval(() => void flushQueue(store), FLUSH_INTERVAL_MS);
   }
 }
 
-export async function flushQueue(): Promise<void> {
+export async function flushQueue(store: ObservabilityStore): Promise<void> {
   if (memoryQueue.length === 0) return;
   const events = memoryQueue.splice(0, memoryQueue.length);
+  if (batchInterval) {
+    clearInterval(batchInterval);
+    batchInterval = null;
+  }
   logger.debug('[observability] flush:', events.length);
-  // Batch write is implemented by consumers; this layer keeps the contract minimal.
+  await Promise.all(events.map((event) => persistEvent(store, event)));
 }
 
 export async function logAuditTrail(batch: ObservabilityBatch, store: ObservabilityStore): Promise<{ id?: string }> {
