@@ -374,3 +374,32 @@ La auditoría adversarial (12 casos de prueba) detectó un bypass arquitectónic
 ### Estado final
 
 El bypass arquitectónico está cerrado. `verdict === 'PUBLICAR'` es ahora matemáticamente imposible sin `meniCleared === true`. El Supervisor Editorial es la autoridad final y MENI es subordinado — pero el Supervisor no puede ignorar a MENI para abrir la puerta de publicación.
+---
+
+## APÉNDICE DE REINGENIERÍA — 2026-08-15
+
+Tras la certificación inicial, se ejecutó la reingeniería ordenada del sistema.
+
+### Fase 1 — Inventario Forense Total: PASS
+
+* `docs/forensic-audit/FORENSIC_ARCHITECTURE.md` actualizado a estado PASS.
+* Mapeo real de `app/`, `lib/`, `tests/`, endpoints, cron jobs y persistencia.
+
+### Fase 2 — Data Contracts: PASS
+
+* `docs/forensic-audit/DATA_CONTRACTS.md` actualizado a estado PASS.
+* `lib/contracts/index.ts` centraliza contratos canónicos.
+* `tests/data-contracts.test.ts`: **5/5 PASS**.
+
+### Evidencia acumulada
+
+* `tsc --noEmit`: 0 errores.
+* `npx vitest run tests/supervisor.test.ts`: 29/29 PASS.
+* `npx vitest run tests/adversarial-scoring-audit.test.ts`: 10/10 PASS.
+* `npx vitest run tests/data-contracts.test.ts`: 5/5 PASS.
+* `npx vitest run tests/observability.test.ts`: 4/4 PASS.
+
+### Notas
+
+* Fases 1 y 2 están cerradas en `master`.
+* Fases 3-10 permanecen en la cola de ejecución.
