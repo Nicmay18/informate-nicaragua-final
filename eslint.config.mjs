@@ -17,6 +17,7 @@ const eslintConfig = [
       'dist/**',
       'node_modules/**',
       '**/*.js',
+      '**/*.cjs',
       'revisadas/**',
       'temp/**',
     ],

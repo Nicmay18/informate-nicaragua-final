@@ -18,7 +18,7 @@ const idsToReeval = fixes.map((f: any) => f.id);
 let sa: any;
 const saPath = 'g:\\RESPALDO\\informate-instant-nicaragua-firebase-adminsdk-fbsvc-2da99059f4.json';
 try { sa = JSON.parse(fs.readFileSync(saPath, 'utf8')); } catch {
-  let pk = process.env.FIREBASE_PRIVATE_KEY;
+  const pk = process.env.FIREBASE_PRIVATE_KEY;
   if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) { sa = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8')); }
   else if (pk) { sa = { projectId: process.env.FIREBASE_PROJECT_ID || 'informate-instant-nicaragua', clientEmail: process.env.FIREBASE_CLIENT_EMAIL, privateKey: pk }; }
   else { console.error('FALTA KEY'); process.exit(1); }

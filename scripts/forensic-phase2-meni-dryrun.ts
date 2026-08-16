@@ -29,7 +29,7 @@ const saPath = 'g:\\RESPALDO\\informate-instant-nicaragua-firebase-adminsdk-fbsv
 try {
   sa = JSON.parse(fs.readFileSync(saPath, 'utf8'));
 } catch {
-  let pk = process.env.FIREBASE_PRIVATE_KEY;
+  const pk = process.env.FIREBASE_PRIVATE_KEY;
   if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
     sa = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
   } else if (pk) {
