@@ -1,10 +1,11 @@
-docs(contracts): data contracts Fase 2 - tipos reales y autoridades
+docs(firebase): Fase 4 - arquitectura Firestore y reglas NIOS
 
-Define DATA_CONTRACTS.md con contratos para Noticia, NoticiaInput,
-MENIResult, EditorialDecision, NIOSArticle/ArticleFusion, GSCData,
-GA4Data, TrustResult, AdSenseRisk, Snapshot y RecoveryItem.
-
-Marca TrafficEvent como pendiente de Fase 3.
+- Actualiza firestore.rules con nios_telemetry, nios_audit_trail,
+  nios_daily_snapshots y nios_alerts.
+- Entrega docs/forensic-audit/FIREBASE_ARCHITECTURE.md con colecciones,
+  riesgos y acciones recomendadas.
+- Entrega docs/forensic-audit/REINGENIERIA_PROGRESS.md con estado de
+  Fases 1-5.
 
 Generated with [Devin](https://cli.devin.ai/docs)
 
