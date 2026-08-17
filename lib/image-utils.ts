@@ -33,7 +33,7 @@ export function getHeroImageUrl(url: string, width = 1200): string {
   }
 
   // Imágenes ya servidas por CDN confiable: devolver directo (evita doble proxy y esqueletos grises)
-  if (responsiveUrl.includes('cdn.jsdelivr.net') || responsiveUrl.includes('raw.githubusercontent.com')) {
+  if (responsiveUrl.includes('cdn.jsdelivr.net') || responsiveUrl.includes('raw.githubusercontent.com') || responsiveUrl.includes('firebasestorage.googleapis.com') || responsiveUrl.includes('storage.googleapis.com')) {
     return responsiveUrl;
   }
 

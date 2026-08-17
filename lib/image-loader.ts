@@ -22,7 +22,10 @@ export default function weservLoader({ src, width, quality = 80 }: ImageLoaderPr
     src.includes('cloudinary') ||
     src.includes('imgix') ||
     src.includes('cdn.jsdelivr.net') ||
-    src.includes('raw.githubusercontent.com')
+    src.includes('raw.githubusercontent.com') ||
+    src.includes('firebasestorage.googleapis.com') ||
+    src.includes('storage.googleapis.com') ||
+    src.startsWith('data:')
   ) {
     return src;
   }

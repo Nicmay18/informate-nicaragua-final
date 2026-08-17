@@ -22,6 +22,7 @@ export interface Noticia {
   categoria: string;
   perfil?: string;
   imagen: string;
+  imagenRedes?: string;
   fecha: string;
   fechaPublicacion?: string;
   fechaActualizacion?: string;

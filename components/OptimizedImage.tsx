@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { FALLBACK_IMAGE } from '@/lib/types';
 
 interface OptimizedImageProps {
   src: string;
@@ -47,7 +48,15 @@ export default function OptimizedImage({
   onError,
 }: OptimizedImageProps) {
   const [loaded, setLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
   const config = VARIANT_SIZES[variant];
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+    setLoaded(false);
+  }, [src]);
 
   const finalWidth = width ?? config.width;
   const finalHeight = height ?? config.height;
@@ -78,7 +87,7 @@ export default function OptimizedImage({
       )}
 
       <Image
-        src={src}
+        src={imgSrc}
         alt={alt}
         fill={fill}
         width={fill ? undefined : finalWidth}
@@ -88,7 +97,14 @@ export default function OptimizedImage({
         fetchPriority={fetchPriority}
         quality={75}
         onLoad={() => setLoaded(true)}
-        onError={() => { setLoaded(true); onError?.(); }}
+        onError={() => {
+          if (!hasError) {
+            setHasError(true);
+            setImgSrc(FALLBACK_IMAGE);
+          }
+          setLoaded(true);
+          onError?.();
+        }}
         style={{
           objectFit: 'cover',
           opacity: loaded ? 1 : 0,

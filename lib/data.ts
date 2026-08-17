@@ -23,6 +23,7 @@ export const LIST_FIELDS = [
   'titulo',
   'resumen',
   'imagen',
+  'imagenRedes',
   'categoria',
   'perfil',
   'fecha',
@@ -46,11 +47,22 @@ export const LIST_FIELDS = [
   'fuentesComplementarias',
 ] as const;
 
-function normalizeImage(imagen: string): string {
-  if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
+function normalizeImage(imagen: string, imagenRedes?: string): string {
+  if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') {
+    if (imagenRedes && (imagenRedes.startsWith('http://') || imagenRedes.startsWith('https://') || imagenRedes.startsWith('data:'))) {
+      return imagenRedes;
+    }
+    return FALLBACK_IMAGE;
+  }
   // Rutas locales, data URI o CDN ya limpios: servir directo
-  if (imagen.startsWith('/images/') || imagen.startsWith('data:')) return imagen;
-  // URLs absolutas (Firebase Storage, Unsplash, etc.): conservar tal cual,
+  if (imagen.startsWith('/images/') || imagen.startsWith('data:')) {
+    // Si existe una imagen de redes absoluta, preferirla sobre /images/ local ausente
+    if (imagenRedes && (imagenRedes.startsWith('http://') || imagenRedes.startsWith('https://') || imagenRedes.startsWith('data:'))) {
+      return imagenRedes;
+    }
+    return imagen;
+  }
+  // URLs absolutas (Firebase Storage, GitHub raw, Unsplash, etc.): conservar tal cual,
   // el loader global de next/image (weserv) se encarga del optimizado.
   // NO reescribir a /images/ porque en este entorno public/images no siempre existe.
   if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
@@ -59,8 +71,17 @@ function normalizeImage(imagen: string): string {
   if (imagen.startsWith('/')) return imagen;
   // Sólo un nombre de archivo: asumir /images/ (legacy, desaconsejado)
   const fn = imagen.split('/').pop()?.trim();
-  if (!fn || fn.length < 2) return FALLBACK_IMAGE;
-  return `/images/${fn}`;
+  if (!fn || fn.length < 2) {
+    if (imagenRedes && (imagenRedes.startsWith('http://') || imagenRedes.startsWith('https://') || imagenRedes.startsWith('data:'))) {
+      return imagenRedes;
+    }
+    return FALLBACK_IMAGE;
+  }
+  const local = `/images/${fn}`;
+  if (imagenRedes && (imagenRedes.startsWith('http://') || imagenRedes.startsWith('https://') || imagenRedes.startsWith('data:'))) {
+    return imagenRedes;
+  }
+  return local;
 }
 
 function safeDateString(value: unknown): string {
@@ -107,7 +128,8 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     resumen: data.resumen || '',
   }),
     perfil: data.perfil || '',
-    imagen: normalizeImage(data.imagen || ''),
+    imagen: normalizeImage(data.imagen || '', data.imagenRedes),
+    imagenRedes: data.imagenRedes || undefined,
     fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
     fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
     autor: data.autor,
@@ -316,7 +338,8 @@ const _cachedGetBySlug = unstable_cache(
     resumen: data.resumen || '',
   }),
           perfil: data.perfil || '',
-          imagen: normalizeImage(data.imagen || ''),
+          imagen: normalizeImage(data.imagen || '', data.imagenRedes),
+          imagenRedes: data.imagenRedes || undefined,
           fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
           fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
           autor: data.autor,
@@ -416,7 +439,8 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           resumen: data.resumen || '',
           contenido: data.contenido || '',
           categoria: data.categoria || 'Actualidad',
-          imagen: normalizeImage(data.imagen || ''),
+          imagen: normalizeImage(data.imagen || '', data.imagenRedes),
+          imagenRedes: data.imagenRedes || undefined,
           fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
           fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
           autor: data.autor,
