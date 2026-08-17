@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 import crypto from 'crypto';
+import { isString } from '@/lib/validators';
 
 function generateShortId(): string {
   // Generar ID corto de 8 caracteres alfanuméricos
@@ -14,12 +17,13 @@ function generateShortId(): string {
  * Body: { slug: string, titulo: string, categoria: string, source: string }
  * Response: { ok: true, shortId: string, shortUrl: string }
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) return unauthorized();
   try {
     const body = await request.json();
-    const { slug, titulo, categoria, source } = body;
+    const { slug, titulo, categoria, source } = body as Record<string, unknown>;
 
-    if (!slug || typeof slug !== 'string') {
+    if (!isString(slug) || slug.length === 0) {
       return NextResponse.json({ error: 'Slug requerido' }, { status: 400 });
     }
 

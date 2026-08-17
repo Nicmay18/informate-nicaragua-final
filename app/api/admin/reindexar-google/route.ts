@@ -2,16 +2,15 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { notifyGoogleBulk } from '@/lib/google-indexing';
 import { logger } from '@/lib/logger';
-
-const API_SECRET = process.env.ADMIN_SECRET_KEY || 'mi-secreto-super-seguro-123';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
 
 export async function POST(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const secret = searchParams.get('secret');
-    if (!secret || secret !== API_SECRET) {
+    const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
+    if (!verifyAdminOrCronToken(secret)) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 

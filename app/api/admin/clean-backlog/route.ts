@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { verifyAdminToken } from '@/lib/auth';
 
 // =============================================================================
 // DICCIONARIO DE SANITIZACION EDITORIAL (Tono institucional/seguro AdSense)
@@ -86,13 +87,7 @@ function segmentarParrafosDensos(htmlContenido: string): string {
 // AUTH BASICA: Header X-Admin-Token
 // =============================================================================
 function verificarAuth(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token');
-  const validToken = process.env.ADMIN_API_KEY;
-  if (!validToken) {
-    console.warn('[clean-backlog] ADMIN_API_KEY no configurado. Endpoint bloqueado.');
-    return false;
-  }
-  return token === validToken;
+  return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
 
 // =============================================================================

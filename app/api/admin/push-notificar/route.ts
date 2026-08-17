@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { clampString } from '@/lib/validators';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -7,11 +9,17 @@ const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '608354d3-fd2a-4c97-b05
 const ONESIGNAL_REST_KEY = process.env.ONESIGNAL_REST_API_KEY || '';
 
 export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) return unauthorized();
   try {
     const body = await request.json();
-    const { titulo, mensaje, url, imagen, segment = 'Subscribed Users' } = body;
+    const { titulo, mensaje, url, imagen, segment } = body as Record<string, unknown>;
 
-    if (!titulo || !mensaje || !url) {
+    const t = clampString(titulo, '', 200);
+    const m = clampString(mensaje, '', 500);
+    const u = clampString(url, '', 500);
+    const seg = clampString(segment, 'Subscribed Users', 100);
+
+    if (!t || !m || !u) {
       return NextResponse.json({ error: 'titulo, mensaje y url requeridos' }, { status: 400 });
     }
 
@@ -21,11 +29,11 @@ export async function POST(request: NextRequest) {
 
     const payload: any = {
       app_id: ONESIGNAL_APP_ID,
-      included_segments: [segment],
-      headings: { en: titulo, es: titulo },
-      contents: { en: mensaje, es: mensaje },
-      url,
-      web_buttons: [{ id: 'read-more', text: 'Leer más', icon: '', url }],
+      included_segments: [seg],
+      headings: { en: t, es: t },
+      contents: { en: m, es: m },
+      url: u,
+      web_buttons: [{ id: 'read-more', text: 'Leer más', icon: '', url: u }],
     };
 
     if (imagen) {

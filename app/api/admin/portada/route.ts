@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getLatestNews } from '@/lib/db/homepage';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { isObject } from '@/lib/validators';
 import { evaluate as pipelineV4 } from '@/lib/editorial';
 import { getPortadaConfig, savePortadaConfig } from '@/lib/portada/config-service';
 import { buildDefaultConfig, noticiaToInput } from '@/lib/portada/helpers';
@@ -33,9 +35,13 @@ export async function GET(): Promise<NextResponse> {
   }
 }
 
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  if (!isAdminRequest(request)) return unauthorized();
   try {
     const body = await request.json();
+    if (!isObject(body)) {
+      return NextResponse.json({ error: 'Body inválido' }, { status: 400 });
+    }
     const config = body.config as PortadaConfig;
 
     if (!config || !config.sections) {

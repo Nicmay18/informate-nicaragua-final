@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -34,6 +35,7 @@ async function postTweet(text: string, replyTo?: string): Promise<{ ok: boolean;
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) return unauthorized();
   try {
     const body = await request.json();
     const { tweets, noticia } = body;

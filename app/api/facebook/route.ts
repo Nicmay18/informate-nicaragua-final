@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) return unauthorized();
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',

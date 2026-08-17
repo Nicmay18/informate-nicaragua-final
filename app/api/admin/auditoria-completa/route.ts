@@ -1,5 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
+import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { clampString, clampInt } from '@/lib/validators';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -140,11 +142,12 @@ function analizarNoticia(doc: any): AnalisisNoticia {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) return unauthorized();
   try {
     const db = getAdminDb();
     const body = await request.json().catch(() => ({}));
-    const categoriaFiltro = body.categoria || 'Sucesos';
-    const limite = body.limite || 100;
+    const categoriaFiltro = clampString((body as Record<string, unknown>)?.categoria, 'Sucesos', 50);
+    const limite = clampInt((body as Record<string, unknown>)?.limite, 100, 1, 500);
 
     // Obtener noticias de la categoría
     const snap = await db
