@@ -28,7 +28,7 @@
     "@google-analytics/data": "^7.0.0",
     "@googleapis/indexing": "^7.0.0",
     "@googleapis/searchconsole": "^7.0.0",
-    "@sentry/nextjs": "^8.55.2",
+    "@sentry/nextjs": "^10.70.0",
     "@tiptap/extension-placeholder": "^3.23.4",
     "@tiptap/pm": "^3.23.4",
     "@tiptap/react": "^3.23.4",
@@ -42,12 +42,12 @@
     "googleapis": "^173.0.0",
     "isomorphic-dompurify": "3.19.0",
     "lucide-react": "^1.14.0",
-    "next": "15.3.9",
-    "postcss": "^8.5.4",
+    "next": "^15.5.23",
+    "postcss": "^8.5.26",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "schema-dts": "^2.0.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "tailwindcss": "^3.4.17",
     "zod": "^3.25.76"
   },
@@ -69,7 +69,7 @@
     "eslint-config-next": "^15.3.9",
     "jsdom": "^24.1.1",
     "typescript": "^5",
-    "vitest": "^2.0.5"
+    "vitest": "^3.2.7"
   },
   "repository": {
     "type": "git",
