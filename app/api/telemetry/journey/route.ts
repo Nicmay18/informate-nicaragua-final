@@ -11,9 +11,15 @@ const ALLOWED_METADATA_KEYS = [
   'query',
   'resultCount',
   'clickTarget',
+  'clickTargetArticleSlug',
+  'clickTargetCategory',
+  'clickTargetUrl',
   'scrollDepth',
+  'scrollThreshold',
   'errorMessage',
   'errorStack',
+  'engagedMs',
+  'visibleMs',
 ] as const;
 
 function sanitizeMetadata(raw: unknown): JourneyEvent['metadata'] | undefined {
@@ -33,12 +39,17 @@ const VALID_EVENT_TYPES: JourneyEventType[] = [
   'SESSION_START',
   'PAGE_VIEW',
   'ARTICLE_VIEW',
+  'CATEGORY_VIEW',
   'SEARCH',
   'INTERNAL_NAVIGATION',
+  'INTERNAL_CLICK',
+  'RELATED_CLICK',
   'OUTBOUND_CLICK',
+  'EXTERNAL_REFERRAL',
   'ENGAGEMENT',
   'SCROLL_50',
   'SCROLL_90',
+  'SCROLL_DEPTH',
   'ERROR',
   'SESSION_END',
 ];
