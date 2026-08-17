@@ -14,6 +14,25 @@ export function cleanImageUrl(url: string): string {
 }
 
 /**
+ * Convierte URLs raw de GitHub a jsDelivr (CDN rápido con headers adecuados
+ * para scrapers de redes sociales). Mantiene otras URLs intactas.
+ */
+function toJsdelivrIfRawGitHub(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'raw.githubusercontent.com') {
+      const parts = u.pathname.split('/').filter(Boolean);
+      // /owner/repo/branch/path... -> /gh/owner/repo@branch/path...
+      if (parts.length >= 3) {
+        const [owner, repo, branch, ...rest] = parts;
+        return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${rest.join('/')}`;
+      }
+    }
+  } catch { /* no es URL válida */ }
+  return url;
+}
+
+/**
  * Genera URL optimizada para el hero/LCP (imagen principal).
  * Usa weserv.nl para redimensionar imágenes a 1200px (mínimo para Google Discover),
  * reduciendo ~60% el peso vs la imagen original a resolución completa.
@@ -22,8 +41,10 @@ export function cleanImageUrl(url: string): string {
 export function getHeroImageUrl(url: string, width = 1200): string {
   if (!url || url === 'null' || url === 'undefined' || url === 'NaN') return FALLBACK_IMAGE;
 
-  const responsiveUrl = getResponsiveImageUrl(url);
-  if (responsiveUrl.includes('images.weserv.nl') || responsiveUrl.startsWith('data:')) {
+  const responsiveUrl = toJsdelivrIfRawGitHub(getResponsiveImageUrl(url));
+  // Data URI no sirve para OG/Twitter scrapers externos
+  if (responsiveUrl.startsWith('data:')) return FALLBACK_IMAGE;
+  if (responsiveUrl.includes('images.weserv.nl')) {
     return responsiveUrl;
   }
 
@@ -73,5 +94,6 @@ export function getResponsiveImageUrl(url: string, _width?: number, _height?: nu
     return url.split('?')[0];
   }
 
-  return url;
+  // Convertir raw.githubusercontent.com a jsDelivr para mejor entrega en el sitio
+  return toJsdelivrIfRawGitHub(url);
 }
