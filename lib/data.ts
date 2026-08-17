@@ -48,39 +48,16 @@ export const LIST_FIELDS = [
 
 function normalizeImage(imagen: string): string {
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
-  if (imagen.startsWith('/images/')) return imagen;
-  if (imagen.startsWith('data:')) return imagen;
-  if (imagen.includes('firebasestorage.googleapis.com') || imagen.includes('storage.googleapis.com')) {
-    try {
-      const url = new URL(imagen);
-      const pathMatch = url.pathname.match(/\/(?:v0\/b\/[^/]+\/o\/)?(?:images%2F)?(.+)$/);
-      if (pathMatch) {
-        const encoded = pathMatch[1];
-        const decoded = decodeURIComponent(encoded);
-        const filename = decoded.split('/').pop()?.trim();
-        if (filename && filename.length > 1) return `/images/${filename}`;
-      }
-      const segments = url.pathname.split('/').filter(Boolean);
-      const last = segments.pop();
-      if (last && last.length > 1) return `/images/${last}`;
-    } catch { /* fallback */ }
-    const raw = imagen.split('/').pop()?.split('?')[0]?.trim();
-    if (raw && raw.length > 1) return `/images/${raw}`;
-    return FALLBACK_IMAGE;
-  }
-  if (imagen.includes('cdn.jsdelivr.net')) return imagen.split('?')[0];
-  if (imagen.includes('githubusercontent.com')) {
-    const clean = imagen.split('?')[0];
-    const match = clean.match(/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.*)/);
-    if (match) {
-      const [, user, repo, branch, path] = match;
-      return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
-    }
-    return clean;
-  }
-  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen.split('?')[0];
+  // Rutas locales, data URI o CDN ya limpios: servir directo
+  if (imagen.startsWith('/images/') || imagen.startsWith('data:')) return imagen;
+  // URLs absolutas (Firebase Storage, Unsplash, etc.): conservar tal cual,
+  // el loader global de next/image (weserv) se encarga del optimizado.
+  // NO reescribir a /images/ porque en este entorno public/images no siempre existe.
+  if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
+  // Rutas sin barra inicial
   if (imagen.startsWith('images/')) return `/${imagen}`;
   if (imagen.startsWith('/')) return imagen;
+  // Sólo un nombre de archivo: asumir /images/ (legacy, desaconsejado)
   const fn = imagen.split('/').pop()?.trim();
   if (!fn || fn.length < 2) return FALLBACK_IMAGE;
   return `/images/${fn}`;
