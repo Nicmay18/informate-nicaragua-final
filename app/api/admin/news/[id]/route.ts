@@ -61,11 +61,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
       // BLOQUEO del Supervisor Editorial — MENI no es el jefe
       if (!supervisorApproved) {
-        const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
-        const first = criticalIssues[0];
+        const issues = supervisor.issues || [];
+        const criticalIssues = issues.filter(i => i.severity === 'CRITICAL');
+        const first = criticalIssues[0] || issues[0];
+        const problem = first
+          ? `[${first.severity || 'SUPERVISOR'}][${first.domain || 'GENERAL'}] ${first.problem || first.action || 'Bloqueo editorial'}`
+          : (supervisor.reason || `Veredicto ${supervisor.verdict}. Confianza: ${supervisor.confidence}%`);
         return NextResponse.json({
           success: false,
-          error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
+          error: problem,
           code: 'SUPERVISOR_BLOCKED',
           supervisor: {
             decisionId: supervisor.decisionId,
@@ -76,7 +80,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             actions: supervisor.actions,
           },
           critical: criticalIssues,
-          warnings: supervisor.issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+          warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
         }, { status: 400 });
       }
 

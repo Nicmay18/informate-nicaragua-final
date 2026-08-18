@@ -336,7 +336,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   // ── 2.7 Valor periodístico y veredicto final ────────────────
   // El Supervisor evalúa dimensiones editoriales INDEPENDIENTEMENTE del score.
   // Un score técnico alto no oculta un valor periodístico bajo.
-  const aporteScore = ctx.aportePropio === true ? 100 : (ctx.aportePropio === false ? 0 : undefined);
+  const aporteScore = ctx.aportePropio === true ? 100 : undefined;
   const editorialDimensions = [
     ctx.adnNI,
     ctx.exclusividad,
