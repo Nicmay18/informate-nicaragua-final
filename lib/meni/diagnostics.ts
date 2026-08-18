@@ -5,6 +5,7 @@ import { MIN_APPROVED_SCORE } from './scoring';
 import {
   MIN_ORIGINALITY_PERCENT,
   MIN_EXPLANATION_SCORE,
+  MAX_TRANSCRIPTION_PERCENT,
 } from './quality-gate/rules';
 
 const DEBUG = process.env.MENI_DEBUG === 'true';
@@ -204,6 +205,39 @@ export function buildMeniDiagnostics(opts: {
         currentValue: `${dna.transcripcion.score}%`,
         expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
         howToFix: 'Parafraseá la fuente. Sumá análisis propio, contexto y explicación.',
+        field: 'contenido',
+      });
+    }
+
+    // Bloqueo genérico del Editorial DNA cuando no se generó un bloqueador específico
+    if (dna.bloquear && dna.motivoBloqueo && !blockingIssues.some(i => i.module === 'editorial-dna')) {
+      blockingIssues.push({
+        code: 'EDITORIAL_DNA_BLOQUEO',
+        module: 'editorial-dna',
+        severity: 'BLOCKER',
+        title: 'Bloqueo editorial activado',
+        description: dna.motivoBloqueo,
+        currentValue: 'no_aprobado',
+        expectedValue: 'aprobado',
+        howToFix: 'Revisá el diagnóstico editorial y atendé las recomendaciones de MENI.',
+        field: 'contenido',
+      });
+    }
+  }
+
+  // Transcripción alta detectada por Quality Gate pero no reflejada en ADN
+  if (!opts.aprobado && opts.qualityGate?.explanationIndex?.porcentajeTranscripcion && !blockingIssues.some(i => i.code === 'EDITORIAL_DNA_TRANSCRIPCION')) {
+    const pct = opts.qualityGate.explanationIndex.porcentajeTranscripcion;
+    if (pct > MAX_TRANSCRIPTION_PERCENT) {
+      blockingIssues.push({
+        code: 'QUALITY_GATE_TRANSCRIPCION',
+        module: 'quality-gate',
+        severity: 'BLOCKER',
+        title: 'Alto porcentaje de transcripción',
+        description: `El texto transcribe un ${pct}% de la fuente original.`,
+        currentValue: `${pct}%`,
+        expectedValue: `≤ ${MAX_TRANSCRIPTION_PERCENT}%`,
+        howToFix: 'Parafraseá la fuente y sumá análisis propio.',
         field: 'contenido',
       });
     }
