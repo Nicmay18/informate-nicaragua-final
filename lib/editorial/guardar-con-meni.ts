@@ -102,10 +102,10 @@ export async function guardarConMeni(
     story: input.story,
   });
 
-  // El Supervisor es la autoridad final: solo PUBLICAR con estado READY puede avanzar.
-  // PUBLICAR_CON_CAMBIOS, REVISION_HUMANA, MEJORAR no son aprobaciones automáticas.
+  // ok = MENI approval (meni.aprobado). supervisorApproved remains the Supervisor verdict.
+  // Callers should check MENI first and Supervisor second.
+  const ok = meni.aprobado;
   const supervisorApproved = supervisor.verdict === 'PUBLICAR';
-  const ok = supervisorApproved;
 
   // REGLA 14: Una sola decision editorial canonica — el Supervisor.
   // buildEditorialDecision (decision.ts) fue eliminado del flujo porque
