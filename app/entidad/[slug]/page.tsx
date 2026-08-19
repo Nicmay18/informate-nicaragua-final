@@ -14,15 +14,21 @@ export async function generateMetadata({
   const { slug } = await params;
   const db = getAdminDb();
   const data = await loadEntityPage(db, slug);
-  if (!data) return { title: 'Entidad no encontrada | Nicaragua Informate' };
+  if (!data) {
+    notFound();
+  }
+
+  const canonical = `https://nicaraguainformate.com/entidad/${slug}`;
 
   return {
     title: `${data.entity.name} | Nicaragua Informate`,
     description: data.entity.description || `Información sobre ${data.entity.name} en Nicaragua`,
+    alternates: { canonical },
+    robots: { index: true, follow: true },
     openGraph: {
       title: `${data.entity.name} | Nicaragua Informate`,
       description: data.entity.description || '',
-      url: `https://nicaraguainformate.com/entidad/${slug}`,
+      url: canonical,
     },
   };
 }
