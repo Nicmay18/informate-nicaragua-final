@@ -27,7 +27,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, skipped: true, message: 'Facebook no configurado' }, { headers });
     }
 
-    const mensaje = `${noticia.titulo}\n\n${noticia.resumen || (noticia.contenido || '').substring(0, 500)}\n\n#${(noticia.categoria || 'Noticias').replace(/\s+/g, '')} #Nicaragua #InformateAlInstante`;
+    const slug = noticia.slug || noticia.id;
+    if (!slug) {
+      return NextResponse.json({ success: false, error: 'Falta slug o id de la noticia' }, { status: 400, headers });
+    }
+    const url = `https://nicaraguainformate.com/noticias/${encodeURIComponent(slug)}?utm_source=facebook&utm_medium=social&utm_campaign=distribucion_manual`;
+
+    const mensaje = `${noticia.titulo}\n\n${noticia.resumen || (noticia.contenido || '').substring(0, 500)}\n\n👉 Lee la nota completa: ${url}\n\n#${(noticia.categoria || 'Noticias').replace(/\s+/g, '')} #Nicaragua #InformateAlInstante`;
     const tieneUrl = noticia.imagen && !noticia.imagen.startsWith('data:');
 
     const results: Array<{ pageId: string; postId?: string; status: string; details?: unknown }> = [];
@@ -38,7 +44,7 @@ export async function POST(request: NextRequest) {
       : `https://graph.facebook.com/v18.0/${FB_PAGE_ID}/feed`;
     const body1 = tieneUrl
       ? { url: noticia.imagen, caption: mensaje, access_token: FB_PAGE_ACCESS_TOKEN }
-      : { message: mensaje, access_token: FB_PAGE_ACCESS_TOKEN };
+      : { message: mensaje, link: url, access_token: FB_PAGE_ACCESS_TOKEN };
 
     const resp1 = await fetch(fbUrl1, {
       method: 'POST',
@@ -60,7 +66,7 @@ export async function POST(request: NextRequest) {
         : `https://graph.facebook.com/v18.0/${FB_PAGE_2_ID}/feed`;
       const body2 = tieneUrl
         ? { url: noticia.imagen, caption: mensaje, access_token: FB_PAGE_2_TOKEN }
-        : { message: mensaje, access_token: FB_PAGE_2_TOKEN };
+        : { message: mensaje, link: url, access_token: FB_PAGE_2_TOKEN };
 
       const resp2 = await fetch(fbUrl2, {
         method: 'POST',
