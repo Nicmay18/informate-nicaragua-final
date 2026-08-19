@@ -22,7 +22,7 @@ function detectarDispositivo(userAgent?: string): 'mobile' | 'desktop' | 'tablet
   return 'unknown';
 }
 
-function detectarFuente(referrer?: string, utmSource?: string, userAgent?: string): string {
+export function detectarFuente(referrer?: string, utmSource?: string, userAgent?: string): string {
   const ref = (referrer || '').toLowerCase();
   const utm = (utmSource || '').toLowerCase();
   const ua = (userAgent || '').toLowerCase();
@@ -120,12 +120,17 @@ export async function getTrendingNews(limitCount: number = 5): Promise<Noticia[]
   const now = Date.now();
   const scored = all
     .map((n) => {
-      const h = (now - new Date(n.fecha).getTime()) / 36e5;
+      const fechaMs = new Date(n.fecha).getTime();
+      if (Number.isNaN(fechaMs)) {
+        return { n, score: Number.NEGATIVE_INFINITY };
+      }
+      const h = (now - fechaMs) / 36e5;
       const frescura = Math.max(0, 1 - h / 48); // decae a 0 en 48h
       const vistasNorm = Math.min(1, Math.log((n.vistas ?? 0) + 1) / Math.log(500));
       const score = frescura * 0.6 + vistasNorm * 0.4;
       return { n, score };
     })
+    .filter((s) => s.score !== Number.NEGATIVE_INFINITY)
     .sort((a, b) => b.score - a.score);
   return scored.slice(0, limitCount).map((s) => s.n);
 }

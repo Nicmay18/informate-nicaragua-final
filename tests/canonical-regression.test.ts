@@ -220,4 +220,26 @@ describe('REGLA 13 — Prueba de contradicción (one source of truth)', () => {
       expect(isPublicCategory(result)).toBe(true);
     }
   });
+
+  it('perfil nacionales + categoria sucesos almacenada → Nacionales', () => {
+    const article: Partial<Noticia> = {
+      titulo: 'INSS informa prestaciones por fallecimiento',
+      contenido: 'El Instituto Nicaragüense de Seguridad Social explicó los requisitos para solicitar la prestación.',
+      resumen: 'Guía de trámites del INSS',
+      perfil: 'nacionales',
+      categoria: 'Sucesos',
+    };
+    expect(resolvePublicCategory(article)).toBe('Nacionales');
+  });
+
+  it('perfil sucesos + categoria nacionales almacenada → Sucesos', () => {
+    const article: Partial<Noticia> = {
+      titulo: 'Accidente de tránsito en Managua',
+      contenido: 'Un motociclista murió tras un accidente. La Policía investiga.',
+      resumen: 'Suceso vial',
+      perfil: 'sucesos',
+      categoria: 'Nacionales',
+    };
+    expect(resolvePublicCategory(article)).toBe('Sucesos');
+  });
 });

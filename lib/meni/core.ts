@@ -10,7 +10,6 @@ import { analyzeAdSense } from './adsense';
 import {
   computePriority,
   scoreToGrade,
-  normalizeCategory,
   MIN_APPROVED_SCORE,
 } from './scoring';
 import { autoCorrectNoticia, type AutoCorrection } from './autocorrect';
@@ -50,7 +49,7 @@ export interface MeniRunOptions {
   };
 }
 
-import { PROFILE_TO_PUBLIC_CATEGORY } from '@/lib/editorial/canonical';
+import { resolvePublicCategory } from '@/lib/editorial/canonical';
 
 const MIN_PROFILE_CONFIDENCE = 0.40;
 
@@ -95,14 +94,18 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   });
   const contentProfile = detectContentProfile(input.titulo, input.contenido, input.resumen);
   const perfilIdentificado = contentProfile.profile_confidence >= MIN_PROFILE_CONFIDENCE;
-  const profileCategoria = perfilIdentificado
-    ? PROFILE_TO_PUBLIC_CATEGORY[contentProfile.profile_detected]
-    : normalizeCategory(input.categoria || 'General');
+  const categoria = resolvePublicCategory({
+    titulo: input.titulo,
+    contenido: input.contenido,
+    resumen: input.resumen,
+    categoria: input.categoria,
+    perfil: perfilIdentificado ? contentProfile.profile_detected : undefined,
+  });
   logMeni('Content profile detected', {
     profile: contentProfile.profile_detected,
     confidence: contentProfile.profile_confidence,
     perfilIdentificado,
-    profileCategoria,
+    categoria,
   });
 
   // Detectar tier editorial (FLASH, NOTICIA, REPORTAJE, INVESTIGACION)
@@ -114,7 +117,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   let thresholds = { ...TIER_THRESHOLDS[tier] };
 
   // Aplicar criterios del perfil editorial según tipo_noticia_detectada
-  const perfil = getPerfilEditorial(profileCategoria, input.contenido);
+  const perfil = getPerfilEditorial(categoria, input.contenido);
   thresholds = {
     ...thresholds,
     exigeServiceValue: perfil.bloqueaPorServicio,
@@ -140,8 +143,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // SEO, EEAT, Discover, AdSense, Forense = datos de respaldo
   // ═══════════════════════════════════════════════════════════
   const evaluacion: EvaluacionEditorial = pipelineV4(input as EditorialNoticiaInput);
-  const rawCategory = evaluacion.evidence.category || profileCategoria || 'general';
-  const categoria = profileCategoria;
+  const rawCategory = evaluacion.evidence.category || categoria || 'general';
   const modulo = getModule(rawCategory);
 
   // ═══════════════════════════════════════════════════════════
@@ -150,8 +152,8 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // ═══════════════════════════════════════════════════════════
   const editorialDecision = runEditorialBrain({
     ...input,
-    categoria: profileCategoria,
-    categoriaSugerida: profileCategoria,
+    categoria: categoria,
+    categoriaSugerida: categoria,
     fuente: input.contenido,
     tierThresholds: thresholds,
     evaluacion,
@@ -421,9 +423,11 @@ export async function runMeniAsync(
   input: NoticiaInput,
   options: MeniRunOptions = {}
 ): Promise<MeniResult> {
-  // Cargar ajustes del Learning Engine si hay DB y no se pasaron explícitamente
+  // Cargar ajustes del Learning Engine si hay DB y no se pasaron explícitamente.
+  // Por defecto están deshabilitados en producción para garantizar determinismo.
   let activeAdjustments = options.activeAdjustments;
-  if (!activeAdjustments && options.db) {
+  const enableLearning = process.env.ENABLE_MENI_LEARNING === 'true';
+  if (!activeAdjustments && options.db && enableLearning) {
     try {
       const { loadActiveAdjustments } = await import('@/lib/meni/learning-engine/learning-adapter');
       activeAdjustments = await loadActiveAdjustments(options.db);

@@ -552,7 +552,7 @@ export async function checkMediumHealth(db: Firestore): Promise<MediumHealth> {
     totalWithoutImage: 0,
     geminiConfigured: !!process.env.GEMINI_API_KEY,
     telegramConfigured: !!process.env.TG_TOKEN && !!process.env.TG_CHAT_ID,
-    facebookConfigured: !!process.env.FB_PAGE_TOKEN && !!process.env.FB_PAGE_ID,
+    facebookConfigured: !!process.env.FB_PAGE_ACCESS_TOKEN && !!process.env.FB_PAGE_ID,
     cronActive: !!(process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET),
     costGuardActive: true,
   };

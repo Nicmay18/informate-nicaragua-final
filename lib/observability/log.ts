@@ -4,6 +4,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { detectarFuente } from '@/lib/db/homepage';
 import type { JourneyEvent, ObservabilityBatch } from './types';
 
 const BATCH_SIZE = 10;
@@ -28,23 +29,12 @@ function sanitizeReferrer(referrer?: string): string | undefined {
   }
 }
 
-function classifySource(referrer?: string, utmSource?: string): JourneyEvent['source'] {
-  if (utmSource) {
-    if (/google|bing|duckduckgo/.test(utmSource)) return 'organic';
-    if (/facebook|x|twitter|telegram|whatsapp|instagram|linkedin/.test(utmSource)) return 'social';
-    return 'referral';
-  }
-  if (!referrer) return 'direct';
-  const r = referrer.toLowerCase();
-  if (/google\.com|bing\.com|duckduckgo\.com/.test(r)) return 'organic';
-  if (/facebook\.com|x\.com|twitter\.com|t\.co|telegram\.me|wa\.me|instagram\.com|linkedin\.com/.test(r)) return 'social';
-  if (r.includes(windowOrHost())) return 'direct';
+function classifySource(referrer?: string, utmSource?: string, userAgent?: string): JourneyEvent['source'] {
+  const raw = detectarFuente(referrer, utmSource, userAgent);
+  if (['google', 'bing'].includes(raw)) return 'organic';
+  if (['facebook', 'twitter', 'telegram', 'whatsapp', 'instagram', 'linkedin'].includes(raw)) return 'social';
+  if (raw === 'directo') return 'direct';
   return 'referral';
-}
-
-function windowOrHost(): string {
-  if (typeof window !== 'undefined') return window.location.host;
-  return process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, '') || 'nicaraguainformate.com';
 }
 
 function inferDevice(userAgent?: string): JourneyEvent['device'] {
@@ -85,7 +75,7 @@ export function buildJourneyEvent(input: {
     path: input.path,
     articleSlug: input.articleSlug,
     referrer: sanitizeReferrer(input.referrer),
-    source: classifySource(input.referrer, input.utmSource),
+    source: classifySource(input.referrer, input.utmSource, input.userAgent),
     device: inferDevice(input.userAgent),
     browser: inferBrowser(input.userAgent),
     country: input.country === 'unknown' ? undefined : input.country,

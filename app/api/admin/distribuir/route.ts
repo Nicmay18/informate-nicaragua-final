@@ -131,7 +131,7 @@ async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore)
 /** Envía a Facebook (si hay token) */
 async function enviarFacebook(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
   try {
-    const FB_TOKEN = process.env.FB_PAGE_TOKEN || '';
+    const FB_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN || '';
     const FB_PAGE_ID = process.env.FB_PAGE_ID || '';
     if (!FB_TOKEN || !FB_PAGE_ID) return { ok: false, error: 'Faltan credenciales Facebook' };
 

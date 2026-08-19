@@ -4,7 +4,6 @@ import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
 import { resolvePublicCategory } from './canonical';
-import { detectContentProfile } from '@/lib/meni/profile-detector';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
 
@@ -70,13 +69,12 @@ export async function guardarConMeni(
   const autorFoto = getAutorFoto(input.autor || '');
 
   // Perfil y categoria publica canonica — una sola fuente de verdad
-  const detectedProfile = detectContentProfile(input.titulo, finalContenido, input.resumen || '');
   const canonicalCategoria = resolvePublicCategory({
     titulo: input.titulo,
     contenido: finalContenido,
     resumen: input.resumen,
-    categoria: meni.categoria,
-    perfil: detectedProfile.profile_detected,
+    categoria: input.categoria,
+    perfil: meni.profile_used,
   });
 
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
@@ -88,7 +86,7 @@ export async function guardarConMeni(
     contenido: finalContenido,
     resumen: input.resumen,
     categoria: canonicalCategoria,
-    perfil: detectedProfile.profile_detected,
+    perfil: meni.profile_used,
     imagen: input.imagen,
     scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
@@ -127,10 +125,13 @@ export async function guardarConMeni(
     nivelScore: meni.scoreFinal,
     nivelFecha: new Date().toISOString(),
     diagnosticoMeni: meni.diagnostico,
+    contentHash: meni.articleHash,
+    meniVersion: meni.meniVersion,
+    evaluationTimestamp: meni.evaluationTimestamp,
     editorialTier: meni.editorialTier,
     editorialReason: meni.editorialReason,
-    perfil: detectedProfile.profile_detected,
-    profile_confidence: detectedProfile.profile_confidence,
+    perfil: meni.profile_used,
+    profile_confidence: meni.profile_confidence,
     categoria: canonicalCategoria,
     palabras,
     puntosClave,
@@ -138,7 +139,7 @@ export async function guardarConMeni(
     fuentesComplementarias,
     autorFoto,
     publicCategory: canonicalCategoria,
-    profileInternal: detectedProfile.profile_detected,
+    profileInternal: meni.profile_used,
     research: input.research,
     story: input.story,
   };

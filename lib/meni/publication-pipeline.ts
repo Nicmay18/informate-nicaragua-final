@@ -147,7 +147,7 @@ async function sendTelegram(db: Firestore, input: PipelineInput): Promise<{ ok: 
 // ── Facebook ────────────────────────────────────────────────
 async function sendFacebook(input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
   try {
-    const token = process.env.FB_PAGE_TOKEN || '';
+    const token = process.env.FB_PAGE_ACCESS_TOKEN || '';
     const pageId = process.env.FB_PAGE_ID || '';
     if (!token || !pageId) return { ok: false, skipped: true, error: 'Credenciales Facebook no configuradas' };
 

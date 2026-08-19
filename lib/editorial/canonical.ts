@@ -72,47 +72,117 @@ export const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCatego
  * Todo el sistema debe usar esta función para obtener la categoría pública.
  * REGLA 5: perfil interno NUNCA escapa a la capa pública.
  */
+const LEGACY_TO_PUBLIC_CATEGORY: Record<string, PublicCategory> = {
+  'Cultura': 'Nacionales',
+  'Economía': 'Nacionales',
+  'Salud': 'Nacionales',
+  'Ambiente': 'Nacionales',
+  'Turismo': 'Nacionales',
+  'Educación': 'Nacionales',
+  'Gastronomía': 'Nacionales',
+  'Política': 'Nacionales',
+  'General': 'Nacionales',
+};
+
+// Marcadores para resolver ambigüedades nacionales/sucesos sin alterar
+// el detector de perfiles estable. Se aplica en el resolver canónico.
+const SUCESOS_EVENT_MARKERS = new Set([
+  'accidente', 'transito', 'policia', 'homicidio',
+  'fallecido', 'muere', 'murio', 'muerte', 'muerto', 'muerta',
+  'heridos', 'herido', 'lesionado', 'lesionada', 'baleado', 'baleada',
+  'captura', 'delito', 'crimen', 'ataco', 'atacado', 'atropello', 'embiste',
+  'embistio', 'incendio', 'rescate', 'arma', 'disparo', 'balazo', 'golpeado',
+  'agredido', 'agredida', 'pelea',
+]);
+
+const NACIONALES_SERVICE_MARKERS = new Set([
+  'inss', 'seguro social', 'prestacion', 'beneficio', 'beneficios', 'tramite',
+  'tramites', 'solicitar', 'solicitud', 'requisitos', 'como solicitar',
+  'familiares', 'pension', 'jubilacion', 'subsidio', 'indemnizacion',
+  'fallecimiento', 'procedimiento', 'aplicar',
+]);
+
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function hasAnyMarker(text: string, markers: Set<string>): boolean {
+  const n = normalizeText(text);
+  for (const m of markers) {
+    if (n.includes(m)) return true;
+  }
+  return false;
+}
+
+function overrideProfileFromContext(
+  perfil: MeniContentProfile,
+  titulo: string,
+  contenido: string,
+  resumen: string,
+): MeniContentProfile {
+  const full = `${titulo} ${contenido} ${resumen}`;
+  const hasService = hasAnyMarker(full, NACIONALES_SERVICE_MARKERS);
+  const hasEvent = hasAnyMarker(full, SUCESOS_EVENT_MARKERS);
+
+  // perfil dice sucesos pero el contenido es de trámites/servicio institucional
+  if (perfil === 'sucesos' && hasService && !hasEvent) return 'nacionales';
+
+  // perfil dice nacionales pero el contenido es un hecho policial/accidente
+  if (perfil === 'nacionales' && hasEvent && !hasService) return 'sucesos';
+
+  return perfil;
+}
+
 export function resolvePublicCategory(article: Partial<Noticia>): PublicCategory {
-  // 1. Si el artículo ya tiene una categoría pública válida, usarla
-  if (article.categoria && isPublicCategory(article.categoria)) {
-    return article.categoria;
-  }
-
-  // 2. Si tiene perfil interno, mapearlo a categoría pública
+  // 1. AUTORIDAD EDITORIAL: perfil interno almacenado + verificación de contexto.
+  //    Si el perfil contradice el contenido (p. ej. INSS/fallecimiento como sucesos),
+  //    el resolver canónico corrige ANTES de mapear a categoría pública.
   if (article.perfil && PROFILE_TO_PUBLIC_CATEGORY[article.perfil as MeniContentProfile]) {
-    return PROFILE_TO_PUBLIC_CATEGORY[article.perfil as MeniContentProfile];
-  }
-
-  // 3. Detectar perfil del texto y mapearlo
-  try {
-    const detected = detectContentProfile(
+    const effectiveProfile = overrideProfileFromContext(
+      article.perfil as MeniContentProfile,
       article.titulo || '',
       article.contenido || '',
       article.resumen || ''
     );
-    const mapped = PROFILE_TO_PUBLIC_CATEGORY[detected.profile_detected];
-    if (mapped) return mapped;
-  } catch (e) {
-    logger.warn('[resolvePublicCategory] Error en detección:', e);
+    return PROFILE_TO_PUBLIC_CATEGORY[effectiveProfile];
   }
 
-  // 4. Fallback: si tiene categoria pero no es pública, intentar mapeo manual
+  // 2. CATEGORÍA PÚBLICA ALMACENADA: si no hay perfil, la categoría editorial
+  //    guardada y válida es la segunda fuente de verdad. Esto preserva
+  //    decisiones editoriales explícitas y mantiene compatibilidad con datos
+  //    históricos que no tienen perfil.
   if (article.categoria) {
-    const catMap: Record<string, PublicCategory> = {
-      'Cultura': 'Nacionales',
-      'Economía': 'Nacionales',
-      'Salud': 'Nacionales',
-      'Ambiente': 'Nacionales',
-      'Turismo': 'Nacionales',
-      'Educación': 'Nacionales',
-      'Gastronomía': 'Nacionales',
-      'Política': 'Nacionales',
-      'General': 'Nacionales',
-    };
-    if (catMap[article.categoria]) return catMap[article.categoria];
+    const key = article.categoria.trim();
+    if (isPublicCategory(key)) return key;
+    if (LEGACY_TO_PUBLIC_CATEGORY[key]) return LEGACY_TO_PUBLIC_CATEGORY[key];
   }
 
-  // 5. Último recurso
+  // 3. SEÑALES CONTEXTUALES: re-detectar perfil del texto
+  const hasText = !!(article.titulo?.trim() || article.contenido?.trim() || article.resumen?.trim());
+  if (hasText) {
+    try {
+      const detected = detectContentProfile(
+        article.titulo || '',
+        article.contenido || '',
+        article.resumen || ''
+      );
+      const effectiveProfile = overrideProfileFromContext(
+        detected.profile_detected,
+        article.titulo || '',
+        article.contenido || '',
+        article.resumen || ''
+      );
+      const mapped = PROFILE_TO_PUBLIC_CATEGORY[effectiveProfile];
+      if (mapped) return mapped;
+    } catch (e) {
+      logger.warn('[resolvePublicCategory] Error en detección:', e);
+    }
+  }
+
+  // 4. ÚLTIMO RECURSO
   return 'Nacionales';
 }
 

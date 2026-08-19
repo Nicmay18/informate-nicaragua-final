@@ -196,4 +196,32 @@ describe('MENI Profile Detector — Regression Tests', () => {
     expect(result.profile_detected).not.toBe('internacional');
   });
 
+  it('Caso Nacional/Servicio: INSS + prestación + fallecimiento → nacionales (NOT sucesos)', () => {
+    const result = detectContentProfile(
+      'Familiares pueden solicitar prestación por fallecimiento ante el INSS',
+      'El Instituto Nicaragüense de Seguridad Social informó los requisitos para que los familiares de un trabajador fallecido soliciten la prestación. El trámite se realiza en las oficinas del seguro social.',
+      'INSS explica requisitos para solicitar prestación por fallecimiento',
+    );
+    expect(result.profile_detected).toBe('nacionales');
+    expect(result.profile_detected).not.toBe('sucesos');
+  });
+
+  it('Caso Sucesos: policía investiga muerte de motociclista → sucesos (NOT nacionales)', () => {
+    const result = detectContentProfile(
+      'Policía investiga muerte de motociclista tras accidente en Managua',
+      'La Policía Nacional indaga la muerte de un motociclista que falleció tras un accidente de tránsito. El cuerpo fue trasladado a medicina legal.',
+      'Muerte de motociclista en accidente es investigada',
+    );
+    expect(result.profile_detected).toBe('sucesos');
+    expect(result.profile_detected).not.toBe('nacionales');
+  });
+
+  it('Caso Nacional/Servicio: INSS cambia prestaciones para jubilados → nacionales', () => {
+    const result = detectContentProfile(
+      'INSS informa cambios en prestaciones para jubilados',
+      'El Instituto Nicaragüense de Seguridad Social anunció ajustes en las pensiones y beneficios para los jubilados. Los requisitos están disponibles en la página web.',
+      'Cambios en prestaciones del INSS para jubilados',
+    );
+    expect(result.profile_detected).toBe('nacionales');
+  });
 });

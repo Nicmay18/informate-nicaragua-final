@@ -50,7 +50,7 @@ export function isSessionExpired(session: SessionHandle, now = Date.now()): bool
 
 export function summarizeSession(session: SessionHandle, now = Date.now()): SessionSummary {
   const pageEvents = session.events.filter(e =>
-    e.type === 'PAGE_VIEW' || e.type === 'ARTICLE_VIEW' || e.type === 'CATEGORY_VIEW' || e.type === 'SEARCH'
+    e.type === 'PAGE_VIEW' || e.type === 'ARTICLE_VIEW' || e.type === 'CATEGORY_VIEW'
   );
   const articleViews = session.events
     .filter(e => e.type === 'ARTICLE_VIEW' && e.articleSlug)
