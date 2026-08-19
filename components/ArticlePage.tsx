@@ -18,7 +18,7 @@ import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
 import ArticleFaq from './ArticleFaq';
 import SupportMedium from './editorial/SupportMedium';
-import type { Noticia } from '@/lib/types';
+import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { AUTHORS } from '@/lib/authors';
 import '@/app/article-page.css';
 
@@ -287,15 +287,27 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {noticia.imagen && (
           <figure style={{ margin: 0, marginBottom: 8 }} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             <div className="article-hero-img">
-              <meta itemProp="url" content={noticia.imagen} />
-              <OptimizedImage
-                src={getResponsiveImageUrl(noticia.imagen)}
-                alt={noticia.titulo}
-                variant="hero"
-                priority={true}
-                fill
-                fetchPriority="high"
-              />
+              {(() => {
+                const responsiveImagen = getResponsiveImageUrl(noticia.imagen);
+                return (
+                  <>
+                    <meta itemProp="url" content={responsiveImagen} />
+                    <img
+                      src={responsiveImagen}
+                      alt={noticia.titulo}
+                      width={1200}
+                      height={675}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        if (!img.src.includes('logo.webp')) img.src = FALLBACK_IMAGE;
+                      }}
+                    />
+                  </>
+                );
+              })()}
             </div>
             <figcaption style={captionStyle}>
               <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
