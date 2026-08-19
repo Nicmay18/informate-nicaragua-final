@@ -66,7 +66,7 @@ export async function guardarConMeni(
   const finalContenido = meni.articulo?.contenido || input.contenido || '';
   const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
   const { fuente, fuentesComplementarias } = extractFuente(finalContenido, input.resumen || '');
-  const puntosClave = extractPuntosClave(finalContenido, 4);
+  const puntosClave = extractPuntosClave(finalContenido);
   const autorFoto = getAutorFoto(input.autor || '');
 
   // Perfil y categoria publica canonica — una sola fuente de verdad

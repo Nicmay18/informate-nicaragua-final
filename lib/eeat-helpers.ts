@@ -17,20 +17,50 @@ function splitSentences(text: string): string[] {
   return text
     .split(/(?<=[.!?])\s+/)
     .map((s) => s.trim())
-    .filter((s) => s.length > 40);
+    .filter((s) => s.length > 30);
 }
 
-export function extractPuntosClave(contenido: string, limite = 4): string[] {
+function concisar(frase: string, minPalabras = 12, maxPalabras = 18): string {
+  const palabras = frase.split(/\s+/).filter(Boolean);
+  const corte = Math.min(Math.max(palabras.length, minPalabras), maxPalabras);
+  const recorte = palabras.slice(0, corte);
+  const oracion = recorte
+    .join(' ')
+    .replace(/[\s,;:-]+$/g, '')
+    .trim();
+  if (!oracion) return '';
+  return oracion.charAt(0).toUpperCase() + oracion.slice(1) + '.';
+}
+
+export function extractPuntosClave(contenido: string, limite = 3): string[] {
   if (!contenido) return [];
   const texto = stripHtml(contenido);
   const frases = splitSentences(texto);
-  const relevantes = frases.filter((f) => {
+  if (frases.length === 0) return [];
+
+  const conDatos = frases.filter((f) => {
     const lower = f.toLowerCase();
-    // Prioriza oraciones con cifras, nombres propios o información concreta
-    return /\d/.test(f) || /[A-Z][a-z]+ [A-Z][a-z]+/.test(f) || lower.includes('según') || lower.includes('segun') || lower.includes('dijo') || lower.includes('anunció');
+    return /\d/.test(f) || /[A-Z][a-z]+ [A-Z][a-z]+/.test(f) || lower.includes('según') || lower.includes('segun') || lower.includes('dijo') || lower.includes('anunció') || lower.includes('según') || lower.includes('afirmó') || lower.includes('indicó') || lower.includes('señaló');
   });
-  const base = relevantes.length > 0 ? relevantes : frases;
-  return base.slice(0, limite);
+
+  const base = conDatos.length >= limite ? conDatos : frases;
+
+  // Seleccionar distribución: primera, mitad y última para cubrir qué/cómo/consecuencia
+  const seleccion: string[] = [];
+  if (base.length > 0) seleccion.push(base[0]);
+  if (base.length > 2) seleccion.push(base[Math.floor(base.length / 2)]);
+  if (base.length > 1) seleccion.push(base[base.length - 1]);
+
+  // Si la selección no alcanza, rellenar con el resto de oraciones
+  for (const f of base) {
+    if (seleccion.length >= limite) break;
+    if (!seleccion.includes(f)) seleccion.push(f);
+  }
+
+  return seleccion
+    .slice(0, limite)
+    .map((f) => concisar(f))
+    .filter(Boolean);
 }
 
 export function extractFuente(contenido: string, resumen = ''): { fuente: string; fuentesComplementarias: string[] } {
