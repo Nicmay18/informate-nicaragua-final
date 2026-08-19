@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getNews } from '@/lib/data';
+import { categoryToSlug } from '@/lib/types';
 import { shouldIndexArticle } from '@/lib/editorial/canonical';
 import { isToxicSlug } from '@/lib/seo-toxic';
 import { getAllAuthors } from '@/lib/authors';
@@ -112,6 +113,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return true;
     });
 
+    const activeCategorySlugs = new Set(
+      cleanArticles
+        .map(article => categoryToSlug(article.categoria || ''))
+        .filter(Boolean)
+    );
+
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
       const publishedAt = safeDate(article.fecha);
       const lastMod = safeDate(article.fechaActualizacion || article.fecha);
@@ -135,7 +142,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...articleUrls];
+    const filteredStaticUrls = staticUrls.filter((u) => {
+      const prefix = `${baseUrl}/categoria/`;
+      if (!u.url.startsWith(prefix)) return true;
+      const catSlug = u.url.slice(prefix.length);
+      return activeCategorySlugs.has(catSlug);
+    });
+
+    return [...filteredStaticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...articleUrls];
   } catch (error) {
     logger.error('[Sitemap] Error fetching articles:', error);
     return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls];

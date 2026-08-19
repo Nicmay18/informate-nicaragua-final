@@ -56,12 +56,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 
   const canonicalUrl = `${SITE_URL}/categoria/${slugLower}`;
+  let hasContent = true;
+  try {
+    hasContent = (await getCategoryCount(catName)) > 0;
+  } catch {
+    hasContent = false;
+  }
 
   return {
     title: meta.titulo,
     description: meta.description,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: hasContent ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       type: 'website',
       locale: 'es_NI',
@@ -111,8 +117,6 @@ export default async function CategoriaPage({
     console.error('[CategoriaPage] Error:', error);
     notFound();
   }
-
-  if (noticias.length === 0 && page === 1) notFound();
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
