@@ -16,6 +16,7 @@ function detectarTipo(texto: string): string {
   if (/muerte|fallecido|muerto|asesinato/i.test(t)) return 'muerte';
   if (/accidente|choque|colisión|atropello/i.test(t)) return 'accidente';
   if (/detención|captura|allanamiento/i.test(t)) return 'delito';
+  if (/(?:\b)(?:cine|pelicula|película|estreno|cinemark|marvel|warner|disney|actor|actriz|taquilla|personaje|protagonista|secuela|remake|estrenar|netflix|streaming|hbo|amazon prime|disney\+|disney plus)(?:\b)/i.test(t)) return 'espectaculo';
   if (/precio|inflación|salario|economía/i.test(t)) return 'economia';
   if (/salud|dengue|covid|epidemia/i.test(t)) return 'salud';
   if (/política|gobierno|asamblea/i.test(t)) return 'politica';

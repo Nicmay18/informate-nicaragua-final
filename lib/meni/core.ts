@@ -87,6 +87,12 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   // ── FASE 2 + 3: perfil y trazabilidad ─────────────────────────────
   const articleHash = computeInputHash(input);
+  logMeni('MENI input fingerprint', {
+    articleHash,
+    contentLength: (input.contenido || '').length,
+    resumenLength: (input.resumen || '').length,
+    hasTitulo: !!input.titulo,
+  });
   const contentProfile = detectContentProfile(input.titulo, input.contenido, input.resumen);
   const perfilIdentificado = contentProfile.profile_confidence >= MIN_PROFILE_CONFIDENCE;
   const profileCategoria = perfilIdentificado
