@@ -8,27 +8,10 @@
     "app/api/admin/meni/generar/route.ts": {
       "maxDuration": 60
     },
-    "app/api/cron/nios-collect/route.ts": {
-      "maxDuration": 60
-    },
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
   },
-  "crons": [
-    {
-      "path": "/api/cron/resumen-diario",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/nios-collect",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/supervisor-watch",
-      "schedule": "0 8 * * *"
-    }
-  ],
   "headers": [
     {
       "source": "/sitemap.xml",
