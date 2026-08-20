@@ -13,7 +13,7 @@
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
-import { USE_MENI_SCORE_V2, MENI_V2_WEIGHTS, MENI_V2_BLEND } from '@/lib/meni/scoring';
+import { USE_MENI_SCORE_V2, MENI_V2_WEIGHTS, MENI_V2_BLEND, MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
 import type { EvaluacionEditorial } from '@/lib/editorial';
 import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
@@ -271,10 +271,11 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   const minScore = input.tierThresholds?.minAdnNI ?? 60;
 
   // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
+  // Alineado con el umbral canónico de aprobación de MENI: >= MIN_APPROVED_SCORE es PUBLICABLE.
   const finalRecomendacion: RecomendacionEditorial =
     editorialDna.bloquear || tieneProblemasGraves || score < 75
       ? 'revisar'
-      : score < 95
+      : score < MIN_APPROVED_SCORE
       ? 'mejorar'
       : 'publicar';
 
