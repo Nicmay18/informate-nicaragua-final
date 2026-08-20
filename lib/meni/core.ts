@@ -154,6 +154,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     ...input,
     categoria: categoria,
     categoriaSugerida: categoria,
+    perfil: contentProfile.profile_detected,
     fuente: input.contenido,
     tierThresholds: thresholds,
     evaluacion,

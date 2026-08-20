@@ -49,7 +49,8 @@ export type { EditorialVerification, EditorialVerificationItem } from './types';
 export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision {
   // 0. Detectar categoria y cargar perfil editorial
   const categoria = input.categoriaSugerida || input.categoria || 'General';
-  const profile = getCategoryProfile(categoria);
+  const perfil = input.perfil || categoria;
+  const profile = getCategoryProfile(perfil);
 
   // 1. News Value — ¿Vale la pena publicarla?
   const newsValue = runNewsValueEngine(input);

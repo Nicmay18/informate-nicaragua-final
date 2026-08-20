@@ -32,7 +32,7 @@ export default defineConfig({
     setupFiles: ['./tests/setup.ts'],
 
     // ─── Test Files Pattern ────────────────────────────────────
-    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    include: ['lib/**/*.test.ts', 'tests/**/*.{test,spec}.{ts,tsx}'],
     exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'tests/e2e/**'],
 
     // ─── Mocking ───────────────────────────────────────────────

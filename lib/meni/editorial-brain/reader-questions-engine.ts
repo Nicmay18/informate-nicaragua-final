@@ -13,7 +13,8 @@ import { getCategoryProfile } from './profiles';
 // exclusivamente del perfil editorial detectado (recalibracion 2.1.1).
 export function runReaderQuestionsEngine(input: EditorialBrainInput): ReaderQuestionsDecision {
   const categoria = input.categoriaSugerida || input.categoria || 'General';
-  const profile = getCategoryProfile(categoria);
+  const perfil = input.perfil || categoria;
+  const profile = getCategoryProfile(perfil);
 
   // REGLA DE RECALIBRACION 2.1.1:
   // Las evidencias requeridas son exclusivas del perfil detectado.

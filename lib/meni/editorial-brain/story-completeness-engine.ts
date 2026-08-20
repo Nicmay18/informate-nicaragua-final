@@ -84,7 +84,7 @@ export function runStoryCompletenessEngine(
   const respuestasFaltantes = readerQuestions
     ? detectarRespuestasFaltantes(texto, readerQuestions)
     : [];
-  const contextoFaltante = detectarContextoFaltante(texto, input.categoria);
+  const contextoFaltante = detectarContextoFaltante(texto, input.perfil || input.categoria);
   const dudasPendientes = detectarDudasPendientes(texto);
 
   const totalFaltantes = respuestasFaltantes.length + contextoFaltante.length + dudasPendientes.length;

@@ -135,7 +135,10 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   const aprobadoMeni = ctx.aprobadoMeni === true
     || (ctx.aprobadoMeni === undefined && ctx.scoreMeni !== undefined && ctx.scoreMeni >= 90);
   const recomendacionMeni = ctx.recomendacionMeni ?? (aprobadoMeni ? 'publicar' : 'mejorar');
-  const meniCleared = aprobadoMeni === true && recomendacionMeni === 'publicar' && (ctx.scoreMeni ?? 0) >= 90;
+  // PUBLICATION GATE: separado de la recomendación editorial.
+  // Si MENI aprobó (score >= MIN_APPROVED_SCORE, sin bloqueos) y no hay bloqueantes del Supervisor,
+  // el artículo puede publicarse aunque la recomendación editorial sea MEJORAR.
+  const meniCleared = aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 90;
   const isPreDraft = !hasContent && !hasResearch && !hasStory && !meniCleared;
 
   if (titleEval.needsInvestigation) {
@@ -347,7 +350,6 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   const journalisticValue = editorialDimensions.length > 0
     ? Math.round(editorialDimensions.reduce((a, b) => a + b, 0) / editorialDimensions.length)
     : (ctx.scoreMeni ?? 100);
-  const hasHighValue = journalisticValue >= 75;
   const hasExceptionalValue = journalisticValue >= 85;
 
   let verdict: SupervisorVerdict;
@@ -381,26 +383,18 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       verdict = 'PUBLICAR_CON_CAMBIOS';
       resultingState = 'EDITORIAL_REVIEW';
     }
-  } else if (!meniCleared && !hasExceptionalValue) {
-    // MENI no recomienda publicar y el valor periodístico no es excepcional.
-    verdict = recomendacionMeni === 'revisar' ? 'REVISION_HUMANA' : 'PUBLICAR_CON_CAMBIOS';
-    resultingState = 'EDITORIAL_REVIEW';
-  } else if (recomendacionMeni !== 'publicar' && !hasExceptionalValue) {
-    verdict = 'REVISION_HUMANA';
-    resultingState = 'EDITORIAL_REVIEW';
-  } else if (recomendacionMeni !== 'publicar' && hasExceptionalValue) {
-    // MENI recomienda revisar, pero el valor periodístico es alto.
-    // Se permite publicar con cambios menores. NUNCA PUBLICAR directo.
-    verdict = 'PUBLICAR_CON_CAMBIOS';
-    resultingState = 'EDITORIAL_REVIEW';
-  } else if (hasHighValue && meniCleared) {
-    // GATE DE INVARIANTE: PUBLICAR directo solo si MENI aprobó Y recomendó publicar
-    // Y el score >= 90 Y el valor periodístico es alto. Sin meniCleared, jamás PUBLICAR.
+  } else if (meniCleared) {
+    // GATE DE PUBLICACIÓN: MENI aprobó (score >= 90, sin bloqueos) y el Supervisor
+    // no encontró bloqueantes críticos/importantes. La recomendación editorial
+    // (MEJORAR/REVISAR) se mantiene como consejo, pero no bloquea.
     verdict = 'PUBLICAR';
     resultingState = 'READY';
-  } else if (hasHighValue && !meniCleared) {
-    // Valor periodístico alto pero MENI no cleared — no bypass.
-    // El editor humano decide; nunca auto-publicar.
+  } else if (!hasExceptionalValue) {
+    // MENI no aprobó y el valor periodístico no es excepcional.
+    verdict = recomendacionMeni === 'revisar' ? 'REVISION_HUMANA' : 'PUBLICAR_CON_CAMBIOS';
+    resultingState = 'EDITORIAL_REVIEW';
+  } else if (hasExceptionalValue) {
+    // MENI no aprobó, pero el valor periodístico es alto.
     verdict = 'REVISION_HUMANA';
     resultingState = 'EDITORIAL_REVIEW';
   } else {

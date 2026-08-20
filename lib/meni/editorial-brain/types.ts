@@ -7,6 +7,7 @@
  */
 
 import type { NoticiaInput } from '@/lib/meni/types';
+import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 import type { IntelligenceResult } from '@/lib/meni/intelligence/types';
 import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import type { TierThresholds } from '@/lib/meni/editorial-tiers';
@@ -33,6 +34,8 @@ export interface KnowledgeContext {
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
   categoriaSugerida?: string;
+  /** Perfil interno detectado (turismo, sucesos, etc.) */
+  perfil?: MeniContentProfile;
   tierThresholds?: TierThresholds;
   knowledgeContext?: KnowledgeContext;
   // Evaluación técnica del motor editorial. Opcional; requerida para MENI Score V2.

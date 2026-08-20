@@ -237,8 +237,8 @@ export default function EditorPage() {
   };
 
   const guardar = async (publicar: boolean) => {
-    if (!resultado || resultado.recomendacionEditorial === 'revisar') {
-      setError('El editor recomienda revisar antes de publicar. No se puede guardar hasta resolver las observaciones.');
+    if (!resultado || resultado.aprobado !== true) {
+      setError('La nota no está aprobada por MENI. No se puede publicar hasta resolver los bloqueantes.');
       return;
     }
     setGuardando(true);
