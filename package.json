@@ -21,7 +21,6 @@
     "test:e2e:ui": "playwright test --ui",
     "test:all": "npm run lint && npm run type-check && npm run test && npm run test:e2e",
     "pre-deploy": "bash scripts/pre-deploy-check.sh",
-    "scripts:organize": "node scripts/cli.js organize",
     "prepare": "node -e \"try { require('child_process').execSync('git config core.hooksPath .githooks', { stdio: 'ignore' }); } catch (e) {}\""
   },
   "dependencies": {
