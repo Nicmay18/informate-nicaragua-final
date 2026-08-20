@@ -394,6 +394,8 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'japón', weight: 1.5 },
     { keyword: 'india', weight: 1.5 },
     { keyword: 'filipinas', weight: 1.5 },
+    { keyword: 'peru', weight: 1.5 },
+    { keyword: 'perú', weight: 1.5 },
     { keyword: 'flores', weight: 1 },
     { keyword: 'sismo', weight: 0.5 },
     { keyword: 'terremoto', weight: 0.5 },
@@ -550,7 +552,7 @@ export function detectContentProfile(
     'volcan', 'volcán', 'erupcion', 'erupción', 'ceniza',
   ]);
   const hasNaturalDisaster = allMatched.some(kw => naturalDisasterWords.has(kw));
-  const foreignCountries = new Set(['indonesia', 'japon', 'japón', 'india', 'filipinas', 'china', 'rusia', 'ucrania', 'mexico', 'colombia', 'argentina', 'brasil', 'eeuu', 'estados unidos', 'europa', 'honduras', 'el salvador', 'guatemala', 'costa rica', 'panama']);
+  const foreignCountries = new Set(['indonesia', 'japon', 'japón', 'india', 'filipinas', 'peru', 'perú', 'china', 'rusia', 'ucrania', 'mexico', 'colombia', 'argentina', 'brasil', 'eeuu', 'estados unidos', 'europa', 'honduras', 'el salvador', 'guatemala', 'costa rica', 'panama']);
   const hasForeignCountry = allMatched.some(kw => foreignCountries.has(kw));
   if (hasNaturalDisaster && hasForeignCountry) {
     scores.internacional += 10;
