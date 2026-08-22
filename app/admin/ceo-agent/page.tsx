@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { CEOAnalysis, CEOBriefAction, DataAvailability } from '@/lib/ceo-agent';
 
 const dataStatusColor: Record<DataAvailability, string> = {
@@ -24,7 +25,7 @@ export default function CEOAgentPage() {
     try {
       const res = await fetch('/api/admin/ceo-agent/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() || '' },
         body: JSON.stringify({ slug: slug.trim() }),
       });
       const json = await res.json();
@@ -41,7 +42,9 @@ export default function CEOAgentPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/admin/ceo-agent/daily');
+      const res = await fetch('/api/admin/ceo-agent/daily', {
+        headers: { 'x-admin-token': getAdminToken() || '' },
+      });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Error');
       setBrief(json.actions as CEOBriefAction[]);

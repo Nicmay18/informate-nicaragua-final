@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { isAuthenticatedAdmin } from '@/lib/admin-auth';
+import AdminNav from '@/components/admin/AdminNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,5 +16,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     redirect('/login');
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <AdminNav />
+      {children}
+    </>
+  );
 }
