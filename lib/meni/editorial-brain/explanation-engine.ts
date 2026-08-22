@@ -13,6 +13,7 @@ function stripHtml(html: string): string {
 
 function detectarTipo(texto: string): string {
   const t = texto.toLowerCase();
+  if (/\b(apertura|sucursal|franquicia|restaurante|comida rápida|marca|cadena|inaugura)\b/i.test(t)) return 'comercial';
   if (/muerte|fallecido|muerto/i.test(t)) return 'muerte';
   if (/accidente|choque|colisión/i.test(t)) return 'accidente';
   if (/detención|captura/i.test(t)) return 'delito';
