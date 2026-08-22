@@ -86,8 +86,8 @@ function basePool(): Noticia[] {
   ];
 }
 
-describe('analyzeForPublication', () => {
-  it('PUBLISH artículo de servicio con tráfico alto', () => {
+describe('analyzeForPublication — decisiones ejecutivas reales', () => {
+  it('artículo excelente → PUBLISH', () => {
     const article = baseArticle({
       slug: 'inss-cobertura-muerte-asegurado',
       titulo: 'INSS: cobertura por muerte de asegurado',
@@ -99,28 +99,14 @@ describe('analyzeForPublication', () => {
       palabras: 480,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('PUBLISH');
-    expect(result.readerInterest).toBe('HIGH');
+    expect(result.action).toBe('PUBLISH');
+    expect(result.urgency).toBe('MEDIUM');
+    expect(result.risk).toBe('LOW');
     expect(result.evidence.some(e => e.includes('1,273'))).toBe(true);
+    expect(result.alert).not.toBeNull();
   });
 
-  it('PUBLISH con tráfico moderado y categoría Sucesos', () => {
-    const article = baseArticle({
-      slug: 'colision-managua',
-      titulo: 'Colisión entre camión y bus deja heridos en Managua',
-      resumen: 'Un choque ocurrió en la capital.',
-      categoria: 'Sucesos',
-      vistas: 300,
-      aprobadoMeni: true,
-      scoreMeni: 88,
-      palabras: 400,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('PUBLISH');
-    expect(result.readerInterest).toBe('MEDIUM');
-  });
-
-  it('PUBLISH_WITH_CHANGES por contenido superficial', () => {
+  it('artículo débil → ADD_CONTEXT', () => {
     const article = baseArticle({
       slug: 'nota-corta',
       titulo: 'Nota corta',
@@ -132,39 +118,11 @@ describe('analyzeForPublication', () => {
       palabras: 150,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('PUBLISH_WITH_CHANGES');
-    expect(result.recommendedChanges.some(c => c.includes('350'))).toBe(true);
+    expect(result.action).toBe('ADD_CONTEXT');
+    expect(result.whyItMatters.toLowerCase()).toContain('lector');
   });
 
-  it('UPDATE_EXISTING cuando existe noticia similar', () => {
-    const article = baseArticle({
-      slug: 'inss-familiares-nuevo',
-      titulo: 'INSS: familiares y cobertura para todos',
-      resumen: 'Guía de prestaciones para familiares.',
-      categoria: 'Nacionales',
-      tags: ['inss', 'familiares', 'cobertura'],
-      aprobadoMeni: true,
-      scoreMeni: 91,
-      palabras: 420,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('UPDATE_EXISTING');
-    expect(result.existingArticleOpportunity?.slug).toBe('inss-cobertura-familiares');
-    expect(result.existingArticleOpportunity?.evidence.length).toBeGreaterThan(0);
-    expect(result.existingArticleOpportunity?.recommendation).toContain('Actualizar');
-  });
-
-  it('HOLD cuando MENI no aprueba', () => {
-    const article = baseArticle({
-      aprobadoMeni: false,
-      scoreMeni: 70,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('HOLD');
-    expect(result.risk).toBe('HIGH');
-  });
-
-  it('HOLD con tráfico bajo y sin patrón demostrado', () => {
+  it('artículo sin valor → DO_NOT_PUBLISH', () => {
     const article = baseArticle({
       slug: 'tema-obscuro',
       titulo: 'Algunas reflexiones generales',
@@ -176,83 +134,64 @@ describe('analyzeForPublication', () => {
       palabras: 500,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(['HOLD', 'PUBLISH_WITH_CHANGES']).toContain(result.decision);
+    expect(result.action).toBe('DO_NOT_PUBLISH');
+    expect(result.urgency).toBe('CRITICAL');
+    expect(result.whatNotToDo.toLowerCase()).toContain('no publicar');
   });
 
-  it('detecta interés del lector como HIGH con tráfico real', () => {
+  it('artículo duplicado → UPDATE_EXISTING', () => {
     const article = baseArticle({
-      titulo: 'INSS: pensiones 2026',
-      resumen: 'Cómo solicitar pensión.',
-      vistas: 800,
-      aprobadoMeni: true,
-      scoreMeni: 93,
-      palabras: 500,
-    });
-    const traffic: TrafficEvidence = { viewsRecent: 120, status: 'REAL' };
-    const result = analyzeForPublication(article, { articlePool: basePool(), traffic });
-    expect(result.readerInterest).toBe('HIGH');
-  });
-
-  it('no inventa datos cuando no hay tráfico', () => {
-    const article = baseArticle({
-      aprobadoMeni: true,
-      scoreMeni: 90,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.trafficEvidence.some(s => s.status === 'NO_DATA')).toBe(true);
-    expect(result.dataStatus.some(d => d.source === 'traffic' && d.status === 'NO_DATA')).toBe(true);
-  });
-
-  it('indica GSC como ACCESS_BLOCKED sin datos', () => {
-    const article = baseArticle({
-      aprobadoMeni: true,
-      scoreMeni: 90,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.seoEvidence.some(s => s.source === 'gsc' && s.status === 'ACCESS_BLOCKED')).toBe(true);
-    expect(result.opportunities.some(o => o.type === 'GSC_UNAVAILABLE')).toBe(true);
-  });
-
-  it('PUBLISH_WITH_CHANGES por título demasiado largo', () => {
-    const article = baseArticle({
-      titulo: 'Este es un título muy largo que supera ampliamente los sesenta caracteres recomendados para SEO',
+      slug: 'inss-familiares-nuevo',
+      titulo: 'INSS: familiares y cobertura para todos',
+      resumen: 'Guía de prestaciones para familiares.',
+      categoria: 'Nacionales',
+      tags: ['inss', 'familiares', 'cobertura'],
       aprobadoMeni: true,
       scoreMeni: 91,
-      palabras: 500,
+      palabras: 420,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('PUBLISH_WITH_CHANGES');
-    expect(result.recommendedChanges.some(c => c.includes('60 caracteres'))).toBe(true);
+    expect(result.action).toBe('UPDATE_EXISTING');
+    expect(result.existingArticle?.slug).toBe('inss-cobertura-familiares');
+    expect(result.whatNotToDo.toLowerCase()).toContain('no crear');
   });
 
-  it('REJECT cuando MENI rechaza con score muy bajo', () => {
+  it('artículo funcionando → PUBLISH o WRITE_FOLLOWUP', () => {
     const article = baseArticle({
-      aprobadoMeni: false,
-      scoreMeni: 45,
-    });
-    const result = analyzeForPublication(article, { articlePool: basePool() });
-    expect(result.decision).toBe('REJECT');
-    expect(result.editorialQuality).toBe('LOW');
-    expect(result.risk).toBe('HIGH');
-  });
-
-  it('separa MENI alto de tráfico desconocido', () => {
-    const article = baseArticle({
+      slug: 'guia-vivienda',
+      titulo: 'Feria de Vivienda en Managua: bonos, precios y requisitos',
+      resumen: 'Información sobre bonos y precios.',
+      categoria: 'Nacionales',
+      vistas: 497,
       aprobadoMeni: true,
-      scoreMeni: 95,
-      palabras: 500,
-      vistas: 0,
+      scoreMeni: 93,
+      palabras: 520,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(['PUBLISH', 'WRITE_FOLLOWUP']).toContain(result.action);
+    expect(result.whyItMatters.toLowerCase()).toContain('tráfico');
+  });
+
+  it('artículo cayendo → UPDATE_EXISTING', () => {
+    const article = baseArticle({
+      slug: 'inss-2020',
+      titulo: 'INSS: requisitos históricos',
+      resumen: 'Guía antigua.',
+      categoria: 'Nacionales',
+      vistas: 1200,
+      fecha: '2020-01-01T00:00:00.000Z',
+      aprobadoMeni: true,
+      scoreMeni: 88,
+      palabras: 400,
     });
     const result = analyzeForPublication(article, {
       articlePool: basePool(),
-      traffic: { status: 'ACCESS_BLOCKED' },
+      traffic: { viewsRecent: 40, source: 'traffic_daily', status: 'REAL' },
     });
-    expect(result.editorialQuality).toBe('HIGH');
-    expect(result.readerInterest).toBe('UNKNOWN');
-    expect(result.trafficEvidence.some(s => s.status === 'ACCESS_BLOCKED')).toBe(true);
+    expect(result.action).toBe('UPDATE_EXISTING');
   });
 
-  it('traffic_daily REAL', () => {
+  it('alto CTR + altas impresiones → mantiene/crece', () => {
     const article = baseArticle({
       titulo: 'INSS: requisitos de cobertura',
       resumen: 'Guía de requisitos.',
@@ -261,41 +200,127 @@ describe('analyzeForPublication', () => {
       scoreMeni: 93,
       palabras: 500,
     });
-    const result = analyzeForPublication(article, {
-      articlePool: basePool(),
-      traffic: { viewsRecent: 800, source: 'traffic_daily', status: 'REAL' },
-    });
-    expect(result.readerInterest).toBe('HIGH');
-    expect(result.trafficEvidence.some(s => s.source === 'traffic_daily' && s.status === 'REAL')).toBe(true);
+    const gsc: GscData = { impressions: 5000, clicks: 400, status: 'REAL' };
+    const result = analyzeForPublication(article, { articlePool: basePool(), gsc });
+    expect(['PUBLISH', 'WRITE_FOLLOWUP', 'RECIRCULATE']).toContain(result.action);
+    expect(result.google.status).toBe('REAL');
   });
 
-  it('traffic_log fallback REAL', () => {
+  it('altas impresiones + bajo CTR → IMPROVE_HEADLINE', () => {
     const article = baseArticle({
-      titulo: 'Nota de prueba fallback',
+      titulo: 'INSS guía',
+      resumen: 'Resumen.',
+      aprobadoMeni: true,
+      scoreMeni: 91,
+      palabras: 500,
+    });
+    const gsc: GscData = { impressions: 26300, clicks: 372, status: 'REAL' };
+    const result = analyzeForPublication(article, { articlePool: basePool(), gsc });
+    expect(result.action).toBe('IMPROVE_HEADLINE');
+    expect(result.alert?.title).toContain('GOOGLE');
+  });
+
+  it('contenido de servicio funcionando → profundizar', () => {
+    const article = baseArticle({
+      titulo: 'INSS: consulta de aportes en línea',
+      resumen: 'Cómo consultar aportes.',
+      categoria: 'Nacionales',
+      vistas: 600,
+      aprobadoMeni: true,
+      scoreMeni: 92,
+      palabras: 480,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(['PUBLISH', 'ADD_SERVICE_INFORMATION']).toContain(result.action);
+  });
+
+  it('sin datos → NO_ACTION con evidencia NO_DATA', () => {
+    const article = baseArticle({
+      aprobadoMeni: true,
+      scoreMeni: 90,
+      palabras: 500,
+      vistas: 0,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.action).toBe('NO_ACTION');
+    expect(result.traffic.status).toBe('NO_DATA');
+    expect(result.whatNotToDo.toLowerCase()).toContain('no inventar');
+  });
+
+  it('acceso bloqueado → ACCESS_BLOCKED', () => {
+    const article = baseArticle({
       aprobadoMeni: true,
       scoreMeni: 90,
       palabras: 500,
     });
     const result = analyzeForPublication(article, {
       articlePool: basePool(),
-      traffic: { viewsRecent: 50, source: 'traffic_log', status: 'REAL' },
+      traffic: { status: 'ACCESS_BLOCKED' },
     });
-    expect(result.trafficEvidence.some(s => s.source === 'traffic_log')).toBe(true);
-    expect(result.readerInterest).toBe('LOW');
+    expect(result.traffic.status).toBe('ACCESS_BLOCKED');
+    expect(result.google.status).toBe('ACCESS_BLOCKED');
   });
 
-  it('indexing_log CONNECTED_NO_DATA', () => {
-    const article = baseArticle({ aprobadoMeni: true, scoreMeni: 90 });
-    const result = analyzeForPublication(article, {
-      articlePool: basePool(),
-      indexing: { status: 'CONNECTED_NO_DATA' },
+  it('MENI rechazado con score bajo → DO_NOT_PUBLISH', () => {
+    const article = baseArticle({
+      aprobadoMeni: false,
+      scoreMeni: 45,
     });
-    expect(result.dataStatus.some(d => d.source === 'indexing' && d.status === 'CONNECTED_NO_DATA')).toBe(true);
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.action).toBe('DO_NOT_PUBLISH');
+    expect(result.urgency).toBe('CRITICAL');
+    expect(result.alert?.title).toContain('NO PUBLICAR');
+  });
+
+  it('MENI no aprobado → IMPROVE_BEFORE_PUBLISH', () => {
+    const article = baseArticle({
+      aprobadoMeni: false,
+      scoreMeni: 70,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.action).toBe('IMPROVE_BEFORE_PUBLISH');
+    expect(result.whatNotToDo.toLowerCase()).toContain('no publicar');
+  });
+
+  it('MENI separado de tráfico desconocido', () => {
+    const article = baseArticle({
+      aprobadoMeni: true,
+      scoreMeni: 95,
+      palabras: 500,
+      vistas: 0,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.meni.status).toBe('REAL');
+    expect(result.traffic.status).toBe('NO_DATA');
+    expect(result.action).toBe('NO_ACTION');
+  });
+
+  it('titular demasiado largo → IMPROVE_HEADLINE', () => {
+    const article = baseArticle({
+      titulo: 'Este es un título muy largo que supera ampliamente los sesenta caracteres recomendados para SEO',
+      aprobadoMeni: true,
+      scoreMeni: 91,
+      palabras: 500,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.action).toBe('IMPROVE_HEADLINE');
+    expect(result.whatToDo.toLowerCase()).toContain('60 caracteres');
+  });
+
+  it('sin GSC no inventa oportunidades', () => {
+    const article = baseArticle({
+      aprobadoMeni: true,
+      scoreMeni: 90,
+      palabras: 500,
+    });
+    const result = analyzeForPublication(article, { articlePool: basePool() });
+    expect(result.google.status).toBe('ACCESS_BLOCKED');
+    expect(result.evidence.every(e => !e.toLowerCase().includes('gsc'))).toBe(true);
   });
 });
 
 describe('findRelatedArticles', () => {
-  it('encuentra artículos relacionados por categoría y titular', () => {
+  it('encuentra artículos reales relacionados', () => {
     const pool = basePool();
     const article = baseArticle({ categoria: 'Nacionales', slug: 'inss-nuevo', titulo: 'INSS: nueva cobertura' });
     const related = findRelatedArticles(article, pool, 3);
@@ -312,62 +337,79 @@ describe('findRelatedArticles', () => {
 });
 
 describe('detectGoogleOpportunities', () => {
-  it('HIGH_IMPRESSIONS_LOW_CTR', () => {
+  it('HIGH_IMPRESSIONS_LOW_CTR → IMPROVE_HEADLINE', () => {
     const gsc: GscData = { impressions: 26300, clicks: 372, status: 'REAL' };
-    const ops = detectGoogleOpportunities({ titulo: 'INSS guía' }, gsc);
-    expect(ops.some(o => o.type === 'HIGH_IMPRESSIONS_LOW_CTR')).toBe(true);
+    const signals = detectGoogleOpportunities({ titulo: 'INSS guía' }, gsc);
+    expect(signals.some(s => s.action === 'IMPROVE_HEADLINE')).toBe(true);
   });
 
-  it('GSC sin datos reporta CONNECTED_NO_DATA', () => {
+  it('GSC sin datos no genera señales', () => {
     const gsc: GscData = { impressions: 0, clicks: 0, status: 'CONNECTED_NO_DATA' };
-    const ops = detectGoogleOpportunities({ titulo: 'Noticia' }, gsc);
-    expect(ops.some(o => o.type === 'GSC_NO_DATA')).toBe(true);
+    const signals = detectGoogleOpportunities({ titulo: 'Noticia' }, gsc);
+    expect(signals.length).toBe(0);
   });
 
-  it('sin GSC devuelve ACCESS_BLOCKED', () => {
-    const ops = detectGoogleOpportunities({ titulo: 'Noticia' });
-    expect(ops.some(o => o.type === 'GSC_UNAVAILABLE')).toBe(true);
+  it('sin GSC devuelve array vacío', () => {
+    const signals = detectGoogleOpportunities({ titulo: 'Noticia' });
+    expect(signals.length).toBe(0);
   });
 
   it('SNIPPET_WEAK con CTR muy bajo', () => {
     const gsc: GscData = { impressions: 2000, clicks: 10, status: 'REAL' };
-    const ops = detectGoogleOpportunities({ titulo: 'INSS guía' }, gsc);
-    expect(ops.some(o => o.type === 'SNIPPET_WEAK')).toBe(true);
+    const signals = detectGoogleOpportunities({ titulo: 'INSS guía' }, gsc);
+    expect(signals.some(s => s.action === 'IMPROVE_SNIPPET')).toBe(true);
   });
 
-  it('CONTENT_GAP cuando faltan queries en el contenido', () => {
+  it('CONTENT_GAP con queries reales', () => {
     const gsc: GscData = { impressions: 500, clicks: 25, status: 'REAL', queries: ['requisitos inss', 'quejas'] };
-    const ops = detectGoogleOpportunities(
+    const signals = detectGoogleOpportunities(
       { titulo: 'Cobertura INSS', resumen: 'Guía de cobertura', contenido: '<p>Información sobre requisitos inss.</p>' },
       gsc,
     );
-    expect(ops.some(o => o.type === 'CONTENT_GAP')).toBe(true);
+    expect(signals.some(s => s.action === 'ADD_CONTEXT')).toBe(true);
   });
 });
 
 describe('getCEODailyBrief', () => {
-  it('genera máximo 5 acciones', () => {
+  it('máximo 5 acciones', () => {
     const articles = basePool();
-    const brief = getCEODailyBrief({ articles });
+    const traffic: Record<string, TrafficEvidence> = {};
+    for (const a of articles) {
+      if ((a.vistas ?? 0) > 0) traffic[a.slug] = { viewsRecent: a.vistas, source: 'test', status: 'REAL' };
+    }
+    const brief = getCEODailyBrief({ articles, traffic });
     expect(brief.length).toBeLessThanOrEqual(5);
-    expect(brief.length).toBeGreaterThan(0);
   });
 
-  it('prioriza actualizar contenido de servicio con tráfico', () => {
-    const articles = basePool();
-    const brief = getCEODailyBrief({ articles });
-    expect(brief[0].action).toBe('ACTUALIZAR_ARTICULO_SERVICIO');
+  it('sin acciones ficticias', () => {
+    const brief = getCEODailyBrief({ articles: [] });
+    expect(brief.length).toBe(0);
   });
 
-  it('detecta categoría con bajo rendimiento', () => {
+  it('prioriza contenido de servicio con tráfico real', () => {
     const articles = basePool();
-    const brief = getCEODailyBrief({ articles });
-    expect(brief.some(a => a.action === 'EVALUAR_CATEGORIA_BAJO_RENDIMIENTO')).toBe(true);
+    const traffic: Record<string, TrafficEvidence> = {};
+    for (const a of articles) {
+      if ((a.vistas ?? 0) > 0) traffic[a.slug] = { viewsRecent: a.vistas, source: 'test', status: 'REAL' };
+    }
+    const brief = getCEODailyBrief({ articles, traffic });
+    expect(brief.some(a => a.action === 'ADD_SERVICE_INFORMATION')).toBe(true);
+  });
+
+  it('detecta titular con bajo CTR solo con GSC real', () => {
+    const articles = basePool();
+    const traffic: Record<string, TrafficEvidence> = {};
+    for (const a of articles) {
+      if ((a.vistas ?? 0) > 0) traffic[a.slug] = { viewsRecent: a.vistas, source: 'test', status: 'REAL' };
+    }
+    const gsc: GscData[] = [{ impressions: 5000, clicks: 50, status: 'REAL' }];
+    const brief = getCEODailyBrief({ articles, traffic, gsc });
+    expect(brief.some(a => a.action === 'IMPROVE_HEADLINE')).toBe(true);
   });
 });
 
 describe('Real article integration', { timeout: 60000 }, () => {
-    const CREDENTIALS_PATH = path.resolve('G:/RESPALDO/ESCRITORIO/fb-key-base64.txt');
+  const CREDENTIALS_PATH = path.resolve('G:/RESPALDO/ESCRITORIO/fb-key-base64.txt');
 
   const targets = [
     { label: 'INSS cobertura familiares', keyword: 'familiares tienen cobertura' },
@@ -392,7 +434,6 @@ describe('Real article integration', { timeout: 60000 }, () => {
     const { getNews, getNewsBySlug } = await import('./data');
     const { getAdminDb } = await import('./firebase-admin');
 
-    // 1. Verificar acceso real a Firestore antes de interpretar ausencia de datos
     let accessOk = false;
     try {
       await getAdminDb().collection('noticias').limit(1).get();
@@ -432,15 +473,13 @@ describe('Real article integration', { timeout: 60000 }, () => {
         label: target.label,
         slug: article.slug,
         found: true,
-        decision: analysis.decision,
-        confidence: analysis.confidence,
-        readerInterest: analysis.readerInterest,
+        action: analysis.action,
+        urgency: analysis.urgency,
         vistas: article.vistas ?? 'NO_DATA',
         scoreMeni: article.scoreMeni ?? 'NO_DATA',
         aprobadoMeni: article.aprobadoMeni ?? 'NO_DATA',
         related: analysis.relatedArticles.slice(0, 2).map(r => r.slug),
-        existing: analysis.existingArticleOpportunity,
-        recommended: analysis.recommendedChanges,
+        existing: analysis.existingArticle,
         dataStatus: analysis.dataStatus.map(d => `${d.source}=${d.status}`),
       });
     }

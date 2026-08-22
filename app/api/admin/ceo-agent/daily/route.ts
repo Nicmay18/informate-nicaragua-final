@@ -54,20 +54,27 @@ export async function GET(request: Request) {
       getTrafficPerformance(db, 7, 50),
     ]);
 
-    const trafficBySlug: TrafficEvidence[] = trafficPerformance.articles.map(a => ({
-      viewsRecent: a.views,
-      source: trafficPerformance.source === 'traffic_log_fallback' ? 'traffic_log' : 'traffic_daily',
-      status: 'REAL',
-    }));
+    const trafficBySlug: Record<string, TrafficEvidence> = {};
+    for (const a of trafficPerformance.articles) {
+      if (a.slug && typeof a.views === 'number') {
+        trafficBySlug[a.slug] = {
+          viewsRecent: a.views,
+          source: trafficPerformance.source === 'traffic_log_fallback' ? 'traffic_log' : 'traffic_daily',
+          status: 'REAL',
+        };
+      }
+    }
 
     const brief = getCEODailyBrief({ articles, traffic: trafficBySlug });
 
     return NextResponse.json({
       actions: brief,
+      articles: articles.map(a => ({ slug: a.slug, titulo: a.titulo, categoria: a.categoria })),
       dataStatus: {
         trafficSource: trafficPerformance.source,
         articleCount: articles.length,
-        trafficArticles: trafficBySlug.length,
+        trafficArticles: Object.keys(trafficBySlug).length,
+        actionCount: brief.length,
       },
     });
   } catch (err) {
