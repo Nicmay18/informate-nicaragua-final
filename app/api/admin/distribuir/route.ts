@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -105,7 +106,7 @@ async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore)
 
       // Fallback si la imagen falla por tipo o URL
       if (photoData.description?.includes('wrong type') || photoData.description?.includes('failed to get HTTP URL content')) {
-        console.log('[Telegram] sendPhoto falló, fallback a sendMessage');
+        logger.info('[Telegram] sendPhoto falló, fallback a sendMessage');
       } else {
         return { ok: false, error: photoData.description };
       }

@@ -1,3 +1,4 @@
+import { getISOWeek, getYear } from 'date-fns';
 import { logger } from '@/lib/logger';
 import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 
@@ -26,6 +27,47 @@ export interface TrafficPerformance {
 
 const TRAFFIC_DAILY = 'traffic_daily';
 const TRAFFIC_LOG = 'traffic_log';
+
+const CANONICAL_TRAFFIC_SOURCES = [
+  'google',
+  'facebook',
+  'telegram',
+  'whatsapp',
+  'direct',
+  'referral',
+  'other',
+  'unknown',
+] as const;
+
+export type TrafficSource = (typeof CANONICAL_TRAFFIC_SOURCES)[number];
+
+const SOURCE_PATTERNS: Record<string, TrafficSource> = {
+  google: 'google',
+  gsearch: 'google',
+  organic: 'google',
+  search: 'google',
+  googlediscover: 'google',
+  facebook: 'facebook',
+  fb: 'facebook',
+  telegram: 'telegram',
+  tme: 'telegram',
+  whatsapp: 'whatsapp',
+  wa: 'whatsapp',
+  direct: 'direct',
+  directo: 'direct',
+  none: 'direct',
+  referral: 'referral',
+  referrer: 'referral',
+};
+
+function normalizeTrafficSource(raw?: string | null): TrafficSource {
+  if (!raw || typeof raw !== 'string') return 'unknown';
+  const trimmed = raw.trim().toLowerCase();
+  if (CANONICAL_TRAFFIC_SOURCES.some(s => s === trimmed)) return trimmed as TrafficSource;
+  const key = trimmed.replace(/[^a-z0-9]/g, '');
+  if (key === '') return 'direct';
+  return SOURCE_PATTERNS[key] ?? 'other';
+}
 
 /**
  * Construye un resumen diario de tráfico a partir de traffic_daily o traffic_log.
@@ -93,7 +135,7 @@ export async function aggregateTrafficFromLog(
       };
 
       summary.views += 1;
-      const source = data.source || 'directo';
+      const source = normalizeTrafficSource(data.source);
       summary.sources[source] = (summary.sources[source] || 0) + 1;
 
       const device = detectDevice(data.userAgent);
@@ -138,6 +180,7 @@ export async function incrementTrafficDaily(
 ): Promise<void> {
   const date = new Date().toISOString().split('T')[0];
   const ref = db.collection(TRAFFIC_DAILY).doc(date).collection('articles').doc(slug);
+  const normalizedSource = normalizeTrafficSource(source);
 
   try {
     await ref.set(
@@ -145,7 +188,7 @@ export async function incrementTrafficDaily(
         slug,
         date,
         views: FieldValue.increment(1),
-        [`sources.${source}`]: FieldValue.increment(1),
+        [`sources.${normalizedSource}`]: FieldValue.increment(1),
         [`devices.${device}`]: FieldValue.increment(1),
         updatedAt: new Date().toISOString(),
       },
@@ -216,10 +259,10 @@ export async function generateTrafficPerformance(
     .slice(0, topN);
 
   const weeklyTrend: Record<string, number> = {};
-  // Agrupar por semana ISO aproximada
+  // Agrupar por semana ISO real
   for (const [date, total] of Object.entries(dailyGrowth)) {
-    const d = new Date(date);
-    const week = `${d.getFullYear()}-W${Math.ceil(d.getDate() / 7)}`;
+    const d = new Date(`${date}T00:00:00Z`);
+    const week = `${getYear(d)}-W${getISOWeek(d).toString().padStart(2, '0')}`;
     weeklyTrend[week] = (weeklyTrend[week] || 0) + total;
   }
 

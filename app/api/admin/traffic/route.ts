@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const db = getAdminDb();
     const today = new Date().toISOString().split('T')[0];
     const read = await getTrafficForDate(db, today, 10);
-    logger.error('[admin/traffic] getTrafficForDate', { today, articleCount: read.articles.length, views: read.views, source: read.source });
+    logger.info('[admin/traffic] getTrafficForDate', { today, articleCount: read.articles.length, views24h: read.views24h, source: read.source });
 
     // Buscar títulos reales para los artículos top
     const topSlugs = read.articles.map((a) => a.slug);
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
     });
 
     const stats = {
-      vistas24h: read.views,
+      vistas24h: read.views24h,
       fuentes: sources,
       topPaginas,
       ultimosEventos,
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
       migrationHealth: read.migrationHealth,
     };
 
-    logger.error('[admin/traffic] response', { vistas24h: stats.vistas24h, topN: topPaginas.length, eventN: ultimosEventos.length, source: stats.source });
+    logger.info('[admin/traffic] response', { vistas24h: stats.vistas24h, topN: topPaginas.length, eventN: ultimosEventos.length, source: stats.source });
 
     return NextResponse.json({
       ok: true,

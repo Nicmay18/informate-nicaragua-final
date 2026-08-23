@@ -68,14 +68,39 @@ async function runReport(
 
     return (response.rows || []) as unknown as GA4ReportRow[];
   } catch (err) {
-    logger.warn(`[ga4-collector] Error running report dimensions=${dimensions.join(',')}:`, err);
-    return [];
+    logger.error(`[ga4-collector] Error running report dimensions=${dimensions.join(',')}:`, err);
+    throw err;
   }
 }
 
 /**
  * Recolecta el snapshot completo de GA4 para un rango de fechas.
  */
+function emptySnapshot(
+  propertyId: string,
+  startDate: string,
+  endDate: string,
+  status: 'NO_DATA' | 'ACCESS_BLOCKED',
+  errorMessage?: string,
+): GA4Snapshot {
+  return {
+    date: formatDate(new Date()),
+    collectedAt: new Date().toISOString(),
+    propertyId,
+    dateRange: { start: startDate, end: endDate },
+    totalUsers: 0,
+    totalSessions: 0,
+    totalPageviews: 0,
+    averageEngagementTimeSec: 0,
+    engagementRate: 0,
+    pages: [],
+    sources: [],
+    devices: [],
+    status,
+    errorMessage,
+  };
+}
+
 export async function collectGA4(
   propertyId: string,
   daysToCollect = 28,
@@ -85,89 +110,101 @@ export async function collectGA4(
     return null;
   }
 
-  const client = getAnalyticsClient();
   const endDate = formatDate(new Date());
   const startDate = formatDate(new Date(Date.now() - daysToCollect * 24 * 60 * 60 * 1000));
 
   logger.info(`[ga4-collector] Collecting GA4 data for property ${propertyId} from ${startDate} to ${endDate}`);
 
-  // 1. Totales (sin dimensiones)
-  const totalRows = await runReport(
-    client, propertyId, startDate, endDate,
-    [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTimePerUser', 'engagementRate'],
-    1,
-  );
+  try {
+    const client = getAnalyticsClient();
 
-  const totals = totalRows[0]?.metricValues || [];
-  const totalUsers = parseInt(totals[0]?.value || '0', 10);
-  const totalSessions = parseInt(totals[1]?.value || '0', 10);
-  const totalPageviews = parseInt(totals[2]?.value || '0', 10);
-  const averageEngagementTimeSec = parseFloat(totals[3]?.value || '0');
-  const engagementRate = parseFloat(totals[4]?.value || '0');
+    // 1. Totales (sin dimensiones)
+    const totalRows = await runReport(
+      client, propertyId, startDate, endDate,
+      [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTimePerUser', 'engagementRate'],
+      1,
+    );
 
-  // 2. Páginas (top 100)
-  const pageRows = await runReport(
-    client, propertyId, startDate, endDate,
-    ['pagePath'],
-    ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTimePerUser', 'engagementRate'],
-    100,
-  );
+    const totals = totalRows[0]?.metricValues || [];
+    const totalUsers = parseInt(totals[0]?.value || '0', 10);
+    const totalSessions = parseInt(totals[1]?.value || '0', 10);
+    const totalPageviews = parseInt(totals[2]?.value || '0', 10);
+    const averageEngagementTimeSec = parseFloat(totals[3]?.value || '0');
+    const engagementRate = parseFloat(totals[4]?.value || '0');
 
-  const pages: GA4PageRow[] = pageRows.map((r) => ({
-    pagePath: r.dimensionValues[0]?.value || '',
-    screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
-    users: parseInt(r.metricValues[1]?.value || '0', 10),
-    sessions: parseInt(r.metricValues[2]?.value || '0', 10),
-    averageEngagementTimeSec: parseFloat(r.metricValues[3]?.value || '0'),
-    engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
-  }));
+    // 2. Páginas (top 100)
+    const pageRows = await runReport(
+      client, propertyId, startDate, endDate,
+      ['pagePath'],
+      ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTimePerUser', 'engagementRate'],
+      100,
+    );
 
-  // 3. Fuentes de tráfico
-  const sourceRows = await runReport(
-    client, propertyId, startDate, endDate,
-    ['sessionSource'],
-    ['totalUsers', 'sessions', 'screenPageViews', 'engagementRate'],
-    50,
-  );
+    const pages: GA4PageRow[] = pageRows.map((r) => ({
+      pagePath: r.dimensionValues[0]?.value || '',
+      screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
+      users: parseInt(r.metricValues[1]?.value || '0', 10),
+      sessions: parseInt(r.metricValues[2]?.value || '0', 10),
+      averageEngagementTimeSec: parseFloat(r.metricValues[3]?.value || '0'),
+      engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
+    }));
 
-  const sources: GA4SourceRow[] = sourceRows.map((r) => ({
-    source: r.dimensionValues[0]?.value || 'directo',
-    users: parseInt(r.metricValues[0]?.value || '0', 10),
-    sessions: parseInt(r.metricValues[1]?.value || '0', 10),
-    screenPageviews: parseInt(r.metricValues[2]?.value || '0', 10),
-    engagementRate: parseFloat(r.metricValues[3]?.value || '0'),
-  }));
+    // 3. Fuentes de tráfico
+    const sourceRows = await runReport(
+      client, propertyId, startDate, endDate,
+      ['sessionSource'],
+      ['totalUsers', 'sessions', 'screenPageViews', 'engagementRate'],
+      50,
+    );
 
-  // 4. Dispositivos
-  const deviceRows = await runReport(
-    client, propertyId, startDate, endDate,
-    ['deviceCategory'],
-    ['totalUsers', 'sessions'],
-    10,
-  );
+    const sources: GA4SourceRow[] = sourceRows.map((r) => ({
+      source: r.dimensionValues[0]?.value || 'unknown',
+      users: parseInt(r.metricValues[0]?.value || '0', 10),
+      sessions: parseInt(r.metricValues[1]?.value || '0', 10),
+      screenPageviews: parseInt(r.metricValues[2]?.value || '0', 10),
+      engagementRate: parseFloat(r.metricValues[3]?.value || '0'),
+    }));
 
-  const devices: GA4DeviceRow[] = deviceRows.map((r) => ({
-    device: (r.dimensionValues[0]?.value || 'mobile') as 'mobile' | 'desktop' | 'tablet',
-    users: parseInt(r.metricValues[0]?.value || '0', 10),
-    sessions: parseInt(r.metricValues[1]?.value || '0', 10),
-  }));
+    // 4. Dispositivos
+    const deviceRows = await runReport(
+      client, propertyId, startDate, endDate,
+      ['deviceCategory'],
+      ['totalUsers', 'sessions'],
+      10,
+    );
 
-  const snapshot: GA4Snapshot = {
-    date: formatDate(new Date()),
-    collectedAt: new Date().toISOString(),
-    propertyId,
-    dateRange: { start: startDate, end: endDate },
-    totalUsers,
-    totalSessions,
-    totalPageviews,
-    averageEngagementTimeSec,
-    engagementRate,
-    pages,
-    sources,
-    devices,
-  };
+    const devices: GA4DeviceRow[] = deviceRows.map((r) => ({
+      device: (r.dimensionValues[0]?.value || 'unknown') as 'mobile' | 'desktop' | 'tablet' | 'unknown',
+      users: parseInt(r.metricValues[0]?.value || '0', 10),
+      sessions: parseInt(r.metricValues[1]?.value || '0', 10),
+    }));
 
-  logger.info(`[ga4-collector] Collected: ${totalUsers} users, ${totalSessions} sessions, ${pages.length} pages`);
+    const snapshot: GA4Snapshot = {
+      date: formatDate(new Date()),
+      collectedAt: new Date().toISOString(),
+      propertyId,
+      dateRange: { start: startDate, end: endDate },
+      totalUsers,
+      totalSessions,
+      totalPageviews,
+      averageEngagementTimeSec,
+      engagementRate,
+      pages,
+      sources,
+      devices,
+    };
 
-  return snapshot;
+    snapshot.status = pages.length > 0 || totalUsers > 0 ? 'REAL' : 'CONNECTED_NO_DATA';
+
+    logger.info(`[ga4-collector] Collected: ${totalUsers} users, ${totalSessions} sessions, ${pages.length} pages`);
+
+    return snapshot;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    logger.error('[ga4-collector] Collection failed:', message);
+    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(message)
+      ? 'ACCESS_BLOCKED'
+      : 'NO_DATA';
+    return emptySnapshot(propertyId, startDate, endDate, status, message);
+  }
 }

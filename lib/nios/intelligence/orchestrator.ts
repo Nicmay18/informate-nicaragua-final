@@ -150,8 +150,8 @@ export async function runNIOSPipeline(
     );
     collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
     gsc = result;
-    if (!gsc) {
-      errors.push('GSC: No se pudieron obtener datos de Google Search Console.');
+    if (!gsc || gsc.status !== 'REAL') {
+      errors.push(gsc?.errorMessage ?? 'GSC: No se pudieron obtener datos de Google Search Console.');
     }
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
@@ -170,8 +170,8 @@ export async function runNIOSPipeline(
       );
       collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
       ga4 = result;
-      if (!ga4) {
-        errors.push('GA4: No se pudieron obtener datos de Google Analytics 4.');
+      if (!ga4 || ga4.status !== 'REAL') {
+        errors.push(ga4?.errorMessage ?? 'GA4: No se pudieron obtener datos de Google Analytics 4.');
       }
     } else {
       errors.push('GA4: No hay property ID configurado (NIOS_GA4_PROPERTY_ID).');

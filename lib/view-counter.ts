@@ -73,7 +73,7 @@ export async function flush(): Promise<void> {
 
     logger.debug(`[view-counter] Flush OK: ${snapshot.size} docs, total increments`);
   } catch (error) {
-    logger.error('[view-counter] Error en batch flush:', error);
+    logger.warn('[view-counter] flush falló:', error);
     // Reintentar en el próximo ciclo (los datos ya se perdieron del buffer,
     // pero es preferible a sobrecargar Firestore con reintentos)
   } finally {

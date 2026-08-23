@@ -251,6 +251,17 @@ export async function POST(request: NextRequest) {
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
 
+    // CEO Agent: decisión editorial automática no bloqueante
+    try {
+      const { runCEODecisionForArticle } = await import('@/lib/ceo-agent-workflow');
+      const ceo = await runCEODecisionForArticle(slug);
+      if (!ceo.stored) {
+        console.warn('[admin/news POST] CEO decision not stored:', ceo.error);
+      }
+    } catch (e) {
+      console.warn('[admin/news POST] CEO analysis error (non-blocking):', e);
+    }
+
     // Revalidar paginas afectadas
     revalidatePath('/');
     revalidatePath('/noticias');

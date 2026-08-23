@@ -150,8 +150,8 @@ export function generateCEOMorningBrief(params: {
     generatedAt: new Date().toISOString(),
     headline: `Brief Ejecutivo — ${today}: ${users} Lectores | ${imps} Impresiones Google`,
     dataIntegrity: {
-      gscStatus: gsc.totalImpressions > 0 ? 'CONNECTED_WITH_DATA' : 'CONNECTED_NO_DATA',
-      ga4Status: ga4.totalUsers > 0 ? 'CONNECTED_WITH_DATA' : 'CONNECTED_NO_DATA',
+      gscStatus: gsc?.status ?? 'NO_DATA',
+      ga4Status: ga4?.status ?? 'NO_DATA',
       articlesTracked: noticias.length,
     },
     audiencePulse: {

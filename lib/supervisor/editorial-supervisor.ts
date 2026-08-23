@@ -138,7 +138,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   // PUBLICATION GATE: separado de la recomendación editorial.
   // Si MENI aprobó (score >= MIN_APPROVED_SCORE, sin bloqueos) y no hay bloqueantes del Supervisor,
   // el artículo puede publicarse aunque la recomendación editorial sea MEJORAR.
-  const meniCleared = aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 90;
+  const meniCleared = aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 90 && recomendacionMeni === 'publicar';
   const isPreDraft = !hasContent && !hasResearch && !hasStory && !meniCleared;
 
   if (titleEval.needsInvestigation) {
@@ -383,7 +383,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       verdict = 'PUBLICAR_CON_CAMBIOS';
       resultingState = 'EDITORIAL_REVIEW';
     }
-  } else if (meniCleared) {
+  } else if (meniCleared && hasExceptionalValue) {
     // GATE DE PUBLICACIÓN: MENI aprobó (score >= 90, sin bloqueos) y el Supervisor
     // no encontró bloqueantes críticos/importantes. La recomendación editorial
     // (MEJORAR/REVISAR) se mantiene como consejo, pero no bloquea.

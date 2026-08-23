@@ -1,19 +1,21 @@
 import { adminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import { aggregateTrafficFromLog } from '@/lib/analytics/traffic-aggregator';
 
 export interface GrowthMetrics {
   totalNews: number;
   totalViews: number;
   avgViews: number;
-  mostRead: { slug: string; titulo: string; vistas: number } | null;
-  topArticles: { slug: string; titulo: string; vistas: number }[];
+  missingViews: number;
+  mostRead: { slug: string; titulo: string; vistas?: number } | null;
+  topArticles: { slug: string; titulo: string; vistas?: number }[];
   trafficSources: Record<string, number>;
   recentVisits: number;
   errors: string[];
 }
 
 async function safeGetNewsData(): Promise<{
-  docs: { slug: string; titulo: string; vistas: number }[];
+  docs: { slug: string; titulo: string; vistas?: number }[];
   error?: string;
 }> {
   try {
@@ -25,11 +27,14 @@ async function safeGetNewsData(): Promise<{
 
     return {
       docs: snap.docs
-        .map((d) => ({
-          slug: (d.data().slug as string) || '',
-          titulo: (d.data().titulo as string) || 'Sin título',
-          vistas: typeof d.data().vistas === 'number' ? d.data().vistas : 0,
-        }))
+        .map((d) => {
+          const data = d.data();
+          return {
+            slug: (data.slug as string) || '',
+            titulo: (data.titulo as string) || 'Sin título',
+            vistas: typeof data.vistas === 'number' ? data.vistas : undefined,
+          };
+        })
         .filter((n) => n.slug && n.titulo),
     };
   } catch (err) {
@@ -45,6 +50,7 @@ async function safeGetTrafficMetrics(): Promise<{
   error?: string;
 }> {
   const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const today = new Date().toISOString().split('T')[0];
   let recentVisits = 0;
   let sources: Record<string, number> = {};
   let error: string | undefined;
@@ -63,20 +69,17 @@ async function safeGetTrafficMetrics(): Promise<{
   }
 
   try {
-    const sourceSnap = await adminDb
-      .collection('traffic_log')
-      .where('timestamp', '>', dayAgo)
-      .select('source')
-      .limit(500)
-      .get();
-
-    sourceSnap.docs.forEach((d) => {
-      const s = typeof d.data().source === 'string' ? d.data().source : 'directo';
-      sources[s] = (sources[s] || 0) + 1;
-    });
+    const fallback = await aggregateTrafficFromLog(adminDb, today);
+    for (const s of Object.values(fallback)) {
+      for (const [k, v] of Object.entries(s.sources || {})) {
+        if (typeof v === 'number') {
+          sources[k] = (sources[k] || 0) + v;
+        }
+      }
+    }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    logger.warn('[growth] No se pudieron leer fuentes de tráfico:', msg);
+    logger.warn('[growth] No se pudieron agregar fuentes de tráfico:', msg);
     if (!error) error = msg;
     sources = {};
   }
@@ -97,10 +100,12 @@ export async function getGrowthMetrics(): Promise<GrowthMetrics> {
 
   const docs = newsData.docs;
   const totalNews = docs.length;
-  const totalViews = docs.reduce((acc, n) => acc + n.vistas, 0);
-  const avgViews = totalNews > 0 ? Math.round(totalViews / totalNews) : 0;
+  const withViews = docs.filter((n) => typeof n.vistas === 'number');
+  const totalViews = withViews.reduce((acc, n) => acc + (n.vistas as number), 0);
+  const missingViews = totalNews - withViews.length;
+  const avgViews = withViews.length > 0 ? Math.round(totalViews / withViews.length) : 0;
 
-  const sortedByViews = [...docs].sort((a, b) => b.vistas - a.vistas);
+  const sortedByViews = [...withViews].sort((a, b) => (b.vistas as number) - (a.vistas as number));
   const mostRead = sortedByViews[0] || null;
   const topArticles = sortedByViews.slice(0, 10);
 
@@ -108,6 +113,7 @@ export async function getGrowthMetrics(): Promise<GrowthMetrics> {
     totalNews,
     totalViews,
     avgViews,
+    missingViews,
     mostRead,
     topArticles,
     trafficSources: traffic.sources,

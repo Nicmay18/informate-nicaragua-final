@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const visitas24h = trafficRead.views;
+    const visitas24h = trafficRead.views24h;
 
     // ─── 4. DISTRIBUCIONES RECIENTES ───
     const distSnap = await db

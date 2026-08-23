@@ -7,6 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -30,7 +31,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
     });
     links.push(...related);
   } catch (e) {
-    console.warn('[guardar-directo] getRelatedLinks error:', e);
+    logger.warn('[guardar-directo] getRelatedLinks error:', e);
   }
   return links;
 }
@@ -241,7 +242,7 @@ export async function POST(request: NextRequest) {
         );
         await persistWatchResult(db, articleDocId!, watchResult);
       } catch (watchError) {
-        console.warn('[guardar-directo] Watch start failed (non-blocking):', watchError);
+        logger.warn('[guardar-directo] Watch start failed (non-blocking):', watchError);
       }
     }
 
@@ -279,7 +280,7 @@ export async function POST(request: NextRequest) {
           author: body.autor || '',
         });
       } catch (kbError) {
-        console.warn('[guardar-directo] Knowledge Base ingestion failed (non-blocking):', kbError);
+        logger.warn('[guardar-directo] Knowledge Base ingestion failed (non-blocking):', kbError);
       }
 
       // Editor Jefe — Fase 1: registrar correcciones del editor
@@ -295,9 +296,9 @@ export async function POST(request: NextRequest) {
               categoria: categoria || 'General',
             });
           }
-          console.log('[guardar-directo] Editor Jefe: correcciones registradas:', body.correcciones.length);
+          logger.info('[guardar-directo] Editor Jefe: correcciones registradas:', body.correcciones.length);
         } catch (corrError) {
-          console.warn('[guardar-directo] Correction tracking failed (non-blocking):', corrError);
+          logger.warn('[guardar-directo] Correction tracking failed (non-blocking):', corrError);
         }
       }
 
@@ -319,7 +320,7 @@ export async function POST(request: NextRequest) {
             realPortada: null,
           });
         } catch (predError) {
-          console.warn('[guardar-directo] Prediction tracking failed (non-blocking):', predError);
+          logger.warn('[guardar-directo] Prediction tracking failed (non-blocking):', predError);
         }
       }
 
@@ -332,7 +333,7 @@ export async function POST(request: NextRequest) {
           categoria: categoria || 'General',
         });
       } catch (scoreError) {
-        console.warn('[guardar-directo] Daily score tracking failed (non-blocking):', scoreError);
+        logger.warn('[guardar-directo] Daily score tracking failed (non-blocking):', scoreError);
       }
 
       // Sistema de Seguimiento — detectar/vincular casos abiertos
@@ -348,10 +349,10 @@ export async function POST(request: NextRequest) {
           departamento || '',
         );
         if (result.action !== 'none') {
-          console.log('[guardar-directo] Seguimiento:', result.action, result.caseId || '', result.reason);
+          logger.info('[guardar-directo] Seguimiento:', result.action, result.caseId || '', result.reason);
         }
       } catch (segError) {
-        console.warn('[guardar-directo] Seguimiento detection failed (non-blocking):', segError);
+        logger.warn('[guardar-directo] Seguimiento detection failed (non-blocking):', segError);
       }
 
       // Publication Pipeline — distribución automática sin intervención
@@ -372,9 +373,9 @@ export async function POST(request: NextRequest) {
           departamento: departamento || undefined,
           veredictoEjecutivo: meni.editorialDecision?.veredictoEjecutivo as any,
         });
-        console.log('[guardar-directo] Pipeline completado en', pipelineResult.duracionMs, 'ms');
+        logger.info('[guardar-directo] Pipeline completado en', pipelineResult.duracionMs, 'ms');
       } catch (pipeError) {
-        console.warn('[guardar-directo] Publication pipeline failed (non-blocking):', pipeError);
+        logger.warn('[guardar-directo] Publication pipeline failed (non-blocking):', pipeError);
       }
     }
 
@@ -400,7 +401,7 @@ export async function POST(request: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('[guardar-directo] Error:', error);
+    logger.error('[guardar-directo] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

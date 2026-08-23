@@ -10,7 +10,14 @@ import {
 
 export interface TrafficReadResult {
   source: 'traffic_daily' | 'traffic_log_fallback';
-  views: number;
+  /** Vistas del día o últimas 24h del calendario consultado (sin mezclar períodos). */
+  views24h: number;
+  /** Vistas acumuladas de los últimos 7 días (solo en lecturas de performance). */
+  views7d?: number;
+  /** Vistas acumuladas de los últimos 30 días (solo en lecturas de performance). */
+  views30d?: number;
+  /** Vistas históricas de todo el tiempo; NO_DATA si no está disponible. */
+  viewsHistorical?: 'NO_DATA' | number;
   articles: TrafficDailySummary[];
   performance: TrafficPerformance | null;
   fallbackReads: number;
@@ -57,15 +64,15 @@ async function fetchTrafficForDate(
   }
 
   const hasDaily = Object.keys(dailySummary).length > 0;
-  logger.error('[traffic-reader] fetchTrafficForDate', { date, hasDaily, dailyCount: Object.keys(dailySummary).length });
+  logger.info('[traffic-reader] fetchTrafficForDate', { date, hasDaily, dailyCount: Object.keys(dailySummary).length });
 
   if (hasDaily) {
     const articles = Object.values(dailySummary).sort((a, b) => b.views - a.views);
     const views = articles.reduce((sum, a) => sum + a.views, 0);
-    logger.error('[traffic-reader] returning traffic_daily', { date, views, articleCount: articles.length });
+    logger.info('[traffic-reader] returning traffic_daily', { date, views, articleCount: articles.length });
     return {
       source: 'traffic_daily',
-      views,
+      views24h: views,
       articles,
       performance: null,
       fallbackReads,
@@ -77,11 +84,11 @@ async function fetchTrafficForDate(
   const fallbackSummary = await aggregateTrafficFromLog(db, date, 5000);
   const articles = Object.values(fallbackSummary).sort((a, b) => b.views - a.views);
   const views = articles.reduce((sum, a) => sum + a.views, 0);
-  logger.error('[traffic-reader] fallback traffic_log', { date, views, articleCount: articles.length });
+  logger.info('[traffic-reader] fallback traffic_log', { date, views, articleCount: articles.length });
 
   return {
     source: 'traffic_log_fallback',
-    views,
+    views24h: views,
     articles,
     performance: null,
     fallbackReads: 1,
@@ -117,14 +124,14 @@ const getCachedTrafficPerformance = (db: Firestore, days = 7, topN = 50) =>
 
 export async function getTrafficPerformance(
   db: Firestore,
-  days = 7,
+  _days = 7,
   topN = 50,
 ): Promise<TrafficReadResult> {
-  const cached = getCachedTrafficPerformance(db, days, topN);
-  const performance = await cached();
-
   const today = new Date().toISOString().split('T')[0];
   const todayRead = await getTrafficForDate(db, today, topN);
+
+  // Leer 30 días para poder entregar views7d y views30d con una sola pasada.
+  const performance = await getCachedTrafficPerformance(db, 30, topN)();
 
   const source: 'traffic_daily' | 'traffic_log_fallback' =
     performance.topArticles.length > 0 ? 'traffic_daily' : 'traffic_log_fallback';
@@ -132,9 +139,19 @@ export async function getTrafficPerformance(
   const fallbackReads = source === 'traffic_daily' ? 0 : 1;
   const migrationHealth = todayRead.source === 'traffic_daily' ? 100 : 50;
 
+  // views24h proviene del día calendario actual; views7d y views30d desde dailyGrowth.
+  const sortedDates = Object.keys(performance.dailyGrowth).sort((a, b) =>
+    new Date(b).getTime() - new Date(a).getTime()
+  );
+  const views7d = sortedDates.slice(0, 7).reduce((sum, d) => sum + (performance.dailyGrowth[d] || 0), 0);
+  const views30d = sortedDates.slice(0, 30).reduce((sum, d) => sum + (performance.dailyGrowth[d] || 0), 0);
+
   return {
     source,
-    views: performance.topArticles.reduce((sum, a) => sum + a.views, 0) || todayRead.views,
+    views24h: todayRead.views24h,
+    views7d,
+    views30d,
+    viewsHistorical: 'NO_DATA',
     articles: todayRead.articles,
     performance,
     fallbackReads,

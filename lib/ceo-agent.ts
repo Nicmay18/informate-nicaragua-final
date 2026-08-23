@@ -87,6 +87,9 @@ export interface RelatedArticle {
   titulo: string;
   categoria: string;
   reason: string;
+  evidence?: string[];
+  confidence?: 'LOW' | 'MEDIUM' | 'HIGH';
+  recommendedAction?: string;
 }
 
 export interface CEOExistingArticle {
@@ -201,14 +204,6 @@ function tokenSet(text: string): Set<string> {
   return new Set(tokenizeTitle(text));
 }
 
-function wordsOverlap(a: string, b: string): number {
-  const setA = new Set(tokenizeTitle(a));
-  const setB = new Set(tokenizeTitle(b));
-  let overlap = 0;
-  for (const w of setA) if (setB.has(w)) overlap++;
-  return overlap;
-}
-
 function formatNumber(n: number | undefined | null): string {
   if (typeof n !== 'number' || Number.isNaN(n)) return 'NO_DATA';
   return n.toLocaleString('es-NI');
@@ -238,7 +233,31 @@ function daysBetween(a?: string, b?: string): number {
   return Math.abs(ta - tb) / (1000 * 60 * 60 * 24);
 }
 
-function scoreExistingSimilarity(article: Noticia, candidate: Noticia): number {
+interface SimilaritySignals {
+  titleJaccard: number;
+  summaryJaccard: number;
+  keywordScore: number;
+  tagScore: number;
+  sameCategory: number;
+  dateGapDays: number;
+  dateRecency: number;
+}
+
+interface SimilarityResult {
+  score: number;
+  signals: SimilaritySignals;
+}
+
+function keywordScore(a?: string, b?: string): number {
+  if (!a || !b) return 0;
+  const setA = new Set(normalize(a).split(/[,;\s]+/).filter(Boolean));
+  const setB = new Set(normalize(b).split(/[,;\s]+/).filter(Boolean));
+  if (setA.size === 0 || setB.size === 0) return 0;
+  const shared = [...setA].filter(x => setB.has(x)).length;
+  return shared / Math.max(setA.size, setB.size);
+}
+
+function scoreAndExplain(article: Noticia, candidate: Noticia): SimilarityResult {
   const titleA = tokenSet(article.titulo);
   const titleB = tokenSet(candidate.titulo);
   const summaryA = tokenSet(`${article.resumen || ''} ${article.contenido || ''}`);
@@ -246,19 +265,31 @@ function scoreExistingSimilarity(article: Noticia, candidate: Noticia): number {
 
   const titleJaccard = jaccard(titleA, titleB);
   const summaryJaccard = jaccard(summaryA, summaryB);
-  const tagSimilarity = tagScore(article.tags, candidate.tags);
+  const kws = keywordScore(article.keywords, candidate.keywords);
+  const tags = tagScore(article.tags, candidate.tags);
   const sameCategory = normalize(article.categoria) === normalize(candidate.categoria) ? 1 : 0;
   const dateGap = daysBetween(article.fecha, candidate.fecha);
-  const recent = article.fecha && candidate.fecha ? 1 - Math.min(dateGap / 30, 1) : 0;
+  const dateRecency = article.fecha && candidate.fecha ? 1 - Math.min(dateGap / 30, 1) : 0;
+  const categoryPenalty = sameCategory ? 0 : 0.35;
 
-  return Math.min(
-    1,
-    titleJaccard * 0.45 +
-      summaryJaccard * 0.25 +
-      tagSimilarity * 0.15 +
-      sameCategory * 0.10 +
-      recent * 0.05,
+  const score = Math.max(
+    0,
+    Math.min(
+      1,
+      titleJaccard * 0.35 +
+        summaryJaccard * 0.25 +
+        kws * 0.15 +
+        tags * 0.10 +
+        sameCategory * 0.10 +
+        dateRecency * 0.05 -
+        categoryPenalty,
+    ),
   );
+
+  return {
+    score,
+    signals: { titleJaccard, summaryJaccard, keywordScore: kws, tagScore: tags, sameCategory, dateGapDays: dateGap, dateRecency },
+  };
 }
 
 // ─── RELACIONADOS ────────────────────────────────────────────────
@@ -268,24 +299,35 @@ export function findRelatedArticles(
   pool: Noticia[] = [],
   max = 3,
 ): RelatedArticle[] {
-  const sameCategory = pool
-    .filter(n => n.slug !== article.slug && normalize(n.categoria) === normalize(article.categoria));
+  const scored = pool
+    .filter(n => n.slug !== article.slug)
+    .map(n => ({ noticia: n, ...scoreAndExplain(article, n) }))
+    .filter(({ score }) => score > 0.15)
+    .sort((a, b) => b.score - a.score);
 
-  const scored = sameCategory.map(n => {
-    const overlap = wordsOverlap(article.titulo, n.titulo);
-    const tagOverlap = (article.tags || []).filter(t => (n.tags || []).includes(t)).length;
-    const score = overlap * 2 + tagOverlap * 3;
-    return { noticia: n, score };
+  return scored.slice(0, max).map(({ noticia: n, score, signals }) => {
+    const reasons: string[] = [];
+    if (signals.sameCategory) reasons.push(`misma categoría (${n.categoria})`);
+    if (signals.titleJaccard > 0) reasons.push(`coincidencia de título ${(signals.titleJaccard * 100).toFixed(0)}%`);
+    if (signals.summaryJaccard > 0) reasons.push(`coincidencia de contenido ${(signals.summaryJaccard * 100).toFixed(0)}%`);
+    if (signals.keywordScore > 0) reasons.push(`palabras clave compartidas ${(signals.keywordScore * 100).toFixed(0)}%`);
+    if (signals.tagScore > 0) reasons.push(`${(signals.tagScore * 100).toFixed(0)}% de tags compartidos`);
+    if (signals.dateRecency > 0) reasons.push(`publicada a ${Math.round(signals.dateGapDays)} días`);
+
+    return {
+      slug: n.slug,
+      titulo: n.titulo,
+      categoria: n.categoria,
+      reason: reasons.length > 0 ? reasons.join('; ') : 'Coincidencia temática débil.',
+      evidence: [
+        `similitud=${(score * 100).toFixed(0)}%`,
+        `categoría=${n.categoria}`,
+        ...reasons,
+      ],
+      confidence: score > 0.4 ? 'MEDIUM' : 'LOW',
+      recommendedAction: score > 0.55 ? `Considerar enlazar o fusionar con /noticias/${n.slug}` : `Enlazar contextualmente a /noticias/${n.slug} si aporta valor.`,
+    };
   });
-
-  scored.sort((a, b) => b.score - a.score);
-
-  return scored.slice(0, max).map(({ noticia: n }) => ({
-    slug: n.slug,
-    titulo: n.titulo,
-    categoria: n.categoria,
-    reason: 'Misma categoría y temas relacionados.',
-  }));
 }
 
 // ─── DUPLICADOS ──────────────────────────────────────────────────
@@ -296,23 +338,35 @@ export function findExistingArticleOpportunity(
 ): CEOExistingArticle | null {
   const scored = pool
     .filter(n => n.slug !== article.slug)
-    .map(n => ({ noticia: n, score: scoreExistingSimilarity(article, n) }))
+    .map(n => ({ noticia: n, ...scoreAndExplain(article, n) }))
     .filter(({ score }) => score >= 0.55)
     .sort((a, b) => b.score - a.score);
 
   if (scored.length === 0) return null;
 
-  const { noticia, score } = scored[0];
+  const { noticia, score, signals } = scored[0];
   const evidence: string[] = [
     `Coincidencia temática: ${(score * 100).toFixed(0)}%.`,
-    `Artículo existente: “${noticia.titulo}”.`,
-    `Misma categoría: ${noticia.categoria}.`,
+    `Artículo existente: “${noticia.titulo}” (${noticia.categoria}).`,
+    `Misma categoría: ${signals.sameCategory ? 'sí' : 'no'}.`,
+    `Coincidencia título: ${(signals.titleJaccard * 100).toFixed(0)}%.`,
+    `Coincidencia contenido: ${(signals.summaryJaccard * 100).toFixed(0)}%.`,
+    `Coincidencia keywords: ${(signals.keywordScore * 100).toFixed(0)}%.`,
+    `Coincidencia tags: ${(signals.tagScore * 100).toFixed(0)}%.`,
+    `Diferencia de fechas: ${Math.round(signals.dateGapDays)} días.`,
   ];
+
+  const mainReason =
+    signals.titleJaccard >= 0.6
+      ? 'El título es casi idéntico; es preferible actualizar la URL existente.'
+      : signals.summaryJaccard >= 0.4
+        ? 'El contenido aborda el mismo tema en profundidad; actualizar evita canibalización.'
+        : 'Existe una noticia con intención temática muy cercana. No conviene crear otra URL.';
 
   return {
     slug: noticia.slug,
     titulo: noticia.titulo,
-    reason: 'Existe una noticia con intención temática muy cercana. No conviene crear otra URL.',
+    reason: mainReason,
     evidence,
     whatToDo: `Actualizar /noticias/${noticia.slug} con la información nueva y redirigir o fusionar contenido.`,
     similarity: score,
@@ -321,27 +375,37 @@ export function findExistingArticleOpportunity(
 
 // ─── TRÁFICO ─────────────────────────────────────────────────────
 
-function readTraffic(article: Noticia, traffic?: TrafficEvidence): { signal: CEODataSignal; interest: ReaderInterest } {
-  const totalViews = article.vistas ?? 0;
-  const recentViews = traffic?.viewsRecent ?? 0;
-  const effective = traffic ? (recentViews || totalViews) : totalViews;
+function readTraffic(
+  article: Noticia,
+  traffic?: TrafficEvidence,
+): { signal: CEODataSignal; interest: ReaderInterest; effective: number | undefined } {
+  const totalViews = article.vistas;
+  const recentViews = traffic?.viewsRecent;
+  const effective: number | undefined = traffic ? (recentViews ?? totalViews) : totalViews;
   const source = traffic?.source ?? 'noticias.vistas';
-  const status = traffic ? traffic.status : totalViews > 0 ? 'REAL' : 'NO_DATA';
+  const status = traffic ? traffic.status : totalViews !== undefined ? 'REAL' : 'NO_DATA';
 
   let interest: ReaderInterest = 'UNKNOWN';
-  if (effective >= THRESHOLD_HIGH_VIEWS) interest = 'HIGH';
-  else if (effective >= THRESHOLD_MEDIUM_VIEWS) interest = 'MEDIUM';
-  else if (effective >= THRESHOLD_LOW_VIEWS) interest = 'LOW';
-  else if (effective > 0) interest = 'LOW';
+  if (effective === undefined) {
+    interest = 'UNKNOWN';
+  } else if (effective >= THRESHOLD_HIGH_VIEWS) {
+    interest = 'HIGH';
+  } else if (effective >= THRESHOLD_MEDIUM_VIEWS) {
+    interest = 'MEDIUM';
+  } else if (effective >= THRESHOLD_LOW_VIEWS) {
+    interest = 'LOW';
+  } else if (effective >= 0) {
+    interest = 'LOW';
+  }
 
   const signal: CEODataSignal = {
     source,
     field: 'views',
-    value: { total: totalViews, recent: recentViews },
+    value: { total: totalViews ?? null, recent: recentViews ?? null },
     status,
   };
 
-  return { signal, interest };
+  return { signal, interest, effective };
 }
 
 // ─── GOOGLE / GSC ────────────────────────────────────────────────
@@ -456,12 +520,12 @@ function pickUrgency(action: CEOAction, interest: ReaderInterest, risk: CEORisk)
   return 'LOW';
 }
 
-function buildMeniSignal(article: Noticia): { signal: CEODataSignal; approved: boolean; score: number } {
+function buildMeniSignal(article: Noticia): { signal: CEODataSignal; approved: boolean; score: number | undefined } {
   const approved = article.aprobadoMeni === true;
-  const score = article.scoreMeni ?? 0;
-  const status = typeof article.scoreMeni === 'number' ? 'REAL' : 'NO_DATA';
+  const score = article.scoreMeni ?? undefined;
+  const status = typeof score === 'number' ? 'REAL' : 'NO_DATA';
   return {
-    signal: { source: 'meni', field: 'score', value: { score, approved }, status },
+    signal: { source: 'meni', field: 'score', value: { score: score ?? null, approved }, status },
     approved,
     score,
   };
@@ -476,7 +540,7 @@ export function analyzeForPublication(article: Noticia, context: CEOAnalyzeConte
   dataStatus.push({ source: 'meni', field: 'aprobadoMeni', status: meni.approved ? 'REAL' : 'NO_DATA', value: meni.signal.value });
 
   // 2. Tráfico
-  const { signal: trafficSignal, interest } = readTraffic(article, context.traffic);
+  const { signal: trafficSignal, interest, effective: trafficEffective } = readTraffic(article, context.traffic);
   dataStatus.push({ source: 'traffic', field: 'views', status: trafficSignal.status, value: trafficSignal.value });
 
   // 3. GSC
@@ -520,8 +584,8 @@ export function analyzeForPublication(article: Noticia, context: CEOAnalyzeConte
 
   if (isService) evidence.push('El contenido trata un tema de servicio ciudadano (trámites, prestaciones, derechos).');
   if (isEvent) evidence.push('El contenido trata un suceso o evento de actualidad.');
-  if (interest === 'HIGH') evidence.push(`Interés del lector: alto (${formatNumber(article.vistas ?? (context.traffic?.viewsRecent ?? 0))} vistas efectivas).`);
-  if (interest === 'MEDIUM') evidence.push(`Interés del lector: moderado (${formatNumber(article.vistas ?? (context.traffic?.viewsRecent ?? 0))} vistas efectivas).`);
+  if (interest === 'HIGH') evidence.push(`Interés del lector: alto (${formatNumber(trafficEffective)} vistas efectivas).`);
+  if (interest === 'MEDIUM') evidence.push(`Interés del lector: moderado (${formatNumber(trafficEffective)} vistas efectivas).`);
 
   // 7. Decisión ejecutiva
   let action: CEOAction = 'NO_ACTION';
@@ -532,7 +596,7 @@ export function analyzeForPublication(article: Noticia, context: CEOAnalyzeConte
   let whatNotToDo = 'No inventar conclusiones ni forzar una acción sin evidencia.';
   let alert: CEOAlert | null = null;
 
-  if (!meni.approved && meni.score > 0 && meni.score < 60) {
+  if (!meni.approved && typeof meni.score === 'number' && meni.score > 0 && meni.score < 60) {
     action = 'DO_NOT_PUBLISH';
     risk = 'HIGH';
     whatIsHappening = 'MENI evaluó la nota y la rechazó por calidad editorial insuficiente.';
@@ -572,9 +636,9 @@ export function analyzeForPublication(article: Noticia, context: CEOAnalyzeConte
     evidence.push(top.evidence);
   } else {
     const ageInDays = daysBetween(article.fecha, new Date().toISOString());
-    const historical = article.vistas ?? 0;
-    const recent = context.traffic?.viewsRecent ?? 0;
-    const isFalling = ageInDays > 30 && historical > THRESHOLD_HIGH_VIEWS && recent < THRESHOLD_MEDIUM_VIEWS;
+    const historical = article.vistas;
+    const recent = context.traffic?.viewsRecent;
+    const isFalling = ageInDays > 30 && typeof historical === 'number' && historical > THRESHOLD_HIGH_VIEWS && typeof recent === 'number' && recent < THRESHOLD_MEDIUM_VIEWS;
     const shape = evaluateContentShape(article);
 
     if (isFalling) {
@@ -701,11 +765,12 @@ export function analyzeForPublication(article: Noticia, context: CEOAnalyzeConte
 // ─── DAILY BRIEF ─────────────────────────────────────────────────
 
 function hasRealViews(a: Noticia, traffic?: TrafficEvidence): boolean {
-  return (a.vistas ?? 0) > 0 || (traffic?.viewsRecent ?? 0) > 0;
+  const effective = traffic?.viewsRecent ?? a.vistas;
+  return typeof effective === 'number';
 }
 
-function articleViews(a: Noticia, traffic?: TrafficEvidence): number {
-  return traffic?.viewsRecent ?? a.vistas ?? 0;
+function articleViews(a: Noticia, traffic?: TrafficEvidence): number | undefined {
+  return traffic?.viewsRecent ?? a.vistas;
 }
 
 export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
@@ -716,7 +781,7 @@ export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
   const serviceByViews = [...articles]
     .filter(a => hasRealViews(a, traffic?.[a.slug]))
     .filter(a => hasMarker(`${a.titulo} ${a.resumen}`, SERVICE_MARKERS))
-    .sort((a, b) => articleViews(b, traffic?.[b.slug]) - articleViews(a, traffic?.[a.slug]));
+    .sort((a, b) => (articleViews(b, traffic?.[b.slug]) ?? -1) - (articleViews(a, traffic?.[a.slug]) ?? -1));
 
   const topService = serviceByViews[0];
   if (topService) {
@@ -734,7 +799,7 @@ export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
   // 2. GSC: titular con alto CTR bajo
   if (gsc) {
     const weakHeadline = gsc.find(g => g.status === 'REAL' && g.impressions >= 1000 && (g.clicks / g.impressions) < 0.02);
-    const targetSlug = articles.find(a => traffic?.[a.slug] && (traffic[a.slug].viewsRecent ?? 0) > 0)?.slug ?? 'UNKNOWN';
+    const targetSlug = articles.find(a => hasRealViews(a, traffic?.[a.slug]))?.slug ?? 'UNKNOWN';
     if (weakHeadline) {
       const article = articles.find(a => a.slug === targetSlug);
       actions.push({
@@ -751,7 +816,7 @@ export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
   // 3. Artículo antiguo con tráfico sostenido → actualizar
   const oldHigh = [...articles].find(a => {
     const age = Date.now() - new Date(a.fecha || Date.now()).getTime();
-    const views = articleViews(a, traffic?.[a.slug]);
+    const views = articleViews(a, traffic?.[a.slug]) ?? -1;
     return views > THRESHOLD_HIGH_VIEWS && age > 30 * 24 * 60 * 60 * 1000;
   });
 
@@ -771,7 +836,7 @@ export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
   const eventByViews = [...articles]
     .filter(a => hasRealViews(a, traffic?.[a.slug]))
     .filter(a => hasMarker(`${a.titulo} ${a.resumen}`, EVENT_MARKERS))
-    .sort((a, b) => articleViews(b, traffic?.[b.slug]) - articleViews(a, traffic?.[a.slug]));
+    .sort((a, b) => (articleViews(b, traffic?.[b.slug]) ?? -1) - (articleViews(a, traffic?.[a.slug]) ?? -1));
 
   const topEvent = eventByViews[0];
   if (topEvent && !actions.some(a => a.slug === topEvent.slug)) {
@@ -789,7 +854,7 @@ export function getCEODailyBrief(context: CEOBriefContext): CEOBriefAction[] {
   // 5. Artículo más leído → recircular
   const topByViews = [...articles]
     .filter(a => hasRealViews(a, traffic?.[a.slug]))
-    .sort((a, b) => articleViews(b, traffic?.[b.slug]) - articleViews(a, traffic?.[a.slug]))[0];
+    .sort((a, b) => (articleViews(b, traffic?.[b.slug]) ?? -1) - (articleViews(a, traffic?.[a.slug]) ?? -1))[0];
 
   if (topByViews && !actions.some(a => a.slug === topByViews.slug)) {
     const ev = traffic?.[topByViews.slug];

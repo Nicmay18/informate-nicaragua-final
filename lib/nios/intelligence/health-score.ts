@@ -18,6 +18,10 @@ export interface NiosHealthScore {
     reliability: number;
     scalability: number;
   };
+  /** Diagnóstico textual: qué significa el score. */
+  diagnosis?: string;
+  /** Acciones operacionales derivadas del score y sus advertencias. */
+  recommendedActions?: string[];
   healthScoreVersion?: string;
   extendedSignals?: HealthScoreExtendedSignals;
 }
@@ -99,7 +103,25 @@ export function calculateHealthScore(
   else if (score >= 70) level = 'ACEPTABLE';
   else level = 'REQUIERE INTERVENCIÓN';
 
-  return { score, level, warnings, breakdown: { performance, firestore, reliability, scalability } };
+  const diagnosis =
+    score >= 90
+      ? 'Pipeline estable. Costos, errores y tiempos dentro de metas.'
+      : score >= 75
+        ? 'Pipeline operativo con riesgos menores; atender advertencias.'
+        : score >= 60
+          ? 'Pipeline en observación: se detectan degradaciones que pueden escalarse.'
+          : 'Pipeline comprometido: requiere intervención directa en los pilares en rojo.';
+
+  const recommendedActions = [
+    ...warnings.map((w) => `Revisar: ${w}`),
+    score < 90 ? 'Auditar el pilar con menor score y priorizar su corrección.' : undefined,
+    reliability < 25 ? 'Revisar logs y reintentos del pipeline (módulos fallidos).' : undefined,
+    performance < 20 ? 'Optimizar duración del pipeline o dividir ejecución.' : undefined,
+    firestore < 20 ? 'Reducir operaciones Firestore o usar snapshots más pequeños.' : undefined,
+    scalability < 20 ? 'Configurar TTL en traffic_log o paginar noticias.' : undefined,
+  ].filter((a): a is string => typeof a === 'string');
+
+  return { score, level, warnings, diagnosis, recommendedActions, breakdown: { performance, firestore, reliability, scalability } };
 }
 
 // ─────────────────────────────────────────────────────────────

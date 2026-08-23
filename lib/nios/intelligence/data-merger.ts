@@ -132,8 +132,8 @@ export function mergeArticleData(
       ga4Pageviews: ga4Data?.pageviews || 0,
       ga4AvgEngagementTimeSec: ga4Data?.avgEngagementTimeSec || 0,
       ga4EngagementRate: ga4Data?.engagementRate || 0,
-      hasGscData: !!gscData,
-      hasGa4Data: !!ga4Data,
+      hasGscData: gsc?.status === 'REAL' && !!gscData,
+      hasGa4Data: ga4?.status === 'REAL' && !!ga4Data,
     });
   }
 

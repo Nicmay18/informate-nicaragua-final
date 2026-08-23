@@ -37,7 +37,7 @@ export default async function GrowthDashboardPage() {
         <StatBox icon={<Eye size={20} />} label="Vistas totales" value={metrics.totalViews.toLocaleString('es-NI')} />
         <StatBox icon={<Newspaper size={20} />} label="Noticias activas" value={metrics.totalNews} />
         <StatBox icon={<Activity size={20} />} label="Vistas promedio" value={metrics.avgViews.toLocaleString('es-NI')} />
-        <StatBox icon={<TrendingUp size={20} />} label="Noticia más leída" value={metrics.mostRead ? `${metrics.mostRead.titulo.slice(0, 18)}…` : '—'} detail={metrics.mostRead ? `${metrics.mostRead.vistas} vistas` : undefined} />
+        <StatBox icon={<TrendingUp size={20} />} label="Noticia más leída" value={metrics.mostRead ? `${metrics.mostRead.titulo.slice(0, 18)}…` : '—'} detail={metrics.mostRead ? `${metrics.mostRead.vistas?.toLocaleString('es-NI') ?? '—'} vistas` : undefined} />
       </div>
 
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 16 }}>
@@ -49,7 +49,7 @@ export default async function GrowthDashboardPage() {
           metrics.topArticles.map((a) => (
             <div key={a.slug} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ fontWeight: 600 }}>{a.titulo}</div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{a.vistas} vistas</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{a.vistas?.toLocaleString('es-NI') ?? '—'} vistas</div>
             </div>
           ))
         ) : (

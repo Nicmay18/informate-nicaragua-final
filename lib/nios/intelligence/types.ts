@@ -48,6 +48,8 @@ export interface GSCPageData {
   topQueries: GSCQueryRow[];
 }
 
+export type NiosDataStatus = 'NO_DATA' | 'CONNECTED_NO_DATA' | 'REAL' | 'ACCESS_BLOCKED';
+
 export interface GSCSnapshot {
   date: string;
   collectedAt: string;
@@ -63,6 +65,8 @@ export interface GSCSnapshot {
   devices: GSCDeviceRow[];
   discover?: GSCDataRow[];
   googleNews?: GSCDataRow[];
+  status?: NiosDataStatus;
+  errorMessage?: string;
 }
 
 // ─── GA4 (Google Analytics 4 Data API) ─────────────────────────
@@ -85,7 +89,7 @@ export interface GA4SourceRow {
 }
 
 export interface GA4DeviceRow {
-  device: 'mobile' | 'desktop' | 'tablet';
+  device: 'mobile' | 'desktop' | 'tablet' | 'unknown';
   users: number;
   sessions: number;
 }
@@ -103,6 +107,8 @@ export interface GA4Snapshot {
   pages: GA4PageRow[];
   sources: GA4SourceRow[];
   devices: GA4DeviceRow[];
+  status?: NiosDataStatus;
+  errorMessage?: string;
 }
 
 // ─── Artículo fusionado: MENI + Google + GA4 ───────────────────

@@ -239,7 +239,6 @@ describe('analyzeForPublication — decisiones ejecutivas reales', () => {
       aprobadoMeni: true,
       scoreMeni: 90,
       palabras: 500,
-      vistas: 0,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
     expect(result.action).toBe('NO_ACTION');
@@ -287,7 +286,6 @@ describe('analyzeForPublication — decisiones ejecutivas reales', () => {
       aprobadoMeni: true,
       scoreMeni: 95,
       palabras: 500,
-      vistas: 0,
     });
     const result = analyzeForPublication(article, { articlePool: basePool() });
     expect(result.meni.status).toBe('REAL');

@@ -406,24 +406,8 @@ export function buildEditorJefeView(
     fortalezas: googleFortalezas.length > 0 ? googleFortalezas : ['El medio mantiene señales de autoridad.'],
   };
 
-  // 6. Simulación de anunciantes
-  const anuncianteBrands = ['Claro', 'Banco LAFISE', 'Universidad'];
-  const anuncianteKeywords: Record<string, string[]> = {
-    Claro: ['tecnología', 'telecom', 'móvil', 'internet', 'datos'],
-    'Banco LAFISE': ['negocios', 'finanzas', 'economía', 'empresas', 'banca'],
-    Universidad: ['educación', 'salud', 'empleo', 'universidad', 'formación'],
-  };
-  const simulaciones: EditorJefeView['anunciante']['simulaciones'] = anuncianteBrands.map((marca) => {
-    const keywords = anuncianteKeywords[marca];
-    const match = cc.revenue.opportunities.find((o) => keywords.some((k) => o.category.toLowerCase().includes(k))) || cc.revenue.opportunities[0];
-    const fallbackCategory = cc.balance.categories.find((c) => c.status === 'deficitario')?.category || cc.balance.categories[0]?.category || 'Nacionales';
-    const category = match?.category || fallbackCategory;
-    const patrocinio = match?.nextStep || `Patrocinar la sección ${category}`;
-    const explicacion = match?.rationale
-      ? `Si hoy entrara ${marca}, pagaría por estar en ${category}: ${match.rationale}`
-      : `Si hoy entrara ${marca}, pagaría por estar en ${category} porque es un espacio de marca con demanda sin vender.`;
-    return { marca, categoria: category, patrocinio, explicacion };
-  });
+  // 6. Anunciantes: sin datos reales no se generan simulaciones.
+  const simulaciones: EditorJefeView['anunciante']['simulaciones'] = [];
 
   // 7. Nota que merece convertirse en guía
   const noticiaAGuia: EditorJefeView['noticiaAGuia'] = (() => {

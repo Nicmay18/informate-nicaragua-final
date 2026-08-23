@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      total: traffic.views,
+      total: traffic.views24h,
       sources,
       topArticles,
       recent,
@@ -69,7 +70,7 @@ export async function GET(request: NextRequest) {
       headers: { 'Cache-Control': 'private, no-cache, no-store, must-revalidate' },
     });
   } catch (err) {
-    console.error('[admin/trafico] error:', err);
+    logger.error('[admin/trafico] error:', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

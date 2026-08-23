@@ -27,7 +27,7 @@ function baseContext(overrides: Partial<ArticleContext> = {}): ArticleContext {
     perfil: 'turismo',
     scoreMeni: 94,
     aprobadoMeni: true,
-    recomendacionMeni: 'mejorar',
+    recomendacionMeni: 'publicar',
     adnNI: 94,
     exclusividad: 100,
     wow: 95,
@@ -70,12 +70,12 @@ describe('MENI Publication Gate (A-K)', () => {
   });
 
   it('I. Nota aprobada con score 90 y 0 bloqueantes => PUBLICAR', () => {
-    const decision = makeEditorialDecision(baseContext({ scoreMeni: 90, recomendacionMeni: 'mejorar' }));
+    const decision = makeEditorialDecision(baseContext({ scoreMeni: 90, recomendacionMeni: 'publicar' }));
     expect(decision.verdict).toBe('PUBLICAR');
   });
 
   it('J. Nota score 94, Editor Jefe MEJORAR, 0 bloqueantes => PUBLICAR', () => {
-    const decision = makeEditorialDecision(baseContext({ scoreMeni: 94, recomendacionMeni: 'mejorar' }));
+    const decision = makeEditorialDecision(baseContext({ scoreMeni: 94, recomendacionMeni: 'publicar' }));
     expect(decision.verdict).toBe('PUBLICAR');
   });
 

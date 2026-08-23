@@ -46,7 +46,7 @@ export async function runGrowthIntelligence(): Promise<NiosModuleReport> {
       }
     }
 
-    if (m.mostRead && m.mostRead.vistas < 10) {
+    if (m.mostRead && typeof m.mostRead.vistas === 'number' && m.mostRead.vistas < 10) {
       recommendations.push(rec('Noticia más leída con pocas vistas', `${m.mostRead.titulo} lidera con solo ${m.mostRead.vistas} vistas.`, 'high', 'Impulsar la noticia más leída en redes y newsletter.', 'growth'));
     }
 

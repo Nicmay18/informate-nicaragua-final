@@ -1,0 +1,41 @@
+{
+  "fecha": "2026-07-20T15:37:36.494Z",
+  "noticias": 176,
+  "exitosas": 176,
+  "errores": 0,
+  "contradictions": 0,
+  "determinismFailures": 0,
+  "budgetViolations": [],
+  "stats": {
+    "SEO": {
+      "promedio": 94.4659090909091,
+      "sigma": 1.7545322067328355
+    },
+    "EEAT": {
+      "promedio": 99.91477272727273,
+      "sigma": 1.1274508427832095
+    },
+    "DISCOVER": {
+      "promedio": 100,
+      "sigma": 0
+    },
+    "ADSENSE": {
+      "promedio": 100,
+      "sigma": 0
+    },
+    "VALOREDITORIAL": {
+      "promedio": 94.05113636363636,
+      "sigma": 13.491693524655199
+    },
+    "FORENSE": {
+      "promedio": 99.7159090909091,
+      "sigma": 1.1574743629240538
+    }
+  },
+  "veredictos": {
+    "cobertura_especial": 144,
+    "portada": 29,
+    "publicar_destacado": 3
+  },
+  "noPublicarCount": 0
+}

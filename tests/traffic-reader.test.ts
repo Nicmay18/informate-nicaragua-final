@@ -77,7 +77,9 @@ describe('Traffic Reader (FASE 3.8)', () => {
     const result = await getTrafficForDate(db, '2026-08-06');
 
     expect(result.source).toBe('traffic_daily');
-    expect(result.views).toBe(200);
+    expect(result.views24h).toBe(200);
+    expect(result.views7d).toBeUndefined();
+    expect(result.views30d).toBeUndefined();
     expect(result.articles.length).toBe(2);
     expect(result.articles[0].slug).toBe('a');
     expect(result.migrationHealth).toBe(100);
@@ -93,7 +95,9 @@ describe('Traffic Reader (FASE 3.8)', () => {
     const result = await getTrafficForDate(db, '2026-08-06');
 
     expect(result.source).toBe('traffic_log_fallback');
-    expect(result.views).toBe(3);
+    expect(result.views24h).toBe(3);
+    expect(result.views7d).toBeUndefined();
+    expect(result.views30d).toBeUndefined();
     expect(result.migrationHealth).toBe(0);
     expect(result.fallbackReads).toBe(1);
   });
@@ -115,7 +119,9 @@ describe('Traffic Reader (FASE 3.8)', () => {
     const result = await getTrafficForDate(db, '2026-08-06');
 
     expect(result.source).toBe('traffic_log_fallback');
-    expect(result.views).toBe(0);
+    expect(result.views24h).toBe(0);
+    expect(result.views7d).toBeUndefined();
+    expect(result.views30d).toBeUndefined();
     expect(result.articles).toEqual([]);
     expect(result.migrationHealth).toBe(0);
   });
@@ -129,5 +135,21 @@ describe('Traffic Reader (FASE 3.8)', () => {
     expect(status.dailySource).toBe('traffic_daily');
     expect(status.dailyGenerated).toBe(true);
     expect(status.migrationHealth).toBe(100);
+  });
+
+  it('getTrafficPerformance distingue views24h, views7d y views30d sin mezclar períodos', async () => {
+    const db = createMockDb([], [
+      { slug: 'a', source: 'facebook', userAgent: 'mobile' },
+      { slug: 'a', source: 'telegram', userAgent: 'mobile' },
+    ]);
+    const result = await getTrafficPerformance(db);
+
+    // Hoy = 2 eventos; 7 días = 14; 30 días = 60
+    expect(result.views24h).toBe(2);
+    expect(result.views7d).toBe(14);
+    expect(result.views30d).toBe(60);
+    expect(result.views24h).not.toBe(result.views7d);
+    expect(result.views7d).not.toBe(result.views30d);
+    expect(result.viewsHistorical).toBe('NO_DATA');
   });
 });

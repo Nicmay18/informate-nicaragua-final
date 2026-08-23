@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 // Mapea nombre de categoria (display) a su slug de URL
 const CATEGORIA_SLUG: Record<string, string> = {
@@ -83,11 +84,10 @@ export async function POST(request: NextRequest) {
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
     revalidados.push('/news-sitemap.xml', '/sitemap.xml');
-
-    console.log('[Revalidate] OK paths:', revalidados.join(', '));
+    logger.info('[Revalidate] OK paths:', revalidados.join(', '));
     return NextResponse.json({ revalidated: true, paths: revalidados });
   } catch (error) {
-    console.error('[Revalidate] Error:', error);
+    logger.error('[Revalidate] Error:', error);
     return NextResponse.json({ revalidated: false, error: String(error) }, { status: 500 });
   }
 }
