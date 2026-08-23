@@ -48,7 +48,16 @@ export interface GSCPageData {
   topQueries: GSCQueryRow[];
 }
 
-export type NiosDataStatus = 'NO_DATA' | 'CONNECTED_NO_DATA' | 'REAL' | 'ACCESS_BLOCKED';
+export type NiosDataStatus =
+  | 'NO_DATA'
+  | 'CONNECTED_NO_DATA'
+  | 'REAL'
+  | 'ACCESS_BLOCKED'
+  | 'NOT_VERIFIED'
+  | 'DATA_CONFLICT'
+  | 'CONFIG_REQUIRED'
+  | 'INVALID_CONFIGURATION'
+  | 'NOT_CONFIGURED';
 
 export interface GSCSnapshot {
   date: string;
@@ -207,6 +216,7 @@ export interface AdSenseReadinessArticle {
   scoreMeni: number | null;
   gscImpressions: number;
   gscClicks: number;
+  hasGscData: boolean;
   // Dimensiones de calidad
   contenidoUtil: boolean;
   profundidad: boolean;
@@ -455,6 +465,8 @@ export interface RecoveryArticle {
   gscClicks: number;
   gscCtr: number;
   gscPosition: number;
+  gscStatus?: NiosDataStatus;
+  hasGscData: boolean;
   ga4Users: number;
   ga4Sessions: number;
   ga4Pageviews: number;
@@ -723,3 +735,28 @@ export const DEFAULT_NIOS_CONFIG: NIOSConfig = {
   minImpressionsForInsight: 10,
   minArticlesForCompliance: 5,
 };
+
+export const DATA_STATUS_LABELS: Record<NiosDataStatus, string> = {
+  NO_DATA: 'Sin datos',
+  CONNECTED_NO_DATA: 'Conectado sin datos',
+  REAL: 'Real',
+  ACCESS_BLOCKED: 'Acceso bloqueado',
+  NOT_VERIFIED: 'No verificado',
+  DATA_CONFLICT: 'Conflicto de datos',
+  CONFIG_REQUIRED: 'Configuración requerida',
+  INVALID_CONFIGURATION: 'Configuración inválida',
+  NOT_CONFIGURED: 'No configurado',
+};
+
+export function formatNiosMetric(
+  value: number,
+  status: NiosDataStatus | undefined,
+  source: 'GSC' | 'GA4' = 'GSC',
+  options?: { decimals?: number; suffix?: string },
+): string {
+  if (status !== 'REAL') {
+    return `${source} — ${DATA_STATUS_LABELS[status ?? 'NO_DATA']}`;
+  }
+  const num = options?.decimals !== undefined ? value.toFixed(options.decimals) : value.toLocaleString();
+  return `${num}${options?.suffix ?? ''}`;
+}

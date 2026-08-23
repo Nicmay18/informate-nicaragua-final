@@ -98,7 +98,7 @@ export function evaluateContentSubstance(article: Partial<Noticia>): {
 
 export function determineLifecycleStage(
   publishedAtIso?: string,
-  metrics: { gscImpressions?: number | null; ga4Users?: number | null; hasUpdateSignal?: boolean } = {}
+  metrics: { gscImpressions?: number | null; ga4Users?: number | null; gscStatus?: import('@/lib/nios/intelligence/types').NiosDataStatus; ga4Status?: import('@/lib/nios/intelligence/types').NiosDataStatus; hasUpdateSignal?: boolean } = {}
 ): { stage: LifecycleStage; ageHours: number } {
   if (!publishedAtIso) {
     return { stage: 'CREATED', ageHours: 0 };
@@ -122,15 +122,18 @@ export function determineLifecycleStage(
     return { stage: 'LEARNING', ageHours };
   }
 
+  const hasGscReal = metrics.gscStatus === 'REAL' || (metrics.gscStatus === undefined && metrics.gscImpressions !== undefined);
+  const hasGa4Real = metrics.ga4Status === 'REAL' || (metrics.ga4Status === undefined && metrics.ga4Users !== undefined);
+
   if (ageDays <= 30) {
     const imps = metrics.gscImpressions ?? 0;
-    if (imps > 50) return { stage: 'GROWING', ageHours };
+    if (hasGscReal && imps > 50) return { stage: 'GROWING', ageHours };
     return { stage: 'STABLE', ageHours };
   }
 
   const users = metrics.ga4Users ?? 0;
   const imps = metrics.gscImpressions ?? 0;
-  if (ageDays > 60 && users === 0 && imps === 0) {
+  if (ageDays > 60 && hasGscReal && hasGa4Real && users === 0 && imps === 0) {
     return { stage: 'ARCHIVE_CANDIDATE', ageHours };
   }
 
@@ -139,7 +142,7 @@ export function determineLifecycleStage(
 
 export function generateLifecycleInsight(
   article: Partial<Noticia> & { id: string },
-  metrics: { gscImpressions?: number | null; ga4Users?: number | null; hasUpdateSignal?: boolean } = {}
+  metrics: { gscImpressions?: number | null; ga4Users?: number | null; gscStatus?: import('@/lib/nios/intelligence/types').NiosDataStatus; ga4Status?: import('@/lib/nios/intelligence/types').NiosDataStatus; hasUpdateSignal?: boolean } = {}
 ): LifecycleInsight {
   const substance = evaluateContentSubstance(article);
   const { stage, ageHours } = determineLifecycleStage(article.fecha || article.fechaPublicacion, metrics);
@@ -158,7 +161,7 @@ export function generateLifecycleInsight(
     recommendation = 'Se detectó nueva información sobre el tema. Evaluar actualización editorial.';
     priority = 'HIGH';
     action = 'UPDATE_ARTICLE';
-  } else if (stage === 'GROWING' && (metrics.gscImpressions || 0) > 100) {
+  } else if (stage === 'GROWING' && metrics.gscStatus === 'REAL' && (metrics.gscImpressions || 0) > 100) {
     recommendation = 'El artículo gana tracción en Google. Enlazar desde notas afines y portada.';
     priority = 'MEDIUM';
     action = 'BOOST_INTERNAL_LINKS';

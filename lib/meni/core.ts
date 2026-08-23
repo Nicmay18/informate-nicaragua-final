@@ -49,7 +49,7 @@ export interface MeniRunOptions {
   };
 }
 
-import { resolvePublicCategory } from '@/lib/editorial/canonical';
+import { resolveEditorialClassification } from '@/lib/editorial/canonical';
 
 const MIN_PROFILE_CONFIDENCE = 0.40;
 
@@ -94,18 +94,19 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   });
   const contentProfile = detectContentProfile(input.titulo, input.contenido, input.resumen);
   const perfilIdentificado = contentProfile.profile_confidence >= MIN_PROFILE_CONFIDENCE;
-  const categoria = resolvePublicCategory({
+  const editorialClassification = resolveEditorialClassification({
     titulo: input.titulo,
     contenido: input.contenido,
     resumen: input.resumen,
     categoria: input.categoria,
-    perfil: perfilIdentificado ? contentProfile.profile_detected : undefined,
   });
+  const categoria = editorialClassification.finalCategory;
   logMeni('Content profile detected', {
     profile: contentProfile.profile_detected,
     confidence: contentProfile.profile_confidence,
     perfilIdentificado,
     categoria,
+    classification: editorialClassification,
   });
 
   // Detectar tier editorial (FLASH, NOTICIA, REPORTAJE, INVESTIGACION)
@@ -154,7 +155,6 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     ...input,
     categoria: categoria,
     categoriaSugerida: categoria,
-    perfil: contentProfile.profile_detected,
     fuente: input.contenido,
     tierThresholds: thresholds,
     evaluacion,
@@ -323,6 +323,14 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     meniVersion: '2.1.1-prod',
     estado: 'Activo',
     categoria,
+    editorCategory: editorialClassification.editorCategory || undefined,
+    suggestedCategory: editorialClassification.suggestedCategory || undefined,
+    suggestedProfile: editorialClassification.suggestedProfile || undefined,
+    classificationSource: editorialClassification.classificationSource,
+    classificationConfidence: editorialClassification.classificationConfidence,
+    classificationReason: editorialClassification.classificationReason,
+    classificationConflict: editorialClassification.classificationConflict,
+    classificationStatus: editorialClassification.classificationStatus,
     modulo: modulo.nombre,
     prioridad,
     riesgo: riesgoEditorial,

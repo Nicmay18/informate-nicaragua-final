@@ -38,7 +38,7 @@ import { buildExecutionReport } from './performance-report';
 import { calculateHealthScore } from './health-score';
 
 export const NIOS_CONFIG: NIOSConfig = {
-  siteUrl: process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com',
+  siteUrl: process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com',
   ga4PropertyId: process.env.NIOS_GA4_PROPERTY_ID || '',
   daysToCollect: 28,
   minImpressionsForInsight: 10,

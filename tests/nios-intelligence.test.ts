@@ -333,8 +333,10 @@ describe('Compliance Intelligence', () => {
         ga4Pageviews: 0,
         ga4AvgEngagementTimeSec: 0,
         ga4EngagementRate: 0,
-        hasGscData: false,
+        hasGscData: true,
         hasGa4Data: false,
+        gscStatus: 'REAL',
+        ga4Status: 'NO_DATA',
       },
     ];
 

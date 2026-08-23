@@ -11,6 +11,7 @@
 
 import { logger } from '@/lib/logger';
 import type {
+  NiosDataStatus,
   GSCSnapshot,
   GSCDataRow,
   GSCQueryRow,
@@ -89,7 +90,7 @@ function emptySnapshot(
   siteUrl: string,
   startDate: string,
   endDate: string,
-  status: 'NO_DATA' | 'ACCESS_BLOCKED',
+  status: NiosDataStatus,
   errorMessage?: string,
 ): GSCSnapshot {
   return {
@@ -116,6 +117,18 @@ export async function collectGSC(
 ): Promise<GSCSnapshot | null> {
   const endDate = formatDate(new Date());
   const startDate = formatDate(new Date(Date.now() - daysToCollect * 24 * 60 * 60 * 1000));
+  const serviceAccountEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+
+  if (!siteUrl) {
+    logger.warn('[gsc-collector] No GSC site URL configured');
+    return emptySnapshot(
+      '',
+      startDate,
+      endDate,
+      'CONFIG_REQUIRED',
+      'NIOS_GSC_SITE_URL / NIOS_SITE_URL no está configurada.',
+    );
+  }
 
   logger.info(`[gsc-collector] Collecting GSC data for ${siteUrl} from ${startDate} to ${endDate}`);
 
@@ -252,12 +265,20 @@ export async function collectGSC(
 
     return snapshot;
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    logger.error('[gsc-collector] Collection failed:', message);
-    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(message)
+    const rawMessage = err instanceof Error ? err.message : String(err);
+    logger.error('[gsc-collector] Collection failed:', rawMessage);
+    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(rawMessage)
       ? 'ACCESS_BLOCKED'
       : 'NO_DATA';
-    return emptySnapshot(siteUrl, startDate, endDate, status, message);
+    const errorMessage = status === 'ACCESS_BLOCKED'
+      ? `Acceso bloqueado. Cuenta utilizada: ${serviceAccountEmail || 'no configurada'}. ` +
+        `Propiedad solicitada: ${siteUrl}. ` +
+        `Permiso requerido: permiso de lectura en Google Search Console. ` +
+        `Consecuencia: Google Trust, recomendaciones orgánicas y reportes CEO no pueden evaluarse con evidencia. ` +
+        `Acción recomendada: agregar la cuenta de servicio ${serviceAccountEmail || 'FIREBASE_CLIENT_EMAIL'} ` +
+        `como propietario o usuario de la propiedad ${siteUrl} en Search Console.`
+      : rawMessage;
+    return emptySnapshot(siteUrl, startDate, endDate, status, errorMessage);
   }
 }
 

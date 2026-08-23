@@ -52,9 +52,12 @@ function daysSince(dateStr: string): number {
  * Retorna null si no es candidato.
  */
 function analyzeArticle(article: ArticleFusion): ArticleUpdateCandidate | null {
-  const { gscImpressions, gscClicks, gscCtr, gscPosition, scoreMeni, slug, titulo, categoria, url, fechaPublicacion } = article;
+  const { gscImpressions, gscClicks, gscCtr, gscPosition, scoreMeni, slug, titulo, categoria, url, fechaPublicacion, hasGscData } = article;
 
-  // Necesita al menos algo de tráfico para considerar actualización
+  // Sin datos GSC reales no se puede concluir necesidad de actualización
+  if (!hasGscData) return null;
+
+  // Necesita al menos algo de tráfico real para considerar actualización
   if (gscImpressions < GOOD_IMPRESSIONS_THRESHOLD) return null;
 
   const days = daysSince(fechaPublicacion);

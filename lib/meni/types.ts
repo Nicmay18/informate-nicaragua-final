@@ -136,6 +136,22 @@ export interface MeniResult {
   meniVersion: string;
   estado: 'Activo';
   categoria: MeniCategoria;
+  /** Categoría explícitamente seleccionada por el editor, si existe. */
+  editorCategory?: MeniCategoria | string;
+  /** Categoría que MENI detectaría automáticamente si no hay editor. */
+  suggestedCategory?: MeniCategoria | string;
+  /** Perfil interno detectado por el detector de contenido. */
+  suggestedProfile?: MeniContentProfile;
+  /** Fuente de la decisión final: 'editor' o 'AI'. */
+  classificationSource: 'editor' | 'AI';
+  /** Confianza de la clasificación (1.0 si fue editor, 0-1 si fue AI). */
+  classificationConfidence: number;
+  /** Explicación legible de por qué se resolvió la categoría. */
+  classificationReason: string;
+  /** True cuando la categoría final difiere de la sugerencia por IA. */
+  classificationConflict: boolean;
+  /** Estado de la clasificación: OK, CATEGORY_CONFLICT, CATEGORY_AMBIGUOUS. */
+  classificationStatus: 'OK' | 'CATEGORY_CONFLICT' | 'CATEGORY_AMBIGUOUS';
   modulo: string;
   prioridad: MeniPrioridad;
   riesgo: MeniRiesgoEditorial;

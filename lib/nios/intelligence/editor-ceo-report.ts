@@ -94,7 +94,7 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
 
   for (const a of articles) {
     // MENI alto pero GSC sin datos (hipótesis, no conclusión)
-    if (a.scoreMeni !== null && a.scoreMeni >= 80 && a.gscImpressions === 0) {
+    if (a.scoreMeni !== null && a.scoreMeni >= 80 && a.hasGscData && a.gscImpressions === 0) {
       failed.push({
         slug: a.slug,
         titulo: a.titulo,
@@ -103,7 +103,7 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
         value: `MENI ${a.scoreMeni}, 0 impresiones`,
         evidence: [
           makeEvidence('MENI', 'scoreMeni', `MENI de "${a.titulo}"`, a.scoreMeni ?? 'N/D'),
-          makeEvidence('Google Search Console', 'searchanalytics.query', `Impresiones de "${a.titulo}"`, 0),
+          makeEvidence('Google Search Console', 'searchanalytics.query', `Impresiones de "${a.titulo}"`, a.gscImpressions),
         ],
       });
     }

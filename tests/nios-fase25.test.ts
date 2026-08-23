@@ -35,6 +35,8 @@ const mockArticle = (overrides: Partial<ArticleFusion> = {}): ArticleFusion => (
   ga4EngagementRate: 0.7,
   hasGscData: true,
   hasGa4Data: true,
+  gscStatus: 'REAL',
+  ga4Status: 'REAL',
   ...overrides,
 });
 

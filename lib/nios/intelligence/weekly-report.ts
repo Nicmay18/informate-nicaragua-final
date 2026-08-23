@@ -234,7 +234,7 @@ export function generateWeeklyReport(
 
   // 2. Contenido sin datos de GSC (no conclusión de rechazo)
   const noGscData = [...articles]
-    .filter(a => a.gscImpressions === 0)
+    .filter(a => !a.hasGscData)
     .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 30);
 

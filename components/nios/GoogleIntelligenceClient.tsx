@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import type {
-  GoogleIntelligenceDashboard,
-  ComplianceReport,
-  AdSenseReadinessReport,
-  ArticleFusion,
+import {
+  formatNiosMetric,
+  type GoogleIntelligenceDashboard,
+  type ComplianceReport,
+  type AdSenseReadinessReport,
+  type ArticleFusion,
 } from '@/lib/nios/intelligence/types';
 
 interface Props {
@@ -431,18 +432,18 @@ function ArticleTable({ articles }: { articles: ArticleFusion[] }) {
               <td style={{ padding: '0.5rem', maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {a.titulo}
               </td>
-              <td style={{ textAlign: 'right', padding: '0.5rem', fontWeight: 600 }}>{a.gscImpressions.toLocaleString()}</td>
-              <td style={{ textAlign: 'right', padding: '0.5rem' }}>{a.gscClicks.toLocaleString()}</td>
-              <td style={{ textAlign: 'right', padding: '0.5rem', color: a.gscCtr < 2 ? '#ef4444' : a.gscCtr > 5 ? '#22c55e' : '#64748b' }}>
-                {a.gscCtr}%
+              <td style={{ textAlign: 'right', padding: '0.5rem', fontWeight: 600 }}>{formatNiosMetric(a.gscImpressions, a.gscStatus, 'GSC')}</td>
+              <td style={{ textAlign: 'right', padding: '0.5rem' }}>{formatNiosMetric(a.gscClicks, a.gscStatus, 'GSC')}</td>
+              <td style={{ textAlign: 'right', padding: '0.5rem', color: a.gscStatus === 'REAL' && a.gscCtr < 2 ? '#ef4444' : a.gscStatus === 'REAL' && a.gscCtr > 5 ? '#22c55e' : '#64748b' }}>
+                {formatNiosMetric(a.gscCtr, a.gscStatus, 'GSC', { suffix: '%' })}
               </td>
-              <td style={{ textAlign: 'right', padding: '0.5rem', color: a.gscPosition > 20 ? '#ef4444' : a.gscPosition < 5 ? '#22c55e' : '#64748b' }}>
-                {a.gscPosition.toFixed(1)}
+              <td style={{ textAlign: 'right', padding: '0.5rem', color: a.gscStatus === 'REAL' && a.gscPosition > 20 ? '#ef4444' : a.gscStatus === 'REAL' && a.gscPosition < 5 ? '#22c55e' : '#64748b' }}>
+                {formatNiosMetric(a.gscPosition, a.gscStatus, 'GSC', { decimals: 1 })}
               </td>
               <td style={{ textAlign: 'right', padding: '0.5rem', fontWeight: 600, color: a.scoreMeni !== null ? (a.scoreMeni >= 90 ? '#22c55e' : a.scoreMeni < 80 ? '#ef4444' : '#f59e0b') : '#64748b' }}>
                 {a.scoreMeni ?? '-'}
               </td>
-              <td style={{ textAlign: 'right', padding: '0.5rem' }}>{a.ga4Users.toLocaleString()}</td>
+              <td style={{ textAlign: 'right', padding: '0.5rem' }}>{formatNiosMetric(a.ga4Users, a.ga4Status, 'GA4')}</td>
             </tr>
           ))}
         </tbody>

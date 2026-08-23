@@ -5,7 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
-import { resolvePublicCategory } from '@/lib/editorial/canonical';
+import { resolvePublicCategory, resolveEditorialClassification } from '@/lib/editorial/canonical';
 import type { Noticia, PublicCategory } from '@/lib/types';
 import { isPublicCategory, PUBLIC_CATEGORIES } from '@/lib/types';
 
@@ -221,7 +221,7 @@ describe('REGLA 13 — Prueba de contradicción (one source of truth)', () => {
     }
   });
 
-  it('perfil nacionales + categoria sucesos almacenada → Nacionales', () => {
+  it('perfil nacionales + categoria sucesos almacenada → Sucesos con CATEGORY_CONFLICT', () => {
     const article: Partial<Noticia> = {
       titulo: 'INSS informa prestaciones por fallecimiento',
       contenido: 'El Instituto Nicaragüense de Seguridad Social explicó los requisitos para solicitar la prestación.',
@@ -229,10 +229,14 @@ describe('REGLA 13 — Prueba de contradicción (one source of truth)', () => {
       perfil: 'nacionales',
       categoria: 'Sucesos',
     };
-    expect(resolvePublicCategory(article)).toBe('Nacionales');
+    const resolved = resolveEditorialClassification(article);
+    expect(resolved.finalCategory).toBe('Sucesos');
+    expect(resolved.classificationConflict).toBe(true);
+    expect(resolved.classificationSource).toBe('editor');
+    expect(resolved.classificationStatus).toBe('CATEGORY_CONFLICT');
   });
 
-  it('perfil sucesos + categoria nacionales almacenada → Sucesos', () => {
+  it('perfil sucesos + categoria nacionales almacenada → Nacionales con CATEGORY_CONFLICT', () => {
     const article: Partial<Noticia> = {
       titulo: 'Accidente de tránsito en Managua',
       contenido: 'Un motociclista murió tras un accidente. La Policía investiga.',
@@ -240,6 +244,10 @@ describe('REGLA 13 — Prueba de contradicción (one source of truth)', () => {
       perfil: 'sucesos',
       categoria: 'Nacionales',
     };
-    expect(resolvePublicCategory(article)).toBe('Sucesos');
+    const resolved = resolveEditorialClassification(article);
+    expect(resolved.finalCategory).toBe('Nacionales');
+    expect(resolved.classificationConflict).toBe(true);
+    expect(resolved.classificationSource).toBe('editor');
+    expect(resolved.classificationStatus).toBe('CATEGORY_CONFLICT');
   });
 });

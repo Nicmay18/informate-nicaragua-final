@@ -182,7 +182,7 @@ describe('NIOS Weekly Report', () => {
   it('should answer all 6 CEO questions', () => {
     const articles = [
       mockArticle({ slug: 'top-1', titulo: 'Top 1', gscImpressions: 5000, gscClicks: 200 }),
-      mockArticle({ slug: 'ignored', titulo: 'Ignored', gscImpressions: 0 }),
+      mockArticle({ slug: 'ignored', titulo: 'Ignored', gscImpressions: 0, gscStatus: 'ACCESS_BLOCKED', hasGscData: false }),
       mockArticle({ slug: 'update', titulo: 'Update', gscImpressions: 1500, gscPosition: 8, gscCtr: 0.5, fechaPublicacion: '2020-01-01T00:00:00Z' }),
     ];
     const trust = generateGoogleTrustReport(articles);

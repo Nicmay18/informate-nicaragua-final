@@ -70,7 +70,7 @@ export function generateComplianceReport(
   const verdicts: ComplianceVerdict[] = [];
 
   for (const article of articles) {
-    const hasGsc = article.hasGscData && article.gscImpressions > 0;
+    const hasGsc = article.hasGscData;
     const impressions = article.gscImpressions;
     const scoreMeni = article.scoreMeni ?? null;
 
@@ -83,7 +83,21 @@ export function generateComplianceReport(
       evidence('MENI', 'scoreMeni', 'Publicación', 'Score MENI', scoreMeni ?? 'N/D'),
     );
 
-    if (!hasGsc || impressions === 0) {
+    if (!hasGsc) {
+      googleVerdict = 'no_data';
+      evidenceList.push(
+        evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 'N/D'),
+      );
+
+      meniVsGoogleGap = 'no_data';
+      if (scoreMeni !== null && scoreMeni >= 90) {
+        explanation = `MENI otorga ${scoreMeni} puntos, pero Google Search Console no está conectado o no tiene datos reales. No se puede determinar si Google valora esta nota.`;
+      } else if (scoreMeni !== null && scoreMeni > 0) {
+        explanation = `MENI otorga ${scoreMeni} puntos. Google Search Console no está conectado o no tiene datos reales. No hay datos suficientes para determinar si Google valora esta nota.`;
+      } else {
+        explanation = `Sin score MENI y sin conexión real con Google Search Console. No hay datos suficientes.`;
+      }
+    } else if (impressions === 0) {
       googleVerdict = 'low_gsc_visibility';
       evidenceList.push(
         evidence('Google Search Console', 'searchanalytics.query', dateRange, 'Impresiones', 0),
@@ -91,13 +105,13 @@ export function generateComplianceReport(
 
       if (scoreMeni !== null && scoreMeni >= 90) {
         meniVsGoogleGap = 'meni_gsc_gap_hypothesis';
-        explanation = `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones en los últimos 28 días. Esto NO significa que Google "rechace" el contenido. Puede deberse a: indexación pendiente, baja demanda de búsqueda, o ausencia de conexión GSC. No se puede concluir que MENI sobreestime sin más evidencia.`;
+        explanation = `HIPÓTESIS INTERNA: MENI otorga ${scoreMeni} puntos, pero Google Search Console registra 0 impresiones reales en los últimos 28 días. Esto NO significa que Google "rechace" el contenido. Puede deberse a: indexación pendiente, baja demanda de búsqueda, o competencia. No se puede concluir que MENI sobreestime sin más evidencia.`;
       } else if (scoreMeni !== null && scoreMeni > 0) {
         meniVsGoogleGap = 'no_data';
-        explanation = `MENI otorga ${scoreMeni} puntos. Google Search Console no registra impresiones. No hay datos suficientes para determinar si Google valora esta nota.`;
+        explanation = `MENI otorga ${scoreMeni} puntos. Google Search Console registra 0 impresiones reales. Datos insuficientes para una conclusión firme.`;
       } else {
         meniVsGoogleGap = 'no_data';
-        explanation = `Sin score MENI y sin impresiones en Google Search Console. No hay datos suficientes.`;
+        explanation = `Sin score MENI y 0 impresiones reales en Google Search Console. No hay datos suficientes.`;
       }
     } else if (impressions < 10) {
       googleVerdict = 'low_gsc_visibility';

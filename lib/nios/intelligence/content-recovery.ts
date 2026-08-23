@@ -69,10 +69,10 @@ function determineMainProblem(a: RecoveryArticle): string {
   if (a.palabras < 400) problems.push('Thin content');
   if (!a.hasAutor) problems.push('Sin autor visible');
   if (!a.hasContexto) problems.push('Poco contexto');
-  if (a.gscImpressions === 0) problems.push('Sin impresiones Google');
-  if (a.gscImpressions > 0 && a.gscCtr < 1) problems.push('CTR bajo, posible problema de título o snippet');
+  if (a.gscStatus === 'REAL' && a.gscImpressions === 0) problems.push('Sin impresiones Google');
+  if (a.gscStatus === 'REAL' && a.gscImpressions > 0 && a.gscCtr < 1) problems.push('CTR bajo, posible problema de título o snippet');
   if (a.ga4AvgEngagementTimeSec < 60 && a.ga4Users > 0) problems.push('Engagement bajo, posible falla de intención de búsqueda');
-  if (a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions < 100) problems.push('MENI alto pero Google no encuentra demanda');
+  if (a.gscStatus === 'REAL' && a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions < 100) problems.push('MENI alto pero Google no encuentra demanda');
 
   if (problems.length === 0) return 'Contenido saludable';
   return problems[0];
@@ -91,15 +91,15 @@ function determineRecommendedAction(a: RecoveryArticle): string {
     return 'Añadir firma de autor y biografía mínima.';
   }
 
-  if (a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90) {
+  if (a.gscStatus === 'REAL' && a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90) {
     return 'Reescribir título SEO y mejorar intención de búsqueda; reforzar enlaces internos.';
   }
 
-  if (a.gscImpressions === 0) {
-    return 'Verificar indexación, reforcer intención de búsqueda y enlaces internos.';
+  if (a.gscStatus === 'REAL' && a.gscImpressions === 0) {
+    return 'Verificar indexación, reforzar intención de búsqueda y enlaces internos.';
   }
 
-  if (a.gscImpressions > 0 && a.gscCtr < 1) {
+  if (a.gscStatus === 'REAL' && a.gscImpressions > 0 && a.gscCtr < 1) {
     return 'Mejorar título y meta descripción para aumentar CTR sin sensacionalismo.';
   }
 
@@ -121,6 +121,7 @@ function calculateStatus(score: number): 'green' | 'yellow' | 'red' {
 }
 
 function scoreGooglePerformance(article: ArticleFusion): number {
+  if (article.gscStatus !== 'REAL') return 0;
   let score = 0;
   if (article.gscImpressions >= 1000) score += 25;
   else if (article.gscImpressions >= 100) score += 18;
@@ -295,6 +296,8 @@ export function generateContentRecoveryReport(
       gscClicks: article.gscClicks,
       gscCtr: article.gscCtr,
       gscPosition: article.gscPosition,
+      gscStatus: article.gscStatus,
+      hasGscData: article.hasGscData,
       ga4Users: article.ga4Users,
       ga4Sessions: article.ga4Sessions,
       ga4Pageviews: article.ga4Pageviews,

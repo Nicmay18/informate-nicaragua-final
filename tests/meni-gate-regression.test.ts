@@ -3,7 +3,7 @@ import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { ArticleContext } from '@/lib/supervisor/types';
 import { runReaderQuestionsEngine } from '@/lib/meni/editorial-brain/reader-questions-engine';
 import type { EditorialBrainInput } from '@/lib/meni/editorial-brain/types';
-import { resolvePublicCategory } from '@/lib/editorial/canonical';
+import { resolvePublicCategory, resolveEditorialClassification } from '@/lib/editorial/canonical';
 
 function tourismContent(complete: boolean): string {
   const base =
@@ -58,15 +58,25 @@ describe('MENI Publication Gate (A-K)', () => {
     expect(textoPreguntas).toContain('donde esta ubicado');
   });
 
-  it('H. "Toro embiste a hombre durante Tope de Toros" resuelve a Sucesos', () => {
-    const categoria = resolvePublicCategory({
+  it('H. Categoría explícita Espectáculos prevalece sobre perfil sucesos con conflicto', () => {
+    const result = resolveEditorialClassification({
       titulo: 'Toro embiste a hombre durante Tope de Toros en Managua',
       contenido: 'Un hombre resultó herido durante el Tope de Toros en Managua. Fue atendido por paramédicos.',
       resumen: 'Incidente en Tope de Toros.',
       categoria: 'Espectáculos',
       perfil: 'sucesos',
     });
-    expect(categoria).toBe('Sucesos');
+    expect(result.finalCategory).toBe('Espectáculos');
+    expect(result.classificationSource).toBe('editor');
+    expect(result.classificationConflict).toBe(true);
+    expect(result.classificationStatus).toBe('CATEGORY_CONFLICT');
+    expect(resolvePublicCategory({
+      titulo: 'Toro embiste a hombre durante Tope de Toros en Managua',
+      contenido: 'Un hombre resultó herido durante el Tope de Toros en Managua. Fue atendido por paramédicos.',
+      resumen: 'Incidente en Tope de Toros.',
+      categoria: 'Espectáculos',
+      perfil: 'sucesos',
+    })).toBe('Espectáculos');
   });
 
   it('I. Nota aprobada con score 90 y 0 bloqueantes => PUBLICAR', () => {

@@ -80,7 +80,7 @@ function emptySnapshot(
   propertyId: string,
   startDate: string,
   endDate: string,
-  status: 'NO_DATA' | 'ACCESS_BLOCKED',
+  status: 'NO_DATA' | 'ACCESS_BLOCKED' | 'CONFIG_REQUIRED' | 'INVALID_CONFIGURATION',
   errorMessage?: string,
 ): GA4Snapshot {
   return {
@@ -104,14 +104,20 @@ function emptySnapshot(
 export async function collectGA4(
   propertyId: string,
   daysToCollect = 28,
-): Promise<GA4Snapshot | null> {
-  if (!propertyId) {
-    logger.warn('[ga4-collector] No GA4 property ID configured');
-    return null;
-  }
-
+): Promise<GA4Snapshot> {
   const endDate = formatDate(new Date());
   const startDate = formatDate(new Date(Date.now() - daysToCollect * 24 * 60 * 60 * 1000));
+
+  if (!propertyId) {
+    logger.warn('[ga4-collector] No GA4 property ID configured');
+    return emptySnapshot(
+      '',
+      startDate,
+      endDate,
+      'CONFIG_REQUIRED',
+      'NIOS_GA4_PROPERTY_ID no está configurada.',
+    );
+  }
 
   logger.info(`[ga4-collector] Collecting GA4 data for property ${propertyId} from ${startDate} to ${endDate}`);
 
@@ -121,7 +127,7 @@ export async function collectGA4(
     // 1. Totales (sin dimensiones)
     const totalRows = await runReport(
       client, propertyId, startDate, endDate,
-      [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTimePerUser', 'engagementRate'],
+      [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTime', 'engagementRate'],
       1,
     );
 
@@ -136,7 +142,7 @@ export async function collectGA4(
     const pageRows = await runReport(
       client, propertyId, startDate, endDate,
       ['pagePath'],
-      ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTimePerUser', 'engagementRate'],
+      ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTime', 'engagementRate'],
       100,
     );
 
@@ -204,7 +210,9 @@ export async function collectGA4(
     logger.error('[ga4-collector] Collection failed:', message);
     const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(message)
       ? 'ACCESS_BLOCKED'
-      : 'NO_DATA';
+      : /INVALID_ARGUMENT|invalid argument|not found/i.test(message)
+        ? 'INVALID_CONFIGURATION'
+        : 'NO_DATA';
     return emptySnapshot(propertyId, startDate, endDate, status, message);
   }
 }

@@ -68,10 +68,31 @@ export const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCatego
 };
 
 /**
- * resolvePublicCategory — FUNCIÓN CANÓNICA ÚNICA
- * Todo el sistema debe usar esta función para obtener la categoría pública.
- * REGLA 5: perfil interno NUNCA escapa a la capa pública.
+ * resolveEditorialClassification — Resolución completa de categoría con trazabilidad.
+ *
+ * Jerarquía editorial:
+ * 1. Categoría pública explícita del editor (article.categoria).
+ * 2. Perfil interno almacenado (article.perfil) solo si no hay categoría explícita.
+ * 3. Detección automática a partir del texto.
+ * 4. Fallback Nacionales.
+ *
+ * REGLA DE PRECEDENCIA: la selección explícita del editor NO puede ser
+ * sobrescrita silenciosamente por la IA. Si la detección contradice al editor,
+ * se reporta classificationConflict = true y el sistema conserva la decisión
+ * editorial mientras explica el motivo.
  */
+export interface EditorialClassification {
+  finalCategory: PublicCategory;
+  editorCategory: PublicCategory | null;
+  suggestedProfile: MeniContentProfile | null;
+  suggestedCategory: PublicCategory | null;
+  classificationSource: 'editor' | 'AI';
+  classificationConfidence: number;
+  classificationReason: string;
+  classificationConflict: boolean;
+  classificationStatus: 'OK' | 'CATEGORY_CONFLICT' | 'CATEGORY_AMBIGUOUS';
+}
+
 const LEGACY_TO_PUBLIC_CATEGORY: Record<string, PublicCategory> = {
   'Cultura': 'Nacionales',
   'Economía': 'Nacionales',
@@ -136,64 +157,125 @@ function overrideProfileFromContext(
   return perfil;
 }
 
-export function resolvePublicCategory(article: Partial<Noticia>): PublicCategory {
-  // 1. AUTORIDAD EDITORIAL: perfil interno almacenado + verificación de contexto.
-  //    Si el perfil contradice el contenido (p. ej. INSS/fallecimiento como sucesos),
-  //    el resolver canónico corrige ANTES de mapear a categoría pública.
-  if (article.perfil && PROFILE_TO_PUBLIC_CATEGORY[article.perfil as MeniContentProfile]) {
-    const effectiveProfile = overrideProfileFromContext(
-      article.perfil as MeniContentProfile,
-      article.titulo || '',
-      article.contenido || '',
-      article.resumen || ''
-    );
-    return PROFILE_TO_PUBLIC_CATEGORY[effectiveProfile];
-  }
+export function resolveEditorialClassification(article: Partial<Noticia>): EditorialClassification {
+  const titulo = article.titulo || '';
+  const contenido = article.contenido || '';
+  const resumen = article.resumen || '';
 
-  // 2. CATEGORÍA PÚBLICA ALMACENADA: si no hay perfil, la categoría editorial
-  //    guardada y válida es la segunda fuente de verdad. Esto preserva
-  //    decisiones editoriales explícitas y mantiene compatibilidad con datos
-  //    históricos que no tienen perfil.
-  if (article.categoria) {
-    const key = article.categoria.trim();
-    if (isPublicCategory(key)) return key;
-    if (LEGACY_TO_PUBLIC_CATEGORY[key]) return LEGACY_TO_PUBLIC_CATEGORY[key];
-  }
+  // 1. PRECEDENCIA EDITORIAL: categoría pública explícita del editor.
+  const explicitCat = article.categoria ? article.categoria.trim() : '';
+  const editorCategory: PublicCategory | null = isPublicCategory(explicitCat)
+    ? explicitCat
+    : (LEGACY_TO_PUBLIC_CATEGORY[explicitCat] || null);
 
-  // 3. SEÑALES CONTEXTUALES: re-detectar perfil del texto
-  const hasText = !!(article.titulo?.trim() || article.contenido?.trim() || article.resumen?.trim());
+  // 2. Detectar perfil/sugerencia automática (siempre, para reportar conflictos).
+  let detectedProfile: MeniContentProfile | null = null;
+  let suggestedCategory: PublicCategory | null = null;
+  let aiConfidence = 0;
+
+  const hasText = !!(titulo.trim() || contenido.trim() || resumen.trim());
+
   if (hasText) {
     try {
-      const detected = detectContentProfile(
-        article.titulo || '',
-        article.contenido || '',
-        article.resumen || ''
-      );
+      const storedOrDetectedProfile = article.perfil
+        ? (article.perfil as MeniContentProfile)
+        : detectContentProfile(titulo, contenido, resumen).profile_detected;
       const effectiveProfile = overrideProfileFromContext(
-        detected.profile_detected,
-        article.titulo || '',
-        article.contenido || '',
-        article.resumen || ''
+        storedOrDetectedProfile,
+        titulo,
+        contenido,
+        resumen,
       );
       const mapped = PROFILE_TO_PUBLIC_CATEGORY[effectiveProfile];
-      if (mapped) return mapped;
+      detectedProfile = effectiveProfile;
+      suggestedCategory = mapped || null;
+      // Confianza estimada: si venía del editor (perfil) damos baja confianza
+      // porque no es una selección de categoría pública, es una etiqueta interna.
+      aiConfidence = article.perfil ? 0.5 : 0;
     } catch (e) {
-      logger.warn('[resolvePublicCategory] Error en detección:', e);
+      logger.warn('[resolveEditorialClassification] Error en detección:', e);
     }
   }
 
-  // 4. ÚLTIMO RECURSO
-  return 'Nacionales';
+  // Si no hay perfil almacenado, recalcular confianza del detector.
+  if (!article.perfil && hasText) {
+    try {
+      const detected = detectContentProfile(titulo, contenido, resumen);
+      aiConfidence = detected.profile_confidence;
+    } catch (e) {
+      logger.warn('[resolveEditorialClassification] Error en confianza:', e);
+    }
+  }
+
+  // 3. Resolver con la taxonomía editorial y la precedencia.
+  if (editorCategory) {
+    const conflict = !!suggestedCategory && suggestedCategory !== editorCategory;
+    const reason = conflict
+      ? `La categoría seleccionada por el editor es ${editorCategory}. MENI detecta señales de ${suggestedCategory} (perfil ${detectedProfile}) en el texto, pero mantiene la decisión editorial explícita.`
+      : `La categoría seleccionada por el editor es ${editorCategory} y las señales del texto son coherentes.`;
+    return {
+      finalCategory: editorCategory,
+      editorCategory,
+      suggestedProfile: detectedProfile,
+      suggestedCategory,
+      classificationSource: 'editor',
+      classificationConfidence: 1,
+      classificationReason: reason,
+      classificationConflict: conflict,
+      classificationStatus: conflict ? 'CATEGORY_CONFLICT' : 'OK',
+    };
+  }
+
+  // 4. Sin categoría explícita: perfil almacenado o detección automática.
+  if (suggestedCategory) {
+    const ambiguous = aiConfidence > 0 && aiConfidence < 0.5;
+    const reason = article.perfil
+      ? `No hay categoría pública explícita. Se usa el perfil almacenado (${detectedProfile}) que se mapea a ${suggestedCategory}.`
+      : `No hay categoría editorial explícita. MENI sugiere ${suggestedCategory} a partir del perfil ${detectedProfile} (confianza ${Math.round(aiConfidence * 100)}%).`;
+    return {
+      finalCategory: suggestedCategory,
+      editorCategory: null,
+      suggestedProfile: detectedProfile,
+      suggestedCategory,
+      classificationSource: 'AI',
+      classificationConfidence: aiConfidence,
+      classificationReason: reason,
+      classificationConflict: false,
+      classificationStatus: ambiguous ? 'CATEGORY_AMBIGUOUS' : 'OK',
+    };
+  }
+
+  // 5. ÚLTIMO RECURSO
+  return {
+    finalCategory: 'Nacionales',
+    editorCategory: null,
+    suggestedProfile: null,
+    suggestedCategory: null,
+    classificationSource: 'AI',
+    classificationConfidence: 0,
+    classificationReason: 'No hay categoría, perfil ni texto suficiente. Se aplica fallback Nacionales.',
+    classificationConflict: false,
+    classificationStatus: 'CATEGORY_AMBIGUOUS',
+  };
+}
+
+/**
+ * resolvePublicCategory — FUNCIÓN CANÓNICA ÚNICA
+ * Todo el sistema debe usar esta función para obtener la categoría pública.
+ * REGLA 5: perfil interno NUNCA escapa a la capa pública.
+ */
+export function resolvePublicCategory(article: Partial<Noticia>): PublicCategory {
+  return resolveEditorialClassification(article).finalCategory;
 }
 
 /**
  * @deprecated Usar resolvePublicCategory
  */
 export function resolveCanonicalCategoria(perfil: string | undefined, categoria: string | undefined): PublicCategory {
+  if (categoria && isPublicCategory(categoria)) return categoria;
   if (perfil && PROFILE_TO_PUBLIC_CATEGORY[perfil as MeniContentProfile]) {
     return PROFILE_TO_PUBLIC_CATEGORY[perfil as MeniContentProfile];
   }
-  if (categoria && isPublicCategory(categoria)) return categoria;
   return 'Nacionales';
 }
 

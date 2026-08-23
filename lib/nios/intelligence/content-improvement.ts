@@ -38,8 +38,8 @@ export function generateImprovementRecommendations(
   const recs: ImprovementRecommendation[] = [];
 
   for (const article of articles) {
-    // 1. MENI > 90 pero GSC < 100 impresiones
-    if (article.scoreMeni !== null && article.scoreMeni > 90 && article.gscImpressions < 100) {
+    // 1. MENI > 90 pero GSC < 100 impresiones (solo con datos GSC reales)
+    if (article.scoreMeni !== null && article.scoreMeni > 90 && article.hasGscData && article.gscImpressions < 100) {
       if (addIfNotExists(recs, article.slug, 'high-meni-low-google')) {
         recs.push({
           id: `improve-${article.slug}-high-meni-low-google`,
@@ -62,7 +62,7 @@ export function generateImprovementRecommendations(
 
     // 2. Muchas visitas sociales pero cero Google
     const social = sourceTraffic['facebook'] || sourceTraffic['instagram'] || sourceTraffic['twitter'] || 0;
-    if (social > 100 && article.gscImpressions === 0) {
+    if (social > 100 && article.hasGscData && article.gscImpressions === 0) {
       if (addIfNotExists(recs, article.slug, 'social-zero-google')) {
         recs.push({
           id: `improve-${article.slug}-social-zero-google`,

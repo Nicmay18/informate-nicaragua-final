@@ -79,14 +79,14 @@ function evalEnlacesInternos(article: ArticleFusion): boolean {
  * Evalúa autoridad: Google muestra impresiones.
  */
 function evalAutoridad(article: ArticleFusion): boolean {
-  return article.gscImpressions >= 100;
+  return article.hasGscData && article.gscImpressions >= 100;
 }
 
 /**
  * Evalúa EEAT: score MENI + impresiones de Google.
  */
 function evalEeat(article: ArticleFusion): boolean {
-  return article.scoreMeni !== null && article.scoreMeni >= 90 && article.gscImpressions > 0;
+  return article.scoreMeni !== null && article.scoreMeni >= 90 && article.hasGscData && article.gscImpressions > 0;
 }
 
 /**
@@ -155,6 +155,7 @@ export function generateReadinessReport(
       scoreMeni: article.scoreMeni,
       gscImpressions: article.gscImpressions,
       gscClicks: article.gscClicks,
+      hasGscData: article.hasGscData,
       contenidoUtil,
       profundidad,
       originalidad,
@@ -193,7 +194,7 @@ export function generateReadinessReport(
 
   // Google ignored with high MENI
   const googleIgnoredWithHighMeni = readinessArticles
-    .filter(a => a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90)
+    .filter(a => a.hasGscData && a.gscImpressions === 0 && a.scoreMeni !== null && a.scoreMeni >= 90)
     .map(a => ({ slug: a.slug, titulo: a.titulo, scoreMeni: a.scoreMeni, gscImpressions: a.gscImpressions }))
     .sort((a, b) => (b.scoreMeni ?? 0) - (a.scoreMeni ?? 0))
     .slice(0, 20);
