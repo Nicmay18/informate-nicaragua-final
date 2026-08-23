@@ -141,7 +141,7 @@ function detectThinContent(article: ArticleFusion): { isThin: boolean; flags: st
     flags.push('Sin autor visible');
   }
 
-  if (article.palabras >= 200 && article.gscImpressions === 0 && article.scoreMeni !== null && article.scoreMeni < 80) {
+  if (article.gscStatus === 'REAL' && article.palabras >= 200 && article.gscImpressions === 0 && article.scoreMeni !== null && article.scoreMeni < 80) {
     flags.push('Poca información nueva: score MENI bajo y 0 impresiones');
   }
 
@@ -152,7 +152,7 @@ function detectThinContent(article: ArticleFusion): { isThin: boolean; flags: st
  * Evalúa riesgo de duplicado basado en longitud, score y GSC.
  */
 function detectDuplicateRisk(article: ArticleFusion): boolean {
-  if (article.palabras < 200 && article.gscImpressions === 0) return true;
+  if (article.gscStatus === 'REAL' && article.palabras < 200 && article.gscImpressions === 0) return true;
   if (article.palabras > 0 && article.scoreMeni !== null && article.scoreMeni < 60) return true;
   return false;
 }
@@ -173,6 +173,7 @@ function calculateGoogleTrustScore(
   authorityScore: number,
   contentValueScore: number,
   thinFlags: string[],
+  gscReal: boolean,
 ): { score: number; risk: 'alto' | 'medio' | 'bajo' } {
   let score = Math.round((authorityScore * 0.4) + (contentValueScore * 0.6));
 
@@ -181,8 +182,8 @@ function calculateGoogleTrustScore(
   else if (thinFlags.length >= 2) score -= 10;
   else if (thinFlags.length >= 1) score -= 5;
 
-  // Penalización por 0 impresiones (GSC sin datos, no conclusión de rechazo)
-  if (contentValueScore === 0) score -= 10;
+  // Penalización por 0 impresiones solo cuando GSC aportó datos reales
+  if (gscReal && contentValueScore === 0) score -= 10;
 
   score = Math.max(0, Math.min(100, score));
 
@@ -205,7 +206,7 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
     const thin = detectThinContent(article);
     const duplicateRisk = detectDuplicateRisk(article);
     const updated = isUpdated(article);
-    const trust = calculateGoogleTrustScore(authority.score, contentValue, thin.flags);
+    const trust = calculateGoogleTrustScore(authority.score, contentValue, thin.flags, article.gscStatus === 'REAL');
 
     trustArticles.push({
       slug: article.slug,
@@ -215,6 +216,7 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
       fechaPublicacion: article.fechaPublicacion,
       palabras: article.palabras,
       scoreMeni: article.scoreMeni,
+      gscStatus: article.gscStatus,
       gscImpressions: article.gscImpressions,
       gscClicks: article.gscClicks,
       gscCtr: article.gscCtr,
@@ -249,13 +251,13 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
   const duplicateRiskCount = trustArticles.filter(a => a.isDuplicateRisk).length;
   const withoutAuthor = trustArticles.filter(a => !a.hasAutor).length;
   const withoutSources = trustArticles.filter(a => !a.hasFuente).length;
-  const lowGoogle = trustArticles.filter(a => a.gscImpressions < 10 && a.palabras > 200).length;
-  const highMeniZeroImpressions = trustArticles.filter(a => a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions === 0).length;
-  const lowMeniHighImpressions = trustArticles.filter(a => a.scoreMeni !== null && a.scoreMeni < 80 && a.gscImpressions > 1000).length;
+  const lowGoogle = trustArticles.filter(a => a.gscStatus === 'REAL' && a.gscImpressions < 10 && a.palabras > 200).length;
+  const highMeniZeroImpressions = trustArticles.filter(a => a.gscStatus === 'REAL' && a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions === 0).length;
+  const lowMeniHighImpressions = trustArticles.filter(a => a.gscStatus === 'REAL' && a.scoreMeni !== null && a.scoreMeni < 80 && a.gscImpressions > 1000).length;
 
   // Top artículos que bloquean AdSense (alto riesgo)
   const topBlocked = [...trustArticles]
-    .filter(a => a.risk === 'alto' || (a.isThin && a.gscImpressions === 0))
+    .filter(a => a.gscStatus === 'REAL' && (a.risk === 'alto' || (a.isThin && a.gscImpressions === 0)))
     .sort((a, b) => a.googleTrustScore - b.googleTrustScore)
     .slice(0, 20);
 
@@ -265,7 +267,10 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
     summary = 'No hay artículos suficientes para emitir una recomendación.';
   } else {
     const pctHigh = Math.round((highRisk / totalArticles) * 100);
-    summary = `Google Trust Audit: ${totalArticles} artículos analizados. Promedio Internal Trust Estimate: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content. ${highMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`;
+    const anyGscReal = trustArticles.some(a => a.gscStatus === 'REAL');
+    summary = anyGscReal
+      ? `Google Trust Audit: ${totalArticles} artículos analizados. Promedio Internal Trust Estimate: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content. ${highMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`
+      : `Google Trust: datos de GSC ACCESS_BLOCKED. No es posible evaluar impresiones, clics o riesgo orgánico real. El score ${avgScore}/100 refleja señales editoriales, no evidencia de Google. Configurar GSC para obtener métricas reales.`;
   }
 
   return {

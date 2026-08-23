@@ -37,6 +37,8 @@ function mockArticle(overrides: Partial<ArticleFusion> = {}): ArticleFusion {
     ga4EngagementRate: 0.7,
     hasGscData: true,
     hasGa4Data: true,
+    gscStatus: 'REAL',
+    ga4Status: 'REAL',
     ...overrides,
   };
 }
@@ -44,6 +46,7 @@ function mockArticle(overrides: Partial<ArticleFusion> = {}): ArticleFusion {
 function mockGSC(overrides: Partial<GSCSnapshot> = {}): GSCSnapshot {
   return {
     date: '2026-08-05',
+    status: 'REAL',
     collectedAt: new Date().toISOString(),
     siteUrl: 'https://nicaraguainformate.com',
     dateRange: { start: '2026-07-08', end: '2026-08-05' },
@@ -66,6 +69,7 @@ function mockGSC(overrides: Partial<GSCSnapshot> = {}): GSCSnapshot {
 function mockGA4(overrides: Partial<GA4Snapshot> = {}): GA4Snapshot {
   return {
     date: '2026-08-05',
+    status: 'REAL',
     collectedAt: new Date().toISOString(),
     propertyId: 'test',
     dateRange: { start: '2026-07-08', end: '2026-08-05' },

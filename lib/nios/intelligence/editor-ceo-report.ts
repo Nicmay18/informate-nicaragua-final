@@ -134,11 +134,11 @@ function findWhatFailed(articles: ArticleFusion[]): EditorCEOReport['whatFailed'
 function findWhatToRepeat(
   articles: ArticleFusion[],
   categories: CategoryIntelligenceRow[],
+  hasGscData: boolean,
 ): EditorCEOReport['whatToRepeat'] {
   const actions: EditorCEOReport['whatToRepeat'] = [];
 
-  // Categorías con buen desempeño
-  const goodCats = categories.filter(c => c.opportunity === 'aumentar' && c.googleImpressions >= 1000);
+  const goodCats = hasGscData ? categories.filter(c => c.opportunity === 'aumentar' && c.googleImpressions >= 1000) : [];
   for (const cat of goodCats.slice(0, 3)) {
     actions.push({
       action: `Publicar más en ${cat.categoria}`,
@@ -147,11 +147,10 @@ function findWhatToRepeat(
     });
   }
 
-  // Artículos evergreen (antiguos con tráfico sostenido)
-  const evergreen = articles.filter(a => {
+  const evergreen = hasGscData ? articles.filter(a => {
     const days = (Date.now() - new Date(a.fechaPublicacion).getTime()) / (1000 * 60 * 60 * 24);
     return days > 60 && a.gscImpressions >= 500;
-  });
+  }) : [];
 
   if (evergreen.length > 0) {
     actions.push({
@@ -172,11 +171,11 @@ function findWhatToRepeat(
 function findWhatToStop(
   articles: ArticleFusion[],
   categories: CategoryIntelligenceRow[],
+  hasGscData: boolean,
 ): EditorCEOReport['whatToStop'] {
   const actions: EditorCEOReport['whatToStop'] = [];
 
-  // Categorías con muchos artículos pero sin tráfico
-  const limitCats = categories.filter(c => c.opportunity === 'limitar');
+  const limitCats = hasGscData ? categories.filter(c => c.opportunity === 'limitar') : [];
   for (const cat of limitCats.slice(0, 3)) {
     actions.push({
       action: `Limitar publicación en ${cat.categoria}`,
@@ -251,6 +250,8 @@ export function generateEditorCEOReport(
   const mixReport = generateContentMixReport(articles, gsc, ga4, trust);
   const updateReport = generateArticleUpdateReport(articles);
 
+  const hasGsc = gsc?.status === 'REAL';
+
   // 1. ¿Qué funcionó?
   const whatWorked = findWhatWorked(articles);
 
@@ -258,10 +259,10 @@ export function generateEditorCEOReport(
   const whatFailed = findWhatFailed(articles);
 
   // 3. ¿Qué repetir?
-  const whatToRepeat = findWhatToRepeat(articles, categoryReport.categories);
+  const whatToRepeat = findWhatToRepeat(articles, categoryReport.categories, hasGsc);
 
   // 4. ¿Qué dejar de hacer?
-  const whatToStop = findWhatToStop(articles, categoryReport.categories);
+  const whatToStop = findWhatToStop(articles, categoryReport.categories, hasGsc);
 
   // 5. ¿Qué temas tienen oportunidad?
   const topicOpportunities: QueryOpportunity[] = opportunityReport.topOpportunities;
@@ -269,7 +270,8 @@ export function generateEditorCEOReport(
   // 6. ¿Qué artículos actualizar?
   const articlesToUpdate: ArticleUpdateCandidate[] = updateReport.topPriority;
 
-  const summary = `Reporte editorial: ${whatWorked.length} artículos funcionando, ${whatFailed.length} fracasando. Repetir: ${whatToRepeat.length} acciones. Detener: ${whatToStop.length} acciones. ${topicOpportunities.length} oportunidades de temas. ${articlesToUpdate.length} artículos para actualizar. ${mixReport.totalArticles} artículos recomendados para próxima semana.`;
+  const gscStatus = hasGsc ? 'con datos GSC' : 'GSC ACCESS_BLOCKED; métricas orgánicas no determinables';
+  const summary = `Reporte editorial: ${whatWorked.length} artículos funcionando, ${whatFailed.length} fracasando. GSC: ${gscStatus}. Repetir: ${whatToRepeat.length} acciones. Detener: ${whatToStop.length} acciones. ${topicOpportunities.length} oportunidades de temas. ${articlesToUpdate.length} artículos para actualizar. ${mixReport.totalArticles} artículos recomendados para próxima semana.`;
 
   return {
     generatedAt: now,

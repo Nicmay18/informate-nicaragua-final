@@ -134,6 +134,8 @@ export function mergeArticleData(
       ga4EngagementRate: ga4Data?.engagementRate || 0,
       hasGscData: gsc?.status === 'REAL' && !!gscData,
       hasGa4Data: ga4?.status === 'REAL' && !!ga4Data,
+      gscStatus: gsc?.status ?? 'NO_DATA',
+      ga4Status: ga4?.status ?? 'NO_DATA',
     });
   }
 

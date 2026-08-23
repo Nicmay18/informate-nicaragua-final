@@ -139,6 +139,8 @@ export interface ArticleFusion {
   // Estado de datos
   hasGscData: boolean;
   hasGa4Data: boolean;
+  gscStatus?: NiosDataStatus;
+  ga4Status?: NiosDataStatus;
 }
 
 // ─── Recomendaciones basadas en reglas ─────────────────────────
@@ -306,6 +308,7 @@ export interface GoogleTrustArticle {
   fechaPublicacion: string;
   palabras: number;
   scoreMeni: number | null;
+  gscStatus?: NiosDataStatus;
   gscImpressions: number;
   gscClicks: number;
   gscCtr: number;

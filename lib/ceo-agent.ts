@@ -386,7 +386,9 @@ function readTraffic(
   const status = traffic ? traffic.status : totalViews !== undefined ? 'REAL' : 'NO_DATA';
 
   let interest: ReaderInterest = 'UNKNOWN';
-  if (effective === undefined) {
+  if (traffic && traffic.status !== 'REAL') {
+    interest = 'UNKNOWN';
+  } else if (effective === undefined) {
     interest = 'UNKNOWN';
   } else if (effective >= THRESHOLD_HIGH_VIEWS) {
     interest = 'HIGH';

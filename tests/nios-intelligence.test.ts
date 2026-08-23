@@ -38,6 +38,7 @@ const mockNoticia = (overrides: Partial<Noticia> = {}): Noticia => ({
 const mockGSC = (): GSCSnapshot => ({
   date: '2026-08-05',
   collectedAt: new Date().toISOString(),
+  status: 'REAL',
   siteUrl: 'https://nicaraguainformate.com',
   dateRange: { start: '2026-07-08', end: '2026-08-05' },
   totalImpressions: 50000,
@@ -63,6 +64,7 @@ const mockGSC = (): GSCSnapshot => ({
 const mockGA4 = (): GA4Snapshot => ({
   date: '2026-08-05',
   collectedAt: new Date().toISOString(),
+  status: 'REAL',
   propertyId: '123456',
   dateRange: { start: '2026-07-08', end: '2026-08-05' },
   totalUsers: 15000,
