@@ -74,13 +74,20 @@ function determineMainProblem(a: RecoveryArticle): string {
   if (a.ga4AvgEngagementTimeSec < 60 && a.ga4Users > 0) problems.push('Engagement bajo, posible falla de intención de búsqueda');
   if (a.gscStatus === 'REAL' && a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions < 100) problems.push('MENI alto pero Google no encuentra demanda');
 
-  if (problems.length === 0) return 'Contenido saludable';
+  if (problems.length === 0) {
+    if (a.gscStatus !== 'REAL') return 'Datos insuficientes';
+    return 'Contenido saludable';
+  }
   return problems[0];
 }
 
 function determineRecommendedAction(a: RecoveryArticle): string {
   if (a.status === 'green') {
     return 'Mantener y considerar como referencia de calidad.';
+  }
+
+  if (a.mainProblem === 'Datos insuficientes') {
+    return 'Esperar datos reales de GSC/GA4; el artículo no presenta señales editoriales negativas.';
   }
 
   if (a.palabras < 400) {
@@ -121,7 +128,8 @@ function calculateStatus(score: number): 'green' | 'yellow' | 'red' {
 }
 
 function scoreGooglePerformance(article: ArticleFusion): number {
-  if (article.gscStatus !== 'REAL') return 0;
+  const gpMax = 65;
+  if (article.gscStatus !== 'REAL') return Math.round(gpMax * 0.5);
   let score = 0;
   if (article.gscImpressions >= 1000) score += 25;
   else if (article.gscImpressions >= 100) score += 18;
@@ -317,6 +325,13 @@ export function generateContentRecoveryReport(
 
     base.mainProblem = determineMainProblem(base);
     base.recommendedAction = determineRecommendedAction(base);
+
+    if (base.status === 'red' && base.mainProblem === 'Contenido saludable') {
+      base.status = 'yellow';
+      base.mainProblem = 'Datos insuficientes';
+      base.recommendedAction = 'Esperar datos reales de GSC/GA4; el artículo no tiene señales editoriales negativas.';
+    }
+
     return base;
   });
 

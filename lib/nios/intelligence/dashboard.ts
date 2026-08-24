@@ -34,17 +34,24 @@ export function buildGoogleIntelligenceDashboard(
 ): GoogleIntelligenceDashboard {
   const now = new Date().toISOString();
 
-  if (!gsc || gsc.totalImpressions === 0) {
+  const gscStatus = gsc?.status ?? 'NO_DATA';
+  const ga4Status = ga4?.status ?? 'NO_DATA';
+  const gscReal = gscStatus === 'REAL';
+  const ga4Real = ga4Status === 'REAL';
+
+  if (!gscReal) {
     return {
       generatedAt: now,
       dateRange: gsc?.dateRange || { start: 'N/A', end: 'N/A' },
       hasData: false,
+      gscStatus,
+      ga4Status,
       totalImpressions: 0,
       totalClicks: 0,
       avgCtr: 0,
       avgPosition: 0,
-      totalUsers: ga4?.totalUsers || 0,
-      totalSessions: ga4?.totalSessions || 0,
+      totalUsers: ga4Real ? ga4!.totalUsers : null,
+      totalSessions: ga4Real ? ga4!.totalSessions : null,
       topImpressions: [],
       topCtr: [],
       worstCtr: [],
@@ -55,7 +62,7 @@ export function buildGoogleIntelligenceDashboard(
       zeroImpressionUrls: [],
       lowGscDataUrls: [],
       recommendations: [],
-      trafficSources: ga4?.sources || [],
+      trafficSources: ga4Real ? ga4!.sources : [],
     };
   }
 
@@ -97,7 +104,7 @@ export function buildGoogleIntelligenceDashboard(
     .sort((a, b) => b.impressions - a.impressions);
 
   // Top queries
-  const topQueries: GSCQueryRow[] = [...(gsc.queries || [])]
+  const topQueries: GSCQueryRow[] = [...(gsc!.queries || [])]
     .sort((a, b) => b.clicks - a.clicks)
     .slice(0, 20);
 
@@ -130,14 +137,16 @@ export function buildGoogleIntelligenceDashboard(
 
   return {
     generatedAt: now,
-    dateRange: gsc.dateRange,
+    dateRange: gsc!.dateRange,
     hasData: true,
-    totalImpressions: gsc.totalImpressions,
-    totalClicks: gsc.totalClicks,
-    avgCtr: gsc.avgCtr,
-    avgPosition: gsc.avgPosition,
-    totalUsers: ga4?.totalUsers || 0,
-    totalSessions: ga4?.totalSessions || 0,
+    gscStatus,
+    ga4Status,
+    totalImpressions: gsc!.totalImpressions,
+    totalClicks: gsc!.totalClicks,
+    avgCtr: gsc!.avgCtr,
+    avgPosition: gsc!.avgPosition,
+    totalUsers: ga4Real ? ga4!.totalUsers : null,
+    totalSessions: ga4Real ? ga4!.totalSessions : null,
     topImpressions,
     topCtr,
     worstCtr,
@@ -148,6 +157,6 @@ export function buildGoogleIntelligenceDashboard(
     zeroImpressionUrls,
     lowGscDataUrls,
     recommendations,
-    trafficSources: ga4?.sources || [],
+    trafficSources: ga4Real ? ga4!.sources : [],
   };
 }

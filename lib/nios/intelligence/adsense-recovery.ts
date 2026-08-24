@@ -86,12 +86,12 @@ export function generateAdSenseRecoveryReport(
       reasons: a.palabras < 400 ? [`Menos de 400 palabras (${a.palabras})`] : [],
     }));
 
-  // Artículos que bloquean (sin autor, thin, 0 impresiones)
+  // Artículos que bloquean (sin autor, thin con 0 impresiones reales, o MENI alto ignorado)
   const blockedArticles: GoogleTrustArticle[] = trust.articles
     .filter(a =>
       (!a.hasAutor) ||
-      (a.isThin && a.gscImpressions === 0) ||
-      (a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscImpressions === 0)
+      (a.isThin && a.gscStatus === 'REAL' && a.gscImpressions === 0) ||
+      (a.scoreMeni !== null && a.scoreMeni >= 90 && a.gscStatus === 'REAL' && a.gscImpressions === 0)
     )
     .slice(0, 20);
 

@@ -40,12 +40,14 @@ function formatDate(iso?: string | null) {
   }
 }
 
-function number(n: number) {
-  return (n || 0).toLocaleString('es-NI');
+function number(n: number | null | undefined) {
+  if (n === null || n === undefined) return '—';
+  return n.toLocaleString('es-NI');
 }
 
-function pct(n: number) {
-  return `${(n || 0).toFixed(1)}%`;
+function pct(n: number | null | undefined) {
+  if (n === null || n === undefined) return '—';
+  return `${n.toFixed(1)}%`;
 }
 
 function Metric({ label, value, status }: { label: string; value: string; status?: Status }) {
@@ -117,11 +119,13 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
   const newsImpressions = gsc?.googleNews?.reduce((s, r) => s + r.impressions, 0) ?? 0;
   const newsClicks = gsc?.googleNews?.reduce((s, r) => s + r.clicks, 0) ?? 0;
 
-  const meniScores = snapshot?.articlesFused?.map(a => a.scoreMeni).filter((s): s is number => s !== null) ?? [];
+  const fusedArticles = snapshot?.articlesFused ?? [];
+  const meniScores = fusedArticles.map(a => a.scoreMeni).filter((s): s is number => s !== null) ?? [];
   const meniAvg = meniScores.length > 0
     ? Math.round(meniScores.reduce((s, v) => s + v, 0) / meniScores.length)
     : null;
   const trustAvg = trust?.averageGoogleTrustScore ? Math.round(trust.averageGoogleTrustScore) : null;
+  const gscMatched = fusedArticles.filter(a => a.hasGscData).length;
 
   const attentionItems: string[] = [];
   if (criticalAlerts.length > 0) attentionItems.push(`${criticalAlerts.length} alerta(s) crítica(s) activa(s)`);
@@ -225,53 +229,80 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
 
             {/* Google Intelligence */}
             <Card title="Google Intelligence" icon="🔎" link="/admin/nios/google-intelligence" linkLabel="Ver análisis completo →">
-              {google?.hasData ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <Metric label="Impresiones (Search)" value={number(google.totalImpressions)} status="ok" />
-                    <Metric label="Clics (Search)" value={number(google.totalClicks)} status="ok" />
-                    <Metric label="CTR promedio" value={pct(google.avgCtr)} status={google.avgCtr >= 3 ? 'ok' : 'warning'} />
-                    <Metric label="Posición promedio" value={(Math.round(google.avgPosition * 10) / 10).toString()} status={google.avgPosition <= 20 ? 'ok' : 'warning'} />
-                  </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Metric
+                    label="GSC"
+                    value={gsc?.status ?? 'NO_DATA'}
+                    status={gsc?.status === 'REAL' ? 'ok' : gsc?.status === 'ACCESS_BLOCKED' || gsc?.status === 'CONFIG_REQUIRED' || gsc?.status === 'INVALID_CONFIGURATION' ? 'critical' : 'warning'}
+                  />
+                  <Metric
+                    label="GA4"
+                    value={ga4?.status ?? 'NO_DATA'}
+                    status={ga4?.status === 'REAL' ? 'ok' : ga4?.status === 'ACCESS_BLOCKED' || ga4?.status === 'CONFIG_REQUIRED' || ga4?.status === 'INVALID_CONFIGURATION' ? 'critical' : 'warning'}
+                  />
+                  <Metric
+                    label="Matching GSC/artículo"
+                    value={`${gscMatched} / ${articlesCount}`}
+                    status={gsc?.status === 'REAL' ? 'ok' : 'missing'}
+                  />
+                  {google?.hasData && (
+                    <>
+                      <Metric label="Impresiones (Search)" value={number(gsc?.totalImpressions)} status="ok" />
+                      <Metric label="Clics (Search)" value={number(gsc?.totalClicks)} status="ok" />
+                      <Metric label="CTR promedio" value={pct(google?.avgCtr)} status={(google?.avgCtr ?? 0) >= 3 ? 'ok' : 'warning'} />
+                      <Metric label="Posición promedio" value={(Math.round((google?.avgPosition ?? 0) * 10) / 10).toString()} status={(google?.avgPosition ?? 999) <= 20 ? 'ok' : 'warning'} />
+                    </>
+                  )}
+                </div>
+                {gsc?.status === 'REAL' && (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <Metric label="Discover impresiones" value={number(discoverImpressions)} status={discoverImpressions > 0 ? 'ok' : 'missing'} />
                     <Metric label="Discover clics" value={number(discoverClicks)} status={discoverClicks > 0 ? 'ok' : 'missing'} />
                     <Metric label="News impresiones" value={number(newsImpressions)} status={newsImpressions > 0 ? 'ok' : 'missing'} />
                     <Metric label="News clics" value={number(newsClicks)} status={newsClicks > 0 ? 'ok' : 'missing'} />
                   </div>
-                  {ga4 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <Metric label="Usuarios GA4" value={number(ga4.totalUsers)} status="ok" />
-                      <Metric label="Sesiones" value={number(ga4.totalSessions)} status="ok" />
-                      <Metric label="Pageviews" value={number(ga4.totalPageviews)} status="ok" />
-                      <Metric label="Engagement" value={`${Math.round(ga4.averageEngagementTimeSec)}s`} status="ok" />
-                    </div>
-                  )}
-                  {google.topQueries.length > 0 && (
-                    <div>
-                      <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top queries</h3>
-                      <ul className="text-sm space-y-1">
-                        {google.topQueries.slice(0, 5).map((q) => (
-                          <li key={q.query} className="flex justify-between py-1 border-b border-slate-100">
-                            <span className="truncate max-w-[60%]">{q.query}</span>
-                            <span className="text-slate-500">{number(q.impressions)} imp · {number(q.clicks)} clics</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <EmptyData label="Sin datos de GSC/GA4 disponibles. Ejecuta el pipeline NIOS para recopilar." />
-              )}
+                )}
+                {gsc?.status !== 'REAL' && (
+                  <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+                    <strong>GSC:</strong> {gsc?.status ?? 'NO_DATA'}. {gsc?.errorMessage || 'Datos de propiedad pendientes o matching no disponible.'}
+                  </p>
+                )}
+                {ga4?.status === 'REAL' && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <Metric label="Usuarios GA4" value={number(ga4.totalUsers)} status="ok" />
+                    <Metric label="Sesiones" value={number(ga4.totalSessions)} status="ok" />
+                    <Metric label="Pageviews" value={number(ga4.totalPageviews)} status="ok" />
+                    <Metric label="Engagement" value={`${Math.round(ga4.averageEngagementTimeSec)}s`} status="ok" />
+                  </div>
+                )}
+                {ga4?.status !== 'REAL' && ga4 && (
+                  <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+                    <strong>GA4:</strong> {ga4.status}. {ga4.errorMessage || 'Configuración o permisos pendientes.'}
+                  </p>
+                )}
+                {google?.topQueries && google.topQueries.length > 0 ? (
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top queries</h3>
+                    <ul className="text-sm space-y-1">
+                      {google.topQueries.slice(0, 5).map((q) => (
+                        <li key={q.query} className="flex justify-between py-1 border-b border-slate-100">
+                          <span className="truncate max-w-[60%]">{q.query}</span>
+                          <span className="text-slate-500">{number(q.impressions)} imp · {number(q.clicks)} clics</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
             </Card>
 
-            {/* Google Trust */}
-            <Card title="Google Trust" icon="🛡️" link="/admin/nios/google-intelligence" linkLabel="Ver Trust completo →">
+            {/* NIOS Trust Estimate */}
+            <Card title="NIOS Trust Estimate" icon="🛡️" link="/admin/nios/google-intelligence" linkLabel="Ver Trust completo →">
               {trust ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <Metric label="Trust Score" value={`${Math.round(trust.averageGoogleTrustScore)}/100`} status={statusFromScore(trust.averageGoogleTrustScore, 70, 50)} />
+                    <Metric label="NIOS Trust Estimate" value={`${Math.round(trust.averageGoogleTrustScore)}/100`} status={statusFromScore(trust.averageGoogleTrustScore, 70, 50)} />
                     <Metric label="Thin content" value={number(trust.thinContentCount)} status={trust.thinContentCount > 0 ? 'warning' : 'ok'} />
                     <Metric label="Riesgo duplicado" value={number(trust.duplicateRiskCount)} status={trust.duplicateRiskCount > 0 ? 'warning' : 'ok'} />
                     <Metric label="Sin autor" value={number(trust.articlesWithoutAuthor)} status={trust.articlesWithoutAuthor > 0 ? 'warning' : 'ok'} />
@@ -298,8 +329,8 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
                     <Metric label="AdSense Trust" value={`${Math.round(adsense.trustCheck?.adSenseTrustScore || 0)}/100`} status={statusFromScore(adsense.trustCheck?.adSenseTrustScore || 0, 70, 50)} />
                   </div>
                   <div className="text-sm space-y-1">
-                    <p><strong className="text-slate-700">Problema detectado:</strong> <span className="text-slate-600">{adsense.likelyRejectionReason}</span></p>
-                    <p><strong className="text-slate-700">Estado:</strong> <span className="text-slate-600">No aprobado · Recuperación en progreso</span></p>
+                    <p><strong className="text-slate-700">Hipótesis de recuperación:</strong> <span className="text-slate-600">{adsense.likelyRejectionReason}</span></p>
+                    <p><strong className="text-slate-700">Nivel de evidencia:</strong> <span className="text-slate-600">Hipótesis basada en datos internos · no constituye rechazo oficial de Google</span></p>
                   </div>
                   {adsense.topAffectingUrls.length > 0 && (
                     <div>

@@ -150,6 +150,8 @@ export interface ArticleFusion {
   hasGa4Data: boolean;
   gscStatus?: NiosDataStatus;
   ga4Status?: NiosDataStatus;
+  gscMatchStatus?: 'matched' | 'no_match' | 'no_traffic' | 'no_data';
+  ga4MatchStatus?: 'matched' | 'no_match' | 'no_traffic' | 'no_data';
 }
 
 // ─── Recomendaciones basadas en reglas ─────────────────────────
@@ -253,13 +255,16 @@ export interface GoogleIntelligenceDashboard {
   generatedAt: string;
   dateRange: { start: string; end: string };
   hasData: boolean;
+  // Fuentes
+  gscStatus?: NiosDataStatus;
+  ga4Status?: NiosDataStatus;
   // Totales
   totalImpressions: number;
   totalClicks: number;
   avgCtr: number;
   avgPosition: number;
-  totalUsers: number;
-  totalSessions: number;
+  totalUsers: number | null;
+  totalSessions: number | null;
   // Top 20 notas por impresiones
   topImpressions: ArticleFusion[];
   // Mejor CTR
@@ -289,6 +294,8 @@ export interface GoogleIntelligenceDashboard {
 export interface DailySnapshot {
   date: string;
   collectedAt: string;
+  version?: string;
+  articlesCount?: number;
   gsc: GSCSnapshot | null;
   ga4: GA4Snapshot | null;
   articlesFused: ArticleFusion[];

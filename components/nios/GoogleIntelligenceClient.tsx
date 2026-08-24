@@ -119,8 +119,8 @@ function GoogleTab({ dashboard }: { dashboard: GoogleIntelligenceDashboard }) {
         <KPI label="Clics" value={dashboard.totalClicks.toLocaleString()} color="#0f766e" />
         <KPI label="CTR promedio" value={`${dashboard.avgCtr}%`} color="#3b82f6" />
         <KPI label="Posición media" value={dashboard.avgPosition.toFixed(1)} color="#8b5cf6" />
-        <KPI label="Usuarios (GA4)" value={dashboard.totalUsers.toLocaleString()} color="#f59e0b" />
-        <KPI label="Sesiones (GA4)" value={dashboard.totalSessions.toLocaleString()} color="#f59e0b" />
+        <KPI label="Usuarios (GA4)" value={dashboard.totalUsers?.toLocaleString() ?? '—'} color="#f59e0b" />
+        <KPI label="Sesiones (GA4)" value={dashboard.totalSessions?.toLocaleString() ?? '—'} color="#f59e0b" />
       </div>
 
       {/* Top 20 por impresiones */}

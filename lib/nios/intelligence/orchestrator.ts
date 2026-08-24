@@ -150,8 +150,8 @@ export async function runNIOSPipeline(
     );
     collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
     gsc = result;
-    if (!gsc || gsc.status !== 'REAL') {
-      errors.push(gsc?.errorMessage ?? 'GSC: No se pudieron obtener datos de Google Search Console.');
+    if (!gsc) {
+      gsc = null;
     }
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
@@ -170,11 +170,10 @@ export async function runNIOSPipeline(
       );
       collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
       ga4 = result;
-      if (!ga4 || ga4.status !== 'REAL') {
-        errors.push(ga4?.errorMessage ?? 'GA4: No se pudieron obtener datos de Google Analytics 4.');
+      if (!ga4) {
+        ga4 = null;
       }
     } else {
-      errors.push('GA4: No hay property ID configurado (NIOS_GA4_PROPERTY_ID).');
       collectMetric('ga4-collector', 'error', 0, 'Missing NIOS_GA4_PROPERTY_ID');
     }
   } catch (err) {
@@ -635,15 +634,25 @@ export async function runNIOSPipeline(
   }
 
   // Summary
-  const summary = `NIOS Pipeline completado. GSC: ${gsc ? `${gsc.totalImpressions} impresiones, ${gsc.totalClicks} clics` : 'sin datos'}. GA4: ${ga4 ? `${ga4.totalUsers} usuarios, ${ga4.totalSessions} sesiones` : 'sin datos'}. Artículos: ${articles.length}. Recomendaciones: ${recommendations.length}. Recovery: GREEN ${contentRecovery?.greenPct ?? 0}%, YELLOW ${contentRecovery?.yellowPct ?? 0}%, RED ${contentRecovery?.redPct ?? 0}%. Trust: ${trust?.averageGoogleTrustScore ?? 0}/100. Mejoras: ${improvements.length}. Learning patterns: ${learningPatterns.length}. Health: ${health.score}/100.`;
+  const gscText = gsc
+    ? gsc.status === 'REAL'
+      ? `${gsc.totalImpressions} impresiones, ${gsc.totalClicks} clics`
+      : `estado ${gsc.status}`
+    : 'sin datos';
+  const ga4Text = ga4
+    ? ga4.status === 'REAL'
+      ? `${ga4.totalUsers} usuarios, ${ga4.totalSessions} sesiones`
+      : `estado ${ga4.status}`
+    : 'sin datos';
+  const summary = `NIOS Pipeline completado. GSC: ${gscText}. GA4: ${ga4Text}. Artículos: ${articles.length}. Recomendaciones: ${recommendations.length}. Recovery: GREEN ${contentRecovery?.greenPct ?? 0}%, YELLOW ${contentRecovery?.yellowPct ?? 0}%, RED ${contentRecovery?.redPct ?? 0}%. Trust: ${trust?.averageGoogleTrustScore ?? 0}/100. Mejoras: ${improvements.length}. Learning patterns: ${learningPatterns.length}. Health: ${health.score}/100.`;
 
   logger.info(`[nios-orchestrator] ${summary}`);
 
   return {
     success: errors.length === 0,
     date,
-    gscCollected: !!gsc,
-    ga4Collected: !!ga4,
+    gscCollected: gsc?.status === 'REAL',
+    ga4Collected: ga4?.status === 'REAL',
     articlesAnalyzed: articles.length,
     recommendationsGenerated: recommendations.length,
     complianceGenerated: !!compliance,

@@ -269,8 +269,8 @@ export function generateGoogleTrustReport(articles: ArticleFusion[]): GoogleTrus
     const pctHigh = Math.round((highRisk / totalArticles) * 100);
     const anyGscReal = trustArticles.some(a => a.gscStatus === 'REAL');
     summary = anyGscReal
-      ? `Google Trust Audit: ${totalArticles} artículos analizados. Promedio Internal Trust Estimate: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content. ${highMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`
-      : `Google Trust: datos de GSC ACCESS_BLOCKED. No es posible evaluar impresiones, clics o riesgo orgánico real. El score ${avgScore}/100 refleja señales editoriales, no evidencia de Google. Configurar GSC para obtener métricas reales.`;
+      ? `NIOS Trust Audit: ${totalArticles} artículos analizados. Promedio NIOS Trust Estimate: ${avgScore}/100. ${highRisk} artículos de riesgo alto (${pctHigh}%), ${mediumRisk} de riesgo medio, ${lowRisk} de riesgo bajo. ${thinCount} artículos tienen thin content. ${highMeniZeroImpressions} artículos con MENI ≥90 sin datos de GSC. ${lowMeniHighImpressions} artículos con MENI <80 reciben tráfico real. Recomendación: optimizar contenido existente antes de publicar más.`
+      : `NIOS Trust: datos de GSC no disponibles (${articles[0]?.gscStatus ?? 'NO_DATA'}). No es posible evaluar impresiones, clics o riesgo orgánico real. El score ${avgScore}/100 refleja señales editoriales, no evidencia de Google. Configurar GSC para obtener métricas reales.`;
   }
 
   return {

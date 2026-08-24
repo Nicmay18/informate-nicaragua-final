@@ -111,6 +111,12 @@ export function mergeArticleData(
     const gscData = gscBySlug.get(n.slug);
     const ga4Data = ga4BySlug.get(n.slug);
 
+    const gscReal = gsc?.status === 'REAL';
+    const ga4Real = ga4?.status === 'REAL';
+
+    const gscMatchStatus = !gscReal ? 'no_data' : gscData ? 'matched' : 'no_traffic';
+    const ga4MatchStatus = !ga4Real ? 'no_data' : ga4Data ? 'matched' : 'no_traffic';
+
     fusions.push({
       slug: n.slug,
       url: `${SITE_URL}/noticias/${n.slug}`,
@@ -132,10 +138,12 @@ export function mergeArticleData(
       ga4Pageviews: ga4Data?.pageviews || 0,
       ga4AvgEngagementTimeSec: ga4Data?.avgEngagementTimeSec || 0,
       ga4EngagementRate: ga4Data?.engagementRate || 0,
-      hasGscData: gsc?.status === 'REAL' && !!gscData,
-      hasGa4Data: ga4?.status === 'REAL' && !!ga4Data,
+      hasGscData: gscReal && !!gscData,
+      hasGa4Data: ga4Real && !!ga4Data,
       gscStatus: gsc?.status ?? 'NO_DATA',
       ga4Status: ga4?.status ?? 'NO_DATA',
+      gscMatchStatus,
+      ga4MatchStatus,
     });
   }
 

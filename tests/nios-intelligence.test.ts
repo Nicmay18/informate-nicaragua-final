@@ -12,7 +12,9 @@ import { generateRecommendations } from '@/lib/nios/intelligence/editorial-rules
 import { generateComplianceReport } from '@/lib/nios/intelligence/compliance';
 import { generateReadinessReport } from '@/lib/nios/intelligence/readiness';
 import { buildGoogleIntelligenceDashboard } from '@/lib/nios/intelligence/dashboard';
-import type { ArticleFusion, GSCSnapshot, GA4Snapshot } from '@/lib/nios/intelligence/types';
+import { generateGoogleTrustReport } from '@/lib/nios/intelligence/google-trust';
+import { generateContentRecoveryReport } from '@/lib/nios/intelligence/content-recovery';
+import type { ArticleFusion, GSCSnapshot, GA4Snapshot, GoogleTrustArticle } from '@/lib/nios/intelligence/types';
 import type { Noticia } from '@/lib/types';
 
 // ─── Fixtures ──────────────────────────────────────────────────
@@ -543,5 +545,102 @@ describe('Dashboard Builder', () => {
 
     expect(dashboard.hasData).toBe(false);
     expect(dashboard.topImpressions).toHaveLength(0);
+  });
+});
+
+// ─── Tests: Misión 14 — Forensic Repair ───────────────────────
+
+describe('Misión 14 — Source Status & Forensic Coherence', () => {
+  it('distinguishes GSC CONFIG_REQUIRED and preserves GA4 REAL totals', () => {
+    const gsc: GSCSnapshot = {
+      ...mockGSC(),
+      status: 'CONFIG_REQUIRED',
+      totalImpressions: 0,
+      totalClicks: 0,
+      errorMessage: 'GSC not configured',
+    };
+    const ga4 = mockGA4();
+    const dashboard = buildGoogleIntelligenceDashboard([], gsc, ga4, []);
+
+    expect(dashboard.hasData).toBe(false);
+    expect(dashboard.gscStatus).toBe('CONFIG_REQUIRED');
+    expect(dashboard.totalUsers).toBe(ga4.totalUsers);
+    expect(dashboard.totalSessions).toBe(ga4.totalSessions);
+  });
+
+  it('sets GA4 totals to null when GA4 is CONFIG_REQUIRED', () => {
+    const gsc = mockGSC();
+    const ga4: GA4Snapshot = {
+      ...mockGA4(),
+      status: 'CONFIG_REQUIRED',
+      errorMessage: 'GA4 property missing',
+    };
+    const dashboard = buildGoogleIntelligenceDashboard([], gsc, ga4, []);
+
+    expect(dashboard.gscStatus).toBe('REAL');
+    expect(dashboard.ga4Status).toBe('CONFIG_REQUIRED');
+    expect(dashboard.hasData).toBe(true);
+    expect(dashboard.totalUsers).toBeNull();
+    expect(dashboard.totalSessions).toBeNull();
+  });
+
+  it('data-merger marks matched, no_traffic and no_data correctly', () => {
+    const noticias = [
+      mockNoticia({ slug: 'test-article' }),
+      mockNoticia({ slug: 'sin-trafico' }),
+    ];
+    const gsc = mockGSC();
+    const ga4 = null;
+    const result = mergeArticleData(noticias, gsc, ga4);
+
+    const matched = result.find((a: ArticleFusion) => a.slug === 'test-article');
+    const noTraffic = result.find((a: ArticleFusion) => a.slug === 'sin-trafico');
+
+    expect(matched?.gscMatchStatus).toBe('matched');
+    expect(noTraffic?.gscMatchStatus).toBe('no_traffic');
+
+    const noGsc = mergeArticleData(noticias, null, null);
+    expect(noGsc[0].gscMatchStatus).toBe('no_data');
+  });
+
+  it('does not mark a healthy article as RED only because GSC/GA4 are not REAL', () => {
+    const articles: ArticleFusion[] = [
+      {
+        slug: 'saludable-sin-google',
+        url: 'https://nicaraguainformate.com/noticias/saludable-sin-google',
+        titulo: 'Saludable sin Google',
+        categoria: 'Nacionales',
+        autor: 'Test Author',
+        fechaPublicacion: new Date().toISOString(),
+        palabras: 600,
+        scoreMeni: 85,
+        tags: ['a', 'b'],
+        relatedLinksCount: 2,
+        gscImpressions: 0,
+        gscClicks: 0,
+        gscCtr: 0,
+        gscPosition: 0,
+        gscTopQueries: [],
+        ga4Users: 0,
+        ga4Sessions: 0,
+        ga4Pageviews: 0,
+        ga4AvgEngagementTimeSec: 0,
+        ga4EngagementRate: 0,
+        hasGscData: false,
+        hasGa4Data: false,
+        gscStatus: 'NO_DATA',
+        ga4Status: 'NO_DATA',
+      },
+    ];
+
+    const trust = generateGoogleTrustReport(articles);
+    const trustMap = new Map(
+      trust.articles.map((a: GoogleTrustArticle) => [a.slug, { googleTrustScore: a.googleTrustScore, risk: a.risk }]),
+    );
+    const recovery = generateContentRecoveryReport(articles, trustMap);
+
+    expect(recovery.articles[0].status).not.toBe('red');
+    expect(recovery.articles[0].mainProblem).not.toBe('Contenido saludable');
+    expect(recovery.articles[0].mainProblem).toBe('Datos insuficientes');
   });
 });

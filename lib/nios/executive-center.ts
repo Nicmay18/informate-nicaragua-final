@@ -100,9 +100,9 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
   const snapshotHistory: SnapshotSummary[] = historicalSnapshots.map((s) => ({
     date: s.date,
     collectedAt: s.collectedAt,
-    articlesCount: s.articlesFused?.length ?? 0,
-    hasGsc: !!s.gsc,
-    hasGa4: !!s.ga4,
+    articlesCount: s.articlesCount ?? s.articlesFused?.length ?? 0,
+    hasGsc: s.gsc?.status === 'REAL',
+    hasGa4: s.ga4?.status === 'REAL',
     trustScore: s.trust?.averageGoogleTrustScore ?? null,
   }));
 
