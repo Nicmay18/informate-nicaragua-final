@@ -102,8 +102,10 @@ export async function guardarConMeni(
 
   // ok = MENI approval (meni.aprobado). supervisorApproved remains the Supervisor verdict.
   // Callers should check MENI first and Supervisor second.
+  // PUBLICAR_CON_CAMBIOS también es aprobado: el Supervisor permite publicar
+  // mientras se muestren las recomendaciones de ajuste menor.
   const ok = meni.aprobado;
-  const supervisorApproved = supervisor.verdict === 'PUBLICAR';
+  const supervisorApproved = ['PUBLICAR', 'PUBLICAR_CON_CAMBIOS'].includes(supervisor.verdict);
 
   // REGLA 14: Una sola decision editorial canonica — el Supervisor.
   // buildEditorialDecision (decision.ts) fue eliminado del flujo porque

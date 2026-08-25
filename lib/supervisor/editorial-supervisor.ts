@@ -402,6 +402,12 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     resultingState = 'EDITORIAL_REVIEW';
   }
 
+  // PUBLICAR_CON_CAMBIOS también es publicable: marcamos READY para que
+  // guardar-directo no deje la noticia atascada en EDITORIAL_REVIEW.
+  if (verdict === 'PUBLICAR_CON_CAMBIOS') {
+    resultingState = 'READY';
+  }
+
   // ── 2.7b INVARIANTE FINAL DE PUBLICACIÓN ─────────────────────
   // Cirugía anti-bypass: por construcción las ramas anteriores ya impiden
   // llegar a PUBLICAR sin meniCleared, pero este guard es la red de seguridad
