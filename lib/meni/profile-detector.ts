@@ -459,6 +459,37 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'gases volcánicos', weight: 2 },
     { keyword: 'comupred', weight: 1.2 },
     { keyword: 'sinapred', weight: 1.2 },
+    { keyword: 'eclipse', weight: 3 },
+    { keyword: 'eclipses', weight: 3 },
+    { keyword: 'lunar', weight: 2 },
+    { keyword: 'luna', weight: 1.5 },
+    { keyword: 'lunas', weight: 1.5 },
+    { keyword: 'luna de sangre', weight: 2.5 },
+    { keyword: 'sombra terrestre', weight: 2 },
+    { keyword: 'umbra', weight: 1.5 },
+    { keyword: 'penumbra', weight: 1.5 },
+    { keyword: 'astronomico', weight: 2.5 },
+    { keyword: 'astronómico', weight: 2.5 },
+    { keyword: 'astronomia', weight: 2.5 },
+    { keyword: 'astronomía', weight: 2.5 },
+    { keyword: 'astronomo', weight: 1.5 },
+    { keyword: 'astrónomo', weight: 1.5 },
+    { keyword: 'observatorio', weight: 1.5 },
+    { keyword: 'satelite', weight: 1.5 },
+    { keyword: 'satélite', weight: 1.5 },
+    { keyword: 'cometa', weight: 1.5 },
+    { keyword: 'cometas', weight: 1.5 },
+    { keyword: 'meteorito', weight: 1.5 },
+    { keyword: 'meteoritos', weight: 1.5 },
+    { keyword: 'estrella', weight: 1 },
+    { keyword: 'estrellas', weight: 1 },
+    { keyword: 'planeta', weight: 1 },
+    { keyword: 'planetas', weight: 1 },
+    { keyword: 'constelacion', weight: 1 },
+    { keyword: 'constelación', weight: 1 },
+    { keyword: 'galaxia', weight: 1 },
+    { keyword: 'cielo', weight: 0.8 },
+    { keyword: 'firmamento', weight: 0.8 },
   ],
 };
 
@@ -521,6 +552,19 @@ export function detectContentProfile(
   if (scores.espectaculos > 0 && scores.cultura > 0) {
     scores.espectaculos += 2;
   }
+  // Astronomía / fenómenos naturales del cielo NO son espectáculos.
+  // La palabra 'espectáculo' usada descriptivamente no debe volcar un eclipse a Espectáculos.
+  const astronomyMarkers = new Set([
+    'eclipse', 'eclipses', 'lunar', 'luna', 'lunas', 'cometa', 'cometas',
+    'meteorito', 'meteoritos', 'planeta', 'planetas', 'satelite', 'estrella',
+    'estrellas', 'constelacion', 'galaxia', 'astronomico', 'astronomia',
+    'astronomo', 'observatorio', 'firmamento',
+  ]);
+  const hasAstronomy = allMatched.some(kw => astronomyMarkers.has(kw));
+  if (hasAstronomy && scores.espectaculos > 0) {
+    scores.espectaculos = 0;
+  }
+
   // Espectáculos NO debe ser ambiente: si ambos puntúan, espectáculos gana
   if (scores.espectaculos > 0 && scores.ambiente > 0) {
     scores.ambiente = Math.max(0, scores.ambiente - scores.espectaculos);

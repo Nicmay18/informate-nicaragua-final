@@ -442,8 +442,14 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     reason = `NO recomiendo publicar. ${issues.filter(i => i.severity === 'CRITICAL').map(i => i.problem).join('; ')}`;
   } else if (hasImportantIssues) {
     reason = `Requiere atención antes de publicar. ${issues.filter(i => i.severity === 'IMPORTANT').map(i => i.problem).join('; ')}`;
-  } else {
+  } else if (verdict === 'PUBLICAR') {
     reason = 'La noticia cumple los criterios editoriales mínimos para publicar.';
+  } else if (verdict === 'REVISION_HUMANA') {
+    reason = 'El Supervisor requiere una revisión humana antes de publicar. MENI no aprobó automáticamente o el valor periodístico no es excepcional.';
+  } else if (verdict === 'PUBLICAR_CON_CAMBIOS') {
+    reason = 'El Supervisor pide ajustes menores antes de publicar.';
+  } else {
+    reason = `Veredicto del Supervisor: ${verdict}.`;
   }
 
   return {

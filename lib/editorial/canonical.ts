@@ -102,7 +102,6 @@ const LEGACY_TO_PUBLIC_CATEGORY: Record<string, PublicCategory> = {
   'Educación': 'Nacionales',
   'Gastronomía': 'Nacionales',
   'Política': 'Nacionales',
-  'General': 'Nacionales',
 };
 
 // Marcadores para resolver ambigüedades nacionales/sucesos sin alterar
