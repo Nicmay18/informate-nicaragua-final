@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 import type { Firestore } from 'firebase-admin/firestore';
 import type { ReliabilitySnapshot } from './reliability-monitor';
 import type { NiosHealthScore } from './health-score';
+import { runAlertEngine, type AlertEngineResult } from './alert-engine';
 
 const ALERTS_COLLECTION = 'nios_alerts';
 
@@ -119,6 +120,23 @@ export async function persistAlerts(
   } catch (err) {
     logger.error('[nios-alerts] Failed to persist alerts:', err);
   }
+}
+
+/**
+ * Emite alertas aplicando deduplicación y cooldown contra el historial.
+ * Solo persiste las alertas que superan el motor de alertas.
+ */
+export async function emitAlerts(
+  db: Firestore,
+  candidates: NiosAlert[],
+): Promise<AlertEngineResult> {
+  const recent = await getActiveAlerts(db, 7);
+  const result = runAlertEngine(candidates, recent);
+  await persistAlerts(db, result.toEmit);
+  if (result.suppressedByCooldown.length > 0 || result.suppressedDuplicates.length > 0) {
+    logger.info(`[nios-alerts] ${result.summary}`);
+  }
+  return result;
 }
 
 /**

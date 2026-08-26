@@ -140,6 +140,9 @@ export function generateOperatingReport(input: NiosOperatingReportInput): NiosOp
       autoFixAvailable: false,
       requiresHuman: true,
       expectedResult: 'snapshotCount === dashboardCount y el dashboard consume el mismo snapshot.',
+      lastAttemptAt: generatedAt,
+      dataAgeHours: 0,
+      confidence: 95,
     });
   }
 

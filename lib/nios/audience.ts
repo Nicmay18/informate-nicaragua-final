@@ -1,6 +1,7 @@
 import { getNews } from '@/lib/data';
 import type { NiosModuleReport, NiosRecommendation } from './types';
 import { rec, sortByPriority, trackError } from './utils';
+import { isContentComplete } from './intelligence/absurd-recommendation-guard';
 
 export async function runAudienceIntelligence(): Promise<NiosModuleReport> {
   try {
@@ -23,7 +24,16 @@ export async function runAudienceIntelligence(): Promise<NiosModuleReport> {
       .sort((a, b) => b.views - a.views);
 
     const avgPalabras = noticias.reduce((s, n) => s + (n.palabras || 0), 0) / noticias.length;
-    const shallow = noticias.filter((n) => (n.palabras || 0) < avgPalabras * 0.6 && (n.vistas || 0) > 0).length;
+    const shallow = noticias.filter(
+      (n) =>
+        (n.palabras || 0) < avgPalabras * 0.6 &&
+        (n.vistas || 0) > 0 &&
+        !isContentComplete({
+          scoreMeni: n.scoreMeni ?? null,
+          palabras: n.palabras || 0,
+          vistas: n.vistas || 0,
+        }),
+    ).length;
     const topCategory = categoryEntries[0];
     const bottomCategory = categoryEntries[categoryEntries.length - 1];
 

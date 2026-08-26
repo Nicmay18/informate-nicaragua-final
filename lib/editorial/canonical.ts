@@ -63,6 +63,7 @@ export const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCatego
   internacional: 'Internacionales',
   educacion: 'Nacionales',
   ambiente: 'Nacionales',
+  astronomia: 'Nacionales',
   turismo: 'Nacionales',
   gastronomia: 'Nacionales',
 };

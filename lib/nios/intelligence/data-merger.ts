@@ -106,7 +106,7 @@ export function mergeArticleData(
   const fusions: ArticleFusion[] = [];
 
   for (const n of noticias) {
-    if (n.estado !== 'publicado') continue;
+    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
 
     const gscData = gscBySlug.get(n.slug);
     const ga4Data = ga4BySlug.get(n.slug);
@@ -158,29 +158,30 @@ export function mergeArticleData(
 export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Promise<Noticia[]> {
   const snap = await db
     .collection('noticias')
-    .where('estado', '==', 'publicado')
+    .orderBy('fecha', 'desc')
     .limit(limit)
     .get();
 
-  return snap.docs.map((doc) => {
-    const d = doc.data();
-    return {
-      id: doc.id,
-      slug: d.slug || '',
-      titulo: d.titulo || '',
-      resumen: d.resumen || '',
-      contenido: d.contenido || '',
-      categoria: d.categoria || 'General',
-      imagen: d.imagen || '',
-      fecha: d.fecha || new Date().toISOString(),
-      autor: d.autor || '',
-      palabras: d.palabras || 0,
-      scoreMeni: d.scoreMeni ?? null,
-      // scoreCalidad eliminado: NIOS solo consume scoreMeni.
-      // Sin MENI → scoreMeni null → NO EVALUADO. No hay fallback.
-      tags: d.tags || [],
-      related_links: d.related_links || [],
-      estado: d.estado || 'publicado',
-    } as Noticia;
-  });
+  return snap.docs
+    .map((doc) => {
+      const d = doc.data();
+      const estado = d.estado || 'publicado';
+      return {
+        id: doc.id,
+        slug: d.slug || '',
+        titulo: d.titulo || '',
+        resumen: d.resumen || '',
+        contenido: d.contenido || '',
+        categoria: d.categoria || 'General',
+        imagen: d.imagen || '',
+        fecha: d.fecha || new Date().toISOString(),
+        autor: d.autor || '',
+        palabras: d.palabras || 0,
+        scoreMeni: d.scoreMeni ?? null,
+        tags: d.tags || [],
+        related_links: d.related_links || [],
+        estado,
+      } as Noticia;
+    })
+    .filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
 }

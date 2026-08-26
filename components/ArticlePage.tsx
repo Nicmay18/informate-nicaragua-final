@@ -11,6 +11,7 @@ import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { injectInternalLinks } from '@/lib/article-links';
 import { trackViewAction } from '@/app/actions/track-view';
+import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -45,12 +46,24 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     setFontIndex(1);
   }, [noticia.id]);
 
-  // Optimistic +1: muestra inmediatamente la vista del usuario actual
-  const [views, setViews] = useState(() => (noticia.vistas || 0) + 1);
+  // Vista canónica: sincroniza con noticias.vistas en Firestore (misma fuente del panel)
+  const [views, setViews] = useState(() => noticia.vistas || 0);
 
   useEffect(() => {
-    setViews((noticia.vistas || 0) + 1);
+    setViews(noticia.vistas || 0);
   }, [noticia.id, noticia.vistas]);
+
+  useEffect(() => {
+    if (!noticia.slug) return;
+
+    getArticleMetricsAction(noticia.slug)
+      .then((res) => {
+        if (res.ok && res.metrics && typeof res.metrics.cmsViews === 'number') {
+          setViews(res.metrics.cmsViews);
+        }
+      })
+      .catch(() => { /* el fallback es mantener el SSR */ });
+  }, [noticia.id, noticia.slug]);
 
   // ============================================================
   // TRACKING DE VISTAS: Server Action (sin Firestore client)

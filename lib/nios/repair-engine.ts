@@ -195,6 +195,9 @@ async function collectSystemState(state: NiosRepairEngineState): Promise<NiosSys
       autoFixAvailable: true,
       requiresHuman: false,
       expectedResult: `snapshotCount === dashboardCount (${dashboardCount}).`,
+      lastAttemptAt: new Date().toISOString(),
+      dataAgeHours: 0,
+      confidence: 95,
     });
   }
 

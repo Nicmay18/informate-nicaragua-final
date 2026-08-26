@@ -11,6 +11,7 @@ import type {
   ImprovementRecommendation,
   NIOSEvidence,
 } from './types';
+import { isContentComplete } from './absurd-recommendation-guard';
 
 function evidence(source: NIOSEvidence['source'], metric: string, value: string | number, now: string): NIOSEvidence {
   return {
@@ -83,8 +84,8 @@ export function generateImprovementRecommendations(
       }
     }
 
-    // 3. Sucesos cortos
-    if (article.categoria === 'Sucesos' && article.palabras < 400) {
+    // 3. Sucesos cortos (solo si no está ya completo)
+    if (article.categoria === 'Sucesos' && article.palabras < 400 && !isContentComplete(article)) {
       if (addIfNotExists(recs, article.slug, 'sucesos-corto')) {
         recs.push({
           id: `improve-${article.slug}-sucesos-corto`,

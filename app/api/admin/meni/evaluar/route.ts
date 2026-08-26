@@ -3,6 +3,7 @@ import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runMeni, runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
+import { runEditorialDiagnosis, generateCEOResponse } from '@/lib/nios/editorial-diagnosis';
 
 export const maxDuration = 30;
 
@@ -45,9 +46,14 @@ export async function POST(request: NextRequest) {
     }
     const tMs = Date.now() - tStart;
 
+    const diagnosis = runEditorialDiagnosis(noticia, resultado);
+    const ceoResponse = generateCEOResponse(diagnosis);
+
     return NextResponse.json({
       success: true,
       result: resultado,
+      diagnosis,
+      ceo: ceoResponse,
       _timingMs: tMs,
     });
   } catch (error) {

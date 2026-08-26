@@ -18,6 +18,18 @@ export interface NiosDiagnostic {
   account?: string;
   property?: string;
   variable?: string;
+  /** Timestamp ISO de la última recolección o diagnóstico. */
+  lastAttemptAt: string;
+  /** Timestamp ISO del último éxito; undefined si nunca hubo. */
+  lastSuccessAt?: string;
+  /** Timestamp ISO del día más reciente cubierto por los datos; undefined sin datos. */
+  lastDataAt?: string;
+  /** Horas transcurridas desde el último éxito o intento. */
+  dataAgeHours: number | null;
+  /** 0-100. Refleja confianza en la fuente según estado y frescura. */
+  confidence: number;
+  /** Mensaje de error de la fuente, si existe. */
+  errorMessage?: string;
 }
 
 function severityForStatus(status: NiosDataStatus): NiosDiagnosticSeverity {
@@ -42,10 +54,49 @@ function severityForStatus(status: NiosDataStatus): NiosDiagnosticSeverity {
   }
 }
 
+function diagnosticMeta(
+  snapshot: { status?: NiosDataStatus; collectedAt?: string; dateRange?: { start?: string; end?: string }; errorMessage?: string } | null,
+  now = new Date(),
+) {
+  const nowIso = now.toISOString();
+  const lastAttemptAt = snapshot?.collectedAt || nowIso;
+  const lastSuccessAt = snapshot?.status === 'REAL' ? (snapshot?.collectedAt || nowIso) : undefined;
+  const lastDataAt = snapshot?.status === 'REAL' ? (snapshot?.dateRange?.end || snapshot?.collectedAt || nowIso) : undefined;
+  const dataAgeHours = (() => {
+    const ref = lastSuccessAt || lastAttemptAt;
+    try {
+      const d = new Date(ref).getTime();
+      if (Number.isNaN(d)) return null;
+      return Math.max(0, Math.round((now.getTime() - d) / 36e5));
+    } catch {
+      return null;
+    }
+  })();
+
+  let confidence = 0;
+  if (snapshot?.status === 'REAL') {
+    confidence = dataAgeHours === null ? 50 : dataAgeHours <= 24 ? 95 : dataAgeHours <= 72 ? 75 : 50;
+  } else if (snapshot?.status === 'CONNECTED_NO_DATA') {
+    confidence = 30;
+  } else if (snapshot?.status === 'NO_DATA') {
+    confidence = 0;
+  }
+
+  return {
+    lastAttemptAt,
+    lastSuccessAt,
+    lastDataAt,
+    dataAgeHours,
+    confidence,
+    errorMessage: snapshot?.errorMessage,
+  };
+}
+
 function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
   const status = snapshot?.status ?? 'NO_DATA';
   const siteUrl = snapshot?.siteUrl || process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || '';
   const account = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const meta = diagnosticMeta(snapshot);
 
   if (status === 'REAL') {
     return {
@@ -63,6 +114,7 @@ function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
       expectedResult: 'gscStatus continúa en REAL.',
       account,
       property: siteUrl,
+      ...meta,
     };
   }
 
@@ -82,6 +134,7 @@ function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
       expectedResult: 'gscStatus = REAL y se obtienen impresiones/clics reales.',
       account,
       property: siteUrl,
+      ...meta,
     };
   }
 
@@ -100,6 +153,7 @@ function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
       requiresHuman: true,
       expectedResult: 'collectGSC recibe una propiedad válida.',
       variable: 'NIOS_GSC_SITE_URL',
+      ...meta,
     };
   }
 
@@ -118,6 +172,7 @@ function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
     expectedResult: 'gscStatus cambia a REAL o ACCESS_BLOCKED con causa clara.',
     account,
     property: siteUrl,
+    ...meta,
   };
 }
 
@@ -125,6 +180,7 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
   const status = snapshot?.status ?? 'NO_DATA';
   const propertyId = snapshot?.propertyId || process.env.NIOS_GA4_PROPERTY_ID || '';
   const account = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const meta = diagnosticMeta(snapshot);
 
   if (status === 'REAL') {
     return {
@@ -142,6 +198,7 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
       expectedResult: 'ga4Status continúa en REAL.',
       account,
       property: propertyId,
+      ...meta,
     };
   }
 
@@ -160,6 +217,7 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
       requiresHuman: true,
       expectedResult: 'ga4Status = REAL tras configurar el ID y permisos.',
       variable: 'NIOS_GA4_PROPERTY_ID',
+      ...meta,
     };
   }
 
@@ -180,6 +238,7 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
       account,
       property: propertyId,
       variable: 'NIOS_GA4_PROPERTY_ID',
+      ...meta,
     };
   }
 
@@ -199,6 +258,7 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
       expectedResult: 'ga4Status = REAL.',
       account,
       property: propertyId,
+      ...meta,
     };
   }
 
@@ -217,11 +277,13 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
     expectedResult: 'ga4Status cambia a REAL.',
     account,
     property: propertyId,
+    ...meta,
   };
 }
 
 function adSenseDiagnostic(): NiosDiagnostic {
   const hasClientId = Boolean(process.env.GOOGLE_ADSENSE_CLIENT_ID);
+  const meta = diagnosticMeta(null);
 
   if (hasClientId) {
     return {
@@ -238,6 +300,7 @@ function adSenseDiagnostic(): NiosDiagnostic {
       requiresHuman: true,
       expectedResult: 'Decisión sobre si AdSense API entra en el alcance actual.',
       variable: 'GOOGLE_ADSENSE_CLIENT_ID',
+      ...meta,
     };
   }
 
@@ -255,6 +318,7 @@ function adSenseDiagnostic(): NiosDiagnostic {
     requiresHuman: false,
     expectedResult: 'AdSense permanece como fuente opcional hasta que se configure.',
     variable: 'GOOGLE_ADSENSE_CLIENT_ID',
+    ...meta,
   };
 }
 

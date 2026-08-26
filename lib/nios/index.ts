@@ -1,5 +1,7 @@
 import { runAudienceIntelligence } from './audience';
 import { buildCeoReport } from './ceoReport';
+export { runEditorialDiagnosis, generateCEOResponse } from './editorial-diagnosis';
+export type { EditorialDiagnosis, EditorialProblem, CEOResponse } from './editorial-diagnosis';
 import { runCompetitorIntelligence } from './competitors';
 import { runContentLifecycle } from './contentLifecycle';
 import { runDistributionIntelligence } from './distribution';
