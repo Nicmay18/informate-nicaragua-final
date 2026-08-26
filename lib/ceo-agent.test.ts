@@ -434,7 +434,11 @@ describe('Real article integration', { timeout: 60000 }, () => {
 
     let accessOk = false;
     try {
-      await getAdminDb().collection('noticias').limit(1).get();
+      const probe = getAdminDb().collection('noticias').limit(1).get();
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('FIRESTORE_TIMEOUT')), 15000),
+      );
+      await Promise.race([probe, timeout]);
       accessOk = true;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

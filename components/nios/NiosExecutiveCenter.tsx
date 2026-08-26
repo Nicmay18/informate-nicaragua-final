@@ -78,6 +78,7 @@ function EmptyData({ label }: { label: string }) {
 
 const NAV_LINKS = [
   { href: '/admin/nios', label: 'Overview', icon: '🧠' },
+  { href: '/admin/nios/reparaciones', label: 'Reparaciones', icon: '🛠️' },
   { href: '/admin/nios/google-intelligence', label: 'Google Intelligence', icon: '🔎' },
   { href: '/admin/nios/adsense-recovery', label: 'AdSense Recovery', icon: '💰' },
   { href: '/admin/nios/adsense-report', label: 'AdSense Report', icon: '📊' },

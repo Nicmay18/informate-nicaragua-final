@@ -243,17 +243,17 @@ function adSenseDiagnostic(): NiosDiagnostic {
 
   return {
     id: 'adsense-not-configured',
-    severity: 'low',
+    severity: 'info',
     source: 'AdSense',
     status: 'NOT_CONFIGURED',
     problem: 'AdSense no está conectado a NIOS.',
     cause: 'GOOGLE_ADSENSE_CLIENT_ID no está configurada y no existe collector.',
     impact: 'No hay ingresos reales de AdSense en los reportes. No bloquea el resto de NIOS.',
     recommendedAction: 'Configurar GOOGLE_ADSENSE_CLIENT_ID e implementar collector solo si AdSense API es requerido.',
-    action: 'NO_ACTION_OR_HUMAN_DECISION',
+    action: 'NO_ACTION',
     autoFixAvailable: false,
-    requiresHuman: true,
-    expectedResult: 'Decisión sobre si AdSense API es necesario.',
+    requiresHuman: false,
+    expectedResult: 'AdSense permanece como fuente opcional hasta que se configure.',
     variable: 'GOOGLE_ADSENSE_CLIENT_ID',
   };
 }

@@ -70,11 +70,18 @@ async function runQuery(
     return (res.data.rows || []) as unknown as GSCRawRow[];
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    if (/\b(403|permission|unauthorized|insufficient)\b/i.test(message)) {
+    const data = (err as any)?.response?.data;
+    const dataText = data ? JSON.stringify(data) : '';
+    const combined = `${message} ${dataText}`;
+    if (/\b(403|permission|unauthorized|insufficient)\b/i.test(combined)) {
       logger.error(`[gsc-collector] Access blocked: ${message}`);
       throw err;
     }
-    logger.warn(`[gsc-collector] Error query dimensions=${dimensions.join(',')}, type=${type}:`, err);
+    if (/\b(invalid|jwt|signature|malformed|key|credential|invalid_grant)\b/i.test(combined)) {
+      logger.error(`[gsc-collector] Invalid configuration: ${message}`);
+      throw err;
+    }
+    logger.warn(`[gsc-collector] Error query dimensions=${dimensions.join(',')}, type=${type}: ${message}`);
     return [];
   }
 }
@@ -132,8 +139,14 @@ export async function collectGSC(
 
   logger.info(`[gsc-collector] Collecting GSC data for ${siteUrl} from ${startDate} to ${endDate}`);
 
+  const timeoutMs = 15000;
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('GSC_TIMEOUT')), timeoutMs),
+  );
+
   try {
-    const auth = await getAuthClient();
+    const collectionPromise = (async () => {
+      const auth = await getAuthClient();
 
     // 1. Páginas (URLs)
     const pageRows = await runQuery(auth, siteUrl, startDate, endDate, ['page']);
@@ -263,13 +276,21 @@ export async function collectGSC(
 
     logger.info(`[gsc-collector] Collected: ${pages.length} pages, ${queries.length} queries, ${totalImpressions} impressions, ${totalClicks} clicks`);
 
-    return snapshot;
+      return snapshot;
+    })();
+
+    return await Promise.race([collectionPromise, timeoutPromise]);
   } catch (err) {
     const rawMessage = err instanceof Error ? err.message : String(err);
-    logger.error('[gsc-collector] Collection failed:', rawMessage);
-    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(rawMessage)
+    const data = (err as any)?.response?.data;
+    const dataText = data ? JSON.stringify(data) : '';
+    const combined = `${rawMessage} ${dataText}`;
+    logger.error('[gsc-collector] Collection failed:', combined);
+    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(combined)
       ? 'ACCESS_BLOCKED'
-      : 'NO_DATA';
+      : /\b(invalid|jwt|signature|malformed|key|credential|invalid_grant)\b/i.test(combined)
+        ? 'INVALID_CONFIGURATION'
+        : 'NO_DATA';
     const errorMessage = status === 'ACCESS_BLOCKED'
       ? `Acceso bloqueado. Cuenta utilizada: ${serviceAccountEmail || 'no configurada'}. ` +
         `Propiedad solicitada: ${siteUrl}. ` +
@@ -277,7 +298,9 @@ export async function collectGSC(
         `Consecuencia: Google Trust, recomendaciones orgánicas y reportes CEO no pueden evaluarse con evidencia. ` +
         `Acción recomendada: agregar la cuenta de servicio ${serviceAccountEmail || 'FIREBASE_CLIENT_EMAIL'} ` +
         `como propietario o usuario de la propiedad ${siteUrl} en Search Console.`
-      : rawMessage;
+      : status === 'INVALID_CONFIGURATION'
+        ? `Credencial inválida para Google Search Console. Verifica FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL, SCOPES y permisos de la cuenta de servicio. Respuesta: ${dataText}`
+        : rawMessage;
     return emptySnapshot(siteUrl, startDate, endDate, status, errorMessage);
   }
 }

@@ -37,5 +37,11 @@
         { "key": "Cache-Control", "value": "public, s-maxage=1800, stale-while-revalidate=3600" }
       ]
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/resumen-diario",
+      "schedule": "0 12 * * *"
+    }
   ]
 }

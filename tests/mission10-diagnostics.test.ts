@@ -82,8 +82,8 @@ describe('Misión 10 — Diagnóstico, repair plan y CEO operativo', () => {
 
     expect(adsense).toBeDefined();
     expect(adsense!.status).toBe('NOT_CONFIGURED');
-    expect(adsense!.severity).toBe('low');
-    expect(adsense!.requiresHuman).toBe(true);
+    expect(adsense!.severity).toBe('info');
+    expect(adsense!.requiresHuman).toBe(false);
     expect(adsense!.impact).toContain('No bloquea');
   });
 

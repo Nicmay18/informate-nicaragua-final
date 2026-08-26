@@ -25,7 +25,7 @@ describe('Misión 9 — Activación real de fuentes (end-to-end)', () => {
     });
 
     expect(snapshot).not.toBeNull();
-    expect(['REAL', 'CONNECTED_NO_DATA', 'NO_DATA', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED']).toContain(snapshot!.status);
+    expect(['REAL', 'CONNECTED_NO_DATA', 'NO_DATA', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED', 'INVALID_CONFIGURATION']).toContain(snapshot!.status);
     expect(typeof snapshot!.totalImpressions).toBe('number');
     expect(typeof snapshot!.totalClicks).toBe('number');
   });
@@ -46,7 +46,7 @@ describe('Misión 9 — Activación real de fuentes (end-to-end)', () => {
     });
 
     expect(snapshot).not.toBeNull();
-    expect(['REAL', 'CONNECTED_NO_DATA', 'NO_DATA', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED']).toContain(snapshot!.status);
+    expect(['REAL', 'CONNECTED_NO_DATA', 'NO_DATA', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED', 'INVALID_CONFIGURATION']).toContain(snapshot!.status);
     expect(typeof snapshot!.totalImpressions).toBe('number');
     expect(typeof snapshot!.totalClicks).toBe('number');
   });
