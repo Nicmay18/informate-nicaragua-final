@@ -11,6 +11,13 @@ import { buildGoogleIntelligenceDashboard } from './intelligence/dashboard';
 import { buildReliabilitySnapshot } from './intelligence/reliability-monitor';
 import { buildWeeklyReliabilityReport } from './intelligence/weekly-reliability-report';
 import { getActiveAlerts } from './intelligence/alerts';
+import { reconcileTraffic, type ReconciledTrafficIntelligence } from './intelligence/traffic-reconciler';
+import { buildCeoVerdict, type CeoVerdict, type CeoVerdictInput } from './ceo-verdict';
+import {
+  buildSocialConversionVerdict,
+  fetchFacebookSnapshot,
+  type SocialConversionVerdict,
+} from './intelligence/social-conversion';
 import type {
   DailySnapshot,
   GoogleIntelligenceDashboard,
@@ -46,6 +53,8 @@ export interface NiosExecutiveData {
   trust: GoogleTrustReport | null;
   adsense: AdSenseRecoveryFullReport | null;
   traffic: TrafficPerformance | null;
+  trafficIntelligence: ReconciledTrafficIntelligence;
+  ceoVerdict: CeoVerdict;
   meniLearning: MeniLearningFeedback | null;
   learningPatterns: GoogleLearningPattern[];
   reliability: ReliabilitySnapshot | null;
@@ -61,6 +70,7 @@ export interface NiosExecutiveData {
   categoryIntelligence: CategoryIntelligenceReport | null;
   editorCEOReport: EditorCEOReport | null;
   snapshotHistory: SnapshotSummary[];
+  socialConversion: SocialConversionVerdict;
 }
 
 const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
@@ -86,6 +96,17 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
   const snapshot = latestSnapshot;
   const articles = snapshot?.articlesFused || [];
 
+  const [facebook] = await Promise.all([
+    fetchFacebookSnapshot(),
+  ]);
+
+  const socialConversion = buildSocialConversionVerdict({
+    facebook,
+    ga4: snapshot?.ga4 || null,
+    traffic: snapshot?.trafficPerformance || null,
+    articles,
+  });
+
   const google = snapshot?.gsc
     ? buildGoogleIntelligenceDashboard(
         articles,
@@ -106,13 +127,18 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     trustScore: s.trust?.averageGoogleTrustScore ?? null,
   }));
 
-  return {
+  const data: CeoVerdictInput = {
     snapshot,
     snapshotDate: snapshot?.date || null,
     google,
     trust: snapshot?.trust || null,
     adsense: snapshot?.adSenseRecoveryFullReport || null,
     traffic: snapshot?.trafficPerformance || null,
+    trafficIntelligence: reconcileTraffic(
+      snapshot?.trafficPerformance ?? null,
+      snapshot?.gsc ?? null,
+      snapshot?.ga4 ?? null,
+    ),
     meniLearning: snapshot?.meniLearning || null,
     learningPatterns: snapshot?.learningPatterns || [],
     reliability,
@@ -128,6 +154,12 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     categoryIntelligence: snapshot?.categoryIntelligence || null,
     editorCEOReport: snapshot?.editorCEOReport || null,
     snapshotHistory,
+    socialConversion,
+  };
+
+  return {
+    ...data,
+    ceoVerdict: buildCeoVerdict(data),
   };
 };
 

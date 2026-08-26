@@ -69,6 +69,7 @@ export function normalizeCategory(raw: string): MeniCategoria {
     educativa: 'Nacionales',
     educativo: 'Nacionales',
     ambiente: 'Nacionales',
+    astronomia: 'Nacionales',
     turismo: 'Nacionales',
     gastronomia: 'Nacionales',
     internacionales: 'Internacionales',

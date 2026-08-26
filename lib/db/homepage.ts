@@ -4,7 +4,7 @@ import { type Noticia } from '@/lib/types';
 import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
-import { incrementView } from '@/lib/view-counter';
+import { incrementView, flush } from '@/lib/view-counter';
 import { CATEGORIES, isLutoNews } from '@/lib/types';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
@@ -102,7 +102,16 @@ export async function incrementViewsBySlug(
       logger.error('[homepage.ts] No se pudo registrar traffic_log:', trafficErr);
     }
 
-    return currentViews + 1;
+    // Forzar flush y devolver el contador canónico real (noticias.vistas).
+    try {
+      await flush();
+      const updated = await docRef.get();
+      const updatedData = updated.data() || {};
+      return typeof updatedData.vistas === 'number' ? updatedData.vistas : currentViews + 1;
+    } catch (flushErr) {
+      logger.warn('[homepage.ts] No se pudo leer el contador actualizado:', flushErr);
+      return currentViews + 1;
+    }
   } catch (err) {
     logger.error('[homepage.ts] ERROR: Fallo al incrementar vistas:', err instanceof Error ? err.message : String(err));
     return null;

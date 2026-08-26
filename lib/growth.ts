@@ -1,25 +1,44 @@
 import { adminDb } from '@/lib/firebase-admin';
+import type { Firestore } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
 import { aggregateTrafficFromLog } from '@/lib/analytics/traffic-aggregator';
+import {
+  getMetricDefinition,
+  wrapMetric,
+  type MetricDefinition,
+  type MetricValue,
+} from '@/lib/nios/intelligence/metric-truth';
+
+export interface GrowthArticleRank {
+  slug: string;
+  titulo: string;
+  vistas?: number;
+  metric: MetricDefinition;
+}
 
 export interface GrowthMetrics {
   totalNews: number;
   totalViews: number;
   avgViews: number;
   missingViews: number;
-  mostRead: { slug: string; titulo: string; vistas?: number } | null;
-  topArticles: { slug: string; titulo: string; vistas?: number }[];
+  mostRead: GrowthArticleRank | null;
+  topArticles: GrowthArticleRank[];
   trafficSources: Record<string, number>;
   recentVisits: number;
   errors: string[];
+  /** Métricas canónicas con su definición completa (SOURCE / DEFINITION / PERIOD / SCOPE / VALUE / CONFIDENCE). */
+  metrics: MetricValue<number>[];
 }
 
-async function safeGetNewsData(): Promise<{
+async function safeGetNewsData(db: Firestore): Promise<{
   docs: { slug: string; titulo: string; vistas?: number }[];
   error?: string;
 }> {
+  // Lectura canónica del contador de vida (noticias.vistas). El acceso directo
+  // a la colección es RAW, pero la métrica expuesta es canónica y se envuelve
+  // en metric-truth para evitar confusiones.
   try {
-    const snap = await adminDb
+    const snap = await db
       .collection('noticias')
       .select('vistas', 'titulo', 'slug')
       .limit(2000)
@@ -44,7 +63,7 @@ async function safeGetNewsData(): Promise<{
   }
 }
 
-async function safeGetTrafficMetrics(): Promise<{
+async function safeGetTrafficMetrics(db: Firestore): Promise<{
   recentVisits: number;
   sources: Record<string, number>;
   error?: string;
@@ -56,7 +75,7 @@ async function safeGetTrafficMetrics(): Promise<{
   let error: string | undefined;
 
   try {
-    const countSnap = await adminDb
+    const countSnap = await db
       .collection('traffic_log')
       .where('timestamp', '>', dayAgo)
       .count()
@@ -69,7 +88,7 @@ async function safeGetTrafficMetrics(): Promise<{
   }
 
   try {
-    const fallback = await aggregateTrafficFromLog(adminDb, today);
+    const fallback = await aggregateTrafficFromLog(db, today);
     for (const s of Object.values(fallback)) {
       for (const [k, v] of Object.entries(s.sources || {})) {
         if (typeof v === 'number') {
@@ -87,12 +106,12 @@ async function safeGetTrafficMetrics(): Promise<{
   return { recentVisits, sources, error };
 }
 
-export async function getGrowthMetrics(): Promise<GrowthMetrics> {
+export async function getGrowthMetrics(db: Firestore = adminDb): Promise<GrowthMetrics> {
   const errors: string[] = [];
 
   const [newsData, traffic] = await Promise.all([
-    safeGetNewsData(),
-    safeGetTrafficMetrics(),
+    safeGetNewsData(db),
+    safeGetTrafficMetrics(db),
   ]);
 
   if (newsData.error) errors.push(`noticias: ${newsData.error}`);
@@ -106,8 +125,20 @@ export async function getGrowthMetrics(): Promise<GrowthMetrics> {
   const avgViews = withViews.length > 0 ? Math.round(totalViews / withViews.length) : 0;
 
   const sortedByViews = [...withViews].sort((a, b) => (b.vistas as number) - (a.vistas as number));
-  const mostRead = sortedByViews[0] || null;
-  const topArticles = sortedByViews.slice(0, 10);
+  const rankDef = getMetricDefinition('article.rank.lifetime.top');
+  const toRank = (n: { slug: string; titulo: string; vistas?: number }) => ({ ...n, metric: rankDef! });
+  const mostRead = sortedByViews[0] ? toRank(sortedByViews[0]) : null;
+  const topArticles = sortedByViews.slice(0, 10).map(toRank);
+
+  const metrics: MetricValue<number>[] = [
+    wrapMetric('site.articles.total', totalNews) as MetricValue<number>,
+    wrapMetric('site.articles.withViews', withViews.length) as MetricValue<number>,
+    wrapMetric('site.articles.withoutViews', missingViews) as MetricValue<number>,
+    wrapMetric('site.articles.totalCanonicalViews', totalViews) as MetricValue<number>,
+    wrapMetric('site.articles.averageViews', avgViews) as MetricValue<number>,
+    wrapMetric('article.rank.lifetime.top', mostRead?.vistas ?? 0) as MetricValue<number>,
+    wrapMetric('site.traffic.recent24h', traffic.recentVisits) as MetricValue<number>,
+  ].filter(Boolean) as MetricValue<number>[];
 
   return {
     totalNews,
@@ -119,5 +150,6 @@ export async function getGrowthMetrics(): Promise<GrowthMetrics> {
     trafficSources: traffic.sources,
     recentVisits: traffic.recentVisits,
     errors,
+    metrics,
   };
 }

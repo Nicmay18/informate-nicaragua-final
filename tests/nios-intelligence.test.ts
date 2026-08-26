@@ -14,7 +14,8 @@ import { generateReadinessReport } from '@/lib/nios/intelligence/readiness';
 import { buildGoogleIntelligenceDashboard } from '@/lib/nios/intelligence/dashboard';
 import { generateGoogleTrustReport } from '@/lib/nios/intelligence/google-trust';
 import { generateContentRecoveryReport } from '@/lib/nios/intelligence/content-recovery';
-import type { ArticleFusion, GSCSnapshot, GA4Snapshot, GoogleTrustArticle } from '@/lib/nios/intelligence/types';
+import { reconcileTraffic } from '@/lib/nios/intelligence/traffic-reconciler';
+import type { ArticleFusion, GSCSnapshot, GA4Snapshot, GoogleTrustArticle, TrafficPerformance } from '@/lib/nios/intelligence/types';
 import type { Noticia } from '@/lib/types';
 
 // ─── Fixtures ──────────────────────────────────────────────────
@@ -122,6 +123,23 @@ describe('Data Merger', () => {
     expect(result[0].hasGa4Data).toBe(false);
     expect(result[0].gscImpressions).toBe(0);
     expect(result[0].ga4Users).toBe(0);
+  });
+
+  it('M15: fuses articles with missing/undefined estado and excludes borrador/archivado', () => {
+    const noticias = [
+      mockNoticia({ slug: 'missing-estado', estado: undefined } as Partial<Noticia>),
+      mockNoticia({ slug: 'borrador-article', estado: 'borrador' }),
+      mockNoticia({ slug: 'archivado-article', estado: 'archivado' }),
+      mockNoticia({ slug: 'programado-article', estado: 'programado' }),
+    ];
+
+    const result = mergeArticleData(noticias, null, null);
+
+    const slugs = result.map(a => a.slug);
+    expect(slugs).toContain('missing-estado');
+    expect(slugs).toContain('programado-article');
+    expect(slugs).not.toContain('borrador-article');
+    expect(slugs).not.toContain('archivado-article');
   });
 });
 
@@ -642,5 +660,38 @@ describe('Misión 14 — Source Status & Forensic Coherence', () => {
     expect(recovery.articles[0].status).not.toBe('red');
     expect(recovery.articles[0].mainProblem).not.toBe('Contenido saludable');
     expect(recovery.articles[0].mainProblem).toBe('Datos insuficientes');
+  });
+});
+
+describe('Misión 15 — Traffic Reconciliation', () => {
+  it('shows "Traffic Intelligence - Data available" when traffic source is REAL', () => {
+    const traffic: TrafficPerformance = {
+      generatedAt: new Date().toISOString(),
+      topArticles: [{ slug: 'a', views: 100, sources: { direct: 100 } }],
+      topSources: { direct: 100 },
+      dailyGrowth: { '2026-08-05': 100 },
+      weeklyTrend: { '2026-W32': 100 },
+    };
+
+    const result = reconcileTraffic(traffic, null, null);
+
+    expect(result.hasData).toBe(true);
+    expect(result.message).toBe('Traffic Intelligence - Data available');
+    expect(result.sources.find(s => s.id === 'traffic')?.status).toBe('REAL');
+    expect(result.sources.find(s => s.id === 'gsc')?.status).toBe('NO_DATA');
+  });
+
+  it('preserves source status and does not mix incompatible metrics', () => {
+    const gsc = mockGSC();
+    const ga4 = mockGA4();
+
+    const result = reconcileTraffic(null, gsc, ga4);
+
+    expect(result.hasData).toBe(true);
+    expect(result.sources.find(s => s.id === 'gsc')?.value).toBe(gsc.totalClicks);
+    expect(result.sources.find(s => s.id === 'gsc')?.unit).toBe('clics');
+    expect(result.sources.find(s => s.id === 'ga4')?.value).toBe(ga4.totalUsers);
+    expect(result.sources.find(s => s.id === 'ga4')?.unit).toBe('usuarios');
+    expect(result.totalTrafficViews7d).toBeNull();
   });
 });

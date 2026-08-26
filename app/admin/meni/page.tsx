@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 import type { MeniResult } from '@/lib/meni';
+import type { EditorialDiagnosis, CEOResponse } from '@/lib/nios/editorial-diagnosis';
 
 const CATEGORIAS = [
   'General',
@@ -25,6 +26,8 @@ export default function MeniPage() {
     departamento: '',
   });
   const [result, setResult] = useState<MeniResult | null>(null);
+  const [diagnosis, setDiagnosis] = useState<EditorialDiagnosis | null>(null);
+  const [ceo, setCeo] = useState<CEOResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showTechnical, setShowTechnical] = useState(false);
@@ -49,6 +52,8 @@ export default function MeniPage() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Error en MENI');
       setResult(json.result);
+      setDiagnosis(json.diagnosis ?? null);
+      setCeo(json.ceo ?? null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error desconocido');
     } finally {
@@ -147,6 +152,12 @@ export default function MeniPage() {
 
           {result && (
             <section className="space-y-6">
+              {result.classificationConflict && (
+                <div className="rounded-lg bg-amber-50 p-4 border border-amber-200">
+                  <p className="text-sm font-semibold text-amber-800">Conflicto de clasificación detectado</p>
+                  <p className="text-sm text-amber-700">{result.classificationReason}</p>
+                </div>
+              )}
               {/* ═══════════════════════════════════════════════════════════
                   PANEL EDITORIAL — única fuente de verdad: EditorialDecision
                   Campos planos, no 20 métricas dispersas.
@@ -443,6 +454,68 @@ export default function MeniPage() {
                 </div>
               )}
 
+              {/* NIOS — Diagnóstico editorial */}
+              {diagnosis && (
+                <div className={`rounded-2xl p-6 shadow border-l-4 ${diagnosis.publicationReadiness === 'READY' ? 'bg-green-50 border-green-500' : diagnosis.publicationReadiness === 'NEEDS_REVIEW' ? 'bg-amber-50 border-amber-500' : 'bg-red-50 border-red-500'}`}>
+                  <h2 className="mb-4 text-lg font-semibold">Diagnóstico NIOS</h2>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="rounded-lg bg-white p-3 text-center">
+                      <p className="text-xs text-slate-500">Estado</p>
+                      <p className="text-sm font-bold">{diagnosis.editorialStatus}</p>
+                    </div>
+                    <div className="rounded-lg bg-white p-3 text-center">
+                      <p className="text-xs text-slate-500">Publicabilidad</p>
+                      <p className="text-sm font-bold">{diagnosis.publicationReadiness}</p>
+                    </div>
+                  </div>
+                  {diagnosis.problems.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Problemas detectados</p>
+                      <ul className="space-y-2">
+                        {diagnosis.problems.map((p, i) => (
+                          <li key={i} className="rounded-lg bg-white border p-3 text-sm">
+                            <p className="font-semibold">{p.problem}</p>
+                            <p className="text-slate-600 text-xs">{p.recommendation} {p.autoFixAvailable ? '— Auto-fix disponible' : '— Requiere decisión humana'}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {diagnosis.autoFixes.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Auto-fix seguros</p>
+                      <ul className="space-y-1 text-sm">
+                        {diagnosis.autoFixes.map((p, i) => (
+                          <li key={i} className="text-slate-700">✓ {p.problem}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {diagnosis.humanActions.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Requieren decisión del editor</p>
+                      <ul className="space-y-1 text-sm">
+                        {diagnosis.humanActions.map((p, i) => (
+                          <li key={i} className="text-slate-700">✎ {p.recommendation}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {ceo && (
+                    <div className="rounded-lg bg-white p-4 border border-slate-200">
+                      <p className="text-xs font-semibold text-slate-500 mb-2">Respuesta del CEO Agent</p>
+                      <p className="text-sm text-slate-700 mb-1"><strong>¿Qué está mal?</strong> {ceo.diagnose}</p>
+                      <p className="text-sm text-slate-700 mb-1"><strong>¿Qué arreglo primero?</strong> {ceo.firstFix}</p>
+                      <p className="text-sm text-slate-700 mb-1"><strong>¿Puedes repararlo?</strong> {ceo.canFix}</p>
+                      <p className="text-sm text-slate-700"><strong>¿Está lista para publicar?</strong> {ceo.isReady}</p>
+                    </div>
+                  )}
+                  {diagnosis.eventCountry && (
+                    <p className="mt-4 text-xs text-slate-500">Ubicación: {diagnosis.eventCountry}{diagnosis.eventCity ? `, ${diagnosis.eventCity}` : ''} · Nacionalidad: {diagnosis.personNationality || 'no identificada'}</p>
+                  )}
+                </div>
+              )}
+
               {/* Editor Jefe — Ranking Editorial */}
               {result.editorialDecision?.ranking && (
                 <div className="rounded-2xl bg-white p-6 shadow border-l-4 border-amber-500">
@@ -654,6 +727,7 @@ export default function MeniPage() {
                       <div className="rounded-lg bg-white p-3 text-center">
                         <p className="text-xs text-slate-500">Categoría</p>
                         <p className="text-sm font-bold">{result.categoria}</p>
+                        <p className="text-xs text-slate-400">{result.classificationSource === 'editor' ? 'Editor' : 'IA'}</p>
                       </div>
                       <div className="rounded-lg bg-white p-3 text-center">
                         <p className="text-xs text-slate-500">Módulo</p>

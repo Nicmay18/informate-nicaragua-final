@@ -50,6 +50,7 @@ const REPORT_KEYS = [
   'articleUpdate',
   'editorCEOReport',
   'meniLearning',
+  'trafficPerformance',
 ] as const;
 
 function todayKey(): string {
@@ -178,6 +179,8 @@ async function assembleSnapshot(
   return {
     date: data.date,
     collectedAt: data.collectedAt,
+    version: data.version || SNAPSHOT_VERSION,
+    articlesCount: data.articlesCount ?? articlesFused.length,
     gsc: data.gsc || null,
     ga4: data.ga4 || null,
     articlesFused,
@@ -194,6 +197,7 @@ async function assembleSnapshot(
     articleUpdate: reportData.articleUpdate || data.articleUpdate || null,
     editorCEOReport: reportData.editorCEOReport || data.editorCEOReport || null,
     meniLearning: reportData.meniLearning || data.meniLearning || null,
+    trafficPerformance: reportData.trafficPerformance || data.trafficPerformance || null,
   } as unknown as DailySnapshot;
 }
 

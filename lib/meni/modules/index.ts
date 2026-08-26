@@ -26,6 +26,8 @@ const map: Record<string, ModuleHandler> = {
   politica: general,
   salud: general,
   educacion: general,
+  ambiente: general,
+  astronomia: general,
   general,
 };
 

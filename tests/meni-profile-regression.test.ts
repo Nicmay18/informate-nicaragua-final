@@ -205,6 +205,28 @@ describe('MENI Profile Detector — Tests de regresión', () => {
       expect(result.scores.sucesos).toBeDefined();
       expect(result.scores.espectaculos).toBeDefined();
       expect(result.scores.ambiente).toBeDefined();
+      expect(result.scores.astronomia).toBeDefined();
+    });
+  });
+
+  describe('Caso 11: Eclipse lunar => ASTRONOMIA (no espectáculos ni nacionales)', () => {
+    it('clasifica un eclipse como astronomia', () => {
+      const titulo = 'Eclipse lunar visible en Nicaragua: cómo y a qué hora verlo';
+      const contenido = `
+        Este martes se podrá observar un eclipse lunar desde Nicaragua. El
+        fenómeno astronómico ocurrirá durante la madrugada y será visible a
+        simple vista en gran parte del territorio nacional. Los astrónomos
+        recomiendan buscar un lugar despejado y alejado de la contaminación
+        lumínica. La sombra terrestre oscurecerá la luna de sangre por varias
+        horas.
+      `;
+      const resumen = 'Un eclipse lunar será visible desde Nicaragua este martes.';
+
+      const result = detectContentProfile(titulo, contenido, resumen);
+
+      expect(result.profile_detected).toBe('astronomia');
+      expect(result.profile_detected).not.toBe('espectaculos');
+      expect(result.profile_detected).not.toBe('nacionales');
     });
   });
 });

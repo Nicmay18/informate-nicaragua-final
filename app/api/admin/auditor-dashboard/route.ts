@@ -1,6 +1,10 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import {
+  getMetricDefinition,
+  type MetricDefinition,
+} from '@/lib/nios/intelligence/metric-truth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -98,7 +102,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // ─── 5. TOP ARTÍCULOS (vistas) ───
+    // ─── 5. TOP ARTÍCULOS (vistas canónicas de vida) ───
+    const topMetric = getMetricDefinition('article.rank.lifetime.top');
     const topNoticias = noticias
       .sort((a: any, b: any) => (b.vistas || 0) - (a.vistas || 0))
       .slice(0, 10)
@@ -106,6 +111,7 @@ export async function GET(request: NextRequest) {
         titulo: n.titulo,
         slug: n.slug,
         vistas: n.vistas || 0,
+        metric: topMetric,
         categoria: n.categoria,
         distribuida: n.distribuida || false,
       }));
@@ -223,18 +229,33 @@ export async function GET(request: NextRequest) {
       ? `Hoy se distribuyeron ${distribuciones24h.length} notas. Esto genera tráfico directo.`
       : 'Sin distribuciones en 24h. El Agente debería ejecutarse.';
 
-    // Fuentes principales de tráfico
+    // Fuentes principales de tráfico (24h, RAW)
+    const trafficSourceMetric = getMetricDefinition('site.traffic.sources');
     const fuentesOrdenadas = Object.entries(fuentes)
       .sort((a, b) => b[1].visits - a[1].visits)
       .map(([nombre, data]) => ({
         nombre,
         visitas: data.visits,
+        metric: trafficSourceMetric,
         articulosUnicos: data.articulos.size,
       }));
 
     // Veredicto final
     const nivelVeredicto = scoreCalidad >= 80 ? 'EXCELENTE' : scoreCalidad >= 60 ? 'BUENO' : scoreCalidad >= 40 ? 'REGULAR' : 'NECESITA ACCIÓN';
     const colorVeredicto = scoreCalidad >= 80 ? '#22c55e' : scoreCalidad >= 60 ? '#3b82f6' : scoreCalidad >= 40 ? '#f59e0b' : '#ef4444';
+
+    const metricDefinitions: Record<string, MetricDefinition | undefined> = {
+      vistasTotales: getMetricDefinition('site.articles.totalCanonicalViews'),
+      noticiasConVistas: getMetricDefinition('site.articles.withViews'),
+      noticiasSinVistas: getMetricDefinition('site.articles.withoutViews'),
+      promedioVistas: getMetricDefinition('site.articles.averageViews'),
+      topNoticias: getMetricDefinition('article.rank.lifetime.top'),
+      visitas24h: getMetricDefinition('site.traffic.recent24h'),
+      fuentes: getMetricDefinition('site.traffic.sources'),
+      distribuciones24h: getMetricDefinition('site.distribution.recent24h'),
+      noticiasPublicadas: getMetricDefinition('site.articles.published'),
+      noticiasRecientes: getMetricDefinition('site.articles.recent30d'),
+    };
 
     return NextResponse.json({
       success: true,
@@ -264,6 +285,9 @@ export async function GET(request: NextRequest) {
 
       // Top
       topNoticias,
+
+      // Definiciones canónicas (SOURCE/DEFINITION/PERIOD/SCOPE/CONFIDENCE)
+      metricDefinitions,
 
       // Calidad / Veredicto del Periodista Senior
       scoreCalidad,

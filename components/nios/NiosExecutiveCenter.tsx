@@ -90,10 +90,10 @@ const NAV_LINKS = [
 
 export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData }) {
   const {
-    snapshot, google, trust, adsense, traffic, learningPatterns,
+    snapshot, google, trust, adsense, traffic, trafficIntelligence, learningPatterns,
     reliability, weekly, alerts, telemetry, articlesCount, ttlStatus,
     gsc, ga4, contentOpportunity, categoryIntelligence, editorCEOReport,
-    snapshotHistory,
+    snapshotHistory, ceoVerdict,
   } = data;
 
   const health = telemetry?.health;
@@ -211,6 +211,63 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
                 </div>
               </div>
             </section>
+
+            {/* CEO Verdict */}
+            <Card title="CEO Verdict" icon={ceoVerdict.statusIcon}>
+              <div className="space-y-4">
+                <div className={`text-3xl font-bold ${STATUS_TEXT[ceoVerdict.status === 'VAS_BIEN' ? 'ok' : ceoVerdict.status === 'CORREGIR' ? 'warning' : ceoVerdict.status === 'LA_ESTAS_CAGANDO' ? 'critical' : 'missing']}`}>
+                  {ceoVerdict.statusLabel} <span className="text-sm font-normal text-slate-500">({ceoVerdict.confidence}% confianza)</span>
+                </div>
+                <p className="text-slate-700 text-sm">{ceoVerdict.whatIsHappening}</p>
+
+                {ceoVerdict.whatMatters.length > 0 && (
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Qué importa</h3>
+                    <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                      {ceoVerdict.whatMatters.map((m, i) => <li key={i}>{m}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                {ceoVerdict.whatToDoToday.length > 0 && (
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Qué hacemos hoy</h3>
+                    <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                      {ceoVerdict.whatToDoToday.map((a, i) => <li key={i}>{a}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Repara NIOS</h3>
+                    <ul className="list-disc pl-5 text-slate-700 space-y-1">
+                      {ceoVerdict.niosRepairs.map((r, i) => <li key={i}>{r}</li>)}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Requiere humano</h3>
+                    <ul className="list-disc pl-5 text-slate-700 space-y-1">
+                      {ceoVerdict.needsHuman.map((h, i) => <li key={i}>{h}</li>)}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">No tocar</h3>
+                    <ul className="list-disc pl-5 text-slate-700 space-y-1">
+                      {ceoVerdict.doNotDo.map((d, i) => <li key={i}>{d}</li>)}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="text-sm text-slate-600 border-t pt-3">
+                  <strong>Resultado esperado:</strong> {ceoVerdict.expectedResult}
+                </div>
+
+                <div className="text-xs text-slate-400">
+                  Evidencia: {ceoVerdict.evidence.map((e) => `${e.source}=${e.status}`).join(' · ')}
+                </div>
+              </div>
+            </Card>
 
             {/* Qué requiere atención hoy */}
             {attentionItems.length > 0 && (
@@ -382,31 +439,36 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
 
             {/* Traffic Intelligence */}
             <Card title="Traffic Intelligence" icon="📈">
-              {traffic ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <Metric label="Visitas 7 días" value={number(Object.values(traffic.dailyGrowth).reduce((a, b) => a + b, 0))} status="ok" />
-                    <Metric label="Artículos top" value={number(traffic.topArticles.length)} status="ok" />
-                    <Metric label="Fuentes" value={Object.keys(traffic.topSources).length.toString()} status="ok" />
-                    <Metric label="Coverage diario" value={trafficDailyPct !== null ? `${trafficDailyPct}%` : '—'} status={trafficDailyPct !== null ? (trafficDailyPct >= 95 ? 'ok' : 'warning') : 'missing'} />
-                  </div>
-                  {traffic.topArticles.length > 0 && (
-                    <div>
-                      <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top artículos</h3>
-                      <ul className="text-sm space-y-1">
-                        {traffic.topArticles.slice(0, 5).map((a, i) => (
-                          <li key={i} className="flex justify-between py-1 border-b border-slate-100">
-                            <span className="truncate max-w-[60%]">{a.slug}</span>
-                            <span className="font-medium">{number(a.views)} visitas</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+              <div className="space-y-4">
+                <div className={`text-sm font-medium ${trafficIntelligence.hasData ? 'text-emerald-700' : 'text-slate-500'}`}>
+                  {trafficIntelligence.message}
                 </div>
-              ) : (
-                <EmptyData label="Sin datos de tráfico disponibles." />
-              )}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {trafficIntelligence.sources.map((s) => (
+                    <div key={s.id} className={`rounded-xl border p-3 ${s.status === 'REAL' ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-xs text-slate-500 uppercase font-semibold">{s.name}</div>
+                      <div className={`text-lg font-bold ${s.status === 'REAL' ? 'text-emerald-700' : 'text-slate-400'}`}>
+                        {s.status === 'REAL' ? number(s.value) : s.status === 'ZERO' ? '0' : s.status.replace('_', ' ')}
+                        {s.status === 'REAL' && <span className="text-xs font-normal text-slate-500 ml-1">{s.unit}</span>}
+                      </div>
+                      <div className="text-[10px] text-slate-500 mt-1">{s.note}</div>
+                    </div>
+                  ))}
+                </div>
+                {traffic && traffic.topArticles.length > 0 && (
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top artículos (últimos 7 días)</h3>
+                    <ul className="text-sm space-y-1">
+                      {traffic.topArticles.slice(0, 5).map((a, i) => (
+                        <li key={i} className="flex justify-between py-1 border-b border-slate-100">
+                          <span className="truncate max-w-[60%]">{a.slug}</span>
+                          <span className="font-medium">{number(a.views)} visitas</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </Card>
 
             {/* Performance */}

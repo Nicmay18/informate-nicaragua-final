@@ -36,6 +36,7 @@ import { getTrafficMigrationStatus } from '@/lib/analytics/traffic-reader';
 import { measureAsync, measureSync, saveTelemetry } from './telemetry';
 import { buildExecutionReport } from './performance-report';
 import { calculateHealthScore } from './health-score';
+import { filterAbsurdNIOSRecommendations, filterAbsurdImprovementRecommendations } from './absurd-recommendation-guard';
 
 export const NIOS_CONFIG: NIOSConfig = {
   siteUrl: process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com',
@@ -225,7 +226,7 @@ export async function runNIOSPipeline(
       generateRecommendations(articles, gsc, ga4, config.daysToCollect),
     );
     collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
-    recommendations = result;
+    recommendations = filterAbsurdNIOSRecommendations(result, articles);
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
     const metric = (err as { metric?: { durationMs: number; memoryMB?: number } }).metric;
@@ -369,7 +370,7 @@ export async function runNIOSPipeline(
       generateImprovementRecommendations(articles, sourceTraffic),
     );
     collectMetric(metric.module, metric.status, metric.durationMs, metric.error, metric.memoryMB);
-    improvements = result;
+    improvements = filterAbsurdImprovementRecommendations(result, articles);
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
     const metric = (err as { metric?: { durationMs: number; memoryMB?: number } }).metric;

@@ -19,6 +19,7 @@ export type MeniContentProfile =
   | 'internacional'
   | 'educacion'
   | 'ambiente'
+  | 'astronomia'
   | 'turismo'
   | 'gastronomia';
 
@@ -424,6 +425,39 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'educativa', weight: 2 },
     { keyword: 'educativo', weight: 2 },
   ],
+  astronomia: [
+    { keyword: 'eclipse', weight: 3 },
+    { keyword: 'eclipses', weight: 3 },
+    { keyword: 'lunar', weight: 2 },
+    { keyword: 'luna', weight: 1.5 },
+    { keyword: 'lunas', weight: 1.5 },
+    { keyword: 'luna de sangre', weight: 2.5 },
+    { keyword: 'sombra terrestre', weight: 2 },
+    { keyword: 'umbra', weight: 1.5 },
+    { keyword: 'penumbra', weight: 1.5 },
+    { keyword: 'astronomico', weight: 2.5 },
+    { keyword: 'astronómico', weight: 2.5 },
+    { keyword: 'astronomia', weight: 2.5 },
+    { keyword: 'astronomía', weight: 2.5 },
+    { keyword: 'astronomo', weight: 1.5 },
+    { keyword: 'astrónomo', weight: 1.5 },
+    { keyword: 'observatorio', weight: 1.5 },
+    { keyword: 'satelite', weight: 1.5 },
+    { keyword: 'satélite', weight: 1.5 },
+    { keyword: 'cometa', weight: 1.5 },
+    { keyword: 'cometas', weight: 1.5 },
+    { keyword: 'meteorito', weight: 1.5 },
+    { keyword: 'meteoritos', weight: 1.5 },
+    { keyword: 'estrella', weight: 1 },
+    { keyword: 'estrellas', weight: 1 },
+    { keyword: 'planeta', weight: 1 },
+    { keyword: 'planetas', weight: 1 },
+    { keyword: 'constelacion', weight: 1 },
+    { keyword: 'constelación', weight: 1 },
+    { keyword: 'galaxia', weight: 1 },
+    { keyword: 'cielo', weight: 0.8 },
+    { keyword: 'firmamento', weight: 0.8 },
+  ],
   ambiente: [
     { keyword: 'cambio climático', weight: 2 },
     { keyword: 'cambio climatico', weight: 2 },
@@ -459,37 +493,6 @@ export const PROFILE_SIGNALS: Record<MeniContentProfile, ProfileSignal[]> = {
     { keyword: 'gases volcánicos', weight: 2 },
     { keyword: 'comupred', weight: 1.2 },
     { keyword: 'sinapred', weight: 1.2 },
-    { keyword: 'eclipse', weight: 3 },
-    { keyword: 'eclipses', weight: 3 },
-    { keyword: 'lunar', weight: 2 },
-    { keyword: 'luna', weight: 1.5 },
-    { keyword: 'lunas', weight: 1.5 },
-    { keyword: 'luna de sangre', weight: 2.5 },
-    { keyword: 'sombra terrestre', weight: 2 },
-    { keyword: 'umbra', weight: 1.5 },
-    { keyword: 'penumbra', weight: 1.5 },
-    { keyword: 'astronomico', weight: 2.5 },
-    { keyword: 'astronómico', weight: 2.5 },
-    { keyword: 'astronomia', weight: 2.5 },
-    { keyword: 'astronomía', weight: 2.5 },
-    { keyword: 'astronomo', weight: 1.5 },
-    { keyword: 'astrónomo', weight: 1.5 },
-    { keyword: 'observatorio', weight: 1.5 },
-    { keyword: 'satelite', weight: 1.5 },
-    { keyword: 'satélite', weight: 1.5 },
-    { keyword: 'cometa', weight: 1.5 },
-    { keyword: 'cometas', weight: 1.5 },
-    { keyword: 'meteorito', weight: 1.5 },
-    { keyword: 'meteoritos', weight: 1.5 },
-    { keyword: 'estrella', weight: 1 },
-    { keyword: 'estrellas', weight: 1 },
-    { keyword: 'planeta', weight: 1 },
-    { keyword: 'planetas', weight: 1 },
-    { keyword: 'constelacion', weight: 1 },
-    { keyword: 'constelación', weight: 1 },
-    { keyword: 'galaxia', weight: 1 },
-    { keyword: 'cielo', weight: 0.8 },
-    { keyword: 'firmamento', weight: 0.8 },
   ],
 };
 
@@ -589,6 +592,14 @@ export function detectContentProfile(
   // Nacionales gana sobre internacional cuando la noticia es sobre Nicaragua
   if (scores.nacionales > 0 && scores.internacional > 0) {
     scores.nacionales += 2;
+  }
+  // Astronomía gana sobre nacionales: un fenómeno del cielo no es "nacional" solo porque es visible en Nicaragua
+  if (scores.astronomia > 0 && scores.nacionales > 0) {
+    scores.nacionales = Math.max(0, scores.nacionales - 2);
+  }
+  // Astronomía gana sobre ambiente: eclipses/cometas no son clima/medio ambiente
+  if (scores.astronomia > 0 && scores.ambiente > 0) {
+    scores.ambiente = Math.max(0, scores.ambiente - 2);
   }
   // Sismo/terremoto/tsunami en un país extranjero → Internacionales gana sobre Ambiente
   const naturalDisasterWords = new Set([
