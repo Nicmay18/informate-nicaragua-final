@@ -3,7 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { runRepairEngine } from '@/lib/nios/repair-engine';
 
-export const maxDuration = 120;
+export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
