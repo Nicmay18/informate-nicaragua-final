@@ -116,7 +116,8 @@ export async function runNIOSPipeline(
     { generateArticleUpdateReport },
     { generateEditorCEOReport },
     { generateMeniLearningFeedback },
-    { saveDailySnapshot },
+    { saveDailySnapshot, getLatestSnapshot },
+    { emitMomentumAlerts },
   ] = await Promise.all([
     import('./gsc-collector'),
     import('./ga4-collector'),
@@ -139,9 +140,18 @@ export async function runNIOSPipeline(
     import('./editor-ceo-report'),
     import('./meni-learning'),
     import('./store'),
+    import('./alerts'),
   ] as const);
 
   logger.info('[nios-orchestrator] Starting NIOS Intelligence Pipeline...');
+
+  // 0. Load previous snapshot for momentum baseline
+  let previousSnapshot: DailySnapshot | null = null;
+  try {
+    previousSnapshot = await getLatestSnapshot(db);
+  } catch (err) {
+    logger.warn('[nios-orchestrator] Could not load previous snapshot:', err);
+  }
 
   // 1. Collect GSC
   let gsc = null;
@@ -648,6 +658,15 @@ export async function runNIOSPipeline(
   const summary = `NIOS Pipeline completado. GSC: ${gscText}. GA4: ${ga4Text}. Artículos: ${articles.length}. Recomendaciones: ${recommendations.length}. Recovery: GREEN ${contentRecovery?.greenPct ?? 0}%, YELLOW ${contentRecovery?.yellowPct ?? 0}%, RED ${contentRecovery?.redPct ?? 0}%. Trust: ${trust?.averageGoogleTrustScore ?? 0}/100. Mejoras: ${improvements.length}. Learning patterns: ${learningPatterns.length}. Health: ${health.score}/100.`;
 
   logger.info(`[nios-orchestrator] ${summary}`);
+
+  // 25. Emit momentum alerts (BREAKOUT → nios_alerts)
+  try {
+    if (trafficPerformance) {
+      await emitMomentumAlerts(db, trafficPerformance, previousSnapshot?.trafficPerformance ?? null);
+    }
+  } catch (err) {
+    logger.warn('[nios-orchestrator] Momentum alert emit failed (non-fatal):', err);
+  }
 
   return {
     success: errors.length === 0,

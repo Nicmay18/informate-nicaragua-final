@@ -10,6 +10,11 @@ import type { Firestore } from 'firebase-admin/firestore';
 import type { ReliabilitySnapshot } from './reliability-monitor';
 import type { NiosHealthScore } from './health-score';
 import { runAlertEngine, type AlertEngineResult } from './alert-engine';
+import {
+  evaluateArticleMomentum,
+  type ArticleMomentum,
+} from './article-momentum';
+import type { TrafficPerformance } from '@/lib/analytics/traffic-aggregator';
 
 const ALERTS_COLLECTION = 'nios_alerts';
 
@@ -120,6 +125,57 @@ export async function persistAlerts(
   } catch (err) {
     logger.error('[nios-alerts] Failed to persist alerts:', err);
   }
+}
+
+/**
+ * Construye candidatos de alerta a partir del momentum de artículos.
+ * Solo convierte en alerta las condiciones ACTIONABLE.
+ */
+export function buildMomentumAlerts(momentum: ArticleMomentum[]): NiosAlert[] {
+  const now = new Date().toISOString();
+  const today = now.split('T')[0];
+  const seen = new Set<string>();
+
+  return momentum
+    .filter((m) => m.level === 'ACTIONABLE')
+    .map((m) => {
+      const message = `Momentum: ${m.slug} ${m.trend.replace(/_/g, ' ')} (${m.currentViews} vistas, +${m.deltaPercent}%)`;
+      seen.add(m.slug);
+      return {
+        date: today,
+        severity: 'warning' as const,
+        category: 'traffic' as const,
+        message,
+        metadata: {
+          slug: m.slug,
+          currentViews: m.currentViews,
+          previousViews: m.previousViews,
+          deltaPercent: m.deltaPercent,
+          attribution: m.attribution,
+        },
+        resolved: false,
+        createdAt: now,
+      };
+    });
+}
+
+/**
+ * Evalúa el momentum entre dos snapshots y emite alertas aplicando dedupe/cooldown.
+ * No rompe el pipeline si falla la persistencia.
+ */
+export async function emitMomentumAlerts(
+  db: Firestore,
+  current: TrafficPerformance | null,
+  previous: TrafficPerformance | null,
+): Promise<AlertEngineResult | null> {
+  if (!current) return null;
+  const momentum = evaluateArticleMomentum(current, previous);
+  const candidates = buildMomentumAlerts(momentum);
+  if (candidates.length === 0) {
+    logger.info('[nios-alerts] No momentum ACTIONABLE; nothing to emit.');
+    return null;
+  }
+  return emitAlerts(db, candidates);
 }
 
 /**
