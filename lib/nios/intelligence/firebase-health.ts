@@ -10,9 +10,13 @@ export type FirebaseHealthStatus =
   | 'WRITE_FAILED'
   | 'UNKNOWN_ERROR';
 
+export type FirebaseOperationalStatus = 'HEALTHY' | 'DEGRADED' | 'DOWN';
+
 export interface FirebaseHealth {
   source: 'Firebase';
   status: FirebaseHealthStatus;
+  /** Estado operacional consolidado para el panel: HEALTHY, DEGRADED o DOWN. */
+  health: FirebaseOperationalStatus;
   lastAttemptAt: string;
   lastSuccessAt: string | null;
   lastDataAt: string | null;
@@ -25,6 +29,8 @@ export interface FirebaseHealth {
   projectId: string;
   clientEmail: string;
   note: string;
+  /** Mensaje de error explícito o cadena vacía si está saludable. */
+  errorMessage: string;
   confidence: number;
   recommendedAction: string;
 }
@@ -35,6 +41,20 @@ function redactEmail(email: string): string {
   const [name, domain] = email.split('@');
   if (!domain) return email;
   return `${name.slice(0, 3)}***@${domain}`;
+}
+
+function toOperationalHealth(
+  status: FirebaseHealthStatus,
+  dataAgeHours: number | null,
+  latencyMs: number | null,
+): FirebaseOperationalStatus {
+  if (status === 'CONNECTED') {
+    if (latencyMs !== null && latencyMs > 5000) return 'DEGRADED';
+    if (dataAgeHours !== null && dataAgeHours > 72) return 'DEGRADED';
+    return 'HEALTHY';
+  }
+  if (status === 'WRITE_FAILED') return 'DEGRADED';
+  return 'DOWN';
 }
 
 /**
@@ -48,9 +68,11 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
 
   if (!projectId || !clientEmail) {
+    const note = 'FIREBASE_PROJECT_ID o FIREBASE_CLIENT_EMAIL no configurados.';
     return {
       source: 'Firebase',
       status: 'CREDENTIALS_MISSING',
+      health: 'DOWN',
       lastAttemptAt: nowIso,
       lastSuccessAt: null,
       lastDataAt: null,
@@ -62,7 +84,8 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
       collectionsChecked: [],
       projectId: projectId || 'NOT_SET',
       clientEmail: clientEmail ? redactEmail(clientEmail) : 'NOT_SET',
-      note: 'FIREBASE_PROJECT_ID o FIREBASE_CLIENT_EMAIL no configurados.',
+      note,
+      errorMessage: note,
       confidence: 0,
       recommendedAction: 'Configurar FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL y FIREBASE_PRIVATE_KEY (o FIREBASE_SERVICE_ACCOUNT_BASE64) en .env.local.',
     };
@@ -77,9 +100,11 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     logger.error('[firebase-health] Auth failed:', message);
+    const note = `No se pudo inicializar Firebase Admin: ${message}`;
     return {
       source: 'Firebase',
       status: 'AUTH_FAILED',
+      health: 'DOWN',
       lastAttemptAt: nowIso,
       lastSuccessAt: null,
       lastDataAt: null,
@@ -91,7 +116,8 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
       collectionsChecked: [],
       projectId,
       clientEmail: redactEmail(clientEmail),
-      note: `No se pudo inicializar Firebase Admin: ${message}`,
+      note,
+      errorMessage: note,
       confidence: 0,
       recommendedAction: 'Verificar FIREBASE_PRIVATE_KEY / FIREBASE_SERVICE_ACCOUNT_BASE64 y que las credenciales correspondan al projectId.',
     };
@@ -119,9 +145,11 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
       ? Math.max(0, Math.round((now.getTime() - new Date(lastDataAt).getTime()) / 36e5))
       : null;
 
+    const note = `Firestore conectado. ${readCount} colecciones verificadas. Última actividad: ${lastDataAt || 'sin datos recientes'}. Latencia ${latencyMs}ms.`;
     return {
       source: 'Firebase',
       status: 'CONNECTED',
+      health: toOperationalHealth('CONNECTED', dataAgeHours, latencyMs),
       lastAttemptAt: nowIso,
       lastSuccessAt: nowIso,
       lastDataAt,
@@ -133,16 +161,19 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
       collectionsChecked: collections,
       projectId,
       clientEmail: redactEmail(clientEmail),
-      note: `Firestore conectado. ${readCount} colecciones verificadas. Última actividad: ${lastDataAt || 'sin datos recientes'}. Latencia ${latencyMs}ms.`,
+      note,
+      errorMessage: '',
       confidence: dataAgeHours !== null && dataAgeHours <= 24 ? 95 : dataAgeHours !== null && dataAgeHours <= 72 ? 75 : 60,
       recommendedAction: 'No requiere acción.',
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     logger.error('[firebase-health] Read failed:', message);
+    const note = `Conexión inicializó pero la lectura falló: ${message}`;
     return {
       source: 'Firebase',
       status: 'READ_FAILED',
+      health: 'DOWN',
       lastAttemptAt: nowIso,
       lastSuccessAt: null,
       lastDataAt: null,
@@ -154,7 +185,8 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
       collectionsChecked: PROBE_COLLECTIONS,
       projectId,
       clientEmail: redactEmail(clientEmail),
-      note: `Conexión inicializó pero la lectura falló: ${message}`,
+      note,
+      errorMessage: note,
       confidence: 0,
       recommendedAction: 'Revisar permisos Firestore, reglas de seguridad y estado del proyecto.',
     };

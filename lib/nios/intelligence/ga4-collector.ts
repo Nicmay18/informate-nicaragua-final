@@ -80,7 +80,7 @@ function emptySnapshot(
   propertyId: string,
   startDate: string,
   endDate: string,
-  status: 'NO_DATA' | 'ACCESS_BLOCKED' | 'CONFIG_REQUIRED' | 'INVALID_CONFIGURATION',
+  status: 'NO_DATA' | 'ACCESS_BLOCKED' | 'CONFIG_REQUIRED' | 'INVALID_CONFIGURATION' | 'TIMEOUT' | 'NETWORK_ERROR',
   errorMessage?: string,
 ): GA4Snapshot {
   return {
@@ -119,100 +119,122 @@ export async function collectGA4(
     );
   }
 
+  const timeoutMs = 15000;
   logger.info(`[ga4-collector] Collecting GA4 data for property ${propertyId} from ${startDate} to ${endDate}`);
 
   try {
-    const client = getAnalyticsClient();
-
-    // 1. Totales (sin dimensiones)
-    const totalRows = await runReport(
-      client, propertyId, startDate, endDate,
-      [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTime', 'engagementRate'],
-      1,
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('GA4_TIMEOUT')), timeoutMs),
     );
 
-    const totals = totalRows[0]?.metricValues || [];
-    const totalUsers = parseInt(totals[0]?.value || '0', 10);
-    const totalSessions = parseInt(totals[1]?.value || '0', 10);
-    const totalPageviews = parseInt(totals[2]?.value || '0', 10);
-    const averageEngagementTimeSec = parseFloat(totals[3]?.value || '0');
-    const engagementRate = parseFloat(totals[4]?.value || '0');
+    const collectionPromise = (async () => {
+      const client = getAnalyticsClient();
 
-    // 2. Páginas (top 100)
-    const pageRows = await runReport(
-      client, propertyId, startDate, endDate,
-      ['pagePath'],
-      ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTime', 'engagementRate'],
-      100,
-    );
+      // 1. Totales (sin dimensiones)
+      const totalRows = await runReport(
+        client, propertyId, startDate, endDate,
+        [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTime', 'engagementRate'],
+        1,
+      );
 
-    const pages: GA4PageRow[] = pageRows.map((r) => ({
-      pagePath: r.dimensionValues[0]?.value || '',
-      screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
-      users: parseInt(r.metricValues[1]?.value || '0', 10),
-      sessions: parseInt(r.metricValues[2]?.value || '0', 10),
-      averageEngagementTimeSec: parseFloat(r.metricValues[3]?.value || '0'),
-      engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
-    }));
+      const totals = totalRows[0]?.metricValues || [];
+      const totalUsers = parseInt(totals[0]?.value || '0', 10);
+      const totalSessions = parseInt(totals[1]?.value || '0', 10);
+      const totalPageviews = parseInt(totals[2]?.value || '0', 10);
+      const averageEngagementTimeSec = parseFloat(totals[3]?.value || '0');
+      const engagementRate = parseFloat(totals[4]?.value || '0');
 
-    // 3. Fuentes de tráfico
-    const sourceRows = await runReport(
-      client, propertyId, startDate, endDate,
-      ['sessionSource'],
-      ['totalUsers', 'sessions', 'screenPageViews', 'engagementRate'],
-      50,
-    );
+      // 2. Páginas (top 100)
+      const pageRows = await runReport(
+        client, propertyId, startDate, endDate,
+        ['pagePath'],
+        ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTime', 'engagementRate'],
+        100,
+      );
 
-    const sources: GA4SourceRow[] = sourceRows.map((r) => ({
-      source: r.dimensionValues[0]?.value || 'unknown',
-      users: parseInt(r.metricValues[0]?.value || '0', 10),
-      sessions: parseInt(r.metricValues[1]?.value || '0', 10),
-      screenPageviews: parseInt(r.metricValues[2]?.value || '0', 10),
-      engagementRate: parseFloat(r.metricValues[3]?.value || '0'),
-    }));
+      const pages: GA4PageRow[] = pageRows.map((r) => ({
+        pagePath: r.dimensionValues[0]?.value || '',
+        screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
+        users: parseInt(r.metricValues[1]?.value || '0', 10),
+        sessions: parseInt(r.metricValues[2]?.value || '0', 10),
+        averageEngagementTimeSec: parseFloat(r.metricValues[3]?.value || '0'),
+        engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
+      }));
 
-    // 4. Dispositivos
-    const deviceRows = await runReport(
-      client, propertyId, startDate, endDate,
-      ['deviceCategory'],
-      ['totalUsers', 'sessions'],
-      10,
-    );
+      // 3. Fuentes de tráfico
+      const sourceRows = await runReport(
+        client, propertyId, startDate, endDate,
+        ['sessionSource'],
+        ['totalUsers', 'sessions', 'screenPageViews', 'engagementRate'],
+        50,
+      );
 
-    const devices: GA4DeviceRow[] = deviceRows.map((r) => ({
-      device: (r.dimensionValues[0]?.value || 'unknown') as 'mobile' | 'desktop' | 'tablet' | 'unknown',
-      users: parseInt(r.metricValues[0]?.value || '0', 10),
-      sessions: parseInt(r.metricValues[1]?.value || '0', 10),
-    }));
+      const sources: GA4SourceRow[] = sourceRows.map((r) => ({
+        source: r.dimensionValues[0]?.value || 'unknown',
+        users: parseInt(r.metricValues[0]?.value || '0', 10),
+        sessions: parseInt(r.metricValues[1]?.value || '0', 10),
+        screenPageviews: parseInt(r.metricValues[2]?.value || '0', 10),
+        engagementRate: parseFloat(r.metricValues[3]?.value || '0'),
+      }));
 
-    const snapshot: GA4Snapshot = {
-      date: formatDate(new Date()),
-      collectedAt: new Date().toISOString(),
-      propertyId,
-      dateRange: { start: startDate, end: endDate },
-      totalUsers,
-      totalSessions,
-      totalPageviews,
-      averageEngagementTimeSec,
-      engagementRate,
-      pages,
-      sources,
-      devices,
-    };
+      // 4. Dispositivos
+      const deviceRows = await runReport(
+        client, propertyId, startDate, endDate,
+        ['deviceCategory'],
+        ['totalUsers', 'sessions'],
+        10,
+      );
 
-    snapshot.status = pages.length > 0 || totalUsers > 0 ? 'REAL' : 'CONNECTED_NO_DATA';
+      const devices: GA4DeviceRow[] = deviceRows.map((r) => ({
+        device: (r.dimensionValues[0]?.value || 'unknown') as 'mobile' | 'desktop' | 'tablet' | 'unknown',
+        users: parseInt(r.metricValues[0]?.value || '0', 10),
+        sessions: parseInt(r.metricValues[1]?.value || '0', 10),
+      }));
 
-    logger.info(`[ga4-collector] Collected: ${totalUsers} users, ${totalSessions} sessions, ${pages.length} pages`);
+      const snapshot: GA4Snapshot = {
+        date: formatDate(new Date()),
+        collectedAt: new Date().toISOString(),
+        propertyId,
+        dateRange: { start: startDate, end: endDate },
+        totalUsers,
+        totalSessions,
+        totalPageviews,
+        averageEngagementTimeSec,
+        engagementRate,
+        pages,
+        sources,
+        devices,
+      };
 
-    return snapshot;
+      snapshot.status = pages.length > 0 || totalUsers > 0 ? 'REAL' : 'CONNECTED_NO_DATA';
+
+      logger.info(`[ga4-collector] Collected: ${totalUsers} users, ${totalSessions} sessions, ${pages.length} pages`);
+
+      return snapshot;
+    })();
+
+    return await Promise.race([collectionPromise, timeoutPromise]);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     logger.error('[ga4-collector] Collection failed:', message);
-    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(message)
-      ? 'ACCESS_BLOCKED'
-      : /INVALID_ARGUMENT|invalid argument|not found/i.test(message)
-        ? 'INVALID_CONFIGURATION'
-        : 'NO_DATA';
-    return emptySnapshot(propertyId, startDate, endDate, status, message);
+    const status = message === 'GA4_TIMEOUT' || /\btimeout\b/i.test(message)
+      ? 'TIMEOUT'
+      : /\b(403|permission|unauthorized|insufficient)\b/i.test(message)
+        ? 'ACCESS_BLOCKED'
+        : /INVALID_ARGUMENT|invalid argument|not found/i.test(message)
+          ? 'INVALID_CONFIGURATION'
+          : /\b(ETIMEDOUT|ECONNRESET|ENOTFOUND|socket hang up|unreachable|network)\b/i.test(message)
+            ? 'NETWORK_ERROR'
+            : 'NO_DATA';
+    const errorMessage = status === 'TIMEOUT'
+      ? `GA4 no respondió en ${timeoutMs}ms. La propiedad ${propertyId} está lenta o inaccesible ahora. Reintentar más tarde.`
+      : status === 'NETWORK_ERROR'
+        ? `Error de red conectando a GA4: ${message}. Verificar conectividad y reintentar.`
+        : status === 'ACCESS_BLOCKED'
+          ? `Acceso bloqueado a GA4. Verifica que la cuenta de servicio tenga permisos de lectura sobre la propiedad ${propertyId}.`
+          : status === 'INVALID_CONFIGURATION'
+            ? `Configuración inválida de GA4: ${message}. Verifica NIOS_GA4_PROPERTY_ID y credenciales.`
+            : message;
+    return emptySnapshot(propertyId, startDate, endDate, status, errorMessage);
   }
 }

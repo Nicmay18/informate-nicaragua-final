@@ -95,6 +95,15 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
     reliability, weekly, alerts, telemetry, articlesCount, ttlStatus,
     gsc, ga4, contentOpportunity, categoryIntelligence, editorCEOReport,
     snapshotHistory, ceoVerdict,
+    articleMomentum = [],
+    firebaseHealth,
+    diagnostics = [],
+    topMovingArticles = [],
+    topLifetimeArticles = [],
+    lastRunAt,
+    dataAgeHours,
+    stale,
+    notificationForensics,
   } = data;
 
   const health = telemetry?.health;
@@ -594,6 +603,131 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
               )}
             </Card>
 
+            {/* Source Health */}
+            <Card title="Salud de Fuentes" icon="🩺">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                {diagnostics.map((d) => {
+                  const dot = d.status === 'REAL' ? '🟢' : ['TIMEOUT', 'NETWORK_ERROR', 'CONNECTED_NO_DATA'].includes(d.status) ? '🟡' : '🔴';
+                  return (
+                    <div key={d.id} className="rounded-xl border p-4 border-slate-200">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-semibold">{d.source}</span>
+                        <span className="text-lg">{dot}</span>
+                      </div>
+                      <div className="text-xs text-slate-500 uppercase">{d.status}</div>
+                      <div className="text-sm text-slate-700 mt-1">{d.problem}</div>
+                      <div className="text-xs text-slate-500 mt-1">{d.recommendedAction}</div>
+                    </div>
+                  );
+                })}
+                {firebaseHealth ? (
+                  <div className={`rounded-xl border p-4 ${firebaseHealth.health === 'HEALTHY' ? 'border-emerald-200 bg-emerald-50' : firebaseHealth.health === 'DEGRADED' ? 'border-amber-200 bg-amber-50' : 'border-rose-200 bg-rose-50'}`}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-semibold">Firebase</span>
+                      <span className="text-lg">{firebaseHealth.health === 'HEALTHY' ? '🟢' : firebaseHealth.health === 'DEGRADED' ? '🟡' : '🔴'}</span>
+                    </div>
+                    <div className="text-xs text-slate-500 uppercase">{firebaseHealth.health} · {firebaseHealth.readCount} lecturas · {firebaseHealth.latencyMs ?? '—'}ms</div>
+                    <div className="text-sm text-slate-700 mt-1">{firebaseHealth.errorMessage || firebaseHealth.note}</div>
+                  </div>
+                ) : (
+                  <div className="rounded-xl border p-4 border-slate-200 text-sm text-slate-500">Sin diagnóstico de Firebase.</div>
+                )}
+              </div>
+            </Card>
+
+            {/* Live Momentum */}
+            <Card title="Momentum en Vivo" icon="⚡">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Accionables e informativos</h3>
+                  {articleMomentum.filter((m) => m.level !== 'SILENT').length > 0 ? (
+                    <ul className="space-y-2 text-sm">
+                      {articleMomentum.filter((m) => m.level !== 'SILENT').slice(0, 5).map((m) => (
+                        <li key={m.slug} className={`p-2 rounded border ${m.level === 'ACTIONABLE' ? 'bg-rose-50 border-rose-200' : 'bg-amber-50 border-amber-200'}`}>
+                          <div className="font-medium">{m.slug}</div>
+                          <div className="text-xs text-slate-600">
+                            {m.trend} · {m.delta >= 0 ? `+${number(m.delta)}` : number(m.delta)} vistas · {m.attribution?.source ?? 'desconocido'} ({m.confidence}%)
+                          </div>
+                          {m.recommendedAction && <div className="text-xs text-slate-500 mt-1">{m.recommendedAction}</div>}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <EmptyData label="Sin movimiento accionable reciente." />
+                  )}
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top moviendo (ventana)</h3>
+                    {topMovingArticles.length > 0 ? (
+                      <ul className="space-y-1 text-sm">
+                        {topMovingArticles.map((m) => (
+                          <li key={m.slug} className="flex justify-between border-b border-slate-100 py-1">
+                            <span className="truncate max-w-[70%]">{m.slug}</span>
+                            <span className="font-medium text-emerald-700">+{number(m.delta)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <EmptyData label="Sin top moviendo." />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase mb-2">Top histórico (lifetime)</h3>
+                    {topLifetimeArticles.length > 0 ? (
+                      <ul className="space-y-1 text-sm">
+                        {topLifetimeArticles.map((a) => (
+                          <li key={a.slug} className="flex justify-between border-b border-slate-100 py-1">
+                            <span className="truncate max-w-[70%]">{a.titulo || a.slug}</span>
+                            <span className="font-medium text-slate-700">{number(a.vistas)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <EmptyData label="Sin datos lifetime." />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Notification Forensics */}
+            <Card title="Forense de Notificaciones" icon="📣">
+              {notificationForensics && notificationForensics.channels.length > 0 ? (
+                <>
+                  <p className="text-xs text-slate-500 mb-3">{notificationForensics.summary}</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="text-left p-2 text-xs font-semibold text-slate-400 uppercase">Canal</th>
+                          <th className="text-center p-2 text-xs font-semibold text-slate-400 uppercase">Estado</th>
+                          <th className="text-right p-2 text-xs font-semibold text-slate-400 uppercase">Éxitos</th>
+                          <th className="text-right p-2 text-xs font-semibold text-slate-400 uppercase">Fallos</th>
+                          <th className="text-right p-2 text-xs font-semibold text-slate-400 uppercase">Tasa</th>
+                          <th className="text-left p-2 text-xs font-semibold text-slate-400 uppercase">Detalle</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {notificationForensics.channels.map((c) => (
+                          <tr key={c.channel} className="border-t border-slate-100">
+                            <td className="p-2 font-medium capitalize">{c.channel}</td>
+                            <td className="p-2 text-center">{c.health === 'HEALTHY' ? '🟢' : c.health === 'DEGRADED' ? '🟡' : c.health === 'DOWN' ? '🔴' : '⚪'}</td>
+                            <td className="p-2 text-right">{number(c.successes)}</td>
+                            <td className="p-2 text-right">{c.failures > 0 ? <span className="text-rose-600">{number(c.failures)}</span> : '0'}</td>
+                            <td className="p-2 text-right">{c.successRate !== null ? `${c.successRate}%` : '—'}</td>
+                            <td className="p-2 text-xs text-slate-500 max-w-xs truncate" title={c.note}>{c.note}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <EmptyData label="Sin registros de distribución para analizar." />
+              )}
+            </Card>
+
             {/* Snapshots history */}
             <Card title="Snapshots — Histórico" icon="📊">
               {snapshotHistory.length > 0 ? (
@@ -636,6 +770,8 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
                   <dl className="space-y-1">
                     <div className="flex justify-between"><dt className="text-slate-500">Fecha</dt><dd className="font-medium">{formatDate(telemetry?.date || snapshot?.date)}</dd></div>
                     <div className="flex justify-between"><dt className="text-slate-500">Guardado</dt><dd className="font-medium">{formatDate(telemetry?.savedAt)}</dd></div>
+                    <div className="flex justify-between"><dt className="text-slate-500">Pipeline corrió</dt><dd className="font-medium">{formatDate(lastRunAt)}</dd></div>
+                    <div className="flex justify-between"><dt className="text-slate-500">Antigüedad datos</dt><dd className={`font-medium ${stale ? 'text-amber-600' : ''}`}>{dataAgeHours !== null && dataAgeHours !== undefined ? `${dataAgeHours}h${stale ? ' (obsoleto)' : ''}` : '—'}</dd></div>
                     <div className="flex justify-between"><dt className="text-slate-500">Duración</dt><dd className="font-medium">{report ? `${(report.totalDuration / 1000).toFixed(1)}s` : '—'}</dd></div>
                     <div className="flex justify-between"><dt className="text-slate-500">Health</dt><dd className="font-medium">{health ? `${health.score}/100 (${health.level})` : '—'}</dd></div>
                   </dl>

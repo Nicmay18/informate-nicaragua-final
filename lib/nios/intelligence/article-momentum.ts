@@ -21,9 +21,18 @@ export interface ArticleMomentum {
   delta: number;
   deltaPercent: number | null;
   velocity: number; // vistas/día en el período actual
+  /** Magnitud absoluta del cambio de vistas en la ventana. */
+  momentum: number;
   trend: 'BREAKOUT' | 'BREAKOUT_FROM_ZERO' | 'RISING' | 'STABLE' | 'DECLINING' | 'INSUFFICIENT_DATA';
+  /** Nivel crudo: SILENT | INFORMATIONAL | ACTIONABLE. */
   level: NotificationLevel;
+  /** Nivel de alerta equivalente a level, listo para mostrar en el panel. */
+  alertLevel: NotificationLevel;
   confidence: number; // 0-100
+  /** Ventana de días usada para el baseline. */
+  window: number;
+  /** Timestamp ISO de la evaluación. */
+  timestamp: string;
   sources: Record<string, number>;
   attribution: { source: string; confidence: number } | null;
   reason: string;
@@ -81,6 +90,7 @@ export function evaluateArticleMomentum(
 ): ArticleMomentum[] {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   if (!current) return [];
+  const timestamp = new Date().toISOString();
 
   const previousMap = new Map<string, number>();
   if (previous?.topArticles) {
@@ -173,9 +183,13 @@ export function evaluateArticleMomentum(
       delta,
       deltaPercent,
       velocity,
+      momentum: delta,
       trend,
       level,
+      alertLevel: level,
       confidence,
+      window: opts.baselineDays,
+      timestamp,
       sources,
       attribution,
       reason,

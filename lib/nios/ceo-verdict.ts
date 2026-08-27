@@ -124,6 +124,11 @@ export function buildCeoVerdict(data: CeoVerdictInput): CeoVerdict {
           hasGa4 ? 'GA4 REAL' : 'GA4 no disponible'
         }.`;
 
+  const articleMomentum = data.articleMomentum ?? [];
+  const firebaseHealth = data.firebaseHealth;
+  const diagnostics = data.diagnostics ?? [];
+  const stale = data.stale ?? false;
+
   const whatMatters: string[] = [
     criticalAlerts[0]?.message,
     criticalAlerts[1]?.message,
@@ -147,6 +152,18 @@ export function buildCeoVerdict(data: CeoVerdictInput): CeoVerdict {
     whatMatters.unshift(`${label} en ${signal.entityId}: ${signal.explanation}${marker}`);
   }
 
+  for (const m of articleMomentum.filter((m) => m.level === 'ACTIONABLE').slice(0, 2)) {
+    whatMatters.unshift(`Momentum: "${m.slug}" ${m.trend} +${m.delta} vistas (${m.attribution?.source ?? 'fuente desconocida'}).`);
+  }
+
+  if (firebaseHealth && firebaseHealth.health !== 'HEALTHY') {
+    whatMatters.push(`Firebase ${firebaseHealth.health}: ${firebaseHealth.errorMessage || firebaseHealth.note}`);
+  }
+
+  if (stale) {
+    whatMatters.push(`Datos del pipeline con ${data.dataAgeHours ?? 'n/a'}h de antigüedad. Considerar reejecutar.`);
+  }
+
   if (whatMatters.length === 0) {
     if (!hasGsc) whatMatters.push('GSC no aporta datos: métricas orgánicas son estimaciones.');
     if (!hasGa4) whatMatters.push('GA4 no aporta datos: tráfico del sitio no medido.');
@@ -154,6 +171,11 @@ export function buildCeoVerdict(data: CeoVerdictInput): CeoVerdict {
   }
 
   const whatToDoToday: string[] = [];
+
+  for (const m of articleMomentum.filter((m) => m.level === 'ACTIONABLE' && m.recommendedAction)) {
+    whatToDoToday.push(`${m.recommendedAction} — ${m.slug} (+${m.delta} vistas).`);
+  }
+
   const breakout = data.trends?.actionable.find((s) => s.classification === 'BREAKOUT');
   if (breakout && !breakout.isHypothesis) {
     whatToDoToday.push(`Aprovechar el despegue de ${breakout.entityId}: distribuir y actualizar el contenido que lo impulsa.`);
@@ -202,6 +224,32 @@ export function buildCeoVerdict(data: CeoVerdictInput): CeoVerdict {
     { source: 'GA4', status: hasGa4 ? 'REAL' : ga4?.status || 'NO_DATA', note: hasGa4 ? `${ga4?.totalUsers ?? 0} usuarios` : 'Sin sesiones' },
     { source: 'MENI/Trust', status: trustAvg !== null ? 'REAL' : 'NO_DATA', note: trustAvg !== null ? `Trust ${trustAvg}/100` : 'Sin trust' },
   ];
+
+  if (firebaseHealth) {
+    evidence.push({
+      source: 'Firebase',
+      status: firebaseHealth.health,
+      note: firebaseHealth.errorMessage || firebaseHealth.note,
+    });
+  }
+
+  const criticalDiag = diagnostics.find((d) => d.severity === 'critical' || d.severity === 'high');
+  if (criticalDiag) {
+    evidence.push({
+      source: 'Source Health',
+      status: criticalDiag.status,
+      note: `[${criticalDiag.source}] ${criticalDiag.problem}: ${criticalDiag.recommendedAction}`,
+    });
+  }
+
+  const topMomentum = articleMomentum.slice(0, 3);
+  if (topMomentum.length > 0) {
+    evidence.push({
+      source: 'Momentum',
+      status: 'REAL',
+      note: `${topMomentum.length} artículos con movimiento reciente. Top: ${topMomentum.map((m) => m.slug).join(', ')}.`,
+    });
+  }
 
   if (data.socialConversion) {
     evidence.push({
