@@ -57,7 +57,9 @@ export type NiosDataStatus =
   | 'DATA_CONFLICT'
   | 'CONFIG_REQUIRED'
   | 'INVALID_CONFIGURATION'
-  | 'NOT_CONFIGURED';
+  | 'NOT_CONFIGURED'
+  | 'TIMEOUT'
+  | 'NETWORK_ERROR';
 
 export interface GSCSnapshot {
   date: string;
@@ -753,6 +755,8 @@ export const DATA_STATUS_LABELS: Record<NiosDataStatus, string> = {
   CONFIG_REQUIRED: 'Configuración requerida',
   INVALID_CONFIGURATION: 'Configuración inválida',
   NOT_CONFIGURED: 'No configurado',
+  TIMEOUT: 'Tiempo de espera agotado',
+  NETWORK_ERROR: 'Error de red',
 };
 
 export function formatNiosMetric(

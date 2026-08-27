@@ -138,6 +138,66 @@ function gscDiagnostic(snapshot: GSCSnapshot | null): NiosDiagnostic {
     };
   }
 
+  if (status === 'TIMEOUT') {
+    return {
+      id: 'gsc-timeout',
+      severity: 'high',
+      source: 'GSC',
+      status,
+      problem: 'Google Search Console no respondió a tiempo.',
+      cause: 'La consulta superó el límite de 15s (timeout interno) o la API de Google respondió con demora excesiva.',
+      impact: 'Los datos orgánicos no están disponibles en este intento; el pipeline puede estar bajo presisión o la conexión es inestable.',
+      recommendedAction: 'Reintentar más tarde. Si persiste, aumentar timeout, revisar latencia de red o reducir dimensionalidad de consulta.',
+      action: 'RETRY_LATER',
+      autoFixAvailable: false,
+      requiresHuman: false,
+      expectedResult: 'GSC responde dentro del timeout o se detecta un error más específico (permiso/credencial).',
+      account,
+      property: siteUrl,
+      ...meta,
+    };
+  }
+
+  if (status === 'NETWORK_ERROR') {
+    return {
+      id: 'gsc-network-error',
+      severity: 'high',
+      source: 'GSC',
+      status,
+      problem: 'No se pudo conectar con Google Search Console.',
+      cause: 'Error de red: DNS falló, conexión interrumpida o servicio inalcanzable desde el entorno de ejecución.',
+      impact: 'NIOS no puede descartar problema de permisos porque no llegó a contactar la API.',
+      recommendedAction: 'Verificar conectividad de red del servidor y disponibilidad de Google APIs. Reintentar.',
+      action: 'RETRY_LATER',
+      autoFixAvailable: false,
+      requiresHuman: false,
+      expectedResult: 'Próximo intento alcanza la API de GSC y devuelve respuesta HTTP.',
+      account,
+      property: siteUrl,
+      ...meta,
+    };
+  }
+
+  if (status === 'INVALID_CONFIGURATION') {
+    return {
+      id: 'gsc-invalid-configuration',
+      severity: 'high',
+      source: 'GSC',
+      status,
+      problem: 'Configuración inválida para acceder a Google Search Console.',
+      cause: snapshot?.errorMessage || 'Credencial mal formada, JWT inválido o permisos insuficientes del service account.',
+      impact: 'No se obtienen datos orgánicos.',
+      recommendedAction: 'Verificar FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL y que el service account tenga scope webmasters.readonly.',
+      action: 'REQUIRES_HUMAN_CONFIG',
+      autoFixAvailable: false,
+      requiresHuman: true,
+      expectedResult: 'gscStatus cambia a REAL o ACCESS_BLOCKED con causa clara.',
+      account,
+      property: siteUrl,
+      ...meta,
+    };
+  }
+
   if (status === 'CONFIG_REQUIRED') {
     return {
       id: 'gsc-config-required',

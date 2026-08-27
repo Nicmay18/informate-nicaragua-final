@@ -81,6 +81,9 @@ async function runQuery(
       logger.error(`[gsc-collector] Invalid configuration: ${message}`);
       throw err;
     }
+    if (/\b(timeout|ETIMEDOUT|ECONNRESET|ENOTFOUND|socket hang up|unreachable|network)\b/i.test(message)) {
+      throw err;
+    }
     logger.warn(`[gsc-collector] Error query dimensions=${dimensions.join(',')}, type=${type}: ${message}`);
     return [];
   }
@@ -286,11 +289,15 @@ export async function collectGSC(
     const dataText = data ? JSON.stringify(data) : '';
     const combined = `${rawMessage} ${dataText}`;
     logger.error('[gsc-collector] Collection failed:', combined);
-    const status = /\b(403|permission|unauthorized|insufficient)\b/i.test(combined)
-      ? 'ACCESS_BLOCKED'
-      : /\b(invalid|jwt|signature|malformed|key|credential|invalid_grant)\b/i.test(combined)
-        ? 'INVALID_CONFIGURATION'
-        : 'NO_DATA';
+    const status = rawMessage === 'GSC_TIMEOUT' || /\btimeout\b/i.test(combined)
+      ? 'TIMEOUT'
+      : /\b(403|permission|unauthorized|insufficient)\b/i.test(combined)
+        ? 'ACCESS_BLOCKED'
+        : /\b(invalid|jwt|signature|malformed|key|credential|invalid_grant)\b/i.test(combined)
+          ? 'INVALID_CONFIGURATION'
+          : /\b(ETIMEDOUT|ECONNRESET|ENOTFOUND|socket hang up|unreachable|network)\b/i.test(combined)
+            ? 'NETWORK_ERROR'
+            : 'NO_DATA';
     const errorMessage = status === 'ACCESS_BLOCKED'
       ? `Acceso bloqueado. Cuenta utilizada: ${serviceAccountEmail || 'no configurada'}. ` +
         `Propiedad solicitada: ${siteUrl}. ` +

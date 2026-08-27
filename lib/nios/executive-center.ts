@@ -13,6 +13,10 @@ import { buildWeeklyReliabilityReport } from './intelligence/weekly-reliability-
 import { getActiveAlerts } from './intelligence/alerts';
 import { reconcileTraffic, type ReconciledTrafficIntelligence } from './intelligence/traffic-reconciler';
 import { buildTrendReport, siteSeriesFromDailyGrowth, type TrendReport } from './intelligence/trend-engine';
+import {
+  evaluateArticleMomentum,
+  type ArticleMomentum,
+} from './intelligence/article-momentum';
 import { buildCeoVerdict, type CeoVerdict, type CeoVerdictInput } from './ceo-verdict';
 import {
   buildSocialConversionVerdict,
@@ -73,6 +77,7 @@ export interface NiosExecutiveData {
   snapshotHistory: SnapshotSummary[];
   socialConversion: SocialConversionVerdict;
   trends: TrendReport | null;
+  articleMomentum: ArticleMomentum[];
 }
 
 const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
@@ -135,6 +140,12 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     trustScore: s.trust?.averageGoogleTrustScore ?? null,
   }));
 
+  const previousSnapshot = historicalSnapshots[0] ?? null;
+  const articleMomentum = evaluateArticleMomentum(
+    snapshot?.trafficPerformance ?? null,
+    previousSnapshot?.trafficPerformance ?? null,
+  );
+
   const data: CeoVerdictInput = {
     snapshot,
     snapshotDate: snapshot?.date || null,
@@ -164,6 +175,7 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     snapshotHistory,
     socialConversion,
     trends,
+    articleMomentum,
   };
 
   return {
