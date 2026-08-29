@@ -428,8 +428,6 @@ export default withSentryConfig(withAnalyzer(nextConfig), {
   widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
   hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
   sourcemaps: {
     disable: true,
   },

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { loadEntityPage, generateEntitySchema } from '@/lib/meni/knowledge-base/entity-page';
 import EntityPageClient from '@/components/knowledge-graph/EntityPageClient';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 export const revalidate = 3600;
 
@@ -58,7 +59,7 @@ export default async function EntityPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(jsonLd as Record<string, unknown>) }}
       />
       <EntityPageClient data={data} />
     </>

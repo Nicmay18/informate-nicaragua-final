@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { getAuthorBySlug } from '@/lib/authors';
 import { getNews } from '@/lib/data';
 import { getCspNonce } from '@/lib/nonce';
+import { escapeJsonLd } from '@/lib/jsonld';
 import type { Author } from '@/lib/authors';
 
 // Dynamic rendering: evita timeout en build y garantiza 404 reales para autores inexistentes
@@ -95,7 +96,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
 
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPersonJsonLd(author)) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildPersonJsonLd(author) as Record<string, unknown>) }} />
 
       {/* Breadcrumb */}
       <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 20px 0' }}>

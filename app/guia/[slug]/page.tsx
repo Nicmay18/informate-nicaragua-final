@@ -5,6 +5,7 @@ import { getEvergreenBySlug, getAllEvergreen } from '@/lib/evergreen';
 import AuthorCard from '@/components/AuthorCard';
 import { getCspNonce } from '@/lib/nonce';
 import { escapeJsonLd } from '@/lib/jsonld';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export async function generateStaticParams() {
   const articles = getAllEvergreen();
@@ -128,7 +129,7 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
         </header>
 
         {/* Content */}
-        <div className="ni-article__body" dangerouslySetInnerHTML={{ __html: article.content }} />
+        <div className="ni-article__body" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.content) }} />
 
         {/* FAQ Section */}
         <section style={{ marginTop: 48, paddingTop: 32, borderTop: '2px solid var(--border)' }}>

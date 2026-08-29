@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Shield, Users, RefreshCw, Mail, Scale, Search } from 'lucide-react';
 import { getCspNonce } from '@/lib/nonce';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 const TRUST_SCHEMA = {
   '@context': 'https://schema.org',
@@ -39,7 +40,7 @@ export default async function CentroConfianzaPage() {
   const nonce = await getCspNonce();
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(TRUST_SCHEMA) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(TRUST_SCHEMA as Record<string, unknown>) }} />
       <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 20px 0' }}>
         <Link href="/">Inicio</Link>
         <span className="ni-breadcrumbs__sep">/</span>

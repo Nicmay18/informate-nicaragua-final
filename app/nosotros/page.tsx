@@ -11,6 +11,7 @@ import {
   Scale,
 } from 'lucide-react';
 import { getCspNonce } from '@/lib/nonce';
+import { escapeJsonLd } from '@/lib/jsonld';
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -119,7 +120,7 @@ export default async function NosotrosPage() {
 
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
-      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(SCHEMA as Record<string, unknown>) }} />
 
       <nav className="ni-breadcrumbs" aria-label="Miga de pan" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 20px 0' }}>
         <Link href="/">Inicio</Link>
