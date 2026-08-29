@@ -7,18 +7,19 @@ import {
   MIN_EXPLANATION_SCORE,
   MAX_TRANSCRIPTION_PERCENT,
 } from './quality-gate/rules';
+import { logger } from '@/lib/logger';
 
 const DEBUG = process.env.MENI_DEBUG === 'true';
 
 export function logMeni(...args: unknown[]): void {
   if (DEBUG) {
-    console.log('[MENI-DEBUG]', ...args);
+    logger.debug('[MENI-DEBUG]', ...args);
   }
 }
 
 function logTime(label: string, t0: number): void {
   if (DEBUG) {
-    console.log(`[MENI-DEBUG] ⏱ ${label}: ${Date.now() - t0}ms`);
+    logger.debug(`[MENI-DEBUG] ⏱ ${label}: ${Date.now() - t0}ms`);
   }
 }
 
