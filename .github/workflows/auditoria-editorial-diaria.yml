@@ -6,7 +6,7 @@ on:
     - cron: '0 12 * * *'
   workflow_dispatch:
   push:
-    branches: [main, develop]
+    branches: [master]
     paths:
       - 'lib/editor-jefe/**'
       - 'lib/analizador-noticias.ts'
@@ -14,7 +14,7 @@ on:
       - '.github/workflows/auditoria-editorial-diaria.yml'
 
 env:
-  NODE_VERSION: '20.x'
+  NODE_VERSION: '22.x'
 
 jobs:
   auditoria-editorial:
