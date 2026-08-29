@@ -3,7 +3,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
-  "regions": ["iad1"],
   "headers": [
     {
       "source": "/sitemap.xml",
