@@ -73,6 +73,7 @@ export async function GET(request: NextRequest) {
         destacada: !!data.destacada,
         vistas: data.vistas || 0,
         publicado: data.publicado !== false,
+        estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
         puntosClave: data.puntosClave || [],
         palabras: data.palabras || 0,
         nivel: data.nivel || 'SIN NIVEL',

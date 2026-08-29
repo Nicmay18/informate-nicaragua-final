@@ -1,6 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
-import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import { getTrafficPerformance } from '@/lib/analytics/traffic-reader';
 import {
   getMetricDefinition,
   type MetricDefinition,
@@ -62,12 +62,11 @@ export async function GET(request: NextRequest) {
       categoriaStats[cat].vistas += v;
     }
 
-    // ─── 3. TRÁFICO POR FUENTE (últimas 24h) ───
-    const today = ahora.toISOString().split('T')[0];
-    const trafficRead = await getTrafficForDate(db, today, 500);
+    // ─── 3. TRÁFICO POR FUENTE (24h, 7d, 30d) ───
+    const trafficPerformance = await getTrafficPerformance(db, 30, 500);
 
     const fuentes: Record<string, { visits: number; articulos: Set<string> }> = {};
-    for (const article of trafficRead.articles) {
+    for (const article of trafficPerformance.articles) {
       for (const [source, views] of Object.entries(article.sources)) {
         if (!fuentes[source]) fuentes[source] = { visits: 0, articulos: new Set() };
         fuentes[source].visits += views;
@@ -75,7 +74,33 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const visitas24h = trafficRead.views24h;
+    const visitas24h = trafficPerformance.views24h ?? 0;
+    const visitas7d = trafficPerformance.views7d ?? 0;
+    const visitas30d = trafficPerformance.views30d ?? 0;
+
+    const dailyGrowth = trafficPerformance.performance?.dailyGrowth || {};
+    const sortedDates = Object.keys(dailyGrowth).sort((a, b) => b.localeCompare(a));
+    const todayTraffic = sortedDates[0] ? (dailyGrowth[sortedDates[0]] ?? 0) : 0;
+    const yesterdayTraffic = sortedDates[1] ? (dailyGrowth[sortedDates[1]] ?? 0) : 0;
+    const trend24h =
+      yesterdayTraffic === 0
+        ? todayTraffic > 0
+          ? '+100%'
+          : 'flat'
+        : `${Math.round(((todayTraffic - yesterdayTraffic) / yesterdayTraffic) * 100)}%`;
+    const dailyAverage7d = visitas7d > 0 ? Math.round(visitas7d / 7) : 0;
+    const dailyAverage30d = visitas30d > 0 ? Math.round(visitas30d / 30) : 0;
+
+    // Fuentes de tráfico acumuladas 30d
+    const trafficSourceMetric = getMetricDefinition('site.traffic.sources');
+    const fuentes30d = Object.entries(trafficPerformance.performance?.topSources || {})
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .map(([nombre, visitas]) => ({
+        nombre,
+        visitas: visitas as number,
+        metric: trafficSourceMetric,
+        articulosUnicos: 0,
+      }));
 
     // ─── 4. DISTRIBUCIONES RECIENTES ───
     const distSnap = await db
@@ -230,8 +255,6 @@ export async function GET(request: NextRequest) {
       ? `Hoy se distribuyeron ${distribuciones24h.length} notas. Esto genera tráfico directo.`
       : 'Sin distribuciones en 24h. El Agente debería ejecutarse.';
 
-    // Fuentes principales de tráfico (24h, RAW)
-    const trafficSourceMetric = getMetricDefinition('site.traffic.sources');
     const fuentesOrdenadas = Object.entries(fuentes)
       .sort((a, b) => b[1].visits - a[1].visits)
       .map(([nombre, data]) => ({
@@ -283,6 +306,27 @@ export async function GET(request: NextRequest) {
       // Tráfico
       fuentes: fuentesOrdenadas,
       visitas24h,
+      visitas7d,
+      visitas30d,
+      trafficEvents: {
+        window24h: visitas24h,
+        window7d: visitas7d,
+        window30d: visitas30d,
+        dailyAverage7d,
+        dailyAverage30d,
+        trend24h,
+        source: trafficPerformance.source,
+        fuentes24h: fuentesOrdenadas,
+        fuentes30d,
+      },
+
+      // Vistas canónicas (lifetime)
+      articleViews: {
+        total: vistasTotales,
+        byCategory: categoriaStats,
+        source: 'noticias.vistas',
+        period: 'lifetime',
+      },
 
       // Top
       topNoticias,

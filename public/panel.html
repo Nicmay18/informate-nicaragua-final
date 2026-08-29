@@ -1823,7 +1823,7 @@ sin texto ni marcas de agua, composición periodística"
           </div>
           <div class="stat-card" style="border-bottom: 3px solid var(--success);">
             <div class="stat-header">
-              <div><div class="stat-value" id="aud-vistas-totales">—</div><div class="stat-label">Vistas Totales</div></div>
+              <div><div class="stat-value" id="aud-vistas-totales">—</div><div class="stat-label">ARTICLE VIEWS (lifetime)</div></div>
               <div class="stat-icon green"><i class="fas fa-eye"></i></div>
             </div>
             <div class="stat-change" id="aud-tasa-vistas-badge"><i class="fas fa-percentage"></i><span id="aud-tasa-vistas">—% con vistas</span></div>
@@ -1841,6 +1841,38 @@ sin texto ni marcas de agua, composición periodística"
               <div class="stat-icon red"><i class="fas fa-inbox"></i></div>
             </div>
             <div class="stat-change negative"><i class="fas fa-arrow-up"></i><span>pendientes</span></div>
+          </div>
+        </div>
+
+        <!-- TRAFFIC EVENTS: 24h, 7d, 30d -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card" style="border-bottom: 3px solid #3b82f6;">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-traffic-24h">—</div><div class="stat-label">TRAFFIC EVENTS 24h</div></div>
+              <div class="stat-icon blue"><i class="fas fa-clock"></i></div>
+            </div>
+            <div class="stat-change" id="aud-traffic-source-24h"><i class="fas fa-database"></i><span>—</span></div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid #8b5cf6;">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-traffic-7d">—</div><div class="stat-label">TRAFFIC EVENTS 7d</div></div>
+              <div class="stat-icon purple"><i class="fas fa-calendar-week"></i></div>
+            </div>
+            <div class="stat-change" id="aud-traffic-avg-7d"><i class="fas fa-divide"></i><span>— / día</span></div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid #ec4899;">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-traffic-30d">—</div><div class="stat-label">TRAFFIC EVENTS 30d</div></div>
+              <div class="stat-icon pink"><i class="fas fa-calendar-alt"></i></div>
+            </div>
+            <div class="stat-change" id="aud-traffic-avg-30d"><i class="fas fa-divide"></i><span>— / día</span></div>
+          </div>
+          <div class="stat-card" style="border-bottom: 3px solid #14b8a6;">
+            <div class="stat-header">
+              <div><div class="stat-value" id="aud-traffic-trend">—</div><div class="stat-label">TREND 24h</div></div>
+              <div class="stat-icon teal"><i class="fas fa-chart-line"></i></div>
+            </div>
+            <div class="stat-change"><i class="fas fa-info-circle"></i><span>hoy vs ayer</span></div>
           </div>
         </div>
 
@@ -5545,6 +5577,17 @@ window.batchRestore = async function() {
 
         // 3. Fuentes de tráfico
         document.getElementById('aud-visitas-24h').textContent = (d.visitas24h ?? 0).toLocaleString();
+        const traf = d.trafficEvents || {};
+        document.getElementById('aud-traffic-24h').textContent = (traf.window24h ?? d.visitas24h ?? 0).toLocaleString();
+        document.getElementById('aud-traffic-7d').textContent = (traf.window7d ?? 0).toLocaleString();
+        document.getElementById('aud-traffic-30d').textContent = (traf.window30d ?? 0).toLocaleString();
+        const avg7d = document.getElementById('aud-traffic-avg-7d');
+        if (avg7d) avg7d.innerHTML = `<i class="fas fa-divide"></i><span>${(traf.dailyAverage7d ?? 0).toLocaleString()} / día</span>`;
+        const avg30d = document.getElementById('aud-traffic-avg-30d');
+        if (avg30d) avg30d.innerHTML = `<i class="fas fa-divide"></i><span>${(traf.dailyAverage30d ?? 0).toLocaleString()} / día</span>`;
+        document.getElementById('aud-traffic-trend').textContent = traf.trend24h ?? '—';
+        const source24h = document.getElementById('aud-traffic-source-24h');
+        if (source24h) source24h.innerHTML = `<i class="fas fa-database"></i><span>${traf.source ?? 'traffic_daily'}</span>`;
         const fuentesBody = document.getElementById('aud-fuentes-body');
         if (fuentesBody) {
           const fuentes = d.fuentes || [];

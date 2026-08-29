@@ -28,6 +28,22 @@ vi.mock('@/lib/auth', () => ({
 
 vi.mock('@/lib/analytics/traffic-reader', () => ({
   getTrafficForDate: vi.fn().mockResolvedValue({ views24h: 0, articles: [] }),
+  getTrafficPerformance: vi.fn().mockResolvedValue({
+    source: 'traffic_daily',
+    views24h: 183,
+    views7d: 3500,
+    views30d: 10000,
+    articles: [],
+    performance: {
+      topArticles: [],
+      topSources: {},
+      dailyGrowth: { '2026-08-06': 183, '2026-08-05': 100 },
+      weeklyTrend: {},
+      generatedAt: new Date().toISOString(),
+    },
+    fallbackReads: 0,
+    migrationHealth: 100,
+  }),
 }));
 
 interface MockDoc {
