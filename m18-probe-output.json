@@ -1,0 +1,146 @@
+{
+  "startedAt": "2026-08-27T20:16:48.577Z",
+  "finishedAt": "2026-08-27T20:16:49.790Z",
+  "envPresence": {
+    "FIREBASE_PROJECT_ID": true,
+    "FIREBASE_CLIENT_EMAIL": true,
+    "FIREBASE_PRIVATE_KEY": true,
+    "FIREBASE_SERVICE_ACCOUNT_BASE64": true,
+    "NIOS_GSC_SITE_URL": false,
+    "NIOS_GA4_PROPERTY_ID": false,
+    "FB_PAGE_ACCESS_TOKEN": false,
+    "FB_PAGE_ID": false
+  },
+  "checks": {
+    "firebaseHealth": {
+      "source": "Firebase",
+      "status": "READ_FAILED",
+      "health": "DOWN",
+      "lastAttemptAt": "2026-08-27T20:16:49.663Z",
+      "lastSuccessAt": null,
+      "lastDataAt": null,
+      "dataAgeHours": null,
+      "readCount": 0,
+      "writeCount": 0,
+      "errorCount": 1,
+      "latencyMs": null,
+      "collectionsChecked": [
+        "noticias",
+        "traffic_log",
+        "nios_daily_snapshots",
+        "nios_alerts"
+      ],
+      "projectId": "informate-instant-nicaragua",
+      "clientEmail": "fir***@informate-instant-nicaragua.iam.gserviceaccount.com",
+      "note": "Conexión inicializó pero la lectura falló: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+      "errorMessage": "Conexión inicializó pero la lectura falló: 16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+      "confidence": 0,
+      "recommendedAction": "Revisar permisos Firestore, reglas de seguridad y estado del proyecto."
+    },
+    "gsc": {
+      "date": "2026-08-27",
+      "collectedAt": "2026-08-27T20:16:49.666Z",
+      "siteUrl": "",
+      "dateRange": {
+        "start": "2026-07-30",
+        "end": "2026-08-27"
+      },
+      "totalImpressions": 0,
+      "totalClicks": 0,
+      "avgCtr": 0,
+      "avgPosition": 0,
+      "pages": [],
+      "queries": [],
+      "countries": [],
+      "devices": [],
+      "status": "CONFIG_REQUIRED",
+      "errorMessage": "NIOS_GSC_SITE_URL / NIOS_SITE_URL no está configurada."
+    },
+    "ga4": {
+      "date": "2026-08-27",
+      "collectedAt": "2026-08-27T20:16:49.667Z",
+      "propertyId": "",
+      "dateRange": {
+        "start": "2026-07-30",
+        "end": "2026-08-27"
+      },
+      "totalUsers": 0,
+      "totalSessions": 0,
+      "totalPageviews": 0,
+      "averageEngagementTimeSec": 0,
+      "engagementRate": 0,
+      "pages": [],
+      "sources": [],
+      "devices": [],
+      "status": "CONFIG_REQUIRED",
+      "errorMessage": "NIOS_GA4_PROPERTY_ID no está configurada."
+    },
+    "facebook": {
+      "source": "Meta",
+      "status": "NOT_CONFIGURED",
+      "collectedAt": "2026-08-27T20:16:49.667Z",
+      "periodDays": 28,
+      "reach": 0,
+      "impressions": 0,
+      "reproductions": 0,
+      "reactions": 0,
+      "comments": 0,
+      "shares": 0,
+      "linkClicks": 0,
+      "outboundClicks": 0,
+      "errorMessage": "FB_PAGE_ACCESS_TOKEN / FB_PAGE_ID no configurados."
+    }
+  },
+  "executive": {
+    "snapshotDate": null,
+    "dataAgeHours": null,
+    "stale": null,
+    "articlesCount": null,
+    "lastRunAt": null,
+    "gsc": {
+      "status": null,
+      "totalClicks": null,
+      "totalImpressions": null,
+      "pagesCount": null,
+      "queriesCount": null,
+      "errorMessage": null
+    },
+    "ga4": {
+      "status": null,
+      "totalUsers": null,
+      "totalSessions": null,
+      "totalPageviews": null,
+      "pagesCount": null,
+      "errorMessage": null
+    },
+    "topLifetimeArticles": null,
+    "topMovingArticles": null,
+    "articleMomentum": null,
+    "socialConversion": null,
+    "notificationForensics": null,
+    "ceoVerdict": null,
+    "diagnostics": null,
+    "firebaseHealth": null,
+    "alerts": null
+  },
+  "rawFirestore": {
+    "noticias": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    },
+    "traffic_log": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    },
+    "traffic_daily": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    },
+    "nios_alerts": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    },
+    "distribuciones": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    },
+    "distribuciones_pendientes": {
+      "error": "16 UNAUTHENTICATED: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
+    }
+  }
+}

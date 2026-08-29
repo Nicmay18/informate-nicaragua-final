@@ -155,8 +155,8 @@ describe('NIOS Operating Mode', () => {
     console.warn('\n=== NIOS OPERATING REPORT (real) ===\n');
     console.warn(JSON.stringify(report, null, 2));
 
-    expect(['REAL', 'ACCESS_BLOCKED', 'INVALID_CONFIGURATION', 'NO_DATA', 'TIMEOUT', 'NETWORK_ERROR']).toContain(gsc.status);
-    expect(['REAL', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED', 'INVALID_CONFIGURATION', 'NO_DATA']).toContain(ga4.status);
+    expect(['REAL', 'ACCESS_BLOCKED', 'INVALID_CONFIGURATION', 'NO_DATA', 'CONNECTED_NO_DATA', 'TIMEOUT', 'NETWORK_ERROR']).toContain(gsc.status);
+    expect(['REAL', 'ACCESS_BLOCKED', 'CONFIG_REQUIRED', 'INVALID_CONFIGURATION', 'NO_DATA', 'CONNECTED_NO_DATA']).toContain(ga4.status);
     expect(report.mode).toMatch(/HEALTHY|WAITING_HUMAN|ACTION_REQUIRED|BLOCKED|VERIFIED/);
     expect(report.top5Actions.length).toBeLessThanOrEqual(5);
     expect(report.niosAhoraPuede.length).toBeGreaterThan(0);

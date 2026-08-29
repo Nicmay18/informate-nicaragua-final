@@ -217,6 +217,25 @@ scripts/output/
 !.devin/prompts/meni-os-*.md
 firebase.json
 
+# M19/M20 — Firebase recovery temporary scripts and artifacts
+m19-*.ts
+m19-*.txt
+m19-probe-output.json
+m20-*.ts
+m20-*.txt
+m20-probe-output.json
+m20-report.json
+m20probe.ts
+m20genreport.ts
+m20genreport.js
+m20createindex.ts
+
+# M21 — Data Integrity & Recovery temporary scripts and artifacts
+m21-*.ts
+m21-*.txt
+m21-pipeline-output.json
+m21-verify-output.json
+
 # MENI OS v3.0 — artefactos generados en prebuild
 data/meni/registry.json
 data/meni/history/*.json

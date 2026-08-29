@@ -129,7 +129,16 @@ export async function checkFirebaseHealth(): Promise<FirebaseHealth> {
     let lastDataAt: string | null = null;
 
     for (const name of collections) {
-      const snap = await db.collection(name).orderBy('__name__', 'desc').limit(1).get();
+      let snap;
+      try {
+        snap = await db.collection(name).orderBy('__name__', 'desc').limit(1).get();
+      } catch (err: any) {
+        if (err?.details?.includes?.('requires an index') || err?.message?.includes?.('requires an index')) {
+          snap = await db.collection(name).limit(1).get();
+        } else {
+          throw err;
+        }
+      }
       readCount += 1;
       if (!snap.empty) {
         const doc = snap.docs[0];
