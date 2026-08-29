@@ -4,14 +4,6 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "regions": ["iad1"],
-  "functions": {
-    "app/api/admin/meni/generar/route.ts": {
-      "maxDuration": 60
-    },
-    "app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/sitemap.xml",
