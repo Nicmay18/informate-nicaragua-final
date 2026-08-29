@@ -30,22 +30,4 @@
       ]
     }
   ],
-  "crons": [
-    {
-      "path": "/api/cron/resumen-diario",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/traffic-cleanup",
-      "schedule": "30 3 * * *"
-    },
-    {
-      "path": "/api/cron/nios-collect",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/supervisor-watch",
-      "schedule": "0 0-23/2 * * *"
-    }
-  ]
 }
