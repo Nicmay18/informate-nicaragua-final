@@ -86,7 +86,7 @@ export function buildGoogleTrust(
       score: authorsScore,
       weight: 0.8,
       strength: `${uniqueAuthors} firma${uniqueAuthors === 1 ? '' : 's'} en circulación.`,
-      weakness: uniqueAuthors < 3 ? 'Google penaliza medios con una sola firma genérica.' : 'Plantilla de firmas suficiente.',
+      weakness: uniqueAuthors < 3 ? 'Menor diversidad de autoría puede afectar la percepción de autoridad; no concluye penalización de Google.' : 'Plantilla de firmas suficiente.',
       nextAction: 'Sumar al menos 3 firmas con especialidad declarada.',
     },
     {

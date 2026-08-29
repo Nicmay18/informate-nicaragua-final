@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminOrCronToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
@@ -31,11 +32,11 @@ export async function POST(request: NextRequest) {
       limpiadas,
       afectadas,
       message: limpiadas > 0
-        ? `Se limpiaron ${limpiadas} noticias que tenían noindex=true. Ahora Google puede indexarlas.`
+        ? `Se limpiaron ${limpiadas} noticias que tenían noindex=true. Se eliminó la señal de noindex; la indexación depende ahora de Google.`
         : 'Ninguna noticia tenía noindex=true. Todo limpio.',
     });
   } catch (error: any) {
-    console.error('[limpiar-noindex]', error);
+    logger.error('[limpiar-noindex]', error);
     return NextResponse.json({ error: error.message || 'Error interno' }, { status: 500 });
   }
 }

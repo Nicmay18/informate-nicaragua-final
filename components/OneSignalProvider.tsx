@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-const ONESIGNAL_APP_ID = '608354d3-fd2a-4c97-b055-5c14b57bbe9b';
+const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || '';
 
 declare global {
   interface Window {
@@ -14,6 +14,7 @@ declare global {
 
 export default function OneSignalProvider() {
   useEffect(() => {
+    if (!ONESIGNAL_APP_ID) return;
     const initOneSignal = () => {
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       window.OneSignalDeferred.push(async function (OneSignal) {

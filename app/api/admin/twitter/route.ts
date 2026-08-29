@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
       resultados,
     });
   } catch (err: any) {
-    console.error('[admin/twitter]', err);
+    logger.error('[admin/twitter]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

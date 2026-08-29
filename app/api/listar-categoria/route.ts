@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 async function fetchCategoriaRaw(categoria: string) {
   const db = getAdminDb();
@@ -36,7 +37,7 @@ export async function GET(request: Request) {
     const noticias = await cachedCategoria(categoria)();
     return NextResponse.json({ ok: true, categoria, total: noticias.length, noticias });
   } catch (error) {
-    console.error('[listar-categoria] Error:', error);
+    logger.error('[listar-categoria] Error:', error);
     return NextResponse.json(
       { error: 'Error interno', detail: error instanceof Error ? error.message : String(error) },
       { status: 500 }

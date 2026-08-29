@@ -4,6 +4,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
 import crypto from 'crypto';
 import { isString } from '@/lib/validators';
+import { logger } from '@/lib/logger';
 
 function generateShortId(): string {
   // Generar ID corto de 8 caracteres alfanuméricos
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[shortlink] Error:', error);
+    logger.error('[shortlink] Error:', error);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }
 }

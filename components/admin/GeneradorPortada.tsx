@@ -12,6 +12,7 @@ import {
   togglePin,
 } from '@/lib/portada/helpers';
 import type { PortadaConfig, PortadaItem, PortadaSectionId } from '@/lib/portada/types';
+import { logger } from '@/lib/logger';
 
 export default function GeneradorPortada() {
   const [data, setData] = useState<{ items: PortadaItem[]; config: PortadaConfig } | null>(null);
@@ -35,7 +36,7 @@ export default function GeneradorPortada() {
         setLoading(false);
       })
       .catch(err => {
-        console.error(err);
+        logger.error(err);
         setLoading(false);
       });
   }, [adminFetch]);
@@ -81,7 +82,7 @@ export default function GeneradorPortada() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       alert('Error guardando la configuración');
     } finally {
       setSaving(false);

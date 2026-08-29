@@ -141,8 +141,10 @@ describe('NIOS Operating Mode', () => {
   });
 
   it('real pipeline produces a valid operating report', async () => {
-    const gsc = await collectGSC('sc-domain:nicaraguainformate.com', 7);
-    const ga4 = await collectGA4(process.env.NIOS_GA4_PROPERTY_ID || '', 1);
+    const [gsc, ga4] = await Promise.all([
+      collectGSC('sc-domain:nicaraguainformate.com', 7),
+      collectGA4(process.env.NIOS_GA4_PROPERTY_ID || '', 1),
+    ]);
 
     const report = generateOperatingReport({
       gsc,
@@ -160,5 +162,5 @@ describe('NIOS Operating Mode', () => {
     expect(report.mode).toMatch(/HEALTHY|WAITING_HUMAN|ACTION_REQUIRED|BLOCKED|VERIFIED/);
     expect(report.top5Actions.length).toBeLessThanOrEqual(5);
     expect(report.niosAhoraPuede.length).toBeGreaterThan(0);
-  }, 30000);
+  }, 60000);
 });

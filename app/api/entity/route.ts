@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { loadEntityPage, listAllEntities, generateEntitySchema } from '@/lib/meni/knowledge-base/entity-page';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, ...data, schema });
   } catch (error) {
-    console.error('[entity-page API] Error:', error);
+    logger.error('[entity-page API] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },

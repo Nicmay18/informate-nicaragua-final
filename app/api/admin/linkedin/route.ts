@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -89,7 +90,7 @@ export async function POST(request: NextRequest) {
     const r = await publishLinkedIn(text, shareUrl, shareThumbnail, shareTitle, shareDesc);
     return NextResponse.json({ success: r.ok, canal: 'linkedin', ...r });
   } catch (err: any) {
-    console.error('[admin/linkedin]', err);
+    logger.error('[admin/linkedin]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

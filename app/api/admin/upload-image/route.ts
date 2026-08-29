@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { verifyAdminToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 export const maxDuration = 30;
 
 /**
@@ -114,7 +115,7 @@ export async function POST(request: NextRequest) {
       filename,
     });
   } catch (error) {
-    console.error('[upload-image]', error);
+    logger.error('[upload-image]', error);
     return NextResponse.json(
       { success: false, error: error instanceof Error ? error.message : 'Error interno' },
       { status: 500 }

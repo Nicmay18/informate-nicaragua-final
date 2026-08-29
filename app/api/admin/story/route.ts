@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
 import { runStoryEditor } from '@/lib/editorial/story-editor';
 import type { ResearchResult } from '@/lib/research/types';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, proposal });
   } catch (error) {
-    console.error('[story] Error:', error);
+    logger.error('[story] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

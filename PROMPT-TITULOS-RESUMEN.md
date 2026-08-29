@@ -15,7 +15,7 @@ REGLAS:
 3. RESUMEN: Máximo 155 caracteres (contar todo). 1 párrafo. Responde: ¿Qué pasó? ¿Dónde? ¿Cuándo? ¿Quién?
 4. CUERPO: 350-500 palabras (según datos verificables). Mínimo 350 si hay ≥3 datos verificables (fecha, nombre, lugar, cifra, institución). NUNCA rellenar para llegar a un número. Formato HTML con <p> para párrafos y <h2> para subtítulos.
 5. PIE DE FOTO: Siempre escribir exactamente: "Foto/Cortesía RRSS / Redacción Keling Rivera M."
-6. NUNCA uses "muertos", "muere", "mueren" — decí "fallecidos", "fallece", "fallecen". Google penaliza sensacionalismo.
+6. NUNCA uses "muertos", "muere", "mueren" — decí "fallecidos", "fallece", "fallecen". Evitar sensacionalismo.
 7. Sin relleno emocional: prohibido "tragedia", "consternación", "dolor", "lamentable", "perdió la vida".
 8. Sin transiciones robóticas: prohibido "además", "por otro lado", "asimismo", "en consecuencia".
 9. Tono informativo, neutral, tercera persona. Hechos, no opiniones.
@@ -76,7 +76,7 @@ NOTICIAS FUENTE:
 
 | Prohibido ❌ | Usar ✅ | Razón |
 |-------------|---------|-------|
-| muertos | fallecidos | Google penaliza sensacionalismo |
+| muertos | fallecidos | Evitar sensacionalismo |
 | muere | fallece | Igual que arriba |
 | mueren | fallecen | Igual que arriba |
 | tragedia | incidente / hecho | Relleno emocional |

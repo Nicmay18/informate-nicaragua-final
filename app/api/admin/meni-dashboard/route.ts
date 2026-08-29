@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -238,7 +239,7 @@ export async function GET(request: NextRequest) {
       categoriasDistribucion,
     });
   } catch (error) {
-    console.error('[meni-dashboard] Error:', error);
+    logger.error('[meni-dashboard] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

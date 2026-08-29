@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@/lib/logger';
 import { useEffect, useState, useCallback } from 'react';
 import { getAdminToken } from '@/hooks/useAdminFetch';
 
@@ -31,7 +32,7 @@ export default function DashboardCalidad() {
     adminFetch('/api/admin/dashboard-calidad')
       .then((r) => r.json())
       .then(setData)
-      .catch(console.error)
+      .catch((err) => logger.error('[DashboardCalidad]', err))
       .finally(() => setLoading(false));
   }, [adminFetch]);
 

@@ -271,7 +271,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
         severity: 'WARNING',
         domain: 'EEAT',
         problem: 'No se identifica quién confirmó la información',
-        impact: 'E-E-A-T comprometido — Google puede penalizar',
+        impact: 'E-E-A-T comprometido; el lector y los motores de búsqueda pueden percibir menor confianza. No concluye penalización de Google sin evidencia.',
         cause: 'Falta atribución de fuentes',
         action: 'Agregar fuente confirmadora',
         autoFixable: false,

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -73,7 +74,7 @@ export async function POST(request: NextRequest) {
     const r = await sendWhatsApp(to, message);
     return NextResponse.json({ success: r.ok, canal: 'whatsapp', ...r });
   } catch (err: any) {
-    console.error('[admin/whatsapp]', err);
+    logger.error('[admin/whatsapp]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

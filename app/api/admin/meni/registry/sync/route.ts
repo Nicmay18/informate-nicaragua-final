@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { syncRegistry } from '@/lib/meni/registry/registry-sync';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
       _timingMs: tMs,
     });
   } catch (error) {
-    console.error('[meni/registry/sync] Error:', error);
+    logger.error('[meni/registry/sync] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido en MENI Registry Sync' },
       { status: 500 }

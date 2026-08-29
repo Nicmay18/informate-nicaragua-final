@@ -119,6 +119,21 @@ export async function collectGA4(
     );
   }
 
+  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const projectId = process.env.FIREBASE_PROJECT_ID || '';
+
+  if (!clientEmail || !privateKey || !projectId) {
+    logger.warn('[ga4-collector] Firebase service account not configured');
+    return emptySnapshot(
+      propertyId,
+      startDate,
+      endDate,
+      'CONFIG_REQUIRED',
+      'FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY o FIREBASE_PROJECT_ID no están configurados. NIOS no puede autenticar GA4.',
+    );
+  }
+
   const timeoutMs = 15000;
   logger.info(`[ga4-collector] Collecting GA4 data for property ${propertyId} from ${startDate} to ${endDate}`);
 

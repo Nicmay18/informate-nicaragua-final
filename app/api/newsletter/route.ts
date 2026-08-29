@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 export async function POST(req: Request) {
   try {
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('[newsletter]', err);
+    logger.error('[newsletter]', err);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }
 }

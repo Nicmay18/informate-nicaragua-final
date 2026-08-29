@@ -6,6 +6,7 @@ import {
   type MetricDefinition,
 } from '@/lib/nios/intelligence/metric-truth';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -311,7 +312,7 @@ export async function GET(request: NextRequest) {
       bitacoraDistribucion,
     });
   } catch (err: any) {
-    console.error('[admin/auditor-dashboard]', err);
+    logger.error('[admin/auditor-dashboard]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

@@ -348,7 +348,7 @@ export function generarFaqSchema(
     return null;
   }
 
-  // Máximo 3 preguntas para evitar penalizaciones por abuso de rich snippets
+  // Limitar a 3 preguntas para seguir las directrices de rich snippets de Google
   const mainEntity = preguntasEncontradas.slice(0, 3).map((pregunta) => ({
     '@type': 'Question',
     name: pregunta.trim(),

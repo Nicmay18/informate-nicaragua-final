@@ -9,6 +9,7 @@ import { ensureUniqueSlug } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
@@ -164,7 +165,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error('[admin/news PUT]', err);
+    logger.error('[admin/news PUT]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }
@@ -230,7 +231,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
           snapshot,
         });
       } catch (e) {
-        console.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
+        logger.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
       }
 
       try {
@@ -280,7 +281,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         },
       });
     } catch (e) {
-      console.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
+      logger.warn('[admin/news DELETE] No se pudo escribir auditoria:', e);
     }
 
     try {
@@ -305,7 +306,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       id,
     });
   } catch (err) {
-    console.error('[admin/news DELETE]', err);
+    logger.error('[admin/news DELETE]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

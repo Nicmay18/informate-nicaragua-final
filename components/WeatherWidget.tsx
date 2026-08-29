@@ -1,4 +1,6 @@
 'use client';
+
+import { logger } from '@/lib/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { Droplets, Wind, Loader2 } from 'lucide-react';
 import { tiempoRelativo } from '@/lib/formateo';
@@ -113,7 +115,7 @@ export default function WeatherWidget() {
         }
       } catch (err) {
         if (!cancelled) {
-          console.warn('[WeatherWidget] fetch failed, using cache/fallback', err);
+          logger.warn('[WeatherWidget] fetch failed, using cache/fallback', err);
           if (!cached) setError('No se pudo cargar el clima');
         }
       } finally {

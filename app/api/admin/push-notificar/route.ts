@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
 import { clampString } from '@/lib/validators';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
 
-const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '608354d3-fd2a-4c97-b055-5c14b57bbe9b';
+const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '';
 const ONESIGNAL_REST_KEY = process.env.ONESIGNAL_REST_API_KEY || '';
 
 export async function POST(request: NextRequest) {
@@ -23,11 +24,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'titulo, mensaje y url requeridos' }, { status: 400 });
     }
 
-    if (!ONESIGNAL_REST_KEY) {
-      return NextResponse.json({ ok: true, skipped: true, message: 'Push: ONESIGNAL_REST_API_KEY no configurada (opcional)' });
+    if (!ONESIGNAL_APP_ID || !ONESIGNAL_REST_KEY) {
+      return NextResponse.json({ ok: true, skipped: true, message: 'Push: ONESIGNAL_APP_ID o ONESIGNAL_REST_API_KEY no configuradas' });
     }
 
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       app_id: ONESIGNAL_APP_ID,
       included_segments: [seg],
       headings: { en: t, es: t },
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
       url,
     });
   } catch (err: any) {
-    console.error('[admin/push-notificar]', err);
+    logger.error('[admin/push-notificar]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

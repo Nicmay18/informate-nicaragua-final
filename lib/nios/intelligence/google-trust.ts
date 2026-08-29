@@ -177,12 +177,12 @@ function calculateGoogleTrustScore(
 ): { score: number; risk: 'alto' | 'medio' | 'bajo' } {
   let score = Math.round((authorityScore * 0.4) + (contentValueScore * 0.6));
 
-  // Penalización por thin content
+  // Ajuste interno por señal de thin content
   if (thinFlags.length >= 3) score -= 20;
   else if (thinFlags.length >= 2) score -= 10;
   else if (thinFlags.length >= 1) score -= 5;
 
-  // Penalización por 0 impresiones solo cuando GSC aportó datos reales
+  // Ajuste interno por 0 impresiones solo cuando GSC aportó datos reales
   if (gscReal && contentValueScore === 0) score -= 10;
 
   score = Math.max(0, Math.min(100, score));

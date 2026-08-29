@@ -89,7 +89,7 @@ export function buildContentWarRoom(
       reason = `Ya está sobrerrepresentada (${cat.share}% frente a ${cat.target}% objetivo). Reducir volumen.`;
     } else if (recentCount === 0) {
       priority = 'alta';
-      reason = 'Sin cobertura en la última semana. Google penaliza secciones abandonadas.';
+      reason = 'Sin cobertura en la última semana. Riesgo editorial de pérdida de relevancia; no concluye penalización de Google.';
     }
 
     const conditional =

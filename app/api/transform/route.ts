@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { logger } from '@/lib/logger';
 
 const ALLOWED_HOSTS = new Set<string>([
   'cdn.jsdelivr.net',
@@ -199,7 +200,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[api/transform] Error procesando imagen:', error);
+    logger.error('[api/transform] Error procesando imagen:', error);
     return new NextResponse('Error interno al procesar la imagen', { status: 500 });
   }
 }

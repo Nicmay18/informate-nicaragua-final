@@ -6,6 +6,7 @@ import { evaluate as pipelineV4 } from '@/lib/editorial';
 import { getPortadaConfig, savePortadaConfig } from '@/lib/portada/config-service';
 import { buildDefaultConfig, noticiaToInput } from '@/lib/portada/helpers';
 import type { PortadaCandidatesResponse, PortadaConfig, PortadaItem } from '@/lib/portada/types';
+import { logger } from '@/lib/logger';
 
 export async function GET(): Promise<NextResponse> {
   try {
@@ -17,7 +18,7 @@ export async function GET(): Promise<NextResponse> {
         const resultado = pipelineV4(noticiaToInput(n));
         items.push({ noticia: n, resultado });
       } catch (err) {
-        console.error('[portada] fallo analizando', n.slug, err);
+        logger.error('[portada] fallo analizando', n.slug, err);
       }
     }
 
@@ -30,7 +31,7 @@ export async function GET(): Promise<NextResponse> {
     const response: PortadaCandidatesResponse = { items, config };
     return NextResponse.json(response);
   } catch (err) {
-    console.error('[portada] GET error', err);
+    logger.error('[portada] GET error', err);
     return NextResponse.json({ error: 'Error cargando portada' }, { status: 500 });
   }
 }
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await savePortadaConfig({ ...config, version: (config.version || 1) + 1 });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('[portada] POST error', err);
+    logger.error('[portada] POST error', err);
     return NextResponse.json({ error: 'Error guardando portada' }, { status: 500 });
   }
 }

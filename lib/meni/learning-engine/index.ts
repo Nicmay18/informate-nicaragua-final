@@ -18,6 +18,7 @@ import { analyzeCategoryPerformance, analyzeTemporalPatterns, analyzeCorrelation
 import { tuneWeights } from './weight-tuner';
 import { generateInsights } from './insight-generator';
 import { persistActiveAdjustments } from './learning-adapter';
+import { logger } from '@/lib/logger';
 
 let cachedResult: LearningCycleResult | null = null;
 let cacheTime = 0;
@@ -113,7 +114,7 @@ export async function runLearningCycle(
       }
     }
   } catch (err) {
-    console.warn('[learning-engine] Error persistiendo ciclo:', err);
+    logger.warn('[learning-engine] Error persistiendo ciclo:', err);
   }
 
   cachedResult = result;

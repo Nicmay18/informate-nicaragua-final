@@ -19,6 +19,7 @@ import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
 import ArticleFaq from './ArticleFaq';
 import SupportMedium from './editorial/SupportMedium';
+import { logger } from '@/lib/logger';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
 import { AUTHORS } from '@/lib/authors';
 import '@/app/article-page.css';
@@ -87,7 +88,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           sessionStorage.setItem(sessionKey, 'true');
         }
       } catch (err) {
-        console.error('[views] Tracking failed:', err instanceof Error ? err.message : String(err));
+        logger.error('[views] Tracking failed:', err instanceof Error ? err.message : String(err));
       }
     };
 

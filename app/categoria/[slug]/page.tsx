@@ -5,6 +5,7 @@ import PaginationWrapper from '@/components/PaginationWrapper';
 import { getCategoryPaginated, getCategoryCount, PAGE_SIZE } from '@/lib/data';
 import { slugToCategory, categoryToSlug } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
+import { logger } from '@/lib/logger';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -114,7 +115,7 @@ export default async function CategoriaPage({
       getCategoryCount(catName),
     ]);
   } catch (error) {
-    console.error('[CategoriaPage] Error:', error);
+    logger.error('[CategoriaPage] Error:', error);
     notFound();
   }
 

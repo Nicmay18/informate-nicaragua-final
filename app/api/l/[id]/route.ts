@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
+import { logger } from '@/lib/logger';
 
 function getClientIP(req: Request): string {
   const xf = req.headers.get('x-forwarded-for');
@@ -89,7 +90,7 @@ export async function GET(
         linkCortoId: id,
       });
     } catch (e) {
-      console.error('[l/[id]] Error registrando analytics:', e);
+      logger.error('[l/[id]] Error registrando analytics:', e);
     }
 
     // 4. Incrementar contador del link
@@ -99,7 +100,7 @@ export async function GET(
         ultimoClick: FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      console.error('[l/[id]] Error incrementando clicks:', e);
+      logger.error('[l/[id]] Error incrementando clicks:', e);
     }
 
     // 5. Redirigir a la noticia con UTM
@@ -109,7 +110,7 @@ export async function GET(
     return NextResponse.redirect(redirectUrl, { status: 302 });
 
   } catch (error) {
-    console.error('[l/[id]] Error:', error);
+    logger.error('[l/[id]] Error:', error);
     return NextResponse.redirect('https://nicaraguainformate.com/noticias');
   }
 }

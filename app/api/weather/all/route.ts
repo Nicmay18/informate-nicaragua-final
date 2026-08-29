@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'edge';
 export const maxDuration = 10;
@@ -67,7 +68,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('[api/weather/all] failed', error);
+    logger.error('[api/weather/all] failed', error);
     return NextResponse.json(
       {},
       { status: 500 }

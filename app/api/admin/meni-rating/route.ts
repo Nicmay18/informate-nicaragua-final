@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 10;
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, rating });
   } catch (error) {
-    console.error('[meni-rating] Error:', error);
+    logger.error('[meni-rating] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

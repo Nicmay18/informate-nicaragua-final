@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { isAdminRequest, unauthorized, badRequest } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 function isString(v: unknown): v is string {
   return typeof v === 'string';
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, config: config });
   } catch (err) {
-    console.error('[admin/config GET]', err);
+    logger.error('[admin/config GET]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
     await docRef.set(updateData, { merge: true });
     return NextResponse.json({ success: true, message: 'Configuración guardada' });
   } catch (err) {
-    console.error('[admin/config POST]', err);
+    logger.error('[admin/config POST]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

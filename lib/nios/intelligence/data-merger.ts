@@ -158,6 +158,20 @@ export function mergeArticleData(
 export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Promise<Noticia[]> {
   const snap = await db
     .collection('noticias')
+    .select(
+      'slug',
+      'titulo',
+      'categoria',
+      'autor',
+      'fecha',
+      'palabras',
+      'scoreMeni',
+      'tags',
+      'related_links',
+      'estado',
+      'resumen',
+      'imagen',
+    )
     .orderBy('fecha', 'desc')
     .limit(limit)
     .get();

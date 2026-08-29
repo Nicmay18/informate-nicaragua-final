@@ -10,6 +10,7 @@ import { ensureUniqueSlug } from '@/lib/slug';
 import { normalizarTitulo } from '@/lib/meni/titulo';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,7 +89,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('[admin/news GET]', err);
+    logger.error('[admin/news GET]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }
@@ -101,7 +102,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
       return { url: `/noticias/${data.slug || d.id}`, anchor: (data.titulo || 'Leer mas').substring(0, 70), type: 'relacionada' };
     });
   } catch (e) {
-    console.warn('[admin/news] getRelatedLinks error:', e);
+    logger.warn('[admin/news] getRelatedLinks error:', e);
     return [];
   }
 }
@@ -216,7 +217,7 @@ export async function POST(request: NextRequest) {
           story: body.story,
         });
       } catch (e) {
-        console.warn('[admin/news POST] publication-pipeline error (non-blocking):', e);
+        logger.warn('[admin/news POST] publication-pipeline error (non-blocking):', e);
       }
 
       // REGLA: Toda noticia publicada entra en WATCH automaticamente.
@@ -235,7 +236,7 @@ export async function POST(request: NextRequest) {
         );
         await persistWatchResult(db, docRef.id, watchResult);
       } catch (e) {
-        console.warn('[admin/news POST] WATCH init error (non-blocking):', e);
+        logger.warn('[admin/news POST] WATCH init error (non-blocking):', e);
       }
     }
 
@@ -256,10 +257,10 @@ export async function POST(request: NextRequest) {
       const { runCEODecisionForArticle } = await import('@/lib/ceo-agent-workflow');
       const ceo = await runCEODecisionForArticle(slug);
       if (!ceo.stored) {
-        console.warn('[admin/news POST] CEO decision not stored:', ceo.error);
+        logger.warn('[admin/news POST] CEO decision not stored:', ceo.error);
       }
     } catch (e) {
-      console.warn('[admin/news POST] CEO analysis error (non-blocking):', e);
+      logger.warn('[admin/news POST] CEO analysis error (non-blocking):', e);
     }
 
     // Revalidar paginas afectadas
@@ -278,7 +279,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, id: docRef.id, slug, googleIndexing: googleIndexing.status });
   } catch (err) {
-    console.error('[admin/news POST]', err);
+    logger.error('[admin/news POST]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

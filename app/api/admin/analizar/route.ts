@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(resultado);
   } catch (error) {
-    console.error('Error en analisis:', error);
+    logger.error('Error en analisis:', error);
     return NextResponse.json(
       { error: 'Error al analizar la noticia' },
       { status: 500 }

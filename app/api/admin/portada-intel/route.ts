@@ -11,6 +11,7 @@ import {
   setStrategyConfig,
 } from '@/lib/meni/portada-intel';
 import type { Noticia } from '@/lib/types';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 export const dynamic = 'force-dynamic';
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, analysis });
   } catch (error) {
-    console.error('[portada-intel GET] Error:', error);
+    logger.error('[portada-intel GET] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
       message: `Análisis completado: ${analysis.totalArticles} artículos, balance ${analysis.balance.balanceScore}/100 (${analysis.balance.estado}), ${analysis.suggestions.length} sugerencias.`,
     });
   } catch (error) {
-    console.error('[portada-intel POST] Error:', error);
+    logger.error('[portada-intel POST] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },
@@ -143,7 +144,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'Configuración de estrategia actualizada.' });
   } catch (error) {
-    console.error('[portada-intel PUT] Error:', error);
+    logger.error('[portada-intel PUT] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },

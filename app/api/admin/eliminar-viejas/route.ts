@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -115,7 +116,7 @@ export async function POST(request: NextRequest) {
       }
       await auditBatch.commit();
     } catch (e) {
-      console.warn('[eliminar-viejas] No se pudo escribir auditoria:', e);
+      logger.warn('[eliminar-viejas] No se pudo escribir auditoria:', e);
     }
 
     return NextResponse.json({
@@ -127,7 +128,7 @@ export async function POST(request: NextRequest) {
       message: `Archivadas: ${archivadas.length}. Eliminadas (borradores): ${eliminadas.length}. Auditoria registrada en deletion_audit.`,
     });
   } catch (err: any) {
-    console.error('[admin/eliminar-viejas] Error:', err);
+    logger.error('[admin/eliminar-viejas] Error:', err);
     return NextResponse.json(
       { error: err.message || 'Error interno' },
       { status: 500 }

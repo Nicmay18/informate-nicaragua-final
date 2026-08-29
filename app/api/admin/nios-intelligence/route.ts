@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -292,7 +293,7 @@ export async function GET(request: NextRequest) {
       trust,
     });
   } catch (error) {
-    console.error('[nios-intelligence GET] Error:', error);
+    logger.error('[nios-intelligence GET] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },

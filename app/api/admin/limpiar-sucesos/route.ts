@@ -2,6 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -380,7 +381,7 @@ export async function POST(request: NextRequest) {
       resumen: `Eliminadas: ${eliminadas.length} | Mejoradas: ${mejoradas.length} | Saltadas: ${saltadas.length}`,
     });
   } catch (err: any) {
-    console.error('[admin/limpiar-sucesos] Error:', err);
+    logger.error('[admin/limpiar-sucesos] Error:', err);
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { logger } from '@/lib/logger';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -187,7 +188,7 @@ export async function POST(request: NextRequest) {
           totalAgregados += agregados;
         } catch (e) {
           errores++;
-          console.error(`Error en doc ${doc.id}:`, e);
+          logger.error(`Error en doc ${doc.id}:`, e);
         }
       }
 
@@ -204,7 +205,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Modo no válido' }, { status: 400 });
 
   } catch (error) {
-    console.error('Enrich strong error:', error);
+    logger.error('Enrich strong error:', error);
     return NextResponse.json(
       { error: 'Error al enriquecer strong', message: (error as Error).message },
       { status: 500 }

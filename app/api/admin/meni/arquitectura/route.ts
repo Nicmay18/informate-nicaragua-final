@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { scanProject } from '@/lib/meni/architect';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
       _timingMs: tMs,
     });
   } catch (error) {
-    console.error('[meni/arquitectura] Error:', error);
+    logger.error('[meni/arquitectura] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido en MENI Architect' },
       { status: 500 }

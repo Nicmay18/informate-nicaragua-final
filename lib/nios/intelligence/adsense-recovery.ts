@@ -128,7 +128,7 @@ export function generateAdSenseRecoveryReport(
       type: 'depth',
       severity: 'critical',
       title: 'Thin content detectado',
-      description: `${trust.thinContentCount} artículos tienen menos de 400 palabras o carecen de contexto. AdSense rechazó el sitio por "Contenido de poco valor".`,
+      description: `${trust.thinContentCount} artículos tienen menos de 400 palabras o carecen de contexto. Esto representa un riesgo interno de contenido de poco valor; no concluye que AdSense haya rechazado el sitio sin evidencia oficial.`,
       evidence: [{
         source: 'Firestore',
         api: 'get()',

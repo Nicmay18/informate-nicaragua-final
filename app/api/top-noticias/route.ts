@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getMetricDefinition } from '@/lib/nios/intelligence/metric-truth';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
@@ -33,7 +34,7 @@ export async function GET() {
       noticias,
     });
   } catch (error) {
-    console.error('Error leyendo top noticias:', error);
+    logger.error('Error leyendo top noticias:', error);
     return NextResponse.json({ noticias: [] }, { status: 500 });
   }
 }

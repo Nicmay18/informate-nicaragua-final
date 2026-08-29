@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -180,7 +181,7 @@ export async function GET(request: Request) {
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Error desconocido';
-    console.error('[cron/resumen-diario]', msg);
+    logger.error('[cron/resumen-diario]', msg);
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

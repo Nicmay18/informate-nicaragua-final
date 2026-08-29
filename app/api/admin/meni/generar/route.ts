@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { generarArticuloAutonomo } from '@/lib/meni/editor-autonomo/engine';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
 
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error('[meni/generar] Error:', error);
+    logger.error('[meni/generar] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

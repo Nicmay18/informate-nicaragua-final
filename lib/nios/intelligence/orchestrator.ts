@@ -33,6 +33,7 @@ import type {
 import type { Noticia } from '@/lib/types';
 import { generateTrafficPerformance, type TrafficPerformance } from '@/lib/analytics/traffic-aggregator';
 import { getTrafficMigrationStatus } from '@/lib/analytics/traffic-reader';
+import { checkTrafficLogHasTTL } from '@/lib/analytics/traffic-ttl';
 import { measureAsync, measureSync, saveTelemetry } from './telemetry';
 import { buildExecutionReport } from './performance-report';
 import { calculateHealthScore } from './health-score';
@@ -628,7 +629,7 @@ export async function runNIOSPipeline(
     },
   );
 
-  const trafficLogHasTTL = process.env.NIOS_TRAFFIC_LOG_TTL === '1';
+  const trafficLogHasTTL = await checkTrafficLogHasTTL(db);
   const health = calculateHealthScore(report, trafficLogHasTTL);
   let trafficMigration: any = { dailyGenerated: false, fallbackReads: 0, migrationHealth: 0 };
   try {

@@ -86,7 +86,7 @@ export function auditArticleForAdSense(article: Partial<Noticia> & { id: string 
   }
 
   if (wordCount < 150) {
-    issues.push(`Extensión insuficiente (${wordCount} palabras). Riesgo de penalización por "Thin Content".`);
+    issues.push(`Extensión insuficiente (${wordCount} palabras). Riesgo interno de calidad (thin content); no concluye acción de Google sin evidencia oficial.`);
   } else if (wordCount < 250) {
     issues.push(`Extensión breve (${wordCount} palabras). Requiere verificar valor informativo para el lector.`);
   }

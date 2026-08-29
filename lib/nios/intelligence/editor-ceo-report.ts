@@ -189,7 +189,7 @@ function findWhatToStop(
   if (thinCount > 5) {
     actions.push({
       action: 'Dejar de publicar contenido corto (<400 palabras)',
-      reasoning: `${thinCount} artículos con menos de 400 palabras. Google penaliza thin content. No publicar más notas cortas sin contexto.`,
+      reasoning: `${thinCount} artículos con menos de 400 palabras. Thin content es un riesgo interno de calidad; no concluye penalización de Google sin GSC. No publicar más notas cortas sin contexto.`,
       evidence: [
         makeEvidence('Firestore', 'noticias', 'Artículos thin content', thinCount),
       ],

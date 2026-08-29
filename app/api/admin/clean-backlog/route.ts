@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { verifyAdminToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // =============================================================================
 // DICCIONARIO DE SANITIZACION EDITORIAL (Tono institucional/seguro AdSense)
@@ -201,7 +202,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[clean-backlog] Error:', error);
+    logger.error('[clean-backlog] Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

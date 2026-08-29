@@ -10,7 +10,7 @@ describe('Misión 9 — Activación real de fuentes (end-to-end)', () => {
   const siteUrl = process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com';
   const ga4PropertyId = process.env.NIOS_GA4_PROPERTY_ID || '';
 
-  it('GSC real connection with NIOS_SITE_URL', { timeout: 30000 }, async () => {
+  it('GSC real connection with NIOS_SITE_URL', { timeout: 60000 }, async () => {
     const snapshot = await collectGSC(siteUrl, 7);
 
     console.log('[M9-GSC]', {
@@ -30,7 +30,7 @@ describe('Misión 9 — Activación real de fuentes (end-to-end)', () => {
     expect(typeof snapshot!.totalClicks).toBe('number');
   });
 
-  it('GSC real connection with sc-domain property', { timeout: 30000 }, async () => {
+  it('GSC real connection with sc-domain property', { timeout: 60000 }, async () => {
     const scDomainUrl = 'sc-domain:nicaraguainformate.com';
     const snapshot = await collectGSC(scDomainUrl, 7);
 

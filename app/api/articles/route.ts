@@ -3,6 +3,7 @@ import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -142,9 +143,9 @@ export async function POST(request: NextRequest) {
         imagen: imagen || undefined,
         autor: autor || 'Redacción Nicaragua Informate',
         story: body.story,
-      }).catch((e) => console.warn('[articles] publication-pipeline error (non-blocking):', e));
+      }).catch((e) => logger.warn('[articles] publication-pipeline error (non-blocking):', e));
     } catch (e) {
-      console.warn('[articles] No se pudo importar publication-pipeline:', e);
+      logger.warn('[articles] No se pudo importar publication-pipeline:', e);
     }
 
     // REGLA: Toda noticia publicada entra en WATCH automaticamente.
@@ -162,9 +163,9 @@ export async function POST(request: NextRequest) {
         { db: adminDb }
       )
         .then((watchResult) => persistWatchResult(adminDb, articleId, watchResult))
-        .catch((e) => console.warn('[articles] WATCH init error (non-blocking):', e));
+        .catch((e) => logger.warn('[articles] WATCH init error (non-blocking):', e));
     } catch (e) {
-      console.warn('[articles] No se pudo importar news-watch:', e);
+      logger.warn('[articles] No se pudo importar news-watch:', e);
     }
 
     // Invalidar cache en memoria para que lecturas futuras vean la nueva noticia

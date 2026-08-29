@@ -103,14 +103,14 @@ export async function generateAdSenseRecoveryFullReport(
   const trustCheck = await generateAdSenseTrustCheck({ articles, trust }, ga4);
   const improvements = generateImprovementRecommendations(articles, sourceTraffic);
 
-  // 1. Razón probable del rechazo
+  // 1. Razón probable de riesgo de rechazo (interno; no afirma decisión oficial de Google)
   let likelyRejectionReason = 'No se detecta una razón única con los datos actuales.';
   const redPct = contentRecovery.redPct;
   const thinPct = Math.round((trust.thinContentCount / articles.length) * 100);
   const lowTrust = trust.averageGoogleTrustScore < 50;
 
   if (redPct >= 30 || thinPct >= 30 || lowTrust) {
-    likelyRejectionReason = `Google probablemente rechazó el sitio por "Contenido de poco valor". ${contentRecovery.redCount} artículos RED (${redPct}%), ${trust.thinContentCount} thin content, Google Trust Score promedio ${trust.averageGoogleTrustScore}/100.`;
+    likelyRejectionReason = `Riesgo interno elevado de "Contenido de poco valor": ${contentRecovery.redCount} artículos RED (${redPct}%), ${trust.thinContentCount} thin content, Google Trust Score promedio ${trust.averageGoogleTrustScore}/100. No concluye rechazo oficial de Google.`;
   } else if (redPct >= 15) {
     likelyRejectionReason = `Riesgo moderado de contenido de poco valor: ${contentRecovery.redCount} artículos RED, ${trust.thinContentCount} thin content. Revisar antes de re-solicitar.`;
   } else if (trustCheck.adSenseTrustScore < 70) {

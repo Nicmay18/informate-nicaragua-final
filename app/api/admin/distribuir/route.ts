@@ -60,7 +60,7 @@ async function yaDistribuido(
 }
 
 /** Envía a Telegram */
-async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; error?: string }> {
+async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
     const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
@@ -130,7 +130,7 @@ async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore)
 }
 
 /** Envía a Facebook (si hay token) */
-async function enviarFacebook(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+async function enviarFacebook(noticia: Noticia): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
     const FB_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN || '';
     const FB_PAGE_ID = process.env.FB_PAGE_ID || '';
@@ -172,7 +172,7 @@ async function enviarFacebook(noticia: Noticia): Promise<{ ok: boolean; error?: 
 }
 
 /** Notifica a IndexNow (Bing + Yandex) */
-async function enviarIndexNow(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+async function enviarIndexNow(noticia: Noticia): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
     const INDEXNOW_KEY = process.env.INDEXNOW_KEY;
     if (!INDEXNOW_KEY) { return { ok: false, error: 'INDEXNOW_KEY no configurada' }; }
@@ -202,11 +202,13 @@ async function enviarIndexNow(noticia: Noticia): Promise<{ ok: boolean; error?: 
 }
 
 /** Notificación Push vía OneSignal */
-async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
-    const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '608354d3-fd2a-4c97-b055-5c14b57bbe9b';
+    const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID || '';
     const ONESIGNAL_REST_KEY = process.env.ONESIGNAL_REST_API_KEY || '';
-    if (!ONESIGNAL_REST_KEY) return { ok: true, error: 'Push: ONESIGNAL_REST_API_KEY no configurada (opcional)' };
+    if (!ONESIGNAL_APP_ID || !ONESIGNAL_REST_KEY) {
+      return { ok: false, skipped: true, error: 'Push: ONESIGNAL_APP_ID o ONESIGNAL_REST_API_KEY no configuradas' };
+    }
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=push`;
 
@@ -223,7 +225,7 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
         contents: { en: noticia.resumen || 'Nueva noticia de Nicaragua Informate', es: noticia.resumen || 'Nueva noticia de Nicaragua Informate' },
         url,
         web_buttons: [{ id: 'read-more', text: 'Leer más', icon: '', url }],
-        chrome_web_image: noticia.imagen || undefined,
+        chrome_web_image: (noticia.imagen && !noticia.imagen.startsWith('data:') && noticia.imagen.startsWith('http')) ? noticia.imagen : undefined,
       }),
     });
     const data = await res.json();
@@ -234,14 +236,12 @@ async function enviarPush(noticia: Noticia): Promise<{ ok: boolean; error?: stri
 }
 
 /** Notificación Twitter/X vía API v2 (requiere OAuth 2.0) */
-async function enviarTwitter(noticia: Noticia): Promise<{ ok: boolean; error?: string }> {
+async function enviarTwitter(noticia: Noticia): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
-    const hasOAuth = process.env.TWITTER_ACCESS_TOKEN && process.env.TWITTER_CLIENT_ID;
-    if (!hasOAuth) {
-      return { ok: false, error: 'Twitter requiere OAuth 2.0. Configurar TWITTER_ACCESS_TOKEN y TWITTER_CLIENT_ID, o desactivar este canal.' };
+    const token = process.env.TWITTER_ACCESS_TOKEN || '';
+    if (!token) {
+      return { ok: false, skipped: true, error: 'Twitter requiere TWITTER_ACCESS_TOKEN (OAuth 2.0). Configurar o desactivar este canal.' };
     }
-    const bearer = process.env.TWITTER_BEARER_TOKEN || '';
-    if (!bearer) return { ok: false, error: 'Falta TWITTER_BEARER_TOKEN' };
 
     const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=twitter`;
     const emoji: Record<string, string> = {
@@ -257,7 +257,7 @@ async function enviarTwitter(noticia: Noticia): Promise<{ ok: boolean; error?: s
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${bearer}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ text: text.slice(0, 280) }),
     });
@@ -374,7 +374,7 @@ export async function POST(request: NextRequest) {
       pendientes: fallidos.length,
     });
   } catch (err: any) {
-    console.error('[admin/distribuir]', err);
+    logger.error('[admin/distribuir]', err);
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }
@@ -390,7 +390,7 @@ export async function GET(request: NextRequest) {
     const registros = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     return NextResponse.json({ success: true, registros });
   } catch (err: any) {
-    console.error('[admin/distribuir] GET', err);
+    logger.error('[admin/distribuir] GET', err);
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }

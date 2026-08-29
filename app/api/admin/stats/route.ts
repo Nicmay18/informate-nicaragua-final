@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
       stats: { total, vistas, publicadas, destacadas, topCategories, monthly },
     });
   } catch (err) {
-    console.error('[admin/stats]', err);
+    logger.error('[admin/stats]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

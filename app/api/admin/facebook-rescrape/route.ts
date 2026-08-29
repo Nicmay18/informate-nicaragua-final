@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       error: 'Falta FB_PAGE_TOKEN o FB_ACCESS_TOKEN en variables de entorno',
     });
   } catch (err: any) {
-    console.error('[admin/facebook-rescrape]', err);
+    logger.error('[admin/facebook-rescrape]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

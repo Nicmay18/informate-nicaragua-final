@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 15;
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
     const r = await publishMedium(title, content, tags, canonicalUrl);
     return NextResponse.json({ success: r.ok, canal: 'medium', ...r });
   } catch (err: any) {
-    console.error('[admin/medium]', err);
+    logger.error('[admin/medium]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

@@ -1,11 +1,11 @@
 import { incrementTrafficDaily } from '@/lib/analytics/traffic-aggregator';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { type Noticia } from '@/lib/types';
-import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
+import { trafficLogExpiresAt } from '@/lib/analytics/traffic-ttl';
+import { FieldValue } from 'firebase-admin/firestore';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
-import { CATEGORIES, isLutoNews } from '@/lib/types';
+import { CATEGORIES, isLutoNews, type Noticia } from '@/lib/types';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -94,6 +94,7 @@ export async function incrementViewsBySlug(
         userAgent: userAgent || '',
         source: detectarFuente(referrer, utmSource, userAgent),
         timestamp: FieldValue.serverTimestamp(),
+        expiresAt: trafficLogExpiresAt(),
       });
 
       const device = detectarDispositivo(userAgent);

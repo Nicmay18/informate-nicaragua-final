@@ -127,7 +127,6 @@ export async function collectGSC(
 ): Promise<GSCSnapshot | null> {
   const endDate = formatDate(new Date());
   const startDate = formatDate(new Date(Date.now() - daysToCollect * 24 * 60 * 60 * 1000));
-  const serviceAccountEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
 
   if (!siteUrl) {
     logger.warn('[gsc-collector] No GSC site URL configured');
@@ -137,6 +136,20 @@ export async function collectGSC(
       endDate,
       'CONFIG_REQUIRED',
       'NIOS_GSC_SITE_URL / NIOS_SITE_URL no está configurada.',
+    );
+  }
+
+  const serviceAccountEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+  if (!serviceAccountEmail || !privateKey) {
+    logger.warn('[gsc-collector] Firebase service account not configured');
+    return emptySnapshot(
+      siteUrl,
+      startDate,
+      endDate,
+      'CONFIG_REQUIRED',
+      'FIREBASE_CLIENT_EMAIL o FIREBASE_PRIVATE_KEY no están configurados. NIOS no puede autenticar GSC.',
     );
   }
 

@@ -13,6 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from './auth';
+import { logger } from './logger';
 
 type RouteHandler = (request: NextRequest) => Promise<NextResponse>;
 
@@ -36,7 +37,7 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       const errMessage = error instanceof Error ? error.message : 'Error desconocido';
 
       // Log estructurado para Vercel Logs / Datadog / Splunk
-      console.error('[api-error-handler]', {
+      logger.error('[api-error-handler]', {
         method: request.method,
         path: request.nextUrl.pathname,
         error: errMessage,

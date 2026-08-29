@@ -16,6 +16,7 @@ import { queryKnowledgeForArticle, ingestArticle } from '@/lib/meni/knowledge-ba
 import { getLatestInsights } from '@/lib/meni/learning-engine';
 import { analyzePortada } from '@/lib/meni/portada-intel';
 import type { Noticia } from '@/lib/types';
+import { logger } from '@/lib/logger';
 import type {
   EditorBrainInput,
   EditorBrainResult,
@@ -188,7 +189,7 @@ export async function ingestPublishedArticle(
   try {
     await ingestArticle(db, input);
   } catch (err) {
-    console.warn('[editor-brain] Error ingiriendo artículo al knowledge base:', err);
+    logger.warn('[editor-brain] Error ingiriendo artículo al knowledge base:', err);
   }
 }
 

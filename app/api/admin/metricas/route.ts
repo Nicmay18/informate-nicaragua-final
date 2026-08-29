@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -110,7 +111,7 @@ export async function GET(request: NextRequest) {
       })),
     });
   } catch (err: any) {
-    console.error('[admin/metricas]', err);
+    logger.error('[admin/metricas]', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

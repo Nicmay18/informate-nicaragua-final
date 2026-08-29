@@ -28,6 +28,7 @@ import {
 import { applyAutoFix } from './autoFix';
 import { computeExplanationIndex, computeOriginalityPercent, computeEditorScore } from './editorScore';
 import { detectParagraphTranscription } from './transcription-detector';
+import { logger } from '@/lib/logger';
 
 export type { EntityMap, QualityGateInput, QualityGateIssue, QualityGateResult } from './types';
 
@@ -149,7 +150,7 @@ export async function appendQualityGateHistory(
       await db.collection('meni_quality_history').add(entry);
       return;
     } catch (err) {
-      console.warn('[quality-gate] Error escribiendo a Firestore meni_quality_history:', err);
+      logger.warn('[quality-gate] Error escribiendo a Firestore meni_quality_history:', err);
     }
   }
 

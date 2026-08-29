@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -50,7 +51,7 @@ export async function POST(request: NextRequest) {
       noticias: noticias.map(n => ({ id: n.id, titulo: n.titulo, palabras: n.palabras })),
     });
   } catch (err: any) {
-    console.error('[admin/exportar-sucesos] Error:', err);
+    logger.error('[admin/exportar-sucesos] Error:', err);
     return NextResponse.json({ error: err.message || 'Error interno' }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
+import { logger } from '@/lib/logger';
 
 // =============================================================================
 // ENDPOINT: Generador de copy para redes sociales con IA (Groq - GRATIS)
@@ -169,7 +170,7 @@ export async function POST(request: NextRequest) {
       source: iaCopy ? 'ia' : 'plantilla',
     });
   } catch (error) {
-    console.error('[copy-social] Error:', error);
+    logger.error('[copy-social] Error:', error);
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }

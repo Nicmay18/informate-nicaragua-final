@@ -4,6 +4,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { runMeni, runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { runEditorialDiagnosis, generateCEOResponse } from '@/lib/nios/editorial-diagnosis';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       _timingMs: tMs,
     });
   } catch (error) {
-    console.error('[meni/evaluar] Error:', error);
+    logger.error('[meni/evaluar] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido en MENI' },
       { status: 500 }

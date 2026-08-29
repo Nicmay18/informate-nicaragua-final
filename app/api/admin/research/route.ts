@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runResearch } from '@/lib/research';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, research: result });
   } catch (error) {
-    console.error('[research] Error:', error);
+    logger.error('[research] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

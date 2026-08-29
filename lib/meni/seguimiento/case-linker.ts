@@ -6,6 +6,7 @@
 
 import type { Firestore } from 'firebase-admin/firestore';
 import type { TrackingCase } from './types';
+import { logger } from '@/lib/logger';
 
 /**
  * Busca entidades del Knowledge Graph que coincidan con el texto del artículo
@@ -69,7 +70,7 @@ export async function linkCaseToEntities(
 
     return matchedEntityIds;
   } catch (err) {
-    console.warn('[case-linker] Error vinculando entidades:', err);
+    logger.warn('[case-linker] Error vinculando entidades:', err);
     return [];
   }
 }

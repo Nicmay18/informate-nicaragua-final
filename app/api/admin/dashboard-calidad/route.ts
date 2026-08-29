@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -418,7 +419,7 @@ export async function GET(request: NextRequest) {
       headers: { 'Cache-Control': 'no-store, must-revalidate' },
     });
   } catch (error) {
-    console.error('Dashboard error:', error);
+    logger.error('Dashboard error:', error);
     return NextResponse.json(
       { error: 'Error al calcular metricas' },
       { status: 500 }

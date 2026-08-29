@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runWatchCycle, persistWatchResult, determineFrequency } from '@/lib/news-watch';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, watch: result });
   } catch (error) {
-    console.error('[watch] Error:', error);
+    logger.error('[watch] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }
@@ -118,7 +119,7 @@ export async function GET(request: NextRequest) {
       results,
     });
   } catch (error) {
-    console.error('[watch cron] Error:', error);
+    logger.error('[watch cron] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 }

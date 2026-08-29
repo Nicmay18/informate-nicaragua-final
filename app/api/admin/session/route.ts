@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminAuth } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     response.headers.set('Set-Cookie', cookieOptions);
     return response;
   } catch (err: any) {
-    console.error('[session] Error:', err.message);
+    logger.error('[session] Error:', err.message);
     return NextResponse.json(
       { error: 'Token inválido o expirado' },
       { status: 401 }

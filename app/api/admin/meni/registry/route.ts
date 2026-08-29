@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { loadRegistry, loadLatestSnapshot } from '@/lib/meni/registry/registry-store';
 import { syncRegistry } from '@/lib/meni/registry/registry-sync';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
 
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
       _timingMs: tMs,
     });
   } catch (error) {
-    console.error('[meni/registry] Error:', error);
+    logger.error('[meni/registry] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido en MENI Registry' },
       { status: 500 }

@@ -17,6 +17,7 @@ import { DEFAULT_STRATEGY_CONFIG } from './types';
 import { analyzeBalance } from './balance-analyzer';
 import { detectConflicts } from './conflict-detector';
 import { generateSuggestions, buildEditorialSummary } from './strategy-engine';
+import { logger } from '@/lib/logger';
 
 let cachedAnalysis: PortadaAnalysis | null = null;
 let cacheTime = 0;
@@ -86,7 +87,7 @@ export async function analyzePortada(
       updatedAt: new Date().toISOString(),
     });
   } catch (err) {
-    console.warn('[portada-intel] Error persistiendo análisis:', err);
+    logger.warn('[portada-intel] Error persistiendo análisis:', err);
   }
 
   cachedAnalysis = analysis;

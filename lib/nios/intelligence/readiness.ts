@@ -2,9 +2,9 @@
  * NIOS Intelligence Platform — AdSense Readiness (Módulo 6)
  * ==========================================================
  * Analiza TODAS las noticias para evaluar readiness para AdSense.
- * AdSense fue rechazado por "Contenido de poco valor".
- * Este módulo calcula dimensiones de calidad y las compara con datos reales
- * de Google Search Console.
+ * Este módulo evalúa el riesgo de contenido de poco valor de forma interna.
+ * No afirma que Google haya rechazado el sitio sin evidencia oficial.
+ * Compara dimensiones de calidad con datos reales de Google Search Console cuando están disponibles.
  *
  * Dimensiones evaluadas:
  * - Contenido útil

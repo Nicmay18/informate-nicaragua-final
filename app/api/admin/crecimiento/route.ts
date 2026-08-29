@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -172,7 +173,7 @@ export async function GET() {
 
     return NextResponse.json(reporte);
   } catch (err) {
-    console.error('[admin/crecimiento]', err);
+    logger.error('[admin/crecimiento]', err);
     return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }

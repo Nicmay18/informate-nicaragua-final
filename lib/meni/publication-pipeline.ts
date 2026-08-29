@@ -214,9 +214,9 @@ async function sendIndexNow(input: PipelineInput): Promise<{ ok: boolean; error?
 // ── Push (OneSignal) ────────────────────────────────────────
 async function sendPush(input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
   try {
-    const appId = process.env.ONESIGNAL_APP_ID || '608354d3-fd2a-4c97-b055-5c14b57bbe9b';
+    const appId = process.env.ONESIGNAL_APP_ID || '';
     const restKey = process.env.ONESIGNAL_REST_API_KEY || '';
-    if (!restKey) return { ok: true, skipped: true, error: 'Push no configurado (opcional)' };
+    if (!appId || !restKey) return { ok: true, skipped: true, error: 'Push no configurado' };
 
     const url = buildUrl(input.slug, 'push');
     const res = await fetch('https://onesignal.com/api/v1/notifications', {

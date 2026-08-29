@@ -7,6 +7,7 @@ import type { Noticia } from '@/lib/types';
 import type { HomePageData } from '@/lib/db/homepage';
 import PaginationWrapper from '@/components/PaginationWrapper';
 import HomePagePro from '@/components/HomePagePro';
+import { logger } from '@/lib/logger';
 
 export const dynamicParams = true;
 export const revalidate = 300;
@@ -85,7 +86,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
       getNewsCount(),
     ]);
   } catch (error) {
-    console.error('[NoticiasPage] Error:', error);
+    logger.error('[NoticiasPage] Error:', error);
   }
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));

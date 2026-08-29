@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken, verifyAdminOrCleanupToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
       message: result.summary,
     });
   } catch (error) {
-    console.error('[nios-collect POST] Error:', error);
+    logger.error('[nios-collect POST] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },
@@ -84,7 +85,7 @@ export async function GET(request: NextRequest) {
       latestRecommendations: latest?.recommendations?.length || 0,
     });
   } catch (error) {
-    console.error('[nios-collect GET] Error:', error);
+    logger.error('[nios-collect GET] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },

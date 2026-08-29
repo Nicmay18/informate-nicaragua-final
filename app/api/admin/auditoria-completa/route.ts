@@ -2,6 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
 import { clampString, clampInt } from '@/lib/validators';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -193,7 +194,7 @@ export async function POST(request: NextRequest) {
       resumen: `${stats.critico} CRÍTICAS | ${stats.alto} ALTAS | ${stats.medio} MEDIAS | ${stats.bajo} BAJAS`,
     });
   } catch (err: any) {
-    console.error('[admin/auditoria-completa] Error:', err);
+    logger.error('[admin/auditoria-completa] Error:', err);
     return NextResponse.json(
       { error: err.message || 'Error interno' },
       { status: 500 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   if (!isAdminRequest(request as unknown as Request)) {
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
       mensaje: 'Caché purgada. Recargá la página en unos segundos.',
     });
   } catch (error: any) {
-    console.error('[cache-purge] Error:', error);
+    logger.error('[cache-purge] Error:', error);
     return NextResponse.json(
       { error: error.message || 'Error purgando caché' },
       { status: 500 }

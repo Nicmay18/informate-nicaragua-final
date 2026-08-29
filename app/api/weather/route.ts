@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
     const data = await res.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('[api/weather] fetch failed', error);
+    logger.error('[api/weather] fetch failed', error);
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 });
   }
 }

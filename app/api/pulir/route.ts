@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { RateLimiter } from '@/lib/rate-limit';
 import { getClientIp } from '@/lib/ip';
+import { logger } from '@/lib/logger';
 
 /** Rate limiter: máximo 20 peticiones de pulido por IP por minuto */
 const pulirLimiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 20 });
@@ -114,7 +115,7 @@ export async function POST(request: NextRequest) {
       transiciones_ia: transicionesCount,
     });
   } catch (error) {
-    console.error('[pulir] Error:', error);
+    logger.error('[pulir] Error:', error);
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }
