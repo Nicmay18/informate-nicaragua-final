@@ -3665,7 +3665,7 @@ sin texto ni marcas de agua, composición periodística"
 
     let _panelCache = null;
     let _panelCacheTime = 0;
-    const _PANEL_CACHE_TTL = 5000; // 5 segundos — antes era 30s y causaba que notas nuevas no aparecieran
+    const _PANEL_CACHE_TTL = 0; // administración no debe servir listas viejas tras publicar
 
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
@@ -5382,7 +5382,7 @@ window.batchRestore = async function() {
       appendAgenteLog('Cargando métricas...', 'info');
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/metricas', { headers: { 'x-admin-token': adminToken } });
+        const res = await fetch('/api/admin/metricas', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
 
@@ -5535,7 +5535,7 @@ window.batchRestore = async function() {
     window.cargarAuditoria = async function() {
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/auditor-dashboard', { headers: { 'x-admin-token': adminToken } });
+        const res = await fetch('/api/admin/auditor-dashboard', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
 

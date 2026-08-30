@@ -109,6 +109,8 @@ export async function GET(request: NextRequest) {
         slug: d.slug,
         canales: Object.keys(d.resultados || {}),
       })),
+    }, {
+      headers: { 'Cache-Control': 'private, no-cache, no-store, must-revalidate' },
     });
   } catch (err: any) {
     logger.error('[admin/metricas]', err);

@@ -354,6 +354,8 @@ export async function GET(request: NextRequest) {
 
       // Bitácora de distribución detectada
       bitacoraDistribucion,
+    }, {
+      headers: { 'Cache-Control': 'private, no-cache, no-store, must-revalidate' },
     });
   } catch (err: any) {
     logger.error('[admin/auditor-dashboard]', err);
