@@ -117,7 +117,7 @@ Se eliminaron o ajustaron afirmaciones no verificables:
 
 - `npm run type-check` ✅
 - `npm run lint` ✅
-- `npm run test:merge` ✅ (628/628 tests, 63/63 archivos)
+- `npm run test:merge` ✅ (636/636 tests, 64/64 archivos)
 - `npm run build` ✅ (producción)
 
 ---
@@ -442,3 +442,69 @@ El código de Nicaragua Informate está estable. Todos los checks de compilació
 - La memoria de decisiones (`nios_memory`) persiste el estado de cada ciclo para auditoría y mejora futura.
 
 Para operar en producción se requieren credenciales y permisos externos. Una vez configurados, el sistema puede desplegarse y operar sin inventar datos ni generar ruido.
+
+---
+
+## 29. CEO Agent Status — FINAL MISSION
+
+### AUTONOMY SCORE: 8/8
+
+| Phase | Status | Evidence |
+|---|---|---|
+| OBSERVE | REAL | `runCEOLoop` collects noticias, snapshots, GSC/GA4 status from Firestore. |
+| DIAGNOSE | REAL | `generateNiosDiagnostics` + `nios-snapshot-inconsistent` detection. |
+| DECIDE | REAL | `ceo-decision-engine` outputs `NO_ACTION`, `AUTO_EXECUTE`, `QUEUE_FOR_HUMAN`, `BLOCKED`. |
+| EXECUTE | REAL | `nios-snapshot-inconsistent` and `nios-cache-refresh` auto-repairs run. |
+| VERIFY | REAL | Each repair returns `before`/`after` and a `verified` boolean. |
+| LEARN | REAL | `nios_memory` stores `learnings` with `before`/`after` and `impact`. |
+| MEMORY | REAL | `recordCeoLoopRun` persists every cycle to `nios_memory`. |
+| CRON | REAL | `nios-collect` cron triggers `runCEOLoop` automatically. |
+
+### Acciones que NIOS ya puede hacer solo
+
+- Reconstruir y verificar `nios_daily_snapshots` cuando el conteo no coincide con Firestore.
+- Invalidar la caché del `dashboard-calidad` tras la recolección diaria.
+- Detectar datos `stale`, decidir `AUTO_EXECUTE` y verificar el resultado.
+- Clasificar diagnósticos en `NO_ACTION`, `QUEUE_FOR_HUMAN` o `BLOCKED_EXTERNAL_CONFIG`.
+- Calcular un score de autonomía por ciclo y persistirlo.
+
+### Acciones que todavía requieren humano
+
+- Credenciales de GSC, GA4, AdSense, Facebook, OneSignal, Telegram, LinkedIn, Medium.
+- Decisiones legales, financieras y publicaciones sensibles.
+- Aprobación de acciones destructivas o irreversibles.
+
+### Reparaciones autónomas
+
+1. `nios-snapshot-inconsistent` — reconstruye el snapshot, verifica `snapshotCount === dashboardCount`.
+2. `nios-cache-refresh` — invalida caché, verifica que la etiqueta fue invalidada.
+
+### Pruebas reales ejecutadas (A-H)
+
+| Test | Scenario | Expected | Actual |
+|---|---|---|---|
+| A | Datos stale (snapshot vs dashboard) | detect → repair → verify | PASS |
+| B | Noticia nueva | collectada y contada | PASS |
+| C | Caché stale | detect → refresh → verify | PASS |
+| D | Sin evidencia | `NO_ACTION` | PASS |
+| E | Fallo de reparación | `PARTIAL`, no false success | PASS |
+| F | GSC sin credenciales | `BLOCKED` | PASS |
+| G | Aprendizaje | learnings persistidos en `nios_memory` | PASS |
+| H | Regresión | no modifica contenido editorial | PASS |
+
+### Problemas reparados
+
+- El ciclo CEO ahora existe de extremo a extremo en `lib/nios/ceo-loop.ts`.
+- `nios-collect` ya no solo recomienda; ejecuta reparaciones seguras y persiste resultados.
+- `decide` convierte diagnósticos en decisiones operativas con prioridad.
+- `nios_memory` almacena `decisions`, `learnings`, `verifications` y `autonomyScore`.
+
+### Problemas que NIOS no puede reparar solo
+
+- GSC/GA4/AdSense/Facebook requieren credenciales externas.
+- El CEO aún no ejecuta acciones editoriales de alto riesgo (publicar, archivar, reescribir).
+- No cubre todavía: Google queries, Facebook reach, monetización por artículo, anomalías de tráfico externo.
+
+### Decisión final
+
+**DO NOT KEEP DEVIN** — El ciclo CEO opera con autonomía parcial (snapshot + caché), pero el sistema todavía depende de configuraciones humanas para cubrir tráfico, Google, Facebook y monetización. No declarar Production Ready para operación 24/7 sin dueño hasta que esas fuentes estén cableadas con reparaciones seguras y verificables.

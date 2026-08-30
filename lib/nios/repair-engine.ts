@@ -74,6 +74,7 @@ export interface NiosRepairRecord {
 }
 
 export interface NiosRepairVerification {
+  id?: string;
   before: Record<string, unknown>;
   after: Record<string, unknown>;
   verified: boolean;
@@ -342,6 +343,7 @@ async function executeRepair(
   const verified = verification.verified;
   const status: NiosRepairRecord['status'] = verified ? 'VERIFIED' : 'FAILED';
 
+  verification.id = action.id;
   action.after = verification.after;
   action.status = verified ? 'VERIFIED' : 'FAILED';
   action.verificationStatus = verified ? 'VERIFIED' : 'FAILED';

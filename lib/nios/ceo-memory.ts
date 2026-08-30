@@ -6,6 +6,7 @@
 
 import type { Firestore } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
+import type { CeoDecision } from './ceo-decision-engine';
 
 export interface CeoMemoryTask {
   id: string;
@@ -21,12 +22,64 @@ export interface CeoMemory {
   recentDone: CeoMemoryTask[];
 }
 
+export interface CEOObservationRecord {
+  source: string;
+  status: string;
+  note: string;
+  dataAgeHours: number | null;
+}
+
+export interface CEODiagnosisRecord {
+  id: string;
+  source: string;
+  severity: string;
+  status: string;
+  problem: string;
+  expectedResult: string;
+}
+
+export interface CEOExecutionRecord {
+  id: string;
+  status: string;
+  verification: string;
+}
+
+export interface CEOVerificationRecord {
+  id: string;
+  before: Record<string, unknown>;
+  after: Record<string, unknown>;
+  verified: boolean;
+  message: string;
+}
+
+export interface CEOLearningRecord {
+  decisionId: string;
+  problem: string;
+  decision: string;
+  before: Record<string, unknown>;
+  after: Record<string, unknown>;
+  impact: string;
+  confidence: number;
+  timestamp: string;
+}
+
 export interface CEOLoopRecord {
   id: string;
   kind: 'ceo_loop';
   timestamp: string;
+  startedAt: string;
+  finishedAt: string;
   mode: string;
   trigger: string;
+  autonomyScore: number;
+  observations: CEOObservationRecord[];
+  diagnoses: CEODiagnosisRecord[];
+  decisions: CeoDecision[];
+  actions: CEOExecutionRecord[];
+  executions: CEOExecutionRecord[];
+  verifications: CEOVerificationRecord[];
+  failures: CEOExecutionRecord[];
+  learnings: CEOLearningRecord[];
   repaired: Array<{
     repairId: string;
     problem: string;
@@ -39,6 +92,7 @@ export interface CEOLoopRecord {
   skipped: number;
   summary: string;
   report: Record<string, unknown>;
+  status: 'COMPLETE' | 'PARTIAL' | 'FAILED';
 }
 
 function db(): Firestore {
@@ -99,7 +153,7 @@ export async function syncRecommendations(recommendations: Array<{ id: string; a
   await batch.commit();
 }
 
-export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'>): Promise<void> {
+export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'>): Promise<string> {
   const ref = db().collection('nios_memory').doc();
   await ref.set({
     ...record,
@@ -107,4 +161,5 @@ export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'
     kind: 'ceo_loop',
     createdAt: record.timestamp,
   });
+  return ref.id;
 }
