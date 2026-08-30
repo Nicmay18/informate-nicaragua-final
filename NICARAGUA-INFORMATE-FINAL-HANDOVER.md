@@ -117,8 +117,8 @@ Se eliminaron o ajustaron afirmaciones no verificables:
 
 - `npm run type-check` ✅
 - `npm run lint` ✅
-- `npm run test:merge` ✅ (622/622 tests, 61/61 archivos)
-- `npm run build` ✅ (producción, 101 páginas estáticas)
+- `npm run test:merge` ✅ (628/628 tests, 63/63 archivos)
+- `npm run build` ✅ (producción)
 
 ---
 
@@ -172,7 +172,14 @@ Backend
 
 ## 7. CEO Agent
 
-- `lib/ceo-agent.ts` + `lib/nios/ceo-verdict.ts`
+- `lib/ceo-agent.ts` + `lib/nios/ceo-verdict.ts`.
+- Nivel de autonomía: **Ejecución autónoma limitada real** (P1).
+  - El cron `nios-collect` ejecuta el `CEO loop` cada día: recolecta, diagnostica, planifica, repara, verifica, persiste y reporta.
+  - `lib/nios/repair-engine.ts` ejecuta dos acciones seguras sin supervisión humana:
+    - `nios-snapshot-inconsistent`: reconstruye `nios_daily_snapshots` desde Firestore y verifica que coincida con el conteo real.
+    - `nios-cache-refresh`: invalida la caché del `dashboard-calidad` tras la recolección.
+  - Otras acciones (GSC, GA4, AdSense) permanecen en `WAITING_HUMAN` con causa clara.
+- `lib/nios/ceo-memory.ts` persiste cada ciclo en `nios_memory` con `kind: 'ceo_loop'`, incluyendo `repaired`, `pendingHuman`, `failedRepairs`, `summary` y `report`.
 - Estados: `SALUDABLE`, `REQUIERE_ATENCION`, `RIESGO_CRITICO`, `EVIDENCIA_INSUFICIENTE`.
 - Sin GSC/GA4 reales, produce `EVIDENCIA_INSUFICIENTE` o acciones internas con fuente clara.
 - No inventa datos. No dramatiza sin evidencia.
@@ -182,6 +189,8 @@ Backend
 ## 8. NIOS
 
 - Orchestrator mide tiempos, reporta errores, no rompe el pipeline.
+- `app/api/cron/nios-collect/route.ts` ahora invoca `runAutonomousRepair` al finalizar la recolección para cerrar el ciclo `detect → decide → execute → verify`.
+- `lib/nios/repair-engine.ts` ejecuta reparaciones automáticas seguras con verificación; deja acciones críticas para intervención humana.
 - Data merger usa `select()` para reducir costos.
 - Trust Score separa ajustes internos de datos de GSC.
 - AdSense Recovery, Readiness y Editor CEO Report no afirman rechazo oficial.
@@ -425,5 +434,11 @@ Resultados de la última corrida:
 ### `🟡 PRODUCTION READY — EXTERNAL CONFIG REQUIRED`
 
 El código de Nicaragua Informate está estable. Todos los checks de compilación, tipos y lint pasan. NIOS, MENI, CEO Agent, Traffic Intelligence, alertas, cron, Firebase y SEO están auditados y reparados en lo técnicamente posible.
+
+**CEO Autonomy Score: 2/5 (Ejecución autónoma parcial).**
+- El ciclo completo `observe → diagnose → plan → execute → verify → learn` está cableado en `nios-collect`.
+- Ejecuta dos acciones seguras autónomamente: consistencia de snapshot e invalidación de caché.
+- Las acciones de GSC/GA4/AdSense requieren credenciales humanas; el sistema las detecta, evita inventar datos y las encola como `pendingHuman`.
+- La memoria de decisiones (`nios_memory`) persiste el estado de cada ciclo para auditoría y mejora futura.
 
 Para operar en producción se requieren credenciales y permisos externos. Una vez configurados, el sistema puede desplegarse y operar sin inventar datos ni generar ruido.

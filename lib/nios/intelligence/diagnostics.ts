@@ -341,6 +341,26 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
   };
 }
 
+function niosDiagnostic(): NiosDiagnostic {
+  return {
+    id: 'nios-cache-refresh',
+    severity: 'low',
+    source: 'NIOS',
+    status: 'NOT_CONFIGURED' as NiosDataStatus,
+    problem: 'La caché de los dashboards administrativos puede estar stale tras la recolección diaria.',
+    cause: 'Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.',
+    impact: 'El panel administrativo puede mostrar métricas de ayer después de que NIOS recolectó nuevos datos.',
+    recommendedAction: 'Invalidar etiquetas de caché del dashboard-calidad y métricas.',
+    action: 'INVALIDATE_CACHE',
+    autoFixAvailable: true,
+    requiresHuman: false,
+    expectedResult: 'Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore.',
+    lastAttemptAt: new Date().toISOString(),
+    dataAgeHours: 0,
+    confidence: 90,
+  };
+}
+
 function adSenseDiagnostic(): NiosDiagnostic {
   const hasClientId = Boolean(process.env.GOOGLE_ADSENSE_CLIENT_ID);
   const meta = diagnosticMeta(null);
@@ -386,5 +406,5 @@ export function generateNiosDiagnostics(
   gsc: GSCSnapshot | null,
   ga4: GA4Snapshot | null,
 ): NiosDiagnostic[] {
-  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic()];
+  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic(), niosDiagnostic()];
 }

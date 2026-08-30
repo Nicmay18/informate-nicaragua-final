@@ -10,6 +10,7 @@
  */
 
 import type { Firestore } from 'firebase-admin/firestore';
+import { revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { generateNiosDiagnostics, type NiosDiagnostic } from './intelligence/diagnostics';
 import { loadNoticiasFromFirestore, mergeArticleData } from './intelligence/data-merger';
@@ -272,6 +273,23 @@ async function repairSnapshotForDate(
   logger.info(`[repair-engine] Repaired snapshot ${date} with ${articles.length} articles`);
 }
 
+async function repairAdminCache(): Promise<NiosRepairVerification> {
+  const before = { tags: ['dashboard-calidad'] };
+  try {
+    revalidateTag('dashboard-calidad');
+    return {
+      before,
+      after: { tags: ['dashboard-calidad'], invalidatedAt: new Date().toISOString() },
+      verified: true,
+      message: 'Caché del dashboard administrativo invalidada correctamente.',
+    };
+  } catch (err) {
+    const error = err instanceof Error ? err.message : String(err);
+    logger.error('[repair-engine] repairAdminCache failed:', err);
+    return { before, after: before, verified: false, message: `Falló invalidación de caché: ${error}` };
+  }
+}
+
 async function repairSnapshotConsistency(state: NiosSystemState): Promise<NiosRepairVerification> {
   const before = {
     snapshotCount: state.snapshotCount,
@@ -310,6 +328,8 @@ async function executeRepair(
   let verification: NiosRepairVerification;
   if (action.id === 'nios-snapshot-inconsistent') {
     verification = await repairSnapshotConsistency(state);
+  } else if (action.id === 'nios-cache-refresh' || action.diagnostic.action === 'INVALIDATE_CACHE') {
+    verification = await repairAdminCache();
   } else {
     verification = {
       before: action.before ?? {},

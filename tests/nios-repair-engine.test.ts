@@ -14,6 +14,10 @@ vi.mock('@/lib/nios/intelligence/store', async () => ({
   saveDailySnapshot: vi.fn(),
 }));
 
+vi.mock('next/cache', () => ({
+  revalidateTag: vi.fn(),
+}));
+
 import { loadNoticiasFromFirestore, mergeArticleData } from '@/lib/nios/intelligence/data-merger';
 import { getLatestSnapshot } from '@/lib/nios/intelligence/store';
 
@@ -170,7 +174,8 @@ describe('NIOS Repair Engine', () => {
 
     const result = await runRepairEngine({ db });
 
-    expect(result.repaired.length).toBe(0);
+    expect(result.repaired.some((r) => r.repairId === 'nios-snapshot-inconsistent')).toBe(false);
+    expect(result.repaired.map((r) => r.repairId)).toContain('nios-cache-refresh');
     expect(result.failedRepairs.some((a) => a.id === 'nios-snapshot-inconsistent')).toBe(false);
     expect(result.actions.some((a) => a.id === 'nios-snapshot-inconsistent')).toBe(false);
   });

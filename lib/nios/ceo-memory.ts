@@ -21,6 +21,26 @@ export interface CeoMemory {
   recentDone: CeoMemoryTask[];
 }
 
+export interface CEOLoopRecord {
+  id: string;
+  kind: 'ceo_loop';
+  timestamp: string;
+  mode: string;
+  trigger: string;
+  repaired: Array<{
+    repairId: string;
+    problem: string;
+    action: string;
+    status: string;
+    verification: string;
+  }>;
+  pendingHuman: number;
+  failedRepairs: number;
+  skipped: number;
+  summary: string;
+  report: Record<string, unknown>;
+}
+
 function db(): Firestore {
   return getAdminDb();
 }
@@ -77,4 +97,14 @@ export async function syncRecommendations(recommendations: Array<{ id: string; a
     }
   });
   await batch.commit();
+}
+
+export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'>): Promise<void> {
+  const ref = db().collection('nios_memory').doc();
+  await ref.set({
+    ...record,
+    id: ref.id,
+    kind: 'ceo_loop',
+    createdAt: record.timestamp,
+  });
 }

@@ -107,7 +107,8 @@ describe('Misión 10 — Diagnóstico, repair plan y CEO operativo', () => {
     expect(plan.critical.length).toBeGreaterThan(0);
     expect(plan.humanActions.length).toBeGreaterThan(0);
     expect(plan.nextAction).toContain('Agregar la cuenta de servicio');
-    expect(plan.autoFixes.length).toBe(0);
+    expect(plan.autoFixes.length).toBeGreaterThanOrEqual(1);
+    expect(plan.autoFixes.some((a) => a.id === 'nios-cache-refresh')).toBe(true);
   });
 
   it('CEO status report habla con datos parciales sin detener NIOS', () => {
