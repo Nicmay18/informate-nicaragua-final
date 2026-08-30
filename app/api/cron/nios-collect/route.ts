@@ -3,6 +3,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { runCEOLoop, type CEOLoopResult } from '@/lib/nios/ceo-loop';
+import { generateCEODailyBrief } from '@/lib/nios/ceo-daily-brief';
+import { validateTrafficReader } from '@/lib/analytics/traffic-reader';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -42,11 +44,26 @@ export async function GET(request: NextRequest) {
       logger.error('[nios-collect] CEO loop failed:', err);
     }
 
+    // Validar 3 corridas de tráfico para detectar datos no confiables
+    let trafficValidation = null;
+    let trafficValidationError: string | null = null;
+    try {
+      trafficValidation = await validateTrafficReader(db, 3);
+      if (trafficValidation.status === 'UNTRUSTED') {
+        logger.warn('[nios-collect] TRAFFIC_DATA_UNTRUSTED:', trafficValidation);
+      }
+    } catch (err) {
+      trafficValidationError = err instanceof Error ? err.message : String(err);
+      logger.error('[nios-collect] traffic validation failed:', err);
+    }
+
     return NextResponse.json({
       success: result.success,
       date: result.date,
       summary: result.summary,
       errors: result.errors,
+      trafficValidation,
+      trafficValidationError,
       ceo: {
         mode: ceo?.record.mode ?? 'UNKNOWN',
         autonomyScore: ceo?.autonomy.score ?? 0,
@@ -57,7 +74,26 @@ export async function GET(request: NextRequest) {
         failedRepairs: ceo?.record.failedRepairs ?? 0,
         decisions: ceo?.record.decisions ?? [],
         learnings: ceo?.record.learnings ?? [],
+        dailyBrief: ceo ? generateCEODailyBrief(ceo, result.date) : { dataStatus: 'UNKNOWN', points: [] },
         summary: ceo?.record.summary ?? ceoError,
+        whatISaw: ceo?.record.observations ?? [],
+        whatIDecided: ceo?.record.decisions ?? [],
+        whatIDid: {
+          repaired: ceo?.record.repaired ?? [],
+          queued: (ceo?.record.decisions ?? []).filter((d) => d.decision === 'QUEUE_FOR_HUMAN'),
+          failed: ceo?.record.failures ?? [],
+        },
+        whatILearned: ceo?.record.learnings ?? [],
+        business: {
+          observations: (ceo?.record.report as Record<string, unknown> | undefined)?.businessObservations ?? 0,
+          decisions: (ceo?.record.report as Record<string, unknown> | undefined)?.businessDecisions ?? 0,
+          queued: (ceo?.record.report as Record<string, unknown> | undefined)?.businessQueues ?? 0,
+          auto: (ceo?.record.report as Record<string, unknown> | undefined)?.businessAuto ?? 0,
+          blocked: (ceo?.record.report as Record<string, unknown> | undefined)?.businessBlocked ?? 0,
+          trafficArticles: (ceo?.record.report as Record<string, unknown> | undefined)?.trafficArticles ?? 0,
+          totalViews24h: (ceo?.record.report as Record<string, unknown> | undefined)?.totalViews24h ?? 0,
+          learningPatterns: (ceo?.record.report as Record<string, unknown> | undefined)?.learningPatterns ?? 0,
+        },
       },
     });
   } catch (error) {

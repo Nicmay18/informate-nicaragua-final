@@ -24,6 +24,14 @@ export interface TrafficReadResult {
   migrationHealth: number;
 }
 
+export interface TrafficValidationResult {
+  status: 'TRUSTED' | 'UNTRUSTED' | 'INSUFFICIENT';
+  confidence: number;
+  samples: number;
+  variance: number;
+  details: string;
+}
+
 export interface TrafficMigrationStatus {
   dailySource: 'traffic_daily' | 'traffic_log_fallback';
   fallbackReads: number;
@@ -173,5 +181,56 @@ export async function getTrafficMigrationStatus(
     fallbackReads: read.fallbackReads,
     migrationHealth: read.migrationHealth,
     dailyGenerated: read.source === 'traffic_daily',
+  };
+}
+
+/**
+ * Ejecuta 3 lecturas de tráfico y compara consistencia.
+ * Si varía, el CEO debe degradar confianza.
+ */
+export async function validateTrafficReader(
+  db: Firestore,
+  runs = 3,
+): Promise<TrafficValidationResult> {
+  const samples: TrafficReadResult[] = [];
+  for (let i = 0; i < runs; i++) {
+    samples.push(await getTrafficPerformance(db, 7, 50));
+  }
+
+  const first = samples[0];
+  const views = samples.map((s) => s.views24h);
+  const articleCounts = samples.map((s) => s.articles.length);
+  const minViews = Math.min(...views);
+  const maxViews = Math.max(...views);
+  const variance = maxViews - minViews;
+  const consistent = views.every((v) => v === first.views24h) && articleCounts.every((c) => c === first.articles.length);
+  const sufficient = first.articles.length > 0 || first.views24h > 0;
+
+  if (!sufficient) {
+    return {
+      status: 'INSUFFICIENT',
+      confidence: 0,
+      samples: runs,
+      variance,
+      details: 'No traffic data available for validation',
+    };
+  }
+
+  if (consistent) {
+    return {
+      status: 'TRUSTED',
+      confidence: 100,
+      samples: runs,
+      variance: 0,
+      details: `All ${runs} runs consistent (${first.views24h} views, ${first.articles.length} articles)`,
+    };
+  }
+
+  return {
+    status: 'UNTRUSTED',
+    confidence: 0,
+    samples: runs,
+    variance,
+    details: `Variance ${variance} views across ${runs} runs`,
   };
 }

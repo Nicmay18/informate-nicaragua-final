@@ -19,6 +19,7 @@ vi.mock('@/lib/nios/intelligence/store', async () => ({
 
 vi.mock('next/cache', () => ({
   revalidateTag: vi.fn(),
+  unstable_cache: (fn: () => unknown) => fn,
 }));
 
 vi.mock('@/lib/firebase-admin', async () => ({

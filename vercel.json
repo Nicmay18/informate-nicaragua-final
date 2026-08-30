@@ -28,5 +28,9 @@
         { "key": "Cache-Control", "value": "public, s-maxage=1800, stale-while-revalidate=3600" }
       ]
     }
+  ],
+  "crons": [
+    { "path": "/api/cron/nios-collect", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/supervisor-watch", "schedule": "*/30 * * * *" }
   ]
 }

@@ -8,16 +8,29 @@ export interface RelatedLink {
   type: string;
 }
 
+export function buildRelatedContentBlock(links: RelatedLink[]): string {
+  const listItems = links
+    .map(
+      (link) =>
+        `<li class="ni-related__item">` +
+        `<a class="ni-related__link" href="${escapeHtml(link.url)}">${escapeHtml(link.anchor)}</a>` +
+        `</li>`,
+    )
+    .join('\n');
+
+  return (
+    `<aside class="ni-related" aria-label="También te puede interesar">` +
+    `<h3 class="ni-related__title">También te puede interesar</h3>` +
+    `<ul class="ni-related__list">\n${listItems}\n</ul>` +
+    `</aside>`
+  );
+}
+
 export function injectInternalLinks(html: string, links: RelatedLink[] | undefined): string {
   if (!links || links.length === 0) return html;
   if (!html || html.trim().length === 0) return html;
 
-  // Construir bloque de links
-  const linkItems = links
-    .map((link) => `<a href="${escapeHtml(link.url)}" style="color:#991b1b;text-decoration:underline;font-weight:600;">${escapeHtml(link.anchor)}</a>`)
-    .join(' · ');
-
-  const linkBlock = `<div style="margin:20px 0;padding:14px 18px;background:#fef2f2;border-left:3px solid #991b1b;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6;color:#374151;"><strong style="color:#7f1d1d;">También te puede interesar:</strong> ${linkItems}</div>`;
+  const linkBlock = buildRelatedContentBlock(links);
 
   // Buscar cierre de </p> para insertar después del primer o segundo párrafo
   const paragraphs = html.split('</p>');

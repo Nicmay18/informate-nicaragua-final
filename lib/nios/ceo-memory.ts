@@ -155,8 +155,10 @@ export async function syncRecommendations(recommendations: Array<{ id: string; a
 
 export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'>): Promise<string> {
   const ref = db().collection('nios_memory').doc();
+  // Sanitize to avoid Firestore rejecting undefined fields or non-serializable values.
+  const cleanRecord = JSON.parse(JSON.stringify(record)) as Omit<CEOLoopRecord, 'id' | 'kind'>;
   await ref.set({
-    ...record,
+    ...cleanRecord,
     id: ref.id,
     kind: 'ceo_loop',
     createdAt: record.timestamp,

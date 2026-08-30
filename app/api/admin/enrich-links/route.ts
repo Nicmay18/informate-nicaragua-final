@@ -3,6 +3,7 @@ import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
+import { buildRelatedContentBlock, type RelatedLink } from '@/lib/article-links';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -64,14 +65,14 @@ export async function POST(request: NextRequest) {
       }
 
       // Generar bloque de links internos
-      const links = candidatos.map(d => {
+      const links: RelatedLink[] = candidatos.map(d => {
         const nd = d.data();
         const tit = (nd.titulo || 'Leer más').substring(0, 70);
         const sl = nd.slug || d.id;
-        return `<li><a href="/noticias/${sl}">${tit}</a></li>`;
-      }).join('\n');
+        return { url: `/noticias/${sl}`, anchor: tit, type: 'related' };
+      });
 
-      const bloque = `\n\n<h3>También te puede interesar</h3>\n<ul>\n${links}\n</ul>`;
+      const bloque = buildRelatedContentBlock(links);
       const nuevoContenido = contenido + bloque;
 
       await docRef.update({
@@ -124,14 +125,14 @@ export async function POST(request: NextRequest) {
             continue;
           }
 
-          const links = candidatos.map(d => {
+          const links: RelatedLink[] = candidatos.map(d => {
             const nd = d.data();
             const tit = (nd.titulo || 'Leer más').substring(0, 70);
             const sl = nd.slug || d.id;
-            return `<li><a href="/noticias/${sl}">${tit}</a></li>`;
-          }).join('\n');
+            return { url: `/noticias/${sl}`, anchor: tit, type: 'related' };
+          });
 
-          const bloque = `\n\n<h3>También te puede interesar</h3>\n<ul>\n${links}\n</ul>`;
+          const bloque = buildRelatedContentBlock(links);
 
           await db.collection('noticias').doc(doc.id).update({
             contenido: sanitizeArticleHtml(contenido + bloque),
