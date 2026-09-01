@@ -128,7 +128,7 @@ export async function collectGA4(
     );
   }
 
-  const timeoutMs = 15000;
+  const timeoutMs = 60000;
   logger.info(`[ga4-collector] Collecting GA4 data for property ${propertyId} from ${startDate} to ${endDate}`);
 
   try {

@@ -187,7 +187,7 @@ export function buildCeoVerdict(data: CeoVerdictInput): CeoVerdict {
   if (data.socialConversion && data.socialConversion.actions.length > 0) {
     whatToDoToday.push(...data.socialConversion.actions.slice(0, 1));
   }
-  data.editorCEOReport?.whatToRepeat?.slice(0, 2).forEach((a) => whatToDoToday.push(`Repetir: ${a}`));
+  data.editorCEOReport?.whatToRepeat?.slice(0, 2).forEach((a) => whatToDoToday.push(`Repetir: ${a.action} — ${a.reasoning}`));
   data.editorCEOReport?.articlesToUpdate?.slice(0, 2).forEach((a) => whatToDoToday.push(`Actualizar: "${a.titulo}"`));
   data.contentOpportunity?.opportunities?.slice(0, 2).forEach((o) => whatToDoToday.push(`Cubrir oportunidad: "${o.query}"`));
   whatToDoToday.push(...(data.weekly?.questions.requiresAttention || []).slice(0, 2));

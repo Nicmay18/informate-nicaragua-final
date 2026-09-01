@@ -17,18 +17,9 @@ export interface GoogleServiceAccountCredentials {
 }
 
 export function getGoogleServiceAccountCredentials(): GoogleServiceAccountCredentials | null {
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
-  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY || '';
   const projectId = process.env.FIREBASE_PROJECT_ID || '';
 
-  if (clientEmail && privateKeyRaw) {
-    return {
-      clientEmail,
-      privateKey: privateKeyRaw.trim().replace(/^["']|["']$/g, '').replace(/\\n/g, '\n'),
-      projectId,
-    };
-  }
-
+  // 1. Full service-account JSON (preferred: same source lib/firebase-admin.ts uses)
   const base64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
   if (base64 && base64.trim().length > 10) {
     try {
@@ -41,12 +32,37 @@ export function getGoogleServiceAccountCredentials(): GoogleServiceAccountCreden
       if (sa.client_email && sa.private_key) {
         return {
           clientEmail: sa.client_email,
-          privateKey: sa.private_key.replace(/\\n/g, '\n'),
+          privateKey: sa.private_key
+            .replace(/\\n/g, '\n')
+            .replace(/\r/g, '')
+            .trim(),
           projectId: sa.project_id || projectId,
         };
       }
     } catch {
-      return null;
+      // fall through to triple
+    }
+  }
+
+  // 2. Triple fallback
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY || '';
+
+  if (clientEmail && privateKeyRaw) {
+    const privateKey = privateKeyRaw
+      .trim()
+      .replace(/^["']|["']$/g, '')
+      .replace(/\\n/g, '\n')
+      .replace(/\r/g, '')
+      .trim();
+
+    // Reject clearly incomplete keys without silently using them
+    if (privateKey.includes('-----BEGIN') && privateKey.includes('-----END')) {
+      return {
+        clientEmail,
+        privateKey,
+        projectId,
+      };
     }
   }
 

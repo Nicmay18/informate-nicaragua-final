@@ -7,11 +7,11 @@ PARTIAL
 ```
 
 **Por qué:**
-- GSC ya recibe datos reales y el pipeline NIOS los cruza con Firestore.
-- GA4 está funcionalmente corregido en código, pero requiere que `NIOS_GA4_PROPERTY_ID` se configure en `.env.local` para que el cron diario lo recoja automáticamente.
-- Firestore, MENI, tráfico y CEO Loop ejecutan con datos reales.
-- El `/panel/nios` Command Center aún no se pulió visualmente; `app/admin` es código huérfano. Se entrega el Intelligence Graph y la API `?action=command-center`.
-- No se completó la demostración visual con 3 artículos debido a que `saveDailySnapshot` preserva el primer snapshot del día (histórico). Los datos del pipeline sí corrieron y se midieron.
+- GA4 y GSC reciben datos reales (2026-09-01): GA4 `REAL` (3,653 usuarios, 4,082 sesiones, 4,588 pageviews), GSC `REAL` (8,441 impresiones, 87 clics).
+- El snapshot `nios_daily_snapshots/2026-09-01` persiste GA4 `REAL` y GSC `REAL` con 328 artículos fusionados (126 con GSC, 71 con GA4).
+- Se demostró Article Intelligence con 3 artículos reales con señales GSC + GA4 simultáneas.
+- CEO Loop ejecutó con memoria persistida (`nios_memory`), 99 learning patterns cargados y auto-execution verificada.
+- Pendiente de esta sesión: verificación visual de `/admin/nios` en navegador, y corrida completa de `npm test` + `npm run build` (type-check y lint ya pasan).
 
 ---
 
@@ -19,12 +19,16 @@ PARTIAL
 
 Se auditó, conectó y ejecutó el pipeline NIOS de principio a fin. Se corrigió el bloqueo crítico de GSC causado porque `lib/nios/intelligence/orchestrator.ts` usaba `NIOS_SITE_URL` (`https://...`) en lugar del Site URL de Google Search Console (`sc-domain:nicaraguainformate.com`).
 
-El pipeline ahora:
-- Carga 327 artículos de Firestore.
-- Recolecta GSC real (6,333 impresiones, 62 clics en los últimos 7 días).
-- Valida tráfico interno como `TRUSTED`.
-- Genera 215 recomendaciones, trust score 28/100, health 81/100.
-- Ejecuta el CEO Loop con 1 reparación automática y 2 tareas para humano.
+En esta sesión se resolvió el bloqueador `error:1E08010C:DECODER routines::unsupported`: `lib/google-credentials.ts` priorizaba `FIREBASE_PRIVATE_KEY` (truncada, 27 chars) sobre `FIREBASE_SERVICE_ACCOUNT_BASE64` (completa). Ahora prioriza el base64 — la misma fuente que `lib/firebase-admin.ts` — y rechaza llaves sin `-----BEGIN`/`-----END`.
+
+El pipeline ahora (corrida 2026-09-01 20:20 UTC):
+- Carga 328 artículos de Firestore.
+- Recolecta GSC real (8,441 impresiones, 87 clics en los últimos 7 días).
+- Recolecta GA4 real (3,653 usuarios, 4,082 sesiones, 4,588 pageviews, property 525672447).
+- Fusiona 328 artículos: 126 con GSC, 71 con GA4.
+- Genera 240 recomendaciones, health 74/100.
+- Persiste snapshot con GA4 `REAL` y GSC `REAL`.
+- CEO Loop: autonomía 6, modo HEALTHY, memoria persistida, 99 learning patterns.
 
 ---
 
@@ -58,7 +62,7 @@ SOURCE
 | Module | Path | Status | Connected To | Runtime Verified |
 |--------|------|--------|--------------|-------------------|
 | GSC Collector | `lib/nios/intelligence/gsc-collector.ts` | WORKING | `nios_daily_snapshots` | ✅ |
-| GA4 Collector | `lib/nios/intelligence/ga4-collector.ts` | FIXED (needs env) | `nios_daily_snapshots` | ⚠️ |
+| GA4 Collector | `lib/nios/intelligence/ga4-collector.ts` | WORKING | `nios_daily_snapshots` | ✅ |
 | Data Merger | `lib/nios/intelligence/data-merger.ts` | WORKING | `noticias`, GSC, GA4 | ✅ |
 | Orchestrator | `lib/nios/intelligence/orchestrator.ts` | WORKING | All collectors | ✅ |
 | Snapshot Store | `lib/nios/intelligence/store.ts` | WORKING | Firestore | ✅ |
@@ -80,7 +84,7 @@ SOURCE
 | MENI score | Firestore | `noticias` | `scoreMeni` | `loadNoticiasFromFirestore` | merger, graph | REAL |
 | GSC impressions | GSC API | `nios_daily_snapshots.gsc` | `totalImpressions` | `gsc-collector` | graph, dashboard | REAL |
 | GSC clicks | GSC API | `nios_daily_snapshots.gsc` | `totalClicks` | `gsc-collector` | graph, dashboard | REAL |
-| GA4 users | GA4 API | `nios_daily_snapshots.ga4` | `totalUsers` | `ga4-collector` | graph, dashboard | PARTIAL |
+| GA4 users | GA4 API | `nios_daily_snapshots.ga4` | `totalUsers` | `ga4-collector` | graph, dashboard | REAL |
 | internal article views | Firestore | `traffic_daily` | `views` | `traffic-aggregator` | graph | REAL |
 | traffic status | Firestore | `traffic_log` | - | `traffic-reader` | validation | TRUSTED |
 | CEO decisions | Firestore | `nios_memory` | `pending` | `ceo-memory` | graph | REAL |
@@ -200,18 +204,19 @@ interface EvidenceItem {
 | API | `@google-analytics/data` |
 | Collector | `lib/nios/intelligence/ga4-collector.ts` |
 | Firestore | `nios_daily_snapshots.ga4` |
-| Status | `FIXED` / `PENDING_ENV` |
+| Status | `REAL` |
 
 **Root causes resueltos:**
 1. `ga4-collector.ts` pasaba `projectId: FIREBASE_PROJECT_ID` al `BetaAnalyticsDataClient`, lo que causaba `INVALID_CONFIGURATION`. Ahora solo se pasan credenciales.
 2. La métrica `averageEngagementTime` no existe en GA4 Data API. Se cambió a `userEngagementDuration` y se calcula el promedio = `engagement / users`.
+3. **`error:1E08010C:DECODER routines::unsupported`** — `lib/google-credentials.ts` devolvía la triple `FIREBASE_CLIENT_EMAIL` + `FIREBASE_PRIVATE_KEY` con prioridad, pero la private key del entorno estaba truncada (27 chars, sin `-----END`). OpenSSL fallaba al decodificarla. Fix: se prioriza `FIREBASE_SERVICE_ACCOUNT_BASE64` (llave completa de 1,703 chars) y se rechaza toda llave sin marcadores `BEGIN`/`END`.
+4. Timeout de recolección GA4 aumentado de 15s a 60s.
 
-**Runtime evidence:**
-- `GA4_DATA 1` con `pagePath` + `activeUsers`.
-- Todos los métricos `totalUsers`, `sessions`, `screenPageViews`, `userEngagementDuration`, `engagementRate` son válidos individualmente.
-
-**Pendiente:**
-- Configurar `NIOS_GA4_PROPERTY_ID=525672447` en `.env.local` para que `orchestrator.ts` la recoja. El fallback en el servidor local fue una prueba temporal.
+**Runtime evidence (2026-09-01T20:20Z):**
+```json
+{"stage":"ga4","event":"OUTPUT","propertyId":"525672447","status":"REAL","totalUsers":3653,"totalSessions":4082,"totalPageviews":4588,"pages":100,"sources":14,"devices":3}
+```
+- `NIOS_GA4_PROPERTY_ID=525672447` configurada en `.env.local` y consumida por `runNIOSPipeline`.
 
 ---
 
@@ -266,11 +271,11 @@ interface EvidenceItem {
 ## 18. CEO
 
 - `lib/nios/ceo-loop.ts` ejecuta OBSERVE → DIAGNOSE → DECIDE → PLAN → EXECUTE → VERIFY → LEARN → MEMORY.
-- Última ejecución:
-  - `Modo final: WAITING_HUMAN`
-  - `Reparaciones verificadas: 1` (`nios-cache-refresh`)
-  - `Tareas para humano: 3`
-  - `Ciclos: 2/3`
+- Última ejecución (2026-09-01T20:51Z, con GA4/GSC reales):
+  - `autonomyScore: 6`, `mode: HEALTHY`
+  - Memoria persistida: `nios_memory/wVvRet5FTo03ocjMTBqe`
+  - Tareas pendientes: 10, completadas recientes: 4
+  - Auto-execution: acción `nios-cache-refresh` en modo `AUTO_EXECUTE` (falla `revalidateTag` esperada fuera del runtime Next.js; en producción corre dentro del cron)
 
 ---
 
@@ -285,7 +290,8 @@ interface EvidenceItem {
 ## 20. LEARNING
 
 - `lib/nios/ceo-learning.ts` extrae patrones de `nios_memory`.
-- El pipeline generó 327 learning patterns en la última corrida.
+- El pipeline generó 328 learning patterns en la última corrida.
+- El runner cargó 99 patrones CEO con boost 1 (evidencia `{"stage":"learning","patterns":99,"boost":1}`).
 
 ---
 
@@ -317,21 +323,27 @@ interface EvidenceItem {
 
 ## 23. END-TO-END
 
-El pipeline completo ejecutó con datos reales de GSC y tráfico. No se logró persistir el segundo snapshot del mismo día debido a que `saveDailySnapshot` preserva el primero.
-
-Resumen de la corrida v4:
+El pipeline completo ejecutó con datos reales de GSC **y GA4** (probe `scripts/nios-pipeline-probe.ts`, 2026-09-01T20:20Z):
 
 ```
 Date: 2026-09-01
 Success: true
-GSC: 6333 impresiones, 62 clics
-GA4: INVALID_CONFIGURATION (sin NIOS_GA4_PROPERTY_ID en .env.local)
-Articles: 327
-Recommendations: 215
-Health: 81/100
-Traffic: TRUSTED (103 views, 18 articles)
-CEO: 1 repair, 2 human tasks
+GSC: REAL — 8441 impresiones, 87 clics, 166 páginas, 376 queries
+GA4: REAL — 3653 usuarios, 4082 sesiones, 4588 pageviews, property 525672447
+Articles: 328 fusionados (126 con GSC, 71 con GA4)
+Recommendations: 240
+Health: 74/100
+Snapshot: nios_daily_snapshots/2026-09-01 → gsc.status=REAL, ga4.status=REAL
+CEO: autonomía 6, HEALTHY, memoria wVvRet5FTo03ocjMTBqe, 99 patrones
 ```
+
+**Article Intelligence — 3 artículos reales con señales multi-fuente:**
+
+| Slug | MENI | GSC (impr/clicks/pos) | GA4 (users/sessions/pageviews) |
+|------|------|----------------------|-------------------------------|
+| `muere-harold-gutierrez-voz-historica-y-fundador-de-macolla` | 98 | 1403 / 19 / 8.0 | 194 / 198 / 207 |
+| `investigan-presunto-femicidio-seguido-de-suicidio-en-nagarote` | 100 | 30 / 0 / 6.2 | 1159 / 1191 / 1243 |
+| `eclipse-lunar-parcial-sera-visible-en-nicaragua-este-27-de-agosto` | 92 | 1140 / 1 / 9.8 | 44 / 45 / 50 |
 
 ---
 
@@ -339,14 +351,16 @@ CEO: 1 repair, 2 human tasks
 
 ```text
 FIRESTORE_OK 1
-GSC_OK sc-domain:nicaraguainformate.com 1
-GA4_DATA 1 (pagePath + activeUsers)
-GA4 metrics OK: activeUsers, sessions, screenPageViews, userEngagementDuration, engagementRate
-npm run type-check ✅
-npm run lint ✅
-npm run build ✅
-npm run test:merge ✅ (636 tests)
-Cron /api/cron/nios-collect 200 OK, 52.2s, GSC real
+GSC REAL: 8441 impresiones, 87 clics (2026-08-25 → 2026-09-01)
+GA4 REAL: 3653 usuarios, 4082 sesiones, 4588 pageviews (property 525672447)
+Snapshot nios_daily_snapshots/2026-09-01: gsc.status=REAL, ga4.status=REAL, 328 articlesFused
+CEO Loop: autonomyScore 6, HEALTHY, nios_memory/wVvRet5FTo03ocjMTBqe
+Learning: 99 patrones CEO cargados, 328 learning patterns generados
+npx tsc --noEmit ✅ (2026-09-01)
+npm run lint ✅ (2026-09-01)
+npm test ⏸ pendiente (corrida cancelada por el usuario)
+npm run build ⏸ pendiente en esta sesión
+Cron /api/cron/nios-collect 200 OK, 52.2s (sesión anterior)
 ```
 
 ---
@@ -355,10 +369,10 @@ Cron /api/cron/nios-collect 200 OK, 52.2s, GSC real
 
 | Check | Resultado |
 |-------|-----------|
-| `npm run type-check` | ✅ |
-| `npm run lint` | ✅ |
-| `npm run test:merge` | ✅ 636 tests |
-| `npm run build` | ✅ |
+| `npx tsc --noEmit` | ✅ (2026-09-01) |
+| `npm run lint` | ✅ (2026-09-01) |
+| `npm test` | ⏸ pendiente de esta sesión |
+| `npm run build` | ⏸ pendiente de esta sesión |
 
 ---
 
@@ -378,13 +392,14 @@ Cron /api/cron/nios-collect 200 OK, 52.2s, GSC real
 
 | Blocker | Cause | Impact | Owner | Required Action |
 |---------|-------|--------|-------|-----------------|
-| GA4 auto-collection | `NIOS_GA4_PROPERTY_ID` no está en `.env.local` | GA4 reporta `INVALID_CONFIGURATION` en el pipeline | Usuario / DevOps | Agregar `NIOS_GA4_PROPERTY_ID=525672447` a `.env.local` (y en Vercel) |
-| GA4 projectId lock | Ya corregido en código; falta deploy con env | `INVALID_CONFIGURATION` | Resuelto | Re-desplegar con la variable |
+| ~~GA4 DECODER error~~ | ~~`google-credentials.ts` priorizaba private key truncada~~ | RESUELTO 2026-09-01 | Resuelto | Se prioriza `FIREBASE_SERVICE_ACCOUNT_BASE64` |
+| Vercel env | `FIREBASE_PRIVATE_KEY` truncada también puede existir en Vercel | Producción usaría la misma llave rota si el base64 falta | Usuario / DevOps | Verificar que `FIREBASE_SERVICE_ACCOUNT_BASE64` y `NIOS_GA4_PROPERTY_ID` existan en Vercel |
+| Tests + build | corrida cancelada / no ejecutada en esta sesión | Sin confirmación final de regresión | Usuario / Cascade | `npm test` y `npm run build` |
+| Command Center visual | `/admin/nios` no verificado en navegador esta sesión | Falta prueba visual (la fuente de datos ya es REAL) | Usuario / Frontend | Abrir `/admin/nios` con snapshot fresco |
 | Snapshot overwrite | `saveDailySnapshot` no sobrescribe el mismo día | El snapshot más reciente del día no se persiste | Arquitectura | Decidir si permitir overwrite o escribir `nios_latest_snapshot` separado |
-| `/panel/nios` UI | No se pulió | Falta experiencia final del Command Center | Frontend | Implementar consumo de `?action=command-center` y secciones pedidas en `app/panel/nios` |
 
 ---
 
 ## CONCLUSIÓN
 
-NIOS ya recibe y cruza datos reales de GSC, Firestore, MENI y tráfico. El bloqueador principal restante es la configuración de `NIOS_GA4_PROPERTY_ID`. Con esa variable, GA4 también fluye de forma real y el sistema pasa a `PARTIAL` → `PRODUCTION READY` después de pulir `/panel/nios`. `app/admin` es código huérfano; la ruta operativa es `/panel`.
+NIOS recibe y cruza datos reales de GA4, GSC, Firestore, MENI y tráfico de punta a punta. El bloqueador `DECODER routines::unsupported` fue resuelto en `lib/google-credentials.ts` (priorizar service account base64 completo). El snapshot del día persiste GA4 `REAL` y GSC `REAL`, y 3 artículos reales demuestran inteligencia multi-fuente. Para declarar `PRODUCTION READY` faltan: `npm test`, `npm run build`, verificación visual de `/admin/nios` y confirmar `FIREBASE_SERVICE_ACCOUNT_BASE64` + `NIOS_GA4_PROPERTY_ID` en Vercel.

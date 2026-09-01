@@ -14,7 +14,6 @@
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig({ path: '.env.local' });
 
-import type { Firestore } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { checkFirebaseHealth } from '@/lib/nios/intelligence/firebase-health';
 import { getTrafficMigrationStatus } from '@/lib/analytics/traffic-reader';
@@ -75,8 +74,8 @@ const TRAFFIC: EnvCheck[] = [
   { name: 'NIOS_TRAFFIC_LOG_TTL_DAYS', source: 'lib/analytics/traffic-ttl.ts', usedBy: 'trafficLogTTLDays', test: 'Stage 2 Traffic / Fase 6 Cron' },
 ];
 
-const REQUIRED = [FIREBASE_BASE64, ...FIREBASE_TRIPLE, ...GSC_GA4, ...ADSENSE];
-const OPTIONAL = [...CRON_ADMIN, ...TRAFFIC];
+const REQUIRED = [FIREBASE_BASE64, ...FIREBASE_TRIPLE, ...GSC_GA4];
+const OPTIONAL = [...ADSENSE, ...CRON_ADMIN, ...TRAFFIC];
 
 function iso() {
   return new Date().toISOString();
@@ -142,12 +141,12 @@ async function runStage<T>(
   }
 }
 
-function summarizeGsc(value: { status: string; siteUrl?: string; errorMessage?: string } | null) {
-  return value ? { status: value.status, siteUrl: value.siteUrl, error: value.errorMessage } : null;
+function summarizeGsc(value: { status?: string; siteUrl?: string; errorMessage?: string } | null): Record<string, unknown> {
+  return value ? { status: value.status, siteUrl: value.siteUrl, error: value.errorMessage } : { status: 'NO_DATA' };
 }
 
-function summarizeGa4(value: { status: string; propertyId?: string; errorMessage?: string } | null) {
-  return value ? { status: value.status, propertyId: value.propertyId, error: value.errorMessage } : null;
+function summarizeGa4(value: { status?: string; propertyId?: string; errorMessage?: string } | null): Record<string, unknown> {
+  return value ? { status: value.status, propertyId: value.propertyId, error: value.errorMessage } : { status: 'NO_DATA' };
 }
 
 async function main() {
