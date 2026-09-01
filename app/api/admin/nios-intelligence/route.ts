@@ -28,6 +28,7 @@ function isAuthorized(request: NextRequest): boolean {
  * ?action=editor-strategy — Editor CEO Report
  * ?action=meni-learning — Aprendizaje MENI
  * ?action=history — Snapshots históricos
+ * ?action=command-center — NIOS Intelligence Graph
  */
 export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) {
@@ -65,6 +66,13 @@ export async function GET(request: NextRequest) {
           meniLearningGenerated: !!s.meniLearning,
         })),
       });
+    }
+
+    if (action === 'command-center') {
+      const { buildIntelligenceGraph } = await import('@/lib/nios/command-center/intelligence-graph');
+      const articleLimit = parseInt(searchParams.get('limit') || '50', 10);
+      const graph = await buildIntelligenceGraph({ articleLimit });
+      return NextResponse.json({ success: true, date: graph.collectedAt, graph });
     }
 
     const { getLatestSnapshot } = await import('@/lib/nios/intelligence/store');
