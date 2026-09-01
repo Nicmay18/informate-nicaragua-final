@@ -10,7 +10,7 @@ PARTIAL
 - GSC ya recibe datos reales y el pipeline NIOS los cruza con Firestore.
 - GA4 está funcionalmente corregido en código, pero requiere que `NIOS_GA4_PROPERTY_ID` se configure en `.env.local` para que el cron diario lo recoja automáticamente.
 - Firestore, MENI, tráfico y CEO Loop ejecutan con datos reales.
-- El `/admin/nios` Command Center aún no se pulió visualmente; se entrega el Intelligence Graph y la API `?action=command-center`.
+- El `/panel/nios` Command Center aún no se pulió visualmente; `app/admin` es código huérfano. Se entrega el Intelligence Graph y la API `?action=command-center`.
 - No se completó la demostración visual con 3 artículos debido a que `saveDailySnapshot` preserva el primer snapshot del día (histórico). Los datos del pipeline sí corrieron y se midieron.
 
 ---
@@ -67,7 +67,8 @@ SOURCE
 | CEO Loop | `lib/nios/ceo-loop.ts` | WORKING | graph, memory | ✅ |
 | Traffic | `lib/analytics/traffic-*.ts` | WORKING | `traffic_daily` | ✅ |
 | Command Center API | `app/api/admin/nios-intelligence/route.ts` | WORKING | graph | ✅ |
-| `/admin/nios` UI | `app/admin/nios/page.tsx` | NOT_POLISHED | API | ❌ |
+| `/panel/nios` UI | `app/panel/nios/page.tsx` | NOT_POLISHED | `NiosPanelPageContent` | ❌ |
+| `app/admin/*` | `app/admin/*` | ORPHANED | — | ❌ |
 
 ---
 
@@ -380,10 +381,10 @@ Cron /api/cron/nios-collect 200 OK, 52.2s, GSC real
 | GA4 auto-collection | `NIOS_GA4_PROPERTY_ID` no está en `.env.local` | GA4 reporta `INVALID_CONFIGURATION` en el pipeline | Usuario / DevOps | Agregar `NIOS_GA4_PROPERTY_ID=525672447` a `.env.local` (y en Vercel) |
 | GA4 projectId lock | Ya corregido en código; falta deploy con env | `INVALID_CONFIGURATION` | Resuelto | Re-desplegar con la variable |
 | Snapshot overwrite | `saveDailySnapshot` no sobrescribe el mismo día | El snapshot más reciente del día no se persiste | Arquitectura | Decidir si permitir overwrite o escribir `nios_latest_snapshot` separado |
-| `/admin/nios` UI | No se pulió | Falta experiencia final del Command Center | Frontend | Implementar consumo de `?action=command-center` y secciones pedidas |
+| `/panel/nios` UI | No se pulió | Falta experiencia final del Command Center | Frontend | Implementar consumo de `?action=command-center` y secciones pedidas en `app/panel/nios` |
 
 ---
 
 ## CONCLUSIÓN
 
-NIOS ya recibe y cruza datos reales de GSC, Firestore, MENI y tráfico. El bloqueador principal restante es la configuración de `NIOS_GA4_PROPERTY_ID`. Con esa variable, GA4 también fluye de forma real y el sistema pasa a `PARTIAL` → `PRODUCTION READY` después de pulir `/admin/nios`.
+NIOS ya recibe y cruza datos reales de GSC, Firestore, MENI y tráfico. El bloqueador principal restante es la configuración de `NIOS_GA4_PROPERTY_ID`. Con esa variable, GA4 también fluye de forma real y el sistema pasa a `PARTIAL` → `PRODUCTION READY` después de pulir `/panel/nios`. `app/admin` es código huérfano; la ruta operativa es `/panel`.
