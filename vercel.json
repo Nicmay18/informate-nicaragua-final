@@ -31,6 +31,6 @@
   ],
   "crons": [
     { "path": "/api/cron/nios-collect", "schedule": "0 8 * * *" },
-    { "path": "/api/cron/supervisor-watch", "schedule": "*/30 * * * *" }
+    { "path": "/api/cron/supervisor-watch", "schedule": "0 9 * * *" }
   ]
 }
