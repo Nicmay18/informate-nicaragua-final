@@ -2,6 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { logger } from '@/lib/logger';
+import { getTelegramConfig } from '@/lib/telegram';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -42,18 +43,9 @@ function fechaMs(f: unknown): number {
   return 0;
 }
 
-/** Lee config de Telegram desde Firestore (igual que el resto de endpoints) */
-async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
-  try {
-    const snap = await db.collection('config').doc('admin').get();
-    const data = snap.data() || {};
-    return {
-      token: data.telegram?.token || process.env.TG_TOKEN || '',
-      chatId: data.telegram?.chatId || process.env.TG_CHAT_ID || '',
-    };
-  } catch {
-    return { token: process.env.TG_TOKEN || '', chatId: process.env.TG_CHAT_ID || '' };
-  }
+/** Lee config de Telegram (Firestore → env) */
+async function resolveTelegramConfig(db: FirebaseFirestore.Firestore) {
+  return getTelegramConfig(db);
 }
 
 /** Fecha legible en español, zona Nicaragua (UTC-6) */
@@ -143,7 +135,7 @@ export async function GET(request: Request) {
       `#NicaraguaInformate`;
 
     // ── Enviar UN solo mensaje a Telegram ──
-    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
+    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await resolveTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) {
       return NextResponse.json({ error: 'Faltan credenciales de Telegram' }, { status: 400 });
     }

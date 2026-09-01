@@ -240,3 +240,4 @@ m21-verify-output.json
 data/meni/registry.json
 data/meni/history/*.json
 public/data/meni-*.json
+.env*

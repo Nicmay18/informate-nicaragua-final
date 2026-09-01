@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import { getTelegramConfig } from '@/lib/telegram';
 
 /** Escape para Telegram HTML parse_mode: solo < > & " ' */
 function escTelegram(texto: string): string {
@@ -28,9 +29,9 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { noticia, config } = body;
-
-    const TG_TOKEN = config?.telegram?.token || process.env.TG_TOKEN || '';
-    const TG_CHAT_ID = config?.telegram?.chatId || process.env.TG_CHAT_ID || '';
+    const cfg = await getTelegramConfig();
+    const TG_TOKEN = config?.telegram?.token || cfg.token;
+    const TG_CHAT_ID = config?.telegram?.chatId || cfg.chatId;
 
     if (!TG_TOKEN) return NextResponse.json({ error: 'Falta token de Telegram' }, { status: 400, headers });
     if (!TG_CHAT_ID) return NextResponse.json({ error: 'Falta chat ID de Telegram' }, { status: 400, headers });
