@@ -10,6 +10,7 @@
  */
 
 import { logger } from '@/lib/logger';
+import { getGoogleServiceAccountCredentials } from '@/lib/google-credentials';
 import type {
   NiosDataStatus,
   GSCSnapshot,
@@ -20,17 +21,16 @@ import type {
 } from './types';
 
 async function getAuthClient() {
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
+  const credentials = getGoogleServiceAccountCredentials();
 
-  if (!privateKey || !clientEmail) {
+  if (!credentials) {
     throw new Error('[gsc-collector] Credenciales de Firebase no configuradas');
   }
 
   const { google } = await import('googleapis');
   return new google.auth.JWT({
-    email: clientEmail,
-    key: privateKey,
+    email: credentials.clientEmail,
+    key: credentials.privateKey,
     scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
   });
 }
@@ -139,17 +139,16 @@ export async function collectGSC(
     );
   }
 
-  const serviceAccountEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  const credentials = getGoogleServiceAccountCredentials();
 
-  if (!serviceAccountEmail || !privateKey) {
+  if (!credentials) {
     logger.warn('[gsc-collector] Firebase service account not configured');
     return emptySnapshot(
       siteUrl,
       startDate,
       endDate,
       'CONFIG_REQUIRED',
-      'FIREBASE_CLIENT_EMAIL o FIREBASE_PRIVATE_KEY no están configurados. NIOS no puede autenticar GSC.',
+      'No hay credenciales de cuenta de servicio (FIREBASE_CLIENT_EMAIL + FIREBASE_PRIVATE_KEY o FIREBASE_SERVICE_ACCOUNT_BASE64). NIOS no puede autenticar GSC.',
     );
   }
 
@@ -312,14 +311,14 @@ export async function collectGSC(
             ? 'NETWORK_ERROR'
             : 'NO_DATA';
     const errorMessage = status === 'ACCESS_BLOCKED'
-      ? `Acceso bloqueado. Cuenta utilizada: ${serviceAccountEmail || 'no configurada'}. ` +
+      ? `Acceso bloqueado. Cuenta utilizada: ${credentials.clientEmail || 'no configurada'}. ` +
         `Propiedad solicitada: ${siteUrl}. ` +
         `Permiso requerido: permiso de lectura en Google Search Console. ` +
         `Consecuencia: Google Trust, recomendaciones orgánicas y reportes CEO no pueden evaluarse con evidencia. ` +
-        `Acción recomendada: agregar la cuenta de servicio ${serviceAccountEmail || 'FIREBASE_CLIENT_EMAIL'} ` +
+        `Acción recomendada: agregar la cuenta de servicio ${credentials.clientEmail || 'FIREBASE_CLIENT_EMAIL'} ` +
         `como propietario o usuario de la propiedad ${siteUrl} en Search Console.`
       : status === 'INVALID_CONFIGURATION'
-        ? `Credencial inválida para Google Search Console. Verifica FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL, SCOPES y permisos de la cuenta de servicio. Respuesta: ${dataText}`
+        ? `Credencial inválida para Google Search Console. Verifica las credenciales de la cuenta de servicio, SCOPES y permisos. Respuesta: ${dataText}`
         : rawMessage;
     return emptySnapshot(siteUrl, startDate, endDate, status, errorMessage);
   }

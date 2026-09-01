@@ -8,6 +8,7 @@
 import { google } from 'googleapis';
 import type { DataStatus, GA4PageRow, GA4Snapshot } from '@/lib/contracts';
 import { logger } from '@/lib/logger';
+import { getGoogleServiceAccountCredentials } from '@/lib/google-credentials';
 
 export interface Ga4CollectorOptions {
   propertyId?: string;
@@ -18,8 +19,11 @@ export interface Ga4CollectorOptions {
 
 export async function collectGa4Data(options: Ga4CollectorOptions = {}): Promise<GA4Snapshot> {
   const propertyId = options.propertyId || process.env.NIOS_GA4_PROPERTY_ID || '525672447';
-  const clientEmail = options.clientEmail || process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = (options.privateKey || process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  const resolved = getGoogleServiceAccountCredentials();
+  const clientEmail = options.clientEmail || resolved?.clientEmail;
+  const privateKey = options.privateKey
+    ? options.privateKey.replace(/\\n/g, '\n')
+    : resolved?.privateKey;
   const days = options.days || 7;
 
   const now = new Date();

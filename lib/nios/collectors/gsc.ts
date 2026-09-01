@@ -8,6 +8,7 @@
 import { google } from 'googleapis';
 import type { DataStatus, GSCDataRow, GSCQueryRow, GSCSnapshot } from '@/lib/contracts';
 import { logger } from '@/lib/logger';
+import { getGoogleServiceAccountCredentials } from '@/lib/google-credentials';
 
 export interface GscCollectorOptions {
   siteUrl?: string;
@@ -18,8 +19,11 @@ export interface GscCollectorOptions {
 
 export async function collectGscData(options: GscCollectorOptions = {}): Promise<GSCSnapshot> {
   const siteUrl = options.siteUrl || process.env.GSC_PROPERTY || 'sc-domain:nicaraguainformate.com';
-  const clientEmail = options.clientEmail || process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = (options.privateKey || process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+  const resolved = getGoogleServiceAccountCredentials();
+  const clientEmail = options.clientEmail || resolved?.clientEmail;
+  const privateKey = options.privateKey
+    ? options.privateKey.replace(/\\n/g, '\n')
+    : resolved?.privateKey;
   const days = options.days || 7;
 
   const now = new Date();

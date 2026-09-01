@@ -11,6 +11,7 @@
 
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
 import { logger } from '@/lib/logger';
+import { getGoogleServiceAccountCredentials } from '@/lib/google-credentials';
 import type {
   GA4Snapshot,
   GA4PageRow,
@@ -19,18 +20,16 @@ import type {
 } from './types';
 
 function getAnalyticsClient(): BetaAnalyticsDataClient {
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
-  const projectId = process.env.FIREBASE_PROJECT_ID || '';
+  const credentials = getGoogleServiceAccountCredentials();
 
-  if (!privateKey || !clientEmail || !projectId) {
+  if (!credentials) {
     throw new Error('[ga4-collector] Credenciales de Firebase no configuradas');
   }
 
   return new BetaAnalyticsDataClient({
     credentials: {
-      client_email: clientEmail,
-      private_key: privateKey,
+      client_email: credentials.clientEmail,
+      private_key: credentials.privateKey,
     },
   });
 }
@@ -118,17 +117,14 @@ export async function collectGA4(
     );
   }
 
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
-
-  if (!clientEmail || !privateKey) {
+  if (!getGoogleServiceAccountCredentials()) {
     logger.warn('[ga4-collector] Firebase service account not configured');
     return emptySnapshot(
       propertyId,
       startDate,
       endDate,
       'CONFIG_REQUIRED',
-      'FIREBASE_CLIENT_EMAIL o FIREBASE_PRIVATE_KEY no están configurados. NIOS no puede autenticar GA4.',
+      'No hay credenciales de cuenta de servicio (FIREBASE_CLIENT_EMAIL + FIREBASE_PRIVATE_KEY o FIREBASE_SERVICE_ACCOUNT_BASE64). NIOS no puede autenticar GA4.',
     );
   }
 
