@@ -37,6 +37,7 @@ out/
 .env.production.local
 .env.local.example
 .env.example
+!.env.example
 *firebase-adminsdk*.json
 fb-key-base64.txt
 firebase.json.local
