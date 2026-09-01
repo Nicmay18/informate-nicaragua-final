@@ -17,7 +17,7 @@ export interface GscCollectorOptions {
 }
 
 export async function collectGscData(options: GscCollectorOptions = {}): Promise<GSCSnapshot> {
-  const siteUrl = options.siteUrl || process.env.NIOS_SITE_URL || 'sc-domain:nicaraguainformate.com';
+  const siteUrl = options.siteUrl || process.env.GSC_PROPERTY || 'sc-domain:nicaraguainformate.com';
   const clientEmail = options.clientEmail || process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = (options.privateKey || process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
   const days = options.days || 7;
@@ -44,7 +44,7 @@ export async function collectGscData(options: GscCollectorOptions = {}): Promise
   } as unknown as GSCSnapshot & { dataStatus: DataStatus; errorMessage?: string });
 
   if (!clientEmail || !privateKey) {
-    logger.warn('[nios-gsc] Missing service account credentials');
+    logger.warn('[nios-gsc] Missing service account credentials or property');
     return emptySnapshot('NOT_CONFIGURED' as DataStatus, 'Missing credentials');
   }
 

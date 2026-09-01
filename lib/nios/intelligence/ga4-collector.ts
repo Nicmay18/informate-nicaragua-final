@@ -32,7 +32,6 @@ function getAnalyticsClient(): BetaAnalyticsDataClient {
       client_email: clientEmail,
       private_key: privateKey,
     },
-    projectId,
   });
 }
 
@@ -121,16 +120,15 @@ export async function collectGA4(
 
   const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || '';
-  const projectId = process.env.FIREBASE_PROJECT_ID || '';
 
-  if (!clientEmail || !privateKey || !projectId) {
+  if (!clientEmail || !privateKey) {
     logger.warn('[ga4-collector] Firebase service account not configured');
     return emptySnapshot(
       propertyId,
       startDate,
       endDate,
       'CONFIG_REQUIRED',
-      'FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY o FIREBASE_PROJECT_ID no están configurados. NIOS no puede autenticar GA4.',
+      'FIREBASE_CLIENT_EMAIL o FIREBASE_PRIVATE_KEY no están configurados. NIOS no puede autenticar GA4.',
     );
   }
 
@@ -148,7 +146,7 @@ export async function collectGA4(
       // 1. Totales (sin dimensiones)
       const totalRows = await runReport(
         client, propertyId, startDate, endDate,
-        [], ['totalUsers', 'sessions', 'screenPageViews', 'averageEngagementTime', 'engagementRate'],
+        [], ['totalUsers', 'sessions', 'screenPageViews', 'userEngagementDuration', 'engagementRate'],
         1,
       );
 
@@ -156,25 +154,30 @@ export async function collectGA4(
       const totalUsers = parseInt(totals[0]?.value || '0', 10);
       const totalSessions = parseInt(totals[1]?.value || '0', 10);
       const totalPageviews = parseInt(totals[2]?.value || '0', 10);
-      const averageEngagementTimeSec = parseFloat(totals[3]?.value || '0');
+      const totalEngagement = parseFloat(totals[3]?.value || '0');
       const engagementRate = parseFloat(totals[4]?.value || '0');
+      const averageEngagementTimeSec = totalUsers > 0 ? totalEngagement / totalUsers : 0;
 
       // 2. Páginas (top 100)
       const pageRows = await runReport(
         client, propertyId, startDate, endDate,
         ['pagePath'],
-        ['screenPageViews', 'totalUsers', 'sessions', 'averageEngagementTime', 'engagementRate'],
+        ['screenPageViews', 'totalUsers', 'sessions', 'userEngagementDuration', 'engagementRate'],
         100,
       );
 
-      const pages: GA4PageRow[] = pageRows.map((r) => ({
-        pagePath: r.dimensionValues[0]?.value || '',
-        screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
-        users: parseInt(r.metricValues[1]?.value || '0', 10),
-        sessions: parseInt(r.metricValues[2]?.value || '0', 10),
-        averageEngagementTimeSec: parseFloat(r.metricValues[3]?.value || '0'),
-        engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
-      }));
+      const pages: GA4PageRow[] = pageRows.map((r) => {
+        const pageUsers = parseInt(r.metricValues[1]?.value || '0', 10);
+        const pageEngagement = parseFloat(r.metricValues[3]?.value || '0');
+        return {
+          pagePath: r.dimensionValues[0]?.value || '',
+          screenPageviews: parseInt(r.metricValues[0]?.value || '0', 10),
+          users: pageUsers,
+          sessions: parseInt(r.metricValues[2]?.value || '0', 10),
+          averageEngagementTimeSec: pageUsers > 0 ? pageEngagement / pageUsers : 0,
+          engagementRate: parseFloat(r.metricValues[4]?.value || '0'),
+        };
+      });
 
       // 3. Fuentes de tráfico
       const sourceRows = await runReport(

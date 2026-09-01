@@ -155,7 +155,7 @@ export async function collectGSC(
 
   logger.info(`[gsc-collector] Collecting GSC data for ${siteUrl} from ${startDate} to ${endDate}`);
 
-  const timeoutMs = 15000;
+  const timeoutMs = 30000;
   const timeoutPromise = new Promise<never>((_, reject) =>
     setTimeout(() => reject(new Error('GSC_TIMEOUT')), timeoutMs),
   );

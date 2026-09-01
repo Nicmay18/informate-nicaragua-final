@@ -40,9 +40,9 @@ import { calculateHealthScore } from './health-score';
 import { filterAbsurdNIOSRecommendations, filterAbsurdImprovementRecommendations } from './absurd-recommendation-guard';
 
 export const NIOS_CONFIG: NIOSConfig = {
-  siteUrl: process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com',
+  siteUrl: process.env.GSC_PROPERTY || process.env.NIOS_GSC_SITE_URL || 'sc-domain:nicaraguainformate.com',
   ga4PropertyId: process.env.NIOS_GA4_PROPERTY_ID || '',
-  daysToCollect: 28,
+  daysToCollect: 7,
   minImpressionsForInsight: 10,
   minArticlesForCompliance: 5,
 };
