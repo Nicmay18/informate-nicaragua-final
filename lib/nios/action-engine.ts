@@ -212,9 +212,11 @@ async function executeActionInFirestore(action: NiosAction): Promise<{ after: Re
       articleId: article.id,
       slug: article.slug,
       title: article.titulo,
+      url,
       message: preparedCopy,
       channel: 'telegram',
-      status: 'pending_review',
+      status: 'PREPARED',
+      origin: 'nios-growth-radar',
       createdAt: new Date().toISOString(),
     });
 
@@ -223,14 +225,16 @@ async function executeActionInFirestore(action: NiosAction): Promise<{ after: Re
         articleId: article.id,
         slug: article.slug,
         titulo: article.titulo,
+        url,
         preparedCopy,
         distributionQueueId: queueRef.id,
+        status: 'PREPARED',
       },
       result: {
         queueId: queueRef.id,
         channel: 'telegram',
-        status: 'pending_review',
-        note: 'Copia preparada para revisión humana. No se publicó automáticamente.',
+        status: 'PREPARED',
+        note: 'Preparé la redistribución del artículo y la puse en cola de revisión. Todavía no se envió realmente a Telegram.',
       },
     };
   }
